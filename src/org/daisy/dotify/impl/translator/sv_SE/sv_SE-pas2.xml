@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>		
+	<comment>Braille translation table for Swedish (2nd pas).</comment>
+<!-- Numbers, excluding the number sign. -->
+    <entry key="1">&#x2801;</entry>	
+	<entry key="2">&#x2803;</entry>
+	<entry key="3">&#x2809;</entry>
+	<entry key="4">&#x2819;</entry>
+	<entry key="5">&#x2811;</entry>
+	<entry key="6">&#x280B;</entry>
+	<entry key="7">&#x281B;</entry>
+	<entry key="8">&#x2813;</entry>
+	<entry key="9">&#x280A;</entry>
+	<entry key="0">&#x281A;</entry>
+<!-- Letters. Use lower case only, upper case letters will be disregarded. -->
+	<entry key="a">&#x2801;</entry>
+	<entry key="à">&#x2837;</entry>
+	<entry key="á">&#x2808;&#x2801;</entry>
+	<entry key="â">&#x2808;&#x2801;</entry>
+	<entry key="ã">&#x2808;&#x2801;</entry>
+	<entry key="ā">&#x2808;&#x2801;</entry>						<!-- LATIN SMALL LETTER A WITH MACRON, 0101 -->
+	<entry key="ă">&#x2808;&#x2801;</entry>						<!-- LATIN SMALL LETTER A WITH BREVE, 0103 -->
+	<entry key="ą">&#x2808;&#x2801;</entry>						<!-- LATIN SMALL LETTER A WITH OGONEK, 0105 -->
+	<entry key="b">&#x2803;</entry>
+	<entry key="c">&#x2809;</entry>
+	<entry key="ç">&#x2808;&#x2809;</entry>
+	<entry key="č">&#x2808;&#x2809;</entry>						<!-- LATIN SMALL LETTER C WITH CARON, 010d -->
+	<entry key="0107">&#x2808;&#x2809;</entry>					<!-- LATIN SMALL LETTER C WITH ACUTE, 0107 -->
+	<entry key="d">&#x2819;</entry>
+	<entry key="đ">&#x2808;&#x2819;</entry>						<!-- LATIN SMALL LETTER D WITH STROKE, 0111 -->
+	<entry key="ð">&#x2808;&#x2819;</entry>						<!-- LATIN SMALL LETTER ETH, 00F0 -->
+	<entry key="e">&#x2811;</entry>
+	<entry key="è">&#x282E;</entry>
+	<entry key="é">&#x283F;</entry>
+	<entry key="ê">&#x2808;&#x2811;</entry>
+	<entry key="ë">&#x2808;&#x2811;</entry>
+	<entry key="ē">&#x2808;&#x2811;</entry>						<!-- LATIN SMALL LETTER E WITH MACRON, 0113 -->
+	<entry key="ę">&#x2808;&#x2811;</entry>						<!-- LATIN SMALL LETTER E WITH OGONEK, 0119 -->
+	<entry key="ȩ">&#x2808;&#x2811;</entry>						<!-- LATIN SMALL LETTER E WITH CEDILLA, 0229 -->
+	<entry key="ě">&#x2808;&#x2811;</entry>						<!-- LATIN SMALL LETTER E WITH CARON, U+011B -->
+	<entry key="ĕ">&#x2808;&#x2811;</entry>						<!-- LATIN SMALL LETTER E WITH BREVE, U+0115 -->
+	<entry key="ė">&#x2808;&#x2811;</entry>						<!-- LATIN SMALL LETTER E WITH DOT ABOVE, U+0117 -->
+	<entry key="f">&#x280B;</entry>
+	<entry key="g">&#x281B;</entry>
+	<entry key="ğ">&#x2808;&#x281B;</entry>						<!-- LATIN SMALL LETTER G WITH BREVE, U+011F -->
+	<entry key="h">&#x2813;</entry>
+	<entry key="i">&#x280A;</entry>
+	<entry key="í">&#x2808;&#x280A;</entry>
+	<entry key="ì">&#x2808;&#x280A;</entry>
+	<entry key="î">&#x2808;&#x280A;</entry>
+	<entry key="ï">&#x2808;&#x280A;</entry>
+	<entry key="ı">&#x2808;&#x280A;</entry>						<!-- LATIN SMALL LETTER DOTLESS I, U+0131 -->
+	<entry key="ī">&#x2808;&#x280A;</entry>						<!-- LATIN SMALL LETTER I WITH MACRON, U+012B -->
+	<entry key="j">&#x281A;</entry>
+	<entry key="k">&#x2805;</entry>
+	<entry key="l">&#x2807;</entry>
+	<entry key="ł">&#x2808;&#x2807;</entry>						<!-- LATIN SMALL LETTER L WITH STROKE, 0142 -->
+	<entry key="m">&#x280D;</entry>
+	<entry key="n">&#x281D;</entry>
+	<entry key="ñ">&#x2808;&#x281D;</entry>
+	<entry key="ń">&#x2808;&#x281D;</entry>						<!-- LATIN SMALL LETTER N WITH ACUTE, 0144 -->
+	<entry key="o">&#x2815;</entry>
+	<entry key="ó">&#x2808;&#x2815;</entry>
+	<entry key="ò">&#x2808;&#x2815;</entry>
+	<entry key="ô">&#x2808;&#x2815;</entry>
+	<entry key="õ">&#x2808;&#x2815;</entry>
+	<entry key="ō">&#x2808;&#x2815;</entry>
+	<entry key="ø">&#x2808;&#x2815;</entry>
+	<entry key="ő">&#x2808;&#x2815;</entry>						<!-- LATIN SMALL LETTER O WITH DOUBLE ACUTE, 0151 -->
+	<entry key="p">&#x280F;</entry>
+	<entry key="q">&#x281F;</entry>
+	<entry key="r">&#x2817;</entry>
+	<entry key="ŕ">&#x2808;&#x2817;</entry>						<!-- LATIN SMALL LETTER R WITH ACUTE, 0155 -->
+	<entry key="ř">&#x2808;&#x2817;</entry>						<!-- LATIN SMALL LETTER R WITH CARON, U+0159 -->
+	<entry key="s">&#x280E;</entry>
+	<entry key="š">&#x2808;&#x280E;</entry>
+	<entry key="ś">&#x2808;&#x280E;</entry>						<!-- LATIN SMALL LETTER S WITH ACUTE, 015b -->
+	<entry key="ş">&#x2808;&#x280E;</entry>						<!-- LATIN SMALL LETTER S WITH CEDILLA, 015f -->
+	<entry key="ß">&#x2808;&#x280E;</entry>
+	<entry key="t">&#x281E;</entry>
+	<entry key="ţ">&#x2808;&#x281E;</entry>						<!-- LATIN SMALL LETTER T WITH CEDILLA, 0163 -->
+	<entry key="þ">&#x2808;&#x281E;</entry>
+	<entry key="u">&#x2825;</entry>
+	<entry key="ü">&#x2833;</entry>
+	<entry key="ù">&#x2808;&#x2825;</entry>
+	<entry key="ú">&#x2808;&#x2825;</entry>
+	<entry key="û">&#x2808;&#x2825;</entry>
+	<entry key="ū">&#x2808;&#x2825;</entry>
+	<entry key="v">&#x2827;</entry>
+	<entry key="w">&#x283A;</entry>
+	<entry key="x">&#x282D;</entry>
+	<entry key="y">&#x283D;</entry>
+	<entry key="ý">&#x2808;&#x283D;</entry>
+	<entry key="ÿ">&#x2808;&#x283D;</entry>
+	<entry key="z">&#x2835;</entry>
+	<entry key="ż">&#x2808;&#x2835;</entry>						<!-- LATIN SMALL LETTER Z WITH DOT ABOVE, 017c -->
+	<entry key="ž">&#x2808;&#x2835;</entry>						<!-- LATIN SMALL LETTER Z WITH CARON, 017E -->
+	<entry key="ź">&#x2808;&#x2835;</entry>						<!-- LATIN SMALL LETTER Z WITH ACUTE, 017A -->
+	<entry key="å">&#x2821;</entry>
+	<entry key="ä">&#x281C;</entry>
+	<entry key="æ">&#x2808;&#x281C;</entry>
+	<entry key="ö">&#x282A;</entry>
+	<entry key="œ">&#x2808;&#x282A;</entry>
+<!-- Symbols and punctuation -->
+	<entry key=",">&#x2802;</entry>
+	<entry key=".">&#x2804;</entry>
+	<entry key=";">&#x2806;</entry>
+	<entry key=":">&#x2812;</entry>
+	<entry key="?">&#x2822;</entry>
+	<entry key="¿">&#x2822;</entry>									<!-- INVERTED QUESTION MARK, 00bf -->
+	<entry key="!">&#x2816;</entry>
+	<entry key="¡">&#x2816;</entry>									<!-- INVERTED EXCLAMATION MARK, 00a1 -->
+	<entry key="(">&#x2826;</entry>
+	<entry key=")">&#x2834;</entry>
+	<entry key="*">&#x2814;</entry>
+	<entry key="&quot;">&#x2830;</entry>
+		<entry key="«">&#x2830;</entry>							<!-- LEFT-POINTING DOUBLE ANGLE QUOTATION MARK, 00ab -->
+		<entry key="»">&#x2830;</entry>							<!-- RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK, 00bb -->
+		<entry key="201c">&#x2830;</entry>						<!-- LEFT DOUBLE QUOTATION MARK, 201c -->
+		<entry key="201d">&#x2830;</entry>						<!-- RIGHT DOUBLE QUOTATION MARK, 201d -->
+		<entry key="201e">&#x2830;</entry>						<!-- DOUBLE LOW-9 QUOTATION MARK, 201e -->
+	<entry key="'">&#x2810;</entry>
+		<entry key="2018">&#x2810;</entry>						<!-- LEFT SINGLE QUOTATION MARK, 2018 -->
+		<entry key="2019">&#x2810;</entry>						<!-- RIGHT SINGLE QUOTATION MARK, 2019 -->
+		<entry key="201a">&#x2810;</entry>						<!-- SINGLE LOW-9 QUOTATION MARK, 201a -->
+		<entry key="2039">&#x2810;</entry>						<!-- SINGLE LEFT-POINTING ANGLE QUOTATION MARK, 2039 -->
+		<entry key="203a">&#x2810;</entry>						<!-- SINGLE RIGHT-POINTING ANGLE QUOTATION MARK, 203a -->
+	<entry key="/">&#x280C;</entry>
+		<entry key="÷">&#x280C;</entry>							<!-- DIVISION SIGN, 00F7 -->
+		<entry key="2215">&#x280C;</entry>						<!-- DIVISION SLASH, 2215 -->
+
+	<!-- Don't translate hyphen-minus as it is used to break rows. It will be translated later. -->
+	<!-- <entry key="-">&#x2824;</entry>  -->					<!-- HYPHEN-MINUS, 002D -->
+
+	<entry key="2010">&#x2824;</entry>							<!-- HYPHEN, 2010 -->
+	<entry key="2212">&#x2824;</entry>							<!-- MINUS SIGN, 2212 -->
+	<entry key="2013">&#x2824;&#x2824;</entry>					<!-- EN DASH, 2013 -->
+	<entry key="2014">&#x2824;&#x2824;</entry>					<!-- EM DASH, 2014 -->
+	<entry key="2015">&#x2824;&#x2824;</entry>					<!-- HORIZONTAL BAR, 2015 -->
+	<entry key="222A">&#x283b;&#x2825;</entry>					<!-- UNION, 222A -->
+	<entry key="22C3">&#x283b;&#x2825;</entry>					<!-- N-ARY UNION, 22C3 -->
+	<entry key="+">&#x2832;</entry>
+	<entry key="§">&#x282C;</entry>
+	<entry key="|">&#x2838;</entry>								<!-- VERTICAL LINE, 007C -->
+	<entry key="=">&#x2836;</entry>
+	<!--  -->													<!-- TODO: add MIDDLE DOT, 00B7 -->
+	<entry key="•">&#x283F;</entry>								<!-- BULLET, 2022 -->
+	<entry key="2219">&#x283b;&#x2804;</entry>					<!-- BULLET OPERATOR, 2219 -->
+	
+	<!--  -->													<!-- TODO: add DOT OPERATOR, 22C5 -->
+	<entry key="[">&#x2837;</entry>
+	<entry key="]">&#x283E;</entry>
+	<entry key="{">&#x2820;&#x2837;</entry>
+	<entry key="}">&#x2820;&#x283E;</entry>
+	<entry key="〈">&#x2820;&#x2826;</entry>
+	<entry key="〉">&#x2820;&#x2834;</entry>
+	<entry key="¢">&#x2818;&#x2809;</entry>						<!-- CENT SIGN, 00A2 -->
+																<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="£">&#x2818;&#x2807;</entry>						<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="$">&#x2818;&#x280E;</entry>						<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="€">&#x2818;&#x2811;</entry>						<!-- EURO SIGN, 20AC -->																				<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="¥">&#x2818;&#x283D;</entry>						<!-- YEN SIGN, 00A5 -->
+																				<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="°">&#x283b;&#x281b;</entry>						<!-- DEGREE SIGN, 00B0 -->
+																				<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="&amp;">&#x282f;</entry>							<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="¸">&#x2818;&#x2802;</entry>
+	<entry key="¨">&#x2818;&#x2806;</entry>
+	<entry key="~">&#x2818;&#x2812;</entry>
+	<entry key="`">&#x2818;&#x2822;</entry>
+	<entry key="´">&#x2818;&#x2814;</entry>
+	<entry key="\">&#x2818;&#x280C;</entry>
+	<entry key="_">&#x2818;&#x2824;</entry>
+	<entry key="02C6">&#x2818;&#x2816;</entry>					<!-- MODIFIER LETTER CIRCUMFLEX ACCENT, 02C6, ˆ -->
+	<entry key="^">&#x2818;&#x2816;</entry>						<!-- CIRCUMFLEX ACCENT, 005E -->
+	<entry key="†">&#x2818;&#x2832;</entry>
+	<entry key="ˇ">&#x2818;&#x2836;</entry>
+	<entry key="#">&#x2818;&#x283C;</entry>
+	<entry key="@">&#x2818;&#x2837;</entry>
+	<entry key="2016">&#x2838;&#x2838;</entry>					<!-- DOUBLE VERTICAL LINE, 2016 -->
+	<entry key="2045">&#x2830;&#x2826;</entry>					<!-- LEFT SQUARE BRACKET WITH QUILL, 2045 -->
+	<entry key="2046">&#x2830;&#x2834;</entry>					<!-- RIGHT SQUARE BRACKET WITH QUILL, 2046 -->
+	<entry key="%">&#x2839;</entry>								<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="‰">&#x2839;&#x2839;</entry>					<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="±">&#x2832;&#x2824;</entry>
+	<entry key="&lt;">&#x283c;&#x282a;</entry>					<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key=">">&#x283c;&#x2815;</entry>						<!-- Svenska skrivregler för punktskrift 2009, page 12 -->
+	<entry key="…">&#x2804;&#x2804;&#x2804;</entry>					<!-- HORIZONTAL ELLIPSIS, 2026 -->
+	<entry key="©">&#x2826;&#x2809;&#x2834;</entry>					<!-- COPYRIGHT SIGN, 00a9 -->
+	<entry key="™">&#x2826;&#x281E;&#x280D;&#x2834;</entry>	<!-- TRADE MARK SIGN, 2122 -->
+	<entry key="®">&#x2826;&#x2817;&#x2834;</entry>					<!-- REGISTERED SIGN, 00ae -->
+	
+	<entry key="¼">&#x283c;&#x2801;&#x280c;&#x283c;&#x2819;</entry>	<!-- VULGAR FRACTION ONE QUARTER, 00bc -->
+	<entry key="½">&#x283c;&#x2801;&#x280c;&#x283c;&#x2803;</entry>	<!-- VULGAR FRACTION ONE HALF, 00bd -->
+	<entry key="¾">&#x283c;&#x2809;&#x280c;&#x283c;&#x2819;</entry>	<!-- VULGAR FRACTION THREE QUARTERS, 00be -->
+	
+	<entry key="×">&#x283b;&#x282d;</entry>							<!-- MULTIPLICATION SIGN, 00D7 -->
+	<entry key="¹">&#x282c;&#x283c;&#x2801;</entry>					<!-- SUPERSCRIPT ONE, 00b9 -->
+	<entry key="²">&#x282c;&#x283c;&#x2803;</entry>					<!-- SUPERSCRIPT TWO, 00b2 -->
+	<entry key="³">&#x282c;&#x283c;&#x2809;</entry>					<!-- SUPERSCRIPT THREE, 00b3 -->
+	<entry key="2022">&#x283f;</entry>									<!-- BULLET, 2022 -->
+	<entry key="º">&#x282c;&#x2815;</entry>								<!-- MASCULINE ORDINAL INDICATOR, 00ba -->
+	<entry key="→"> &#x2812;&#x2815; </entry>							<!-- RIGHTWARDS ARROW, 2192 -->
+	<entry key="↓"> &#x2823;&#x2815; </entry>							<!-- DOWNWARDS ARROW, 2193 -->
+
+	<!-- TODO: -->
+	<!--
+	<entry key="■">&#x2818;&#x283f;</entry>			-->				<!-- BLACK SQUARE, 25a0 -->
+	<!--
+	<entry key="01C1">&#x2838;&#x2838;</entry>			-->				<!-- LATIN LETTER LATERAL CLICK, 01C1 -->
+
+</properties>
