@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>		
+	<comment>Configuration for Malayalam.</comment>
+
+	<entry key="patternPath">resource-files/utf8/hyph-ml.tex</entry>
+	<entry key="mode">character</entry>
+	<entry key="encoding">UTF-8</entry>
+	<entry key="beginLimit">1</entry>
+	<entry key="endLimit">1</entry>
+
+</properties>

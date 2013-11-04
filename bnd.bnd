@@ -1,0 +1,10 @@
+Private-Package: org.daisy.dotify.impl.hyphenator.latex,\
+	org.daisy.dotify.text
+Service-Component: *
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	biz.aQute.bnd.annotation,\
+	junit.osgi,\
+	com.googlecode.texhyphj,\
+	dotify.translator.api;version=latest,\
+	dotify.common;version=latest
