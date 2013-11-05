@@ -9,3 +9,5 @@ Private-Package: org.daisy.dotify.impl.translator,\
 	org.daisy.dotify.text,\
 	org.daisy.dotify.translator,\
 	org.daisy.dotify.impl.translator.sv_SE
+Include-Resource: / = src/
+-sources: false
