@@ -8,5 +8,5 @@ Include-Resource: / = src/
 	biz.aQute.bnd.annotation,\
 	junit.osgi,\
 	com.googlecode.texhyphj,\
-	dotify.translator.api;version=latest,\
-	dotify.common;version=latest
+	dotify.common;version=latest,\
+	dotify.api;version=latest
