@@ -141,10 +141,37 @@ public class BreakPointHandlerTest {
 
 	@Test
 	public void testZWSP_03() {
-		BreakPointHandler bph = new BreakPointHandler("citat\u200bblockcitat20");
+		BreakPointHandler bph = new BreakPointHandler("ABCDE\u200bFGHIJKL");
 		BreakPoint bp = bph.nextRow(6, false);
-		assertEquals("citat", bp.getHead());
-		assertEquals("blockcitat20", bp.getTail());
+		assertEquals("ABCDE", bp.getHead());
+		assertEquals("FGHIJKL", bp.getTail());
+		assertTrue(!bp.isHardBreak());
+	}
+	
+	@Test
+	public void testZWSP_04() {
+		BreakPointHandler bph = new BreakPointHandler("ABCDE\u200bF\u200bGHIJKL");
+		BreakPoint bp = bph.nextRow(6, false);
+		assertEquals("ABCDEF", bp.getHead());
+		assertEquals("GHIJKL", bp.getTail());
+		assertTrue(!bp.isHardBreak());
+	}
+	
+	@Test
+	public void testZWSP_05() {
+		BreakPointHandler bph = new BreakPointHandler("\u200b\u200bABCDE\u200b\u200bF\u200bGHIJKL");
+		BreakPoint bp = bph.nextRow(5, false);
+		assertEquals("ABCDE", bp.getHead());
+		assertEquals("F\u200bGHIJKL", bp.getTail());
+		assertTrue(!bp.isHardBreak());
+	}
+	
+	@Test
+	public void testSpace_01() {
+		BreakPointHandler bph = new BreakPointHandler("ABCDE  F GHIJKL");
+		BreakPoint bp = bph.nextRow(5, false);
+		assertEquals("ABCDE", bp.getHead());
+		assertEquals("F GHIJKL", bp.getTail());
 		assertTrue(!bp.isHardBreak());
 	}
 

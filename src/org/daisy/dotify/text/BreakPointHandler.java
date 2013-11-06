@@ -19,8 +19,8 @@ public class BreakPointHandler {
 	private final static char ZERO_WIDTH_SPACE = '\u200b';
 	private final static char DASH = '-';
 	private final static char SPACE = ' ';
-	private final static Pattern leadingWhitespace = Pattern.compile("\\A\\s+");
-	private final static Pattern trailingWhitespace = Pattern.compile("\\s+\\z");
+	private final static Pattern leadingWhitespace = Pattern.compile("\\A[\\s\u200b]+");
+	private final static Pattern trailingWhitespace = Pattern.compile("[\\s\u200b]+\\z");
 	private String charsStr;
 	
 	/**
