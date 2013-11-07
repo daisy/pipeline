@@ -4,8 +4,10 @@ import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryService;
 
+import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
 
+@Component
 public class SwedishBrailleTranslatorFactoryService implements
 		BrailleTranslatorFactoryService {
 
