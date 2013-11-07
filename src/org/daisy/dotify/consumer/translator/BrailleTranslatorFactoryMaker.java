@@ -41,7 +41,7 @@ public class BrailleTranslatorFactoryMaker implements
 	private final Map<String, BrailleTranslatorFactoryService> map;
 	private final Logger logger;
 
-	private BrailleTranslatorFactoryMaker() {
+	public BrailleTranslatorFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		factories = new CopyOnWriteArrayList<BrailleTranslatorFactoryService>();
 		this.map = Collections.synchronizedMap(new HashMap<String, BrailleTranslatorFactoryService>());

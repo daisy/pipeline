@@ -41,7 +41,7 @@ public class MarkerProcessorFactoryMaker implements
 	private final Map<String, MarkerProcessorFactoryService> map;
 	private final Logger logger;
 
-	private MarkerProcessorFactoryMaker() {
+	public MarkerProcessorFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		factories = new CopyOnWriteArrayList<MarkerProcessorFactoryService>();
 		this.map = Collections.synchronizedMap(new HashMap<String, MarkerProcessorFactoryService>());

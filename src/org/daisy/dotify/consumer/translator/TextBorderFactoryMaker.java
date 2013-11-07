@@ -37,7 +37,7 @@ public class TextBorderFactoryMaker implements TextBorderFactoryMakerService {
 	private final List<TextBorderFactoryService> factories;
 	private final Logger logger;
 
-	private TextBorderFactoryMaker() {
+	public TextBorderFactoryMaker() {
 		logger = Logger.getLogger(TextBorderFactoryMaker.class.getCanonicalName());
 		factories = new CopyOnWriteArrayList<TextBorderFactoryService>();
 	}
