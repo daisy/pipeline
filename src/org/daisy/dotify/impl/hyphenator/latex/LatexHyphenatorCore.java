@@ -1,5 +1,6 @@
 package org.daisy.dotify.impl.hyphenator.latex;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -55,6 +56,11 @@ class LatexHyphenatorCore {
 	        	return props;
 	        }
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<String> listLocales() {
+		return (Collection<String>) locator.listLocales();
 	}
 	
 }

@@ -10,7 +10,7 @@ public class LatexHyphenatorFactoryTest {
 
 	@Test
 	public void testEnglishHyphenator() throws HyphenatorConfigurationException {
-		HyphenatorInterface h = new LatexHyphenatorFactory().newHyphenator("en");
+		HyphenatorInterface h = new LatexHyphenatorFactory(LatexHyphenatorCore.getInstance()).newHyphenator("en");
 		
 		//Test
 		assertEquals("test­ing", h.hyphenate("testing"));

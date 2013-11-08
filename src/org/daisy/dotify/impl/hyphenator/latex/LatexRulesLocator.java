@@ -3,6 +3,7 @@ package org.daisy.dotify.impl.hyphenator.latex;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +32,10 @@ public class LatexRulesLocator {
 	
 	public boolean supportsLocale(String locale) {
 		return locales.getProperty(locale) != null;
+	}
+	
+	public Collection<?> listLocales() {
+		return locales.keySet();
 	}
 	
 	public Properties getProperties(String locale) {
