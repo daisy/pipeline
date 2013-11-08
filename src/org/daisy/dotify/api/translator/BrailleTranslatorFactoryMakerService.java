@@ -25,5 +25,14 @@ public interface BrailleTranslatorFactoryMakerService {
 	 *             if the specification is not supported
 	 */
 	public BrailleTranslatorFactory newFactory(String locale, String grade) throws TranslatorConfigurationException;
+	
+	/**
+	 * Gets a translator for the given specification
+	 * @param locale the locale for the translator
+	 * @param grade the grade for the translator
+	 * @return returns a braille translator
+	 * @throws TranslatorConfigurationException if the specification is not supported
+	 */
+	public BrailleTranslator newTranslator(String locale, String grade) throws TranslatorConfigurationException;
 
 }
