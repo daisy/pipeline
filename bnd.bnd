@@ -4,6 +4,7 @@
 	junit.osgi
 Export-Package: se.mtm.common.io,\
 	se.mtm.common.xml,\
-	se.mtm.common.text
+	se.mtm.common.text,\
+	org.daisy.dotify.text
 Include-Resource: / = src/
 -sources: false
