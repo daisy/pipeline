@@ -126,10 +126,6 @@ public class Integer2TextFactoryMaker implements
 		for (Integer2TextFactoryService s : filters) {
 			ret.addAll(s.listLocales());
 		}
-		if (ret.contains("*")) {
-			ret.clear();
-			ret.add("*");
-		}
 		return ret;
 	}
 

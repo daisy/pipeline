@@ -33,8 +33,7 @@ public interface Integer2TextFactoryService {
 	public boolean supportsLocale(String locale);
 	
 	/**
-	 * Returns a list of supported locales. If any locale is supported,
-	 * a list containing the single entry "*" is allowed.
+	 * Returns a list of supported locales as defined by IETF RFC 3066.
 	 * @return returns a list of locales
 	 */
 	public Collection<String> listLocales();
