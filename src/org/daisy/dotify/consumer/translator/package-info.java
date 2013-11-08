@@ -1,6 +1,8 @@
 /**
- * Provides a braille translation consumer. Currently using SPI, this would be
- * rewritten if moving to OSGi.
+ * Provides braille translation consumers. This package is only visible in
+ * a non-OSGi environment. In an OSGi context, classes in this 
+ * package must be retrieved from the service registry under the interfaces
+ * they implement.
  * 
  * <p>
  * The entry point for translating braille is the BrailleTranslatorFactoryMaker

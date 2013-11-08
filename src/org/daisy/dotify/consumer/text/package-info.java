@@ -1,6 +1,8 @@
 /**
- * Provides a text consumer. Currently using SPI, this would be rewritten if
- * moving to OSGi.
+ * Provides a text consumer. This package is only visible in
+ * a non-OSGi environment. In an OSGi context, classes in this 
+ * package must be retrieved from the service registry under the interfaces
+ * they implement.
  * 
  * @author Joel Håkansson
  */
