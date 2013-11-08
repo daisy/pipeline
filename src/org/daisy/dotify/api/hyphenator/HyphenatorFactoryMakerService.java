@@ -1,5 +1,7 @@
 package org.daisy.dotify.api.hyphenator;
 
+import java.util.Collection;
+
 
 
 /**
@@ -44,4 +46,11 @@ public interface HyphenatorFactoryMakerService {
 	 *             if the locale is not supported
 	 */
 	public HyphenatorInterface newHyphenator(String target) throws HyphenatorConfigurationException;
+	
+	
+	/**
+	 * Returns a list of supported locales as defined by IETF RFC 3066.
+	 * @return returns a list of locales
+	 */
+	public Collection<String> listLocales();
 }

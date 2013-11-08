@@ -1,5 +1,7 @@
 package org.daisy.dotify.consumer.hyphenator;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -117,6 +119,14 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 			super(message);
 			// TODO Auto-generated constructor stub
 		}
+	}
+	
+	public Collection<String> listLocales() {
+		ArrayList<String> ret = new ArrayList<String>();
+		for (HyphenatorFactoryService s : filters) {
+			ret.addAll(s.listLocales());
+		}
+		return ret;
 	}
 
 }

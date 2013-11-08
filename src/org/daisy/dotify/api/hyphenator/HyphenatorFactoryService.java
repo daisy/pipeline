@@ -1,5 +1,7 @@
 package org.daisy.dotify.api.hyphenator;
 
+import java.util.Collection;
+
 
 /**
  * <p>
@@ -28,6 +30,12 @@ public interface HyphenatorFactoryService {
 	 *         otherwise
 	 */
 	public boolean supportsLocale(String locale);
+	
+	/**
+	 * Returns a list of supported locales as defined by IETF RFC 3066.
+	 * @return returns a list of locales
+	 */
+	public Collection<String> listLocales();
 
 	public HyphenatorFactory newFactory();
 
