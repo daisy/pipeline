@@ -1,5 +1,7 @@
 package org.daisy.dotify.api.text;
 
+import java.util.Collection;
+
 
 
 
@@ -45,5 +47,12 @@ public interface Integer2TextFactoryMakerService {
 	 *             if the locale is not supported
 	 */
 	public Integer2Text newInteger2Text(String locale) throws Integer2TextConfigurationException;
+	
+	/**
+	 * Returns a list of supported locales. If any locale is supported,
+	 * a list containing the single entry "*" is allowed.
+	 * @return returns a list of locales
+	 */
+	public Collection<String> listLocales();
 
 }

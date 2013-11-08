@@ -1,5 +1,7 @@
 package org.daisy.dotify.consumer.text;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -117,6 +119,18 @@ public class Integer2TextFactoryMaker implements
 			super(message);
 		}
 		
+	}
+
+	public Collection<String> listLocales() {
+		ArrayList<String> ret = new ArrayList<String>();
+		for (Integer2TextFactoryService s : filters) {
+			ret.addAll(s.listLocales());
+		}
+		if (ret.contains("*")) {
+			ret.clear();
+			ret.add("*");
+		}
+		return ret;
 	}
 
 }
