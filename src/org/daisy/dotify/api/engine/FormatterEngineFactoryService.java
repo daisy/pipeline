@@ -1,9 +1,5 @@
 package org.daisy.dotify.api.engine;
 
-import javax.xml.stream.XMLEventFactory;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
-
 import org.daisy.dotify.api.formatter.FormatterFactory;
 import org.daisy.dotify.api.obfl.ExpressionFactory;
 import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
@@ -69,9 +65,4 @@ public interface FormatterEngineFactoryService {
 	 */
 	public void setExpressionFactory(ExpressionFactory ef);
 
-	public void setXMLInputFactory(XMLInputFactory in);
-
-	public void setXMLEventFactory(XMLEventFactory xef);
-
-	public void setXMLOutputFactory(XMLOutputFactory of);
 }
