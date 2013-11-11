@@ -4,6 +4,9 @@ import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.MarkerProcessorFactory;
 import org.daisy.dotify.api.translator.MarkerProcessorFactoryService;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class SwedishMarkerProcessorFactoryService implements
 		MarkerProcessorFactoryService {
 
