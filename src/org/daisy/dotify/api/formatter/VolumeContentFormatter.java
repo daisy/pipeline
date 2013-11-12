@@ -1,6 +1,5 @@
 package org.daisy.dotify.api.formatter;
 
-import java.util.List;
 
 
 /**
@@ -27,7 +26,7 @@ public interface VolumeContentFormatter {
 	 * @param crh the cross references available
 	 * @return returns the formatted contents
 	 */
-	public List<Iterable<BlockSequence>> formatPreVolumeContents(int volumeNumber, int volumeCount, CrossReferences crh);
+	public PageStruct formatPreVolumeContents(int volumeNumber, int volumeCount, CrossReferences crh);
 	
 	/**
 	 * Formats the post-volume contents for the specified volume given the supplied information.
@@ -36,6 +35,6 @@ public interface VolumeContentFormatter {
 	 * @param crh the cross references available
 	 * @return returns the formatted contents
 	 */
-	public List<Iterable<BlockSequence>> formatPostVolumeContents(int volumeNumber, int volumeCount, CrossReferences crh);
+	public PageStruct formatPostVolumeContents(int volumeNumber, int volumeCount, CrossReferences crh);
 	
 }
