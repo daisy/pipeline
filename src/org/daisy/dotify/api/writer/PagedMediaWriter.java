@@ -12,12 +12,10 @@ import org.daisy.dotify.api.formatter.SectionProperties;
 /**
  * <p>PagedMediaWriter is an interface for writing to a paged media.</p>
  * 
- * <p>An implementation of PagedMediaWriter is to render 
- * a result created by e.g. a {@link Paginator} implementation by
- * adding the tokens and properties that are specific for a particular 
- * output format.</p>
+ * <p>An implementation of PagedMediaWriter is responsible for writing 
+ * volumes, sections, pages and rows in a specific format.</p>
  * 
- * <p>The PagedMediaWriter must not alter the page appearance.
+ * <p>The PagedMediaWriter must not alter the input structure.
  * For example, an implementation of PagedMediaWriter must not break
  * a page unless instructed via {@link #newPage()}.</p>
  * 
