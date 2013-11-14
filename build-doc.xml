@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="buildDoc">
+
+	<property name="src.dir" value="src"/>
+	<property name="ant-build.dir" value="${basedir}/ant-build"/>
+	<property name="ant-output.dir" value="${ant-build.dir}/output"/>
+
+	<property name="javadoc.dir" value="${ant-output.dir}/docs/javadoc"/>
+
+	<path id="path.lib">
+		<fileset dir="../DotifyShared">
+			<include name="bnd.jar"/>
+		</fileset>
+	</path>
+	
+    <target name="javadoc" description="Create javadoc">
+    	<delete dir="${javadoc.dir}"/>
+        <javadoc access="public" author="true"
+        	classpathref="path.lib"
+        	destdir="${javadoc.dir}" 
+        	nodeprecated="false" 
+        	nodeprecatedlist="false" 
+        	noindex="false" 
+        	nonavbar="false" 
+        	notree="false" 
+        	windowtitle="Dotify API"
+        	packagenames="org.daisy.dotify.*"
+        	excludepackagenames="org.daisy.dotify.impl.*"
+        	source="1.5" 
+        	sourcepath="${src.dir}" 
+        	splitindex="true" 
+        	use="true" 
+        	version="true"
+        	encoding="UTF-8"
+        	charset="UTF-8">
+        	<link offline="true" href="http://java.sun.com/javase/6/docs/api/" packagelistLoc="ant-build/resources/javase-6"/>
+        </javadoc>
+    </target>
+	
+	<target name="buildDoc" description="Build javadoc documentation">
+		<antcall target="javadoc"/>
+	</target>
+
+</project>
