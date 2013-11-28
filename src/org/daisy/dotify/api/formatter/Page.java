@@ -27,7 +27,7 @@ public interface Page {
 	 * Gets the rows on this page
 	 * @return returns the rows on this page
 	 */
-	public List<String> getRows();
+	public List<Row> getRows();
 
 	/**
 	 * Gets the page index for this page

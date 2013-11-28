@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.OutputStream;
 import java.util.List;
 
+import org.daisy.dotify.api.formatter.Row;
 import org.daisy.dotify.api.formatter.SectionProperties;
 
 
@@ -44,9 +45,9 @@ public interface PagedMediaWriter extends Closeable {
 
 	/**
 	 * Add a new row to the current page
-	 * @param row the characters to put on the row
+	 * @param row the row
 	 */
-	public void newRow(CharSequence row);
+	public void newRow(Row row);
 	
 	/**
 	 * Add a new empty row to the current page  
