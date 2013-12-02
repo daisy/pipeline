@@ -1,9 +1,17 @@
 package org.daisy.dotify.consumer.engine;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.dotify.api.engine.FormatterEngine;
+import org.daisy.dotify.api.engine.FormatterEngineConfigurationException;
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
+import org.daisy.dotify.api.formatter.FormatterFactory;
+import org.daisy.dotify.api.obfl.ExpressionFactory;
+import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
+import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 import org.daisy.dotify.consumer.formatter.FormatterFactoryMaker;
 import org.daisy.dotify.consumer.obfl.ExpressionFactoryMaker;
@@ -18,10 +26,18 @@ public class FormatterEngineMaker {
 		proxy = ServiceRegistry.lookupProviders(FormatterEngineFactoryService.class).next();
 		// populate the engine factory with SPI here as this class is never used
 		// from OSGi
-		proxy.setFormatterFactory(FormatterFactoryMaker.newInstance().getFactory());
-		proxy.setMarkerProcessor(MarkerProcessorFactoryMaker.newInstance());
-		proxy.setTextBorderFactoryMaker(TextBorderFactoryMaker.newInstance());
-		proxy.setExpressionFactory(ExpressionFactoryMaker.newInstance().getFactory());
+		setReference(FormatterFactory.class, FormatterFactoryMaker.newInstance().getFactory());
+		setReference(MarkerProcessorFactoryMakerService.class, MarkerProcessorFactoryMaker.newInstance());
+		setReference(TextBorderFactoryMakerService.class, TextBorderFactoryMaker.newInstance());
+		setReference(ExpressionFactory.class, ExpressionFactoryMaker.newInstance().getFactory());
+	}
+	
+	private <T> void setReference(Class<T> c, T ref) {
+		try {
+			proxy.setReference(c, ref);
+		} catch (FormatterEngineConfigurationException e) {
+			Logger.getLogger(this.getClass().getCanonicalName()).log(Level.WARNING, "Failed to set reference.", e);
+		}
 	}
 
 	public static FormatterEngineMaker newInstance() {

@@ -1,6 +1,5 @@
 package org.daisy.dotify.api.formatter;
 
-import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
 
 
 /**
@@ -18,14 +17,18 @@ public interface FormatterFactory {
 	public Formatter newFormatter(String locale, String mode);
 
 	/**
-	 * Provides a method to set the BrailleTranslatorFactoryMaker directly. This
+	 * Provides a method to set references directly. This
 	 * is included in the interface as a compromise between OSGi visibility and
 	 * SPI compatibility.
 	 * 
-	 * In an OSGi context, the implementation should not set the implementation
+	 * In an OSGi context, the implementation should not set references
 	 * directly, but attach it to the service using DS.
 	 * 
-	 * @param translatorFactory
+	 * @param c the reference class
+	 * @param reference the reference instance
+	 * 
+	 * @throws FormatterConfigurationException if a reference of type T cannot be bound to the implementation 
 	 */
-	public void setTranslator(BrailleTranslatorFactoryMakerService translatorFactory);
+	public <T> void setReference(Class<T> c, T reference) throws FormatterConfigurationException;
+
 }

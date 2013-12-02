@@ -1,6 +1,5 @@
 package org.daisy.dotify.api.translator;
 
-import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
 
 public interface BrailleTranslatorFactoryService {
 
@@ -18,14 +17,18 @@ public interface BrailleTranslatorFactoryService {
 	public BrailleTranslatorFactory newFactory();
 
 	/**
-	 * Provides a method to set the HyphenatorFactoryMakerService directly. This
+	 * Provides a method to set references directly. This
 	 * is included in the interface as a compromise between OSGi visibility and
 	 * SPI compatibility.
 	 * 
-	 * In an OSGi context, the implementation should not set the implementation
+	 * In an OSGi context, the implementation should not set references
 	 * directly, but attach it to the service using DS.
 	 * 
-	 * @param hyphenator
+	 * @param c the reference class
+	 * @param reference the reference instance
+	 * 
+	 * @throws TranslatorConfigurationException if a reference of type T cannot be bound to the implementation 
 	 */
-	public void setHyphenator(HyphenatorFactoryMakerService hyphenator);
+	public <T> void setReference(Class<T> c, T reference) throws TranslatorConfigurationException;
+
 }

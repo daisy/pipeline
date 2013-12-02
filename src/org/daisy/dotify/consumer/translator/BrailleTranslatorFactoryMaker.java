@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.spi.ServiceRegistry;
@@ -68,7 +69,11 @@ public class BrailleTranslatorFactoryMaker implements
 			Iterator<BrailleTranslatorFactoryService> i = ServiceRegistry.lookupProviders(BrailleTranslatorFactoryService.class);
 			while (i.hasNext()) {
 				BrailleTranslatorFactoryService f = i.next();
-				f.setHyphenator(hyph);
+				try {
+					f.setReference(HyphenatorFactoryMakerService.class, hyph);
+				} catch (TranslatorConfigurationException e) {
+					Logger.getLogger(BrailleTranslatorFactoryMaker.class.getCanonicalName()).log(Level.WARNING, "Failed to set reference.", e);
+				}
 				ret.addFactory(f);
 			}
 		}

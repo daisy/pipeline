@@ -56,7 +56,7 @@ public class TextBorderFactoryMaker implements TextBorderFactoryMakerService {
 	 * 
 	 * @return returns a new marker processor factory maker.
 	 */
-	public static TextBorderFactoryMaker newInstance() {
+	public static TextBorderFactoryMakerService newInstance() {
 		TextBorderFactoryMaker ret = new TextBorderFactoryMaker();
 		{
 			Iterator<TextBorderFactoryService> i = ServiceRegistry.lookupProviders(TextBorderFactoryService.class);
