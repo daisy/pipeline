@@ -8,38 +8,24 @@ import java.util.List;
  * @author Joel Håkansson
  */
 public interface PageTemplate {
-	
-	/**
-	 * Get the header height.
-	 * An implementation must ensure that getHeaderHeight()=getHeader().size() for all pagenum's
-	 * @return returns the header height
-	 */
-	public int getHeaderHeight();
 
 	/**
-	 * Get the footer height.
-	 * An implementation must ensure that getFooterHeight()=getFooter().size() for all pagenum's
-	 * @return returns the footer height
-	 */
-	public int getFooterHeight();
-
-	/**
-	 * Get header rows for a page using this Template. Each ArrayList must 
-	 * fit within a single row, i.e. the combined length of all resolved strings in each ArrayList must
+	 * Get header rows for a page using this Template. Each FieldList must 
+	 * fit within a single row, i.e. the combined length of all resolved strings in each FieldList must
 	 * be smaller than the flow width. Keep in mind that text filters will be applied to the 
 	 * resolved string, which could affect its length.
-	 * @return returns an ArrayList containing an ArrayList of String
+	 * @return returns a List of FieldList
 	 */
-	public List<List<Field>> getHeader();
+	public List<FieldList> getHeader();
 	
 	/**
-	 * Get footer rows for a page using this Template. Each ArrayList must 
-	 * fit within a single row, i.e. the combined length of all resolved strings in each ArrayList must
+	 * Get footer rows for a page using this Template. Each FieldList must 
+	 * fit within a single row, i.e. the combined length of all resolved strings in each FieldList must
 	 * be smaller than the flow width. Keep in mind that text filters will be applied to the 
 	 * resolved string, which could affect its length.
-	 * @return returns an ArrayList containing an ArrayList of String
+	 * @return returns a List of FieldList
 	 */
-	public List<List<Field>> getFooter();
+	public List<FieldList> getFooter();
 	
 	/**
 	 * Test if this Template applies to this pagenum.

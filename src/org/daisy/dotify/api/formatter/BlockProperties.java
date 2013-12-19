@@ -19,6 +19,7 @@ public class BlockProperties {
 	private final int textIndent;
 	private final int firstLineIndent;
 	private final ListStyle listType;
+	private final Float rowSpacing;
 	private int listIterator;
 	private final BreakBefore breakBefore;
 	private final Keep keep;
@@ -53,6 +54,7 @@ public class BlockProperties {
 		String identifier = "";
 		Position verticalPosition = null;
 		VerticalAlignment verticalAlignment = VerticalAlignment.AFTER;
+		Float rowSpacing = null;
 		
 		/**
 		 * Create a new Builder
@@ -218,6 +220,11 @@ public class BlockProperties {
 			verticalAlignment = alignment;
 			return this;
 		}
+		
+		public Builder rowSpacing(float value) {
+			this.rowSpacing = value;
+			return this;
+		}
 
 		/**
 		 * Set the block indent for the block, in characters.
@@ -269,6 +276,7 @@ public class BlockProperties {
 		} else {
 			verticalPosition = null;
 		}
+		rowSpacing = builder.rowSpacing;
 	}
 	
 	/**
@@ -398,6 +406,10 @@ public class BlockProperties {
 
 	public BlockPosition getVerticalPosition() {
 		return verticalPosition;
+	}
+	
+	public Float getRowSpacing() {
+		return rowSpacing;
 	}
 
 	@Override
