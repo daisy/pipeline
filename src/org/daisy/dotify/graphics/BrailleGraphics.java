@@ -111,5 +111,74 @@ public class BrailleGraphics {
 		}
 		return ret;
 	}
+	
+	/**
+	 * Combines two braille images by combining characters from the two input
+	 * images. The overlay image overwrites a portion of the background image
+	 * where it is placed. Bounds checking is performed to ensure that the 
+	 * overlay image is placed completely within the size of the background data.
+	 * 
+	 * @param background the image onto which data is to be placed
+	 * @param overlay the image to place onto the background
+	 * @param x the overlay offset in characters
+	 * @param y the overlay offset in rows
+	 * @return returns the combined image
+	 * @throws IllegalArgumentException if x or y is negative, or if the overlay are out of
+	 * bounds of the background image.
+	 */
+	public static List<String> combine(List<String> background, List<String> overlay, int x, int y) {
+		if (x<0||y<0) {
+			throw new IllegalArgumentException("Negative offset not allowed.");
+		} else if (y>background.size()) {
+			throw new IllegalArgumentException("y-axis offset out of bounds.");
+		}		
+		if (overlay.size()+y>background.size()) {
+			throw new IllegalArgumentException("Cannot fit overlay within background (y-axis)");
+		}
+		ArrayList<String> ret = new ArrayList<String>();
+		for (int i = 0; i<background.size();i++) {
+			int y2 = i-y;
+			String a = null;
+			String b = null;
+			if (y2>=0 && y2<overlay.size()) {
+				a = overlay.get(y2);
+			}
+			if (i<background.size()) {
+				b = background.get(i);
+			}
+			if (a!=null&&b!=null) {
+				//combine
+				if (a.length()+x>b.length()) {
+					throw new IllegalArgumentException("Cannot fit overlay within background (x-axis, line " + i + ")");
+				}
+				StringBuilder sb = new StringBuilder();
+				for (int j = 0; j<b.length(); j++) {
+					int x2 = j-x;
+					if (x2>=0 && x2<a.length()) {
+						sb.append(a.charAt(x2));
+					} else if (j<b.length()) {
+						sb.append(b.charAt(j));
+					} else {
+						throw new RuntimeException("Error in code.");
+					}
+				}
+				ret.add(sb.toString());
+			} else if (b==null && a!=null) {
+				/*
+				StringBuilder sb = new StringBuilder();
+				for (int j = 0; j<x; j++) {
+					sb.append("\u2800");
+				}
+				sb.append(a);
+				ret.add(sb.toString());*/
+				throw new RuntimeException("Error in code.");
+			} else if (a==null && b!=null) {
+				ret.add(b);
+			} else {
+				throw new RuntimeException("Error in code.");
+			}
+		}
+		return ret;
+	}
 
 }

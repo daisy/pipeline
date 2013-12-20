@@ -6,6 +6,7 @@ import java.awt.BasicStroke;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -63,7 +64,7 @@ public class BrailleGraphicsTest {
 		
 		
 		List<String> res = eightDotGraphics.renderGraphics(lineImage.getData());
-		assertEquals(res.size(), exp.length);
+		assertEquals(exp.length, res.size());
 		for (int i = 0; i< exp.length; i++) {
 			assertEquals("Assert that render is correct.", exp[i], res.get(i));
 		}
@@ -79,7 +80,7 @@ public class BrailleGraphicsTest {
 		
 		
 		List<String> res = sixDotGraphics.renderGraphics(lineImage.getData());
-		assertEquals(res.size(), exp.length);
+		assertEquals(exp.length, res.size());
 		for (int i = 0; i< exp.length; i++) {
 			assertEquals("Assert that render is correct.", exp[i], res.get(i));
 		}
@@ -94,7 +95,7 @@ public class BrailleGraphicsTest {
 		
 		
 		List<String> res = BrailleGraphics.sixDotFilter(eightDotGraphics.renderGraphics(lineImage.getData()));
-		assertEquals(res.size(), exp.length);
+		assertEquals(exp.length, res.size());
 		for (int i = 0; i< exp.length; i++) {
 			assertEquals("Assert that render is correct.", exp[i], res.get(i));
 		}
@@ -107,10 +108,43 @@ public class BrailleGraphicsTest {
 		"⠸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿",
 		"⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉"};
 		List<String> res = sixDotGraphics.renderGraphics(borderImage.getData());
-		assertEquals(res.size(), exp.length);
+		assertEquals(exp.length, res.size());
 		for (int i = 0; i< exp.length; i++) {
 			assertEquals("Assert that render is correct.", exp[i], res.get(i));
 		}
+	}
+	
+	@Test
+	public void testCombine() {
+		String[] exp = new String[]{"⠰⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠶",
+									"⠸⠀⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿",
+									"⠸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿",
+									"⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉"};
+		List<String> a = sixDotGraphics.renderGraphics(borderImage.getData());
+		List<String> b = new ArrayList<String>();
+		b.add("\u28FF\u28FF\u28FF");
+		List<String> res = BrailleGraphics.combine(a, b, 2, 1);
+		assertEquals(exp.length, res.size());
+		for (int i = 0; i< exp.length; i++) {
+			assertEquals("Assert that render is correct.", exp[i], res.get(i));
+		}
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testCombineOutsideX() {
+		List<String> a = sixDotGraphics.renderGraphics(borderImage.getData());
+		List<String> b = new ArrayList<String>();
+		b.add("\u28FF\u28FF\u28FF");
+		BrailleGraphics.combine(a, b, 14, 1);
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testCombineOutsideY() {
+		List<String> a = sixDotGraphics.renderGraphics(borderImage.getData());
+		List<String> b = new ArrayList<String>();
+		b.add("\u28FF\u28FF\u28FF");
+		b.add("\u28FF\u28FF\u28FF");
+		BrailleGraphics.combine(a, b, 2, 3);
 	}
 
 }
