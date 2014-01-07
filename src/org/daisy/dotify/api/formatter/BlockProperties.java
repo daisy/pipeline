@@ -5,13 +5,14 @@ import org.daisy.dotify.api.formatter.FormattingTypes.Alignment;
 import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.api.formatter.FormattingTypes.Keep;
 import org.daisy.dotify.api.formatter.FormattingTypes.ListStyle;
+import org.daisy.dotify.api.translator.TextBorderStyle;
 
 
 /**
  * BlockProperties defines properties specific for a block of text
  * @author Joel Håkansson
  */
-public class BlockProperties {
+public class BlockProperties implements Cloneable {
 	private final int leftMargin;
 	private final int rightMargin;
 	private final int topMargin;
@@ -30,6 +31,7 @@ public class BlockProperties {
 	private final int blockIndent;
 	private final String identifier;
 	private final BlockPosition verticalPosition;
+	private final TextBorderStyle textBorderStyle;
 
 	/**
 	 * The Builder is used when creating a BlockProperties instance.
@@ -55,32 +57,13 @@ public class BlockProperties {
 		Position verticalPosition = null;
 		VerticalAlignment verticalAlignment = VerticalAlignment.AFTER;
 		Float rowSpacing = null;
+		TextBorderStyle textBorderStyle = null;
 		
 		/**
 		 * Create a new Builder
 		 */
 		public Builder() { }
-		
-		/**
-		 * Creates a new Builder based on existing properties
-		 * @param b
-		 */
-		public Builder(BlockProperties b) {
-			leftMargin = b.getLeftMargin();
-			rightMargin = b.getRightMargin();
-			topMargin = b.getTopMargin();
-			bottomMargin = b.getBottomMargin();
-			textIndent = b.getTextIndent();
-			firstLineIndent = b.getFirstLineIndent();
-			listType = b.getListType();
-			breakBefore = b.getBreakBeforeType();
-			keep = b.getKeepType();
-			keepWithNext = b.getKeepWithNext();
-			keepWithPreviousSheets = b.getKeepWithPreviousSheets();
-			keepWithNextSheets = b.getKeepWithNextSheets();
-			blockIndent = b.getBlockIndent();
-			identifier = b.getIdentifier();
-		}
+
 		/**
 		 * Set the left margin for the block, in characters.
 		 * @param leftMargin left margin, in characters
@@ -243,6 +226,11 @@ public class BlockProperties {
 			return this;
 		}
 		
+		public Builder textBorderStyle(TextBorderStyle value) {
+			this.textBorderStyle = value;
+			return this;
+		}
+		
 		/**
 		 * Build BlockProperties using the current state of the Builder.
 		 * @return returns a new BlockProperties instance
@@ -277,6 +265,7 @@ public class BlockProperties {
 			verticalPosition = null;
 		}
 		rowSpacing = builder.rowSpacing;
+		textBorderStyle = builder.textBorderStyle;
 	}
 	
 	/**
@@ -412,6 +401,17 @@ public class BlockProperties {
 		return rowSpacing;
 	}
 
+	
+	public TextBorderStyle getTextBorderStyle() {
+		return textBorderStyle;
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		//shallow copy should be fine, as all member variables are either immutable or primitives
+		return super.clone();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -429,6 +429,8 @@ public class BlockProperties {
 		result = prime * result + leftMargin;
 		result = prime * result + ((listType == null) ? 0 : listType.hashCode());
 		result = prime * result + rightMargin;
+		result = prime * result + ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
+		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
 		result = prime * result + textIndent;
 		result = prime * result + topMargin;
 		result = prime * result + ((verticalPosition == null) ? 0 : verticalPosition.hashCode());
@@ -456,6 +458,16 @@ public class BlockProperties {
 		if (leftMargin != other.leftMargin) return false;
 		if (listType != other.listType) return false;
 		if (rightMargin != other.rightMargin) return false;
+		if (rowSpacing == null) {
+			if (other.rowSpacing != null)
+				return false;
+		} else if (!rowSpacing.equals(other.rowSpacing))
+			return false;
+		if (textBorderStyle == null) {
+			if (other.textBorderStyle != null)
+				return false;
+		} else if (!textBorderStyle.equals(other.textBorderStyle))
+			return false;
 		if (textIndent != other.textIndent) return false;
 		if (topMargin != other.topMargin) return false;
 		if (verticalPosition == null) {

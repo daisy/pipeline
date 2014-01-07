@@ -176,4 +176,82 @@ public class TextBorderStyle {
 		return bottomRightCorner;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((bottomBorder == null) ? 0 : bottomBorder.hashCode());
+		result = prime
+				* result
+				+ ((bottomLeftCorner == null) ? 0 : bottomLeftCorner.hashCode());
+		result = prime
+				* result
+				+ ((bottomRightCorner == null) ? 0 : bottomRightCorner
+						.hashCode());
+		result = prime * result
+				+ ((leftBorder == null) ? 0 : leftBorder.hashCode());
+		result = prime * result
+				+ ((rightBorder == null) ? 0 : rightBorder.hashCode());
+		result = prime * result
+				+ ((topBorder == null) ? 0 : topBorder.hashCode());
+		result = prime * result
+				+ ((topLeftCorner == null) ? 0 : topLeftCorner.hashCode());
+		result = prime * result
+				+ ((topRightCorner == null) ? 0 : topRightCorner.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TextBorderStyle other = (TextBorderStyle) obj;
+		if (bottomBorder == null) {
+			if (other.bottomBorder != null)
+				return false;
+		} else if (!bottomBorder.equals(other.bottomBorder))
+			return false;
+		if (bottomLeftCorner == null) {
+			if (other.bottomLeftCorner != null)
+				return false;
+		} else if (!bottomLeftCorner.equals(other.bottomLeftCorner))
+			return false;
+		if (bottomRightCorner == null) {
+			if (other.bottomRightCorner != null)
+				return false;
+		} else if (!bottomRightCorner.equals(other.bottomRightCorner))
+			return false;
+		if (leftBorder == null) {
+			if (other.leftBorder != null)
+				return false;
+		} else if (!leftBorder.equals(other.leftBorder))
+			return false;
+		if (rightBorder == null) {
+			if (other.rightBorder != null)
+				return false;
+		} else if (!rightBorder.equals(other.rightBorder))
+			return false;
+		if (topBorder == null) {
+			if (other.topBorder != null)
+				return false;
+		} else if (!topBorder.equals(other.topBorder))
+			return false;
+		if (topLeftCorner == null) {
+			if (other.topLeftCorner != null)
+				return false;
+		} else if (!topLeftCorner.equals(other.topLeftCorner))
+			return false;
+		if (topRightCorner == null) {
+			if (other.topRightCorner != null)
+				return false;
+		} else if (!topRightCorner.equals(other.topRightCorner))
+			return false;
+		return true;
+	}
+
 }
