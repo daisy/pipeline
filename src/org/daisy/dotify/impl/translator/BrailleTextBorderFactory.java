@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
@@ -19,32 +18,12 @@ import org.daisy.dotify.graphics.BrailleGraphics;
 import org.daisy.dotify.impl.translator.BorderSpecification.Style;
 
 class BrailleTextBorderFactory implements TextBorderFactory {
-	/**
-	 * Mode feature. The corresponding value should be
-	 * a string.
-	 */
-	public final static String FEATURE_MODE = "mode";
-	/**
-	 * Style feature. The corresponding value should be
-	 * Set<String> with style values.
-	 */
-	public final static String FEATURE_STYLE = "style";
-	public final static String STYLE_SOLID = "solid";
-	public final static String STYLE_WIDE = "wide";
-	public final static String STYLE_THIN = "thin";
-	public final static String STYLE_INNER = "inner";
-	public final static String STYLE_OUTER = "outer";
 	
-	public final static String FEATURE_BORDER_STYLE = "border-style";
-	public final static String FEATURE_BORDER_WIDTH = "border-width";
-	public final static String FEATURE_BORDER_ALIGN = "border-align";
-	
-	public final static String KEY_BORDER = "border";
-
-	public final static String KEY_TOP = "top";
-	public final static String KEY_LEFT = "left";
-	public final static String KEY_RIGHT = "right";
-	public final static String KEY_BOTTOM = "bottom";
+	private final static String KEY_BORDER = "border";
+	private final static String KEY_TOP = "top";
+	private final static String KEY_LEFT = "left";
+	private final static String KEY_RIGHT = "right";
+	private final static String KEY_BOTTOM = "bottom";
 	
 	private final BorderSpecification def;
 	private final BorderSpecification top;
@@ -106,14 +85,6 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		try {
 			mode = (String) getFeature(FEATURE_MODE);
 		} catch (Exception e) {
-		}
-		Set<String> set = new HashSet<String>();
-		try {
-			set = (Set<String>) getFeature(FEATURE_STYLE);
-		} catch (Exception e) {
-		}
-		if (set == null) {
-			set = new HashSet<String>();
 		}
 
 		if (!mode.equals(BrailleTranslatorFactory.MODE_BYPASS)) {
