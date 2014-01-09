@@ -146,31 +146,6 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 				}
 				
 				return style.build();
-			} else {
-
-			// this is pretty stupid
-			if (set.contains(STYLE_SOLID)) {
-				if (set.contains(STYLE_WIDE)) {
-					if (set.contains(STYLE_INNER)) {
-						return BrailleTextBorderStyle.SOLID_WIDE_INNER;
-					} else if (set.contains(STYLE_OUTER)) {
-						return BrailleTextBorderStyle.SOLID_WIDE_OUTER;
-					} else {
-						Logger.getLogger(this.getClass().getCanonicalName()).fine("Ignoring unknown frame " + set);
-					}
-				} else if (set.contains(STYLE_THIN)) {
-					if (set.contains(STYLE_INNER)) {
-						return BrailleTextBorderStyle.SOLID_THIN_INNER;
-					} else if (set.contains(STYLE_OUTER)) {
-						return BrailleTextBorderStyle.SOLID_THIN_OUTER;
-					} else {
-						Logger.getLogger(this.getClass().getCanonicalName()).fine("Ignoring unknown frame " + set);
-					}
-				} else {
-					Logger.getLogger(this.getClass().getCanonicalName()).fine("Ignoring unknown frame " + set);
-				}
-			}
-			
 			}
 		}
 		throw new BrailleTextBorderFactoryConfigurationException();
