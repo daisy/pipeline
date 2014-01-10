@@ -64,6 +64,22 @@ public interface FormattingTypes {
 		/**
 		 * Align content to the right
 		 */
-		RIGHT
+		RIGHT;
+		
+		/**
+		 * Gets the alignment offset based on available space.
+		 * @param space available space
+		 * @return returns the offset
+		 */
+		public int getOffset(int space) {
+	    	switch (this) {
+		    	case CENTER:
+					return space / 2;
+		    	case RIGHT:
+					return space;
+		    	case LEFT: default: return 0;
+	    	}
+		}
+	
 	}
 }
