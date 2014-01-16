@@ -24,7 +24,7 @@ public class TextFileReader implements Closeable {
 	private int limit;
 	private int currentLine;
 	
-	public class Builder {
+	public static class Builder {
 		private final InputStream is;
 		private Charset cs = DEFAULT_CHARSET;
 		private String regex = DEFAULT_EXPRESSION;
