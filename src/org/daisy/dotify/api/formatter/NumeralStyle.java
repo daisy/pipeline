@@ -8,7 +8,11 @@ public enum NumeralStyle {
 	/**
 	 * Defines default numeral style
 	 */
-	DEFAULT,
+	DEFAULT, DECIMAL,
+	/**
+	 * Defines a number with a single leading zero if the number is < 10 (01, 02, 03, etc.)
+	 */
+	DECIMAL_LEADING_ZERO,
 	/**
 	 * Defines roman numeral style
 	 */
@@ -37,7 +41,10 @@ public enum NumeralStyle {
 				return AlphaNumeral.int2alpha(i);
 			case LOWER_ALPHA:
 				return AlphaNumeral.int2alpha(i).toLowerCase();
-			case DEFAULT:
+			case DECIMAL_LEADING_ZERO:
+				return (i<10?"0":"")+i;
+			case DEFAULT: 
+			case DECIMAL:
 			default:
 				return "" + i;
 		}
