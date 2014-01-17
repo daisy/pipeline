@@ -2,7 +2,6 @@ package org.daisy.dotify.api.formatter;
 
 import java.io.Closeable;
 
-import org.daisy.dotify.api.formatter.NumeralField.NumeralStyle;
 import org.daisy.dotify.api.translator.BrailleTranslator;
 
 

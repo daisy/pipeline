@@ -7,23 +7,6 @@ package org.daisy.dotify.api.formatter;
  * @author Joel Håkansson
  */
 public class NumeralField implements Field {
-	/**
-	 * Defines numeral styles
-	 */
-	public static enum NumeralStyle {
-		/**
-		 * Defines default numeral style
-		 */
-		DEFAULT,
-		/**
-		 * Defines roman numeral style
-		 */
-		ROMAN, UPPER_ROMAN, LOWER_ROMAN,
-		/**
-		 * Defines alpha numeral style
-		 */
-		ALPHA, UPPER_ALPHA, LOWER_ALPHA;
-	};
 
 	private NumeralStyle style;
 	
