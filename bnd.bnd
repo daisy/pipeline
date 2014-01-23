@@ -4,11 +4,12 @@ Service-Component: *
 	biz.aQute.bnd.annotation,\
 	junit.osgi,\
 	dotify.common;version=latest,\
-	com.ibm.icu,\
-	dotify.api;version=latest
+	dotify.api;version=latest,\
+	com.ibm.icu
 Private-Package: org.daisy.dotify.impl.translator,\
 	org.daisy.dotify.text,\
 	org.daisy.dotify.translator,\
-	org.daisy.dotify.impl.translator.sv_SE
+	org.daisy.dotify.impl.translator.sv_SE,\
+	org.daisy.dotify.impl.translator.liblouis
 Include-Resource: / = src/
 -sources: false
