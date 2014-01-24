@@ -240,7 +240,7 @@ public class BlockProperties implements Cloneable {
 		}
 	}
 
-	private BlockProperties(Builder builder) {
+	protected BlockProperties(Builder builder) {
 		leftMargin = builder.leftMargin;
 		rightMargin = builder.rightMargin;
 		topMargin = builder.topMargin;

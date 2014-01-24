@@ -52,4 +52,16 @@ public interface Formatter extends Closeable, FormatterCore {
 	//public BlockStruct getFlowStruct();
 
 	public Iterable<Volume> getVolumes(VolumeContentFormatter vcf);
+	
+	/*API additions that eventually should add TOC, content-item functionality and replace VolumeContentFormatter */
+	
+	public VolumeTemplateBuilder newVolumeTemplate(VolumeTemplateProperties props); 
+	
+	public TableOfContents newToc(String name);
+
+	public Iterable<Volume> getVolumes();
+	
+	
+	/* End */
+	
 }

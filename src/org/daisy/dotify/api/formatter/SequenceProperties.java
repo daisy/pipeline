@@ -54,7 +54,7 @@ public class SequenceProperties {
 		
 	}
 
-	private SequenceProperties(Builder builder) {
+	protected SequenceProperties(Builder builder) {
 		this.masterName = builder.masterName;
 		this.initialPageNumber = builder.initialPageNumber;
 	}
