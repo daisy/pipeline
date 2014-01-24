@@ -36,6 +36,12 @@ public interface Formatter extends Closeable, FormatterCore {
 
 
 	/**
+	 * Start a new Sequence at the current position in the flow.
+	 * @param props the SequenceProperties for the new sequence
+	 */
+	public void newSequence(SequenceProperties props);
+
+	/**
 	 * Add a LayoutMaster
 	 * @param name The name of the LayoutMaster. This is the named used in when retrieving
 	 * a master for a particular sequence from the {@link SequenceProperties}.

@@ -1,12 +1,6 @@
 package org.daisy.dotify.api.formatter;
 
 public interface FormatterCore {
-	
-	/**
-	 * Start a new Sequence at the current position in the flow.
-	 * @param props the SequenceProperties for the new sequence
-	 */
-	public void newSequence(SequenceProperties props);
 
 	/**
 	 * Start a new block with the supplied BlockProperties.
