@@ -1,5 +1,11 @@
 package org.daisy.dotify.api.formatter;
 
+/**
+ * Provides methods needed to build a TOC sequence.
+ * 
+ * @author Joel Håkansson
+ *
+ */
 public interface TocSequenceBuilder {
 
 	/**

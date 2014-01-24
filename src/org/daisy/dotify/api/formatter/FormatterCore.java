@@ -1,5 +1,10 @@
 package org.daisy.dotify.api.formatter;
 
+/**
+ * Provides core formatter tasks.
+ * 
+ * @author Joel Håkansson
+ */
 public interface FormatterCore {
 
 	/**

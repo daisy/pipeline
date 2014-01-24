@@ -2,11 +2,9 @@ package org.daisy.dotify.api.formatter;
 
 import java.util.List;
 
-
-
-
 /**
- * A page object
+ * Provides a page object.
+ * 
  * @author Joel Håkansson
  */
 public interface Page {

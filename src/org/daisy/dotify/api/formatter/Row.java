@@ -1,5 +1,10 @@
 package org.daisy.dotify.api.formatter;
 
+/**
+ * Defines a row of braille.
+ * 
+ * @author Joel Håkansson
+ */
 public interface Row {
 
 	/**

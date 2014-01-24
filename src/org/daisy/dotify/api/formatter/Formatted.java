@@ -1,6 +1,10 @@
 package org.daisy.dotify.api.formatter;
 
-
+/**
+ * Provides a formatted result, in various facets.
+ * 
+ * @author Joel Håkansson
+ */
 public interface Formatted {
 
 	/**

@@ -1,5 +1,10 @@
 package org.daisy.dotify.api.engine;
 
+/**
+ * Provides an exception for a FormatterEngineFactory
+ * 
+ * @author Joel Håkansson
+ */
 public class FormatterEngineConfigurationException extends Exception {
 
 	/**
