@@ -1,5 +1,10 @@
 package org.daisy.dotify.api.formatter;
 
+/**
+ * Provides an exception for conditions in a formatter factory configuration.
+ * 
+ * @author Joel Håkansson
+ */
 public class FormatterConfigurationException extends Exception {
 
 	/**

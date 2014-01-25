@@ -2,8 +2,7 @@ package org.daisy.dotify.api.formatter;
 
 
 /**
- * <p>SpanProperties defines properties specific for a span of text</p>
- * <p>Note that no span properties have been implemented yet</p>
+ * <p>Defines properties specific for a span of text.</p>
  * 
  * @author Joel Håkansson
  */

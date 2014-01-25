@@ -52,6 +52,9 @@ public interface FormattingTypes {
 		 */
 		ALL}
 
+	/**
+	 * Defines alignment options.
+	 */
 	public static enum Alignment {
 		/**
 		 * Align content to the left
