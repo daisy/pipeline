@@ -1,5 +1,11 @@
 package org.daisy.dotify.api.translator;
 
+/**
+ * Provides an exception that indicates a problem configuring
+ * a new translator instance.
+ * 
+ * @author Joel Håkansson
+ */
 public class TranslatorConfigurationException extends Exception {
 
 	/**

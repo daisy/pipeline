@@ -1,6 +1,11 @@
 package org.daisy.dotify.api.translator;
 
-
+/**
+ * Defines a text border. The border cannot be more than one
+ * character high, and shouldn't be more than one character wide.
+ * 
+ * @author Joel Håkansson
+ */
 public class TextBorderStyle {
 	private final String topLeftCorner, topBorder, topRightCorner, leftBorder,
 			rightBorder, bottomLeftCorner, bottomBorder, bottomRightCorner;
@@ -16,6 +21,11 @@ public class TextBorderStyle {
 	 * }
 	 */
 
+	/**
+	 * Provides a builder for text borders.
+	 * 
+	 * @author Joel Håkansson
+	 */
 	public static class Builder {
 		String topLeftCorner, topBorder, topRightCorner, leftBorder,
 				rightBorder, bottomLeftCorner, bottomBorder, bottomRightCorner;
@@ -144,34 +154,71 @@ public class TextBorderStyle {
 		this.bottomRightCorner = builder.bottomRightCorner;
 	}
 
+	/**
+	 * Gets the top left corner component.
+	 * @return returns the top left corner
+	 */
 	public String getTopLeftCorner() {
 		return topLeftCorner;
 	}
 
+	/**
+	 * Gets the top component pattern. This may be several characters long.
+	 * 
+	 * @return returns the top pattern
+	 */
 	public String getTopBorder() {
 		return topBorder;
 	}
 
+	/**
+	 * Gets the top right corner component.
+	 * @return returns the top right corner
+	 */
 	public String getTopRightCorner() {
 		return topRightCorner;
 	}
 
+	/**
+	 * Gets the left border component. This should be a single character or 
+	 * an empty string (although not strictly required).
+	 * 
+	 * @return returns the left border
+	 */
 	public String getLeftBorder() {
 		return leftBorder;
 	}
 
+	/**
+	 * Gets the right border component. This should be a single character or 
+	 * an empty string (although not strictly required).
+	 * 
+	 * @return returns the right border
+	 */
 	public String getRightBorder() {
 		return rightBorder;
 	}
 
+	/**
+	 * Gets the bottom left corner component.
+	 * @return returns the bottom left corner
+	 */
 	public String getBottomLeftCorner() {
 		return bottomLeftCorner;
 	}
 
+	/**
+	 * Gets the bottom component pattern. This may be several characters long.
+	 * @return returns the bottom pattern
+	 */
 	public String getBottomBorder() {
 		return bottomBorder;
 	}
 
+	/**
+	 * Gets the bottom right corner component.
+	 * @return returns the bottom right corner
+	 */
 	public String getBottomRightCorner() {
 		return bottomRightCorner;
 	}

@@ -22,7 +22,7 @@ public interface BrailleTranslator {
 	 *            length of all attributes must be equal to the length of the
 	 *            text.
 	 * @return returns the translator result
-	 * @throws UnsupportedLocaleException
+	 * @throws TranslationException
 	 *             if the locale is not supported by the implementation
 	 * @throws IllegalArgumentException
 	 *             if the sum of all attributes length is not equal to the
@@ -55,7 +55,7 @@ public interface BrailleTranslator {
 	 * @param locale
 	 *            the language/region of the text
 	 * @return returns the translator result
-	 * @throws UnsupportedLocaleException
+	 * @throws TranslationException
 	 *             if the locale is not supported by the implementation
 	 */
 	public BrailleTranslatorResult translate(String text, String locale) throws TranslationException;

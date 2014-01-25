@@ -1,5 +1,10 @@
 package org.daisy.dotify.api.translator;
 
+/**
+ * Provides an exception indicating a translation problem.
+ * 
+ * @author Joel Håkansson
+ */
 public class TranslationException extends Exception {
 
 	/**

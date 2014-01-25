@@ -1,6 +1,11 @@
 package org.daisy.dotify.api.translator;
 
-
+/**
+ * Provides an exception that indicates a problem configuring a new
+ * marker processor instance.
+ * 
+ * @author Joel Håkansson
+ */
 public class MarkerProcessorConfigurationException extends Exception {
 
 	/**
