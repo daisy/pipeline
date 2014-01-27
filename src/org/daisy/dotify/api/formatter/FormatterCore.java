@@ -62,6 +62,12 @@ public interface FormatterCore {
 	 */
 	public void newLine();
 	
+	/**
+	 * Adds the page number of a reference.
+	 * 
+	 * @param identifier the element of interest
+	 * @param numeralStyle the numeral style
+	 */
 	public void insertReference(String identifier, NumeralStyle numeralStyle);
 
 }
