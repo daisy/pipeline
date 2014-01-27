@@ -22,11 +22,4 @@ public interface TableOfContents extends FormatterCore {
 	 */
 	public void endEntry();
 	
-	/**
-	 * Inserts an expression to evaluate.
-	 * @param exp the expression
-	 * @param t the text properties
-	 */
-	public void insertEvaluate(String exp, TextProperties t);
-	
 }

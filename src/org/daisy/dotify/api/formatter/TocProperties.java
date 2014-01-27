@@ -9,7 +9,7 @@ public class TocProperties extends SequenceProperties {
 	/**
 	 * Defines TOC ranges.
 	 */
-	enum TocRange {
+	public enum TocRange {
 		/**
 		 * Defines the TOC range to include the entire document
 		 */
@@ -46,6 +46,10 @@ public class TocProperties extends SequenceProperties {
 			this.tocName = tocName;
 			this.range = range;
 			this.useWhen = useWhen;
+		}
+		
+		public TocProperties build() {
+			return new TocProperties(this);
 		}
 	}
 
