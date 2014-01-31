@@ -5,6 +5,7 @@
 Export-Package: se.mtm.common.io,\
 	se.mtm.common.xml,\
 	se.mtm.common.text,\
-	org.daisy.dotify.text
+	org.daisy.dotify.text,\
+	se.mtm.common.collection
 Include-Resource: / = src/
 -sources: false
