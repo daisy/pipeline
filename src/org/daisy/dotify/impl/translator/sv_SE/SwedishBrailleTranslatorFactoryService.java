@@ -1,9 +1,13 @@
 package org.daisy.dotify.impl.translator.sv_SE;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryService;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
+import org.daisy.dotify.api.translator.TranslatorSpecification;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
@@ -13,7 +17,13 @@ public class SwedishBrailleTranslatorFactoryService implements
 		BrailleTranslatorFactoryService {
 
 	private HyphenatorFactoryMakerService hyphenator = null;
+	private final ArrayList<TranslatorSpecification> specs;
 
+	public SwedishBrailleTranslatorFactoryService() {
+		this.specs = new ArrayList<TranslatorSpecification>();
+		specs.add(new TranslatorSpecification("sv-SE", BrailleTranslatorFactory.MODE_UNCONTRACTED));
+	}
+	
 	public boolean supportsSpecification(String locale, String mode) {
 		return "sv-SE".equalsIgnoreCase(locale) && mode.equals(BrailleTranslatorFactory.MODE_UNCONTRACTED);
 	}
@@ -38,6 +48,10 @@ public class SwedishBrailleTranslatorFactoryService implements
 		} else {
 			throw new TranslatorConfigurationException("Unrecognized reference: " + reference);
 		}
+	}
+
+	public Collection<TranslatorSpecification> listSpecifications() {
+		return specs;
 	}
 
 }

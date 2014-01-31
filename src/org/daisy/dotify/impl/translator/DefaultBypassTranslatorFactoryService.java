@@ -1,9 +1,13 @@
 package org.daisy.dotify.impl.translator;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryService;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
+import org.daisy.dotify.api.translator.TranslatorSpecification;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
@@ -38,6 +42,14 @@ public class DefaultBypassTranslatorFactoryService implements
 		} else {
 			throw new TranslatorConfigurationException("Unrecognized reference: " + reference);
 		}
+	}
+
+	public Collection<TranslatorSpecification> listSpecifications() {
+		ArrayList<TranslatorSpecification> ret = new ArrayList<TranslatorSpecification>();
+		for (String loc : hyphenator.listLocales()) {
+			ret.add(new TranslatorSpecification(loc, BrailleTranslatorFactory.MODE_BYPASS));
+		}
+		return ret;
 	}
 
 }
