@@ -1,5 +1,7 @@
 package org.daisy.dotify.api.translator;
 
+import java.util.Collection;
+
 /**
  * <p>
  * Provides an interface for a BrailleTranslatorFactory service. The purpose of
@@ -27,6 +29,12 @@ public interface BrailleTranslatorFactoryService {
 	 * @return returns true if the translator factory supports the specification
 	 */
 	public boolean supportsSpecification(String locale, String mode);
+	
+	/**
+	 * Returns a list of supported specifications.
+	 * @return returns a list of specifications
+	 */
+	public Collection<TranslatorSpecification> listSpecifications();
 
 	public BrailleTranslatorFactory newFactory();
 

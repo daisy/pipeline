@@ -1,10 +1,13 @@
 package org.daisy.dotify.consumer.translator;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,6 +20,7 @@ import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryService;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
+import org.daisy.dotify.api.translator.TranslatorSpecification;
 import org.daisy.dotify.consumer.hyphenator.HyphenatorFactoryMaker;
 
 import aQute.bnd.annotation.component.Component;
@@ -150,5 +154,15 @@ public class BrailleTranslatorFactoryMaker implements
 			super(message);
 		}
 		
+	}
+
+	public Collection<TranslatorSpecification> listSpecifications() {
+		Set<TranslatorSpecification> ret = new HashSet<TranslatorSpecification>();
+		synchronized (map) {
+			for (BrailleTranslatorFactoryService f : factories) {
+				ret.addAll(f.listSpecifications());
+			}
+		}
+		return ret;
 	}
 }
