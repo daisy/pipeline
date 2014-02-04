@@ -43,7 +43,4 @@ public class Marker {
 		return value;
 	}
 
-	public boolean canContainEventObjects() {
-		return false;
-	}
 }

@@ -17,6 +17,11 @@ public interface Formatter extends Closeable, FormatterCore {
 	/*
 	public FilterFactory getFilterFactory();
 	*/
+	/**
+	 * 
+	 * @return
+	 * @deprecated
+	 */
 	public BrailleTranslator getTranslator();
 	
 	/*

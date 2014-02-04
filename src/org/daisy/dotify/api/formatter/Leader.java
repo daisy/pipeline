@@ -136,8 +136,4 @@ public class Leader {
 		return align;
 	}
 
-	public boolean canContainEventObjects() {
-		return false;
-	}
-
 }
