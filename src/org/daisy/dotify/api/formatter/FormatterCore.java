@@ -91,6 +91,6 @@ public interface FormatterCore {
 	 * @param exp the expression
 	 * @param t the text properties
 	 */
-	public void insertEvaluate(String exp, TextProperties t);
+	public void insertEvaluate(DynamicContent exp, TextProperties t);
 
 }

@@ -2,8 +2,6 @@ package org.daisy.dotify.api.formatter;
 
 import java.io.Closeable;
 
-import org.daisy.dotify.api.translator.BrailleTranslator;
-
 
 /**
  * <p>Provides an entry point for formatting text.</p>
@@ -17,12 +15,6 @@ public interface Formatter extends Closeable, FormatterCore {
 	/*
 	public FilterFactory getFilterFactory();
 	*/
-	/**
-	 * 
-	 * @return
-	 * @deprecated
-	 */
-	public BrailleTranslator getTranslator();
 	
 	/*
 	public StringFilter getDefaultFilter();
@@ -60,8 +52,7 @@ public interface Formatter extends Closeable, FormatterCore {
 
 	/**
 	 * Creates a new empty volume template builder.
-	 * @param useWhen
-	 * @param splitterMax
+	 * @param props properties
 	 * @return returns a new volume template builder
 	 */
 	public VolumeTemplateBuilder newVolumeTemplate(VolumeTemplateProperties props); 

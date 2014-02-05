@@ -28,11 +28,11 @@ public interface VolumeContentBuilder extends FormatterCore {
 	 * <p>Creates a new on toc start block. In a scenario where conditions
 	 *  overlap, the first one added takes precedence.</p> 
 	 * <p>Calling this method is only valid within a TOC sequence.</p>
-	 * @param useWhen a condition, or null
+	 * @param condition a condition, or null
 	 * @return returns the formatter for the events
 	 * @throws IllegalStateException if not in a TOC sequence
 	 */
-	public void newOnTocStart(String useWhen);
+	public void newOnTocStart(Condition condition);
 
 	/**
 	 * <p>Creates a new on toc start block that always apply. In a scenario where conditions
@@ -47,11 +47,11 @@ public interface VolumeContentBuilder extends FormatterCore {
 	 * <p>Creates a new on volume start block. In a scenario where conditions
 	 *  overlap, the first one added takes precedence.</p> 
 	 * <p>Calling this method is only valid within a TOC sequence.</p>
-	 * @param useWhen a condition, or null
+	 * @param condition a condition, or null
 	 * @return returns the formatter for the events
 	 * @throws IllegalStateException if not in a TOC sequence
 	 */
-	public void newOnVolumeStart(String useWhen);
+	public void newOnVolumeStart(Condition condition);
 
 	/**
 	 * <p>Creates a new on volume start block that always apply. In a scenario where conditions
@@ -66,11 +66,11 @@ public interface VolumeContentBuilder extends FormatterCore {
 	 * <p>Creates a new on volume end block. In a scenario where conditions
 	 *  overlap, the first one added takes precedence.</p> 
 	 * <p>Calling this method is only valid within a TOC sequence.</p>
-	 * @param useWhen a condition, or null
+	 * @param condition a condition, or null
 	 * @return returns the formatter for the events
 	 * @throws IllegalStateException if not in a TOC sequence
 	 */
-	public void newOnVolumeEnd(String useWhen);
+	public void newOnVolumeEnd(Condition condition);
 
 	/**
 	 * <p>Creates a new on volume end block that always apply. In a scenario where conditions
@@ -85,11 +85,11 @@ public interface VolumeContentBuilder extends FormatterCore {
 	 * <p>Creates a new on toc end block. In a scenario where conditions
 	 *  overlap, the first one added takes precedence.</p> 
 	 * <p>Calling this method is only valid within a TOC sequence.</p>
-	 * @param useWhen a condition, or null
+	 * @param condition a condition, or null
 	 * @return returns the formatter for the events
 	 * @throws IllegalStateException if not in a TOC sequence
 	 */
-	public void newOnTocEnd(String useWhen);
+	public void newOnTocEnd(Condition condition);
 
 	/**
 	 * <p>Creates a new on toc end block that always apply. In a scenario where conditions

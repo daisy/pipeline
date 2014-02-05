@@ -21,7 +21,7 @@ public class TocProperties extends SequenceProperties {
 
 	private final String tocName;
 	private final TocRange range; 
-	private final String useWhen;
+	private final Condition condition;
 	
 	/**
 	 * Provides a builder for creating TOC properties instances.
@@ -31,7 +31,7 @@ public class TocProperties extends SequenceProperties {
 	public static class Builder extends SequenceProperties.Builder {
 		private final String tocName;
 		private final TocRange range; 
-		private final String useWhen;
+		private final Condition condition;
 		
 		/**
 		 * Creates a new builder with the supplied arguments.
@@ -39,13 +39,13 @@ public class TocProperties extends SequenceProperties {
 		 * @param masterName the master identifier
 		 * @param tocName the toc identifier
 		 * @param range a range for the TOC
-		 * @param useWhen a condition for when to apply the TOC sequence
+		 * @param condition a condition for when to apply the TOC sequence
 		 */
-		public Builder(String masterName, String tocName, TocRange range, String useWhen) {
+		public Builder(String masterName, String tocName, TocRange range, Condition condition) {
 			super(masterName);
 			this.tocName = tocName;
 			this.range = range;
-			this.useWhen = useWhen;
+			this.condition = condition;
 		}
 		
 		public TocProperties build() {
@@ -57,7 +57,7 @@ public class TocProperties extends SequenceProperties {
 		super(builder);
 		this.tocName = builder.tocName;
 		this.range = builder.range;
-		this.useWhen = builder.useWhen;
+		this.condition = builder.condition;
 	}
 
 	/**
@@ -80,8 +80,8 @@ public class TocProperties extends SequenceProperties {
 	 * Gets the condition for applying the TOC
 	 * @return the condition
 	 */
-	public String getUseWhen() {
-		return useWhen;
+	public Condition getCondition() {
+		return condition;
 	}
 
 }

@@ -6,9 +6,7 @@ package org.daisy.dotify.api.formatter;
  * @author Joel Håkansson
  */
 public class VolumeTemplateProperties {
-	private final String volumeNumberVariable;
-	private final String volumeCountVariable;
-	private final String useWhen;
+	private final Condition condition;
 	private final int splitterMax;
 	
 	/**
@@ -18,9 +16,7 @@ public class VolumeTemplateProperties {
 	 */
 	public static class Builder {
 		private final int splitterMax;
-		private String useWhen = null;
-		private String volumeNumberVariable = null;
-		private String volumeCountVariable = null;
+		private Condition condition = null;
 
 		/**
 		 * Creates a new Builder.
@@ -33,34 +29,14 @@ public class VolumeTemplateProperties {
 		
 		/**
 		 * Sets the condition for applying the volume template.
-		 * @param useWhen the condition
+		 * @param condition the condition
 		 * @return returns the builder
 		 */
-		public Builder useWhen(String useWhen) {
-			this.useWhen = useWhen;
+		public Builder condition(Condition condition) {
+			this.condition = condition;
 			return this;
 		}
-		
-		/**
-		 * Sets the variable name for the volume number that can be used in the condition.
-		 * @param value the variable name
-		 * @return returns the builder
-		 */
-		public Builder volumeNumberVariable(String value) {
-			volumeNumberVariable = value;
-			return this;
-		}
-		
-		/**
-		 * Sets the variable name for the volume count that can be used in the condition.
-		 * @param name the variable name
-		 * @return returns the builder
-		 */
-		public Builder volumeCountVariable(String name) {
-			volumeCountVariable = name;
-			return this;
-		}
-		
+
 		/**
 		 * Creates a new VolumeTemplateProperties instance based on the current
 		 * configuration.
@@ -74,36 +50,17 @@ public class VolumeTemplateProperties {
 
 	protected VolumeTemplateProperties(Builder builder) {
 		this.splitterMax = builder.splitterMax;
-		this.useWhen = builder.useWhen;
-		this.volumeNumberVariable = builder.volumeNumberVariable;
-		this.volumeCountVariable = builder.volumeCountVariable;
+		this.condition = builder.condition;
 	}
 
-	/**
-	 * Gets the variable name used for volume number.
-	 * 
-	 * @return returns the name of the variable
-	 */
-	public String getVolumeNumberVariable() {
-		return volumeNumberVariable;
-	}
-
-	/**
-	 * Gets the variable name used for volume count.
-	 * 
-	 * @return returns the name of the variable
-	 */
-	public String getVolumeCountVariable() {
-		return volumeCountVariable;
-	}
 
 	/**
 	 * Gets the condition for applying the volume template
 	 * 
 	 * @return returns the condition
 	 */
-	public String getUseWhen() {
-		return useWhen;
+	public Condition getCondition() {
+		return condition;
 	}
 
 	/**
