@@ -1,6 +1,5 @@
 package org.daisy.dotify.api.formatter;
 
-import java.util.Map;
 
 /**
  * Provides an interface for dynamic text, in other words
@@ -18,21 +17,11 @@ public interface DynamicContent {
 	public String render();
 
 	/**
-	 * <p>Renders the content using the supplied variables.</p> 
-	 * <p>The variable names may only contain word characters.</p>
+	 * <p>Renders the content in the supplied context.</p> 
 	 * 
-	 * @param variables the variables
+	 * @param context the context
 	 * @return returns the evaluation result
 	 */
-	public String render(Map<String, String> variables);
+	public String render(Context context);
 
-	/**
-	 * <p>Renders the content using the supplied variables. Each supplied string 
-	 * should be a key/value pair separated by '='. E.g. <tt>myVariable=1</tt></p> 
-	 * <p>The variable names may only contain word characters.</p>
-	 * 
-	 * @param variables the variables
-	 * @return returns the evaluation result
-	 */
-	public String render(String... vars);
 }

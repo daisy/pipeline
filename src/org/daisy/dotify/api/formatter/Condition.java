@@ -1,6 +1,5 @@
 package org.daisy.dotify.api.formatter;
 
-import java.util.Map;
 
 /**
  * Provides an interface for a condition.
@@ -17,21 +16,11 @@ public interface Condition {
 	public boolean evaluate();
 
 	/**
-	 * <p>Evaluates the condition using the supplied variables.</p> 
-	 * <p>The variable names may only contain word characters.</p>
+	 * <p>Evaluates the condition in the supplied context.</p> 
 	 * 
-	 * @param variables the variables
+	 * @param context the context
 	 * @return returns the evaluation result
 	 */
-	public boolean evaluate(Map<String, String> variables);
+	public boolean evaluate(Context context);
 
-	/**
-	 * <p>Evaluates the condition using the supplied variables. Each supplied string 
-	 * should be a key/value pair separated by '='. E.g. <tt>myVariable=1</tt></p> 
-	 * <p>The variable names may only contain word characters.</p>
-	 * 
-	 * @param variables the variables
-	 * @return returns the evaluation result
-	 */
-	public boolean evaluate(String... vars);
 }
