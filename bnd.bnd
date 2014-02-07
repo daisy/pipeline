@@ -16,3 +16,5 @@ Private-Package: org.daisy.dotify.consumer.hyphenator,\
 Include-Resource: / = src/
 -sources: false
 Service-Component: *
+Import-Package: org.junit*;resolution:=optional,\
+	*
