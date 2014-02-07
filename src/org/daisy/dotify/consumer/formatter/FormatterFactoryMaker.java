@@ -8,9 +8,7 @@ import javax.imageio.spi.ServiceRegistry;
 import org.daisy.dotify.api.formatter.Formatter;
 import org.daisy.dotify.api.formatter.FormatterConfigurationException;
 import org.daisy.dotify.api.formatter.FormatterFactory;
-import org.daisy.dotify.api.obfl.ExpressionFactory;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
-import org.daisy.dotify.consumer.obfl.ExpressionFactoryMaker;
 import org.daisy.dotify.consumer.translator.BrailleTranslatorFactoryMaker;
 
 /**
@@ -27,11 +25,6 @@ public class FormatterFactoryMaker {
 		proxy = ServiceRegistry.lookupProviders(FormatterFactory.class).next();
 		try {
 			proxy.setReference(BrailleTranslatorFactoryMakerService.class, BrailleTranslatorFactoryMaker.newInstance());
-		} catch (FormatterConfigurationException e) {
-			Logger.getLogger(this.getClass().getCanonicalName()).log(Level.WARNING, "Failed to set reference.", e);
-		}
-		try {
-			proxy.setReference(ExpressionFactory.class, ExpressionFactoryMaker.newInstance().getFactory());
 		} catch (FormatterConfigurationException e) {
 			Logger.getLogger(this.getClass().getCanonicalName()).log(Level.WARNING, "Failed to set reference.", e);
 		}
