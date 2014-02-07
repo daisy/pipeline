@@ -28,8 +28,8 @@ public interface Page {
 	public List<Row> getRows();
 
 	/**
-	 * Gets the page index for this page
-	 * @return returns the page index in the sequence (zero based)
+	 * Gets the page index for this page (zero based, but including page number offset)
+	 * @return returns the page index in the sequence
 	 */
 	public int getPageIndex();
 	
