@@ -17,11 +17,11 @@
  */
 package se.mtm.common.io;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Given an initial input file and a final output file, this class can be
@@ -35,9 +35,11 @@ import java.io.IOException;
  * 
  * @author Joel Håkansson
  */
-public class TempFileHandler implements Closeable {
+public class TempFileHandler implements StreamJuggler {
 	private File t1;
 	private File t2;
+	private InputStreamMaker is;
+	private OutputStream os;
 	private File output;
 	private boolean toggle;
 	
@@ -63,6 +65,8 @@ public class TempFileHandler implements Closeable {
 		this.t1 = FileIO.createTempFile();
 		this.t2 = FileIO.createTempFile();
 		FileIO.copy(input, this.t1);
+		is = null;
+		os = null;
 	}
 
 	/**
@@ -96,6 +100,8 @@ public class TempFileHandler implements Closeable {
 		if (t1==null || t2==null) {
 			throw new IllegalStateException("Cannot swap after close.");
 		}
+		is = null;
+		os = null;
 		if (getOutput().length()>0) {
 			toggle = !toggle;
 			// reset the new output to length()=0
@@ -130,6 +136,26 @@ public class TempFileHandler implements Closeable {
 			t1 = null;
 			t2 = null;
 		}
+	}
+
+	public InputStreamMaker getInputStreamMaker() {
+		if (t1==null || t2==null) {
+			throw new IllegalStateException("Closed.");
+		}
+		if (is==null) {
+			is = new FileInputStreamMaker(getInput());
+		}
+		return is;
+	}
+
+	public OutputStream getOutputStream() throws IOException {
+		if (t1==null || t2==null) {
+			throw new IllegalStateException("Closed.");
+		}
+		if (os==null) {
+			os = new FileOutputStream(getOutput());
+		}
+		return os;
 	}
 
 }
