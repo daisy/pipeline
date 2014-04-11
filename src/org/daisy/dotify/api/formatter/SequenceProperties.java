@@ -10,8 +10,8 @@ package org.daisy.dotify.api.formatter;
  * @author Joel Håkansson 
  */
 public class SequenceProperties {
-	private String masterName;
-	private Integer initialPageNumber;
+	private final String masterName;
+	private final Integer initialPageNumber;
 	
 	/**
 	 * The Builder is used when creating a SequenceProperites instance 

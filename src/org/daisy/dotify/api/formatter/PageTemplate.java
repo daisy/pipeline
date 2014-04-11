@@ -10,7 +10,7 @@ import java.util.List;
 public interface PageTemplate {
 
 	/**
-	 * Get header rows for a page using this Template. Each FieldList must 
+	 * Gets header rows for a page using this Template. Each FieldList must 
 	 * fit within a single row, i.e. the combined length of all resolved strings in each FieldList must
 	 * be smaller than the flow width. Keep in mind that text filters will be applied to the 
 	 * resolved string, which could affect its length.
@@ -19,7 +19,7 @@ public interface PageTemplate {
 	public List<FieldList> getHeader();
 	
 	/**
-	 * Get footer rows for a page using this Template. Each FieldList must 
+	 * Gets footer rows for a page using this Template. Each FieldList must 
 	 * fit within a single row, i.e. the combined length of all resolved strings in each FieldList must
 	 * be smaller than the flow width. Keep in mind that text filters will be applied to the 
 	 * resolved string, which could affect its length.
@@ -28,7 +28,7 @@ public interface PageTemplate {
 	public List<FieldList> getFooter();
 	
 	/**
-	 * Test if this Template applies to this pagenum.
+	 * Tests if this Template applies to this pagenum.
 	 * @param pagenum the pagenum to test
 	 * @return returns true if the Template should be applied to the page
 	 */

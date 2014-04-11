@@ -2,35 +2,17 @@ package org.daisy.dotify.api.formatter;
 
 import java.io.Closeable;
 
-
 /**
- * <p>Provides an entry point for formatting text.</p>
+ * <p>Provides text-only formatting.</p>
  * 
- * <p>The result can be passed on to a Paginator or used for displaying
- * on a refreshable braille display.</p>
- *  
  * @author Joel Håkansson
  */
 public interface Formatter extends Closeable, FormatterCore {
-	/*
-	public FilterFactory getFilterFactory();
-	*/
-	
-	/*
-	public StringFilter getDefaultFilter();
-	*/
-	/*
-	public FilterLocale getFilterLocale();
-	*/
-	/*
-	public void setLocale(FilterLocale locale);
-	*/
-	
+
 	/**
 	 * Opens the Formatter for writing.
 	 */
 	public void open();
-
 
 	/**
 	 * Start a new Sequence at the current position in the flow.
@@ -45,10 +27,6 @@ public interface Formatter extends Closeable, FormatterCore {
 	 * @param master the LayoutMaster
 	 */
 	public void addLayoutMaster(String name, LayoutMaster master);
-	
-	//public BlockStruct getFlowStruct();
-
-	/*API additions that eventually should add TOC, content-item functionality and replace VolumeContentFormatter */
 
 	/**
 	 * Creates a new empty volume template builder.
@@ -56,12 +34,26 @@ public interface Formatter extends Closeable, FormatterCore {
 	 * @return returns a new volume template builder
 	 */
 	public VolumeTemplateBuilder newVolumeTemplate(VolumeTemplateProperties props); 
-	
+
+	/**
+	 * Creates a new table of contents with the supplied name
+	 * @param name the TOC identifier
+	 * @return returns a new table of contents
+	 */
 	public TableOfContents newToc(String name);
 
+	/**
+	 * Creates a new collection with the supplied identifier
+	 * 
+	 * @param collectionIdentifier the collection identifier
+	 * @return returns a new collection
+	 */
+	public ContentCollection newCollection(String collectionIdentifier); 
+
+	/**
+	 * Gets the formatted result.
+	 * @return returns the formatted result
+	 */
 	public Iterable<Volume> getVolumes();
-	
-	
-	/* End */
-	
+
 }

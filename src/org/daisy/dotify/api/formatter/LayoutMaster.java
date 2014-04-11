@@ -17,4 +17,10 @@ public interface LayoutMaster extends SectionProperties {
 	 */
 	public PageTemplate getTemplate(int pagenum);
 
+	/**
+	 * Gets the page area for all pages using this master.
+	 * @return returns the PageArea, or null if no page area is used.
+	 */
+	public PageArea getPageArea();
+
 }
