@@ -27,19 +27,6 @@ public interface FormatterCore {
 	 * @throws IllegalStateException if the current state does not allow this call to be made
 	 */
 	public void endBlock();
-	
-	/**
-	 * Start a floating element
-	 * @param id the identifier of the floating element
-	 * @throws IllegalStateException if the current state does not allow this call to be made
-	 */
-	public void startFloat(String id);
-	
-	/**
-	 * End the floating element
-	 * @throws IllegalStateException if the current state does not allow this call to be made
-	 */
-	public void endFloat();
 
 	/**
 	 * Insert a marker at the current position in the flow
