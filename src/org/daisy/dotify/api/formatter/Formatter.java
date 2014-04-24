@@ -21,12 +21,12 @@ public interface Formatter extends Closeable, FormatterCore {
 	public void newSequence(SequenceProperties props);
 
 	/**
-	 * Add a LayoutMaster
+	 * Creates a new LayoutMaster builder.
 	 * @param name The name of the LayoutMaster. This is the named used in when retrieving
 	 * a master for a particular sequence from the {@link SequenceProperties}.
-	 * @param master the LayoutMaster
+	 * @param properties the properties
 	 */
-	public void addLayoutMaster(String name, LayoutMaster master);
+	public LayoutMasterBuilder newLayoutMaster(String name, SectionProperties properties);
 
 	/**
 	 * Creates a new empty volume template builder.
