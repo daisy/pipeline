@@ -7,7 +7,7 @@ package org.daisy.dotify.api.formatter;
  * 
  * @author Joel Håkansson
  */
-public interface PageArea {
+public class PageAreaProperties {
 	/**
 	 * Specifies the alignment of the page area.
 	 */
@@ -37,18 +37,71 @@ public interface PageArea {
 		 * the page area.
 		 */
 		PAGE};
+		
+	private final Alignment align;
+	private final FallbackScope scope;
+	private final String collectionId;
+	private final int maxHeight;
+	private final String fallbackId;
+
+	public static class Builder {
+		//required
+		private final String collectionId;
+		private final int maxHeight;
+		
+		//optional
+		private Alignment align = Alignment.BOTTOM;
+		private FallbackScope scope = FallbackScope.PAGE;
+		private String fallbackId = null;
+		
+		public Builder(String collectionId, int maxHeight) {
+			this.collectionId = collectionId;
+			this.maxHeight = maxHeight;
+		}
+		
+		public Builder align(Alignment value) {
+			this.align = value;
+			return this;
+		}
+		
+		public Builder scope(FallbackScope value) {
+			this.scope = value;
+			return this;
+		}
+		
+		public Builder fallbackId(String value) {
+			this.fallbackId = value;
+			return this;
+		}
+		
+		public PageAreaProperties build() {
+			return new PageAreaProperties(this);
+		}
+		
+	}
 	
+	private PageAreaProperties(Builder builder) {
+		this.align = builder.align;
+		this.collectionId = builder.collectionId;
+		this.maxHeight = builder.maxHeight;
+		this.fallbackId = builder.fallbackId;
+		this.scope = builder.scope;
+	}
 	/**
 	 * Gets the alignment of the page area.
 	 * @return returns the alignment
 	 */
-	public Alignment getAlignment();
+	public Alignment getAlignment() {
+		return align;
+	}
 	
 	/**
 	 * Gets the id of the associated collection.
 	 * @return returns the id of the associated collection
 	 */
-	public String getCollectionId();
+	public String getCollectionId() {
+		return collectionId;
+	}
 	
 	/**
 	 * Gets the id of a fallback collection. Note that the
@@ -56,18 +109,24 @@ public interface PageArea {
 	 * 
 	 * @return returns the id of the fallback collection
 	 */
-	public String getFallbackId();
+	public String getFallbackId() {
+		return fallbackId;
+	}
 	
 	/**
 	 * Gets the scope of the fallback action.
 	 * @return returns the scope of the fallback action
 	 */
-	public FallbackScope getFallbackScope();
+	public FallbackScope getFallbackScope() {
+		return scope;
+	}
 	
 	/**
 	 * Gets the maximum height allowed to be used by the page
 	 * area, in rows.
 	 * @return returns the maximum height of the page area in rows
 	 */
-	public int getMaxHeight();
+	public int getMaxHeight() {
+		return maxHeight;
+	}
 }
