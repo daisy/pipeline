@@ -19,7 +19,7 @@ public interface PagedMediaWriterFactory {
 	 * @throws PagedMediaWriterConfigurationException
 	 *             if the media type is not supported
 	 */
-	public PagedMediaWriter newPagedMediaWriter(String mediaType) throws PagedMediaWriterConfigurationException;
+	public PagedMediaWriter newPagedMediaWriter() throws PagedMediaWriterConfigurationException;
 	
 	/**
 	 * Gets the value of a PagedMediaWriter feature.

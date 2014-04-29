@@ -101,11 +101,11 @@ public class PagedMediaWriterFactoryMaker implements
 		if (template==null) {
 			throw new PagedMediaWriterFactoryConfigurationException("Cannot find a PagedMediaWriter factory for " + target);
 		}
-		return template.newFactory();
+		return template.newFactory(target);
 	}
 
 	public PagedMediaWriter newPagedMediaWriter(String target) throws PagedMediaWriterConfigurationException {
-		return getFactory(target).newPagedMediaWriter(target);
+		return getFactory(target).newPagedMediaWriter();
 	}
 	
 	private class PagedMediaWriterFactoryConfigurationException extends PagedMediaWriterConfigurationException {

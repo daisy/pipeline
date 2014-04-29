@@ -38,6 +38,6 @@ public interface PagedMediaWriterFactoryService {
 	 */
 	public Collection<String> listMediaTypes();
 
-	public PagedMediaWriterFactory newFactory();
+	public PagedMediaWriterFactory newFactory(String mediaType);
 
 }
