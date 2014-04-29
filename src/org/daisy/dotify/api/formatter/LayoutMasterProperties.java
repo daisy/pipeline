@@ -9,7 +9,7 @@ import org.daisy.dotify.api.translator.TextBorderStyle;
  * 
  * @author Joel Håkansson
  */
-public class LayoutMasterProperties implements SectionProperties {
+public class LayoutMasterProperties {
 	private final int flowWidth;
 	private final int pageWidth;
 	private final int pageHeight;

@@ -26,7 +26,7 @@ public interface Formatter extends Closeable, FormatterCore {
 	 * a master for a particular sequence from the {@link SequenceProperties}.
 	 * @param properties the properties
 	 */
-	public LayoutMasterBuilder newLayoutMaster(String name, SectionProperties properties);
+	public LayoutMasterBuilder newLayoutMaster(String name, LayoutMasterProperties properties);
 
 	/**
 	 * Creates a new empty volume template builder.
