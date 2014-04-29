@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SwedishBrailleFilterTest {
@@ -226,5 +227,11 @@ public class SwedishBrailleFilterTest {
 	@Test
 	public void testFractions_001() {
 		assertEquals("⠼⠃⠼⠁⠌⠼⠙⠂ ⠼⠁⠼⠁⠌⠼⠃⠂ ⠼⠉⠼⠉⠌⠼⠙", filter.filter("2¼, 1½, 3¾"));
+	}
+	
+	@Test @Ignore
+	public void testCapitalIWithDot() {
+		//Issue #88
+		assertEquals("⠠⠈⠊", filter.filter("İ"));
 	}
 }
