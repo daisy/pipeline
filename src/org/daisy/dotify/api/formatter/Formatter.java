@@ -2,6 +2,8 @@ package org.daisy.dotify.api.formatter;
 
 import java.io.Closeable;
 
+import org.daisy.dotify.api.writer.PagedMediaWriter;
+
 /**
  * <p>Provides text-only formatting.</p>
  * 
@@ -49,11 +51,7 @@ public interface Formatter extends Closeable, FormatterCore {
 	 * @return returns a new collection
 	 */
 	public ContentCollection newCollection(String collectionIdentifier); 
-
-	/**
-	 * Gets the formatted result.
-	 * @return returns the formatted result
-	 */
-	public Iterable<Volume> getVolumes();
+	
+	public void write(PagedMediaWriter writer);
 
 }

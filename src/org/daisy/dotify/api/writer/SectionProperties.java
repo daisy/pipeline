@@ -1,6 +1,5 @@
-package org.daisy.dotify.api.formatter;
+package org.daisy.dotify.api.writer;
 
-import org.daisy.dotify.api.translator.TextBorderStyle;
 
 
 /**
@@ -37,28 +36,4 @@ public interface SectionProperties {
 	public boolean duplex();
 	
 
-	/**
-	 * Gets the flow width
-	 * @return returns the flow width
-	 */
-	public int getFlowWidth();
-
-	/**
-	 * Gets the border.
-	 * @return the border
-	 */
-	public TextBorderStyle getBorder();
-
-	/**
-	 * Gets inner margin
-	 * @return returns the inner margin
-	 */
-	public int getInnerMargin();
-
-	/**
-	 * Gets outer margin
-	 * @return returns the outer margin
-	 */
-	public int getOuterMargin();
-	
 }

@@ -4,9 +4,6 @@ import java.io.Closeable;
 import java.io.OutputStream;
 import java.util.List;
 
-import org.daisy.dotify.api.formatter.Row;
-import org.daisy.dotify.api.formatter.SectionProperties;
-
 
 
 

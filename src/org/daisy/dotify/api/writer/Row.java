@@ -1,4 +1,4 @@
-package org.daisy.dotify.api.formatter;
+package org.daisy.dotify.api.writer;
 
 /**
  * Defines a row of braille.
