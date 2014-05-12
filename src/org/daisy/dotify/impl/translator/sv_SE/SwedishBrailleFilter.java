@@ -2,8 +2,8 @@ package org.daisy.dotify.impl.translator.sv_SE;
 
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Locale;
 
-import org.daisy.dotify.text.CaseFilter;
 import org.daisy.dotify.text.CharFilter;
 import org.daisy.dotify.text.CombinationFilter;
 import org.daisy.dotify.text.FilterLocale;
@@ -57,13 +57,13 @@ public class SwedishBrailleFilter implements UncontractedBrailleFilter {
 		// Add another upper case marker if the upper case sequence contains more than one character
 		//filters.add(new RegexFilter("(\\u2820\\p{Lu}\\u00ad*\\p{Lu}[\\p{Lu}\\u00ad]*)", "\u2820$1"));
 		filters.add(new CapitalizationMarkers());
-		// Change case to lower case
-		filters.add(new CaseFilter(CaseFilter.Mode.LOWER_CASE));
+
 		if (t.equals(sv_SE)) {
+			Locale l = FilterLocale.parse(sv_SE).toLocale();
 			// Text to braille, Pas 1
-			filters.add(new CharFilter(getResource("sv_SE-pas1.xml")));
+			filters.add(new CharFilter(getResource("sv_SE-pas1.xml"), l));
 			// Text to braille, Pas 2
-			filters.add(new CharFilter(getResource("sv_SE-pas2.xml")));
+			filters.add(new CharFilter(getResource("sv_SE-pas2.xml"), l));
 		}
 		// Remove redundant whitespace
 		filters.add(new RegexFilter("(\\s+)", " "));

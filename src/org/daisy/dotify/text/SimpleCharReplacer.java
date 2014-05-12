@@ -5,7 +5,6 @@ import java.net.URL;
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -67,11 +66,15 @@ import java.util.Set;
  * @author Joel Håkansson
  * @author Markus Gylling (UCharReplacer)
  */
-public class SimpleCharReplacer {
-	private Map<Integer, String> mSubstitutionTable = null;
+public class SimpleCharReplacer extends HashMap<Integer, String> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3238811228931823883L;
 
 	public SimpleCharReplacer() {
-		mSubstitutionTable = new HashMap<Integer, String>();
+		super();
 	}
 
 	public void addSubstitutionTable(URL table) throws IOException {
@@ -94,7 +97,7 @@ public class SimpleCharReplacer {
 		// iterate over each code point in the input string
 		for (int offset = 0; offset < input.length();) {
 			codePoint = input.codePointAt(offset);
-			CharSequence substitution = substitute(codePoint);
+			CharSequence substitution = get(codePoint);
 			if (null != substitution && substitution.length() > 0) {
 				// a replacement occurred
 				sb.append(substitution);
@@ -119,23 +122,15 @@ public class SimpleCharReplacer {
 		for (Iterator<?> it = keys.iterator(); it.hasNext();) {
 			String key = (String) it.next();
 			if (key.codePointCount(0, key.length()) == 1) {
-				mSubstitutionTable.put(key.codePointAt(0), props.getProperty(key));
+				put(key.codePointAt(0), props.getProperty(key));
 			} else {
 				try {
-					mSubstitutionTable.put(Integer.decode("0x" + key), props.getProperty(key));
+					put(Integer.decode("0x" + key), props.getProperty(key));
 				} catch (NumberFormatException e) {
 					System.err.println("error in translation table " + tableURL.toString() + ": attribute key=\"" + key + "\" is not a hex number.");
 				}
 			}
 		}
-	}
-
-	/**
-	 * @return a substite string if available in tables, or null if not
-	 *         available
-	 */
-	private String substitute(int codePoint) {
-		return mSubstitutionTable.get(Integer.valueOf(codePoint));
 	}
 
 }

@@ -52,6 +52,7 @@
 	<entry key="ï">&#x2808;&#x280A;</entry>
 	<entry key="ı">&#x2808;&#x280A;</entry>						<!-- LATIN SMALL LETTER DOTLESS I, U+0131 -->
 	<entry key="ī">&#x2808;&#x280A;</entry>						<!-- LATIN SMALL LETTER I WITH MACRON, U+012B -->
+	<entry key="İ">&#x2808;&#x280A;</entry> <!-- LATIN CAPITAL LETTER I WITH DOT ABOVE, 0130 -->
 	<entry key="j">&#x281A;</entry>
 	<entry key="k">&#x2805;</entry>
 	<entry key="l">&#x2807;</entry>
