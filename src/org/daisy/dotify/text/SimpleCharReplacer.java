@@ -2,14 +2,12 @@ package org.daisy.dotify.text;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
-import com.ibm.icu.text.Normalizer;
-import com.ibm.icu.text.UCharacterIterator;
 
 /**
  * <p>
@@ -89,17 +87,13 @@ public class SimpleCharReplacer {
 
 		StringBuilder sb = new StringBuilder(input.length());
 
-		// icu4j version
-		// normalize to eliminate any ambiguities vis-a-vis the user tables
-		Normalizer.normalize(input, Normalizer.NFC);
-
 		// Java 1.6 SDK version
-		// Normalizer.normalize(input, Normalizer.Form.NFC);
+		Normalizer.normalize(input, Normalizer.Form.NFC);
 
-		// icu4j version
+		//Java 1.5 SDK version
 		// iterate over each code point in the input string
-		UCharacterIterator uci = UCharacterIterator.getInstance(input.toString());
-		while ((codePoint = uci.nextCodePoint()) != UCharacterIterator.DONE) {
+		for (int offset = 0; offset < input.length();) {
+			codePoint = input.codePointAt(offset);
 			CharSequence substitution = substitute(codePoint);
 			if (null != substitution && substitution.length() > 0) {
 				// a replacement occurred
@@ -108,25 +102,9 @@ public class SimpleCharReplacer {
 				// a replacement didn't occur
 				sb.appendCodePoint(codePoint);
 			}
+			offset += Character.charCount(codePoint);
 		}
-
-		/*
-		 * Java 1.5 SDK version
-		 * // iterate over each code point in the input string
-		 * final int length = input.length();
-		 * for (int offset = 0; offset < length;) {
-		 * codePoint = input.codePointAt(offset);
-		 * CharSequence substitution = substitute(codePoint);
-		 * if (null != substitution && substitution.length() > 0) {
-		 * // a replacement occurred
-		 * sb.append(substitution);
-		 * } else {
-		 * // a replacement didn't occur
-		 * sb.appendCodePoint(codePoint);
-		 * }
-		 * offset += Character.charCount(codePoint);
-		 * }
-		 */
+		 
 
 		return sb;
 	}

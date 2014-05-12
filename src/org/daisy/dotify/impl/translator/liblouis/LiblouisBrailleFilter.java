@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 
 import org.daisy.dotify.text.StringFilter;
 
-import com.ibm.icu.text.UCharacterIterator;
-
 public class LiblouisBrailleFilter implements StringFilter {
 	private final Map<Integer, Substitution> mSubstitutionTable;
 
@@ -82,8 +80,9 @@ public class LiblouisBrailleFilter implements StringFilter {
 		int codePoint;
 		StringBuilder sbr = new StringBuilder(input.length());
 		StringBuilder sbc = new StringBuilder(input.length());
-		UCharacterIterator uci = UCharacterIterator.getInstance(input.toString());
-		while ((codePoint = uci.nextCodePoint()) != UCharacterIterator.DONE) {
+		
+		for (int offset = 0; offset < input.length();) {
+			codePoint = input.codePointAt(offset);
 			Substitution rd = mSubstitutionTable.get(Integer.valueOf(codePoint));
 			if (codePoint>=0x2800&&codePoint<=0x28FF) {
 				sbr.appendCodePoint(codePoint);
@@ -104,6 +103,7 @@ public class LiblouisBrailleFilter implements StringFilter {
 				sbr.appendCodePoint(codePoint);
 				sbc.append(CharClass.UNDEFINED);
 			}
+			offset += Character.charCount(codePoint);
 		}
 		String contentStr = sbr.toString();
 		
