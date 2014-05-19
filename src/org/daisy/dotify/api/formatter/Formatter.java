@@ -9,7 +9,7 @@ import org.daisy.dotify.api.writer.PagedMediaWriter;
  * 
  * @author Joel Håkansson
  */
-public interface Formatter extends Closeable, FormatterCore {
+public interface Formatter extends Closeable {
 
 	/**
 	 * Opens the Formatter for writing.
@@ -20,7 +20,7 @@ public interface Formatter extends Closeable, FormatterCore {
 	 * Start a new Sequence at the current position in the flow.
 	 * @param props the SequenceProperties for the new sequence
 	 */
-	public void newSequence(SequenceProperties props);
+	public FormatterCore newSequence(SequenceProperties props);
 
 	/**
 	 * Creates a new LayoutMaster builder.
