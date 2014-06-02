@@ -35,6 +35,14 @@ public class BreakPointHandler {
 		}
 		this.charsStr = str;
 	}
+	
+	/**
+	 * Creates a new copy of this object in its current state.
+	 * @return returns a new instance
+	 */
+	public BreakPointHandler copy() {
+		return new BreakPointHandler(charsStr);
+	}
 
 	/**
 	 * Gets the next row from this BreakPointHandler
@@ -42,19 +50,6 @@ public class BreakPointHandler {
 	 * @return returns the next BreakPoint
 	 */
 	public BreakPoint nextRow(int breakPoint, boolean force) {
-		return doNextRow(breakPoint, force, false);
-	}
-	
-	/**
-	 * Tries to break the row at the breakpoint but does not modify the buffer.
-	 * @param breakPoint the row length limit
-	 * @return returns the break point
-	 */
-	public BreakPoint tryNextRow(int breakPoint) {
-		return doNextRow(breakPoint, false, true);
-	}
-	
-	private BreakPoint doNextRow(int breakPoint, boolean force, boolean test) {
 		if (charsStr.length()==0) {
 			// pretty simple...
 			return new BreakPoint("", "", false);
@@ -62,15 +57,15 @@ public class BreakPointHandler {
 
 		assert charsStr.length()==charsStr.codePointCount(0, charsStr.length());
 		if (charsStr.length()<=breakPoint) {
-			return finalizeBreakpointTrimTail(charsStr, "", test, false);
+			return finalizeBreakpointTrimTail(charsStr, "", false);
 		} else if (breakPoint<=0) {
-			return finalizeBreakpointTrimTail("", charsStr, test, false);
+			return finalizeBreakpointTrimTail("", charsStr, false);
 		} else {
-			return findBreakpoint(breakPoint, force, test);
+			return findBreakpoint(breakPoint, force);
 		}
 	}
 	
-	private BreakPoint findBreakpoint(int breakPoint, boolean force, boolean test) {
+	private BreakPoint findBreakpoint(int breakPoint, boolean force) {
 		int strPos = findBreakpointPosition(charsStr, breakPoint);
 		assert strPos<charsStr.length();
 
@@ -83,17 +78,17 @@ public class BreakPointHandler {
 		if (strPos==charsStr.length()-1) {
 			String head = charsStr.substring(0, strPos+1);
 			int tailStart = strPos+1;
-			return finalizeBreakpointFull(head, tailStart, test, false);
+			return finalizeBreakpointFull(head, tailStart, false);
 		} else if (charsStr.charAt(strPos + 1) == SPACE || charsStr.charAt(strPos + 1) == ZERO_WIDTH_SPACE) {
 			String head = charsStr.substring(0, strPos+2); // strPos+1
 			int tailStart = strPos+2;
-			return finalizeBreakpointFull(head, tailStart, test, false);
+			return finalizeBreakpointFull(head, tailStart, false);
 		} else {
-			return newBreakpointFromPosition(strPos, breakPoint, force, test);
+			return newBreakpointFromPosition(strPos, breakPoint, force);
 		}
 	}
 	
-	private BreakPoint newBreakpointFromPosition(int strPos, int breakPoint, boolean force, boolean test) {
+	private BreakPoint newBreakpointFromPosition(int strPos, int breakPoint, boolean force) {
 		// back up
 		int i=findBreakpointBefore(charsStr, strPos);
 		String head;
@@ -125,15 +120,15 @@ public class BreakPointHandler {
 			head = charsStr.substring(0, i+1);
 			tailStart = i+1;
 		}
-		return finalizeBreakpointFull(head, tailStart, test, hard);
+		return finalizeBreakpointFull(head, tailStart, hard);
 	}
 	
-	private BreakPoint finalizeBreakpointFull(String head, int tailStart, boolean test, boolean hard) {
+	private BreakPoint finalizeBreakpointFull(String head, int tailStart, boolean hard) {
 		String tail = getTail(tailStart);
 
 		head = trailingWhitespace.matcher(head).replaceAll("");
 		
-		return finalizeBreakpointTrimTail(head, tail, test, hard);
+		return finalizeBreakpointTrimTail(head, tail, hard);
 	}
 	
 	private String getTail(int tailStart) {
@@ -146,13 +141,11 @@ public class BreakPointHandler {
 		}
 	}
 	
-	private BreakPoint finalizeBreakpointTrimTail(String head, String tail, boolean test, boolean hard) {
+	private BreakPoint finalizeBreakpointTrimTail(String head, String tail, boolean hard) {
 		//trim leading whitespace in tail
 		tail = leadingWhitespace.matcher(tail).replaceAll("");
 		head = finalize(head);
-		if (!test) {
-			charsStr = tail;
-		}
+		charsStr = tail;
 		return new BreakPoint(head, tail, hard);
 	}
 
