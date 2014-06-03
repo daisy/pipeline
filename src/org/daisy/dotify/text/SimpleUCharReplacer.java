@@ -66,14 +66,14 @@ import java.util.Set;
  * @author Joel Håkansson
  * @author Markus Gylling (UCharReplacer)
  */
-public class SimpleCharReplacer extends HashMap<Integer, String> {
+public class SimpleUCharReplacer extends HashMap<Integer, String> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3238811228931823883L;
 
-	public SimpleCharReplacer() {
+	public SimpleUCharReplacer() {
 		super();
 	}
 

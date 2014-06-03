@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.daisy.dotify.text.CharFilter;
+import org.daisy.dotify.text.UCharFilter;
 import org.daisy.dotify.text.CombinationFilter;
 import org.daisy.dotify.text.FilterLocale;
 import org.daisy.dotify.text.RegexFilter;
@@ -61,9 +61,9 @@ public class SwedishBrailleFilter implements UncontractedBrailleFilter {
 		if (t.equals(sv_SE)) {
 			Locale l = FilterLocale.parse(sv_SE).toLocale();
 			// Text to braille, Pas 1
-			filters.add(new CharFilter(getResource("sv_SE-pas1.xml"), l));
+			filters.add(new UCharFilter(getResource("sv_SE-pas1.xml"), l));
 			// Text to braille, Pas 2
-			filters.add(new CharFilter(getResource("sv_SE-pas2.xml"), l));
+			filters.add(new UCharFilter(getResource("sv_SE-pas2.xml"), l));
 		}
 		// Remove redundant whitespace
 		filters.add(new RegexFilter("(\\s+)", " "));
