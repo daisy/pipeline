@@ -48,10 +48,7 @@ public class SwedishBrailleFilter implements UncontractedBrailleFilter {
 		filters = new CombinationFilter();
 		// Remove zero width space
 		filters.add(new RegexFilter("\\u200B", ""));
-		// One or more digit followed by zero or more digits, commas or periods
-		filters.add(new RegexFilter("([\\d]+[\\d,\\.]*)", "\u283c$1"));
-		// Insert a "reset character" between a digit and lower case a-j
-		filters.add(new RegexFilter("([\\d])([a-j])", "$1\u2831$2"));
+		filters.add(new DigitFilter());
 		// Add upper case marker to the beginning of any upper case sequence
 		//filters.add(new RegexFilter("(\\p{Lu}[\\p{Lu}\\u00ad]*)", "\u2820$1"));
 		// Add another upper case marker if the upper case sequence contains more than one character
