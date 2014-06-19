@@ -81,7 +81,7 @@ public class SimpleUCharReplacer extends HashMap<Integer, String> {
 		try {
 			loadTable(table);
 		} catch (Exception e) {
-			throw new IOException(e.getMessage());
+			throw new IOException(e);
 		}
 	}
 
