@@ -1,6 +1,6 @@
 package org.daisy.dotify.consumer.obfl;
 
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 
 import org.daisy.dotify.api.obfl.ExpressionFactory;
 import org.daisy.dotify.consumer.text.Integer2TextFactoryMaker;
@@ -10,7 +10,7 @@ public class ExpressionFactoryMaker {
 
 	public ExpressionFactoryMaker() {
 		// Gets the first formatter engine (assumes there is at least one).
-		proxy = ServiceRegistry.lookupProviders(ExpressionFactory.class).next();
+		proxy = ServiceLoader.load(ExpressionFactory.class).iterator().next();
 		// populate the engine factory with SPI here as this class is never used
 		// from OSGi
 		proxy.setInteger2TextFactory(Integer2TextFactoryMaker.newInstance());

@@ -1,9 +1,8 @@
 package org.daisy.dotify.consumer.formatter;
 
+import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.dotify.api.formatter.Formatter;
 import org.daisy.dotify.api.formatter.FormatterConfigurationException;
@@ -22,7 +21,7 @@ public class FormatterFactoryMaker {
 	
 	public FormatterFactoryMaker() {
 		//Gets the first formatter (assumes there is at least one).
-		proxy = ServiceRegistry.lookupProviders(FormatterFactory.class).next();
+		proxy = ServiceLoader.load(FormatterFactory.class).iterator().next();
 		try {
 			proxy.setReference(BrailleTranslatorFactoryMakerService.class, BrailleTranslatorFactoryMaker.newInstance());
 		} catch (FormatterConfigurationException e) {

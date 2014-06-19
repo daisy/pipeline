@@ -7,10 +7,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
@@ -57,7 +56,7 @@ public class PagedMediaWriterFactoryMaker implements
 	public static PagedMediaWriterFactoryMaker newInstance() {
 		PagedMediaWriterFactoryMaker ret = new PagedMediaWriterFactoryMaker();
 		{
-			Iterator<PagedMediaWriterFactoryService> i = ServiceRegistry.lookupProviders(PagedMediaWriterFactoryService.class);
+			Iterator<PagedMediaWriterFactoryService> i = ServiceLoader.load(PagedMediaWriterFactoryService.class).iterator();
 			while (i.hasNext()) {
 				ret.addFactory(i.next());
 			}

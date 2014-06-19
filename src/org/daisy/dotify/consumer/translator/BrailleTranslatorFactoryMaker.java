@@ -7,12 +7,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
 import org.daisy.dotify.api.translator.BrailleTranslator;
@@ -70,7 +69,7 @@ public class BrailleTranslatorFactoryMaker implements
 		BrailleTranslatorFactoryMaker ret = new BrailleTranslatorFactoryMaker();
 		{
 			HyphenatorFactoryMakerService hyph = HyphenatorFactoryMaker.newInstance();
-			Iterator<BrailleTranslatorFactoryService> i = ServiceRegistry.lookupProviders(BrailleTranslatorFactoryService.class);
+			Iterator<BrailleTranslatorFactoryService> i = ServiceLoader.load(BrailleTranslatorFactoryService.class).iterator();
 			while (i.hasNext()) {
 				BrailleTranslatorFactoryService f = i.next();
 				try {

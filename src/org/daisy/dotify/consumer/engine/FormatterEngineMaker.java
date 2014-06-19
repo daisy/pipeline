@@ -1,9 +1,8 @@
 package org.daisy.dotify.consumer.engine;
 
+import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.dotify.api.engine.FormatterEngine;
 import org.daisy.dotify.api.engine.FormatterEngineConfigurationException;
@@ -23,7 +22,7 @@ public class FormatterEngineMaker {
 
 	public FormatterEngineMaker() {
 		// Gets the first formatter engine (assumes there is at least one).
-		proxy = ServiceRegistry.lookupProviders(FormatterEngineFactoryService.class).next();
+		proxy = ServiceLoader.load(FormatterEngineFactoryService.class).iterator().next();
 		// populate the engine factory with SPI here as this class is never used
 		// from OSGi
 		setReference(FormatterFactory.class, FormatterFactoryMaker.newInstance().getFactory());

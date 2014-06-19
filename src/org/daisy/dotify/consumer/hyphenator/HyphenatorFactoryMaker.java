@@ -7,10 +7,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.dotify.api.hyphenator.HyphenatorConfigurationException;
 import org.daisy.dotify.api.hyphenator.HyphenatorFactory;
@@ -56,7 +55,7 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 	public static HyphenatorFactoryMaker newInstance() {
 		HyphenatorFactoryMaker ret = new HyphenatorFactoryMaker();
 		{
-			Iterator<HyphenatorFactoryService> i = ServiceRegistry.lookupProviders(HyphenatorFactoryService.class);
+			Iterator<HyphenatorFactoryService> i = ServiceLoader.load(HyphenatorFactoryService.class).iterator();
 			while (i.hasNext()) {
 				ret.addFactory(i.next());
 			}

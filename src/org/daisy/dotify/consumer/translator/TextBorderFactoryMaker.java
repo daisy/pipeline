@@ -3,10 +3,9 @@ package org.daisy.dotify.consumer.translator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.dotify.api.translator.TextBorderConfigurationException;
 import org.daisy.dotify.api.translator.TextBorderFactory;
@@ -59,7 +58,7 @@ public class TextBorderFactoryMaker implements TextBorderFactoryMakerService {
 	public static TextBorderFactoryMakerService newInstance() {
 		TextBorderFactoryMaker ret = new TextBorderFactoryMaker();
 		{
-			Iterator<TextBorderFactoryService> i = ServiceRegistry.lookupProviders(TextBorderFactoryService.class);
+			Iterator<TextBorderFactoryService> i = ServiceLoader.load(TextBorderFactoryService.class).iterator();
 			while (i.hasNext()) {
 				ret.addFactory(i.next());
 			}

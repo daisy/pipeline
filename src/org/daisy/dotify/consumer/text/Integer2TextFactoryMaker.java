@@ -7,10 +7,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.dotify.api.text.Integer2Text;
 import org.daisy.dotify.api.text.Integer2TextConfigurationException;
@@ -57,7 +56,7 @@ public class Integer2TextFactoryMaker implements
 	public static Integer2TextFactoryMaker newInstance() {
 		Integer2TextFactoryMaker ret = new Integer2TextFactoryMaker();
 		{
-			Iterator<Integer2TextFactoryService> i = ServiceRegistry.lookupProviders(Integer2TextFactoryService.class);
+			Iterator<Integer2TextFactoryService> i = ServiceLoader.load(Integer2TextFactoryService.class).iterator();
 			while (i.hasNext()) {
 				ret.addFactory(i.next());
 			}

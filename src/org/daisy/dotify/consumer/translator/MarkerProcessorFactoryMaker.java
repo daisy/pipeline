@@ -5,10 +5,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.dotify.api.translator.MarkerProcessor;
 import org.daisy.dotify.api.translator.MarkerProcessorConfigurationException;
@@ -64,7 +63,7 @@ public class MarkerProcessorFactoryMaker implements
 	public static MarkerProcessorFactoryMakerService newInstance() {
 		MarkerProcessorFactoryMaker ret = new MarkerProcessorFactoryMaker();
 		{
-			Iterator<MarkerProcessorFactoryService> i = ServiceRegistry.lookupProviders(MarkerProcessorFactoryService.class);
+			Iterator<MarkerProcessorFactoryService> i = ServiceLoader.load(MarkerProcessorFactoryService.class).iterator();
 			while (i.hasNext()) {
 				ret.addFactory(i.next());
 			}
