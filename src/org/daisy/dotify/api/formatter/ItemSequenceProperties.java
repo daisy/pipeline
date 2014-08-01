@@ -1,12 +1,27 @@
 package org.daisy.dotify.api.formatter;
 
+
 /**
  * <p>Defines properties specific for an item sequence.</p>
  * 
  * @author Joel Håkansson
  */
 public class ItemSequenceProperties extends SequenceProperties {
+	/**
+	 * Defines  ranges.
+	 */
+	public enum Range {
+		/**
+		 * Defines the range to include the entire document
+		 */
+		DOCUMENT,
+		/**
+		 * Defines the range to include entries within the volume
+		 */
+		VOLUME};
+		
 	private final String collectionID;
+	private final Range range;
 
 	/**
 	 * Provides a builder for creating ItemSequenceProperties instances.
@@ -15,6 +30,7 @@ public class ItemSequenceProperties extends SequenceProperties {
 	 */
 	public static class Builder extends SequenceProperties.Builder {
 		private final String collectionID;
+		private final Range range;
 		
 		/**
 		 * Creates a new builder with the supplied arguments.
@@ -22,9 +38,10 @@ public class ItemSequenceProperties extends SequenceProperties {
 		 * @param masterName the master identifier
 		 * @param collectionID the collection identifier
 		 */
-		public Builder(String masterName, String collectionID) {
+		public Builder(String masterName, String collectionID, Range range) {
 			super(masterName);
 			this.collectionID = collectionID;
+			this.range = range;
 		}
 		
 		public ItemSequenceProperties build() {
@@ -35,6 +52,7 @@ public class ItemSequenceProperties extends SequenceProperties {
 	private ItemSequenceProperties(Builder builder) {
 		super(builder);
 		this.collectionID = builder.collectionID;
+		this.range = builder.range;
 	}
 
 	/**
@@ -45,4 +63,8 @@ public class ItemSequenceProperties extends SequenceProperties {
 		return collectionID;
 	}
 
+	public Range getRange() {
+		return range;
+	}
+	
 }
