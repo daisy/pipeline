@@ -20,8 +20,7 @@ public class TocProperties extends SequenceProperties {
 		VOLUME};
 
 	private final String tocName;
-	private final TocRange range; 
-	private final Condition condition;
+	private final TocRange range;
 	
 	/**
 	 * Provides a builder for creating TOC properties instances.
@@ -30,8 +29,7 @@ public class TocProperties extends SequenceProperties {
 	 */
 	public static class Builder extends SequenceProperties.Builder {
 		private final String tocName;
-		private final TocRange range; 
-		private final Condition condition;
+		private final TocRange range;
 		
 		/**
 		 * Creates a new builder with the supplied arguments.
@@ -41,11 +39,10 @@ public class TocProperties extends SequenceProperties {
 		 * @param range a range for the TOC
 		 * @param condition a condition for when to apply the TOC sequence
 		 */
-		public Builder(String masterName, String tocName, TocRange range, Condition condition) {
+		public Builder(String masterName, String tocName, TocRange range) {
 			super(masterName);
 			this.tocName = tocName;
 			this.range = range;
-			this.condition = condition;
 		}
 		
 		public TocProperties build() {
@@ -57,7 +54,6 @@ public class TocProperties extends SequenceProperties {
 		super(builder);
 		this.tocName = builder.tocName;
 		this.range = builder.range;
-		this.condition = builder.condition;
 	}
 
 	/**
@@ -74,14 +70,6 @@ public class TocProperties extends SequenceProperties {
 	 */
 	public TocRange getRange() {
 		return range;
-	}
-
-	/**
-	 * Gets the condition for applying the TOC
-	 * @return the condition
-	 */
-	public Condition getCondition() {
-		return condition;
 	}
 
 }
