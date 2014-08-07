@@ -99,40 +99,13 @@ public interface VolumeContentBuilder extends FormatterCore {
 	 * @throws IllegalStateException if not in a TOC sequence
 	 */
 	public void newOnTocEnd();
-	
+
 	/**
-	 * Creates a new item sequence at the current position.
-	 * 
-	 * @param props the properties of the item sequence
+	 * Creates a new dynamic sequence.
+	 * @param props
+	 * @return
 	 */
-	public void newItemSequence(ItemSequenceProperties props);
-	
-	/**
-	 * <p>Creates a new on collection start block.</p> 
-	 * <p>Calling this method is only valid within an item sequence.</p>
-	 * @throws IllegalStateException if not in an item sequence
-	 */
-	public void newOnCollectionStart();
-	
-	/**
-	 * <p>Creates a new on collection end block.</p> 
-	 * <p>Calling this method is only valid within an item sequence.</p>
-	 * @throws IllegalStateException if not in an item sequence
-	 */
-	public void newOnCollectionEnd();
-	
-	/**
-	 * <p>Creates a new on page start block.</p> 
-	 * <p>Calling this method is only valid within an item sequence.</p>
-	 * @throws IllegalStateException if not in an item sequence
-	 */
-	public void newOnPageStart();
-	
-	/**
-	 * <p>Creates a new on page end block.</p> 
-	 * <p>Calling this method is only valid within an item sequence.</p>
-	 * @throws IllegalStateException if not in an item sequence
-	 */
-	public void newOnPageEnd();
+	//TODO: add special dynamic sequence properties
+	public DynamicSequenceBuilder newDynamicSequence(SequenceProperties props);
 
 }

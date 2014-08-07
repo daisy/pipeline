@@ -6,7 +6,8 @@ package org.daisy.dotify.api.formatter;
  * 
  * @author Joel Håkansson
  */
-public class ItemSequenceProperties extends SequenceProperties {
+//TODO:rename class, since it is not a sequence any more
+public class ItemSequenceProperties {
 	/**
 	 * Defines  ranges.
 	 */
@@ -28,7 +29,7 @@ public class ItemSequenceProperties extends SequenceProperties {
 	 * 
 	 * @author Joel Håkansson
 	 */
-	public static class Builder extends SequenceProperties.Builder {
+	public static class Builder {
 		private final String collectionID;
 		private final Range range;
 		
@@ -38,8 +39,7 @@ public class ItemSequenceProperties extends SequenceProperties {
 		 * @param masterName the master identifier
 		 * @param collectionID the collection identifier
 		 */
-		public Builder(String masterName, String collectionID, Range range) {
-			super(masterName);
+		public Builder(String collectionID, Range range) {
 			this.collectionID = collectionID;
 			this.range = range;
 		}
@@ -50,7 +50,6 @@ public class ItemSequenceProperties extends SequenceProperties {
 	}
 
 	private ItemSequenceProperties(Builder builder) {
-		super(builder);
 		this.collectionID = builder.collectionID;
 		this.range = builder.range;
 	}
