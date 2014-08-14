@@ -1,5 +1,11 @@
 package org.daisy.dotify.api.formatter;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
+
 /**
  * Specifies an area of the page where collection items can be placed. The
  * page area can be located before the text body, below the header or after
@@ -20,29 +26,10 @@ public class PageAreaProperties {
 		 * Aligns toward the bottom of the page, above the footer
 		 */
 		BOTTOM};
-	
-	/**
-	 * Specifies the scope of the fallback action. 
-	 *
-	 */
-	public enum FallbackScope {
-		/**
-		 * Specifies that all items in the collection should be reassigned,
-		 * if at least one item cannot be rendered in its designated page area.
-		 */
-		ALL,
-		/**
-		 * Specified that items on the same page in the collection should be
-		 * reassigned, if at least one item on the page cannot be rendered in
-		 * the page area.
-		 */
-		PAGE};
-		
 	private final Alignment align;
-	private final FallbackScope scope;
 	private final String collectionId;
 	private final int maxHeight;
-	private final String fallbackId;
+	private final List<FallbackRule> fallbackRules;
 
 	public static class Builder {
 		//required
@@ -51,12 +38,12 @@ public class PageAreaProperties {
 		
 		//optional
 		private Alignment align = Alignment.BOTTOM;
-		private FallbackScope scope = FallbackScope.PAGE;
-		private String fallbackId = null;
+		private List<FallbackRule> fallbackRules;
 		
 		public Builder(String collectionId, int maxHeight) {
 			this.collectionId = collectionId;
 			this.maxHeight = maxHeight;
+			this.fallbackRules = new ArrayList<FallbackRule>();
 		}
 		
 		public Builder align(Alignment value) {
@@ -64,13 +51,8 @@ public class PageAreaProperties {
 			return this;
 		}
 		
-		public Builder scope(FallbackScope value) {
-			this.scope = value;
-			return this;
-		}
-		
-		public Builder fallbackId(String value) {
-			this.fallbackId = value;
+		public Builder addFallback(FallbackRule rule) {
+			this.fallbackRules.add(rule);
 			return this;
 		}
 		
@@ -84,9 +66,30 @@ public class PageAreaProperties {
 		this.align = builder.align;
 		this.collectionId = builder.collectionId;
 		this.maxHeight = builder.maxHeight;
-		this.fallbackId = builder.fallbackId;
-		this.scope = builder.scope;
+		this.fallbackRules = builder.fallbackRules;
+		validateFallbackRules();
 	}
+	
+	private void validateFallbackRules() {
+		if (fallbackRules.size()>0) {
+			boolean found = false;
+			Set<String> str = new HashSet<String>();
+			for (FallbackRule r : fallbackRules) {
+				if (!str.add(r.applyToCollection())) {
+					Logger.getLogger(this.getClass().getCanonicalName()).warning("Multiple rules for the same collection: " + r.applyToCollection());
+				}
+				if (collectionId.equals(r.applyToCollection())) {
+					found = true;
+				} else if (r.mustBeContextCollection()) {
+					throw new IllegalArgumentException("This rule (" + r + ") can only be applied to the collection with id: " + collectionId);
+				}
+			}
+			if (!found) {
+				throw new IllegalArgumentException("The fallback rules must include a rule for the collection that triggered the fallback action (" + collectionId + ")");
+			}
+		}
+	}
+
 	/**
 	 * Gets the alignment of the page area.
 	 * @return returns the alignment
@@ -103,22 +106,8 @@ public class PageAreaProperties {
 		return collectionId;
 	}
 	
-	/**
-	 * Gets the id of a fallback collection. Note that the
-	 * collection id need not refer to an existing collection.
-	 * 
-	 * @return returns the id of the fallback collection
-	 */
-	public String getFallbackId() {
-		return fallbackId;
-	}
-	
-	/**
-	 * Gets the scope of the fallback action.
-	 * @return returns the scope of the fallback action
-	 */
-	public FallbackScope getFallbackScope() {
-		return scope;
+	public Iterable<FallbackRule> getFallbackRules() {
+		return fallbackRules;
 	}
 	
 	/**
