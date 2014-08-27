@@ -1,4 +1,4 @@
-package org.daisy.dotify.translator;
+package org.daisy.dotify.api.translator;
 
 import static org.junit.Assert.assertEquals;
 

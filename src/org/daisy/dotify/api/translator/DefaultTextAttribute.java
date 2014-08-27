@@ -1,10 +1,8 @@
-package org.daisy.dotify.translator;
+package org.daisy.dotify.api.translator;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.daisy.dotify.api.translator.TextAttribute;
 
 
 

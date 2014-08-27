@@ -1,8 +1,8 @@
 -buildpath: biz.aQute.bnd.annotation,\
 	javax.xml.stream
-Export-Package: org.daisy.dotify.api.hyphenator,\
+Export-Package:  \
+	org.daisy.dotify.api.hyphenator,\
 	org.daisy.dotify.api.text,\
-	org.daisy.dotify.translator,\
 	org.daisy.dotify.api.translator,\
 	org.daisy.dotify.api.obfl,\
 	org.daisy.dotify.graphics,\
