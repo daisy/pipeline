@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SwedishBrailleFilterTest {
@@ -209,6 +210,7 @@ public class SwedishBrailleFilterTest {
 		assertEquals("This\u2800is\u2800a\u2800test\u2800string\u2800to\u2800finalize\u2800\u2824\u2800nothing\u2800more.", filter.finalize("This is a test string to finalize - nothing more."));
 	}
 	@Test
+	@Ignore
 	public void testFinalizer_performance() {
 		//This test is most interesting to run manually when optimizing performance, but it is included 
 		//here in case of future improvements. 
