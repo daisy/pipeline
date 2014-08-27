@@ -20,12 +20,12 @@ public class LiblouisBrailleFilter implements StringFilter {
 		//Braille Indicators
 		private String numsign = "";
 		private String capsign = "";
-		private String begcaps = "";
-		private String endcaps = "";
-		private String letsign = "";
-		private String noletsign = "";
-		private String noletsignbefore = "";
-		private String noletsignafter = "";
+		//private String begcaps = "";
+		//private String endcaps = "";
+		//private String letsign = "";
+		//private String noletsign = "";
+		//private String noletsignbefore = "";
+		//private String noletsignafter = "";
 
 		public Builder() {
 			this.mSubstitutionTable = new HashMap<Integer, Substitution>();

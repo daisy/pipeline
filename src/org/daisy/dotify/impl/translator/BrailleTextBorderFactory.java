@@ -79,7 +79,6 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		return features.get(key);
 	}
 
-	@SuppressWarnings("unchecked")
 	public TextBorderStyle newTextBorderStyle() throws TextBorderConfigurationException {
 		String mode = "";
 		try {
