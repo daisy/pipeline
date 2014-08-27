@@ -1,6 +1,6 @@
 package org.daisy.dotify.translator;
 
-import org.daisy.dotify.translator.DefaultTextAttribute;
+import org.daisy.dotify.api.translator.DefaultTextAttribute;
 import org.junit.Test;
 
 public class DefaultTextAttributeTest {

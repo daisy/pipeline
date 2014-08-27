@@ -12,5 +12,5 @@ Private-Package: org.daisy.dotify.impl.translator,\
 	org.daisy.dotify.impl.translator.liblouis
 Include-Resource: / = src/
 -sources: false
-Import-Package: org.junit*;resolution:=optional,\
+Import-Package:  \
 	*

@@ -3,9 +3,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.daisy.dotify.api.translator.BrailleTranslator;
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
+import org.daisy.dotify.api.translator.DefaultTextAttribute;
 import org.daisy.dotify.api.translator.TranslationException;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
-import org.daisy.dotify.translator.DefaultTextAttribute;
 import org.junit.Ignore;
 import org.junit.Test;
 

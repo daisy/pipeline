@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
 import org.daisy.dotify.text.TextFileReader;
-import org.daisy.dotify.translator.BrailleNotationConverter;
+import org.daisy.dotify.tools.BrailleNotationConverter;
 
 class LiblouisFileReader {
 	private final ResourceResolver rr;

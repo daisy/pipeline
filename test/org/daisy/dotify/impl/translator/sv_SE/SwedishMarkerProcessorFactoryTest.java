@@ -3,9 +3,9 @@ package org.daisy.dotify.impl.translator.sv_SE;
 import static org.junit.Assert.assertEquals;
 
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
+import org.daisy.dotify.api.translator.DefaultTextAttribute;
 import org.daisy.dotify.api.translator.MarkerProcessor;
 import org.daisy.dotify.api.translator.MarkerProcessorConfigurationException;
-import org.daisy.dotify.translator.DefaultTextAttribute;
 import org.junit.Test;
 
 public class SwedishMarkerProcessorFactoryTest {

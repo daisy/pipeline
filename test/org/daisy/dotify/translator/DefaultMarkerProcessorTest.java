@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+import org.daisy.dotify.api.translator.DefaultTextAttribute;
 import org.daisy.dotify.translator.DefaultMarkerProcessor;
-import org.daisy.dotify.translator.DefaultTextAttribute;
 import org.daisy.dotify.translator.RegexMarkerDictionary;
 import org.junit.Test;
 
