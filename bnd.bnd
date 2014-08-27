@@ -1,5 +1,6 @@
-Private-Package: org.daisy.dotify.impl.hyphenator.latex,\
-	org.daisy.dotify.text
+Private-Package:  \
+	org.daisy.dotify.impl.hyphenator.latex,\
+	org.daisy.dotify.hyphenator
 Service-Component: *
 Include-Resource: / = src/
 -sources: false
