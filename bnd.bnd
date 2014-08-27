@@ -2,10 +2,12 @@
 	osgi.cmpn,\
 	biz.aQute.bnd.annotation,\
 	junit.osgi
-Export-Package: se.mtm.common.io,\
+Export-Package:  \
+	se.mtm.common.io,\
 	se.mtm.common.xml,\
 	se.mtm.common.text,\
 	org.daisy.dotify.text,\
+	org.daisy.dotify.tools,\
 	se.mtm.common.collection
 Include-Resource: / = src/
 -sources: false
