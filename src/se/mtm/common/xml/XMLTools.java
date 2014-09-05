@@ -20,6 +20,7 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -88,8 +89,25 @@ public class XMLTools {
 		}
 	}
 
+	/**
+	 * Returns true if the specified file is well formed XML.
+	 * @param f the file
+	 * @return returns true if the file is well formed XML, false otherwise
+	 * @throws XMLToolsException
+	 */
 	public final static boolean isWellformedXML(File f) throws XMLToolsException {
+		return parseXML(f)!=null;
+	}
+	
+	/**
+	 * Asserts that the specified file is well formed and returns some root node information.
+	 * @param f the file
+	 * @return returns the root node, or null if file is not well formed
+	 * @throws XMLToolsException
+	 */
+	public final static XMLInfo parseXML(File f) throws XMLToolsException {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
+		factory.setNamespaceAware(true);
 		SAXParser saxParser = null;
 		try {
 			saxParser = factory.newSAXParser();
@@ -98,15 +116,27 @@ public class XMLTools {
 		} catch (SAXException e) {
 			throw new XMLToolsException("Failed to set up XML parser.", e);
 		}
-		DefaultHandler dh = new DefaultHandler();
+		XMLHandler dh = new XMLHandler();
 		try {
 			saxParser.parse(f, dh);
 		} catch (SAXException e) {
-			return false;
+			return null;
 		} catch (IOException e) {
 			throw new XMLToolsException(e);
 		}
-		return true;
+		return dh.root;
+	}
+	
+	private static class XMLHandler extends DefaultHandler {
+		private XMLInfo root = null;
+
+		@Override
+		public void startElement(String uri, String localName, String qName,
+				Attributes attributes) throws SAXException {
+			if (this.root == null) {
+				this.root = new XMLInfo(uri, localName, qName, attributes);
+			}
+		}
 	}
 
 }
