@@ -106,6 +106,10 @@ public class XMLTools {
 	 * @throws XMLToolsException
 	 */
 	public final static XMLInfo parseXML(File f) throws XMLToolsException {
+		return parseXML(f, false);
+	}
+	
+	public final static XMLInfo parseXML(File f, boolean peek) throws XMLToolsException {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setNamespaceAware(true);
 		SAXParser saxParser = null;
@@ -116,9 +120,11 @@ public class XMLTools {
 		} catch (SAXException e) {
 			throw new XMLToolsException("Failed to set up XML parser.", e);
 		}
-		XMLHandler dh = new XMLHandler();
+		XMLHandler dh = new XMLHandler(peek);
 		try {
 			saxParser.parse(f, dh);
+		} catch (StopParsing e) {
+			//thrown if peek is true
 		} catch (SAXException e) {
 			return null;
 		} catch (IOException e) {
@@ -128,15 +134,29 @@ public class XMLTools {
 	}
 	
 	private static class XMLHandler extends DefaultHandler {
+		private final boolean peek;
 		private XMLInfo root = null;
+		
+		XMLHandler(boolean peek) {
+			this.peek = peek;
+		}
 
 		@Override
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) throws SAXException {
 			if (this.root == null) {
 				this.root = new XMLInfo(uri, localName, qName, attributes);
+				if (peek) {
+					throw new StopParsing();
+				}
 			}
 		}
+	}
+	
+	private static class StopParsing extends SAXException {
+
+		private static final long serialVersionUID = -4335028194855324300L;
+		
 	}
 
 }
