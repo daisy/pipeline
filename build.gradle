@@ -36,6 +36,8 @@ jar {
 		'Implementation-URL': 'http://code.google.com/p/brailleutils/'
 		)
 	}
+	from sourceSets.main.allJava
+	baseName = 'brailleUtils-catalog'
 }
 
 repositories {
