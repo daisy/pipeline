@@ -25,17 +25,21 @@ sourceSets {
 	}
 }
 
-jar.doFirst {
-	manifest {
-    	attributes ('Built-By': '',				//'${user.name}'
-    	'Built-On': new Date(),					//'${ISO-TODAY}'
-		'Repository-Revision': "$repositoryRevision",
-		'Implementation-Title': "$releaseName Core",
-		'Implementation-Version': "$releaseVersion",
-		'Implementation-URL': 'http://code.google.com/p/brailleutils/',
-		'Class-Path': configurations.compile.collect { it.getName() }.join(' ')					//'${core.classpath.attribute}'
-		)
+jar {
+	doFirst {
+		manifest {
+	    	attributes ('Built-By': '',				//'${user.name}'
+	    	'Built-On': new Date(),					//'${ISO-TODAY}'
+			'Repository-Revision': "$repositoryRevision",
+			'Implementation-Title': "$releaseName Core",
+			'Implementation-Version': "$releaseVersion",
+			'Implementation-URL': 'http://code.google.com/p/brailleutils/',
+			'Class-Path': configurations.compile.collect { it.getName() }.join(' ')					//'${core.classpath.attribute}'
+			)
+		}
 	}
+	from sourceSets.main.allJava
+	baseName = 'brailleUtils-core'
 }
 
 repositories {
