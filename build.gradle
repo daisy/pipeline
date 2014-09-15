@@ -1,27 +1,14 @@
 apply plugin: "java"
 apply plugin: "maven"
-apply plugin: "osgi"
 
 group = "org.daisy.dotify"
-version = "2.3-SNAPSHOT"
+version = "1.0-SNAPSHOT"
+
 
 repositories {
     mavenCentral()
     mavenLocal()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    flatDir { dirs "../DotifyShared" }
-}
-
-// need to use maven dependencies instead of DotifyShared otherwise POM won't validate
-dependencies {
-    // compile files("../dotify.api/build/libs/dotify.api-2.3-SNAPSHOT.jar")
-    compile group: "org.daisy.dotify", name: "dotify.api", version: "2.3-SNAPSHOT"
-    // compile files("../dotify.common/build/libs/dotify.common-2.3-SNAPSHOT.jar")
-    compile group: "org.daisy.dotify", name: "dotify.common", version: "2.3-SNAPSHOT"
-    // compile name: "bnd"
-    compile group: "biz.aQute", name: "bndlib", version: "2.0.0.20130123-133441"
-    // testCompile name: "junit-4.7"
-    testCompile group: "junit", name: "junit", version: "4.7"
 }
 
 sourceSets {
@@ -35,9 +22,45 @@ sourceSets {
     }
 }
 
-// not sure if this has any effect and whether it is needed at all?
-jar {
-    manifest {
-        instruction "-include", "bnd.bnd"
+configurations {
+    provided {
+        transitive = true
+        visible = true
     }
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    main.runtimeClasspath -= configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}
+
+dependencies {
+    compile group: "org.daisy.dotify", name: "dotify.api", version: "1.0-SNAPSHOT"
+    compile group: "org.daisy.dotify", name: "dotify.common", version: "1.0-SNAPSHOT"
+    provided group: "biz.aQute", name: "bndlib", version: "2.0.0.20130123-133441"
+    testCompile group: "junit", name: "junit", version: "4.7"
+}
+
+compileJava {
+    options.encoding = "UTF-8"
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+    // FIXME: "bootstrap class path not set in conjunction with -source 1.6"
+    // options.bootClasspath = "/usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar"
+}
+
+buildscript {
+    repositories { mavenCentral() }
+    dependencies { classpath group: "org.dm.gradle", name: "bundle", version: "0.4" }
+}
+
+apply plugin: "bundle"
+
+bundle {
+    instructions << [
+        "-include": "bnd.bnd",
+        "SPI-Provider": "*"
+    ]
 }
