@@ -174,5 +174,66 @@ public class BreakPointHandlerTest {
 		assertEquals("F GHIJKL", bp.getTail());
 		assertTrue(!bp.isHardBreak());
 	}
+	
+	@Test
+	public void testNSH_01() {
+		BreakPointHandler bph = new BreakPointHandler.Builder("til\u00adlåta").
+				addHyphenationInfo(2, 3, "ll\u00adl").build();
+		BreakPoint bp = bph.nextRow(5, false);
+		assertEquals("till-", bp.getHead());
+		assertEquals("låta", bp.getTail());
+		assertTrue(!bp.isHardBreak());
+	}
+	
+	@Test
+	public void testNSH_02() {
+		BreakPointHandler bph = new BreakPointHandler.Builder("til\u00adlåter det mes\u00adta.").
+				addHyphenationInfo(2, 3, "ll\u00adl").build();
+		BreakPoint bp = bph.nextRow(17, false);
+		assertEquals("tillåter det mes-", bp.getHead());
+		assertEquals("ta.", bp.getTail());
+		assertTrue(!bp.isHardBreak());
+	}
+	
+	@Test
+	public void testNSH_03() {
+		BreakPointHandler bph = new BreakPointHandler.Builder("til\u00ad").
+				addHyphenationInfo(2, 2, "ll\u00ad").build();
+		BreakPoint bp = bph.nextRow(17, false);
+		assertEquals("til", bp.getHead());
+		assertEquals("", bp.getTail());
+		assertTrue(!bp.isHardBreak());
+	}
+	
+	@Test
+	public void testNSH_04() {
+		BreakPointHandler bph = new BreakPointHandler.Builder("til\u00adlåta").
+				addHyphenationInfo(2, 3, "ll\u00adl").build();
+		BreakPoint bp = bph.nextRow(4, false);
+		assertEquals("", bp.getHead());
+		assertEquals("til\u00adlåta", bp.getTail());
+		assertTrue(!bp.isHardBreak());
+	}
+	
+	@Test
+	public void testNSH_05() {
+		BreakPointHandler bph = new BreakPointHandler.Builder("Det ska vara til\u00adlåtet.").
+				addHyphenationInfo(15, 3, "ll\u00adl").build();
+		bph.nextRow(7, false);
+		BreakPoint bp = bph.nextRow(11, false);
+		assertEquals("vara till-", bp.getHead());
+		assertEquals("låtet.", bp.getTail());
+		assertTrue(!bp.isHardBreak());
+	}
+	
+	@Test
+	public void testNSH_06() {
+		BreakPointHandler bph = new BreakPointHandler.Builder("eigh\u00adteen").
+				addHyphenationInfo(4, 2, "t\u00adt").build();
+		BreakPoint bp = bph.nextRow(6, false);
+		assertEquals("eight-", bp.getHead());
+		assertEquals("teen", bp.getTail());
+		assertTrue(!bp.isHardBreak());
+	}
 
 }

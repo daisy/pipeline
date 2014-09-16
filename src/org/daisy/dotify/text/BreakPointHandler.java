@@ -1,16 +1,20 @@
 package org.daisy.dotify.text;
 
+import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 
 /**
  * Breaks a paragraph of text into rows. It is assumed that all 
  * preferred break points are supplied with the input String.
- * As a consequence, non standard hyphenation is not supported.
  * 
- * Soft hyphen (0x00ad), dash (0x002d) and space are used to
- * determine an appropriate break point. Soft hyphens are
- * removed in the result.
+ * Soft hyphen (0x00ad) and zero width space (0x200b) characters
+ * can also be used for non-standard hyphenation.
+ * 
+ * Soft hyphen (0x00ad), zero width space (0x200b), dash (0x002d)
+ * and space are used to determine an appropriate break point. Soft
+ * hyphens are removed in the result.
  * @author Joel Håkansson, TPB
  *
  */
@@ -22,6 +26,52 @@ public class BreakPointHandler {
 	private final static Pattern leadingWhitespace = Pattern.compile("\\A[\\s\u200b]+");
 	private final static Pattern trailingWhitespace = Pattern.compile("[\\s\u200b]+\\z");
 	private String charsStr;
+	private int offset;
+	private TreeMap<Integer, NonStandardHyphenationInfo> meta;
+	
+	public static class Builder {
+		private final String str;
+		private final TreeMap<Integer, NonStandardHyphenationInfo> meta;
+		
+		public Builder(String str) {
+			this.str = str;
+			this.meta = new TreeMap<Integer, NonStandardHyphenationInfo>();
+		}
+
+		/**
+		 * Adds a non-standard hyphenation rule to apply if the hyphenation point
+		 * within the specified range is chosen for hyphenation.
+		 * 
+		 * @param offset the offset where the rule applies
+		 * @param length the length of segment that should be replaced
+		 * @param replacement the replacement string, must contain exactly 
+		 * 		one soft hyphen OR exactly one zero width space. Furthermore, the
+		 * 		replacement string is expected to push the hyphenation point 
+		 * 		towards the end of the text.
+		 * @return returns the builder
+		 */
+		public Builder addHyphenationInfo(int offset, int length, String replacement) {
+			if (str.length()<offset+length) {
+				throw new IndexOutOfBoundsException();
+			}
+			//TODO: Verify that range includes at least one hyphenation point 
+			NonStandardHyphenationInfo info = new NonStandardHyphenationInfo(replacement, length);
+			meta.put(offset, info);
+			return this;
+		}
+
+		/**
+		 * Creates a new break point handler with the specified configuration.
+		 * @return returns a new BreakPointHandler
+		 */
+		public BreakPointHandler build() {
+			if (meta.size()>0) {
+				return new BreakPointHandler(str, meta, 0);
+			} else {
+				return new BreakPointHandler(str, null, 0);
+			}
+		}
+	}
 	
 	/**
 	 * Create a new BreakPointHandler. All preferred break points 
@@ -30,10 +80,25 @@ public class BreakPointHandler {
 	 * @param str the paragraph to break into rows. 
 	 */
 	public BreakPointHandler(String str) {
+		this(str, null, 0);
+	}
+/*
+	public BreakPointHandler(String str, TreeMap<Integer, NonStandardHyphenationInfo> meta) {
+		this(str, meta, 0);
+	}*/
+	
+	@SuppressWarnings("unchecked")
+	private BreakPointHandler(String str, TreeMap<Integer, NonStandardHyphenationInfo> meta, int offset) {
 		if (str==null) {
 			throw new NullPointerException("Input string cannot be null.");
 		}
 		this.charsStr = str;
+		this.offset = offset;
+		if (meta!=null) {
+			this.meta = (TreeMap<Integer, NonStandardHyphenationInfo>)meta.clone();
+		} else {
+			this.meta = null;
+		}
 	}
 	
 	/**
@@ -41,7 +106,7 @@ public class BreakPointHandler {
 	 * @return returns a new instance
 	 */
 	public BreakPointHandler copy() {
-		return new BreakPointHandler(charsStr);
+		return new BreakPointHandler(charsStr, meta, offset);
 	}
 
 	/**
@@ -90,7 +155,7 @@ public class BreakPointHandler {
 	
 	private BreakPoint newBreakpointFromPosition(int strPos, int breakPoint, boolean force) {
 		// back up
-		int i=findBreakpointBefore(charsStr, strPos);
+		int i=findBreakpointBefore(strPos);
 		String head;
 		boolean hard = false;
 		int tailStart;
@@ -145,6 +210,7 @@ public class BreakPointHandler {
 		//trim leading whitespace in tail
 		tail = leadingWhitespace.matcher(tail).replaceAll("");
 		head = finalize(head);
+		offset = charsStr.length() - tail.length();
 		charsStr = tail;
 		return new BreakPoint(head, tail, hard);
 	}
@@ -192,11 +258,34 @@ public class BreakPointHandler {
 	 * @param strPos
 	 * @return returns the break point, or -1 if none is found
 	 */
-	private static int findBreakpointBefore(String charsStr, int strPos) {
+	private int findBreakpointBefore(int strPos) {
 		int i = strPos;
 whileLoop: while (i>=0) {
 			switch (charsStr.charAt(i)) {
-				case SPACE: case DASH: case SOFT_HYPHEN: case ZERO_WIDTH_SPACE:
+				case SOFT_HYPHEN: case ZERO_WIDTH_SPACE:
+					boolean done = true;
+					if (meta!=null) {
+						Entry<Integer, NonStandardHyphenationInfo> entry = meta.floorEntry(i+offset);
+						if (entry!=null) {
+							int head = NonStandardHyphenationInfo.getHeadLength(charsStr, entry.getKey()-offset);
+							if ((entry.getKey()+head)>i+offset) { // the closest entry is applicable
+								if (i+head<=strPos) { // the closest entry fits
+									NonStandardHyphenationInfo rule = entry.getValue();
+									//patch string
+									charsStr = rule.apply(charsStr, entry.getKey()-offset);
+									i = entry.getKey() - offset + head;
+								} else { //find another breakpoint
+									done = false;
+								}
+							}
+						}
+					}
+					if (done) {
+						break whileLoop;
+					}
+					break;
+				case SPACE: case DASH:
+					//non-standard hyphenation does not apply
 					break whileLoop;
 			}
 			i--;
