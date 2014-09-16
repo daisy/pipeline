@@ -10,7 +10,6 @@ Private-Package: org.daisy.dotify.impl.translator,\
 	org.daisy.dotify.translator,\
 	org.daisy.dotify.impl.translator.sv_SE,\
 	org.daisy.dotify.impl.translator.liblouis
-Include-Resource: / = src/
--sources: false
+-sources: true
 Import-Package:  \
 	*
