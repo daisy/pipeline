@@ -13,8 +13,5 @@ Bundle-Version: 1.0.0
 Private-Package: org.daisy.dotify.consumer.hyphenator,\
 	org.daisy.dotify.consumer.text,\
 	org.daisy.dotify.consumer.translator
-Include-Resource: / = src/
--sources: false
+-sources: true
 Service-Component: *
-Import-Package: org.junit*;resolution:=optional,\
-	*
