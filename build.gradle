@@ -1,5 +1,7 @@
 apply plugin: "java"
 apply plugin: "maven"
+//custom plugins
+apply plugin: "bundle"
 
 group = "org.daisy.dotify"
 version = "1.0-SNAPSHOT"
@@ -33,11 +35,13 @@ compileJava {
     // options.bootClasspath = "/usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar"
 }
 
-buildscript {
-    repositories { mavenCentral() }
-    dependencies { classpath group: "org.dm.gradle", name: "bundle", version: "0.4" }
+compileTestJava {
+	options.encoding = 'UTF-8'
 }
 
-apply plugin: "bundle"
+buildscript {
+    repositories { mavenCentral() }
+    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.5" }
+}
 
-bundle { instructions << [ "-include": "bnd.bnd" ] }
+bundle { instructions << [ "-include": file('bnd.bnd') ] }
