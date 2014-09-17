@@ -1,0 +1,54 @@
+/*
+ * Braille Utils (C) 2010-2011 Daisy Consortium 
+ * 
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ * 
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this library; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ */
+package com_braillo;
+
+import org.daisy.braille.embosser.AbstractEmbosser;
+import org.daisy.braille.embosser.EmbosserFeatures;
+import org.daisy.braille.table.DefaultTableProvider;
+import org.daisy.braille.table.Table;
+import org.daisy.braille.table.TableFilter;
+
+public abstract class BrailloEmbosser extends AbstractEmbosser {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7640218914742790228L;
+	private final static TableFilter tableFilter;
+	static {
+		tableFilter = new TableFilter() {
+			public boolean accept(Table object) {
+				if (object.getIdentifier().equals(DefaultTableProvider.class.getCanonicalName() + ".TableType.EN_US")) { return true; }
+				if (object.getIdentifier().startsWith(BrailloTableProvider.class.getCanonicalName() + ".TableType.")) { return true; }
+				return false;
+			}
+		};
+	}
+
+	public BrailloEmbosser(String name, String desc,  Enum<? extends Enum<?>> identifier) {
+		super(name, desc, identifier);
+		//TODO: fix this, width is 6.0325
+		setFeature(EmbosserFeatures.CELL_WIDTH, 6);
+		setFeature(EmbosserFeatures.CELL_HEIGHT, 10);
+	}
+
+	//jvm1.6@Override
+	public TableFilter getTableFilter() {
+		return tableFilter;
+	}
+        
+}
