@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar  
+  ns="http://www.daisy.org/ns/2008/pef"
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+>
+
+	<a:documentation>
+		RELAX NG schema for PEF 1.0 - Portable Embosser Format
+		Public Draft 12 February 2009
+		Authors: Joel Håkansson, Piotr Kiernicki, Linus Ericson
+	</a:documentation>
+
+	<start>
+		<ref name="element.pef"/>
+	</start>
+
+	<define name="element.pef">
+		<element name="pef" ns="http://www.daisy.org/ns/2008/pef"><!-- see http://www.oasis-open.org/committees/relax-ng/tutorial.html#IDADGZR-->
+			<ref name="element.pef.attList"/>
+			<ref name="element.head"/>
+			<ref name="element.body"/>
+		</element>
+	</define>
+
+	<define name="element.pef.attList">
+		<attribute name="version">
+			<choice>
+				<value>2008-1</value>
+			</choice>
+		</attribute>
+		<zeroOrMore>
+			<ref name="attribute.anyExceptDefault"/>
+		</zeroOrMore>
+	</define>
+
+	<define name="element.head">
+		<element name="head">
+			<zeroOrMore>
+				<ref name="attribute.anyExceptDefault"/>
+			</zeroOrMore>
+			<interleave>
+				<ref name="element.meta"/>
+				<zeroOrMore>
+					<ref name="element.any"/>
+				</zeroOrMore>
+			</interleave>
+		</element>
+	</define>
+	
+	<define name="element.meta">
+		<element name="meta" xmlns:dc="http://purl.org/dc/elements/1.1/">
+			<zeroOrMore>
+				<ref name="attribute.anyExceptDefault"/>
+			</zeroOrMore>
+			<interleave>
+				<element name="dc:identifier">
+					<zeroOrMore>
+						<ref name="attribute.anyExceptDefault"/>
+					</zeroOrMore>
+					<ref name="datatype.string"/>
+				</element>
+				<element name="dc:format">
+					<zeroOrMore>
+						<ref name="attribute.anyExceptDefault"/>
+					</zeroOrMore>
+					<ref name="datatype.mime.pef"/>
+				</element>
+				<optional>
+					<element name="dc:title">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</optional>
+				<zeroOrMore>
+					<element name="dc:creator">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<element name="dc:subject">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</zeroOrMore>
+				<optional>
+					<element name="dc:description">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</optional>
+				<zeroOrMore>
+					<element name="dc:publisher">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<element name="dc:contributor">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</zeroOrMore>
+				<optional>
+					<element name="dc:date">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.iso8601.yyyyMmDd"/>
+					</element>
+				</optional>
+				<zeroOrMore>
+					<element name="dc:type">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<element name="dc:source">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<element name="dc:language">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.rfc1766"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<element name="dc:relation">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<element name="dc:coverage">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<element name="dc:rights">
+						<zeroOrMore>
+							<ref name="attribute.anyExceptDefault"/>
+						</zeroOrMore>
+						<ref name="datatype.string"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="element.any.meta"/>
+				</zeroOrMore>
+			</interleave>
+		</element>	  	
+	</define>
+	
+	<define name="element.body">
+		<element name="body">
+			<zeroOrMore>
+				<ref name="attribute.anyExceptDefault"/>
+			</zeroOrMore>
+			<interleave>
+				<oneOrMore>
+					<ref name="element.volume"/>
+				</oneOrMore>
+				<zeroOrMore>
+					<ref name="element.any"/>
+				</zeroOrMore>
+			</interleave>
+		</element>
+	</define>
+	
+	<define name="element.volume">
+		<element name="volume">
+			<a:documentation>Defines a volume of embossed braille.</a:documentation>
+			<ref name="attribute.cols"/>
+			<ref name="attribute.rows"/>	
+			<ref name="attribute.rowgap"/>
+			<ref name="attribute.duplex"/>
+			<zeroOrMore>
+				<ref name="attribute.anyExceptDefault"/>
+			</zeroOrMore>
+			<interleave>
+				<oneOrMore>
+					<ref name="element.section"/>
+				</oneOrMore>
+				<zeroOrMore>
+					<ref name="element.any"/>
+				</zeroOrMore>
+			</interleave>
+		</element>
+	</define>
+	
+	<define name="element.section">
+		<element name="section">
+			<a:documentation>Defines a section of embossed braille.</a:documentation>
+			<ref name="attribute.cols.optional"/>
+			<ref name="attribute.rows.optional"/>
+			<ref name="attribute.rowgap.optional"/>
+			<ref name="attribute.duplex.optional"/>
+			<zeroOrMore>
+				<ref name="attribute.anyExceptDefault"/>
+			</zeroOrMore>
+			<interleave>
+				<oneOrMore>
+					<ref name="element.page"/>
+				</oneOrMore>
+				<zeroOrMore>
+					<ref name="element.any"/>
+				</zeroOrMore>
+			</interleave>
+		</element>
+	</define>
+
+	<define name="element.page">
+		<element name="page">
+			<a:documentation>Defines a page of embossed braille.</a:documentation>
+			<ref name="attribute.rowgap.optional"/>
+			<zeroOrMore>
+				<ref name="attribute.anyExceptDefault"/>
+			</zeroOrMore>
+			<interleave>
+				<zeroOrMore>
+					<ref name="element.row"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="element.any"/>
+				</zeroOrMore>
+			</interleave>
+		</element>
+	</define>
+
+	<define name="element.row">
+		<element name="row">
+			<a:documentation>Defines a row of embossed braille.</a:documentation>
+			<ref name="attribute.rowgap.optional"/>
+			<zeroOrMore>
+				<ref name="attribute.anyExceptDefault"/>
+			</zeroOrMore>
+			<ref name="datatype.string.unicode.braille"/>
+		</element>
+	</define>
+
+	<define name="element.any">
+		<element>
+			<anyName>
+				<except>
+					<nsName ns="http://www.daisy.org/ns/2008/pef"/>
+				</except>
+			</anyName>
+			<zeroOrMore>
+				<choice>
+					<ref name="attribute.any"/>
+					<text/>
+					<ref name="element.any"/>
+				</choice>
+			</zeroOrMore>
+		</element>
+	</define>
+	
+	<define name="element.any.meta">
+		<element>
+			<anyName>
+				<except>
+					<nsName ns="http://www.daisy.org/ns/2008/pef"/>
+					<nsName ns="http://purl.org/dc/elements/1.1/"/>
+				</except>
+			</anyName>
+			<zeroOrMore>
+				<choice>
+					<ref name="attribute.any"/>
+					<text/>
+					<ref name="element.any.meta"/>
+				</choice>
+			</zeroOrMore>
+		</element>
+	</define>
+
+	<define name="attribute.any">
+		<attribute>
+			<anyName></anyName>
+		</attribute>
+	</define>
+
+	<define name="attribute.anyExceptDefault">
+		<attribute>
+			<anyName>
+				<except>
+					<nsName ns=""/>
+				</except>
+			</anyName>
+		</attribute>
+	</define>
+	
+	<define name="attribute.cols">
+		<a:documentation>Defines the width (measured in characters) of page descendants.</a:documentation>
+		<attribute name="cols">
+			<ref name="datatype.positiveInteger"/>
+		</attribute>
+	</define>
+	<define name="attribute.cols.optional">
+		<a:documentation>Overrides any value defined by ancestors.</a:documentation>
+		<optional>
+			<ref name="attribute.cols"/>
+		</optional>
+	</define>
+	
+	<define name="attribute.rows">
+		<a:documentation>Defines the height (measured in characters) of page descendants.</a:documentation>
+		<attribute name="rows">
+			<ref name="datatype.positiveInteger"/>
+		</attribute>
+	</define>
+	<define name="attribute.rows.optional">
+		<a:documentation>Overrides any value defined by ancestors.</a:documentation>
+		<optional>
+			<ref name="attribute.rows"/>
+		</optional>
+	</define>
+	
+	<define name="attribute.rowgap">
+		<a:documentation>Defines the size of a gap between rows (expressed as a multiple of the dot-to-dot height). In practice, this value should be 0 or more for six dot braille and 1 or more for eight dot braille</a:documentation>
+		<attribute name="rowgap">
+			<ref name="datatype.nonNegativeInteger"/>
+		</attribute>
+	</define>
+	<define name="attribute.rowgap.optional">
+		<a:documentation>Overrides any value defined by ancestors.</a:documentation>
+		<optional>
+			<ref name="attribute.rowgap"/>
+		</optional>	
+	</define>
+	
+	<define name="attribute.duplex">
+		<a:documentation>Defines whether page descendants are intended for duplex printing or not.</a:documentation>
+		<attribute name="duplex">
+			<ref name="datatype.boolean"/>
+		</attribute>
+	</define>
+	<define name="attribute.duplex.optional">
+		<a:documentation>Overrides any value defined by ancestors.</a:documentation>
+		<optional>
+			<ref name="attribute.duplex"/>
+		</optional>	
+	</define>
+	
+	<define name="datatype.mime.pef">
+		<choice>
+			<value>application/x-pef+xml</value>
+		</choice>
+	</define>
+
+	<define name="datatype.string.unicode.braille">
+		<data type="string">
+			<param name="pattern">([&#x2800;-&#x28FF;])*</param>
+		</data>
+	</define>
+	
+	<define name="datatype.rfc1766">		
+		<!-- this is in reality rfc3066; supercedes 1766 by this erratum: http://www.w3.org/XML/xml-V10-2e-errata#E11 -->
+		<data type="language"/>
+	</define>
+	
+	<define name="datatype.string">
+		<data type="string"/>
+	</define>
+	
+	<define name="datatype.boolean">
+		<data type="boolean"/>
+	</define>	
+	
+	<define name="datatype.integer">
+		<data type="integer"/>
+	</define>
+		
+	<define name="datatype.iso8601.yyyyMmDd">
+		<a:documentation>[ISO8601] subset: requires yyyy-mm-dd
+			format</a:documentation>
+		<data type="string">
+			<param name="pattern">[0-9]{4}-[0-9]{2}-[0-9]{2}</param>
+		</data>
+	</define>
+	
+	<define name="datatype.nonNegativeInteger">
+		<data type="nonNegativeInteger"/>
+	</define>
+	
+	<define name="datatype.positiveInteger">
+		<data type="positiveInteger"/>
+	</define>
+	
+</grammar>
