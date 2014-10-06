@@ -37,8 +37,7 @@ public abstract class AbstractUI {
 	 * Prefix used for required arguments in the arguments map
 	 */
 	public final static String ARG_PREFIX = "required-";
-	private String delimiter;
-	private String optionalArgumentPrefix;
+	protected final DefaultCommandParser parser;
 	
 	/**
 	 * Expands the short form of the value with the given key in the provided map using the specified resolver.
@@ -78,6 +77,7 @@ public abstract class AbstractUI {
 	 * the default optional argument prefix '-'
 	 */
 	public AbstractUI() {
+		this.parser = new DefaultCommandParser();
 		setKeyValueDelimiter("=");
 		setOptionalArgumentPrefix("-");
 	}
@@ -88,7 +88,7 @@ public abstract class AbstractUI {
 	 * @param value the delimiter to use
 	 */
 	public void setKeyValueDelimiter(String value) {
-		delimiter = value;
+		parser.setKeyValueDelimiter(value);
 	}
 	
 	/**
@@ -100,7 +100,7 @@ public abstract class AbstractUI {
 		if (ARG_PREFIX.equals(value)) {
 			throw new IllegalArgumentException("Prefix is reserved: " + ARG_PREFIX);
 		}
-		optionalArgumentPrefix = value;
+		parser.setOptionalArgumentPrefix(value);
 	}
 	
 	/**
@@ -131,13 +131,14 @@ public abstract class AbstractUI {
 	 * @return returns a map of application arguments
 	 */
 	public Map<String, String> toMap(String[] args) {
+		args = parser.processSwitches(args);
 		Hashtable<String, String> p = new Hashtable<String, String>();
 		int i = 0;
 		String[] t;
 		for (String s : args) {
 			s = s.trim();
-			t = s.split(delimiter, 2);
-			if (s.startsWith(optionalArgumentPrefix) && t.length==2) {
+			t = s.split(parser.getKeyValueDelimiter(), 2);
+			if (s.startsWith(parser.getOptionalArgumentPrefix()) && t.length==2) {
 				p.put(t[0].substring(1), t[1]);
 			} else {
 				p.put(ARG_PREFIX+i, s);
@@ -146,14 +147,15 @@ public abstract class AbstractUI {
 		}
 		return p;
 	}
-	
+
 	public Map<String, String> getOptional(String[] args) {
+		args = parser.processSwitches(args);
 		Hashtable<String, String> p = new Hashtable<String, String>();
 		String[] t;
 		for (String s : args) {
 			s = s.trim();
-			t = s.split(delimiter, 2);
-			if (s.startsWith(optionalArgumentPrefix) && t.length==2) {
+			t = s.split(parser.getKeyValueDelimiter(), 2);
+			if (s.startsWith(parser.getOptionalArgumentPrefix()) && t.length==2) {
 				p.put(t[0].substring(1), t[1]);
 			}
 		}
@@ -165,8 +167,8 @@ public abstract class AbstractUI {
 		String[] t;
 		for (String s : args) {
 			s = s.trim();
-			t = s.split(delimiter, 2);
-			if (!(s.startsWith(optionalArgumentPrefix) && t.length==2)) {
+			t = s.split(parser.getKeyValueDelimiter(), 2);
+			if (!(s.startsWith(parser.getOptionalArgumentPrefix()) && t.length==2)) {
 				p.add(s);
 			}
 		}
@@ -194,7 +196,7 @@ public abstract class AbstractUI {
 		if (getRequiredArguments()!=null && getRequiredArguments().size()>0) {
 			for (Argument a : getRequiredArguments()) {
 				ps.print(" ");
-				ps.print(a.getName());
+				ps.print("<"+a.getName()+">");
 			}
 		}
 		if (getOptionalArguments()!=null && getOptionalArguments().size()>0) {
@@ -219,7 +221,7 @@ public abstract class AbstractUI {
 		if (getOptionalArguments()!=null && getOptionalArguments().size()>0) {
 			ps.println("Optional arguments:");
 			for (OptionalArgument a : getOptionalArguments()) {
-				ps.print("\t" + optionalArgumentPrefix + a.getName() + delimiter + "[value]");
+				ps.print("\t" + parser.getOptionalArgumentPrefix() + a.getName() + parser.getKeyValueDelimiter() + "[value]");
 				if (!a.hasValues()) {
 					ps.print(" (default '"  + a.getDefault() + "')");
 				}
@@ -236,6 +238,19 @@ public abstract class AbstractUI {
 						}
 					}
 				}
+			}
+			ps.println();
+		}
+		displaySwitches(ps);
+	}
+	
+	public void displaySwitches(PrintStream ps) {
+		if (parser.getSwitches()!=null && parser.getSwitches().size()>0) {
+			ps.println("Switches:");
+			for (SwitchArgument a : parser.getSwitches()) {
+				ps.print("\t" + parser.getSwitchArgumentPrefix() + a.getKey());
+				ps.println();
+				ps.println("\t\t" + a.getDescription());
 			}
 			ps.println();
 		}
