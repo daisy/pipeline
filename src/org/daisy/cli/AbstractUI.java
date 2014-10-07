@@ -35,6 +35,7 @@ public abstract class AbstractUI {
 	 * Prefix used for required arguments in the arguments map
 	 */
 	public final static String ARG_PREFIX = "required-";
+	private final static int WIDTH = 50;
 	protected final DefaultCommandParser parser;
 	
 	/**
@@ -167,7 +168,7 @@ public abstract class AbstractUI {
 	public void displayRequired(PrintStream ps) {
 		for (Argument a : getRequiredArguments()) {
 			ps.println("\t<" + a.getName()+ ">");
-			ps.println("\t\t" + a.getDescription());
+			format(ps, a.getDescription(), "\t\t", WIDTH);
 			ps.println();
 			if (a.hasValues()) {
 				ps.println("\t\tValues:");
@@ -189,16 +190,17 @@ public abstract class AbstractUI {
 				ps.print(" (default '"  + a.getDefault() + "')");
 			}
 			ps.println();
-			ps.println("\t\t" + a.getDescription());
+			format(ps, a.getDescription(), "\t\t", WIDTH);
 			if (a.hasValues()) {
 				ps.println("\t\tValues:");
 				for (Definition value : a.getValues()) {
-					ps.print("\t\t\t'"+value.getName() + "' - " + value.getDescription());
+					ps.print("\t\t\t'"+value.getName() + "'");
 					if (value.getName().equals(a.getDefault())) {
 						ps.println(" (default)");
 					} else {
 						ps.println();
 					}
+					format(ps, value.getDescription(), "\t\t\t\t", WIDTH);
 				}
 			}
 			ps.println();
@@ -221,8 +223,24 @@ public abstract class AbstractUI {
 				ps.print(parser.getOptionalArgumentPrefix() + a.getAlias());
 			}
 			ps.println();
-			ps.println("\t\t" + a.getDescription());
+			format(ps, a.getDescription(), "\t\t", WIDTH);
 			ps.println();
 		}
 	}
+	
+	void format(PrintStream ps, String str, String prefix, int w) {
+		while (str.length()>w) {
+			int i = w;
+			while (i>0 && !Character.isWhitespace(str.charAt(i))) {
+				i--;
+			}
+			if (i==0) {
+				i = w;
+			}
+			ps.println(prefix+str.substring(0, i));
+			str = str.substring(i+1);
+		}
+		ps.println(prefix+str);
+	}
+	
 }
