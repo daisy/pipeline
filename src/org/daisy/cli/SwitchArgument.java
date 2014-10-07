@@ -6,7 +6,7 @@ package org.daisy.cli;
  * @author Joel Håkansson
  */
 public class SwitchArgument extends Definition {
-	private final char key;
+	private final Character key;
 	private final String alias;
 	private final String value;
 
