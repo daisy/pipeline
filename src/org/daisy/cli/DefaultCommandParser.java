@@ -64,6 +64,7 @@ public class DefaultCommandParser {
 	}
 
 	//Process switches and turn them into optional arguments
+	//TODO:remove, integrated in "parse" below
 	String[] processSwitches(String[] args) {
 		for (int i=0; i<args.length; i++) {
 			String s = args[i];
@@ -76,6 +77,26 @@ public class DefaultCommandParser {
 			}
 		}
 		return args;
+	}
+	
+	public CommandParserResult parse(String[] args) {
+		String[] t;
+		DefaultCommandParserResult.Builder builder = new DefaultCommandParserResult.Builder();
+		for (String s : args) {
+			s = s.trim();
+			t = s.split(delimiter, 2);
+			if (s.startsWith(optionalArgumentPrefix) && t.length==2) {
+				builder.addOptional(t[0].substring(1), t[1]);
+			} else if (s.startsWith(switchArgumentPrefix) && s.length()==switchArgumentPrefix.length()+1) {
+				SwitchArgument sc = switches.get(s.substring(switchArgumentPrefix.length()).charAt(0));
+				if (sc!=null) {
+					builder.addOptional(sc.getName(), sc.getValue());
+				}
+			} else {
+				builder.addRequired(s);
+			}
+		}
+		return builder.build();
 	}
 
 }
