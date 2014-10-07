@@ -1,20 +1,24 @@
 package org.daisy.cli;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DefaultCommandParser {
 	private String delimiter;
 	private String optionalArgumentPrefix;
 	private String switchArgumentPrefix;
-	private Map<Character, SwitchArgument> switches;
+	private List<SwitchArgument> switches;
+	private Map<String, SwitchArgument> switchesLookup;
 	
 	public DefaultCommandParser() {
 		delimiter = "=";
-		optionalArgumentPrefix = "-";
+		optionalArgumentPrefix = "--";
 		switchArgumentPrefix = "-";
-		switches = new HashMap<Character, SwitchArgument>();
+		switches = new ArrayList<SwitchArgument>();
+		switchesLookup = new HashMap<String, SwitchArgument>();
 	}
 	
 	public String getKeyValueDelimiter() {
@@ -51,8 +55,23 @@ public class DefaultCommandParser {
 		this.switchArgumentPrefix = switchArgumentPrefix;
 	}
 	
-	public SwitchArgument addSwitch(SwitchArgument value) {
-		return switches.put(value.getKey(), value);
+	/**
+	 * Adds a switch.
+	 * @param value the switch
+	 * @throws IllegalArgumentException if the key or alias is already in use
+	 */
+	public void addSwitch(SwitchArgument value) {
+		if (value.getKey()!=null) {
+			if (switchesLookup.put(""+value.getKey(), value)!=null) {
+				throw new IllegalArgumentException("Key already in use: " + value.getKey());
+			}
+		}
+		if (value.getAlias()!=null) {
+			if (switchesLookup.put(value.getAlias(), value)!=null)  {
+				throw new IllegalArgumentException("Alias already in use: " + value.getAlias());
+			}
+		}
+		switches.add(value);
 	}
 	
 	/**
@@ -60,7 +79,7 @@ public class DefaultCommandParser {
 	 * @return returns the switch arguments
 	 */
 	public Collection<SwitchArgument> getSwitches() {
-		return switches.values();
+		return switches;
 	}
 
 	//Process switches and turn them into optional arguments
@@ -70,7 +89,7 @@ public class DefaultCommandParser {
 			String s = args[i];
 			if (s.startsWith(switchArgumentPrefix) && s.length()==switchArgumentPrefix.length()+1) {
 				String t = s.substring(switchArgumentPrefix.length());
-				SwitchArgument sc = switches.get(t.charAt(0));
+				SwitchArgument sc = switchesLookup.get(t);
 				if (sc!=null) {
 					args[i] = optionalArgumentPrefix+sc.getName()+delimiter+sc.getValue();
 				}
@@ -85,12 +104,23 @@ public class DefaultCommandParser {
 		for (String s : args) {
 			s = s.trim();
 			t = s.split(delimiter, 2);
-			if (s.startsWith(optionalArgumentPrefix) && t.length==2) {
-				builder.addOptional(t[0].substring(1), t[1]);
+			if (s.startsWith(optionalArgumentPrefix) && t.length<=2) {
+				if (t.length==2) {
+					builder.addOptional(t[0].substring(optionalArgumentPrefix.length()), t[1]);
+				} else {
+					SwitchArgument sc = switchesLookup.get(s.substring(optionalArgumentPrefix.length()));
+					if (sc!=null) {
+						builder.addOptional(sc.getName(), sc.getValue());
+					} else {
+						builder.addRequired(s);
+					}
+				}
 			} else if (s.startsWith(switchArgumentPrefix) && s.length()==switchArgumentPrefix.length()+1) {
-				SwitchArgument sc = switches.get(s.substring(switchArgumentPrefix.length()).charAt(0));
+				SwitchArgument sc = switchesLookup.get(s.substring(switchArgumentPrefix.length()));
 				if (sc!=null) {
 					builder.addOptional(sc.getName(), sc.getValue());
+				} else {
+					builder.addRequired(s);
 				}
 			} else {
 				builder.addRequired(s);

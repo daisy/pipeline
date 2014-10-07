@@ -1,6 +1,5 @@
 package org.daisy.cli;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
@@ -14,33 +13,36 @@ public class DefaultCommandParserTest {
 	public void testSwitchProcessing_01() {
 		DefaultCommandParser parser = new DefaultCommandParser();
 		parser.addSwitch(new SwitchArgument('c', "copy", "true", "Turns on copying."));
-		String[] ret = parser.processSwitches(new String[]{"-c"});
-		assertArrayEquals(new String[]{"-copy=true"}, ret);
+		CommandParserResult result = parser.parse(new String[]{"-c"});
+		
+		Map<String, String> opts = result.getOptional();
+
+		assertEquals(1, opts.size());
+		assertEquals("true", opts.get("copy"));
 	}
-	
+
 	@Test
 	public void testSwitchProcessing_02() {
 		DefaultCommandParser parser = new DefaultCommandParser();
-		parser.setOptionalArgumentPrefix("--");
-		parser.addSwitch(new SwitchArgument('c', "copy", "true", "Turns on copying."));
-		String[] ret = parser.processSwitches(new String[]{"-c"});
-		assertArrayEquals(new String[]{"--copy=true"}, ret);
-	}
-	
-	@Test
-	public void testSwitchProcessing_03() {
-		DefaultCommandParser parser = new DefaultCommandParser();
-		parser.setOptionalArgumentPrefix("--");
 		parser.addSwitch(new SwitchArgument('c', "copy", "true", "Turns on copying."));
 		parser.addSwitch(new SwitchArgument('d', "delete", "all", "Delete originals."));
-		String[] ret = parser.processSwitches(new String[]{"-c", "--copy=true", "-e", "-d"});
-		assertArrayEquals(new String[]{"--copy=true", "--copy=true", "-e", "--delete=all"}, ret);
+		
+		CommandParserResult result = parser.parse(new String[]{"-c", "--copy=true", "-e", "-d"});
+		
+		List<String> req = result.getRequired();
+		assertEquals(1, req.size());
+		assertEquals("-e", req.get(0));
+
+		Map<String, String> opts = result.getOptional();
+		assertEquals(2, opts.size());
+		assertEquals("true", opts.get("copy"));
+		assertEquals("all", opts.get("delete"));
 	}
 	
 	@Test
 	public void testCommandParser_01() {
 		DefaultCommandParser parser = new DefaultCommandParser();
-		CommandParserResult result = parser.parse(new String[]{"R1", "R2", "-option=value"});
+		CommandParserResult result = parser.parse(new String[]{"R1", "R2", "--option=value"});
 		Map<String, String> opts = result.getOptional();
 		List<String> req = result.getRequired();
 		assertEquals(2, req.size());
@@ -48,7 +50,6 @@ public class DefaultCommandParserTest {
 		assertEquals("R2", req.get(1));
 
 		assertEquals(1, opts.size());
-		assertEquals("option", opts.keySet().iterator().next());
 		assertEquals("value", opts.get("option"));
 	}
 	
@@ -64,7 +65,20 @@ public class DefaultCommandParserTest {
 		assertEquals("R2", req.get(1));
 
 		assertEquals(1, opts.size());
-		assertEquals("option", opts.keySet().iterator().next());
+		assertEquals("value", opts.get("option"));
+	}
+	
+	@Test
+	public void testCommandParser_03() {
+		DefaultCommandParser parser = new DefaultCommandParser();
+		parser.setOptionalArgumentPrefix("--");
+		parser.addSwitch(new SwitchArgument('d', "default", "option", "value", "Switch option value."));
+		CommandParserResult result = parser.parse(new String[]{"--default"});
+		Map<String, String> opts = result.getOptional();
+		List<String> req = result.getRequired();
+		assertEquals(0, req.size());
+
+		assertEquals(1, opts.size());
 		assertEquals("value", opts.get("option"));
 	}
 

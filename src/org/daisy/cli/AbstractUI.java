@@ -19,10 +19,8 @@ package org.daisy.cli;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 import org.daisy.factory.Factory;
 import org.daisy.factory.FactoryCatalog;
@@ -79,7 +77,7 @@ public abstract class AbstractUI {
 	public AbstractUI() {
 		this.parser = new DefaultCommandParser();
 		setKeyValueDelimiter("=");
-		setOptionalArgumentPrefix("-");
+		setOptionalArgumentPrefix("--");
 	}
 
 	/**
@@ -122,58 +120,6 @@ public abstract class AbstractUI {
 	 * passed to the UI on startup
 	 */
 	public abstract List<OptionalArgument> getOptionalArguments();
-
-	/**
-	 * Converts a string based definition of UI arguments, typically 
-	 * passed by the main method, into a key-value map as described
-	 * by displayHelp
-	 * @param args the arguments passed to the application
-	 * @return returns a map of application arguments
-	 */
-	public Map<String, String> toMap(String[] args) {
-		args = parser.processSwitches(args);
-		Hashtable<String, String> p = new Hashtable<String, String>();
-		int i = 0;
-		String[] t;
-		for (String s : args) {
-			s = s.trim();
-			t = s.split(parser.getKeyValueDelimiter(), 2);
-			if (s.startsWith(parser.getOptionalArgumentPrefix()) && t.length==2) {
-				p.put(t[0].substring(1), t[1]);
-			} else {
-				p.put(ARG_PREFIX+i, s);
-				i++;
-			}
-		}
-		return p;
-	}
-
-	public Map<String, String> getOptional(String[] args) {
-		args = parser.processSwitches(args);
-		Hashtable<String, String> p = new Hashtable<String, String>();
-		String[] t;
-		for (String s : args) {
-			s = s.trim();
-			t = s.split(parser.getKeyValueDelimiter(), 2);
-			if (s.startsWith(parser.getOptionalArgumentPrefix()) && t.length==2) {
-				p.put(t[0].substring(1), t[1]);
-			}
-		}
-		return p;
-	}
-	
-	public List<String> getRequired(String[] args) {
-		Vector<String> p = new Vector<String>();
-		String[] t;
-		for (String s : args) {
-			s = s.trim();
-			t = s.split(parser.getKeyValueDelimiter(), 2);
-			if (!(s.startsWith(parser.getOptionalArgumentPrefix()) && t.length==2)) {
-				p.add(s);
-			}
-		}
-		return p;
-	}
 	
 	public static void exitWithCode(ExitCode e) {
 		exitWithCode(e, null);
@@ -192,7 +138,11 @@ public abstract class AbstractUI {
 	 * @param ps The print stream to use, typically System.out
 	 */
 	public void displayHelp(PrintStream ps) {
-		ps.print(getName());
+		ps.println("NAME");
+		ps.println("\t"+getName());
+		ps.println();
+		ps.println("SYNOPSIS");
+		ps.print("\t"+getName());
 		if (getRequiredArguments()!=null && getRequiredArguments().size()>0) {
 			for (Argument a : getRequiredArguments()) {
 				ps.print(" ");
@@ -204,54 +154,74 @@ public abstract class AbstractUI {
 		}
 		ps.println();
 		ps.println();
-		if (getRequiredArguments()!=null && getRequiredArguments().size()>0) {
-			for (Argument a : getRequiredArguments()) {
-				ps.println("Required argument:");
-				ps.println("\t" + a.getName()+ " - " + a.getDescription());
-				ps.println();
-				if (a.hasValues()) {
-					ps.println("\tValues:");
-					for (Definition value : a.getValues()) {
-						ps.println("\t\t'"+value.getName() + "' - " + value.getDescription());
-					}
-					ps.println();
+		if ((getRequiredArguments()!=null && getRequiredArguments().size()>0)||
+				(getOptionalArguments()!=null && getOptionalArguments().size()>0)||
+				(parser.getSwitches()!=null && parser.getSwitches().size()>0)) {
+			ps.println("OPTIONS");
+			displayRequired(ps);
+			displayOptions(ps);
+			displaySwitches(ps);
+		}
+	}
+	
+	public void displayRequired(PrintStream ps) {
+		for (Argument a : getRequiredArguments()) {
+			ps.println("\t<" + a.getName()+ ">");
+			ps.println("\t\t" + a.getDescription());
+			ps.println();
+			if (a.hasValues()) {
+				ps.println("\t\tValues:");
+				for (Definition value : a.getValues()) {
+					ps.println("\t\t\t'"+value.getName() + "' - " + value.getDescription());
 				}
+				ps.println();
 			}
 		}
-		if (getOptionalArguments()!=null && getOptionalArguments().size()>0) {
-			ps.println("Optional arguments:");
-			for (OptionalArgument a : getOptionalArguments()) {
-				ps.print("\t" + parser.getOptionalArgumentPrefix() + a.getName() + parser.getKeyValueDelimiter() + "[value]");
-				if (!a.hasValues()) {
-					ps.print(" (default '"  + a.getDefault() + "')");
-				}
-				ps.println();
-				ps.println("\t\t" + a.getDescription());
-				if (a.hasValues()) {
-					ps.println("\t\tValues:");
-					for (Definition value : a.getValues()) {
-						ps.print("\t\t\t'"+value.getName() + "' - " + value.getDescription());
-						if (value.getName().equals(a.getDefault())) {
-							ps.println(" (default)");
-						} else {
-							ps.println();
-						}
+	}
+	
+	public void displayOptions(PrintStream ps) {
+		if (getOptionalArguments()==null) {
+			return;
+		}
+		for (OptionalArgument a : getOptionalArguments()) {
+			ps.print("\t" + parser.getOptionalArgumentPrefix() + a.getName() + parser.getKeyValueDelimiter() + "<value>");
+			if (!a.hasValues()) {
+				ps.print(" (default '"  + a.getDefault() + "')");
+			}
+			ps.println();
+			ps.println("\t\t" + a.getDescription());
+			if (a.hasValues()) {
+				ps.println("\t\tValues:");
+				for (Definition value : a.getValues()) {
+					ps.print("\t\t\t'"+value.getName() + "' - " + value.getDescription());
+					if (value.getName().equals(a.getDefault())) {
+						ps.println(" (default)");
+					} else {
+						ps.println();
 					}
 				}
 			}
 			ps.println();
 		}
-		displaySwitches(ps);
 	}
 	
 	public void displaySwitches(PrintStream ps) {
-		if (parser.getSwitches()!=null && parser.getSwitches().size()>0) {
-			ps.println("Switches:");
-			for (SwitchArgument a : parser.getSwitches()) {
-				ps.print("\t" + parser.getSwitchArgumentPrefix() + a.getKey());
-				ps.println();
-				ps.println("\t\t" + a.getDescription());
+		if (parser.getSwitches()==null) {
+			return;
+		}
+		for (SwitchArgument a : parser.getSwitches()) {
+			ps.print("\t");
+			if (a.getKey()!=null) {
+				ps.print(parser.getSwitchArgumentPrefix() + a.getKey());
 			}
+			if (a.getAlias()!=null) {
+				if (a.getKey()!=null) {
+					ps.print(", ");
+				}
+				ps.print(parser.getOptionalArgumentPrefix() + a.getAlias());
+			}
+			ps.println();
+			ps.println("\t\t" + a.getDescription());
 			ps.println();
 		}
 	}
