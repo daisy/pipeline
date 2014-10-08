@@ -169,11 +169,11 @@ public abstract class AbstractUI {
 		for (Argument a : getRequiredArguments()) {
 			ps.println("\t<" + a.getName()+ ">");
 			format(ps, a.getDescription(), "\t\t", WIDTH);
-			ps.println();
 			if (a.hasValues()) {
 				ps.println("\t\tValues:");
 				for (Definition value : a.getValues()) {
-					ps.println("\t\t\t'"+value.getName() + "' - " + value.getDescription());
+					ps.println("\t\t\t'"+value.getName()+"'");
+					format(ps, value.getDescription(), "\t\t\t\t", WIDTH);
 				}
 				ps.println();
 			}
