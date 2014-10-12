@@ -17,7 +17,10 @@
  */
 package org.daisy.validator;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.imageio.spi.ServiceRegistry;
 
@@ -25,9 +28,13 @@ import javax.imageio.spi.ServiceRegistry;
  * Simple factory for instantiating a Validator based on its identifier 
  * @author Joel Håkansson
  */
+//@Component
 public class ValidatorFactory {
+	private final Map<String, Validator> map;
 	
-	protected ValidatorFactory() { }
+	public ValidatorFactory() {
+		map = Collections.synchronizedMap(new HashMap<String, Validator>());
+	}
 
 	/**
 	 * Obtains a new instance of a ValidatorFactory.
@@ -35,7 +42,22 @@ public class ValidatorFactory {
 	 * @return returns a new ValidatorFactory instance. 
 	 */
 	public static ValidatorFactory newInstance() {
-		return new ValidatorFactory();
+		ValidatorFactory ret = new ValidatorFactory();
+		Iterator<Validator> i = ServiceRegistry.lookupProviders(Validator.class);
+		while (i.hasNext()) {
+			ret.addFactory(i.next());
+		}
+		return ret;
+	}
+	
+	//@Reference(type = '*')
+	public void addFactory(Validator factory) {
+		map.put(factory.getIdentifier(), factory);
+	}
+
+	// Unbind reference added automatically from addFactory annotation
+	public void removeFactory(Validator factory) {
+		map.remove(factory.getIdentifier());
 	}
 
 	/**
@@ -44,14 +66,7 @@ public class ValidatorFactory {
 	 * @return returns a Validator for the given identifier, or null if none is found
 	 */
 	public Validator newValidator(String identifier) {
-		Iterator<Validator> i = ServiceRegistry.lookupProviders(Validator.class);
-		while (i.hasNext()) {
-			Validator v = i.next();
-			if (identifier.equals(v.getIdentifier())) {
-				return v;
-			}
-		}
-		return null;
+		return map.get(identifier);
 	}
 
 }

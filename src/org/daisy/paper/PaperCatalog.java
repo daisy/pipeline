@@ -17,35 +17,95 @@
  */
 package org.daisy.paper;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.factory.FactoryCatalog;
+import org.daisy.factory.FactoryFilter;
 
 /**
  * Provides a catalog of Paper factories.
  * @author Joel Håkansson
  */
-public abstract class PaperCatalog implements FactoryCatalog<Paper> {
+//TODO: use PaperService instead of Paper and enable OSGi support
+//@Component
+public class PaperCatalog implements FactoryCatalog<Paper> {
+	private final Map<String, Paper> map;
 	
-	protected PaperCatalog() {	}
+	public PaperCatalog() {
+		map = Collections.synchronizedMap(new HashMap<String, Paper>());
+	}
 	
 	/**
-	 * Obtains a new PaperCatalog instance. If at least one implementation can be found 
-	 * using the Services API, then the first one will be returned. Otherwise the default PaperCatalog
-	 * will be used.
+	 * <p>
+	 * Creates a new PaperCatalog and populates it using the SPI
+	 * (java service provider interface).
+	 * </p>
 	 * 
-	 * The default PaperCatalog will use the Services API to
-	 * find PaperProviders. The combined result from all PaperProviders are available to
-	 * the catalog.
-	 * @return returns a new PaperCatalog instance. 
+	 * <p>
+	 * In an OSGi context, an instance should be retrieved using the service
+	 * registry. It will be registered under the PaperCatalogService
+	 * interface.
+	 * </p>
+	 * 
+	 * @return returns a new PaperCatalogCatalog
 	 */
 	public static PaperCatalog newInstance() {
-		Iterator<PaperCatalog> i = ServiceRegistry.lookupProviders(PaperCatalog.class);
+		PaperCatalog ret = new PaperCatalog();
+		Iterator<PaperProvider> i = ServiceRegistry.lookupProviders(PaperProvider.class);
 		while (i.hasNext()) {
-			return i.next();
+			PaperProvider provider = i.next();
+			for (Paper paper : provider.list()) {
+				ret.addFactory(paper);
+			}
 		}
-		return new DefaultPaperCatalog();
+		return ret;
+	}
+	
+	//@Reference(type = '*')
+	public void addFactory(Paper factory) {
+		map.put(factory.getIdentifier(), factory);
+	}
+
+	// Unbind reference added automatically from addFactory annotation
+	public void removeFactory(Paper factory) {
+		map.remove(factory.getIdentifier());
+	}
+	
+	//jvm1.6@Override
+	public Object getFeature(String key) {
+		throw new IllegalArgumentException("Unsupported feature: " + key);
+	}
+
+	//jvm1.6@Override
+	public void setFeature(String key, Object value) {
+		throw new IllegalArgumentException("Unsupported feature: " + key);
+	}
+	
+	//jvm1.6@Override
+	public Paper get(String identifier) {
+		return map.get(identifier);
+	}
+
+	//jvm1.6@Override
+	public Collection<Paper> list() {
+		return map.values();
+	}
+
+	//jvm1.6@Override
+	public Collection<Paper> list(FactoryFilter<Paper> filter) {
+		Collection<Paper> ret = new ArrayList<Paper>();
+		for (Paper paper : map.values()) {
+			if (filter.accept(paper)) {
+				ret.add(paper);
+			}
+		}
+		return ret;
 	}
 }

@@ -17,36 +17,91 @@
  */
 package org.daisy.braille.table;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.factory.FactoryCatalog;
+import org.daisy.factory.FactoryFilter;
 
 /**
  * Provides a catalog of Table factories.
  * @author Joel Håkansson
  */
-public abstract class TableCatalog implements FactoryCatalog<Table> {
+//TODO: use TableService instead of Table and enable OSGi support
+//@Component
+public class TableCatalog implements FactoryCatalog<Table> {
+	private final Map<String, Table> map;
 	
-	protected TableCatalog() {	}
+	public TableCatalog() {
+		map = Collections.synchronizedMap(new HashMap<String, Table>());
+	}
 	
 	/**
-	 * Obtains a new TableCatalog instance. If at least one implementation can be found 
-	 * using the Services API, then the first one will be returned. Otherwise the default TableCatalog
-	 * will be used.
+	 * <p>
+	 * Creates a new TableCatalog and populates it using the SPI
+	 * (java service provider interface).
+	 * </p>
 	 * 
-	 * The default TableCatalog will use the Services API to
-	 * find TableProviders. The combined result from all TableProviders are available to
-	 * the catalog.
-	 * @return returns a new TableCatalog instance. 
+	 * <p>
+	 * In an OSGi context, an instance should be retrieved using the service
+	 * registry. It will be registered under the TableCatalogService
+	 * interface.
+	 * </p>
+	 * 
+	 * @return returns a new TableCatalog
 	 */
 	public static TableCatalog newInstance() {
-		Iterator<TableCatalog> i = ServiceRegistry.lookupProviders(TableCatalog.class);
+		TableCatalog ret = new TableCatalog();
+		Iterator<TableProvider> i = ServiceRegistry.lookupProviders(TableProvider.class);
 		while (i.hasNext()) {
-			return i.next();
+			TableProvider provider = i.next();
+			for (Table table : provider.list()) {
+				ret.addFactory(table);
+			}
 		}
-		return new DefaultTableCatalog();
+		return ret;
+	}
+	
+	//@Reference(type = '*')
+	public void addFactory(Table factory) {
+		map.put(factory.getIdentifier(), factory);
+	}
+
+	// Unbind reference added automatically from addFactory annotation
+	public void removeFactory(Table factory) {
+		map.remove(factory.getIdentifier());
+	}
+	
+	public Object getFeature(String key) {
+		throw new IllegalArgumentException("Unsupported feature: " + key);
+	}
+	
+	public void setFeature(String key, Object value) {
+		throw new IllegalArgumentException("Unsupported feature: " + key);	
+	}
+	
+	public Table get(String identifier) {
+		return map.get(identifier);
+	}
+	
+	public Collection<Table> list() {
+		return map.values();
+	}
+	
+	public Collection<Table> list(FactoryFilter<Table> filter) {
+		Collection<Table> ret = new ArrayList<Table>();
+		for (Table table : map.values()) {
+			if (filter.accept(table)) {
+				ret.add(table);
+			}
+		}
+		return ret;
 	}
 
 }

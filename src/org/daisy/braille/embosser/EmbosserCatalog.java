@@ -38,19 +38,23 @@ import org.daisy.factory.FactoryFilter;
 public class EmbosserCatalog implements FactoryCatalog<Embosser> {
 	private final Map<String, Embosser> map;
 	
-	protected EmbosserCatalog() {
+	public EmbosserCatalog() {
 		map = Collections.synchronizedMap(new HashMap<String, Embosser>());
 	}
 	
 	/**
-	 * Obtains a new EmbosserCatalog instance. If at least one implementation can be found 
-	 * using the Services API, then the first one will be returned. Otherwise the default EmbosserCatalog
-	 * will be used.
+	 * <p>
+	 * Creates a new EmbosserCatalog and populates it using the SPI
+	 * (java service provider interface).
+	 * </p>
 	 * 
-	 * The default EmbosserCatalog will use the Services API to
-	 * find EmbosserProviders. The combined result from all EmbosserProviders are available to
-	 * the catalog.
-	 * @return returns a new EmbosserCatalog instance. 
+	 * <p>
+	 * In an OSGi context, an instance should be retrieved using the service
+	 * registry. It will be registered under the EmbosserCatalogService
+	 * interface.
+	 * </p>
+	 * 
+	 * @return returns a new EmbosserCatalog
 	 */
 	public static EmbosserCatalog newInstance() {
 		EmbosserCatalog ret = new EmbosserCatalog();
