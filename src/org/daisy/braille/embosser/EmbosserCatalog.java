@@ -17,19 +17,30 @@
  */
 package org.daisy.braille.embosser;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.factory.FactoryCatalog;
+import org.daisy.factory.FactoryFilter;
 
 /**
  * Provides a catalog of Embosser factories.
  * @author Joel Håkansson
  */
-public abstract class EmbosserCatalog implements FactoryCatalog<Embosser> {
+//TODO: use EmbosserService instead of Embosser and enable OSGi support
+//@Component
+public class EmbosserCatalog implements FactoryCatalog<Embosser> {
+	private final Map<String, Embosser> map;
 	
-	protected EmbosserCatalog() {	}
+	protected EmbosserCatalog() {
+		map = Collections.synchronizedMap(new HashMap<String, Embosser>());
+	}
 	
 	/**
 	 * Obtains a new EmbosserCatalog instance. If at least one implementation can be found 
@@ -42,10 +53,48 @@ public abstract class EmbosserCatalog implements FactoryCatalog<Embosser> {
 	 * @return returns a new EmbosserCatalog instance. 
 	 */
 	public static EmbosserCatalog newInstance() {
-		Iterator<EmbosserCatalog> i = ServiceRegistry.lookupProviders(EmbosserCatalog.class);
+		EmbosserCatalog ret = new EmbosserCatalog();
+		Iterator<EmbosserProvider> i = ServiceRegistry.lookupProviders(EmbosserProvider.class);
 		while (i.hasNext()) {
-			return i.next();
+			EmbosserProvider provider = i.next();
+			for (Embosser embosser : provider.list()) {
+				ret.addFactory(embosser);
+			}
 		}
-		return new DefaultEmbosserCatalog();
+		return ret;
+	}
+	
+	//@Reference(type = '*')
+	public void addFactory(Embosser factory) {
+		map.put(factory.getIdentifier(), factory);
+	}
+
+	// Unbind reference added automatically from addFactory annotation
+	public void removeFactory(Embosser factory) {
+		map.remove(factory.getIdentifier());
+	}
+	
+	public Object getFeature(String key) {
+		throw new IllegalArgumentException("Unsupported feature: " + key);	}
+	
+	public void setFeature(String key, Object value) {
+		throw new IllegalArgumentException("Unsupported feature: " + key);	}
+	
+	public Embosser get(String identifier) {
+		return map.get(identifier);
+	}
+	
+	public Collection<Embosser> list() {
+		return map.values();
+	}
+	
+	public Collection<Embosser> list(FactoryFilter<Embosser> filter) {
+		Collection<Embosser> ret = new ArrayList<Embosser>();
+		for (Embosser embosser : map.values()) {
+			if (filter.accept(embosser)) {
+				ret.add(embosser);
+			}
+		}
+		return ret;
 	}
 }
