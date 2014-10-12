@@ -26,20 +26,6 @@ import java.util.Collection;
  * @param <T> the type of factory objects that this catalog contains
  */
 public interface FactoryCatalog<T extends Factory> extends Provider<T> {
-
-	/**
-	 * Gets the value of a feature for this catalog
-	 * @param key the feature to get the value for
-	 * @return returns the value of a feature for this factory
-	 */
-	public Object getFeature(String key);
-	
-	/**
-	 * Sets the value of a feature for this catalog
-	 * @param key the feature key
-	 * @param value the feature value
-	 */
-	public void setFeature(String key, Object value);
 	
 	/**
 	 * Gets the Factory with this identifier

@@ -78,12 +78,6 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser> {
 		map.remove(factory.getIdentifier());
 	}
 	
-	public Object getFeature(String key) {
-		throw new IllegalArgumentException("Unsupported feature: " + key);	}
-	
-	public void setFeature(String key, Object value) {
-		throw new IllegalArgumentException("Unsupported feature: " + key);	}
-	
 	public Embosser get(String identifier) {
 		return map.get(identifier);
 	}

@@ -77,15 +77,7 @@ public class TableCatalog implements FactoryCatalog<Table> {
 	public void removeFactory(Table factory) {
 		map.remove(factory.getIdentifier());
 	}
-	
-	public Object getFeature(String key) {
-		throw new IllegalArgumentException("Unsupported feature: " + key);
-	}
-	
-	public void setFeature(String key, Object value) {
-		throw new IllegalArgumentException("Unsupported feature: " + key);	
-	}
-	
+
 	public Table get(String identifier) {
 		return map.get(identifier);
 	}

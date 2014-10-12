@@ -77,17 +77,7 @@ public class PaperCatalog implements FactoryCatalog<Paper> {
 	public void removeFactory(Paper factory) {
 		map.remove(factory.getIdentifier());
 	}
-	
-	//jvm1.6@Override
-	public Object getFeature(String key) {
-		throw new IllegalArgumentException("Unsupported feature: " + key);
-	}
 
-	//jvm1.6@Override
-	public void setFeature(String key, Object value) {
-		throw new IllegalArgumentException("Unsupported feature: " + key);
-	}
-	
 	//jvm1.6@Override
 	public Paper get(String identifier) {
 		return map.get(identifier);
