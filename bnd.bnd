@@ -10,8 +10,13 @@ Export-Package:  \
 	org.daisy.dotify.api.engine,\
 	org.daisy.dotify.api.writer
 Bundle-Version: 1.0.0
-Private-Package: org.daisy.dotify.consumer.hyphenator,\
+Private-Package:  \
+	org.daisy.dotify.consumer.hyphenator,\
 	org.daisy.dotify.consumer.text,\
-	org.daisy.dotify.consumer.translator
+	org.daisy.dotify.consumer.translator,\
+	org.daisy.dotify.consumer.obfl,\
+	org.daisy.dotify.consumer.formatter,\
+	org.daisy.dotify.consumer.engine,\
+	org.daisy.dotify.consumer.writer
 -sources: true
 Service-Component: *
