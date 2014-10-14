@@ -20,35 +20,39 @@ package com_viewplus;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.daisy.braille.table.AbstractConfigurableTableProvider;
 import org.daisy.braille.table.AdvancedBrailleConverter;
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
+import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.tools.StringTranslator.MatchMode;
 
 /**
  *
  * @author Bert Frees
  */
-public class ViewPlusTableProvider extends AbstractConfigurableTableProvider<ViewPlusTableProvider.TableType> {
+public class ViewPlusTableProvider implements TableProvider {
 
     enum TableType { TIGER_INLINE_SUBSTITUTION_8DOT };
 
-    private final ArrayList<Table> tables;
+    private final Map<TableType, Table> tables;
 
     public ViewPlusTableProvider() {
-        super(EightDotFallbackMethod.values()[0], '\u2800');
-        tables = new ArrayList<Table>();
-        tables.add(new EmbosserTable<TableType>("Tiger inline substitution 8-dot", "", TableType.TIGER_INLINE_SUBSTITUTION_8DOT, this));
-    }
+        super();
+        tables = new HashMap<TableType, Table>(); 
+        tables.put(TableType.TIGER_INLINE_SUBSTITUTION_8DOT, new EmbosserTable<TableType>("Tiger inline substitution 8-dot", "", TableType.TIGER_INLINE_SUBSTITUTION_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
 
-    public BrailleConverter newTable(TableType t) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -3747633563102712142L;
 
-        switch (t) {
-            case TIGER_INLINE_SUBSTITUTION_8DOT:
+			@Override
+			public BrailleConverter newBrailleConverter() {
                 final String SUB = String.valueOf((char)0x1a);
                 ArrayList<String> a = new ArrayList<String>();
                 for (int i=0; i<256; i++) {
@@ -59,13 +63,15 @@ public class ViewPlusTableProvider extends AbstractConfigurableTableProvider<Vie
                     Charset.forName("ISO-8859-1"),
                     false,
                     MatchMode.RELUCTANT);
-            default:
-                throw new IllegalArgumentException("Cannot find table type " + t);
-        }
+			}});
+    }
+
+    public BrailleConverter newTable(TableType t) {
+    	return tables.get(t).newBrailleConverter();
     }
 
     //jvm1.6@Override
     public Collection<Table> list() {
-        return tables;
+        return tables.values();
     }
 }

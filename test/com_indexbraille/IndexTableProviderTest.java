@@ -13,6 +13,7 @@ import org.junit.Test;
 public class IndexTableProviderTest {
 	private IndexTableProvider bt = new IndexTableProvider(); 
 	
+	/*
 	@Test
 	public void testFeatureReplacement() {
 		assertEquals('\u2800', bt.getFeature("replacement"));
@@ -31,7 +32,7 @@ public class IndexTableProviderTest {
 	@Test (expected=IllegalArgumentException.class)
 	public void testSetUnknownFeature() {
 		bt.setFeature("unknown-feature", null);
-	}
+	}*/
 	
 	@Test
 	public void testListLength() {

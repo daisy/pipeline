@@ -13,7 +13,7 @@ import com_braillo.BrailloTableProvider;
 
 public class BrailloTableProviderTest {
 	private static BrailloTableProvider bt = new BrailloTableProvider(); 
-	
+	/*
 	@Test
 	public void testFeatureReplacement() {
 		//bt = new BrailloTableProvider();
@@ -36,7 +36,7 @@ public class BrailloTableProviderTest {
 	public void testSetUnknownFeature() {
 		//BrailloTableProvider bt = new BrailloTableProvider();
 		bt.setFeature("unknown-feature", null);
-	}
+	}*/
 	
 	@Test
 	public void testListLength() {

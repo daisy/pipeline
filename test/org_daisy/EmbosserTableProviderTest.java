@@ -11,6 +11,7 @@ import org.junit.Test;
 
 public class EmbosserTableProviderTest {
 	
+	/*
 	@Test
 	public void testFeatureReplacement() {
 		EmbosserTableProvider bt = new EmbosserTableProvider();
@@ -33,7 +34,7 @@ public class EmbosserTableProviderTest {
 	public void testSetUnknownFeature() {
 		EmbosserTableProvider bt = new EmbosserTableProvider();
 		bt.setFeature("unknown-feature", null);
-	}
+	}*/
 	/*
 	@Test
 	public void testListLength() {

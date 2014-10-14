@@ -13,6 +13,7 @@ import org.junit.Test;
 public class SupernovaTableProviderTest {
 	private static SupernovaTableProvider bt = new SupernovaTableProvider(); 
 	
+	/*
 	@Test
 	public void testFeatureReplacement() {
 		assertEquals('\u2800', bt.getFeature("replacement"));
@@ -31,7 +32,7 @@ public class SupernovaTableProviderTest {
 	@Test (expected=IllegalArgumentException.class)
 	public void testSetUnknownFeature() {
 		bt.setFeature("unknown-feature", null);
-	}
+	}*/
 	
 	@Test
 	public void testListLength() {

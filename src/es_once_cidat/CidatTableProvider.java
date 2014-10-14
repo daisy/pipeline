@@ -20,11 +20,13 @@ package es_once_cidat;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.daisy.braille.table.AbstractConfigurableTableProvider;
 import org.daisy.braille.table.AdvancedBrailleConverter;
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.EmbosserBrailleConverter;
+import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
@@ -35,7 +37,7 @@ import org.daisy.braille.tools.StringTranslator.MatchMode;
  * @author Bert Frees
  * @author Joel Håkansson
  */
-public class CidatTableProvider extends AbstractConfigurableTableProvider<CidatTableProvider.TableType> {
+public class CidatTableProvider implements TableProvider {
     
     enum TableType { IMPACTO_TRANSPARENT_6DOT,
                      IMPACTO_TRANSPARENT_8DOT,
@@ -43,28 +45,19 @@ public class CidatTableProvider extends AbstractConfigurableTableProvider<CidatT
                      //PORTATHIEL_TRANSPARENT_8DOT
     };
 
-    private final ArrayList<Table> tables;
+    private final Map<TableType, Table> tables;
 
     public CidatTableProvider() {
-        super(EightDotFallbackMethod.values()[0], '\u2800');
-        tables = new ArrayList<Table>();
-        tables.add(new EmbosserTable<TableType>("Transparent mode",         "Impacto 6-dot in transparent mode",    TableType.IMPACTO_TRANSPARENT_6DOT, this));
-        tables.add(new EmbosserTable<TableType>("Transparent mode (8 dot)", "Impacto 8-dot in transparent mode",    TableType.IMPACTO_TRANSPARENT_8DOT, this));
-        tables.add(new EmbosserTable<TableType>("Transparent mode",         "Portathiel 6-dot in transparent mode", TableType.PORTATHIEL_TRANSPARENT_6DOT, this));
-      //tables.add(new EmbosserTable<TableType>("Transparent mode (8 dot)", "Portathiel 8-dot in transparent mode", TableType.PORTATHIEL_TRANSPARENT_8DOT, this));
-    }
+        tables = new HashMap<TableType, Table>(); 
+        tables.put(TableType.IMPACTO_TRANSPARENT_6DOT, new EmbosserTable<TableType>("Transparent mode",         "Impacto 6-dot in transparent mode",    TableType.IMPACTO_TRANSPARENT_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
 
-    /**
-     * Get a new table instance based on the factory's current settings.
-     *
-     * @param t
-     *            the type of table to return, this will override the factory's
-     *            default table type.
-     * @return returns a new table instance.
-     */
-    public BrailleConverter newTable(TableType t) {
-        switch (t) {
-            case IMPACTO_TRANSPARENT_6DOT: {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 5207685560736203905L;
+
+			@Override
+			public BrailleConverter newBrailleConverter() {
                 ArrayList<String> al = new ArrayList<String>();
                 for (int i=0; i<0x1b; i++) {
                     al.add(String.valueOf((char)i));
@@ -80,8 +73,16 @@ public class CidatTableProvider extends AbstractConfigurableTableProvider<CidatT
                     replacement,
                     false,
                     MatchMode.RELUCTANT);
-            }
-            case IMPACTO_TRANSPARENT_8DOT: {
+			}});
+        tables.put(TableType.IMPACTO_TRANSPARENT_8DOT, new EmbosserTable<TableType>("Transparent mode (8 dot)", "Impacto 8-dot in transparent mode",    TableType.IMPACTO_TRANSPARENT_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -4503322212435004238L;
+
+			@Override
+			public BrailleConverter newBrailleConverter() {
                 ArrayList<String> al = new ArrayList<String>();
                 for (int i=0; i<0x1b; i++) {
                     al.add(String.valueOf((char)i));
@@ -95,8 +96,16 @@ public class CidatTableProvider extends AbstractConfigurableTableProvider<CidatT
                     Charset.forName("ISO-8859-1"),
                     false,
                     MatchMode.RELUCTANT);
-            }
-            case PORTATHIEL_TRANSPARENT_6DOT: {
+			}});
+        tables.put(TableType.PORTATHIEL_TRANSPARENT_6DOT, new EmbosserTable<TableType>("Transparent mode",         "Portathiel 6-dot in transparent mode", TableType.PORTATHIEL_TRANSPARENT_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -6387852281349846246L;
+
+			@Override
+			public BrailleConverter newBrailleConverter() {
                 StringBuilder sb = new StringBuilder();
                 for (int i=0; i<0x1b; i++) {
                     sb.append((char)i);
@@ -111,14 +120,24 @@ public class CidatTableProvider extends AbstractConfigurableTableProvider<CidatT
                         fallback,
                         replacement,
                         false);
-            }
-            default:
-                throw new IllegalArgumentException("Cannot find table type " + t);
-        }
+			}});
+      //tables.add(new EmbosserTable<TableType>("Transparent mode (8 dot)", "Portathiel 8-dot in transparent mode", TableType.PORTATHIEL_TRANSPARENT_8DOT, this));
+    }
+
+    /**
+     * Get a new table instance based on the factory's current settings.
+     *
+     * @param t
+     *            the type of table to return, this will override the factory's
+     *            default table type.
+     * @return returns a new table instance.
+     */
+    public BrailleConverter newTable(TableType t) {
+    	return tables.get(t).newBrailleConverter();
     }
 
     //jvm1.6@Override
     public Collection<Table> list() {
-        return tables;
+        return tables.values();
     }
 }
