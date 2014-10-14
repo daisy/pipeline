@@ -22,22 +22,8 @@ package org.daisy.factory;
  * @author Joel Håkansson
  *
  */
-public interface Factory extends Comparable<Factory> {
-	/**
-	 * Gets the identifier for this Factory
-	 * @return returns the identifier for this Factory
-	 */
-	public String getIdentifier();
-	/**
-	 * Gets the display name for this Factory
-	 * @return returns the display name for this Factory
-	 */
-	public String getDisplayName();
-	/**
-	 * Gets the description for this Factory
-	 * @return returns the description for this Factory
-	 */
-	public String getDescription();
+public interface Factory extends Comparable<Factory>, FactoryProperties {
+
 	/**
 	 * Gets the value of a read-only property that applies to all objects returned
 	 * by this Factory.

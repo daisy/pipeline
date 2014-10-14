@@ -19,6 +19,8 @@ package org.daisy.braille.table;
 
 import java.util.HashMap;
 
+import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
+
 /**
  * Provides an embosser table implementation. This implementation
  * assumes that each character matches a single braille pattern,
@@ -27,14 +29,15 @@ import java.util.HashMap;
  *
  * @param <T>
  */
-public class EmbosserTable<T> extends AbstractTable {
+public abstract class EmbosserTable<T> extends AbstractTable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3902130832797155793L;
 	private final HashMap<String, Object> props;
-	private final T type;
-	private final ConfigurableTableProvider<T> provider;
+	
+	protected EightDotFallbackMethod fallback;
+	protected char replacement;
 	
 	/**
 	 * Creates a new EmbosserTable with the supplied settings
@@ -43,13 +46,14 @@ public class EmbosserTable<T> extends AbstractTable {
 	 * @param type the type of table
 	 * @param provider the provider
 	 */
-	public EmbosserTable(String name, String desc, T type, ConfigurableTableProvider<T> provider) {
+	public EmbosserTable(String name, String desc, T type, EightDotFallbackMethod fallback, char replacement) {
 		super(name, desc, type.getClass().getCanonicalName() + "." + type.toString());
-		this.type = type;
-		this.provider = provider;
 		props = new HashMap<String, Object>();
 		props.put(TableProperties.IS_ONE_TO_ONE, true);
 		props.put(TableProperties.IS_DISPLAY_FORMAT, true);
+		
+		this.fallback = fallback;
+		this.replacement = replacement;
 	}
 	
 	EmbosserTable<T> putProperty(String key, Object value) {
@@ -58,23 +62,66 @@ public class EmbosserTable<T> extends AbstractTable {
 	}
 
 	//jvm1.6@Override
-	public BrailleConverter newBrailleConverter() {
-		return provider.newTable(type);
-	}
-
-	//jvm1.6@Override
-	public void setFeature(String key, Object value) {
-		provider.setFeature(key, value);
-	}
-
+	public abstract BrailleConverter newBrailleConverter();
+	
 	//jvm1.6@Override
 	public Object getProperty(String key) {
 		return props.get(key);
 	}
 
-	//jvm1.6@Override
+	private void setFallback(String value) {
+		if (value != null && !"".equals(value)) {
+			setFallback(EightDotFallbackMethod.valueOf(value.toUpperCase()));
+		}
+	}
+
+	private void setFallback(EightDotFallbackMethod value) {
+		fallback = value;
+	}
+
+	/**
+	 * hex value between 2800-283F
+	 * 
+	 * @param value
+	 * @return
+	 */
+	private void setReplacement(String value) {
+		if (value != null && !"".equals(value)) {
+			setReplacement((char) Integer.parseInt(value, 16));
+		}
+	}
+
+	private void setReplacement(char value) {
+		int val = (value + "").codePointAt(0);
+		if (val >= 0x2800 && val <= 0x283F) {
+			replacement = value;
+		} else {
+			throw new IllegalArgumentException("Replacement value out of range");
+		}
+	}
+	
+	public void setFeature(String key, Object value) {
+		if ("replacement".equals(key)) {
+			if (value!=null) {
+				setReplacement((String)value);
+			}
+		} else if ("fallback".equals(key)) {
+			if (value!=null) {
+				setFallback(value.toString());
+			}
+		} else {
+			throw new IllegalArgumentException("Unknown feature: " + key);
+		}
+	}
+	
 	public Object getFeature(String key) {
-		return provider.getFeature(key);
+		if ("replacement".equals(key)) {
+			return replacement;
+		} else if ("fallback".equals(key)) {
+			return fallback;
+		} else {
+			throw new IllegalArgumentException("Unknown feature: " + key);
+		}
 	}
 
 }
