@@ -19,7 +19,9 @@ package com_viewplus;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
+import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
 
@@ -38,34 +40,42 @@ public class ViewPlusEmbosserProvider implements EmbosserProvider {
                                         EMPRINT_SPOTDOT
     };
 
-    private final HashMap<EmbosserType, Embosser> embossers;
+    private final Map<String, Embosser> embossers;
 
     public ViewPlusEmbosserProvider() {
-        embossers = new HashMap<EmbosserType, Embosser>();
+        embossers = new HashMap<String, Embosser>();
 
         // Elite Braille Printers
-        embossers.put(EmbosserType.ELITE_150,       new TigerEmbosser("ViewPlus - Elite 150",       "150 CPS",                  EmbosserType.ELITE_150));
-        embossers.put(EmbosserType.ELITE_200,       new TigerEmbosser("ViewPlus - Elite 200",       "200 CPS",                  EmbosserType.ELITE_200));
+        addEmbosser(new TigerEmbosser("ViewPlus - Elite 150",       "150 CPS",                  EmbosserType.ELITE_150));
+        addEmbosser(new TigerEmbosser("ViewPlus - Elite 200",       "200 CPS",                  EmbosserType.ELITE_200));
 
         // Premier Braille Printers
-        embossers.put(EmbosserType.PREMIER_80,      new TigerEmbosser("ViewPlus - Premier 80",      "80 CPS",                   EmbosserType.PREMIER_80));
-        embossers.put(EmbosserType.PREMIER_100,     new TigerEmbosser("ViewPlus - Premier 100",     "100 CPS",                  EmbosserType.PREMIER_100));
+        addEmbosser(new TigerEmbosser("ViewPlus - Premier 80",      "80 CPS",                   EmbosserType.PREMIER_80));
+        addEmbosser(new TigerEmbosser("ViewPlus - Premier 100",     "100 CPS",                  EmbosserType.PREMIER_100));
 
         // Pro Braille Printer
-        embossers.put(EmbosserType.PRO_GEN_II,      new TigerEmbosser("ViewPlus - Pro Gen II",      "100 CPS",                  EmbosserType.PRO_GEN_II));
+        addEmbosser(new TigerEmbosser("ViewPlus - Pro Gen II",      "100 CPS",                  EmbosserType.PRO_GEN_II));
 
         // Desktop Braille Printers
-        embossers.put(EmbosserType.CUB_JR,          new TigerEmbosser("ViewPlus - Cub Jr.",         "30 CPS",                   EmbosserType.CUB_JR));
-        embossers.put(EmbosserType.CUB,             new TigerEmbosser("ViewPlus - Cub",             "50 CPS",                   EmbosserType.CUB));
-        embossers.put(EmbosserType.MAX,             new TigerEmbosser("ViewPlus - Max",             "60 CPS",                   EmbosserType.MAX));
+        addEmbosser(new TigerEmbosser("ViewPlus - Cub Jr.",         "30 CPS",                   EmbosserType.CUB_JR));
+        addEmbosser(new TigerEmbosser("ViewPlus - Cub",             "50 CPS",                   EmbosserType.CUB));
+        addEmbosser(new TigerEmbosser("ViewPlus - Max",             "60 CPS",                   EmbosserType.MAX));
 
         // EmFuse Color Braille Station
-        embossers.put(EmbosserType.EMFUSE,          new TigerEmbosser("ViewPlus - EmFuse",          "Large-print, Color, and Braille. " +
+        addEmbosser(new TigerEmbosser("ViewPlus - EmFuse",          "Large-print, Color, and Braille. " +
                                                                                                     "400 CPS",                  EmbosserType.EMFUSE));
         // Emprint Spotdot Ink & Braille Embossers
-        embossers.put(EmbosserType.EMPRINT_SPOTDOT, new TigerEmbosser("ViewPlus - Emprint SpotDot", "Ink and Braille. " +
+        addEmbosser(new TigerEmbosser("ViewPlus - Emprint SpotDot", "Ink and Braille. " +
                                                                                                     "40-50 CPS",                EmbosserType.EMPRINT_SPOTDOT));
     }
+
+	private void addEmbosser(AbstractEmbosser e) {
+		embossers.put(e.getIdentifier(), e);
+	}
+
+	public Embosser newFactory(String identifier) {
+		return embossers.get(identifier);
+	}
 
     public Collection<Embosser> list() {
         return embossers.values();

@@ -48,15 +48,23 @@ public class EmbosserTableProvider implements TableProvider {
             MIT,            // = EN_US (http://www.dotlessbraille.org/asciibrltable.htm)
             NABCC,          // http://www.accessibility.org/~max/doc/2004-jica/html/node9.html
             NABCC_8DOT      // http://mielke.cc/brltty//doc/Manual-BRLTTY/English/BRLTTY-14.html
+            ;
+    		private final String identifier;
+    		TableType() {
+    			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+    		}
+    		String getIdentifier() {
+    			return identifier;
+    		}
 
 	};
 
-	private final Map<TableType, Table> tables;
+	private final Map<String, Table> tables;
 
 	public EmbosserTableProvider() {
-		tables = new HashMap<TableType, Table>(); 
+		tables = new HashMap<String, Table>(); 
 		//tables.add(new EmbosserTable<TableType>("US", "Commonly used embosser table", TableType.EN_US, this));
-		tables.put(TableType.EN_GB, new EmbosserTable<TableType>("British", "", TableType.EN_GB, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("British", "", TableType.EN_GB, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -70,7 +78,7 @@ public class EmbosserTableProvider implements TableProvider {
 								" a1b'k2l@cif/msp\"e3h9o6r^djg>ntq,*5<-u8v.%[$+x!&;:4\\0z7(_?w]#y)="),
 						Charset.forName("UTF-8"), fallback, replacement, true);
 			}});
-		tables.put(TableType.DA_DK, new EmbosserTable<TableType>("Danish", "", TableType.DA_DK, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("Danish", "", TableType.DA_DK, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -84,7 +92,7 @@ public class EmbosserTableProvider implements TableProvider {
 								" a,b.k;l'cif/msp`e:h*o!r~djgæntq@å?ê-u(v\\îøë§xèç^û_ü)z\"à|ôwï#yùé"),
 						Charset.forName("IBM850"), fallback, replacement, true);
 			}});
-		tables.put(TableType.DE_DE, new EmbosserTable<TableType>("German", "", TableType.DE_DE, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("German", "", TableType.DE_DE, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -98,7 +106,7 @@ public class EmbosserTableProvider implements TableProvider {
 								" a,b.k;l\"cif|msp!e:h*o+r>djg`ntq'1?2-u(v$3960x~&<5/8)z={_4w7#y}%"),
 						Charset.forName("UTF-8"), fallback, replacement, true);
 			}});
-		tables.put(TableType.CS_CZ, new EmbosserTable<TableType>("Czech", "", TableType.CS_CZ, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("Czech", "", TableType.CS_CZ, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -112,7 +120,7 @@ public class EmbosserTableProvider implements TableProvider {
 								" a,b.k;l'cifímsp~e:h*o!r^djgéntq§á?ě-u(v$čóňúxžý¤š+ť)z\"w|ďř/#yůľ"),
 						Charset.forName("windows-1250"), fallback, replacement, true);
 			}});
-		tables.put(TableType.ES_ES, new EmbosserTable<TableType>("Spanish (classic)", "Classic Spanish braille table", TableType.ES_ES, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("Spanish (classic)", "Classic Spanish braille table", TableType.ES_ES, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -126,7 +134,7 @@ public class EmbosserTableProvider implements TableProvider {
 								" a,b.k;l'cif/msp@e:h}o+r^djg|ntq_1?2-u<v{3960x$&\"5*8>z=(%4w7#y)\\"),
 						Charset.forName("UTF-8"), fallback, replacement, true);
 			}});
-		tables.put(TableType.ES_ES_TABLE_2, new EmbosserTable<TableType>("Spanish (modern)", "Modern Spanish braille table", TableType.ES_ES_TABLE_2, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("Spanish (modern)", "Modern Spanish braille table", TableType.ES_ES_TABLE_2, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -139,7 +147,7 @@ public class EmbosserTableProvider implements TableProvider {
 						new String(" a,b.k;l'cifímsp@e:h}o+r^djgÌntq_1?2-u<v{396óxé&\"5*8>z=á%4w7#yú\\"),
 						Charset.forName("UTF-8"), fallback, replacement, false);
 			}});
-		tables.put(TableType.IT_IT_FIRENZE, new EmbosserTable<TableType>("Italian", "", TableType.IT_IT_FIRENZE, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("Italian", "", TableType.IT_IT_FIRENZE, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -153,7 +161,7 @@ public class EmbosserTableProvider implements TableProvider {
 								" a,b'k;l\"cif/msp)e:h*o!r%djg&ntq(1?2-u<v#396^x\\@+5.8>z=[$4w7_y]0"),
 						Charset.forName("UTF-8"), fallback, replacement, true);
 			}});
-		tables.put(TableType.UNICODE_BRAILLE, new EmbosserTable<TableType>("Unicode braille", "", TableType.UNICODE_BRAILLE, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("Unicode braille", "", TableType.UNICODE_BRAILLE, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -165,7 +173,7 @@ public class EmbosserTableProvider implements TableProvider {
 				return new EmbosserBrailleConverter(BrailleConstants.BRAILLE_PATTERNS_256,
 						Charset.forName("UTF-8"), fallback, replacement, true);
 			}});
-                tables.put(TableType.MIT, new EmbosserTable<TableType>("US (MIT)", "Commonly used embosser table", TableType.MIT, EightDotFallbackMethod.values()[0], '\u2800'){
+                addTable(new EmbosserTable<TableType>("US (MIT)", "Commonly used embosser table", TableType.MIT, EightDotFallbackMethod.values()[0], '\u2800'){
                 	/**
 					 * 
 					 */
@@ -179,7 +187,7 @@ public class EmbosserTableProvider implements TableProvider {
 										" A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="),
 								Charset.forName("UTF-8"), fallback, replacement, true);
 					}});
-                tables.put(TableType.NABCC, new EmbosserTable<TableType>("US (NABCC)", "North American Braille Computer Code", TableType.NABCC, EightDotFallbackMethod.values()[0], '\u2800'){
+                addTable(new EmbosserTable<TableType>("US (NABCC)", "North American Braille Computer Code", TableType.NABCC, EightDotFallbackMethod.values()[0], '\u2800'){
 
 					/**
 					 * 
@@ -193,7 +201,7 @@ public class EmbosserTableProvider implements TableProvider {
 										" a1b'k2l`cif/msp\"e3h9o6r~djg>ntq,*5<-u8v.%{$+x!&;:4|0z7(_?w}#y)="),
 								Charset.forName("UTF-8"), fallback, replacement, true);
 					}});
-                tables.put(TableType.NABCC_8DOT, new EmbosserTable<TableType>("US (NABCC 8 dot)", "North American Braille Computer Code (8 dot)", TableType.NABCC_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+                addTable(new EmbosserTable<TableType>("US (NABCC 8 dot)", "North American Braille Computer Code (8 dot)", TableType.NABCC_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
 
 					/**
 					 * 
@@ -240,6 +248,9 @@ public class EmbosserTableProvider implements TableProvider {
 					}});
 	}
 
+	private void addTable(EmbosserTable<?> t) {
+		tables.put(t.getIdentifier(), t);
+	}
 
 	/**
 	 * Get a new table instance based on the factory's current settings.
@@ -250,7 +261,11 @@ public class EmbosserTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t).newBrailleConverter();
+		return tables.get(t.getIdentifier()).newBrailleConverter();
+	}
+
+	public Table newFactory(String identifier) {
+		return tables.get(identifier);
 	}
 
 	//jvm1.6@Override

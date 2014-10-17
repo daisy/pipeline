@@ -26,9 +26,9 @@ import org.daisy.braille.embosser.EmbosserTools;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.UnsupportedPaperException;
-import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.table.TableFilter;
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.PrintPage;
 
@@ -51,7 +51,7 @@ public class ImpactoEmbosser extends CidatEmbosser {
     static {
         tableFilter = new TableFilter() {
             //jvm1.6@Override
-            public boolean accept(Table object) {
+            public boolean accept(FactoryProperties object) {
                 if (object == null) { return false; }
                 if (object.getIdentifier().equals(transparentTable))     { return true; }
               //if (object.getIdentifier().equals(transparent8dotTable)) { return true; }

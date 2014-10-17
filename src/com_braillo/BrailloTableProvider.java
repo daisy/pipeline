@@ -41,13 +41,21 @@ public class BrailloTableProvider implements TableProvider {
 				// "Braillo USA 6 DOT 001.00"
 		BRAILLO_6DOT_046_01, // compatible with "Braillo SWEDEN 6 DOT 046.01"
 		BRAILLO_6DOT_047_01 // compatible with "Braillo NORWAY 6 DOT 047.01"
+		;
+		private final String identifier;
+		TableType() {
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		String getIdentifier() {
+			return identifier;
+		}
 	};
 
-	private final Map<TableType, Table> tables;
+	private final Map<String, Table> tables;
 
 	public BrailloTableProvider() {
-		tables = new HashMap<TableType, Table>(); 
-		tables.put(TableType.BRAILLO_6DOT_001_00, new EmbosserTable<TableType>("Braillo USA 6 DOT 001.00", "Compatible with Braillo USA 6 DOT 001.00", TableType.BRAILLO_6DOT_001_00, EightDotFallbackMethod.values()[0], '\u2800'){
+		tables = new HashMap<String, Table>(); 
+		addTable(new EmbosserTable<TableType>("Braillo USA 6 DOT 001.00", "Compatible with Braillo USA 6 DOT 001.00", TableType.BRAILLO_6DOT_001_00, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -61,7 +69,7 @@ public class BrailloTableProvider implements TableProvider {
 								" A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="),
 						Charset.forName("UTF-8"), fallback, replacement, true);
 			}});
-		tables.put(TableType.BRAILLO_6DOT_044_00, new EmbosserTable<TableType>("Braillo ENGLAND 6 DOT 044.00", "Compatible with Braillo ENGLAND 6 DOT 044.00", TableType.BRAILLO_6DOT_044_00, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("Braillo ENGLAND 6 DOT 044.00", "Compatible with Braillo ENGLAND 6 DOT 044.00", TableType.BRAILLO_6DOT_044_00, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -75,7 +83,7 @@ public class BrailloTableProvider implements TableProvider {
 								" a1b'k2l@cif/msp\"e3h9o6r^djg>ntq,*5<-u8v.%[$+x!&;:4\\0z7(_?w]#y)="),
 						Charset.forName("UTF-8"), fallback, replacement, true);
 			}});		
-		tables.put(TableType.BRAILLO_6DOT_046_01, new EmbosserTable<TableType>("Braillo SWEDEN 6 DOT 046.01", "Compatible with Braillo SWEDEN 6 DOT 046.01", TableType.BRAILLO_6DOT_046_01, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("Braillo SWEDEN 6 DOT 046.01", "Compatible with Braillo SWEDEN 6 DOT 046.01", TableType.BRAILLO_6DOT_046_01, EightDotFallbackMethod.values()[0], '\u2800'){
 			 /**
 			 * 
 			 */
@@ -89,7 +97,7 @@ public class BrailloTableProvider implements TableProvider {
 								" a,b'k;l^cif/msp!e:h*o+r\"djg[ntq_1?2-u<v%396]x\\&#5.8>z=($4w70y)@"),
 						Charset.forName("UTF-8"), fallback, replacement, true);
 			}});
-		tables.put(TableType.BRAILLO_6DOT_047_01, new EmbosserTable<TableType>("Braillo NORWAY 6 DOT 047.01", "Compatible with Braillo NORWAY 6 DOT 047.01", TableType.BRAILLO_6DOT_047_01, EightDotFallbackMethod.values()[0], '\u2800'){
+		addTable(new EmbosserTable<TableType>("Braillo NORWAY 6 DOT 047.01", "Compatible with Braillo NORWAY 6 DOT 047.01", TableType.BRAILLO_6DOT_047_01, EightDotFallbackMethod.values()[0], '\u2800'){
 			/**
 			 * 
 			 */
@@ -104,6 +112,10 @@ public class BrailloTableProvider implements TableProvider {
 						Charset.forName("UTF-8"), fallback, replacement, false);
 			}});		
 	}
+	
+	private void addTable(EmbosserTable<?> t) {
+		tables.put(t.getIdentifier(), t);
+	}
 
 	/**
 	 * Get a new table instance based on the factory's current settings.
@@ -114,7 +126,11 @@ public class BrailloTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t).newBrailleConverter();
+		return tables.get(t.getIdentifier()).newBrailleConverter();
+	}
+
+	public Table newFactory(String identifier) {
+		return tables.get(identifier);
 	}
 
 	//jvm1.6@Override

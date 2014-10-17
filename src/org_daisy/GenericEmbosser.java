@@ -32,6 +32,7 @@ import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.table.TableFilter;
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
 import org.daisy.paper.PrintPage;
@@ -47,7 +48,7 @@ public class GenericEmbosser extends AbstractEmbosser {
 	static {
 		tableFilter = new TableFilter() {
 			//jvm1.6@Override
-			public boolean accept(Table object) {
+			public boolean accept(FactoryProperties object) {
 				if (object!=null) {
 					return true; 
 				} else { return false; }

@@ -34,14 +34,21 @@ public class CXTableProvider implements TableProvider {
 //	public final static String IS_DISPLAY_FORMAT = "is display format";
 	
 	enum TableType {
-		SV_SE_CX 
+		SV_SE_CX;
+		private final String identifier;
+		TableType() {
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		String getIdentifier() {
+			return identifier;
+		}
 	};
 
-	private final Map<TableType, Table> tables;
+	private final Map<String, Table> tables;
 
 	public CXTableProvider() {
-		tables = new HashMap<TableType, Table>(); 
-		tables.put(TableType.SV_SE_CX, new EmbosserTable<TableType>("Swedish CX", "Matches the Swedish representation in CX", TableType.SV_SE_CX, EightDotFallbackMethod.values()[0], '\u2800'){
+		tables = new HashMap<String, Table>(); 
+		addTable(new EmbosserTable<TableType>("Swedish CX", "Matches the Swedish representation in CX", TableType.SV_SE_CX, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -57,6 +64,10 @@ public class CXTableProvider implements TableProvider {
 			}});
 	}
 
+	private void addTable(EmbosserTable<?> t) {
+		tables.put(t.getIdentifier(), t);
+	}
+
 	/**
 	 * Get a new table instance based on the factory's current settings.
 	 * 
@@ -66,7 +77,11 @@ public class CXTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t).newBrailleConverter();
+		return tables.get(t.getIdentifier()).newBrailleConverter();
+	}
+
+	public Table newFactory(String identifier) {
+		return tables.get(identifier);
 	}
 
 	//jvm1.6@Override

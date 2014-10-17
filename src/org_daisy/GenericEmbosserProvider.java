@@ -19,7 +19,9 @@ package org_daisy;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
+import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
 
@@ -28,11 +30,19 @@ public class GenericEmbosserProvider implements EmbosserProvider {
 		NONE
 	};
 	
-	private final HashMap<EmbosserType, Embosser> embossers;
+	private final Map<String, Embosser> embossers;
 	
 	public GenericEmbosserProvider() {
-		embossers = new HashMap<EmbosserType, Embosser>();
-		embossers.put(EmbosserType.NONE, new GenericEmbosser("Unspecified", "Limited support for unknown embossers", EmbosserType.NONE));
+		embossers = new HashMap<String, Embosser>();
+		addEmbosser(new GenericEmbosser("Unspecified", "Limited support for unknown embossers", EmbosserType.NONE));
+	}
+
+	private void addEmbosser(AbstractEmbosser e) {
+		embossers.put(e.getIdentifier(), e);
+	}
+
+	public Embosser newFactory(String identifier) {
+		return embossers.get(identifier);
 	}
 
 	//jvm1.6@Override

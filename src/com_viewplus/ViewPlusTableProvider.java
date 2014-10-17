@@ -37,14 +37,22 @@ import org.daisy.braille.tools.StringTranslator.MatchMode;
  */
 public class ViewPlusTableProvider implements TableProvider {
 
-    enum TableType { TIGER_INLINE_SUBSTITUTION_8DOT };
+    enum TableType {
+    	TIGER_INLINE_SUBSTITUTION_8DOT;
+		private final String identifier;
+		TableType() {
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		String getIdentifier() {
+			return identifier;
+		}
+    };
 
-    private final Map<TableType, Table> tables;
+    private final Map<String, Table> tables;
 
     public ViewPlusTableProvider() {
-        super();
-        tables = new HashMap<TableType, Table>(); 
-        tables.put(TableType.TIGER_INLINE_SUBSTITUTION_8DOT, new EmbosserTable<TableType>("Tiger inline substitution 8-dot", "", TableType.TIGER_INLINE_SUBSTITUTION_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+        tables = new HashMap<String, Table>(); 
+        addTable(new EmbosserTable<TableType>("Tiger inline substitution 8-dot", "", TableType.TIGER_INLINE_SUBSTITUTION_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -66,9 +74,17 @@ public class ViewPlusTableProvider implements TableProvider {
 			}});
     }
 
+	private void addTable(EmbosserTable<?> t) {
+		tables.put(t.getIdentifier(), t);
+	}
+
     public BrailleConverter newTable(TableType t) {
-    	return tables.get(t).newBrailleConverter();
+    	return tables.get(t.getIdentifier()).newBrailleConverter();
     }
+
+	public Table newFactory(String identifier) {
+		return tables.get(identifier);
+	}
 
     //jvm1.6@Override
     public Collection<Table> list() {

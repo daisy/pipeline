@@ -43,13 +43,21 @@ public class CidatTableProvider implements TableProvider {
                      IMPACTO_TRANSPARENT_8DOT,
                      PORTATHIEL_TRANSPARENT_6DOT,
                      //PORTATHIEL_TRANSPARENT_8DOT
+                     ;
+		private final String identifier;
+		TableType() {
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		String getIdentifier() {
+			return identifier;
+		}
     };
 
-    private final Map<TableType, Table> tables;
+    private final Map<String, Table> tables;
 
     public CidatTableProvider() {
-        tables = new HashMap<TableType, Table>(); 
-        tables.put(TableType.IMPACTO_TRANSPARENT_6DOT, new EmbosserTable<TableType>("Transparent mode",         "Impacto 6-dot in transparent mode",    TableType.IMPACTO_TRANSPARENT_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+        tables = new HashMap<String, Table>(); 
+        addTable(new EmbosserTable<TableType>("Transparent mode",         "Impacto 6-dot in transparent mode",    TableType.IMPACTO_TRANSPARENT_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -74,7 +82,7 @@ public class CidatTableProvider implements TableProvider {
                     false,
                     MatchMode.RELUCTANT);
 			}});
-        tables.put(TableType.IMPACTO_TRANSPARENT_8DOT, new EmbosserTable<TableType>("Transparent mode (8 dot)", "Impacto 8-dot in transparent mode",    TableType.IMPACTO_TRANSPARENT_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+        addTable(new EmbosserTable<TableType>("Transparent mode (8 dot)", "Impacto 8-dot in transparent mode",    TableType.IMPACTO_TRANSPARENT_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -97,7 +105,7 @@ public class CidatTableProvider implements TableProvider {
                     false,
                     MatchMode.RELUCTANT);
 			}});
-        tables.put(TableType.PORTATHIEL_TRANSPARENT_6DOT, new EmbosserTable<TableType>("Transparent mode",         "Portathiel 6-dot in transparent mode", TableType.PORTATHIEL_TRANSPARENT_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+        addTable(new EmbosserTable<TableType>("Transparent mode",         "Portathiel 6-dot in transparent mode", TableType.PORTATHIEL_TRANSPARENT_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -124,6 +132,10 @@ public class CidatTableProvider implements TableProvider {
       //tables.add(new EmbosserTable<TableType>("Transparent mode (8 dot)", "Portathiel 8-dot in transparent mode", TableType.PORTATHIEL_TRANSPARENT_8DOT, this));
     }
 
+	private void addTable(EmbosserTable<?> t) {
+		tables.put(t.getIdentifier(), t);
+	}
+
     /**
      * Get a new table instance based on the factory's current settings.
      *
@@ -133,8 +145,12 @@ public class CidatTableProvider implements TableProvider {
      * @return returns a new table instance.
      */
     public BrailleConverter newTable(TableType t) {
-    	return tables.get(t).newBrailleConverter();
+    	return tables.get(t.getIdentifier()).newBrailleConverter();
     }
+
+	public Table newFactory(String identifier) {
+		return tables.get(identifier);
+	}
 
     //jvm1.6@Override
     public Collection<Table> list() {

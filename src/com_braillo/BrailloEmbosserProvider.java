@@ -19,7 +19,9 @@ package com_braillo;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
+import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
 
@@ -35,17 +37,25 @@ public class BrailloEmbosserProvider implements EmbosserProvider {
 		BRAILLO_440_SWSF
 	};
 	
-	private final HashMap<EmbosserType, Embosser> embossers;
+	private final Map<String, Embosser> embossers;
 	
 	public BrailloEmbosserProvider() {
-		embossers = new HashMap<EmbosserType, Embosser>();
-		embossers.put(EmbosserType.BRAILLO_200, new Braillo200Embosser("Braillo 200", "Firmware 000.17 or later. Embosser table must match hardware setup."));
-		embossers.put(EmbosserType.BRAILLO_200_FW_11, new Braillo200_270_400_v1_11Embosser("Braillo 200/270/400 FW 1-11", "Firmware 11 and older. Embosser must be set to interpoint embossing. Table must match hardware setup."));
-		embossers.put(EmbosserType.BRAILLO_270, new Braillo200_270_400_v12_16Embosser("Braillo 200/270/400 FW 12-16", "Firmware 12 to 16. Embosser table must match hardware setup."));
-		embossers.put(EmbosserType.BRAILLO_400_S, new Braillo400SEmbosser("Braillo 400S", "Firmware 000.17 or later. Embosser table must match hardware setup."));
-		embossers.put(EmbosserType.BRAILLO_400_SR, new Braillo400SREmbosser("Braillo 400SR", "Firmware 000.17 or later. Embosser table must match hardware setup."));
-		embossers.put(EmbosserType.BRAILLO_440_SW, new Braillo440SWEmbosser("Braillo 440SW", "Embosser table must match hardware setup."));
-		embossers.put(EmbosserType.BRAILLO_440_SWSF, new Braillo440SFEmbosser("Braillo 440SWSF", "Embosser table must match hardware setup."));
+		embossers = new HashMap<String, Embosser>();
+		addEmbosser(new Braillo200Embosser("Braillo 200", "Firmware 000.17 or later. Embosser table must match hardware setup."));
+		addEmbosser(new Braillo200_270_400_v1_11Embosser("Braillo 200/270/400 FW 1-11", "Firmware 11 and older. Embosser must be set to interpoint embossing. Table must match hardware setup."));
+		addEmbosser(new Braillo200_270_400_v12_16Embosser("Braillo 200/270/400 FW 12-16", "Firmware 12 to 16. Embosser table must match hardware setup."));
+		addEmbosser(new Braillo400SEmbosser("Braillo 400S", "Firmware 000.17 or later. Embosser table must match hardware setup."));
+		addEmbosser(new Braillo400SREmbosser("Braillo 400SR", "Firmware 000.17 or later. Embosser table must match hardware setup."));
+		addEmbosser(new Braillo440SWEmbosser("Braillo 440SW", "Embosser table must match hardware setup."));
+		addEmbosser(new Braillo440SFEmbosser("Braillo 440SWSF", "Embosser table must match hardware setup."));
+	}
+	
+	private void addEmbosser(AbstractEmbosser e) {
+		embossers.put(e.getIdentifier(), e);
+	}
+	
+	public Embosser newFactory(String identifier) {
+		return embossers.get(identifier);
 	}
 
 	//jvm1.6@Override

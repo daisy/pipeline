@@ -20,8 +20,8 @@ package com_braillo;
 import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.table.DefaultTableProvider;
-import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableFilter;
+import org.daisy.factory.FactoryProperties;
 
 public abstract class BrailloEmbosser extends AbstractEmbosser {
 	/**
@@ -31,7 +31,7 @@ public abstract class BrailloEmbosser extends AbstractEmbosser {
 	private final static TableFilter tableFilter;
 	static {
 		tableFilter = new TableFilter() {
-			public boolean accept(Table object) {
+			public boolean accept(FactoryProperties object) {
 				if (object.getIdentifier().equals(DefaultTableProvider.class.getCanonicalName() + ".TableType.EN_US")) { return true; }
 				if (object.getIdentifier().startsWith(BrailloTableProvider.class.getCanonicalName() + ".TableType.")) { return true; }
 				return false;

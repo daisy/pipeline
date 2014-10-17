@@ -19,20 +19,19 @@ package com_indexbraille;
 
 import java.io.OutputStream;
 
+import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.EmbosserTools;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.StandardLineBreaks;
-import org.daisy.braille.table.Table;
+import org.daisy.braille.embosser.UnsupportedPaperException;
 import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.table.TableFilter;
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
 
 import com_indexbraille.IndexEmbosserProvider.EmbosserType;
-
-import org.daisy.braille.embosser.UnsupportedPaperException;
 
 public class IndexV2Embosser extends IndexEmbosser {
 
@@ -47,7 +46,7 @@ public class IndexV2Embosser extends IndexEmbosser {
     static {
         tableFilter = new TableFilter() {
             //jvm1.6@Override
-            public boolean accept(Table object) {
+            public boolean accept(FactoryProperties object) {
                 if (object == null) { return false; }
                 String tableID = object.getIdentifier();
                 if (tableID.equals(table6dot)) { return true; }

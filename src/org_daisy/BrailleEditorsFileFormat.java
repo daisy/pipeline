@@ -33,6 +33,7 @@ import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.AbstractEmbosserWriter.Padding;
 import org.daisy.factory.AbstractFactory;
+import org.daisy.factory.FactoryProperties;
 
 import org_daisy.BrailleEditorsFileFormatProvider.FileType;
 
@@ -90,7 +91,7 @@ public class BrailleEditorsFileFormat extends AbstractFactory implements FileFor
 
         tableFilter = new TableFilter() {
             //jvm1.6@Override
-            public boolean accept(Table object) {
+            public boolean accept(FactoryProperties object) {
                 return supportedTableIds.contains(object.getIdentifier());
             }
         };

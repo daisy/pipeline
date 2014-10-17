@@ -30,14 +30,22 @@ import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
 
 public class SupernovaTableProvider implements TableProvider {
-	enum TableType {SV_SE_6DOT};
+	enum TableType {
+		SV_SE_6DOT;
+		private final String identifier;
+		TableType() {
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		String getIdentifier() {
+			return identifier;
+		}
+	};
 
-	private final Map<TableType, Table> tables;
+	private final Map<String, Table> tables;
 	
 	public SupernovaTableProvider() {
-		super();
-		tables = new HashMap<TableType, Table>(); 
-		tables.put(TableType.SV_SE_6DOT, new EmbosserTable<TableType>("Swedish - Supernova 6 dot", "Table for Supernova, using 6 dot", TableType.SV_SE_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+		tables = new HashMap<String, Table>(); 
+		addTable(new EmbosserTable<TableType>("Swedish - Supernova 6 dot", "Table for Supernova, using 6 dot", TableType.SV_SE_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -52,6 +60,10 @@ public class SupernovaTableProvider implements TableProvider {
 			}});
 	}
 
+	private void addTable(EmbosserTable<?> t) {
+		tables.put(t.getIdentifier(), t);
+	}
+
 	/**
 	 * Get a new table instance based on the factory's current settings.
 	 * 
@@ -61,9 +73,13 @@ public class SupernovaTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t).newBrailleConverter();
+		return tables.get(t.getIdentifier()).newBrailleConverter();
 	}
-	
+
+	public Table newFactory(String identifier) {
+		return tables.get(identifier);
+	}
+
 	//jvm1.6@Override
 	public Collection<Table> list() {
 		return tables.values();

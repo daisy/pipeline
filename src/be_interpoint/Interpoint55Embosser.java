@@ -35,9 +35,9 @@ import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
-import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.table.TableFilter;
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
@@ -67,7 +67,7 @@ public class Interpoint55Embosser extends AbstractEmbosser {
     static {
         tableFilter = new TableFilter() {
             //jvm1.6@Override
-            public boolean accept(Table object) {
+            public boolean accept(FactoryProperties object) {
                 if (object == null) { return false; }
                 String tableID = object.getIdentifier();
                 if (tableID.equals(table_US1))      { return true; }

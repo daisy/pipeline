@@ -36,14 +36,21 @@ import org.daisy.braille.table.Table;
  */
 public class BrailleEditorsTableProvider implements TableProvider {
 	enum TableType {
-		MICROBRAILLE
+		MICROBRAILLE;
+		private final String identifier;
+		TableType() {
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		String getIdentifier() {
+			return identifier;
+		}
 	};
 
-	private final Map<TableType, Table> tables;
+	private final Map<String, Table> tables;
 	
 	public BrailleEditorsTableProvider() {
-		tables = new HashMap<TableType, Table>(); 
-		tables.put(TableType.MICROBRAILLE, new EmbosserTable<TableType>("MicroBraille BRL-file", "Table for MicroBraille files (.brl)", TableType.MICROBRAILLE, EightDotFallbackMethod.values()[0], '\u2800'){
+		tables = new HashMap<String, Table>(); 
+		addTable(new EmbosserTable<TableType>("MicroBraille BRL-file", "Table for MicroBraille files (.brl)", TableType.MICROBRAILLE, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -56,6 +63,10 @@ public class BrailleEditorsTableProvider implements TableProvider {
 			}});
 	}
 
+	private void addTable(EmbosserTable<?> t) {
+		tables.put(t.getIdentifier(), t);
+	}
+
 	/**
 	 * Get a new table instance based on the factory's current settings.
 	 * 
@@ -65,7 +76,11 @@ public class BrailleEditorsTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t).newBrailleConverter();
+		return tables.get(t.getIdentifier()).newBrailleConverter();
+	}
+
+	public Table newFactory(String identifier) {
+		return tables.get(identifier);
 	}
 
 	//jvm1.6@Override

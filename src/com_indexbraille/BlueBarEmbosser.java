@@ -22,9 +22,9 @@ import java.io.OutputStream;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.table.TableFilter;
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
 
 import com_indexbraille.IndexEmbosserProvider.EmbosserType;
@@ -41,7 +41,7 @@ public class BlueBarEmbosser extends IndexEmbosser {
     static {
         tableFilter = new TableFilter() {
             //jvm1.6@Override
-            public boolean accept(Table object) {
+            public boolean accept(FactoryProperties object) {
                 if (object == null) { return false; }
                 String tableID = object.getIdentifier();
                 if (tableID.equals(table6dot)) { return true; }
