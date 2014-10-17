@@ -26,16 +26,13 @@ import java.util.Map;
 
 import javax.imageio.spi.ServiceRegistry;
 
-import org.daisy.factory.FactoryCatalog;
-import org.daisy.factory.FactoryFilter;
-
 /**
  * Provides a catalog of Paper factories.
  * @author Joel Håkansson
  */
 //TODO: use PaperService instead of Paper and enable OSGi support
 //@Component
-public class PaperCatalog implements FactoryCatalog<Paper> {
+public class PaperCatalog {
 	private final Map<String, Paper> map;
 	
 	public PaperCatalog() {
@@ -89,7 +86,7 @@ public class PaperCatalog implements FactoryCatalog<Paper> {
 	}
 
 	//jvm1.6@Override
-	public Collection<Paper> list(FactoryFilter<Paper> filter) {
+	public Collection<Paper> list(PaperFilter filter) {
 		Collection<Paper> ret = new ArrayList<Paper>();
 		for (Paper paper : map.values()) {
 			if (filter.accept(paper)) {

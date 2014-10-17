@@ -25,7 +25,7 @@ import java.util.Collection;
  *
  * @param <T> the type of factory objects that this catalog contains
  */
-public interface FactoryCatalog<T extends Factory> extends Provider<T> {
+public interface FactoryCatalog<T extends Factory, S extends FactoryProperties> extends Provider<S> {
 	
 	/**
 	 * Gets the Factory with this identifier
@@ -40,6 +40,6 @@ public interface FactoryCatalog<T extends Factory> extends Provider<T> {
 	 * @param filter the FactoryFilter to use
 	 * @return returns a collection of Factories
 	 */
-	public Collection<T> list(FactoryFilter<T> filter);
+	public Collection<S> list(FactoryFilter filter);
 
 }

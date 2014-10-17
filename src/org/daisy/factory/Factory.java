@@ -22,7 +22,7 @@ package org.daisy.factory;
  * @author Joel Håkansson
  *
  */
-public interface Factory extends Comparable<Factory>, FactoryProperties {
+public interface Factory extends FactoryProperties {
 
 	/**
 	 * Gets the value of a read-only property that applies to all objects returned

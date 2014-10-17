@@ -22,12 +22,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.factory.FactoryCatalog;
 import org.daisy.factory.FactoryFilter;
+import org.daisy.factory.FactoryProperties;
 
 /**
  * Provides a catalog of Embosser factories.
@@ -35,11 +39,15 @@ import org.daisy.factory.FactoryFilter;
  */
 //TODO: use EmbosserService instead of Embosser and enable OSGi support
 //@Component
-public class EmbosserCatalog implements FactoryCatalog<Embosser> {
-	private final Map<String, Embosser> map;
+public class EmbosserCatalog implements FactoryCatalog<Embosser, Embosser> {
+	private final List<EmbosserProvider> providers;
+	private final Map<String, EmbosserProvider> map;
+	private final Logger logger;
 	
 	public EmbosserCatalog() {
-		map = Collections.synchronizedMap(new HashMap<String, Embosser>());
+		logger = Logger.getLogger(this.getClass().getCanonicalName());
+		providers = new CopyOnWriteArrayList<EmbosserProvider>();
+		map = Collections.synchronizedMap(new HashMap<String, EmbosserProvider>());
 	}
 	
 	/**
@@ -60,37 +68,64 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser> {
 		EmbosserCatalog ret = new EmbosserCatalog();
 		Iterator<EmbosserProvider> i = ServiceRegistry.lookupProviders(EmbosserProvider.class);
 		while (i.hasNext()) {
-			EmbosserProvider provider = i.next();
-			for (Embosser embosser : provider.list()) {
-				ret.addFactory(embosser);
-			}
+			ret.addFactory(i.next());
 		}
 		return ret;
 	}
 	
 	//@Reference(type = '*')
-	public void addFactory(Embosser factory) {
-		map.put(factory.getIdentifier(), factory);
+	public void addFactory(EmbosserProvider factory) {
+		logger.finer("Adding factory: " + factory);
+		providers.add(factory);
 	}
 
 	// Unbind reference added automatically from addFactory annotation
-	public void removeFactory(Embosser factory) {
-		map.remove(factory.getIdentifier());
+	public void removeFactory(EmbosserProvider factory) {
+		// this is to avoid adding items to the cache that were removed while
+		// iterating
+		synchronized (map) {
+			providers.remove(factory);
+			map.clear();
+		}
 	}
 	
 	public Embosser get(String identifier) {
-		return map.get(identifier);
+		EmbosserProvider template = map.get(identifier);
+		if (template==null) {
+			// this is to avoid adding items to the cache that were removed
+			// while iterating
+			synchronized (map) {
+				for (EmbosserProvider p : providers) {
+					for (FactoryProperties fp : p.list()) {
+						if (fp.getIdentifier().equals(identifier)) {
+							logger.fine("Found a factory for " + identifier + " (" + p.getClass() + ")");
+							map.put(fp.getIdentifier(), p);
+							template = p;
+							break;
+						}						
+					}
+				}
+			}
+		}
+		if (template==null) {
+			throw new IllegalArgumentException("Cannot find a factory for " + identifier);
+		}
+		return template.newFactory(identifier);
 	}
 	
 	public Collection<Embosser> list() {
-		return map.values();
+		Collection<Embosser> ret = new ArrayList<Embosser>();
+		for (EmbosserProvider p : providers) {
+			ret.addAll(p.list());
+		}
+		return ret;
 	}
 	
-	public Collection<Embosser> list(FactoryFilter<Embosser> filter) {
+	public Collection<Embosser> list(FactoryFilter filter) {
 		Collection<Embosser> ret = new ArrayList<Embosser>();
-		for (Embosser embosser : map.values()) {
-			if (filter.accept(embosser)) {
-				ret.add(embosser);
+		for (Embosser fp : list()) {
+			if (filter.accept(fp)) {
+				ret.add(fp);
 			}
 		}
 		return ret;

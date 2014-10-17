@@ -33,16 +33,24 @@ public class DefaultTableProvider implements TableProvider {
 	enum TableType {
 		EN_US, // US computer braille, compatible with
 				// "Braillo USA 6 DOT 001.00"
+		;
+		private final String identifier;
+		TableType() {
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		String getIdentifier() {
+			return identifier;
+		}
 	};
 
-	private final Map<TableType, Table> tables;
+	private final Map<String, Table> tables;
 
 	/**
 	 * Creates a new DefaultTableProvider
 	 */
 	public DefaultTableProvider() {
-		tables = new HashMap<TableType, Table>(); 
-		tables.put(TableType.EN_US, new EmbosserTable<TableType>("US", "Commonly used embosser table", TableType.EN_US, EightDotFallbackMethod.values()[0], '\u2800'){
+		tables = new HashMap<String, Table>(); 
+		addTable(new EmbosserTable<TableType>("US", "Commonly used embosser table", TableType.EN_US, EightDotFallbackMethod.values()[0], '\u2800'){
 
 			/**
 			 * 
@@ -57,6 +65,10 @@ public class DefaultTableProvider implements TableProvider {
 						Charset.forName("UTF-8"), fallback, replacement, true);
 			}});
 	}
+	
+	private void addTable(EmbosserTable<?> t) {
+		tables.put(t.getIdentifier(), t);
+	}
 
 	/**
 	 * Get a new table instance based on the factory's current settings.
@@ -67,7 +79,11 @@ public class DefaultTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t).newBrailleConverter();
+		return tables.get(t.getIdentifier()).newBrailleConverter();
+	}
+	
+	public Table newFactory(String identifier) {
+		return tables.get(identifier);
 	}
 
 	//jvm1.6@Override

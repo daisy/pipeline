@@ -26,4 +26,5 @@ import org.daisy.factory.Provider;
  */
 public interface EmbosserProvider extends Provider<Embosser> {
 
+	public Embosser newFactory(String identifier);
 }

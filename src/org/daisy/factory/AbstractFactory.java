@@ -73,14 +73,6 @@ public abstract class AbstractFactory implements Factory, Serializable {
 	public String getIdentifier() {
 		return identifier;
 	}
-	
-	public int compareTo(Factory o) {
-		if (this.equals(o)) {
-			return 0;
-		} else {
-			return this.getDisplayName().compareTo(o.getDisplayName());
-		}
-	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()

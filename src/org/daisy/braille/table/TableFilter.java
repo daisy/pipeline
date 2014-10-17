@@ -23,7 +23,7 @@ import org.daisy.factory.FactoryFilter;
  * Provides an interface for filtering a collection of Tables.
  * @author Joel Håkansson
  */
-public interface TableFilter extends FactoryFilter<Table>{
+public interface TableFilter extends FactoryFilter {
 
 
 }

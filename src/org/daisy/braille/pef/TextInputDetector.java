@@ -32,6 +32,7 @@ import org.daisy.braille.BrailleConstants;
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalog;
+import org.daisy.factory.FactoryProperties;
 
 /**
  * Provides a method for detecting a table based on text input.
@@ -85,8 +86,9 @@ public class TextInputDetector {
 		HashMap<BitSet, HashMap<String, Table>> tables = new HashMap<BitSet, HashMap<String, Table>>();
 		BitSet tableThumbprint;
 		TableCatalog factory = TableCatalog.newInstance();
-		for (Table type : factory.list()) {
+		for (FactoryProperties fp : factory.list()) {
 			try {
+				Table type = factory.get(fp.getIdentifier());
 				BrailleConverter c = type.newBrailleConverter();
 				if (!eightDot && c.supportsEightDot()) {
 					continue;

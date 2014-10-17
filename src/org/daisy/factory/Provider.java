@@ -25,7 +25,7 @@ import java.util.Collection;
  *
  * @param <T> the type of Factories handled by this Provider
  */
-public interface Provider<T extends Factory> {
+public interface Provider<T extends FactoryProperties>{
 	
 	/**
 	 * Lists all Factories

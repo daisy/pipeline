@@ -22,12 +22,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.factory.FactoryCatalog;
 import org.daisy.factory.FactoryFilter;
+import org.daisy.factory.FactoryProperties;
 
 /**
  * Provides a catalog of Table factories.
@@ -35,11 +39,15 @@ import org.daisy.factory.FactoryFilter;
  */
 //TODO: use TableService instead of Table and enable OSGi support
 //@Component
-public class TableCatalog implements FactoryCatalog<Table> {
-	private final Map<String, Table> map;
+public class TableCatalog implements FactoryCatalog<Table, Table> {
+	private final List<TableProvider> providers;
+	private final Map<String, TableProvider> map;
+	private final Logger logger;
 	
 	public TableCatalog() {
-		map = Collections.synchronizedMap(new HashMap<String, Table>());
+		logger = Logger.getLogger(this.getClass().getCanonicalName());
+		providers = new CopyOnWriteArrayList<TableProvider>();
+		map = Collections.synchronizedMap(new HashMap<String, TableProvider>());
 	}
 	
 	/**
@@ -60,37 +68,64 @@ public class TableCatalog implements FactoryCatalog<Table> {
 		TableCatalog ret = new TableCatalog();
 		Iterator<TableProvider> i = ServiceRegistry.lookupProviders(TableProvider.class);
 		while (i.hasNext()) {
-			TableProvider provider = i.next();
-			for (Table table : provider.list()) {
-				ret.addFactory(table);
-			}
+			ret.addFactory(i.next());
 		}
 		return ret;
 	}
 	
 	//@Reference(type = '*')
-	public void addFactory(Table factory) {
-		map.put(factory.getIdentifier(), factory);
+	public void addFactory(TableProvider factory) {
+		logger.finer("Adding factory: " + factory);
+		providers.add(factory);
 	}
 
 	// Unbind reference added automatically from addFactory annotation
-	public void removeFactory(Table factory) {
-		map.remove(factory.getIdentifier());
+	public void removeFactory(TableProvider factory) {
+		// this is to avoid adding items to the cache that were removed while
+		// iterating
+		synchronized (map) {
+			providers.remove(factory);
+			map.clear();
+		}
 	}
 
 	public Table get(String identifier) {
-		return map.get(identifier);
+		TableProvider template = map.get(identifier);
+		if (template==null) {
+			// this is to avoid adding items to the cache that were removed
+			// while iterating
+			synchronized (map) {
+				for (TableProvider p : providers) {
+					for (FactoryProperties fp : p.list()) {
+						if (fp.getIdentifier().equals(identifier)) {
+							logger.fine("Found a factory for " + identifier + " (" + p.getClass() + ")");
+							map.put(fp.getIdentifier(), p);
+							template = p;
+							break;
+						}						
+					}
+				}
+			}
+		}
+		if (template==null) {
+			throw new IllegalArgumentException("Cannot find a factory for " + identifier);
+		}
+		return template.newFactory(identifier);
 	}
 	
 	public Collection<Table> list() {
-		return map.values();
+		Collection<Table> ret = new ArrayList<Table>();
+		for (TableProvider p : providers) {
+			ret.addAll(p.list());
+		}
+		return ret;
 	}
 	
-	public Collection<Table> list(FactoryFilter<Table> filter) {
+	public Collection<Table> list(FactoryFilter filter) {
 		Collection<Table> ret = new ArrayList<Table>();
-		for (Table table : map.values()) {
-			if (filter.accept(table)) {
-				ret.add(table);
+		for (Table fp : list()) {
+			if (filter.accept(fp)) {
+				ret.add(fp);
 			}
 		}
 		return ret;

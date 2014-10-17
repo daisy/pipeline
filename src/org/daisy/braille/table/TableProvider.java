@@ -36,4 +36,5 @@ import org.daisy.factory.Provider;
  */
 public interface TableProvider extends Provider<Table> {
 
+	public Table newFactory(String identifier);
 }
