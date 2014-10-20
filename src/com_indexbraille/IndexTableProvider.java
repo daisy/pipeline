@@ -24,10 +24,11 @@ import java.util.Map;
 
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.EmbosserBrailleConverter;
-import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
+import org.daisy.braille.table.TableProvider;
+import org.daisy.factory.FactoryProperties;
 
 /**
  *
@@ -36,40 +37,40 @@ import org.daisy.braille.table.Table;
  */
 public class IndexTableProvider implements TableProvider {
 
-	enum TableType { INDEX_TRANSPARENT_6DOT,
-                         INDEX_TRANSPARENT_8DOT;
+	enum TableType implements FactoryProperties {
+			INDEX_TRANSPARENT_6DOT("Index transparent 6 dot", "Table for transparent mode, 6 dot"),
+			INDEX_TRANSPARENT_8DOT("Index transparent 8 dot", "Table for transparent mode, 8 dot");
+		private final String name;
+		private final String desc;
 		private final String identifier;
-		TableType() {
+		TableType(String name, String desc) {
+			this.name = name;
+			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
 		}
-		String getIdentifier() {
+		@Override
+		public String getIdentifier() {
 			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
 		}
 	};
 
-	private final Map<String, Table> tables;
+	private final Map<String, FactoryProperties> tables;
 
 	public IndexTableProvider() {
-		tables = new HashMap<String, Table>();
-		addTable(new EmbosserTable<TableType>("Index transparent 6 dot", "Table for transparent mode, 6 dot", TableType.INDEX_TRANSPARENT_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 4158051645788882958L;
-
-			@Override
-			public BrailleConverter newBrailleConverter() {
-				StringBuilder sb = new StringBuilder();
-				for (int i=0; i<64; i++) {
-					sb.append((char)((i & 0x07) + ((i & 0x38) << 1)));
-				}
-				return new EmbosserBrailleConverter(sb.toString(), Charset.forName("US-ASCII"), fallback, replacement, false);
-			}});
+		tables = new HashMap<String, FactoryProperties>();
+		addTable(TableType.INDEX_TRANSPARENT_6DOT);
         //tables.add(new EmbosserTable<TableType>("Index transparent 8 dot", "Table for transparent mode, 8 dot", TableType.INDEX_TRANSPARENT_8DOT, this));
 	}
 	
-	private void addTable(EmbosserTable<?> t) {
+	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
@@ -82,15 +83,35 @@ public class IndexTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t.getIdentifier()).newBrailleConverter();
+		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
 
 	public Table newFactory(String identifier) {
-		return tables.get(identifier);
+		FactoryProperties fp = tables.get(identifier);
+		switch ((TableType)fp) {
+		case INDEX_TRANSPARENT_6DOT:
+			return new EmbosserTable(TableType.INDEX_TRANSPARENT_6DOT, EightDotFallbackMethod.values()[0], '\u2800') {
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 4158051645788882958L;
+
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					StringBuilder sb = new StringBuilder();
+					for (int i=0; i<64; i++) {
+						sb.append((char)((i & 0x07) + ((i & 0x38) << 1)));
+					}
+					return new EmbosserBrailleConverter(sb.toString(), Charset.forName("US-ASCII"), fallback, replacement, false);
+				}};
+			default:
+				return null;
+		}
 	}
 
 	//jvm1.6@Override
-	public Collection<Table> list() {
+	public Collection<FactoryProperties> list() {
 		return tables.values();
 	}
 

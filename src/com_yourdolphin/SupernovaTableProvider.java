@@ -24,43 +24,45 @@ import java.util.Map;
 
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.EmbosserBrailleConverter;
-import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
+import org.daisy.braille.table.TableProvider;
+import org.daisy.factory.FactoryProperties;
 
 public class SupernovaTableProvider implements TableProvider {
-	enum TableType {
-		SV_SE_6DOT;
+	enum TableType implements FactoryProperties {
+		SV_SE_6DOT("Swedish - Supernova 6 dot", "Table for Supernova, using 6 dot");
+		private final String name;
+		private final String desc;
 		private final String identifier;
-		TableType() {
+		TableType(String name, String desc) {
+			this.name = name;
+			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
 		}
-		String getIdentifier() {
+		@Override
+		public String getIdentifier() {
 			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
 		}
 	};
 
-	private final Map<String, Table> tables;
+	private final Map<String, FactoryProperties> tables;
 	
 	public SupernovaTableProvider() {
-		tables = new HashMap<String, Table>(); 
-		addTable(new EmbosserTable<TableType>("Swedish - Supernova 6 dot", "Table for Supernova, using 6 dot", TableType.SV_SE_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1946091643211394782L;
-
-			@Override
-			public BrailleConverter newBrailleConverter() {
-				return new EmbosserBrailleConverter(
-						new String(" a,b.k;l@cif/msp'e:h*o!rødjgäntq_å?ê-u(v`îöë§xèç\"û+ü)z=àœôwï#yùé"), 
-						Charset.forName("UTF-8"), fallback, replacement, true);
-			}});
+		tables = new HashMap<String, FactoryProperties>(); 
+		addTable(TableType.SV_SE_6DOT);
 	}
 
-	private void addTable(EmbosserTable<?> t) {
+	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
@@ -73,15 +75,33 @@ public class SupernovaTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t.getIdentifier()).newBrailleConverter();
+		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
 
 	public Table newFactory(String identifier) {
-		return tables.get(identifier);
+		FactoryProperties fp = tables.get(identifier);
+		switch ((TableType)fp) {
+		case SV_SE_6DOT:
+			return new EmbosserTable(TableType.SV_SE_6DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1946091643211394782L;
+
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					return new EmbosserBrailleConverter(
+							new String(" a,b.k;l@cif/msp'e:h*o!rødjgäntq_å?ê-u(v`îöë§xèç\"û+ü)z=àœôwï#yùé"), 
+							Charset.forName("UTF-8"), fallback, replacement, true);
+				}};
+		default:
+			return null;
+		}
 	}
 
 	//jvm1.6@Override
-	public Collection<Table> list() {
+	public Collection<FactoryProperties> list() {
 		return tables.values();
 	}
 

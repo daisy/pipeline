@@ -25,10 +25,11 @@ import java.util.Map;
 
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.EmbosserBrailleConverter;
-import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
+import org.daisy.braille.table.TableProvider;
+import org.daisy.factory.FactoryProperties;
 
 /**
  *
@@ -37,39 +38,39 @@ import org.daisy.braille.table.Table;
  */
 public class InterpointTableProvider implements TableProvider {
     
-    enum TableType { 
-    	USA1_8;
+    enum TableType implements FactoryProperties { 
+    	USA1_8("USA1_8 font", "Interpoint 8-dot table");
+		private final String name;
+		private final String desc;
 		private final String identifier;
-		TableType() {
+		TableType(String name, String desc) {
+			this.name = name;
+			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
 		}
-		String getIdentifier() {
+		@Override
+		public String getIdentifier() {
 			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
 		}
     };
 
-    private final Map<String, Table> tables;
+    private final Map<String, FactoryProperties> tables;
 
     public InterpointTableProvider() {
-        tables = new HashMap<String, Table>();
-        addTable(new EmbosserTable<TableType>("USA1_8 font", "Interpoint 8-dot table", TableType.USA1_8, EightDotFallbackMethod.values()[0], '\u2800'){
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 5042547624591164148L;
-
-			@Override
-			public BrailleConverter newBrailleConverter() {
-				String table = " a,b.k;l\"cif|msp!e:h*o+r>djg`ntq'1?2-u(v$3960x~&<5/8)z={\u007f4w7#y}%"; // TODO: add patterns U+2840 - U+28ff
-
-                StringBuffer sb = new StringBuffer();
-                sb.append(table);
-                return new EmbosserBrailleConverter(sb.toString(), Charset.forName("ISO-8859-1"), fallback, replacement, true);
-			}});
+        tables = new HashMap<String, FactoryProperties>();
+        //The implementation is intentionally excluded from listing
+        //addTable(TableType.USA1_8);
     }
 
-	private void addTable(EmbosserTable<?> t) {
+	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
@@ -82,16 +83,35 @@ public class InterpointTableProvider implements TableProvider {
      * @return returns a new table instance.
      */
     public BrailleConverter newTable(TableType t) {
-    	return tables.get(t.getIdentifier()).newBrailleConverter();
+    	return newFactory(t.getIdentifier()).newBrailleConverter();
     }
 
 	public Table newFactory(String identifier) {
-		return tables.get(identifier);
+		FactoryProperties fp = tables.get(identifier);
+		switch ((TableType)fp) {
+		case USA1_8:
+			return new EmbosserTable(TableType.USA1_8, EightDotFallbackMethod.values()[0], '\u2800'){
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 5042547624591164148L;
+
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					String table = " a,b.k;l\"cif|msp!e:h*o+r>djg`ntq'1?2-u(v$3960x~&<5/8)z={\u007f4w7#y}%"; // TODO: add patterns U+2840 - U+28ff
+
+	                StringBuffer sb = new StringBuffer();
+	                sb.append(table);
+	                return new EmbosserBrailleConverter(sb.toString(), Charset.forName("ISO-8859-1"), fallback, replacement, true);
+				}};
+		default:
+			return null;
+		}
 	}
 
     //jvm1.6@Override
-    public Collection<Table> list() {
-    	//The implementation is intentionally excluded from listing
-        return new ArrayList<Table>();
+    public Collection<FactoryProperties> list() {
+        return tables.values();
     }
 }

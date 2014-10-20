@@ -24,10 +24,11 @@ import java.util.Map;
 
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.EmbosserBrailleConverter;
-import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
+import org.daisy.braille.table.TableProvider;
+import org.daisy.factory.FactoryProperties;
 
 /**
  * 
@@ -35,35 +36,38 @@ import org.daisy.braille.table.Table;
  * @author Joel Håkansson
  */
 public class BrailleEditorsTableProvider implements TableProvider {
-	enum TableType {
-		MICROBRAILLE;
+	enum TableType implements FactoryProperties {
+		MICROBRAILLE("MicroBraille BRL-file", "Table for MicroBraille files (.brl)");
+		private final String name;
+		private final String desc;
 		private final String identifier;
-		TableType() {
+		TableType(String name, String desc) {
+			this.name = name;
+			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
 		}
-		String getIdentifier() {
+		@Override
+		public String getIdentifier() {
 			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
 		}
 	};
 
-	private final Map<String, Table> tables;
+	private final Map<String, FactoryProperties> tables;
 	
 	public BrailleEditorsTableProvider() {
-		tables = new HashMap<String, Table>(); 
-		addTable(new EmbosserTable<TableType>("MicroBraille BRL-file", "Table for MicroBraille files (.brl)", TableType.MICROBRAILLE, EightDotFallbackMethod.values()[0], '\u2800'){
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -5319371919262493138L;
-
-			@Override
-			public BrailleConverter newBrailleConverter() {
-				return new EmbosserBrailleConverter(new String(" á¬â§ë»ì«ãéæ¯íóð½åºèªï¡òüäêçÁîôñ¾ÜÎÇ­õ¿öûÓ¼ÄÉøÝÛß×®Ï¢ú¨àýÔ÷Å£ùÐÆ"), Charset.forName("UTF-8"), fallback, replacement, false);
-			}});
+		tables = new HashMap<String, FactoryProperties>(); 
+		addTable(TableType.MICROBRAILLE);
 	}
 
-	private void addTable(EmbosserTable<?> t) {
+	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
@@ -76,15 +80,31 @@ public class BrailleEditorsTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t.getIdentifier()).newBrailleConverter();
+		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
 
 	public Table newFactory(String identifier) {
-		return tables.get(identifier);
+		FactoryProperties fp = tables.get(identifier);
+		switch ((TableType)fp) {
+		case MICROBRAILLE:
+			return new EmbosserTable(TableType.MICROBRAILLE, EightDotFallbackMethod.values()[0], '\u2800'){
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -5319371919262493138L;
+
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					return new EmbosserBrailleConverter(new String(" á¬â§ë»ì«ãéæ¯íóð½åºèªï¡òüäêçÁîôñ¾ÜÎÇ­õ¿öûÓ¼ÄÉøÝÛß×®Ï¢ú¨àýÔ÷Å£ùÐÆ"), Charset.forName("UTF-8"), fallback, replacement, false);
+				}};
+		default:
+			return null;
+		}
 	}
 
 	//jvm1.6@Override
-	public Collection<Table> list() {
+	public Collection<FactoryProperties> list() {
 		return tables.values();
 	}
 

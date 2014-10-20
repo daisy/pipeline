@@ -30,6 +30,7 @@ import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.tools.StringTranslator.MatchMode;
+import org.daisy.factory.FactoryProperties;
 
 /**
  *
@@ -37,57 +38,76 @@ import org.daisy.braille.tools.StringTranslator.MatchMode;
  */
 public class ViewPlusTableProvider implements TableProvider {
 
-    enum TableType {
-    	TIGER_INLINE_SUBSTITUTION_8DOT;
+    enum TableType implements FactoryProperties {
+    	TIGER_INLINE_SUBSTITUTION_8DOT("Tiger inline substitution 8-dot", "");
+		private final String name;
+		private final String desc;
 		private final String identifier;
-		TableType() {
+		TableType(String name, String desc) {
+			this.name = name;
+			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
 		}
-		String getIdentifier() {
+		@Override
+		public String getIdentifier() {
 			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
 		}
     };
 
-    private final Map<String, Table> tables;
+    private final Map<String, FactoryProperties> tables;
 
     public ViewPlusTableProvider() {
-        tables = new HashMap<String, Table>(); 
-        addTable(new EmbosserTable<TableType>("Tiger inline substitution 8-dot", "", TableType.TIGER_INLINE_SUBSTITUTION_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -3747633563102712142L;
-
-			@Override
-			public BrailleConverter newBrailleConverter() {
-                final String SUB = String.valueOf((char)0x1a);
-                ArrayList<String> a = new ArrayList<String>();
-                for (int i=0; i<256; i++) {
-                    a.add(SUB + (char)i);
-                }
-                return new AdvancedBrailleConverter(
-                    a.toArray(new String[a.size()]),
-                    Charset.forName("ISO-8859-1"),
-                    false,
-                    MatchMode.RELUCTANT);
-			}});
+        tables = new HashMap<String, FactoryProperties>(); 
+        addTable(TableType.TIGER_INLINE_SUBSTITUTION_8DOT);
     }
 
-	private void addTable(EmbosserTable<?> t) {
+	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
     public BrailleConverter newTable(TableType t) {
-    	return tables.get(t.getIdentifier()).newBrailleConverter();
+    	return newFactory(t.getIdentifier()).newBrailleConverter();
     }
 
 	public Table newFactory(String identifier) {
-		return tables.get(identifier);
+		FactoryProperties fp = tables.get(identifier);
+		switch ((TableType)fp) {
+		case TIGER_INLINE_SUBSTITUTION_8DOT:
+			return new EmbosserTable(TableType.TIGER_INLINE_SUBSTITUTION_8DOT, EightDotFallbackMethod.values()[0], '\u2800'){
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -3747633563102712142L;
+
+				@Override
+				public BrailleConverter newBrailleConverter() {
+	                final String SUB = String.valueOf((char)0x1a);
+	                ArrayList<String> a = new ArrayList<String>();
+	                for (int i=0; i<256; i++) {
+	                    a.add(SUB + (char)i);
+	                }
+	                return new AdvancedBrailleConverter(
+	                    a.toArray(new String[a.size()]),
+	                    Charset.forName("ISO-8859-1"),
+	                    false,
+	                    MatchMode.RELUCTANT);
+				}};
+		default:
+			return null;
+		}
 	}
 
     //jvm1.6@Override
-    public Collection<Table> list() {
+    public Collection<FactoryProperties> list() {
         return tables.values();
     }
 }

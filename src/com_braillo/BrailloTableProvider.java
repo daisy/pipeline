@@ -28,92 +28,58 @@ import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableProvider;
+import org.daisy.factory.FactoryProperties;
 
 public class BrailloTableProvider implements TableProvider {
 	//public final static String IS_ONE_TO_ONE = "is one-to-one";
 	//public final static String IS_DISPLAY_FORMAT = "is display format";
 	
-	enum TableType {
-		BRAILLO_6DOT_001_00, // US computer braille, compatible with
+	enum TableType implements FactoryProperties {
+		BRAILLO_6DOT_001_00("Braillo USA 6 DOT 001.00", "Compatible with Braillo USA 6 DOT 001.00"), 
+				// US computer braille, compatible with
 				// "Braillo USA 6 DOT 001.00"
-		BRAILLO_6DOT_044_00, // US computer braille (lower case), compatible with
+		BRAILLO_6DOT_044_00("Braillo ENGLAND 6 DOT 044.00", "Compatible with Braillo ENGLAND 6 DOT 044.00"), 
+				// US computer braille (lower case), compatible with
 				// "Braillo ENGLAND 6 DOT 044.00" which is identical to
 				// "Braillo USA 6 DOT 001.00"
-		BRAILLO_6DOT_046_01, // compatible with "Braillo SWEDEN 6 DOT 046.01"
-		BRAILLO_6DOT_047_01 // compatible with "Braillo NORWAY 6 DOT 047.01"
+		BRAILLO_6DOT_046_01("Braillo SWEDEN 6 DOT 046.01", "Compatible with Braillo SWEDEN 6 DOT 046.01"), 
+				// compatible with "Braillo SWEDEN 6 DOT 046.01"
+		BRAILLO_6DOT_047_01("Braillo NORWAY 6 DOT 047.01", "Compatible with Braillo NORWAY 6 DOT 047.01")
+				// compatible with "Braillo NORWAY 6 DOT 047.01"
 		;
+		private final String name;
+		private final String desc;
 		private final String identifier;
-		TableType() {
+		TableType(String name, String desc) {
+			this.name = name;
+			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
 		}
-		String getIdentifier() {
+		@Override
+		public String getIdentifier() {
 			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
 		}
 	};
 
-	private final Map<String, Table> tables;
+	private final Map<String, FactoryProperties> tables;
 
 	public BrailloTableProvider() {
-		tables = new HashMap<String, Table>(); 
-		addTable(new EmbosserTable<TableType>("Braillo USA 6 DOT 001.00", "Compatible with Braillo USA 6 DOT 001.00", TableType.BRAILLO_6DOT_001_00, EightDotFallbackMethod.values()[0], '\u2800'){
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -3728256382860405787L;
-
-			@Override
-			public BrailleConverter newBrailleConverter() {
-				return new EmbosserBrailleConverter(
-						new String(
-								" A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="),
-						Charset.forName("UTF-8"), fallback, replacement, true);
-			}});
-		addTable(new EmbosserTable<TableType>("Braillo ENGLAND 6 DOT 044.00", "Compatible with Braillo ENGLAND 6 DOT 044.00", TableType.BRAILLO_6DOT_044_00, EightDotFallbackMethod.values()[0], '\u2800'){
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1636005108305141651L;
-
-			@Override
-			public BrailleConverter newBrailleConverter() {
-				return new EmbosserBrailleConverter(
-						new String(
-								" a1b'k2l@cif/msp\"e3h9o6r^djg>ntq,*5<-u8v.%[$+x!&;:4\\0z7(_?w]#y)="),
-						Charset.forName("UTF-8"), fallback, replacement, true);
-			}});		
-		addTable(new EmbosserTable<TableType>("Braillo SWEDEN 6 DOT 046.01", "Compatible with Braillo SWEDEN 6 DOT 046.01", TableType.BRAILLO_6DOT_046_01, EightDotFallbackMethod.values()[0], '\u2800'){
-			 /**
-			 * 
-			 */
-			private static final long serialVersionUID = -5911455102023772974L;
-
-			// sv-SE
-			@Override
-			public BrailleConverter newBrailleConverter() {
-				return new EmbosserBrailleConverter(
-						new String(
-								" a,b'k;l^cif/msp!e:h*o+r\"djg[ntq_1?2-u<v%396]x\\&#5.8>z=($4w70y)@"),
-						Charset.forName("UTF-8"), fallback, replacement, true);
-			}});
-		addTable(new EmbosserTable<TableType>("Braillo NORWAY 6 DOT 047.01", "Compatible with Braillo NORWAY 6 DOT 047.01", TableType.BRAILLO_6DOT_047_01, EightDotFallbackMethod.values()[0], '\u2800'){
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -8132115348497209954L;
-
-			// no-NO
-			@Override
-			public BrailleConverter newBrailleConverter() {
-				return new EmbosserBrailleConverter(
-						new String(
-								" A,B.K;L`CIF/MSP'E:H@O!RaDJG[NTQ*]?r-U\"Vqm\\h&Xli_e%u$Z=k|dWg#Ynj"),
-						Charset.forName("UTF-8"), fallback, replacement, false);
-			}});		
+		tables = new HashMap<String, FactoryProperties>(); 
+		addTable(TableType.BRAILLO_6DOT_001_00);
+		addTable(TableType.BRAILLO_6DOT_044_00);		
+		addTable(TableType.BRAILLO_6DOT_046_01);
+		addTable(TableType.BRAILLO_6DOT_047_01);		
 	}
 	
-	private void addTable(EmbosserTable<?> t) {
+	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
@@ -126,15 +92,78 @@ public class BrailloTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t.getIdentifier()).newBrailleConverter();
+		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
 
 	public Table newFactory(String identifier) {
-		return tables.get(identifier);
+		FactoryProperties fp = tables.get(identifier);
+		switch ((TableType)fp) {
+		case BRAILLO_6DOT_001_00:
+			return new EmbosserTable(TableType.BRAILLO_6DOT_001_00, EightDotFallbackMethod.values()[0], '\u2800'){
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -3728256382860405787L;
+
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					return new EmbosserBrailleConverter(
+							new String(
+									" A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="),
+							Charset.forName("UTF-8"), fallback, replacement, true);
+				}};
+		case BRAILLO_6DOT_044_00:
+			return new EmbosserTable(TableType.BRAILLO_6DOT_044_00, EightDotFallbackMethod.values()[0], '\u2800'){
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1636005108305141651L;
+
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					return new EmbosserBrailleConverter(
+							new String(
+									" a1b'k2l@cif/msp\"e3h9o6r^djg>ntq,*5<-u8v.%[$+x!&;:4\\0z7(_?w]#y)="),
+							Charset.forName("UTF-8"), fallback, replacement, true);
+				}};
+		case BRAILLO_6DOT_046_01:
+			return new EmbosserTable(TableType.BRAILLO_6DOT_046_01, EightDotFallbackMethod.values()[0], '\u2800'){
+				 /**
+				 * 
+				 */
+				private static final long serialVersionUID = -5911455102023772974L;
+
+				// sv-SE
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					return new EmbosserBrailleConverter(
+							new String(
+									" a,b'k;l^cif/msp!e:h*o+r\"djg[ntq_1?2-u<v%396]x\\&#5.8>z=($4w70y)@"),
+							Charset.forName("UTF-8"), fallback, replacement, true);
+				}};
+		case BRAILLO_6DOT_047_01:
+			return new EmbosserTable(TableType.BRAILLO_6DOT_047_01, EightDotFallbackMethod.values()[0], '\u2800'){
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -8132115348497209954L;
+
+				// no-NO
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					return new EmbosserBrailleConverter(
+							new String(
+									" A,B.K;L`CIF/MSP'E:H@O!RaDJG[NTQ*]?r-U\"Vqm\\h&Xli_e%u$Z=k|dWg#Ynj"),
+							Charset.forName("UTF-8"), fallback, replacement, false);
+				}};
+		default: return null;
+		}
 	}
 
 	//jvm1.6@Override
-	public Collection<Table> list() {
+	public Collection<FactoryProperties> list() {
 		return tables.values();
 	}
 
