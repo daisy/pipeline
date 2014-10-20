@@ -20,6 +20,7 @@ package org.daisy.braille.table;
 import java.util.HashMap;
 
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
+import org.daisy.factory.FactoryProperties;
 
 /**
  * Provides an embosser table implementation. This implementation
@@ -29,7 +30,7 @@ import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
  *
  * @param <T>
  */
-public abstract class EmbosserTable<T> extends AbstractTable {
+public abstract class EmbosserTable extends AbstractTable {
 	/**
 	 * 
 	 */
@@ -46,8 +47,8 @@ public abstract class EmbosserTable<T> extends AbstractTable {
 	 * @param type the type of table
 	 * @param provider the provider
 	 */
-	public EmbosserTable(String name, String desc, T type, EightDotFallbackMethod fallback, char replacement) {
-		super(name, desc, type.getClass().getCanonicalName() + "." + type.toString());
+	public EmbosserTable(FactoryProperties fp, EightDotFallbackMethod fallback, char replacement) {
+		super(fp.getDisplayName(), fp.getDescription(), fp.getIdentifier());
 		props = new HashMap<String, Object>();
 		props.put(TableProperties.IS_ONE_TO_ONE, true);
 		props.put(TableProperties.IS_DISPLAY_FORMAT, true);
@@ -56,7 +57,7 @@ public abstract class EmbosserTable<T> extends AbstractTable {
 		this.replacement = replacement;
 	}
 	
-	EmbosserTable<T> putProperty(String key, Object value) {
+	EmbosserTable putProperty(String key, Object value) {
 		props.put(key, value);
 		return this;
 	}

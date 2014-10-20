@@ -39,7 +39,7 @@ import org.daisy.factory.FactoryProperties;
  */
 //TODO: use TableService instead of Table and enable OSGi support
 //@Component
-public class TableCatalog implements FactoryCatalog<Table, Table> {
+public class TableCatalog implements FactoryCatalog<Table, FactoryProperties> {
 	private final List<TableProvider> providers;
 	private final Map<String, TableProvider> map;
 	private final Logger logger;
@@ -113,17 +113,17 @@ public class TableCatalog implements FactoryCatalog<Table, Table> {
 		return template.newFactory(identifier);
 	}
 	
-	public Collection<Table> list() {
-		Collection<Table> ret = new ArrayList<Table>();
+	public Collection<FactoryProperties> list() {
+		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
 		for (TableProvider p : providers) {
 			ret.addAll(p.list());
 		}
 		return ret;
 	}
 	
-	public Collection<Table> list(FactoryFilter filter) {
-		Collection<Table> ret = new ArrayList<Table>();
-		for (Table fp : list()) {
+	public Collection<FactoryProperties> list(FactoryFilter filter) {
+		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
+		for (FactoryProperties fp : list()) {
 			if (filter.accept(fp)) {
 				ret.add(fp);
 			}

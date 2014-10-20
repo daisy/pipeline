@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
+import org.daisy.factory.FactoryProperties;
 
 /**
  * Provides a default table, for convenience.
@@ -30,43 +31,43 @@ import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
  */
 public class DefaultTableProvider implements TableProvider {
 	
-	enum TableType {
-		EN_US, // US computer braille, compatible with
+	enum TableType implements FactoryProperties {
+		EN_US("US", "Commonly used embosser table"), // US computer braille, compatible with
 				// "Braillo USA 6 DOT 001.00"
 		;
+		private final String name;
+		private final String desc;
 		private final String identifier;
-		TableType() {
+		TableType(String name, String desc) {
+			this.name = name;
+			this.desc = desc;
 			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
 		}
-		String getIdentifier() {
+		@Override
+		public String getIdentifier() {
 			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
 		}
 	};
 
-	private final Map<String, Table> tables;
+	private final Map<String, FactoryProperties> tables;
 
 	/**
 	 * Creates a new DefaultTableProvider
 	 */
 	public DefaultTableProvider() {
-		tables = new HashMap<String, Table>(); 
-		addTable(new EmbosserTable<TableType>("US", "Commonly used embosser table", TableType.EN_US, EightDotFallbackMethod.values()[0], '\u2800'){
-
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -64524572279113677L;
-
-			@Override
-			public BrailleConverter newBrailleConverter() {
-				return new EmbosserBrailleConverter(
-						new String(
-								" A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="),
-						Charset.forName("UTF-8"), fallback, replacement, true);
-			}});
+		tables = new HashMap<String, FactoryProperties>(); 
+		addTable(TableType.EN_US);
 	}
 	
-	private void addTable(EmbosserTable<?> t) {
+	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
 
@@ -79,15 +80,34 @@ public class DefaultTableProvider implements TableProvider {
 	 * @return returns a new table instance.
 	 */
 	public BrailleConverter newTable(TableType t) {
-		return tables.get(t.getIdentifier()).newBrailleConverter();
+		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
 	
 	public Table newFactory(String identifier) {
-		return tables.get(identifier);
+		FactoryProperties fp = tables.get(identifier);
+		switch ((TableType)fp) {
+		case EN_US :
+			return new EmbosserTable(TableType.EN_US, EightDotFallbackMethod.values()[0], '\u2800') {
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -64524572279113677L;
+
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					return new EmbosserBrailleConverter(
+							new String(
+									" A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="),
+							Charset.forName("UTF-8"), fallback, replacement, true);
+				}};
+		default:
+			return  null;
+		}
 	}
 
 	//jvm1.6@Override
-	public Collection<Table> list() {
+	public Collection<FactoryProperties> list() {
 		return tables.values();
 	}
 

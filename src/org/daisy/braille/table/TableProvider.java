@@ -17,6 +17,7 @@
  */
 package org.daisy.braille.table;
 
+import org.daisy.factory.FactoryProperties;
 import org.daisy.factory.Provider;
 
 /**
@@ -34,7 +35,7 @@ import org.daisy.factory.Provider;
  * 
  * @author Joel Håkansson
  */
-public interface TableProvider extends Provider<Table> {
+public interface TableProvider extends Provider<FactoryProperties> {
 
 	public Table newFactory(String identifier);
 }
