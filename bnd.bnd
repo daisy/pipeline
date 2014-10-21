@@ -2,7 +2,8 @@ Private-Package:  \
 	org.daisy.dotify.impl.hyphenator.latex,\
 	org.daisy.dotify.hyphenator
 Service-Component: *
--sources: true
+Include-Resource: / = src/
+-sources: false
 -buildpath: osgi.core,\
 	osgi.cmpn,\
 	biz.aQute.bnd.annotation,\
