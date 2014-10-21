@@ -9,4 +9,5 @@ Export-Package:  \
 	org.daisy.dotify.text,\
 	org.daisy.dotify.tools,\
 	se.mtm.common.collection
--sources: true
+Include-Resource: / = src/
+-sources: false
