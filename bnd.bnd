@@ -18,5 +18,8 @@ Private-Package:  \
 	org.daisy.dotify.consumer.formatter,\
 	org.daisy.dotify.consumer.engine,\
 	org.daisy.dotify.consumer.writer
--sources: true
+Include-Resource: / = src/
+-sources: false
 Service-Component: *
+Import-Package: org.junit*;resolution:=optional,\
+	*
