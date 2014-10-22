@@ -33,13 +33,15 @@ import org.daisy.factory.FactoryCatalog;
 import org.daisy.factory.FactoryFilter;
 import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
+
 /**
  * Provides a catalog of Table factories.
  * @author Joel Håkansson
  */
-//TODO: use TableService instead of Table and enable OSGi support
-//@Component
-public class TableCatalog implements FactoryCatalog<Table, FactoryProperties> {
+@Component
+public class TableCatalog implements FactoryCatalog<Table, FactoryProperties>, TableCatalogService {
 	private final List<TableProvider> providers;
 	private final Map<String, TableProvider> map;
 	private final Logger logger;
@@ -73,7 +75,7 @@ public class TableCatalog implements FactoryCatalog<Table, FactoryProperties> {
 		return ret;
 	}
 	
-	//@Reference(type = '*')
+	@Reference(type = '*')
 	public void addFactory(TableProvider factory) {
 		logger.finer("Adding factory: " + factory);
 		providers.add(factory);
@@ -90,6 +92,9 @@ public class TableCatalog implements FactoryCatalog<Table, FactoryProperties> {
 	}
 
 	public Table get(String identifier) {
+		if (identifier==null) {
+			return null;
+		}
 		TableProvider template = map.get(identifier);
 		if (template==null) {
 			// this is to avoid adding items to the cache that were removed
@@ -107,10 +112,15 @@ public class TableCatalog implements FactoryCatalog<Table, FactoryProperties> {
 				}
 			}
 		}
-		if (template==null) {
-			throw new IllegalArgumentException("Cannot find a factory for " + identifier);
+		if (template!=null) {
+			return template.newFactory(identifier);
+		} else {
+			return null;
 		}
-		return template.newFactory(identifier);
+	}
+	
+	public Table newTable(String identifier) {
+		return get(identifier);
 	}
 	
 	public Collection<FactoryProperties> list() {

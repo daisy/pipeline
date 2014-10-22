@@ -19,16 +19,20 @@ package org.daisy.braille.table;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
+
 /**
  * Provides a default table, for convenience.
  * @author Joel Håkansson
  */
+@Component
 public class DefaultTableProvider implements TableProvider {
 	
 	enum TableType implements FactoryProperties {
@@ -108,7 +112,7 @@ public class DefaultTableProvider implements TableProvider {
 
 	//jvm1.6@Override
 	public Collection<FactoryProperties> list() {
-		return tables.values();
+		return Collections.unmodifiableCollection(tables.values());
 	}
 
 }

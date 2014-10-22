@@ -90,6 +90,9 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser, Embosser> {
 	}
 	
 	public Embosser get(String identifier) {
+		if (identifier==null) {
+			return null;
+		}
 		EmbosserProvider template = map.get(identifier);
 		if (template==null) {
 			// this is to avoid adding items to the cache that were removed
@@ -107,10 +110,11 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser, Embosser> {
 				}
 			}
 		}
-		if (template==null) {
-			throw new IllegalArgumentException("Cannot find a factory for " + identifier);
+		if (template!=null) {
+			return template.newFactory(identifier);
+		} else {
+			return null;
 		}
-		return template.newFactory(identifier);
 	}
 	
 	public Collection<Embosser> list() {
