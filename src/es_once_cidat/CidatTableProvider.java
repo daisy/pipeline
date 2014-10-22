@@ -20,6 +20,7 @@ package es_once_cidat;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,11 +34,14 @@ import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.tools.StringTranslator.MatchMode;
 import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
+
 /**
  *
  * @author Bert Frees
  * @author Joel Håkansson
  */
+@Component
 public class CidatTableProvider implements TableProvider {
     
     enum TableType implements FactoryProperties {
@@ -179,6 +183,6 @@ public class CidatTableProvider implements TableProvider {
 
     //jvm1.6@Override
     public Collection<FactoryProperties> list() {
-        return tables.values();
+        return Collections.unmodifiableCollection(tables.values());
     }
 }

@@ -19,6 +19,7 @@ package org_daisy;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,9 @@ import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableProvider;
 import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class EmbosserTableProvider implements TableProvider {
 	
 	enum TableType implements FactoryProperties {
@@ -312,7 +316,7 @@ public class EmbosserTableProvider implements TableProvider {
 
 	//jvm1.6@Override
 	public Collection<FactoryProperties> list() {
-		return tables.values();
+		return Collections.unmodifiableCollection(tables.values());
 	}
 
 }

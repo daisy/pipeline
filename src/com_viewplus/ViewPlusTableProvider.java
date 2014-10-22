@@ -20,6 +20,7 @@ package com_viewplus;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +33,13 @@ import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.tools.StringTranslator.MatchMode;
 import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
+
 /**
  *
  * @author Bert Frees
  */
+@Component
 public class ViewPlusTableProvider implements TableProvider {
 
     enum TableType implements FactoryProperties {
@@ -108,6 +112,6 @@ public class ViewPlusTableProvider implements TableProvider {
 
     //jvm1.6@Override
     public Collection<FactoryProperties> list() {
-        return tables.values();
+        return Collections.unmodifiableCollection(tables.values());
     }
 }

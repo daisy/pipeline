@@ -19,6 +19,7 @@ package se_tpb;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,9 @@ import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableProvider;
 import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class CXTableProvider implements TableProvider {
 //	public final static String IS_ONE_TO_ONE = "is one-to-one";
 //	public final static String IS_DISPLAY_FORMAT = "is display format";
@@ -106,7 +110,7 @@ public class CXTableProvider implements TableProvider {
 
 	//jvm1.6@Override
 	public Collection<FactoryProperties> list() {
-		return tables.values();
+		return Collections.unmodifiableCollection(tables.values());
 	}
 
 }

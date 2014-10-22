@@ -1,10 +1,12 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 
+//custom plugins
+apply plugin: "bundle"
+
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 javadoc.options.encoding = 'UTF-8'
-
 sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
@@ -31,14 +33,16 @@ sourceSets {
 }
 
 jar {
-	manifest {
-    	attributes ('Built-By': '',				//'${user.name}'
-    	'Built-On': new Date(),					//'${ISO-TODAY}'
-		'Repository-Revision': "$repositoryRevision",
-		'Implementation-Title': "$releaseName Catalog",
-		'Implementation-Version': "$releaseVersion",
-		'Implementation-URL': 'http://code.google.com/p/brailleutils/'
-		)
+	doFirst {
+		manifest {
+	    	attributes ('Built-By': '',				//'${user.name}'
+    		'Built-On': new Date(),					//'${ISO-TODAY}'
+			'Repository-Revision': "$repositoryRevision",
+			'Implementation-Title': "$releaseName Catalog",
+			'Implementation-Version': "$releaseVersion",
+			'Implementation-URL': 'http://code.google.com/p/brailleutils/'
+			)
+		}
 	}
 	from sourceSets.main.allJava
 	baseName = 'brailleUtils-catalog'
@@ -51,6 +55,19 @@ repositories {
 
 dependencies {
 	compile group: 'org.daisy.braille', name:'brailleUtils-core', version:'2.0-SNAPSHOT'
+	compile group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
 	//compile group: 'com.thaiopensource', name: 'jing', version: '20091111'
 	testCompile group: 'junit', name: 'junit', version: '4.7'
+}
+
+buildscript {
+    repositories { mavenCentral() }
+    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.5" }
+}
+
+bundle {
+    instructions << [
+     	//must use file() to resolve against the build.gradle in Eclipse
+        "-include": file('bnd.bnd'),
+    ]
 }
