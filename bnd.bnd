@@ -11,5 +11,6 @@ Export-Package: org.daisy.braille,\
 	org.daisy.printing,\
 	org.daisy.validator
 Bundle-Version: 1.0.0
--sources: true
+Include-Resource: / = src/
+-sources: false
 Service-Component: *

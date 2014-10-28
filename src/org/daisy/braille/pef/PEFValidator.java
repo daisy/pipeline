@@ -44,7 +44,7 @@ import com.thaiopensource.validate.ValidateProperty;
 import com.thaiopensource.validate.ValidationDriver;
 
 /**
- * Validates PEF-documents against the official Relax NG schema. Optionally performes additional
+ * Validates PEF-documents against the official Relax NG schema. Optionally performs additional
  * checks, see the different modes. 
  * @author Joel Håkansson
  */
@@ -78,7 +78,11 @@ public class PEFValidator extends AbstractFactory implements org.daisy.validator
 	 * Creates a new PEFValidator
 	 */
 	public PEFValidator() {
-		super("PEF Validator", "A validator for PEF 1.0 files.", PEFValidator.class.getCanonicalName());
+		this(PEFValidator.class.getCanonicalName());
+	}
+
+	PEFValidator(String id) {
+		super("PEF Validator", "A validator for PEF 1.0 files.", id);
 		this.report = null;
 		this.mode = Mode.FULL_MODE;
 	}
