@@ -17,14 +17,14 @@
  */
 package org.daisy.paper;
 
-import org.daisy.factory.Factory;
+import org.daisy.factory.FactoryProperties;
 
 /**
- * Provides an interface for a physical paper media. 
+ * Provides an interface for a physical paper media. Implementations
+ * must be immutable.
  * @author Joel Håkansson
- *
  */
-public interface Paper extends Factory {
+public interface Paper extends FactoryProperties {
 	/**
 	 * Defines paper types.
 	 */

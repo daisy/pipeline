@@ -17,19 +17,22 @@
  */
 package org.daisy.paper;
 
-import org.daisy.factory.AbstractFactory;
+import java.io.Serializable;
 
 /**
  * Provides a default implementation for Paper.
  * @author Joel Håkansson
  */
-public abstract class AbstractPaper extends AbstractFactory implements Paper {
+public abstract class AbstractPaper implements Paper, Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 3698214577768375057L;
-
+	private static final long serialVersionUID = -1622983592321625679L;
+	private final String name;
+	private final String desc;
+	private final String identifier;
+	
 	/**
 	 * Creates a new paper.
 	 * @param name the name of the paper
@@ -37,7 +40,7 @@ public abstract class AbstractPaper extends AbstractFactory implements Paper {
 	 * @param identifier the identifier
 	 */
 	public AbstractPaper(String name, String desc, Enum<? extends Enum<?>> identifier) {
-		super(name, desc, identifier);
+		this(name, desc, identifier.getClass().getCanonicalName() + "." + identifier.toString());
 	}
 	
 	/**
@@ -47,22 +50,28 @@ public abstract class AbstractPaper extends AbstractFactory implements Paper {
 	 * @param identifier the identifier
 	 */
 	public AbstractPaper(String name, String desc, String identifier) {
-		super(name, desc, identifier);
+		if (identifier==null) {
+			throw new NullPointerException("Null identifier.");
+		}
+		this.name = name;
+		this.desc = desc;
+		this.identifier = identifier;
+	}
+
+
+	//jvm1.6@Override
+	public String getDescription() {
+		return desc;
 	}
 
 	//jvm1.6@Override
-	public Object getFeature(String key) {
-		throw new IllegalArgumentException("Unknown feature: " + key);
+	public String getDisplayName() {
+		return name;
 	}
 
 	//jvm1.6@Override
-	public Object getProperty(String key) {
-		return null;
-	}
-
-	//jvm1.6@Override
-	public void setFeature(String key, Object value) {
-		throw new IllegalArgumentException("Unknown feature: " + key);
+	public String getIdentifier() {
+		return identifier;
 	}
 
 	/* (non-Javadoc)

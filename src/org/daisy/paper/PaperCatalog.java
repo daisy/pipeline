@@ -26,13 +26,15 @@ import java.util.Map;
 
 import javax.imageio.spi.ServiceRegistry;
 
+import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
+
 /**
  * Provides a catalog of Paper factories.
  * @author Joel Håkansson
  */
-//TODO: use PaperService instead of Paper and enable OSGi support
-//@Component
-public class PaperCatalog {
+@Component
+public class PaperCatalog implements PaperCatalogService {
 	private final Map<String, Paper> map;
 	
 	public PaperCatalog() {
@@ -58,34 +60,38 @@ public class PaperCatalog {
 		Iterator<PaperProvider> i = ServiceRegistry.lookupProviders(PaperProvider.class);
 		while (i.hasNext()) {
 			PaperProvider provider = i.next();
-			for (Paper paper : provider.list()) {
-				ret.addFactory(paper);
-			}
+			ret.addFactory(provider);
 		}
 		return ret;
 	}
 	
-	//@Reference(type = '*')
-	public void addFactory(Paper factory) {
-		map.put(factory.getIdentifier(), factory);
+	@Reference(type = '*')
+	public void addFactory(PaperProvider factory) {
+		for (Paper paper : factory.list()) {
+			map.put(paper.getIdentifier(), paper);
+		}
 	}
 
 	// Unbind reference added automatically from addFactory annotation
-	public void removeFactory(Paper factory) {
-		map.remove(factory.getIdentifier());
+	public void removeFactory(PaperProvider factory) {
+		synchronized (map) {
+			for (Paper paper : factory.list()) {
+				map.remove(paper.getIdentifier());
+			}
+		}
 	}
 
-	//jvm1.6@Override
+	@Override
 	public Paper get(String identifier) {
 		return map.get(identifier);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public Collection<Paper> list() {
 		return map.values();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public Collection<Paper> list(PaperFilter filter) {
 		Collection<Paper> ret = new ArrayList<Paper>();
 		for (Paper paper : map.values()) {
