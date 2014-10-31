@@ -18,18 +18,22 @@
 package org_daisy;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.daisy.paper.CustomPaperCollection;
 import org.daisy.paper.Paper;
 import org.daisy.paper.PaperProvider;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class CustomPaperProvider implements PaperProvider {
 
 	public CustomPaperProvider() {
 	}
 
 	public Collection<Paper> list() {
-		return CustomPaperCollection.getInstance().list();
+		return Collections.unmodifiableCollection(CustomPaperCollection.getInstance().list());
 	}
 
 }

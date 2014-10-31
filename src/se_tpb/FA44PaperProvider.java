@@ -19,12 +19,16 @@ package se_tpb;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.daisy.braille.tools.Length;
 import org.daisy.paper.Paper;
 import org.daisy.paper.PaperProvider;
 import org.daisy.paper.SheetPaper;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class FA44PaperProvider implements PaperProvider {
 	public static final double INCH_IN_MM = 25.4;
 	enum PaperSize {
@@ -32,14 +36,15 @@ public class FA44PaperProvider implements PaperProvider {
 		//FA44_LEGACY
 	};
 
-	private final ArrayList<Paper> papers;
+	private final Collection<Paper> papers;
 	
 	public FA44PaperProvider() {
-		papers = new ArrayList<Paper>();
-		papers.add(new SheetPaper("FA44", "261 mm x 297 mm", PaperSize.FA44, 
+		ArrayList<Paper> tmp = new ArrayList<Paper>();
+		tmp.add(new SheetPaper("FA44", "261 mm x 297 mm", PaperSize.FA44, 
 				Length.newMillimeterValue(261d),
 				Length.newMillimeterValue(297d)));
 		//papers.add(new DefaultPaper("FA44 (legacy)", "252 mm x 297 mm", PaperSize.FA44_LEGACY, 252d, 297d));
+		this.papers = Collections.unmodifiableCollection(tmp);
 	}
 
 	//jvm1.6@Override

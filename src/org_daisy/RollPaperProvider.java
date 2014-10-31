@@ -19,12 +19,16 @@ package org_daisy;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.daisy.braille.tools.Length;
 import org.daisy.paper.Paper;
 import org.daisy.paper.PaperProvider;
 import org.daisy.paper.RollPaper;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class RollPaperProvider implements PaperProvider {
 	enum PaperSize {
 		W21CM,
@@ -33,14 +37,15 @@ public class RollPaperProvider implements PaperProvider {
 		W33CM
 	}
 	
-	private final ArrayList<Paper> papers;
+	private final Collection<Paper> papers;
 	
 	public RollPaperProvider() {
-		papers = new ArrayList<Paper>();
-		papers.add(new RollPaper("21 cm wide", "", PaperSize.W21CM, Length.newCentimeterValue(21)));
-		papers.add(new RollPaper("24 cm wide", "", PaperSize.W24CM, Length.newCentimeterValue(24)));
-		papers.add(new RollPaper("28 cm wide", "", PaperSize.W28CM, Length.newCentimeterValue(28)));
-		papers.add(new RollPaper("33 cm wide", "", PaperSize.W33CM, Length.newCentimeterValue(33)));
+		ArrayList<Paper> tmp = new ArrayList<Paper>();
+		tmp.add(new RollPaper("21 cm wide", "", PaperSize.W21CM, Length.newCentimeterValue(21)));
+		tmp.add(new RollPaper("24 cm wide", "", PaperSize.W24CM, Length.newCentimeterValue(24)));
+		tmp.add(new RollPaper("28 cm wide", "", PaperSize.W28CM, Length.newCentimeterValue(28)));
+		tmp.add(new RollPaper("33 cm wide", "", PaperSize.W33CM, Length.newCentimeterValue(33)));
+		this.papers = Collections.unmodifiableCollection(tmp);
 	}
 
 	public Collection<Paper> list() {

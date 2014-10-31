@@ -19,12 +19,16 @@ package org_daisy;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.daisy.braille.tools.Length;
 import org.daisy.paper.Paper;
 import org.daisy.paper.PaperProvider;
 import org.daisy.paper.SheetPaper;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class NorthAmericaPaperProvider implements PaperProvider {
 	public static final double INCH_IN_MM = 25.4;
 	enum PaperSize {
@@ -36,28 +40,29 @@ public class NorthAmericaPaperProvider implements PaperProvider {
 		W11500THOU_X_H11INCH
 	};
 
-	private final ArrayList<Paper> papers;
+	private final Collection<Paper> papers;
 	
 	public NorthAmericaPaperProvider() {
-		papers = new ArrayList<Paper>();
-		papers.add(new SheetPaper("Letter", "8.5 inch x 11 inch", PaperSize.LETTER,
+		ArrayList<Paper> tmp = new ArrayList<Paper>();
+		tmp.add(new SheetPaper("Letter", "8.5 inch x 11 inch", PaperSize.LETTER,
 				Length.newInchValue(8.5), 
 				Length.newInchValue(11)));
-        papers.add(new SheetPaper("Legal", " 8.5 inch x 14 inch", PaperSize.LEGAL, 
+        tmp.add(new SheetPaper("Legal", " 8.5 inch x 14 inch", PaperSize.LEGAL, 
         		Length.newInchValue(8.5), 
         		Length.newInchValue(14)));
-        papers.add(new SheetPaper("Junior Legal", "8 inch x 5 inch", PaperSize.JUNIOR_LEGAL, 
+        tmp.add(new SheetPaper("Junior Legal", "8 inch x 5 inch", PaperSize.JUNIOR_LEGAL, 
         		Length.newInchValue(8), 
         		Length.newInchValue(5)));
-        papers.add(new SheetPaper("Ledger", "17 inch x 11 inch", PaperSize.LEDGER, 
+        tmp.add(new SheetPaper("Ledger", "17 inch x 11 inch", PaperSize.LEDGER, 
         		Length.newInchValue(17),
         		Length.newInchValue(11)));
-        papers.add(new SheetPaper("Tabloid", "11 inch x 17 inch", PaperSize.TABLOID,
+        tmp.add(new SheetPaper("Tabloid", "11 inch x 17 inch", PaperSize.TABLOID,
         		Length.newInchValue(11), 
         		Length.newInchValue(17)));
-		papers.add(new SheetPaper("11.5 inch x 11 inch", "11.5 inch wide, 11 inch high", PaperSize.W11500THOU_X_H11INCH, 
+		tmp.add(new SheetPaper("11.5 inch x 11 inch", "11.5 inch wide, 11 inch high", PaperSize.W11500THOU_X_H11INCH, 
 				Length.newInchValue(11.5),
 				Length.newInchValue(11)));
+		this.papers = Collections.unmodifiableCollection(tmp);
 	}
 
 	//jvm1.6@Override

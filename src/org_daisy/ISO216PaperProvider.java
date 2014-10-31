@@ -19,12 +19,16 @@ package org_daisy;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.daisy.braille.tools.Length;
 import org.daisy.paper.Paper;
 import org.daisy.paper.PaperProvider;
 import org.daisy.paper.SheetPaper;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class ISO216PaperProvider implements PaperProvider {
 	public static final double INCH_IN_MM = 25.4;
 	enum PaperSize {
@@ -36,28 +40,29 @@ public class ISO216PaperProvider implements PaperProvider {
                 B5
 	};
 
-	private final ArrayList<Paper> papers;
+	private final Collection<Paper> papers;
 	
 	public ISO216PaperProvider() {
-		papers = new ArrayList<Paper>();
-		papers.add(new SheetPaper("A3", "297 mm x 420 mm", PaperSize.A3, 
+		ArrayList<Paper> tmp = new ArrayList<Paper>();
+		tmp.add(new SheetPaper("A3", "297 mm x 420 mm", PaperSize.A3, 
 				Length.newMillimeterValue(297d),
 				Length.newMillimeterValue(420d)));
-		papers.add(new SheetPaper("A4", "210 mm x 297 mm", PaperSize.A4, 
+		tmp.add(new SheetPaper("A4", "210 mm x 297 mm", PaperSize.A4, 
 				Length.newMillimeterValue(210d),
 				Length.newMillimeterValue(297d)));
-        papers.add(new SheetPaper("A5", "148 mm x 210 mm", PaperSize.A5, 
+        tmp.add(new SheetPaper("A5", "148 mm x 210 mm", PaperSize.A5, 
         		Length.newMillimeterValue(148d), 
         		Length.newMillimeterValue(210d)));
-        papers.add(new SheetPaper("B3", "353 mm x 500 mm", PaperSize.B3, 
+        tmp.add(new SheetPaper("B3", "353 mm x 500 mm", PaperSize.B3, 
         		Length.newMillimeterValue(353d), 
         		Length.newMillimeterValue(500d)));
-        papers.add(new SheetPaper("B4", "250 mm x 353 mm", PaperSize.B4, 
+        tmp.add(new SheetPaper("B4", "250 mm x 353 mm", PaperSize.B4, 
         		Length.newMillimeterValue(250d), 
         		Length.newMillimeterValue(353d)));
-        papers.add(new SheetPaper("B5", "176 mm x 250 mm", PaperSize.B5, 
+        tmp.add(new SheetPaper("B5", "176 mm x 250 mm", PaperSize.B5, 
         		Length.newMillimeterValue(176d), 
         		Length.newMillimeterValue(250d)));
+        this.papers = Collections.unmodifiableCollection(tmp);
 	}
 
 	//jvm1.6@Override
