@@ -56,8 +56,8 @@ public class GenericEmbosser extends AbstractEmbosser {
 		};
 	}
 	
-	public GenericEmbosser(String name, String desc,  Enum<? extends Enum<?>> identifier) {
-		super(name, desc, identifier);
+	public GenericEmbosser(FactoryProperties props) {
+		super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
 		setFeature(EmbosserFeatures.CELL_WIDTH, 6);
 		setFeature(EmbosserFeatures.CELL_HEIGHT, 10);
 	}

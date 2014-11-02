@@ -59,13 +59,13 @@ public class IndexV3Embosser extends IndexEmbosser {
         };
     }
 
-    public IndexV3Embosser(String name, String desc, EmbosserType identifier) {
+    public IndexV3Embosser(EmbosserType props) {
 
-        super(name, desc, identifier);
+        super(props);
 
         setTable = TableCatalog.newInstance().get(table6dot);
 
-        switch (type) {
+        switch (props) {
             case INDEX_BASIC_S_V3:
                 duplexEnabled = false;
                 break;
@@ -85,7 +85,7 @@ public class IndexV3Embosser extends IndexEmbosser {
         maxMarginOuter = 10;
         maxMarginTop = 10;
 
-        if (type == EmbosserType.INDEX_4X4_PRO_V3) {
+        if (props == EmbosserType.INDEX_4X4_PRO_V3) {
             minMarginInner = 1;
             marginInner = 1;
         }

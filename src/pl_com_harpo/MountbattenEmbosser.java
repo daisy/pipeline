@@ -41,8 +41,6 @@ import org.daisy.paper.SheetPaperFormat;
 import org.daisy.paper.SheetPaperFormat.Orientation;
 import org.daisy.printing.Device;
 
-import pl_com_harpo.HarpoEmbosserProvider.EmbosserType;
-
 public class MountbattenEmbosser extends AbstractEmbosser {
 
     /**
@@ -74,9 +72,9 @@ public class MountbattenEmbosser extends AbstractEmbosser {
         return tableFilter;
     }
 
-    public MountbattenEmbosser(String name, String desc, EmbosserType identifier) {
+    public MountbattenEmbosser(FactoryProperties props) {
 
-        super(name, desc, identifier);
+        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
         setTable = TableCatalog.newInstance().get(table6dot);
 

@@ -57,11 +57,11 @@ public abstract class CidatEmbosser extends AbstractEmbosser {
     protected boolean duplexEnabled = true;
     protected boolean eightDotsEnabled = false;
 
-    public CidatEmbosser(String name, String desc, EmbosserType identifier) {
+    public CidatEmbosser(EmbosserType props) {
 
-        super(name, desc, identifier);
+        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
-        type = identifier;
+        type = props;
 
         setCellWidth(0.25*EmbosserTools.INCH_IN_MM);
         setCellHeight((eightDotsEnabled?0.5:0.4)*EmbosserTools.INCH_IN_MM);

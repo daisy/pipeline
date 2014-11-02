@@ -56,9 +56,9 @@ public class IndexV2Embosser extends IndexEmbosser {
         };
     }
 
-    public IndexV2Embosser(String name, String desc, EmbosserType identifier) {
+    public IndexV2Embosser(EmbosserType props) {
 
-        super(name, desc, identifier);
+        super(props);
 
         setTable = TableCatalog.newInstance().get(table6dot);
 

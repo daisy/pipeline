@@ -18,36 +18,66 @@
 package org_daisy;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class GenericEmbosserProvider implements EmbosserProvider {
-	public static enum EmbosserType {
-		NONE
+	public static enum EmbosserType implements FactoryProperties {
+		NONE("Unspecified", "Limited support for unknown embossers");
+		private final String name;
+		private final String desc;
+		private final String identifier;
+    	EmbosserType (String name, String desc) {
+			this.name = name;
+			this.desc = desc;
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		@Override
+		public String getIdentifier() {
+			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
+		}
 	};
 	
-	private final Map<String, Embosser> embossers;
+	private final Map<String, FactoryProperties> embossers;
 	
 	public GenericEmbosserProvider() {
-		embossers = new HashMap<String, Embosser>();
-		addEmbosser(new GenericEmbosser("Unspecified", "Limited support for unknown embossers", EmbosserType.NONE));
+		embossers = new HashMap<String, FactoryProperties>();
+		addEmbosser(EmbosserType.NONE);
 	}
 
-	private void addEmbosser(AbstractEmbosser e) {
+	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
 
 	public Embosser newFactory(String identifier) {
-		return embossers.get(identifier);
+		FactoryProperties fp = embossers.get(identifier);
+		switch ((EmbosserType)fp) {
+		case NONE:
+			return new GenericEmbosser(EmbosserType.NONE);
+		default:
+			return null;
+		}
 	}
 
 	//jvm1.6@Override
-	public Collection<Embosser> list() {
-		return embossers.values();
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(embossers.values());
 	}
 
 }

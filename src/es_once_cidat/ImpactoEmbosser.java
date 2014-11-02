@@ -63,9 +63,9 @@ public class ImpactoEmbosser extends CidatEmbosser {
     private int numberOfCopies = 1;
     private int maxNumberOfCopies = 32767;
 
-    public ImpactoEmbosser(String name, String desc, EmbosserType identifier) {
+    public ImpactoEmbosser(EmbosserType props) {
 
-        super(name, desc, identifier);
+        super(props);
         setTable = TableCatalog.newInstance().get(transparentTable);
     }
 

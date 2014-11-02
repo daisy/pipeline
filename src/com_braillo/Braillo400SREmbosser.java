@@ -17,10 +17,9 @@
  */
 package com_braillo;
 
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
-
-import com_braillo.BrailloEmbosserProvider.EmbosserType;
 
 public class Braillo400SREmbosser extends AbstractBraillo200Embosser {
 
@@ -29,8 +28,8 @@ public class Braillo400SREmbosser extends AbstractBraillo200Embosser {
 	 */
 	private static final long serialVersionUID = 4824785073677884484L;
 
-	public Braillo400SREmbosser(String name, String desc) {
-		super(name, desc, EmbosserType.BRAILLO_400_SR);
+	public Braillo400SREmbosser(FactoryProperties props) {
+		super(props);
 	}
 
 	public boolean supportsPageFormat(PageFormat pageFormat) {

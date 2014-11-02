@@ -27,6 +27,7 @@ import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalog;
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.PrintPage;
@@ -47,8 +48,8 @@ public abstract class AbstractBraillo440Embosser extends BrailloEmbosser {
 	
 	protected boolean saddleStitchEnabled;
 
-	public AbstractBraillo440Embosser(String name, String desc, Enum<? extends Enum<?>> identifier) {
-		super(name, desc, identifier);
+	public AbstractBraillo440Embosser(FactoryProperties props) {
+		super(props);
 		saddleStitchEnabled = false;
 		setCellWidth(cellWidth);
 	}

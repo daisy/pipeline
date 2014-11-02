@@ -87,11 +87,11 @@ public class TigerEmbosser extends AbstractEmbosser {
     private int marginTop = 0;
     private int marginBottom = 0;
 
-    public TigerEmbosser(String name, String desc, EmbosserType identifier) {
+    public TigerEmbosser(EmbosserType props) {
 
-        super(name, desc, identifier);
+        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
-        type = identifier;
+        type = props;
 
         setTable = TableCatalog.newInstance().get(table6dot);
 

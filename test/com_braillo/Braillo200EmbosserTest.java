@@ -9,10 +9,12 @@ import org.daisy.braille.embosser.UnsupportedWidthException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import com_braillo.BrailloEmbosserProvider.EmbosserType;
+
 public class Braillo200EmbosserTest extends AbstractTestBraillo200Embosser {
 	
 	public Braillo200EmbosserTest() {
-		super(new Braillo200Embosser("Braillo 200", "Firmware 000.17 or later. Embosser table must match hardware setup."));
+		super(new Braillo200Embosser(EmbosserType.BRAILLO_200));
 		emb.setFeature(EmbosserFeatures.PAGE_FORMAT, tractor_210mm_x_12inch);
 	}
 	

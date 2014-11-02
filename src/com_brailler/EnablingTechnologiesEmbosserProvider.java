@@ -18,78 +18,140 @@
 package com_brailler;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.factory.FactoryProperties;
+
+import aQute.bnd.annotation.component.Component;
 
 /**
  *
  * @author Bert Frees
  */
+@Component
 public class EnablingTechnologiesEmbosserProvider implements EmbosserProvider {
 
-    public static enum EmbosserType {
-        ROMEO_ATTACHE,
-        ROMEO_ATTACHE_PRO,
-        ROMEO_25,
-        ROMEO_PRO_50,
-        ROMEO_PRO_LE_NARROW,
-        ROMEO_PRO_LE_WIDE,
-        THOMAS,
-        THOMAS_PRO,
-        MARATHON,
-        ET,
-        JULIET_PRO,
-        JULIET_PRO_60,
-        JULIET_CLASSIC,
-        BOOKMAKER,
-        BRAILLE_EXPRESS_100,
-        BRAILLE_EXPRESS_150,
-        BRAILLE_PLACE
+    public static enum EmbosserType implements FactoryProperties {
+        ROMEO_ATTACHE("Enabling Technologies - Romeo Attache", ""),
+        ROMEO_ATTACHE_PRO("Enabling Technologies - Romeo Attache Pro", ""),
+        ROMEO_25("Enabling Technologies - Romeo 25", ""),
+        ROMEO_PRO_50("Enabling Technologies - Romeo Pro 50", ""),
+        ROMEO_PRO_LE_NARROW("Enabling Technologies - Romeo Pro LE Narrow", ""),
+        ROMEO_PRO_LE_WIDE("Enabling Technologies - Romeo Pro LE Wide", ""),
+        THOMAS("Enabling Technologies - Thomas", ""),
+        THOMAS_PRO("Enabling Technologies - Thomas Pro", ""),
+        MARATHON("Enabling Technologies - Marathon", ""),
+        ET("Enabling Technologies - ET", ""),
+        JULIET_PRO("Enabling Technologies - Juliet Pro", ""),
+        JULIET_PRO_60("Enabling Technologies - Juliet Pro 60", ""),
+        JULIET_CLASSIC("Enabling Technologies - Juliet Classic", ""),
+        BOOKMAKER("Enabling Technologies - Bookmaker", ""),
+        BRAILLE_EXPRESS_100("Enabling Technologies - Braille Express 100", ""),
+        BRAILLE_EXPRESS_150("Enabling Technologies - Braille Express 150", ""),
+        BRAILLE_PLACE("Enabling Technologies - BraillePlace", "");
+		private final String name;
+		private final String desc;
+		private final String identifier;
+    	EmbosserType (String name, String desc) {
+			this.name = name;
+			this.desc = desc;
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		@Override
+		public String getIdentifier() {
+			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
+		}
     };
 
-    private final Map<String, Embosser> embossers;
+    private final Map<String, FactoryProperties> embossers;
 
     public EnablingTechnologiesEmbosserProvider() {
-        embossers = new HashMap<String, Embosser>();
+        embossers = new HashMap<String, FactoryProperties>();
 
         // Single sided
-        addEmbosser(new EnablingTechnologiesSingleSidedEmbosser("Enabling Technologies - Romeo Attache",       "", EmbosserType.ROMEO_ATTACHE));
-        addEmbosser(new EnablingTechnologiesSingleSidedEmbosser("Enabling Technologies - Romeo Attache Pro",   "", EmbosserType.ROMEO_ATTACHE_PRO));
-        addEmbosser(new EnablingTechnologiesSingleSidedEmbosser("Enabling Technologies - Romeo 25",            "", EmbosserType.ROMEO_25));
-        addEmbosser(new EnablingTechnologiesSingleSidedEmbosser("Enabling Technologies - Romeo Pro 50",        "", EmbosserType.ROMEO_PRO_50));
-        addEmbosser(new EnablingTechnologiesSingleSidedEmbosser("Enabling Technologies - Romeo Pro LE Narrow", "", EmbosserType.ROMEO_PRO_LE_NARROW));
-        addEmbosser(new EnablingTechnologiesSingleSidedEmbosser("Enabling Technologies - Romeo Pro LE Wide",   "", EmbosserType.ROMEO_PRO_LE_WIDE));
-        addEmbosser(new EnablingTechnologiesSingleSidedEmbosser("Enabling Technologies - Thomas",              "", EmbosserType.THOMAS));
-        addEmbosser(new EnablingTechnologiesSingleSidedEmbosser("Enabling Technologies - Thomas Pro",          "", EmbosserType.THOMAS_PRO));
-        addEmbosser(new EnablingTechnologiesSingleSidedEmbosser("Enabling Technologies - Marathon",            "", EmbosserType.MARATHON));
+        addEmbosser(EmbosserType.ROMEO_ATTACHE);
+        addEmbosser(EmbosserType.ROMEO_ATTACHE_PRO);
+        addEmbosser(EmbosserType.ROMEO_25);
+        addEmbosser(EmbosserType.ROMEO_PRO_50);
+        addEmbosser(EmbosserType.ROMEO_PRO_LE_NARROW);
+        addEmbosser(EmbosserType.ROMEO_PRO_LE_WIDE);
+        addEmbosser(EmbosserType.THOMAS);
+        addEmbosser(EmbosserType.THOMAS_PRO);
+        addEmbosser(EmbosserType.MARATHON);
 
         // Double sided
-        addEmbosser(new EnablingTechnologiesDoubleSidedEmbosser("Enabling Technologies - ET",                  "", EmbosserType.ET));
-        addEmbosser(new EnablingTechnologiesDoubleSidedEmbosser("Enabling Technologies - Juliet Pro",          "", EmbosserType.JULIET_PRO));
-        addEmbosser(new EnablingTechnologiesDoubleSidedEmbosser("Enabling Technologies - Juliet Pro 60",       "", EmbosserType.JULIET_PRO_60));
-        addEmbosser(new EnablingTechnologiesDoubleSidedEmbosser("Enabling Technologies - Juliet Classic",      "", EmbosserType.JULIET_CLASSIC));
+        addEmbosser(EmbosserType.ET);
+        addEmbosser(EmbosserType.JULIET_PRO);
+        addEmbosser(EmbosserType.JULIET_PRO_60);
+        addEmbosser(EmbosserType.JULIET_CLASSIC);
 
         // Production double sided
-        addEmbosser(new EnablingTechnologiesDoubleSidedEmbosser("Enabling Technologies - Bookmaker",           "", EmbosserType.BOOKMAKER));
-        addEmbosser(new EnablingTechnologiesDoubleSidedEmbosser("Enabling Technologies - Braille Express 100", "", EmbosserType.BRAILLE_EXPRESS_100));
-        addEmbosser(new EnablingTechnologiesDoubleSidedEmbosser("Enabling Technologies - Braille Express 150", "", EmbosserType.BRAILLE_EXPRESS_150));
-        addEmbosser(new EnablingTechnologiesDoubleSidedEmbosser("Enabling Technologies - BraillePlace",        "", EmbosserType.BRAILLE_PLACE));
+        addEmbosser(EmbosserType.BOOKMAKER);
+        addEmbosser(EmbosserType.BRAILLE_EXPRESS_100);
+        addEmbosser(EmbosserType.BRAILLE_EXPRESS_150);
+        addEmbosser(EmbosserType.BRAILLE_PLACE);
     }
 
-	private void addEmbosser(AbstractEmbosser e) {
+	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
     
 	public Embosser newFactory(String identifier) {
-		return embossers.get(identifier);
+		FactoryProperties fp = embossers.get(identifier);
+		switch ((EmbosserType)fp) {
+		case ROMEO_ATTACHE:
+			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_ATTACHE);
+		case ROMEO_ATTACHE_PRO:
+			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_ATTACHE_PRO);
+		case ROMEO_25:
+			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_25);
+		case ROMEO_PRO_50:
+			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_PRO_50);
+		case ROMEO_PRO_LE_NARROW:
+			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_PRO_LE_NARROW);
+		case ROMEO_PRO_LE_WIDE:
+			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_PRO_LE_WIDE);
+		case THOMAS:
+			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.THOMAS);
+		case THOMAS_PRO:
+			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.THOMAS_PRO);
+		case MARATHON:
+			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.MARATHON);
+		case ET:
+			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.ET);
+		case JULIET_PRO:
+			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.JULIET_PRO);
+		case JULIET_PRO_60:
+			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.JULIET_PRO_60);
+		case JULIET_CLASSIC:
+			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.JULIET_CLASSIC);
+		case BOOKMAKER:
+			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.BOOKMAKER);
+		case BRAILLE_EXPRESS_100:
+			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.BRAILLE_EXPRESS_100);
+		case BRAILLE_EXPRESS_150:
+			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.BRAILLE_EXPRESS_150);
+		case BRAILLE_PLACE:
+			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.BRAILLE_PLACE);
+		default:
+			return null;
+		}
 	}
 
     //jvm1.6@Override
-    public Collection<Embosser> list() {
-        return embossers.values();
+    public Collection<FactoryProperties> list() {
+        return Collections.unmodifiableCollection(embossers.values());
     }
 }

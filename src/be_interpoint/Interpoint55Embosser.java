@@ -45,8 +45,6 @@ import org.daisy.paper.PrintPage;
 import org.daisy.paper.PrintPage.PrintDirection;
 import org.daisy.printing.Device;
 
-import be_interpoint.InterpointEmbosserProvider.EmbosserType;
-
 /**
  *
  * @author Bert Frees
@@ -95,9 +93,9 @@ public class Interpoint55Embosser extends AbstractEmbosser {
     private int maxPagesInQuire = 0;                  // 0 == no quires
     private int numberOfCopies = 1;
 
-    public Interpoint55Embosser(String name, String desc) {
+    public Interpoint55Embosser(FactoryProperties props) {
 
-        super(name, desc, EmbosserType.INTERPOINT_55);
+        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
         setTable = TableCatalog.newInstance().get(table_US1);
 

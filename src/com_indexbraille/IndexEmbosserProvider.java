@@ -18,66 +18,121 @@
 package com_indexbraille;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
+
+@Component
 public class IndexEmbosserProvider implements EmbosserProvider {
-	public static enum EmbosserType {
-                INDEX_3_7,
-                INDEX_ADVANCED,
-                INDEX_BASIC_BLUE_BAR,
-                INDEX_CLASSIC,
-                INDEX_DOMINO,
-                INDEX_EVEREST_S_V1,
-                INDEX_EVEREST_D_V1,
-                INDEX_BASIC_S_V2,
-                INDEX_BASIC_D_V2,
-                INDEX_EVEREST_D_V2,
-                INDEX_4X4_PRO_V2,
-                INDEX_BASIC_S_V3,
-                INDEX_BASIC_D_V3,
-                INDEX_EVEREST_D_V3,
-                INDEX_4X4_PRO_V3,
-                INDEX_4WAVES_PRO_V3,
-                INDEX_BASIC_D_V4,
-                INDEX_EVEREST_D_V4,
-                INDEX_BRAILLE_BOX_V4
+	public static enum EmbosserType implements FactoryProperties {
+                INDEX_3_7("", ""), //Not implemented
+                INDEX_ADVANCED("", ""), //Not implemented
+                INDEX_CLASSIC("", ""), //Not implemented
+                INDEX_DOMINO("", ""), //Not implemented
+                INDEX_EVEREST_S_V1("", ""), //Not implemented
+                INDEX_EVEREST_D_V1("", ""), //Not implemented
+                INDEX_BASIC_BLUE_BAR("Index Basic Blue-Bar", "Early Index Basic embosser"),
+                INDEX_BASIC_S_V2("Index Basic-S V2",""),
+                INDEX_BASIC_D_V2("Index Basic-D V2",""),
+                INDEX_EVEREST_D_V2("Index Everest-D V2",""),
+                INDEX_4X4_PRO_V2("Index 4X4 Pro V2",""),
+                INDEX_BASIC_S_V3("Index Basic-S V3",""),
+                INDEX_BASIC_D_V3("Index Basic-D V3",""),
+                INDEX_EVEREST_D_V3("Index Everest-D V3",""),
+                INDEX_4X4_PRO_V3("Index 4X4 Pro V3",""),
+                INDEX_4WAVES_PRO_V3("Index 4Waves Pro",""),
+                INDEX_BASIC_D_V4("Index Basic-D V4",""),
+                INDEX_EVEREST_D_V4("Index Everest-D V4",""),
+                INDEX_BRAILLE_BOX_V4("Index Braille Box","");
+
+		private final String name;
+		private final String desc;
+		private final String identifier;
+		EmbosserType (String name, String desc) {
+			this.name = name;
+			this.desc = desc;
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		@Override
+		public String getIdentifier() {
+			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
+		}
 	};
 
-	private final Map<String, Embosser> embossers;
+	private final Map<String, FactoryProperties> embossers;
 
 	public IndexEmbosserProvider() {
-            embossers = new HashMap<String, Embosser>();
-            addEmbosser(new BlueBarEmbosser("Index Basic Blue-Bar", "Early Index Basic embosser"));
-            addEmbosser(new IndexV2Embosser("Index Basic-S V2","", EmbosserType.INDEX_BASIC_S_V2));
-            addEmbosser(new IndexV2Embosser("Index Basic-D V2","", EmbosserType.INDEX_BASIC_D_V2));
-            addEmbosser(new IndexV2Embosser("Index Everest-D V2","", EmbosserType.INDEX_EVEREST_D_V2));
-            addEmbosser(new IndexV2Embosser("Index 4X4 Pro V2","", EmbosserType.INDEX_4X4_PRO_V2));
-            addEmbosser(new IndexV3Embosser("Index Everest-D V3","", EmbosserType.INDEX_EVEREST_D_V3));
-            addEmbosser(new IndexV3Embosser("Index Basic-S V3","", EmbosserType.INDEX_BASIC_S_V3));
-            addEmbosser(new IndexV3Embosser("Index Basic-D V3","", EmbosserType.INDEX_BASIC_D_V3));
-            addEmbosser(new IndexV3Embosser("Index 4X4 Pro V3","", EmbosserType.INDEX_4X4_PRO_V3));
-            addEmbosser(new IndexV3Embosser("Index 4Waves Pro","", EmbosserType.INDEX_4WAVES_PRO_V3));
-            addEmbosser(new IndexV4Embosser("Index Basic-D V4","", EmbosserType.INDEX_BASIC_D_V4));
-            addEmbosser(new IndexV4Embosser("Index Everest-D V4","", EmbosserType.INDEX_EVEREST_D_V4));
-            addEmbosser(new IndexV4Embosser("Index Braille Box","", EmbosserType.INDEX_BRAILLE_BOX_V4));
+            embossers = new HashMap<String, FactoryProperties>();
+            addEmbosser(EmbosserType.INDEX_BASIC_BLUE_BAR);
+            addEmbosser(EmbosserType.INDEX_BASIC_S_V2);
+            addEmbosser(EmbosserType.INDEX_BASIC_D_V2);
+            addEmbosser(EmbosserType.INDEX_EVEREST_D_V2);
+            addEmbosser(EmbosserType.INDEX_4X4_PRO_V2);
+            addEmbosser(EmbosserType.INDEX_EVEREST_D_V3);
+            addEmbosser(EmbosserType.INDEX_BASIC_S_V3);
+            addEmbosser(EmbosserType.INDEX_BASIC_D_V3);
+            addEmbosser(EmbosserType.INDEX_4X4_PRO_V3);
+            addEmbosser(EmbosserType.INDEX_4WAVES_PRO_V3);
+            addEmbosser(EmbosserType.INDEX_BASIC_D_V4);
+            addEmbosser(EmbosserType.INDEX_EVEREST_D_V4);
+            addEmbosser(EmbosserType.INDEX_BRAILLE_BOX_V4);
         }
 	
-	private void addEmbosser(AbstractEmbosser e) {
+	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
 	
 	public Embosser newFactory(String identifier) {
-		return embossers.get(identifier);
+		FactoryProperties fp = embossers.get(identifier);
+		switch ((EmbosserType)fp) {
+		case INDEX_BASIC_BLUE_BAR:
+			return new BlueBarEmbosser(EmbosserType.INDEX_BASIC_BLUE_BAR);
+		case INDEX_BASIC_S_V2:
+			return new IndexV2Embosser(EmbosserType.INDEX_BASIC_S_V2);
+		case INDEX_BASIC_D_V2:
+			return new IndexV2Embosser(EmbosserType.INDEX_BASIC_D_V2);
+		case INDEX_EVEREST_D_V2:
+			return new IndexV2Embosser(EmbosserType.INDEX_EVEREST_D_V2);
+		case INDEX_4X4_PRO_V2:
+			return new IndexV2Embosser(EmbosserType.INDEX_4X4_PRO_V2);
+		case INDEX_EVEREST_D_V3:
+			return new IndexV3Embosser(EmbosserType.INDEX_EVEREST_D_V3);
+		case INDEX_BASIC_S_V3:
+			return new IndexV3Embosser(EmbosserType.INDEX_BASIC_S_V3);
+		case INDEX_BASIC_D_V3:
+			return new IndexV3Embosser(EmbosserType.INDEX_BASIC_D_V3);
+		case INDEX_4X4_PRO_V3:
+			return new IndexV3Embosser(EmbosserType.INDEX_4X4_PRO_V3);
+		case INDEX_4WAVES_PRO_V3:
+			return new IndexV3Embosser(EmbosserType.INDEX_4WAVES_PRO_V3);
+		case INDEX_BASIC_D_V4:
+			return new IndexV4Embosser(EmbosserType.INDEX_BASIC_D_V4);
+		case INDEX_EVEREST_D_V4:
+			return new IndexV4Embosser(EmbosserType.INDEX_EVEREST_D_V4);
+		case INDEX_BRAILLE_BOX_V4:
+			return new IndexV4Embosser(EmbosserType.INDEX_BRAILLE_BOX_V4);
+		default:
+			return null;
+		}
 	}
 
 	//jvm1.6@Override
-	public Collection<Embosser> list() {
-		return embossers.values();
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(embossers.values());
 	}
 
 }

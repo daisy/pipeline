@@ -33,9 +33,9 @@ public class EnablingTechnologiesSingleSidedEmbosser extends EnablingTechnologie
 	 */
 	private static final long serialVersionUID = -3602582375923051565L;
 
-	public EnablingTechnologiesSingleSidedEmbosser(String name, String desc, EmbosserType identifier) {
+	public EnablingTechnologiesSingleSidedEmbosser(EmbosserType props) {
 
-        super(name, desc, identifier);
+        super(props);
 
         switch (type) {
             case ROMEO_ATTACHE:

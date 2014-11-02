@@ -39,8 +39,8 @@ public abstract class BrailloEmbosser extends AbstractEmbosser {
 		};
 	}
 
-	public BrailloEmbosser(String name, String desc,  Enum<? extends Enum<?>> identifier) {
-		super(name, desc, identifier);
+	public BrailloEmbosser(FactoryProperties props) {
+		super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
 		//TODO: fix this, width is 6.0325
 		setFeature(EmbosserFeatures.CELL_WIDTH, 6);
 		setFeature(EmbosserFeatures.CELL_HEIGHT, 10);

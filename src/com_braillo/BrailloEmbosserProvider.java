@@ -18,49 +18,90 @@
 package com_braillo;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
 
+@Component
 public class BrailloEmbosserProvider implements EmbosserProvider {
-	public static enum EmbosserType {
-		BRAILLO_200,
-		BRAILLO_200_FW_11,
-		BRAILLO_270,
-		BRAILLO_400_S, 
-		BRAILLO_400_SR,
-		BRAILLO_440_SW,
-		BRAILLO_440_SWSF
+	public static enum EmbosserType implements FactoryProperties {
+		BRAILLO_200("Braillo 200", "Firmware 000.17 or later. Embosser table must match hardware setup."),
+		BRAILLO_200_FW_11("Braillo 200/270/400 FW 1-11", "Firmware 11 and older. Embosser must be set to interpoint embossing. Table must match hardware setup."),
+		BRAILLO_270("Braillo 200/270/400 FW 12-16", "Firmware 12 to 16. Embosser table must match hardware setup."),
+		BRAILLO_400_S("Braillo 400S", "Firmware 000.17 or later. Embosser table must match hardware setup."), 
+		BRAILLO_400_SR("Braillo 400SR", "Firmware 000.17 or later. Embosser table must match hardware setup."),
+		BRAILLO_440_SW("Braillo 440SW", "Embosser table must match hardware setup."),
+		BRAILLO_440_SWSF("Braillo 440SWSF", "Embosser table must match hardware setup.");
+		private final String name;
+		private final String desc;
+		private final String identifier;
+    	EmbosserType (String name, String desc) {
+			this.name = name;
+			this.desc = desc;
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		@Override
+		public String getIdentifier() {
+			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
+		}
 	};
 	
-	private final Map<String, Embosser> embossers;
+	private final Map<String, FactoryProperties> embossers;
 	
 	public BrailloEmbosserProvider() {
-		embossers = new HashMap<String, Embosser>();
-		addEmbosser(new Braillo200Embosser("Braillo 200", "Firmware 000.17 or later. Embosser table must match hardware setup."));
-		addEmbosser(new Braillo200_270_400_v1_11Embosser("Braillo 200/270/400 FW 1-11", "Firmware 11 and older. Embosser must be set to interpoint embossing. Table must match hardware setup."));
-		addEmbosser(new Braillo200_270_400_v12_16Embosser("Braillo 200/270/400 FW 12-16", "Firmware 12 to 16. Embosser table must match hardware setup."));
-		addEmbosser(new Braillo400SEmbosser("Braillo 400S", "Firmware 000.17 or later. Embosser table must match hardware setup."));
-		addEmbosser(new Braillo400SREmbosser("Braillo 400SR", "Firmware 000.17 or later. Embosser table must match hardware setup."));
-		addEmbosser(new Braillo440SWEmbosser("Braillo 440SW", "Embosser table must match hardware setup."));
-		addEmbosser(new Braillo440SFEmbosser("Braillo 440SWSF", "Embosser table must match hardware setup."));
+		embossers = new HashMap<String, FactoryProperties>();
+		addEmbosser(EmbosserType.BRAILLO_200);
+		addEmbosser(EmbosserType.BRAILLO_200_FW_11);
+		addEmbosser(EmbosserType.BRAILLO_270);
+		addEmbosser(EmbosserType.BRAILLO_400_S);
+		addEmbosser(EmbosserType.BRAILLO_400_SR);
+		addEmbosser(EmbosserType.BRAILLO_440_SW);
+		addEmbosser(EmbosserType.BRAILLO_440_SWSF);
 	}
 	
-	private void addEmbosser(AbstractEmbosser e) {
+	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
 	
 	public Embosser newFactory(String identifier) {
-		return embossers.get(identifier);
+		FactoryProperties fp = embossers.get(identifier);
+		switch ((EmbosserType)fp) {
+		case BRAILLO_200:
+			return new Braillo200Embosser(EmbosserType.BRAILLO_200);
+		case BRAILLO_200_FW_11:
+			return new Braillo200_270_400_v1_11Embosser(EmbosserType.BRAILLO_200_FW_11);
+		case BRAILLO_270:
+			return new Braillo200_270_400_v12_16Embosser(EmbosserType.BRAILLO_270);
+		case BRAILLO_400_S:
+			return new Braillo400SEmbosser(EmbosserType.BRAILLO_400_S);
+		case BRAILLO_400_SR:
+			return new Braillo400SREmbosser(EmbosserType.BRAILLO_400_SR);
+		case BRAILLO_440_SW:
+			return new Braillo440SWEmbosser(EmbosserType.BRAILLO_440_SW);
+		case BRAILLO_440_SWSF:
+			return new Braillo440SFEmbosser(EmbosserType.BRAILLO_440_SWSF);
+		default:
+			return null;
+		}
 	}
 
 	//jvm1.6@Override
-	public Collection<Embosser> list() {
-		return embossers.values();
+	public Collection<FactoryProperties> list() {
+		return Collections.unmodifiableCollection(embossers.values());
 	}
 
 }

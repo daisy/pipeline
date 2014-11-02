@@ -85,11 +85,11 @@ public abstract class IndexEmbosser extends AbstractEmbosser {
     protected int maxCellsInWidth = Integer.MAX_VALUE;
     protected int maxLinesInHeight = Integer.MAX_VALUE;
   
-    public IndexEmbosser(String name, String desc, EmbosserType identifier) {
+    public IndexEmbosser(EmbosserType props) {
 
-        super(name, desc, identifier);
+        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
-        type = identifier;
+        type = props;
 
         setCellWidth(6d);
         setCellHeight(eightDotsEnabled?12.5d:10d);

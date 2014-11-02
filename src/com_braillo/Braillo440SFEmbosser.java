@@ -18,11 +18,10 @@
 package com_braillo;
 
 import org.daisy.braille.embosser.EmbosserFeatures;
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
 import org.daisy.paper.Paper.Type;
-
-import com_braillo.BrailloEmbosserProvider.EmbosserType;
 
 public class Braillo440SFEmbosser extends AbstractBraillo440Embosser {
 
@@ -31,8 +30,8 @@ public class Braillo440SFEmbosser extends AbstractBraillo440Embosser {
 	 */
 	private static final long serialVersionUID = 3642071434258027472L;
 
-	public Braillo440SFEmbosser(String name, String desc) {
-		super(name, desc, EmbosserType.BRAILLO_440_SWSF);
+	public Braillo440SFEmbosser(FactoryProperties props) {
+		super(props);
 		saddleStitchEnabled = true;
 	}
 	

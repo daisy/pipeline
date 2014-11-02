@@ -10,10 +10,12 @@ import org.daisy.braille.embosser.UnsupportedWidthException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import com_braillo.BrailloEmbosserProvider.EmbosserType;
+
 public class Braillo440SWSFEmbosserTest extends AbstractTestBraillo440Embosser {
 
 	public Braillo440SWSFEmbosserTest() {
-		super(new Braillo440SFEmbosser("Braillo 440SWSF", "Embosser table must match hardware setup."));
+		super(new Braillo440SFEmbosser(EmbosserType.BRAILLO_440_SWSF));
 		emb.setFeature(EmbosserFeatures.PAGE_FORMAT, fa44_4p);
 	}
 

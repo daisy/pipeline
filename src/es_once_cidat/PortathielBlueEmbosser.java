@@ -67,9 +67,9 @@ public class PortathielBlueEmbosser extends CidatEmbosser {
         };
     }
 
-    public PortathielBlueEmbosser(String name, String desc, EmbosserType identifier) {
+    public PortathielBlueEmbosser(EmbosserType props) {
         
-        super(name, desc, identifier);
+        super(props);
         setTable = TableCatalog.newInstance().get(transparentTable);
     }
 

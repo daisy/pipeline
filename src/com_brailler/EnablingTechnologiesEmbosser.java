@@ -97,11 +97,11 @@ public abstract class EnablingTechnologiesEmbosser extends AbstractEmbosser {
         };
     }
 
-    public EnablingTechnologiesEmbosser(String name, String desc, EmbosserType identifier) {
+    public EnablingTechnologiesEmbosser(EmbosserType props) {
 
-        super(name, desc, identifier);
+        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
-        type = identifier;
+        type = props;
 
         setTable = TableCatalog.newInstance().get(table6dot);
 

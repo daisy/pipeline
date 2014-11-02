@@ -34,6 +34,7 @@ import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.embosser.UnsupportedPaperException;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalog;
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
 import org.daisy.paper.Dimensions;
 import org.daisy.paper.PageFormat;
@@ -41,8 +42,6 @@ import org.daisy.paper.Paper;
 import org.daisy.paper.PrintPage;
 import org.daisy.paper.PrintPage.PrintDirection;
 import org.daisy.printing.Device;
-
-import com_braillo.BrailloEmbosserProvider.EmbosserType;
 
 
 /**
@@ -74,8 +73,8 @@ public class Braillo200_270_400_v12_16Embosser extends BrailloEmbosser {
 		return true;
 	}
 	
-	public Braillo200_270_400_v12_16Embosser(String name, String desc) {
-		super(name, desc, EmbosserType.BRAILLO_270);
+	public Braillo200_270_400_v12_16Embosser(FactoryProperties props) {
+		super(props);
 		zFoldingEnabled = false;
 	}
 

@@ -34,9 +34,9 @@ public class EnablingTechnologiesDoubleSidedEmbosser extends EnablingTechnologie
 	 */
 	private static final long serialVersionUID = 160751373667707902L;
 
-	public EnablingTechnologiesDoubleSidedEmbosser(String name, String desc, EmbosserType identifier) {
+	public EnablingTechnologiesDoubleSidedEmbosser(EmbosserType props) {
 
-        super(name, desc, identifier);
+        super(props);
 
         switch (type) {
             case ET:

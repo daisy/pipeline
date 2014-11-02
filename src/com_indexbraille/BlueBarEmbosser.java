@@ -50,9 +50,9 @@ public class BlueBarEmbosser extends IndexEmbosser {
         };
     }
 
-    public BlueBarEmbosser(String name, String desc) {
+    public BlueBarEmbosser(EmbosserType props) {
         
-        super(name, desc, EmbosserType.INDEX_BASIC_BLUE_BAR);
+        super(props);
         setTable = TableCatalog.newInstance().get(table6dot);
     }
 

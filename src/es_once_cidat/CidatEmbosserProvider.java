@@ -18,44 +18,78 @@
 package es_once_cidat;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.factory.FactoryProperties;
+
+import aQute.bnd.annotation.component.Component;
 
 /**
  *
  * @author Bert Frees
  */
+@Component
 public class CidatEmbosserProvider implements EmbosserProvider {
 
-    public static enum EmbosserType {
-        IMPACTO_600,
-        IMPACTO_TEXTO,
-        PORTATHIEL_BLUE
+    public static enum EmbosserType implements FactoryProperties {
+        IMPACTO_600("Cidat - Impacto 600", "High-quality, high-speed (600 pages per hour) double-sided embosser"),
+        IMPACTO_TEXTO("Cidat - Impacto Texto", "High-quality, high-speed (800 pages per hour) double-sided embosser"),
+        PORTATHIEL_BLUE("Cidat - Portathiel Blue", "Small, lightweight, portable double-sided embosser");
+		private final String name;
+		private final String desc;
+		private final String identifier;
+    	EmbosserType (String name, String desc) {
+			this.name = name;
+			this.desc = desc;
+			this.identifier = this.getClass().getCanonicalName() + "." + this.toString();
+		}
+		@Override
+		public String getIdentifier() {
+			return identifier;
+		}
+		@Override
+		public String getDisplayName() {
+			return name;
+		}
+		@Override
+		public String getDescription() {
+			return desc;
+		}
     };
 
-    private final Map<String, Embosser> embossers;
+    private final Map<String, FactoryProperties> embossers;
 
     public CidatEmbosserProvider() {
-        embossers = new HashMap<String, Embosser>();
-        addEmbosser( new ImpactoEmbosser("Cidat - Impacto 600", "High-quality, high-speed (600 pages per hour) double-sided embosser", EmbosserType.IMPACTO_600));
-        addEmbosser(new ImpactoEmbosser("Cidat - Impacto Texto","High-quality, high-speed (800 pages per hour) double-sided embosser", EmbosserType.IMPACTO_TEXTO));
-        addEmbosser(new PortathielBlueEmbosser("Cidat - Portathiel Blue", "Small, lightweight, portable double-sided embosser", EmbosserType.PORTATHIEL_BLUE));
+        embossers = new HashMap<String, FactoryProperties>();
+        addEmbosser(EmbosserType.IMPACTO_600);
+        addEmbosser(EmbosserType.IMPACTO_TEXTO);
+        addEmbosser(EmbosserType.PORTATHIEL_BLUE);
     }
 
-	private void addEmbosser(AbstractEmbosser e) {
+	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
 
 	public Embosser newFactory(String identifier) {
-		return embossers.get(identifier);
+		FactoryProperties fp = embossers.get(identifier);
+		switch ((EmbosserType)fp) {
+		case IMPACTO_600:
+			return new ImpactoEmbosser(EmbosserType.IMPACTO_600);
+		case IMPACTO_TEXTO:
+			return new ImpactoEmbosser(EmbosserType.IMPACTO_TEXTO);
+		case PORTATHIEL_BLUE:
+			return new PortathielBlueEmbosser(EmbosserType.PORTATHIEL_BLUE);
+		default:
+			return null;
+		}
 	}
 
     //jvm1.6@Override
-    public Collection<Embosser> list() {
-        return embossers.values();
+    public Collection<FactoryProperties> list() {
+        return Collections.unmodifiableCollection(embossers.values());
     }
 }

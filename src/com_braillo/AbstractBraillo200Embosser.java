@@ -34,6 +34,7 @@ import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.embosser.UnsupportedPaperException;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalog;
+import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
 import org.daisy.paper.Dimensions;
 import org.daisy.paper.PageFormat;
@@ -67,8 +68,8 @@ public abstract class AbstractBraillo200Embosser extends BrailloEmbosser {
 		return true;
 	}
 
-	public AbstractBraillo200Embosser(String name, String desc, Enum<? extends Enum<?>> identifier) {
-		super(name, desc, identifier);
+	public AbstractBraillo200Embosser(FactoryProperties props) {
+		super(props);
 		this.zFoldingEnabled = false;
 	}
 
