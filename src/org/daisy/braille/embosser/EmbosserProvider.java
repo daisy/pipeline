@@ -17,6 +17,7 @@
  */
 package org.daisy.braille.embosser;
 
+import org.daisy.factory.FactoryProperties;
 import org.daisy.factory.Provider;
 
 /**
@@ -24,7 +25,7 @@ import org.daisy.factory.Provider;
  * @author Joel Håkansson
  *
  */
-public interface EmbosserProvider extends Provider<Embosser> {
+public interface EmbosserProvider extends Provider<FactoryProperties> {
 
 	public Embosser newFactory(String identifier);
 }

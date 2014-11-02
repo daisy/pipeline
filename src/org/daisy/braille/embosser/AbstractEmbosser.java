@@ -51,7 +51,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 	 * @param desc the embosser description
 	 * @param identifier an identifier
 	 */
-	public AbstractEmbosser(String name, String desc,  Enum<? extends Enum<?>> identifier) {
+	public AbstractEmbosser(String name, String desc, String identifier) {
 		super(name, desc, identifier);
 		this.props = new HashMap<String, Object>();
 		this.settings = new HashMap<String, String>();

@@ -33,13 +33,16 @@ import org.daisy.factory.FactoryCatalog;
 import org.daisy.factory.FactoryFilter;
 import org.daisy.factory.FactoryProperties;
 
+import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
+
 /**
  * Provides a catalog of Embosser factories.
  * @author Joel Håkansson
  */
 //TODO: use EmbosserService instead of Embosser and enable OSGi support
-//@Component
-public class EmbosserCatalog implements FactoryCatalog<Embosser, Embosser> {
+@Component
+public class EmbosserCatalog implements FactoryCatalog<Embosser, FactoryProperties>, EmbosserCatalogService {
 	private final List<EmbosserProvider> providers;
 	private final Map<String, EmbosserProvider> map;
 	private final Logger logger;
@@ -73,7 +76,7 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser, Embosser> {
 		return ret;
 	}
 	
-	//@Reference(type = '*')
+	@Reference(type = '*')
 	public void addFactory(EmbosserProvider factory) {
 		logger.finer("Adding factory: " + factory);
 		providers.add(factory);
@@ -117,17 +120,21 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser, Embosser> {
 		}
 	}
 	
-	public Collection<Embosser> list() {
-		Collection<Embosser> ret = new ArrayList<Embosser>();
+	public Embosser newEmbosser(String identifier) {
+		return get(identifier);
+	}
+	
+	public Collection<FactoryProperties> list() {
+		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
 		for (EmbosserProvider p : providers) {
 			ret.addAll(p.list());
 		}
 		return ret;
 	}
 	
-	public Collection<Embosser> list(FactoryFilter filter) {
-		Collection<Embosser> ret = new ArrayList<Embosser>();
-		for (Embosser fp : list()) {
+	public Collection<FactoryProperties> list(FactoryFilter filter) {
+		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
+		for (FactoryProperties fp : list()) {
 			if (filter.accept(fp)) {
 				ret.add(fp);
 			}
