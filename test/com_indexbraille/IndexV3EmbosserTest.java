@@ -132,7 +132,7 @@ public class IndexV3EmbosserTest {
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/single_sided.pef"), new FileOutputStream(pef));
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/basic_s_v3_single_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );
@@ -148,7 +148,7 @@ public class IndexV3EmbosserTest {
                           .topOffset(0);
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/basic_d_v3_single_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );
@@ -164,7 +164,7 @@ public class IndexV3EmbosserTest {
                           .topOffset(0);
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/basic_d_v3_zfolding_single_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );
@@ -181,7 +181,7 @@ public class IndexV3EmbosserTest {
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/double_sided.pef"), new FileOutputStream(pef));
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/basic_d_v3_double_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );
@@ -197,7 +197,7 @@ public class IndexV3EmbosserTest {
                           .topOffset(0);
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/basic_d_v3_zfolding_double_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );
@@ -212,7 +212,7 @@ public class IndexV3EmbosserTest {
                           .topOffset(0);
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/everest_v3_double_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );
@@ -228,7 +228,7 @@ public class IndexV3EmbosserTest {
                           .topOffset(0);
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/4x4_pro_v3_double_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );
@@ -244,7 +244,7 @@ public class IndexV3EmbosserTest {
                           .topOffset(0);
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/4x4_pro_v3_saddle_stitch.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );

@@ -12,6 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.daisy.braille.embosser.Embosser;
+import org.daisy.braille.embosser.EmbosserCatalog;
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.UnsupportedWidthException;
@@ -54,7 +55,7 @@ public abstract class AbstractTestBraillo440Embosser {
 			EmbosserWriter ew = emb.newEmbosserWriter(fd);
 			PEFHandler.Builder builder = new PEFHandler.Builder(ew);
 			builder.align(Alignment.CENTER_INNER);
-			PEFConverterFacade.parsePefFile(this.getClass().getResourceAsStream(resource), builder.build());
+			new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(this.getClass().getResourceAsStream(resource), builder.build());
 			assertEquals("Assert that the number of generated files is correct", fileCount, dir.listFiles().length);
 			FileCompare fc = new FileCompare();
 			File[] res = dir.listFiles();

@@ -93,7 +93,7 @@ public class BlueBarEmbosserTest {
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/single_sided.pef"), new FileOutputStream(pef));
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/bluebar_single_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );

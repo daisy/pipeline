@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.daisy.braille.embosser.EmbosserCatalog;
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.UnsupportedWidthException;
@@ -117,7 +118,7 @@ public class Interpoint55EmbosserTest {
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/single_sided.pef"), new FileOutputStream(pef));
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/interpoint55_single_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );
@@ -133,7 +134,7 @@ public class Interpoint55EmbosserTest {
 
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/double_sided.pef"), new FileOutputStream(pef));
         FileTools.copy(this.getClass().getResourceAsStream("resource-files/interpoint55_double_sided.prn"), new FileOutputStream(prn2));
-        PEFConverterFacade.parsePefFile(pef, builder.build());
+        new PEFConverterFacade(EmbosserCatalog.newInstance()).parsePefFile(pef, builder.build());
         assertTrue("Assert that the contents of the file is as expected.",
                 fc.compareBinary(new FileInputStream(prn1), new FileInputStream(prn2))
         );
