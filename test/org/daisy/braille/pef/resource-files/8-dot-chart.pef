@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef version="2008-1" xmlns="http://www.daisy.org/ns/2008/pef">
+	<head>
+		<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+			<dc:title>8-dot Chart</dc:title>
+			<dc:creator>Joel Håkansson</dc:creator>
+			<dc:date>2010-12-08</dc:date>
+			<dc:format>application/x-pef+xml</dc:format>
+			<dc:identifier>org.pef-format.00005</dc:identifier>
+			<dc:description>The file contains a test pattern that uses all 8-dot patterns.
+								Each pattern occurs once. The order is Unicode (binary) order 
+								with spaces in between each character. For each block of 8 by 8 patterns,
+								the first column of each cell is identical for every row within a column. 
+								The second column of each cell is identical for every column within a row.</dc:description>
+		</meta>
+	</head>
+	<body>
+		<volume cols="28" rows="29" rowgap="1" duplex="true">
+			<section>
+				<page>
+					<row/>
+					<row/>
+					<row/>
+					<row>⠀⠀⠀⠁⠀⠂⠀⠃⠀⠄⠀⠅⠀⠆⠀⠇</row>
+					<row>⠀⠈⠀⠉⠀⠊⠀⠋⠀⠌⠀⠍⠀⠎⠀⠏</row>
+					<row>⠀⠐⠀⠑⠀⠒⠀⠓⠀⠔⠀⠕⠀⠖⠀⠗</row>
+					<row>⠀⠘⠀⠙⠀⠚⠀⠛⠀⠜⠀⠝⠀⠞⠀⠟</row>
+					<row>⠀⠠⠀⠡⠀⠢⠀⠣⠀⠤⠀⠥⠀⠦⠀⠧</row>
+					<row>⠀⠨⠀⠩⠀⠪⠀⠫⠀⠬⠀⠭⠀⠮⠀⠯</row>
+					<row>⠀⠰⠀⠱⠀⠲⠀⠳⠀⠴⠀⠵⠀⠶⠀⠷</row>
+					<row>⠀⠸⠀⠹⠀⠺⠀⠻⠀⠼⠀⠽⠀⠾⠀⠿</row>
+					<row/>
+					<row>⠀⡀⠀⡁⠀⡂⠀⡃⠀⡄⠀⡅⠀⡆⠀⡇</row>
+					<row>⠀⡈⠀⡉⠀⡊⠀⡋⠀⡌⠀⡍⠀⡎⠀⡏</row>
+					<row>⠀⡐⠀⡑⠀⡒⠀⡓⠀⡔⠀⡕⠀⡖⠀⡗</row>
+					<row>⠀⡘⠀⡙⠀⡚⠀⡛⠀⡜⠀⡝⠀⡞⠀⡟</row>
+					<row>⠀⡠⠀⡡⠀⡢⠀⡣⠀⡤⠀⡥⠀⡦⠀⡧</row>
+					<row>⠀⡨⠀⡩⠀⡪⠀⡫⠀⡬⠀⡭⠀⡮⠀⡯</row>
+					<row>⠀⡰⠀⡱⠀⡲⠀⡳⠀⡴⠀⡵⠀⡶⠀⡷</row>
+					<row>⠀⡸⠀⡹⠀⡺⠀⡻⠀⡼⠀⡽⠀⡾⠀⡿</row>
+				</page>
+				<page>
+					<row/>
+					<row/>
+					<row/>
+					<row>⠀⢀⠀⢁⠀⢂⠀⢃⠀⢄⠀⢅⠀⢆⠀⢇</row>
+					<row>⠀⢈⠀⢉⠀⢊⠀⢋⠀⢌⠀⢍⠀⢎⠀⢏</row>
+					<row>⠀⢐⠀⢑⠀⢒⠀⢓⠀⢔⠀⢕⠀⢖⠀⢗</row>
+					<row>⠀⢘⠀⢙⠀⢚⠀⢛⠀⢜⠀⢝⠀⢞⠀⢟</row>
+					<row>⠀⢠⠀⢡⠀⢢⠀⢣⠀⢤⠀⢥⠀⢦⠀⢧</row>
+					<row>⠀⢨⠀⢩⠀⢪⠀⢫⠀⢬⠀⢭⠀⢮⠀⢯</row>
+					<row>⠀⢰⠀⢱⠀⢲⠀⢳⠀⢴⠀⢵⠀⢶⠀⢷</row>
+					<row>⠀⢸⠀⢹⠀⢺⠀⢻⠀⢼⠀⢽⠀⢾⠀⢿</row>
+					<row/>
+					<row>⠀⣀⠀⣁⠀⣂⠀⣃⠀⣄⠀⣅⠀⣆⠀⣇</row>
+					<row>⠀⣈⠀⣉⠀⣊⠀⣋⠀⣌⠀⣍⠀⣎⠀⣏</row>
+					<row>⠀⣐⠀⣑⠀⣒⠀⣓⠀⣔⠀⣕⠀⣖⠀⣗</row>
+					<row>⠀⣘⠀⣙⠀⣚⠀⣛⠀⣜⠀⣝⠀⣞⠀⣟</row>
+					<row>⠀⣠⠀⣡⠀⣢⠀⣣⠀⣤⠀⣥⠀⣦⠀⣧</row>
+					<row>⠀⣨⠀⣩⠀⣪⠀⣫⠀⣬⠀⣭⠀⣮⠀⣯</row>
+					<row>⠀⣰⠀⣱⠀⣲⠀⣳⠀⣴⠀⣵⠀⣶⠀⣷</row>
+					<row>⠀⣸⠀⣹⠀⣺⠀⣻⠀⣼⠀⣽⠀⣾⠀⣿</row>
+				</page>
+			</section>
+		</volume>
+	</body>
+</pef>
