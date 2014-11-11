@@ -24,13 +24,18 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 import org.daisy.braille.pef.PEFValidator;
-import org.daisy.validator.ValidatorFactory;
+import org.daisy.validator.ValidatorFactoryService;
 
 /**
  * Provides a facade for PEFValidator
  * @author Joel Håkansson
  */
 public class PEFValidatorFacade {
+	private final ValidatorFactoryService factory;
+	
+	public PEFValidatorFacade(ValidatorFactoryService factory) {
+		this.factory = factory;
+	}
 	
 	/**
 	 * Validates the supplied PEF-file
@@ -38,7 +43,7 @@ public class PEFValidatorFacade {
 	 * @return returns true if PEF-file is valid and validation was successful, false otherwise 
 	 * @throws IOException throws IOException if an error occurred
 	 */
-	public static boolean validate(File in) throws IOException {
+	public boolean validate(File in) throws IOException {
 		return validate(in, null);
 	}
 	
@@ -49,11 +54,10 @@ public class PEFValidatorFacade {
 	 * @return returns true if PEF-file is valid and validation was successful, false otherwise 
 	 * @throws IOException throws IOException if an error occurred
 	 */
-	public static boolean validate(File in, PrintStream msg) throws IOException {
+	public boolean validate(File in, PrintStream msg) throws IOException {
 		if (!in.exists()) {
 			throw new FileNotFoundException("File does not exist: " + in);
 		}
-		ValidatorFactory factory = ValidatorFactory.newInstance();
 		org.daisy.validator.Validator pv = factory.newValidator(PEFValidator.class.getCanonicalName());
 		if (pv == null) {
 			throw new IOException("Could not find validator.");

@@ -22,8 +22,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,7 +29,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.daisy.braille.embosser.Embosser;
-import org.daisy.braille.embosser.EmbosserCatalog;
+import org.daisy.braille.embosser.EmbosserCatalogService;
 import org.daisy.braille.embosser.EmbosserFactoryException;
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.EmbosserWriter;
@@ -39,7 +37,6 @@ import org.daisy.braille.embosser.UnsupportedWidthException;
 import org.daisy.braille.pef.PEFHandler;
 import org.daisy.braille.pef.PEFHandler.Alignment;
 import org.daisy.braille.pef.Range;
-import org.daisy.braille.pef.TextHandler;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.paper.PageFormat;
 import org.xml.sax.SAXException;
@@ -49,7 +46,7 @@ import org.xml.sax.SAXException;
  * @author Joel Håkansson
  */
 public class PEFConverterFacade {
-	public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+
 	/**
 	 * Key for parsePefFile setting,
 	 * corresponding settings value should match an embosser identifier
@@ -105,42 +102,11 @@ public class PEFConverterFacade {
 	 * corresponding settings value should be a number, in millimeters 
 	 */
 	public final static String KEY_CELL_HEIGHT = "cellHeight";
-
-	/**
-	 * Key for parseTextFile setting,
-	 * corresponding settings value should contain the title of the publication
-	 */
-	public final static String KEY_TITLE = "title";
-	/**
-	 * Key for parseTextFile setting,
-	 * corresponding settings value should contain the author of the publication
-	 */
-	public final static String KEY_AUTHOR = "author";
-	/**
-	 * Key for parseTextFile setting,
-	 * corresponding settings value should contain the identifier for the publication 
-	 */
-	public final static String KEY_IDENTIFIER = "identifier";
-	/**
-	 * Key for parseTextFile setting,
-	 * corresponding settings value should match the table to use
-	 */
-	public final static String KEY_MODE = "mode";
-	/**
-	 * Key for parseTextFile setting,
-	 * corresponding settings value should contain the language of the publication
-	 */
-	public final static String KEY_LANGUAGE = "language";
-	/**
-	 * Key for parseTextFile setting,
-	 * corresponding settings value should be "true" for duplex or "false" for simplex
-	 */
-	public final static String KEY_DUPLEX = "duplex";
-	/**
-	 * Key for parseTextFile setting,
-	 * corresponding settings value should be a string containing a valid date on the form yyyy-MM-dd
-	 */
-	public final static String KEY_DATE = "date";
+	
+	private final EmbosserCatalogService ef;
+	public PEFConverterFacade(EmbosserCatalogService embosserFactory) {
+		this.ef = embosserFactory;
+	}
 
 	/**
 	 * Parses the given PEF-file input using the supplied output stream and settings.
@@ -154,15 +120,14 @@ public class PEFConverterFacade {
 	 * @throws EmbosserFactoryException
 	 * @throws UnsupportedWidthException
 	 */
-	public static void parsePefFile(File input, OutputStream os, PageFormat pf, Map<String, String> settings) throws NumberFormatException, ParserConfigurationException, SAXException, IOException, EmbosserFactoryException, UnsupportedWidthException {
+	public void parsePefFile(File input, OutputStream os, PageFormat pf, Map<String, String> settings) throws NumberFormatException, ParserConfigurationException, SAXException, IOException, EmbosserFactoryException, UnsupportedWidthException {
 		Range range = null;
-		EmbosserCatalog ef = EmbosserCatalog.newInstance();
 		Alignment align = Alignment.CENTER_OUTER;
 		int offset = 0;
 		Embosser emb = null;
-		emb = ef.get(settings.remove(KEY_EMBOSSER));
+		emb = ef.newEmbosser(settings.remove(KEY_EMBOSSER));
 		if (emb==null) {
-			emb = ef.get("org_daisy.GenericEmbosserProvider.EmbosserType.NONE");
+			emb = ef.newEmbosser("org_daisy.GenericEmbosserProvider.EmbosserType.NONE");
 		}
 		if (pf!=null) {
 			emb.setFeature(EmbosserFeatures.PAGE_FORMAT, pf);
@@ -220,7 +185,7 @@ public class PEFConverterFacade {
 	 * @throws IOException
 	 * @throws UnsupportedWidthException
 	 */
-	public static void parsePefFile(File input, PEFHandler ph) throws ParserConfigurationException, SAXException, IOException, UnsupportedWidthException {
+	public void parsePefFile(File input, PEFHandler ph) throws ParserConfigurationException, SAXException, IOException, UnsupportedWidthException {
 		if (!input.exists()) {
 			throw new IllegalArgumentException("Input does not exist");
 		}
@@ -237,7 +202,7 @@ public class PEFConverterFacade {
 	 * @throws IOException
 	 * @throws UnsupportedWidthException
 	 */
-	public static void parsePefFile(InputStream is, PEFHandler ph) throws ParserConfigurationException, SAXException, IOException, UnsupportedWidthException {
+	public void parsePefFile(InputStream is, PEFHandler ph) throws ParserConfigurationException, SAXException, IOException, UnsupportedWidthException {
 		SAXParserFactory spf = SAXParserFactory.newInstance();
 		spf.setNamespaceAware(true);
 		SAXParser sp = spf.newSAXParser();
@@ -251,42 +216,5 @@ public class PEFConverterFacade {
 			}
 		}		
 	}
-
-	/**
-	 * Parses a text file and outputs a PEF-file based on the contents of the file
-	 * @param input input text file
-	 * @param output output PEF-file
-	 * @param settings settings
-	 * @throws IOException if IO fails
-	 */
-	public static void parseTextFile(File input, File output, Map<String, String> settings) throws IOException {
-		TextHandler.Builder builder = new TextHandler.Builder(input, output);
-		for (String key : settings.keySet()) {
-			String value = settings.get(key);
-			if (KEY_TITLE.equals(key)) {
-				builder.title(value);
-			} else if (KEY_AUTHOR.equals(key)) {
-				builder.author(value);
-			} else if (KEY_IDENTIFIER.equals(key)) {
-				builder.identifier(value);
-			} else if (KEY_MODE.equals(key)) {
-				builder.converterId(value);
-			} else if (KEY_LANGUAGE.equals(key)) {
-				builder.language(value);
-			} else if (KEY_DUPLEX.equals(key)) {
-				builder.duplex("true".equals(value.toLowerCase()));
-			}else if (KEY_DATE.equals(key)) {
-				try {
-					builder.date(DATE_FORMAT.parse(value));
-				} catch (ParseException e) {
-					throw new IllegalArgumentException(e);
-				}
-			} else {
-				throw new IllegalArgumentException("Unknown option \"" + key + "\"");
-			}
-		}
-		TextHandler tp = builder.build();
-		tp.parse();
-	}	
 
 }
