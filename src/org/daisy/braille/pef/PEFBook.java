@@ -245,7 +245,7 @@ public class PEFBook implements Serializable {
 		return new PEFBook(metadata, volumes, pages, pageTags, maxWidth, maxHeight, inputEncoding, containsEightDot, startPages);
 	}
 	
-	private PEFBook(HashMap<String, List<String>> metadata, int volumes, int pages, int pageTags, int maxWidth, int maxHeight, String inputEncoding, boolean containsEightDot, int[] startPages) {
+	PEFBook(HashMap<String, List<String>> metadata, int volumes, int pages, int pageTags, int maxWidth, int maxHeight, String inputEncoding, boolean containsEightDot, int[] startPages) {
 		this.metadata = metadata;
 		this.volumes = volumes;
 		this.pages = pages;
