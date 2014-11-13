@@ -39,7 +39,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
 import org.daisy.validator.Validator;
-import org.daisy.validator.ValidatorFactory;
+import org.daisy.validator.ValidatorFactoryService;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -61,12 +61,14 @@ public class PEFFileSplitter implements ErrorHandler  {
 	public final static String POSTFIX = ".pef";
 	enum State {HEADER, BODY, FOOTER};
 	private Logger logger;
+	private final ValidatorFactoryService validatorFactory;
 
 	/**
 	 * Creates a new PEFFileSplitter object.
 	 */
-	public PEFFileSplitter() {
+	public PEFFileSplitter(ValidatorFactoryService validatorFactory) {
 		logger = Logger.getLogger(PEFFileSplitter.class.getCanonicalName());
+		this.validatorFactory = validatorFactory;
 	}
 	
 	/**
@@ -199,8 +201,7 @@ public class PEFFileSplitter implements ErrorHandler  {
 	        is.close();
 	        sendMessage("Checking result for errors");
 	        //progress(0.5);
-	        ValidatorFactory vf = ValidatorFactory.newInstance();
-	        Validator v = vf.newValidator(PEFValidator.class.getName());
+	        Validator v = validatorFactory.newValidator(PEFValidator.class.getName());
 	        if (v!=null) {
 		        v.setFeature(PEFValidator.FEATURE_MODE, PEFValidator.Mode.FULL_MODE);
 		        for (File f : files) {

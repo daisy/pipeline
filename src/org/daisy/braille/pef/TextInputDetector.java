@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 import org.daisy.braille.BrailleConstants;
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 
 /**
@@ -39,11 +39,13 @@ import org.daisy.factory.FactoryProperties;
  * @author Joel Håkansson
  */
 public class TextInputDetector {
+	private final TableCatalogService factory;
 	
 	/**
 	 * Creates a new TextInputDetector
 	 */
-	public TextInputDetector() {
+	public TextInputDetector(TableCatalogService factory) {
+		this.factory = factory;
 	}
 
 	private BitSet analyze(InputStream is) throws IOException {
@@ -85,10 +87,9 @@ public class TextInputDetector {
 		Logger logger = Logger.getLogger(TextHandler.class.getCanonicalName());
 		HashMap<BitSet, HashMap<String, Table>> tables = new HashMap<BitSet, HashMap<String, Table>>();
 		BitSet tableThumbprint;
-		TableCatalog factory = TableCatalog.newInstance();
 		for (FactoryProperties fp : factory.list()) {
 			try {
-				Table type = factory.get(fp.getIdentifier());
+				Table type = factory.newTable(fp.getIdentifier());
 				BrailleConverter c = type.newBrailleConverter();
 				if (!eightDot && c.supportsEightDot()) {
 					continue;
@@ -128,7 +129,6 @@ public class TextInputDetector {
 	public List<Table> detect(InputStream is) throws IOException {
 		BitSet inputThumbprint = readInput(is, true);
 		ArrayList<Table> res = new ArrayList<Table>();
-		//TableCatalog factory = TableCatalog.newInstance();
 		//BitSet tableThumbprint;
 		int size = 0;
 		for (int i = inputThumbprint.nextSetBit(0); i >= 0; i = inputThumbprint.nextSetBit(i+1)) {

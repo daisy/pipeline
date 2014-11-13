@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Map;
 
 import org.daisy.braille.pef.TextHandler;
+import org.daisy.braille.table.TableCatalogService;
 
 public class TextConverterFacade {
 	public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -45,6 +46,12 @@ public class TextConverterFacade {
 	 * corresponding settings value should be a string containing a valid date on the form yyyy-MM-dd
 	 */
 	public final static String KEY_DATE = "date";
+	
+	private final TableCatalogService factory;
+	
+	public TextConverterFacade(TableCatalogService factory) {
+		this.factory = factory;
+	}
 
 	/**
 	 * Parses a text file and outputs a PEF-file based on the contents of the file
@@ -54,7 +61,7 @@ public class TextConverterFacade {
 	 * @throws IOException if IO fails
 	 */
 	public void parseTextFile(File input, File output, Map<String, String> settings) throws IOException {
-		TextHandler.Builder builder = new TextHandler.Builder(input, output);
+		TextHandler.Builder builder = new TextHandler.Builder(input, output, factory);
 		for (String key : settings.keySet()) {
 			String value = settings.get(key);
 			if (KEY_TITLE.equals(key)) {

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import javax.xml.transform.TransformerException;
 
 import org.daisy.braille.tools.FileCompare;
+import org.daisy.validator.ValidatorFactory;
 import org.junit.Test;
 
 
@@ -21,7 +22,7 @@ public class PEFFileSplitterTest {
 		assertTrue("Verify that test is correctly set up", f.delete());
 		File dir = new File(f.getParentFile(), f.getName());
 		assertTrue("Verify that test is correctly set up", dir.mkdir());
-		PEFFileSplitter splitter = new PEFFileSplitter();
+		PEFFileSplitter splitter = new PEFFileSplitter(ValidatorFactory.newInstance());
 		assertTrue("Verify that splitter returns true", splitter.split(
 				this.getClass().getResourceAsStream("resource-files/PEFFileSplitterTestInput.pef"),
 				dir));

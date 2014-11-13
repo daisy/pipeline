@@ -39,7 +39,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
 import org.daisy.validator.Validator;
-import org.daisy.validator.ValidatorFactory;
+import org.daisy.validator.ValidatorFactoryService;
 
 /**
  * Merges several single volume PEF-files into one. Metadata is collected from
@@ -67,13 +67,16 @@ public class PEFFileMerger {
 		 */
 		STANDARD
 		};
+
 	private Logger logger;
+	private final ValidatorFactoryService validatorFactory;
 
 	/**
 	 * Creates a new PEFFileMerger
 	 */
-	public PEFFileMerger() {
+	public PEFFileMerger(ValidatorFactoryService validatorFactory) {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
+		this.validatorFactory = validatorFactory;
 	}
 
 	/**
@@ -108,8 +111,7 @@ public class PEFFileMerger {
         }
 
 		try {
-			ValidatorFactory vf = ValidatorFactory.newInstance();
-			Validator v = vf.newValidator(PEFValidator.class.getName());
+			Validator v = validatorFactory.newValidator(PEFValidator.class.getName());
 			if (v!=null) {
 				v.setFeature(PEFValidator.FEATURE_MODE, PEFValidator.Mode.FULL_MODE);
 				sendMessage("Checking input files");

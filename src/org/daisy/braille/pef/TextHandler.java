@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 
 /**
  * Provides a handler for reading text and writing a PEF-file.
@@ -39,14 +39,15 @@ import org.daisy.braille.table.TableCatalog;
 public class TextHandler {
 	public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
-	private File input;
-	private File output;
-	private String title;
-	private String author;
-	private String language;
-	private String identifier;
-	private BrailleConverter converter;
-	private boolean duplex;
+	private final File input;
+	private final File output;
+	private final TableCatalogService factory;
+	private final String title;
+	private final String author;
+	private final String language;
+	private final String identifier;
+	private final BrailleConverter converter;
+	private final boolean duplex;
 	private Date date;
 	
 	private int maxRows;
@@ -61,8 +62,9 @@ public class TextHandler {
 	 */
 	public static class Builder {
 		// required params
-		private File input;
-		private File output;
+		private final File input;
+		private final File output;
+		private final TableCatalogService factory;
 
 		// optional params
 		private String title = "";
@@ -78,9 +80,10 @@ public class TextHandler {
 		 * @param input
 		 * @param output
 		 */
-		public Builder(File input, File output) {
+		public Builder(File input, File output, TableCatalogService factory) {
 			this.input = input;
 			this.output = output;
+			this.factory = factory;
 			String s = (new Long((Math.round(Math.random() * 1000000000)))).toString();
 			char[] chars = s.toCharArray();
 			char[] dest = new char[] {'0','0','0','0','0','0','0','0','0'};
@@ -166,6 +169,7 @@ public class TextHandler {
 	private TextHandler(Builder builder) throws IOException, InputDetectionException {
 		input = builder.input;
 		output = builder.output;
+		factory = builder.factory;
 		title = builder.title;
 		author = builder.author;
 		language = builder.language;
@@ -173,7 +177,7 @@ public class TextHandler {
 		if (builder.converterId==null) {
 			List<Table> tableCandiates;
 			FileInputStream is = new FileInputStream(input);
-			TextInputDetector tid = new TextInputDetector();
+			TextInputDetector tid = new TextInputDetector(factory);
 			tableCandiates = tid.detect(is);
 			if (tableCandiates==null || tableCandiates.size()<1) {
 				throw new InputDetectionException("Cannot detect table.");
@@ -194,8 +198,7 @@ public class TextHandler {
 			System.out.println("Using " + tableCandiates.get(0).getDisplayName());
 			converter = tableCandiates.get(0).newBrailleConverter();
 		} else {
-			TableCatalog b = TableCatalog.newInstance();
-			converter = b.get(builder.converterId).newBrailleConverter();			
+			converter = factory.newTable(builder.converterId).newBrailleConverter();			
 		}
 		duplex = builder.duplex;
 		date = builder.date;

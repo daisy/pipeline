@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerException;
 import org.daisy.braille.pef.PEFFileMerger.SortType;
 import org.daisy.braille.tools.FileCompare;
 import org.daisy.braille.tools.FileTools;
+import org.daisy.validator.ValidatorFactory;
 import org.junit.Test;
 
 public class PEFFileMergerTest {
@@ -33,7 +34,7 @@ public class PEFFileMergerTest {
 			FileTools.copy(this.getClass().getResourceAsStream("resource-files/PEFFileMergerTestInput-2.pef"), new FileOutputStream(f2));
 			FileTools.copy(this.getClass().getResourceAsStream("resource-files/PEFFileMergerTestInput-3.pef"), new FileOutputStream(f3));
 			
-			PEFFileMerger merger = new PEFFileMerger();
+			PEFFileMerger merger = new PEFFileMerger(ValidatorFactory.newInstance());
 			merger.merge(dir, new FileOutputStream(output), "Merged file", SortType.STANDARD);
 			FileCompare fc = new FileCompare();
 			assertTrue("Assert that the contents of the file is as expected.", fc.compareXML(
