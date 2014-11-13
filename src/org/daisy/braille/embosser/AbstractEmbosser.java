@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 import org.daisy.braille.table.DefaultTableProvider;
 import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.AbstractFactory;
 import org.daisy.paper.Area;
 import org.daisy.paper.PageFormat;
@@ -41,6 +41,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 	private final HashMap<String, String> settings;
 	private double cellHeight = 10;
 	private double cellWidth = 6;
+	protected final TableCatalogService tableCatalogService;
 	protected final Table defaultTable;
 	private PageFormat pageFormat;
 	protected Table setTable;
@@ -51,11 +52,12 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
 	 * @param desc the embosser description
 	 * @param identifier an identifier
 	 */
-	public AbstractEmbosser(String name, String desc, String identifier) {
+	public AbstractEmbosser(TableCatalogService service, String name, String desc, String identifier) {
 		super(name, desc, identifier);
 		this.props = new HashMap<String, Object>();
 		this.settings = new HashMap<String, String>();
-		defaultTable = TableCatalog.newInstance().get(DefaultTableProvider.class.getCanonicalName() + ".TableType.EN_US");
+		this.tableCatalogService = service;
+		defaultTable = service.newTable(DefaultTableProvider.class.getCanonicalName() + ".TableType.EN_US");
 		setTable = defaultTable;
 	}
 	
@@ -155,7 +157,7 @@ public abstract class AbstractEmbosser extends AbstractFactory implements Emboss
                         try {
 				t = (Table)value;
 			} catch (ClassCastException e) {
-				t = TableCatalog.newInstance().get(value.toString());
+				t = tableCatalogService.newTable(value.toString());
 				if (t == null) {
 					throw new IllegalArgumentException("Unsupported value for table: '" + value + "'");
 				}

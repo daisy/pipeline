@@ -71,7 +71,9 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser, FactoryProperti
 		EmbosserCatalog ret = new EmbosserCatalog();
 		Iterator<EmbosserProvider> i = ServiceRegistry.lookupProviders(EmbosserProvider.class);
 		while (i.hasNext()) {
-			ret.addFactory(i.next());
+			EmbosserProvider ep = i.next();
+			ep.setCreatedWithSPI();
+			ret.addFactory(ep);
 		}
 		return ret;
 	}
