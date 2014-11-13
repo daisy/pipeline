@@ -24,9 +24,12 @@ import java.util.Map;
 
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
 
 @Component
 public class ViewPlusEmbosserProvider implements EmbosserProvider {
@@ -65,6 +68,7 @@ public class ViewPlusEmbosserProvider implements EmbosserProvider {
     };
 
     private final Map<String, FactoryProperties> embossers;
+    private TableCatalogService tableCatalogService = null;
 
     public ViewPlusEmbosserProvider() {
         embossers = new HashMap<String, FactoryProperties>();
@@ -99,25 +103,25 @@ public class ViewPlusEmbosserProvider implements EmbosserProvider {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
 		case ELITE_150:
-			return new TigerEmbosser(EmbosserType.ELITE_150);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.ELITE_150);
 		case ELITE_200:
-			return new TigerEmbosser(EmbosserType.ELITE_200);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.ELITE_200);
 		case PREMIER_80:
-			return new TigerEmbosser(EmbosserType.PREMIER_80);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.PREMIER_80);
 		case PREMIER_100:
-			return new TigerEmbosser(EmbosserType.PREMIER_100);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.PREMIER_100);
 		case PRO_GEN_II:
-			return new TigerEmbosser(EmbosserType.PRO_GEN_II);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.PRO_GEN_II);
 		case CUB_JR:
-			return new TigerEmbosser(EmbosserType.CUB_JR);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.CUB_JR);
 		case CUB:
-			return new TigerEmbosser(EmbosserType.CUB);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.CUB);
 		case MAX:
-			return new TigerEmbosser(EmbosserType.MAX);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.MAX);
 		case EMFUSE:
-			return new TigerEmbosser(EmbosserType.EMFUSE);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.EMFUSE);
 		case EMPRINT_SPOTDOT:
-			return new TigerEmbosser(EmbosserType.EMPRINT_SPOTDOT);
+			return new TigerEmbosser(tableCatalogService, EmbosserType.EMPRINT_SPOTDOT);
 		default:
 			return null;
 		}
@@ -126,4 +130,20 @@ public class ViewPlusEmbosserProvider implements EmbosserProvider {
     public Collection<FactoryProperties> list() {
         return Collections.unmodifiableCollection(embossers.values());
     }
+    
+	@Reference
+	public void setTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = service;
+	}
+	
+	public void unsetTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = null;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		if (tableCatalogService==null) {
+			tableCatalogService = TableCatalog.newInstance();
+		}
+	}
 }

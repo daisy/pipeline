@@ -29,7 +29,7 @@ import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
@@ -72,11 +72,11 @@ public class MountbattenEmbosser extends AbstractEmbosser {
         return tableFilter;
     }
 
-    public MountbattenEmbosser(FactoryProperties props) {
+    public MountbattenEmbosser(TableCatalogService service, FactoryProperties props) {
 
-        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
+        super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
-        setTable = TableCatalog.newInstance().get(table6dot);
+        setTable = service.newTable(table6dot);
 
         setCellWidth(5.9d);
         setCellHeight(10.1d);

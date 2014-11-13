@@ -26,6 +26,7 @@ import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.EmbosserTools;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
 import org.daisy.paper.PrintPage;
@@ -57,9 +58,9 @@ public abstract class CidatEmbosser extends AbstractEmbosser {
     protected boolean duplexEnabled = true;
     protected boolean eightDotsEnabled = false;
 
-    public CidatEmbosser(EmbosserType props) {
+    public CidatEmbosser(TableCatalogService service, EmbosserType props) {
 
-        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
+        super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
         type = props;
 

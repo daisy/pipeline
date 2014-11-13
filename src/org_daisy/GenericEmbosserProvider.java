@@ -24,9 +24,12 @@ import java.util.Map;
 
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
 
 @Component
 public class GenericEmbosserProvider implements EmbosserProvider {
@@ -55,6 +58,7 @@ public class GenericEmbosserProvider implements EmbosserProvider {
 	};
 	
 	private final Map<String, FactoryProperties> embossers;
+	private TableCatalogService tableCatalogService = null;
 	
 	public GenericEmbosserProvider() {
 		embossers = new HashMap<String, FactoryProperties>();
@@ -69,7 +73,7 @@ public class GenericEmbosserProvider implements EmbosserProvider {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
 		case NONE:
-			return new GenericEmbosser(EmbosserType.NONE);
+			return new GenericEmbosser(tableCatalogService, EmbosserType.NONE);
 		default:
 			return null;
 		}
@@ -78,6 +82,22 @@ public class GenericEmbosserProvider implements EmbosserProvider {
 	//jvm1.6@Override
 	public Collection<FactoryProperties> list() {
 		return Collections.unmodifiableCollection(embossers.values());
+	}
+	
+	@Reference
+	public void setTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = service;
+	}
+	
+	public void unsetTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = null;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		if (tableCatalogService==null) {
+			tableCatalogService = TableCatalog.newInstance();
+		}
 	}
 
 }

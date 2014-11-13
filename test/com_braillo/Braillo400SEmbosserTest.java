@@ -6,6 +6,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.UnsupportedWidthException;
+import org.daisy.braille.table.TableCatalog;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -14,7 +15,7 @@ import com_braillo.BrailloEmbosserProvider.EmbosserType;
 public class Braillo400SEmbosserTest extends AbstractTestBraillo200Embosser {
 	
 	public Braillo400SEmbosserTest() {
-		super(new Braillo400SEmbosser(EmbosserType.BRAILLO_400_S));
+		super(new Braillo400SEmbosser(TableCatalog.newInstance(), EmbosserType.BRAILLO_400_S));
 		emb.setFeature(EmbosserFeatures.PAGE_FORMAT, tractor_210mm_x_12inch);
 	}
 	

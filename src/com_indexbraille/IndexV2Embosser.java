@@ -26,7 +26,7 @@ import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.embosser.UnsupportedPaperException;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
@@ -56,11 +56,11 @@ public class IndexV2Embosser extends IndexEmbosser {
         };
     }
 
-    public IndexV2Embosser(EmbosserType props) {
+    public IndexV2Embosser(TableCatalogService service, EmbosserType props) {
 
-        super(props);
+        super(service, props);
 
-        setTable = TableCatalog.newInstance().get(table6dot);
+        setTable = service.newTable(table6dot);
 
         switch (type) {
             case INDEX_BASIC_S_V2:

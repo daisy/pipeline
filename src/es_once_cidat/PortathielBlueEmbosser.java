@@ -27,7 +27,7 @@ import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.embosser.StandardPageBreaks;
 import org.daisy.braille.embosser.UnsupportedPaperException;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
@@ -67,10 +67,10 @@ public class PortathielBlueEmbosser extends CidatEmbosser {
         };
     }
 
-    public PortathielBlueEmbosser(EmbosserType props) {
+    public PortathielBlueEmbosser(TableCatalogService service, EmbosserType props) {
         
-        super(props);
-        setTable = TableCatalog.newInstance().get(transparentTable);
+        super(service, props);
+        setTable = service.newTable(transparentTable);
     }
 
     public TableFilter getTableFilter() {

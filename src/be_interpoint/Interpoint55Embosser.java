@@ -35,7 +35,7 @@ import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
@@ -93,11 +93,11 @@ public class Interpoint55Embosser extends AbstractEmbosser {
     private int maxPagesInQuire = 0;                  // 0 == no quires
     private int numberOfCopies = 1;
 
-    public Interpoint55Embosser(FactoryProperties props) {
+    public Interpoint55Embosser(TableCatalogService service, FactoryProperties props) {
 
-        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
+        super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
-        setTable = TableCatalog.newInstance().get(table_US1);
+        setTable = service.newTable(table_US1);
 
         setCellWidth(6d);
         setCellHeight(eightDotsEnabled?12.5d:10d);

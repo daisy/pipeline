@@ -17,6 +17,7 @@
  */
 package com_brailler;
 
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.PrintPage;
 
@@ -33,9 +34,9 @@ public class EnablingTechnologiesSingleSidedEmbosser extends EnablingTechnologie
 	 */
 	private static final long serialVersionUID = -3602582375923051565L;
 
-	public EnablingTechnologiesSingleSidedEmbosser(EmbosserType props) {
+	public EnablingTechnologiesSingleSidedEmbosser(TableCatalogService service, EmbosserType props) {
 
-        super(props);
+        super(service, props);
 
         switch (type) {
             case ROMEO_ATTACHE:

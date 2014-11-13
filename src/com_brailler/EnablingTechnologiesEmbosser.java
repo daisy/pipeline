@@ -30,7 +30,7 @@ import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
@@ -97,13 +97,13 @@ public abstract class EnablingTechnologiesEmbosser extends AbstractEmbosser {
         };
     }
 
-    public EnablingTechnologiesEmbosser(EmbosserType props) {
+    public EnablingTechnologiesEmbosser(TableCatalogService service, EmbosserType props) {
 
-        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
+        super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
         type = props;
 
-        setTable = TableCatalog.newInstance().get(table6dot);
+        setTable = service.newTable(table6dot);
 
         setCellWidth(0.24*EmbosserTools.INCH_IN_MM);
         setCellHeight((eightDotsEnabled?0.6:0.4)*EmbosserTools.INCH_IN_MM);

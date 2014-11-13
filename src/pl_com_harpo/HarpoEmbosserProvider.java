@@ -24,9 +24,12 @@ import java.util.Map;
 
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
 
 @Component
 public class HarpoEmbosserProvider implements EmbosserProvider {
@@ -58,6 +61,7 @@ public class HarpoEmbosserProvider implements EmbosserProvider {
     };
 
     private final Map<String, FactoryProperties> embossers;
+    private TableCatalogService tableCatalogService = null;
 
     public HarpoEmbosserProvider() {
         embossers = new HashMap<String, FactoryProperties>();
@@ -74,11 +78,11 @@ public class HarpoEmbosserProvider implements EmbosserProvider {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
 		case MOUNTBATTEN_LS:
-			return new MountbattenEmbosser(EmbosserType.MOUNTBATTEN_LS);
+			return new MountbattenEmbosser(tableCatalogService, EmbosserType.MOUNTBATTEN_LS);
 		case MOUNTBATTEN_PRO:
-			return new MountbattenEmbosser(EmbosserType.MOUNTBATTEN_PRO);
+			return new MountbattenEmbosser(tableCatalogService, EmbosserType.MOUNTBATTEN_PRO);
 		case MOUNTBATTEN_WRITER_PLUS:
-			return new MountbattenEmbosser(EmbosserType.MOUNTBATTEN_WRITER_PLUS);
+			return new MountbattenEmbosser(tableCatalogService, EmbosserType.MOUNTBATTEN_WRITER_PLUS);
 		default:
 			return null;
 		}
@@ -87,4 +91,20 @@ public class HarpoEmbosserProvider implements EmbosserProvider {
     public Collection<FactoryProperties> list() {
         return Collections.unmodifiableCollection(embossers.values());
     }
+    
+	@Reference
+	public void setTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = service;
+	}
+	
+	public void unsetTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = null;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		if (tableCatalogService==null) {
+			tableCatalogService = TableCatalog.newInstance();
+		}
+	}
 }

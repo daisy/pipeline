@@ -33,7 +33,7 @@ import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.embosser.UnsupportedPaperException;
 import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
 import org.daisy.paper.Dimensions;
@@ -73,16 +73,15 @@ public class Braillo200_270_400_v12_16Embosser extends BrailloEmbosser {
 		return true;
 	}
 	
-	public Braillo200_270_400_v12_16Embosser(FactoryProperties props) {
-		super(props);
+	public Braillo200_270_400_v12_16Embosser(TableCatalogService service, FactoryProperties props) {
+		super(service, props);
 		zFoldingEnabled = false;
 	}
 
 	//jvm1.6@Override
 	public EmbosserWriter newEmbosserWriter(OutputStream os) {
 		try {
-			TableCatalog btb = TableCatalog.newInstance();
-			Table tc = btb.get(setTable.getIdentifier());
+			Table tc = tableCatalogService.newTable(setTable.getIdentifier());
 			tc.setFeature("fallback", getFeature("fallback"));
 			tc.setFeature("replacement", getFeature("replacement"));
 			PrintPage printPage = getPrintPage(getPageFormat());

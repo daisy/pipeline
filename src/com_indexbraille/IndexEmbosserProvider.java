@@ -24,9 +24,12 @@ import java.util.Map;
 
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
 
 @Component
 public class IndexEmbosserProvider implements EmbosserProvider {
@@ -74,6 +77,7 @@ public class IndexEmbosserProvider implements EmbosserProvider {
 	};
 
 	private final Map<String, FactoryProperties> embossers;
+	private TableCatalogService tableCatalogService = null;
 
 	public IndexEmbosserProvider() {
             embossers = new HashMap<String, FactoryProperties>();
@@ -100,31 +104,31 @@ public class IndexEmbosserProvider implements EmbosserProvider {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
 		case INDEX_BASIC_BLUE_BAR:
-			return new BlueBarEmbosser(EmbosserType.INDEX_BASIC_BLUE_BAR);
+			return new BlueBarEmbosser(tableCatalogService, EmbosserType.INDEX_BASIC_BLUE_BAR);
 		case INDEX_BASIC_S_V2:
-			return new IndexV2Embosser(EmbosserType.INDEX_BASIC_S_V2);
+			return new IndexV2Embosser(tableCatalogService, EmbosserType.INDEX_BASIC_S_V2);
 		case INDEX_BASIC_D_V2:
-			return new IndexV2Embosser(EmbosserType.INDEX_BASIC_D_V2);
+			return new IndexV2Embosser(tableCatalogService, EmbosserType.INDEX_BASIC_D_V2);
 		case INDEX_EVEREST_D_V2:
-			return new IndexV2Embosser(EmbosserType.INDEX_EVEREST_D_V2);
+			return new IndexV2Embosser(tableCatalogService, EmbosserType.INDEX_EVEREST_D_V2);
 		case INDEX_4X4_PRO_V2:
-			return new IndexV2Embosser(EmbosserType.INDEX_4X4_PRO_V2);
+			return new IndexV2Embosser(tableCatalogService, EmbosserType.INDEX_4X4_PRO_V2);
 		case INDEX_EVEREST_D_V3:
-			return new IndexV3Embosser(EmbosserType.INDEX_EVEREST_D_V3);
+			return new IndexV3Embosser(tableCatalogService, EmbosserType.INDEX_EVEREST_D_V3);
 		case INDEX_BASIC_S_V3:
-			return new IndexV3Embosser(EmbosserType.INDEX_BASIC_S_V3);
+			return new IndexV3Embosser(tableCatalogService, EmbosserType.INDEX_BASIC_S_V3);
 		case INDEX_BASIC_D_V3:
-			return new IndexV3Embosser(EmbosserType.INDEX_BASIC_D_V3);
+			return new IndexV3Embosser(tableCatalogService, EmbosserType.INDEX_BASIC_D_V3);
 		case INDEX_4X4_PRO_V3:
-			return new IndexV3Embosser(EmbosserType.INDEX_4X4_PRO_V3);
+			return new IndexV3Embosser(tableCatalogService, EmbosserType.INDEX_4X4_PRO_V3);
 		case INDEX_4WAVES_PRO_V3:
-			return new IndexV3Embosser(EmbosserType.INDEX_4WAVES_PRO_V3);
+			return new IndexV3Embosser(tableCatalogService, EmbosserType.INDEX_4WAVES_PRO_V3);
 		case INDEX_BASIC_D_V4:
-			return new IndexV4Embosser(EmbosserType.INDEX_BASIC_D_V4);
+			return new IndexV4Embosser(tableCatalogService, EmbosserType.INDEX_BASIC_D_V4);
 		case INDEX_EVEREST_D_V4:
-			return new IndexV4Embosser(EmbosserType.INDEX_EVEREST_D_V4);
+			return new IndexV4Embosser(tableCatalogService, EmbosserType.INDEX_EVEREST_D_V4);
 		case INDEX_BRAILLE_BOX_V4:
-			return new IndexV4Embosser(EmbosserType.INDEX_BRAILLE_BOX_V4);
+			return new IndexV4Embosser(tableCatalogService, EmbosserType.INDEX_BRAILLE_BOX_V4);
 		default:
 			return null;
 		}
@@ -133,6 +137,22 @@ public class IndexEmbosserProvider implements EmbosserProvider {
 	//jvm1.6@Override
 	public Collection<FactoryProperties> list() {
 		return Collections.unmodifiableCollection(embossers.values());
+	}
+	
+	@Reference
+	public void setTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = service;
+	}
+	
+	public void unsetTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = null;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		if (tableCatalogService==null) {
+			tableCatalogService = TableCatalog.newInstance();
+		}
 	}
 
 }

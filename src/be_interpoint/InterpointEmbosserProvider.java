@@ -24,7 +24,11 @@ import java.util.Map;
 
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
+
+import aQute.bnd.annotation.component.Reference;
 
 /**
  *
@@ -57,6 +61,7 @@ public class InterpointEmbosserProvider implements EmbosserProvider {
     }
 
     private final Map<String, FactoryProperties> embossers;
+	private TableCatalogService tableCatalogService = null;
     
     public InterpointEmbosserProvider() {
         embossers = new HashMap<String, FactoryProperties>();
@@ -66,12 +71,12 @@ public class InterpointEmbosserProvider implements EmbosserProvider {
 	private void addEmbosser(FactoryProperties e) {
 		embossers.put(e.getIdentifier(), e);
 	}
-	
+
 	public Embosser newFactory(String identifier) {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
 		case INTERPOINT_55:
-			return new Interpoint55Embosser(EmbosserType.INTERPOINT_55);
+			return new Interpoint55Embosser(tableCatalogService, EmbosserType.INTERPOINT_55);
 		default:
 			return null;
 		}
@@ -80,4 +85,20 @@ public class InterpointEmbosserProvider implements EmbosserProvider {
     public Collection<FactoryProperties> list() {
         return Collections.unmodifiableCollection(embossers.values());
     }
+
+	@Reference
+	public void setTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = service;
+	}
+	
+	public void unsetTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = null;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		if (tableCatalogService==null) {
+			tableCatalogService = TableCatalog.newInstance();
+		}
+	}
 }

@@ -22,7 +22,7 @@ import java.io.OutputStream;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
@@ -50,10 +50,10 @@ public class BlueBarEmbosser extends IndexEmbosser {
         };
     }
 
-    public BlueBarEmbosser(EmbosserType props) {
+    public BlueBarEmbosser(TableCatalogService service, EmbosserType props) {
         
-        super(props);
-        setTable = TableCatalog.newInstance().get(table6dot);
+        super(service, props);
+        setTable = service.newTable(table6dot);
     }
 
     public TableFilter getTableFilter() {

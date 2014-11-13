@@ -36,7 +36,7 @@ import be_interpoint.InterpointEmbosserProvider.EmbosserType;
  */
 public class Interpoint55EmbosserTest {
 
-	private static Interpoint55Embosser e = new Interpoint55Embosser(EmbosserType.INTERPOINT_55);
+	private static Interpoint55Embosser e = new Interpoint55Embosser(TableCatalog.newInstance(), EmbosserType.INTERPOINT_55);
     private static PaperCatalog pc = PaperCatalog.newInstance();
     private static PageFormat a3 = new SheetPaperFormat((SheetPaper)pc.get("org_daisy.ISO216PaperProvider.PaperSize.A3"), SheetPaperFormat.Orientation.REVERSED);
 

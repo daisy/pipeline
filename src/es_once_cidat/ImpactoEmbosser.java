@@ -26,7 +26,7 @@ import org.daisy.braille.embosser.EmbosserTools;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.UnsupportedPaperException;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
@@ -63,10 +63,10 @@ public class ImpactoEmbosser extends CidatEmbosser {
     private int numberOfCopies = 1;
     private int maxNumberOfCopies = 32767;
 
-    public ImpactoEmbosser(EmbosserType props) {
+    public ImpactoEmbosser(TableCatalogService service, EmbosserType props) {
 
-        super(props);
-        setTable = TableCatalog.newInstance().get(transparentTable);
+        super(service, props);
+        setTable = service.newTable(transparentTable);
     }
 
     public TableFilter getTableFilter() {

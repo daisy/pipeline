@@ -24,9 +24,12 @@ import java.util.Map;
 
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
 
 /**
  *
@@ -76,6 +79,7 @@ public class EnablingTechnologiesEmbosserProvider implements EmbosserProvider {
     };
 
     private final Map<String, FactoryProperties> embossers;
+    private TableCatalogService tableCatalogService = null;
 
     public EnablingTechnologiesEmbosserProvider() {
         embossers = new HashMap<String, FactoryProperties>();
@@ -112,39 +116,39 @@ public class EnablingTechnologiesEmbosserProvider implements EmbosserProvider {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
 		case ROMEO_ATTACHE:
-			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_ATTACHE);
+			return new EnablingTechnologiesSingleSidedEmbosser(tableCatalogService, EmbosserType.ROMEO_ATTACHE);
 		case ROMEO_ATTACHE_PRO:
-			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_ATTACHE_PRO);
+			return new EnablingTechnologiesSingleSidedEmbosser(tableCatalogService, EmbosserType.ROMEO_ATTACHE_PRO);
 		case ROMEO_25:
-			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_25);
+			return new EnablingTechnologiesSingleSidedEmbosser(tableCatalogService, EmbosserType.ROMEO_25);
 		case ROMEO_PRO_50:
-			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_PRO_50);
+			return new EnablingTechnologiesSingleSidedEmbosser(tableCatalogService, EmbosserType.ROMEO_PRO_50);
 		case ROMEO_PRO_LE_NARROW:
-			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_PRO_LE_NARROW);
+			return new EnablingTechnologiesSingleSidedEmbosser(tableCatalogService, EmbosserType.ROMEO_PRO_LE_NARROW);
 		case ROMEO_PRO_LE_WIDE:
-			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.ROMEO_PRO_LE_WIDE);
+			return new EnablingTechnologiesSingleSidedEmbosser(tableCatalogService, EmbosserType.ROMEO_PRO_LE_WIDE);
 		case THOMAS:
-			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.THOMAS);
+			return new EnablingTechnologiesSingleSidedEmbosser(tableCatalogService, EmbosserType.THOMAS);
 		case THOMAS_PRO:
-			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.THOMAS_PRO);
+			return new EnablingTechnologiesSingleSidedEmbosser(tableCatalogService, EmbosserType.THOMAS_PRO);
 		case MARATHON:
-			return new EnablingTechnologiesSingleSidedEmbosser(EmbosserType.MARATHON);
+			return new EnablingTechnologiesSingleSidedEmbosser(tableCatalogService, EmbosserType.MARATHON);
 		case ET:
-			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.ET);
+			return new EnablingTechnologiesDoubleSidedEmbosser(tableCatalogService, EmbosserType.ET);
 		case JULIET_PRO:
-			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.JULIET_PRO);
+			return new EnablingTechnologiesDoubleSidedEmbosser(tableCatalogService, EmbosserType.JULIET_PRO);
 		case JULIET_PRO_60:
-			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.JULIET_PRO_60);
+			return new EnablingTechnologiesDoubleSidedEmbosser(tableCatalogService, EmbosserType.JULIET_PRO_60);
 		case JULIET_CLASSIC:
-			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.JULIET_CLASSIC);
+			return new EnablingTechnologiesDoubleSidedEmbosser(tableCatalogService, EmbosserType.JULIET_CLASSIC);
 		case BOOKMAKER:
-			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.BOOKMAKER);
+			return new EnablingTechnologiesDoubleSidedEmbosser(tableCatalogService, EmbosserType.BOOKMAKER);
 		case BRAILLE_EXPRESS_100:
-			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.BRAILLE_EXPRESS_100);
+			return new EnablingTechnologiesDoubleSidedEmbosser(tableCatalogService, EmbosserType.BRAILLE_EXPRESS_100);
 		case BRAILLE_EXPRESS_150:
-			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.BRAILLE_EXPRESS_150);
+			return new EnablingTechnologiesDoubleSidedEmbosser(tableCatalogService, EmbosserType.BRAILLE_EXPRESS_150);
 		case BRAILLE_PLACE:
-			return new EnablingTechnologiesDoubleSidedEmbosser(EmbosserType.BRAILLE_PLACE);
+			return new EnablingTechnologiesDoubleSidedEmbosser(tableCatalogService, EmbosserType.BRAILLE_PLACE);
 		default:
 			return null;
 		}
@@ -154,4 +158,20 @@ public class EnablingTechnologiesEmbosserProvider implements EmbosserProvider {
     public Collection<FactoryProperties> list() {
         return Collections.unmodifiableCollection(embossers.values());
     }
+    
+	@Reference
+	public void setTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = service;
+	}
+	
+	public void unsetTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = null;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		if (tableCatalogService==null) {
+			tableCatalogService = TableCatalog.newInstance();
+		}
+	}
 }

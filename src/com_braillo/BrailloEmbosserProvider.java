@@ -24,9 +24,12 @@ import java.util.Map;
 
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
 
 @Component
 public class BrailloEmbosserProvider implements EmbosserProvider {
@@ -61,6 +64,7 @@ public class BrailloEmbosserProvider implements EmbosserProvider {
 	};
 	
 	private final Map<String, FactoryProperties> embossers;
+	private TableCatalogService tableCatalogService = null;
 	
 	public BrailloEmbosserProvider() {
 		embossers = new HashMap<String, FactoryProperties>();
@@ -81,19 +85,19 @@ public class BrailloEmbosserProvider implements EmbosserProvider {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
 		case BRAILLO_200:
-			return new Braillo200Embosser(EmbosserType.BRAILLO_200);
+			return new Braillo200Embosser(tableCatalogService, EmbosserType.BRAILLO_200);
 		case BRAILLO_200_FW_11:
-			return new Braillo200_270_400_v1_11Embosser(EmbosserType.BRAILLO_200_FW_11);
+			return new Braillo200_270_400_v1_11Embosser(tableCatalogService, EmbosserType.BRAILLO_200_FW_11);
 		case BRAILLO_270:
-			return new Braillo200_270_400_v12_16Embosser(EmbosserType.BRAILLO_270);
+			return new Braillo200_270_400_v12_16Embosser(tableCatalogService, EmbosserType.BRAILLO_270);
 		case BRAILLO_400_S:
-			return new Braillo400SEmbosser(EmbosserType.BRAILLO_400_S);
+			return new Braillo400SEmbosser(tableCatalogService, EmbosserType.BRAILLO_400_S);
 		case BRAILLO_400_SR:
-			return new Braillo400SREmbosser(EmbosserType.BRAILLO_400_SR);
+			return new Braillo400SREmbosser(tableCatalogService, EmbosserType.BRAILLO_400_SR);
 		case BRAILLO_440_SW:
-			return new Braillo440SWEmbosser(EmbosserType.BRAILLO_440_SW);
+			return new Braillo440SWEmbosser(tableCatalogService, EmbosserType.BRAILLO_440_SW);
 		case BRAILLO_440_SWSF:
-			return new Braillo440SFEmbosser(EmbosserType.BRAILLO_440_SWSF);
+			return new Braillo440SFEmbosser(tableCatalogService, EmbosserType.BRAILLO_440_SWSF);
 		default:
 			return null;
 		}
@@ -102,6 +106,22 @@ public class BrailloEmbosserProvider implements EmbosserProvider {
 	//jvm1.6@Override
 	public Collection<FactoryProperties> list() {
 		return Collections.unmodifiableCollection(embossers.values());
+	}
+	
+	@Reference
+	public void setTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = service;
+	}
+	
+	public void unsetTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = null;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		if (tableCatalogService==null) {
+			tableCatalogService = TableCatalog.newInstance();
+		}
 	}
 
 }

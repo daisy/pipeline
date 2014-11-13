@@ -18,6 +18,7 @@
 package com_brailler;
 
 import org.daisy.braille.embosser.EmbosserFeatures;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.PrintPage;
 
@@ -34,9 +35,9 @@ public class EnablingTechnologiesDoubleSidedEmbosser extends EnablingTechnologie
 	 */
 	private static final long serialVersionUID = 160751373667707902L;
 
-	public EnablingTechnologiesDoubleSidedEmbosser(EmbosserType props) {
+	public EnablingTechnologiesDoubleSidedEmbosser(TableCatalogService service, EmbosserType props) {
 
-        super(props);
+        super(service, props);
 
         switch (type) {
             case ET:

@@ -24,9 +24,12 @@ import java.util.Map;
 
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
+import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
 
 /**
  *
@@ -62,6 +65,7 @@ public class CidatEmbosserProvider implements EmbosserProvider {
     };
 
     private final Map<String, FactoryProperties> embossers;
+    private TableCatalogService tableCatalogService = null;
 
     public CidatEmbosserProvider() {
         embossers = new HashMap<String, FactoryProperties>();
@@ -78,11 +82,11 @@ public class CidatEmbosserProvider implements EmbosserProvider {
 		FactoryProperties fp = embossers.get(identifier);
 		switch ((EmbosserType)fp) {
 		case IMPACTO_600:
-			return new ImpactoEmbosser(EmbosserType.IMPACTO_600);
+			return new ImpactoEmbosser(tableCatalogService, EmbosserType.IMPACTO_600);
 		case IMPACTO_TEXTO:
-			return new ImpactoEmbosser(EmbosserType.IMPACTO_TEXTO);
+			return new ImpactoEmbosser(tableCatalogService, EmbosserType.IMPACTO_TEXTO);
 		case PORTATHIEL_BLUE:
-			return new PortathielBlueEmbosser(EmbosserType.PORTATHIEL_BLUE);
+			return new PortathielBlueEmbosser(tableCatalogService, EmbosserType.PORTATHIEL_BLUE);
 		default:
 			return null;
 		}
@@ -92,4 +96,20 @@ public class CidatEmbosserProvider implements EmbosserProvider {
     public Collection<FactoryProperties> list() {
         return Collections.unmodifiableCollection(embossers.values());
     }
+    
+	@Reference
+	public void setTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = service;
+	}
+	
+	public void unsetTableCatalog(TableCatalogService service) {
+		this.tableCatalogService = null;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		if (tableCatalogService==null) {
+			tableCatalogService = TableCatalog.newInstance();
+		}
+	}
 }

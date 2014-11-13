@@ -26,6 +26,7 @@ import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.EmbosserTools;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.paper.Area;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
@@ -85,9 +86,9 @@ public abstract class IndexEmbosser extends AbstractEmbosser {
     protected int maxCellsInWidth = Integer.MAX_VALUE;
     protected int maxLinesInHeight = Integer.MAX_VALUE;
   
-    public IndexEmbosser(EmbosserType props) {
+    public IndexEmbosser(TableCatalogService service, EmbosserType props) {
 
-        super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
+        super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
 
         type = props;
 

@@ -26,7 +26,7 @@ import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
 import org.daisy.paper.PageFormat;
@@ -48,8 +48,8 @@ public abstract class AbstractBraillo440Embosser extends BrailloEmbosser {
 	
 	protected boolean saddleStitchEnabled;
 
-	public AbstractBraillo440Embosser(FactoryProperties props) {
-		super(props);
+	public AbstractBraillo440Embosser(TableCatalogService service, FactoryProperties props) {
+		super(service, props);
 		saddleStitchEnabled = false;
 		setCellWidth(cellWidth);
 	}
@@ -71,8 +71,7 @@ public abstract class AbstractBraillo440Embosser extends BrailloEmbosser {
 
 	//jvm1.6@Override
 	public EmbosserWriter newEmbosserWriter(Device device) {
-		TableCatalog btb = TableCatalog.newInstance();
-		Table tc = btb.get(setTable.getIdentifier());
+		Table tc = tableCatalogService.newTable(setTable.getIdentifier());
 		tc.setFeature("fallback", getFeature("fallback"));
 		tc.setFeature("replacement", getFeature("replacement"));
 		Braillo440VolumeWriter bvw;

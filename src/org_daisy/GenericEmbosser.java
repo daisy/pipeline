@@ -30,7 +30,7 @@ import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalog;
+import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.PageFormat;
@@ -56,8 +56,8 @@ public class GenericEmbosser extends AbstractEmbosser {
 		};
 	}
 	
-	public GenericEmbosser(FactoryProperties props) {
-		super(props.getDisplayName(), props.getDescription(), props.getIdentifier());
+	public GenericEmbosser(TableCatalogService service, FactoryProperties props) {
+		super(service, props.getDisplayName(), props.getDescription(), props.getIdentifier());
 		setFeature(EmbosserFeatures.CELL_WIDTH, 6);
 		setFeature(EmbosserFeatures.CELL_HEIGHT, 10);
 	}
@@ -86,8 +86,7 @@ public class GenericEmbosser extends AbstractEmbosser {
 	public EmbosserWriter newEmbosserWriter(OutputStream os) {
 		PrintPage pp = new PrintPage(getPageFormat());
 
-		TableCatalog btb = TableCatalog.newInstance();
-		Table tc = btb.get(setTable.getIdentifier());
+		Table tc = tableCatalogService.newTable(setTable.getIdentifier());
 		tc.setFeature("fallback", getFeature("fallback"));
 		tc.setFeature("replacement", getFeature("replacement"));
 		ConfigurableEmbosser.Builder b = new ConfigurableEmbosser.Builder(os, tc.newBrailleConverter());
