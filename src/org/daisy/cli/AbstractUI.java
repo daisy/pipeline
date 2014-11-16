@@ -110,6 +110,12 @@ public abstract class AbstractUI {
 	public abstract String getName();
 	
 	/**
+	 * Gets the UI description
+	 * @return returns the UI description
+	 */
+	public abstract String getDescription();
+	
+	/**
 	 * Gets required arguments
 	 * @return returns a list of required arguments that can be
 	 * passed to the UI on startup
@@ -155,6 +161,9 @@ public abstract class AbstractUI {
 			ps.print(" [options ... ]");
 		}
 		ps.println();
+		ps.println();
+		ps.println("DESCRIPTION");
+		format(ps,getDescription(), "\t", WIDTH);
 		ps.println();
 		if ((getRequiredArguments()!=null && getRequiredArguments().size()>0)||
 				(getOptionalArguments()!=null && getOptionalArguments().size()>0)||
