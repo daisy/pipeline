@@ -14,7 +14,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.daisy.braille.tools.FileCompare;
+import org.daisy.braille.tools.XMLFileCompare;
 
 public class PEFFileCompare {
 	private final static NormalizationResource def = new PackageNormalizationResource("resource-files/strip-meta.xsl");
@@ -69,7 +69,7 @@ public class PEFFileCompare {
 				xslt = new StreamSource(nr.getNormalizationResourceAsStream());
 				transformer = factory.newTransformer(xslt);
 				transformer.transform(xml2, new StreamResult(t2));
-				FileCompare fc = new FileCompare();
+				XMLFileCompare fc = new XMLFileCompare(factory);
 				boolean ret = fc.compareXML(new FileInputStream(t1), new FileInputStream(t2));
 				pos = fc.getPos();
 				return ret;

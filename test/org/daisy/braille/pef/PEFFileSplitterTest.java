@@ -8,8 +8,9 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 
-import org.daisy.braille.tools.FileCompare;
+import org.daisy.braille.tools.XMLFileCompare;
 import org.daisy.validator.ValidatorFactory;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ public class PEFFileSplitterTest {
 		assertEquals("Assert that the number of generated files is correct", 3, dir.listFiles().length);
 		int i = 1;
 		//System.out.println(dir);
-		FileCompare fc = new FileCompare(true);
+		XMLFileCompare fc = new XMLFileCompare(TransformerFactory.newInstance(), true);
 		File[] res = dir.listFiles();
 		Arrays.sort(res);
 		for (File v : res) {
