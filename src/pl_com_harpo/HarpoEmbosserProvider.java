@@ -104,7 +104,7 @@ public class HarpoEmbosserProvider implements EmbosserProvider {
 	@Override
 	public void setCreatedWithSPI() {
 		if (tableCatalogService==null) {
-			tableCatalogService = TableCatalog.newInstance();
+			tableCatalogService = TableCatalog.newInstance/*SPI*/();
 		}
 	}
 }
