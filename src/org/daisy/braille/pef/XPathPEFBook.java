@@ -24,11 +24,11 @@ import org.xml.sax.SAXException;
 class XPathPEFBook {
 	private static final Pattern eightDotPattern = Pattern.compile("[\u2840-\u28ff]");
 	
-	public static PEFBook load(URI uri) throws ParserConfigurationException, SAXException, XPathExpressionException, IOException {
+	static PEFBook load(URI uri) throws ParserConfigurationException, SAXException, XPathExpressionException, IOException {
 		return load(uri, false);
 	}
 
-	private static PEFBook load(URI uri, boolean continueOnError) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+	static PEFBook load(URI uri, boolean continueOnError) throws ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		HashMap<String, List<String>> metadata;
 		// Book properties
 		int volumes;
