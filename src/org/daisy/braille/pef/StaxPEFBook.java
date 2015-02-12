@@ -155,7 +155,7 @@ class StaxPEFBook {
 	}
 	
 	private void scanVolume() throws XMLStreamException {
-		if (!(event.getEventType()==XMLStreamConstants.START_ELEMENT && volume.equals(event.asStartElement().getName()))) {
+		if (!eventIsStartElement(volume)) {
 			throw new XMLStreamException("Parse error.");
 		}
 		volumes++;
@@ -163,38 +163,60 @@ class StaxPEFBook {
 		addToStack(new Inherited(parseIntAttribute(event.asStartElement(), rowsqn, 0), 
 								parseIntAttribute(event.asStartElement(), colsqn, 0),
 								parseBooleanAttribute(event.asStartElement(), duplexqn, false)));
-		int level = 1;
 		while (reader.hasNext()) {
 			event = reader.nextEvent();
 			if (event.getEventType()==XMLStreamConstants.START_ELEMENT) {
-				level++;
-				if (row.equals(event.asStartElement().getName())) {
-					scanRow();
-					level--;
-				} else if (page.equals(event.asStartElement().getName())) {
+				if (section.equals(event.asStartElement().getName())) {
+					scanSection();
+				}
+			} else if (eventIsEndElement(volume)) {
+				stack.pop();
+				break;
+			}
+		}
+	}
+	
+	private void scanSection() throws XMLStreamException {
+		if (!eventIsStartElement(section)) {
+			throw new XMLStreamException("Parse error.");
+		}
+		addToStack(new Inherited(parseIntAttribute(event.asStartElement(), rowsqn, stack.peek().rows), 
+				parseIntAttribute(event.asStartElement(), colsqn, stack.peek().cols),
+				parseBooleanAttribute(event.asStartElement(), duplexqn, stack.peek().duplex)));
+
+		while (reader.hasNext()) {
+			event = reader.nextEvent();
+			if (event.getEventType()==XMLStreamConstants.START_ELEMENT) {
+				if (page.equals(event.asStartElement().getName())) {
 					pageTags++;
 					pages += (stack.peek().duplex?1:2);
-				} else if (section.equals(event.asStartElement().getName())) {
-					addToStack(new Inherited(parseIntAttribute(event.asStartElement(), rowsqn, stack.peek().rows), 
-							parseIntAttribute(event.asStartElement(), colsqn, stack.peek().cols),
-							parseBooleanAttribute(event.asStartElement(), duplexqn, stack.peek().duplex)));
+					scanPage();
 				}
-			} else if (event.getEventType()==XMLStreamConstants.END_ELEMENT) {
-				level--;
-				if (section.equals(event.asEndElement().getName())) {
-					//two operations in one, stack.pop() must be performed
-					if (stack.pop().duplex==true && pages % 2 == 1) {
-						pages++;
-						evenLast = true;
-					} else {
-						evenLast = false;
-					}
-				} else if (volume.equals(event.asEndElement().getName())) {
-					stack.pop();
+			} else if (eventIsEndElement(section)) {
+				//two operations in one, stack.pop() must be performed
+				if (stack.pop().duplex==true && pages % 2 == 1) {
+					pages++;
+					evenLast = true;
+				} else {
+					evenLast = false;
 				}
-				if (level<=0) {
-					break;
+				break;
+			}
+		}
+	}
+	
+	private void scanPage() throws XMLStreamException {
+		if (!eventIsStartElement(page)) {
+			throw new XMLStreamException("Parse error.");
+		}
+		while (reader.hasNext()) {
+			event = reader.nextEvent();
+			if (event.getEventType()==XMLStreamConstants.START_ELEMENT) {
+				if (row.equals(event.asStartElement().getName())) {
+					scanRow();
 				}
+			} else if (eventIsEndElement(page)) {
+				break;
 			}
 		}
 	}
@@ -214,25 +236,27 @@ class StaxPEFBook {
 	 * except the last one
 	 */
 	private void scanRow() throws XMLStreamException {
-		if (!(event.getEventType()==XMLStreamConstants.START_ELEMENT && row.equals(event.asStartElement().getName()))) {
+		if (!eventIsStartElement(row)) {
 			throw new XMLStreamException("Parse error.");
 		}
-		int level = 1;
 		while (reader.hasNext()) {
 			event = reader.nextEvent();
 			if (event.getEventType()==XMLStreamConstants.CHARACTERS) {
 				if (eightDotPattern.matcher(event.asCharacters().getData()).find()) {
 					containsEightDot = true;
 				}
-			} else if (event.getEventType()==XMLStreamConstants.START_ELEMENT) {
-				level++;
-			} else if (event.getEventType()==XMLStreamConstants.END_ELEMENT) {
-				level--;
-				if (level<=0) {
-					break;
-				}
+			} else if (eventIsEndElement(row)) {
+				break;
 			}
 		}
+	}
+	
+	private boolean eventIsStartElement(QName name) {
+		return event.getEventType()==XMLStreamConstants.START_ELEMENT && name.equals(event.asStartElement().getName());
+	}
+	
+	private boolean eventIsEndElement(QName name) {
+		return  event.getEventType()==XMLStreamConstants.END_ELEMENT && name.equals(event.asEndElement().getName());
 	}
 	
 	private int parseIntAttribute(StartElement element, QName att, int def) {
