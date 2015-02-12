@@ -6,7 +6,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Stack;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -34,6 +33,7 @@ class StaxPEFBook {
 	private final static QName colsqn = new QName("cols");
 	private final static QName duplexqn = new QName("duplex");
 	
+	private final XMLInputFactory inFactory;
 	private XMLEventReader reader;
 	
 	private String encoding;
@@ -41,7 +41,6 @@ class StaxPEFBook {
 	private int pages;
 	private int pageTags;
 	private HashMap<String, List<String>> metadata;
-	private Stack<Inherited> stack;
 	private List<Integer> started;
 	private int maxWidth;
 	private int maxHeight;
@@ -51,16 +50,11 @@ class StaxPEFBook {
 	boolean evenLast = false;
 	
 	private StaxPEFBook() {
-		this.encoding = null;
-		this.volumes = 0;
-		this.pages = 0;
-		this.pageTags = 0;
-		this.metadata = new HashMap<String, List<String>>();
-		this.stack = new Stack<Inherited>();
-		this.started = new ArrayList<Integer>();
-		this.maxWidth = 0;
-		this.maxHeight = 0;
-		this.containsEightDot = false;
+		inFactory = XMLInputFactory.newInstance();
+		inFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);        
+	    inFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.TRUE);
+	    inFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.TRUE);
+	    inFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.TRUE);
 	}
 
 	static PEFBook loadStax(URI uri) {
@@ -78,11 +72,15 @@ class StaxPEFBook {
 	}
 
 	private PEFBook parse(URI uri) throws MalformedURLException, XMLStreamException, IOException {
-		XMLInputFactory inFactory = XMLInputFactory.newInstance();
-		inFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);        
-	    inFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.TRUE);
-	    inFactory.setProperty(XMLInputFactory.SUPPORT_DTD, Boolean.TRUE);
-	    inFactory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, Boolean.TRUE);
+		encoding = null;
+		volumes = 0;
+		pages = 0;
+		pageTags = 0;
+		metadata = new HashMap<String, List<String>>();
+		started = new ArrayList<Integer>();
+		maxWidth = 0;
+		maxHeight = 0;
+		containsEightDot = false;
 		reader = inFactory.createXMLEventReader(uri.toURL().openStream());
 		
 		while (reader.hasNext()) {
@@ -160,41 +158,40 @@ class StaxPEFBook {
 		}
 		volumes++;
 		started.add(pages+1);
-		addToStack(new Inherited(parseIntAttribute(event.asStartElement(), rowsqn, 0), 
+		SectionAttributes v = new SectionAttributes(parseIntAttribute(event.asStartElement(), rowsqn, 0), 
 								parseIntAttribute(event.asStartElement(), colsqn, 0),
-								parseBooleanAttribute(event.asStartElement(), duplexqn, false)));
+								parseBooleanAttribute(event.asStartElement(), duplexqn, false));
 		while (reader.hasNext()) {
 			event = reader.nextEvent();
 			if (event.getEventType()==XMLStreamConstants.START_ELEMENT) {
 				if (section.equals(event.asStartElement().getName())) {
-					scanSection();
+					scanSection(v);
 				}
 			} else if (eventIsEndElement(volume)) {
-				stack.pop();
 				break;
 			}
 		}
 	}
 	
-	private void scanSection() throws XMLStreamException {
+	private void scanSection(SectionAttributes v) throws XMLStreamException {
 		if (!eventIsStartElement(section)) {
 			throw new XMLStreamException("Parse error.");
 		}
-		addToStack(new Inherited(parseIntAttribute(event.asStartElement(), rowsqn, stack.peek().rows), 
-				parseIntAttribute(event.asStartElement(), colsqn, stack.peek().cols),
-				parseBooleanAttribute(event.asStartElement(), duplexqn, stack.peek().duplex)));
+		SectionAttributes s = new SectionAttributes(parseIntAttribute(event.asStartElement(), rowsqn, v.rows), 
+				parseIntAttribute(event.asStartElement(), colsqn, v.cols),
+				parseBooleanAttribute(event.asStartElement(), duplexqn, v.duplex));
 
 		while (reader.hasNext()) {
 			event = reader.nextEvent();
 			if (event.getEventType()==XMLStreamConstants.START_ELEMENT) {
 				if (page.equals(event.asStartElement().getName())) {
 					pageTags++;
-					pages += (stack.peek().duplex?1:2);
+					pages += (s.duplex?1:2);
 					scanPage();
 				}
 			} else if (eventIsEndElement(section)) {
 				//two operations in one, stack.pop() must be performed
-				if (stack.pop().duplex==true && pages % 2 == 1) {
+				if (s.duplex==true && pages % 2 == 1) {
 					pages++;
 					evenLast = true;
 				} else {
@@ -279,20 +276,16 @@ class StaxPEFBook {
 		return def;
 	}
 
-	private void addToStack(Inherited inh) {
-		stack.add(inh);
-		maxWidth = Math.max(maxWidth, inh.cols);
-		maxHeight = Math.max(maxHeight, inh.rows);
-	}
-
-	private static class Inherited {
+	private class SectionAttributes {
 		private final int rows, cols;
 		private final boolean duplex;
 		
-		public Inherited(int rows, int cols, boolean duplex) {
+		public SectionAttributes(int rows, int cols, boolean duplex) {
 			this.rows = rows;
 			this.cols = cols;
 			this.duplex = duplex;
+			maxWidth = Math.max(maxWidth, this.cols);
+			maxHeight = Math.max(maxHeight, this.rows);
 		}
 	}
 
