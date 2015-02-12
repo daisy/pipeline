@@ -46,5 +46,7 @@ public class StaxPEFBookTest {
 	public void testEightDot() throws XPathExpressionException, ParserConfigurationException, SAXException, IOException, URISyntaxException {
 		PEFBook p1 = StaxPEFBook.loadStax(this.getClass().getResource("resource-files/8-dot-chart.pef").toURI());
 		assertEquals(true, p1.containsEightDot());
+		assertEquals("8-dot Chart", p1.getTitle().iterator().next());
+		assertEquals("org.pef-format.00005", p1.getMetadata("identifier").iterator().next());
 	}
 }
