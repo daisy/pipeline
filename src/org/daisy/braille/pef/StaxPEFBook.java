@@ -106,7 +106,7 @@ class StaxPEFBook {
 		for (int i=0; i<started.size(); i++) {
 			str[i] = started.get(i);
 		}
-		return new PEFBook(metadata, volumes, pages, pageTags, maxWidth, maxHeight, encoding, containsEightDot, str);
+		return new PEFBook(uri, metadata, volumes, pages, pageTags, maxWidth, maxHeight, encoding, containsEightDot, str);
 	}
 	
 	private void scanMeta() throws XMLStreamException {

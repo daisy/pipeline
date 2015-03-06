@@ -197,6 +197,6 @@ class XPathPEFBook {
 				}
 			}
 		}
-		return new PEFBook(metadata, volumes, pages, pageTags, maxWidth, maxHeight, inputEncoding, containsEightDot, startPages);
+		return new PEFBook(uri, metadata, volumes, pages, pageTags, maxWidth, maxHeight, inputEncoding, containsEightDot, startPages);
 	}
 }

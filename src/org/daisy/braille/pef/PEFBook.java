@@ -34,14 +34,16 @@ import org.xml.sax.SAXException;
  * @author Joel Håkansson
  */
 public class PEFBook implements Serializable {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3068081596918714831L;
-	
+	private static final long serialVersionUID = 1528085103073735540L;
+
 	private final Map<String, List<String>> metadata;
 	
 	// Book properties
+	private final URI uri;
 	private final int volumes;
 	private final int pageTags;
 	private final int pages;
@@ -60,7 +62,8 @@ public class PEFBook implements Serializable {
 		return XPathPEFBook.load(uri);
 	}
 	
-	PEFBook(Map<String, List<String>> metadata, int volumes, int pages, int pageTags, int maxWidth, int maxHeight, String inputEncoding, boolean containsEightDot, int[] startPages) {
+	PEFBook(URI uri, Map<String, List<String>> metadata, int volumes, int pages, int pageTags, int maxWidth, int maxHeight, String inputEncoding, boolean containsEightDot, int[] startPages) {
+		this.uri = uri;
 		this.metadata = metadata;
 		this.volumes = volumes;
 		this.pages = pages;
@@ -77,6 +80,14 @@ public class PEFBook implements Serializable {
 	 */
 	public String getInputEncoding() {
 		return inputEncoding;
+	}
+	
+	/**
+	 * Gets the uri for the document at the time of parsing.
+	 * @return returns the uri
+	 */
+	public URI getURI() {
+		return uri;
 	}
 	
 	/**
@@ -219,9 +230,6 @@ public class PEFBook implements Serializable {
 		return getMetadata("creator");
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -236,13 +244,11 @@ public class PEFBook implements Serializable {
 		result = prime * result + pageTags;
 		result = prime * result + pages;
 		result = prime * result + Arrays.hashCode(startPages);
+		result = prime * result + ((uri == null) ? 0 : uri.hashCode());
 		result = prime * result + volumes;
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -274,21 +280,24 @@ public class PEFBook implements Serializable {
 			return false;
 		if (!Arrays.equals(startPages, other.startPages))
 			return false;
+		if (uri == null) {
+			if (other.uri != null)
+				return false;
+		} else if (!uri.equals(other.uri))
+			return false;
 		if (volumes != other.volumes)
 			return false;
 		return true;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "PEFBook [metadata=" + metadata + ", volumes=" + volumes
-				+ ", pageTags=" + pageTags + ", pages=" + pages + ", maxWidth="
-				+ maxWidth + ", maxHeight=" + maxHeight + ", inputEncoding="
-				+ inputEncoding + ", containsEightDot=" + containsEightDot
-				+ ", startPages=" + Arrays.toString(startPages) + "]";
+		return "PEFBook [metadata=" + metadata + ", uri=" + uri + ", volumes="
+				+ volumes + ", pageTags=" + pageTags + ", pages=" + pages
+				+ ", maxWidth=" + maxWidth + ", maxHeight=" + maxHeight
+				+ ", inputEncoding=" + inputEncoding + ", containsEightDot="
+				+ containsEightDot + ", startPages="
+				+ Arrays.toString(startPages) + "]";
 	}
 
 }
