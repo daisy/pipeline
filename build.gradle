@@ -2,6 +2,7 @@ apply plugin: "java"
 apply plugin: "maven"
 //custom plugins
 apply plugin: "bundle"
+apply plugin: 'signing'
 
 group = "org.daisy.dotify"
 version = "1.0-SNAPSHOT"
@@ -69,3 +70,60 @@ bundle {
     ]
 }
 
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+signing {
+    required { isReleaseVersion }
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+            pom.project {
+                name 'Dotify'
+                packaging 'jar'
+                description 'Dotify braille translation system'
+                url 'https://code.google.com/p/dotify/'
+                scm {
+                    connection 'scm:git:https://github.com/mtmse/dotify.git'
+                    developerConnection 'scm:git:https://github.com/mtmse/dotify.git'
+                    url 'https://github.com/mtmse/dotify'
+                }
+                licenses {
+                    license {
+                        name 'LGPL'
+                        url 'http://www.gnu.org/licenses/lgpl.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'joel'
+                        name 'Joel Håkansson'
+                    }
+                }
+            }
+        }
+    }
+}
