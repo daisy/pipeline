@@ -17,9 +17,6 @@ import org.daisy.dotify.api.translator.TextBorderStyle;
 import org.daisy.dotify.graphics.BrailleGraphics;
 import org.daisy.dotify.impl.translator.BorderSpecification.Style;
 
-import aQute.bnd.annotation.component.Component;
-
-@Component
 class BrailleTextBorderFactory implements TextBorderFactory {
 	
 	private final static String KEY_BORDER = "border";
