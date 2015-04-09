@@ -2,7 +2,7 @@ apply plugin: "java"
 apply plugin: "maven"
 //custom plugins
 apply plugin: "bundle"
-apply plugin: 'signing'
+apply plugin: "signing"
 
 group = "org.daisy.dotify"
 version = "1.0-SNAPSHOT"
@@ -104,7 +104,7 @@ uploadArchives {
                 authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
             pom.project {
-                name 'Dotify'
+                name 'Dotify - dotify.api'
                 packaging 'jar'
                 description 'Dotify braille translation system'
                 url 'https://code.google.com/p/dotify/'
