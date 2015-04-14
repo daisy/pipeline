@@ -103,14 +103,14 @@ uploadArchives {
                 authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
             pom.project {
-                name 'Dotify - dotify.translator.impl'
+                name 'dotify.translator.impl'
                 packaging 'jar'
-                description 'Dotify braille translation system'
-                url 'https://code.google.com/p/dotify/'
+                description 'Dotify Braille Translator'
+                url 'https://github.com/joeha480/dotify/'
                 scm {
-                    connection 'scm:git:https://github.com/mtmse/dotify.git'
-                    developerConnection 'scm:git:https://github.com/mtmse/dotify.git'
-                    url 'https://github.com/mtmse/dotify'
+                    connection 'scm:git:https://github.com/joeha480/dotify.git'
+                    developerConnection 'scm:git:https://github.com/joeha480/dotify.git'
+                    url 'https://github.com/joeha480/dotify'
                 }
                 licenses {
                     license {
