@@ -5,7 +5,6 @@ apply plugin: "bundle"
 apply plugin: "signing"
 
 group = "org.daisy.dotify"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -64,9 +63,12 @@ buildscript {
 
 bundle {
     instructions << [
-    				//must use file() to resolve against the build.gradle in Eclipse
+		//must use file() to resolve against the build.gradle in Eclipse
         "-include": file('bnd.bnd'),
-        //"SPI-Consumer": "java.util.ServiceLoader#load(java.lang.Class)"
+        'Built-By': System.getProperty("user.name"),
+        'Built-On': new Date().format('yyyy-MM-dd'),
+        'Repository-Revision': "$repositoryRevision",
+        'Repository-URL': "$repositoryURL" 
     ]
 }
 
@@ -111,7 +113,7 @@ uploadArchives {
                 scm {
                     connection 'scm:git:https://github.com/joeha480/dotify.git'
                     developerConnection 'scm:git:https://github.com/joeha480/dotify.git'
-                    url 'https://github.com/joeha480/dotify'
+                    url "$repositoryURL"
                 }
                 licenses {
                     license {
