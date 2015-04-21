@@ -1,11 +1,10 @@
 apply plugin: "java"
 apply plugin: "maven"
 //custom plugins
-apply plugin: "bundle"
+apply plugin: "org.dm.bundle"
 apply plugin: "signing"
 
 group = "org.daisy.dotify"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -42,10 +41,23 @@ compileTestJava {
 
 buildscript {
     repositories { mavenCentral() }
-    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.5" }
+    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.2" }
 }
 
-bundle { instructions << [ "-include": file('bnd.bnd') ] }
+task updateBndVersion() << {
+	String contents = file('bnd.bnd').getText('UTF-8')
+	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.]+', "Bundle-Version: $version"), 'UTF-8')
+}
+
+bundle {
+	instructions << [
+		"-include": file('bnd.bnd'),
+		'Built-By': System.getProperty("user.name"),
+        'Built-On': new Date().format('yyyy-MM-dd'),
+        'Repository-Revision': "$repositoryRevision",
+        'Repository-URL': "$repositoryURL"
+	]
+}
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
@@ -69,6 +81,8 @@ signing {
 }
 
 uploadArchives {
+	//only upload if a git hash is supplied
+	enabled = repositoryRevision.size()==40
     repositories {
         mavenDeployer {
             if (isReleaseVersion) {
@@ -88,7 +102,7 @@ uploadArchives {
                 scm {
                     connection 'scm:git:https://github.com/joeha480/dotify.git'
                     developerConnection 'scm:git:https://github.com/joeha480/dotify.git'
-                    url 'https://github.com/joeha480/dotify'
+                    url "$repositoryURL"
                 }
                 licenses {
                     license {
