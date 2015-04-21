@@ -38,7 +38,7 @@ sourceSets {
 }
 
 dependencies {
-    compile group: "org.daisy.dotify", name: "dotify.api", version: "1.0-SNAPSHOT"
+    compile group: "org.daisy.dotify", name: "dotify.api", version: "1.0.0"
     compile group: "org.daisy.dotify", name: "dotify.common", version: "1.0-SNAPSHOT"
     compile group: "com.googlecode.texhyphj", name: "texhyphj", version: "1.2"
     compile group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
