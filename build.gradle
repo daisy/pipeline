@@ -1,7 +1,7 @@
 apply plugin: "java"
 apply plugin: "maven"
 //custom plugins
-apply plugin: "bundle"
+apply plugin: "org.dm.bundle"
 apply plugin: "signing"
 
 group = "org.daisy.dotify"
@@ -55,11 +55,16 @@ compileTestJava {
 }
 
 buildscript {
-    repositories { mavenCentral() }
-    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.5" }
+    repositories {
+    	mavenCentral()
+    }
+    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.2" }
 }
 
-
+task updateBndVersion() << {
+	String contents = file('bnd.bnd').getText('UTF-8')
+	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.]+', "Bundle-Version: $version"), 'UTF-8')
+}
 
 bundle {
     instructions << [
@@ -68,7 +73,7 @@ bundle {
         'Built-By': System.getProperty("user.name"),
         'Built-On': new Date().format('yyyy-MM-dd'),
         'Repository-Revision': "$repositoryRevision",
-        'Repository-URL': "$repositoryURL" 
+        'Repository-URL': "$repositoryURL"
     ]
 }
 
@@ -94,6 +99,8 @@ signing {
 }
 
 uploadArchives {
+	//only upload if a git hash is supplied
+	enabled = repositoryRevision.size()==40
     repositories {
         mavenDeployer {
             if (isReleaseVersion) {
