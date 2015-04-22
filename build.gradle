@@ -54,6 +54,11 @@ compileTestJava {
 	options.encoding = 'UTF-8'
 }
 
+javadoc {
+	options.encoding = 'UTF-8'
+	options.links('http://docs.oracle.com/javase/6/docs/api/');
+}
+
 buildscript {
     repositories {
     	mavenCentral()
