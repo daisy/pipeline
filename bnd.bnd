@@ -3,12 +3,11 @@
 	biz.aQute.bnd.annotation,\
 	junit.osgi
 Export-Package:  \
-	se.mtm.common.io,\
-	se.mtm.common.xml,\
-	se.mtm.common.text,\
-	org.daisy.dotify.text,\
-	org.daisy.dotify.tools,\
-	se.mtm.common.collection
+	org.daisy.dotify.common.io,\
+	org.daisy.dotify.common.xml,\
+	org.daisy.dotify.common.text,\
+	org.daisy.dotify.common.braille,\
+	org.daisy.dotify.common.collection
 Include-Resource: / = src/
 -sources: false
 Bundle-Version: 1.0.0-SNAPSHOT
