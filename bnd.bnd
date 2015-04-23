@@ -11,3 +11,4 @@ Export-Package:  \
 	se.mtm.common.collection
 Include-Resource: / = src/
 -sources: false
+Bundle-Version: 1.0.0-SNAPSHOT
