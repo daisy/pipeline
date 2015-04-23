@@ -3,9 +3,7 @@ package org.daisy.dotify.common.text;
 /**
  * StringFilter is in interface used when replacing a string with another string.
  * 
- * @author  Joel Hakansson, TPB
- * @version 4 maj 2009
- * @since 1.0
+ * @author  Joel Hakansson
  */
 public interface StringFilter {
 	

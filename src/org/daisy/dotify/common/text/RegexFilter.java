@@ -9,9 +9,7 @@ import java.util.regex.PatternSyntaxException;
 /**
  * Implements StringFilter using a regex pattern.
  * 
- * @author  Joel Håkansson, TPB
- * @version 30 apr 2009
- * @since 1.0
+ * @author  Joel Håkansson
  */
 public class RegexFilter implements StringFilter {
 	private final Pattern pattern;

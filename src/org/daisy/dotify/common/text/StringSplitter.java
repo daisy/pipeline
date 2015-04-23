@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * Provides a method for splitting a CharSequence using regex 
  * where both matching and non matching sub sequences are retained.
- * @author Joel Håkansson, TPB
+ * @author Joel Håkansson
  */
 public class StringSplitter {
 	private final Pattern pattern;

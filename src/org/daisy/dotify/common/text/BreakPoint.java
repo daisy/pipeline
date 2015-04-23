@@ -5,7 +5,7 @@ package org.daisy.dotify.common.text;
  * Since this implementation uses two Strings, rather than the original String and
  * an integer for the break point position, it can be used with non standard hyphenation 
  * algorithms.</p>
- * @author Joel Håkansson, TPB
+ * @author Joel Håkansson
  */
 public class BreakPoint {
 	/* (non-Javadoc)

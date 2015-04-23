@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * Soft hyphen (0x00ad), zero width space (0x200b), dash (0x002d)
  * and space are used to determine an appropriate break point. Soft
  * hyphens are removed in the result.
- * @author Joel Håkansson, TPB
+ * @author Joel Håkansson
  *
  */
 public class BreakPointHandler {
