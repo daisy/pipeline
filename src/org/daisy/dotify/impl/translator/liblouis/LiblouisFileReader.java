@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.text.TextFileReader;
-import org.daisy.dotify.tools.BrailleNotationConverter;
+import org.daisy.dotify.common.braille.BrailleNotationConverter;
+import org.daisy.dotify.common.text.TextFileReader;
 
 class LiblouisFileReader {
 	private final ResourceResolver rr;

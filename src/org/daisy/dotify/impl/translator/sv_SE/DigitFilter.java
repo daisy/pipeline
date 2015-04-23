@@ -1,8 +1,8 @@
 package org.daisy.dotify.impl.translator.sv_SE;
 
-import org.daisy.dotify.text.CombinationFilter;
-import org.daisy.dotify.text.RegexFilter;
-import org.daisy.dotify.text.StringFilter;
+import org.daisy.dotify.common.text.CombinationFilter;
+import org.daisy.dotify.common.text.RegexFilter;
+import org.daisy.dotify.common.text.StringFilter;
 
 class DigitFilter implements StringFilter {
 	enum Algorithm {

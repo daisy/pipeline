@@ -4,7 +4,7 @@ import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
 import org.daisy.dotify.api.translator.BrailleTranslator;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
-import org.daisy.dotify.text.IdentityFilter;
+import org.daisy.dotify.common.text.IdentityFilter;
 import org.daisy.dotify.translator.SimpleBrailleTranslator;
 
 class DefaultBypassTranslatorFactory implements BrailleTranslatorFactory {

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import org.daisy.dotify.text.StringFilter;
+import org.daisy.dotify.common.text.StringFilter;
 
 public class LiblouisBrailleFilter implements StringFilter {
 	private final Map<Integer, Substitution> mSubstitutionTable;

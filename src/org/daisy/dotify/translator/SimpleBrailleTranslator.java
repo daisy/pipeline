@@ -11,8 +11,8 @@ import org.daisy.dotify.api.translator.BrailleTranslatorResult;
 import org.daisy.dotify.api.translator.MarkerProcessor;
 import org.daisy.dotify.api.translator.TextAttribute;
 import org.daisy.dotify.api.translator.TranslationException;
-import org.daisy.dotify.text.BreakPointHandler;
-import org.daisy.dotify.text.StringFilter;
+import org.daisy.dotify.common.text.BreakPointHandler;
+import org.daisy.dotify.common.text.StringFilter;
 
 /**
  * Provides a simple braille translator that translates

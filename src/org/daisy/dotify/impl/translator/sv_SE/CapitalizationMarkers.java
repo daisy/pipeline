@@ -2,10 +2,9 @@ package org.daisy.dotify.impl.translator.sv_SE;
 
 import java.util.regex.Pattern;
 
-import org.daisy.dotify.text.StringFilter;
-
-import se.mtm.common.text.SplitResult;
-import se.mtm.common.text.StringSplitter;
+import org.daisy.dotify.common.text.SplitResult;
+import org.daisy.dotify.common.text.StringFilter;
+import org.daisy.dotify.common.text.StringSplitter;
 
 
 /**

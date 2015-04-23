@@ -4,10 +4,10 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.daisy.dotify.text.UCharFilter;
-import org.daisy.dotify.text.CombinationFilter;
-import org.daisy.dotify.text.FilterLocale;
-import org.daisy.dotify.text.RegexFilter;
+import org.daisy.dotify.common.text.CombinationFilter;
+import org.daisy.dotify.common.text.FilterLocale;
+import org.daisy.dotify.common.text.RegexFilter;
+import org.daisy.dotify.common.text.UCharFilter;
 import org.daisy.dotify.translator.UncontractedBrailleFilter;
 
 public class SwedishBrailleFilter implements UncontractedBrailleFilter {

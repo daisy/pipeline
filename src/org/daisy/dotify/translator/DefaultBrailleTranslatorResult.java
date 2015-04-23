@@ -1,8 +1,8 @@
 package org.daisy.dotify.translator;
 
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
-import org.daisy.dotify.text.BreakPointHandler;
-import org.daisy.dotify.text.StringFilter;
+import org.daisy.dotify.common.text.BreakPointHandler;
+import org.daisy.dotify.common.text.StringFilter;
 
 class DefaultBrailleTranslatorResult implements BrailleTranslatorResult {
 	private final BreakPointHandler bph;
