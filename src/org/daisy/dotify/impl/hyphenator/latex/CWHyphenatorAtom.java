@@ -7,9 +7,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.daisy.dotify.api.hyphenator.HyphenatorConfigurationException;
-
-import se.mtm.common.text.SplitResult;
-import se.mtm.common.text.StringSplitter;
+import org.daisy.dotify.common.text.SplitResult;
+import org.daisy.dotify.common.text.StringSplitter;
 
 public class CWHyphenatorAtom {
 	public final static String DICTIONARY_KEY = "dictionary";

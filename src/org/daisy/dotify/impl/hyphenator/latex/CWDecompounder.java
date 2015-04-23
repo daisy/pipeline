@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.dotify.text.TextFileReader;
-import org.daisy.dotify.text.TextFileReader.LineData;
+import org.daisy.dotify.common.text.TextFileReader;
+import org.daisy.dotify.common.text.TextFileReader.LineData;
 
 
 /**

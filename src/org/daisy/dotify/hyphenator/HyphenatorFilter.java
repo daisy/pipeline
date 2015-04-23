@@ -3,7 +3,7 @@ package org.daisy.dotify.hyphenator;
 import org.daisy.dotify.api.hyphenator.HyphenatorConfigurationException;
 import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
 import org.daisy.dotify.api.hyphenator.HyphenatorInterface;
-import org.daisy.dotify.text.StringFilter;
+import org.daisy.dotify.common.text.StringFilter;
 
 /**
  * Provides a hyphenating string filter. This filter will hyphenate the
