@@ -9,7 +9,7 @@ import org.daisy.dotify.common.text.StringSplitter;
 
 /**
  * Adds Swedish braille capitalization markers to a String.
- * @author Joel Håkansson, TPB
+ * @author Joel Håkansson
  */
 class CapitalizationMarkers implements StringFilter {
 	private final static String CHAR_MARKER = "\u2820";
