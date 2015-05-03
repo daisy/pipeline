@@ -1,10 +1,7 @@
-apply plugin: "java"
 apply plugin: "maven"
 //custom plugins
 apply plugin: "org.dm.bundle"
 apply plugin: "signing"
-
-group = "org.daisy.dotify"
 
 repositories {
     mavenCentral()
@@ -12,36 +9,8 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
-sourceSets {
-    main {
-        java { srcDir "src" }
-        resources { srcDir "src" }
-    }
-    test {
-        java { srcDir "test" }
-        resources { srcDir "test" }
-    }
-}
-
 dependencies {
     testCompile group: "junit", name: "junit", version: "4.7"
-}
-
-compileJava {
-    options.encoding = "UTF-8"
-    sourceCompatibility = 1.6
-    targetCompatibility = 1.6
-    // FIXME: "bootstrap class path not set in conjunction with -source 1.6"
-    // options.bootClasspath = "/usr/lib/jvm/java-6-openjdk/jre/lib/rt.jar"
-}
-
-compileTestJava {
-	options.encoding = 'UTF-8'
-}
-
-javadoc {
-	options.encoding = 'UTF-8'
-	options.links('http://docs.oracle.com/javase/6/docs/api/');
 }
 
 buildscript {
