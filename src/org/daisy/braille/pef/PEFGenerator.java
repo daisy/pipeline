@@ -48,6 +48,12 @@ public class PEFGenerator {
 	public static String KEY_VOLUMES = "volumes";
 	/**
 	 * Key used in the settings map passed to the constructor. Its value defines
+	 * the number of sections
+	 * in the generated file 
+	 */
+	public static String KEY_SPV = "sections";
+	/**
+	 * Key used in the settings map passed to the constructor. Its value defines
 	 * the number of pages per volume
 	 * in the generated file 
 	 */
@@ -81,6 +87,7 @@ public class PEFGenerator {
 	static {
 		defaults = new HashMap<String, String>();
 		defaults.put(KEY_VOLUMES, "3");
+		defaults.put(KEY_SPV, "1");
 		defaults.put(KEY_PPV, "20");
 		defaults.put(KEY_EIGHT_DOT, "false");
 		defaults.put(KEY_ROWS, "29");
@@ -89,6 +96,7 @@ public class PEFGenerator {
 	}
 	
 	private int volumes;
+	private int sectionsPerVolume;
 	private int pagesPerVolume;
 	private boolean eightDot;
 	private int rows;
@@ -109,6 +117,7 @@ public class PEFGenerator {
 	 */
 	public PEFGenerator(Map<String, String> p) {
 		volumes = Integer.parseInt(get(KEY_VOLUMES, p));
+		sectionsPerVolume = Integer.parseInt(get(KEY_SPV, p));
 		pagesPerVolume = Integer.parseInt(get(KEY_PPV, p));
 		eightDot = Boolean.parseBoolean(get(KEY_EIGHT_DOT, p));
 		rows = Integer.parseInt(get(KEY_ROWS, p));
@@ -116,6 +125,9 @@ public class PEFGenerator {
 		duplex = Boolean.parseBoolean(get(KEY_DUPLEX, p));
 		if (volumes<1) {
 			throw new IllegalArgumentException("Volumes must be larger than 0");
+		}
+		if (sectionsPerVolume<1) {
+			throw new IllegalArgumentException("Sections per volume must be larger than 0");
 		}
 		if (pagesPerVolume<1) {
 			throw new IllegalArgumentException("Pages per volume must be larger than 0");
@@ -189,9 +201,15 @@ public class PEFGenerator {
 		int range = (eightDot?256:64);
 		int rowgap = (eightDot?1:0);
 		for (int v=0; v<volumes; v++) {
+			List<Integer> sections = getSectionDivisors();
 			pw.println("\t\t<volume cols=\""+cols+"\" rows=\""+(rows + (int)Math.ceil((rows*rowgap)/4d))+"\" rowgap=\""+rowgap+"\" duplex=\""+duplex+"\">");
 			pw.println("\t\t\t<section>");
 			for (int ppv=0; ppv<pagesPerVolume; ppv++) {
+				if (sections.size()>0 && sections.get(0).equals(ppv)) {
+					pw.println("\t\t\t</section>");
+					pw.println("\t\t\t<section>");
+					sections.remove(0);
+				}
 				pw.println("\t\t\t\t<page>");
 				rpp = (int)(Math.floor(Math.random()*(rows+1)));
 				for (int r=0; r<rpp; r++) {
@@ -210,6 +228,21 @@ public class PEFGenerator {
 		pw.println("\t</body>");
 		pw.print("</pef>");
 		pw.close();
+	}
+	
+	/**
+	 * Calculate section dividers based on the current settings. 
+	 * @return returns a list of page numbers where sections should be inserted
+	 */
+	List<Integer> getSectionDivisors() {
+		List<Integer> sections = new ArrayList<Integer>();
+		if (sectionsPerVolume>1) {
+			int pps = (pagesPerVolume-1)/(sectionsPerVolume-1);
+			for (int i=0; i<sectionsPerVolume-1; i++) {
+				sections.add(1+(pps*i)+(int)(Math.floor(Math.random()*(pps))));
+			}
+		}
+		return sections;
 	}
 
         /**
