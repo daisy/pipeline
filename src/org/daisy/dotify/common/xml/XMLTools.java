@@ -20,8 +20,11 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.daisy.dotify.common.net.URLCache;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class XMLTools {
@@ -122,7 +125,14 @@ public class XMLTools {
 		}
 		XMLHandler dh = new XMLHandler(peek);
 		try {
-			saxParser.parse(f, dh);
+	        XMLReader reader = saxParser.getXMLReader();
+	        if (dh != null) {
+	            reader.setContentHandler(dh);
+	            reader.setEntityResolver(new EntityResolverCache());
+	            reader.setErrorHandler(dh);
+	            reader.setDTDHandler(dh);
+	        }
+			saxParser.getXMLReader().parse(new InputSource(f.toURI().toASCIIString()));
 		} catch (StopParsing e) {
 			//thrown if peek is true
 		} catch (SAXException e) {
@@ -151,6 +161,7 @@ public class XMLTools {
 				}
 			}
 		}
+		
 	}
 	
 	private static class StopParsing extends SAXException {
