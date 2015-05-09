@@ -1,6 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'maven'
-
+apply plugin: "signing"
 //custom plugins
 apply plugin: "bundle"
 
@@ -14,25 +14,10 @@ sourceCompatibility = '1.6'
 targetCompatibility = '1.6'
 
 group = "org.daisy.braille"
-version = "2.0-SNAPSHOT"
 
 sourceSets {
-	main {
-		java {
-			srcDir 'src'
-		}
-		resources {
-			srcDir 'src'
-		}
-	}
-	test {
-		java {
-			srcDir 'test'
-		}
-		resources {
-			srcDir 'test'
-		}
-	}
+	main {	java { srcDir 'src' }	resources { srcDir 'src' } }
+	test {	java { srcDir 'test' }	resources { srcDir 'test' } }
 }
 
 jar {
@@ -42,7 +27,7 @@ jar {
 	    	'Built-On': new Date(),					//'${ISO-TODAY}'
 			'Repository-Revision': "$repositoryRevision",
 			'Implementation-Title': "$releaseName Core",
-			'Implementation-Version': "$releaseVersion",
+			'Implementation-Version': version,
 			'Implementation-URL': 'http://code.google.com/p/brailleutils/',
 			'Class-Path': configurations.compile.collect { it.getName() }.join(' ')					//'${core.classpath.attribute}'
 			)
@@ -55,12 +40,18 @@ jar {
 repositories {
     mavenCentral()
     mavenLocal()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+configurations {
+	provided
+	compile { extendsFrom provided }
 }
 
 dependencies {
+	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
 	//compile group: 'com.thaiopensource', name: 'jing', version: '20091111'
 	compile group: 'org.daisy.libs', name: 'jing', version: '20120724.0.0'
-	compile group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
 	testCompile group: 'junit', name: 'junit', version: '4.7'
 	runtime group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5'
 }
@@ -76,4 +67,66 @@ bundle {
         "-include": file('bnd.bnd'),
         'Repository-Revision': "$repositoryRevision"
     ]
+}
+
+task javadocJar(type: Jar) {
+	classifier = 'javadoc'
+	from javadoc
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives javadocJar, sourcesJar
+}
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+signing {
+	required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+	sign configurations.archives
+}
+
+uploadArchives {
+	//only upload if a git hash is supplied
+	enabled = repositoryRevision.size()==40
+	repositories {
+		mavenDeployer {
+			if (isReleaseVersion) {
+				beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+			}
+			repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+				authentication(userName: sonatypeUsername, password: sonatypePassword)
+			}
+			snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+				authentication(userName: sonatypeUsername, password: sonatypePassword)
+			}
+            pom.project {
+				name 'braille-utils.api'
+				packaging 'jar'
+				description 'Braille Utils API'
+				url 'https://github.com/joeha480/brailleutils/'
+				scm {
+					connection 'scm:git:https://github.com/joeha480/brailleutils.git'
+					developerConnection 'scm:git:https://github.com/joeha480/brailleutils.git'
+					url "$repositoryURL"
+				}
+                licenses {
+					license {
+						name 'LGPL'
+						url 'http://www.gnu.org/licenses/lgpl.html'
+					}
+                }
+				developers {
+					developer {
+						id 'joel'
+						name 'Joel Håkansson'
+					}
+				}
+			}
+		}
+	}
 }
