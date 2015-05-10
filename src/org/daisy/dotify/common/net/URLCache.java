@@ -39,17 +39,48 @@ public class URLCache {
 		return new FileInputStream(f);
 	}
 	
+	/**
+	 * Updates the cache file
+	 * @param url the url to update
+	 * @return the cache file
+	 * @throws IOException if download failed
+	 */
 	public File updateCacheFile(URL url) throws IOException {
 		return getCacheFile(url, true);
 	}
 	
-	public File getCacheFile(URL url) throws IOException {
+	/**
+	 * Gets the cache file for the specified url
+	 * @param url the url to get the file for
+	 * @return returns the file, or null if the file isn't in the cache
+	 * @throws IOException if download failed
+	 */
+	public File getCacheFile(URL url) throws IOException  {
 		return getCacheFile(url, false);
 	}
 	
+	/**
+	 * Returns true if the entry is in the cache
+	 * @param url
+	 * @return returns true if the entry is in the cache
+	 */
 	public boolean hasEntry(URL url) {
 		File f = toPath(url);
 		return (f!=null ? f.exists() : false);
+	}
+	
+	/**
+	 * Removes the specified url from the cache.
+	 * @param url the url to remove from the cache
+	 * @return returns true if the entry was successfully removed
+	 */
+	public boolean removeEntry(URL url) {
+		File f = toPath(url);
+		if (f!=null) {
+			return f.delete(); 
+		} else {
+			return false;
+		}
 	}
 
 	private File getCacheFile(URL url, boolean overwrite) throws IOException {
