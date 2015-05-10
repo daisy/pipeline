@@ -60,6 +60,23 @@ public class URLCache {
 	}
 	
 	/**
+	 * Sets the cache file to the contents of the specified input stream
+	 * @param url the url to set the cache contents for
+	 * @param is the content input stream
+	 * @return returns true if the operation was successful, false otherwise
+	 * @throws IOException if the stream couldn't be copied
+	 */
+	public boolean setCacheFile(URL url, InputStream is) throws IOException {
+		File f = toPath(url);
+		if (f!=null) {
+			copyStream(is, f);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Returns true if the entry is in the cache
 	 * @param url
 	 * @return returns true if the entry is in the cache
@@ -90,11 +107,15 @@ public class URLCache {
 		}
 		if (overwrite || !f.exists()) {
 			//Download a copy
-			f.getParentFile().mkdirs();
-			FileOutputStream os = new FileOutputStream(f);
-			FileIO.copy(url.openStream(), os);
+			copyStream(url.openStream(), f);
 		}
 		return f;
+	}
+	
+	private void copyStream(InputStream source, File target) throws IOException {
+		target.getParentFile().mkdirs();
+		FileOutputStream os = new FileOutputStream(target);
+		FileIO.copy(source, os);
 	}
 
 	private File toPath(URL url) {
