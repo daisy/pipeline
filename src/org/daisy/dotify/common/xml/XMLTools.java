@@ -3,6 +3,7 @@ package org.daisy.dotify.common.xml;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Map;
@@ -17,6 +18,7 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
@@ -45,7 +47,29 @@ public class XMLTools {
 		for (String name : params.keySet()) {
 			transformer.setParameter(name, params.get(name));
 		}
-
+		
+		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+		transformer.setURIResolver(new CachingURIResolver(parserFactory));
+        //Create a SAXSource, hook up an entityresolver
+        if(source.getSystemId()!=null && source.getSystemId().length()>0) {
+        	try{
+	            SAXSource saxSource = null;
+				if(!(source instanceof SAXSource)) {
+					SAXParser parser = parserFactory.newSAXParser();
+					parser.getXMLReader().setFeature("http://xml.org/sax/features/validation", false);
+			        saxSource = new SAXSource(parser.getXMLReader(), new InputSource(new URLCache().openStream(new URI(source.getSystemId()).toURL())));        
+			        saxSource.setSystemId(source.getSystemId());
+				}else{
+					saxSource = (SAXSource) source;
+				}
+				if(saxSource.getXMLReader().getEntityResolver()==null) {
+					saxSource.getXMLReader().setEntityResolver(new EntityResolverCache());
+				}	
+				source = saxSource;
+        	}catch (Exception e) {
+				e.printStackTrace();
+			}
+        }
 		try {
 			transformer.transform(source, result);
 		} catch (TransformerException e) {
