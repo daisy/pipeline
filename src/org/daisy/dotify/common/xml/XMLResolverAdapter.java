@@ -33,11 +33,11 @@ import org.xml.sax.SAXException;
  * An XMLResolver that uses a SAX EntityResolver for entity resolution.
  * @author Linus Ericson
  */
-public class CachingXMLResolver implements XMLResolver {
+public class XMLResolverAdapter implements XMLResolver {
 
     private EntityResolver resolver;
     
-    CachingXMLResolver(EntityResolver entityResolver) {
+    public XMLResolverAdapter(EntityResolver entityResolver) {
         resolver = entityResolver;
     }
     
