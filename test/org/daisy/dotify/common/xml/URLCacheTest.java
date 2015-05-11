@@ -1,4 +1,4 @@
-package org.daisy.dotify.common.net;
+package org.daisy.dotify.common.xml;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.daisy.dotify.common.xml.URLCache;
 import org.junit.Test;
 public class URLCacheTest {
 	

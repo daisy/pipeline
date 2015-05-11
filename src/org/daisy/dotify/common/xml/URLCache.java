@@ -1,4 +1,4 @@
-package org.daisy.dotify.common.net;
+package org.daisy.dotify.common.xml;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,18 +11,18 @@ import java.util.ArrayList;
 
 import org.daisy.dotify.common.io.FileIO;
 
-public class URLCache {
+class URLCache {
 	private final File root;
 	
-	public URLCache() {
+	URLCache() {
 		this(new File(System.getProperty("java.io.tmpdir"), "url-cache"));
 	}
 
-	public URLCache(File root) {
+	URLCache(File root) {
 		this.root = root;
 	}
 
-	public InputStream openStream(URL url) throws IOException {
+	InputStream openStream(URL url) throws IOException {
 		File f;
 		if (url.getProtocol().equals("file")) {
 			try {
@@ -45,7 +45,7 @@ public class URLCache {
 	 * @return the cache file
 	 * @throws IOException if download failed
 	 */
-	public File updateCacheFile(URL url) throws IOException {
+	File updateCacheFile(URL url) throws IOException {
 		return getCacheFile(url, true);
 	}
 	
@@ -55,7 +55,7 @@ public class URLCache {
 	 * @return returns the file, or null if the file isn't in the cache
 	 * @throws IOException if download failed
 	 */
-	public File getCacheFile(URL url) throws IOException  {
+	File getCacheFile(URL url) throws IOException  {
 		return getCacheFile(url, false);
 	}
 	
@@ -66,7 +66,7 @@ public class URLCache {
 	 * @return returns true if the operation was successful, false otherwise
 	 * @throws IOException if the stream couldn't be copied
 	 */
-	public boolean setCacheFile(URL url, InputStream is) throws IOException {
+	boolean setCacheFile(URL url, InputStream is) throws IOException {
 		File f = toPath(url);
 		if (f!=null) {
 			copyStream(is, f);
@@ -81,7 +81,7 @@ public class URLCache {
 	 * @param url
 	 * @return returns true if the entry is in the cache
 	 */
-	public boolean hasEntry(URL url) {
+	boolean hasEntry(URL url) {
 		File f = toPath(url);
 		return (f!=null ? f.exists() : false);
 	}
@@ -91,7 +91,7 @@ public class URLCache {
 	 * @param url the url to remove from the cache
 	 * @return returns true if the entry was successfully removed
 	 */
-	public boolean removeEntry(URL url) {
+	boolean removeEntry(URL url) {
 		File f = toPath(url);
 		if (f!=null) {
 			return f.delete(); 
