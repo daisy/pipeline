@@ -1,0 +1,2 @@
+# Introduction #
+dotify.common contains general classes that had to be implemented in order to support the other projects. Adding classes to this project should not be taken lightly as infrastructure dependencies can cause problems if overused.
