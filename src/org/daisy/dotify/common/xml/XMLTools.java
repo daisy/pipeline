@@ -23,9 +23,11 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.xml.sax.Attributes;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class XMLTools {
@@ -151,7 +153,10 @@ public class XMLTools {
 	        XMLReader reader = saxParser.getXMLReader();
 	        if (dh != null) {
 	            reader.setContentHandler(dh);
-	            reader.setEntityResolver(new EntityResolverCache());
+	            reader.setEntityResolver(dh);
+				//since we sometimes have loadDTD turned off,
+				//we use lexical handler to get the pub and sys id of prolog
+				reader.setProperty("http://xml.org/sax/properties/lexical-handler", dh);
 	            reader.setErrorHandler(dh);
 	            reader.setDTDHandler(dh);
 	        }
@@ -166,27 +171,69 @@ public class XMLTools {
 		return dh.root;
 	}
 	
-	private static class XMLHandler extends DefaultHandler {
+	private static class XMLHandler extends DefaultHandler implements LexicalHandler {
+		private final EntityResolver resolver;
 		private final boolean peek;
+		private final XMLInfo.Builder builder;
 		private XMLInfo root = null;
 		
 		XMLHandler(boolean peek) {
+			this.resolver = new EntityResolverCache();
 			this.peek = peek;
+			this.builder = new XMLInfo.Builder();
 		}
 
 		@Override
 		public void startElement(String uri, String localName, String qName,
 				Attributes attributes) throws SAXException {
 			if (this.root == null) {
-				this.root = new XMLInfo(uri, localName, qName, attributes);
+				this.root = builder.uri(uri).localName(localName).qName(qName).attributes(attributes).build();
 				if (peek) {
 					throw new StopParsing();
 				}
 			}
 		}
-		
+
+		public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
+			if (root == null) {
+				//set prolog entity in builder
+				builder.publicId(publicId);
+				builder.systemId(systemId);
+			}
+			return resolver.resolveEntity(publicId, systemId);
+		}
+
+		public void startDTD(String name, String publicId, String systemId) throws SAXException {
+			builder.publicId(publicId);
+			builder.systemId(systemId);
+		}
+
+		@Override
+		public void endDTD() throws SAXException {
+		}
+
+		@Override
+		public void startEntity(String name) throws SAXException {
+		}
+
+		@Override
+		public void endEntity(String name) throws SAXException {
+		}
+
+		@Override
+		public void startCDATA() throws SAXException {
+		}
+
+		@Override
+		public void endCDATA() throws SAXException {
+		}
+
+		@Override
+		public void comment(char[] ch, int start, int length)
+				throws SAXException {
+		}
 	}
-	
+
 	private static class StopParsing extends SAXException {
 
 		private static final long serialVersionUID = -4335028194855324300L;
