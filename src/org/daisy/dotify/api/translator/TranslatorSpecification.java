@@ -49,23 +49,30 @@ public class TranslatorSpecification implements Comparable<TranslatorSpecificati
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		TranslatorSpecification other = (TranslatorSpecification) obj;
 		if (locale == null) {
-			if (other.locale != null)
+			if (other.locale != null) {
 				return false;
-		} else if (!locale.equals(other.locale))
+			}
+		} else if (!locale.equals(other.locale)) {
 			return false;
+		}
 		if (mode == null) {
-			if (other.mode != null)
+			if (other.mode != null) {
 				return false;
-		} else if (!mode.equals(other.mode))
+			}
+		} else if (!mode.equals(other.mode)) {
 			return false;
+		}
 		return true;
 	}
 

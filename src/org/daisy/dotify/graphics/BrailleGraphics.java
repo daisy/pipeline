@@ -65,15 +65,15 @@ public class BrailleGraphics {
 		for (int y = my; y < h; y=y+dy) {
 			sb = new StringBuilder();
 			for (int x = mx; x < w; x=x+dx) {
-				if (x<w&&y<h) r.getPixel(x, y, p1); else p1[0]=0;
-				if (x<w&&y+1<h) r.getPixel(x, y+1, p2); else p2[0]=0;
-				if (x<w&&y+2<h) r.getPixel(x, y+2, p3); else p3[0]=0;
-				if (x+1<w&&y<h) r.getPixel(x+1, y, p4);  else p4[0]=0;
-				if (x+1<w&&y+1<h) r.getPixel(x+1, y+1, p5); else p5[0]=0;
-				if (x+1<w&&y+2<h) r.getPixel(x+1, y+2, p6); else p6[0]=0;
+				if (x<w&&y<h) { r.getPixel(x, y, p1); } else { p1[0]=0; }
+				if (x<w&&y+1<h) { r.getPixel(x, y+1, p2); } else { p2[0]=0; }
+				if (x<w&&y+2<h) { r.getPixel(x, y+2, p3); } else { p3[0]=0; }
+				if (x+1<w&&y<h) { r.getPixel(x+1, y, p4); } else { p4[0]=0; }
+				if (x+1<w&&y+1<h) { r.getPixel(x+1, y+1, p5); } else { p5[0]=0; }
+				if (x+1<w&&y+2<h) { r.getPixel(x+1, y+2, p6); } else { p6[0]=0; }
 				if (eightDot) {
-					if (x<w&&y+3<h) r.getPixel(x, y+3, p7); else p7[0]=0;
-					if (x+1<w&&y+3<h) r.getPixel(x+1, y+3, p8);	else p8[0]=0;
+					if (x<w&&y+3<h) { r.getPixel(x, y+3, p7); } else { p7[0]=0; }
+					if (x+1<w&&y+3<h) { r.getPixel(x+1, y+3, p8); }	else { p8[0]=0; }
 				} else {
 					p7[0]=0;
 					p8[0]=0;

@@ -76,14 +76,26 @@ public class TextProperties {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 		TextProperties other = (TextProperties) obj;
-		if (hyphenate != other.hyphenate) return false;
+		if (hyphenate != other.hyphenate) {
+			return false;
+		}
 		if (locale == null) {
-			if (other.locale != null) return false;
-		} else if (!locale.equals(other.locale)) return false;
+			if (other.locale != null) {
+				return false;
+			}
+		} else if (!locale.equals(other.locale)) {
+			return false;
+		}
 		return true;
 	}
 

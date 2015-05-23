@@ -251,53 +251,72 @@ public class TextBorderStyle {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		TextBorderStyle other = (TextBorderStyle) obj;
 		if (bottomBorder == null) {
-			if (other.bottomBorder != null)
+			if (other.bottomBorder != null) {
 				return false;
-		} else if (!bottomBorder.equals(other.bottomBorder))
+			}
+		} else if (!bottomBorder.equals(other.bottomBorder)) {
 			return false;
+		}
 		if (bottomLeftCorner == null) {
-			if (other.bottomLeftCorner != null)
+			if (other.bottomLeftCorner != null) {
 				return false;
-		} else if (!bottomLeftCorner.equals(other.bottomLeftCorner))
+			}
+		} else if (!bottomLeftCorner.equals(other.bottomLeftCorner)) {
 			return false;
+		}
 		if (bottomRightCorner == null) {
-			if (other.bottomRightCorner != null)
+			if (other.bottomRightCorner != null) {
 				return false;
-		} else if (!bottomRightCorner.equals(other.bottomRightCorner))
+			}
+		} else if (!bottomRightCorner.equals(other.bottomRightCorner)) {
 			return false;
+		}
 		if (leftBorder == null) {
-			if (other.leftBorder != null)
+			if (other.leftBorder != null) {
 				return false;
-		} else if (!leftBorder.equals(other.leftBorder))
+			}
+		} else if (!leftBorder.equals(other.leftBorder)) {
 			return false;
+		}
 		if (rightBorder == null) {
-			if (other.rightBorder != null)
+			if (other.rightBorder != null) {
 				return false;
-		} else if (!rightBorder.equals(other.rightBorder))
+			}
+		} else if (!rightBorder.equals(other.rightBorder)) {
 			return false;
+		}
 		if (topBorder == null) {
-			if (other.topBorder != null)
+			if (other.topBorder != null) {
 				return false;
-		} else if (!topBorder.equals(other.topBorder))
+			}
+		} else if (!topBorder.equals(other.topBorder)) {
 			return false;
+		}
 		if (topLeftCorner == null) {
-			if (other.topLeftCorner != null)
+			if (other.topLeftCorner != null) {
 				return false;
-		} else if (!topLeftCorner.equals(other.topLeftCorner))
+			}
+		} else if (!topLeftCorner.equals(other.topLeftCorner)) {
 			return false;
+		}
 		if (topRightCorner == null) {
-			if (other.topRightCorner != null)
+			if (other.topRightCorner != null) {
 				return false;
-		} else if (!topRightCorner.equals(other.topRightCorner))
+			}
+		} else if (!topRightCorner.equals(other.topRightCorner)) {
 			return false;
+		}
 		return true;
 	}
 

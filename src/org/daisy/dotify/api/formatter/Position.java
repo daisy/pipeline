@@ -78,9 +78,6 @@ public class Position {
 		return (int)Math.round(ret);
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -92,23 +89,25 @@ public class Position {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Position other = (Position) obj;
-		if (isRelative != other.isRelative)
+		if (isRelative != other.isRelative) {
 			return false;
+		}
 		if (Double.doubleToLongBits(value) != Double
-				.doubleToLongBits(other.value))
+				.doubleToLongBits(other.value)) {
 			return false;
+		}
 		return true;
 	}
 }

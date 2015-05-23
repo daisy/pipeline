@@ -419,60 +419,113 @@ public class BlockProperties implements Cloneable {
 		result = prime * result + ((align == null) ? 0 : align.hashCode());
 		result = prime * result + blockIndent;
 		result = prime * result + bottomMargin;
-		result = prime * result + ((breakBefore == null) ? 0 : breakBefore.hashCode());
+		result = prime * result
+				+ ((breakBefore == null) ? 0 : breakBefore.hashCode());
 		result = prime * result + firstLineIndent;
-		result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
+		result = prime * result
+				+ ((identifier == null) ? 0 : identifier.hashCode());
 		result = prime * result + ((keep == null) ? 0 : keep.hashCode());
 		result = prime * result + keepWithNext;
 		result = prime * result + keepWithNextSheets;
 		result = prime * result + keepWithPreviousSheets;
 		result = prime * result + leftMargin;
-		result = prime * result + ((listType == null) ? 0 : listType.hashCode());
+		result = prime * result
+				+ ((listType == null) ? 0 : listType.hashCode());
 		result = prime * result + rightMargin;
-		result = prime * result + ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
-		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
+		result = prime * result
+				+ ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
+		result = prime * result
+				+ ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
 		result = prime * result + textIndent;
 		result = prime * result + topMargin;
-		result = prime * result + ((verticalPosition == null) ? 0 : verticalPosition.hashCode());
+		result = prime
+				* result
+				+ ((verticalPosition == null) ? 0 : verticalPosition.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 		BlockProperties other = (BlockProperties) obj;
-		if (align != other.align) return false;
-		if (blockIndent != other.blockIndent) return false;
-		if (bottomMargin != other.bottomMargin) return false;
-		if (breakBefore != other.breakBefore) return false;
-		if (firstLineIndent != other.firstLineIndent) return false;
+		if (align != other.align) {
+			return false;
+		}
+		if (blockIndent != other.blockIndent) {
+			return false;
+		}
+		if (bottomMargin != other.bottomMargin) {
+			return false;
+		}
+		if (breakBefore != other.breakBefore) {
+			return false;
+		}
+		if (firstLineIndent != other.firstLineIndent) {
+			return false;
+		}
 		if (identifier == null) {
-			if (other.identifier != null) return false;
-		} else if (!identifier.equals(other.identifier)) return false;
-		if (keep != other.keep) return false;
-		if (keepWithNext != other.keepWithNext) return false;
-		if (keepWithNextSheets != other.keepWithNextSheets) return false;
-		if (keepWithPreviousSheets != other.keepWithPreviousSheets) return false;
-		if (leftMargin != other.leftMargin) return false;
-		if (listType != other.listType) return false;
-		if (rightMargin != other.rightMargin) return false;
+			if (other.identifier != null) {
+				return false;
+			}
+		} else if (!identifier.equals(other.identifier)) {
+			return false;
+		}
+		if (keep != other.keep) {
+			return false;
+		}
+		if (keepWithNext != other.keepWithNext) {
+			return false;
+		}
+		if (keepWithNextSheets != other.keepWithNextSheets) {
+			return false;
+		}
+		if (keepWithPreviousSheets != other.keepWithPreviousSheets) {
+			return false;
+		}
+		if (leftMargin != other.leftMargin) {
+			return false;
+		}
+		if (listType != other.listType) {
+			return false;
+		}
+		if (rightMargin != other.rightMargin) {
+			return false;
+		}
 		if (rowSpacing == null) {
-			if (other.rowSpacing != null)
+			if (other.rowSpacing != null) {
 				return false;
-		} else if (!rowSpacing.equals(other.rowSpacing))
+			}
+		} else if (!rowSpacing.equals(other.rowSpacing)) {
 			return false;
+		}
 		if (textBorderStyle == null) {
-			if (other.textBorderStyle != null)
+			if (other.textBorderStyle != null) {
 				return false;
-		} else if (!textBorderStyle.equals(other.textBorderStyle))
+			}
+		} else if (!textBorderStyle.equals(other.textBorderStyle)) {
 			return false;
-		if (textIndent != other.textIndent) return false;
-		if (topMargin != other.topMargin) return false;
+		}
+		if (textIndent != other.textIndent) {
+			return false;
+		}
+		if (topMargin != other.topMargin) {
+			return false;
+		}
 		if (verticalPosition == null) {
-			if (other.verticalPosition != null) return false;
-		} else if (!verticalPosition.equals(other.verticalPosition)) return false;
+			if (other.verticalPosition != null) {
+				return false;
+			}
+		} else if (!verticalPosition.equals(other.verticalPosition)) {
+			return false;
+		}
 		return true;
 	}
 

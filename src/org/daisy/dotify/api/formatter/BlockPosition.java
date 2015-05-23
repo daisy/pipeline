@@ -99,20 +99,33 @@ public class BlockPosition {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((align == null) ? 0 : align.hashCode());
-		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result
+				+ ((position == null) ? 0 : position.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
 		BlockPosition other = (BlockPosition) obj;
-		if (align != other.align) return false;
+		if (align != other.align) {
+			return false;
+		}
 		if (position == null) {
-			if (other.position != null) return false;
-		} else if (!position.equals(other.position)) return false;
+			if (other.position != null) {
+				return false;
+			}
+		} else if (!position.equals(other.position)) {
+			return false;
+		}
 		return true;
 	}
 
