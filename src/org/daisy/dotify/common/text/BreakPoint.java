@@ -8,9 +8,6 @@ package org.daisy.dotify.common.text;
  * @author Joel Håkansson
  */
 public class BreakPoint {
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -21,30 +18,35 @@ public class BreakPoint {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		BreakPoint other = (BreakPoint) obj;
-		if (hardBreak != other.hardBreak)
+		if (hardBreak != other.hardBreak) {
 			return false;
+		}
 		if (head == null) {
-			if (other.head != null)
+			if (other.head != null) {
 				return false;
-		} else if (!head.equals(other.head))
+			}
+		} else if (!head.equals(other.head)) {
 			return false;
+		}
 		if (tail == null) {
-			if (other.tail != null)
+			if (other.tail != null) {
 				return false;
-		} else if (!tail.equals(other.tail))
+			}
+		} else if (!tail.equals(other.tail)) {
 			return false;
+		}
 		return true;
 	}
 

@@ -26,7 +26,7 @@ public class ByteArrayStreamJuggler implements StreamJuggler {
 	 *             or if the input or output is a directory.
 	 */
 	public ByteArrayStreamJuggler(File input, File output) throws IOException {
-		if (!input.exists()) throw new FileNotFoundException();
+		if (!input.exists()) { throw new FileNotFoundException(); }
 		if (!input.isFile() || (output.exists() && !output.isFile())) {
 			throw new IOException("Cannot perform this operation on directories.");
 		}

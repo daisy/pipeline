@@ -60,18 +60,23 @@ public class FilterLocale {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		FilterLocale other = (FilterLocale) obj;
 		if (str == null) {
-			if (other.str != null)
+			if (other.str != null) {
 				return false;
-		} else if (!str.equals(other.str))
+			}
+		} else if (!str.equals(other.str)) {
 			return false;
+		}
 		return true;
 	}
 

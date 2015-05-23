@@ -209,7 +209,7 @@ public class BreakPointHandler {
 	private BreakPoint finalizeBreakpointTrimTail(String head, String tail, boolean hard) {
 		//trim leading whitespace in tail
 		tail = leadingWhitespace.matcher(tail).replaceAll("");
-		head = finalize(head);
+		head = finalizeResult(head);
 		offset = charsStr.length() - tail.length();
 		charsStr = tail;
 		return new BreakPoint(head, tail, hard);
@@ -223,7 +223,7 @@ public class BreakPointHandler {
 	}
 	
 	public String getRemaining() {
-		return finalize(charsStr);
+		return finalizeResult(charsStr);
 	}
 	
 	/**
@@ -293,7 +293,7 @@ whileLoop: while (i>=0) {
 		return i;
 	}
 	
-	private String finalize(String str) {
+	private String finalizeResult(String str) {
 		StringBuilder sb = new StringBuilder();
 		for (char c : str.toCharArray()) {
 			switch (c) {
