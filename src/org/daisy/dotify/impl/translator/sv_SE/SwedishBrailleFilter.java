@@ -77,7 +77,7 @@ public class SwedishBrailleFilter implements UncontractedBrailleFilter {
 	    	String qualifiedPath = this.getClass().getPackage().getName().replace('.','/') + "/";	    	
 	    	url = this.getClass().getClassLoader().getResource(qualifiedPath+subPath);
 	    }
-	    if(url==null) throw new IllegalArgumentException(subPath);
+	    if(url==null) { throw new IllegalArgumentException(subPath); }
 	    return url;
 	}
 

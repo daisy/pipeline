@@ -103,16 +103,16 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 				boolean r = right.getStyle()!=Style.NONE;
 
 				if (t) {
-					if (l) style.topLeftCorner(""+str.get(0).charAt(0));
+					if (l) { style.topLeftCorner(""+str.get(0).charAt(0)); }
 					style.topBorder(""+str.get(0).charAt(1));
-					if (r) style.topRightCorner(""+str.get(0).charAt(2));
+					if (r) { style.topRightCorner(""+str.get(0).charAt(2)); }
 				}
-				if (l) style.leftBorder(""+str.get(1).charAt(0));
-				if (r) style.rightBorder(""+str.get(1).charAt(2));
+				if (l) { style.leftBorder(""+str.get(1).charAt(0)); }
+				if (r) { style.rightBorder(""+str.get(1).charAt(2)); }
 				if (b) {
-					if (l) style.bottomLeftCorner(""+str.get(2).charAt(0));
+					if (l) { style.bottomLeftCorner(""+str.get(2).charAt(0)); }
 					style.bottomBorder(""+str.get(2).charAt(1));
-					if (r) style.bottomRightCorner(""+str.get(2).charAt(2));
+					if (r) { style.bottomRightCorner(""+str.get(2).charAt(2)); }
 				}
 				
 				return style.build();
