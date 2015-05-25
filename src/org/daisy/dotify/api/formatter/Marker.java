@@ -11,8 +11,8 @@ package org.daisy.dotify.api.formatter;
  *
  */
 public class Marker {
-	private String name;
-	private String value;
+	private final String name;
+	private final String value;
 	
 	/**
 	 * <p>Create a new Marker with the given name and value.</p><p>Marker names are used

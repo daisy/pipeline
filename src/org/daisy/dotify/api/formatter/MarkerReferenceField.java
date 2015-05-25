@@ -18,9 +18,9 @@ public class MarkerReferenceField implements Field {
 	 */
 	public static enum MarkerSearchScope {PAGE_CONTENT, PAGE, SEQUENCE}
 
-	private String markerName;
-	private MarkerSearchDirection dir;
-	private MarkerSearchScope scope;
+	private final String markerName;
+	private final MarkerSearchDirection dir;
+	private final MarkerSearchScope scope;
 
 	public MarkerReferenceField(String markerName, MarkerSearchDirection dir, MarkerSearchScope scope) {
 		super();

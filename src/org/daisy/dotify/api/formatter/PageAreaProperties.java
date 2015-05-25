@@ -38,7 +38,7 @@ public class PageAreaProperties {
 		
 		//optional
 		private Alignment align = Alignment.BOTTOM;
-		private List<FallbackRule> fallbackRules;
+		private final List<FallbackRule> fallbackRules;
 		
 		public Builder(String collectionId, int maxHeight) {
 			this.collectionId = collectionId;

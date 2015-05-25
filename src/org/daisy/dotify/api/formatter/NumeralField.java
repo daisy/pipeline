@@ -8,7 +8,7 @@ package org.daisy.dotify.api.formatter;
  */
 public class NumeralField implements Field {
 
-	private NumeralStyle style;
+	private final NumeralStyle style;
 	
 	/**
 	 * Creates a new numeral with the supplied style.
