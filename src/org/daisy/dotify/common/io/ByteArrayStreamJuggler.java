@@ -12,7 +12,7 @@ public class ByteArrayStreamJuggler implements StreamJuggler {
 	private final int BUF_SIZE = 65536;
 	private InputStreamMaker ci;
 	private ByteArrayOutputStream co;
-	private File output;
+	private final File output;
 	
 	/**
 	 * Constructs a new instance

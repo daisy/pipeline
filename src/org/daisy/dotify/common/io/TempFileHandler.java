@@ -40,7 +40,7 @@ public class TempFileHandler implements StreamJuggler {
 	private File t2;
 	private InputStreamMaker is;
 	private OutputStream os;
-	private File output;
+	private final File output;
 	private boolean toggle;
 	
 	/**

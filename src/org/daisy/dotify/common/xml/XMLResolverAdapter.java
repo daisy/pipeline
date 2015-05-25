@@ -35,7 +35,7 @@ import org.xml.sax.SAXException;
  */
 public class XMLResolverAdapter implements XMLResolver {
 
-    private EntityResolver resolver;
+    private final EntityResolver resolver;
     
     public XMLResolverAdapter(EntityResolver entityResolver) {
         resolver = entityResolver;

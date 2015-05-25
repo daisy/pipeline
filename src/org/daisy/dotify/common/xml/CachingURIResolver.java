@@ -40,7 +40,7 @@ import org.xml.sax.XMLReader;
  */
 public class CachingURIResolver implements URIResolver {
 
-    private XMLReader reader = null;
+    private final XMLReader reader;
     
     public CachingURIResolver() throws XMLToolsException {
     	this(SAXParserFactory.newInstance());

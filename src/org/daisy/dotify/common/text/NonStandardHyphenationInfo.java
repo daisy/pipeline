@@ -69,10 +69,10 @@ class NonStandardHyphenationInfo {
 				}
 			}
 		}
-		StringBuilder ns = new StringBuilder();
-		ns.append(charsStr.substring(0, offset));
-		ns.append(replacement);
-		ns.append(charsStr.substring(offset+length, charsStr.length()));
+		StringBuilder ns = new StringBuilder()
+			.append(charsStr.substring(0, offset))
+			.append(replacement)
+			.append(charsStr.substring(offset+length, charsStr.length()));
 		return ns.toString();
 	}
 

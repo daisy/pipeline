@@ -24,7 +24,7 @@ public class CaseFilter implements StringFilter {
 		 * Upper case mode
 		 */
 			UPPER_CASE};
-	private Mode mode;
+	private final Mode mode;
 	
 	/**
 	 * Create a new CaseFilter
