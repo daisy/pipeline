@@ -57,29 +57,29 @@ class HyphenationConfig {
 
 		hyphenator = new net.davidashen.text.Hyphenator();
 		try {
-			switch (getMode()) {
+			switch (mode) {
 				case BYTE: {
-					if (getEncoding()!=null) {
+					if (encoding!=null) {
 						logger.warning("Configuration problem: Encoding has no effect in byte mode.");
 					}
-			        InputStream language = new LatexRulesLocator().getResource(getPatternPath()).openStream();
+			        InputStream language = new LatexRulesLocator().getResource(patternPath).openStream();
 					hyphenator.loadTable(language);
 					break;
 				}
 				case CHARACTER: {
-					if (getEncoding()==null) {
+					if (encoding==null) {
 						logger.warning("Configuration problem: Encoding should be set in character mode.");
 					}
-			        InputStream language = new LatexRulesLocator().getResource(getPatternPath()).openStream();
-			        InputStreamReader sr = new InputStreamReader(language, Charset.forName(getEncoding()));
+			        InputStream language = new LatexRulesLocator().getResource(patternPath).openStream();
+			        InputStreamReader sr = new InputStreamReader(language, Charset.forName(encoding));
 					hyphenator.loadTable(sr);
 					break;
 				}
 			}
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to load resource: " + getPatternPath());
+			throw new RuntimeException("Failed to load resource: " + patternPath);
 		} catch (TexParserException e) {
-			throw new RuntimeException("Failed to load resource: " + getPatternPath());
+			throw new RuntimeException("Failed to load resource: " + patternPath);
 		}
 	}
 
