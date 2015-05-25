@@ -47,7 +47,7 @@ public class DefaultTextAttribute implements TextAttribute {
 		for (TextAttribute a : builder.attributes) {
 			s += a.getWidth();
 		}
-		if (s > 0 && s != getWidth()) {
+		if (s > 0 && s != length) {
 			throw new IllegalArgumentException("Text attribute size (" + s + ") does not match specified length (" + length + ").");
 		}
 	}
