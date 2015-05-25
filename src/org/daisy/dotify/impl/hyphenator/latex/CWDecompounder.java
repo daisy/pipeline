@@ -129,10 +129,10 @@ public class CWDecompounder {
 			} 
 		}
 		if (breakPoint>-1) {		
-			StringBuilder r = new StringBuilder();
-			r.append(bp1.hyphenate(word.substring(0, breakPoint)));
-			r.append(SOFT_HYPHEN);
-			r.append(bp2.hyphenate(word.substring(breakPoint, word.length())));
+			StringBuilder r = new StringBuilder()
+				.append(bp1.hyphenate(word.substring(0, breakPoint)))
+				.append(SOFT_HYPHEN)
+				.append(bp2.hyphenate(word.substring(breakPoint, word.length())));
 			return r.toString();
 		} else {
 			return word;
