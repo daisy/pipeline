@@ -33,7 +33,7 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 	
 	private boolean useBorder = false;
 	
-	private Map<String, Object> features;
+	private final Map<String, Object> features;
 
 	public BrailleTextBorderFactory() {
 		this.features = new HashMap<String, Object>();
