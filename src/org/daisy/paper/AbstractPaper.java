@@ -59,17 +59,17 @@ public abstract class AbstractPaper implements Paper, Serializable {
 	}
 
 
-	//jvm1.6@Override
+	@Override
 	public String getDescription() {
 		return desc;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public String getDisplayName() {
 		return name;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public String getIdentifier() {
 		return identifier;
 	}

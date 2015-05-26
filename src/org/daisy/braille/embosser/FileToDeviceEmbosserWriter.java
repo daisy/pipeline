@@ -45,82 +45,82 @@ public class FileToDeviceEmbosserWriter implements EmbosserWriter {
 		this.f = f;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public int getRowGap() {
 		return w.getRowGap();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean isClosed() {
 		return w.isClosed();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean isOpen() {
 		return w.isOpen();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void newLine() throws IOException {
 		w.newLine();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void newPage() throws IOException {
 		w.newPage();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void newSectionAndPage(boolean duplex) throws IOException {
 		w.newSectionAndPage(duplex);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void newVolumeSectionAndPage(boolean duplex) throws IOException {
 		w.newVolumeSectionAndPage(duplex);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void open(boolean duplex) throws IOException {
 		w.open(duplex);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void setRowGap(int value) {
 		w.setRowGap(value);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void write(String braille) throws IOException {
 		w.write(braille);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public int getMaxHeight() {
 		return w.getMaxHeight();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public int getMaxWidth() {
 		return w.getMaxWidth();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supports8dot() {
 		return w.supports8dot();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsAligning() {
 		return w.supportsAligning();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsDuplex() {
 		return w.supportsDuplex();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsVolumes() {
 		return w.supportsVolumes();
 	}
@@ -133,7 +133,7 @@ public class FileToDeviceEmbosserWriter implements EmbosserWriter {
 		return w.supportsPrintMode(mode);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void close() throws IOException {
 		w.close();
 		try {
@@ -145,7 +145,7 @@ public class FileToDeviceEmbosserWriter implements EmbosserWriter {
 		}
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void open(boolean duplex, Contract contract) throws IOException, ContractNotSupportedException {
 		w.open(duplex, contract);
 	}

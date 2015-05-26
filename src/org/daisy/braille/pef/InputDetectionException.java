@@ -35,10 +35,7 @@ public class InputDetectionException extends IOException {
 	}
 
 	public InputDetectionException(String message, Throwable cause) {
-		//jvm1.6super(message, cause);
-		//jvm1.5
-		super(message);
-		this.initCause(cause);
+		super(message, cause);
 	}
 
 	public InputDetectionException(String message) {
@@ -46,9 +43,6 @@ public class InputDetectionException extends IOException {
 	}
 	
 	public InputDetectionException(Throwable cause) {
-		//jvm1.6super(cause);
-		//jvm1.5
-		super();
-		this.initCause(cause);
+		super(cause);
 	}
 }

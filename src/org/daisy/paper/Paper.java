@@ -48,7 +48,7 @@ public interface Paper extends FactoryProperties {
 	 * the paper feed direction.
 	 * @return returns width in mm.
 	 *//*
-	//jvm1.6@Override
+	@Override
 	public double getWidth();*/
 	
 	/**
@@ -56,7 +56,7 @@ public interface Paper extends FactoryProperties {
 	 * the paper feed direction. 
 	 * @return returns height in mm.
 	 *//*
-	//jvm1.6@Override
+	@Override
 	public double getHeight();*/
 	
 	/**

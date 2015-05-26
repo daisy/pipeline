@@ -62,10 +62,10 @@ public abstract class EmbosserTable extends AbstractTable {
 		return this;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public abstract BrailleConverter newBrailleConverter();
 	
-	//jvm1.6@Override
+	@Override
 	public Object getProperty(String key) {
 		return props.get(key);
 	}

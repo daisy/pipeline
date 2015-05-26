@@ -54,32 +54,32 @@ public class BufferedEmbosserWriter implements EmbosserWriter {
 		this.contractBuilder = new Contract.Builder();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public int getMaxWidth() {
 		return writer.getMaxWidth();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public int getMaxHeight() {
 		return writer.getMaxHeight();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsVolumes() {
 		return writer.supportsVolumes();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supports8dot() {
 		return writer.supports8dot();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsDuplex() {
 		return writer.supportsDuplex();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsAligning() {
 		return writer.supportsAligning();
 	}
@@ -92,7 +92,7 @@ public class BufferedEmbosserWriter implements EmbosserWriter {
 		return writer.supportsPrintMode(mode);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void close() throws IOException {
 		isClosed = true;
 		isOpen = false;
@@ -100,33 +100,33 @@ public class BufferedEmbosserWriter implements EmbosserWriter {
 		flush();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void write(String braille) throws IOException {
 		events.add(new WriteEvent(braille));
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void newLine() throws IOException {
 		events.add(new NewLineEvent());
 
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void newPage() throws IOException {
 		events.add(new NewPageEvent());
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void newSectionAndPage(boolean duplex) throws IOException {
 		events.add(new NewSectionAndPageEvent(duplex));
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void newVolumeSectionAndPage(boolean duplex) throws IOException {
 		events.add(new NewVolumeSectionAndPageEvent(duplex));
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void open(boolean duplex) throws IOException {
 		try {
 			open(duplex, new Contract.Builder().build());
@@ -136,7 +136,7 @@ public class BufferedEmbosserWriter implements EmbosserWriter {
 		}
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void open(boolean duplex, Contract contract) throws IOException, ContractNotSupportedException {
 		rowgap = 0;
 		isOpen = true;
@@ -144,17 +144,17 @@ public class BufferedEmbosserWriter implements EmbosserWriter {
 		contractBuilder = new Contract.Builder(contract);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean isOpen() {
 		return isOpen;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean isClosed() {
 		return isClosed;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public void setRowGap(int value) {
 		if (value<0) {
 			throw new IllegalArgumentException("Non negative integer expected.");
@@ -164,7 +164,7 @@ public class BufferedEmbosserWriter implements EmbosserWriter {
 		events.add(new SetRowGapEvent(value));
 	}
 
-	//jvm1.6@Override
+	@Override
 	public int getRowGap() {
 		return rowgap;
 	}

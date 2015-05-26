@@ -49,7 +49,6 @@ public class TractorPaperFormat extends AbstractPageFormat {
 	 * Gets the length of the paper perpendicular to the direction of the paper feed.
 	 * @return returns the length.
 	 */
-	//jvm1.6@Override
 	public Length getLengthAcrossFeed() {
 		return across;
 	}
@@ -58,7 +57,6 @@ public class TractorPaperFormat extends AbstractPageFormat {
 	 * Gets the length of the paper along the direction of the paper feed.
 	 * @return returns the length.
 	 */
-	//jvm1.6@Override
 	public Length getLengthAlongFeed() {
 		return along;
 	}
@@ -71,9 +69,6 @@ public class TractorPaperFormat extends AbstractPageFormat {
 		return this;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
 		return "TractorPaperFormat [across=" + across + ", along=" + along
