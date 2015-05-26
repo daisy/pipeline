@@ -64,7 +64,7 @@ public class Interpoint55Embosser extends AbstractEmbosser {
 
     static {
         tableFilter = new TableFilter() {
-            //jvm1.6@Override
+            @Override
             public boolean accept(FactoryProperties object) {
                 if (object == null) { return false; }
                 String tableID = object.getIdentifier();
@@ -107,7 +107,7 @@ public class Interpoint55Embosser extends AbstractEmbosser {
         return tableFilter;
     }
 
-    //jvm1.6@Override
+    @Override
     public boolean supportsPaper(Paper paper) {
         if (paper == null) { return false; }
         try {
@@ -154,12 +154,12 @@ public class Interpoint55Embosser extends AbstractEmbosser {
         return true;
     }
 
-    //jvm1.6@Override
+    @Override
     public boolean supportsZFolding() {
         return false;
     }
 
-    //jvm1.6@Override
+    @Override
     public boolean supportsPrintMode(PrintMode mode) {
         return true;
     }
@@ -332,7 +332,7 @@ public class Interpoint55Embosser extends AbstractEmbosser {
         }
     }
 
-    //jvm1.6@Override
+    @Override
     public PrintPage getPrintPage(PageFormat pageFormat) {
         PrintMode mode = saddleStitchEnabled?PrintMode.MAGAZINE:PrintMode.REGULAR;
         return new PrintPage(pageFormat, PRINT_DIRECTION, mode);

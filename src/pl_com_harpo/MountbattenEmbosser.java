@@ -59,7 +59,7 @@ public class MountbattenEmbosser extends AbstractEmbosser {
 
     static {
         tableFilter = new TableFilter() {
-            //jvm1.6@Override
+            @Override
             public boolean accept(FactoryProperties object) {
                 if (object == null) { return false; }
                 if (object.getIdentifier().equals(table6dot))     { return true; }
@@ -82,7 +82,7 @@ public class MountbattenEmbosser extends AbstractEmbosser {
         setCellHeight(10.1d);
     }
 
-    //jvm1.6@Override
+    @Override
     public boolean supportsPaper(Paper paper) {
         if (paper == null) { return false; }
         try {
@@ -225,12 +225,12 @@ public class MountbattenEmbosser extends AbstractEmbosser {
 		return false;
 	}
 	
-	//jvm1.6@Override
+	@Override
 	public boolean supportsPrintMode(PrintMode mode) {
 		return PrintMode.REGULAR == mode;
 	}
 	
-	//jvm1.6@Override
+	@Override
 	public PrintPage getPrintPage(PageFormat pageFormat) {
 		return new PrintPage(pageFormat);
 	}

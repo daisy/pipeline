@@ -45,7 +45,7 @@ public class IndexV2Embosser extends IndexEmbosser {
 
     static {
         tableFilter = new TableFilter() {
-            //jvm1.6@Override
+            @Override
             public boolean accept(FactoryProperties object) {
                 if (object == null) { return false; }
                 String tableID = object.getIdentifier();

@@ -90,7 +90,7 @@ public class BrailleEditorsFileFormat extends AbstractFactory implements FileFor
         }
 
         tableFilter = new TableFilter() {
-            //jvm1.6@Override
+            @Override
             public boolean accept(FactoryProperties object) {
                 return supportedTableIds.contains(object.getIdentifier());
             }

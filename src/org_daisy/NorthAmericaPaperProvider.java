@@ -65,7 +65,7 @@ public class NorthAmericaPaperProvider implements PaperProvider {
 		this.papers = Collections.unmodifiableCollection(tmp);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public Collection<Paper> list() {
 		return papers;
 	}

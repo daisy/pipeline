@@ -86,7 +86,7 @@ public abstract class CidatEmbosser extends AbstractEmbosser {
         }
     }
 
-    //jvm1.6@Override
+    @Override
     public boolean supportsPaper(Paper paper) {
         if (paper == null) { return false; }
         try {

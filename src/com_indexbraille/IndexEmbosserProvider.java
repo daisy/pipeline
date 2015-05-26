@@ -134,7 +134,7 @@ public class IndexEmbosserProvider implements EmbosserProvider {
 		}
 	}
 
-	//jvm1.6@Override
+	@Override
 	public Collection<FactoryProperties> list() {
 		return Collections.unmodifiableCollection(embossers.values());
 	}

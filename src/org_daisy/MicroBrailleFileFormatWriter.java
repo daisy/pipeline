@@ -60,27 +60,27 @@ public class MicroBrailleFileFormatWriter extends AbstractEmbosserWriter {
         init(props);
     }
 
-    //jvm1.6@Override
+    @Override
     public LineBreaks getLinebreakStyle() {
         return breaks;
     }
 
-    //jvm1.6@Override
+    @Override
     public Padding getPaddingStyle() {
         return padding;
     }
 
-    //jvm1.6@Override
+    @Override
     public BrailleConverter getTable() {
         return table;
     }
 
-    //jvm1.6@Override
+    @Override
     protected void add(byte b) throws IOException {
         os.write(b);
     }
 
-    //jvm1.6@Override
+    @Override
     protected void addAll(byte[] bytes) throws IOException {
         os.write(bytes);
     }

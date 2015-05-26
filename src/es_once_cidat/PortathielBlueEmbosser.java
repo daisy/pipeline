@@ -54,7 +54,7 @@ public class PortathielBlueEmbosser extends CidatEmbosser {
 
     static {
         tableFilter = new TableFilter() {
-            //jvm1.6@Override
+            @Override
             public boolean accept(FactoryProperties object) {
                 if (object == null) { return false; }
                 if (object.getIdentifier().equals(transparentTable))     { return true; }
@@ -163,11 +163,11 @@ public class PortathielBlueEmbosser extends CidatEmbosser {
 		return false;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsPrintMode(PrintMode mode) {
 		return PrintMode.REGULAR == mode;
 	}
-	//jvm1.6@Override
+	@Override
 	public PrintPage getPrintPage(PageFormat pageFormat) {
 		return new PrintPage(pageFormat);
 	}

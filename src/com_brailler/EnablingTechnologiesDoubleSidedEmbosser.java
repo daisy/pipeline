@@ -56,7 +56,7 @@ public class EnablingTechnologiesDoubleSidedEmbosser extends EnablingTechnologie
         duplexEnabled = true;
     }
 
-    //jvm1.6@Override
+    @Override
     public boolean supportsDuplex() {
         return true;
     }
@@ -89,12 +89,12 @@ public class EnablingTechnologiesDoubleSidedEmbosser extends EnablingTechnologie
 		return false;
 	}
 	
-	//jvm1.6Override
+	@Override
 	public boolean supportsPrintMode(PrintMode mode) {
 		return PrintMode.REGULAR == mode;
 	}
 	
-	//jvm1.6Override	
+	@Override	
 	public PrintPage getPrintPage(PageFormat pageFormat) {
 		return new PrintPage(pageFormat);
 	}

@@ -57,27 +57,27 @@ public class IndexTransparentEmbosserWriter extends AbstractEmbosserWriter {
         charsOnRow = 0;
     }
 
-    //jvm1.6@Override
+    @Override
     public LineBreaks getLinebreakStyle() {
         return new StandardLineBreaks(StandardLineBreaks.Type.DOS);
     }
 
-    //jvm1.6@Override
+    @Override
     public Padding getPaddingStyle() {
         return Padding.NONE;
     }
 
-    //jvm1.6@Override
+    @Override
     public BrailleConverter getTable() {
         return bc;
     }
 
-    //jvm1.6@Override
+    @Override
     protected void add(byte b) throws IOException {
         buf.add(b);
     }
 
-    //jvm1.6@Override
+    @Override
     protected void addAll(byte[] b) throws IOException {
         for (byte bi : b) {
             add(bi);

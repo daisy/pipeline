@@ -54,7 +54,7 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 	 */
 	private static final long serialVersionUID = -254360539553477980L;
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsPrintPage(PrintPage dim) {
 		int height = (int)Math.ceil(dim.getHeight()/EmbosserTools.INCH_IN_MM);
 		int width = EmbosserTools.getWidth(dim, getCellWidth());
@@ -72,7 +72,7 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 		super(service, props);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public EmbosserWriter newEmbosserWriter(OutputStream os) {
 		try {
 			Table tc = tableCatalogService.newTable(setTable.getIdentifier());
@@ -97,7 +97,7 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 		}
 	}
 
-	//jvm1.6@Override
+	@Override
 	public EmbosserWriter newEmbosserWriter(Device device) {
 		if (!supportsPrintPage(getPrintPage(getPageFormat()))) {
 			throw new IllegalArgumentException("Unsupported paper for embosser " + getDisplayName());
@@ -153,13 +153,13 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
         return false;
     }
 
-	//jvm1.6@Override
+	@Override
 	public Area getPrintableArea(PageFormat pageFormat) {
 		PrintPage printPage = getPrintPage(pageFormat);
 		return new Area(printPage.getWidth(), printPage.getHeight(), 0, 0);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public PrintPage getPrintPage(PageFormat pageFormat) {
 		return new PrintPage(pageFormat, PrintDirection.UPRIGHT, PrintMode.REGULAR);
 	}
@@ -168,7 +168,7 @@ public class Braillo200_270_400_v1_11Embosser extends BrailloEmbosser {
 		return false;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsPrintMode(PrintMode mode) {
 		return mode == PrintMode.REGULAR;
 	}

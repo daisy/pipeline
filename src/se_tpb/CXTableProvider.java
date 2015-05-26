@@ -108,7 +108,7 @@ public class CXTableProvider implements TableProvider {
 		}
 	}
 
-	//jvm1.6@Override
+	@Override
 	public Collection<FactoryProperties> list() {
 		return Collections.unmodifiableCollection(tables.values());
 	}

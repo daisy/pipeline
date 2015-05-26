@@ -86,7 +86,7 @@ public abstract class EnablingTechnologiesEmbosser extends AbstractEmbosser {
 
     static {
         tableFilter = new TableFilter() {
-            //jvm1.6@Override
+            @Override
             public boolean accept(FactoryProperties object) {
                 if (object == null) { return false; }
                 String tableID = object.getIdentifier();
@@ -162,7 +162,7 @@ public abstract class EnablingTechnologiesEmbosser extends AbstractEmbosser {
         
     }
 
-    //jvm1.6@Override
+    @Override
     public boolean supportsPaper(Paper paper) {
         if (paper == null) { return false; }
         try {

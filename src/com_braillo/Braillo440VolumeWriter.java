@@ -136,12 +136,12 @@ class Braillo440VolumeWriter extends BrailloVolumeWriter {
 		return len-(getPos(pos, len)+1);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public byte[] getFooter(int len) {
 		return new byte[0];
 	}
 
-	//jvm1.6@Override
+	@Override
 	public byte[] getHeader(int len) throws IOException {
 		// Round to the closest possible higher value, so that all characters fit on the page
 		byte[] w = EmbosserTools.toBytes(width, 2);

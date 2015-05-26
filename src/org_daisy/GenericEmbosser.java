@@ -47,7 +47,7 @@ public class GenericEmbosser extends AbstractEmbosser {
 	
 	static {
 		tableFilter = new TableFilter() {
-			//jvm1.6@Override
+			@Override
 			public boolean accept(FactoryProperties object) {
 				if (object!=null) {
 					return true; 
@@ -62,27 +62,27 @@ public class GenericEmbosser extends AbstractEmbosser {
 		setFeature(EmbosserFeatures.CELL_HEIGHT, 10);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsPrintPage(PrintPage dim) {
 		return true;
 	}
 	
-	//jvm1.6@Override
+	@Override
 	public boolean supportsPageFormat(PageFormat pageFormat) {
 		return true;
 	}
 	
-    //jvm1.6@Override
+    @Override
 	public boolean supportsPaper(Paper paper) {
 		return true;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public TableFilter getTableFilter() {
 		return tableFilter;
 	}
 	
-	//jvm1.6@Override
+	@Override
 	public EmbosserWriter newEmbosserWriter(OutputStream os) {
 		PrintPage pp = new PrintPage(getPageFormat());
 
@@ -113,7 +113,7 @@ public class GenericEmbosser extends AbstractEmbosser {
 		return b.build();
 	}
 
-	//jvm1.6@Override
+	@Override
 	public EmbosserWriter newEmbosserWriter(Device device) {
 		try {
 			File f = File.createTempFile(this.getClass().getCanonicalName(), ".tmp");
@@ -147,11 +147,11 @@ public class GenericEmbosser extends AbstractEmbosser {
 		return false;
 	}
 	
-	//jvm1.6@Override
+	@Override
 	public boolean supportsPrintMode(PrintMode mode) {
 		return PrintMode.REGULAR == mode;
 	}
-	//jvm1.6@Override
+	@Override
 	public PrintPage getPrintPage(PageFormat pageFormat) {
 		return new PrintPage(pageFormat);
 	}

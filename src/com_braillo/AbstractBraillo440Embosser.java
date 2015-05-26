@@ -54,7 +54,7 @@ public abstract class AbstractBraillo440Embosser extends BrailloEmbosser {
 		setCellWidth(cellWidth);
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsPrintPage(PrintPage dim) {
 		int width = (int)Math.floor((dim.getWidth()+constant-EmbosserTools.INCH_IN_MM) / cellWidth);
 		int inchHeight = (int)Math.ceil(dim.getHeight()/EmbosserTools.INCH_IN_MM);
@@ -64,12 +64,12 @@ public abstract class AbstractBraillo440Embosser extends BrailloEmbosser {
 		return true;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public EmbosserWriter newEmbosserWriter(OutputStream os) {
 		throw  new IllegalArgumentException(new EmbosserFactoryException(getDisplayName() + " does not support writing to file."));
 	}
 
-	//jvm1.6@Override
+	@Override
 	public EmbosserWriter newEmbosserWriter(Device device) {
 		Table tc = tableCatalogService.newTable(setTable.getIdentifier());
 		tc.setFeature("fallback", getFeature("fallback"));

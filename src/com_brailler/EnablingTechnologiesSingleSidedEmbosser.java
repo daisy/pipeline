@@ -64,12 +64,12 @@ public class EnablingTechnologiesSingleSidedEmbosser extends EnablingTechnologie
 		return false;
 	}
 
-	//jvm1.6@Override
+	@Override
 	public boolean supportsPrintMode(PrintMode mode) {
 		return PrintMode.REGULAR == mode;
 	}
 
-	//jvm1.6Override	
+	@Override	
 	public PrintPage getPrintPage(PageFormat pageFormat) {
 		return new PrintPage(pageFormat);
 	}
