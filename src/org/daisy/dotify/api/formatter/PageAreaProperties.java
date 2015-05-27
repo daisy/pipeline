@@ -71,7 +71,7 @@ public class PageAreaProperties {
 	}
 	
 	private void validateFallbackRules() {
-		if (fallbackRules.size()>0) {
+		if (!fallbackRules.isEmpty()) {
 			boolean found = false;
 			Set<String> str = new HashSet<String>();
 			for (FallbackRule r : fallbackRules) {

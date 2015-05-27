@@ -57,7 +57,7 @@ public class DefaultTextAttribute implements TextAttribute {
 	}
 
 	public boolean hasChildren() {
-		return attributes.size() > 0;
+		return !attributes.isEmpty();
 	}
 
 	@Override
