@@ -23,8 +23,8 @@ public class BreakPointHandler {
 	private final static char ZERO_WIDTH_SPACE = '\u200b';
 	private final static char DASH = '-';
 	private final static char SPACE = ' ';
-	private final static Pattern leadingWhitespace = Pattern.compile("\\A[\\s\u200b]+");
-	private final static Pattern trailingWhitespace = Pattern.compile("[\\s\u200b]+\\z");
+	private final static Pattern LEADING_WHITESPACE = Pattern.compile("\\A[\\s\u200b]+");
+	private final static Pattern TRAILING_WHITESPACE = Pattern.compile("[\\s\u200b]+\\z");
 	private String charsStr;
 	private int offset;
 	private TreeMap<Integer, NonStandardHyphenationInfo> meta;
@@ -65,10 +65,10 @@ public class BreakPointHandler {
 		 * @return returns a new BreakPointHandler
 		 */
 		public BreakPointHandler build() {
-			if (meta.size()>0) {
-				return new BreakPointHandler(str, meta, 0);
-			} else {
+			if (meta.isEmpty()) {
 				return new BreakPointHandler(str, null, 0);
+			} else {
+				return new BreakPointHandler(str, meta, 0);
 			}
 		}
 	}
@@ -191,7 +191,7 @@ public class BreakPointHandler {
 	private BreakPoint finalizeBreakpointFull(String head, int tailStart, boolean hard) {
 		String tail = getTail(tailStart);
 
-		head = trailingWhitespace.matcher(head).replaceAll("");
+		head = TRAILING_WHITESPACE.matcher(head).replaceAll("");
 		
 		return finalizeBreakpointTrimTail(head, tail, hard);
 	}
@@ -208,7 +208,7 @@ public class BreakPointHandler {
 	
 	private BreakPoint finalizeBreakpointTrimTail(String head, String tail, boolean hard) {
 		//trim leading whitespace in tail
-		tail = leadingWhitespace.matcher(tail).replaceAll("");
+		tail = LEADING_WHITESPACE.matcher(tail).replaceAll("");
 		head = finalizeResult(head);
 		offset = charsStr.length() - tail.length();
 		charsStr = tail;
