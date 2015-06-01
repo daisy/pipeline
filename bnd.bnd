@@ -10,7 +10,7 @@ Export-Package: org.daisy.braille,\
 	org.daisy.paper,\
 	org.daisy.printing,\
 	org.daisy.validator
-Bundle-Version: 1.0.0
+Bundle-Version: 2.0.0-SNAPSHOT
 Include-Resource: / = src/
 -sources: false
 Service-Component: *

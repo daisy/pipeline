@@ -61,6 +61,11 @@ buildscript {
     dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.5" }
 }
 
+task updateBndVersion() << {
+	String contents = file('bnd.bnd').getText('UTF-8')
+	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
+}
+
 bundle {
     instructions << [
      	//must use file() to resolve against the build.gradle in Eclipse
