@@ -11,4 +11,4 @@ Include-Resource: / = src/
 	com.googlecode.texhyphj,\
 	dotify.common;version=latest,\
 	dotify.api;version=latest
-Bundle-Version: 1.0.0-SNAPSHOT
+Bundle-Version: 1.0.0
