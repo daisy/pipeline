@@ -22,8 +22,6 @@ import java.io.IOException;
 
 import javax.print.PrintException;
 
-import org.daisy.printing.Device;
-
 /**
  * Provides a bridge between a Device and file based EmbosserWriter
  * @author Joel Håkansson

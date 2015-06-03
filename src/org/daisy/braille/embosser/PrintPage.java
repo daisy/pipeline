@@ -15,10 +15,15 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.paper;
+package org.daisy.braille.embosser;
 
 import org.daisy.braille.embosser.EmbosserProperties.PrintMode;
-import org.daisy.braille.tools.Length;
+import org.daisy.paper.Dimensions;
+import org.daisy.paper.Length;
+import org.daisy.paper.PageFormat;
+import org.daisy.paper.RollPaperFormat;
+import org.daisy.paper.SheetPaperFormat;
+import org.daisy.paper.TractorPaperFormat;
 
 /**
  *

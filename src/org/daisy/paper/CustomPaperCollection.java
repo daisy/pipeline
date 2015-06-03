@@ -28,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-import org.daisy.braille.tools.Length;
-
 /**
  * Provides a custom paper collection that lets a user
  * add and remove papers. The collection is stored as

@@ -17,7 +17,6 @@
  */
 package org.daisy.paper;
 
-import org.daisy.braille.tools.Length;
 
 /**
  * Provides a paper format for tractor paper.

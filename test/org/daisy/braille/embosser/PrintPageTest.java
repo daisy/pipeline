@@ -1,10 +1,13 @@
-package org.daisy.paper;
+package org.daisy.braille.embosser;
 
 import static org.junit.Assert.assertEquals;
 
+import org.daisy.braille.embosser.PrintPage;
 import org.daisy.braille.embosser.EmbosserProperties.PrintMode;
-import org.daisy.braille.tools.Length;
-import org.daisy.paper.PrintPage.PrintDirection;
+import org.daisy.braille.embosser.PrintPage.PrintDirection;
+import org.daisy.paper.Length;
+import org.daisy.paper.RollPaperFormat;
+import org.daisy.paper.SheetPaperFormat;
 import org.daisy.paper.SheetPaperFormat.Orientation;
 import org.junit.Test;
 

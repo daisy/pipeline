@@ -17,7 +17,6 @@
  */
 package org.daisy.paper;
 
-import org.daisy.braille.tools.Length;
 
 /**
  * Provides a paper object for perforated paper with paper guides.

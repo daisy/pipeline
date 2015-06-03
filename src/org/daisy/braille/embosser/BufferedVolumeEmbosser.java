@@ -25,7 +25,6 @@ import java.util.Stack;
 import javax.print.PrintException;
 
 import org.daisy.braille.table.BrailleConverter;
-import org.daisy.printing.Device;
 
 /**
  * Provides a buffered volume embossers. This is similar to {@link ConfigurableEmbosser},

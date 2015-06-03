@@ -25,8 +25,6 @@ import org.daisy.factory.Factory;
 import org.daisy.paper.Area;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
-import org.daisy.paper.PrintPage;
-import org.daisy.printing.Device;
 
 /**
  * Provides an interface for common properties of an Embosser.
