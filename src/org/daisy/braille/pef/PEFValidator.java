@@ -48,7 +48,7 @@ import com.thaiopensource.validate.ValidationDriver;
  * checks, see the different modes. 
  * @author Joel Håkansson
  */
-public class PEFValidator extends AbstractFactory implements org.daisy.validator.Validator {
+public class PEFValidator extends AbstractFactory implements org.daisy.braille.api.validator.Validator {
 	/**
 	 * 
 	 */

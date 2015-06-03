@@ -1,4 +1,4 @@
-package org.daisy.validator;
+package org.daisy.braille.api.validator;
 
 import org.daisy.factory.FactoryProperties;
 import org.daisy.factory.Provider;

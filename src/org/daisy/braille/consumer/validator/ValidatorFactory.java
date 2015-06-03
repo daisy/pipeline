@@ -15,7 +15,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.validator;
+package org.daisy.braille.consumer.validator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +28,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.spi.ServiceRegistry;
 
+import org.daisy.braille.api.validator.Validator;
+import org.daisy.braille.api.validator.ValidatorFactoryService;
+import org.daisy.braille.api.validator.ValidatorProvider;
 import org.daisy.factory.FactoryFilter;
 import org.daisy.factory.FactoryProperties;
 

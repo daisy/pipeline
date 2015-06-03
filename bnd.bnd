@@ -1,5 +1,6 @@
 -buildpath: biz.aQute.bnd.annotation
 Export-Package: org.daisy.braille,\
+	org.daisy.braille.api.validator,\
 	org.daisy.braille.embosser,\
 	org.daisy.braille.facade,\
 	org.daisy.braille.pef,\
@@ -8,8 +9,9 @@ Export-Package: org.daisy.braille,\
 	org.daisy.cli,\
 	org.daisy.factory,\
 	org.daisy.paper,\
-	org.daisy.printing,\
-	org.daisy.validator
+	org.daisy.printing
+Private-Package:  \
+	org.daisy.braille.consumer.validator
 Bundle-Version: 2.0.0-SNAPSHOT
 Include-Resource: / = src/
 -sources: false

@@ -1,4 +1,4 @@
-package org.daisy.validator;
+package org.daisy.braille.api.validator;
 
 import java.util.Collection;
 

@@ -1,6 +1,8 @@
-package org.daisy.validator;
+package org.daisy.braille.consumer.validator;
 
+import org.daisy.braille.consumer.validator.ValidatorFactory;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 public class ValidatorFactoryTest {
 	

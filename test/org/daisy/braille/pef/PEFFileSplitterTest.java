@@ -10,8 +10,8 @@ import java.util.Arrays;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
+import org.daisy.braille.consumer.validator.ValidatorFactory;
 import org.daisy.braille.tools.XMLFileCompare;
-import org.daisy.validator.ValidatorFactory;
 import org.junit.Test;
 
 

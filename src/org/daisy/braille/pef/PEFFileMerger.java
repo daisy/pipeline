@@ -38,8 +38,8 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
-import org.daisy.validator.Validator;
-import org.daisy.validator.ValidatorFactoryService;
+import org.daisy.braille.api.validator.Validator;
+import org.daisy.braille.api.validator.ValidatorFactoryService;
 
 /**
  * Merges several single volume PEF-files into one. Metadata is collected from
