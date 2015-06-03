@@ -19,6 +19,7 @@ package com_braillo;
 
 import java.io.OutputStream;
 
+import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.paper.Area;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.embosser.BufferedVolumeEmbosser;
@@ -32,7 +33,6 @@ import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalogService;
-import org.daisy.factory.FactoryProperties;
 
 import com_braillo.Braillo440VolumeWriter.Mode;
 import com_braillo.BrailloEmbosserProvider.EmbosserType;

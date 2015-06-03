@@ -7,7 +7,6 @@ import java.nio.charset.Charset;
 
 import org.daisy.braille.BrailleConstants;
 import org.daisy.braille.table.BrailleConverter;
-import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.junit.Test;
 
 public class SupernovaTableProviderTest {

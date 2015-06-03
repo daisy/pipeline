@@ -19,6 +19,7 @@ package com_indexbraille;
 
 import java.io.OutputStream;
 
+import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.EmbosserTools;
@@ -29,7 +30,6 @@ import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.embosser.UnsupportedPaperException;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
-import org.daisy.factory.FactoryProperties;
 
 import com_indexbraille.IndexEmbosserProvider.EmbosserType;
 

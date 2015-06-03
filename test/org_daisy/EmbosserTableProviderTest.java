@@ -1,12 +1,12 @@
 package org_daisy;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.nio.charset.Charset;
 
 import org.daisy.braille.BrailleConstants;
 import org.daisy.braille.table.BrailleConverter;
-import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.junit.Test;
 
 public class EmbosserTableProviderTest {

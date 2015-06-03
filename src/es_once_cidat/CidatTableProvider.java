@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.table.AdvancedBrailleConverter;
 import org.daisy.braille.table.BrailleConverter;
 import org.daisy.braille.table.EmbosserBrailleConverter;
@@ -32,7 +33,6 @@ import org.daisy.braille.table.EmbosserTable;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableProvider;
 import org.daisy.braille.tools.StringTranslator.MatchMode;
-import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
 

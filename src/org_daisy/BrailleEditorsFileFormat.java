@@ -17,24 +17,23 @@
  */
 package org_daisy;
 
-import java.util.Collection;
-import java.util.ArrayList;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import org.daisy.braille.api.factory.AbstractFactory;
+import org.daisy.braille.api.factory.FactoryProperties;
+import org.daisy.braille.embosser.AbstractEmbosserWriter.Padding;
+import org.daisy.braille.embosser.ConfigurableEmbosser;
+import org.daisy.braille.embosser.EmbosserFeatures;
+import org.daisy.braille.embosser.EmbosserWriter;
+import org.daisy.braille.embosser.EmbosserWriterProperties;
+import org.daisy.braille.embosser.FileFormat;
+import org.daisy.braille.embosser.SimpleEmbosserProperties;
+import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.table.TableFilter;
-import org.daisy.braille.embosser.FileFormat;
-import org.daisy.braille.embosser.EmbosserWriter;
-import org.daisy.braille.embosser.EmbosserFeatures;
-import org.daisy.braille.embosser.StandardLineBreaks;
-import org.daisy.braille.embosser.EmbosserWriterProperties;
-import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.embosser.ConfigurableEmbosser;
-import org.daisy.braille.embosser.AbstractEmbosserWriter.Padding;
-import org.daisy.factory.AbstractFactory;
-import org.daisy.factory.FactoryProperties;
-
 import org_daisy.BrailleEditorsFileFormatProvider.FileType;
 
 

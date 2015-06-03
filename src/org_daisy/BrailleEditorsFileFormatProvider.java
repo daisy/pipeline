@@ -18,8 +18,8 @@
 package org_daisy;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.daisy.braille.embosser.FileFormat;
 import org.daisy.braille.embosser.FileFormatProvider;
