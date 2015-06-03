@@ -28,6 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserCatalogService;
 import org.daisy.braille.embosser.EmbosserFactoryException;
@@ -38,7 +39,6 @@ import org.daisy.braille.pef.PEFHandler;
 import org.daisy.braille.pef.PEFHandler.Alignment;
 import org.daisy.braille.pef.Range;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
-import org.daisy.paper.PageFormat;
 import org.xml.sax.SAXException;
 
 /**

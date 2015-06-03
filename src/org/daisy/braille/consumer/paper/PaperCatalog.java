@@ -15,7 +15,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.paper;
+package org.daisy.braille.consumer.paper;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,6 +25,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 import javax.imageio.spi.ServiceRegistry;
+
+import org.daisy.braille.api.paper.Paper;
+import org.daisy.braille.api.paper.PaperCatalogService;
+import org.daisy.braille.api.paper.PaperFilter;
+import org.daisy.braille.api.paper.PaperProvider;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

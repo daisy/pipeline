@@ -15,7 +15,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.paper;
+package org.daisy.braille.api.paper;
 
 import java.io.Serializable;
 
@@ -75,21 +75,21 @@ public abstract class AbstractPaper implements Paper, Serializable {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.daisy.paper.Paper#asSheetPaper()
+	 * @see org.daisy.braille.api.paper.Paper#asSheetPaper()
 	 */
 	public SheetPaper asSheetPaper() {
 		throw new ClassCastException();
 	}
 
 	/* (non-Javadoc)
-	 * @see org.daisy.paper.Paper#asTractorPaper()
+	 * @see org.daisy.braille.api.paper.Paper#asTractorPaper()
 	 */
 	public TractorPaper asTractorPaper() {
 		throw new ClassCastException();
 	}
 
 	/* (non-Javadoc)
-	 * @see org.daisy.paper.Paper#asRollPaper()
+	 * @see org.daisy.braille.api.paper.Paper#asRollPaper()
 	 */
 	public RollPaper asRollPaper() {
 		throw new ClassCastException();

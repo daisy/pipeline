@@ -15,20 +15,14 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.paper;
+package org.daisy.braille.api.paper;
 
+import org.daisy.factory.Provider;
 
 /**
- * Provides an interface for filtering a collection of Papers.
+ * Provides an interface for a collection of Papers. 
  * @author Joel Håkansson
  */
-public interface PaperFilter {
-	
-	/**
-	 * Tests if a specified object should be included in a list.
-	 * @param object the Object to test
-	 * @return returns true if the specified object should be included in a list, false otherwise
-	 */
-	public boolean accept(Paper object);
+public interface PaperProvider extends Provider<Paper> {
 
 }

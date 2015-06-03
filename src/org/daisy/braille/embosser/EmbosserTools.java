@@ -17,7 +17,7 @@
  */
 package org.daisy.braille.embosser;
 
-import org.daisy.paper.Dimensions;
+import org.daisy.braille.api.paper.Dimensions;
 
 /**
  * Provides tools related to embosser communication.

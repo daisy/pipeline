@@ -19,12 +19,12 @@ package org.daisy.braille.embosser;
 
 import java.util.HashMap;
 
+import org.daisy.braille.api.paper.Area;
+import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.table.DefaultTableProvider;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.AbstractFactory;
-import org.daisy.paper.Area;
-import org.daisy.paper.PageFormat;
 
 /**
  * Provides an abstract base for Embossers, implementing basic features

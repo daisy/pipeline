@@ -15,14 +15,40 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.paper;
-
-import org.daisy.factory.Provider;
+package org.daisy.braille.api.paper;
 
 /**
- * Provides an interface for a collection of Papers. 
- * @author Joel Håkansson
+ *
+ * @author Bert Frees
  */
-public interface PaperProvider extends Provider<Paper> {
+public class Area implements Dimensions {
 
+    private final double width, height, offsetX, offsetY;
+
+    public Area(double width,
+                double height,
+                double offsetX,
+                double offsetY) {
+
+        this.width = width;
+        this.height = height;
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public double getOffsetX() {
+        return offsetX;
+    }
+
+    public double getOffsetY() {
+        return offsetY;
+    }
 }

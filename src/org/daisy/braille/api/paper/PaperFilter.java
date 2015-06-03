@@ -15,23 +15,20 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.paper;
+package org.daisy.braille.api.paper;
+
 
 /**
- * Provides two dimensional measurements in millimeters
+ * Provides an interface for filtering a collection of Papers.
  * @author Joel Håkansson
  */
-public interface Dimensions {
-
-	/**
-	 * Gets width, in mm.
-	 * @return returns width in mm.
-	 */
-	public double getWidth();
+public interface PaperFilter {
 	
 	/**
-	 * Gets height, in mm.
-	 * @return returns height in mm.
+	 * Tests if a specified object should be included in a list.
+	 * @param object the Object to test
+	 * @return returns true if the specified object should be included in a list, false otherwise
 	 */
-	public double getHeight();
+	public boolean accept(Paper object);
+
 }

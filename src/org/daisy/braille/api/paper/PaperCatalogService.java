@@ -1,4 +1,4 @@
-package org.daisy.paper;
+package org.daisy.braille.api.paper;
 
 import java.util.Collection;
 

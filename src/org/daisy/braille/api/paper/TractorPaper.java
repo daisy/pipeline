@@ -15,34 +15,38 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.paper;
+package org.daisy.braille.api.paper;
 
 
 /**
- * Provides a paper format for paper in rolls.
+ * Provides a paper object for perforated paper with paper guides.
  * @author Joel Håkansson
  */
-public class RollPaperFormat extends AbstractPageFormat {
+public class TractorPaper extends AbstractPaper {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7988082460666139365L;
 	private final Length across, along;
 	
 	/**
-	 * Creates a new roll paper format
-	 * @param paper the roll paper to use
-	 * @param length the cut-length
+	 * Creates a new tractor paper
+	 * @param name a name
+	 * @param desc a description
+	 * @param identifier an identifier
+	 * @param across the width of the paper
+	 * @param along the height of the paper
 	 */
-	public RollPaperFormat(RollPaper paper, Length length) {
-		this.across = paper.getLengthAcrossFeed();
-		this.along = length;
+	public TractorPaper(String name, String desc, Enum<? extends Enum<?>> identifier, Length across, Length along) {
+		super(name, desc, identifier);
+		this.across = across;
+		this.along = along;
 	}
 	
-	/**
-	 * Creates a new roll paper format
-	 * @param acrossPaperFeed the height of the roll
-	 * @param alongPaperFeed the cut-length
-	 */
-	public RollPaperFormat(Length acrossPaperFeed, Length alongPaperFeed) {
-		this.across = acrossPaperFeed;
-		this.along = alongPaperFeed;
+	TractorPaper(String name, String desc, String identifier, Length across, Length along) {
+		super(name, desc, identifier);
+		this.across = across;
+		this.along = along;
 	}
 
 	/**
@@ -60,21 +64,18 @@ public class RollPaperFormat extends AbstractPageFormat {
 	public Length getLengthAlongFeed() {
 		return along;
 	}
-	
-	public Type getPageFormatType() {
-		return Type.ROLL;
+
+	public Type getType() {
+		return Type.TRACTOR;
 	}
-	
-	public RollPaperFormat asRollPaperFormat() {
+
+	public TractorPaper asTractorPaper() {
 		return this;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		return "RollPaperFormat [across=" + across + ", along=" + along + "]";
+		return "TractorPaper [lengthAcrossFeed=" + getLengthAcrossFeed() +
+                                   ", lengthAlongFeed=" + getLengthAlongFeed() + "]";
 	}
-
 }

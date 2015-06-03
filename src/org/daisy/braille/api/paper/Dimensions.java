@@ -15,24 +15,23 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.paper;
+package org.daisy.braille.api.paper;
 
 /**
- * Provides an abstract page format
+ * Provides two dimensional measurements in millimeters
  * @author Joel Håkansson
  */
-public abstract class AbstractPageFormat implements PageFormat {
+public interface Dimensions {
 
-	public SheetPaperFormat asSheetPaperFormat() {
-		throw new ClassCastException();
-	}
+	/**
+	 * Gets width, in mm.
+	 * @return returns width in mm.
+	 */
+	public double getWidth();
 	
-	public TractorPaperFormat asTractorPaperFormat() {
-		throw new ClassCastException();
-	}
-	
-	public RollPaperFormat asRollPaperFormat() {
-		throw new ClassCastException();
-	}
-
+	/**
+	 * Gets height, in mm.
+	 * @return returns height in mm.
+	 */
+	public double getHeight();
 }

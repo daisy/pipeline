@@ -17,8 +17,8 @@
  */
 package org.daisy.braille.embosser;
 
+import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
-import org.daisy.paper.PageFormat;
 
 /**
  * Provides common embosser features to be used when configuring an Embosser factory.

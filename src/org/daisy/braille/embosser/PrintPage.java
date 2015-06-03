@@ -17,13 +17,13 @@
  */
 package org.daisy.braille.embosser;
 
+import org.daisy.braille.api.paper.Dimensions;
+import org.daisy.braille.api.paper.Length;
+import org.daisy.braille.api.paper.PageFormat;
+import org.daisy.braille.api.paper.RollPaperFormat;
+import org.daisy.braille.api.paper.SheetPaperFormat;
+import org.daisy.braille.api.paper.TractorPaperFormat;
 import org.daisy.braille.embosser.EmbosserProperties.PrintMode;
-import org.daisy.paper.Dimensions;
-import org.daisy.paper.Length;
-import org.daisy.paper.PageFormat;
-import org.daisy.paper.RollPaperFormat;
-import org.daisy.paper.SheetPaperFormat;
-import org.daisy.paper.TractorPaperFormat;
 
 /**
  *
