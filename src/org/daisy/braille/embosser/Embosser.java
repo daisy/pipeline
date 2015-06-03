@@ -19,12 +19,12 @@ package org.daisy.braille.embosser;
 
 import java.io.OutputStream;
 
+import org.daisy.braille.api.factory.Factory;
 import org.daisy.braille.api.paper.Area;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.api.paper.Paper;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableFilter;
-import org.daisy.factory.Factory;
 
 /**
  * Provides an interface for common properties of an Embosser.

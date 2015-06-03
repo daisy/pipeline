@@ -1,7 +1,7 @@
 package org.daisy.braille.api.validator;
 
-import org.daisy.factory.FactoryProperties;
-import org.daisy.factory.Provider;
+import org.daisy.braille.api.factory.FactoryProperties;
+import org.daisy.braille.api.factory.Provider;
 
 /**
  * <p>

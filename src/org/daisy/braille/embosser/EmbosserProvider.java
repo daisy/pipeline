@@ -17,8 +17,8 @@
  */
 package org.daisy.braille.embosser;
 
-import org.daisy.factory.FactoryProperties;
-import org.daisy.factory.Provider;
+import org.daisy.braille.api.factory.FactoryProperties;
+import org.daisy.braille.api.factory.Provider;
 
 /**
  * Provides an interface for a collection of Embossers. 

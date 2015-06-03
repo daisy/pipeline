@@ -14,4 +14,4 @@ that can be used to create a specific type of objects.</p>
 by these interfaces.</p>
  * @author Joel Håkansson
  */
-package org.daisy.factory;
+package org.daisy.braille.api.factory;

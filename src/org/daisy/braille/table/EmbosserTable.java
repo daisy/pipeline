@@ -19,8 +19,8 @@ package org.daisy.braille.table;
 
 import java.util.HashMap;
 
+import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
-import org.daisy.factory.FactoryProperties;
 
 /**
  * Provides an embosser table implementation. This implementation

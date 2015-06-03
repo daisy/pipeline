@@ -17,7 +17,7 @@
  */
 package org.daisy.braille.api.paper;
 
-import org.daisy.factory.Provider;
+import org.daisy.braille.api.factory.Provider;
 
 /**
  * Provides an interface for a collection of Papers. 

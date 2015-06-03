@@ -29,9 +29,9 @@ import java.util.logging.Logger;
 
 import javax.imageio.spi.ServiceRegistry;
 
-import org.daisy.factory.FactoryCatalog;
-import org.daisy.factory.FactoryFilter;
-import org.daisy.factory.FactoryProperties;
+import org.daisy.braille.api.factory.FactoryCatalog;
+import org.daisy.braille.api.factory.FactoryFilter;
+import org.daisy.braille.api.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

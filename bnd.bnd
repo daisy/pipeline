@@ -1,5 +1,6 @@
 -buildpath: biz.aQute.bnd.annotation
 Export-Package: org.daisy.braille,\
+	org.daisy.braille.api.factory,\
 	org.daisy.braille.api.paper,\
 	org.daisy.braille.api.validator,\
 	org.daisy.braille.embosser,\

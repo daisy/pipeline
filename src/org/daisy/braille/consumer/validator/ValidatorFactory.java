@@ -28,11 +28,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.imageio.spi.ServiceRegistry;
 
+import org.daisy.braille.api.factory.FactoryFilter;
+import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.validator.Validator;
 import org.daisy.braille.api.validator.ValidatorFactoryService;
 import org.daisy.braille.api.validator.ValidatorProvider;
-import org.daisy.factory.FactoryFilter;
-import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

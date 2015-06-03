@@ -2,8 +2,8 @@ package org.daisy.braille.table;
 
 import java.util.Collection;
 
-import org.daisy.factory.FactoryFilter;
-import org.daisy.factory.FactoryProperties;
+import org.daisy.braille.api.factory.FactoryFilter;
+import org.daisy.braille.api.factory.FactoryProperties;
 
 
 /**

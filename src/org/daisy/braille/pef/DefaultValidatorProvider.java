@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.validator.Validator;
 import org.daisy.braille.api.validator.ValidatorProvider;
-import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
 

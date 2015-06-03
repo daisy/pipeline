@@ -17,7 +17,7 @@
  */
 package org.daisy.braille.embosser;
 
-import org.daisy.factory.Provider;
+import org.daisy.braille.api.factory.Provider;
 
 /**
  *

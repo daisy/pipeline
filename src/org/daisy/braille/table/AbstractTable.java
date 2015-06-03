@@ -17,7 +17,7 @@
  */
 package org.daisy.braille.table;
 
-import org.daisy.factory.AbstractFactory;
+import org.daisy.braille.api.factory.AbstractFactory;
 
 /**
  * Provides an abstract base for Table factories.

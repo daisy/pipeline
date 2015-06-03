@@ -17,7 +17,7 @@
  */
 package org.daisy.braille.embosser;
 
-import org.daisy.factory.FactoryFilter;
+import org.daisy.braille.api.factory.FactoryFilter;
 
 /**
  * Provides an interface for filtering a collection of Embossers.

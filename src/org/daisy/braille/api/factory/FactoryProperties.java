@@ -1,4 +1,4 @@
-package org.daisy.factory;
+package org.daisy.braille.api.factory;
 
 public interface FactoryProperties {
 	/**

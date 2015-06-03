@@ -17,7 +17,7 @@
  */
 package org.daisy.braille.api.paper;
 
-import org.daisy.factory.FactoryProperties;
+import org.daisy.braille.api.factory.FactoryProperties;
 
 /**
  * Provides an interface for a physical paper media. Implementations

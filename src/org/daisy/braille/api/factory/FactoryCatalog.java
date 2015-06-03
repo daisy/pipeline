@@ -15,22 +15,31 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.factory;
+package org.daisy.braille.api.factory;
 
 import java.util.Collection;
 
 /**
- * Provides an interface for a collection of Factories.
+ * Provides an interface for factory catalogs.
  * @author Joel Håkansson
  *
- * @param <T> the type of Factories handled by this Provider
+ * @param <T> the type of factory objects that this catalog contains
  */
-public interface Provider<T extends FactoryProperties>{
+public interface FactoryCatalog<T extends Factory, S extends FactoryProperties> extends Provider<S> {
 	
 	/**
-	 * Lists all Factories
+	 * Gets the Factory with this identifier
+	 * @param identifier the identifier for the requested Factory
+	 * @return returns the Factory with this identifier, or null if none is found
+	 */
+	public T get(String identifier);
+	
+	/**
+	 * Lists the Factories available to this catalog that the
+	 * supplied FactoryFilter accepts
+	 * @param filter the FactoryFilter to use
 	 * @return returns a collection of Factories
 	 */
-	public Collection<T> list();
+	public Collection<S> list(FactoryFilter filter);
 
 }

@@ -20,7 +20,7 @@ package org.daisy.braille.api.validator;
 import java.io.InputStream;
 import java.net.URL;
 
-import org.daisy.factory.Factory;
+import org.daisy.braille.api.factory.Factory;
 
 /**
  * Simple interface for validators

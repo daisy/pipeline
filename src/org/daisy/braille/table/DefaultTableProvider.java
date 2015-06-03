@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
-import org.daisy.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
 

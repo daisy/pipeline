@@ -17,7 +17,7 @@
  */
 package org.daisy.braille.table;
 
-import org.daisy.factory.Factory;
+import org.daisy.braille.api.factory.Factory;
 
 /**
  * Provides an interface for common properties of a Table. 
