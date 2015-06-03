@@ -18,13 +18,8 @@
 package org.daisy.cli;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import org.daisy.factory.Factory;
-import org.daisy.factory.FactoryCatalog;
-import org.daisy.factory.FactoryProperties;
 
 /**
  * Provides an abstract base for command line UI's.
@@ -56,20 +51,6 @@ public abstract class AbstractUI {
 				System.exit(-ExitCode.ILLEGAL_ARGUMENT_VALUE.ordinal());
 			}
 		}
-	}
-	
-	/**
-	 * Creates a list of definitions based on the contents of the supplied FactoryCatalog.
-	 * @param catalog the catalog to create definitions for
-	 * @param resolver 
-	 * @return returns a list of definitions
-	 */
-	public List<Definition> getDefinitionList(FactoryCatalog<? extends Factory, ? extends FactoryProperties> catalog, ShortFormResolver resolver) {
-		List<Definition> ret = new ArrayList<Definition>();
-		for (String key : resolver.getShortForms()) {
-			ret.add(new Definition(key, catalog.get(resolver.resolve(key)).getDescription()));
-		}
-		return ret;
 	}
 	
 	/**
