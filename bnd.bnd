@@ -6,7 +6,6 @@ Export-Package: org.daisy.braille,\
 	org.daisy.braille.pef,\
 	org.daisy.braille.table,\
 	org.daisy.braille.tools,\
-	org.daisy.cli,\
 	org.daisy.factory,\
 	org.daisy.paper,\
 	org.daisy.printing
