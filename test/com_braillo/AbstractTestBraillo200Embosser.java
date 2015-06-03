@@ -9,6 +9,10 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.daisy.braille.api.paper.Length;
+import org.daisy.braille.api.paper.RollPaperFormat;
+import org.daisy.braille.api.paper.TractorPaperFormat;
+import org.daisy.braille.consumer.paper.PaperCatalog;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserCatalog;
 import org.daisy.braille.embosser.EmbosserFeatures;
@@ -19,10 +23,6 @@ import org.daisy.braille.pef.PEFHandler;
 import org.daisy.braille.pef.PEFHandler.Alignment;
 import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.tools.FileCompare;
-import org.daisy.paper.Length;
-import org.daisy.paper.PaperCatalog;
-import org.daisy.paper.RollPaperFormat;
-import org.daisy.paper.TractorPaperFormat;
 import org.xml.sax.SAXException;
 
 public abstract class AbstractTestBraillo200Embosser {

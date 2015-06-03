@@ -26,6 +26,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import org.daisy.braille.api.paper.Area;
+import org.daisy.braille.api.paper.PageFormat;
+import org.daisy.braille.api.paper.Paper;
 import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.AbstractEmbosserWriter.Padding;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
@@ -41,9 +44,6 @@ import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
-import org.daisy.paper.Area;
-import org.daisy.paper.PageFormat;
-import org.daisy.paper.Paper;
 
 /**
  *

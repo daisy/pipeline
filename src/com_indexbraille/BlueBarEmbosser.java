@@ -19,13 +19,13 @@ package com_indexbraille;
 
 import java.io.OutputStream;
 
+import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
-import org.daisy.paper.PageFormat;
 
 import com_indexbraille.IndexEmbosserProvider.EmbosserType;
 

@@ -19,6 +19,7 @@ package es_once_cidat;
 
 import java.io.OutputStream;
 
+import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.EmbosserFactoryException;
 import org.daisy.braille.embosser.EmbosserFeatures;
@@ -30,7 +31,6 @@ import org.daisy.braille.embosser.UnsupportedPaperException;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
 import org.daisy.factory.FactoryProperties;
-import org.daisy.paper.PageFormat;
 
 import es_once_cidat.CidatEmbosserProvider.EmbosserType;
 

@@ -22,6 +22,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.daisy.braille.api.paper.Area;
+import org.daisy.braille.api.paper.Dimensions;
+import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.Device;
 import org.daisy.braille.embosser.EmbosserFactoryException;
@@ -38,9 +41,6 @@ import org.daisy.braille.embosser.UnsupportedPaperException;
 import org.daisy.braille.table.Table;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
-import org.daisy.paper.Area;
-import org.daisy.paper.Dimensions;
-import org.daisy.paper.PageFormat;
 
 
 /**

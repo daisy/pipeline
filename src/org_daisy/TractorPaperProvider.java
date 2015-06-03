@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.daisy.paper.Length;
-import org.daisy.paper.Paper;
-import org.daisy.paper.PaperProvider;
-import org.daisy.paper.TractorPaper;
+import org.daisy.braille.api.paper.Length;
+import org.daisy.braille.api.paper.Paper;
+import org.daisy.braille.api.paper.PaperProvider;
+import org.daisy.braille.api.paper.TractorPaper;
 
 import aQute.bnd.annotation.component.Component;
 

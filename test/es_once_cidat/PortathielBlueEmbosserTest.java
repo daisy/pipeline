@@ -10,6 +10,10 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.daisy.braille.api.paper.PageFormat;
+import org.daisy.braille.api.paper.SheetPaper;
+import org.daisy.braille.api.paper.SheetPaperFormat;
+import org.daisy.braille.consumer.paper.PaperCatalog;
 import org.daisy.braille.embosser.EmbosserCatalog;
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.EmbosserWriter;
@@ -19,10 +23,6 @@ import org.daisy.braille.pef.PEFHandler;
 import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.tools.FileCompare;
 import org.daisy.braille.tools.FileTools;
-import org.daisy.paper.PageFormat;
-import org.daisy.paper.PaperCatalog;
-import org.daisy.paper.SheetPaper;
-import org.daisy.paper.SheetPaperFormat;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;

@@ -17,12 +17,12 @@
  */
 package com_braillo;
 
+import org.daisy.braille.api.paper.PageFormat;
+import org.daisy.braille.api.paper.Paper;
+import org.daisy.braille.api.paper.Paper.Type;
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
-import org.daisy.paper.PageFormat;
-import org.daisy.paper.Paper;
-import org.daisy.paper.Paper.Type;
 
 public class Braillo440SWEmbosser extends AbstractBraillo440Embosser {
 

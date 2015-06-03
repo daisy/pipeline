@@ -21,8 +21,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.daisy.braille.api.paper.Dimensions;
 import org.daisy.braille.embosser.EmbosserTools;
-import org.daisy.paper.Dimensions;
 
 
 class Braillo440VolumeWriter extends BrailloVolumeWriter {
