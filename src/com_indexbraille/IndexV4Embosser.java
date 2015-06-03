@@ -23,15 +23,15 @@ import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.EmbosserFactoryException;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
+import org.daisy.braille.embosser.PrintPage;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.embosser.UnsupportedPaperException;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
-import org.daisy.braille.tools.Length;
 import org.daisy.factory.FactoryProperties;
+import org.daisy.paper.Length;
 import org.daisy.paper.PageFormat;
-import org.daisy.paper.PrintPage;
 
 import com_indexbraille.IndexEmbosserProvider.EmbosserType;
 

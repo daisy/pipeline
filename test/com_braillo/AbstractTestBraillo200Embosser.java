@@ -19,7 +19,7 @@ import org.daisy.braille.pef.PEFHandler;
 import org.daisy.braille.pef.PEFHandler.Alignment;
 import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.tools.FileCompare;
-import org.daisy.braille.tools.Length;
+import org.daisy.paper.Length;
 import org.daisy.paper.PaperCatalog;
 import org.daisy.paper.RollPaperFormat;
 import org.daisy.paper.TractorPaperFormat;

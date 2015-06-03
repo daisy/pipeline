@@ -22,21 +22,21 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.daisy.braille.embosser.AbstractEmbosser;
+import org.daisy.braille.embosser.Device;
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.EmbosserTools;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
+import org.daisy.braille.embosser.PrintPage;
+import org.daisy.braille.embosser.PrintPage.PrintDirection;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.paper.Area;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
-import org.daisy.paper.PrintPage;
-import org.daisy.paper.PrintPage.PrintDirection;
 import org.daisy.paper.SheetPaper;
 import org.daisy.paper.SheetPaperFormat;
 import org.daisy.paper.SheetPaperFormat.Orientation;
 import org.daisy.paper.TractorPaperFormat;
-import org.daisy.printing.Device;
 
 import com_indexbraille.IndexEmbosserProvider.EmbosserType;
 

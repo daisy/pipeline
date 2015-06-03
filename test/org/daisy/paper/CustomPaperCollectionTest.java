@@ -4,7 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 
-import org.daisy.braille.tools.Length;
 import org.junit.Test;
 public class CustomPaperCollectionTest {
 	

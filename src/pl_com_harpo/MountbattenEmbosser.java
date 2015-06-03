@@ -24,10 +24,12 @@ import java.io.OutputStream;
 
 import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
+import org.daisy.braille.embosser.Device;
 import org.daisy.braille.embosser.EmbosserFactoryException;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
+import org.daisy.braille.embosser.PrintPage;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.braille.table.TableFilter;
@@ -35,11 +37,9 @@ import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
-import org.daisy.paper.PrintPage;
 import org.daisy.paper.SheetPaper;
 import org.daisy.paper.SheetPaperFormat;
 import org.daisy.paper.SheetPaperFormat.Orientation;
-import org.daisy.printing.Device;
 
 public class MountbattenEmbosser extends AbstractEmbosser {
 

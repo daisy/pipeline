@@ -20,9 +20,12 @@ package com_braillo;
 import java.io.OutputStream;
 
 import org.daisy.braille.embosser.BufferedVolumeEmbosser;
+import org.daisy.braille.embosser.Device;
 import org.daisy.braille.embosser.EmbosserFactoryException;
 import org.daisy.braille.embosser.EmbosserTools;
 import org.daisy.braille.embosser.EmbosserWriter;
+import org.daisy.braille.embosser.PrintPage;
+import org.daisy.braille.embosser.PrintPage.PrintDirection;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.table.Table;
@@ -30,9 +33,6 @@ import org.daisy.braille.table.TableCatalogService;
 import org.daisy.factory.FactoryProperties;
 import org.daisy.paper.Area;
 import org.daisy.paper.PageFormat;
-import org.daisy.paper.PrintPage;
-import org.daisy.paper.PrintPage.PrintDirection;
-import org.daisy.printing.Device;
 
 import com_braillo.Braillo440VolumeWriter.Mode;
 import com_braillo.BrailloEmbosserProvider.EmbosserType;

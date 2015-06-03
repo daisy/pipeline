@@ -22,18 +22,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.daisy.braille.embosser.AbstractEmbosser;
+import org.daisy.braille.embosser.Device;
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.EmbosserTools;
 import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
+import org.daisy.braille.embosser.PrintPage;
 import org.daisy.braille.table.TableCatalogService;
 import org.daisy.paper.PageFormat;
 import org.daisy.paper.Paper;
-import org.daisy.paper.PrintPage;
 import org.daisy.paper.SheetPaper;
 import org.daisy.paper.SheetPaperFormat;
 import org.daisy.paper.SheetPaperFormat.Orientation;
-import org.daisy.printing.Device;
 
 import es_once_cidat.CidatEmbosserProvider.EmbosserType;
 

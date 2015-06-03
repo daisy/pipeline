@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.daisy.braille.tools.Length;
+import org.daisy.paper.Length;
 import org.daisy.paper.Paper;
 import org.daisy.paper.PaperProvider;
 import org.daisy.paper.RollPaper;
