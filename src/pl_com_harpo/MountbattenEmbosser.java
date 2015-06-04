@@ -29,6 +29,8 @@ import org.daisy.braille.api.paper.Paper;
 import org.daisy.braille.api.paper.SheetPaper;
 import org.daisy.braille.api.paper.SheetPaperFormat;
 import org.daisy.braille.api.paper.SheetPaperFormat.Orientation;
+import org.daisy.braille.api.table.TableCatalogService;
+import org.daisy.braille.api.table.TableFilter;
 import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.Device;
@@ -38,8 +40,6 @@ import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
 import org.daisy.braille.embosser.PrintPage;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.table.TableCatalogService;
-import org.daisy.braille.table.TableFilter;
 
 public class MountbattenEmbosser extends AbstractEmbosser {
 

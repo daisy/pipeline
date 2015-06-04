@@ -22,11 +22,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.daisy.braille.api.table.BrailleConverter;
 import org.daisy.braille.embosser.AbstractEmbosserWriter;
 import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.LineBreaks;
 import org.daisy.braille.embosser.StandardLineBreaks;
-import org.daisy.braille.table.BrailleConverter;
 
 /**
  * @author Bert Frees

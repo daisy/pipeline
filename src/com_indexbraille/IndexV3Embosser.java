@@ -22,6 +22,8 @@ import java.io.OutputStream;
 import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.paper.Length;
 import org.daisy.braille.api.paper.PageFormat;
+import org.daisy.braille.api.table.TableCatalogService;
+import org.daisy.braille.api.table.TableFilter;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.EmbosserFactoryException;
 import org.daisy.braille.embosser.EmbosserTools;
@@ -31,8 +33,6 @@ import org.daisy.braille.embosser.PrintPage;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.embosser.UnsupportedPaperException;
-import org.daisy.braille.table.TableCatalogService;
-import org.daisy.braille.table.TableFilter;
 
 import com_indexbraille.IndexEmbosserProvider.EmbosserType;
 
@@ -43,7 +43,7 @@ public class IndexV3Embosser extends IndexEmbosser {
 	 */
 	private static final long serialVersionUID = 192884103325881800L;
 	private final static TableFilter tableFilter;
-    private final static String table6dot = "org.daisy.braille.table.DefaultTableProvider.TableType.EN_US";
+    private final static String table6dot = "org.daisy.braille.api.table.DefaultTableProvider.TableType.EN_US";
   //private final static String table8dot = "com_indexbraille.IndexTableProvider.TableType.INDEX_TRANSPARENT_8DOT";
 
     static {

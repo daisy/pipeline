@@ -18,8 +18,8 @@
 package com_brailler;
 
 import org.daisy.braille.api.paper.PageFormat;
+import org.daisy.braille.api.table.TableCatalogService;
 import org.daisy.braille.embosser.PrintPage;
-import org.daisy.braille.table.TableCatalogService;
 
 import com_brailler.EnablingTechnologiesEmbosserProvider.EmbosserType;
 

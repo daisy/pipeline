@@ -29,6 +29,8 @@ import org.daisy.braille.api.paper.Paper;
 import org.daisy.braille.api.paper.SheetPaper;
 import org.daisy.braille.api.paper.SheetPaperFormat;
 import org.daisy.braille.api.paper.SheetPaperFormat.Orientation;
+import org.daisy.braille.api.table.TableCatalogService;
+import org.daisy.braille.api.table.TableFilter;
 import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.Device;
@@ -41,8 +43,6 @@ import org.daisy.braille.embosser.PrintPage;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
 import org.daisy.braille.embosser.UnsupportedPaperException;
-import org.daisy.braille.table.TableCatalogService;
-import org.daisy.braille.table.TableFilter;
 
 import com_viewplus.ViewPlusEmbosserProvider.EmbosserType;
 
@@ -64,7 +64,7 @@ public class TigerEmbosser extends AbstractEmbosser {
     private boolean eightDotsEnabled = false;
 
     private final static TableFilter tableFilter;
-    private final static String table6dot = "org.daisy.braille.table.DefaultTableProvider.TableType.EN_US";
+    private final static String table6dot = "org.daisy.braille.api.table.DefaultTableProvider.TableType.EN_US";
   //private final static String table8dot = "com_viewplusViewPlusTableProvider.TableType.TIGER_INLINE_SUBSTITUTION_8DOT";
 
     static {

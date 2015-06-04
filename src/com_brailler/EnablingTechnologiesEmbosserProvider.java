@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.daisy.braille.api.factory.FactoryProperties;
+import org.daisy.braille.api.table.TableCatalogService;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserProvider;
-import org.daisy.braille.table.TableCatalog;
-import org.daisy.braille.table.TableCatalogService;
+import org.daisy.braille.impl.spi.SPIHelper;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
@@ -171,7 +171,7 @@ public class EnablingTechnologiesEmbosserProvider implements EmbosserProvider {
 	@Override
 	public void setCreatedWithSPI() {
 		if (tableCatalogService==null) {
-			tableCatalogService = TableCatalog.newInstance/*SPI*/();
+			tableCatalogService = SPIHelper.getTableCatalog();
 		}
 	}
 }

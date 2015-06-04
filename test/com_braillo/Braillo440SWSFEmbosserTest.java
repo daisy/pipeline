@@ -5,9 +5,9 @@ import java.io.IOException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.daisy.braille.consumer.table.TableCatalog;
 import org.daisy.braille.embosser.EmbosserFeatures;
 import org.daisy.braille.embosser.UnsupportedWidthException;
-import org.daisy.braille.table.TableCatalog;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 

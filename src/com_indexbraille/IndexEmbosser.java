@@ -28,6 +28,7 @@ import org.daisy.braille.api.paper.SheetPaper;
 import org.daisy.braille.api.paper.SheetPaperFormat;
 import org.daisy.braille.api.paper.SheetPaperFormat.Orientation;
 import org.daisy.braille.api.paper.TractorPaperFormat;
+import org.daisy.braille.api.table.TableCatalogService;
 import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.Device;
 import org.daisy.braille.embosser.EmbosserFeatures;
@@ -36,7 +37,6 @@ import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
 import org.daisy.braille.embosser.PrintPage;
 import org.daisy.braille.embosser.PrintPage.PrintDirection;
-import org.daisy.braille.table.TableCatalogService;
 
 import com_indexbraille.IndexEmbosserProvider.EmbosserType;
 

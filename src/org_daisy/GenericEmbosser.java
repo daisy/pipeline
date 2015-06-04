@@ -25,6 +25,9 @@ import java.io.OutputStream;
 import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.api.paper.Paper;
+import org.daisy.braille.api.table.Table;
+import org.daisy.braille.api.table.TableCatalogService;
+import org.daisy.braille.api.table.TableFilter;
 import org.daisy.braille.embosser.AbstractEmbosser;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.Device;
@@ -34,9 +37,6 @@ import org.daisy.braille.embosser.EmbosserWriter;
 import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
 import org.daisy.braille.embosser.PrintPage;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalogService;
-import org.daisy.braille.table.TableFilter;
 
 public class GenericEmbosser extends AbstractEmbosser {
 	/**

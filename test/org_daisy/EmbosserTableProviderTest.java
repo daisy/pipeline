@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.nio.charset.Charset;
 
 import org.daisy.braille.BrailleConstants;
-import org.daisy.braille.table.BrailleConverter;
+import org.daisy.braille.api.table.BrailleConverter;
 import org.junit.Test;
 
 public class EmbosserTableProviderTest {

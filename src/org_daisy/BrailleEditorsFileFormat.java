@@ -23,6 +23,9 @@ import java.util.Collection;
 
 import org.daisy.braille.api.factory.AbstractFactory;
 import org.daisy.braille.api.factory.FactoryProperties;
+import org.daisy.braille.api.table.Table;
+import org.daisy.braille.api.table.TableCatalogService;
+import org.daisy.braille.api.table.TableFilter;
 import org.daisy.braille.embosser.AbstractEmbosserWriter.Padding;
 import org.daisy.braille.embosser.ConfigurableEmbosser;
 import org.daisy.braille.embosser.EmbosserFeatures;
@@ -31,9 +34,7 @@ import org.daisy.braille.embosser.EmbosserWriterProperties;
 import org.daisy.braille.embosser.FileFormat;
 import org.daisy.braille.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.embosser.StandardLineBreaks;
-import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalog;
-import org.daisy.braille.table.TableFilter;
+import org.daisy.braille.impl.spi.SPIHelper;
 import org_daisy.BrailleEditorsFileFormatProvider.FileType;
 
 
@@ -49,7 +50,7 @@ public class BrailleEditorsFileFormat extends AbstractFactory implements FileFor
 	private static final long serialVersionUID = 4217010913717769350L;
 	private FileType type;
     private Table table;
-    private TableCatalog tableCatalog;
+    private TableCatalogService tableCatalog;
     private TableFilter tableFilter;
     private final Collection<String> supportedTableIds = new ArrayList<String>();
 
@@ -95,8 +96,8 @@ public class BrailleEditorsFileFormat extends AbstractFactory implements FileFor
             }
         };
 
-        tableCatalog = TableCatalog.newInstance();
-        table = tableCatalog.get("org_daisy.EmbosserTableProvider.TableType.MIT");
+        tableCatalog = SPIHelper.getTableCatalog();
+        table = tableCatalog.newTable("org_daisy.EmbosserTableProvider.TableType.MIT");
     }
 
     public TableFilter getTableFilter() {
@@ -165,7 +166,7 @@ public class BrailleEditorsFileFormat extends AbstractFactory implements FileFor
             try {
                 t = (Table)value;
             } catch (ClassCastException e) {
-                t = TableCatalog.newInstance().get(value.toString());
+                t = tableCatalog.newTable(value.toString());
             }
             if (getTableFilter().accept(t)) {
                 table = t;

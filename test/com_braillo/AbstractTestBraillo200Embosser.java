@@ -13,6 +13,7 @@ import org.daisy.braille.api.paper.Length;
 import org.daisy.braille.api.paper.RollPaperFormat;
 import org.daisy.braille.api.paper.TractorPaperFormat;
 import org.daisy.braille.consumer.paper.PaperCatalog;
+import org.daisy.braille.consumer.table.TableCatalog;
 import org.daisy.braille.embosser.Embosser;
 import org.daisy.braille.embosser.EmbosserCatalog;
 import org.daisy.braille.embosser.EmbosserFeatures;
@@ -21,7 +22,6 @@ import org.daisy.braille.embosser.UnsupportedWidthException;
 import org.daisy.braille.facade.PEFConverterFacade;
 import org.daisy.braille.pef.PEFHandler;
 import org.daisy.braille.pef.PEFHandler.Alignment;
-import org.daisy.braille.table.TableCatalog;
 import org.daisy.braille.tools.FileCompare;
 import org.xml.sax.SAXException;
 
