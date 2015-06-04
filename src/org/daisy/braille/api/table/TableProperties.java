@@ -15,15 +15,20 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.braille.table;
-
-import org.daisy.braille.api.factory.FactoryFilter;
+package org.daisy.braille.api.table;
 
 /**
- * Provides an interface for filtering a collection of Tables.
+ * Provides common table features. 
  * @author Joel Håkansson
  */
-public interface TableFilter extends FactoryFilter {
-
-
+public class TableProperties {
+	/**
+	 * Defines that table has a one-to-one mapping between character and braille pattern
+	 */
+	public final static String IS_ONE_TO_ONE = "is one-to-one";
+	/**
+	 * Defines that the table is meant for screen use, that is to say, 
+	 * does not contain binary type characters.
+	 */
+	public final static String IS_DISPLAY_FORMAT = "is display format";
 }

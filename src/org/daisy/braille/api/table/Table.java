@@ -15,27 +15,20 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.braille.table;
+package org.daisy.braille.api.table;
 
-import org.daisy.braille.api.factory.FactoryProperties;
-import org.daisy.braille.api.factory.Provider;
+import org.daisy.braille.api.factory.Factory;
 
 /**
- * <p>
- * Provides an interface for a Table service. The purpose of this
- * interface is to expose an implementation of Table as a
- * service.
- * </p>
- * 
- * <p>
- * To comply with this interface, an implementation must be thread safe and
- * address both the possibility that only a single instance is created and used
- * throughout and that new instances are created as desired.
- * </p>
- * 
+ * Provides an interface for common properties of a Table. 
  * @author Joel Håkansson
+ *
  */
-public interface TableProvider extends Provider<FactoryProperties> {
-
-	public Table newFactory(String identifier);
+public interface Table extends Factory {
+	/**
+	 * Creates a new BrailleConverter based on the current configuration of this
+	 * Table. 
+	 * @return returns a new BrailleConverter instance
+	 */
+	public BrailleConverter newBrailleConverter();
 }

@@ -20,8 +20,8 @@ package org.daisy.braille.embosser;
 import java.io.OutputStream;
 
 import org.daisy.braille.api.factory.Factory;
-import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableFilter;
+import org.daisy.braille.api.table.Table;
+import org.daisy.braille.api.table.TableFilter;
 
 
 /**

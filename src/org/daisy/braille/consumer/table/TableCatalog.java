@@ -15,7 +15,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.braille.table;
+package org.daisy.braille.consumer.table;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,6 +32,9 @@ import javax.imageio.spi.ServiceRegistry;
 import org.daisy.braille.api.factory.FactoryCatalog;
 import org.daisy.braille.api.factory.FactoryFilter;
 import org.daisy.braille.api.factory.FactoryProperties;
+import org.daisy.braille.api.table.Table;
+import org.daisy.braille.api.table.TableCatalogService;
+import org.daisy.braille.api.table.TableProvider;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

@@ -15,12 +15,12 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.braille.table;
+package org.daisy.braille.api.table;
 
 import java.util.HashMap;
 
 import org.daisy.braille.api.factory.FactoryProperties;
-import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
+import org.daisy.braille.api.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 
 /**
  * Provides an embosser table implementation. This implementation

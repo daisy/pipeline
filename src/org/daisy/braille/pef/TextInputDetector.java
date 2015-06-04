@@ -30,9 +30,9 @@ import java.util.logging.Logger;
 
 import org.daisy.braille.BrailleConstants;
 import org.daisy.braille.api.factory.FactoryProperties;
-import org.daisy.braille.table.BrailleConverter;
-import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalogService;
+import org.daisy.braille.api.table.BrailleConverter;
+import org.daisy.braille.api.table.Table;
+import org.daisy.braille.api.table.TableCatalogService;
 
 /**
  * Provides a method for detecting a table based on text input.

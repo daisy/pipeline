@@ -6,8 +6,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
+import org.daisy.braille.api.table.TableCatalogService;
 import org.daisy.braille.pef.TextHandler;
-import org.daisy.braille.table.TableCatalogService;
 
 public class TextConverterFacade {
 	public final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");

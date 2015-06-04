@@ -20,7 +20,7 @@ package org.daisy.braille.embosser;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.daisy.braille.table.BrailleConverter;
+import org.daisy.braille.api.table.BrailleConverter;
 
 /**
  * Provides a configurable embosser. Outputs to a single OutputStream. 

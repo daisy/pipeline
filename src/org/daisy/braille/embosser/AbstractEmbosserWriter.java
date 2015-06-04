@@ -19,7 +19,7 @@ package org.daisy.braille.embosser;
 
 import java.io.IOException;
 
-import org.daisy.braille.table.BrailleConverter;
+import org.daisy.braille.api.table.BrailleConverter;
 
 /**
  * Provides an abstract base for embossers.

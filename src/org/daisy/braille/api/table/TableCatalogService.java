@@ -1,4 +1,4 @@
-package org.daisy.braille.table;
+package org.daisy.braille.api.table;
 
 import java.util.Collection;
 

@@ -28,9 +28,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.daisy.braille.table.BrailleConverter;
-import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalogService;
+import org.daisy.braille.api.table.BrailleConverter;
+import org.daisy.braille.api.table.Table;
+import org.daisy.braille.api.table.TableCatalogService;
 
 /**
  * Provides a handler for reading text and writing a PEF-file.

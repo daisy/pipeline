@@ -1,8 +1,8 @@
-package org.daisy.braille.table;
+package org.daisy.braille.api.table;
 import java.nio.charset.Charset;
 
 import org.daisy.braille.BrailleConstants;
-import org.daisy.braille.table.EmbosserBrailleConverter.EightDotFallbackMethod;
+import org.daisy.braille.api.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.junit.Test;
 
 public class EmbosserBrailleConverterTest {

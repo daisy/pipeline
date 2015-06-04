@@ -22,9 +22,9 @@ import java.util.HashMap;
 import org.daisy.braille.api.factory.AbstractFactory;
 import org.daisy.braille.api.paper.Area;
 import org.daisy.braille.api.paper.PageFormat;
-import org.daisy.braille.table.DefaultTableProvider;
-import org.daisy.braille.table.Table;
-import org.daisy.braille.table.TableCatalogService;
+import org.daisy.braille.api.table.DefaultTableProvider;
+import org.daisy.braille.api.table.Table;
+import org.daisy.braille.api.table.TableCatalogService;
 
 /**
  * Provides an abstract base for Embossers, implementing basic features

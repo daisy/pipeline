@@ -2,16 +2,16 @@
 Export-Package: org.daisy.braille,\
 	org.daisy.braille.api.factory,\
 	org.daisy.braille.api.paper,\
+	org.daisy.braille.api.table,\
 	org.daisy.braille.api.validator,\
 	org.daisy.braille.embosser,\
 	org.daisy.braille.facade,\
 	org.daisy.braille.pef,\
-	org.daisy.braille.table,\
 	org.daisy.braille.tools,\
-	org.daisy.factory,\
 	org.daisy.printing
 Private-Package:  \
 	org.daisy.braille.consumer.paper,\
+	org.daisy.braille.consumer.table,\
 	org.daisy.braille.consumer.validator
 Bundle-Version: 2.0.0-SNAPSHOT
 Include-Resource: / = src/
