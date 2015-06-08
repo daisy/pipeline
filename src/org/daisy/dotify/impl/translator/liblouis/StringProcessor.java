@@ -23,21 +23,21 @@ class StringProcessor {
 			String t = input.substring(m.start(), m.end());
 			if (t.startsWith("\\x")) {
 				ret.append((char)Integer.parseInt(t.substring(2), 16));
-			} else if (t.equals("\\\\")) {
-				ret.append("\\");
-			} else if (t.equals("\\f")) {
-				ret.append("\f");
-			} else if (t.equals("\\n")) {
-					ret.append("\n");
-			} else if (t.equals("\\r")) {
-				ret.append("\r");
-			} else if (t.equals("\\s")) {
-				ret.append(" ");
-			} else if (t.equals("\\t")) {
-				ret.append("\t");
-			} else if (t.equals("\\v")) {
+			} else if ("\\\\".equals(t)) {
+				ret.append('\\');
+			} else if ("\\f".equals(t)) {
+				ret.append('\f');
+			} else if ("\\n".equals(t)) {
+					ret.append('\n');
+			} else if ("\\r".equals(t)) {
+				ret.append('\r');
+			} else if ("\\s".equals(t)) {
+				ret.append(' ');
+			} else if ("\\t".equals(t)) {
+				ret.append('\t');
+			} else if ("\\v".equals(t)) {
 				ret.append("\0x0B");
-			} else if (t.equals("\\e")) {
+			} else if ("\\e".equals(t)) {
 				ret.append("\0x1B");
 			}
 			

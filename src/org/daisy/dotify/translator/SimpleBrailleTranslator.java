@@ -73,7 +73,7 @@ public class SimpleBrailleTranslator implements BrailleTranslator {
 		try {
 			return translate(text, this.locale.toString(), atts);
 		} catch (TranslationException e) {
-			throw new RuntimeException("Coding error. This translator does not support the language it claims to support.");
+			throw new RuntimeException("Coding error. This translator does not support the language it claims to support.", e);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class SimpleBrailleTranslator implements BrailleTranslator {
 		try {
 			return translate(text, this.locale.toString());
 		} catch (TranslationException e) {
-			throw new RuntimeException("Coding error. This translator does not support the language it claims to support.");
+			throw new RuntimeException("Coding error. This translator does not support the language it claims to support.", e);
 		}
 	}
 

@@ -166,10 +166,10 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		final int ar = (right.getAlign()==BorderSpecification.Align.INNER?cw:0);
 		
 		//border coordinates
-		final int x1 = 0 + Math.max((al-wl), 0);
-		final int y1 = 0 + Math.max((at-wt), 0);
-		final int x2 = w - (1 + Math.max((ar-wr), 0));
-		final int y2 = h - (1 + Math.max((ab-wb), 0));
+		final int x1 = 0 + Math.max(al-wl, 0);
+		final int y1 = 0 + Math.max(at-wt, 0);
+		final int x2 = w - (1 + Math.max(ar-wr, 0));
+		final int y2 = h - (1 + Math.max(ab-wb, 0));
 		
 		BufferedImage borderImage = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_BINARY);
 
