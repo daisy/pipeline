@@ -77,9 +77,9 @@ class HyphenationConfig {
 				}
 			}
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to load resource: " + patternPath);
+			throw new RuntimeException("Failed to load resource: " + patternPath, e);
 		} catch (TexParserException e) {
-			throw new RuntimeException("Failed to load resource: " + patternPath);
+			throw new RuntimeException("Failed to load resource: " + patternPath, e);
 		}
 	}
 
