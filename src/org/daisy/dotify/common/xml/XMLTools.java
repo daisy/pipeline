@@ -210,27 +210,33 @@ public class XMLTools {
 
 		@Override
 		public void endDTD() throws SAXException {
+			// no-op
 		}
 
 		@Override
 		public void startEntity(String name) throws SAXException {
+			// no-op
 		}
 
 		@Override
 		public void endEntity(String name) throws SAXException {
+			// no-op
 		}
 
 		@Override
 		public void startCDATA() throws SAXException {
+			// no-op
 		}
 
 		@Override
 		public void endCDATA() throws SAXException {
+			// no-op
 		}
 
 		@Override
 		public void comment(char[] ch, int start, int length)
 				throws SAXException {
+			// no-op
 		}
 	}
 
