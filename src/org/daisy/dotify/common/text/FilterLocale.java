@@ -14,7 +14,7 @@ public class FilterLocale {
 		this.lang = lang.intern();
 		this.country = country.intern();
 		this.variant = variant.intern();
-		this.str = (lang + (country.equals("") ? "" : "-" + country + (variant.equals("") ? "" : "-" + variant))).intern();
+		this.str = (lang + ("".equals(country) ? "" : "-" + country + ("".equals(variant) ? "" : "-" + variant))).intern();
 	}
 	
 	public static FilterLocale parse(String locale) {

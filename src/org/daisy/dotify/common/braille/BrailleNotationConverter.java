@@ -23,7 +23,7 @@ public class BrailleNotationConverter {
 		}
 		StringBuilder sb = new StringBuilder();
 		for (String t : s) {
-			if (!t.equals("")) {
+			if (!"".equals(t)) {
 				sb.append(numberStringToUnicode(t));
 			}
 		}
