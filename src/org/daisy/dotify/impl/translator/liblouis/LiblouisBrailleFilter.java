@@ -44,7 +44,7 @@ public class LiblouisBrailleFilter implements StringFilter {
 		}
 		
 		public Builder numsign(String value) {
-			if (!numsign.equals("")) {
+			if (!"".equals(numsign)) {
 				logger.warning("Numsign already set: " + numsign + " -> " + value);
 			}
 			numsign = value;
@@ -52,7 +52,7 @@ public class LiblouisBrailleFilter implements StringFilter {
 		}
 		
 		public Builder capsign(String value) {
-			if (!capsign.equals("")) {
+			if (!"".equals(capsign)) {
 				logger.warning("Capsign already set: " + capsign + " -> " + value);
 			}
 			capsign = value;
