@@ -17,6 +17,7 @@
  */
 package org.daisy.braille.api.embosser;
 
+
 /**
  * Provides standard line break definitions
  * @author Joel Håkansson
