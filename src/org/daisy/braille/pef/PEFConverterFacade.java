@@ -33,7 +33,6 @@ import org.daisy.braille.api.embosser.EmbosserCatalogService;
 import org.daisy.braille.api.embosser.EmbosserFactoryException;
 import org.daisy.braille.api.embosser.EmbosserFeatures;
 import org.daisy.braille.api.embosser.EmbosserWriter;
-import org.daisy.braille.api.embosser.UnsupportedWidthException;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.api.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.braille.pef.PEFHandler.Alignment;
