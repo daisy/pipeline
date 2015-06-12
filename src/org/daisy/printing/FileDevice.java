@@ -27,7 +27,7 @@ import java.io.IOException;
 
 import javax.print.PrintException;
 
-import org.daisy.braille.embosser.Device;
+import org.daisy.braille.api.embosser.Device;
 
 /**
  * Provides a way of writing the files transmitted using the Device interface to files

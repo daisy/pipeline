@@ -32,7 +32,7 @@ import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.print.attribute.DocAttributeSet;
 
-import org.daisy.braille.embosser.Device;
+import org.daisy.braille.api.embosser.Device;
 
 /**
  * Printer device class of type DocFlavor.INPUT_STREAM.AUTOSENSE

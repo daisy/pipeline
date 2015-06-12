@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Stack;
 
-import org.daisy.braille.embosser.EmbosserWriter;
+import org.daisy.braille.api.embosser.EmbosserWriter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
