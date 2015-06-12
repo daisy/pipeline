@@ -10,17 +10,17 @@ import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.daisy.braille.api.embosser.EmbosserFeatures;
+import org.daisy.braille.api.embosser.EmbosserWriter;
+import org.daisy.braille.api.embosser.UnsupportedWidthException;
 import org.daisy.braille.api.paper.Length;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.api.paper.RollPaperFormat;
 import org.daisy.braille.api.paper.SheetPaper;
 import org.daisy.braille.api.paper.SheetPaperFormat;
+import org.daisy.braille.consumer.embosser.EmbosserCatalog;
 import org.daisy.braille.consumer.paper.PaperCatalog;
 import org.daisy.braille.consumer.table.TableCatalog;
-import org.daisy.braille.embosser.EmbosserCatalog;
-import org.daisy.braille.embosser.EmbosserFeatures;
-import org.daisy.braille.embosser.EmbosserWriter;
-import org.daisy.braille.embosser.UnsupportedWidthException;
 import org.daisy.braille.facade.PEFConverterFacade;
 import org.daisy.braille.pef.PEFHandler;
 import org.daisy.braille.tools.FileCompare;

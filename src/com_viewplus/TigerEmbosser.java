@@ -22,6 +22,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.daisy.braille.api.embosser.AbstractEmbosser;
+import org.daisy.braille.api.embosser.ConfigurableEmbosser;
+import org.daisy.braille.api.embosser.Device;
+import org.daisy.braille.api.embosser.EmbosserFactoryException;
+import org.daisy.braille.api.embosser.EmbosserFeatures;
+import org.daisy.braille.api.embosser.EmbosserProperties.PrintMode;
+import org.daisy.braille.api.embosser.EmbosserTools;
+import org.daisy.braille.api.embosser.EmbosserWriter;
+import org.daisy.braille.api.embosser.FileToDeviceEmbosserWriter;
+import org.daisy.braille.api.embosser.PrintPage;
+import org.daisy.braille.api.embosser.SimpleEmbosserProperties;
+import org.daisy.braille.api.embosser.StandardLineBreaks;
+import org.daisy.braille.api.embosser.UnsupportedPaperException;
 import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.paper.Area;
 import org.daisy.braille.api.paper.PageFormat;
@@ -31,18 +44,6 @@ import org.daisy.braille.api.paper.SheetPaperFormat;
 import org.daisy.braille.api.paper.SheetPaperFormat.Orientation;
 import org.daisy.braille.api.table.TableCatalogService;
 import org.daisy.braille.api.table.TableFilter;
-import org.daisy.braille.embosser.AbstractEmbosser;
-import org.daisy.braille.embosser.ConfigurableEmbosser;
-import org.daisy.braille.embosser.Device;
-import org.daisy.braille.embosser.EmbosserFactoryException;
-import org.daisy.braille.embosser.EmbosserFeatures;
-import org.daisy.braille.embosser.EmbosserTools;
-import org.daisy.braille.embosser.EmbosserWriter;
-import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
-import org.daisy.braille.embosser.PrintPage;
-import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.embosser.StandardLineBreaks;
-import org.daisy.braille.embosser.UnsupportedPaperException;
 
 import com_viewplus.ViewPlusEmbosserProvider.EmbosserType;
 

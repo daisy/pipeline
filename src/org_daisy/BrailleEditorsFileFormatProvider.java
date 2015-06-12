@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.braille.embosser.FileFormat;
-import org.daisy.braille.embosser.FileFormatProvider;
+import org.daisy.braille.api.embosser.FileFormat;
+import org.daisy.braille.api.embosser.FileFormatProvider;
 
 /**
  *

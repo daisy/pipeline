@@ -19,19 +19,19 @@ package com_indexbraille;
 
 import java.io.OutputStream;
 
+import org.daisy.braille.api.embosser.ConfigurableEmbosser;
+import org.daisy.braille.api.embosser.EmbosserFactoryException;
+import org.daisy.braille.api.embosser.EmbosserWriter;
+import org.daisy.braille.api.embosser.EmbosserWriterProperties;
+import org.daisy.braille.api.embosser.PrintPage;
+import org.daisy.braille.api.embosser.SimpleEmbosserProperties;
+import org.daisy.braille.api.embosser.StandardLineBreaks;
+import org.daisy.braille.api.embosser.UnsupportedPaperException;
 import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.paper.Length;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.api.table.TableCatalogService;
 import org.daisy.braille.api.table.TableFilter;
-import org.daisy.braille.embosser.ConfigurableEmbosser;
-import org.daisy.braille.embosser.EmbosserFactoryException;
-import org.daisy.braille.embosser.EmbosserWriter;
-import org.daisy.braille.embosser.EmbosserWriterProperties;
-import org.daisy.braille.embosser.PrintPage;
-import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.embosser.StandardLineBreaks;
-import org.daisy.braille.embosser.UnsupportedPaperException;
 
 import com_indexbraille.IndexEmbosserProvider.EmbosserType;
 

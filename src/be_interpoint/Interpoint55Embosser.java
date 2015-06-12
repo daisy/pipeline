@@ -26,24 +26,24 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import org.daisy.braille.api.embosser.AbstractEmbosser;
+import org.daisy.braille.api.embosser.AbstractEmbosserWriter.Padding;
+import org.daisy.braille.api.embosser.ConfigurableEmbosser;
+import org.daisy.braille.api.embosser.Device;
+import org.daisy.braille.api.embosser.EmbosserFactoryException;
+import org.daisy.braille.api.embosser.EmbosserFeatures;
+import org.daisy.braille.api.embosser.EmbosserWriter;
+import org.daisy.braille.api.embosser.EmbosserWriterProperties;
+import org.daisy.braille.api.embosser.PrintPage;
+import org.daisy.braille.api.embosser.PrintPage.PrintDirection;
+import org.daisy.braille.api.embosser.SimpleEmbosserProperties;
+import org.daisy.braille.api.embosser.StandardLineBreaks;
 import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.paper.Area;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.api.paper.Paper;
 import org.daisy.braille.api.table.TableCatalogService;
 import org.daisy.braille.api.table.TableFilter;
-import org.daisy.braille.embosser.AbstractEmbosser;
-import org.daisy.braille.embosser.AbstractEmbosserWriter.Padding;
-import org.daisy.braille.embosser.ConfigurableEmbosser;
-import org.daisy.braille.embosser.Device;
-import org.daisy.braille.embosser.EmbosserFactoryException;
-import org.daisy.braille.embosser.EmbosserFeatures;
-import org.daisy.braille.embosser.EmbosserWriter;
-import org.daisy.braille.embosser.EmbosserWriterProperties;
-import org.daisy.braille.embosser.PrintPage;
-import org.daisy.braille.embosser.PrintPage.PrintDirection;
-import org.daisy.braille.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.embosser.StandardLineBreaks;
 
 /**
  *

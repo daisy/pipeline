@@ -17,7 +17,7 @@
  */
 package pl_com_harpo;
 
-import org.daisy.braille.embosser.LineBreaks;
+import org.daisy.braille.api.embosser.LineBreaks;
 
 /**
  *

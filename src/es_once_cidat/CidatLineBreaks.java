@@ -17,7 +17,7 @@
  */
 package es_once_cidat;
 
-import org.daisy.braille.embosser.LineBreaks;
+import org.daisy.braille.api.embosser.LineBreaks;
 
 /**
  *

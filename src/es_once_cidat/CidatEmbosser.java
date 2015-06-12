@@ -21,19 +21,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.daisy.braille.api.embosser.AbstractEmbosser;
+import org.daisy.braille.api.embosser.Device;
+import org.daisy.braille.api.embosser.EmbosserFeatures;
+import org.daisy.braille.api.embosser.EmbosserTools;
+import org.daisy.braille.api.embosser.EmbosserWriter;
+import org.daisy.braille.api.embosser.FileToDeviceEmbosserWriter;
+import org.daisy.braille.api.embosser.PrintPage;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.api.paper.Paper;
 import org.daisy.braille.api.paper.SheetPaper;
 import org.daisy.braille.api.paper.SheetPaperFormat;
 import org.daisy.braille.api.paper.SheetPaperFormat.Orientation;
 import org.daisy.braille.api.table.TableCatalogService;
-import org.daisy.braille.embosser.AbstractEmbosser;
-import org.daisy.braille.embosser.Device;
-import org.daisy.braille.embosser.EmbosserFeatures;
-import org.daisy.braille.embosser.EmbosserTools;
-import org.daisy.braille.embosser.EmbosserWriter;
-import org.daisy.braille.embosser.FileToDeviceEmbosserWriter;
-import org.daisy.braille.embosser.PrintPage;
 
 import es_once_cidat.CidatEmbosserProvider.EmbosserType;
 
