@@ -15,7 +15,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.braille.facade;
+package org.daisy.braille.pef;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,7 +24,6 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 import org.daisy.braille.api.validator.ValidatorFactoryService;
-import org.daisy.braille.pef.PEFValidator;
 
 /**
  * Provides a facade for PEFValidator

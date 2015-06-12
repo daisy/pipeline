@@ -15,7 +15,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org.daisy.braille.facade;
+package org.daisy.braille.pef;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,9 +36,7 @@ import org.daisy.braille.api.embosser.EmbosserWriter;
 import org.daisy.braille.api.embosser.UnsupportedWidthException;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.api.table.EmbosserBrailleConverter.EightDotFallbackMethod;
-import org.daisy.braille.pef.PEFHandler;
 import org.daisy.braille.pef.PEFHandler.Alignment;
-import org.daisy.braille.pef.Range;
 import org.xml.sax.SAXException;
 
 /**
