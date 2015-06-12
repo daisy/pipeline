@@ -21,19 +21,19 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.daisy.braille.api.embosser.AbstractEmbosserWriter.Padding;
-import org.daisy.braille.api.embosser.ConfigurableEmbosser;
 import org.daisy.braille.api.embosser.EmbosserFeatures;
 import org.daisy.braille.api.embosser.EmbosserWriter;
 import org.daisy.braille.api.embosser.EmbosserWriterProperties;
 import org.daisy.braille.api.embosser.FileFormat;
-import org.daisy.braille.api.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.api.embosser.StandardLineBreaks;
 import org.daisy.braille.api.factory.AbstractFactory;
 import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.table.Table;
 import org.daisy.braille.api.table.TableCatalogService;
 import org.daisy.braille.api.table.TableFilter;
+import org.daisy.braille.impl.embosser.AbstractEmbosserWriter.Padding;
+import org.daisy.braille.impl.embosser.ConfigurableEmbosser;
+import org.daisy.braille.impl.embosser.SimpleEmbosserProperties;
 import org.daisy.braille.impl.spi.SPIHelper;
 import org_daisy.BrailleEditorsFileFormatProvider.FileType;
 

@@ -19,6 +19,7 @@ package pl_com_harpo;
 
 import org.daisy.braille.api.embosser.LineBreaks;
 
+
 /**
  *
  * @author Bert Frees

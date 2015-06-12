@@ -17,7 +17,6 @@
  */
 package com_brailler;
 
-import org.daisy.braille.api.embosser.EmbosserProperties.PrintMode;
 import org.daisy.braille.api.embosser.PrintPage;
 import org.daisy.braille.api.paper.PageFormat;
 import org.daisy.braille.api.table.TableCatalogService;

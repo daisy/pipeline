@@ -15,23 +15,25 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org_daisy;
+package org.daisy.braille.impl.embosser;
 
-import org.daisy.braille.impl.embosser.PageBreaks;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 /**
- * Provides standard page break definitions
- * @author Bert Frees
+ * Provides an interface for writing a volume of braille to a file.
+ * @author Joel Håkansson
  */
-public class NoPageBreaks implements PageBreaks {
+public interface VolumeWriter {
 
 	/**
-	 * Creates a new object with the system's default page break style.
+	 * Writes the pages in this volume to a file
+	 * @param pages the pages to write
+	 * @param f the file to write to
+	 * @return returns true if writing was successful, false otherwise
+	 * @throws IOException
 	 */
-	public NoPageBreaks() {
-        }
+	public boolean write(List<? extends List<Byte>> pages, File f) throws IOException;
 
-	public String getString() {
-		return "";
-	}
 }

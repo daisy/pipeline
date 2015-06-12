@@ -15,23 +15,18 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package org_daisy;
-
-import org.daisy.braille.impl.embosser.PageBreaks;
+package org.daisy.braille.impl.embosser;
 
 /**
- * Provides standard page break definitions
+ * Provides an interface for page breaks
  * @author Bert Frees
  */
-public class NoPageBreaks implements PageBreaks {
-
+public interface PageBreaks {
+	
 	/**
-	 * Creates a new object with the system's default page break style.
+	 * Gets the string used to represent page breaks
+	 * @return returns the string used to represent page breaks
 	 */
-	public NoPageBreaks() {
-        }
+	public String getString();
 
-	public String getString() {
-		return "";
-	}
 }

@@ -10,6 +10,7 @@ Private-Package: be_interpoint,\
 	com_viewplus,\
 	com_yourdolphin,\
 	es_once_cidat,\
+	org.daisy.braille.impl.embosser,\
 	org.daisy.braille.impl.spi,\
 	org_daisy,\
 	pl_com_harpo,\
