@@ -6,7 +6,6 @@ Export-Package: org.daisy.braille,\
 	org.daisy.braille.api.table,\
 	org.daisy.braille.api.validator,\
 	org.daisy.braille.embosser,\
-	org.daisy.braille.pef,\
 	org.daisy.braille.tools,\
 	org.daisy.printing
 Private-Package:  \
