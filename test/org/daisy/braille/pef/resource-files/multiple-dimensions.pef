@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef version="2008-1" xmlns="http://www.daisy.org/ns/2008/pef">
+	<head>
+		<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+			<dc:title>6-dot Chart</dc:title>
+			<dc:creator>Joel Håkansson</dc:creator>
+			<dc:date>2008-11-07</dc:date>
+			<dc:format>application/x-pef+xml</dc:format>
+			<dc:identifier>org.pef-format.00003</dc:identifier>
+			<dc:description>The file contains a test pattern that uses all 6-dot patterns.
+								Each pattern occurs once. The order is Unicode (binary) order 
+								with spaces in between each character. The first column of each
+								cell is identical for every row within a column. The second column 
+								of each cell is identical for every column within a row.</dc:description>
+		</meta>
+	</head>
+	<body>
+		<volume cols="30" rows="11" rowgap="0" duplex="true">
+			<section>
+				<page>
+					<row/>
+					<row/>
+					<row/>
+					<row>⠀⠀⠀⠀⠁⠀⠂⠀⠃⠀⠄⠀⠅⠀⠆⠀⠇</row>
+					<row>⠀⠀⠈⠀⠉⠀⠊⠀⠋⠀⠌⠀⠍⠀⠎⠀⠏</row>
+					<row>⠀⠀⠐⠀⠑⠀⠒⠀⠓⠀⠔⠀⠕⠀⠖⠀⠗</row>
+					<row>⠀⠀⠘⠀⠙⠀⠚⠀⠛⠀⠜⠀⠝⠀⠞⠀⠟</row>
+					<row>⠀⠀⠠⠀⠡⠀⠢⠀⠣⠀⠤⠀⠥⠀⠦⠀⠧</row>
+					<row>⠀⠀⠨⠀⠩⠀⠪⠀⠫⠀⠬⠀⠭⠀⠮⠀⠯</row>
+					<row>⠀⠀⠰⠀⠱⠀⠲⠀⠳⠀⠴⠀⠵⠀⠶⠀⠷</row>
+					<row>⠀⠀⠸⠀⠹⠀⠺⠀⠻⠀⠼⠀⠽⠀⠾⠀⠿</row>
+				</page>
+			</section>
+		</volume>
+		<volume cols="19" rows="20" rowgap="0" duplex="true">
+			<section>
+				<page>
+					<row/>
+					<row/>
+					<row/>
+					<row>⠀⠀⠀⠀⠁⠀⠂⠀⠃⠀⠄⠀⠅⠀⠆⠀⠇</row>
+					<row>⠀⠀⠈⠀⠉⠀⠊⠀⠋⠀⠌⠀⠍⠀⠎⠀⠏</row>
+					<row>⠀⠀⠐⠀⠑⠀⠒⠀⠓⠀⠔⠀⠕⠀⠖⠀⠗</row>
+					<row>⠀⠀⠘⠀⠙⠀⠚⠀⠛⠀⠜⠀⠝⠀⠞⠀⠟</row>
+					<row>⠀⠀⠠⠀⠡⠀⠢⠀⠣⠀⠤⠀⠥⠀⠦⠀⠧</row>
+					<row>⠀⠀⠨⠀⠩⠀⠪⠀⠫⠀⠬⠀⠭⠀⠮⠀⠯</row>
+					<row>⠀⠀⠰⠀⠱⠀⠲⠀⠳⠀⠴⠀⠵⠀⠶⠀⠷</row>
+					<row>⠀⠀⠸⠀⠹⠀⠺⠀⠻⠀⠼⠀⠽⠀⠾⠀⠿</row>
+				</page>
+			</section>
+		</volume>
+	</body>
+</pef>
