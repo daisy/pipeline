@@ -22,8 +22,7 @@ import java.util.HashMap;
 
 import org.daisy.braille.api.table.BrailleConverter;
 import org.daisy.braille.api.table.EmbosserBrailleConverter.EightDotFallbackMethod;
-import org.daisy.braille.tools.StringTranslator;
-import org.daisy.braille.tools.StringTranslator.MatchMode;
+import org.daisy.braille.impl.table.StringTranslator.MatchMode;
 
 /**
  * Provides an advanced Braille converter mapping each braille character to a string.

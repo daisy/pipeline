@@ -7,8 +7,7 @@ import java.nio.charset.Charset;
 
 import org.daisy.braille.BrailleConstants;
 import org.daisy.braille.api.table.EmbosserBrailleConverter.EightDotFallbackMethod;
-import org.daisy.braille.impl.table.AdvancedBrailleConverter;
-import org.daisy.braille.tools.StringTranslator.MatchMode;
+import org.daisy.braille.impl.table.StringTranslator.MatchMode;
 import org.junit.Test;
 public class AdvancedBrailleConverterTest {
 	private final static String[] glyphs = new String[]{
