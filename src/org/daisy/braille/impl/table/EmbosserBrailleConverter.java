@@ -20,6 +20,7 @@ package org.daisy.braille.impl.table;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 
+import org.daisy.braille.api.embosser.EightDotFallbackMethod;
 import org.daisy.braille.api.table.BrailleConverter;
 
 /**
@@ -29,24 +30,7 @@ import org.daisy.braille.api.table.BrailleConverter;
  * @author Joel Håkansson
  */
 public class EmbosserBrailleConverter implements BrailleConverter {
-	/**
-	 * Defines the fallback action when a character in the range 0x2840-0x28FF is
-	 * encountered.
-	 */
-	public enum EightDotFallbackMethod {
-		/**
-		 * Mask the character. Treat it as if dots 7 and 8 were off
-		 */
-		MASK,
-		/**
-		 * Replace the character with a fixed replacement character 
-		 */
-		REPLACE,
-		/**
-		 * Remove the character from output
-		 */
-		REMOVE
-	}; // , FAIL
+
 	private HashMap<Character, Character> b2t;
 	private HashMap<Character, Character> t2b;
 	private Charset charset;

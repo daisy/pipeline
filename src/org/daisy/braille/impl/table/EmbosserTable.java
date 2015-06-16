@@ -19,10 +19,10 @@ package org.daisy.braille.impl.table;
 
 import java.util.HashMap;
 
+import org.daisy.braille.api.embosser.EightDotFallbackMethod;
 import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.table.BrailleConverter;
 import org.daisy.braille.api.table.TableProperties;
-import org.daisy.braille.impl.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 
 /**
  * Provides an embosser table implementation. This implementation
