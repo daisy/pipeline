@@ -23,8 +23,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.braille.BrailleConstants;
 import org.daisy.braille.api.factory.FactoryProperties;
+import org.daisy.braille.api.table.BrailleConstants;
 import org.daisy.braille.api.table.BrailleConverter;
 import org.daisy.braille.api.table.EmbosserBrailleConverter;
 import org.daisy.braille.api.table.EmbosserBrailleConverter.EightDotFallbackMethod;

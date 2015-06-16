@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.nio.charset.Charset;
 
-import org.daisy.braille.BrailleConstants;
+import org.daisy.braille.api.table.BrailleConstants;
 import org.daisy.braille.api.table.BrailleConverter;
 import org.junit.Test;
 
