@@ -20,23 +20,6 @@ sourceSets {
 	test {	java { srcDir 'test' }	resources { srcDir 'test' } }
 }
 
-jar {
-	doFirst {
-		manifest {
-	    	attributes ('Built-By': '',				//'${user.name}'
-	    	'Built-On': new Date(),					//'${ISO-TODAY}'
-			'Repository-Revision': "$repositoryRevision",
-			'Implementation-Title': "$releaseName Core",
-			'Implementation-Version': version,
-			'Implementation-URL': 'http://code.google.com/p/brailleutils/',
-			'Class-Path': configurations.compile.collect { it.getName() }.join(' ')					//'${core.classpath.attribute}'
-			)
-		}
-	}
-	from sourceSets.main.allJava
-	baseName = 'brailleUtils-core'
-}
-
 repositories {
     mavenCentral()
     mavenLocal()
@@ -64,11 +47,14 @@ task updateBndVersion() << {
 }
 
 bundle {
-    instructions << [
-     	//must use file() to resolve against the build.gradle in Eclipse
-        "-include": file('bnd.bnd'),
-        'Repository-Revision': "$repositoryRevision"
-    ]
+	instructions << [
+		"-include": file('bnd.bnd'),
+		'Built-By': System.getProperty("user.name"),
+		'Built-On': new Date().format('yyyy-MM-dd'),
+		'Implementation-Title': "$releaseName",
+		'Repository-Revision': "$repositoryRevision",
+		'Repository-URL': "$repositoryURL"
+	]
 }
 
 task javadocJar(type: Jar) {
