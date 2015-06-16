@@ -53,13 +53,6 @@ public class PEFFileBatchCompare {
 
 	}
 
-	/**
-	 * 
-	 * @param path1 a folder
-	 * @param path2 another folder
-	 * @throws FileNotFoundException
-	 * @throws IllegalArgumentException if path is not a directory
-	 */
 	public PEFFileBatchCompare(FileFilter filter, NormalizationResource nr) {
 		this.filter = filter;
 		this.nr = nr;
@@ -83,6 +76,13 @@ public class PEFFileBatchCompare {
 		this.unbraillerTable = unbraillerTable;
 	}
 
+	/**
+	 * 
+	 * @param path1 a folder
+	 * @param path2 another folder
+	 * @throws FileNotFoundException
+	 * @throws IllegalArgumentException if path is not a directory
+	 */
 	public void run(String path1, String path2) throws FileNotFoundException {
 		final File dir1 = getExistingPath(path1);
 		final File dir2 = getExistingPath(path2);

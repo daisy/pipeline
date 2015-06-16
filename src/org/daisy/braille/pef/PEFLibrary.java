@@ -23,7 +23,7 @@ public class PEFLibrary {
     /**
      * Lists pef files in the specified folder and sub folders
      * @param dir the folder to start search
-     * @return
+     * @return returns a list of pef files
      */
 	public static Collection<File> listFiles(File dir) {
 		return listFiles(dir, true);

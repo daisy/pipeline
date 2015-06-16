@@ -67,7 +67,7 @@ public class TextInputDetector {
 	 * 
 	 * @param input
 	 * @param clearCodes set to true to clear the LF, CR, FF, and SUB fields.
-	 * @return
+	 * @return returns a thumb print for the input stream
 	 * @throws InputDetectionException
 	 */
 	private BitSet readInput(InputStream input, boolean clearCodes) throws IOException {

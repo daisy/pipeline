@@ -28,6 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.daisy.braille.api.embosser.EightDotFallbackMethod;
 import org.daisy.braille.api.embosser.Embosser;
 import org.daisy.braille.api.embosser.EmbosserCatalogService;
 import org.daisy.braille.api.embosser.EmbosserFactoryException;
