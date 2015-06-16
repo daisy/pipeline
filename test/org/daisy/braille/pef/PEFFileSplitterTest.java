@@ -11,7 +11,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
 import org.daisy.braille.consumer.validator.ValidatorFactory;
-import org.daisy.braille.tools.XMLFileCompare;
 import org.junit.Test;
 
 

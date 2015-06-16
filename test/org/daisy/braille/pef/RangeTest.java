@@ -1,5 +1,6 @@
 package org.daisy.braille.pef;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 public class RangeTest {

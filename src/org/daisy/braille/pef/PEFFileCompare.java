@@ -14,8 +14,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.daisy.braille.tools.XMLFileCompare;
-
 public class PEFFileCompare {
 	private final static NormalizationResource def = new PackageNormalizationResource("resource-files/strip-meta.xsl");
 	private final NormalizationResource nr;

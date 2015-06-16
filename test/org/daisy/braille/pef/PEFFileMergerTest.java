@@ -12,8 +12,6 @@ import javax.xml.transform.TransformerFactory;
 
 import org.daisy.braille.consumer.validator.ValidatorFactory;
 import org.daisy.braille.pef.PEFFileMerger.SortType;
-import org.daisy.braille.tools.FileTools;
-import org.daisy.braille.tools.XMLFileCompare;
 import org.junit.Test;
 
 public class PEFFileMergerTest {
