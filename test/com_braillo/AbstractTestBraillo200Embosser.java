@@ -18,11 +18,11 @@ import org.daisy.braille.api.paper.TractorPaperFormat;
 import org.daisy.braille.consumer.embosser.EmbosserCatalog;
 import org.daisy.braille.consumer.paper.PaperCatalog;
 import org.daisy.braille.consumer.table.TableCatalog;
+import org.daisy.braille.pef.FileCompare;
 import org.daisy.braille.pef.PEFConverterFacade;
 import org.daisy.braille.pef.PEFHandler;
 import org.daisy.braille.pef.PEFHandler.Alignment;
 import org.daisy.braille.pef.UnsupportedWidthException;
-import org.daisy.braille.tools.FileCompare;
 import org.xml.sax.SAXException;
 
 public abstract class AbstractTestBraillo200Embosser {
