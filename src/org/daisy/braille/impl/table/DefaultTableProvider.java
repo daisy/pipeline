@@ -15,7 +15,7 @@
  * along with this library; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
-package se_tpb;
+package org.daisy.braille.impl.table;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -27,19 +27,21 @@ import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.table.BrailleConverter;
 import org.daisy.braille.api.table.Table;
 import org.daisy.braille.api.table.TableProvider;
-import org.daisy.braille.impl.table.EmbosserBrailleConverter;
 import org.daisy.braille.impl.table.EmbosserBrailleConverter.EightDotFallbackMethod;
-import org.daisy.braille.impl.table.EmbosserTable;
 
 import aQute.bnd.annotation.component.Component;
 
+/**
+ * Provides a default table, for convenience.
+ * @author Joel Håkansson
+ */
 @Component
-public class CXTableProvider implements TableProvider {
-//	public final static String IS_ONE_TO_ONE = "is one-to-one";
-//	public final static String IS_DISPLAY_FORMAT = "is display format";
+public class DefaultTableProvider implements TableProvider {
 	
 	enum TableType implements FactoryProperties {
-		SV_SE_CX("Swedish CX", "Matches the Swedish representation in CX");
+		EN_US("US", "Commonly used embosser table"), // US computer braille, compatible with
+				// "Braillo USA 6 DOT 001.00"
+		;
 		private final String name;
 		private final String desc;
 		private final String identifier;
@@ -64,11 +66,14 @@ public class CXTableProvider implements TableProvider {
 
 	private final Map<String, FactoryProperties> tables;
 
-	public CXTableProvider() {
+	/**
+	 * Creates a new DefaultTableProvider
+	 */
+	public DefaultTableProvider() {
 		tables = new HashMap<String, FactoryProperties>(); 
-		addTable(TableType.SV_SE_CX);
+		addTable(TableType.EN_US);
 	}
-
+	
 	private void addTable(FactoryProperties t) {
 		tables.put(t.getIdentifier(), t);
 	}
@@ -84,27 +89,27 @@ public class CXTableProvider implements TableProvider {
 	public BrailleConverter newTable(TableType t) {
 		return newFactory(t.getIdentifier()).newBrailleConverter();
 	}
-
+	
 	public Table newFactory(String identifier) {
 		FactoryProperties fp = tables.get(identifier);
 		switch ((TableType)fp) {
-		case SV_SE_CX:
-			return new EmbosserTable(TableType.SV_SE_CX, EightDotFallbackMethod.values()[0], '\u2800'){
+		case EN_US :
+			return new EmbosserTable(TableType.EN_US, EightDotFallbackMethod.values()[0], '\u2800') {
 
 				/**
 				 * 
 				 */
-				private static final long serialVersionUID = 1834860594148104502L;
+				private static final long serialVersionUID = -64524572279113677L;
 
 				@Override
 				public BrailleConverter newBrailleConverter() {
 					return new EmbosserBrailleConverter(
 							new String(
-									" a,b.k;l^cif/msp'e:h*o!r~djgäntq_å?ê-u(v@îöë§xèç\"û+ü)z=à|ôwï#yùé"),
+									" A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="),
 							Charset.forName("UTF-8"), fallback, replacement, true);
 				}};
 		default:
-			return null;
+			return  null;
 		}
 	}
 

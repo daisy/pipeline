@@ -64,7 +64,7 @@ public class TigerEmbosser extends AbstractEmbosser {
     private boolean eightDotsEnabled = false;
 
     private final static TableFilter tableFilter;
-    private final static String table6dot = "org.daisy.braille.api.table.DefaultTableProvider.TableType.EN_US";
+    private final static String table6dot = "org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US";
   //private final static String table8dot = "com_viewplusViewPlusTableProvider.TableType.TIGER_INLINE_SUBSTITUTION_8DOT";
 
     static {

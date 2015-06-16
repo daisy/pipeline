@@ -25,9 +25,9 @@ import org.daisy.braille.api.embosser.PrintPage;
 import org.daisy.braille.api.factory.AbstractFactory;
 import org.daisy.braille.api.paper.Area;
 import org.daisy.braille.api.paper.PageFormat;
-import org.daisy.braille.api.table.DefaultTableProvider;
 import org.daisy.braille.api.table.Table;
 import org.daisy.braille.api.table.TableCatalogService;
+import org.daisy.braille.impl.table.DefaultTableProvider;
 
 /**
  * Provides an abstract base for Embossers, implementing basic features

@@ -21,7 +21,7 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 
 import org.daisy.braille.api.table.BrailleConverter;
-import org.daisy.braille.api.table.EmbosserBrailleConverter.EightDotFallbackMethod;
+import org.daisy.braille.impl.table.EmbosserBrailleConverter.EightDotFallbackMethod;
 import org.daisy.braille.impl.table.StringTranslator.MatchMode;
 
 /**
