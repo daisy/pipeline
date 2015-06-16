@@ -21,7 +21,6 @@ package org.daisy.braille.api.factory;
  * Provides an interface for filtering a collection of Factories.
  * @author Joel Håkansson
  *
- * @param <T> the type of Factory handled by this FactoryFilter
  */
 public interface FactoryFilter {
 	
