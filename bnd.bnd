@@ -12,5 +12,5 @@ Private-Package:  \
 	org.daisy.braille.consumer.validator
 Bundle-Version: 2.0.0-SNAPSHOT
 Include-Resource: / = src/
--sources: true
+-sources: false
 Service-Component: *

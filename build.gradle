@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: "signing"
 //custom plugins
-apply plugin: "bundle"
+apply plugin: "org.dm.bundle"
 
 compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
@@ -38,7 +38,7 @@ dependencies {
 
 buildscript {
     repositories { mavenCentral() }
-    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.5" }
+    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.2" }
 }
 
 task updateBndVersion() << {
