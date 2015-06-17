@@ -2,7 +2,6 @@ package org.daisy.braille.api.embosser;
 
 import java.util.Collection;
 
-import org.daisy.braille.api.factory.FactoryFilter;
 import org.daisy.braille.api.factory.FactoryProperties;
 
 
@@ -27,6 +26,6 @@ public interface EmbosserCatalogService {
 
 	public Collection<FactoryProperties> list();
 
-	public Collection<FactoryProperties> list(FactoryFilter filter);
+	public Collection<FactoryProperties> list(EmbosserFilter filter);
 
 }

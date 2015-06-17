@@ -2,7 +2,6 @@ package org.daisy.braille.api.table;
 
 import java.util.Collection;
 
-import org.daisy.braille.api.factory.FactoryFilter;
 import org.daisy.braille.api.factory.FactoryProperties;
 
 
@@ -27,6 +26,6 @@ public interface TableCatalogService {
 	
 	public Collection<FactoryProperties> list();
 	
-	public Collection<FactoryProperties> list(FactoryFilter filter);
+	public Collection<FactoryProperties> list(TableFilter filter);
 
 }

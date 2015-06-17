@@ -31,9 +31,9 @@ import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.braille.api.embosser.Embosser;
 import org.daisy.braille.api.embosser.EmbosserCatalogService;
+import org.daisy.braille.api.embosser.EmbosserFilter;
 import org.daisy.braille.api.embosser.EmbosserProvider;
 import org.daisy.braille.api.factory.FactoryCatalog;
-import org.daisy.braille.api.factory.FactoryFilter;
 import org.daisy.braille.api.factory.FactoryProperties;
 
 import aQute.bnd.annotation.component.Component;
@@ -45,7 +45,7 @@ import aQute.bnd.annotation.component.Reference;
  */
 //TODO: use EmbosserService instead of Embosser and enable OSGi support
 @Component
-public class EmbosserCatalog implements FactoryCatalog<Embosser, FactoryProperties>, EmbosserCatalogService {
+public class EmbosserCatalog implements FactoryCatalog<Embosser>, EmbosserCatalogService {
 	private final List<EmbosserProvider> providers;
 	private final Map<String, EmbosserProvider> map;
 	private final Logger logger;
@@ -137,7 +137,7 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser, FactoryProperti
 		return ret;
 	}
 	
-	public Collection<FactoryProperties> list(FactoryFilter filter) {
+	public Collection<FactoryProperties> list(EmbosserFilter filter) {
 		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
 		for (FactoryProperties fp : list()) {
 			if (filter.accept(fp)) {

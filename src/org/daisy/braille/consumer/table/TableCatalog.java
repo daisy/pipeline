@@ -30,10 +30,10 @@ import java.util.logging.Logger;
 import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.braille.api.factory.FactoryCatalog;
-import org.daisy.braille.api.factory.FactoryFilter;
 import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.table.Table;
 import org.daisy.braille.api.table.TableCatalogService;
+import org.daisy.braille.api.table.TableFilter;
 import org.daisy.braille.api.table.TableProvider;
 
 import aQute.bnd.annotation.component.Component;
@@ -44,7 +44,7 @@ import aQute.bnd.annotation.component.Reference;
  * @author Joel Håkansson
  */
 @Component
-public class TableCatalog implements FactoryCatalog<Table, FactoryProperties>, TableCatalogService {
+public class TableCatalog implements FactoryCatalog<Table>, TableCatalogService {
 	private final List<TableProvider> providers;
 	private final Map<String, TableProvider> map;
 	private final Logger logger;
@@ -134,7 +134,7 @@ public class TableCatalog implements FactoryCatalog<Table, FactoryProperties>, T
 		return ret;
 	}
 	
-	public Collection<FactoryProperties> list(FactoryFilter filter) {
+	public Collection<FactoryProperties> list(TableFilter filter) {
 		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
 		for (FactoryProperties fp : list()) {
 			if (filter.accept(fp)) {

@@ -17,7 +17,6 @@
  */
 package org.daisy.braille.api.factory;
 
-import java.util.Collection;
 
 /**
  * Provides an interface for factory catalogs.
@@ -25,7 +24,7 @@ import java.util.Collection;
  *
  * @param <T> the type of factory objects that this catalog contains
  */
-public interface FactoryCatalog<T extends Factory, S extends FactoryProperties> extends Provider<S> {
+public interface FactoryCatalog<T extends Factory>  {
 	
 	/**
 	 * Gets the Factory with this identifier
@@ -33,13 +32,5 @@ public interface FactoryCatalog<T extends Factory, S extends FactoryProperties> 
 	 * @return returns the Factory with this identifier, or null if none is found
 	 */
 	public T get(String identifier);
-	
-	/**
-	 * Lists the Factories available to this catalog that the
-	 * supplied FactoryFilter accepts
-	 * @param filter the FactoryFilter to use
-	 * @return returns a collection of Factories
-	 */
-	public Collection<S> list(FactoryFilter filter);
 
 }
