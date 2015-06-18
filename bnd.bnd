@@ -3,5 +3,6 @@
 Export-Package: \
 	org.daisy.braille.pef
 Bundle-Version: 1.0.0-SNAPSHOT
--sources: true
+Include-Resource: / = src/
+-sources: false
 Service-Component: *
