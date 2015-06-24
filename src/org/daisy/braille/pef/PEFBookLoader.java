@@ -32,7 +32,7 @@ public class PEFBookLoader {
 	}
 	
 	public PEFBook load(File f) throws XPathExpressionException, ParserConfigurationException, SAXException, IOException {
-		File serial = new File(dir, f.getName()+"-"+f.hashCode()+".meta");
+		File serial = new File(dir, f.getName()+"-"+f.hashCode()+".v2meta");
 		PEFBook book;
 		if (serial.exists() && serial.lastModified()>f.lastModified()) {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(serial));

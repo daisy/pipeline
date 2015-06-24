@@ -59,7 +59,7 @@ public class PEFBook implements Serializable {
 	 * @return returns a PEFBook object containing the information collected from the supplied PEF-document
 	 */
 	public static PEFBook load(URI uri) throws ParserConfigurationException, SAXException, XPathExpressionException, IOException {
-		return XPathPEFBook.load(uri);
+		return StaxPEFBook.loadStax(uri);
 	}
 	
 	PEFBook(URI uri, Map<String, List<String>> metadata, int volumes, int pages, int pageTags, int maxWidth, int maxHeight, String inputEncoding, boolean containsEightDot, int[] startPages) {
