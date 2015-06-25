@@ -29,8 +29,6 @@ import org.daisy.braille.api.table.TableProperties;
  * assumes that each character matches a single braille pattern,
  * and vice versa. 
  * @author Joel Håkansson
- *
- * @param <T>
  */
 public abstract class EmbosserTable extends AbstractTable {
 	/**
@@ -43,11 +41,11 @@ public abstract class EmbosserTable extends AbstractTable {
 	protected char replacement;
 	
 	/**
-	 * Creates a new EmbosserTable with the supplied settings
-	 * @param name the name for the table
-	 * @param desc the description for the table
-	 * @param type the type of table
-	 * @param provider the provider
+	 * Creates a new EmbosserTable with the supplied settings.
+	 * @param fp factory properties for this table
+	 * @param fallback fallback method 
+	 * @param replacement replacement character
+	 * 
 	 */
 	public EmbosserTable(FactoryProperties fp, EightDotFallbackMethod fallback, char replacement) {
 		super(fp.getDisplayName(), fp.getDescription(), fp.getIdentifier());
@@ -86,7 +84,6 @@ public abstract class EmbosserTable extends AbstractTable {
 	 * hex value between 2800-283F
 	 * 
 	 * @param value
-	 * @return
 	 */
 	private void setReplacement(String value) {
 		if (value != null && !"".equals(value)) {
