@@ -1,0 +1,100 @@
+apply plugin: "maven"
+//custom plugins
+apply plugin: "org.dm.bundle"
+apply plugin: "signing"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
+
+dependencies {
+    provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
+    testCompile group: "junit", name: "junit", version: "4.7"
+}
+
+buildscript {
+    repositories {
+    	mavenCentral()
+    }
+    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.2" }
+}
+
+task updateBndVersion() << {
+	String contents = file('bnd.bnd').getText('UTF-8')
+	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
+}
+
+bundle {
+    instructions << [
+		//must use file() to resolve against the build.gradle in Eclipse
+        "-include": file('bnd.bnd'),
+        'Built-By': System.getProperty("user.name"),
+        'Built-On': new Date().format('yyyy-MM-dd'),
+        'Repository-Revision': "$repositoryRevision",
+        'Repository-URL': "$repositoryURL"
+    ]
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+signing {
+    required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+    sign configurations.archives
+}
+
+uploadArchives {
+	//Only upload if a git hash is supplied. On Travis only upload snapshots.
+	enabled = repositoryRevision.size()==40 && (System.getenv("TRAVIS_BUILD_ID")==null || version.endsWith("SNAPSHOT"))
+    repositories {
+        mavenDeployer {
+            if (isReleaseVersion) {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: sonatypeUsername, password: sonatypePassword)
+            }
+            pom.project {
+                name 'dotify.api'
+                packaging 'jar'
+                description 'Dotify Task'
+                url 'https://github.com/joeha480/dotify/'
+                scm {
+                    connection 'scm:git:https://github.com/joeha480/dotify.git'
+                    developerConnection 'scm:git:https://github.com/joeha480/dotify.git'
+                    url "$repositoryURL"
+                }
+                licenses {
+                    license {
+                        name 'LGPL'
+                        url 'http://www.gnu.org/licenses/lgpl.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'joel'
+                        name 'Joel Håkansson'
+                    }
+                }
+            }
+        }
+    }
+}
