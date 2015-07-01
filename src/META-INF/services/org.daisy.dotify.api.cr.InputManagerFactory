@@ -1,0 +1,2 @@
+org.daisy.dotify.impl.input.xml.XMLInputManagerFactory
+org.daisy.dotify.impl.input.text.TextInputManagerFactory
