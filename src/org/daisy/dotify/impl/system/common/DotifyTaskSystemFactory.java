@@ -22,7 +22,10 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 
 	public TaskSystem newTaskSystem(String locale, String outputFormat) throws TaskSystemFactoryException {
 		if (supportsSpecification(locale, outputFormat)) {
-			return new DotifyTaskSystem("Dotify Task System", outputFormat, locale);
+			DotifyTaskSystem ret = new DotifyTaskSystem("Dotify Task System", outputFormat, locale);
+			//TODO: fix so that this class works with OSGi
+			ret.setCreatedWithSPI();
+			return ret;
 		}
 		throw new TaskSystemFactoryException("Unsupported specification: " + locale + "/" + outputFormat);
 	}

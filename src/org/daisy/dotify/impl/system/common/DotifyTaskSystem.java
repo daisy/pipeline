@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.daisy.dotify.api.cr.InputManager;
+import org.daisy.dotify.api.cr.InputManagerFactoryMakerService;
 import org.daisy.dotify.api.cr.InternalTask;
 import org.daisy.dotify.api.cr.TaskSystem;
 import org.daisy.dotify.api.cr.TaskSystemException;
@@ -14,10 +15,10 @@ import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
-import org.daisy.dotify.consumer.cr.InputManagerFactoryMaker;
-import org.daisy.dotify.consumer.writer.PagedMediaWriterFactoryMaker;
+import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 import org.daisy.dotify.impl.input.Keys;
 import org.daisy.dotify.impl.input.LayoutEngineTask;
+import org.daisy.dotify.impl.input.SPIHelper;
 
 
 /**
@@ -41,6 +42,8 @@ public class DotifyTaskSystem implements TaskSystem {
 	private final String outputFormat;
 	private final String context;
 	private final String name;
+	private InputManagerFactoryMakerService imf;
+	private PagedMediaWriterFactoryMakerService pmw;
 	
 	public DotifyTaskSystem(String name, String outputFormat, String context) {
 		this.context = context;
@@ -50,6 +53,11 @@ public class DotifyTaskSystem implements TaskSystem {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public void setCreatedWithSPI() {
+		imf = SPIHelper.getInputManagerFactoryMakerService();
+		pmw = SPIHelper.getPagedMediaWriterFactoryMakerService();
 	}
 
 	public ArrayList<InternalTask> compile(Map<String, Object> pa) throws TaskSystemException {
@@ -73,7 +81,7 @@ public class DotifyTaskSystem implements TaskSystem {
 		ArrayList<InternalTask> setup = new ArrayList<InternalTask>();
 		{
 			//InputDetector
-			InputManager idts = InputManagerFactoryMaker.newInstance().newInputManager(context, p2.get(Keys.INPUT_FORMAT).toString());
+			InputManager idts = imf.newInputManager(context, p2.get(Keys.INPUT_FORMAT).toString());
 			setup.addAll(idts.compile(h));
 			
 			// Whitespace normalizer TransformerFactoryConstants.SAXON8
@@ -108,14 +116,14 @@ public class DotifyTaskSystem implements TaskSystem {
 				if (Keys.PEF_FORMAT.equals(outputFormat)) {
 					// additional braille modes here...
 					translatorMode = BrailleTranslatorFactory.MODE_UNCONTRACTED;
-					PagedMediaWriterFactory pmf = PagedMediaWriterFactoryMaker.newInstance().getFactory(MediaTypes.PEF_MEDIA_TYPE);
+					PagedMediaWriterFactory pmf = pmw.getFactory(MediaTypes.PEF_MEDIA_TYPE);
 					for (Object key : p2.keySet()) {
 						pmf.setFeature(key.toString(), p2.get(key));
 					}
 					paged = pmf.newPagedMediaWriter();
 				} else {
 					translatorMode = BrailleTranslatorFactory.MODE_BYPASS;
-					paged = PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.TEXT_MEDIA_TYPE);
+					paged = pmw.newPagedMediaWriter(MediaTypes.TEXT_MEDIA_TYPE);
 				}
 			} catch (PagedMediaWriterConfigurationException e) {
 				throw new TaskSystemException(e);

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.lang.reflect.Method;
 import java.util.logging.Logger;
 
 import org.daisy.dotify.api.cr.InternalTaskException;
@@ -11,7 +12,6 @@ import org.daisy.dotify.api.cr.ReadWriteTask;
 import org.daisy.dotify.api.engine.FormatterEngine;
 import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
-import org.daisy.dotify.consumer.engine.FormatterEngineMaker;
 import org.daisy.dotify.impl.input.ObflResourceLocator.ObflResourceIdentifier;
 
 /**
@@ -57,8 +57,18 @@ public class LayoutEngineTask extends ReadWriteTask  {
 			} catch (ValidatorException e) {
 				throw new InternalTaskException("Input validation failed.", e);
 			}
-
-			FormatterEngine engine = FormatterEngineMaker.newInstance().newFormatterEngine(locale, mode, writer);
+			FormatterEngine engine;	//FormatterEngineMaker.newInstance().newFormatterEngine(locale, mode, writer);
+									//TODO: add service interface for formatter engine. For now, use reflexion.	
+			try {
+				Class<?> cls = Class.forName("org.daisy.dotify.consumer.engine.FormatterEngineMaker");
+				Method m = cls.getMethod("newInstance");
+				Object o = m.invoke(null);
+				Method m2 = o.getClass().getMethod("newFormatterEngine", String.class, String.class, PagedMediaWriter.class);
+			
+				engine = (FormatterEngine)m2.invoke(o, locale, mode, writer);
+			} catch (Exception e) {
+				throw new InternalTaskException("Failed to instantiate FormatterEngine using reflexion.", e);
+			}
 
 			engine.convert(new FileInputStream(input), new FileOutputStream(output));
 
