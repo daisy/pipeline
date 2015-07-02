@@ -33,7 +33,9 @@ public abstract class AbstractResourceLocator implements ResourceLocator {
 	    	String qualifiedPath = this.getClass().getPackage().getName().replace('.','/') + "/";	    	
 	    	url = this.getClass().getClassLoader().getResource(qualifiedPath+path);
 	    }
-	    if(url==null) throw new ResourceLocatorException("Cannot find resource path '" + path + "' relative to " + this.getClass().getCanonicalName());
+	    if(url==null) {
+	    	throw new ResourceLocatorException("Cannot find resource path '" + path + "' relative to " + this.getClass().getCanonicalName());
+	    }
 	    return url;
 	}
 
