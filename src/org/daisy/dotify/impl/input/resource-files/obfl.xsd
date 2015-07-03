@@ -394,6 +394,10 @@
 		<xs:attribute name="margin-left" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-top" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-right" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-bottom" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-left" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-top" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-right" type="xs:anySimpleType"/>
 		<xs:attribute name="text-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="block-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="align">
@@ -862,6 +866,10 @@
 		<xs:attribute name="margin-left" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-top" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-right" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-bottom" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-left" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-top" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-right" type="xs:anySimpleType"/>
 		<xs:attribute name="text-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="block-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="align">
@@ -1141,6 +1149,10 @@
 		<xs:attribute name="margin-left" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-top" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-right" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-bottom" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-left" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-top" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-right" type="xs:anySimpleType"/>
 		<xs:attribute name="text-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="block-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="align">
@@ -1428,6 +1440,10 @@
 		<xs:attribute name="margin-left" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-top" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-right" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-bottom" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-left" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-top" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-right" type="xs:anySimpleType"/>
 		<xs:attribute name="text-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="block-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="align">
@@ -1708,6 +1724,10 @@
 		<xs:attribute name="margin-left" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-top" type="xs:anySimpleType"/>
 		<xs:attribute name="margin-right" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-bottom" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-left" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-top" type="xs:anySimpleType"/>
+		<xs:attribute name="padding-right" type="xs:anySimpleType"/>
 		<xs:attribute name="text-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="block-indent" type="xs:anySimpleType"/>
 		<xs:attribute name="align">
