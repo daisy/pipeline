@@ -11,8 +11,16 @@ import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
 import org.daisy.dotify.consumer.translator.BrailleTranslatorFactoryMaker;
 
 /**
- * Provides a factory for formatters. The factory will instantiate 
- * the first Formatter it encounters when querying the services API. 
+ * <p>Provides a factory for formatters. The factory will instantiate 
+ * the first Formatter it encounters when querying the services API.</p> 
+
+ * <p>Like all classes in the org.daisy.dotify.consumer sub packages, this
+ * class is only used directly in SPI context. Unlike some other classes however,
+ * this class does not implement a service interface that can be used from
+ * OSGi. The reason for this is that the implementation <i>simply returns
+ * a single instance of the lower level interface</i> with references populated
+ * with SPI. To use in OSGi context, request the lower level service directly
+ * from the DS registry.</p>
  * 
  * @author Joel Håkansson
  */
