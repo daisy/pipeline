@@ -1,18 +1,30 @@
 package org.daisy.dotify.impl.system.common;
 
+import org.daisy.dotify.api.cr.InputManagerFactoryMakerService;
 import org.daisy.dotify.api.cr.TaskSystem;
 import org.daisy.dotify.api.cr.TaskSystemFactory;
 import org.daisy.dotify.api.cr.TaskSystemFactoryException;
+import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
+import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 import org.daisy.dotify.common.text.FilterLocale;
 import org.daisy.dotify.impl.input.Keys;
+import org.daisy.dotify.impl.input.SPIHelper;
+
+import aQute.bnd.annotation.component.Component;
+import aQute.bnd.annotation.component.Reference;
 
 /**
  * Provides a default task system factory for PEF, OBFL and text output.
  * 
  * @author Joel Håkansson
  */
+@Component
 public class DotifyTaskSystemFactory implements TaskSystemFactory {
+	private InputManagerFactoryMakerService imf;
+	private PagedMediaWriterFactoryMakerService pmw;
+	private FormatterEngineFactoryService fe;
 
+	@Override
 	public boolean supportsSpecification(String locale, String outputFormat) {
 		//TODO: remove conditions guard once possible 
 		return FilterLocale.parse(locale).equals(FilterLocale.parse("sv-SE")) && 
@@ -20,14 +32,52 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 				|| Keys.TEXT_FORMAT.equals(outputFormat);
 	}
 
+	@Override
 	public TaskSystem newTaskSystem(String locale, String outputFormat) throws TaskSystemFactoryException {
 		if (supportsSpecification(locale, outputFormat)) {
-			DotifyTaskSystem ret = new DotifyTaskSystem("Dotify Task System", outputFormat, locale);
-			//TODO: fix so that this class works with OSGi
-			ret.setCreatedWithSPI();
-			return ret;
+			return new DotifyTaskSystem("Dotify Task System", outputFormat, locale, imf, pmw, fe);
 		}
 		throw new TaskSystemFactoryException("Unsupported specification: " + locale + "/" + outputFormat);
+	}
+
+	@Reference
+	public void setInputManagerFactory(InputManagerFactoryMakerService service) {
+		this.imf = service;
+	}
+
+	public void unsetInputManagerFactory(InputManagerFactoryMakerService service) {
+		this.imf = null;
+	}
+
+	@Reference
+	public void setPagedMediaWriterFactory(PagedMediaWriterFactoryMakerService service) {
+		this.pmw = service;
+	}
+
+	public void unsetPagedMediaWriterFactory(PagedMediaWriterFactoryMakerService service) {
+		this.pmw = null;
+	}
+	
+	@Reference
+	public void setFormatterEngineFactory(FormatterEngineFactoryService service) {
+		this.fe = service;
+	}
+	
+	public void unsetFormatterEngineFactory(FormatterEngineFactoryService service) {
+		this.fe = null;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		if (imf == null) {
+			imf = SPIHelper.getInputManagerFactoryMakerService();
+		}
+		if (pmw == null) {
+			pmw = SPIHelper.getPagedMediaWriterFactoryMakerService();
+		}
+		if (fe == null) {
+			fe = SPIHelper.getFormatterEngineFactoryService();
+		}
 	}
 
 }

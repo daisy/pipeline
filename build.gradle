@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
 	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-	compile 'org.daisy.dotify:dotify.api:1.0.0'
+	compile 'org.daisy.dotify:dotify.api:1.1.0'
 	compile 'org.daisy.dotify:dotify.api.cr:1.0.0-SNAPSHOT'
 	compile 'org.daisy.dotify:dotify.common:1.1.0-SNAPSHOT'
 	compile group: 'org.daisy.libs', name: 'jing', version: '20120724.0.0'	

@@ -10,6 +10,7 @@ import org.daisy.dotify.api.cr.InputManagerFactoryMakerService;
 import org.daisy.dotify.api.cr.InternalTask;
 import org.daisy.dotify.api.cr.TaskSystem;
 import org.daisy.dotify.api.cr.TaskSystemException;
+import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
@@ -18,7 +19,6 @@ import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 import org.daisy.dotify.impl.input.Keys;
 import org.daisy.dotify.impl.input.LayoutEngineTask;
-import org.daisy.dotify.impl.input.SPIHelper;
 
 
 /**
@@ -42,22 +42,22 @@ public class DotifyTaskSystem implements TaskSystem {
 	private final String outputFormat;
 	private final String context;
 	private final String name;
-	private InputManagerFactoryMakerService imf;
-	private PagedMediaWriterFactoryMakerService pmw;
+	private final InputManagerFactoryMakerService imf;
+	private final PagedMediaWriterFactoryMakerService pmw;
+	private final FormatterEngineFactoryService fe;
 	
-	public DotifyTaskSystem(String name, String outputFormat, String context) {
+	public DotifyTaskSystem(String name, String outputFormat, String context,
+			InputManagerFactoryMakerService imf, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe) {
 		this.context = context;
 		this.outputFormat = outputFormat;
 		this.name = name;
+		this.imf = imf;
+		this.pmw = pmw;
+		this.fe = fe;
 	}
 	
 	public String getName() {
 		return name;
-	}
-	
-	public void setCreatedWithSPI() {
-		imf = SPIHelper.getInputManagerFactoryMakerService();
-		pmw = SPIHelper.getPagedMediaWriterFactoryMakerService();
 	}
 
 	public ArrayList<InternalTask> compile(Map<String, Object> pa) throws TaskSystemException {
@@ -131,7 +131,7 @@ public class DotifyTaskSystem implements TaskSystem {
 			// BrailleTranslator bt =
 			// BrailleTranslatorFactoryMaker.newInstance().newTranslator(context,
 			// translatorMode);
-			setup.add(new LayoutEngineTask("OBFL to " + outputFormat.toUpperCase() + " converter", context, translatorMode, paged));
+			setup.add(new LayoutEngineTask("OBFL to " + outputFormat.toUpperCase() + " converter", context, translatorMode, paged, fe));
 
 			return setup;
 		}
