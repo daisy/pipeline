@@ -17,6 +17,10 @@ public class BlockProperties implements Cloneable {
 	private final int rightMargin;
 	private final int topMargin;
 	private final int bottomMargin;
+	private final int leftPadding;
+	private final int rightPadding;
+	private final int topPadding;
+	private final int bottomPadding;
 	private final int textIndent;
 	private final int firstLineIndent;
 	private final ListStyle listType;
@@ -43,6 +47,10 @@ public class BlockProperties implements Cloneable {
 		int rightMargin = 0;
 		int topMargin = 0;
 		int bottomMargin = 0;
+		int leftPadding = 0;
+		int rightPadding = 0;
+		int topPadding = 0;
+		int bottomPadding = 0;
 		int textIndent = 0;
 		int firstLineIndent = 0;
 		ListStyle listType = ListStyle.NONE;
@@ -101,6 +109,46 @@ public class BlockProperties implements Cloneable {
 		 */
 		public Builder bottomMargin(int bottomMargin) {
 			this.bottomMargin = bottomMargin;
+			return this;
+		}
+		
+		/**
+		 * Set the left padding for the block, in characters.
+		 * @param leftPadding left padding, in characters
+		 * @return returns "this" object
+		 */
+		public Builder leftPadding(int leftPadding) {
+			this.leftPadding = leftPadding;
+			return this;
+		}
+		
+		/**
+		 * Set the right padding for the block, in characters.
+		 * @param rightPadding right padding, in characters
+		 * @return returns "this" object
+		 */
+		public Builder rightPadding(int rightPadding) {
+			this.rightPadding = rightPadding;
+			return this;
+		}
+		
+		/**
+		 * Set the top padding for the block, in characters.
+		 * @param topPadding top padding, in characters
+		 * @return returns "this" object
+		 */
+		public Builder topPadding(int topPadding) {
+			this.topPadding = topPadding;
+			return this;
+		}
+		
+		/**
+		 * Set the bottom padding for the block, in characters.
+		 * @param bottomPadding bottom padding, in characters
+		 * @return returns "this" object
+		 */
+		public Builder bottomPadding(int bottomPadding) {
+			this.bottomPadding = bottomPadding;
 			return this;
 		}
 		
@@ -245,6 +293,10 @@ public class BlockProperties implements Cloneable {
 		rightMargin = builder.rightMargin;
 		topMargin = builder.topMargin;
 		bottomMargin = builder.bottomMargin;
+		leftPadding = builder.leftPadding;
+		rightPadding = builder.rightPadding;
+		topPadding = builder.topPadding;
+		bottomPadding = builder.bottomPadding;
 		textIndent = builder.textIndent;
 		firstLineIndent = builder.firstLineIndent;
 		listType = builder.listType;
@@ -298,6 +350,38 @@ public class BlockProperties implements Cloneable {
 	 */
 	public int getBottomMargin() {
 		return bottomMargin;
+	}
+	
+	/**
+	 * Get left padding, in characters
+	 * @return returns the left padding
+	 */
+	public int getLeftPadding() {
+		return leftPadding;
+	}
+	
+	/**
+	 * Get right padding, in characters
+	 * @return returns the right padding
+	 */
+	public int getRightPadding() {
+		return rightPadding;
+	}
+	
+	/**
+	 * Get top padding, in characters
+	 * @return returns the top padding
+	 */
+	public int getTopPadding() {
+		return topPadding;
+	}
+	
+	/**
+	 * Get bottom padding, in characters
+	 * @return returns the bottom padding
+	 */
+	public int getBottomPadding() {
+		return bottomPadding;
 	}
 	
 	/**
