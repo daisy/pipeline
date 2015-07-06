@@ -2,6 +2,7 @@ package org.daisy.dotify.impl.input.xml;
 
 import static org.junit.Assert.assertTrue;
 
+import org.daisy.dotify.api.cr.TaskGroupSpecification;
 import org.daisy.dotify.common.text.FilterLocale;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class XMLInputManagerFactoryTest {
 		FilterLocale filter = FilterLocale.parse("en-US");
 		
 		//Test
-		assertTrue(factory.newInputManager(filter.toString(), "xml")!=null);
+		assertTrue(factory.newInputManager(new TaskGroupSpecification("xml", "obfl", filter.toString()))!=null);
 	}
 
 	
@@ -34,7 +35,7 @@ public class XMLInputManagerFactoryTest {
 		FilterLocale filter = FilterLocale.parse("sv-SE");
 		
 		//Test
-		assertTrue(factory.newInputManager(filter.toString(), "xml")!=null);
+		assertTrue(factory.newInputManager(new TaskGroupSpecification("xml", "obfl", filter.toString()))!=null);
 	}
 	/*
 	@Test
@@ -54,6 +55,6 @@ public class XMLInputManagerFactoryTest {
 		FilterLocale filter = FilterLocale.parse("fi");
 		
 		//Test
-		assertTrue(factory.newInputManager(filter.toString(), "xml")!=null);
+		assertTrue(factory.newInputManager(new TaskGroupSpecification("xml", "obfl", filter.toString()))!=null);
 	}
 }

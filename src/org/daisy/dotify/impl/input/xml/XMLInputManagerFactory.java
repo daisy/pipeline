@@ -2,6 +2,7 @@ package org.daisy.dotify.impl.input.xml;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -10,6 +11,7 @@ import java.util.logging.Logger;
 
 import org.daisy.dotify.api.cr.InputManager;
 import org.daisy.dotify.api.cr.InputManagerFactory;
+import org.daisy.dotify.api.cr.TaskGroupSpecification;
 import org.daisy.dotify.common.io.AbstractResourceLocator;
 import org.daisy.dotify.common.io.ResourceLocator;
 
@@ -28,29 +30,35 @@ import aQute.bnd.annotation.component.Component;
 @Component
 public class XMLInputManagerFactory implements InputManagerFactory {
 	private final Whatever locator;
-	private final Set<String> supportedFormats;
+
+	private final Set<TaskGroupSpecification> supportedSpecifications;
 	
 	public XMLInputManagerFactory() {
 		this.locator = new Whatever();
 		DefaultInputUrlResourceLocator p = DefaultInputUrlResourceLocator.getInstance();
-		supportedFormats = p.listFileFormats();
+		Set<String> supportedFormats = p.listFileFormats();
 		supportedFormats.add("xml");
+		supportedSpecifications = new HashSet<TaskGroupSpecification>();
+		for (String format : supportedFormats) {
+			for (String locale : locator.listSupportedLocales()) {
+				supportedSpecifications.add(new TaskGroupSpecification(format, "obfl", locale));
+			}
+		}
 	}
 
-	public boolean supportsSpecification(String locale, String fileFormat) {
-		return locator.supportsLocale(locale) && supportedFormats.contains(fileFormat);
+	@Override
+	public boolean supportsSpecification(TaskGroupSpecification spec) {
+		return supportedSpecifications.contains(spec);
 	}
 	
-	public Set<String> listSupportedLocales() {
-		return locator.listSupportedLocales();
+	@Override
+	public Set<TaskGroupSpecification> listSupportedSpecifications() {
+		return Collections.unmodifiableSet(supportedSpecifications);
 	}
 
-	public Set<String> listSupportedFileFormats() {
-		return supportedFormats;
-	}
-
-	public InputManager newInputManager(String locale, String fileFormat) {
-        return new XMLInputManager(locator.getResourceLocator(locale), new CommonResourceLocator("resource-files/common"));
+	@Override
+	public InputManager newInputManager(TaskGroupSpecification spec) {
+        return new XMLInputManager(locator.getResourceLocator(spec.getLocale()), new CommonResourceLocator("resource-files/common"));
 	}
 
 	private class CommonResourceLocator extends AbstractResourceLocator {
@@ -92,16 +100,6 @@ public class XMLInputManagerFactory implements InputManagerFactory {
 			}
 		}
 
-		/**
-		 * Returns true if the specified locale is at all supported, that is to say
-		 * that there is an entry for the locale in the localization catalog.
-		 * @param locale the locale to test
-		 * @return returns true if the locale is supported, false otherwise
-		 */
-		public boolean supportsLocale(String locale) {
-			return locales.getProperty(locale)!=null;
-		}
-		
 		/**
 		 * Lists all supported locales, that is to say all locales that are
 		 * in the localization catalog.

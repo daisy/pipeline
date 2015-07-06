@@ -1,41 +1,45 @@
 package org.daisy.dotify.impl.input.text;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.daisy.dotify.api.cr.InputManager;
 import org.daisy.dotify.api.cr.InputManagerFactory;
+import org.daisy.dotify.api.cr.TaskGroupSpecification;
 
 import aQute.bnd.annotation.component.Component;
 
 @Component
 public class TextInputManagerFactory implements InputManagerFactory {
-	private final Set<String> locales;
-	private final Set<String> formats;
+	private final Set<TaskGroupSpecification> specs;
 
 	public TextInputManagerFactory() {
-		this.locales = new HashSet<String>();
-		this.locales.add("sv-SE");
-		this.locales.add("en-US");
-		this.formats = new HashSet<String>();
-		this.formats.add("text");
-		this.formats.add("txt");
+		this.specs = new HashSet<TaskGroupSpecification>();
+		String text = "text";
+		String txt = "txt";
+		String obfl = "obfl";
+		String sv = "sv-SE";
+		String en = "en-US";
+		this.specs.add(new TaskGroupSpecification(text, obfl, sv));
+		this.specs.add(new TaskGroupSpecification(text, obfl, en));
+		this.specs.add(new TaskGroupSpecification(txt, obfl, sv));
+		this.specs.add(new TaskGroupSpecification(txt, obfl, en));
 	}
 
-	public boolean supportsSpecification(String locale, String fileFormat) {
-		return formats.contains(fileFormat);
+	@Override
+	public boolean supportsSpecification(TaskGroupSpecification spec) {
+		return specs.contains(spec);
 	}
 
-	public InputManager newInputManager(String locale, String fileFormat) {
-		return new TextInputManager(locale);
+	@Override
+	public InputManager newInputManager(TaskGroupSpecification spec) {
+		return new TextInputManager(spec.getLocale());
 	}
 
-	public Set<String> listSupportedLocales() {
-		return new HashSet<String>(locales);
-	}
-
-	public Set<String> listSupportedFileFormats() {
-		return new HashSet<String>(formats);
+	@Override
+	public Set<TaskGroupSpecification> listSupportedSpecifications() {
+		return Collections.unmodifiableSet(specs);
 	}
 
 }

@@ -5,35 +5,34 @@ import java.util.Set;
 
 import org.daisy.dotify.api.cr.InputManager;
 import org.daisy.dotify.api.cr.InputManagerFactory;
+import org.daisy.dotify.api.cr.TaskGroupSpecification;
 
 public class Epub3InputManagerFactory implements InputManagerFactory {
-	private final Set<String> supportedLocales;
-	private final Set<String> supportedFileFormats;
+	private final Set<TaskGroupSpecification> supportedSpecifications;
 
 	public Epub3InputManagerFactory() {
-		this.supportedFileFormats = new HashSet<String>();
-		supportedFileFormats.add("epub");
-		this.supportedLocales = new HashSet<String>();
-		supportedLocales.add("sv-SE");
-		supportedLocales.add("sv");
-		supportedLocales.add("en");
-		supportedLocales.add("en-US");
+		this.supportedSpecifications = new HashSet<TaskGroupSpecification>();
+		String epub = "epub";
+		String obfl = "obfl";
+		supportedSpecifications.add(new TaskGroupSpecification(epub, obfl, "sv-SE"));
+		supportedSpecifications.add(new TaskGroupSpecification(epub, obfl, "sv"));
+		supportedSpecifications.add(new TaskGroupSpecification(epub, obfl, "en"));
+		supportedSpecifications.add(new TaskGroupSpecification(epub, obfl, "en-US"));
 	}
 
-	public Set<String> listSupportedLocales() {
-		return supportedLocales;
+	@Override
+	public Set<TaskGroupSpecification> listSupportedSpecifications() {
+		return supportedSpecifications;
 	}
 
-	public Set<String> listSupportedFileFormats() {
-		return supportedFileFormats;
+	@Override
+	public boolean supportsSpecification(TaskGroupSpecification spec) {
+		return supportedSpecifications.contains(spec);
 	}
 
-	public boolean supportsSpecification(String locale, String fileFormat) {
-		return supportedFileFormats.contains(fileFormat);
-	}
-
-	public InputManager newInputManager(String locale, String fileFormat) {
-		if (supportsSpecification(locale, fileFormat)) {
+	@Override
+	public InputManager newInputManager(TaskGroupSpecification spec) {
+		if (supportsSpecification(spec)) {
 			return new Epub3InputManager();
 		}
 		return null;

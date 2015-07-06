@@ -8,6 +8,7 @@ import java.util.Properties;
 import org.daisy.dotify.api.cr.InputManager;
 import org.daisy.dotify.api.cr.InputManagerFactoryMakerService;
 import org.daisy.dotify.api.cr.InternalTask;
+import org.daisy.dotify.api.cr.TaskGroupSpecification;
 import org.daisy.dotify.api.cr.TaskSystem;
 import org.daisy.dotify.api.cr.TaskSystemException;
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
@@ -81,7 +82,7 @@ public class DotifyTaskSystem implements TaskSystem {
 		ArrayList<InternalTask> setup = new ArrayList<InternalTask>();
 		{
 			//InputDetector
-			InputManager idts = imf.newInputManager(context, p2.get(Keys.INPUT_FORMAT).toString());
+			InputManager idts = imf.newInputManager(new TaskGroupSpecification(p2.get(Keys.INPUT_FORMAT).toString(), "obfl", context));
 			setup.addAll(idts.compile(h));
 			
 			// Whitespace normalizer TransformerFactoryConstants.SAXON8
