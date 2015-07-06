@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.daisy.dotify.api.cr.InputManager;
 import org.daisy.dotify.api.cr.InternalTask;
+import org.daisy.dotify.api.cr.TaskGroup;
 import org.daisy.dotify.api.cr.TaskSystemException;
 import org.daisy.dotify.impl.input.XsltTask;
 
-public class Epub3InputManager implements InputManager {
+public class Epub3InputManager implements TaskGroup {
 
 	public String getName() {
 		return this.getClass().getName();

@@ -24,7 +24,7 @@ public class XMLInputManagerFactoryTest {
 		FilterLocale filter = FilterLocale.parse("en-US");
 		
 		//Test
-		assertTrue(factory.newInputManager(new TaskGroupSpecification("xml", "obfl", filter.toString()))!=null);
+		assertTrue(factory.newTaskGroup(new TaskGroupSpecification("xml", "obfl", filter.toString()))!=null);
 	}
 
 	
@@ -35,7 +35,7 @@ public class XMLInputManagerFactoryTest {
 		FilterLocale filter = FilterLocale.parse("sv-SE");
 		
 		//Test
-		assertTrue(factory.newInputManager(new TaskGroupSpecification("xml", "obfl", filter.toString()))!=null);
+		assertTrue(factory.newTaskGroup(new TaskGroupSpecification("xml", "obfl", filter.toString()))!=null);
 	}
 	/*
 	@Test
@@ -55,6 +55,6 @@ public class XMLInputManagerFactoryTest {
 		FilterLocale filter = FilterLocale.parse("fi");
 		
 		//Test
-		assertTrue(factory.newInputManager(new TaskGroupSpecification("xml", "obfl", filter.toString()))!=null);
+		assertTrue(factory.newTaskGroup(new TaskGroupSpecification("xml", "obfl", filter.toString()))!=null);
 	}
 }

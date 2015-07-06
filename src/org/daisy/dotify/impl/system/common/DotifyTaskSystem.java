@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.daisy.dotify.api.cr.InputManager;
-import org.daisy.dotify.api.cr.InputManagerFactoryMakerService;
 import org.daisy.dotify.api.cr.InternalTask;
+import org.daisy.dotify.api.cr.TaskGroup;
+import org.daisy.dotify.api.cr.TaskGroupFactoryMakerService;
 import org.daisy.dotify.api.cr.TaskGroupSpecification;
 import org.daisy.dotify.api.cr.TaskSystem;
 import org.daisy.dotify.api.cr.TaskSystemException;
@@ -43,12 +43,12 @@ public class DotifyTaskSystem implements TaskSystem {
 	private final String outputFormat;
 	private final String context;
 	private final String name;
-	private final InputManagerFactoryMakerService imf;
+	private final TaskGroupFactoryMakerService imf;
 	private final PagedMediaWriterFactoryMakerService pmw;
 	private final FormatterEngineFactoryService fe;
 	
 	public DotifyTaskSystem(String name, String outputFormat, String context,
-			InputManagerFactoryMakerService imf, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe) {
+			TaskGroupFactoryMakerService imf, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe) {
 		this.context = context;
 		this.outputFormat = outputFormat;
 		this.name = name;
@@ -82,7 +82,7 @@ public class DotifyTaskSystem implements TaskSystem {
 		ArrayList<InternalTask> setup = new ArrayList<InternalTask>();
 		{
 			//InputDetector
-			InputManager idts = imf.newInputManager(new TaskGroupSpecification(p2.get(Keys.INPUT_FORMAT).toString(), "obfl", context));
+			TaskGroup idts = imf.newTaskGroup(new TaskGroupSpecification(p2.get(Keys.INPUT_FORMAT).toString(), "obfl", context));
 			setup.addAll(idts.compile(h));
 			
 			// Whitespace normalizer TransformerFactoryConstants.SAXON8

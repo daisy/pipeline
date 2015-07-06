@@ -14,8 +14,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.cr.InputManager;
 import org.daisy.dotify.api.cr.InternalTask;
+import org.daisy.dotify.api.cr.TaskGroup;
 import org.daisy.dotify.api.cr.TaskSystemException;
 import org.daisy.dotify.common.io.ResourceLocator;
 import org.daisy.dotify.common.io.ResourceLocatorException;
@@ -54,7 +54,7 @@ import org.daisy.dotify.impl.input.XsltTask;
  * @author Joel Håkansson
  *
  */
-class XMLInputManager implements InputManager {
+class XMLInputManager implements TaskGroup {
 	private final static String TEMPLATES_PATH = "templates/";
 	private final static String LOCALIZATION_PROPS = "localization.xml";
 	private final ResourceLocator localLocator;

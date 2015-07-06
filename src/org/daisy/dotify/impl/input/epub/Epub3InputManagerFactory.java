@@ -3,11 +3,11 @@ package org.daisy.dotify.impl.input.epub;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.daisy.dotify.api.cr.InputManager;
-import org.daisy.dotify.api.cr.InputManagerFactory;
+import org.daisy.dotify.api.cr.TaskGroup;
+import org.daisy.dotify.api.cr.TaskGroupFactory;
 import org.daisy.dotify.api.cr.TaskGroupSpecification;
 
-public class Epub3InputManagerFactory implements InputManagerFactory {
+public class Epub3InputManagerFactory implements TaskGroupFactory {
 	private final Set<TaskGroupSpecification> supportedSpecifications;
 
 	public Epub3InputManagerFactory() {
@@ -31,7 +31,7 @@ public class Epub3InputManagerFactory implements InputManagerFactory {
 	}
 
 	@Override
-	public InputManager newInputManager(TaskGroupSpecification spec) {
+	public TaskGroup newTaskGroup(TaskGroupSpecification spec) {
 		if (supportsSpecification(spec)) {
 			return new Epub3InputManager();
 		}

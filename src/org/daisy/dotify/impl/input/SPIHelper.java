@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.cr.InputManagerFactoryMakerService;
+import org.daisy.dotify.api.cr.TaskGroupFactoryMakerService;
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 
@@ -17,7 +17,7 @@ import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
  * @author Joel Håkansson
  */
 public class SPIHelper {
-	private static InputManagerFactoryMakerService inputManagerFactory;
+	private static TaskGroupFactoryMakerService inputManagerFactory;
 	private static PagedMediaWriterFactoryMakerService pagedMediaWriterFactory;
 	private static FormatterEngineFactoryService formatterEngingeFactory;
 	private final static Logger logger = Logger.getLogger(SPIHelper.class.getCanonicalName());
@@ -28,9 +28,9 @@ public class SPIHelper {
 	 * <p>Note: This method uses reflexion to get the table catalog implementation.</p>
 	 * @return returns a table catalog
 	 */
-	public static InputManagerFactoryMakerService getInputManagerFactoryMakerService() {
+	public static TaskGroupFactoryMakerService getInputManagerFactoryMakerService() {
 		if (inputManagerFactory==null) {
-			inputManagerFactory = (InputManagerFactoryMakerService)invoke("org.daisy.dotify.consumer.cr.InputManagerFactoryMaker");
+			inputManagerFactory = (TaskGroupFactoryMakerService)invoke("org.daisy.dotify.consumer.cr.TaskGroupFactoryMaker");
 		}
 		return inputManagerFactory;
 	}

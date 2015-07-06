@@ -1,6 +1,6 @@
 package org.daisy.dotify.impl.system.common;
 
-import org.daisy.dotify.api.cr.InputManagerFactoryMakerService;
+import org.daisy.dotify.api.cr.TaskGroupFactoryMakerService;
 import org.daisy.dotify.api.cr.TaskSystem;
 import org.daisy.dotify.api.cr.TaskSystemFactory;
 import org.daisy.dotify.api.cr.TaskSystemFactoryException;
@@ -20,7 +20,7 @@ import aQute.bnd.annotation.component.Reference;
  */
 @Component
 public class DotifyTaskSystemFactory implements TaskSystemFactory {
-	private InputManagerFactoryMakerService imf;
+	private TaskGroupFactoryMakerService imf;
 	private PagedMediaWriterFactoryMakerService pmw;
 	private FormatterEngineFactoryService fe;
 
@@ -41,11 +41,11 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 	}
 
 	@Reference
-	public void setInputManagerFactory(InputManagerFactoryMakerService service) {
+	public void setInputManagerFactory(TaskGroupFactoryMakerService service) {
 		this.imf = service;
 	}
 
-	public void unsetInputManagerFactory(InputManagerFactoryMakerService service) {
+	public void unsetInputManagerFactory(TaskGroupFactoryMakerService service) {
 		this.imf = null;
 	}
 

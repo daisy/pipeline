@@ -9,8 +9,8 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.cr.InputManager;
-import org.daisy.dotify.api.cr.InputManagerFactory;
+import org.daisy.dotify.api.cr.TaskGroup;
+import org.daisy.dotify.api.cr.TaskGroupFactory;
 import org.daisy.dotify.api.cr.TaskGroupSpecification;
 import org.daisy.dotify.common.io.AbstractResourceLocator;
 import org.daisy.dotify.common.io.ResourceLocator;
@@ -28,7 +28,7 @@ import aQute.bnd.annotation.component.Component;
  *
  */
 @Component
-public class XMLInputManagerFactory implements InputManagerFactory {
+public class XMLInputManagerFactory implements TaskGroupFactory {
 	private final Whatever locator;
 
 	private final Set<TaskGroupSpecification> supportedSpecifications;
@@ -57,7 +57,7 @@ public class XMLInputManagerFactory implements InputManagerFactory {
 	}
 
 	@Override
-	public InputManager newInputManager(TaskGroupSpecification spec) {
+	public TaskGroup newTaskGroup(TaskGroupSpecification spec) {
         return new XMLInputManager(locator.getResourceLocator(spec.getLocale()), new CommonResourceLocator("resource-files/common"));
 	}
 

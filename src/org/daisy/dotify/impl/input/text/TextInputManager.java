@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.daisy.dotify.api.cr.InputManager;
 import org.daisy.dotify.api.cr.InternalTask;
+import org.daisy.dotify.api.cr.TaskGroup;
 import org.daisy.dotify.api.cr.TaskSystemException;
 
-class TextInputManager implements InputManager {
+class TextInputManager implements TaskGroup {
 	private final String rootLang;
 
 	TextInputManager(String rootLang) {
