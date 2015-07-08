@@ -73,7 +73,7 @@ uploadArchives {
                 authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
             pom.project {
-                name 'dotify.api'
+                name 'dotify.task-api'
                 packaging 'jar'
                 description 'Dotify Tasks API'
                 url 'https://github.com/joeha480/dotify/'
