@@ -1,0 +1,9 @@
+-buildpath: biz.aQute.bnd.annotation
+Export-Package:  \
+	org.daisy.dotify.api.cr
+Private-Package:  \
+	org.daisy.dotify.consumer.cr
+Bundle-Version: 1.0.0-SNAPSHOT
+Include-Resource: / = src/
+-sources: false
+Service-Component: *
