@@ -75,7 +75,7 @@ uploadArchives {
             pom.project {
                 name 'dotify.api'
                 packaging 'jar'
-                description 'Dotify Chain Reactor API'
+                description 'Dotify Tasks API'
                 url 'https://github.com/joeha480/dotify/'
                 scm {
                     connection 'scm:git:https://github.com/joeha480/dotify.git'
