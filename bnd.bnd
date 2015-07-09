@@ -1,8 +1,8 @@
 -buildpath: biz.aQute.bnd.annotation
 Export-Package:  \
-	org.daisy.dotify.api.cr
+	org.daisy.dotify.api.tasks
 Private-Package:  \
-	org.daisy.dotify.consumer.cr
+	org.daisy.dotify.consumer.tasks
 Bundle-Version: 1.0.0-SNAPSHOT
 Include-Resource: / = src/
 -sources: false

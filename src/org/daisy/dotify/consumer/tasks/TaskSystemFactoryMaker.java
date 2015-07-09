@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.cr;
+package org.daisy.dotify.consumer.tasks;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,10 +9,10 @@ import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.cr.TaskSystem;
-import org.daisy.dotify.api.cr.TaskSystemFactory;
-import org.daisy.dotify.api.cr.TaskSystemFactoryException;
-import org.daisy.dotify.api.cr.TaskSystemFactoryMakerService;
+import org.daisy.dotify.api.tasks.TaskSystem;
+import org.daisy.dotify.api.tasks.TaskSystemFactory;
+import org.daisy.dotify.api.tasks.TaskSystemFactoryException;
+import org.daisy.dotify.api.tasks.TaskSystemFactoryMakerService;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

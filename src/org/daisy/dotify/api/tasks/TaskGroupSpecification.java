@@ -1,4 +1,4 @@
-package org.daisy.dotify.api.cr;
+package org.daisy.dotify.api.tasks;
 
 public final class TaskGroupSpecification {
 	private final String input, output, locale;

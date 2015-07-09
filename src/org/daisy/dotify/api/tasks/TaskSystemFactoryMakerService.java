@@ -1,4 +1,4 @@
-package org.daisy.dotify.api.cr;
+package org.daisy.dotify.api.tasks;
 
 /**
  * <p>
