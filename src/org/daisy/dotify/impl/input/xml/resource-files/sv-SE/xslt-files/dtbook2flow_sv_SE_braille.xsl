@@ -146,16 +146,16 @@
 					<xsl:call-template name="coverPage"/>
 					<toc-sequence master="front" toc="full-toc" range="document" initial-page-number="1">
 						<on-toc-start>
-							<block margin-bottom="1"><xsl:value-of select="$l10nTocHeadline"/></block>
+							<block padding-bottom="1"><xsl:value-of select="$l10nTocHeadline"/></block>
 							<xsl:if test="$l10nTocDescription!=''">
-								<block margin-bottom="1"><xsl:value-of select="$l10nTocDescription"/></block>
+								<block padding-bottom="1"><xsl:value-of select="$l10nTocDescription"/></block>
 							</xsl:if>
 						</on-toc-start>
 						<on-volume-start use-when="(&amp; (> $volumes 1) (= $started-volume-number 1))">
-							<block keep="all" keep-with-next="1" margin-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
+							<block keep="all" keep-with-next="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
 						</on-volume-start>
 						<on-volume-start use-when="(&amp; (> $volumes 1) (> $started-volume-number 1))">
-							<block keep="all" keep-with-next="1" margin-top="1" margin-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
+							<block keep="all" keep-with-next="1" padding-top="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
 						</on-volume-start>
 					</toc-sequence>
 					<xsl:apply-templates select="//dtb:frontmatter" mode="pre-volume-mode"/>
@@ -169,7 +169,7 @@
 					<xsl:call-template name="coverPage"/>
 					<toc-sequence master="front" toc="full-toc" range="volume" initial-page-number="1">
 						<on-toc-start>
-							<block margin-bottom="1"><evaluate expression="(format &quot;{$l10nTocVolumeHeading}&quot; $volume)"/></block>
+							<block padding-bottom="1"><evaluate expression="(format &quot;{$l10nTocVolumeHeading}&quot; $volume)"/></block>
 						</on-toc-start>
 					</toc-sequence>
 				</pre-content>
@@ -224,17 +224,17 @@
 	<xsl:template name="postContentNotes">
 		<xsl:if test="count(//dtb:note)>0">
 			<dynamic-sequence master="notes">
-				<block margin-top="3"><xsl:value-of select="$l10nEndnotesHeadling"/></block>
+				<block padding-top="3"><xsl:value-of select="$l10nEndnotesHeadling"/></block>
 				<xsl:if test="count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]])>0">
 					<list-of-references collection="endnotes-front" range="volume">
 						<on-page-start>
-							<block margin-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
+							<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
 						</on-page-start>
 					</list-of-references>
 					<xsl:if test="count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]])>0">
 						<list-of-references collection="endnotes-frontB" range="volume">
 							<on-page-start>
-								<block margin-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
+								<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
 							</on-page-start>
 						</list-of-references>
 					</xsl:if>
@@ -242,13 +242,13 @@
 				<xsl:if test="count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]])>0">
 					<list-of-references collection="endnotes" range="volume">
 						<on-page-start>
-							<block margin-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
+							<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
 						</on-page-start>
 					</list-of-references>
 					<xsl:if test="count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]])>0">
 						<list-of-references collection="endnotesB" range="volume">
 							<on-page-start>
-								<block margin-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
+								<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
 							</on-page-start>
 						</list-of-references>
 					</xsl:if>
@@ -261,10 +261,10 @@
 		<sequence master="cover">
 			<xsl:choose>
 				<xsl:when test="/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle">
-					<block align="center" margin-top="3" margin-bottom="1" margin-left="2" margin-right="2"><xsl:value-of select="/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle"/></block>
+					<block align="center" padding-top="3" padding-bottom="1" margin-left="2" margin-right="2"><xsl:value-of select="/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle"/></block>
 				</xsl:when>
 				<xsl:otherwise>
-					<block align="center" margin-top="3"  margin-left="2" margin-right="2">&#x00a0;</block>
+					<block align="center" padding-top="3"  margin-left="2" margin-right="2">&#x00a0;</block>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:choose>
@@ -414,7 +414,7 @@
 		<xsl:if test="dtb:h1|dtb:h2">
 <!--
 			<xsl:choose>
-				<xsl:when test="self::dtb:level1 and @class='part'"><toc-entry ref-id="{generate-id(.)}" margin-bottom="1" keep="all"><xsl:apply-templates select="dtb:h1" mode="toc-hd"/></toc-entry><xsl:apply-templates mode="toc"/></xsl:when>
+				<xsl:when test="self::dtb:level1 and @class='part'"><toc-entry ref-id="{generate-id(.)}" padding-bottom="1" keep="all"><xsl:apply-templates select="dtb:h1" mode="toc-hd"/></toc-entry><xsl:apply-templates mode="toc"/></xsl:when>
 				<xsl:otherwise>--><toc-entry ref-id="{generate-id(dtb:h1|dtb:h2)}" block-indent="{$toc-indent-multiplier}" text-indent="{2*$toc-indent-multiplier}" keep="all"><xsl:apply-templates select="dtb:h1|dtb:h2" mode="toc-hd"/><xsl:apply-templates mode="toc"/></toc-entry><!--</xsl:otherwise>
 			</xsl:choose>-->
 		</xsl:if>
@@ -432,7 +432,7 @@
 	<xsl:template name="addBottomMarginIfPart">
 	
 		<xsl:if test="(following::*[self::dtb:level1|self::dtb:level2|self::dtb:level3|self::dtb:level4|self::dtb:level5|self::dtb:level6][1])[self::dtb:level1[@class='part']]">
-			<xsl:attribute name="margin-bottom">1</xsl:attribute>
+			<xsl:attribute name="padding-bottom">1</xsl:attribute>
 		</xsl:if>
 	</xsl:template>
 -->

@@ -48,7 +48,7 @@
 				<xsl:apply-templates/>
 			</xsl:when>
 			<xsl:otherwise>
-				<block margin-bottom="1"><xsl:apply-templates/></block></xsl:otherwise>
+				<block padding-bottom="1"><xsl:apply-templates/></block></xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	
