@@ -1,10 +1,10 @@
 package org.daisy.dotify.impl.system.common;
 
-import org.daisy.dotify.api.cr.TaskGroupFactoryMakerService;
-import org.daisy.dotify.api.cr.TaskSystem;
-import org.daisy.dotify.api.cr.TaskSystemFactory;
-import org.daisy.dotify.api.cr.TaskSystemFactoryException;
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
+import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
+import org.daisy.dotify.api.tasks.TaskSystem;
+import org.daisy.dotify.api.tasks.TaskSystemFactory;
+import org.daisy.dotify.api.tasks.TaskSystemFactoryException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 import org.daisy.dotify.common.text.FilterLocale;
 import org.daisy.dotify.impl.input.Keys;

@@ -9,8 +9,8 @@ import java.io.IOException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
-import org.daisy.dotify.api.cr.InternalTaskException;
-import org.daisy.dotify.api.cr.ReadWriteTask;
+import org.daisy.dotify.api.tasks.InternalTaskException;
+import org.daisy.dotify.api.tasks.ReadWriteTask;
 import org.daisy.dotify.common.text.StringFilter;
 import org.daisy.dotify.common.xml.EntityResolverCache;
 import org.daisy.dotify.common.xml.XMLResolverAdapter;

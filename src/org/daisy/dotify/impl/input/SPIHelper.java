@@ -4,8 +4,8 @@ import java.lang.reflect.Method;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.cr.TaskGroupFactoryMakerService;
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
+import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 
 /**
@@ -30,7 +30,7 @@ public class SPIHelper {
 	 */
 	public static TaskGroupFactoryMakerService getInputManagerFactoryMakerService() {
 		if (inputManagerFactory==null) {
-			inputManagerFactory = (TaskGroupFactoryMakerService)invoke("org.daisy.dotify.consumer.cr.TaskGroupFactoryMaker");
+			inputManagerFactory = (TaskGroupFactoryMakerService)invoke("org.daisy.dotify.consumer.tasks.TaskGroupFactoryMaker");
 		}
 		return inputManagerFactory;
 	}

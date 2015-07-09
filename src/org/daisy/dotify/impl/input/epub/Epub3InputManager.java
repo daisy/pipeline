@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.daisy.dotify.api.cr.InternalTask;
-import org.daisy.dotify.api.cr.TaskGroup;
-import org.daisy.dotify.api.cr.TaskSystemException;
+import org.daisy.dotify.api.tasks.InternalTask;
+import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.impl.input.XsltTask;
 
 public class Epub3InputManager implements TaskGroup {

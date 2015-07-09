@@ -9,9 +9,9 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.cr.TaskGroup;
-import org.daisy.dotify.api.cr.TaskGroupFactory;
-import org.daisy.dotify.api.cr.TaskGroupSpecification;
+import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskGroupFactory;
+import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 import org.daisy.dotify.common.io.AbstractResourceLocator;
 import org.daisy.dotify.common.io.ResourceLocator;
 

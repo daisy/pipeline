@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.daisy.dotify.api.cr.InternalTask;
-import org.daisy.dotify.api.cr.TaskGroup;
-import org.daisy.dotify.api.cr.TaskSystemException;
+import org.daisy.dotify.api.tasks.InternalTask;
+import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskSystemException;
 
 class TextInputManager implements TaskGroup {
 	private final String rootLang;

@@ -4,8 +4,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.Map;
 
-import org.daisy.dotify.api.cr.InternalTaskException;
-import org.daisy.dotify.api.cr.ReadWriteTask;
+import org.daisy.dotify.api.tasks.InternalTaskException;
+import org.daisy.dotify.api.tasks.ReadWriteTask;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
 

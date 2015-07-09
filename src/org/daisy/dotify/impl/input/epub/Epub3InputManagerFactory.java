@@ -3,9 +3,9 @@ package org.daisy.dotify.impl.input.epub;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.daisy.dotify.api.cr.TaskGroup;
-import org.daisy.dotify.api.cr.TaskGroupFactory;
-import org.daisy.dotify.api.cr.TaskGroupSpecification;
+import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskGroupFactory;
+import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 
 public class Epub3InputManagerFactory implements TaskGroupFactory {
 	private final Set<TaskGroupSpecification> supportedSpecifications;

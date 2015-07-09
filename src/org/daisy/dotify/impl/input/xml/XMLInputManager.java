@@ -14,9 +14,9 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.cr.InternalTask;
-import org.daisy.dotify.api.cr.TaskGroup;
-import org.daisy.dotify.api.cr.TaskSystemException;
+import org.daisy.dotify.api.tasks.InternalTask;
+import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.common.io.ResourceLocator;
 import org.daisy.dotify.common.io.ResourceLocatorException;
 import org.daisy.dotify.common.xml.XMLInfo;

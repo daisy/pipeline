@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.daisy.dotify.api.cr.TaskGroup;
-import org.daisy.dotify.api.cr.TaskGroupFactory;
-import org.daisy.dotify.api.cr.TaskGroupSpecification;
+import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskGroupFactory;
+import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 
 import aQute.bnd.annotation.component.Component;
 
