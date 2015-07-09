@@ -3,7 +3,7 @@ Export-Package:  \
 	org.daisy.dotify.api.tasks
 Private-Package:  \
 	org.daisy.dotify.consumer.tasks
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1-SNAPSHOT
 Include-Resource: / = src/
 -sources: false
 Service-Component: *
