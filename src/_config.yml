@@ -1,3 +1,8 @@
 name: snækobbi
 gh: "https://github.com/snaekobbi"
 irc: "https://webchat.freenode.net/?url=irc://irc.freenode.net/snaekobbi"
+markdown: kramdown
+site_base: "http://snaekobbi.github.io"
+meta_file: meta.ttl
+exclude:
+  - /meta.ttl

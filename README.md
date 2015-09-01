@@ -5,10 +5,13 @@
 [Jekyll][]
 
     gem install jekyll
+    gem install sparql
+    gem install rdf-turtle
+    gem install rdf-rdfa
 
 ## Usage
 
-    make
+    make serve
 
 
 [snaekobbi.github.io]: https://github.com/snaekobbi/snaekobbi.github.io
