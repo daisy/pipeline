@@ -8,7 +8,7 @@
 
 ## Usage
 
-    jekyll serve
+    make
 
 
 [snaekobbi.github.io]: https://github.com/snaekobbi/snaekobbi.github.io
