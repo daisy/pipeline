@@ -8,16 +8,23 @@
  * required parameters is context locale. The context locale is the locale in which the 
  * output is to be consumed.</p>
  * 
+ * <h3>Localization catalog</h3>
  * <p>The first configurable part of the input system is the localization_catalog.xml
  * which is scanned for supported locales, for example 'en-US'. It connects a locale 
- * with a base folder for the input system. The base folder is relative to the 
- * localization catalog (or rather ???).</p>
+ * with a base folder for the input system. This folder will be used when looking for
+ * file references for that locale. Note that:</p>
+ * <ul><li>The base folder in the localization catalog is relative to the 
+ * <tt>XMLInputManagerFactory</tt> class.</li>
+ * <li><b>An entry in the localization catalog is 
+ * required for a locale to be supported.</b> However, no files are required to be localized.</li>
+ * </ul>
  * 
  * <p>In addition to the base folder supplied in the localization catalog, there is a 
- * fallback base folder called "common" which is used whenever the input system fails
- * to locate a resource in the supplied localization catalog.</p>
+ * fallback base folder called "common" which is used if the input system fails
+ * to locate a resource in the base folder of the locale.</p>
  * 
- * <p>Parameters of the input format conversion can be stored as presets, these 
+ * <h3>localization.xml</h3>
+ * <p><del>Parameters of the input format conversion can be stored as presets, these 
  * can be placed in the "config" implementation package. See this package for more
  * information. Content localization should be stored independently of the
  * presets. A mechanism for supplying content localization exists in this package.
@@ -26,8 +33,9 @@
  * however it could be useful if there are a lot of formats to manage and the
  * localization information must be updated or if a fallback input transformation is 
  * used. Therefore, a great deal of care must be taken to ensure that the same keys 
- * are used in all input transformations in this package.</p>
+ * are used in all input transformations in this package.</del></p>
  * 
+ * <h3>Template selection</h3>
  * <p>The process of interpreting an input file format as OBFL is managed by a properties 
  * file which must be named as indicated by the input_format_catalog.xml. The input format
  * catalog connects a root element and namespace with a filename. The location of this 
