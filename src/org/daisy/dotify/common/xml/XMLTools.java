@@ -35,11 +35,19 @@ public class XMLTools {
 	public static void transform(Object source, Object result, Object xslt, Map<String, Object> params) throws XMLToolsException {
 		transform(toSource(source), toResult(result), toSource(xslt), params);
 	}
-
+	
+	public static void transform(Object source, Object result, Object xslt, Map<String, Object> params, TransformerFactory factory) throws XMLToolsException {
+		transform(toSource(source), toResult(result), toSource(xslt), params, factory);
+	}
+	
 	public static void transform(Source source, Result result, Source xslt, Map<String, Object> params) throws XMLToolsException {
+		transform(source, result, xslt, params, TransformerFactory.newInstance());
+	}
+
+	public static void transform(Source source, Result result, Source xslt, Map<String, Object> params, TransformerFactory factory) throws XMLToolsException {
 		Transformer transformer;
 		try {
-			transformer = TransformerFactory.newInstance().newTransformer(xslt);
+			transformer = factory.newTransformer(xslt);
 		} catch (TransformerConfigurationException e) {
 			throw new XMLToolsException(e);
 		} catch (TransformerFactoryConfigurationError e) {
