@@ -17,13 +17,9 @@ public class ObflResourceLocator extends AbstractResourceLocator {
 	 */
 	public enum ObflResourceIdentifier {
 		/**
-		 * An XML schema describing OBFL.
+		 * A relax ng schema describing OBFL
 		 */
-		OBFL_XML_SCHEMA,
-		/**
-		 * An XSLT that normalizes whitespace in an OBFL file.
-		 */
-		// OBFL_WHITESPACE_NORMALIZER_XSLT
+		OBFL_RNG_SCHEMA,
 	}
 	private static ObflResourceLocator instance;
 	
@@ -53,11 +49,8 @@ public class ObflResourceLocator extends AbstractResourceLocator {
 	public URL getResourceByIdentifier(ObflResourceIdentifier identifier) {
 		try {
 			switch (identifier) {
-				case OBFL_XML_SCHEMA:
-					return getResource("resource-files/obfl.xsd");
-					// case OBFL_WHITESPACE_NORMALIZER_XSLT:
-					// return
-					// getResource("resource-files/obfl-ws-normalizer.xsl");
+				case OBFL_RNG_SCHEMA:
+					return getResource("resource-files/obfl.rng");
 				default:
 					throw new RuntimeException("Enum identifier not implemented. This is a coding error.");
 			}

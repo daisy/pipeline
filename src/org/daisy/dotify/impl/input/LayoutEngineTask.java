@@ -55,7 +55,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 			logger.info("Validating input...");
 
 			try {
-				ValidatorTask.validate(input, ObflResourceLocator.getInstance().getResourceByIdentifier(ObflResourceIdentifier.OBFL_XML_SCHEMA));
+				ValidatorTask.validate(input, ObflResourceLocator.getInstance().getResourceByIdentifier(ObflResourceIdentifier.OBFL_RNG_SCHEMA));
 			} catch (ValidatorException e) {
 				throw new InternalTaskException("Input validation failed.", e);
 			}
