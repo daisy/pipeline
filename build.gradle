@@ -13,9 +13,9 @@ dependencies {
 	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
 	compile 'org.daisy.dotify:dotify.api:1.1.0'
 	compile 'org.daisy.dotify:dotify.task-api:1.0.0'
-	compile 'org.daisy.dotify:dotify.common:1.1.0'
+	compile 'org.daisy.dotify:dotify.common:1.2.0'
 	compile group: 'org.daisy.libs', name: 'jing', version: '20120724.0.0'	
-	runtime group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5'
+	compile group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5'
 	testCompile group: "junit", name: "junit", version: "4.7"
 }
 
