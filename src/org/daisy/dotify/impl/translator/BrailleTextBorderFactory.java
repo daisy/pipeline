@@ -160,10 +160,10 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		final int h = ch * (ct + cb + 1);
 
 		//alignment
-		final int at = (top.getAlign()==BorderSpecification.Align.INNER?ch:0);
-		final int ab = (bottom.getAlign()==BorderSpecification.Align.INNER?ch:0);
-		final int al = (left.getAlign()==BorderSpecification.Align.INNER?cw:0);
-		final int ar = (right.getAlign()==BorderSpecification.Align.INNER?cw:0);
+		final int at = top.getAlign().align(ch);
+		final int ab = bottom.getAlign().align(ch);
+		final int al = left.getAlign().align(cw);
+		final int ar = right.getAlign().align(cw);
 		
 		//border coordinates
 		final int x1 = 0 + Math.max(al-wl, 0);

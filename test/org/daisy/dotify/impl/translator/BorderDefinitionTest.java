@@ -20,4 +20,19 @@ public class BorderDefinitionTest {
 		//default (set)
 		assertEquals(BorderSpecification.Align.INNER, override.getAlign());
 	}
+	
+	@Test
+	public void testAlignInner() {
+		assertEquals(3, BorderSpecification.Align.INNER.align(3));
+	}
+	
+	@Test
+	public void testAlignOuter() {
+		assertEquals(0, BorderSpecification.Align.OUTER.align(3));
+	}
+	
+	@Test
+	public void testAlignCenter() {
+		assertEquals(2, BorderSpecification.Align.CENTER.align(3));
+	}
 }

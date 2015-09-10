@@ -15,7 +15,15 @@ class BorderSpecification {
 
 	enum Align {
 		INNER,
-		OUTER
+		CENTER,
+		OUTER;
+		int align(int w) {
+			switch (this) {
+			case INNER: return w;
+			case CENTER: return (int)Math.ceil(w/2d);
+			case OUTER: default: return 0;
+			}
+		}
 	}
 	
 	private Style style;
