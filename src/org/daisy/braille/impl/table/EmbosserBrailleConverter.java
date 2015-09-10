@@ -19,6 +19,7 @@ package org.daisy.braille.impl.table;
 
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.daisy.braille.api.embosser.EightDotFallbackMethod;
 import org.daisy.braille.api.table.BrailleConverter;
@@ -49,6 +50,20 @@ public class EmbosserBrailleConverter implements BrailleConverter {
 	 * @throws throws IllegalArgumentException if the table length isn't equal to 64 or 256.
 	 */
 	public EmbosserBrailleConverter(String table, Charset charset, EightDotFallbackMethod fallback, char replacement, boolean ignoreCase) {
+		this(table, charset, fallback, replacement, ignoreCase, null);
+	}
+	
+	/**
+	 * Creates a new EmbosserBrailleConverter
+	 * @param table the characters in the table, in Unicode order. Must contain 64 or 256 characters.
+	 * @param charset the preferred charset as defined in the BrailleConverter interface
+	 * @param fallback the fallback method to use when encountering a character in the range 0x2840-0x28FF
+	 * @param replacement the replacement character, must be in the range 0x2800-0x283F
+	 * @param ignoreCase set to true to ignore character case
+	 * @param t2bSupplements additional substitutions for text to braille translation. Values MUST be braille characters.
+	 * @throws throws IllegalArgumentException if the table length isn't equal to 64 or 256 or if supplements values are not braille characters.
+	 */
+	public EmbosserBrailleConverter(String table, Charset charset, EightDotFallbackMethod fallback, char replacement, boolean ignoreCase, Map<Character, Character> t2bSupplements) {
 		char[] tableDef = table.toCharArray();
 		this.charset = charset;
 		this.fallback = fallback;
@@ -67,6 +82,16 @@ public class EmbosserBrailleConverter implements BrailleConverter {
 			b = (char)(0x2800+i);
 			put(b, t);
 			i++;
+		}
+		if (t2bSupplements!=null) {
+			for (char key : t2bSupplements.keySet()) {
+				char val = t2bSupplements.get(key);
+				if (val>=0x2800 && val<=0x28FF) {
+					t2b.put(key, val);
+				} else {
+					throw new IllegalArgumentException("Supplements value must be in range [0x2800, 0x28FF]: " + key + "=>" + val);
+				}
+			}
 		}
 	}
 

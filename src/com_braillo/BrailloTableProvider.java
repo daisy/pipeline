@@ -109,13 +109,19 @@ public class BrailloTableProvider implements TableProvider {
 				 * 
 				 */
 				private static final long serialVersionUID = -3728256382860405787L;
-
+				
 				@Override
 				public BrailleConverter newBrailleConverter() {
+					Map<Character, Character> supplements  = new HashMap<Character, Character>();
+					supplements.put('`', (char)0x2808);
+					supplements.put('~', (char)0x2818);
+					supplements.put('{', (char)0x282a);
+					supplements.put('|', (char)0x2833);
+					supplements.put('}', (char)0x283b);
 					return new EmbosserBrailleConverter(
 							new String(
 									" A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="),
-							Charset.forName("UTF-8"), fallback, replacement, true);
+							Charset.forName("UTF-8"), fallback, replacement, true, supplements);
 				}};
 		case BRAILLO_6DOT_044_00:
 			return new EmbosserTable(TableType.BRAILLO_6DOT_044_00, EightDotFallbackMethod.values()[0], '\u2800'){

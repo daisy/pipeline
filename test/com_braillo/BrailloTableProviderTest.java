@@ -57,6 +57,23 @@ public class BrailloTableProviderTest {
 	}
 	
 	@Test
+	public void testTable6Dot_001_00Supplements() {
+		BrailloTableProvider.TableType t = BrailloTableProvider.TableType.BRAILLO_6DOT_001_00;
+		BrailleConverter ta = bt.newTable(t);
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0x40;i<=0x5E; i++) {
+			sb.append((char)i);
+		}
+		String uppercase = sb.toString();
+		sb = new StringBuilder();
+		for (int i = 0x60;i<=0x7E; i++) {
+			sb.append((char)i);
+		}
+		String lowercase = sb.toString();
+		assertEquals(ta.toBraille(uppercase), ta.toBraille(lowercase));
+	}
+	
+	@Test
 	public void testTable6Dot_044_00() {
 		//BrailloTableProvider bt = new BrailloTableProvider();
 		String input = BrailleConstants.BRAILLE_PATTERNS_64;
