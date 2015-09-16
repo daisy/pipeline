@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
 	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-    compile "org.daisy.dotify:dotify.api:1.0.0"
+    compile "org.daisy.dotify:dotify.api:1.3.0"
     compile "org.daisy.dotify:dotify.common:1.0.0"
     testCompile group: "junit", name: "junit", version: "4.7"
 }
