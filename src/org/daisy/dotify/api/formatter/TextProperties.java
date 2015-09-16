@@ -8,6 +8,7 @@ package org.daisy.dotify.api.formatter;
  */
 public class TextProperties {
 	private final String locale;
+	private final String translationMode;
 	private final boolean hyphenate;
 	
 	/**
@@ -17,7 +18,9 @@ public class TextProperties {
 	 */
 	public static class Builder {
 		private final String locale;
+		private String translationMode = null;
 		private boolean hyphenate = true;
+
 		/**
 		 * Creates a new builder with the specified locale
 		 * @param locale the locale for the builder
@@ -25,13 +28,24 @@ public class TextProperties {
 		public Builder(String locale) {
 			this.locale = locale;
 		}
+
 		/**
-		 * Sets the hyphenate value for thie builder
+		 * Sets the hyphenate value for this builder
 		 * @param value the value
 		 * @return returns this object
 		 */
 		public Builder hyphenate(boolean value) {
 			this.hyphenate = value;
+			return this;
+		}
+		
+		/**
+		 * Sets the translation mode for the builder
+		 * @param mode the translation mode
+		 * @return returns this object
+		 */
+		public Builder translationMode(String mode) {
+			this.translationMode = mode;
 			return this;
 		}
 		/**
@@ -46,6 +60,7 @@ public class TextProperties {
 	
 	private TextProperties(Builder builder) {
 		this.locale = builder.locale;
+		this.translationMode = builder.translationMode;
 		this.hyphenate = builder.hyphenate;
 	}
 
@@ -55,6 +70,14 @@ public class TextProperties {
 	 */
 	public String getLocale() {
 		return locale;
+	}
+	
+	/**
+	 * Gets the translation mode
+	 * @return the translation mode
+	 */
+	public String getTranslationMode() {
+		return translationMode;
 	}
 
 	/**
@@ -71,6 +94,7 @@ public class TextProperties {
 		int result = 1;
 		result = prime * result + (hyphenate ? 1231 : 1237);
 		result = prime * result + ((locale == null) ? 0 : locale.hashCode());
+		result = prime * result + ((translationMode == null) ? 0 : translationMode.hashCode());
 		return result;
 	}
 
@@ -94,6 +118,13 @@ public class TextProperties {
 				return false;
 			}
 		} else if (!locale.equals(other.locale)) {
+			return false;
+		}
+		if (translationMode == null) {
+			if (other.translationMode != null) {
+				return false;
+			}
+		} else if (!translationMode.equals(other.translationMode)) {
 			return false;
 		}
 		return true;
