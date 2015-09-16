@@ -36,8 +36,8 @@ public class ItemSequenceProperties {
 		/**
 		 * Creates a new builder with the supplied arguments.
 		 * 
-		 * @param masterName the master identifier
 		 * @param collectionID the collection identifier
+		 * @param range the range
 		 */
 		public Builder(String collectionID, Range range) {
 			this.collectionID = collectionID;

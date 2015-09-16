@@ -37,7 +37,6 @@ public class TocProperties extends SequenceProperties {
 		 * @param masterName the master identifier
 		 * @param tocName the toc identifier
 		 * @param range a range for the TOC
-		 * @param condition a condition for when to apply the TOC sequence
 		 */
 		public Builder(String masterName, String tocName, TocRange range) {
 			super(masterName);

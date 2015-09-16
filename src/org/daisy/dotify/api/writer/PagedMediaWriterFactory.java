@@ -11,10 +11,8 @@ package org.daisy.dotify.api.writer;
 public interface PagedMediaWriterFactory {
 	
 	/**
-	 * Returns a new PagedMediaWriter configured for the specified locale.
+	 * Returns a new PagedMediaWriter
 	 * 
-	 * @param mediaType
-	 *            the Internet media type for the new PagedMediaWriter
 	 * @return returns a new PagedMediaWriter
 	 * @throws PagedMediaWriterConfigurationException
 	 *             if the media type is not supported
