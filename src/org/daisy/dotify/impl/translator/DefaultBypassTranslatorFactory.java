@@ -5,6 +5,7 @@ import org.daisy.dotify.api.translator.BrailleTranslator;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
 import org.daisy.dotify.common.text.IdentityFilter;
+import org.daisy.dotify.translator.DefaultBrailleFilter;
 import org.daisy.dotify.translator.SimpleBrailleTranslator;
 
 class DefaultBypassTranslatorFactory implements BrailleTranslatorFactory {
@@ -18,7 +19,9 @@ class DefaultBypassTranslatorFactory implements BrailleTranslatorFactory {
 		if (hyphenatorService == null) {
 			throw new DefaultBypassTranslatorConfigurationException("HyphenatorFactoryMakerService not set.");
 		} else if (mode.equals(MODE_BYPASS)) {
-			return new SimpleBrailleTranslator(new IdentityFilter(), locale, mode, hyphenatorService);
+			return new SimpleBrailleTranslator(
+					new DefaultBrailleFilter(new IdentityFilter(), locale, hyphenatorService),
+					locale, mode);
 		}
 		throw new DefaultBypassTranslatorConfigurationException("Factory does not support " + locale + "/" + mode);
 	}

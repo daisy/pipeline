@@ -207,7 +207,8 @@ public class SwedishBrailleFilterTest {
 	}
 	@Test
 	public void testFinalizer_001() {
-		assertEquals("This\u2800is\u2800a\u2800test\u2800string\u2800to\u2800finalize\u2800\u2824\u2800nothing\u2800more.", filter.finalize("This is a test string to finalize - nothing more."));
+		SwedishBrailleFinalizer finalizer = new SwedishBrailleFinalizer();
+		assertEquals("This\u2800is\u2800a\u2800test\u2800string\u2800to\u2800finalize\u2800\u2824\u2800nothing\u2800more.", finalizer.finalizeBraille("This is a test string to finalize - nothing more."));
 	}
 	@Test
 	@Ignore
@@ -216,10 +217,10 @@ public class SwedishBrailleFilterTest {
 		//here in case of future improvements. 
 		String s ="This is a test string to finalize - nothing more.";
 		int threshold = 500;
-		SwedishBrailleFilter f = new SwedishBrailleFilter();
+		SwedishBrailleFinalizer f = new SwedishBrailleFinalizer();
 		long d= System.currentTimeMillis();
 		for (int i=0; i<100000; i++) {
-			f.finalize(s);
+			f.finalizeBraille(s);
 		}
 		long actualTime = System.currentTimeMillis()-d;
 		assertTrue("Time exceeded threshold ("+threshold+" ms), was " + actualTime + " ms.", (actualTime<threshold));

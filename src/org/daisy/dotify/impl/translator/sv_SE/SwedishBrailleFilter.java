@@ -7,10 +7,10 @@ import java.util.Locale;
 import org.daisy.dotify.common.text.CombinationFilter;
 import org.daisy.dotify.common.text.FilterLocale;
 import org.daisy.dotify.common.text.RegexFilter;
+import org.daisy.dotify.common.text.StringFilter;
 import org.daisy.dotify.common.text.UCharFilter;
-import org.daisy.dotify.translator.UncontractedBrailleFilter;
 
-public class SwedishBrailleFilter implements UncontractedBrailleFilter {
+public class SwedishBrailleFilter implements StringFilter {
 	private final static String sv_SE = "sv-SE";
 	private final static HashMap<String, FilterLocale> locales;
 	static {
@@ -79,34 +79,6 @@ public class SwedishBrailleFilter implements UncontractedBrailleFilter {
 	    }
 	    if(url==null) { throw new IllegalArgumentException(subPath); }
 	    return url;
-	}
-
-	public String finalize(String input) {
-		StringBuilder sb = new StringBuilder();
-		for (char c : input.toCharArray()) {
-			switch (c) {
-				case ' ':
-					sb.append('\u2800');
-					break;
-				case '\u00a0':
-					sb.append('\u2800');
-					break;
-				case '-':
-					sb.append('\u2824');
-					break;
-				case '\u00ad':
-					sb.append('\u2824');
-					break;
-				default:
-					sb.append(c);
-			}
-		}
-		return sb.toString();
-		/*
-		return input.replaceAll(" ", "\u2800").
-					replaceAll("\u00a0","\u2800").
-					replaceAll("-", "\u2824").
-					replaceAll("\u00ad", "\u2824");*/
 	}
 
 }

@@ -6,6 +6,7 @@ import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.MarkerProcessor;
 import org.daisy.dotify.api.translator.MarkerProcessorConfigurationException;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
+import org.daisy.dotify.translator.DefaultBrailleFilter;
 import org.daisy.dotify.translator.SimpleBrailleTranslator;
 
 class SwedishBrailleTranslatorFactory implements BrailleTranslatorFactory {
@@ -28,7 +29,9 @@ class SwedishBrailleTranslatorFactory implements BrailleTranslatorFactory {
 				throw new SwedishTranslatorConfigurationException(e);
 			}
 
-			return new SimpleBrailleTranslator(new SwedishBrailleFilter(), sv_SE, mode, sap, hyphenatorService);
+			return new SimpleBrailleTranslator(
+					new DefaultBrailleFilter(new SwedishBrailleFilter(), sv_SE, sap, hyphenatorService),
+					new SwedishBrailleFinalizer(), sv_SE, mode);
 		} 
 		throw new SwedishTranslatorConfigurationException("Factory does not support " + locale + "/" + mode);
 	}

@@ -2,25 +2,20 @@ package org.daisy.dotify.translator;
 
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
 import org.daisy.dotify.common.text.BreakPointHandler;
-import org.daisy.dotify.common.text.StringFilter;
 
 class DefaultBrailleTranslatorResult implements BrailleTranslatorResult {
 	private final BreakPointHandler bph;
-	private final UncontractedBrailleFilter filter;
+	private final BrailleFinalizer finalizer;
 
-	public DefaultBrailleTranslatorResult(BreakPointHandler bph, StringFilter filter) {
+	public DefaultBrailleTranslatorResult(BreakPointHandler bph, BrailleFinalizer finalizer) {
 		super();
-		if (UncontractedBrailleFilter.class.isInstance(filter)) {
-			this.filter = (UncontractedBrailleFilter)filter;
-		} else {
-			this.filter = null;
-		}
+		this.finalizer = finalizer;
 		this.bph = bph;
 	}
 
 	public String nextTranslatedRow(int limit, boolean force) {
-		if (filter!=null) {
-			return filter.finalize(bph.nextRow(limit, force).getHead());
+		if (finalizer!=null) {
+			return finalizer.finalizeBraille(bph.nextRow(limit, force).getHead());
 		} else {
 			return bph.nextRow(limit, force).getHead();
 		}
@@ -31,8 +26,8 @@ class DefaultBrailleTranslatorResult implements BrailleTranslatorResult {
 	}
 
 	public String getTranslatedRemainder() {
-		if (filter!=null) {
-			return filter.finalize(bph.getRemaining());
+		if (finalizer!=null) {
+			return finalizer.finalizeBraille(bph.getRemaining());
 		} else {
 			return bph.getRemaining();
 		}
