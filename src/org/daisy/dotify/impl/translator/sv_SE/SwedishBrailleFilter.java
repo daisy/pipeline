@@ -1,7 +1,6 @@
 package org.daisy.dotify.impl.translator.sv_SE;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Locale;
 
 import org.daisy.dotify.common.text.CombinationFilter;
@@ -12,39 +11,13 @@ import org.daisy.dotify.common.text.UCharFilter;
 
 public class SwedishBrailleFilter implements StringFilter {
 	private final static String sv_SE = "sv-SE";
-	private final static HashMap<String, FilterLocale> locales;
-	static {
-		locales = new HashMap<String, FilterLocale>();
-		//putLocale("sv");
-		putLocale(sv_SE);
-	}
-	
-	private static void putLocale(String str) {
-		FilterLocale loc = FilterLocale.parse(str);
-		locales.put(loc.toString(), loc);
-	}
-
 	private CombinationFilter filters;
 	
 	public SwedishBrailleFilter() { 
-		filters = null;
-		setLocale(sv_SE);
+		this(false);
 	}
 
-	public String filter(String str) {
-		return filters.filter(str);
-	}
-
-	public boolean supportsLocale(String target) {
-		for (FilterLocale loc : locales.values()) {
-			if (FilterLocale.parse(target).equals(loc)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public void setLocale(String t) {
+	public SwedishBrailleFilter(boolean strict) {
 		filters = new CombinationFilter();
 		// Remove zero width space
 		filters.add(new RegexFilter("\\u200B", ""));
@@ -55,15 +28,21 @@ public class SwedishBrailleFilter implements StringFilter {
 		//filters.add(new RegexFilter("(\\u2820\\p{Lu}\\u00ad*\\p{Lu}[\\p{Lu}\\u00ad]*)", "\u2820$1"));
 		filters.add(new CapitalizationMarkers());
 
-		if (t.equals(sv_SE)) {
-			Locale l = FilterLocale.parse(sv_SE).toLocale();
-			// Text to braille, Pas 1
-			filters.add(new UCharFilter(getResource("sv_SE-pas1.xml"), l));
-			// Text to braille, Pas 2
-			filters.add(new UCharFilter(getResource("sv_SE-pas2.xml"), l));
-		}
+		Locale l = FilterLocale.parse(sv_SE).toLocale();
+		// Text to braille, Pas 1
+		filters.add(new UCharFilter(getResource("sv_SE-pas1.xml"), l));
+		// Text to braille, Pas 2
+		filters.add(new UCharFilter(getResource("sv_SE-pas2.xml"), l));
 		// Remove redundant whitespace
 		filters.add(new RegexFilter("(\\s+)", " "));
+		
+		if (strict) {
+			filters.add(new StrictFilter());
+		}
+	}
+
+	public String filter(String str) {
+		return filters.filter(str);
 	}
 	
 	/**
@@ -79,6 +58,40 @@ public class SwedishBrailleFilter implements StringFilter {
 	    }
 	    if(url==null) { throw new IllegalArgumentException(subPath); }
 	    return url;
+	}
+	
+	/**
+	 * Processes some characters that are also filtered in the finalizer,
+	 * but aren't allowed by the BrailleFilter interface.
+	 * @author Joel Håkansson
+	 *
+	 */
+	private static class StrictFilter implements StringFilter {
+
+		@Override
+		public String filter(String str) {
+			StringBuilder sb = new StringBuilder();
+			char[] ca = str.toCharArray();
+			for (int i = 0; i<ca.length; i++) {
+				switch (ca[i]) {
+					case '\u00a0': //NO-BREAK SPACE
+						sb.append('\u2800');
+						break;
+					case '-':
+						sb.append('\u2824');
+						if (i>0 && i<ca.length-1 &&
+								!(ca[i-1]==' ' && ca[i+1]=='⠼')
+								) {
+							sb.append('\u200B');
+						}
+						break;
+					default:
+						sb.append(ca[i]);
+				}
+			}
+			return sb.toString();
+		}
+		
 	}
 
 }

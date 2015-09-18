@@ -13,7 +13,6 @@ public class SwedishBrailleFilterTest {
 	
 	public SwedishBrailleFilterTest() {
 		filter = new SwedishBrailleFilter();
-		filter.setLocale("sv-SE");
 	}
 	// 1.2 - Numbers	
 	@Test

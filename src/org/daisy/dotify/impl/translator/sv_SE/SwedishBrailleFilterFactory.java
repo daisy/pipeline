@@ -28,13 +28,12 @@ class SwedishBrailleFilterFactory implements BrailleFilterFactory {
 			} catch (MarkerProcessorConfigurationException e) {
 				throw new SwedishFilterConfigurationException(e);
 			}
-
-			return new DefaultBrailleFilter(new SwedishBrailleFilter(), sv_SE, sap, hyphenatorService);
+			return new DefaultBrailleFilter(new SwedishBrailleFilter(true), sv_SE, sap, hyphenatorService);
 		} 
 		throw new SwedishFilterConfigurationException("Factory does not support " + locale + "/" + mode);
 	}
 	
-	private class SwedishFilterConfigurationException extends TranslatorConfigurationException {
+	private static class SwedishFilterConfigurationException extends TranslatorConfigurationException {
 
 		/**
 		 * 
