@@ -34,9 +34,11 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	
 	/**
 	 * Creates a new instance of LayoutEngineTask.
-	 * @param name a descriptive name for the task
-	 * @param translator the translator to use
+	 * @param name the name of the task
+	 * @param locale the locale
+	 * @param mode the translation mode
 	 * @param writer the output writer
+	 * @param fe 
 	 */
 	public LayoutEngineTask(String name, String locale, String mode, PagedMediaWriter writer, FormatterEngineFactoryService fe) {
 		super(name);

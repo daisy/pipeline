@@ -47,22 +47,22 @@
  * <h3>English conversions of DTBook</h3>
  * <ul>
  * <li><a href=
- * "../../../../../../../xsltdoc/org.daisy.dotify.impl.input.xml.resource-files.common.xslt-files.dtbook2obfl_base.html"
- * >dtbook2flow.xsl</a></li>
+ * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.common.xslt-files.dtbook2obfl_base.html"
+ * >dtbook2obfl_base.xsl</a></li>
  * <li><a href=
- * "../../../../../../../xsltdoc/org.daisy.dotify.impl.input.xml.resource-files.common.xslt-files.xml2flow.html"
+ * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.common.xslt-files.xml2flow.html"
  * >xml2flow.xsl</a></li>
  * </ul>
  * <h3>Swedish conversion of DTBook</h3>
  * <ul>
  * <li><a href=
- * "../../../../../../../xsltdoc/org.daisy.dotify.impl.input.xml.resource-files.sv-SE.xslt-files.dtbook2flow_sv_SE.html"
+ * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.sv-SE.xslt-files.dtbook2flow_sv_SE.html"
  * >dtbook2flow_sv_SE.xsl</a></li>
  * <li><a href=
- * "../../../../../../../xsltdoc/org.daisy.dotify.impl.input.xml.resource-files.sv-SE.xslt-files.dtbook2flow_sv_SE_braille.html"
+ * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.sv-SE.xslt-files.dtbook2flow_sv_SE_braille.html"
  * >dtbook2flow_sv_SE_braille.xsl</a></li>
  * <li><a href=
- * "../../../../../../../xsltdoc/org.daisy.dotify.impl.input.xml.resource-files.sv-SE.xslt-files.dtbook2flow_sv_SE_text.html"
+ * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.sv-SE.xslt-files.dtbook2flow_sv_SE_text.html"
  * >dtbook2flow_sv_SE_text.xsl</a></li>
  * </ul>
  * <h3>Adding an input format conversion</h3>
@@ -91,8 +91,7 @@
  * 
  * <p>
  * 2. Add a selector file into the folder hierarchy in the appropriate location
- * of the folder hierarchy. The location of the selector file is subject to
- * change, and is therefore not documented here. The selector file should
+ * of the folder hierarchy. The selector file should
  * contain two entries: a path to the validation file and a path to the
  * transformation file (relative to the root folder of the locale).
  * </p>

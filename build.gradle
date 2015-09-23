@@ -52,6 +52,43 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+task xsltdoc() << {
+	ant {
+		xslt (
+			basedir: "src",
+			destdir: (new File(docsDir, "javadoc/resources")),
+			style: "build-resources/build-xslt-doc.xsl",
+			includes: "**/*.xsl",
+			excludes:"lib, build-resources, build",
+			filenameparameter: "filename"
+		) {
+			mapper (
+				type: "package",
+				from: "*.xsl",
+				to: "*.html"
+			)
+			xmlcatalog {
+				dtd (
+					publicId: "-//W3C//DTD XHTML 1.0 Strict//EN",
+					location: "build-resources/xhtml10/xhtml1-strict.dtd"
+				)
+			}
+		}
+	}
+}
+
+
+javadoc {
+	dependsOn xsltdoc
+	doLast {
+		copy {
+			from "src"
+			include "**/doc-files/*.*"
+			into new File(docsDir, "javadoc")
+		}
+	}
+}
+
 artifacts {
     archives javadocJar, sourcesJar
 }

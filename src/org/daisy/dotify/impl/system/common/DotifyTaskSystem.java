@@ -23,18 +23,14 @@ import org.daisy.dotify.impl.input.LayoutEngineTask;
 
 
 /**
- * <p>Transforms XML into Swedish braille in PEF 2008-1 format.</p>
+ * <p>Transforms XML into braille in PEF 2008-1 format.</p>
  * <p>Transforms documents into text format.</p>
  * 
  * <p>This TaskSystem consists of the following steps:</p>
  * <ol>
 	 * <li>Input Manager. Validates and converts input to OBFL.</li>
-	 * <li>Whitespace normalizer. Normalizes OBFL whitespace.</li>
 	 * <li>OBFL to PEF converter.
 	 * 		Translates all characters into braille, and puts the text flow onto pages.</li>
-	 * <li>Cover page adder</li>
-	 * <li>Meta data finalizer</li>
-
  * </ol>
  * <p>The result should be validated against the PEF Relax NG schema using int_daisy_validator.</p>
  * @author Joel Håkansson
