@@ -2,7 +2,7 @@
 	javax.xml.stream
 Export-Package:  \
 	org.daisy.dotify.impl.input.xml
-Bundle-Version: 1.0.0-SNAPSHOT
+Bundle-Version: 1.0.0
 Include-Resource: / = src/
 -sources: false
 Service-Component: *
