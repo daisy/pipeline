@@ -2,7 +2,7 @@
 	braille-utils.api;version=latest
 Export-Package: \
 	org.daisy.braille.pef
-Bundle-Version: 1.0.1
+Bundle-Version: 1.0.2-SNAPSHOT
 Include-Resource: / = src/
 -sources: false
 Service-Component: *
