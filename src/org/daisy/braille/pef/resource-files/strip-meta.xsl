@@ -7,9 +7,14 @@
 		<xsl:call-template name="copy"/>
 	</xsl:template>
 	
+	<xsl:template match="text()[normalize-space()='']"/>
+	
 	<xsl:template name="copy">
 		<xsl:copy>
-			<xsl:copy-of select="@*"/>
+			<xsl:for-each select="@*">
+				<xsl:sort select="name()"/>
+				<xsl:copy-of select="."/>
+			</xsl:for-each>
 			<xsl:apply-templates/>
 		</xsl:copy>
 	</xsl:template>
