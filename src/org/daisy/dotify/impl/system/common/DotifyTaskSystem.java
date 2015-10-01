@@ -2,8 +2,11 @@ package org.daisy.dotify.impl.system.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import javax.xml.namespace.QName;
 
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.tasks.InternalTask;
@@ -13,7 +16,9 @@ import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 import org.daisy.dotify.api.tasks.TaskSystem;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
+import org.daisy.dotify.api.writer.AttributeItem;
 import org.daisy.dotify.api.writer.MediaTypes;
+import org.daisy.dotify.api.writer.MetaDataItem;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
@@ -36,6 +41,7 @@ import org.daisy.dotify.impl.input.LayoutEngineTask;
  * @author Joel Håkansson
  */
 public class DotifyTaskSystem implements TaskSystem {
+	private final static QName ENTRY = new QName("http://daisymfc.svn.sourceforge.net/viewvc/daisymfc/trunk/dmfc/transformers/org_pef_dtbook2pef/", "entry", "generator");
 	private final String outputFormat;
 	private final String context;
 	private final String name;
@@ -114,10 +120,8 @@ public class DotifyTaskSystem implements TaskSystem {
 					// additional braille modes here...
 					translatorMode = BrailleTranslatorFactory.MODE_UNCONTRACTED;
 					PagedMediaWriterFactory pmf = pmw.getFactory(MediaTypes.PEF_MEDIA_TYPE);
-					for (Object key : p2.keySet()) {
-						pmf.setFeature(key.toString(), p2.get(key));
-					}
 					paged = pmf.newPagedMediaWriter();
+					paged.prepare(asMetadata(p2));
 				} else {
 					translatorMode = BrailleTranslatorFactory.MODE_BYPASS;
 					paged = pmw.newPagedMediaWriter(MediaTypes.TEXT_MEDIA_TYPE);
@@ -132,6 +136,27 @@ public class DotifyTaskSystem implements TaskSystem {
 
 			return setup;
 		}
+	}
+	
+	private static List<MetaDataItem> asMetadata(Properties p2) {
+		ArrayList<MetaDataItem> meta = new ArrayList<MetaDataItem>();
+		
+		String ident = p2.getProperty("identifier");
+		if (ident!=null) {
+			meta.add(asDCItem("identifier", ident));
+		}
+		String date = p2.getProperty("date");
+		if (date!=null) {
+			meta.add(asDCItem("date", date));
+		}
+		for (Object key : p2.keySet()) {
+			meta.add(new MetaDataItem.Builder(ENTRY, p2.get(key).toString()).attribute(new AttributeItem("key", key.toString())).build());
+		}
+		return meta;
+	}
+	
+	private static MetaDataItem asDCItem(String name, String value) {
+		return new MetaDataItem.Builder(new QName("http://purl.org/dc/elements/1.1/", name, "dc"), value).build();
 	}
 
 }
