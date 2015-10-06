@@ -278,6 +278,26 @@ public class BlockProperties implements Cloneable {
 		}
 		
 		/**
+		 * Sets the orphans property
+		 * @param value the value
+		 * @return returns this object
+		 */
+		public Builder orphans(int value) {
+			this.orphans = value;
+			return this;
+		}
+		
+		/**
+		 * Sets the widows property
+		 * @param value the value
+		 * @return returns this object
+		 */
+		public Builder widows(int value) {
+			this.widows = value;
+			return this;
+		}
+		
+		/**
 		 * Build BlockProperties using the current state of the Builder.
 		 * @return returns a new BlockProperties instance
 		 */
