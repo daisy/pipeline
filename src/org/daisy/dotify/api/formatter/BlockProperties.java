@@ -23,6 +23,8 @@ public class BlockProperties implements Cloneable {
 	private final BreakBefore breakBefore;
 	private final Keep keep;
 	private final Alignment align;
+	private final int orphans;
+	private final int widows;
 	private final int keepWithNext;
 	private final int keepWithPreviousSheets;
 	private final int keepWithNextSheets;
@@ -51,6 +53,8 @@ public class BlockProperties implements Cloneable {
 		BreakBefore breakBefore = BreakBefore.AUTO;
 		Keep keep = Keep.AUTO;
 		Alignment align = Alignment.LEFT;
+		int orphans = 2;
+		int widows = 2;
 		int keepWithNext = 0;
 		int keepWithPreviousSheets = 0;
 		int keepWithNextSheets = 0;
@@ -300,6 +304,8 @@ public class BlockProperties implements Cloneable {
 		breakBefore = builder.breakBefore;
 		keep = builder.keep;
 		align = builder.align;
+		orphans = builder.orphans;
+		widows = builder.widows;
 		keepWithNext = builder.keepWithNext;
 		keepWithPreviousSheets = builder.keepWithPreviousSheets;
 		keepWithNextSheets = builder.keepWithNextSheets;
@@ -512,6 +518,24 @@ public class BlockProperties implements Cloneable {
 		return textBorderStyle;
 	}
 	
+	/**
+	 * Gets the minimum number of lines of a paragraph that must be
+	 * left at the bottom of a page. 
+	 * @return returns the orphans
+	 */
+	public int getOrphans() {
+		return orphans;
+	}
+
+	/**
+	 * Gets the minimum number of lines of a paragraph that must be
+	 * left at the top of a page.
+	 * @return returns the widows
+	 */
+	public int getWidows() {
+		return widows;
+	}
+
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		//shallow copy should be fine, as all member variables are either immutable or primitives
@@ -533,11 +557,13 @@ public class BlockProperties implements Cloneable {
 		result = prime * result + keepWithPreviousSheets;
 		result = prime * result + ((listType == null) ? 0 : listType.hashCode());
 		result = prime * result + ((margin == null) ? 0 : margin.hashCode());
+		result = prime * result + orphans;
 		result = prime * result + ((padding == null) ? 0 : padding.hashCode());
 		result = prime * result + ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
 		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
 		result = prime * result + textIndent;
 		result = prime * result + ((verticalPosition == null) ? 0 : verticalPosition.hashCode());
+		result = prime * result + widows;
 		return result;
 	}
 
@@ -594,6 +620,9 @@ public class BlockProperties implements Cloneable {
 		} else if (!margin.equals(other.margin)) {
 			return false;
 		}
+		if (orphans != other.orphans) {
+			return false;
+		}
 		if (padding == null) {
 			if (other.padding != null) {
 				return false;
@@ -623,6 +652,9 @@ public class BlockProperties implements Cloneable {
 				return false;
 			}
 		} else if (!verticalPosition.equals(other.verticalPosition)) {
+			return false;
+		}
+		if (widows != other.widows) {
 			return false;
 		}
 		return true;
