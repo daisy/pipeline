@@ -13,14 +13,8 @@ import org.daisy.dotify.api.translator.TextBorderStyle;
  * @author Joel Håkansson
  */
 public class BlockProperties implements Cloneable {
-	private final int leftMargin;
-	private final int rightMargin;
-	private final int topMargin;
-	private final int bottomMargin;
-	private final int leftPadding;
-	private final int rightPadding;
-	private final int topPadding;
-	private final int bottomPadding;
+	private final BlockSpacing margin;
+	private final BlockSpacing padding;
 	private final int textIndent;
 	private final int firstLineIndent;
 	private final ListStyle listType;
@@ -289,14 +283,16 @@ public class BlockProperties implements Cloneable {
 	}
 
 	protected BlockProperties(Builder builder) {
-		leftMargin = builder.leftMargin;
-		rightMargin = builder.rightMargin;
-		topMargin = builder.topMargin;
-		bottomMargin = builder.bottomMargin;
-		leftPadding = builder.leftPadding;
-		rightPadding = builder.rightPadding;
-		topPadding = builder.topPadding;
-		bottomPadding = builder.bottomPadding;
+		margin = new BlockSpacing.Builder().
+				leftSpacing(builder.leftMargin).
+				rightSpacing(builder.rightMargin).
+				topSpacing(builder.topMargin).
+				bottomSpacing(builder.bottomMargin).build();
+		padding = new BlockSpacing.Builder().
+				leftSpacing(builder.leftPadding).
+				rightSpacing(builder.rightPadding).
+				topSpacing(builder.topPadding).
+				bottomSpacing(builder.bottomPadding).build();
 		textIndent = builder.textIndent;
 		firstLineIndent = builder.firstLineIndent;
 		listType = builder.listType;
@@ -323,65 +319,89 @@ public class BlockProperties implements Cloneable {
 	/**
 	 * Get left margin, in characters
 	 * @return returns the left margin
+	 * @deprecated use getMargin
 	 */
 	public int getLeftMargin() {
-		return leftMargin;
+		return margin.getLeftSpacing();
 	}
 	
 	/**
 	 * Get right margin, in characters
 	 * @return returns the right margin
+	 * @deprecated use getMargin
 	 */
 	public int getRightMargin() {
-		return rightMargin;
+		return margin.getRightSpacing();
 	}
 	
 	/**
 	 * Get top margin, in characters
 	 * @return returns the top margin
+	 * @deprecated use getMargin
 	 */
 	public int getTopMargin() {
-		return topMargin;
+		return margin.getTopSpacing();
 	}
 	
 	/**
 	 * Get bottom margin, in characters
 	 * @return returns the bottom margin
+	 * @deprecated use getMargin
 	 */
 	public int getBottomMargin() {
-		return bottomMargin;
+		return margin.getBottomSpacing();
+	}
+	
+	/**
+	 * Gets the margin
+	 * @return returns the margin
+	 */
+	public BlockSpacing getMargin() {
+		return margin;
 	}
 	
 	/**
 	 * Get left padding, in characters
 	 * @return returns the left padding
+	 * @deprecated use getPadding
 	 */
 	public int getLeftPadding() {
-		return leftPadding;
+		return padding.getLeftSpacing();
 	}
 	
 	/**
 	 * Get right padding, in characters
 	 * @return returns the right padding
+	 * @deprecated use getPadding
 	 */
 	public int getRightPadding() {
-		return rightPadding;
+		return padding.getRightSpacing();
 	}
 	
 	/**
 	 * Get top padding, in characters
 	 * @return returns the top padding
+	 * @deprecated use getPadding
 	 */
 	public int getTopPadding() {
-		return topPadding;
+		return padding.getTopSpacing();
 	}
 	
 	/**
 	 * Get bottom padding, in characters
 	 * @return returns the bottom padding
+	 * @deprecated use getPadding
 	 */
 	public int getBottomPadding() {
-		return bottomPadding;
+		return padding.getBottomSpacing();
+	}
+	
+	/**
+	 * Gets the padding
+	 * @return returns the padding
+	 */
+	public BlockSpacing getPadding() {
+		return padding;
 	}
 	
 	/**
@@ -419,6 +439,7 @@ public class BlockProperties implements Cloneable {
 	/**
 	 * Increments the list iterator and returns the current list number
 	 * @return returns the current list number
+	 * @deprecated
 	 */
 	public int nextListNumber() {
 		listIterator++;
@@ -428,6 +449,7 @@ public class BlockProperties implements Cloneable {
 	/**
 	 * Get current list number
 	 * @return returns the current list number
+	 * @deprecated
 	 */
 	public int getListNumber() {
 		return listIterator;
@@ -502,29 +524,20 @@ public class BlockProperties implements Cloneable {
 		int result = 1;
 		result = prime * result + ((align == null) ? 0 : align.hashCode());
 		result = prime * result + blockIndent;
-		result = prime * result + bottomMargin;
-		result = prime * result
-				+ ((breakBefore == null) ? 0 : breakBefore.hashCode());
+		result = prime * result + ((breakBefore == null) ? 0 : breakBefore.hashCode());
 		result = prime * result + firstLineIndent;
-		result = prime * result
-				+ ((identifier == null) ? 0 : identifier.hashCode());
+		result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
 		result = prime * result + ((keep == null) ? 0 : keep.hashCode());
 		result = prime * result + keepWithNext;
 		result = prime * result + keepWithNextSheets;
 		result = prime * result + keepWithPreviousSheets;
-		result = prime * result + leftMargin;
-		result = prime * result
-				+ ((listType == null) ? 0 : listType.hashCode());
-		result = prime * result + rightMargin;
-		result = prime * result
-				+ ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
-		result = prime * result
-				+ ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
+		result = prime * result + ((listType == null) ? 0 : listType.hashCode());
+		result = prime * result + ((margin == null) ? 0 : margin.hashCode());
+		result = prime * result + ((padding == null) ? 0 : padding.hashCode());
+		result = prime * result + ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
+		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
 		result = prime * result + textIndent;
-		result = prime * result + topMargin;
-		result = prime
-				* result
-				+ ((verticalPosition == null) ? 0 : verticalPosition.hashCode());
+		result = prime * result + ((verticalPosition == null) ? 0 : verticalPosition.hashCode());
 		return result;
 	}
 
@@ -544,9 +557,6 @@ public class BlockProperties implements Cloneable {
 			return false;
 		}
 		if (blockIndent != other.blockIndent) {
-			return false;
-		}
-		if (bottomMargin != other.bottomMargin) {
 			return false;
 		}
 		if (breakBefore != other.breakBefore) {
@@ -574,13 +584,21 @@ public class BlockProperties implements Cloneable {
 		if (keepWithPreviousSheets != other.keepWithPreviousSheets) {
 			return false;
 		}
-		if (leftMargin != other.leftMargin) {
-			return false;
-		}
 		if (listType != other.listType) {
 			return false;
 		}
-		if (rightMargin != other.rightMargin) {
+		if (margin == null) {
+			if (other.margin != null) {
+				return false;
+			}
+		} else if (!margin.equals(other.margin)) {
+			return false;
+		}
+		if (padding == null) {
+			if (other.padding != null) {
+				return false;
+			}
+		} else if (!padding.equals(other.padding)) {
 			return false;
 		}
 		if (rowSpacing == null) {
@@ -598,9 +616,6 @@ public class BlockProperties implements Cloneable {
 			return false;
 		}
 		if (textIndent != other.textIndent) {
-			return false;
-		}
-		if (topMargin != other.topMargin) {
 			return false;
 		}
 		if (verticalPosition == null) {

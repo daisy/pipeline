@@ -38,7 +38,9 @@ public interface FormattingTypes {
 		/**
 		 * Start block on a new page
 		 */
-		PAGE}; // TODO: Implement ODD_PAGE, EVEN_PAGE 
+		PAGE};
+		// Note:	ODD_PAGE is supported via new sequence
+		// 			EVEN_PAGE is not explicitly supported 
 	/**
 	 * Defines keep types.
 	 */
