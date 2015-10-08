@@ -51,11 +51,11 @@ public class PrintPage implements Dimensions {
 	 */
 	public enum Shape {
 		/**
-		 *  Represents portrait shape, that is to say that getWidth()<getHeight()
+		 *  Represents portrait shape, that is to say that getWidth()&lt;getHeight()
 		 */
 		PORTRAIT,
 		/**
-		 *  Represents landscape shape, that is to say that getWidth>getHeight()
+		 *  Represents landscape shape, that is to say that getWidth&gt;getHeight()
 		 */
 		LANDSCAPE,
 		/**
