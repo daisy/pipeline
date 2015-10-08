@@ -94,7 +94,6 @@ public class PrinterDevice implements Device {
 	/**
 	 * Transmit a file to the device
 	 * @param file the file to transmit
-	 * @throws FileNotFoundException
 	 * @throws PrintException
 	 */
 	public void transmit(File file) throws PrintException {
