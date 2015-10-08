@@ -47,7 +47,7 @@ public class EmbosserBrailleConverter implements BrailleConverter {
 	 * @param fallback the fallback method to use when encountering a character in the range 0x2840-0x28FF
 	 * @param replacement the replacement character, must be in the range 0x2800-0x283F
 	 * @param ignoreCase set to true to ignore character case
-	 * @throws throws IllegalArgumentException if the table length isn't equal to 64 or 256.
+	 * @throws IllegalArgumentException if the table length isn't equal to 64 or 256.
 	 */
 	public EmbosserBrailleConverter(String table, Charset charset, EightDotFallbackMethod fallback, char replacement, boolean ignoreCase) {
 		this(table, charset, fallback, replacement, ignoreCase, null);
@@ -61,7 +61,7 @@ public class EmbosserBrailleConverter implements BrailleConverter {
 	 * @param replacement the replacement character, must be in the range 0x2800-0x283F
 	 * @param ignoreCase set to true to ignore character case
 	 * @param t2bSupplements additional substitutions for text to braille translation. Values MUST be braille characters.
-	 * @throws throws IllegalArgumentException if the table length isn't equal to 64 or 256 or if supplements values are not braille characters.
+	 * @throws IllegalArgumentException if the table length isn't equal to 64 or 256 or if supplements values are not braille characters.
 	 */
 	public EmbosserBrailleConverter(String table, Charset charset, EightDotFallbackMethod fallback, char replacement, boolean ignoreCase, Map<Character, Character> t2bSupplements) {
 		char[] tableDef = table.toCharArray();

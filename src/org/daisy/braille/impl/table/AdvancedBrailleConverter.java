@@ -49,7 +49,7 @@ public class AdvancedBrailleConverter implements BrailleConverter {
 	 * @param replacement the replacement character, must be in the range 0x2800-0x283F
 	 * @param ignoreCase set to true to ignore character case
 	 * @param mode the match mode to use
-	 * @throws throws IllegalArgumentException if the table length isn't equal to 64
+	 * @throws IllegalArgumentException if the table length isn't equal to 64
 	 */
 	public AdvancedBrailleConverter(String[] table, Charset charset, EightDotFallbackMethod fallback, char replacement, boolean ignoreCase, MatchMode mode) {
 		this(table, charset, fallback, replacement, ignoreCase, false, mode);
@@ -63,7 +63,7 @@ public class AdvancedBrailleConverter implements BrailleConverter {
 	 * @param charset the preferred charset as defined in the BrailleConverter interface
 	 * @param ignoreCase set to true to ignore character case
 	 * @param mode the match mode to use
-	 * @throws throws IllegalArgumentException if the table length isn't equal to 256
+	 * @throws IllegalArgumentException if the table length isn't equal to 256
 	 */
 	public AdvancedBrailleConverter(String[] table, Charset charset, boolean ignoreCase, MatchMode mode) {
 		this(table, charset, EightDotFallbackMethod.MASK, null, ignoreCase, true, mode);
