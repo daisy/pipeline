@@ -1,14 +1,14 @@
 package org.daisy.dotify.common.text;
 class DummySplitPoint implements SplitPointUnit {
-	private final boolean breakable, skippable, collapsable;
+	private final boolean breakable, skippable, collapsible;
 	private final float size;
 	static class Builder {
-		boolean breakable = false; boolean skippable = false; boolean collapsable = false; float size = 1;
+		boolean breakable = false; boolean skippable = false; boolean collapsible = false; float size = 1;
 		Builder() {
 		}
 		Builder breakable(boolean value) { breakable = value; return this; }
 		Builder skippable(boolean value) { skippable = value; return this; }
-		Builder collapsable(boolean value) { collapsable = value; return this; }
+		Builder collapsable(boolean value) { collapsible = value; return this; }
 		Builder size(float value) { size = value; return this; }
 		DummySplitPoint build() {
 			return new DummySplitPoint(this);
@@ -19,7 +19,7 @@ class DummySplitPoint implements SplitPointUnit {
 		this.breakable = builder.breakable;
 		this.skippable = builder.skippable;
 		this.size = builder.size;
-		this.collapsable = builder.collapsable;
+		this.collapsible = builder.collapsible;
 	}
 	@Override
 	public boolean isBreakable() {
@@ -34,7 +34,27 @@ class DummySplitPoint implements SplitPointUnit {
 		return size;
 	}
 	@Override
-	public boolean isCollapsable() {
-		return collapsable;
+	public boolean isCollapsible() {
+		return collapsible;
 	}
+
+	@Override
+	public boolean collapsesWith(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		DummySplitPoint other = (DummySplitPoint) obj;
+		if (collapsible != other.collapsible) {
+			return false;
+		}
+		return true;
+	}
+	
+	
 }

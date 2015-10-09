@@ -18,12 +18,20 @@ public interface SplitPointUnit {
 	public boolean isSkippable();
 	
 	/**
-	 * Returns true if this unit can be excluded if it is adjoined with other
-	 * collapsable items with greater size.
+	 * Returns true if this unit can be excluded if an adjoining object 
+	 * <tt>collapsesWith</tt> this unit, but has a greater size.
 	 * 
-	 * @return true if the unit is collapsable, false otherwise
+	 * @return true if the unit is collapsible, false otherwise
 	 */
-	public boolean isCollapsable();
+	public boolean isCollapsible();
+	
+	/**
+	 * Returns true if this unit can collapse with the other object.
+	 * 
+	 * @param obj the other object
+	 * @return true if the objects can collapse, false otherwise
+	 */
+	public boolean collapsesWith(Object obj);
 	
 	/**
 	 * Gets the size of the unit.

@@ -69,7 +69,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	}
 	
 	private SplitPoint<T> findBreakpoint(List<T> units, float breakPoint, boolean force) {
-		int strPos = findBreakpointPosition(units, breakPoint);
+		int strPos = forwardSkippable(units, findCollapse(units, new SizeStep(breakPoint)));
 		// check next unit to see if it can be removed.
 		if (strPos==units.size()-1) { // last unit?
 			List<T> head = units.subList(0, strPos+1);
@@ -120,7 +120,9 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		if (trimLeading) {
 			tail = trimLeading(tail);
 		}
-		head = trimCollapsing(head);
+		TrimStep trimmed = new TrimStep();
+		findCollapse(head, trimmed);
+		head = trimmed.getResult();
 		return new SplitPoint<T>(head, tail, hard);
 	}
 	
@@ -134,35 +136,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 		return ret;
 	}
-	
-	static <T extends SplitPointUnit> List<T> trimCollapsing(List<T> in) {
-		if (in.size()==0) {
-			return in;
-		}
-		List<T> ret = new ArrayList<T>();
-		T maxCollapsable = null;
-		for (T unit : in) {
-			if (unit.isCollapsable()) {
-				if (maxCollapsable!=null) {
-					maxCollapsable = maxSize(maxCollapsable, unit);
-				} else {
-					maxCollapsable = unit;
-				}
-			} else {
-				if (maxCollapsable!=null) {
-					ret.add(maxCollapsable);
-					maxCollapsable = null;
-				}
-				ret.add(unit);
-			}
-		}
-		if (maxCollapsable!=null) {
-			ret.add(maxCollapsable);
-			maxCollapsable = null;
-		}
-		return ret;
-	}
-	
+
 	static <T extends SplitPointUnit> T maxSize(T u1, T u2) {
 		return (u1.getUnitSize()>=u2.getUnitSize()?u1:u2); 
 	}
@@ -187,27 +161,78 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 	}
 	
-	static <T extends SplitPointUnit> int findBreakpointPosition(List<T> charsStr, final float breakPoint) {
+	static <T extends SplitPointUnit> int findCollapse(List<T> charsStr, StepForward<T> impl) {
 		int units = -1;
-		float len = 0;
-		float maxCollapsable = 0;
+		T maxCollapsable = null;
 		for (T c : charsStr) {
 			units++;
-			if (c.isCollapsable()) {
-				maxCollapsable = Math.max(maxCollapsable, c.getUnitSize());
-			} else {
-				if (maxCollapsable>0) {
-					len+=maxCollapsable;
-					maxCollapsable = 0;
+			if (c.isCollapsible()) {
+				if (maxCollapsable!=null) {
+					if (maxCollapsable.collapsesWith(c)) {
+						maxCollapsable = maxSize(maxCollapsable, c);
+					} else {
+						impl.addUnit(maxCollapsable);
+						maxCollapsable = c;
+					}
+				} else {
+					maxCollapsable = c;
 				}
-				len+=c.getUnitSize();
+			} else {
+				if (maxCollapsable!=null) {
+					impl.addUnit(maxCollapsable);
+					maxCollapsable = null;
+				}
+				impl.addUnit(c);
 			}
-			if (len+maxCollapsable>breakPoint) { //time to exit
+			if (impl.overflows(maxCollapsable)) { //time to exit
 				units--;
-				return forwardSkippable(charsStr, units);
+				return units;
 			}
 		}
+		if (maxCollapsable!=null) {
+			impl.addUnit(maxCollapsable);
+			maxCollapsable = null;
+		}
 		return units;
+	}
+	
+	class SizeStep implements StepForward<T> {
+		private float size = 0;
+		private final float breakPoint;
+		
+		SizeStep(float breakPoint) {
+			this.breakPoint = breakPoint;
+		}
+
+		@Override
+		public void addUnit(T unit) {
+			size+=unit.getUnitSize();
+		}
+
+		@Override
+		public boolean overflows(T buffer) {
+			return size+(buffer!=null?buffer.getUnitSize():0)>breakPoint;
+		}
+
+	}
+	
+	class TrimStep implements StepForward<T> {
+		private List<T> ret = new ArrayList<T>();
+
+		@Override
+		public void addUnit(T unit) {
+			ret.add(unit);
+		}
+
+		@Override
+		public boolean overflows(T buffer) {
+			return false;
+		}
+		
+		List<T> getResult() {
+			return ret;
+		}
+		
 	}
 	
 	static int forwardSkippable(List<? extends SplitPointUnit> charsStr, final int pos) {
