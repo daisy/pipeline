@@ -39,7 +39,7 @@ public class BrailloTableProviderTest {
 	@Test
 	public void testListLength() {
 		//BrailloTableProvider bt = new BrailloTableProvider();
-		assertEquals("Assert that all tables have tests by counting the list length", 4, bt.list().size());
+		assertEquals("Assert that all tables have tests by counting the list length", 5, bt.list().size());
 	}
 	
 	@Test
@@ -71,6 +71,20 @@ public class BrailloTableProviderTest {
 		}
 		String lowercase = sb.toString();
 		assertEquals(ta.toBraille(uppercase), ta.toBraille(lowercase));
+	}
+
+	@Test
+	public void testTable6Dot_031_01() {
+		//BrailloTableProvider bt = new BrailloTableProvider();
+		String input = BrailleConstants.BRAILLE_PATTERNS_64;
+		BrailloTableProvider.TableType t = BrailloTableProvider.TableType.BRAILLO_6DOT_031_01;
+		BrailleConverter ta = bt.newTable(t);
+		String text = ta.toText(input);
+		String braille = ta.toBraille(text);
+		assertEquals("Assert that conversion is reversible", input, braille);
+		assertEquals("Assert that text has been transformed", " a,b'k;l&cif/msp|e:h*o!r]djgäntq@\\?ê-u<v{îöëóxèç~û.ü>z=à[ôwï%yúé", text);
+		assertTrue("Assert that table does not support 8-dot", !ta.supportsEightDot());
+		assertEquals("Assert that UTF-8 is the preferred charset", Charset.forName("UTF-8"), ta.getPreferredCharset());
 	}
 	
 	@Test

@@ -42,6 +42,8 @@ public class BrailloTableProvider implements TableProvider {
 		BRAILLO_6DOT_001_00("Braillo USA 6 DOT 001.00", "Compatible with Braillo USA 6 DOT 001.00"), 
 				// US computer braille, compatible with
 				// "Braillo USA 6 DOT 001.00"
+		BRAILLO_6DOT_031_01("Braillo NETHERLANDS 6 DOT 031.01", "Compatible with Braillo NETHERLANDS 6 DOT 031.01"), 
+				// compatible with "Braillo NETHERLANDS 6 DOT 031.01"
 		BRAILLO_6DOT_044_00("Braillo ENGLAND 6 DOT 044.00", "Compatible with Braillo ENGLAND 6 DOT 044.00"), 
 				// US computer braille (lower case), compatible with
 				// "Braillo ENGLAND 6 DOT 044.00" which is identical to
@@ -78,6 +80,7 @@ public class BrailloTableProvider implements TableProvider {
 	public BrailloTableProvider() {
 		tables = new HashMap<String, FactoryProperties>(); 
 		addTable(TableType.BRAILLO_6DOT_001_00);
+		addTable(TableType.BRAILLO_6DOT_031_01);
 		addTable(TableType.BRAILLO_6DOT_044_00);		
 		addTable(TableType.BRAILLO_6DOT_046_01);
 		addTable(TableType.BRAILLO_6DOT_047_01);		
@@ -122,6 +125,21 @@ public class BrailloTableProvider implements TableProvider {
 							new String(
 									" A1B'K2L@CIF/MSP\"E3H9O6R^DJG>NTQ,*5<-U8V.%[$+X!&;:4\\0Z7(_?W]#Y)="),
 							Charset.forName("UTF-8"), fallback, replacement, true, supplements);
+				}};
+		case BRAILLO_6DOT_031_01:
+			return new EmbosserTable(TableType.BRAILLO_6DOT_031_01, EightDotFallbackMethod.values()[0], '\u2800'){
+				 /**
+				 * 
+				 */
+				private static final long serialVersionUID = -3339773640297501373L;
+
+				// nl-NL
+				@Override
+				public BrailleConverter newBrailleConverter() {
+					return new EmbosserBrailleConverter(
+							new String(
+									" a,b'k;l&cif/msp|e:h*o!r]djgäntq@\\?ê-u<v{îöëóxèç~û.ü>z=à[ôwï%yúé"),
+							Charset.forName("UTF-8"), fallback, replacement, true);
 				}};
 		case BRAILLO_6DOT_044_00:
 			return new EmbosserTable(TableType.BRAILLO_6DOT_044_00, EightDotFallbackMethod.values()[0], '\u2800'){
