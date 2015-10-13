@@ -37,10 +37,15 @@ public class SimpleBrailleTranslator implements BrailleTranslator {
 		this.translatorMode = translatorMode;
 		this.hyphenating = true;
 	}
+	
+	@Override
+	public BrailleTranslatorResult translate(Translatable specification) throws TranslationException {
+		BreakPointHandler bph = new BreakPointHandler(filter.filter(specification));
+		return new DefaultBrailleTranslatorResult(bph, finalizer);
+	}
 
 	public BrailleTranslatorResult translate(String text, String locale, TextAttribute atts) throws TranslationException {
-		BreakPointHandler bph = new BreakPointHandler(filter.filter(Translatable.text(text).locale(locale).attributes(atts).hyphenate(isHyphenating()).build()));
-		return new DefaultBrailleTranslatorResult(bph, finalizer);
+		return translate(Translatable.text(text).locale(locale).attributes(atts).hyphenate(isHyphenating()).build());
 	}
 
 	public BrailleTranslatorResult translate(String text, TextAttribute atts) {

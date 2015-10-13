@@ -67,5 +67,15 @@ public class SwedishMarkerProcessorFactoryTest {
 		String actual = processor.processAttributes(atts.build(3), text);
 		assertEquals("", "\u2820\u2804\u28003rd", actual);
 	}
+	
+	@Test
+	public void testNested() {
+		String text = "page 1";
+		DefaultTextAttribute.Builder atts = new DefaultTextAttribute.Builder("strong");
+		atts.add(5);
+		atts.add(new DefaultTextAttribute.Builder("em").build(1));
+		String actual = processor.processAttributes(new DefaultTextAttribute.Builder().add(atts.build(6)).build(6), text);
+		assertEquals("", "⠨⠨page ⠠⠄1⠱", actual);
+	}
 
 }
