@@ -24,4 +24,8 @@ public class CurrentPageField extends PagenumField {
 		super(style);
 	}
 
+	public CurrentPageField(NumeralStyle style, String textStyle) {
+		super(style, textStyle);
+	}
+
 }

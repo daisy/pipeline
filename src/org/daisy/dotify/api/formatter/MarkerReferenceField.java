@@ -21,12 +21,18 @@ public class MarkerReferenceField implements Field {
 	private final String markerName;
 	private final MarkerSearchDirection dir;
 	private final MarkerSearchScope scope;
-
+	private final String textStyle;
+	
 	public MarkerReferenceField(String markerName, MarkerSearchDirection dir, MarkerSearchScope scope) {
+		this(markerName, dir, scope, null);
+	}
+
+	public MarkerReferenceField(String markerName, MarkerSearchDirection dir, MarkerSearchScope scope, String textStyle) {
 		super();
 		this.markerName = markerName;
 		this.dir = dir;
 		this.scope = scope;
+		this.textStyle = textStyle;
 	}
 
 	public String getName() {
@@ -39,6 +45,11 @@ public class MarkerReferenceField implements Field {
 	
 	public MarkerSearchScope getSearchScope() {
 		return scope;
+	}
+
+	@Override
+	public String getTextStyle() {
+		return textStyle;
 	}
 
 }

@@ -15,4 +15,8 @@ public class PagenumField extends NumeralField {
 		super(style);
 	}
 
+	public PagenumField(NumeralStyle style, String textStyle) {
+		super(style, textStyle);
+	}
+
 }

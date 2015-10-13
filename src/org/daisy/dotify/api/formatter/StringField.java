@@ -7,6 +7,7 @@ package org.daisy.dotify.api.formatter;
  */
 public class StringField implements Field {
 	private final Object obj;
+	private final String textStyle;
 	
 	/**
 	 * Creates a new string field using the specified object.
@@ -15,12 +16,20 @@ public class StringField implements Field {
 	 * @param obj the object to use for this field.
 	 */
 	public StringField(Object obj) {
+		this(obj, null);
+	}
+	public StringField(Object obj, String textStyle) {
 		this.obj = obj;
+		this.textStyle = textStyle;
 	}
 
 	@Override
 	public String toString() {
 		return obj.toString();
+	}
+	@Override
+	public String getTextStyle() {
+		return textStyle;
 	}
 
 }
