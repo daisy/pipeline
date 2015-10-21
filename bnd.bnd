@@ -9,7 +9,7 @@ Export-Package:  \
 	org.daisy.dotify.api.formatter,\
 	org.daisy.dotify.api.engine,\
 	org.daisy.dotify.api.writer
-Bundle-Version: 1.6.1-SNAPSHOT
+Bundle-Version: 1.7.0-SNAPSHOT
 Private-Package:  \
 	org.daisy.dotify.consumer.hyphenator,\
 	org.daisy.dotify.consumer.text,\

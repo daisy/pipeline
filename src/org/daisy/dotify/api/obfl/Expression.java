@@ -23,8 +23,12 @@ public interface Expression {
 	 * @param expr
 	 * @param variables
 	 * @return returns the evaluation result
+	 * @deprecated replace variables beforehand
 	 */
 	public Object evaluate(String expr, Map<String, String> variables);
 
+	/**
+	 * @deprecated replace variables beforehand
+	 */
 	public Object evaluate(String expr, String... vars);
 }
