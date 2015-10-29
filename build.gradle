@@ -10,8 +10,8 @@ javadoc {
 	options.encoding = 'UTF-8'
 	options.links('http://docs.oracle.com/javase/6/docs/api/');
 }
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 group = "org.daisy.braille"
 
