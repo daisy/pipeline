@@ -11,6 +11,7 @@ import java.util.List;
 public class SplitPoint<T extends SplitPointUnit> {
 
 	private final List<T> head;
+	private final List<T> supplements;
 	private final List<T> tail;
 	private final boolean hardBreak;
 
@@ -20,14 +21,18 @@ public class SplitPoint<T extends SplitPointUnit> {
 	 * @param tail the part of the original SplitPointUnit list that is left
 	 * @param hardBreak set to true if a break point could not be achieved with respect for break point boundaries 
 	 */
-	public SplitPoint(List<T> head, List<T> tail, boolean hardBreak) {
+	public SplitPoint(List<T> head, List<T> supplements, List<T> tail, boolean hardBreak) {
 		if (head == null) {
 			head = Collections.emptyList();
+		}
+		if (supplements == null) {
+			supplements = Collections.emptyList();
 		}
 		if (tail == null) {
 			tail = Collections.emptyList();
 		}
 		this.head = head;
+		this.supplements = supplements;
 		this.tail = tail;
 		this.hardBreak = hardBreak;
 	}
@@ -38,6 +43,11 @@ public class SplitPoint<T extends SplitPointUnit> {
 	 */
 	public List<T> getHead() {
 		return head;
+	}
+	
+	
+	public List<T> getSupplements() {
+		return supplements;
 	}
 
 	/**

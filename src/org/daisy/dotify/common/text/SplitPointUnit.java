@@ -1,5 +1,7 @@
 package org.daisy.dotify.common.text;
 
+import java.util.List;
+
 public interface SplitPointUnit {
 	
 	/**
@@ -40,4 +42,11 @@ public interface SplitPointUnit {
 	 */
 	public float getUnitSize();
 	
+	/**
+	 * Gets the supplementary IDs for this unit.
+	 * 
+	 * @return returns a list of the supplementary IDs
+	 */
+	public List<String> getSupplementaryIDs();
+
 }

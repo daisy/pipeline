@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -164,6 +166,30 @@ public class SplitPointHandlerTest {
 		SplitPoint<DummySplitPoint> bp = bph.split(6, false, Arrays.asList(c, c, x, y, c));
 		assertEquals(Arrays.asList(c, c), bp.getHead());
 		assertEquals(Arrays.asList(y, c), bp.getTail());
+	}
+	
+	@Test
+	public void testSupplementary_01() {
+		DummySplitPoint s1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		DummySplitPoint s2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		DummySplitPoint s3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		Map<String, DummySplitPoint> supps = new HashMap<String, DummySplitPoint>();
+		supps.put("s1", s1);
+		supps.put("s2", s2);
+		supps.put("s3", s3);
+		
+		DummySplitPoint c1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).supplementID("s1").build();
+		DummySplitPoint c2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		DummySplitPoint c3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).supplementID("s1").supplementID("s2").build();
+		DummySplitPoint c4 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		DummySplitPoint c5 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<DummySplitPoint>();
+
+		SplitPointData<DummySplitPoint> spd = new SplitPointData<DummySplitPoint>(Arrays.asList(c1, c2, c3, c4, c5), supps);
+		SplitPoint<DummySplitPoint> bp = bph.split(6, false, spd);
+		assertEquals(Arrays.asList(c1, c2, c3, c4), bp.getHead());
+		assertEquals(Arrays.asList(c5), bp.getTail());
+		assertEquals(Arrays.asList(s1, s2), bp.getSupplements());
 	}
 
 }
