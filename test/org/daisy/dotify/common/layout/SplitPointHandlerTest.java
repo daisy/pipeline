@@ -1,4 +1,4 @@
-package org.daisy.dotify.common.text;
+package org.daisy.dotify.common.layout;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.daisy.dotify.common.layout.DummySplitPoint.Builder;
 import org.junit.Test;
 
 public class SplitPointHandlerTest {

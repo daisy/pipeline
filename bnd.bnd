@@ -4,6 +4,7 @@
 	junit.osgi
 Export-Package:  \
 	org.daisy.dotify.common.io,\
+	org.daisy.dotify.common.layout,\
 	org.daisy.dotify.common.xml,\
 	org.daisy.dotify.common.text,\
 	org.daisy.dotify.common.braille,\

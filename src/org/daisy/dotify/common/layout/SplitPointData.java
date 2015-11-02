@@ -1,4 +1,4 @@
-package org.daisy.dotify.common.text;
+package org.daisy.dotify.common.layout;
 
 import java.util.Arrays;
 import java.util.Collections;

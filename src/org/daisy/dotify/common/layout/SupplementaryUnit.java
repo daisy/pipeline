@@ -1,4 +1,4 @@
-package org.daisy.dotify.common.text;
+package org.daisy.dotify.common.layout;
 
 /**
  * A supplementary unit is a unit that should be included with the 
