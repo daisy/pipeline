@@ -24,9 +24,9 @@ public class SwedishBrailleTranslatorTest {
 
 	@Test
 	@Ignore
-	public void testTranslator() {
+	public void testTranslator() throws TranslationException {
 		//Setup
-		BrailleTranslatorResult btr = translator.translate(TEST_INPUT_STRING_1);
+		BrailleTranslatorResult btr = translator.translate(Translatable.text(TEST_INPUT_STRING_1).build());
 		//Test
 		assertEquals("Assert that the output is translated.", 
 				"⠠⠎⠅⠊⠇⠇⠝⠁⠙⠑⠝\u2800⠍⠑⠇⠇⠁⠝\u2800⠁⠗⠃⠑⠞⠎\u2824\u2800⠕⠉⠓\u2800⠧⠊⠇⠕⠙⠁⠛⠁⠗\u2800⠃⠇⠑⠧\u2800⠍⠊⠝⠙⠗⠑\u2800⠎⠅⠁⠗⠏⠆\u2800⠓⠕⠝\u2800⠅⠥⠝⠙⠑\u2800⠞⠊⠇⠇⠡⠞⠁\u2800⠎⠊⠛\u2800⠧⠊⠇⠕⠙⠁⠛⠁⠗\u2800⠍⠊⠞⠞\u2800⠊\u2800⠧⠑⠉⠅⠁⠝⠄",
@@ -35,9 +35,9 @@ public class SwedishBrailleTranslatorTest {
 	
 	@Test
 	@Ignore
-	public void testTranslator_01firstRow() {
+	public void testTranslator_01firstRow() throws TranslationException {
 		//Setup
-		BrailleTranslatorResult btr = translator.translate(TEST_INPUT_STRING_1);
+		BrailleTranslatorResult btr = translator.translate(Translatable.text(TEST_INPUT_STRING_1).build());
 
 		//Test
 		assertEquals("Assert that limit is handled correctly.", 
@@ -49,7 +49,7 @@ public class SwedishBrailleTranslatorTest {
 	@Ignore
 	public void testTranslatorWithAnotherLanguage() throws TranslationException {
 		//Setup
-		BrailleTranslatorResult btr = translator.translate(TEST_INPUT_STRING_1, "en");
+		BrailleTranslatorResult btr = translator.translate(Translatable.text(TEST_INPUT_STRING_1).locale("en").build());
 		//Test
 		assertEquals("Assert that the output is translated.", 
 				"⠠⠎⠅⠊⠇⠇⠝⠁⠙⠑⠝\u2800⠍⠑⠇⠇⠁⠝\u2800⠁⠗⠃⠑⠞⠎\u2824\u2800⠕⠉⠓\u2800⠧⠊⠇⠕⠙⠁⠛⠁⠗\u2800⠃⠇⠑⠧\u2800⠍⠊⠝⠙⠗⠑\u2800⠎⠅⠁⠗⠏⠆\u2800⠓⠕⠝\u2800⠅⠥⠝⠙⠑\u2800⠞⠊⠇⠇⠡⠞⠁\u2800⠎⠊⠛\u2800⠧⠊⠇⠕⠙⠁⠛⠁⠗\u2800⠍⠊⠞⠞\u2800⠊\u2800⠧⠑⠉⠅⠁⠝⠄",
@@ -58,11 +58,11 @@ public class SwedishBrailleTranslatorTest {
 
 	@Test
 	@Ignore
-	public void testTranslatorAttributes_StyleBoldSingleWord() {
+	public void testTranslatorAttributes_StyleBoldSingleWord() throws TranslationException {
 		DefaultTextAttribute.Builder atts = new DefaultTextAttribute.Builder();
 		atts.add(new DefaultTextAttribute.Builder("strong").build(10));
 		atts.add(new DefaultTextAttribute.Builder().build(95));
-		BrailleTranslatorResult btr = translator.translate(TEST_INPUT_STRING_1, atts.build(105));
+		BrailleTranslatorResult btr = translator.translate(Translatable.text(TEST_INPUT_STRING_1).attributes(atts.build(105)).build());
 		assertEquals("Assert that the style is translated.", 
 				"\u2828⠠⠎⠅⠊⠇⠇⠝⠁⠙⠑⠝\u2800⠍⠑⠇⠇⠁⠝\u2800⠁⠗⠃⠑⠞⠎\u2824\u2800⠕⠉⠓\u2800⠧⠊⠇⠕⠙⠁⠛⠁⠗\u2800⠃⠇⠑⠧\u2800⠍⠊⠝⠙⠗⠑\u2800⠎⠅⠁⠗⠏⠆\u2800⠓⠕⠝\u2800⠅⠥⠝⠙⠑\u2800⠞⠊⠇⠇⠡⠞⠁\u2800⠎⠊⠛\u2800⠧⠊⠇⠕⠙⠁⠛⠁⠗\u2800⠍⠊⠞⠞\u2800⠊\u2800⠧⠑⠉⠅⠁⠝⠄",
 				btr.getTranslatedRemainder());
@@ -70,11 +70,11 @@ public class SwedishBrailleTranslatorTest {
 
 	@Test
 	@Ignore
-	public void testTranslatorAttributes_StyleBoldMultipleWords() {
+	public void testTranslatorAttributes_StyleBoldMultipleWords() throws TranslationException {
 		DefaultTextAttribute.Builder atts = new DefaultTextAttribute.Builder();
 		atts.add(new DefaultTextAttribute.Builder("strong").build(17));
 		atts.add(new DefaultTextAttribute.Builder().build(88));
-		BrailleTranslatorResult btr = translator.translate(TEST_INPUT_STRING_1, atts.build(TEST_INPUT_STRING_1.length()));
+		BrailleTranslatorResult btr = translator.translate(Translatable.text(TEST_INPUT_STRING_1).attributes(atts.build(TEST_INPUT_STRING_1.length())).build());
 		assertEquals("Assert that the style is translated.", "\u2828\u2828⠠⠎⠅⠊⠇⠇⠝⠁⠙⠑⠝\u2800⠍⠑⠇⠇⠁⠝\u2831\u2800⠁⠗⠃⠑⠞⠎\u2824\u2800⠕⠉⠓\u2800⠧⠊⠇⠕⠙⠁⠛⠁⠗\u2800⠃⠇⠑⠧\u2800⠍⠊⠝⠙⠗⠑\u2800⠎⠅⠁⠗⠏⠆\u2800⠓⠕⠝\u2800⠅⠥⠝⠙⠑\u2800⠞⠊⠇⠇⠡⠞⠁\u2800⠎⠊⠛\u2800⠧⠊⠇⠕⠙⠁⠛⠁⠗\u2800⠍⠊⠞⠞\u2800⠊\u2800⠧⠑⠉⠅⠁⠝⠄", btr.getTranslatedRemainder());
 	}
 	
@@ -91,12 +91,12 @@ public class SwedishBrailleTranslatorTest {
 
 	@Test
 	@Ignore
-	public void testTranslatorAttributes_DisallowedStructure() {
+	public void testTranslatorAttributes_DisallowedStructure() throws TranslationException {
 		String numeric = "123";
 		DefaultTextAttribute.Builder atts = new DefaultTextAttribute.Builder("sub");
 		atts.add(new DefaultTextAttribute.Builder("sup").build(2));
 		atts.add(1);
-		BrailleTranslatorResult btr = translator.translate(numeric, atts.build(numeric.length()));
+		BrailleTranslatorResult btr = translator.translate(Translatable.text(numeric).attributes(atts.build(numeric.length())).build());
 		System.out.println(btr.getTranslatedRemainder());
 	}
 
