@@ -212,7 +212,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 			if (idList!=null) {
 				for (String id : idList) {
 					if (ids.add(id)) { //id didn't already exist in the list
-						size+=map.get(id).getUnitSize();
+						T item = map.get(id);
+						if (item!=null) {
+							size+=item.getUnitSize();
+						}
 					}
 				}
 			}
@@ -230,7 +233,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 			if (idList!=null) {
 				for (String id : idList) {
 					if (!ids.contains(id)) { //id didn't already exist in the list
-						ret+=map.get(id).getUnitSize();
+						T item = map.get(id);
+						if (item!=null) {
+							ret+=item.getUnitSize();
+						}
 					}
 				}
 			}
@@ -259,7 +265,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 			if (idList!=null) {
 				for (String id : idList) {
 					if (ids.add(id)) { //id didn't already exist in the list
-						supplements.add(map.get(id));
+						T item = map.get(id);
+						if (item!=null) {
+							supplements.add(item);
+						}
 					}
 				}
 			}
@@ -322,7 +331,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 			if (suppIds!=null) {
 				for (String id : suppIds) {
 					if (ids.add(id)) { //id didn't already exist in the list
-						ret += map.get(id).getUnitSize();
+						T item = map.get(id);
+						if (item!=null) {
+							ret += item.getUnitSize();
+						}
 					}
 				}
 			}
