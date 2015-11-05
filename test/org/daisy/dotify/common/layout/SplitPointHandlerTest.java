@@ -4,10 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.daisy.dotify.common.layout.DummySplitPoint.Builder;
 import org.junit.Test;
 
 public class SplitPointHandlerTest {
@@ -171,13 +168,21 @@ public class SplitPointHandlerTest {
 	
 	@Test
 	public void testSupplementary_01() {
-		DummySplitPoint s1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
-		DummySplitPoint s2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
-		DummySplitPoint s3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
-		Map<String, DummySplitPoint> supps = new HashMap<String, DummySplitPoint>();
-		supps.put("s1", s1);
-		supps.put("s2", s2);
-		supps.put("s3", s3);
+		final DummySplitPoint s1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		final DummySplitPoint s2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		final DummySplitPoint s3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		Supplements<DummySplitPoint> supps = new Supplements<DummySplitPoint>(){
+
+			@Override
+			public DummySplitPoint get(String id) {
+				switch (id) {
+					case "s1": return s1;
+					case "s2": return s2;
+					case "s3": return s3;
+					default: return null;
+				}
+			}
+		};
 		
 		DummySplitPoint c1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).supplementID("s1").build();
 		DummySplitPoint c2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();

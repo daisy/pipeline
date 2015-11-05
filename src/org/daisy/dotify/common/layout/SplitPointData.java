@@ -1,13 +1,11 @@
 package org.daisy.dotify.common.layout;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public final class SplitPointData<T extends SplitPointUnit> {
 	private final List<T> units;
-	private final Map<String, T> supplements;
+	private final Supplements<T> supplements;
 
 	public SplitPointData(T ... units) {
 		this(Arrays.asList(units));
@@ -17,10 +15,14 @@ public final class SplitPointData<T extends SplitPointUnit> {
 		this(units, null);
 	}
 	
-	public SplitPointData(List<T> units, Map<String, T> supplements) {
+	public SplitPointData(List<T> units, Supplements<T> supplements) {
 		this.units = units;
 		if (supplements==null) {
-			this.supplements = Collections.emptyMap();
+			this.supplements = new Supplements<T>(){
+				@Override
+				public T get(String id) {
+					return null;
+				}};
 		} else {
 			this.supplements = supplements;
 		}
@@ -30,7 +32,7 @@ public final class SplitPointData<T extends SplitPointUnit> {
 		return units;
 	}
 
-	public Map<String, T> getSupplements() {
+	public Supplements<T> getSupplements() {
 		return supplements;
 	}
 

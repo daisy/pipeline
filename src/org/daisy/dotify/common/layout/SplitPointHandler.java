@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -66,7 +65,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		this.trimTrailing = trimTrailing;
 	}
 	
-	private SplitPoint<T> findBreakpoint(List<T> units, float breakPoint, Map<String, T> map, boolean force) {
+	private SplitPoint<T> findBreakpoint(List<T> units, float breakPoint, Supplements<T> map, boolean force) {
 		int strPos = forwardSkippable(units, findCollapse(units, new SizeStep(breakPoint, map)));
 		// check next unit to see if it can be removed.
 		if (strPos==units.size()-1) { // last unit?
@@ -82,7 +81,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 	}
 	
-	private SplitPoint<T> newBreakpointFromPosition(List<T> units, int strPos, Map<String, T> map, boolean force) {
+	private SplitPoint<T> newBreakpointFromPosition(List<T> units, int strPos, Supplements<T> map, boolean force) {
 		// back up
 		int i=findBreakpointBefore(units, strPos);
 		List<T> head;
@@ -104,7 +103,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		return finalizeBreakpointFull(units, head, tailStart, map, hard);
 	}
 	
-	private SplitPoint<T> finalizeBreakpointFull(List<T> units, List<T> head, int tailStart, Map<String, T> map, boolean hard) {
+	private SplitPoint<T> finalizeBreakpointFull(List<T> units, List<T> head, int tailStart, Supplements<T> map, boolean hard) {
 		List<T> tail = getTail(units, tailStart);
 
 		if (trimTrailing) {
@@ -114,7 +113,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		return finalizeBreakpointTrimTail(head, tail, map, hard);
 	}
 
-	private SplitPoint<T> finalizeBreakpointTrimTail(List<T> head, List<T> tail, Map<String, T> map, boolean hard) {
+	private SplitPoint<T> finalizeBreakpointTrimTail(List<T> head, List<T> tail, Supplements<T> map, boolean hard) {
 		if (trimLeading) {
 			tail = trimLeading(tail);
 		}
@@ -196,11 +195,11 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	
 	class SizeStep implements StepForward<T> {
 		private float size = 0;
-		private final Map<String, T> map;
+		private final Supplements<T> map;
 		private final Set<String> ids;
 		private final float breakPoint;
 		
-		SizeStep(float breakPoint, Map<String, T> map) {
+		SizeStep(float breakPoint, Supplements<T> map) {
 			this.breakPoint = breakPoint;
 			this.map = map;
 			this.ids = new HashSet<String>();
@@ -249,10 +248,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	class TrimStep implements StepForward<T> {
 		private final List<T> ret;
 		private final List<T> supplements;
-		private final Map<String, T> map;
+		private final Supplements<T> map;
 		private final Set<String> ids;
 		
-		TrimStep(Map<String, T> map) {
+		TrimStep(Supplements<T> map) {
 			this.ret = new ArrayList<T>();
 			this.supplements = new ArrayList<T>();
 			this.map = map;
@@ -323,7 +322,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		return i;
 	}
 	
-	static <T extends SplitPointUnit> float totalSize(List<T> units, Map<String, T> map) {
+	static <T extends SplitPointUnit> float totalSize(List<T> units, Supplements<T> map) {
 		float ret = 0;
 		Set<String> ids = new HashSet<String>();
 		for (T unit : units) {
