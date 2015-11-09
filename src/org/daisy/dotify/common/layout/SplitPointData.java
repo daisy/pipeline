@@ -7,6 +7,7 @@ public final class SplitPointData<T extends SplitPointUnit> {
 	private final List<T> units;
 	private final Supplements<T> supplements;
 
+	@SafeVarargs
 	public SplitPointData(T ... units) {
 		this(Arrays.asList(units));
 	}

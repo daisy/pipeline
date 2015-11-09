@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A SplitPoint is a data object to keep the information about a split point result.
+ * Provides a data object to keep the information about a split point result.
  * 
  * @author Joel Håkansson
  */
@@ -50,7 +50,10 @@ public class SplitPoint<T extends SplitPointUnit> {
 		return head;
 	}
 	
-	
+	/**
+	 * Gets the supplements.
+	 * @return returns the supplements
+	 */
 	public List<T> getSupplements() {
 		return supplements;
 	}

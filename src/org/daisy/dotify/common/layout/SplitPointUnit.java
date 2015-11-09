@@ -2,6 +2,11 @@ package org.daisy.dotify.common.layout;
 
 import java.util.List;
 
+/**
+ * Provides an interface for split point units.
+ * @author Joel Håkansson
+ *
+ */
 public interface SplitPointUnit {
 	
 	/**

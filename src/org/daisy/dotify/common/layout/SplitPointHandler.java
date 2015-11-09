@@ -23,7 +23,8 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		this.trimTrailing = true;
 	}
 	
-	public SplitPoint<T> split(float breakPoint, boolean force, T ... units) {
+	@SafeVarargs
+	public final SplitPoint<T> split(float breakPoint, boolean force, T ... units) {
 		return split(breakPoint, force, new SplitPointData<T>(units));
 	}
 
@@ -156,11 +157,11 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 					if (maxCollapsable.collapsesWith(c)) {
 						if (maxSize(maxCollapsable, c)==c) {
 							//new one is now max, add the previous to collapsed
-							impl.addCollapsed(maxCollapsable);
+							impl.addDiscarded(maxCollapsable);
 							maxCollapsable = c;
 						} else {
 							//old one is max, add the new one to collapsed
-							impl.addCollapsed(c);
+							impl.addDiscarded(c);
 						}
 					} else {
 						impl.addUnit(maxCollapsable);
@@ -248,7 +249,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 
 		@Override
-		public void addCollapsed(T unit) {
+		public void addDiscarded(T unit) {
 			//Nothing to do
 		}
 
@@ -257,14 +258,14 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	class TrimStep implements StepForward<T> {
 		private final List<T> ret;
 		private final List<T> supplements;
-		private final List<T> collapsed;
+		private final List<T> discarded;
 		private final Supplements<T> map;
 		private final Set<String> ids;
 		
 		TrimStep(Supplements<T> map) {
 			this.ret = new ArrayList<T>();
 			this.supplements = new ArrayList<T>();
-			this.collapsed = new ArrayList<T>();
+			this.discarded = new ArrayList<T>();
 			this.map = map;
 			this.ids = new HashSet<String>();
 		}
@@ -299,12 +300,12 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 		
 		List<T> getDiscarded() {
-			return collapsed;
+			return discarded;
 		}
 
 		@Override
-		public void addCollapsed(T unit) {
-			collapsed.add(unit);
+		public void addDiscarded(T unit) {
+			discarded.add(unit);
 		}
 		
 	}
