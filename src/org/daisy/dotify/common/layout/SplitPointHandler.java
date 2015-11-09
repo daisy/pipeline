@@ -198,6 +198,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		private final Supplements<T> map;
 		private final Set<String> ids;
 		private final float breakPoint;
+		private T lastUnit;
 		
 		SizeStep(float breakPoint, Supplements<T> map) {
 			this.breakPoint = breakPoint;
@@ -207,6 +208,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 
 		@Override
 		public void addUnit(T unit) {
+			if (lastUnit!=null) {
+				size+=lastUnit.getUnitSize();
+				lastUnit = null;
+			}
 			List<String> idList = unit.getSupplementaryIDs();
 			if (idList!=null) {
 				for (String id : idList) {
@@ -218,15 +223,19 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 					}
 				}
 			}
-			size+=unit.getUnitSize();
+			lastUnit=unit;
 		}
 
 		@Override
 		public boolean overflows(T buffer) {
-			return size+(buffer!=null?unitSize(buffer):0)>breakPoint;
+			return size+(
+					buffer!=null?
+							lastUnitSize(buffer) + (lastUnit!=null?lastUnit.getUnitSize():0):
+							lastUnit!=null?lastUnit.getLastUnitSize():0
+						)>breakPoint;
 		}
 		
-		private float unitSize(T b) {
+		private float lastUnitSize(T b) {
 			float ret = 0;
 			List<String> idList = b.getSupplementaryIDs();
 			if (idList!=null) {
@@ -239,7 +248,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 					}
 				}
 			}
-			ret += b.getUnitSize();
+			ret += b.getLastUnitSize();
 			return ret;
 		}
 
@@ -325,7 +334,8 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	static <T extends SplitPointUnit> float totalSize(List<T> units, Supplements<T> map) {
 		float ret = 0;
 		Set<String> ids = new HashSet<String>();
-		for (T unit : units) {
+		for (int i=0; i<units.size(); i++) {
+			T unit = units.get(i);
 			List<String> suppIds = unit.getSupplementaryIDs();
 			if (suppIds!=null) {
 				for (String id : suppIds) {
@@ -337,7 +347,11 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 					}
 				}
 			}
-			ret += unit.getUnitSize();
+			if (i==units.size()-1) {
+				ret += unit.getLastUnitSize();
+			} else {
+				ret += unit.getUnitSize();
+			}
 		}
 		return ret;
 	}

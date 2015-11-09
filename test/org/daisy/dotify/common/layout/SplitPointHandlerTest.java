@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -188,6 +190,85 @@ public class SplitPointHandlerTest {
 		DummySplitPoint c2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
 		DummySplitPoint c3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).supplementID("s1").supplementID("s2").build();
 		DummySplitPoint c4 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		DummySplitPoint c5 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<DummySplitPoint>();
+
+		SplitPointData<DummySplitPoint> spd = new SplitPointData<DummySplitPoint>(Arrays.asList(c1, c2, c3, c4, c5), supps);
+		SplitPoint<DummySplitPoint> bp = bph.split(6, false, spd);
+		assertEquals(Arrays.asList(c1, c2, c3, c4), bp.getHead());
+		assertEquals(Arrays.asList(c5), bp.getTail());
+		assertEquals(Arrays.asList(s1, s2), bp.getSupplements());
+	}
+	
+	@Test
+	public void testTotalSize_01() {
+		final DummySplitPoint s1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).minSize(0.5f).build();
+		final DummySplitPoint s2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).minSize(0.5f).build();
+		final DummySplitPoint s3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).minSize(0.5f).build();
+		Supplements<DummySplitPoint> empty = new Supplements<DummySplitPoint>() {
+
+			@Override
+			public DummySplitPoint get(String id) {
+				return null;
+			}};
+		float res = SplitPointHandler.totalSize(Arrays.asList(s1, s2, s3), empty);
+		assertEquals(2.5, res, 0);
+	}
+	
+	@Test
+	public void testMinimumSize_01() {
+		final DummySplitPoint s1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		final DummySplitPoint s2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		final DummySplitPoint s3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		Supplements<DummySplitPoint> supps = new Supplements<DummySplitPoint>(){
+
+			@Override
+			public DummySplitPoint get(String id) {
+				switch (id) {
+					case "s1": return s1;
+					case "s2": return s2;
+					case "s3": return s3;
+					default: return null;
+				}
+			}
+		};
+		
+		DummySplitPoint c1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).supplementID("s1").build();
+		DummySplitPoint c2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		DummySplitPoint c3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).supplementID("s1").supplementID("s2").build();
+		DummySplitPoint c4 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1.5f).minSize(1).build();
+		DummySplitPoint c5 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<DummySplitPoint>();
+
+		SplitPointData<DummySplitPoint> spd = new SplitPointData<DummySplitPoint>(Arrays.asList(c1, c2, c3, c4, c5), supps);
+		SplitPoint<DummySplitPoint> bp = bph.split(6, false, spd);
+		assertEquals(Arrays.asList(c1, c2, c3, c4), bp.getHead());
+		assertEquals(Arrays.asList(c5), bp.getTail());
+		assertEquals(Arrays.asList(s1, s2), bp.getSupplements());
+	}
+	
+	@Test
+	public void testMinimumSize_02() {
+		final DummySplitPoint s1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		final DummySplitPoint s2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		final DummySplitPoint s3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		Supplements<DummySplitPoint> supps = new Supplements<DummySplitPoint>(){
+
+			@Override
+			public DummySplitPoint get(String id) {
+				switch (id) {
+					case "s1": return s1;
+					case "s2": return s2;
+					case "s3": return s3;
+					default: return null;
+				}
+			}
+		};
+		
+		DummySplitPoint c1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).minSize(0).supplementID("s1").build();
+		DummySplitPoint c2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).minSize(0).build();
+		DummySplitPoint c3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).minSize(0).supplementID("s1").supplementID("s2").build();
+		DummySplitPoint c4 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1.5f).minSize(1).build();
 		DummySplitPoint c5 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<DummySplitPoint>();
 

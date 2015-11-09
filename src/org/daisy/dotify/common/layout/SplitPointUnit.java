@@ -43,6 +43,14 @@ public interface SplitPointUnit {
 	public float getUnitSize();
 	
 	/**
+	 * Gets the size of the unit if it is the last unit.
+	 * 
+	 * @return returns the size of the unit when placed last
+	 * in the result.
+	 */
+	public float getLastUnitSize();
+	
+	/**
 	 * Gets the supplementary IDs for this unit.
 	 * 
 	 * @return returns a list of the supplementary IDs
