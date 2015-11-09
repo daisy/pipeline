@@ -53,8 +53,8 @@ public class BlockProperties implements Cloneable {
 		BreakBefore breakBefore = BreakBefore.AUTO;
 		Keep keep = Keep.AUTO;
 		Alignment align = Alignment.LEFT;
-		int orphans = 2;
-		int widows = 2;
+		int orphans = 1;
+		int widows = 1;
 		int keepWithNext = 0;
 		int keepWithPreviousSheets = 0;
 		int keepWithNextSheets = 0;
