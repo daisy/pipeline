@@ -13,6 +13,7 @@ public class SplitPoint<T extends SplitPointUnit> {
 	private final List<T> head;
 	private final List<T> supplements;
 	private final List<T> tail;
+	private final List<T> discarded;
 	private final boolean hardBreak;
 
 	/**
@@ -21,7 +22,7 @@ public class SplitPoint<T extends SplitPointUnit> {
 	 * @param tail the part of the original SplitPointUnit list that is left
 	 * @param hardBreak set to true if a break point could not be achieved with respect for break point boundaries 
 	 */
-	public SplitPoint(List<T> head, List<T> supplements, List<T> tail, boolean hardBreak) {
+	public SplitPoint(List<T> head, List<T> supplements, List<T> tail, List<T> discarded, boolean hardBreak) {
 		if (head == null) {
 			head = Collections.emptyList();
 		}
@@ -31,9 +32,13 @@ public class SplitPoint<T extends SplitPointUnit> {
 		if (tail == null) {
 			tail = Collections.emptyList();
 		}
+		if (discarded == null) {
+			discarded = Collections.emptyList();
+		}
 		this.head = head;
 		this.supplements = supplements;
 		this.tail = tail;
+		this.discarded = discarded;
 		this.hardBreak = hardBreak;
 	}
 	
@@ -59,6 +64,14 @@ public class SplitPoint<T extends SplitPointUnit> {
 	}
 	
 	/**
+	 * Gets discarded units
+	 * @return returns the discarded units, if any
+	 */
+	public List<T> getDiscarded() {
+		return discarded;
+	}
+	
+	/**
 	 * Test if this SplitPoint was achieved by breaking on a unit other 
 	 * than a breakpoint.
 	 * @return returns true if this SplitPoint was achieved by breaking on a unit other than a breakpoint
@@ -71,8 +84,10 @@ public class SplitPoint<T extends SplitPointUnit> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((discarded == null) ? 0 : discarded.hashCode());
 		result = prime * result + (hardBreak ? 1231 : 1237);
 		result = prime * result + ((head == null) ? 0 : head.hashCode());
+		result = prime * result + ((supplements == null) ? 0 : supplements.hashCode());
 		result = prime * result + ((tail == null) ? 0 : tail.hashCode());
 		return result;
 	}
@@ -89,6 +104,13 @@ public class SplitPoint<T extends SplitPointUnit> {
 			return false;
 		}
 		SplitPoint<?> other = (SplitPoint<?>) obj;
+		if (discarded == null) {
+			if (other.discarded != null) {
+				return false;
+			}
+		} else if (!discarded.equals(other.discarded)) {
+			return false;
+		}
 		if (hardBreak != other.hardBreak) {
 			return false;
 		}
@@ -97,6 +119,13 @@ public class SplitPoint<T extends SplitPointUnit> {
 				return false;
 			}
 		} else if (!head.equals(other.head)) {
+			return false;
+		}
+		if (supplements == null) {
+			if (other.supplements != null) {
+				return false;
+			}
+		} else if (!supplements.equals(other.supplements)) {
 			return false;
 		}
 		if (tail == null) {

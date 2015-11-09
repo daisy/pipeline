@@ -4,8 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -84,7 +82,7 @@ public class SplitPointHandlerTest {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<DummySplitPoint>();
 		SplitPoint<DummySplitPoint> bp = bph.split(5, false, Arrays.asList(c, c, c, e, e, e, e, e, c, c, c, t, c, c, c, c));
 		assertEquals(Arrays.asList(c, c, c), bp.getHead());
-		assertEquals(Arrays.asList(c, c, c, t, c, c, c, c), bp.getTail());
+		assertEquals(Arrays.asList(c, c, c, t, c, c, c, c), SplitPointHandler.trimLeading(bp.getTail()).getSecondPart());
 		assertTrue(!bp.isHardBreak());
 	}
 	
@@ -125,6 +123,7 @@ public class SplitPointHandlerTest {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<DummySplitPoint>();
 		SplitPoint<DummySplitPoint> bp = bph.split(6, false, Arrays.asList(c, x, y, c));
 		assertEquals(Arrays.asList(c, y, c), bp.getHead());
+		assertEquals(Arrays.asList(x), bp.getDiscarded());
 	}
 	
 	@Test
@@ -144,7 +143,7 @@ public class SplitPointHandlerTest {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<DummySplitPoint>();
 		SplitPoint<DummySplitPoint> bp = bph.split(6, false, Arrays.asList(c, c, x, y, c));
 		assertEquals(Arrays.asList(c, c), bp.getHead());
-		assertEquals(Arrays.asList(c), bp.getTail());
+		assertEquals(Arrays.asList(c), SplitPointHandler.trimLeading(bp.getTail()).getSecondPart());
 	}
 	
 	@Test
@@ -162,7 +161,6 @@ public class SplitPointHandlerTest {
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(true).collapsable(true).size(2).build();
 		DummySplitPoint y = new DummySplitPoint.Builder().breakable(false).skippable(true).collapsable(true).size(4).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<DummySplitPoint>();
-		bph.setTrimLeading(false);
 		SplitPoint<DummySplitPoint> bp = bph.split(6, false, Arrays.asList(c, c, x, y, c));
 		assertEquals(Arrays.asList(c, c), bp.getHead());
 		assertEquals(Arrays.asList(y, c), bp.getTail());
