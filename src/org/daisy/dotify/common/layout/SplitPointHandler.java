@@ -1,6 +1,5 @@
 package org.daisy.dotify.common.layout;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -19,24 +18,47 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	private final List<T> EMPTY_LIST = Collections.emptyList();
 	private boolean trimTrailing;
 	
+	/**
+	 * Creates a new split point handler.
+	 */
 	public SplitPointHandler() {
 		this.trimTrailing = true;
 	}
 	
 	@SafeVarargs
+	/**
+	 * Splits the data at, or before, the supplied breakPoint according to the rules
+	 * in the data. If force is used, rules may be broken to achieve a result.
+	 * @param breakPoint the split point
+	 * @param force true if force is allowed, false otherwise
+	 * @param units the data
+	 * @return returns a split point result
+	 */
 	public final SplitPoint<T> split(float breakPoint, boolean force, T ... units) {
 		return split(breakPoint, force, new SplitPointData<T>(units));
 	}
 
 	/**
-	 * Gets the next result from this BreakPointHandler
-	 * @param breakPoint the desired breakpoint for this result
-	 * @return returns the next BreakPoint
+	 * Splits the data at, or before, the supplied breakPoint according to the rules
+	 * in the data. If force is used, rules may be broken to achieve a result.
+	 * @param breakPoint the split point
+	 * @param force true if force is allowed, false otherwise
+	 * @param units the data
+	 * @return returns a split point result
 	 */
 	public SplitPoint<T> split(float breakPoint, boolean force, List<T> units) {
 		return split(breakPoint, force, new SplitPointData<T>(units));
 	}
 
+	/**
+	 * Splits the data at, or before, the supplied breakPoint according to the rules
+	 * in the data. If force is used, rules may be broken to achieve a result.
+	 * 
+	 * @param breakPoint the split point
+	 * @param force true if force is allowed, false otherwise
+	 * @param data the data to split
+	 * @return returns a split point result
+	 */
 	public SplitPoint<T> split(float breakPoint, boolean force, SplitPointData<T> data) {
 		if (data.getUnits().size()==0) {
 			// pretty simple...
@@ -50,16 +72,24 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 	}
 
+	/**
+	 * Returns true if trailing skippable units will be removed.
+	 * @return true if trailing skippable units will be removed, false otherwise
+	 */
 	public boolean isTrimTrailing() {
 		return trimTrailing;
 	}
 
+	/**
+	 * Sets whether to trim trailing skippable units or not.
+	 * @param trimTrailing the new value
+	 */
 	public void setTrimTrailing(boolean trimTrailing) {
 		this.trimTrailing = trimTrailing;
 	}
 	
 	private SplitPoint<T> findBreakpoint(List<T> units, float breakPoint, Supplements<T> map, boolean force) {
-		int strPos = forwardSkippable(units, findCollapse(units, new SizeStep(breakPoint, map)));
+		int strPos = forwardSkippable(units, findCollapse(units, new SizeStep<T>(breakPoint, map)));
 		// check next unit to see if it can be removed.
 		if (strPos==units.size()-1) { // last unit?
 			List<T> head = units.subList(0, strPos+1);
@@ -107,13 +137,21 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	}
 
 	private SplitPoint<T> finalizeBreakpointTrimTail(SplitList<T> head, List<T> tail, Supplements<T> map, boolean hard) {
-		TrimStep trimmed = new TrimStep(map);
+		TrimStep<T> trimmed = new TrimStep<>(map);
 		findCollapse(head.getFirstPart(), trimmed);
 		List<T> discarded = trimmed.getDiscarded();
 		discarded.addAll(head.getSecondPart());
 		return new SplitPoint<T>(trimmed.getResult(), trimmed.getSupplements(), tail, discarded, hard);
 	}
-	
+
+	/**
+	 * Trims leading skippable units in the supplied list. The result is backed by the
+	 * original list. 
+	 * 
+	 * @param in the list to trim
+	 * @return the list split in two parts, one with the leading skippable units, one with
+	 * the remainder
+	 */
 	public static <T extends SplitPointUnit> SplitList<T> trimLeading(List<T> in) {
 		int i;
 		for (i = 0; i<in.size(); i++) {
@@ -188,128 +226,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 		return units;
 	}
-	
-	class SizeStep implements StepForward<T> {
-		private float size = 0;
-		private final Supplements<T> map;
-		private final Set<String> ids;
-		private final float breakPoint;
-		private T lastUnit;
-		
-		SizeStep(float breakPoint, Supplements<T> map) {
-			this.breakPoint = breakPoint;
-			this.map = map;
-			this.ids = new HashSet<String>();
-		}
 
-		@Override
-		public void addUnit(T unit) {
-			if (lastUnit!=null) {
-				size+=lastUnit.getUnitSize();
-				lastUnit = null;
-			}
-			List<String> idList = unit.getSupplementaryIDs();
-			if (idList!=null) {
-				for (String id : idList) {
-					if (ids.add(id)) { //id didn't already exist in the list
-						T item = map.get(id);
-						if (item!=null) {
-							size+=item.getUnitSize();
-						}
-					}
-				}
-			}
-			lastUnit=unit;
-		}
-
-		@Override
-		public boolean overflows(T buffer) {
-			return size+(
-					buffer!=null?
-							lastUnitSize(buffer) + (lastUnit!=null?lastUnit.getUnitSize():0):
-							lastUnit!=null?lastUnit.getLastUnitSize():0
-						)>breakPoint;
-		}
-		
-		private float lastUnitSize(T b) {
-			float ret = 0;
-			List<String> idList = b.getSupplementaryIDs();
-			if (idList!=null) {
-				for (String id : idList) {
-					if (!ids.contains(id)) { //id didn't already exist in the list
-						T item = map.get(id);
-						if (item!=null) {
-							ret+=item.getUnitSize();
-						}
-					}
-				}
-			}
-			ret += b.getLastUnitSize();
-			return ret;
-		}
-
-		@Override
-		public void addDiscarded(T unit) {
-			//Nothing to do
-		}
-
-	}
-	
-	class TrimStep implements StepForward<T> {
-		private final List<T> ret;
-		private final List<T> supplements;
-		private final List<T> discarded;
-		private final Supplements<T> map;
-		private final Set<String> ids;
-		
-		TrimStep(Supplements<T> map) {
-			this.ret = new ArrayList<T>();
-			this.supplements = new ArrayList<T>();
-			this.discarded = new ArrayList<T>();
-			this.map = map;
-			this.ids = new HashSet<String>();
-		}
-
-		@Override
-		public void addUnit(T unit) {
-			List<String> idList = unit.getSupplementaryIDs();
-			if (idList!=null) {
-				for (String id : idList) {
-					if (ids.add(id)) { //id didn't already exist in the list
-						T item = map.get(id);
-						if (item!=null) {
-							supplements.add(item);
-						}
-					}
-				}
-			}
-			ret.add(unit);
-		}
-
-		@Override
-		public boolean overflows(T buffer) {
-			return false;
-		}
-
-		List<T> getSupplements() {
-			return supplements;
-		}
-
-		List<T> getResult() {
-			return ret;
-		}
-		
-		List<T> getDiscarded() {
-			return discarded;
-		}
-
-		@Override
-		public void addDiscarded(T unit) {
-			discarded.add(unit);
-		}
-		
-	}
-	
 	static int forwardSkippable(List<? extends SplitPointUnit> charsStr, final int pos) {
 		SplitPointUnit c;
 		int ret = pos;
