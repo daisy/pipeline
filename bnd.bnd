@@ -14,4 +14,4 @@ Include-Resource: / = src/
 -sources: false
 Import-Package: org.junit*;resolution:=optional,\
 	*
-Bundle-Version: 2.0.1
+Bundle-Version: 2.0.2-SNAPSHOT
