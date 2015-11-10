@@ -63,16 +63,6 @@ public interface PagedMediaWriter extends Closeable {
 	 * @throws IllegalStateException if writer has been opened
 	 */
 	public void prepare(List<MetaDataItem> meta);
-
-	/**
-	 * Open the PagedMediaWriter for writing.
-	 * @param os The underlying OutputStream for the PagedMediaWriter
-	 * @param meta a list of meta data
-	 * @throws PagedMediaWriterException throws an PagedMediaWriterException if the PagedMediaWriter could not be opened
-	 * @throws IllegalStateException if writer has already been opened
-	 * @deprecated use <tt>prepare(List&lt;MetaDataItem>)</tt> followed by <tt>open(OutputStream)</tt>
-	 */
-	public void open(OutputStream os, List<MetaDataItem> meta) throws PagedMediaWriterException;
 	
 	/**
 	 * Open the PagedMediaWriter for writing. Must be called before writing to the writer.

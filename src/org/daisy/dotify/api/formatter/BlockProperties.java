@@ -341,85 +341,13 @@ public class BlockProperties implements Cloneable {
 		rowSpacing = builder.rowSpacing;
 		textBorderStyle = builder.textBorderStyle;
 	}
-	
-	/**
-	 * Get left margin, in characters
-	 * @return returns the left margin
-	 * @deprecated use getMargin
-	 */
-	public int getLeftMargin() {
-		return margin.getLeftSpacing();
-	}
-	
-	/**
-	 * Get right margin, in characters
-	 * @return returns the right margin
-	 * @deprecated use getMargin
-	 */
-	public int getRightMargin() {
-		return margin.getRightSpacing();
-	}
-	
-	/**
-	 * Get top margin, in characters
-	 * @return returns the top margin
-	 * @deprecated use getMargin
-	 */
-	public int getTopMargin() {
-		return margin.getTopSpacing();
-	}
-	
-	/**
-	 * Get bottom margin, in characters
-	 * @return returns the bottom margin
-	 * @deprecated use getMargin
-	 */
-	public int getBottomMargin() {
-		return margin.getBottomSpacing();
-	}
-	
+
 	/**
 	 * Gets the margin
 	 * @return returns the margin
 	 */
 	public BlockSpacing getMargin() {
 		return margin;
-	}
-	
-	/**
-	 * Get left padding, in characters
-	 * @return returns the left padding
-	 * @deprecated use getPadding
-	 */
-	public int getLeftPadding() {
-		return padding.getLeftSpacing();
-	}
-	
-	/**
-	 * Get right padding, in characters
-	 * @return returns the right padding
-	 * @deprecated use getPadding
-	 */
-	public int getRightPadding() {
-		return padding.getRightSpacing();
-	}
-	
-	/**
-	 * Get top padding, in characters
-	 * @return returns the top padding
-	 * @deprecated use getPadding
-	 */
-	public int getTopPadding() {
-		return padding.getTopSpacing();
-	}
-	
-	/**
-	 * Get bottom padding, in characters
-	 * @return returns the bottom padding
-	 * @deprecated use getPadding
-	 */
-	public int getBottomPadding() {
-		return padding.getBottomSpacing();
 	}
 	
 	/**

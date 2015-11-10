@@ -25,15 +25,6 @@ public class NumeralField implements Field {
 	}
 	
 	/**
-	 * Gets the style for this numeral.
-	 * @return the style for this numeral
-	 * @deprecated
-	 */
-	public NumeralStyle getStyle() {
-		return style;
-	}
-	
-	/**
 	 * Gets the numeral style.
 	 * @return the numeral style
 	 */
