@@ -41,7 +41,7 @@
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
 			<template use-when="(= (% $page 2) 0)">
 				<header>
-					<field><string value="&#xA0;&#xA0;"/><current-page style="roman"/></field>
+					<field><string value="&#xA0;&#xA0;"/><current-page number-format="roman"/></field>
 				</header>
 				<footer></footer>
 			</template>
@@ -53,7 +53,7 @@
 						<xsl:attribute name="row-spacing">1</xsl:attribute>
 					</xsl:if>
 					<field><string value=""/></field>
-					<field><current-page style="roman"/></field>
+					<field><current-page number-format="roman"/></field>
 				</header>
 				<footer></footer>
 			</default-template>
@@ -64,7 +64,7 @@
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
 			<template use-when="(= (% $page 2) 0)">
 				<header>
-					<field><string value="&#xA0;&#xA0;"/><current-page style="default"/></field>
+					<field><string value="&#xA0;&#xA0;"/><current-page number-format="default"/></field>
 					<field>
 						<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
 						<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
@@ -83,7 +83,7 @@
 						<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
 						<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
 					</field>
-					<field><current-page style="default"/></field>
+					<field><current-page number-format="default"/></field>
 				</header>
 				<footer></footer>
 			</default-template>
@@ -112,7 +112,7 @@
 							page-height="{$page-height}" inner-margin="{$inner-margin}"
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
 			<template use-when="(= (% $page 2) 0)">
-				<header><field><string value="&#xA0;&#xA0;"/><string value="{$l10nEndnotesPageHeader} "/><current-page style="default"/></field></header>
+				<header><field><string value="&#xA0;&#xA0;"/><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field></header>
 				<footer></footer>
 			</template>
 			<default-template>
@@ -123,7 +123,7 @@
 						<xsl:attribute name="row-spacing">1</xsl:attribute>
 					</xsl:if>
 					<field><string value=""/></field>
-					<field><string value="{$l10nEndnotesPageHeader} "/><current-page style="default"/></field>
+					<field><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field>
 				</header>
 				<footer></footer>
 			</default-template>
