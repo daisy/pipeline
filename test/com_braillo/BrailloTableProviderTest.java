@@ -82,7 +82,7 @@ public class BrailloTableProviderTest {
 		String text = ta.toText(input);
 		String braille = ta.toBraille(text);
 		assertEquals("Assert that conversion is reversible", input, braille);
-		assertEquals("Assert that text has been transformed", " a,b'k;l&cif/msp|e:h*o!r]djgäntq@\\?ê-u<v{îöëóxèç~û.ü>z=à[ôwï%yúé", text);
+		assertEquals("Assert that text has been transformed", " a,b'k;l&cif/msp|e:h*o!r]djgäntq@\\?ê-u}v{îöëòxè#~û.ü\"z=à[ôwï%yùé", text);
 		assertTrue("Assert that table does not support 8-dot", !ta.supportsEightDot());
 		assertEquals("Assert that UTF-8 is the preferred charset", Charset.forName("UTF-8"), ta.getPreferredCharset());
 	}

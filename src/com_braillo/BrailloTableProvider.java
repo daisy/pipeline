@@ -136,10 +136,24 @@ public class BrailloTableProvider implements TableProvider {
 				// nl-NL
 				@Override
 				public BrailleConverter newBrailleConverter() {
+					Map<Character, Character> supplements  = new HashMap<Character, Character>();
+					supplements.put('1', (char)0x2801);
+					supplements.put('2', (char)0x2803);
+					supplements.put('3', (char)0x2809);
+					supplements.put('4', (char)0x2819);
+					supplements.put('5', (char)0x2811);
+					supplements.put('6', (char)0x280B);
+					supplements.put('7', (char)0x281B);
+					supplements.put('8', (char)0x2813);
+					supplements.put('9', (char)0x280A);
+					supplements.put('0', (char)0x281A);
+					supplements.put('ç', (char)0x283F);
+					supplements.put('(', (char)0x2836);
+					supplements.put(')', (char)0x2836);
 					return new EmbosserBrailleConverter(
 							new String(
-									" a,b'k;l&cif/msp|e:h*o!r]djgäntq@\\?ê-u<v{îöëóxèç~û.ü>z=à[ôwï%yúé"),
-							Charset.forName("UTF-8"), fallback, replacement, true);
+									" a,b'k;l&cif/msp|e:h*o!r]djgäntq@\\?ê-u}v{îöëòxè#~û.ü\"z=à[ôwï%yùé"),
+							Charset.forName("UTF-8"), fallback, replacement, true, supplements);
 				}};
 		case BRAILLO_6DOT_044_00:
 			return new EmbosserTable(TableType.BRAILLO_6DOT_044_00, EightDotFallbackMethod.values()[0], '\u2800'){
