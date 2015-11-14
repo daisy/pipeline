@@ -1,8 +1,14 @@
 -buildpath: biz.aQute.bnd.annotation,\
 	javax.xml.stream
-Export-Package:  \
-	org.daisy.dotify.impl.input.xml
-Bundle-Version: 1.0.2-SNAPSHOT
+Import-Package:  \
+	org.daisy.dotify.api.tasks; provide:=true, *
+Private-Package: \
+	org.daisy.dotify.impl.input,\
+	org.daisy.dotify.impl.input.epub,\
+	org.daisy.dotify.impl.input.text,\
+	org.daisy.dotify.impl.input.xml,\
+	org.daisy.dotify.impl.system.common
+Bundle-Version: 2.0.0-SNAPSHOT
 Include-Resource: / = src/
 -sources: false
 Service-Component: *
