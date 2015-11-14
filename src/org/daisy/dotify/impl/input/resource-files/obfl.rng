@@ -269,6 +269,28 @@
       </attribute>
     </optional>
     <optional>
+      <attribute name="orphans">
+        <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0">
+          The "orphans" property specifies the minimum number of lines of a paragraph that must be left at the bottom of a page.
+        </documentation>
+        <data type="integer">
+          <param name="minInclusive">1</param>
+          <param name="maxInclusive">9</param>
+        </data>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="widows">
+        <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0">
+          The "widows" property specifies the minimum number of lines of a paragraph that must be left at the top of a page.
+        </documentation>
+        <data type="integer">
+          <param name="minInclusive">1</param>
+          <param name="maxInclusive">9</param>
+        </data>
+      </attribute>
+    </optional>
+    <optional>
       <attribute name="keep-with-previous-sheets">
         <choice>
           <value>0</value>
@@ -537,7 +559,11 @@
     </element>
   </define>
   <define name="attlist-field" combine="interleave">
-    <empty/>
+    <optional>
+      <attribute name="text-style">
+        <data type="NMTOKEN"/>
+      </attribute>
+    </optional>
   </define>
   <define name="current-page">
     <element name="current-page">
@@ -546,16 +572,23 @@
     </element>
   </define>
   <define name="attlist-current-page" combine="interleave">
-    <attribute name="style">
-      <choice>
-        <value>default</value>
-        <value>roman</value>
-        <value>upper-roman</value>
-        <value>lower-roman</value>
-        <value>upper-alpha</value>
-        <value>lower-alpha</value>
-      </choice>
-    </attribute>
+     <optional>
+      <attribute name="number-format">
+        <choice>
+          <value>default</value>
+          <value>roman</value>
+          <value>upper-roman</value>
+          <value>lower-roman</value>
+          <value>upper-alpha</value>
+          <value>lower-alpha</value>
+        </choice>
+      </attribute>
+     </optional>
+    <optional>
+      <attribute name="text-style">
+        <data type="NMTOKEN"/>
+      </attribute>
+    </optional>
   </define>
   <define name="marker-reference">
     <element name="marker-reference">
@@ -569,17 +602,32 @@
     </attribute>
     <attribute name="direction">
       <choice>
+        <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0">Defines the direction of the search</documentation>
         <value>forward</value>
         <value>backward</value>
       </choice>
     </attribute>
     <attribute name="scope">
+      <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0">Defines the boundaries of the search</documentation>
       <choice>
         <value>page-content</value>
         <value>page</value>
+        <value>spread</value>
+        <value>sheet</value>
         <value>sequence</value>
       </choice>
     </attribute>
+    <optional>
+      <attribute name="start-offset">
+        <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0">Offsets the start of the search by the specified number of pages</documentation>
+         <data type="short"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="text-style">
+        <data type="NMTOKEN"/>
+      </attribute>
+    </optional>
   </define>
   <define name="string">
     <element name="string">
@@ -589,6 +637,11 @@
   </define>
   <define name="attlist-string" combine="interleave">
     <attribute name="value"/>
+    <optional>
+      <attribute name="text-style">
+        <data type="NMTOKEN"/>
+      </attribute>
+    </optional>
   </define>
   <define name="evaluate">
     <element name="evaluate">
@@ -598,6 +651,11 @@
   </define>
   <define name="attlist-evaluate" combine="interleave">
     <attribute name="expression"/>
+    <optional>
+      <attribute name="text-style">
+        <data type="NMTOKEN"/>
+      </attribute>
+    </optional>
   </define>
   <define name="table-of-contents">
     <element name="table-of-contents">
@@ -1224,7 +1282,7 @@
       <data type="IDREF"/>
     </attribute>
     <optional>
-      <attribute name="style">
+      <attribute name="number-format">
         <choice>
           <value>default</value>
           <value>roman</value>
