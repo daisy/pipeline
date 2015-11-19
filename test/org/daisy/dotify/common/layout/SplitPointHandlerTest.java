@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SplitPointHandlerTest {
@@ -276,5 +277,16 @@ public class SplitPointHandlerTest {
 		assertEquals(Arrays.asList(c5), bp.getTail());
 		assertEquals(Arrays.asList(s1, s2), bp.getSupplements());
 	}
+	
+	@Test
+	@Ignore("Fails due to an unhandled case where unitSize > breakPoint. See issue #141")
+	public void testSize_01() {
+		int unitSize = 10;
+		int breakPoint = 6;
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<DummySplitPoint>();
+		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(false).collapsable(true).size(unitSize).build();
+		bph.split(breakPoint, true, Arrays.asList(x, x));
+	}
+
 
 }
