@@ -26,7 +26,7 @@ buildscript {
     repositories {
     	mavenCentral()
     }
-    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.2" }
+    dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.4" }
 }
 
 task updateBndVersion() << {
