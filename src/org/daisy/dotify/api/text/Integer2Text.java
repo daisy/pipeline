@@ -16,6 +16,7 @@ public interface Integer2Text {
 	 * @throws IntegerOutOfRange
 	 *             If value is out of range of the implementations
 	 *             capabilities.
+	 * @return the integer as text
 	 */
 	public String intToText(int value) throws IntegerOutOfRange;
 	

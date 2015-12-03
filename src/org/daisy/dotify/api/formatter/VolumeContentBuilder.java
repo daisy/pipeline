@@ -92,7 +92,7 @@ public interface VolumeContentBuilder extends FormatterCore {
 
 	/**
 	 * Creates a new dynamic sequence.
-	 * @param props
+	 * @param props the sequence properties
 	 * @return returns a new dynamic sequence
 	 */
 	//TODO: add special dynamic sequence properties

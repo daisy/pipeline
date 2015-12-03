@@ -24,6 +24,7 @@ public interface PagedMediaWriter extends Closeable {
 	/**
 	 * Inserts a new volume in the output format,
 	 * if applicable
+	 * @param props the section properties
 	 * @throws IllegalStateException if writer is not opened or if writer has been closed
 	 */
 	public void newVolume(SectionProperties props);

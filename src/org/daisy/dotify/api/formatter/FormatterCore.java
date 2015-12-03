@@ -16,8 +16,8 @@ public interface FormatterCore {
 	
 	/**
 	 * 
-	 * @param props
-	 * @param blockId
+	 * @param props the block properties
+	 * @param blockId the block id
 	 * @throws IllegalStateException if the current state does not allow this call to be made
 	 */
 	public void startBlock(BlockProperties props, String blockId);

@@ -74,7 +74,7 @@ public class Translatable {
 
 	/**
 	 * Creates a new Translatable.Builder with the specified text.
-	 * @param text
+	 * @param text the text to translate
 	 * @return returns a new Translatable.Builder
 	 */
 	public static Builder text(String text) {

@@ -13,7 +13,7 @@ public interface MarkerProcessorFactory {
 	 * @param locale the marker processor locale
 	 * @param mode the marker processor grade
 	 * @return returns a new marker processor
-	 * @throws TranslatorConfigurationException if the specification is not supported
+	 * @throws MarkerProcessorConfigurationException if the specification is not supported
 	 */
 	public MarkerProcessor newMarkerProcessor(String locale, String mode) throws MarkerProcessorConfigurationException;
 

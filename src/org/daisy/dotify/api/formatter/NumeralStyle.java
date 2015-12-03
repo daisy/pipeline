@@ -10,7 +10,7 @@ public enum NumeralStyle {
 	 */
 	DEFAULT, DECIMAL,
 	/**
-	 * Defines a number with a single leading zero if the number is < 10 (01, 02, 03, etc.)
+	 * Defines a number with a single leading zero if the number is &lt; 10 (01, 02, 03, etc.)
 	 */
 	DECIMAL_LEADING_ZERO,
 	/**

@@ -20,14 +20,17 @@ public interface Expression {
 	 * variable names must only
 	 * contain word characters.
 	 * 
-	 * @param expr
-	 * @param variables
+	 * @param expr the expression to evaluate
+	 * @param variables the variables
 	 * @return returns the evaluation result
 	 * @deprecated replace variables beforehand
 	 */
 	public Object evaluate(String expr, Map<String, String> variables);
 
 	/**
+	 * @param expr the expression
+	 * @param vars the variables
+	 * @return returns the evaluation result
 	 * @deprecated replace variables beforehand
 	 */
 	public Object evaluate(String expr, String... vars);

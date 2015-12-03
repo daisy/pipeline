@@ -36,7 +36,7 @@ public class SequenceProperties {
 		/**
 		 * Set the initialPageNumber for the SequenceProperties instances
 		 * created using this Builder
-		 * @param value
+		 * @param value the value
 		 * @return returns the Builder
 		 */
 		public Builder initialPageNumber(int value) {

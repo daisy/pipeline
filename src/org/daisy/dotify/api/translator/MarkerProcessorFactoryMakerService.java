@@ -31,7 +31,7 @@ public interface MarkerProcessorFactoryMakerService {
 	 * @param grade
 	 *            the grade for the factory
 	 * @return returns a marker processor factory
-	 * @throws TranslatorConfigurationException
+	 * @throws MarkerProcessorConfigurationException
 	 *             if the specification is not supported
 	 */
 	public MarkerProcessorFactory newFactory(String locale, String grade) throws MarkerProcessorConfigurationException;

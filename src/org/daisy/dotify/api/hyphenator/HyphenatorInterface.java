@@ -12,6 +12,7 @@ public interface HyphenatorInterface {
 	/**
 	 * Hyphenates the phrase, inserting soft hyphens at all possible breakpoints.
 	 * @param phrase the phrase to hyphenate
+	 * @return the hyphenated string
 	 */
 	public String hyphenate(String phrase);
 

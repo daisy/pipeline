@@ -12,6 +12,8 @@ public interface FormatterFactory {
 	
 	/**
 	 * Creates a new formatter.
+	 * @param locale the locale
+	 * @param mode the mode
 	 * @return returns the new formatter.
 	 */
 	public Formatter newFormatter(String locale, String mode);

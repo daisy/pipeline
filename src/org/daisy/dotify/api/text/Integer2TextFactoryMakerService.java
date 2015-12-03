@@ -29,7 +29,7 @@ public interface Integer2TextFactoryMakerService {
 	 * @param locale
 	 *            the target locale
 	 * @return returns a integer2text factory for the specified locale
-	 * @throws Integer2TextFactoryMakerException
+	 * @throws Integer2TextConfigurationException
 	 *             if the locale is not supported
 	 */
 	public Integer2TextFactory getFactory(String locale) throws Integer2TextConfigurationException;
@@ -43,7 +43,7 @@ public interface Integer2TextFactoryMakerService {
 	 * @param locale
 	 *            the target locale
 	 * @return returns a new integer2text
-	 * @throws UnsupportedLocaleException
+	 * @throws Integer2TextConfigurationException
 	 *             if the locale is not supported
 	 */
 	public Integer2Text newInteger2Text(String locale) throws Integer2TextConfigurationException;
