@@ -79,10 +79,12 @@ class XMLInputManager implements TaskGroup {
 		this.logger = Logger.getLogger(XMLInputManager.class.getCanonicalName());
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public List<InternalTask> compile(Map<String, Object> parameters)
 			throws TaskSystemException {
 

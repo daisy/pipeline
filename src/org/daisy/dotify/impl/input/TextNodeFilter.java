@@ -50,7 +50,8 @@ public class TextNodeFilter extends StaxFilter2 {
 		this.filters = filters;
 	}
 	
-    protected Characters characters(Characters event) {
+    @Override
+	protected Characters characters(Characters event) {
     	return getEventFactory().createCharacters(filters.filter(event.getData()));
     }
 

@@ -145,15 +145,18 @@ public class ValidatorTask extends ReadOnlyTask {
 			return error;
 		}
 	
+		@Override
 		public void error(SAXParseException exception) throws SAXException {
 			logger.log(Level.WARNING, "Validation error" + getLineColumn(exception) + ": " + exception.getMessage());
 			error = true;
 		}
 	
+		@Override
 		public void fatalError(SAXParseException exception) throws SAXException {
 			throw new SAXException(exception);
 		}
 	
+		@Override
 		public void warning(SAXParseException exception) throws SAXException {
 			logger.log(Level.INFO, "Parse warning " + getLineColumn(exception), exception);
 		}

@@ -15,10 +15,12 @@ class TextInputManager implements TaskGroup {
 		this.rootLang = rootLang;
 	}
 
+	@Override
 	public String getName() {
 		return "TextInputManager";
 	}
 
+	@Override
 	public List<InternalTask> compile(Map<String, Object> parameters) throws TaskSystemException {
 		List<InternalTask> ret = new ArrayList<InternalTask>();
 		ret.add(new Text2ObflTask("Text to OBFL converter", rootLang, parameters));

@@ -11,10 +11,12 @@ import org.daisy.dotify.impl.input.XsltTask;
 
 public class Epub3InputManager implements TaskGroup {
 
+	@Override
 	public String getName() {
 		return this.getClass().getName();
 	}
 
+	@Override
 	public List<InternalTask> compile(Map<String, Object> parameters) throws TaskSystemException {
 		ArrayList<InternalTask> ret = new ArrayList<InternalTask>();
 		ret.add(new Epub3Task("Epub to Epub converter"));

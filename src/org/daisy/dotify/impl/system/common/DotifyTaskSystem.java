@@ -59,10 +59,12 @@ public class DotifyTaskSystem implements TaskSystem {
 		this.fe = fe;
 	}
 	
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public ArrayList<InternalTask> compile(Map<String, Object> pa) throws TaskSystemException {
 		//configURL = new URL(resourceBase, config);
 		
