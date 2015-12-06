@@ -395,6 +395,7 @@ public class BlockProperties implements Cloneable {
 	 * @return returns the current list number
 	 * @deprecated keep state outside of this object
 	 */
+	@Deprecated
 	public int nextListNumber() {
 		listIterator++;
 		return listIterator;
@@ -405,6 +406,7 @@ public class BlockProperties implements Cloneable {
 	 * @return returns the current list number
 	 * @deprecated keep state outside of this object
 	 */
+	@Deprecated
 	public int getListNumber() {
 		return listIterator;
 	}

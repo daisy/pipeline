@@ -25,6 +25,7 @@ public interface Expression {
 	 * @return returns the evaluation result
 	 * @deprecated replace variables beforehand
 	 */
+	@Deprecated
 	public Object evaluate(String expr, Map<String, String> variables);
 
 	/**
@@ -33,5 +34,6 @@ public interface Expression {
 	 * @return returns the evaluation result
 	 * @deprecated replace variables beforehand
 	 */
+	@Deprecated
 	public Object evaluate(String expr, String... vars);
 }
