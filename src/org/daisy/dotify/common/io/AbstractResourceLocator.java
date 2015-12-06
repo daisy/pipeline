@@ -24,6 +24,7 @@ public abstract class AbstractResourceLocator implements ResourceLocator {
 		}
 	}
 	
+	@Override
 	public URL getResource(String subpath) throws ResourceLocatorException {
 		String path = basePath + subpath;
 		//TODO check the viability of this method

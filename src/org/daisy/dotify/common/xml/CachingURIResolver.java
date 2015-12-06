@@ -60,7 +60,8 @@ public class CachingURIResolver implements URIResolver {
         reader.setEntityResolver(new EntityResolverCache());
     }    
     
-    public Source resolve(String href, String base) throws TransformerException {
+    @Override
+	public Source resolve(String href, String base) throws TransformerException {
         //System.err.println("resolving href:" + href + ", base: " + base);
         
         // Self reference, let the internal URIResolver handle it.

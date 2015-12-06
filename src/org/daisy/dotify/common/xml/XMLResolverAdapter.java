@@ -41,7 +41,8 @@ public class XMLResolverAdapter implements XMLResolver {
         resolver = entityResolver;
     }
     
-    @SuppressWarnings("unused")
+    @Override
+	@SuppressWarnings("unused")
     public Object resolveEntity(String publicID, String systemID, String baseURI, String namespace) throws XMLStreamException {
         try {
             InputSource is = resolver.resolveEntity(publicID, systemID);

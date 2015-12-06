@@ -128,7 +128,8 @@ final class URIUtils {
          *
          * @return the lowercase name of this enum constant
          */
-        public String toString() {
+        @Override
+		public String toString() {
             return super.toString().toLowerCase();
         }
 

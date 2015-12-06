@@ -96,6 +96,7 @@ public class TempFileHandler implements StreamJuggler {
 	 *             An IOException is thrown if TempFileHandler has been
 	 *             closed or if the output file is open or empty.
 	 */
+	@Override
 	public void reset() throws IOException {
 		if (t1==null || t2==null) {
 			throw new IllegalStateException("Cannot swap after close.");
@@ -120,6 +121,7 @@ public class TempFileHandler implements StreamJuggler {
 	 *             An IOException is thrown if the temporary files have been
 	 *             deleted, or are empty.
 	 */
+	@Override
 	public void close() throws IOException {
 		if (t1==null || t2==null) {
 			return;
@@ -138,6 +140,7 @@ public class TempFileHandler implements StreamJuggler {
 		}
 	}
 
+	@Override
 	public InputStreamMaker getInputStreamMaker() {
 		if (t1==null || t2==null) {
 			throw new IllegalStateException("Closed.");
@@ -148,6 +151,7 @@ public class TempFileHandler implements StreamJuggler {
 		return is;
 	}
 
+	@Override
 	public OutputStream getOutputStream() throws IOException {
 		if (t1==null || t2==null) {
 			throw new IllegalStateException("Closed.");

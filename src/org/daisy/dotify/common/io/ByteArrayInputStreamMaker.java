@@ -11,6 +11,7 @@ public class ByteArrayInputStreamMaker implements InputStreamMaker {
 		this.buf = buf;
 	}
 
+	@Override
 	public InputStream newInputStream() throws IOException {
 		return new ByteArrayInputStream(buf);
 	}

@@ -51,6 +51,7 @@ public class RegexFilter implements StringFilter {
 	 * @param str The string to replace in
 	 * @return The resulting <tt>String</tt>
 	 */
+	@Override
 	public String filter(String str) {
 		return pattern.matcher(str).replaceAll(replacement);
 		//return str.replaceAll("", replacement);

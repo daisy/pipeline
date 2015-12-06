@@ -12,6 +12,7 @@ public class FileInputStreamMaker implements InputStreamMaker {
 		this.f = f;
 	}
 
+	@Override
 	public InputStream newInputStream() throws IOException {
 		return new FileInputStream(f);
 	}

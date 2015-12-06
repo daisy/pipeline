@@ -66,6 +66,7 @@ public class UCharFilter extends SimpleUCharReplacer implements StringFilter {
 		return add;
 	}
 
+	@Override
 	public String filter(String str) {
 		return replace(str).toString();
 	}

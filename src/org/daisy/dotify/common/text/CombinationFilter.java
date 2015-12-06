@@ -17,6 +17,7 @@ public class CombinationFilter extends ArrayList<StringFilter> implements String
 	 */
 	private static final long serialVersionUID = 5284947865448511026L;
 
+	@Override
 	public String filter(String str) {
     	for (StringFilter e : this) {
     		str = e.filter(str);

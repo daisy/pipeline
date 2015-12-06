@@ -100,6 +100,7 @@ public class FilterLocale {
 
 	}
 
+	@Override
 	public String toString() {
 		return str;
 	}

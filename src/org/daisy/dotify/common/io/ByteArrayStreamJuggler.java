@@ -35,14 +35,17 @@ public class ByteArrayStreamJuggler implements StreamJuggler {
 		this.co = new ByteArrayOutputStream(BUF_SIZE);
 	}
 
+	@Override
 	public InputStreamMaker getInputStreamMaker() {
 		return ci;
 	}
 
+	@Override
 	public OutputStream getOutputStream() {
 		return co;
 	}
 	
+	@Override
 	public void reset() throws IOException {
 		if (ci==null || co==null) {
 			throw new IllegalStateException("Cannot swap after close.");
@@ -51,6 +54,7 @@ public class ByteArrayStreamJuggler implements StreamJuggler {
 		co = new ByteArrayOutputStream(BUF_SIZE);
 	}
 	
+	@Override
 	public void close() throws IOException {
 		try {
 			if (co.size() > 0) {

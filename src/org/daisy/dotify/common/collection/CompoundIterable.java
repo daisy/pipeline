@@ -16,6 +16,7 @@ public class CompoundIterable<T> implements Iterable<T> {
 		this.iterables = iterables;
 	}
 
+	@Override
 	public Iterator<T> iterator() {
 		return new CompoundIterator<T>(iterables);
 	}

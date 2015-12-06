@@ -202,6 +202,7 @@ public class XMLTools {
 			}
 		}
 
+		@Override
 		public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
 			if (root == null) {
 				//set prolog entity in builder
@@ -211,6 +212,7 @@ public class XMLTools {
 			return resolver.resolveEntity(publicId, systemId);
 		}
 
+		@Override
 		public void startDTD(String name, String publicId, String systemId) throws SAXException {
 			builder.publicId(publicId);
 			builder.systemId(systemId);

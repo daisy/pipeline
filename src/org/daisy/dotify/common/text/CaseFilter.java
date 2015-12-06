@@ -34,6 +34,7 @@ public class CaseFilter implements StringFilter {
 		this.mode = mode;
 	}
 
+	@Override
 	public String filter(String expr) {
 		switch (mode) {
 			case UPPER_CASE:

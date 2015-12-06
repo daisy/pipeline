@@ -121,6 +121,7 @@ public class TextFileReader implements Closeable {
 		return null;
 	}
 	
+	@Override
 	public void close() throws IOException {
 		lnr.close();
 	}

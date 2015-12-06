@@ -20,6 +20,7 @@ public class CompoundIterator<T> implements Iterator<T> {
 		}
 	}
 
+	@Override
 	public boolean hasNext() {
 		for (Iterator<T> e : iterators) {
 			if (e.hasNext()) {
@@ -29,6 +30,7 @@ public class CompoundIterator<T> implements Iterator<T> {
 		return false;
 	}
 
+	@Override
 	public T next() {
 		for (Iterator<T> e : iterators) {
 			if (e.hasNext()) {
@@ -38,6 +40,7 @@ public class CompoundIterator<T> implements Iterator<T> {
 		throw new NoSuchElementException();
 	}
 
+	@Override
 	public void remove() {
 		throw new UnsupportedOperationException();
 		
