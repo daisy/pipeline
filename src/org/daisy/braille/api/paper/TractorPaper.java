@@ -65,10 +65,12 @@ public class TractorPaper extends AbstractPaper {
 		return along;
 	}
 
+        @Override
 	public Type getType() {
 		return Type.TRACTOR;
 	}
 
+        @Override
 	public TractorPaper asTractorPaper() {
 		return this;
 	}

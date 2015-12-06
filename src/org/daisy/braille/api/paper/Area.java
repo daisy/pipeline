@@ -36,10 +36,12 @@ public class Area implements Dimensions {
         this.offsetY = offsetY;
     }
 
+    @Override
     public double getWidth() {
         return width;
     }
 
+    @Override
     public double getHeight() {
         return height;
     }

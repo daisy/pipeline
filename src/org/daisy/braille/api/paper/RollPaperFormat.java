@@ -61,10 +61,12 @@ public class RollPaperFormat extends AbstractPageFormat {
 		return along;
 	}
 	
+        @Override
 	public Type getPageFormatType() {
 		return Type.ROLL;
 	}
 	
+        @Override
 	public RollPaperFormat asRollPaperFormat() {
 		return this;
 	}

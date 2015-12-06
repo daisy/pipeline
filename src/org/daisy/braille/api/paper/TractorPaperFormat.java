@@ -60,10 +60,12 @@ public class TractorPaperFormat extends AbstractPageFormat {
 		return along;
 	}
 
+        @Override
 	public Type getPageFormatType() {
 		return Type.TRACTOR;
 	}
 	
+        @Override
 	public TractorPaperFormat asTractorPaperFormat() {
 		return this;
 	}

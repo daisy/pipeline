@@ -51,7 +51,7 @@ public class TableCatalog implements FactoryCatalog<Table>, TableCatalogService 
 	
 	public TableCatalog() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
-		providers = new CopyOnWriteArrayList<TableProvider>();
+		providers = new CopyOnWriteArrayList<>();
 		map = Collections.synchronizedMap(new HashMap<String, TableProvider>());
 	}
 	
@@ -94,6 +94,7 @@ public class TableCatalog implements FactoryCatalog<Table>, TableCatalogService 
 		}
 	}
 
+        @Override
 	public Table get(String identifier) {
 		if (identifier==null) {
 			return null;
@@ -122,20 +123,23 @@ public class TableCatalog implements FactoryCatalog<Table>, TableCatalogService 
 		}
 	}
 	
+        @Override
 	public Table newTable(String identifier) {
 		return get(identifier);
 	}
 	
+        @Override
 	public Collection<FactoryProperties> list() {
-		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
+		Collection<FactoryProperties> ret = new ArrayList<>();
 		for (TableProvider p : providers) {
 			ret.addAll(p.list());
 		}
 		return ret;
 	}
 	
+        @Override
 	public Collection<FactoryProperties> list(TableFilter filter) {
-		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
+		Collection<FactoryProperties> ret = new ArrayList<>();
 		for (FactoryProperties fp : list()) {
 			if (filter.accept(fp)) {
 				ret.add(fp);

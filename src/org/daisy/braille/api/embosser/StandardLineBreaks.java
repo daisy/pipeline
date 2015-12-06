@@ -61,6 +61,7 @@ public class StandardLineBreaks implements LineBreaks {
 		newline = getString(t);
 	}
 
+        @Override
 	public String getString() {
 		return newline;
 	}

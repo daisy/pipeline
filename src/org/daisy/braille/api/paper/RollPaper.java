@@ -54,10 +54,12 @@ public class RollPaper extends AbstractPaper {
 		return across;
 	}
 
+        @Override
 	public Type getType() {
 		return Type.ROLL;
 	}
 	
+        @Override
 	public RollPaper asRollPaper() {
 		return this;
 	}

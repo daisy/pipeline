@@ -98,7 +98,7 @@ public class PaperCatalog implements PaperCatalogService {
 
 	@Override
 	public Collection<Paper> list(PaperFilter filter) {
-		Collection<Paper> ret = new ArrayList<Paper>();
+		Collection<Paper> ret = new ArrayList<>();
 		for (Paper paper : map.values()) {
 			if (filter.accept(paper)) {
 				ret.add(paper);

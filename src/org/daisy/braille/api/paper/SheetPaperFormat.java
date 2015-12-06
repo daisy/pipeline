@@ -105,10 +105,12 @@ public class SheetPaperFormat extends AbstractPageFormat {
 		}
 	}
 
+        @Override
 	public Type getPageFormatType() {
 		return Type.SHEET;
 	}
 
+        @Override
 	public SheetPaperFormat asSheetPaperFormat() {
 		return this;
 	}

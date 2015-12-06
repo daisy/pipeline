@@ -52,7 +52,7 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser>, EmbosserCatalo
 	
 	public EmbosserCatalog() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
-		providers = new CopyOnWriteArrayList<EmbosserProvider>();
+		providers = new CopyOnWriteArrayList<>();
 		map = Collections.synchronizedMap(new HashMap<String, EmbosserProvider>());
 	}
 	
@@ -97,6 +97,7 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser>, EmbosserCatalo
 		}
 	}
 	
+        @Override
 	public Embosser get(String identifier) {
 		if (identifier==null) {
 			return null;
@@ -125,20 +126,23 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser>, EmbosserCatalo
 		}
 	}
 	
+        @Override
 	public Embosser newEmbosser(String identifier) {
 		return get(identifier);
 	}
 	
+        @Override
 	public Collection<FactoryProperties> list() {
-		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
+		Collection<FactoryProperties> ret = new ArrayList<>();
 		for (EmbosserProvider p : providers) {
 			ret.addAll(p.list());
 		}
 		return ret;
 	}
 	
+        @Override
 	public Collection<FactoryProperties> list(EmbosserFilter filter) {
-		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
+		Collection<FactoryProperties> ret = new ArrayList<>();
 		for (FactoryProperties fp : list()) {
 			if (filter.accept(fp)) {
 				ret.add(fp);

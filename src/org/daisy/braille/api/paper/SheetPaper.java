@@ -49,6 +49,7 @@ public class SheetPaper extends AbstractPaper {
 		this.pageHeight = pageHeight;
 	}
 
+        @Override
 	public Type getType() {
 		return Type.SHEET;
 	}
@@ -69,6 +70,7 @@ public class SheetPaper extends AbstractPaper {
 		return pageHeight;
 	}
 
+        @Override
 	public SheetPaper asSheetPaper() {
 		return this;
 	}

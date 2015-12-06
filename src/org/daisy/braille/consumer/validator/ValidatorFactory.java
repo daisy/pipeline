@@ -47,7 +47,7 @@ public class ValidatorFactory implements ValidatorFactoryService {
 	private final Map<String, ValidatorProvider> map;
 	
 	public ValidatorFactory() {
-		providers = new CopyOnWriteArrayList<ValidatorProvider>();
+		providers = new CopyOnWriteArrayList<>();
 		map = Collections.synchronizedMap(new HashMap<String, ValidatorProvider>());
 	}
 
@@ -94,6 +94,7 @@ public class ValidatorFactory implements ValidatorFactoryService {
 	 * @param identifier a string that identifies the desired implementation
 	 * @return returns a Validator for the given identifier, or null if none is found
 	 */
+        @Override
 	public Validator newValidator(String identifier) {
 		if (identifier==null) {
 			return null;
@@ -123,7 +124,7 @@ public class ValidatorFactory implements ValidatorFactoryService {
 
 	@Override
 	public Collection<FactoryProperties> list() {
-		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
+		Collection<FactoryProperties> ret = new ArrayList<>();
 		for (ValidatorProvider p : providers) {
 			ret.addAll(p.list());
 		}
@@ -132,7 +133,7 @@ public class ValidatorFactory implements ValidatorFactoryService {
 
 	@Override
 	public Collection<FactoryProperties> list(FactoryFilter filter) {
-		Collection<FactoryProperties> ret = new ArrayList<FactoryProperties>();
+		Collection<FactoryProperties> ret = new ArrayList<>();
 		for (FactoryProperties fp : list()) {
 			if (filter.accept(fp)) {
 				ret.add(fp);

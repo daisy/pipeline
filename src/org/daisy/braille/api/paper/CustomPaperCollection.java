@@ -41,7 +41,7 @@ public class CustomPaperCollection {
 	private Date sync;
 	
 	private CustomPaperCollection() {
-		this.papers = new ArrayList<Paper>();
+		this.papers = new ArrayList<>();
 		this.index = 0;
 		this.sync = null;
 		File tmp = null;

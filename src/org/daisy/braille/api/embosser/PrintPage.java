@@ -119,6 +119,7 @@ public class PrintPage implements Dimensions {
 		}
     }
 
+    @Override
     public double getWidth() {
         double width;
 
@@ -140,6 +141,7 @@ public class PrintPage implements Dimensions {
         }
     }
 
+    @Override
     public double getHeight() {
         switch (direction) {
             case SIDEWAYS:

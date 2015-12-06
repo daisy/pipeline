@@ -77,6 +77,7 @@ public abstract class AbstractPaper implements Paper, Serializable {
 	/* (non-Javadoc)
 	 * @see org.daisy.braille.api.paper.Paper#asSheetPaper()
 	 */
+        @Override
 	public SheetPaper asSheetPaper() {
 		throw new ClassCastException();
 	}
@@ -84,6 +85,7 @@ public abstract class AbstractPaper implements Paper, Serializable {
 	/* (non-Javadoc)
 	 * @see org.daisy.braille.api.paper.Paper#asTractorPaper()
 	 */
+        @Override
 	public TractorPaper asTractorPaper() {
 		throw new ClassCastException();
 	}
@@ -91,6 +93,7 @@ public abstract class AbstractPaper implements Paper, Serializable {
 	/* (non-Javadoc)
 	 * @see org.daisy.braille.api.paper.Paper#asRollPaper()
 	 */
+        @Override
 	public RollPaper asRollPaper() {
 		throw new ClassCastException();
 	}
