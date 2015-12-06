@@ -122,22 +122,27 @@ public class PrinterDevice implements Device {
 			this.stream = stream;
 		}
 
+                @Override
 		public DocAttributeSet getAttributes() {
 			return null;
 		}
 
+                @Override
 		public DocFlavor getDocFlavor() {
 			return FLAVOR;
 		}
 
+                @Override
 		public Object getPrintData() throws IOException {
 			return getStreamForBytes();
 		}
 
+                @Override
 		public Reader getReaderForText() throws IOException {
 			return null;
 		}
 
+                @Override
 		public InputStream getStreamForBytes() throws IOException {
 			return stream;
 		}

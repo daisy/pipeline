@@ -60,6 +60,7 @@ public class NumeralSortString implements Comparable<NumeralSortString> {
 			return strValue;
 		}
 
+                @Override
 		public int compareTo(Part otherObj) {
 			if (otherObj==null) {
 				throw new NullPointerException();
@@ -161,6 +162,7 @@ public class NumeralSortString implements Comparable<NumeralSortString> {
 		return str;
 	}
 
+        @Override
 	public int compareTo(NumeralSortString otherObj) {
 		if (otherObj==null) {
 			throw new NullPointerException();

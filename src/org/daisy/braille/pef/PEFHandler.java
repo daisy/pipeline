@@ -225,6 +225,7 @@ public class PEFHandler extends DefaultHandler {
 	// sum(//section/(if (ancestor-or-self::*[@duplex][1]/@duplex=false()) then (count(descendant::page) * 2) else (count(descendant::page) + count(descendant::page) mod 2)))
 	// Pages, XPath 1:
 	// count(//section[ancestor-or-self::*[@duplex][1][@duplex='false']]/descendant::page)*2 + count(//section[ancestor-or-self::*[@duplex][1][@duplex='true']]/descendant::page) + count(//section[count(descendant::page) mod 2 = 1][ancestor-or-self::*[@duplex][1][@duplex='true']])
+        @Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		HashMap<String, String> atts = new HashMap<String, String>();
 		if (PEF_NS.equals(uri)) {
@@ -392,6 +393,7 @@ public class PEFHandler extends DefaultHandler {
 		return map.get(toKey(uri, localName));
 	}
 	
+        @Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		elements.pop();
 		if (PEF_NS.equals(uri)) {
@@ -405,6 +407,7 @@ public class PEFHandler extends DefaultHandler {
 		}
 	}
 	
+        @Override
 	public void characters(char[] ch, int start, int length) throws SAXException {
 		Element context = elements.peek();
 		if (PEF_NS.equals(context.getUri()) 
@@ -419,6 +422,7 @@ public class PEFHandler extends DefaultHandler {
 		}
 	}
 
+        @Override
 	public void endDocument() throws SAXException {
 		try {
 			embosser.newPage();

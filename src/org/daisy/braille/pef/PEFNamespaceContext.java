@@ -62,14 +62,17 @@ public class PEFNamespaceContext implements NamespaceContext {
 		}
 	}
 
+        @Override
 	public String getNamespaceURI(String prefix) {
 		return namespaces.get(prefix);
 	}
 
+        @Override
 	public String getPrefix(String namespaceURI) {
 		return prefixes.get(namespaceURI);
 	}
 
+        @Override
 	public Iterator<Entry<String, String>> getPrefixes(String namespaceURI) {
 		return prefixes.entrySet().iterator();
 	}

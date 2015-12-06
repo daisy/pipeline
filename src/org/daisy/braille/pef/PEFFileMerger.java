@@ -93,12 +93,14 @@ public class PEFFileMerger {
 			throw new IllegalArgumentException("Input must be an existing directory " + input);
 		}
 		File[] files = input.listFiles(new FileFilter(){
+                        @Override
 			public boolean accept(File pathname) {
 				return pathname.isFile();
 			}});
         switch (sort) {
 	    	case NUMERAL_GROUPING:
 		        Arrays.sort(files, new Comparator<File>() {
+                                        @Override
 					public int compare(File o1, File o2) {
 						NumeralSortString s1 = new NumeralSortString(o1.getName().toLowerCase());
 						NumeralSortString s2 = new NumeralSortString(o2.getName().toLowerCase());

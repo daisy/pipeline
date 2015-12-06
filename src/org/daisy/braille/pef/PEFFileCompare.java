@@ -102,6 +102,7 @@ public class PEFFileCompare {
 		}
 
 
+                @Override
 		public InputStream getNormalizationResourceAsStream() {
 			try {
 				return url.openStream();
@@ -119,6 +120,7 @@ public class PEFFileCompare {
 		}
 
 
+                @Override
 		public InputStream getNormalizationResourceAsStream() {
 			return this.getClass().getResourceAsStream(path);
 		}

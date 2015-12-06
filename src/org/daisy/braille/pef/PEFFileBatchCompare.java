@@ -129,6 +129,7 @@ public class PEFFileBatchCompare {
 			final int i = i2;
 			i2++;
 			e.execute(new Runnable() {
+                        @Override
 		        public void run() {
 
 					System.out.println("Comparing file " + key + " in " + dir1 + " and " + dir2 + " (" + i + "/" + x.size() + ")");
@@ -229,6 +230,7 @@ public class PEFFileBatchCompare {
 			return noMatch;
 		}
 
+                @Override
 		public boolean accept(File pathname) {
 			boolean isMatch = filter.accept(pathname);
 			if (!isMatch) {
