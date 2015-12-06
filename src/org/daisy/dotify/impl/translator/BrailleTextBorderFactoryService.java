@@ -9,6 +9,7 @@ import aQute.bnd.annotation.component.Component;
 public class BrailleTextBorderFactoryService implements
 		TextBorderFactoryService {
 
+	@Override
 	public TextBorderFactory newFactory() {
 		return new BrailleTextBorderFactory();
 	}

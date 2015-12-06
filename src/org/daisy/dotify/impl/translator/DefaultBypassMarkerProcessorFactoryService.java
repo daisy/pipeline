@@ -10,10 +10,12 @@ import aQute.bnd.annotation.component.Component;
 public class DefaultBypassMarkerProcessorFactoryService implements
 		MarkerProcessorFactoryService {
 
+	@Override
 	public boolean supportsSpecification(String locale, String mode) {
 		return mode.equals(BrailleTranslatorFactory.MODE_BYPASS);
 	}
 
+	@Override
 	public MarkerProcessorFactory newFactory() {
 		return new DefaultBypassMarkerProcessorFactory();
 	}

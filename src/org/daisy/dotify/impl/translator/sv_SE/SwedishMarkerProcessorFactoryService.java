@@ -10,10 +10,12 @@ import aQute.bnd.annotation.component.Component;
 public class SwedishMarkerProcessorFactoryService implements
 		MarkerProcessorFactoryService {
 
+	@Override
 	public boolean supportsSpecification(String locale, String mode) {
 		return "sv-SE".equalsIgnoreCase(locale) && mode.equals(BrailleTranslatorFactory.MODE_UNCONTRACTED);
 	}
 
+	@Override
 	public MarkerProcessorFactory newFactory() {
 		return new SwedishMarkerProcessorFactory();
 	}

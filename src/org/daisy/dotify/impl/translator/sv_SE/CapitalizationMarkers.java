@@ -34,6 +34,7 @@ class CapitalizationMarkers implements StringFilter {
 		this.p6 = Pattern.compile("(\\A|(?<=\\-))(\\p{Lu}(\u00ad)?)+");
 	}
 
+	@Override
 	public String filter(String str) {
 		return addCapitalizationMarkers(str);
 	}

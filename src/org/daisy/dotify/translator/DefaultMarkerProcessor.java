@@ -37,10 +37,12 @@ public class DefaultMarkerProcessor implements MarkerProcessor {
 		this.specs = builder.specs;
 	}
 
+	@Override
 	public String processAttributes(TextAttribute atts, String... text) {
 		return join(processAttributesRetain(atts, text));
 	}
 
+	@Override
 	public String[] processAttributesRetain(TextAttribute atts, String[] text) {
 		if (atts == null) {
 			return text;

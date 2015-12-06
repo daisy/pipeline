@@ -42,6 +42,7 @@ class DigitFilter implements StringFilter {
 		return mode;
 	}
 
+	@Override
 	public String filter(String str) {
 		switch (mode) {
 			case REGEX: return filterRegex(str);

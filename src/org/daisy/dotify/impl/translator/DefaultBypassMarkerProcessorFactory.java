@@ -12,6 +12,7 @@ import org.daisy.dotify.translator.SimpleMarkerDictionary;
 class DefaultBypassMarkerProcessorFactory implements
 		MarkerProcessorFactory {
 
+	@Override
 	public MarkerProcessor newMarkerProcessor(String locale, String mode) throws MarkerProcessorConfigurationException {
 		if (mode.equals(BrailleTranslatorFactory.MODE_BYPASS)) {
 			SimpleMarkerDictionary dd = new SimpleMarkerDictionary(new Marker("* ", ""));

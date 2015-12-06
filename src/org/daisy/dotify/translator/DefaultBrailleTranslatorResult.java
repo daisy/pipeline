@@ -13,6 +13,7 @@ class DefaultBrailleTranslatorResult implements BrailleTranslatorResult {
 		this.bph = bph;
 	}
 
+	@Override
 	public String nextTranslatedRow(int limit, boolean force) {
 		if (finalizer!=null) {
 			return finalizer.finalizeBraille(bph.nextRow(limit, force).getHead());
@@ -21,10 +22,12 @@ class DefaultBrailleTranslatorResult implements BrailleTranslatorResult {
 		}
 	}
 	
+	@Override
 	public boolean hasNext() {
 		return bph.hasNext();
 	}
 
+	@Override
 	public String getTranslatedRemainder() {
 		if (finalizer!=null) {
 			return finalizer.finalizeBraille(bph.getRemaining());
@@ -33,6 +36,7 @@ class DefaultBrailleTranslatorResult implements BrailleTranslatorResult {
 		}
 	}
 
+	@Override
 	public int countRemaining() {
 		return getTranslatedRemainder().length();
 	}

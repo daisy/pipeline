@@ -41,6 +41,7 @@ public class SwedishBrailleFilter implements StringFilter {
 		}
 	}
 
+	@Override
 	public String filter(String str) {
 		return filters.filter(str);
 	}

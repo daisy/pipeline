@@ -76,6 +76,7 @@ public class SimpleBrailleTranslator implements BrailleTranslator {
 		return hyphenating;
 	}
 
+	@Override
 	public String getTranslatorMode() {
 		return translatorMode;
 	}

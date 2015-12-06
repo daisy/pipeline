@@ -22,6 +22,7 @@ public class SimpleMarkerDictionary implements MarkerDictionary {
 		this.def = def;
 	}
 
+	@Override
 	public Marker getMarkersFor(String str, TextAttribute attributes) throws MarkerNotFoundException, MarkerNotCompatibleException {
 		return def;
 	}

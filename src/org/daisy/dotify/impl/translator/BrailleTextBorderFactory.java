@@ -44,6 +44,7 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		this.bottom = new BorderSpecification(def);
 	}
 	
+	@Override
 	public void setFeature(String key, Object value) {
 		if (key!=null && key.toLowerCase().startsWith(KEY_BORDER)) {
 			useBorder = true;
@@ -75,10 +76,12 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		}
 	}
 
+	@Override
 	public Object getFeature(String key) {
 		return features.get(key);
 	}
 
+	@Override
 	public TextBorderStyle newTextBorderStyle() throws TextBorderConfigurationException {
 		String mode = "";
 		try {

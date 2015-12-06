@@ -15,6 +15,7 @@ class DefaultBypassTranslatorFactory implements BrailleTranslatorFactory {
 		this.hyphenatorService = hyphenatorService;
 	}
 
+	@Override
 	public BrailleTranslator newTranslator(String locale, String mode) throws TranslatorConfigurationException {
 		if (hyphenatorService == null) {
 			throw new DefaultBypassTranslatorConfigurationException("HyphenatorFactoryMakerService not set.");

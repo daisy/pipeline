@@ -17,6 +17,7 @@ class SwedishBrailleFilterFactory implements BrailleFilterFactory {
 		this.hyphenatorService = hyphenatorService;
 	}
 
+	@Override
 	public BrailleFilter newFilter(String locale, String mode) throws TranslatorConfigurationException {
 		if (hyphenatorService == null) {
 			throw new SwedishFilterConfigurationException("HyphenatorFactoryMakerService not set.");

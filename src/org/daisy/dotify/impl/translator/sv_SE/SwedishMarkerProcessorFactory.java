@@ -18,6 +18,7 @@ class SwedishMarkerProcessorFactory implements MarkerProcessorFactory {
 	private final static String ALPHANUM_REGEX = "\\A[a-zA-Z0-9]+\\z";
 	private final static FilterLocale sv_SE = FilterLocale.parse("sv-SE");
 
+	@Override
 	public MarkerProcessor newMarkerProcessor(String locale, String mode) throws MarkerProcessorConfigurationException {
 		if (FilterLocale.parse(locale).equals(sv_SE)) {
 			if (mode.equals(BrailleTranslatorFactory.MODE_UNCONTRACTED)) {
@@ -50,6 +51,7 @@ class SwedishMarkerProcessorFactory implements MarkerProcessorFactory {
 						return true;
 					}
 	
+					@Override
 					public boolean appliesTo(TextAttribute atts) {
 						return checkChildren(atts);
 					}

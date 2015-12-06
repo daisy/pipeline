@@ -47,6 +47,7 @@ public class RegexMarkerDictionary implements MarkerDictionary {
 	public static class Builder {
 		private final Map<Pattern, MarkerPair> patterns;
 		private TextAttributeFilter filter = new TextAttributeFilter() {
+			@Override
 			public boolean appliesTo(TextAttribute atts) {
 				return true;
 			}
@@ -119,6 +120,7 @@ public class RegexMarkerDictionary implements MarkerDictionary {
 		this.filter = builder.filter;
 	}
 
+	@Override
 	public Marker getMarkersFor(String str, TextAttribute attribute) throws MarkerNotFoundException, MarkerNotCompatibleException {
 		if (!filter.appliesTo(attribute)) {
 			throw new MarkerNotCompatibleException("Cannot apply marker to " + attribute);

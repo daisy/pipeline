@@ -18,10 +18,12 @@ public class DefaultBypassTranslatorFactoryService implements
 
 	private HyphenatorFactoryMakerService hyphenator = null;
 
+	@Override
 	public boolean supportsSpecification(String locale, String mode) {
 		return mode.equals(BrailleTranslatorFactory.MODE_BYPASS);
 	}
 
+	@Override
 	public BrailleTranslatorFactory newFactory() {
 		return new DefaultBypassTranslatorFactory(hyphenator);
 	}
@@ -35,6 +37,7 @@ public class DefaultBypassTranslatorFactoryService implements
 		this.hyphenator = null;
 	}
 
+	@Override
 	public <T> void setReference(Class<T> c, T reference)
 			throws TranslatorConfigurationException {
 		if (c.equals(HyphenatorFactoryMakerService.class)) {
@@ -44,6 +47,7 @@ public class DefaultBypassTranslatorFactoryService implements
 		}
 	}
 
+	@Override
 	public Collection<TranslatorSpecification> listSpecifications() {
 		ArrayList<TranslatorSpecification> ret = new ArrayList<TranslatorSpecification>();
 		for (String loc : hyphenator.listLocales()) {

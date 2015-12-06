@@ -3,6 +3,7 @@ package org.daisy.dotify.impl.translator.sv_SE;
 import org.daisy.dotify.translator.BrailleFinalizer;
 
 class SwedishBrailleFinalizer implements BrailleFinalizer {
+	@Override
 	public String finalizeBraille(String input) {
 		StringBuilder sb = new StringBuilder();
 		for (char c : input.toCharArray()) {

@@ -25,10 +25,12 @@ public class SwedishBrailleFilterFactoryService implements
 		specs.add(new TranslatorSpecification("sv-SE", BrailleTranslatorFactory.MODE_UNCONTRACTED));
 	}
 	
+	@Override
 	public boolean supportsSpecification(String locale, String mode) {
 		return "sv-SE".equalsIgnoreCase(locale) && mode.equals(BrailleTranslatorFactory.MODE_UNCONTRACTED);
 	}
 
+	@Override
 	public BrailleFilterFactory newFactory() {
 		return new SwedishBrailleFilterFactory(hyphenator);
 	}
@@ -42,6 +44,7 @@ public class SwedishBrailleFilterFactoryService implements
 		this.hyphenator = null;
 	}
 	
+	@Override
 	public Collection<TranslatorSpecification> listSpecifications() {
 		return specs;
 	}

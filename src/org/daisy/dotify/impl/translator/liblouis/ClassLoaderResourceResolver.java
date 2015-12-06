@@ -21,6 +21,7 @@ class ClassLoaderResourceResolver implements ResourceResolver {
 		this.encoding = encoding;
 	}
 
+	@Override
 	public ResourceDescriptor resolve(String subpath) {
 		InputStream is = this.getClass().getResourceAsStream((basepath!=null?basepath:"")+subpath);
 		if (is!=null) {

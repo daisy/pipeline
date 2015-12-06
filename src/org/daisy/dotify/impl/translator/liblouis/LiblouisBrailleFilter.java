@@ -75,6 +75,7 @@ public class LiblouisBrailleFilter implements StringFilter {
 		replacers.add(new RegexReplace("(?<!"+d+")("+d+"+)(?!"+d+")", b.numsign+"$1"));
 	}
 
+	@Override
 	public String filter(String input) {
 		//Translate characters and determine character class for each character
 		int codePoint;
