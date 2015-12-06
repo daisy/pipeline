@@ -10,6 +10,7 @@ public class RenameFallbackRule implements FallbackRule {
 		this.toCollection = toCollection;
 	}
 
+	@Override
 	public String applyToCollection() {
 		return fromCollection;
 	}

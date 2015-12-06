@@ -44,6 +44,7 @@ public class TocProperties extends SequenceProperties {
 			this.range = range;
 		}
 		
+		@Override
 		public TocProperties build() {
 			return new TocProperties(this);
 		}

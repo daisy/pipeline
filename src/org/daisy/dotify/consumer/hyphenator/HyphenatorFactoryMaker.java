@@ -80,6 +80,7 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 		}
 	}
 
+	@Override
 	public HyphenatorFactory newFactory(String target) throws HyphenatorConfigurationException {
 		HyphenatorFactoryService template = map.get(target.toLowerCase());
 		if (template==null) {
@@ -102,6 +103,7 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 		return template.newFactory();
 	}
 
+	@Override
 	public HyphenatorInterface newHyphenator(String target) throws HyphenatorConfigurationException {
 		HyphenatorInterface ret = newFactory(target).newHyphenator(target);
 		return ret;
@@ -120,6 +122,7 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 		}
 	}
 	
+	@Override
 	public Collection<String> listLocales() {
 		ArrayList<String> ret = new ArrayList<String>();
 		for (HyphenatorFactoryService s : filters) {

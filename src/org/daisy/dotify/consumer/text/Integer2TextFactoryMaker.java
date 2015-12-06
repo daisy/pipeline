@@ -81,6 +81,7 @@ public class Integer2TextFactoryMaker implements
 		}
 	}
 
+	@Override
 	public Integer2TextFactory getFactory(String target) throws Integer2TextConfigurationException {
 		Integer2TextFactoryService template = map.get(target.toLowerCase());
 		if (template==null) {
@@ -103,6 +104,7 @@ public class Integer2TextFactoryMaker implements
 		return template.newFactory();
 	}
 
+	@Override
 	public Integer2Text newInteger2Text(String target) throws Integer2TextConfigurationException {
 		return getFactory(target).newInteger2Text(target);
 	}
@@ -120,6 +122,7 @@ public class Integer2TextFactoryMaker implements
 		
 	}
 
+	@Override
 	public Collection<String> listLocales() {
 		ArrayList<String> ret = new ArrayList<String>();
 		for (Integer2TextFactoryService s : filters) {

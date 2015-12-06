@@ -80,6 +80,7 @@ public class TextBorderFactoryMaker implements TextBorderFactoryMakerService {
 		factories.remove(factory);
 	}
 
+	@Override
 	public TextBorderStyle newTextBorderStyle(Map<String, Object> features) throws TextBorderConfigurationException {
 		// TODO: this could be optimized
 		for (TextBorderFactoryService s : factories) {

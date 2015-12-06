@@ -81,6 +81,7 @@ public class PagedMediaWriterFactoryMaker implements
 		}
 	}
 
+	@Override
 	public PagedMediaWriterFactory getFactory(String target) throws PagedMediaWriterConfigurationException {
 		PagedMediaWriterFactoryService template = map.get(target.toLowerCase());
 		if (template==null) {
@@ -103,6 +104,7 @@ public class PagedMediaWriterFactoryMaker implements
 		return template.newFactory(target);
 	}
 
+	@Override
 	public PagedMediaWriter newPagedMediaWriter(String target) throws PagedMediaWriterConfigurationException {
 		return getFactory(target).newPagedMediaWriter();
 	}
@@ -120,6 +122,7 @@ public class PagedMediaWriterFactoryMaker implements
 		
 	}
 
+	@Override
 	public Collection<String> listMediaTypes() {
 		ArrayList<String> ret = new ArrayList<String>();
 		for (PagedMediaWriterFactoryService s : filters) {

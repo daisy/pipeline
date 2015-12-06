@@ -52,10 +52,12 @@ public class DefaultTextAttribute implements TextAttribute {
 		}
 	}
 
+	@Override
 	public int getWidth() {
 		return length;
 	}
 
+	@Override
 	public boolean hasChildren() {
 		return !attributes.isEmpty();
 	}
@@ -69,10 +71,12 @@ public class DefaultTextAttribute implements TextAttribute {
 		return this.getClass().getSimpleName() + " [length=" + length + (identifier != null ? ", identifier=" + identifier : "") + ", attributes=" + sb.toString() + "]";
 	}
 
+	@Override
 	public String getDictionaryIdentifier() {
 		return identifier;
 	}
 
+	@Override
 	public Iterator<TextAttribute> iterator() {
 		return attributes.iterator();
 	}

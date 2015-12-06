@@ -92,10 +92,12 @@ public class MarkerProcessorFactoryMaker implements
 		return locale.toLowerCase() + "(" + grade.toUpperCase() + ")";
 	}
 	
+	@Override
 	public boolean supportsSpecification(String locale, String grade) {
 		return map.get(toKey(locale, grade)) != null;
 	}
 	
+	@Override
 	public MarkerProcessorFactory newFactory(String locale, String grade) throws MarkerProcessorFactoryMakerException {
 		MarkerProcessorFactoryService template = map.get(toKey(locale, grade));
 		if (template==null) {
@@ -118,6 +120,7 @@ public class MarkerProcessorFactoryMaker implements
 		return template.newFactory();
 	}
 	
+	@Override
 	public MarkerProcessor newMarkerProcessor(String locale, String grade) throws MarkerProcessorConfigurationException {
 		return newFactory(locale, grade).newMarkerProcessor(locale, grade);
 	}

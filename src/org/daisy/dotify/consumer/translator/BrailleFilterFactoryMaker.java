@@ -96,6 +96,7 @@ public class BrailleFilterFactoryMaker implements
 		return locale.toLowerCase() + "(" + grade.toUpperCase() + ")";
 	}
 	
+	@Override
 	public boolean supportsSpecification(String locale, String grade) {
 		return map.get(toKey(locale, grade)) != null;
 	}
@@ -108,6 +109,7 @@ public class BrailleFilterFactoryMaker implements
 	 * @return returns a braille filter factory
 	 * @throws TranslatorConfigurationException if the specification is not supported
 	 */
+	@Override
 	public BrailleFilterFactory newFactory(String locale, String grade) throws TranslatorConfigurationException {
 		BrailleFilterFactoryService template = map.get(toKey(locale, grade));
 		if (template==null) {
@@ -130,6 +132,7 @@ public class BrailleFilterFactoryMaker implements
 		return template.newFactory();
 	}
 	
+	@Override
 	public BrailleFilter newFilter(String locale, String grade) throws TranslatorConfigurationException {
 		return newFactory(locale, grade).newFilter(locale, grade);
 	}
@@ -147,6 +150,7 @@ public class BrailleFilterFactoryMaker implements
 		
 	}
 
+	@Override
 	public Collection<TranslatorSpecification> listSpecifications() {
 		Set<TranslatorSpecification> ret = new HashSet<TranslatorSpecification>();
 		synchronized (map) {

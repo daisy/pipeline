@@ -76,6 +76,7 @@ public class TranslatorSpecification implements Comparable<TranslatorSpecificati
 		return true;
 	}
 
+	@Override
 	public int compareTo(TranslatorSpecification o) {
 		int l = this.locale.compareTo(o.locale);
 		if (l!=0) {
