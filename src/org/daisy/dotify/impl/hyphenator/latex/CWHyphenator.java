@@ -17,6 +17,7 @@ class CWHyphenator extends AbstractHyphenator {
 		return CWHyphenatorCore.getInstance().supportsLocale(locale);
 	}
 
+	@Override
 	public String hyphenate(String phrase) {
 		return hyphenator.hyphenate(phrase, getBeginLimit(), getEndLimit(), accuracy);
 	}

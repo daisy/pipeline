@@ -14,14 +14,17 @@ public class LatexHyphenatorFactory implements HyphenatorFactory {
 		this.core = core;
 	}
 
+	@Override
 	public HyphenatorInterface newHyphenator(String locale) throws HyphenatorConfigurationException {
 		return new LatexHyphenator(core.getHyphenator(locale));
 	}
 
+	@Override
 	public Object getFeature(String key) {
 		return null;
 	}
 
+	@Override
 	public void setFeature(String key, Object value) throws HyphenatorConfigurationException {
 		throw new LatexHyphenatorConfigurationException();
 	}

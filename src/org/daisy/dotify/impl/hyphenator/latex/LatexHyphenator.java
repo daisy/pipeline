@@ -11,6 +11,7 @@ class LatexHyphenator extends AbstractHyphenator {
 		this.endLimit = this.hyphenator.getDefaultEndLimit();
 	}
 
+	@Override
 	public String hyphenate(String phrase) {
 		return hyphenator.getHyphenator().hyphenate(phrase, getBeginLimit(), getEndLimit());
 	}

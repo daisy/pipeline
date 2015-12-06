@@ -15,14 +15,17 @@ public class LatexHyphenatorFactoryService implements HyphenatorFactoryService {
 		this.core = LatexHyphenatorCore.getInstance();
 	}
 
+	@Override
 	public boolean supportsLocale(String locale) {
 		return core.supportsLocale(locale);
 	}
 
+	@Override
 	public HyphenatorFactory newFactory() {
 		return new LatexHyphenatorFactory(core);
 	}
 
+	@Override
 	public Collection<String> listLocales() {
 		return core.listLocales();
 	}

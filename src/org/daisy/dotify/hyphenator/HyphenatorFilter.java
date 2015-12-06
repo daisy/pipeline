@@ -39,6 +39,7 @@ public class HyphenatorFilter implements StringFilter {
 		hyphenator.setEndLimit(endLimit);
 	}
 	
+	@Override
 	public String filter(String str) {
 		return hyphenator.hyphenate(str);
 	}

@@ -13,10 +13,12 @@ public class CWHyphenatorFactory implements HyphenatorFactory {
 		return CWHyphenator.supportsLocale(locale);
 	}
 
+	@Override
 	public HyphenatorInterface newHyphenator(String locale) throws HyphenatorConfigurationException {
 		return new CWHyphenator(locale, accuracy);
 	}
 
+	@Override
 	public Object getFeature(String key) {
 		if (key.equals(HyphenatorFactory.FEATURE_HYPHENATION_ACCURACY)) {
 			return accuracy;
@@ -24,6 +26,7 @@ public class CWHyphenatorFactory implements HyphenatorFactory {
 		return null;
 	}
 
+	@Override
 	public void setFeature(String key, Object value) throws HyphenatorConfigurationException {
 		if (key.equals(HyphenatorFactory.FEATURE_HYPHENATION_ACCURACY)) {
 			accuracy = (Integer)value;
