@@ -30,6 +30,7 @@ public class StandardPageBreaks implements PageBreaks {
 	public StandardPageBreaks() {
         }
 
+        @Override
 	public String getString() {
 		return "\u000c";
 	}

@@ -115,7 +115,7 @@ public class BrailloTableProvider implements TableProvider {
 				
 				@Override
 				public BrailleConverter newBrailleConverter() {
-					Map<Character, Character> supplements  = new HashMap<Character, Character>();
+					Map<Character, Character> supplements  = new HashMap<>();
 					supplements.put('`', (char)0x2808);
 					supplements.put('~', (char)0x2818);
 					supplements.put('{', (char)0x282a);
@@ -136,7 +136,7 @@ public class BrailloTableProvider implements TableProvider {
 				// nl-NL
 				@Override
 				public BrailleConverter newBrailleConverter() {
-					Map<Character, Character> supplements  = new HashMap<Character, Character>();
+					Map<Character, Character> supplements  = new HashMap<>();
 					supplements.put('1', (char)0x2801);
 					supplements.put('2', (char)0x2803);
 					supplements.put('3', (char)0x2809);

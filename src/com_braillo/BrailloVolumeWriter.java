@@ -38,27 +38,27 @@ public abstract class BrailloVolumeWriter implements VolumeWriter {
 	public abstract byte[] getHeader(int pages) throws IOException;
 	public abstract byte[] getFooter(int pages) throws IOException;
 
+        @Override
 	public boolean write(List<? extends List<Byte>> input, File out) throws IOException {
-		FileOutputStream os = new FileOutputStream(out);
-
-		List<? extends List<Byte>> pages = reorder(input);
-		
-		int len = pages.size();
-		os.write(getHeader(len));
-		//write contents
-		// debug: int j = 1;
-		for (List<Byte> page : pages) {
-			byte[] b = new byte[page.size()];
-			for (int i=0; i<page.size(); i++) {
-				b[i] = page.get(i);
-			}
-			// debug: os.write(("---- page --- " + j + " [").getBytes());
-			os.write(b);
-			// debug: os.write("]--- page ---- ".getBytes());
-			// debug: j++;
-		}
-		os.write(getFooter(len));
-		os.close();
+            try (FileOutputStream os = new FileOutputStream(out)) {
+                List<? extends List<Byte>> pages = reorder(input);
+                
+                int len = pages.size();
+                os.write(getHeader(len));
+                //write contents
+                // debug: int j = 1;
+                for (List<Byte> page : pages) {
+                    byte[] b = new byte[page.size()];
+                    for (int i=0; i<page.size(); i++) {
+                        b[i] = page.get(i);
+                    }
+                    // debug: os.write(("---- page --- " + j + " [").getBytes());
+                    os.write(b);
+                    // debug: os.write("]--- page ---- ".getBytes());
+                    // debug: j++;
+                }
+                os.write(getFooter(len));
+            }
 		return true;
 	}
 

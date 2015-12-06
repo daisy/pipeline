@@ -41,7 +41,7 @@ public class EightToSixDotMapper {
 	 */
 	public EightToSixDotMapper(int width) {
 		this.width = width;
-		this.bs = new ArrayList<BitSet>();
+		this.bs = new ArrayList<>();
 		new BitSet(width*2);
 		sb = new StringBuilder();
 	}

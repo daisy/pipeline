@@ -51,7 +51,7 @@ public class StringTranslator {
 	 * @param mode the mode to use
 	 */
 	public StringTranslator(MatchMode mode) {
-		this.tokens = new ArrayList<HashMap<String, String>>();
+		this.tokens = new ArrayList<>();
 		this.mode = mode;
 		this.currentMax = 0;
 		this.tokenCount = 0;

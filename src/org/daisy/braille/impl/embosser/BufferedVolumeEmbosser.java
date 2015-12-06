@@ -138,32 +138,38 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 		init(builder.ep);
 	}
 	
+        @Override
 	public void open(boolean duplex) throws IOException {
 		super.open(duplex);
 		initVolume();
 	}
 	
 	private void initVolume() {
-		pages = new Stack<ArrayList<Byte>>();
+		pages = new Stack<>();
 		pages.add(new ArrayList<Byte>());
 	}
 	
+        @Override
 	public BrailleConverter getTable() {
 		return bf;
 	}
 	
+        @Override
 	public LineBreaks getLinebreakStyle() {
 		return breaks;
 	}
 	
+        @Override
 	public Padding getPaddingStyle() {
 		return padNewline;
 	}
 
+        @Override
 	protected void add(byte b) {
 		pages.peek().add(b);
 	}
 	
+        @Override
 	protected void addAll(byte[] bytes) {
 		ArrayList<Byte> page = pages.peek();
 		for (byte b : bytes) {
@@ -171,6 +177,7 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 		}
 	}
 
+        @Override
 	protected void formFeed() throws IOException {
 		if (lineFeedOnEmptySheet && pageIsEmpty()) {
 			lineFeed();
@@ -179,6 +186,7 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
         pages.add(new ArrayList<Byte>()); // start a new page
 	}
 
+        @Override
 	public void newVolumeSectionAndPage(boolean duplex) throws IOException {
 		super.newVolumeSectionAndPage(duplex);
 		finalizeVolume();
@@ -200,6 +208,7 @@ public class BufferedVolumeEmbosser extends AbstractEmbosserWriter {
 		}
 	}
 	
+        @Override
 	public void close() throws IOException {
 		finalizeVolume();
 		super.close();

@@ -53,7 +53,7 @@ public class IndexTransparentEmbosserWriter extends AbstractEmbosserWriter {
                        else { this.footer = new byte[0]; }
         this.os = os;
         this.bc = bc;
-        this.buf = new ArrayList<Byte>();
+        this.buf = new ArrayList<>();
         charsOnRow = 0;
     }
 

@@ -49,7 +49,7 @@ public abstract class EmbosserTable extends AbstractTable {
 	 */
 	public EmbosserTable(FactoryProperties fp, EightDotFallbackMethod fallback, char replacement) {
 		super(fp.getDisplayName(), fp.getDescription(), fp.getIdentifier());
-		props = new HashMap<String, Object>();
+		props = new HashMap<>();
 		props.put(TableProperties.IS_ONE_TO_ONE, true);
 		props.put(TableProperties.IS_DISPLAY_FORMAT, true);
 		

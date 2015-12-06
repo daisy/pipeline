@@ -31,6 +31,7 @@ public class NoPageBreaks implements PageBreaks {
 	public NoPageBreaks() {
         }
 
+        @Override
 	public String getString() {
 		return "";
 	}

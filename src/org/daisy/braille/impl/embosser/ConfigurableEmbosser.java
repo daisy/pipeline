@@ -158,6 +158,7 @@ public class ConfigurableEmbosser extends AbstractEmbosserWriter {
 		}
 	}
 	
+        @Override
 	protected void formFeed() throws IOException {
 		if (lineFeedOnEmptySheet && pageIsEmpty()) {
 			lineFeed();
@@ -178,31 +179,38 @@ public class ConfigurableEmbosser extends AbstractEmbosserWriter {
 		init(builder.props);
 	}
 
+        @Override
 	protected void add(byte b) throws IOException {
 		os.write(b);
 	}
 	
+        @Override
 	protected void addAll(byte[] bytes)  throws IOException {
 		os.write(bytes);
 	}
 
+        @Override
 	public BrailleConverter getTable() {
 		return bf;
 	}
 
+        @Override
 	public LineBreaks getLinebreakStyle() {
 		return breaks;
 	}
 	
+        @Override
 	public Padding getPaddingStyle() {
 		return padNewline;
 	}
 	
+        @Override
 	public void open(boolean duplex) throws IOException {
 		super.open(duplex);
 		os.write(header);
 	}
 	
+        @Override
 	public void close() throws IOException {
 		if (fillSheet && supportsDuplex() && currentPage() % 2 == 0) {
 			formFeed();

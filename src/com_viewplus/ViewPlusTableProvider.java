@@ -95,7 +95,7 @@ public class ViewPlusTableProvider implements TableProvider {
 				@Override
 				public BrailleConverter newBrailleConverter() {
 	                final String SUB = String.valueOf((char)0x1a);
-	                ArrayList<String> a = new ArrayList<String>();
+	                ArrayList<String> a = new ArrayList<>();
 	                for (int i=0; i<256; i++) {
 	                    a.add(SUB + (char)i);
 	                }

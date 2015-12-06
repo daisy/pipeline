@@ -52,7 +52,7 @@ public class BrailleEditorsFileFormat extends AbstractFactory implements FileFor
     private Table table;
     private TableCatalogService tableCatalog;
     private TableFilter tableFilter;
-    private final Collection<String> supportedTableIds = new ArrayList<String>();
+    private final Collection<String> supportedTableIds = new ArrayList<>();
 
     private final boolean duplexEnabled = false;
     private final boolean eightDotsEnabled = false;

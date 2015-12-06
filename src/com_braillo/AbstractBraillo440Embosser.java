@@ -137,6 +137,7 @@ public abstract class AbstractBraillo440Embosser extends BrailloEmbosser {
 			);
 	}
 
+        @Override
 	public Area getPrintableArea(PageFormat pageFormat) {
 		PrintPage printPage = getPrintPage(pageFormat);
 		return new Area(printPage.getWidth(), printPage.getHeight(), 0, 0);

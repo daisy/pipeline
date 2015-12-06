@@ -73,8 +73,8 @@ public class EmbosserBrailleConverter implements BrailleConverter {
 		if (tableDef.length!=64 && tableDef.length!=256) {
 			throw new IllegalArgumentException("Unsupported table length: " + table.length());
 		}
-		b2t = new HashMap<Character, Character>();
-		t2b = new HashMap<Character, Character>();
+		b2t = new HashMap<>();
+		t2b = new HashMap<>();
 		//lower case def.
 		int i = 0;
 		char b;

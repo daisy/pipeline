@@ -111,7 +111,7 @@ public class CidatTableProvider implements TableProvider {
 
 				@Override
 				public BrailleConverter newBrailleConverter() {
-	                ArrayList<String> al = new ArrayList<String>();
+	                ArrayList<String> al = new ArrayList<>();
 	                for (int i=0; i<0x1b; i++) {
 	                    al.add(String.valueOf((char)i));
 	                }
@@ -137,7 +137,7 @@ public class CidatTableProvider implements TableProvider {
 
 				@Override
 				public BrailleConverter newBrailleConverter() {
-	                ArrayList<String> al = new ArrayList<String>();
+	                ArrayList<String> al = new ArrayList<>();
 	                for (int i=0; i<0x1b; i++) {
 	                    al.add(String.valueOf((char)i));
 	                }

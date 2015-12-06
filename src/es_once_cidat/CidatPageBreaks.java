@@ -45,6 +45,7 @@ public class CidatPageBreaks implements PageBreaks {
         }
     }
 
+    @Override
     public String getString() {
         return newpage;
     }

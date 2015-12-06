@@ -63,6 +63,7 @@ class Braillo440VolumeWriter extends BrailloVolumeWriter {
 		return new List[s];
 	}
 
+        @Override
 	public List<? extends List<Byte>> reorder(List<? extends List<Byte>> pages) {
 		switch (mode) {
 			case SW_FOUR_PAGE: case SWSF: {
@@ -78,7 +79,7 @@ class Braillo440VolumeWriter extends BrailloVolumeWriter {
 							throw new RuntimeException("Unexpected error.");
 						}
 						if (i>pages.size()) {
-							r[pos] = new ArrayList<Byte>();
+							r[pos] = new ArrayList<>();
 							for (byte b:ffSeq) {
 								r[pos].add(b);
 							}
@@ -86,7 +87,7 @@ class Braillo440VolumeWriter extends BrailloVolumeWriter {
 							r[pos] = pages.get(i-1);
 						}
 					}
-					ArrayList<List<Byte>> ret = new ArrayList<List<Byte>>();
+					ArrayList<List<Byte>> ret = new ArrayList<>();
 					for (List<Byte> r2 : r) {
 						ret.add(r2);
 					}
@@ -97,7 +98,7 @@ class Braillo440VolumeWriter extends BrailloVolumeWriter {
 					List<Byte>[] r = newList(s);
 					for (int i=0;i<s;i++) {
 						if (i>=pages.size()) {
-							r[i] = new ArrayList<Byte>();
+							r[i] = new ArrayList<>();
 							for (byte b:ffSeq) {
 								r[i].add(b);
 							}
@@ -105,7 +106,7 @@ class Braillo440VolumeWriter extends BrailloVolumeWriter {
 							r[i] = pages.get(i);
 						}
 					}
-					ArrayList<List<Byte>> ret = new ArrayList<List<Byte>>();
+					ArrayList<List<Byte>> ret = new ArrayList<>();
 					for (List<Byte> r2 : r) {
 						ret.add(r2);
 					}

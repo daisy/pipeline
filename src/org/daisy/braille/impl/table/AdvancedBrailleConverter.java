@@ -81,7 +81,7 @@ public class AdvancedBrailleConverter implements BrailleConverter {
 		this.replacement = replacement;
 		this.ignoreCase = ignoreCase;
 		this.supports8dot = table.length == 256;
-		b2t = new HashMap<Character, String>();
+		b2t = new HashMap<>();
 		t2b = new StringTranslator(mode);
 		int i = 0;
 		char b;

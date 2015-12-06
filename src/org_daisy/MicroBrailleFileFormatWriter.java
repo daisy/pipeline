@@ -113,6 +113,7 @@ public class MicroBrailleFileFormatWriter extends AbstractEmbosserWriter {
         super.close();
     }
 
+    @Override
 	public boolean supportsZFolding() {
 		// TODO Auto-generated method stub
 		return false;
