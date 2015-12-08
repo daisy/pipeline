@@ -13,4 +13,16 @@ public interface PageTemplateBuilder {
 	 * @param obj the field list
 	 */
 	public void addToFooter(FieldList obj);
+	
+	/**
+	 * Adds a column to the left margin of the page.
+	 * @param margin the column
+	 */
+	public void addToLeftMargin(MarginRegion margin);
+	
+	/**
+	 * Adds a column to the right margin of the page.
+	 * @param margin the column
+	 */
+	public void addToRightMargin(MarginRegion margin);
 }
