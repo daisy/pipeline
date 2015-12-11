@@ -43,7 +43,7 @@ public class SplitList<T> {
 	 * @return returns the split list
 	 */
 	public static <T> SplitList<T> split(List<T> in, int pos) {
-		return new SplitList<T>(in.subList(0, pos), in.subList(pos, in.size()));
+		return new SplitList<>(in.subList(0, pos), in.subList(pos, in.size()));
 	}
 
 }

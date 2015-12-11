@@ -123,7 +123,7 @@ class URLCache {
 				url.getProtocol().equals("") || url.getHost().equals("") || url.getPath().equals("")) {
 			return null;
 		}
-		ArrayList<String> list = new ArrayList<String>();
+		ArrayList<String> list = new ArrayList<>();
 		list.add(url.getProtocol());
 		list.add(url.getHost());
 		list.add(url.getPath());

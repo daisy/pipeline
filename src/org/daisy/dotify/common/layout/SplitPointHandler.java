@@ -35,7 +35,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * @return returns a split point result
 	 */
 	public final SplitPoint<T> split(float breakPoint, boolean force, T ... units) {
-		return split(breakPoint, force, new SplitPointData<T>(units));
+		return split(breakPoint, force, new SplitPointData<>(units));
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * @return returns a split point result
 	 */
 	public SplitPoint<T> split(float breakPoint, boolean force, List<T> units) {
-		return split(breakPoint, force, new SplitPointData<T>(units));
+		return split(breakPoint, force, new SplitPointData<>(units));
 	}
 
 	/**
@@ -62,11 +62,11 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	public SplitPoint<T> split(float breakPoint, boolean force, SplitPointData<T> data) {
 		if (data.getUnits().size()==0) {
 			// pretty simple...
-			return new SplitPoint<T>(data.getUnits(), EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, false);
+			return new SplitPoint<>(data.getUnits(), EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, false);
 		} else if (breakPoint<=0) {
-			return finalizeBreakpointTrimTail(new SplitList<T>(EMPTY_LIST, EMPTY_LIST), data.getUnits(), data.getSupplements(), false);
+			return finalizeBreakpointTrimTail(new SplitList<>(EMPTY_LIST, EMPTY_LIST), data.getUnits(), data.getSupplements(), false);
 		} else if (totalSize(data.getUnits(), data.getSupplements())<=breakPoint) {
-			return finalizeBreakpointTrimTail(new SplitList<T>(data.getUnits(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
+			return finalizeBreakpointTrimTail(new SplitList<>(data.getUnits(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
 		} else {
 			return findBreakpoint(data.getUnits(), breakPoint, data.getSupplements(), force);
 		}
@@ -89,7 +89,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	}
 	
 	private SplitPoint<T> findBreakpoint(List<T> units, float breakPoint, Supplements<T> map, boolean force) {
-		int strPos = forwardSkippable(units, findCollapse(units, new SizeStep<T>(breakPoint, map)));
+		int strPos = forwardSkippable(units, findCollapse(units, new SizeStep<>(breakPoint, map)));
 		// check next unit to see if it can be removed.
 		if (strPos==units.size()-1) { // last unit?
 			List<T> head = units.subList(0, strPos+1);
@@ -132,7 +132,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		if (trimTrailing) {
 			return finalizeBreakpointTrimTail(trimTrailing(head), tail, map, hard);
 		} else {
-			return finalizeBreakpointTrimTail(new SplitList<T>(head, EMPTY_LIST), tail, map, hard);
+			return finalizeBreakpointTrimTail(new SplitList<>(head, EMPTY_LIST), tail, map, hard);
 		}
 	}
 
@@ -141,7 +141,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		findCollapse(head.getFirstPart(), trimmed);
 		List<T> discarded = trimmed.getDiscarded();
 		discarded.addAll(head.getSecondPart());
-		return new SplitPoint<T>(trimmed.getResult(), trimmed.getSupplements(), tail, discarded, hard);
+		return new SplitPoint<>(trimmed.getResult(), trimmed.getSupplements(), tail, discarded, hard);
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	
 	static <T extends SplitPointUnit> float totalSize(List<T> units, Supplements<T> map) {
 		float ret = 0;
-		Set<String> ids = new HashSet<String>();
+		Set<String> ids = new HashSet<>();
 		for (int i=0; i<units.size(); i++) {
 			T unit = units.get(i);
 			List<String> suppIds = unit.getSupplementaryIDs();

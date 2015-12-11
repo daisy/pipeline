@@ -14,7 +14,7 @@ public class CompoundIterator<T> implements Iterator<T> {
 	ArrayList<Iterator<T>> iterators;
 	
 	public CompoundIterator(Iterable<? extends Iterable<T>> iterables) {
-		iterators = new ArrayList<Iterator<T>>();
+		iterators = new ArrayList<>();
 		for (Iterable<T> e : iterables) {
 			iterators.add(e.iterator());
 		}

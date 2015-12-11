@@ -12,7 +12,7 @@ class DummySplitPoint implements SplitPointUnit {
 		boolean breakable = false; boolean skippable = false; boolean collapsible = false; float size = 1; Float minSize = null;
 		List<String> supplementIds;
 		Builder() {
-			supplementIds = new ArrayList<String>();
+			supplementIds = new ArrayList<>();
 		}
 		Builder breakable(boolean value) { breakable = value; return this; }
 		Builder skippable(boolean value) { skippable = value; return this; }

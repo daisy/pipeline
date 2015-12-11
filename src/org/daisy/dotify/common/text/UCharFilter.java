@@ -38,7 +38,7 @@ public class UCharFilter extends SimpleUCharReplacer implements StringFilter {
 	}
 	
 	private static Map<Integer, String> fillInCase(Map<Integer, String> map, Locale autoComplete) {
-		Map<Integer, String> add = new HashMap<Integer, String>();
+		Map<Integer, String> add = new HashMap<>();
 		String substitute;
 		String codePointStr;
 		String newStr;

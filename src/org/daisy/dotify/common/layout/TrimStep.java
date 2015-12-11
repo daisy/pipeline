@@ -13,11 +13,11 @@ class TrimStep<T extends SplitPointUnit> implements StepForward<T> {
 	private final Set<String> ids;
 	
 	TrimStep(Supplements<T> map) {
-		this.ret = new ArrayList<T>();
-		this.supplements = new ArrayList<T>();
-		this.discarded = new ArrayList<T>();
+		this.ret = new ArrayList<>();
+		this.supplements = new ArrayList<>();
+		this.discarded = new ArrayList<>();
 		this.map = map;
-		this.ids = new HashSet<String>();
+		this.ids = new HashSet<>();
 	}
 
 	@Override

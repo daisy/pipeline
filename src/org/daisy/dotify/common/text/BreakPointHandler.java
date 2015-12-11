@@ -35,7 +35,7 @@ public class BreakPointHandler {
 		
 		public Builder(String str) {
 			this.str = str;
-			this.meta = new TreeMap<Integer, NonStandardHyphenationInfo>();
+			this.meta = new TreeMap<>();
 		}
 
 		/**

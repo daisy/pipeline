@@ -14,7 +14,7 @@ class SizeStep<T extends SplitPointUnit> implements StepForward<T> {
 	SizeStep(float breakPoint, Supplements<T> map) {
 		this.breakPoint = breakPoint;
 		this.map = map;
-		this.ids = new HashSet<String>();
+		this.ids = new HashSet<>();
 	}
 
 	@Override

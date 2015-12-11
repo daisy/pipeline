@@ -18,6 +18,6 @@ public class CompoundIterable<T> implements Iterable<T> {
 
 	@Override
 	public Iterator<T> iterator() {
-		return new CompoundIterator<T>(iterables);
+		return new CompoundIterator<>(iterables);
 	}
 }
