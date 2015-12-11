@@ -1,3 +1,5 @@
+Import-Package:  \
+	org.daisy.dotify.api.hyphenator; provide:=true, *
 Private-Package:  \
 	org.daisy.dotify.impl.hyphenator.latex,\
 	org.daisy.dotify.hyphenator
@@ -11,4 +13,3 @@ Include-Resource: / = src/
 	com.googlecode.texhyphj,\
 	dotify.common;version=latest,\
 	dotify.api;version=latest
-Bundle-Version: 2.0.2-SNAPSHOT
