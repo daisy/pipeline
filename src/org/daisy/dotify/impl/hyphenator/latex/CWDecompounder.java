@@ -88,7 +88,6 @@ public class CWDecompounder {
 	 * @param word the input word
 	 * @param beginLimit the shortest substring at the beginning of the word to evaluate against the dictionary
 	 * @param endLimit the shortest substring at the end of the word to evaluate against the dictionary
-	 * @param evaluate if true, return the most likely solution based on its frequency
 	 * @return returns the word, hyphenated at compound boundaries
 	 */
 	public String findCompounds(String word, int beginLimit, int endLimit, double threshold) {

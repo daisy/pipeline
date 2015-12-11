@@ -43,7 +43,7 @@ public class CWHyphenationUnit {
 	/**
 	 * Hyphenates the supplied word, using the hyphenation points in this unit 
 	 * @param word
-	 * @return
+	 * @return returns the hyphenated string
 	 */
 	public String hyphenate(String word) {
 		if (hasHyphenation()) {
