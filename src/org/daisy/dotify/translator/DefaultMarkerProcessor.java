@@ -95,7 +95,7 @@ public class DefaultMarkerProcessor implements MarkerProcessor {
 	 *            the start index, from the beginning of the first string
 	 * @param endInx
 	 *            the end index,
-	 * @return
+	 * @return returns a substring
 	 * @throws IndexOutOfBoundsException
 	 *             if end index is less than or equal to start index
 	 */
