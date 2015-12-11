@@ -20,7 +20,7 @@ public class DefaultTextAttribute implements TextAttribute {
 		}
 
 		public Builder(String attribute) {
-			this.attributes = new ArrayList<TextAttribute>();
+			this.attributes = new ArrayList<>();
 			this.identifier = attribute;
 		}
 

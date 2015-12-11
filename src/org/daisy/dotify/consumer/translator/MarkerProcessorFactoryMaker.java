@@ -42,7 +42,7 @@ public class MarkerProcessorFactoryMaker implements
 
 	public MarkerProcessorFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
-		factories = new CopyOnWriteArrayList<MarkerProcessorFactoryService>();
+		factories = new CopyOnWriteArrayList<>();
 		this.map = Collections.synchronizedMap(new HashMap<String, MarkerProcessorFactoryService>());
 	}
 

@@ -121,7 +121,7 @@ public class BrailleGraphicsTest {
 									"⠸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠿",
 									"⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉"};
 		List<String> a = sixDotGraphics.renderGraphics(borderImage.getData());
-		List<String> b = new ArrayList<String>();
+		List<String> b = new ArrayList<>();
 		b.add("\u28FF\u28FF\u28FF");
 		List<String> res = BrailleGraphics.combine(a, b, 2, 1);
 		assertEquals(exp.length, res.size());
@@ -133,7 +133,7 @@ public class BrailleGraphicsTest {
 	@Test (expected=IllegalArgumentException.class)
 	public void testCombineOutsideX() {
 		List<String> a = sixDotGraphics.renderGraphics(borderImage.getData());
-		List<String> b = new ArrayList<String>();
+		List<String> b = new ArrayList<>();
 		b.add("\u28FF\u28FF\u28FF");
 		BrailleGraphics.combine(a, b, 14, 1);
 	}
@@ -141,7 +141,7 @@ public class BrailleGraphicsTest {
 	@Test (expected=IllegalArgumentException.class)
 	public void testCombineOutsideY() {
 		List<String> a = sixDotGraphics.renderGraphics(borderImage.getData());
-		List<String> b = new ArrayList<String>();
+		List<String> b = new ArrayList<>();
 		b.add("\u28FF\u28FF\u28FF");
 		b.add("\u28FF\u28FF\u28FF");
 		BrailleGraphics.combine(a, b, 2, 3);

@@ -19,7 +19,7 @@ public class TranslatorSpecificationTest {
 		TranslatorSpecification s1 = new TranslatorSpecification("sv", "uncontracted");
 		TranslatorSpecification s2 = new TranslatorSpecification("en", "bypass");
 		TranslatorSpecification s3 = new TranslatorSpecification("sv", "bypass");
-		ArrayList<TranslatorSpecification> a = new ArrayList<TranslatorSpecification>();
+		ArrayList<TranslatorSpecification> a = new ArrayList<>();
 		a.add(s1);
 		a.add(s2);
 		a.add(s3);

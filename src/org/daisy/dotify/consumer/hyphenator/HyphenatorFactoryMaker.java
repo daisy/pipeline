@@ -34,7 +34,7 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 	
 	public HyphenatorFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
-		filters = new CopyOnWriteArrayList<HyphenatorFactoryService>();
+		filters = new CopyOnWriteArrayList<>();
 		this.map = Collections.synchronizedMap(new HashMap<String, HyphenatorFactoryService>());
 	}
 	
@@ -124,7 +124,7 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 	
 	@Override
 	public Collection<String> listLocales() {
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<String> ret = new ArrayList<>();
 		for (HyphenatorFactoryService s : filters) {
 			ret.addAll(s.listLocales());
 		}

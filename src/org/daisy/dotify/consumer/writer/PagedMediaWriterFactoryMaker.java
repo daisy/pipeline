@@ -35,7 +35,7 @@ public class PagedMediaWriterFactoryMaker implements
 
 	public PagedMediaWriterFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
-		filters = new CopyOnWriteArrayList<PagedMediaWriterFactoryService>();
+		filters = new CopyOnWriteArrayList<>();
 		this.map = Collections.synchronizedMap(new HashMap<String, PagedMediaWriterFactoryService>());
 	}
 	
@@ -124,7 +124,7 @@ public class PagedMediaWriterFactoryMaker implements
 
 	@Override
 	public Collection<String> listMediaTypes() {
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<String> ret = new ArrayList<>();
 		for (PagedMediaWriterFactoryService s : filters) {
 			ret.addAll(s.listMediaTypes());
 		}

@@ -44,7 +44,7 @@ public class BrailleFilterFactoryMaker implements
 
 	public BrailleFilterFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
-		factories = new CopyOnWriteArrayList<BrailleFilterFactoryService>();
+		factories = new CopyOnWriteArrayList<>();
 		this.map = Collections.synchronizedMap(new HashMap<String, BrailleFilterFactoryService>());
 	}
 
@@ -152,7 +152,7 @@ public class BrailleFilterFactoryMaker implements
 
 	@Override
 	public Collection<TranslatorSpecification> listSpecifications() {
-		Set<TranslatorSpecification> ret = new HashSet<TranslatorSpecification>();
+		Set<TranslatorSpecification> ret = new HashSet<>();
 		synchronized (map) {
 			for (BrailleFilterFactoryService f : factories) {
 				ret.addAll(f.listSpecifications());

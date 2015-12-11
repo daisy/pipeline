@@ -35,7 +35,7 @@ public class Integer2TextFactoryMaker implements
 
 	public Integer2TextFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
-		filters = new CopyOnWriteArrayList<Integer2TextFactoryService>();
+		filters = new CopyOnWriteArrayList<>();
 		this.map = Collections.synchronizedMap(new HashMap<String, Integer2TextFactoryService>());
 	}
 	
@@ -124,7 +124,7 @@ public class Integer2TextFactoryMaker implements
 
 	@Override
 	public Collection<String> listLocales() {
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<String> ret = new ArrayList<>();
 		for (Integer2TextFactoryService s : filters) {
 			ret.addAll(s.listLocales());
 		}

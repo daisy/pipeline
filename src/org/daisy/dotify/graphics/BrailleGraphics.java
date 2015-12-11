@@ -61,7 +61,7 @@ public class BrailleGraphics {
 		int[]p8 = new int[1];
 		int c = 0;
 		StringBuilder sb;
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<String> ret = new ArrayList<>();
 		for (int y = my; y < h; y=y+dy) {
 			sb = new StringBuilder();
 			for (int x = mx; x < w; x=x+dx) {
@@ -100,7 +100,7 @@ public class BrailleGraphics {
 	 * @return the filtered braille image, characters in the range 0x2800-0x283F
 	 */
 	public static List<String> sixDotFilter(List<String> input) {
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<String> ret = new ArrayList<>();
 		StringBuilder sb;
 		for (String s : input) {
 			sb = new StringBuilder();
@@ -135,7 +135,7 @@ public class BrailleGraphics {
 		if (overlay.size()+y>background.size()) {
 			throw new IllegalArgumentException("Cannot fit overlay within background (y-axis)");
 		}
-		ArrayList<String> ret = new ArrayList<String>();
+		ArrayList<String> ret = new ArrayList<>();
 		for (int i = 0; i<background.size();i++) {
 			int y2 = i-y;
 			String a = null;

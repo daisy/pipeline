@@ -43,7 +43,7 @@ public class PageAreaProperties {
 		public Builder(String collectionId, int maxHeight) {
 			this.collectionId = collectionId;
 			this.maxHeight = maxHeight;
-			this.fallbackRules = new ArrayList<FallbackRule>();
+			this.fallbackRules = new ArrayList<>();
 		}
 		
 		public Builder align(Alignment value) {
@@ -73,7 +73,7 @@ public class PageAreaProperties {
 	private void validateFallbackRules() {
 		if (!fallbackRules.isEmpty()) {
 			boolean found = false;
-			Set<String> str = new HashSet<String>();
+			Set<String> str = new HashSet<>();
 			for (FallbackRule r : fallbackRules) {
 				if (!str.add(r.applyToCollection())) {
 					Logger.getLogger(this.getClass().getCanonicalName()).warning("Multiple rules for the same collection: " + r.applyToCollection());
