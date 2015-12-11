@@ -41,7 +41,7 @@ import org.daisy.dotify.impl.input.LayoutEngineTask;
  * @author Joel Håkansson
  */
 public class DotifyTaskSystem implements TaskSystem {
-	private final static QName ENTRY = new QName("http://daisymfc.svn.sourceforge.net/viewvc/daisymfc/trunk/dmfc/transformers/org_pef_dtbook2pef/", "entry", "generator");
+	private final static QName ENTRY = new QName("http://www.daisy.org/ns/2015/dotify", "entry", "generator");
 	private final String outputFormat;
 	private final String context;
 	private final String name;
