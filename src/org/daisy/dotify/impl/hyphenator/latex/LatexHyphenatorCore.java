@@ -19,7 +19,7 @@ class LatexHyphenatorCore {
 	
 	private LatexHyphenatorCore() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
-		map = new HashMap<String, HyphenationConfig>();
+		map = new HashMap<>();
 		locator = new LatexRulesLocator();
 	}
 	

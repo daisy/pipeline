@@ -24,7 +24,7 @@ public class CWDecompounder {
 		if (decompoundLimit<1) {
 			throw new IllegalArgumentException("Decompound limit must not be lower than one.");
 		}
-		stems = new HashMap<String, CWHyphenationUnit>();
+		stems = new HashMap<>();
 	}
 
 	/**

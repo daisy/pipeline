@@ -17,7 +17,7 @@ public class CWHyphenatorCore {
 	
 	private CWHyphenatorCore() {
 		tables = loadProperties("compound-catalog.xml");
-		map = new HashMap<String, CWHyphenatorAtom>();
+		map = new HashMap<>();
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 	}
 	
