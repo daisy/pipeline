@@ -18,7 +18,7 @@ public class Epub3InputManager implements TaskGroup {
 
 	@Override
 	public List<InternalTask> compile(Map<String, Object> parameters) throws TaskSystemException {
-		ArrayList<InternalTask> ret = new ArrayList<InternalTask>();
+		ArrayList<InternalTask> ret = new ArrayList<>();
 		ret.add(new Epub3Task("Epub to Epub converter"));
 		ret.add(new XsltTask("Epub 3 to OBFL converter", null, null));
 		return ret;

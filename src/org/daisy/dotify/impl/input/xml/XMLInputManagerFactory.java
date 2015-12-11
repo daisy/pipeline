@@ -38,7 +38,7 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 		DefaultInputUrlResourceLocator p = DefaultInputUrlResourceLocator.getInstance();
 		Set<String> supportedFormats = p.listFileFormats();
 		supportedFormats.add("xml");
-		supportedSpecifications = new HashSet<TaskGroupSpecification>();
+		supportedSpecifications = new HashSet<>();
 		for (String format : supportedFormats) {
 			for (String locale : locator.listSupportedLocales()) {
 				supportedSpecifications.add(new TaskGroupSpecification(format, "obfl", locale));
@@ -106,7 +106,7 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 		 * @return returns a list of supported locales
 		 */
 		public Set<String> listSupportedLocales() {
-			HashSet<String> ret = new HashSet<String>();
+			HashSet<String> ret = new HashSet<>();
 			for (Object key : locales.keySet()) {
 				ret.add(key.toString());
 			}

@@ -99,7 +99,7 @@ class XMLInputManager implements TaskGroup {
 
 			inputformat = p.getConfigFileName(rootElement, rootNS);
 			if (inputformat !=null && "".equals(inputformat)) {
-				return new ArrayList<InternalTask>();
+				return new ArrayList<>();
 			}
 		} catch (XMLToolsException e) {
 			throw new TaskSystemException("XMLToolsException while reading input", e);
@@ -151,7 +151,7 @@ class XMLInputManager implements TaskGroup {
 	
 	private ArrayList<InternalTask> readConfiguration(ResourceLocator locator, String path, Map<String, Object> parameters) throws TaskSystemException, ResourceLocatorException {
 		URL t = locator.getResource(path);
-		ArrayList<InternalTask> setup = new ArrayList<InternalTask>();
+		ArrayList<InternalTask> setup = new ArrayList<>();
 		try {
 			InputStream propsStream = null;
 			try {
@@ -180,7 +180,7 @@ class XMLInputManager implements TaskGroup {
 							}
 						}
 					} else if ("transformation".equals(key.toString())) {
-						Map<String, Object> xsltParams = new HashMap<String, Object>();
+						Map<String, Object> xsltParams = new HashMap<>();
 						for (String key2 : parameters.keySet()) {
 							xsltParams.put(key2, parameters.get(key2));
 						}

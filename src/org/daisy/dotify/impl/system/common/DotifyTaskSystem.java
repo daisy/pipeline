@@ -77,13 +77,13 @@ public class DotifyTaskSystem implements TaskSystem {
 			p = new RunParameters(p1);
 		}
 		Properties p2 = new Properties();
-		HashMap<String, Object> h = new HashMap<String, Object>();
+		HashMap<String, Object> h = new HashMap<>();
 		for (Object key : p.getKeys()) {
 			p2.put(key, p.getProperty(key));
 			h.put(key.toString(), p.getProperty(key));
 		}
 		
-		ArrayList<InternalTask> setup = new ArrayList<InternalTask>();
+		ArrayList<InternalTask> setup = new ArrayList<>();
 		{
 			//InputDetector
 			TaskGroup idts = imf.newTaskGroup(new TaskGroupSpecification(p2.get(Keys.INPUT_FORMAT).toString(), "obfl", context));
@@ -141,7 +141,7 @@ public class DotifyTaskSystem implements TaskSystem {
 	}
 	
 	private static List<MetaDataItem> asMetadata(Properties p2) {
-		ArrayList<MetaDataItem> meta = new ArrayList<MetaDataItem>();
+		ArrayList<MetaDataItem> meta = new ArrayList<>();
 		
 		String ident = p2.getProperty("identifier");
 		if (ident!=null) {

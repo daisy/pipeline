@@ -15,7 +15,7 @@ public class TextInputManagerFactory implements TaskGroupFactory {
 	private final Set<TaskGroupSpecification> specs;
 
 	public TextInputManagerFactory() {
-		this.specs = new HashSet<TaskGroupSpecification>();
+		this.specs = new HashSet<>();
 		String text = "text";
 		String txt = "txt";
 		String obfl = "obfl";

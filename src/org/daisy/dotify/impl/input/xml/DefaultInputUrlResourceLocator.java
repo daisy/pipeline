@@ -53,7 +53,7 @@ class DefaultInputUrlResourceLocator extends AbstractResourceLocator {
 	}
 
 	Set<String> listFileFormats() {
-		Set<String> ret = new HashSet<String>();
+		Set<String> ret = new HashSet<>();
 		try {
 			loadIfNotLoaded();
 		} catch (ResourceLocatorException e) {

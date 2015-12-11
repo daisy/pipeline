@@ -11,7 +11,7 @@ public class Epub3InputManagerFactory implements TaskGroupFactory {
 	private final Set<TaskGroupSpecification> supportedSpecifications;
 
 	public Epub3InputManagerFactory() {
-		this.supportedSpecifications = new HashSet<TaskGroupSpecification>();
+		this.supportedSpecifications = new HashSet<>();
 		String epub = "epub";
 		String obfl = "obfl";
 		supportedSpecifications.add(new TaskGroupSpecification(epub, obfl, "sv-SE"));
