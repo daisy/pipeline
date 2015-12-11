@@ -6,12 +6,11 @@ Service-Component: *
 	dotify.common;version=latest,\
 	dotify.api;version=latest
 Private-Package: org.daisy.dotify.impl.translator,\
-	org.daisy.dotify.text,\
 	org.daisy.dotify.translator,\
 	org.daisy.dotify.impl.translator.sv_SE,\
 	org.daisy.dotify.impl.translator.liblouis
 Include-Resource: / = src/
 -sources: false
-Import-Package: org.junit*;resolution:=optional,\
+Import-Package: \
+	org.daisy.dotify.api.translator; provide:=true,\
 	*
-Bundle-Version: 2.0.2-SNAPSHOT
