@@ -58,7 +58,7 @@ public class RegexMarkerDictionary implements MarkerDictionary {
 		 * to function, at least one pattern must be added.
 		 */
 		public Builder() {
-			patterns = new LinkedHashMap<Pattern, MarkerPair>();
+			patterns = new LinkedHashMap<>();
 		}
 
 		/**

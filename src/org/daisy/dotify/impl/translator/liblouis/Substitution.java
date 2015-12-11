@@ -10,7 +10,7 @@ class Substitution {
 	public Substitution(String replacement) {
 		super();
 		this.replacement = replacement;
-		this.groups = new HashSet<CharClass>();
+		this.groups = new HashSet<>();
 	}
 	
 	public String getReplacement() {

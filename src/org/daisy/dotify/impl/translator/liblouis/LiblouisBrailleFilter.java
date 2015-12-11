@@ -28,7 +28,7 @@ public class LiblouisBrailleFilter implements StringFilter {
 		//private String noletsignafter = "";
 
 		public Builder() {
-			this.mSubstitutionTable = new HashMap<Integer, Substitution>();
+			this.mSubstitutionTable = new HashMap<>();
 			this.logger = Logger.getLogger(this.getClass().getCanonicalName());
 		}
 		
@@ -65,9 +65,9 @@ public class LiblouisBrailleFilter implements StringFilter {
 	}
 
 	private LiblouisBrailleFilter(Builder b) {
-		this.mSubstitutionTable = new HashMap<Integer, Substitution>();
+		this.mSubstitutionTable = new HashMap<>();
 		mSubstitutionTable.putAll(b.mSubstitutionTable);
-		this.replacers = new ArrayList<RegexReplace>();
+		this.replacers = new ArrayList<>();
 		//Add more regular expressions here, based on character classes
 		char uc = CharClass.UPPERCASE.token();
 		replacers.add(new RegexReplace("(?<!"+uc+")("+uc+"{1})(?!"+uc+")", b.capsign+"$1"));

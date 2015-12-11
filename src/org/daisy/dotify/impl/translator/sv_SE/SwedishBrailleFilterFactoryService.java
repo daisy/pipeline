@@ -21,7 +21,7 @@ public class SwedishBrailleFilterFactoryService implements
 	private final ArrayList<TranslatorSpecification> specs;
 
 	public SwedishBrailleFilterFactoryService() {
-		this.specs = new ArrayList<TranslatorSpecification>();
+		this.specs = new ArrayList<>();
 		specs.add(new TranslatorSpecification("sv-SE", BrailleTranslatorFactory.MODE_UNCONTRACTED));
 	}
 	

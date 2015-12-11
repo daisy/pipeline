@@ -20,7 +20,7 @@ public class DefaultMarkerProcessor implements MarkerProcessor {
 		private final Map<String, MarkerDictionary> specs;
 
 		public Builder() {
-			specs = new HashMap<String, MarkerDictionary>();
+			specs = new HashMap<>();
 		}
 
 		public Builder addDictionary(String identifier, MarkerDictionary def) {
@@ -126,7 +126,7 @@ public class DefaultMarkerProcessor implements MarkerProcessor {
 				endOffset -= strs[aEnd].length();
 				aEnd++;
 			}
-			List<String> ret = new ArrayList<String>();
+			List<String> ret = new ArrayList<>();
 			for (int i = aStart; i <= aEnd; i++) {
 				if (i == aStart && i == aEnd) {
 					ret.add(strs[aStart].substring(startOffset, endOffset));

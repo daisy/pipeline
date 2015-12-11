@@ -27,7 +27,7 @@ public class DefaultBrailleFilter implements BrailleFilter {
 		this.loc = locale;
 		this.filter = filter;
 		this.tap = tap;
-		this.hyphenators = new HashMap<String, HyphenatorInterface>();
+		this.hyphenators = new HashMap<>();
 		this.hyphenatorFactoryMaker = hyphenatorFactoryMaker;
 	}
 

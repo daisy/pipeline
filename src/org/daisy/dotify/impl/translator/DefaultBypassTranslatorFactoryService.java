@@ -49,7 +49,7 @@ public class DefaultBypassTranslatorFactoryService implements
 
 	@Override
 	public Collection<TranslatorSpecification> listSpecifications() {
-		ArrayList<TranslatorSpecification> ret = new ArrayList<TranslatorSpecification>();
+		ArrayList<TranslatorSpecification> ret = new ArrayList<>();
 		for (String loc : hyphenator.listLocales()) {
 			ret.add(new TranslatorSpecification(loc, BrailleTranslatorFactory.MODE_BYPASS));
 		}

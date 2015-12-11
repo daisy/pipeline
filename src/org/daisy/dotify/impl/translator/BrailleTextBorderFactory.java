@@ -36,7 +36,7 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 	private final Map<String, Object> features;
 
 	public BrailleTextBorderFactory() {
-		this.features = new HashMap<String, Object>();
+		this.features = new HashMap<>();
 		this.def = new BorderSpecification();
 		this.top = new BorderSpecification(def);
 		this.left = new BorderSpecification(def);
@@ -48,7 +48,7 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 	public void setFeature(String key, Object value) {
 		if (key!=null && key.toLowerCase().startsWith(KEY_BORDER)) {
 			useBorder = true;
-			HashSet<String> set = new HashSet<String>();
+			HashSet<String> set = new HashSet<>();
 			for (String s : key.toLowerCase().split("-")) {
 				set.add(s);
 			}
