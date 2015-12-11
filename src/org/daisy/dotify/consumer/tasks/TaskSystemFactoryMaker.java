@@ -34,7 +34,7 @@ public class TaskSystemFactoryMaker implements TaskSystemFactoryMakerService {
 
 	public TaskSystemFactoryMaker() {
 		logger = Logger.getLogger(TaskSystemFactoryMaker.class.getCanonicalName());
-		filters = new CopyOnWriteArrayList<TaskSystemFactory>();
+		filters = new CopyOnWriteArrayList<>();
 		this.map = Collections.synchronizedMap(new HashMap<String, TaskSystemFactory>());
 	}
 

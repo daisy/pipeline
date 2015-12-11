@@ -32,7 +32,7 @@ public class TaskGroupFactoryMaker implements TaskGroupFactoryMakerService {
 
 	public TaskGroupFactoryMaker() {
 		logger = Logger.getLogger(TaskGroupFactoryMaker.class.getCanonicalName());
-		filters = new CopyOnWriteArrayList<TaskGroupFactory>();
+		filters = new CopyOnWriteArrayList<>();
 		this.map = Collections.synchronizedMap(new HashMap<String, TaskGroupFactory>());		
 	}
 
@@ -120,7 +120,7 @@ public class TaskGroupFactoryMaker implements TaskGroupFactoryMakerService {
 	
 	@Override
 	public Set<TaskGroupSpecification> listSupportedSpecifications() {
-		HashSet<TaskGroupSpecification> ret = new HashSet<TaskGroupSpecification>();
+		HashSet<TaskGroupSpecification> ret = new HashSet<>();
 		for (TaskGroupFactory h : filters) {
 			ret.addAll(h.listSupportedSpecifications());
 		}
