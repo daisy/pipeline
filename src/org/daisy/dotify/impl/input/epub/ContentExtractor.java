@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -29,21 +30,20 @@ public class ContentExtractor {
 		try {
 			ZipEntry entry;
 			try {
-				entry = zis.getNextEntry();
-				// this must be the first item
-				// see 3.3 OCF ZIP Container Media Type Identification
-				if (entry.getName().equals("mimetype")) {
-					int s = (int) entry.getSize();
-					byte[] b = new byte[s];
-					zis.read(b);
-					if (!"application/epub+zip".equals(new String(b))) {
-						throw new EPUB3ReaderException("Wrong mimetype: " + new String(b));
-					}
-				} else {
-					throw new EPUB3ReaderException("The file does not contain a mimetype file.");
-				}
+				boolean mimetypeChecked = false;
 				while ((entry = zis.getNextEntry()) != null) {
-					processEntry(entry);
+					if (entry.getName().equals("mimetype")) {
+						processMimetype(entry);
+						mimetypeChecked = true;
+					} else {
+						// "mimetype" must be the first item
+						// see 3.3 OCF ZIP Container Media Type Identification
+						if (!mimetypeChecked) {
+							Logger.getLogger(this.getClass().getCanonicalName()).warning("The first item in an epub should be a mimetype file.");
+							mimetypeChecked = true;
+						}
+						processEntry(entry);
+					}
 				}
 			} catch (IOException e) {
 				throw new EPUB3ReaderException(e);
@@ -55,6 +55,15 @@ public class ContentExtractor {
 				} catch (IOException e) {
 				}
 			}
+		}
+	}
+	
+	private void processMimetype(ZipEntry entry) throws EPUB3ReaderException, IOException {
+		int s = (int) entry.getSize();
+		byte[] b = new byte[s];
+		zis.read(b);
+		if (!"application/epub+zip".equals(new String(b))) {
+			throw new EPUB3ReaderException("Wrong mimetype: " + new String(b));
 		}
 	}
 
