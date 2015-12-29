@@ -8,7 +8,12 @@
 	<xsl:key name="spine" match="opf:itemref" use="@idref"/>
 
 	<xsl:template match="/">
-		<html>
+		<!-- There must be at least one language, according to http://www.idpf.org/epub/30/spec/epub30-publications.html#sec-metadata-elem -->
+		<xsl:variable name="lang" select="/opf:package/opf:metadata/dc:language[1]/text()"/>
+		<xsl:if test="count(/opf:package/opf:metadata/dc:language)&gt;1">
+			<xsl:message terminate="no">WARNING: Multiple languages detected, using '<xsl:value-of select="$lang"/>'</xsl:message>
+		</xsl:if>
+		<html xml:lang="{normalize-space($lang)}">
 			<!-- Get the head part from the first content document -->
 			<xsl:copy-of select="document(
 								key('manifest', /opf:package/opf:spine[1]/opf:itemref[1]/@idref)[1]/@href

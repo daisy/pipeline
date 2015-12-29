@@ -13,15 +13,17 @@ import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
 
 public class ContentMerger {
-	private final File epub;
+	private final static String CONTENT_NAME = "package.opf.html";
+	private final ContainerReader container;
 	private final Logger logger;
 
-	public ContentMerger(File epub) {
-		if (!epub.isDirectory()) {
-			throw new IllegalArgumentException("Input must be a directory.");
-		}
-		this.epub = epub;
+	public ContentMerger(ContainerReader container) throws EPUB3ReaderException {
 		this.logger = Logger.getLogger(this.getClass().getCanonicalName());
+		this.container = container;		
+	}
+
+	public ContentMerger(File epub) throws EPUB3ReaderException {
+		this(new ContainerReader(epub));
 	}
 	
 	public static void copyMerged(File epub, File output) throws EPUB3ReaderException {
@@ -31,85 +33,104 @@ public class ContentMerger {
 	public void copyMerged(File output) throws EPUB3ReaderException {
 		output.mkdirs();
 
-		logger.info("Reading container.xml");
+		List<String> opfPaths = container.getOPFPaths();
 
-		ContainerReader containerReader = new ContainerReader(epub);
-
-		List<String> opfPaths = containerReader.getPaths();
-
-		logger.info("Copying metadata");
-		FileIO.copyRecursive(new File(epub, "META-INF"), new File(output, "META-INF"));
+		logger.info("Copying metadata...");
+		FileIO.copyRecursive(new File(container.getFolder(), "META-INF"), new File(output, "META-INF"));
 
 		logger.fine("Found " + opfPaths.size() + " opf-file" + (opfPaths.size() == 1 ? "." : "s."));
 		for (String path : opfPaths) {
-			logger.fine("Reading " + path);
-			OPFReader opfReader = new OPFReader();
-			OPF opf = opfReader.parse(epub, path);
-			merge(opf, output);
+			merge(container.readOPF(path), output);
 		}
 	}
 
 	private void merge(OPF opf, File output) throws EPUB3ReaderException {
-		String contentName = "package.opf.html";
-		File opfFile = new File(epub, opf.getPath());
+		File opfFile = new File(container.getFolder(), opf.getPath());
 		File baseFolder = opfFile.getParentFile();
-		System.out.println(baseFolder);
-
 		File resultFile = new File(output, opf.getPath());
 		resultFile.getParentFile().mkdirs();
 
-		File contentFile = new File(resultFile.getParentFile(), contentName);
+		File contentFile = new File(resultFile.getParentFile(), CONTENT_NAME);
 		Map<String, String> manifest = new HashMap<String, String>(opf.getManifest());
 		logger.info("Merging spine to " + resultFile);
-		File f;
-		String path;
 
+		//remove spine items
 		for (String idref : opf.getSpine()) {
 			manifest.remove(idref);
 		}
 
 		resultFile.getParentFile().mkdirs();
-		{
-			Map<String, Object> params = new HashMap<String, Object>();
-			params.put("content", contentName);
-			try {
-				XMLTools.transform(opfFile, resultFile, this.getClass().getResource("resource-files/opf-merge-spine.xslt"), params);
-			} catch (XMLToolsException e) {
-				throw new EPUB3ReaderException(e);
-			}
-		}
+		makeMergedSpineOPF(CONTENT_NAME, opfFile, resultFile);
+		makeSingleContentDocument(opfFile, contentFile);
+		copyResourcesInManifest(manifest, baseFolder, resultFile.getParentFile());
+	}
 
-		{
-			Map<String, Object> params = new HashMap<String, Object>();
-			try {
-				XMLTools.transform(opfFile, contentFile, this.getClass().getResource("resource-files/opf-merge-content-docs.xslt"), params);
-			} catch (XMLToolsException e) {
-				throw new EPUB3ReaderException(e);
-			}
+	/**
+	 * Creates a new opf with the spine items replaced with a single item, the supplied name.
+	 * @param contentName the name of the new spine item
+	 * @param sourceOpf the source opf
+	 * @param targetOpf the target opf
+	 * @throws EPUB3ReaderException
+	 */
+	private void makeMergedSpineOPF(String contentName, File sourceOpf, File targetOpf) throws EPUB3ReaderException {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("content", contentName);
+		try {
+			XMLTools.transform(sourceOpf, targetOpf, this.getClass().getResource("resource-files/opf-merge-spine.xslt"), params);
+		} catch (XMLToolsException e) {
+			throw new EPUB3ReaderException(e);
 		}
+	}
+	
+	public void makeSingleContentDocument(String opfPath, File resultFile) throws EPUB3ReaderException {
+		makeSingleContentDocument(new File(container.getFolder(), opfPath), resultFile);
+	}
+	
+	/**
+	 * Makes a single content document based on the original spine items.
+	 * @param opfFile the original opf
+	 * @param resultFile the resulting document
+	 * @throws EPUB3ReaderException
+	 */
+	public void makeSingleContentDocument(File opfFile, File resultFile) throws EPUB3ReaderException {
+		if (!opfFile.exists()) {
+			throw new EPUB3ReaderException("File not found: " + opfFile);
+		}
+		Map<String, Object> params = new HashMap<String, Object>();
+		try {
+			XMLTools.transform(opfFile, resultFile, this.getClass().getResource("resource-files/opf-merge-content-docs.xslt"), params);
+		} catch (XMLToolsException e) {
+			throw new EPUB3ReaderException(e);
+		}
+	}
 
+	/**
+	 * Copies the resources in the manifest from the source to the target
+	 * @param manifest the manifest
+	 * @param sourceFolder the source folder
+	 * @param targetFolder the target folder
+	 */
+	private void copyResourcesInManifest(Map<String, String> manifest, File sourceFolder, File targetFolder) {
 		logger.info("Copying resources...");
-		File f2;
+		File source;
+		File target;
+		String path;
 		for (String id : manifest.keySet()) {
 			try {
 				path = manifest.get(id);
-				f = new File(baseFolder, path).getCanonicalFile();
-				if (f.exists()) {
-					f2 = new File(resultFile.getParentFile(), path).getCanonicalFile();
-					logger.fine("Moving '" + f + "' --> '" + f2 + "'");
-					f2.getParentFile().mkdirs();
-					FileIO.copyFile(f, f2);
-
+				source = new File(sourceFolder, path).getCanonicalFile();
+				if (source.exists()) {
+					target = new File(targetFolder, path).getCanonicalFile();
+					logger.fine("Copying " + source + " --> " + target);
+					target.getParentFile().mkdirs();
+					FileIO.copyFile(source, target);
 				} else {
-					logger.info("Referenced file cannot be found (if several OPF-files use the same resource, this could be correct).");
+					logger.info("Referenced file cannot be found: " + path);
 				}
 			} catch (IOException e) {
 				logger.log(Level.WARNING, "Failed to resolve path reference: " + id, e);
 			}
 		}
 	}
-
-
-
 
 }
