@@ -12,7 +12,6 @@ import org.daisy.dotify.api.tasks.ReadWriteTask;
 import org.daisy.dotify.common.io.TempFileHandler;
 
 public class TaskRunnerCore {
-	private int i;
 	private final Logger logger;
 	private final TempFileHandler fj;
 	private final TempFileWriter tfw;
@@ -22,7 +21,6 @@ public class TaskRunnerCore {
 	}
 
 	public TaskRunnerCore(TempFileHandler fj, TempFileWriter tfw) {
-		this.i = 0;
 		this.fj = fj;
 		this.tfw = tfw;
 		this.logger = Logger.getLogger(this.getClass().getCanonicalName());
@@ -39,7 +37,7 @@ public class TaskRunnerCore {
 			logger.info("Running (r/w) " + task.getName());
 			((ReadWriteTask)task).execute(fj.getInput(), fj.getOutput());
 			if (tfw!=null) {
-				tfw.writeTempFile(fj.getOutput(), task.getName(), i);
+				tfw.writeTempFile(fj.getOutput(), task.getName());
 			}
 			fj.reset();
 		} else if (task instanceof ReadOnlyTask) {
@@ -48,7 +46,6 @@ public class TaskRunnerCore {
 		} else {
 			logger.warning("Unknown task type, skipping.");
 		}
-		i++;
 	}
 
 }
