@@ -208,7 +208,7 @@ public class XMLInputManager implements TaskGroup {
 							} else if ("transformation".equals(key.toString())) {
 								for (String s : schemas) {
 									if (s!=null && s!="") {
-										setup.add(new XsltTask("Input to OBFL converter: " + s, locator.getResource(s), xsltParams));
+										setup.add(new XsltTask("XML to OBFL converter: " + s, locator.getResource(s), xsltParams));
 									}
 								}
 							} else {
