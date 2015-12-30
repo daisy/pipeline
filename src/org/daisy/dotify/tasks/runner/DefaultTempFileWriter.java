@@ -26,7 +26,7 @@ public class DefaultTempFileWriter implements TempFileWriter {
 	
 	public static class Builder {
 		private File tempFilesFolder = new File(TEMP_DIR);
-		public String prefix = "" + System.currentTimeMillis();
+		public String prefix = "";
 		public Builder() {
 		}
 		/**
@@ -74,7 +74,7 @@ public class DefaultTempFileWriter implements TempFileWriter {
 	private DefaultTempFileWriter(Builder builder) {
 		this.logger = Logger.getLogger(this.getClass().getCanonicalName());
 		this.tempFilesFolder = builder.tempFilesFolder;
-		this.prefix = builder.prefix;
+		this.prefix = builder.prefix + "@" + Integer.toHexString((int)(System.currentTimeMillis()-1261440000000l));
 		this.tempFiles = new ArrayList<>();
 	}
 	
