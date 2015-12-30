@@ -14,10 +14,18 @@
 			<xsl:message terminate="no">WARNING: Multiple languages detected, using '<xsl:value-of select="$lang"/>'</xsl:message>
 		</xsl:if>
 		<html xml:lang="{normalize-space($lang)}">
-			<!-- Get the head part from the first content document -->
-			<xsl:copy-of select="document(
+			<xsl:variable name="meta" select="/opf:package/opf:metadata/dc:*"/>
+			<!-- Get the head part from the first content document (excluding dc:*) -->
+			<xsl:for-each select="document(
 								key('manifest', /opf:package/opf:spine[1]/opf:itemref[1]/@idref)[1]/@href
-							)/html:html/html:head"/>
+							)/html:html/html:head">
+				<xsl:copy>
+					<xsl:copy-of select="*[not(starts-with(@name, 'dc:'))]"/>
+					<xsl:for-each select="$meta">
+						<meta name="dc:{local-name()}" content="{text()}"/>
+					</xsl:for-each>
+				</xsl:copy>
+			</xsl:for-each>
 			<body><xsl:apply-templates select="//opf:spine"/></body>
 		</html>
 	</xsl:template>
@@ -25,15 +33,12 @@
 	<xsl:template match="opf:spine">
 		<xsl:for-each select="opf:itemref">
 			<xsl:for-each select="key('manifest', @idref)">
-<!--				<xsl:if test="not(@properties) or @properties!='nav'"> -->
-					<xsl:variable name="content" select="document(@href)"/>
-					<!-- Can't use default namespace here, allthough it is also html -->
-					<div id="{@href}">
-						<xsl:apply-templates select="$content//html:body/node()" mode="html">
-							<xsl:with-param name="this" select="/"/>
-						</xsl:apply-templates>
-					</div>
-<!--				</xsl:if> -->
+<!--			<xsl:if test="not(@properties) or @properties!='nav'"> -->
+				<xsl:variable name="content" select="document(@href)"/>
+				<xsl:apply-templates select="$content//html:body" mode="html">
+					<xsl:with-param name="this" select="/"/>
+				</xsl:apply-templates>
+<!--			</xsl:if> -->
 			</xsl:for-each>
 		</xsl:for-each>
 	</xsl:template>
@@ -46,6 +51,17 @@
 				 <xsl:with-param name="this" select="$this"/>
 			 </xsl:apply-templates>
 		</xsl:copy>
+	</xsl:template>
+
+	<xsl:template match="html:body" mode="html">
+		<xsl:param name="this"/>
+		<!-- Can't use default namespace here, allthough it is also html -->
+		<div id="{@href}">
+			<xsl:copy-of select="@*[not(local-name()='id')]"/>
+			<xsl:apply-templates mode="html">
+				 <xsl:with-param name="this" select="$this"/>
+			 </xsl:apply-templates>
+		</div>
 	</xsl:template>
 	
 	<xsl:template match="html:a" mode="html">
