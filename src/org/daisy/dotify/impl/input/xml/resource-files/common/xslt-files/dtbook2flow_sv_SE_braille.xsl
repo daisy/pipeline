@@ -7,7 +7,7 @@
 -->
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="dtb xs" xmlns="http://www.daisy.org/ns/2011/obfl">
 
-	<xsl:import href="dtbook2flow_sv_SE.xsl" />
+	<xsl:import href="dtbook2obfl_layout.xsl" />
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:param name="toc-indent-multiplier" select="1"/>
 	<xsl:param name="splitterMax" select="10"/>

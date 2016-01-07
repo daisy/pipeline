@@ -91,9 +91,13 @@
 		<xsl:attribute name="master">main</xsl:attribute>
 	</xsl:template>
 	<xsl:template match="dtb:h1" mode="apply-block-attributes">
-		<xsl:attribute name="padding-top">3</xsl:attribute>
+		<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">2</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:attribute>
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level2)]">
 			<xsl:attribute name="padding-bottom">1</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="$row-spacing=2">
+			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
+			<xsl:attribute name="border-align">inner</xsl:attribute>
 		</xsl:if>
 		<xsl:attribute name="keep">all</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
@@ -105,18 +109,26 @@
 	</xsl:template>
 	<!-- If level1 has part, format h2 as h1 -->
 	<xsl:template match="dtb:h2[ancestor::dtb:level1[@class='part']]" mode="apply-block-attributes">
-		<xsl:attribute name="padding-top">3</xsl:attribute>
+		<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">2</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:attribute>
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level3)]">
 			<xsl:attribute name="padding-bottom">1</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="$row-spacing=2">
+			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
+			<xsl:attribute name="border-align">inner</xsl:attribute>
 		</xsl:if>
 		<xsl:attribute name="keep">all</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
 	<xsl:template match="dtb:h2" mode="apply-block-attributes">
-		<xsl:attribute name="padding-top">2</xsl:attribute>
+		<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">1</xsl:when><xsl:otherwise>2</xsl:otherwise></xsl:choose></xsl:attribute>
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level3)]">
 			<xsl:attribute name="padding-bottom">1</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="$row-spacing=2">
+			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
+			<xsl:attribute name="border-align">inner</xsl:attribute>
 		</xsl:if>
 		<xsl:attribute name="keep">all</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
@@ -124,9 +136,13 @@
 	</xsl:template>
 	<!-- If level1 has part, format h3 as h2 -->
 	<xsl:template match="dtb:h3[ancestor::dtb:level1[@class='part']]" mode="apply-block-attributes">
-		<xsl:attribute name="padding-top">2</xsl:attribute>
+		<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">1</xsl:when><xsl:otherwise>2</xsl:otherwise></xsl:choose></xsl:attribute>
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level4)]">
 			<xsl:attribute name="padding-bottom">1</xsl:attribute>
+		</xsl:if>
+		<xsl:if test="$row-spacing=2">
+			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
+			<xsl:attribute name="border-align">inner</xsl:attribute>
 		</xsl:if>
 		<xsl:attribute name="keep">all</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
@@ -178,20 +194,20 @@
 	<xsl:template match="dtb:level2[ancestor::dtb:level1[@class='part']]" mode="apply-block-attributes">
 		<xsl:attribute name="break-before">page</xsl:attribute>
 		<xsl:if test="not(dtb:h2)">
-			<xsl:attribute name="padding-top">3</xsl:attribute>
+			<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">2</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:attribute>
 		</xsl:if>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
 	<xsl:template match="dtb:level2" mode="apply-block-attributes">
 		<xsl:if test="not(dtb:h2)">
-			<xsl:attribute name="padding-top">2</xsl:attribute>
+			<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">1</xsl:when><xsl:otherwise>2</xsl:otherwise></xsl:choose></xsl:attribute>
 		</xsl:if>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
 	<!-- If level1 has part, format level3 as level2 -->
 	<xsl:template match="dtb:level3[ancestor::dtb:level1[@class='part']]" mode="apply-block-attributes">
 		<xsl:if test="not(dtb:h3)">
-			<xsl:attribute name="padding-top">2</xsl:attribute>
+			<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">1</xsl:when><xsl:otherwise>2</xsl:otherwise></xsl:choose></xsl:attribute>
 		</xsl:if>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
@@ -289,7 +305,9 @@
 			Assume that bodymatter contains something besides this, don't even test it.
 	-->
 	<xsl:template match="dtb:rearmatter" mode="sequence-mode">
-		<xsl:if test="*[not(self::dtb:level1[@class='backCoverText' or @class='rearjacketcopy' or @class='colophon'])]">
+		<xsl:if test="*[not(self::dtb:level1[@class='backCoverText' or @class='rearjacketcopy' or @class='colophon'
+or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note) and (self::dtb:level2 or self::dtb:level3 or self::dtb:level4 or self::dtb:level5 or self::dtb:level6 or self::dtb:h1 or self::dtb:h2 or self::dtb:h3 or self::dtb:h4 or self::dtb:h5 or self::dtb:h6 or self::dtb:note or self::dtb:pagenum)])=count(descendant::*[not(ancestor::dtb:note)])
+		])]">
 			<sequence>
 				<xsl:apply-templates select="." mode="apply-sequence-attributes"/>
 				<xsl:apply-templates/>
@@ -397,17 +415,88 @@
 		</block>
 	</xsl:template>
 	
+	<!--  Override default processing -->
+	<xsl:template match="dtb:note" mode="block-mode" priority="10"/>
+	
+	<!-- Exclude any element that only contains notes -->
+	<xsl:template match="*[count(*|text())&gt;0 and count(*|text())=count(dtb:note)]" priority="10"/>
+	
+	<!-- Remove emptied notes level -->
+	<xsl:template match="dtb:level1[
+		count(descendant::dtb:note)>0 and
+		count(descendant::*[not(ancestor::dtb:note) and (self::dtb:level2 or self::dtb:level3 or self::dtb:level4 or self::dtb:level5 or self::dtb:level6 or self::dtb:h1 or self::dtb:h2 or self::dtb:h3 or self::dtb:h4 or self::dtb:h5 or self::dtb:h6 or self::dtb:note or self::dtb:pagenum)])
+		=count(descendant::*[not(ancestor::dtb:note)])]">
+			<xsl:message terminate="no">Removed a level1 that only contained notes, heading structure and pagenums.</xsl:message>
+		</xsl:template>
+	
 	<xsl:template match="dtb:dd" mode="apply-block-attributes">
 		<xsl:attribute name="text-indent">3</xsl:attribute>
+	</xsl:template>
+	
+	<xsl:template match="dtb:dd" mode="block-mode">
+		<block>
+			<xsl:apply-templates select="." mode="apply-block-attributes"/>
+			<style name="dd"><xsl:apply-templates/></style>
+		</block>
 	</xsl:template>
 	
 	<xsl:template match="text()">
 		<xsl:choose>
 			<xsl:when test="ancestor::dtb:*[@xml:lang][1][not(self::dtb:dtbook)]">
-				<span><xsl:attribute name="xml:lang"><xsl:value-of select="ancestor::dtb:*[@xml:lang][1]/@xml:lang"/></xsl:attribute><xsl:value-of select="."/></span>
+				<xsl:choose>
+					<!-- span is handled when style is applied -->
+					<xsl:when test="ancestor::dtb:em or ancestor::dtb:strong"><xsl:value-of select="."/></xsl:when>
+					<xsl:otherwise><span><xsl:attribute name="xml:lang"><xsl:value-of select="ancestor::dtb:*[@xml:lang][1]/@xml:lang"/></xsl:attribute><xsl:value-of select="."/></span></xsl:otherwise>
+				</xsl:choose>
 			</xsl:when>
 			<xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="dtb:em" mode="inline-mode">
+		<xsl:call-template name="applyStyle"/>
+	</xsl:template>
+	
+	<xsl:template match="dtb:strong" mode="inline-mode">
+		<xsl:call-template name="applyStyle"/>
+	</xsl:template>
+	
+	<xsl:template match="dtb:sub" mode="inline-mode">
+		<xsl:call-template name="applyFlatStyle"/>
+	</xsl:template>
+	
+	<xsl:template match="dtb:sup" mode="inline-mode">
+		<xsl:call-template name="applyFlatStyle"/>
+	</xsl:template>
+	
+	<xsl:template name="applyStyle">
+		<xsl:choose>
+			<xsl:when test="count(node())=0">
+				<xsl:text> </xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+					<xsl:choose>
+						<xsl:when test="ancestor-or-self::dtb:*[@xml:lang][1][not(self::dtb:dtbook)] and not(ancestor::dtb:em or ancestor::dtb:strong)">
+								<span><xsl:attribute name="xml:lang"><xsl:value-of select="ancestor::dtb:*[@xml:lang][1]/@xml:lang"/></xsl:attribute><style name="{name()}"><xsl:apply-templates/></style></span>
+						</xsl:when>
+						<xsl:otherwise><style name="{name()}"><xsl:apply-templates/></style></xsl:otherwise>
+					</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="applyFlatStyle">
+			<xsl:choose>
+				<!-- text contains a single string -->
+				<xsl:when test="count(node())=1 and text()">
+					<style name="{name()}"><xsl:apply-templates/></style>
+				</xsl:when>
+				<!-- Otherwise -->
+				<xsl:otherwise>
+					<xsl:message terminate="no">Error: sub/sub contains a complex expression for which there is no specified formatting.</xsl:message>
+					<xsl:apply-templates/>
+				</xsl:otherwise>
+			</xsl:choose>
 	</xsl:template>
 
 </xsl:stylesheet>
