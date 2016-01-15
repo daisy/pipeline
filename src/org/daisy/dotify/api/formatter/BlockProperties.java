@@ -1,7 +1,6 @@
 package org.daisy.dotify.api.formatter;
 
 import org.daisy.dotify.api.formatter.BlockPosition.VerticalAlignment;
-import org.daisy.dotify.api.formatter.FormattingTypes.Alignment;
 import org.daisy.dotify.api.formatter.FormattingTypes.BreakBefore;
 import org.daisy.dotify.api.formatter.FormattingTypes.Keep;
 import org.daisy.dotify.api.formatter.FormattingTypes.ListStyle;
@@ -15,23 +14,19 @@ import org.daisy.dotify.api.translator.TextBorderStyle;
 public class BlockProperties implements Cloneable {
 	private final BlockSpacing margin;
 	private final BlockSpacing padding;
-	private final int textIndent;
-	private final int firstLineIndent;
 	private final ListStyle listType;
-	private final Float rowSpacing;
 	private int listIterator;
 	private final BreakBefore breakBefore;
 	private final Keep keep;
-	private final Alignment align;
 	private final int orphans;
 	private final int widows;
 	private final int keepWithNext;
 	private final int keepWithPreviousSheets;
 	private final int keepWithNextSheets;
 	private final int blockIndent;
-	private final String identifier;
 	private final BlockPosition verticalPosition;
 	private final TextBorderStyle textBorderStyle;
+	private final TextBlockProperties textBlockProps;
 
 	/**
 	 * The Builder is used when creating a BlockProperties instance.
@@ -39,31 +34,27 @@ public class BlockProperties implements Cloneable {
 	 */
 	public static class Builder {
 		// Optional parameters
-		int leftMargin = 0;
-		int rightMargin = 0;
-		int topMargin = 0;
-		int bottomMargin = 0;
-		int leftPadding = 0;
-		int rightPadding = 0;
-		int topPadding = 0;
-		int bottomPadding = 0;
-		int textIndent = 0;
-		int firstLineIndent = 0;
-		ListStyle listType = ListStyle.NONE;
-		BreakBefore breakBefore = BreakBefore.AUTO;
-		Keep keep = Keep.AUTO;
-		Alignment align = Alignment.LEFT;
-		int orphans = 1;
-		int widows = 1;
-		int keepWithNext = 0;
-		int keepWithPreviousSheets = 0;
-		int keepWithNextSheets = 0;
-		int blockIndent = 0;
-		String identifier = "";
-		Position verticalPosition = null;
-		VerticalAlignment verticalAlignment = VerticalAlignment.AFTER;
-		Float rowSpacing = null;
-		TextBorderStyle textBorderStyle = null;
+		private int leftMargin = 0;
+		private int rightMargin = 0;
+		private int topMargin = 0;
+		private int bottomMargin = 0;
+		private int leftPadding = 0;
+		private int rightPadding = 0;
+		private int topPadding = 0;
+		private int bottomPadding = 0;
+		private ListStyle listType = ListStyle.NONE;
+		private BreakBefore breakBefore = BreakBefore.AUTO;
+		private Keep keep = Keep.AUTO;
+		private int orphans = 1;
+		private int widows = 1;
+		private int keepWithNext = 0;
+		private int keepWithPreviousSheets = 0;
+		private int keepWithNextSheets = 0;
+		private int blockIndent = 0;
+		private Position verticalPosition = null;
+		private VerticalAlignment verticalAlignment = VerticalAlignment.AFTER;
+		private TextBorderStyle textBorderStyle = null;
+		private TextBlockProperties.Builder textBlockPropsBuilder = new TextBlockProperties.Builder();
 		
 		/**
 		 * Create a new Builder
@@ -160,7 +151,7 @@ public class BlockProperties implements Cloneable {
 		 * @return returns "this" object
 		 */
 		public Builder textIndent(int textIndent) {
-			this.textIndent = textIndent;
+			this.textBlockPropsBuilder.textIndent(textIndent);
 			return this;
 		}
 		
@@ -174,7 +165,7 @@ public class BlockProperties implements Cloneable {
 		 * @return returns "this" object
 		 */
 		public Builder firstLineIndent(int firstLineIndent) {
-			this.firstLineIndent = firstLineIndent;
+			this.textBlockPropsBuilder.firstLineIndent(firstLineIndent);
 			return this;
 		}
 		
@@ -215,7 +206,7 @@ public class BlockProperties implements Cloneable {
 		 * @return returns "this" object
 		 */
 		public Builder align(FormattingTypes.Alignment align) {
-			this.align = align;
+			this.textBlockPropsBuilder.align(align);
 			return this;
 		}
 		
@@ -250,8 +241,13 @@ public class BlockProperties implements Cloneable {
 			return this;
 		}
 		
+		/**
+		 * 
+		 * @param value
+		 * @return returns the row spacing
+		 */
 		public Builder rowSpacing(float value) {
-			this.rowSpacing = value;
+			this.textBlockPropsBuilder.rowSpacing(value);
 			return this;
 		}
 
@@ -267,11 +263,16 @@ public class BlockProperties implements Cloneable {
 			return this;
 		}
 		
+		/**
+		 * 
+		 * @param identifier
+		 * @return
+		 */
 		public Builder identifier(String identifier) {
-			this.identifier = identifier;
+			this.textBlockPropsBuilder.identifier(identifier);
 			return this;
 		}
-		
+
 		public Builder textBorderStyle(TextBorderStyle value) {
 			this.textBorderStyle = value;
 			return this;
@@ -317,20 +318,17 @@ public class BlockProperties implements Cloneable {
 				rightSpacing(builder.rightPadding).
 				topSpacing(builder.topPadding).
 				bottomSpacing(builder.bottomPadding).build();
-		textIndent = builder.textIndent;
-		firstLineIndent = builder.firstLineIndent;
+		textBlockProps = builder.textBlockPropsBuilder.build();
 		listType = builder.listType;
 		listIterator = 0;
 		breakBefore = builder.breakBefore;
 		keep = builder.keep;
-		align = builder.align;
 		orphans = builder.orphans;
 		widows = builder.widows;
 		keepWithNext = builder.keepWithNext;
 		keepWithPreviousSheets = builder.keepWithPreviousSheets;
 		keepWithNextSheets = builder.keepWithNextSheets;
 		blockIndent = builder.blockIndent;
-		identifier = builder.identifier;
 		if (builder.verticalPosition != null) {
 			verticalPosition = new BlockPosition.Builder().
 				position(builder.verticalPosition).
@@ -338,7 +336,6 @@ public class BlockProperties implements Cloneable {
 		} else {
 			verticalPosition = null;
 		}
-		rowSpacing = builder.rowSpacing;
 		textBorderStyle = builder.textBorderStyle;
 	}
 
@@ -361,17 +358,21 @@ public class BlockProperties implements Cloneable {
 	/**
 	 * Get text indent, in characters
 	 * @return returns the text indent
+	 * @deprecated use <code>getTextBlockProperties</code>
 	 */
+	@Deprecated
 	public int getTextIndent() {
-		return textIndent;
+		return textBlockProps.getTextIndent();
 	}
 	
 	/**
 	 * Get first line indent, in characters
 	 * @return returns the first line indent
+	 * @deprecated use <code>getTextBlockProperties</code>
 	 */
+	@Deprecated
 	public int getFirstLineIndent() {
-		return firstLineIndent;
+		return textBlockProps.getFirstLineIndent();
 	}
 	
 	/**
@@ -430,9 +431,11 @@ public class BlockProperties implements Cloneable {
 	/**
 	 * Gets the alignment
 	 * @return returns the alignment
+	 * @deprecated use <code>getTextBlockProperties</code>
 	 */
+	@Deprecated
 	public FormattingTypes.Alignment getAlignment() {
-		return align;
+		return textBlockProps.getAlignment();
 	}
 
 	/**
@@ -451,16 +454,28 @@ public class BlockProperties implements Cloneable {
 		return keepWithNextSheets;
 	}
 	
+	/**
+	 * 
+	 * @return the identifier
+	 * @deprecated use <code>getTextBlockProperties</code>
+	 */
+	@Deprecated
 	public String getIdentifier() {
-		return identifier;
+		return textBlockProps.getIdentifier();
 	}
 
 	public BlockPosition getVerticalPosition() {
 		return verticalPosition;
 	}
 	
+	/**
+	 * 
+	 * @return returns the row spacing
+	 * @deprecated use <code>getTextBlockProperties</code>
+	 */
+	@Deprecated
 	public Float getRowSpacing() {
-		return rowSpacing;
+		return textBlockProps.getRowSpacing();
 	}
 
 	
@@ -485,6 +500,10 @@ public class BlockProperties implements Cloneable {
 	public int getWidows() {
 		return widows;
 	}
+	
+	public TextBlockProperties getTextBlockProperties() {
+		return textBlockProps;
+	}
 
 	@Override
 	public Object clone() throws CloneNotSupportedException {
@@ -496,11 +515,8 @@ public class BlockProperties implements Cloneable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((align == null) ? 0 : align.hashCode());
 		result = prime * result + blockIndent;
 		result = prime * result + ((breakBefore == null) ? 0 : breakBefore.hashCode());
-		result = prime * result + firstLineIndent;
-		result = prime * result + ((identifier == null) ? 0 : identifier.hashCode());
 		result = prime * result + ((keep == null) ? 0 : keep.hashCode());
 		result = prime * result + keepWithNext;
 		result = prime * result + keepWithNextSheets;
@@ -509,9 +525,8 @@ public class BlockProperties implements Cloneable {
 		result = prime * result + ((margin == null) ? 0 : margin.hashCode());
 		result = prime * result + orphans;
 		result = prime * result + ((padding == null) ? 0 : padding.hashCode());
-		result = prime * result + ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
+		result = prime * result + ((textBlockProps == null) ? 0 : textBlockProps.hashCode());
 		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
-		result = prime * result + textIndent;
 		result = prime * result + ((verticalPosition == null) ? 0 : verticalPosition.hashCode());
 		result = prime * result + widows;
 		return result;
@@ -529,23 +544,10 @@ public class BlockProperties implements Cloneable {
 			return false;
 		}
 		BlockProperties other = (BlockProperties) obj;
-		if (align != other.align) {
-			return false;
-		}
 		if (blockIndent != other.blockIndent) {
 			return false;
 		}
 		if (breakBefore != other.breakBefore) {
-			return false;
-		}
-		if (firstLineIndent != other.firstLineIndent) {
-			return false;
-		}
-		if (identifier == null) {
-			if (other.identifier != null) {
-				return false;
-			}
-		} else if (!identifier.equals(other.identifier)) {
 			return false;
 		}
 		if (keep != other.keep) {
@@ -580,11 +582,11 @@ public class BlockProperties implements Cloneable {
 		} else if (!padding.equals(other.padding)) {
 			return false;
 		}
-		if (rowSpacing == null) {
-			if (other.rowSpacing != null) {
+		if (textBlockProps == null) {
+			if (other.textBlockProps != null) {
 				return false;
 			}
-		} else if (!rowSpacing.equals(other.rowSpacing)) {
+		} else if (!textBlockProps.equals(other.textBlockProps)) {
 			return false;
 		}
 		if (textBorderStyle == null) {
@@ -592,9 +594,6 @@ public class BlockProperties implements Cloneable {
 				return false;
 			}
 		} else if (!textBorderStyle.equals(other.textBorderStyle)) {
-			return false;
-		}
-		if (textIndent != other.textIndent) {
 			return false;
 		}
 		if (verticalPosition == null) {
