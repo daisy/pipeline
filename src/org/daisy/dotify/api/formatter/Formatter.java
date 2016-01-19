@@ -21,7 +21,7 @@ public interface Formatter extends Closeable {
 	 * @param props the SequenceProperties for the new sequence
 	 * @return returns a formatter core
 	 */
-	public FormatterCore newSequence(SequenceProperties props);
+	public FormatterSequence newSequence(SequenceProperties props);
 
 	/**
 	 * Creates a new LayoutMaster builder.
