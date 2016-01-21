@@ -7,7 +7,7 @@ import org.daisy.dotify.api.translator.TextBorderStyle;
  * @author Joel Håkansson
  */
 public final class TableProperties {
-	private final int rowSpacing, colSpacing;
+	private final int tableRowSpacing, tableColSpacing;
 	private final BlockSpacing margin;
 	private final BlockSpacing padding;
 	private final TextBorderStyle textBorderStyle;
@@ -16,8 +16,8 @@ public final class TableProperties {
 	 * Provides a builder for creating table properties
 	 */
 	public static class Builder {
-		private int rowSpacing = 0;
-		private int colSpacing = 0;
+		private int tableRowSpacing = 0;
+		private int tableColSpacing = 0;
 		private BlockSpacing margin = new BlockSpacing.Builder().build();
 		private BlockSpacing padding = new BlockSpacing.Builder().build();
 		TextBorderStyle textBorderStyle = null;
@@ -25,30 +25,30 @@ public final class TableProperties {
 		public Builder() { }
 		
 		/**
-		 * Sets the row spacing
-		 * @param value the row spacing
+		 * Sets the table row spacing
+		 * @param value the table row spacing
 		 * @return this builder
 		 * @throws IllegalArgumentException if the value is less than zero
 		 */
-		public Builder rowSpacing(int value) {
+		public Builder tableRowSpacing(int value) {
 			if (value<0) {
 				throw new IllegalArgumentException("Negative values not allowed.");
 			}
-			this.rowSpacing = value;
+			this.tableRowSpacing = value;
 			return this;
 		}
 		
 		/**
-		 * Sets the column spacing
-		 * @param value the column spacing
+		 * Sets the table column spacing
+		 * @param value the table column spacing
 		 * @return this builder
 		 * @throws IllegalArgumentException if the value is less than zero
 		 */
-		public Builder colSpacing(int value) {
+		public Builder tableColSpacing(int value) {
 			if (value<0) {
 				throw new IllegalArgumentException("Negative values not allowed.");
 			}
-			this.colSpacing = value;
+			this.tableColSpacing = value;
 			return this;
 		}
 		
@@ -86,19 +86,19 @@ public final class TableProperties {
 	}
 
 	private TableProperties(Builder builder) {
-		this.rowSpacing = builder.rowSpacing;
-		this.colSpacing = builder.colSpacing;
+		this.tableRowSpacing = builder.tableRowSpacing;
+		this.tableColSpacing = builder.tableColSpacing;
 		this.margin = builder.margin;
 		this.padding = builder.padding;
 		this.textBorderStyle = builder.textBorderStyle;
 	}
 
-	public int getRowSpacing() {
-		return rowSpacing;
+	public int getTableRowSpacing() {
+		return tableRowSpacing;
 	}
 
-	public int getColSpacing() {
-		return colSpacing;
+	public int getTableColSpacing() {
+		return tableColSpacing;
 	}
 	
 	/**
@@ -129,10 +129,10 @@ public final class TableProperties {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + colSpacing;
+		result = prime * result + tableColSpacing;
 		result = prime * result + ((margin == null) ? 0 : margin.hashCode());
 		result = prime * result + ((padding == null) ? 0 : padding.hashCode());
-		result = prime * result + rowSpacing;
+		result = prime * result + tableRowSpacing;
 		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
 		return result;
 	}
@@ -149,7 +149,7 @@ public final class TableProperties {
 			return false;
 		}
 		TableProperties other = (TableProperties) obj;
-		if (colSpacing != other.colSpacing) {
+		if (tableColSpacing != other.tableColSpacing) {
 			return false;
 		}
 		if (margin == null) {
@@ -166,7 +166,7 @@ public final class TableProperties {
 		} else if (!padding.equals(other.padding)) {
 			return false;
 		}
-		if (rowSpacing != other.rowSpacing) {
+		if (tableRowSpacing != other.tableRowSpacing) {
 			return false;
 		}
 		if (textBorderStyle == null) {
