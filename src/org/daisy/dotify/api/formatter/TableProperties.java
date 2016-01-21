@@ -8,6 +8,7 @@ import org.daisy.dotify.api.translator.TextBorderStyle;
  */
 public final class TableProperties {
 	private final int tableRowSpacing, tableColSpacing;
+	private final Float rowSpacing;
 	private final BlockSpacing margin;
 	private final BlockSpacing padding;
 	private final TextBorderStyle textBorderStyle;
@@ -18,6 +19,7 @@ public final class TableProperties {
 	public static class Builder {
 		private int tableRowSpacing = 0;
 		private int tableColSpacing = 0;
+		private Float rowSpacing = null;
 		private BlockSpacing margin = new BlockSpacing.Builder().build();
 		private BlockSpacing padding = new BlockSpacing.Builder().build();
 		TextBorderStyle textBorderStyle = null;
@@ -49,6 +51,17 @@ public final class TableProperties {
 				throw new IllegalArgumentException("Negative values not allowed.");
 			}
 			this.tableColSpacing = value;
+			return this;
+		}
+		
+		/**
+		 * Sets the row spacing for the resulting rows of text,
+		 * that the table is made up of 
+		 * @param value the row spacing
+		 * @return returns this object
+		 */
+		public Builder rowSpacing(float value) {
+			this.rowSpacing = value;
 			return this;
 		}
 		
@@ -88,17 +101,37 @@ public final class TableProperties {
 	private TableProperties(Builder builder) {
 		this.tableRowSpacing = builder.tableRowSpacing;
 		this.tableColSpacing = builder.tableColSpacing;
+		this.rowSpacing = builder.rowSpacing;
 		this.margin = builder.margin;
 		this.padding = builder.padding;
 		this.textBorderStyle = builder.textBorderStyle;
 	}
 
+	/**
+	 * Gets the table row spacing, in other words the vertical spacing
+	 * between two rows of table cells.
+	 * @return the table row spacing
+	 */
 	public int getTableRowSpacing() {
 		return tableRowSpacing;
 	}
 
+	/**
+	 * Gets the table column spacing, in other words the horizontal spacing
+	 * between two columns of table cells.
+	 * @return the table column spacing
+	 */
 	public int getTableColSpacing() {
 		return tableColSpacing;
+	}
+	
+	/**
+	 * Gets the row spacing, or null if not set. This is the spacing
+	 * between the output rows that are used to present the table.
+	 * @return returns the row spacing
+	 */
+	public Float getRowSpacing() {
+		return rowSpacing;
 	}
 	
 	/**
@@ -129,9 +162,10 @@ public final class TableProperties {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + tableColSpacing;
 		result = prime * result + ((margin == null) ? 0 : margin.hashCode());
 		result = prime * result + ((padding == null) ? 0 : padding.hashCode());
+		result = prime * result + ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
+		result = prime * result + tableColSpacing;
 		result = prime * result + tableRowSpacing;
 		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
 		return result;
@@ -149,9 +183,6 @@ public final class TableProperties {
 			return false;
 		}
 		TableProperties other = (TableProperties) obj;
-		if (tableColSpacing != other.tableColSpacing) {
-			return false;
-		}
 		if (margin == null) {
 			if (other.margin != null) {
 				return false;
@@ -164,6 +195,16 @@ public final class TableProperties {
 				return false;
 			}
 		} else if (!padding.equals(other.padding)) {
+			return false;
+		}
+		if (rowSpacing == null) {
+			if (other.rowSpacing != null) {
+				return false;
+			}
+		} else if (!rowSpacing.equals(other.rowSpacing)) {
+			return false;
+		}
+		if (tableColSpacing != other.tableColSpacing) {
 			return false;
 		}
 		if (tableRowSpacing != other.tableRowSpacing) {
