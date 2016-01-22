@@ -8,6 +8,7 @@ import org.daisy.dotify.api.translator.TextBorderStyle;
  */
 public final class TableProperties {
 	private final int tableRowSpacing, tableColSpacing;
+	private final int preferredEmptySpace;
 	private final Float rowSpacing;
 	private final BlockSpacing margin;
 	private final BlockSpacing padding;
@@ -19,6 +20,7 @@ public final class TableProperties {
 	public static class Builder {
 		private int tableRowSpacing = 0;
 		private int tableColSpacing = 0;
+		private int preferredEmptySpace = 2;
 		private Float rowSpacing = null;
 		private BlockSpacing margin = new BlockSpacing.Builder().build();
 		private BlockSpacing padding = new BlockSpacing.Builder().build();
@@ -51,6 +53,20 @@ public final class TableProperties {
 				throw new IllegalArgumentException("Negative values not allowed.");
 			}
 			this.tableColSpacing = value;
+			return this;
+		}
+		
+		/**
+		 * Sets the preferred empty space of the table when the text content of cells are shorter
+		 * than the largest possible column width
+		 * @param value the number of character positions to preferably leave empty
+		 * @return returns this builder
+		 */
+		public Builder preferredEmptySpace(int value) {
+			if (value<0) {
+				throw new IllegalArgumentException("Negative values not allowed.");
+			}
+			this.preferredEmptySpace = value;
 			return this;
 		}
 		
@@ -101,6 +117,7 @@ public final class TableProperties {
 	private TableProperties(Builder builder) {
 		this.tableRowSpacing = builder.tableRowSpacing;
 		this.tableColSpacing = builder.tableColSpacing;
+		this.preferredEmptySpace = builder.preferredEmptySpace;
 		this.rowSpacing = builder.rowSpacing;
 		this.margin = builder.margin;
 		this.padding = builder.padding;
@@ -123,6 +140,15 @@ public final class TableProperties {
 	 */
 	public int getTableColSpacing() {
 		return tableColSpacing;
+	}
+	
+	/**
+	 * Gets the preferred empty space in table cells when the text content is 
+	 * shorter than the available maximum column width
+	 * @return returns the number of character positions to leave empty
+	 */
+	public int getPreferredEmtpySpace() {
+		return preferredEmptySpace;
 	}
 	
 	/**
