@@ -1,6 +1,6 @@
 package org.daisy.dotify.api.formatter;
 
-import org.daisy.dotify.api.translator.TextBorderStyle;
+import org.daisy.dotify.api.translator.Border;
 
 /**
  * Provides properties needed for a table cell. This class is immutable.
@@ -10,7 +10,7 @@ public final class TableCellProperties {
 	private final int rowSpan, colSpan;
 	private final TextBlockProperties textBlockProperties; 
 	private final BlockSpacing padding;
-	private final TextBorderStyle textBorderStyle;
+	private final Border border;
 	
 	/**
 	 * Provides a builder for creating table properties
@@ -20,7 +20,7 @@ public final class TableCellProperties {
 		private int colSpan = 1;
 		private BlockSpacing padding = new BlockSpacing.Builder().build();
 		private TextBlockProperties textBlockProps = new TextBlockProperties.Builder().build();
-		private TextBorderStyle textBorderStyle = null;
+		private Border border = null;
 
 		public Builder() { }
 		
@@ -63,12 +63,12 @@ public final class TableCellProperties {
 		}
 		
 		/**
-		 * Sets the text border style
-		 * @param value the text border style
+		 * Sets the border
+		 * @param value the border
 		 * @return returns this object
 		 */
-		public Builder textBorderStyle(TextBorderStyle value) {
-			this.textBorderStyle = value;
+		public Builder border(Border value) {
+			this.border = value;
 			return this;
 		}
 
@@ -82,7 +82,7 @@ public final class TableCellProperties {
 		this.colSpan = builder.colSpan;
 		this.padding = builder.padding;
 		this.textBlockProperties = builder.textBlockProps;
-		this.textBorderStyle = builder.textBorderStyle;
+		this.border = builder.border;
 	}
 	
 	/**
@@ -115,11 +115,11 @@ public final class TableCellProperties {
 	}
 	
 	/**
-	 * Gets the text border style, or null if not set
-	 * @return returns the text border style
+	 * Gets the border, or null if not set
+	 * @return returns the border
 	 */
-	public TextBorderStyle getTextBorderStyle() {
-		return textBorderStyle;
+	public Border getBorder() {
+		return border;
 	}
 
 	/**
@@ -138,7 +138,7 @@ public final class TableCellProperties {
 		result = prime * result + ((padding == null) ? 0 : padding.hashCode());
 		result = prime * result + rowSpan;
 		result = prime * result + ((textBlockProperties == null) ? 0 : textBlockProperties.hashCode());
-		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
+		result = prime * result + ((border == null) ? 0 : border.hashCode());
 		return result;
 	}
 
@@ -174,11 +174,11 @@ public final class TableCellProperties {
 		} else if (!textBlockProperties.equals(other.textBlockProperties)) {
 			return false;
 		}
-		if (textBorderStyle == null) {
-			if (other.textBorderStyle != null) {
+		if (border == null) {
+			if (other.border != null) {
 				return false;
 			}
-		} else if (!textBorderStyle.equals(other.textBorderStyle)) {
+		} else if (!border.equals(other.border)) {
 			return false;
 		}
 		return true;

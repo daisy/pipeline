@@ -1,6 +1,6 @@
 package org.daisy.dotify.api.formatter;
 
-import org.daisy.dotify.api.translator.TextBorderStyle;
+import org.daisy.dotify.api.translator.Border;
 
 /**
  * Provides properties needed for a table. This class is immutable.
@@ -12,7 +12,7 @@ public final class TableProperties {
 	private final Float rowSpacing;
 	private final BlockSpacing margin;
 	private final BlockSpacing padding;
-	private final TextBorderStyle textBorderStyle;
+	private final Border border;
 	
 	/**
 	 * Provides a builder for creating table properties
@@ -24,7 +24,7 @@ public final class TableProperties {
 		private Float rowSpacing = null;
 		private BlockSpacing margin = new BlockSpacing.Builder().build();
 		private BlockSpacing padding = new BlockSpacing.Builder().build();
-		TextBorderStyle textBorderStyle = null;
+		Border border = null;
 
 		public Builder() { }
 		
@@ -100,12 +100,12 @@ public final class TableProperties {
 		}
 		
 		/**
-		 * Sets the text border style
-		 * @param value the text border style
+		 * Sets the border
+		 * @param value the border
 		 * @return returns this object
 		 */
-		public Builder textBorderStyle(TextBorderStyle value) {
-			this.textBorderStyle = value;
+		public Builder border(Border value) {
+			this.border = value;
 			return this;
 		}
 
@@ -121,7 +121,7 @@ public final class TableProperties {
 		this.rowSpacing = builder.rowSpacing;
 		this.margin = builder.margin;
 		this.padding = builder.padding;
-		this.textBorderStyle = builder.textBorderStyle;
+		this.border = builder.border;
 	}
 
 	/**
@@ -177,11 +177,11 @@ public final class TableProperties {
 	}
 	
 	/**
-	 * Gets the text border style, or null if not set
-	 * @return returns the text border style
+	 * Gets the border, or null if not set
+	 * @return returns the border
 	 */
-	public TextBorderStyle getTextBorderStyle() {
-		return textBorderStyle;
+	public Border getBorder() {
+		return border;
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public final class TableProperties {
 		result = prime * result + ((rowSpacing == null) ? 0 : rowSpacing.hashCode());
 		result = prime * result + tableColSpacing;
 		result = prime * result + tableRowSpacing;
-		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
+		result = prime * result + ((border == null) ? 0 : border.hashCode());
 		return result;
 	}
 
@@ -236,11 +236,11 @@ public final class TableProperties {
 		if (tableRowSpacing != other.tableRowSpacing) {
 			return false;
 		}
-		if (textBorderStyle == null) {
-			if (other.textBorderStyle != null) {
+		if (border == null) {
+			if (other.border != null) {
 				return false;
 			}
-		} else if (!textBorderStyle.equals(other.textBorderStyle)) {
+		} else if (!border.equals(other.border)) {
 			return false;
 		}
 		return true;
