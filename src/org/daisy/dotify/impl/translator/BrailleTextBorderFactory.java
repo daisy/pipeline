@@ -21,7 +21,7 @@ import org.daisy.dotify.api.translator.TextBorderStyle;
 import org.daisy.dotify.graphics.BrailleGraphics;
 
 class BrailleTextBorderFactory implements TextBorderFactory {
-	
+	private final static Logger logger = Logger.getLogger(BrailleTextBorderFactory.class.getCanonicalName());
 	private final static String KEY_BORDER = "border";
 	private final static String KEY_TOP = "top";
 	private final static String KEY_LEFT = "left";
@@ -31,21 +31,24 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 	private final static String KEY_WIDTH = "width";
 	private final static String KEY_ALIGN = "align";
 	private final Border.Builder builder;
+	private Border border;
 
-	
-	private boolean useBorder = false;
+	private boolean useBorderBuilder = false;
 	
 	private final Map<String, Object> features;
 
 	public BrailleTextBorderFactory() {
 		this.features = new HashMap<>();
 		this.builder = new Border.Builder();
+		this.border = null;
 	}
 	
 	@Override
 	public void setFeature(String key, Object value) {
-		if (key!=null && key.toLowerCase().startsWith(KEY_BORDER)) {
-			useBorder = true;
+		if (KEY_BORDER.equals(key.toLowerCase()) && value instanceof Border) {
+			border = (Border)value;
+		} else if (key!=null && key.toLowerCase().startsWith(KEY_BORDER)) {
+			useBorderBuilder = true;
 			HashSet<String> set = new HashSet<>();
 			for (String s : key.toLowerCase().split("-")) {
 				set.add(s);
@@ -66,7 +69,7 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 				set(b, s, value.toString());
 			} else {
 				//unknown
-				Logger.getLogger(this.getClass().getCanonicalName()).warning("Unknown feature: " + key);
+				logger.warning("Unknown feature: " + key);
 				features.put(key, value);
 			}
 		} else {
@@ -84,7 +87,7 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 				b.width(Integer.parseInt(value));
 			} catch (NumberFormatException e) {
 				//ignore
-				Logger.getLogger(this.getClass().getCanonicalName()).warning("Ignoring unparsable value: " + value);
+				logger.warning("Ignoring unparsable value: " + value);
 			}
 		} else if (key.equals(KEY_ALIGN)) {
 			b.align(Align.valueOf(value));
@@ -108,8 +111,12 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		}
 
 		if (!mode.equals(BrailleTranslatorFactory.MODE_BYPASS)) {
-			if (useBorder) {
-				Border border = builder.build();
+			if (useBorderBuilder || border!=null) {
+				if (border==null) {
+					border = builder.build();
+				} else if (useBorderBuilder) {
+					logger.warning("Bad combination of features. Some instructions were ignored.");				
+				}
 				TextBorderStyle.Builder style = new TextBorderStyle.Builder();
 				if (border.getTop().getStyle()==Style.NONE&&border.getBottom().getStyle()==Style.NONE&&border.getLeft().getStyle()==Style.NONE&&border.getRight().getStyle()==Style.NONE) {
 					return style.build();
@@ -139,8 +146,12 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 				return style.build();
 			}
 		} else {
-			if (useBorder) {
-				Border border = builder.build();
+			if (useBorderBuilder || border!=null) {
+				if (border==null) {
+					border = builder.build();
+				} else if (useBorderBuilder) {
+					logger.warning("Bad combination of features. Some instructions were ignored.");				
+				}
 				boolean t = border.getTop().getStyle()!=Style.NONE;
 				boolean b = border.getBottom().getStyle()!=Style.NONE;
 				boolean l = border.getLeft().getStyle()!=Style.NONE;
