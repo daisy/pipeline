@@ -58,7 +58,9 @@ public class PagedMediaWriterFactoryMaker implements
 		{
 			Iterator<PagedMediaWriterFactoryService> i = ServiceLoader.load(PagedMediaWriterFactoryService.class).iterator();
 			while (i.hasNext()) {
-				ret.addFactory(i.next());
+				PagedMediaWriterFactoryService factory = i.next();
+				factory.setCreatedWithSPI();
+				ret.addFactory(factory);
 			}
 		}
 		return ret;
