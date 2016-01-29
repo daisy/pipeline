@@ -8,6 +8,7 @@ import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryService;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
 import org.daisy.dotify.api.translator.TranslatorSpecification;
+import org.daisy.dotify.impl.translator.SPIHelper;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
@@ -44,6 +45,7 @@ public class SwedishBrailleTranslatorFactoryService implements
 	}
 	
 	@Override
+	@Deprecated
 	public <T> void setReference(Class<T> c, T reference)
 			throws TranslatorConfigurationException {
 		if (c.equals(HyphenatorFactoryMakerService.class)) {
@@ -56,6 +58,11 @@ public class SwedishBrailleTranslatorFactoryService implements
 	@Override
 	public Collection<TranslatorSpecification> listSpecifications() {
 		return specs;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		setHyphenator(SPIHelper.getHyphenatorFactoryMakerService());
 	}
 
 }

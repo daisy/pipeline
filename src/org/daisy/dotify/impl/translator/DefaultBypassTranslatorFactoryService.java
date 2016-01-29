@@ -38,6 +38,7 @@ public class DefaultBypassTranslatorFactoryService implements
 	}
 
 	@Override
+	@Deprecated
 	public <T> void setReference(Class<T> c, T reference)
 			throws TranslatorConfigurationException {
 		if (c.equals(HyphenatorFactoryMakerService.class)) {
@@ -54,6 +55,11 @@ public class DefaultBypassTranslatorFactoryService implements
 			ret.add(new TranslatorSpecification(loc, BrailleTranslatorFactory.MODE_BYPASS));
 		}
 		return ret;
+	}
+
+	@Override
+	public void setCreatedWithSPI() {
+		setHyphenator(SPIHelper.getHyphenatorFactoryMakerService());
 	}
 
 }

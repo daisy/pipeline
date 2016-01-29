@@ -20,4 +20,8 @@ public class SwedishMarkerProcessorFactoryService implements
 		return new SwedishMarkerProcessorFactory();
 	}
 
+	@Override
+	public void setCreatedWithSPI() {
+	}
+
 }

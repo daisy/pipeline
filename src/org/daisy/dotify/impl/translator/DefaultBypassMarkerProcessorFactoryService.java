@@ -20,4 +20,8 @@ public class DefaultBypassMarkerProcessorFactoryService implements
 		return new DefaultBypassMarkerProcessorFactory();
 	}
 
+	@Override
+	public void setCreatedWithSPI() {
+	}
+
 }

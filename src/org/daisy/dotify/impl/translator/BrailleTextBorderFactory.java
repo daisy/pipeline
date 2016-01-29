@@ -10,12 +10,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.daisy.dotify.api.translator.Border;
+import org.daisy.dotify.api.translator.Border.Builder.BuilderView;
+import org.daisy.dotify.api.translator.BorderSpecification.Align;
+import org.daisy.dotify.api.translator.BorderSpecification.Style;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.TextBorderConfigurationException;
 import org.daisy.dotify.api.translator.TextBorderFactory;
 import org.daisy.dotify.api.translator.TextBorderStyle;
 import org.daisy.dotify.graphics.BrailleGraphics;
-import org.daisy.dotify.impl.translator.BorderSpecification.Style;
 
 class BrailleTextBorderFactory implements TextBorderFactory {
 	
@@ -24,12 +27,11 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 	private final static String KEY_LEFT = "left";
 	private final static String KEY_RIGHT = "right";
 	private final static String KEY_BOTTOM = "bottom";
-	
-	private final BorderSpecification def;
-	private final BorderSpecification top;
-	private final BorderSpecification left;
-	private final BorderSpecification right;
-	private final BorderSpecification bottom;
+	private final static String KEY_STYLE = "style";
+	private final static String KEY_WIDTH = "width";
+	private final static String KEY_ALIGN = "align";
+	private final Border.Builder builder;
+
 	
 	private boolean useBorder = false;
 	
@@ -37,11 +39,7 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 
 	public BrailleTextBorderFactory() {
 		this.features = new HashMap<>();
-		this.def = new BorderSpecification();
-		this.top = new BorderSpecification(def);
-		this.left = new BorderSpecification(def);
-		this.right = new BorderSpecification(def);
-		this.bottom = new BorderSpecification(def);
+		this.builder = new Border.Builder();
 	}
 	
 	@Override
@@ -53,19 +51,19 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 				set.add(s);
 			}
 			set.remove(KEY_BORDER);
-			BorderSpecification b = def;
+			BuilderView b = builder.getDefault();
 			if (set.remove(KEY_TOP)) {
-				b = top;
+				b = builder.getTop();
 			} else if (set.remove(KEY_LEFT)) {
-				b = left;
+				b = builder.getLeft();
 			} else if (set.remove(KEY_RIGHT)) {
-				b = right;
+				b = builder.getRight();
 			} else if (set.remove(KEY_BOTTOM)) {
-				b = bottom;
+				b = builder.getBottom();
 			}
 			if (set.size()==1) {
 				String s = set.iterator().next();
-				b.set(s, value.toString());
+				set(b, s, value.toString());
 			} else {
 				//unknown
 				Logger.getLogger(this.getClass().getCanonicalName()).warning("Unknown feature: " + key);
@@ -73,6 +71,25 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 			}
 		} else {
 			features.put(key, value);
+		}
+	}
+	
+	void set(BuilderView b, String key, String value) {
+		key = key.toLowerCase();
+		value = value.toUpperCase();
+		if (key.equals(KEY_STYLE)) {
+			b.style(Style.valueOf(value));
+		} else if (key.equals(KEY_WIDTH)) {
+			try {
+				b.width(Integer.parseInt(value));
+			} catch (NumberFormatException e) {
+				//ignore
+				Logger.getLogger(this.getClass().getCanonicalName()).warning("Ignoring unparsable value: " + value);
+			}
+		} else if (key.equals(KEY_ALIGN)) {
+			b.align(Align.valueOf(value));
+		} else {
+			throw new IllegalArgumentException("Unkown value '" + value + "' for " + key);
 		}
 	}
 
@@ -83,6 +100,7 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 
 	@Override
 	public TextBorderStyle newTextBorderStyle() throws TextBorderConfigurationException {
+		
 		String mode = "";
 		try {
 			mode = (String) getFeature(FEATURE_MODE);
@@ -90,20 +108,20 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		}
 
 		if (!mode.equals(BrailleTranslatorFactory.MODE_BYPASS)) {
-			
 			if (useBorder) {
+				Border border = builder.build();
 				TextBorderStyle.Builder style = new TextBorderStyle.Builder();
-				if (top.getStyle()==Style.NONE&&bottom.getStyle()==Style.NONE&&left.getStyle()==Style.NONE&&right.getStyle()==Style.NONE) {
+				if (border.getTop().getStyle()==Style.NONE&&border.getBottom().getStyle()==Style.NONE&&border.getLeft().getStyle()==Style.NONE&&border.getRight().getStyle()==Style.NONE) {
 					return style.build();
 				}
 
-				BufferedImage borderImage = renderBorderImage(false);
+				BufferedImage borderImage = renderBorderImage(border, false);
 				BrailleGraphics bg = new BrailleGraphics(false);
 				List<String> str = bg.renderGraphics(borderImage.getData());
-				boolean t = top.getStyle()!=Style.NONE;
-				boolean b = bottom.getStyle()!=Style.NONE;
-				boolean l = left.getStyle()!=Style.NONE;
-				boolean r = right.getStyle()!=Style.NONE;
+				boolean t = border.getTop().getStyle()!=Style.NONE;
+				boolean b = border.getBottom().getStyle()!=Style.NONE;
+				boolean l = border.getLeft().getStyle()!=Style.NONE;
+				boolean r = border.getRight().getStyle()!=Style.NONE;
 
 				if (t) {
 					if (l) { style.topLeftCorner(""+str.get(0).charAt(0)); }
@@ -122,10 +140,11 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 			}
 		} else {
 			if (useBorder) {
-				boolean t = top.getStyle()!=Style.NONE;
-				boolean b = bottom.getStyle()!=Style.NONE;
-				boolean l = left.getStyle()!=Style.NONE;
-				boolean r = right.getStyle()!=Style.NONE;
+				Border border = builder.build();
+				boolean t = border.getTop().getStyle()!=Style.NONE;
+				boolean b = border.getBottom().getStyle()!=Style.NONE;
+				boolean l = border.getLeft().getStyle()!=Style.NONE;
+				boolean r = border.getRight().getStyle()!=Style.NONE;
 				TextBorderStyle.Builder style = new TextBorderStyle.Builder();
 				if (t) {
 					style.topBorder("-");
@@ -165,16 +184,16 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 	 * Creates a border image compatible with both 6 and 8-dot use.
 	 * @return
 	 */
-	private BufferedImage renderBorderImage(boolean eightDot) throws TextBorderConfigurationException {
+	private static BufferedImage renderBorderImage(Border border, boolean eightDot) throws TextBorderConfigurationException {
 		//cell dimensions in pixels
 		final int cw = 2;
 		final int ch = (eightDot?4:3);
 
 		//border widths
-		final int wt = top.getWidth();
-		final int wb = bottom.getWidth();
-		final int wl = left.getWidth();
-		final int wr = right.getWidth();
+		final int wt = border.getTop().getWidth();
+		final int wb = border.getBottom().getWidth();
+		final int wl = border.getLeft().getWidth();
+		final int wr = border.getRight().getWidth();
 
 		if (wt>3) {
 			throw new BrailleTextBorderFactoryConfigurationException("Width of top border out of supported range [1,"+ch+"]: " + wt);
@@ -200,10 +219,10 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		final int h = ch * (ct + cb + 1);
 
 		//alignment
-		final int at = top.getAlign().align(ch);
-		final int ab = bottom.getAlign().align(ch);
-		final int al = left.getAlign().align(cw);
-		final int ar = right.getAlign().align(cw);
+		final int at = border.getTop().getAlign().align(ch);
+		final int ab = border.getBottom().getAlign().align(ch);
+		final int al = border.getLeft().getAlign().align(cw);
+		final int ar = border.getRight().getAlign().align(cw);
 		
 		//border coordinates
 		final int x1 = 0 + Math.max(al-wl, 0);
@@ -220,25 +239,25 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		g.setStroke(s);
 		
 		//top
-		if (top.getStyle()!=Style.NONE) {
+		if (border.getTop().getStyle()!=Style.NONE) {
 			for (int i=0; i<wt; i++) {
 				g.drawLine(x1, y1+i, x2, y1+i);
 			}
 		}
 		//right
-		if (right.getStyle()!=Style.NONE) {
+		if (border.getRight().getStyle()!=Style.NONE) {
 			for (int i=0; i<wr; i++) {
 				g.drawLine(x2-i, y1, x2-i, y2);
 			}
 		}
 		//bottom
-		if (bottom.getStyle()!=Style.NONE) {
+		if (border.getBottom().getStyle()!=Style.NONE) {
 			for (int i=0; i<wb; i++) {
 				g.drawLine(x2, y2-i, x1, y2-i);
 			}
 		}
 		//left
-		if (left.getStyle()!=Style.NONE) {
+		if (border.getLeft().getStyle()!=Style.NONE) {
 			for (int i=0; i<wl; i++) {
 				g.drawLine(x1+i, y2, x1+i, y1);
 			}
@@ -247,7 +266,7 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 		return borderImage;
 	}
 	
-	private class BrailleTextBorderFactoryConfigurationException extends TextBorderConfigurationException {
+	private static class BrailleTextBorderFactoryConfigurationException extends TextBorderConfigurationException {
 
 		/**
 		 * 

@@ -14,4 +14,8 @@ public class BrailleTextBorderFactoryService implements
 		return new BrailleTextBorderFactory();
 	}
 
+	@Override
+	public void setCreatedWithSPI() {
+	}
+
 }
