@@ -49,6 +49,8 @@ public class SPIHelper {
 	}
 	
 	public static FormatterEngineFactoryService getFormatterEngineFactoryService() {
+		//FIXME: this works by accident, the FormatterEngineMaker does NOT implement FormatterEngineFactoryService
+		//see https://github.com/joeha480/dotify/issues/160
 		if (formatterEngingeFactory ==null) {
 			Object o = invoke("org.daisy.dotify.consumer.engine.FormatterEngineMaker");
 			try {
