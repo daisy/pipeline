@@ -120,8 +120,45 @@ class BrailleTextBorderFactory implements TextBorderFactory {
 				
 				return style.build();
 			}
+		} else {
+			if (useBorder) {
+				boolean t = top.getStyle()!=Style.NONE;
+				boolean b = bottom.getStyle()!=Style.NONE;
+				boolean l = left.getStyle()!=Style.NONE;
+				boolean r = right.getStyle()!=Style.NONE;
+				TextBorderStyle.Builder style = new TextBorderStyle.Builder();
+				if (t) {
+					style.topBorder("-");
+				}
+				if (b) {
+					style.bottomBorder("-");
+				}
+				if (l) {
+					style.leftBorder("|");
+				}
+				if (r) {
+					style.rightBorder("|");
+				}
+				style.topLeftCorner(selectCorner(t, l));
+				style.topRightCorner(selectCorner(t, r));
+				style.bottomLeftCorner(selectCorner(b, l));
+				style.bottomRightCorner(selectCorner(b, r));
+				return style.build();
+			}
 		}
 		throw new BrailleTextBorderFactoryConfigurationException();
+	}
+	
+	private static String selectCorner(boolean h, boolean v) {
+		if (h&&v) {
+			return "+";
+		} else if (h) {
+			return "-";
+		} else if (v) {
+			return "|";
+		} else {
+			return "";
+		}
 	}
 	
 	/**
