@@ -60,7 +60,9 @@ public class TextBorderFactoryMaker implements TextBorderFactoryMakerService {
 		{
 			Iterator<TextBorderFactoryService> i = ServiceLoader.load(TextBorderFactoryService.class).iterator();
 			while (i.hasNext()) {
-				ret.addFactory(i.next());
+				TextBorderFactoryService f = i.next();
+				f.setCreatedWithSPI();
+				ret.addFactory(f);
 			}
 		}
 		return ret;

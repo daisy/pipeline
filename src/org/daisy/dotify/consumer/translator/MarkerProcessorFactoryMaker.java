@@ -65,7 +65,9 @@ public class MarkerProcessorFactoryMaker implements
 		{
 			Iterator<MarkerProcessorFactoryService> i = ServiceLoader.load(MarkerProcessorFactoryService.class).iterator();
 			while (i.hasNext()) {
-				ret.addFactory(i.next());
+				MarkerProcessorFactoryService f = i.next();
+				f.setCreatedWithSPI();
+				ret.addFactory(f);
 			}
 		}
 		return ret;

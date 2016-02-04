@@ -68,15 +68,10 @@ public class BrailleTranslatorFactoryMaker implements
 	public static BrailleTranslatorFactoryMaker newInstance() {
 		BrailleTranslatorFactoryMaker ret = new BrailleTranslatorFactoryMaker();
 		{
-			HyphenatorFactoryMakerService hyph = HyphenatorFactoryMaker.newInstance();
 			Iterator<BrailleTranslatorFactoryService> i = ServiceLoader.load(BrailleTranslatorFactoryService.class).iterator();
 			while (i.hasNext()) {
 				BrailleTranslatorFactoryService f = i.next();
-				try {
-					f.setReference(HyphenatorFactoryMakerService.class, hyph);
-				} catch (TranslatorConfigurationException e) {
-					Logger.getLogger(BrailleTranslatorFactoryMaker.class.getCanonicalName()).log(Level.WARNING, "Failed to set reference.", e);
-				}
+				f.setCreatedWithSPI();
 				ret.addFactory(f);
 			}
 		}
