@@ -79,5 +79,11 @@ public interface FormatterCore {
 	 * @param t the text properties
 	 */
 	public void insertEvaluate(DynamicContent exp, TextProperties t);
+	
+	/**
+	 * Inserts a dynamic layout processor
+	 * @param renderer the layout processor
+	 */
+	public void insertDynamicLayout(DynamicRenderer renderer);
 
 }
