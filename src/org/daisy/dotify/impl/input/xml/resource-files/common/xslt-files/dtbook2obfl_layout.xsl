@@ -93,7 +93,7 @@
 	<xsl:template match="dtb:h1" mode="apply-block-attributes">
 		<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">2</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:attribute>
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level2)]">
-			<xsl:attribute name="padding-bottom">1</xsl:attribute>
+			<xsl:attribute name="margin-bottom">1</xsl:attribute>
 		</xsl:if>
 		<xsl:if test="$row-spacing=2">
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
@@ -111,7 +111,7 @@
 	<xsl:template match="dtb:h2[ancestor::dtb:level1[@class='part']]" mode="apply-block-attributes">
 		<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">2</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:attribute>
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level3)]">
-			<xsl:attribute name="padding-bottom">1</xsl:attribute>
+			<xsl:attribute name="margin-bottom">1</xsl:attribute>
 		</xsl:if>
 		<xsl:if test="$row-spacing=2">
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
@@ -124,7 +124,7 @@
 	<xsl:template match="dtb:h2" mode="apply-block-attributes">
 		<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">1</xsl:when><xsl:otherwise>2</xsl:otherwise></xsl:choose></xsl:attribute>
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level3)]">
-			<xsl:attribute name="padding-bottom">1</xsl:attribute>
+			<xsl:attribute name="margin-bottom">1</xsl:attribute>
 		</xsl:if>
 		<xsl:if test="$row-spacing=2">
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
@@ -138,7 +138,7 @@
 	<xsl:template match="dtb:h3[ancestor::dtb:level1[@class='part']]" mode="apply-block-attributes">
 		<xsl:attribute name="padding-top"><xsl:choose><xsl:when test="$row-spacing=2">1</xsl:when><xsl:otherwise>2</xsl:otherwise></xsl:choose></xsl:attribute>
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level4)]">
-			<xsl:attribute name="padding-bottom">1</xsl:attribute>
+			<xsl:attribute name="margin-bottom">1</xsl:attribute>
 		</xsl:if>
 		<xsl:if test="$row-spacing=2">
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
