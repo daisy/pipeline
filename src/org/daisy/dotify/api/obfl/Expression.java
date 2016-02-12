@@ -5,6 +5,19 @@ import java.util.Map;
 public interface Expression {
 
 	/**
+	 * Sets a globally accessible variable for this instance
+	 * @param key the variable name
+	 * @param value the value
+	 */
+	public void setVariable(String key, Object value);
+
+	/**
+	 * Removes a previously set variable
+	 * @param key the variable name
+	 */
+	public void removeVariable(String key);
+
+	/**
 	 * Evaluate is the method to use when evaluating an expression.
 	 * 
 	 * @param expr
