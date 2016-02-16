@@ -16,6 +16,11 @@ public interface Expression {
 	 * @param key the variable name
 	 */
 	public void removeVariable(String key);
+	
+	/**
+	 * Removes all global variables
+	 */
+	public void removeAllVariables();
 
 	/**
 	 * Evaluate is the method to use when evaluating an expression.
