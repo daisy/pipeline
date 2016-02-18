@@ -66,7 +66,7 @@ inline) can easily be customized using the processing modes.</p>
 	<dt>no text</dt>
 		<dd>level, level1, level2, level3, level4, level5, level6</dd>
 	<dt>can be surrounded by text, does not contain text</dt>
-		<dd>list, blockquote, linegroup, poem, div, annotation, dl, imggroup, note</dd>
+		<dd>list, blockquote, linegroup, poem, div, annotation, dl, imggroup, note, table</dd>
 	<dt>can contain text, but cannot be surrounded by text</dt>
 		<dd>bridgehead, caption, covertitle, docauthor, doctitle, li, h1, h2, h3, h4, h5, h6</dd>
 	<dt>can be surrounded by text and contain text</dt>
@@ -85,10 +85,10 @@ dfn, q, noteref, annoref, sent, w, linenum, lic, dd, dt</p>
 <p>br, pagenum</p>
 
 <h3>no-op</h3>
-<p>book, dtbook, head, meta, link, img</p>
+<p>book, dtbook, head, meta, link, img, col, colgroup</p>
 
 <h2>Unhandled elements</h2>
-<p>table, col, colgroup, tbody, td, tfoot, th, thead, title, tr</p>
+<p>table, tbody, td, tfoot, th, thead, title, tr</p>
 <h2>Summary</h2>
 <table>
   <tbody>
@@ -197,6 +197,8 @@ dfn, q, noteref, annoref, sent, w, linenum, lic, dd, dt</p>
       </td>
       <td><ul>
           <li>book </li>
+          <li>col</li>
+          <li>colgroup</li>
           <li>dtbook</li>
           <li>head</li>
           <li>img</li>
@@ -205,8 +207,6 @@ dfn, q, noteref, annoref, sent, w, linenum, lic, dd, dt</p>
         </ul>
       </td>
       <td><ul>
-          <li>col</li>
-          <li>colgroup</li>
           <li>table</li>
           <li>tbody</li>
           <li>td</li>

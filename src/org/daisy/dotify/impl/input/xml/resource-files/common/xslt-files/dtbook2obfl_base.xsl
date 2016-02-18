@@ -9,7 +9,7 @@
 
 	<xsl:template match="/"><obfl version="2011-1" hyphenate="{$hyphenate}"><xsl:attribute name="xml:lang"><xsl:value-of select="/dtb:dtbook/@xml:lang"/></xsl:attribute><xsl:call-template name="insertMetadata"/><xsl:call-template name="insertLayoutMaster"/><xsl:apply-templates/></obfl></xsl:template>
 	<xsl:template match="dtb:dtbook | dtb:book"><xsl:apply-templates/></xsl:template>
-	<xsl:template match="dtb:head | dtb:meta | dtb:link | dtb:img"></xsl:template>
+	<xsl:template match="dtb:head | dtb:meta | dtb:link | dtb:img | dtb:col | dtb:colgroup"></xsl:template>
 	
 <!-- sequence elements / -->
 	<xsl:template match="dtb:frontmatter | dtb:bodymatter | dtb:rearmatter">
@@ -86,7 +86,7 @@
 <!-- / special -->
 
 <!-- disallowed elements / -->
-	<xsl:template match="dtb:col | dtb:colgroup | dtb:table | dtb:tbody | dtb:thead | dtb:tfoot | dtb:tr | dtb:th | dtb:td">
+	<xsl:template match="dtb:table | dtb:tbody | dtb:thead | dtb:tfoot | dtb:tr | dtb:th | dtb:td">
 		<xsl:message terminate="yes">Tables are not supported.</xsl:message>
 	</xsl:template>
 <!-- / disallowed elements -->

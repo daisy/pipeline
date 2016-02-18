@@ -5,7 +5,7 @@
 		- komplexa sub, sup
 		- länkar, e-postadresser
 -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="dtb xs" xmlns="http://www.daisy.org/ns/2011/obfl">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="dtb xs obfl" xmlns:obfl="http://www.daisy.org/ns/2011/obfl" xmlns="http://www.daisy.org/ns/2011/obfl">
 
 	<xsl:import href="dtbook2obfl_layout.xsl" />
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
@@ -30,6 +30,7 @@
 	<xsl:key name="noterefs" match="dtb:noteref" use="substring-after(@idref, '#')"/>
 
 	<xsl:template match="/">
+		<xsl:variable name="result">
 		<obfl version="2011-1" hyphenate="{$hyphenate}">
 			<xsl:attribute name="xml:lang"><xsl:value-of select="/dtb:dtbook/@xml:lang"/></xsl:attribute>
 			<xsl:call-template name="insertMetadata"/>
@@ -37,6 +38,30 @@
 			<xsl:call-template name="insertNoteCollection"/>
 			<xsl:apply-templates/>
 		</obfl>
+		</xsl:variable>
+		<xsl:apply-templates select="$result" mode="breakOutTable"/>
+	</xsl:template>
+	
+	<xsl:template match="obfl:table" mode="breakOutTable">
+		<xsl:for-each select="ancestor::obfl:*[ancestor::obfl:sequence and not(descendant-or-self::obfl:xml-data)]">
+			<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="local-name()"/>
+			<xsl:text disable-output-escaping="yes">></xsl:text>
+		</xsl:for-each>
+		<xsl:copy-of select="."/>
+		<xsl:for-each select="ancestor::obfl:*[ancestor::obfl:sequence and not(descendant-or-self::obfl:xml-data)]">
+			<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="local-name()"/>
+			<xsl:for-each select="@*[not(name()='id')]">
+				<xsl:value-of select="concat(' ', name(), '=', '&quot;', . , '&quot;')"></xsl:value-of>
+			</xsl:for-each>
+			<xsl:text disable-output-escaping="yes">></xsl:text>
+		</xsl:for-each>
+	</xsl:template>
+	
+	<xsl:template match="*|processing-instruction()|comment()" mode="breakOutTable">
+		<xsl:copy>
+			<xsl:copy-of select="@*"/>
+			<xsl:apply-templates mode="breakOutTable"/>
+		</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template name="insertLayoutMaster">
@@ -549,5 +574,54 @@
 	</xsl:template>
 	
 	<xsl:template match="node()" mode="toc"/>
+	
+		
+	<xsl:template match="dtb:table">
+		<xsl:apply-templates select="dtb:caption"/>
+		<!-- choose table formats -->
+		<xsl:apply-templates select="." mode="matrixTable"/>
+	</xsl:template>
+	
+	<xsl:template match="dtb:table" mode="matrixTable">
+		<table>
+			<xsl:choose>
+				<xsl:when test="dtb:thead"> 
+					<thead>
+						<xsl:apply-templates select="dtb:thead"/>
+					</thead>
+					<tbody>
+						<xsl:apply-templates select="dtb:tbody/dtb:tr" mode="matrixRow"/>
+						<xsl:apply-templates select="dtb:tr" mode="matrixRow"/>
+						<!-- What about pagenums? -->
+						<xsl:apply-templates select="dtb:tfoot/dtb:tr" mode="matrixRow"/>
+					</tbody>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates select="dtb:tbody/dtb:tr" mode="matrixRow"/>
+					<xsl:apply-templates select="dtb:tr" mode="matrixRow"/>
+					<!-- What about pagenums? -->
+					<xsl:apply-templates select="dtb:tfoot/dtb:tr" mode="matrixRow"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</table>
+	</xsl:template>
+	
+	<xsl:template match="dtb:tr" mode="matrixRow">
+		<tr>
+			<xsl:apply-templates mode="matrixCell"/>
+		</tr>
+	</xsl:template>
+	
+	<xsl:template match="dtb:td | dtb:th" mode="matrixCell">
+		<td>
+			<xsl:if test="@colspan">
+				<xsl:attribute name="col-span" select="@colspan"/>
+			</xsl:if>
+			<xsl:if test="@rowspan">
+				<xsl:attribute name="row-span" select="@rowspan"/>
+			</xsl:if>
+			<xsl:apply-templates/>
+		</td>
+	</xsl:template>
 
 </xsl:stylesheet>
