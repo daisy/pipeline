@@ -5,6 +5,24 @@
 	<head>
 		<title>DTBook to OBFL</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<style type="text/css">
+			body {
+				margin: 1em 4em 1em 4em;
+				font-family: sans-serif; 
+			}
+			td, th {
+				vertical-align: top;
+				padding-right: 0.5em;
+			}
+			ul {
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+			}
+			table, th, td {
+				border: 0px;
+			}
+		</style>
 	</head>
 	<body>
 <pre>
@@ -72,247 +90,135 @@ dfn, q, noteref, annoref, sent, w, linenum, lic, dd, dt</p>
 <h2>Unhandled elements</h2>
 <p>table, col, colgroup, tbody, td, tfoot, th, thead, title, tr</p>
 <h2>Summary</h2>
-		<table border="1px">
-			<tr>
-				<th>Sequence</th>
-				<th>Block (type 1)</th>
-				<th>Block (type 2)</th>
-				<th>Block (type 3)</th>
-				<th>Block (type 4)</th>
-				<th>Block or Inline</th>
-				<th>Inline</th>
-				<th>Special</th>
-				<th>No-op</th>
-				<th>Not supported</th>
-			</tr>
-			<tr>
-				<td>bodymatter</td>
-				<td>level</td>
-				<td>annotation</td>
-				<td>bridgehead</td>
-				<td>address</td>
-				<td>a</td>
-				<td>abbr</td>
-				<td>br</td>
-				<td>book</td>
-				<td>col</td>
-			</tr>
-			<tr>
-				<td>frontmatter</td>
-				<td>level1</td>
-				<td>blockquote</td>
-				<td>caption</td>
-				<td>author</td>
-				<td>cite</td>
-				<td>acronym</td>
-				<td>pagenum</td>
-				<td>dtbook</td>
-				<td>colgroup</td>
-			</tr>
-			<tr>
-				<td>rearmatter</td>
-				<td>level2</td>
-				<td>div</td>
-				<td>covertitle</td>
-				<td>byline</td>
-				<td>kbd</td>
-				<td>annoref</td>
-				<td/>
-				<td>head</td>
-				<td></td>
-			</tr>
-			<tr>
-				<td/>
-				<td>level3</td>
-				<td>dl</td>
-				<td>docauthor</td>
-				<td>dateline</td>
-				<td>samp</td>
-				<td>bdo</td>
-				<td/>
-				<td>img</td>
-				<td>table</td>
-			</tr>
-			<tr>
-				<td/>
-				<td>level4</td>
-				<td>imggroup</td>
-				<td>doctitle</td>
-				<td>epigraph</td>
-				<td/>
-				<td>code</td>
-				<td/>
-				<td>link</td>
-				<td>tbody</td>
-			</tr>
-			<tr>
-				<td/>
-				<td>level5</td>
-				<td>linegroup</td>
-				<td>h1</td>
-				<td>hd</td>
-				<td/>
-				<td>dd</td>
-				<td/>
-				<td>meta</td>
-				<td>td</td>
-			</tr>
-			<tr>
-				<td/>
-				<td>level6</td>
-				<td>list</td>
-				<td>h2</td>
-				<td>line</td>
-				<td/>
-				<td>dfn</td>
-				<td/>
-				<td/>
-				<td>tfoot</td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td>poem</td>
-				<td>h3</td>
-				<td>p</td>
-				<td/>
-				<td>dt</td>
-				<td/>
-				<td/>
-				<td>th</td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td>note</td>
-				<td>h4</td>
-				<td>prodnote</td>
-				<td/>
-				<td>em</td>
-				<td/>
-				<td/>
-				<td>thead</td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td>h5</td>
-				<td>sidebar</td>
-				<td/>
-				<td>lic</td>
-				<td/>
-				<td/>
-				<td>title</td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td>h6</td>
-				<td/>
-				<td/>
-				<td>linenum</td>
-				<td/>
-				<td/>
-				<td>tr</td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td>li</td>
-				<td/>
-				<td/>
-				<td>noteref</td>
-				<td/>
-				<td/>
-				<td></td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td>q</td>
-				<td/>
-				<td/>
-				<td></td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td>sent</td>
-				<td/>
-				<td/>
-				<td></td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td>span</td>
-				<td/>
-				<td/>
-				<td></td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td>strong</td>
-				<td/>
-				<td/>
-				<td></td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td>sub</td>
-				<td/>
-				<td/>
-				<td></td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td>sup</td>
-				<td/>
-				<td/>
-				<td></td>
-			</tr>
-			<tr>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td/>
-				<td>w</td>
-				<td/>
-				<td/>
-				<td></td>
-			</tr>
-		</table>	
+<table>
+  <tbody>
+    <tr>
+      <th>Sequence</th>
+      <th>Block (type 1)</th>
+      <th>Block (type 2)</th>
+      <th>Block (type 3)</th>
+      <th>Block (type 4)</th>
+      <th>Block or Inline</th>
+      <th>Inline</th>
+      <th>Special</th>
+      <th>No-op</th>
+      <th>Not supported</th>
+    </tr>
+    <tr>
+      <td><ul>
+          <li>bodymatter </li>
+          <li>frontmatter</li>
+          <li>rearmatter</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>level </li>
+          <li>level1</li>
+          <li>level2</li>
+          <li>level3</li>
+          <li>level4</li>
+          <li>level5</li>
+          <li>level6</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>annotation </li>
+          <li>blockquote</li>
+          <li>div</li>
+          <li>dl</li>
+          <li>imggroup</li>
+          <li>linegroup</li>
+          <li>list</li>
+          <li>poem</li>
+          <li>note</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>bridgehead </li>
+          <li>caption</li>
+          <li>covertitle</li>
+          <li>docauthor</li>
+          <li>doctitle</li>
+          <li>h1</li>
+          <li>h2</li>
+          <li>h3</li>
+          <li>h4</li>
+          <li>h5</li>
+          <li>h6</li>
+          <li>li</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>address </li>
+          <li>author</li>
+          <li>byline</li>
+          <li>dateline</li>
+          <li>epigraph</li>
+          <li>hd</li>
+          <li>line</li>
+          <li>p</li>
+          <li>prodnote</li>
+          <li>sidebar</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>a </li>
+          <li>cite</li>
+          <li>kbd</li>
+          <li>samp</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>abbr </li>
+          <li>acronym</li>
+          <li>annoref</li>
+          <li>bdo</li>
+          <li>code</li>
+          <li>dd</li>
+          <li>dfn</li>
+          <li>dt</li>
+          <li>em</li>
+          <li>lic</li>
+          <li>linenum</li>
+          <li>noteref</li>
+          <li>q</li>
+          <li>sent</li>
+          <li>span</li>
+          <li>strong</li>
+          <li>sub</li>
+          <li>sup</li>
+          <li>w</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>br </li>
+          <li>pagenum</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>book </li>
+          <li>dtbook</li>
+          <li>head</li>
+          <li>img</li>
+          <li>link</li>
+          <li>meta</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>col</li>
+          <li>colgroup</li>
+          <li>table</li>
+          <li>tbody</li>
+          <li>td</li>
+          <li>tfoot</li>
+          <li>th</li>
+          <li>thead</li>
+          <li>title</li>
+          <li>tr</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
 	</body>
 </html>
