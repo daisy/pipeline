@@ -117,6 +117,13 @@ public class TaskRunner {
 				logger.info(nf.format(progress.getProgress()) + " done. ETA " + progress.getETA());
 				//progress(i/tasks.size());
 			}
+		} catch (IOException | TaskSystemException | RuntimeException e) {
+			//This is called after the resource (fj) is closed.
+			//Since the temp file handler is closed the current state will be written to output. However, we do not want it.
+			if (!output.delete()) {
+				output.deleteOnExit();
+			}
+			throw e;
 		}
 		if (!keepTempFilesOnSuccess && tempWriter!=null) {
 			// Process were successful, delete temp files
