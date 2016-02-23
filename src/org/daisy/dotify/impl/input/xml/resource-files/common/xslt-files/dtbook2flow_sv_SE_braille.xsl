@@ -36,6 +36,7 @@
 			<xsl:call-template name="insertMetadata"/>
 			<xsl:call-template name="insertLayoutMaster"/>
 			<xsl:call-template name="insertNoteCollection"/>
+			<xsl:call-template name="insertProcessorRenderer"/>
 			<xsl:apply-templates/>
 		</obfl>
 		</xsl:variable>
@@ -47,7 +48,9 @@
 			<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="local-name()"/>
 			<xsl:text disable-output-escaping="yes">></xsl:text>
 		</xsl:for-each>
-		<xsl:copy-of select="."/>
+		<xml-data renderer="table-renderer">
+			<xsl:copy-of select="."/>
+		</xml-data>
 		<xsl:for-each select="ancestor::obfl:*[ancestor::obfl:sequence and not(descendant-or-self::obfl:xml-data)]">
 			<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="local-name()"/>
 			<xsl:for-each select="@*[not(name()='id')]">
@@ -575,7 +578,20 @@
 	
 	<xsl:template match="node()" mode="toc"/>
 	
-		
+	<xsl:template name="insertProcessorRenderer">
+		<xml-processor name="table-as-block">
+			<!-- table-as-block.xsl-->
+			<xsl:copy-of select="document('table-as-block.xml')"/>
+		</xml-processor>
+		<xml-processor name="identity">
+			<xsl:copy-of select="document('identity.xml')"/>
+		</xml-processor>
+		<renderer name="table-renderer">
+			<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" processor="identity" cost="(- 14 $min-block-width)"/>
+			<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" processor="table-as-block" cost="(- 14 $min-block-width)"/>
+		</renderer>
+	</xsl:template>
+
 	<xsl:template match="dtb:table">
 		<xsl:apply-templates select="dtb:caption"/>
 		<!-- choose table formats -->
