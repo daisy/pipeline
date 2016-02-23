@@ -10,7 +10,7 @@ public interface RenderingScenario {
 	 * @throws FormatterException if rendering fails. If this exception is thrown,
 	 * the supplied formatter may be in an unknown state.
 	 */
-	public void renderScenario(FormatterSequence formatter) throws FormatterException;
+	public void renderScenario(FormatterCore formatter) throws FormatterException;
 
 	/**
 	 * Calculates the cost of this scenario with the supplied 
