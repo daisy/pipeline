@@ -35,8 +35,9 @@
 			<xsl:attribute name="xml:lang"><xsl:value-of select="/dtb:dtbook/@xml:lang"/></xsl:attribute>
 			<xsl:call-template name="insertMetadata"/>
 			<xsl:call-template name="insertLayoutMaster"/>
-			<xsl:call-template name="insertNoteCollection"/>
 			<xsl:call-template name="insertProcessorRenderer"/>
+			<xsl:call-template name="insertTOCVolumeTemplate"/>
+			<xsl:call-template name="insertNoteCollection"/>
 			<xsl:apply-templates/>
 		</obfl>
 		</xsl:variable>
@@ -218,6 +219,9 @@
 				<footer></footer>
 			</default-template>
 		</layout-master>
+	</xsl:template>
+	
+	<xsl:template name="insertTOCVolumeTemplate">
 		<xsl:choose>
 			<xsl:when test="$toc-depth > 0 and (//dtb:level1[@class='toc'] or //dtb:level1[dtb:list[@class='toc']])">
 			<table-of-contents name="full-toc">
