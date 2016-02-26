@@ -591,8 +591,13 @@
 			<xsl:copy-of select="document('identity.xml')"/>
 		</xml-processor>
 		<renderer name="table-renderer">
-			<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" processor="identity" cost="(- 14 $min-block-width)"/>
-			<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" processor="table-as-block" cost="(- 14 $min-block-width)"/>
+			<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+								qualifier="4>/obfl:table/(count(obfl:tr[1]/obfl:td[not(@col-span)])+sum(obfl:tr[1]/obfl:td[@col-span]/@col-span))"
+			 					processor="identity" 
+			 					cost="(- {$page-width} $min-block-width)"/>
+			<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" 
+								processor="table-as-block" 
+								cost="(- {$page-width} $min-block-width)"/>
 		</renderer>
 	</xsl:template>
 
