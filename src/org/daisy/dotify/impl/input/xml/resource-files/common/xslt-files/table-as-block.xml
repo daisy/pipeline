@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl">
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl" exclude-result-prefixes="obfl">
 	<xsl:template match="obfl:table">
 		<obfl:block>
 			<xsl:apply-templates/>
@@ -10,8 +10,8 @@
 	</xsl:template>
 	<xsl:template match="obfl:td">
 		<obfl:block margin-left="2">
-			<xsl:value-of select="text()"/>
-			<xsl:apply-templates select="following-sibling::*[1]"/>
+			<xsl:copy-of select="node()|@*"/>
+			<xsl:apply-templates select="following-sibling::obfl:td[1]"/>
 		</obfl:block>
 	</xsl:template>
 </xsl:stylesheet>
