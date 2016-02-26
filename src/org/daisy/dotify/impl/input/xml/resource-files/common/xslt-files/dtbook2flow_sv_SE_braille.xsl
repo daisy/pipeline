@@ -11,6 +11,10 @@
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:param name="toc-indent-multiplier" select="1"/>
 	<xsl:param name="splitterMax" select="10"/>
+	<xsl:param name="toc-depth" select="6"/>
+	<xsl:param name="volume-toc" select="true()"/>
+	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>
+	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>
 
 	<xsl:param name="l10nLang" select="'en'"/>
 	<xsl:param name="l10nTocHeadline" select="'Table Of Contents'"/>
@@ -41,20 +45,27 @@
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
 			<template use-when="(= (% $page 2) 0)">
 				<header>
-					<field><string value="&#xA0;&#xA0;"/><current-page number-format="roman"/></field>
+					<xsl:if test="$show-braille-page-numbers">
+						<field><string value="&#xA0;&#xA0;"/><current-page number-format="roman"/></field>
+					</xsl:if>
 				</header>
 				<footer></footer>
 			</template>
 			<default-template>
-				<header>
-					<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
-					 of every front page as to avoid embossing on the same row on front and back -->
-					<xsl:if test="$row-spacing=2">
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
-					</xsl:if>
-					<field><string value=""/></field>
-					<field><current-page number-format="roman"/></field>
-				</header>
+				<xsl:if test="$show-braille-page-numbers">
+					<header>
+						<field><string value=""/></field>
+						<field><current-page number-format="roman"/></field>
+					</header>
+				</xsl:if>
+				<xsl:if test="$row-spacing=2">
+					<header>
+						<field><string value=""/></field>
+					</header>
+				</xsl:if>
+				<xsl:if test="not($show-braille-page-numbers or $row-spacing=2)">
+					<header></header>
+				</xsl:if>
 				<footer></footer>
 			</default-template>
 			<xsl:call-template name="insertFrontPageArea"/>
@@ -64,27 +75,34 @@
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
 			<template use-when="(= (% $page 2) 0)">
 				<header>
+					<xsl:if test="$show-braille-page-numbers or $show-print-page-numbers">
 					<field><string value="&#xA0;&#xA0;"/><current-page number-format="default"/></field>
 					<field>
 						<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
 						<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
 					</field>
+					</xsl:if>
 				</header>
 				<footer></footer>
 			</template>
 			<default-template>
 				<header>
-					<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
-					 of every front page as to avoid embossing on the same row on front and back -->
-					<xsl:if test="$row-spacing=2">
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
-					</xsl:if>
+					<xsl:if test="$show-braille-page-numbers or $show-print-page-numbers">
 					<field><string value="&#xA0;&#xA0;"/>
 						<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
 						<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
 					</field>
 					<field><current-page number-format="default"/></field>
+					</xsl:if>
 				</header>
+				<xsl:if test="$row-spacing=2">
+					<header>
+						<field><string value=""/></field>
+					</header>
+				</xsl:if>
+				<xsl:if test="not($show-braille-page-numbers or $show-print-page-numbers or $row-spacing=2)">
+					<header></header>
+				</xsl:if>
 				<footer></footer>
 			</default-template>
 			<xsl:call-template name="insertMainPageArea"/>
@@ -137,7 +155,7 @@
 			</default-template>
 		</layout-master>
 		<xsl:choose>
-			<xsl:when test="//dtb:level1[@class='toc'] or //dtb:level1[dtb:list[@class='toc']]">
+			<xsl:when test="$toc-depth > 0 and (//dtb:level1[@class='toc'] or //dtb:level1[dtb:list[@class='toc']])">
 			<table-of-contents name="full-toc">
 				<xsl:apply-templates select="//dtb:level1" mode="toc"/>
 			</table-of-contents>
@@ -167,11 +185,13 @@
 			<volume-template volume-number-variable="volume" volume-count-variable="volumes" use-when="(> $volume 1)" sheets-in-volume-max="{$splitterMax}">
 				<pre-content>
 					<xsl:call-template name="coverPage"/>
+					<xsl:if test="$volume-toc">
 					<toc-sequence master="front" toc="full-toc" range="volume" initial-page-number="1">
 						<on-toc-start>
 							<block padding-bottom="1"><evaluate expression="(format &quot;{$l10nTocVolumeHeading}&quot; $volume)"/></block>
 						</on-toc-start>
 					</toc-sequence>
+					</xsl:if>
 				</pre-content>
 				<post-content>
 					<xsl:call-template name="postContentNotes"/>
@@ -305,6 +325,12 @@
 		</xsl:if>
 	</xsl:template>
 	
+	<xsl:template match="dtb:pagenum">
+		<xsl:if test="$show-print-page-numbers">
+			<xsl:next-match/>
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template match="dtb:noteref" priority="10">
 		<xsl:apply-templates select="." mode="inline-mode"/>
 		<xsl:variable name="afix">
@@ -410,6 +436,32 @@
 		count(descendant::*[not(ancestor::dtb:note) and (self::dtb:level2 or self::dtb:level3 or self::dtb:level4 or self::dtb:level5 or self::dtb:level6 or self::dtb:h1 or self::dtb:h2 or self::dtb:h3 or self::dtb:h4 or self::dtb:h5 or self::dtb:h6 or self::dtb:note or self::dtb:pagenum)])
 		=count(descendant::*[not(ancestor::dtb:note)])]" mode="toc"/>
 	
+	<xsl:template match="dtb:level2" mode="toc" priority="0.6">
+		<xsl:if test="$toc-depth > 1">
+			<xsl:next-match/>
+		</xsl:if>
+	</xsl:template>
+	<xsl:template match="dtb:level3" mode="toc" priority="0.6">
+		<xsl:if test="$toc-depth > 2">
+			<xsl:next-match/>
+		</xsl:if>
+	</xsl:template>
+	<xsl:template match="dtb:level4" mode="toc" priority="0.6">
+		<xsl:if test="$toc-depth > 3">
+			<xsl:next-match/>
+		</xsl:if>
+	</xsl:template>
+	<xsl:template match="dtb:level5" mode="toc" priority="0.6">
+		<xsl:if test="$toc-depth > 4">
+			<xsl:next-match/>
+		</xsl:if>
+	</xsl:template>
+	<xsl:template match="dtb:level6" mode="toc" priority="0.6">
+		<xsl:if test="$toc-depth > 5">
+			<xsl:next-match/>
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template match="dtb:level1|dtb:level2" mode="toc">
 		<xsl:if test="dtb:h1|dtb:h2">
 <!--
@@ -441,7 +493,12 @@
 <!--		<xsl:value-of select="descendant::text()"/>-->
 	<xsl:apply-templates mode="toc-text"/>
 	<!-- <xsl:if test="not(self::dtb:h1 and ancestor::dtb:level1[@class='part'])"> -->
-		<xsl:text> (</xsl:text><xsl:value-of select="preceding::dtb:pagenum[1]/text()"/><xsl:text>) </xsl:text><leader position="100%" align="right" pattern="."/><page-number ref-id="{generate-id(.)}"><xsl:if test="ancestor::dtb:frontmatter"><xsl:attribute name="number-format">roman</xsl:attribute></xsl:if></page-number>
+	<xsl:if test="$show-print-page-numbers">
+		<xsl:text> (</xsl:text><xsl:value-of select="preceding::dtb:pagenum[1]/text()"/><xsl:text>)</xsl:text>
+	</xsl:if>
+	<xsl:if test="$show-braille-page-numbers">
+		<xsl:text> </xsl:text><leader position="100%" align="right" pattern="."/><page-number ref-id="{generate-id(.)}"><xsl:if test="ancestor::dtb:frontmatter"><xsl:attribute name="number-format">roman</xsl:attribute></xsl:if></page-number>
+	</xsl:if>
 		<!--  </xsl:if>  -->
 	</xsl:template>
 

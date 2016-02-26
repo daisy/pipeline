@@ -12,6 +12,8 @@
 		outer-margin
 		row-spacing
 		duplex
+		colophon-metadata-placement
+		rear-cover-placement
 		hyphenate (inherited)
 
 	Format (input -> output)
@@ -34,6 +36,8 @@
 	<xsl:param name="outer-margin" select="0" as="xs:integer"/>
 	<xsl:param name="row-spacing" select="1" as="xs:decimal"/>
 	<xsl:param name="duplex" select="true()" as="xs:boolean"/>
+	<xsl:param name="colophon-metadata-placement" select="'end'"/>
+	<xsl:param name="rear-cover-placement" select="'end'"/>
 	
 	<xsl:param name="l10nrearjacketcopy" select="'Rear jacket copy'"/>
 	<xsl:param name="l10nimagedescription" select="'Image description'"/>
@@ -323,7 +327,22 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 	
 	<!-- Organize colophon and rearjacketcopy -->
 	<xsl:template match="dtb:book" priority="10">
+		<xsl:if test="$colophon-metadata-placement='begin'">
+			<xsl:call-template name="insertColophon"/>
+		</xsl:if>
+		<xsl:if test="$rear-cover-placement='begin'">
+			<xsl:call-template name="insertBackCoverTextAndRearJacketCopy"/>
+		</xsl:if>
 		<xsl:apply-templates/>
+		<xsl:if test="not($colophon-metadata-placement='begin')">
+			<xsl:call-template name="insertColophon"/>
+		</xsl:if>
+		<xsl:if test="not($rear-cover-placement='begin')">
+			<xsl:call-template name="insertBackCoverTextAndRearJacketCopy"/>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="insertColophon">
 		<xsl:for-each select="//dtb:level1[@class='colophon']">
 			<sequence master="plain" initial-page-number="1">
 				<block padding-bottom="1"><xsl:value-of select="concat(':: ', $l10ncolophon, ' ')"/><leader position="100%" pattern=":"/></block>
@@ -333,6 +352,9 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 				<block><leader position="100%" pattern=":"/></block>
 			</sequence>
 		</xsl:for-each>
+	</xsl:template>
+	
+	<xsl:template name="insertBackCoverTextAndRearJacketCopy">
 		<xsl:for-each select="//dtb:level1[@class='backCoverText' or @class='rearjacketcopy']">
 			<sequence master="plain" initial-page-number="1">
 				<block padding-bottom="1"><xsl:value-of select="concat(':: ', $l10nrearjacketcopy, ' ')"/><leader position="100%" pattern=":"/></block>
