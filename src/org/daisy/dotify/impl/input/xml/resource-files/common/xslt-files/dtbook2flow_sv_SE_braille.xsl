@@ -12,7 +12,7 @@
 	<xsl:param name="toc-indent-multiplier" select="1"/>
 	<xsl:param name="splitterMax" select="10"/>
 	<xsl:param name="toc-depth" select="6"/>
-	<xsl:param name="volume-toc" select="true()"/>
+	<xsl:param name="volume-toc" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>
 
@@ -44,6 +44,12 @@
 							page-height="{$page-height}" inner-margin="{$inner-margin}"
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
 			<template use-when="(= (% $page 2) 0)">
+				<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers)">
+					<header>
+						<xsl:attribute name="row-spacing">1</xsl:attribute>
+						<field><string value=""/></field>
+					</header>
+				</xsl:if>
 				<header>
 					<xsl:if test="$show-braille-page-numbers">
 						<field><string value="&#xA0;&#xA0;"/><current-page number-format="roman"/></field>
@@ -52,20 +58,17 @@
 				<footer></footer>
 			</template>
 			<default-template>
-				<xsl:if test="$show-braille-page-numbers">
-					<header>
+				<header>
+					<xsl:if test="$show-braille-page-numbers">
+						<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
+						 of every front page as to avoid embossing on the same row on front and back -->
+						<xsl:if test="$row-spacing=2">
+							<xsl:attribute name="row-spacing">1</xsl:attribute>
+						</xsl:if>
 						<field><string value=""/></field>
 						<field><current-page number-format="roman"/></field>
-					</header>
-				</xsl:if>
-				<xsl:if test="$row-spacing=2">
-					<header>
-						<field><string value=""/></field>
-					</header>
-				</xsl:if>
-				<xsl:if test="not($show-braille-page-numbers or $row-spacing=2)">
-					<header></header>
-				</xsl:if>
+					</xsl:if>
+				</header>
 				<footer></footer>
 			</default-template>
 			<xsl:call-template name="insertFrontPageArea"/>
@@ -74,13 +77,30 @@
 							page-height="{$page-height}" inner-margin="{$inner-margin}"
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
 			<template use-when="(= (% $page 2) 0)">
+				<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers or $show-print-page-numbers)">
+					<header>
+						<xsl:attribute name="row-spacing">1</xsl:attribute>
+						<field><string value=""/></field>
+					</header>
+				</xsl:if>
 				<header>
 					<xsl:if test="$show-braille-page-numbers or $show-print-page-numbers">
-					<field><string value="&#xA0;&#xA0;"/><current-page number-format="default"/></field>
-					<field>
-						<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
-						<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
-					</field>
+						<field><string value="&#xA0;&#xA0;"/>
+							<xsl:if test="$show-braille-page-numbers">
+								<current-page number-format="default"/>
+							</xsl:if>
+						</field>
+						<field>
+							<xsl:choose>
+								<xsl:when test="$show-print-page-numbers">
+									<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
+									<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<string value=""/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</field>
 					</xsl:if>
 				</header>
 				<footer></footer>
@@ -88,21 +108,25 @@
 			<default-template>
 				<header>
 					<xsl:if test="$show-braille-page-numbers or $show-print-page-numbers">
-					<field><string value="&#xA0;&#xA0;"/>
-						<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
-						<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
-					</field>
-					<field><current-page number-format="default"/></field>
+						<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
+						 of every front page as to avoid embossing on the same row on front and back -->
+						<xsl:if test="$row-spacing=2">
+							<xsl:attribute name="row-spacing">1</xsl:attribute>
+						</xsl:if>
+						<field><string value="&#xA0;&#xA0;"/>
+							<xsl:if test="$show-print-page-numbers">
+								<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
+								<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
+							</xsl:if>
+						</field>
+						<field>
+							<xsl:choose>
+								<xsl:when test="$show-braille-page-numbers"><current-page number-format="default"/></xsl:when>
+								<xsl:otherwise><string value=""/></xsl:otherwise>
+							</xsl:choose>
+						</field>
 					</xsl:if>
 				</header>
-				<xsl:if test="$row-spacing=2">
-					<header>
-						<field><string value=""/></field>
-					</header>
-				</xsl:if>
-				<xsl:if test="not($show-braille-page-numbers or $show-print-page-numbers or $row-spacing=2)">
-					<header></header>
-				</xsl:if>
 				<footer></footer>
 			</default-template>
 			<xsl:call-template name="insertMainPageArea"/>
@@ -130,18 +154,30 @@
 							page-height="{$page-height}" inner-margin="{$inner-margin}"
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
 			<template use-when="(= (% $page 2) 0)">
-				<header><field><string value="&#xA0;&#xA0;"/><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field></header>
+				<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers)">
+					<header>
+						<xsl:attribute name="row-spacing">1</xsl:attribute>
+						<field><string value=""/></field>
+					</header>
+				</xsl:if>
+				<header>
+					<xsl:if test="$show-braille-page-numbers">
+						<field><string value="&#xA0;&#xA0;"/><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field>
+					</xsl:if>
+				</header>
 				<footer></footer>
 			</template>
 			<default-template>
 				<header>
-					<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
-					 of every front page as to avoid embossing on the same row on front and back -->
-					<xsl:if test="$row-spacing=2">
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
+					<xsl:if test="$show-braille-page-numbers">
+						<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
+						 of every front page as to avoid embossing on the same row on front and back -->
+						<xsl:if test="$row-spacing=2">
+							<xsl:attribute name="row-spacing">1</xsl:attribute>
+						</xsl:if>
+						<field><string value=""/></field>
+						<field><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field>
 					</xsl:if>
-					<field><string value=""/></field>
-					<field><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field>
 				</header>
 				<footer></footer>
 			</default-template>
