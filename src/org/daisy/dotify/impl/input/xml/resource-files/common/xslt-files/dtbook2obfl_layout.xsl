@@ -482,6 +482,8 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 				<xsl:choose>
 					<!-- span is handled when style is applied -->
 					<xsl:when test="ancestor::dtb:em or ancestor::dtb:strong"><xsl:value-of select="."/></xsl:when>
+					<!-- This case is handled when style is applied -->
+					<xsl:when test="count(parent::node())=1 and (parent::dtb:sub or parent::dtb:sup)"><xsl:value-of select="."/></xsl:when>
 					<xsl:otherwise><span><xsl:attribute name="xml:lang"><xsl:value-of select="ancestor::dtb:*[@xml:lang][1]/@xml:lang"/></xsl:attribute><xsl:value-of select="."/></span></xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>
@@ -525,7 +527,12 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 			<xsl:choose>
 				<!-- text contains a single string -->
 				<xsl:when test="count(node())=1 and text()">
-					<style name="{name()}"><xsl:apply-templates/></style>
+					<xsl:choose>
+						<xsl:when test="ancestor-or-self::dtb:*[@xml:lang][1][not(self::dtb:dtbook)] and not(ancestor::dtb:em or ancestor::dtb:strong)">
+							<span><xsl:attribute name="xml:lang"><xsl:value-of select="ancestor::dtb:*[@xml:lang][1]/@xml:lang"/></xsl:attribute><style name="{name()}"><xsl:apply-templates/></style></span>
+						</xsl:when>
+						<xsl:otherwise><style name="{name()}"><xsl:apply-templates/></style></xsl:otherwise>
+					</xsl:choose>
 				</xsl:when>
 				<!-- Otherwise -->
 				<xsl:otherwise>
