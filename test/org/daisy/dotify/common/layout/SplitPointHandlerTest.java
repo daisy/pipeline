@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class SplitPointHandlerTest {
@@ -279,14 +278,47 @@ public class SplitPointHandlerTest {
 	}
 	
 	@Test
-	@Ignore("Fails due to an unhandled case where unitSize > breakPoint. See issue #141")
 	public void testSize_01() {
 		int unitSize = 10;
 		int breakPoint = 6;
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(false).collapsable(true).size(unitSize).build();
-		bph.split(breakPoint, true, Arrays.asList(x, x));
+		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, true, Arrays.asList(x, x));
+		assertEquals(Arrays.asList(), bp.getHead());
+		assertEquals(Arrays.asList(x, x), bp.getTail());
 	}
-
+	
+	@Test
+	public void testSize_02() {
+		int unitSize = 10;
+		int breakPoint = 6;
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
+		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(false).collapsable(true).size(unitSize).build();
+		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, false, Arrays.asList(x, x));
+		assertEquals(Arrays.asList(), bp.getHead());
+		assertEquals(Arrays.asList(x, x), bp.getTail());
+	}
+	
+	@Test
+	public void testSupplementsSize_01() {
+		int breakPoint = 6;
+		Supplements<DummySplitPoint> supps = new Supplements<DummySplitPoint>() {
+			DummySplitPoint s1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(10).build();
+			@Override
+			public DummySplitPoint get(String id) {
+				switch (id) {
+					case "s1": return s1;
+					default: return null;
+				}
+			}
+		};
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
+		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(false).supplementID("s1").size(1).build();
+		//DummySplitPoint y = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
+		SplitPointData<DummySplitPoint> spd = new SplitPointData<>(Arrays.asList(x), supps);
+		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, true, spd);
+		assertEquals(Arrays.asList(), bp.getHead());
+		assertEquals(Arrays.asList(x), bp.getTail());
+	}
 
 }

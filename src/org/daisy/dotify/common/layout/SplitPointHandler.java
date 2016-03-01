@@ -64,12 +64,25 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 			// pretty simple...
 			return new SplitPoint<>(data.getUnits(), EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, false);
 		} else if (breakPoint<=0) {
-			return finalizeBreakpointTrimTail(new SplitList<>(EMPTY_LIST, EMPTY_LIST), data.getUnits(), data.getSupplements(), false);
+			return emptyHead(data);
 		} else if (totalSize(data.getUnits(), data.getSupplements())<=breakPoint) {
-			return finalizeBreakpointTrimTail(new SplitList<>(data.getUnits(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
+			return emptyTail(data);
 		} else {
-			return findBreakpoint(data.getUnits(), breakPoint, data.getSupplements(), force);
+			int startPos = findCollapse(data.getUnits(), new SizeStep<>(breakPoint, data.getSupplements()));
+			if (startPos<0) {
+				return emptyHead(data);
+			} else {
+				return findBreakpoint(data.getUnits(), data.getSupplements(), force, startPos);
+			}
 		}
+	}
+	
+	private SplitPoint<T> emptyHead(SplitPointData<T> data) {
+		return finalizeBreakpointTrimTail(new SplitList<>(EMPTY_LIST, EMPTY_LIST), data.getUnits(), data.getSupplements(), false);
+	}
+	
+	private SplitPoint<T> emptyTail(SplitPointData<T> data) {
+		return finalizeBreakpointTrimTail(new SplitList<>(data.getUnits(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
 	}
 
 	/**
@@ -88,8 +101,8 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		this.trimTrailing = trimTrailing;
 	}
 	
-	private SplitPoint<T> findBreakpoint(List<T> units, float breakPoint, Supplements<T> map, boolean force) {
-		int strPos = forwardSkippable(units, findCollapse(units, new SizeStep<>(breakPoint, map)));
+	private SplitPoint<T> findBreakpoint(List<T> units, Supplements<T> map, boolean force, int startPos) {
+		int strPos = forwardSkippable(units, startPos);
 		// check next unit to see if it can be removed.
 		if (strPos==units.size()-1) { // last unit?
 			List<T> head = units.subList(0, strPos+1);
@@ -185,6 +198,12 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 	}
 	
+	/**
+	 * Finds the index for the last unit that fits into the given space
+	 * @param charsStr
+	 * @param impl
+	 * @return
+	 */
 	static <T extends SplitPointUnit> int findCollapse(List<T> charsStr, StepForward<T> impl) {
 		int units = -1;
 		T maxCollapsable = null;
