@@ -160,9 +160,9 @@ public class DefaultMarkerProcessor implements MarkerProcessor {
 				try {
 					return def.getMarkersFor(text, atts);
 				} catch (MarkerNotFoundException e) {
-					Logger.getLogger(this.getClass().getCanonicalName()).log(Level.WARNING, specKey + " markers cannot be applied to the text: " + text, e);
+					Logger.getLogger(this.getClass().getCanonicalName()).log(Level.WARNING, specKey + " markers cannot be applied to the text: " + text);
 				} catch (MarkerNotCompatibleException e) {
-					Logger.getLogger(this.getClass().getCanonicalName()).log(Level.WARNING, specKey + " markers cannot be applied to this structure.", e);
+					Logger.getLogger(this.getClass().getCanonicalName()).log(Level.WARNING, specKey + " markers cannot be applied to this structure.");
 				}
 			} else {
 				Logger.getLogger(this.getClass().getCanonicalName()).warning("Undefined attribute: " + specKey);
