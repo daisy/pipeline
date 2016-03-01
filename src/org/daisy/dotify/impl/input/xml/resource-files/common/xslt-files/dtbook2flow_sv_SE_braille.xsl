@@ -492,10 +492,8 @@
 		</xsl:copy>
 	</xsl:template>
 	
-	<xsl:template match="dtb:level1[@class='toc']"></xsl:template>
-	<xsl:template match="dtb:level1[dtb:list[@class='toc']]"></xsl:template>
-	<xsl:template match="dtb:level1[@class='toc']" mode="toc"></xsl:template>
-	<xsl:template match="dtb:level1[dtb:list[@class='toc']]" mode="toc"></xsl:template>
+	<xsl:template match="dtb:level1[@class='toc' or dtb:list[@class='toc']]"></xsl:template>
+	<xsl:template match="dtb:level1[@class='toc' or dtb:list[@class='toc']]" mode="toc"></xsl:template>
 
 	<xsl:template match="dtb:level1[(@class='backCoverText' or @class='rearjacketcopy' or @class='colophon') and (parent::dtb:frontmatter or parent::dtb:rearmatter)]" mode="toc"></xsl:template>
 	
