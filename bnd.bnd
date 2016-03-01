@@ -11,4 +11,4 @@ Export-Package:  \
 	org.daisy.dotify.common.collection
 Include-Resource: / = src/
 -sources: false
-Bundle-Version: 2.0.2-SNAPSHOT
+Bundle-Version: 2.0.2
