@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar ns="http://www.daisy.org/ns/2011/obfl" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <!-- -->
   <define name="blockContents">
     <choice>
       <text/>
@@ -32,7 +33,20 @@
         <choice>
           <value>true</value>
           <value>false</value>
+          <value></value>
         </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="translate">
+		<choice>
+	        <value></value>
+	        <value>pre-translated</value>
+          <value>grade0</value>
+	        <value>grade1</value>
+	        <value>grade2</value>
+	        <value>grade3</value>
+	    </choice>
       </attribute>
     </optional>
   </define>
@@ -216,21 +230,97 @@
     </optional>
   </define>
   <!--
-    break-before, if present, break before block begins
-    first-line-indent, indent (in chars) of first line block
-    keep, keep rows in this block
-    keep-with-next, keep the following block's first line(s) together with this block
-    list-type, the list type of this block
     margin-bottom, bottom margin for this block (in rows)
     margin-left, left margin for this block (in chars)
     margin-top, top margin for this block (in rows)
     margin-right, right margin for this block (in chars)
+  -->
+  <define name="margin-atts">
+    <optional>
+      <attribute name="margin-bottom"/>
+    </optional>
+    <optional>
+      <attribute name="margin-left"/>
+    </optional>
+    <optional>
+      <attribute name="margin-top"/>
+    </optional>
+    <optional>
+      <attribute name="margin-right"/>
+    </optional>
+  </define>
+  <!--
     padding-bottom, bottom padding for this block (in rows)
     padding-left, left padding for this block (in chars)
     padding-top, top padding for this block (in rows)
     padding-right, right padding for this block (in chars)
+  -->
+  <define name="padding-atts">
+    <optional>
+      <attribute name="padding-bottom"/>
+    </optional>
+    <optional>
+      <attribute name="padding-left"/>
+    </optional>
+    <optional>
+      <attribute name="padding-top"/>
+    </optional>
+    <optional>
+      <attribute name="padding-right"/>
+    </optional>
+  </define>
+  <!--
     text-indent, indent (in chars) of every line in the block except the first one
     block-indent, indent (in chars) of this block's block children
+  -->
+  <define name="block-atts-except-list-type-and-row-spacing">
+    <optional>
+      <attribute name="first-line-indent"/>
+    </optional>
+    <optional>
+      <attribute name="text-indent"/>
+    </optional>
+    <optional>
+      <attribute name="block-indent"/>
+    </optional>
+    <optional>
+      <attribute name="align">
+        <choice>
+          <value>left</value>
+          <value>center</value>
+          <value>right</value>
+        </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+    <ref name="textAtts"/>
+  </define>
+  <!--
+    list-type, the list type of this block
+  -->
+  <define name="block-atts">
+    <optional>
+      <attribute name="list-type">
+        <choice>
+          <value>none</value>
+          <value>ol</value>
+          <value>ul</value>
+          <value>pl</value>
+        </choice>
+      </attribute>
+    </optional>
+    <ref name="row-spacing"/>
+    <ref name="block-atts-except-list-type-and-row-spacing"/>
+  </define>
+  <!--
+    break-before, if present, break before block begins
+    first-line-indent, indent (in chars) of first line block
+    keep, keep rows in this block
+    keep-with-next, keep the following block's first line(s) together with this block
   -->
   <define name="blockAtts">
     <optional>
@@ -240,9 +330,6 @@
           <value>page</value>
         </choice>
       </attribute>
-    </optional>
-    <optional>
-      <attribute name="first-line-indent"/>
     </optional>
     <optional>
       <attribute name="keep">
@@ -323,55 +410,6 @@
       </attribute>
     </optional>
     <optional>
-      <attribute name="list-type">
-        <choice>
-          <value>none</value>
-          <value>ol</value>
-          <value>ul</value>
-          <value>pl</value>
-        </choice>
-      </attribute>
-    </optional>
-    <optional>
-      <attribute name="margin-bottom"/>
-    </optional>
-    <optional>
-      <attribute name="margin-left"/>
-    </optional>
-    <optional>
-      <attribute name="margin-top"/>
-    </optional>
-    <optional>
-      <attribute name="margin-right"/>
-    </optional>
-    <optional>
-      <attribute name="padding-bottom"/>
-    </optional>
-    <optional>
-      <attribute name="padding-left"/>
-    </optional>
-    <optional>
-      <attribute name="padding-top"/>
-    </optional>
-    <optional>
-      <attribute name="padding-right"/>
-    </optional>
-    <optional>
-      <attribute name="text-indent"/>
-    </optional>
-    <optional>
-      <attribute name="block-indent"/>
-    </optional>
-    <optional>
-      <attribute name="align">
-        <choice>
-          <value>left</value>
-          <value>center</value>
-          <value>right</value>
-        </choice>
-      </attribute>
-    </optional>
-    <optional>
       <attribute name="vertical-align">
         <choice>
           <value>before</value>
@@ -383,14 +421,10 @@
     <optional>
       <attribute name="vertical-position"/>
     </optional>
-    <optional>
-      <attribute name="id">
-        <data type="ID"/>
-      </attribute>
-    </optional>
-    <ref name="row-spacing"/>
     <ref name="border-atts"/>
-    <ref name="textAtts"/>
+    <ref name="margin-atts"/>
+    <ref name="padding-atts"/>
+    <ref name="block-atts"/>
   </define>
   <!--
     master, name of master to use for this sequence
@@ -415,6 +449,12 @@
       <oneOrMore>
         <ref name="layout-master"/>
       </oneOrMore>
+      <zeroOrMore>
+        <ref name="xml-processor"/>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="renderer"/>
+      </zeroOrMore>
       <zeroOrMore>
         <ref name="table-of-contents"/>
       </zeroOrMore>
@@ -444,7 +484,20 @@
         <choice>
           <value>true</value>
           <value>false</value>
+          <value></value>
         </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="translate">
+      	<choice>
+	        <value></value>
+	        <value>pre-translated</value>
+      	  <value>grade0</value>
+	        <value>grade1</value>
+	        <value>grade2</value>
+	        <value>grade3</value>
+	    </choice>
       </attribute>
     </optional>
   </define>
@@ -452,7 +505,9 @@
   <define name="meta">
     <element name="meta">
       <ref name="attlist-meta"/>
-      <ref name="any"/>
+      <zeroOrMore>
+        <ref name="any_element_except_obfl"/>
+      </zeroOrMore>
     </element>
   </define>
   <define name="attlist-meta" combine="interleave">
@@ -498,12 +553,7 @@
   <define name="template">
     <element name="template">
       <ref name="attlist-template"/>
-      <oneOrMore>
-        <ref name="header"/>
-      </oneOrMore>
-      <oneOrMore>
-        <ref name="footer"/>
-      </oneOrMore>
+      <ref name="template-children"/>
     </element>
   </define>
   <define name="attlist-template" combine="interleave">
@@ -512,16 +562,22 @@
   <define name="default-template">
     <element name="default-template">
       <ref name="attlist-default-template"/>
-      <oneOrMore>
-        <ref name="header"/>
-      </oneOrMore>
-      <oneOrMore>
-        <ref name="footer"/>
-      </oneOrMore>
+      <ref name="template-children"/>
     </element>
   </define>
   <define name="attlist-default-template" combine="interleave">
     <empty/>
+  </define>
+  <define name="template-children">
+    <oneOrMore>
+      <ref name="header"/>
+    </oneOrMore>
+    <oneOrMore>
+      <ref name="footer"/>
+    </oneOrMore>
+    <zeroOrMore>
+      <ref name="margin-region"/>
+    </zeroOrMore>
   </define>
   <define name="header">
     <element name="header">
@@ -544,6 +600,48 @@
   </define>
   <define name="attlist-footer" combine="interleave">
     <ref name="row-spacing"/>
+  </define>
+  <define name="margin-region">
+    <element name="margin-region">
+      <ref name="attlist-margin-region"/>
+      <optional>
+        <ref name="indicators"/>
+      </optional>
+    </element>
+  </define>
+  <define name="attlist-margin-region" combine="interleave">
+    <attribute name="align">
+      <choice>
+        <value>left</value>
+        <value>right</value>
+      </choice>
+    </attribute>
+    <optional>
+      <attribute name="width">
+        <data type="positiveInteger"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="indicators">
+    <element name="indicators">
+      <zeroOrMore>
+        <ref name="marker-indicator"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="marker-indicator">
+    <element name="marker-indicator">
+      <empty/>
+      <ref name="attlist-marker-indicator"></ref>
+    </element>
+  </define>
+  <define name="attlist-marker-indicator">
+    <attribute name="markers">
+      <data type="NMTOKENS"/>
+    </attribute>
+    <attribute name="indicator">
+      <data type="normalizedString"/>
+    </attribute>
   </define>
   <define name="field">
     <element name="field">
@@ -615,6 +713,8 @@
         <value>spread</value>
         <value>sheet</value>
         <value>sequence</value>
+        <value>volume</value>
+        <value>document</value>
       </choice>
     </attribute>
     <optional>
@@ -905,7 +1005,11 @@
     <element name="sequence">
       <ref name="attlist-sequence"/>
       <oneOrMore>
-        <ref name="block"/>
+        <choice>
+          <ref name="block"/>
+          <ref name="table"/>
+          <ref name="xml-data"/>
+        </choice>
       </oneOrMore>
     </element>
   </define>
@@ -1294,7 +1398,165 @@
       </attribute>
     </optional>
   </define>
-  <start>
+  <!-- Tabular data -->
+  <define name="table">
+    <element name="table">
+      <ref name="attlist-table"/>
+      <choice>
+        <group>
+          <element name="thead">
+            <oneOrMore>
+              <ref name="tr"/>
+            </oneOrMore>
+          </element>
+          <element name="tbody">
+            <oneOrMore>
+              <ref name="tr"/>
+            </oneOrMore>
+          </element>
+        </group>
+        <oneOrMore>
+          <ref name="tr"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="attlist-table" combine="interleave">
+    <optional>
+      <attribute name="table-col-spacing">
+        <data type="nonNegativeInteger"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="table-row-spacing">
+        <data type="nonNegativeInteger"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="preferred-empty-space">
+        <data type="nonNegativeInteger"/>
+      </attribute>
+    </optional>
+    <ref name="row-spacing"/>
+    <ref name="border-atts"/>
+    <ref name="margin-atts"/>
+    <ref name="padding-atts"/>
+  </define>
+  <define name="tr">
+    <element name="tr">
+      <oneOrMore>
+        <ref name="td"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="td">
+    <element name="td">
+      <ref name="attlist-td"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="blockContents"/>
+          <ref name="anchor"/>
+          <ref name="block"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="attlist-td" combine="interleave">
+    <optional>
+      <attribute name="row-span">
+        <data type="positiveInteger"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="col-span">
+        <data type="positiveInteger"/>
+      </attribute>
+    </optional>
+    <ref name="border-atts"/>
+    <ref name="padding-atts"/>
+    <ref name="block-atts-except-list-type-and-row-spacing"/>
+  </define>
+  <!-- XML Data -->
+  <define name="xml-data">
+    <element name="xml-data">
+      <ref name="attlist-xml-data"/>
+      <!--
+      <choice>
+        <ref name="any"/>
+      </choice>-->
+      <choice>
+        <ref name="any_content"/>
+      </choice>
+    </element>
+  </define>
+  <define name="attlist-xml-data" combine="interleave">
+    <attribute name="renderer" >
+      <data type="IDREF"/>
+    </attribute> 
+  </define>
+  <define name="renderer">
+    <element name="renderer">
+      <ref name="attlist-renderer"/>
+      <oneOrMore>
+        <choice>
+          <ref name="rendering-scenario"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="attlist-renderer" combine="interleave">
+    <attribute name="name">
+      <data type="ID"/>
+    </attribute>
+  </define>
+  <define name="rendering-scenario">
+    <element name="rendering-scenario">
+      <ref name="attlist-rendering-scenario"/>
+    </element>
+  </define>
+  <define name="attlist-rendering-scenario">
+    <attribute name="processor">
+      <data type="IDREF"/>
+    </attribute>
+    <attribute name="cost">
+       <data type="string"/>
+    </attribute>
+    <optional>
+      <attribute name="qualifier">
+        <data type="string"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="xml-processor">
+    <element name="xml-processor">
+      <ref name="attlist-xml-processor"/>
+      <choice>
+        <ref name="any_content"/>
+      </choice>
+<!--
+            <include href="xslt20.rng"/>
+            <define name="processor.content">
+              <parentRef name="xml-processor"></parentRef>
+            </define>-->
+           
+
+        <!--
+        <element name="stylesheet" ns="http://www.w3.org/1999/XSL/Transform">
+          <ref name="any_content"/>
+        </element>
+        <ref name="stylesheet.element"/>
+        <ref name="transform.element"/>
+        <ref name="literal-result-element-as-stylesheet"/>-->
+        <!--<ref name="table"/>
+      </choice>-->
+    </element>
+  </define>
+  <define name="attlist-xml-processor">
+    <attribute name="name">
+      <data type="ID"/>
+    </attribute>
+  </define>
+  <start combine="choice">
     <choice>
       <ref name="obfl"/>
     </choice>
@@ -1302,17 +1564,149 @@
   <define name="any">
     <zeroOrMore>
       <choice>
-        <element>
-          <anyName><except><nsName ns="http://www.daisy.org/ns/2011/obfl"></nsName></except></anyName>
-          <zeroOrMore>
-            <attribute>
-              <anyName/>
-            </attribute>
-          </zeroOrMore>
-          <ref name="any"/>
-        </element>
+        <ref name="any_element_except_obfl"/>
         <text/>
       </choice>
     </zeroOrMore>
   </define>
+  
+  <define name="any_element_except_obfl">
+    <element>
+      <anyName><except><nsName ns="http://www.daisy.org/ns/2011/obfl"></nsName></except></anyName>
+      <zeroOrMore>
+        <attribute>
+          <anyName/>
+        </attribute>
+      </zeroOrMore>
+      <ref name="any"/>
+    </element>
+  </define>
+  
+  <define name="any_content">
+    <zeroOrMore>
+      <choice>
+        <ref name="any_element"/>
+        <ref name="any_obfl"/>
+        <text/>
+      </choice>        
+    </zeroOrMore>
+  </define>
+ 
+  <define name="any_obfl">
+    <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0">
+      This definition is complex because any id/idref values defined in obfl needs to be retained using an enumerated list.
+      For these elements, the id/idref attributes are retained as optional. This will work for many situations, but it will
+      fail in some cases, for example if the same id is used on two obfl elements inside different branches of an xslt choice 
+      statement.
+    </documentation>
+    <choice>
+    <element>
+      <nsName ns="http://www.daisy.org/ns/2011/obfl">
+        <except>
+          <name>table-of-contents</name>
+          <name>collection</name>
+          <name>xml-processor</name>
+          <name>layout-master</name>
+          <name>renderer</name>
+          <name>rendering-scenario</name>
+          <name>toc-sequence</name>
+          <name>rename</name>
+          <name>anchor</name>
+          <name>sequence</name>
+          <name>dynamic-sequence</name>
+          <name>xml-data</name>
+          <name>toc-entry</name>
+          <name>page-number</name>
+          <name>list-of-references</name>
+          <name>page-area</name>
+          <name>item</name>
+          <name>before</name>
+          <name>block</name>
+          <name>td</name>
+          <name>after</name>
+        </except>
+      </nsName>
+      <optional>
+        <attribute name="name"><data type="NMTOKEN"/></attribute>
+      </optional>
+      <zeroOrMore>
+        <attribute><anyName><except><name ns="">name</name></except></anyName></attribute>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="any_content"/>
+      </zeroOrMore>
+    </element>
+    <element ns="http://www.daisy.org/ns/2011/obfl">
+      <choice>
+          <name>table-of-contents</name>
+          <name>collection</name>
+          <name>xml-processor</name>
+          <name>layout-master</name>
+          <name>renderer</name>
+          <name>rendering-scenario</name>
+          <name>toc-sequence</name>
+          <name>rename</name>
+          <name>anchor</name>
+          <name>sequence</name>
+          <name>dynamic-sequence</name>
+          <name>xml-data</name>
+          <name>toc-entry</name>
+          <name>page-number</name>
+          <name>list-of-references</name>
+          <name>page-area</name>
+          <name>item</name>
+          <name>before</name>
+          <name>block</name>
+          <name>td</name>
+          <name>after</name>
+      </choice>
+      <optional><attribute name="id"><data type="ID"/></attribute></optional>
+      <optional><attribute name="collection"><data type="IDREF"/></attribute></optional>
+      <optional><attribute name="ref-id"><data type="IDREF"/></attribute></optional>
+      <optional><attribute name="renderer"><data type="IDREF"/></attribute></optional>
+      <optional><attribute name="name"><data type="ID"/></attribute></optional>
+      <optional><attribute name="master"><data type="IDREF"/></attribute></optional>
+      <optional><attribute name="item"><data type="IDREF"/></attribute></optional>
+      <optional><attribute name="to"><data type="ID"/></attribute></optional>
+      <optional><attribute name="toc"><data type="IDREF"/></attribute></optional>
+      <optional><attribute name="processor"><data type="IDREF"/></attribute></optional>
+      <zeroOrMore>
+        <attribute>
+          <anyName>
+            <except>
+              <name ns="">id</name>
+              <name ns="">collection</name>
+              <name ns="">ref-id</name>
+              <name ns="">renderer</name>
+              <name ns="">name</name>
+              <name ns="">master</name>
+              <name ns="">item</name>
+              <name ns="">to</name>
+              <name ns="">toc</name>
+              <name ns="">processor</name>
+            </except>
+          </anyName>
+        </attribute>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="any_content"/>
+      </zeroOrMore>
+    </element>
+    </choice>
+  </define>
+  
+  <define name="any_element">
+    <element>
+      <anyName><except><nsName ns="http://www.daisy.org/ns/2011/obfl"></nsName></except></anyName>
+      <zeroOrMore>
+        <attribute>
+          <anyName/>
+        </attribute>
+      </zeroOrMore>
+      <zeroOrMore>
+        <ref name="any_content"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
 </grammar>

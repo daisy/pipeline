@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0" startMode="init">
+	<mode name="init">
+		<anyNamespace>
+			<validate schema="obfl.rng" message="Validate with obfl.rng">
+				<mode>
+					<anyNamespace>
+						<attach message="obfl.rng handles unknown namespaces in most cases"/>
+					</anyNamespace>
+				</mode>
+				<context path="xml-processor" useMode="xslt"/>
+			</validate>
+		</anyNamespace>
+	</mode>
+	<mode name="xslt">
+		<anyNamespace>
+			<validate schema="xslt20.rng" message="Switch to xslt 2.0 validation">
+				<mode>
+					<anyNamespace>
+						<attach message="Let the xslt validation handle all sub nodes of the xslt."/>
+					</anyNamespace>
+				</mode>
+			</validate>
+		</anyNamespace>
+	</mode>
+</rules>

@@ -20,6 +20,10 @@ public class ObflResourceLocator extends AbstractResourceLocator {
 		 * A relax ng schema describing OBFL
 		 */
 		OBFL_RNG_SCHEMA,
+		/**
+		 * A nvdl schema describing OBFL
+		 */
+		OBFL_NVDL_SCHEMA
 	}
 	private static ObflResourceLocator instance;
 	
@@ -51,6 +55,8 @@ public class ObflResourceLocator extends AbstractResourceLocator {
 			switch (identifier) {
 				case OBFL_RNG_SCHEMA:
 					return getResource("resource-files/obfl.rng");
+				case OBFL_NVDL_SCHEMA:
+					return getResource("resource-files/obfl.nvdl");
 				default:
 					throw new RuntimeException("Enum identifier not implemented. This is a coding error.");
 			}
