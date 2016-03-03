@@ -1,5 +1,10 @@
 -buildpath: biz.aQute.bnd.annotation,\
 	braille-utils.api;version=latest
+Import-Package: \
+	org.daisy.braille.api.embosser; provide:=true,\
+	org.daisy.braille.api.factory; provide:=true,\
+	org.daisy.braille.api.paper; provide:=true,\
+	org.daisy.braille.api.table; provide:=true, *
 Private-Package: be_interpoint,\
 	com_brailler,\
 	com_braillo,\
