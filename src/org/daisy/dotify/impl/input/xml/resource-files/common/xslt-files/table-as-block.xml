@@ -11,6 +11,7 @@
 	<xsl:template match="obfl:td">
 		<obfl:block margin-left="2">
 			<xsl:copy-of select="node()|@*"/>
+			<xsl:if test="count(node())=0">&#x2014;</xsl:if>
 			<xsl:apply-templates select="following-sibling::obfl:td[1]"/>
 		</obfl:block>
 	</xsl:template>

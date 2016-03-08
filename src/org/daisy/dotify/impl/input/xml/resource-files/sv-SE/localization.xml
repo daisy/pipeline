@@ -15,6 +15,7 @@
 	<entry key="l10nimagedescription">Bildbeskrivning</entry>
 	<entry key="l10ncolophon">Tryckuppgifter</entry>
 	<entry key="l10ncaption">Bildtext</entry>
+	<entry key="l10ntable">Tabell</entry>
 	<entry key="l10nTocHeadline">Innehåll</entry>
 	<entry key="l10nTocDescription">Sid­hän­vis­ning­ar till svart­skrifts­bo­ken står in­om pa­ren­tes.</entry>
 
@@ -22,7 +23,7 @@
 	<entry key="l10nTocVolumeHeading">Innehåll volym {0}</entry>
 	<entry key="l10nTocVolumeXofY">Volym {0} av {1}</entry>
 	<entry key="l10nTocOneVolume">En volym</entry>
-	<entry key="l10nEndnotesHeadling">Fotnoter till denna volym</entry>
+	<entry key="l10nEndnotesHeading">Fotnoter till denna volym</entry>
 	<entry key="l10nEndnotesPageStart">Sida {0}</entry>
 	<entry key="l10nEndnotesPageHeader">Noter</entry>
 

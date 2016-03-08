@@ -8,6 +8,7 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="dtb xs obfl" xmlns:obfl="http://www.daisy.org/ns/2011/obfl" xmlns="http://www.daisy.org/ns/2011/obfl">
 
 	<xsl:import href="dtbook2obfl_layout.xsl" />
+	<xsl:import href="dtbook_table_grid.xsl" />
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:param name="toc-indent-multiplier" select="1"/>
 	<xsl:param name="splitterMax" select="10"/>
@@ -15,6 +16,7 @@
 	<xsl:param name="volume-toc" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>
+	<xsl:param name="table-split-columns" select="10"/>
 
 	<xsl:param name="l10nLang" select="'en'"/>
 	<xsl:param name="l10nTocHeadline" select="'Table Of Contents'"/>
@@ -23,9 +25,10 @@
 	<xsl:param name="l10nTocVolumeHeading" select="'Contents of Volume {0}'"/>
 	<xsl:param name="l10nTocVolumeXofY" select="'Volume {0} of {1}'"/>
 	<xsl:param name="l10nTocOneVolume" select="'One Volume'"/>
-	<xsl:param name="l10nEndnotesHeadling" select="'Footnotes'"/>
+	<xsl:param name="l10nEndnotesHeading" select="'Footnotes'"/>
 	<xsl:param name="l10nEndnotesPageStart" select="'Page {0}'"/>
 	<xsl:param name="l10nEndnotesPageHeader" select="'Footnotes'"/>
+	<xsl:param name="l10ntable" select="'Table'"/>
 	
 	<xsl:key name="noterefs" match="dtb:noteref" use="substring-after(@idref, '#')"/>
 
@@ -54,7 +57,7 @@
 		</xml-data>
 		<xsl:for-each select="ancestor::obfl:*[ancestor::obfl:sequence and not(descendant-or-self::obfl:xml-data)]">
 			<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="local-name()"/>
-			<xsl:for-each select="@*[not(name()='id')]">
+			<xsl:for-each select="@*[not(name()='id' or name()='break-before')]">
 				<xsl:value-of select="concat(' ', name(), '=', '&quot;', . , '&quot;')"></xsl:value-of>
 			</xsl:for-each>
 			<xsl:text disable-output-escaping="yes">></xsl:text>
@@ -312,7 +315,7 @@
 	<xsl:template name="postContentNotes">
 		<xsl:if test="count(//dtb:note)>0">
 			<dynamic-sequence master="notes">
-				<block padding-top="3"><xsl:value-of select="$l10nEndnotesHeadling"/></block>
+				<block padding-top="3"><xsl:value-of select="$l10nEndnotesHeading"/></block>
 				<xsl:if test="count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]])>0">
 					<list-of-references collection="endnotes-front" range="volume">
 						<on-page-start>
@@ -592,20 +595,29 @@
 			<xsl:element name="obfl:rendering-scenario" namespace="http://www.daisy.org/ns/2011/obfl" >
 				<xsl:attribute name="qualifier">4>/obfl:table/obfl:tr[1]/(count(obfl:td[not(@col-span)])+sum(obfl:tr[1]/obfl:td[@col-span]/@col-span))</xsl:attribute>
 				<xsl:attribute name="processor">identity</xsl:attribute>
-				<xsl:attribute name="cost">(+ (- <xsl:value-of select="$page-width"/> $min-block-width) $total-height)</xsl:attribute>
+				<xsl:attribute name="cost">(+ (* 2 (- <xsl:value-of select="$page-width"/> $min-block-width)) $total-height)</xsl:attribute>
 			</xsl:element>
-			<rendering-scenario processor="table-as-block" cost="(+ (- {$page-width} $min-block-width) $total-height))"/>
+			<rendering-scenario processor="table-as-block" cost="(+ (* 2 (- {$page-width} $min-block-width)) $total-height)"/>
 		</renderer>
 	</xsl:template>
 
 	<xsl:template match="dtb:table">
-		<xsl:apply-templates select="dtb:caption"/>
-		<!-- choose table formats -->
-		<xsl:apply-templates select="." mode="matrixTable"/>
+		<block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ntable, ' ')"/><leader position="100%" pattern=":"/></block>
+		<xsl:variable name="table">
+			<xsl:apply-templates select="." mode="splitTable">
+				<xsl:with-param name="maxColumns" select="$table-split-columns"/>
+			</xsl:apply-templates>
+		</xsl:variable>
+		<block>
+			<xsl:apply-templates select="dtb:caption"/>
+			<!-- choose table formats -->
+			<xsl:apply-templates select="$table" mode="matrixTable"/>
+			<block><leader align="right" position="100%" pattern=":"/></block>
+		</block>
 	</xsl:template>
 	
 	<xsl:template match="dtb:table" mode="matrixTable">
-		<table>
+		<table table-col-spacing="1">
 			<xsl:choose>
 				<xsl:when test="dtb:thead"> 
 					<thead>
