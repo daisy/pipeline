@@ -9,6 +9,13 @@ repositories {
 	//maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
+// Due to problems with relative links in the test xslt wrapper Eclipse and Gradle
+// need to agree on the name of the src folder (which means changing it in build)
+sourceSets.main {
+	output.classesDir = "${project.buildDir}/classes/src"
+	output.resourcesDir = "${project.buildDir}/resources/src"
+}
+
 dependencies {
 	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
 	compile 'org.daisy.dotify:dotify.api:2.3.0'
@@ -17,6 +24,8 @@ dependencies {
 	compile group: 'org.daisy.libs', name: 'jing', version: '20120724.0.0'	
 	compile group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5'
 	testCompile group: "junit", name: "junit", version: "4.7"
+	testCompile 'org.daisy.braille:braille-utils.pef-tools:1.0.1'
+	testCompile 'org.daisy.dotify:dotify.task-runner:1.0.1'
 }
 
 buildscript {
