@@ -76,8 +76,26 @@
 		<xsl:param name="end" required="yes"/>
 		<xsl:variable name="td-id" select="generate-id(.)"/>
 		<xsl:if test="$grid/cell[@id=$td-id and @col>=$start and @col&lt;$end]">
+			<xsl:variable name="cellStart" select="$grid/cell[@id=$td-id and @col=$start][1]"/> <!-- [1] if rowspan > 1 -->
+			<xsl:variable name="cellEnd" select="$grid/cell[@id=$td-id and @col=$end - 1][1]"/> <!-- [1] if rowspan > 1 -->
 			<xsl:copy>
-				<xsl:copy-of select="@*"/>
+				<xsl:copy-of select="@*[not(name()='colspan')]"/>
+				<xsl:choose>
+					<xsl:when test="$cellStart and $cellEnd">
+						<xsl:attribute name="colspan"><xsl:value-of select="$end - $start"/></xsl:attribute>
+					</xsl:when>
+					<xsl:when test="$cellStart">
+						<xsl:attribute name="colspan"><xsl:value-of select="(if (@colspan) then @colspan else 1) - $cellStart/@col-offset"/></xsl:attribute>
+					</xsl:when>
+					<xsl:when test="$cellEnd">
+						<xsl:attribute name="colspan"><xsl:value-of select="$cellEnd/@col-offset+1"/></xsl:attribute>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:if test="@colspan">
+							<xsl:attribute name="colspan"><xsl:value-of select="@colspan"/></xsl:attribute>
+						</xsl:if>
+					</xsl:otherwise>
+				</xsl:choose>
 				<xsl:apply-templates select="node()" mode="makeSplitTable">
 					<xsl:with-param name="grid" select="$grid"/>
 					<xsl:with-param name="start" select="$start"/>
