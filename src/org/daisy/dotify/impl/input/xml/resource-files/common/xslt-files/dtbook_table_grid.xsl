@@ -6,6 +6,7 @@
 	exclude-result-prefixes="dtb xs">
 
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
+	<xsl:param name="debug" select="false()" as="xs:boolean"/>
 	
 	<!-- 
 		Splits a DTBook table into several parts, depending on the number of columns.
@@ -161,7 +162,11 @@
 			<!-- unpack i -->
 			<xsl:variable name="cr" select="floor(($i - 1) div $colspan)"/>
 			<xsl:variable name="cc" select="(($i - 1) mod $colspan)"/>
-			<cell row="{$gy+$cr}" col="{$gx+$cc}" row-offset="{$cr}" col-offset="{$cc}" id="{generate-id()}" text="{text()}" rowspan="{$rowspan}" colspan="{$colspan}"/> 
+			<cell row="{$gy+$cr}" col="{$gx+$cc}" row-offset="{$cr}" col-offset="{$cc}" id="{generate-id()}" rowspan="{$rowspan}" colspan="{$colspan}">
+				<xsl:if test="$debug">
+					<xsl:attribute name="text" select="text()"/>
+				</xsl:if>
+			</cell> 
 			<xsl:apply-templates select="." mode="gridBuilderInner">
 				<xsl:with-param name="i" select="$i+1"/>
 				<xsl:with-param name="gx" select="$gx"/>
