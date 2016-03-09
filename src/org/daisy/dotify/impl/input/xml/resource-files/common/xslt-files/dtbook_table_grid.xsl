@@ -17,15 +17,10 @@
 		<xsl:variable name="grid">
 			<xsl:apply-templates select="." mode="makeGrid"/>
 		</xsl:variable>
-		<xsl:variable name="grid-width" as="xs:integer">
-			<xsl:call-template name="getGridWidth">
-				<xsl:with-param name="grid" select="$grid"/>
-			</xsl:call-template>
-		</xsl:variable>
 		<xsl:choose>
-			<xsl:when test="$grid-width>$maxColumns">
-				<xsl:variable name="sections" select="ceiling($grid-width div $maxColumns)"/>
-				<xsl:variable name="size" select="ceiling($grid-width div $sections)"/>
+			<xsl:when test="$grid/summary/@grid-width>$maxColumns">
+				<xsl:variable name="sections" select="ceiling($grid/summary/@grid-width div $maxColumns)"/>
+				<xsl:variable name="size" select="ceiling($grid/summary/@grid-width div $sections)"/>
 				<xsl:apply-templates select="." mode="tableSplitIterator">
 					<xsl:with-param name="grid" select="$grid"/>
 					<xsl:with-param name="start" select="1"/>
@@ -143,6 +138,16 @@
 		</xsl:variable>
 		<!-- TODO: Check that count (@row-@col distinct values) = count(*) -->
 		<xsl:copy-of select="$result"/>
+		<summary>
+			<xsl:attribute name="grid-width">
+				<xsl:call-template name="getGridWidth">
+					<xsl:with-param name="grid" select="$result"/>
+				</xsl:call-template>
+			</xsl:attribute>
+			<xsl:call-template name="getValidSplitPoints">
+				<xsl:with-param name="grid" select="$result"/>
+			</xsl:call-template>
+		</summary>
 	</xsl:template>
 	
 	<xsl:template match="dtb:td" mode="gridBuilderOuter">
@@ -217,6 +222,21 @@
 			<xsl:when test="count($grid/cell[@col=$split])=count($grid/cell[@col=$split and @col-offset=0])">true</xsl:when>
 			<xsl:otherwise>false</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="getValidSplitPoints">
+		<xsl:param name="grid" required="yes"/>
+		<xsl:param name="split" select="1"/>
+		<xsl:choose>
+			<xsl:when test="count($grid/cell[@col=$split])=count($grid/cell[@col=$split and @col-offset=0])"><split-point index="{$split}"/></xsl:when>
+			<xsl:otherwise></xsl:otherwise>
+		</xsl:choose>
+		<xsl:if test="count($grid/cell[@col=$split+1])>0">
+			<xsl:call-template name="getValidSplitPoints">
+				<xsl:with-param name="grid" select="$grid"/>
+				<xsl:with-param name="split" select="$split+1"/>
+			</xsl:call-template>
+		</xsl:if>
 	</xsl:template>
 	
 	<!-- Gets the grid width -->
