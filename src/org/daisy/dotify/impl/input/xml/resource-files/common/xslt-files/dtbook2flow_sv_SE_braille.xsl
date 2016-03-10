@@ -44,18 +44,16 @@
 			<xsl:apply-templates/>
 		</obfl>
 		</xsl:variable>
-		<xsl:apply-templates select="$result" mode="breakOutTable"/>
+		<xsl:apply-templates select="$result" mode="breakOutXMLData"/>
 	</xsl:template>
 	
-	<xsl:template match="obfl:table" mode="breakOutTable">
-		<xsl:for-each select="ancestor::obfl:*[ancestor::obfl:sequence and not(descendant-or-self::obfl:xml-data)]">
+	<xsl:template match="obfl:xml-data" mode="breakOutXMLData">
+		<xsl:for-each select="ancestor::obfl:*[ancestor::obfl:sequence]">
 			<xsl:text disable-output-escaping="yes">&lt;/</xsl:text><xsl:value-of select="local-name()"/>
 			<xsl:text disable-output-escaping="yes">></xsl:text>
 		</xsl:for-each>
-		<xml-data renderer="table-renderer">
-			<xsl:copy-of select="."/>
-		</xml-data>
-		<xsl:for-each select="ancestor::obfl:*[ancestor::obfl:sequence and not(descendant-or-self::obfl:xml-data)]">
+		<xsl:copy-of select="."/>
+		<xsl:for-each select="ancestor::obfl:*[ancestor::obfl:sequence]">
 			<xsl:text disable-output-escaping="yes">&lt;</xsl:text><xsl:value-of select="local-name()"/>
 			<xsl:for-each select="@*[not(name()='id' or name()='break-before')]">
 				<xsl:value-of select="concat(' ', name(), '=', '&quot;', . , '&quot;')"></xsl:value-of>
@@ -64,10 +62,10 @@
 		</xsl:for-each>
 	</xsl:template>
 	
-	<xsl:template match="*|processing-instruction()|comment()" mode="breakOutTable">
+	<xsl:template match="*|processing-instruction()|comment()" mode="breakOutXMLData">
 		<xsl:copy>
 			<xsl:copy-of select="@*"/>
-			<xsl:apply-templates mode="breakOutTable"/>
+			<xsl:apply-templates mode="breakOutXMLData"/>
 		</xsl:copy>
 	</xsl:template>
 	
@@ -592,28 +590,26 @@
 			<xsl:copy-of select="document('identity.xml')"/>
 		</xml-processor>
 		<renderer name="table-renderer">
-			<xsl:element name="obfl:rendering-scenario" namespace="http://www.daisy.org/ns/2011/obfl" >
-				<xsl:attribute name="qualifier">4>/obfl:table/obfl:tr[1]/(count(obfl:td[not(@col-span)])+sum(obfl:tr[1]/obfl:td[@col-span]/@col-span))</xsl:attribute>
-				<xsl:attribute name="processor">identity</xsl:attribute>
-				<xsl:attribute name="cost">(+ (* 2 (- <xsl:value-of select="$page-width"/> $min-block-width)) $total-height)</xsl:attribute>
-			</xsl:element>
-			<rendering-scenario processor="table-as-block" cost="(+ (* 2 (- {$page-width} $min-block-width)) $total-height)"/>
+			<rendering-scenario processor="identity" cost="(+ 0 $total-height)"/>
+			<rendering-scenario processor="table-as-block" cost="(+ 1 $total-height)"/>
 		</renderer>
 	</xsl:template>
 
 	<xsl:template match="dtb:table">
-		<block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ntable, ' ')"/><leader position="100%" pattern=":"/></block>
-		<xsl:variable name="table">
-			<xsl:apply-templates select="." mode="splitTable">
-				<xsl:with-param name="maxColumns" select="$table-split-columns"/>
-			</xsl:apply-templates>
-		</xsl:variable>
-		<block>
-			<xsl:apply-templates select="dtb:caption"/>
-			<!-- choose table formats -->
-			<xsl:apply-templates select="$table" mode="matrixTable"/>
-			<block><leader align="right" position="100%" pattern=":"/></block>
-		</block>
+		<xml-data renderer="table-renderer" xmlns:dotify="http://brailleapps.github.io/ns/dotify">
+			<dotify:node>
+				<block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ntable, ' ')"/><leader position="100%" pattern=":"/></block>
+				<xsl:variable name="table">
+					<xsl:apply-templates select="." mode="splitTable">
+						<xsl:with-param name="maxColumns" select="$table-split-columns"/>
+					</xsl:apply-templates>
+				</xsl:variable>
+				<xsl:apply-templates select="dtb:caption"/>
+				<!-- choose table formats -->
+				<xsl:apply-templates select="$table" mode="matrixTable"/>
+				<block><leader align="right" position="100%" pattern=":"/></block>
+			</dotify:node>
+		</xml-data>
 	</xsl:template>
 	
 	<xsl:template match="dtb:table" mode="matrixTable">

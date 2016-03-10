@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl" exclude-result-prefixes="obfl">
-	<xsl:template match="obfl:table">
-		<obfl:block>
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns="http://www.daisy.org/ns/2011/obfl"
+	xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+	xmlns:dotify="http://brailleapps.github.io/ns/dotify"
+	exclude-result-prefixes="obfl dotify">
+	
+	<xsl:template match="node()">
+		<xsl:copy>
+			<xsl:copy-of select="@*"/>
 			<xsl:apply-templates/>
-		</obfl:block>
+		</xsl:copy>
 	</xsl:template>
+	
+	<xsl:template match="dotify:node">
+		<xml-processor-result>
+			<xsl:apply-templates/>
+		</xml-processor-result>
+	</xsl:template>
+
+	<xsl:template match="obfl:table">
+		<block>
+			<xsl:apply-templates/>
+		</block>
+	</xsl:template>
+
 	<xsl:template match="obfl:tr">
 		<xsl:apply-templates select="obfl:td[1]"/>
 	</xsl:template>
+
 	<xsl:template match="obfl:td">
-		<obfl:block margin-left="2">
-			<xsl:copy-of select="node()|@*"/>
+		<block>
+			<xsl:if test="preceding-sibling::obfl:td">
+				<xsl:attribute name="margin-left" select="2"/>
+			</xsl:if>
+			<xsl:copy-of select="node()"/>
 			<xsl:if test="count(node())=0">&#x2014;</xsl:if>
 			<xsl:apply-templates select="following-sibling::obfl:td[1]"/>
-		</obfl:block>
+		</block>
 	</xsl:template>
+
 </xsl:stylesheet>
