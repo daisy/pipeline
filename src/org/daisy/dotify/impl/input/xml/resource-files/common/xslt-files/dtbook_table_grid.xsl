@@ -65,7 +65,7 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template match="dtb:td" mode="makeSplitTable">
+	<xsl:template match="*[self::dtb:td or self::dtb:th]" mode="makeSplitTable">
 		<xsl:param name="grid" required="yes"/>
 		<xsl:param name="start" required="yes"/>
 		<xsl:param name="end" required="yes"/>
@@ -132,7 +132,7 @@
 			</xsl:if>
 		</xsl:for-each>-->
 		<xsl:variable name="result">
-			<xsl:apply-templates select="descendant::dtb:td[last()]" mode="gridBuilderOuter">
+			<xsl:apply-templates select="descendant::*[self::dtb:td or self::dtb:th][last()]" mode="gridBuilderOuter">
 				<xsl:with-param name="table-id" select="generate-id()"/>
 			</xsl:apply-templates>
 		</xsl:variable>
@@ -150,10 +150,10 @@
 		</summary>
 	</xsl:template>
 	
-	<xsl:template match="dtb:td" mode="gridBuilderOuter">
+	<xsl:template match="*[self::dtb:td or self::dtb:th]" mode="gridBuilderOuter">
 		<xsl:param name="table-id" required="yes"/>
 		<xsl:variable name="grid">
-			<xsl:apply-templates select="preceding::dtb:td[1][ancestor::dtb:table[generate-id()=$table-id]]" mode="gridBuilderOuter">
+			<xsl:apply-templates select="preceding::*[self::dtb:td or self::dtb:th][1][ancestor::dtb:table[generate-id()=$table-id]]" mode="gridBuilderOuter">
 				<xsl:with-param name="table-id" select="$table-id"/>
 			</xsl:apply-templates>
 		</xsl:variable>
@@ -171,7 +171,7 @@
 		</xsl:apply-templates>
 	</xsl:template>
 	
-	<xsl:template match="dtb:td" mode="gridBuilderInner">
+	<xsl:template match="*[self::dtb:td or self::dtb:th]" mode="gridBuilderInner">
 		<xsl:param name="i" select="1"/> <!-- current_column + (current_row-1) * column_count -->
 		<xsl:param name="gx" select="1"/>
 		<xsl:param name="gy" select="1"/>
@@ -185,7 +185,7 @@
 			<!-- unpack i -->
 			<xsl:variable name="cr" select="floor(($i - 1) div $colspan)"/>
 			<xsl:variable name="cc" select="(($i - 1) mod $colspan)"/>
-			<cell row="{$gy+$cr}" col="{$gx+$cc}" row-offset="{$cr}" col-offset="{$cc}" id="{generate-id()}" rowspan="{$rowspan}" colspan="{$colspan}">
+			<cell row="{$gy+$cr}" col="{$gx+$cc}" row-offset="{$cr}" col-offset="{$cc}" id="{generate-id()}" rowspan="{$rowspan}" colspan="{$colspan}" heading="{count(self::dtb:th)=1}">
 				<xsl:if test="$debug">
 					<xsl:attribute name="text" select="text()"/>
 				</xsl:if>
