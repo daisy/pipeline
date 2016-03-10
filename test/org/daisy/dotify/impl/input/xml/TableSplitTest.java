@@ -42,5 +42,14 @@ public class TableSplitTest {
 		//Test
 		TestHelper.runXSLT("resource-files/table-split-input.xml", "resource-files/test_table_grid.xsl", "resource-files/table-split-expected.xml", params, false);
 	}
+	
+	@Test
+	public void testTableSplitComplex() throws IOException, TaskSystemException, URISyntaxException, TransformerException {
+		//Setup
+		Map<String, Object> params = new HashMap<>();
+		params.put("table-split-columns", 2);
+		//Test
+		TestHelper.runXSLT("resource-files/table-split-complex-input.xml", "resource-files/test_table_grid.xsl", "resource-files/table-split-complex-expected.xml", params, false);
+	}
 
 }
