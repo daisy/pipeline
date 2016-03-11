@@ -29,6 +29,7 @@
 	<xsl:param name="l10nEndnotesPageStart" select="'Page {0}'"/>
 	<xsl:param name="l10nEndnotesPageHeader" select="'Footnotes'"/>
 	<xsl:param name="l10ntable" select="'Table'"/>
+	<xsl:param name="l10ntablepart" select="'Table part'"/>
 	
 	<xsl:key name="noterefs" match="dtb:noteref" use="substring-after(@idref, '#')"/>
 
@@ -598,16 +599,20 @@
 	<xsl:template match="dtb:table">
 		<xml-data renderer="table-renderer" xmlns:dotify="http://brailleapps.github.io/ns/dotify">
 			<dotify:node>
-				<block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ntable, ' ')"/><leader position="100%" pattern=":"/></block>
+				<block keep="all" keep-with-next="1"><xsl:value-of select="concat('== ', $l10ntable, ' ')"/><leader position="100%" pattern="="/></block>
 				<xsl:variable name="table">
 					<xsl:apply-templates select="." mode="splitTable">
 						<xsl:with-param name="maxColumns" select="$table-split-columns"/>
 					</xsl:apply-templates>
 				</xsl:variable>
 				<xsl:apply-templates select="dtb:caption"/>
-				<!-- choose table formats -->
-				<xsl:apply-templates select="$table" mode="matrixTable"/>
-				<block><leader align="right" position="100%" pattern=":"/></block>
+				<xsl:for-each select="$table/dtb:table">
+					<xsl:apply-templates select="." mode="matrixTable"/>
+					<xsl:if test="following-sibling::dtb:table">
+						<block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ntablepart, ' ')"/><leader position="100%" pattern=":"/></block>
+					</xsl:if>
+				</xsl:for-each>
+				<block><leader align="right" position="100%" pattern="="/></block>
 			</dotify:node>
 		</xml-data>
 	</xsl:template>
