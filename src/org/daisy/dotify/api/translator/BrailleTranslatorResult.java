@@ -6,7 +6,20 @@ package org.daisy.dotify.api.translator;
  *
  */
 public interface BrailleTranslatorResult {
-	
+
+	/**
+	 * Metric identifier representing the total number of forced breaks applied
+	 * on the instance up to this point. Note that this only counts actually forced
+	 * breaks, not breaks where forced was <i>allowed but not used</i> .
+	 */
+	public final static String METRIC_FORCED_BREAK = "forced-break-count";
+
+	/**
+	 * Metric identifier representing the total number of breaks applied at break
+	 * points <i>inside words</i> on the instance up to this point.
+	 */
+	public final static String METRIC_HYPHEN_COUNT = "word-break-count";
+
 	/**
 	 * Gets the translated string preceding the row break, including a translated 
 	 * hyphen at the end, if needed. The length of the translated text must not exceed the
@@ -42,5 +55,27 @@ public interface BrailleTranslatorResult {
 	 * @return returns true if there are characters remaining, false otherwise
 	 */
 	public boolean hasNext();
+	
+	/**
+	 * <p>Returns true if this result supports the given metric,
+	 * false otherwise.</p>
+	 * <p>Metrics specified by the API are included as static strings in
+	 * this class, but additional ones may be offered by an implementation. </p>
+	 * @param metric the metric identifier 
+	 * @return returns true if the given metric is supported, false otherwise
+	 */
+	public boolean supportsMetric(String metric);
+	
+	/**
+	 * <p>Gets the value of a given metric.</p>
+	 * <p>Metrics specified by the API are included as static strings in
+	 * this interface, but additional ones may be offered by an implementation.
+	 * Note that an implementation is not required to support any metrics.
+	 * Metric support can be tested with <code>supportsMetric</code>.</p>
+	 * @param metric the metric identifier
+	 * @return the metric value
+	 * @throws UnsupportedMetricException if the metric is not supported
+	 */
+	public double getMetric(String metric);
 
 }
