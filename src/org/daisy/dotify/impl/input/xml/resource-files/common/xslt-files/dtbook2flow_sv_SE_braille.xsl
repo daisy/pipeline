@@ -597,8 +597,8 @@
 			<xsl:copy-of select="document('identity.xsl')"/>
 		</xml-processor>
 		<renderer name="table-renderer">
-			<rendering-scenario processor="identity" cost="(+ 0 $total-height)"/>
-			<rendering-scenario processor="table-as-block" cost="(+ 1 $total-height)"/>
+			<rendering-scenario processor="identity" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))"/>
+			<rendering-scenario processor="table-as-block" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))"/>
 		</renderer>
 	</xsl:template>
 
