@@ -30,8 +30,8 @@
 		</xsl:variable>
 		<xsl:variable name="sortedGrid">
 			<xsl:for-each select="$grid/tmp:cell">
-				<xsl:sort select="@row"/>
-				<xsl:sort select="@col"/>
+				<xsl:sort select="axs:integer(@row)"/>
+				<xsl:sort select="axs:integer(@col)"/>
 				<xsl:copy-of select="."/>
 			</xsl:for-each>
 		</xsl:variable>
@@ -63,10 +63,15 @@
 				<xsl:with-param name="cell" select="."/>
 				<xsl:with-param name="table" select="$table"/>
 			</xsl:call-template>
-			<xsl:apply-templates select="following-sibling::tmp:cell[1]" mode="thisRow">
+			<xsl:variable name="cr" select="@row"/>
+			<xsl:apply-templates select="following-sibling::tmp:cell[@row=$cr][1]" mode="thisRow">
 				<xsl:with-param name="table" select="$table"/>
 			</xsl:apply-templates>
 		</aobfl:block>
+	</xsl:template>
+	
+	<xsl:template match="tmp:cell" mode="thisRow">
+		<xsl:message terminate="yes">Internal error.</xsl:message>
 	</xsl:template>
 	
 	<xsl:template name="copyCell">
