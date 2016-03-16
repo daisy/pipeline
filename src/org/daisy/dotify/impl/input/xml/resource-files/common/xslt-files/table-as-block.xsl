@@ -78,12 +78,17 @@
 		<xsl:param name="cell" required="yes"/>
 		<xsl:param name="table" required="yes"/>
 		<!-- Only copy contents once, otherwise leave empty -->
-		<xsl:if test="$cell/@col-offset=0 and $cell/@row-offset=0">
-			<xsl:variable name="node" select="$table//*[generate-id()=$cell/@id]"/>
-			<xsl:if test="count($node)!=1">Error in stylesheet.</xsl:if>
-			<xsl:copy-of select="$node/node()"/>
-			<xsl:if test="count($node/node())=0">&#x2014;</xsl:if>
-		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="$cell/@col-offset=0 and $cell/@row-offset=0">
+				<xsl:variable name="node" select="$table//*[generate-id()=$cell/@id]"/>
+				<xsl:if test="count($node)!=1">Error in stylesheet.</xsl:if>
+				<xsl:copy-of select="$node/node()"/>
+				<xsl:if test="count($node/node())=0">&#x2014;</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>
+				<aobfl:style name="table-cell-continued"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<!-- dtbook_table_grid.xsl -->
