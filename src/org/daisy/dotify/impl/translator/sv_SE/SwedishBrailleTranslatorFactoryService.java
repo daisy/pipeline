@@ -23,11 +23,18 @@ public class SwedishBrailleTranslatorFactoryService implements
 	public SwedishBrailleTranslatorFactoryService() {
 		this.specs = new ArrayList<>();
 		specs.add(new TranslatorSpecification("sv-SE", BrailleTranslatorFactory.MODE_UNCONTRACTED));
+		specs.add(new TranslatorSpecification("sv-SE", SwedishBrailleTranslatorFactory.PRE_TRANSLATED));
 	}
 	
 	@Override
 	public boolean supportsSpecification(String locale, String mode) {
-		return "sv-SE".equalsIgnoreCase(locale) && mode.equals(BrailleTranslatorFactory.MODE_UNCONTRACTED);
+		TranslatorSpecification target = new TranslatorSpecification(locale, mode);
+		for (TranslatorSpecification spec : specs) {
+			if (target.equals(spec)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

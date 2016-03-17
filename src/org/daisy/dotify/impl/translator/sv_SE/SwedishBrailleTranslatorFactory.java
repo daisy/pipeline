@@ -7,9 +7,12 @@ import org.daisy.dotify.api.translator.MarkerProcessor;
 import org.daisy.dotify.api.translator.MarkerProcessorConfigurationException;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
 import org.daisy.dotify.translator.DefaultBrailleFilter;
+import org.daisy.dotify.translator.PreTranslatedBrailleFilter;
 import org.daisy.dotify.translator.SimpleBrailleTranslator;
 
 class SwedishBrailleTranslatorFactory implements BrailleTranslatorFactory {
+	//TODO: remove when this string is part of the api
+	final static String PRE_TRANSLATED = "pre-translated";
 	private final static String sv_SE = "sv-SE";
 	private final HyphenatorFactoryMakerService hyphenatorService;
 
@@ -33,7 +36,12 @@ class SwedishBrailleTranslatorFactory implements BrailleTranslatorFactory {
 			return new SimpleBrailleTranslator(
 					new DefaultBrailleFilter(new SwedishBrailleFilter(), sv_SE, sap, hyphenatorService),
 					new SwedishBrailleFinalizer(), sv_SE, mode);
-		} 
+		} else if (sv_SE.equalsIgnoreCase(locale) && mode.equals(PRE_TRANSLATED)) {
+			return new SimpleBrailleTranslator(
+					new PreTranslatedBrailleFilter(),
+					new SwedishBrailleFinalizer(),
+					sv_SE, mode);
+		}
 		throw new SwedishTranslatorConfigurationException("Factory does not support " + locale + "/" + mode);
 	}
 	
