@@ -69,6 +69,8 @@ class SwedishMarkerProcessorFactory implements MarkerProcessorFactory {
 				
 				// Redigering och avskrivning, page 148
 				SimpleMarkerDictionary dd = new SimpleMarkerDictionary(new Marker("\u2820\u2804\u2800", ""));
+				
+				SimpleMarkerDictionary continuedTableCell = new SimpleMarkerDictionary(new Marker("\u283b\u283b", ""));
 	
 				DefaultMarkerProcessor sap = new DefaultMarkerProcessor.Builder().
 						addDictionary(MarkerStyleConstants.STRONG, strong).
@@ -76,6 +78,7 @@ class SwedishMarkerProcessorFactory implements MarkerProcessorFactory {
 						addDictionary(MarkerStyleConstants.SUB, sub).
 						addDictionary(MarkerStyleConstants.SUP, sup).
 						addDictionary(MarkerStyleConstants.DD, dd).
+						addDictionary("table-cell-continued", continuedTableCell).
 						build();
 	
 				return sap;
