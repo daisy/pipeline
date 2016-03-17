@@ -132,6 +132,25 @@ public class DefaultMarkerProcessorTest {
 		assertEquals("", 2, ret.getArrayStart());
 		assertEquals("", "9", ret.getStrings()[0]);
 	}
+	
+	@Test
+	public void test_empty_input_01() {
+		DefaultTextAttribute.Builder t = new DefaultTextAttribute.Builder();
+		t.add(new DefaultTextAttribute.Builder("b").build(0));
+		sap.processAttributes(t.build(0), "");
+		String[] ret = sap.processAttributesRetain(t.build(0), new String[]{});
+		assertEquals(1, ret.length);
+		assertEquals("{sb::sb}", ret[0]);
+	}
+	
+	@Test
+	public void test_empty_input_02() {
+		DefaultTextAttribute.Builder t = new DefaultTextAttribute.Builder();
+		t.add(new DefaultTextAttribute.Builder("b").build(0));
+		String[] ret = sap.processAttributesRetain(t.build(0), new String[]{});
+		assertEquals(1, ret.length);
+		assertEquals("{sb::sb}", ret[0]);
+	}
 
 	private String join(String[] strs) {
 		StringBuilder sb = new StringBuilder();

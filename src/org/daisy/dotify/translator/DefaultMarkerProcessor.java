@@ -55,12 +55,12 @@ public class DefaultMarkerProcessor implements MarkerProcessor {
 			if (atts.getWidth() != textLen) {
 				throw new IllegalArgumentException("Text attribute width (" + atts.getWidth() + ") does not match text length (" + textLen + ").");
 			}
-			String[] ret = new String[text.length];
+			String[] ret = new String[text.length>0?text.length:1];
 			Arrays.fill(ret, "");
 			Marker m = getMarker(combined.toString(), atts);
 
 			if (m != null) {
-				ret[0] = m.getPrefix() + ret[0];
+				ret[0] = m.getPrefix() + (ret.length>0?ret[0]:"");
 			}
 			int startInx = 0;
 			if (atts.hasChildren()) {
@@ -80,7 +80,7 @@ public class DefaultMarkerProcessor implements MarkerProcessor {
 				}
 			}
 			if (m != null) {
-				ret[text.length - 1] += m.getPostfix();
+				ret[text.length>0?text.length - 1:0] += m.getPostfix();
 			}
 			return ret;
 		}
@@ -101,9 +101,11 @@ public class DefaultMarkerProcessor implements MarkerProcessor {
 	 */
 	private static SubstringReturn substrings(String[] strs, int startInx, int endInx) {
 		if (strs.length < 1) {
-			throw new IllegalArgumentException("At least one string expected.");
-		} else if (endInx <= startInx) {
+			return new SubstringReturn(new String[]{}, 0);
+		} else if (endInx < startInx) {
 			throw new IndexOutOfBoundsException("End index must be greater than start index.");
+		} else if (endInx == startInx) {
+			return new SubstringReturn(new String[]{}, 0);
 		} else if (strs.length == 1) {
 			return new SubstringReturn(new String[] { strs[0].substring(startInx, endInx) }, 0);
 		} else {
