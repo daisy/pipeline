@@ -619,6 +619,7 @@
 					</xsl:if>
 				</xsl:for-each>
 				<block><leader align="right" position="100%" pattern="="/></block>
+				<xsl:apply-templates select="descendant::dtb:pagenum"/>
 			</dotify:node>
 		</xml-data>
 	</xsl:template>
@@ -633,14 +634,14 @@
 					<tbody>
 						<xsl:apply-templates select="dtb:tbody/dtb:tr" mode="matrixRow"/>
 						<xsl:apply-templates select="dtb:tr" mode="matrixRow"/>
-						<!-- What about pagenums? -->
+						<!-- pagenums are moved after the table -->
 						<xsl:apply-templates select="dtb:tfoot/dtb:tr" mode="matrixRow"/>
 					</tbody>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:apply-templates select="dtb:tbody/dtb:tr" mode="matrixRow"/>
 					<xsl:apply-templates select="dtb:tr" mode="matrixRow"/>
-					<!-- What about pagenums? -->
+					<!-- pagenums are moved after the table -->
 					<xsl:apply-templates select="dtb:tfoot/dtb:tr" mode="matrixRow"/>
 				</xsl:otherwise>
 			</xsl:choose>
