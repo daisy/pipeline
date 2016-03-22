@@ -60,8 +60,8 @@ import java.util.Set;
  * codepoints from a string.
  * </p>
  * 
- * @see [1] http://java.sun.com/j2se/1.5.0/docs/api/java/util/Properties.html
- * @see [2] http://java.sun.com/dtd/properties.dtd
+ * <ul><li>see [1] http://java.sun.com/j2se/1.5.0/docs/api/java/util/Properties.html</li>
+ * <li>see [2] http://java.sun.com/dtd/properties.dtd</li></ul>
  * 
  * @author Joel Håkansson
  * @author Markus Gylling (UCharReplacer)

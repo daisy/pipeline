@@ -202,7 +202,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * Finds the index for the last unit that fits into the given space
 	 * @param charsStr
 	 * @param impl
-	 * @return
+	 * @return returns the index for the last unit
 	 */
 	static <T extends SplitPointUnit> int findCollapse(List<T> charsStr, StepForward<T> impl) {
 		int units = -1;
