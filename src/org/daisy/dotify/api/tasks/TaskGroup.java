@@ -20,6 +20,12 @@ public interface TaskGroup {
 	 * @return returns the name for the task group
 	 */
 	public String getName();
+	
+	/**
+	 * Gets a list of parameters applicable to this instance
+	 * @return returns a list of parameters
+	 */
+	public List<TaskOption> getOptions();
 
 	/**
 	 * Compile the task group using the supplied parameters
@@ -27,6 +33,6 @@ public interface TaskGroup {
 	 * @return returns a list of InternalTasks
 	 * @throws TaskSystemException throws TaskSystemException if something goes wrong when compiling the task group
 	 */
-	public List<InternalTask> compile(Map<String, Object> parameters) throws TaskSystemException;
+	public InternalTaskGroup compile(Map<String, Object> parameters) throws TaskSystemException;
 
 }

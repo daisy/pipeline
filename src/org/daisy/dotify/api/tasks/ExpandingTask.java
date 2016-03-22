@@ -1,7 +1,6 @@
 package org.daisy.dotify.api.tasks;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Provides an abstract base for expanding tasks. 
@@ -24,6 +23,6 @@ public abstract class ExpandingTask extends InternalTask { //NOPMD
 	 * @param input input file
 	 * @throws InternalTaskException throws InternalTaskException if something goes wrong.
 	 */
-	public abstract List<InternalTask> resolve(File input) throws InternalTaskException;
+	public abstract InternalTaskGroup resolve(File input) throws InternalTaskException;
 
 }

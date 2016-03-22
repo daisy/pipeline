@@ -26,8 +26,8 @@ public interface TaskGroupFactory {
 	public boolean supportsSpecification(TaskGroupSpecification specification);
 	
 	/**
-	 * Returns a new input manager configured for the specified locale.
-	 * @param locale the locale for the new input manager
+	 * Returns a new task group.
+	 * @param specification the specification for the task group 
 	 * @return returns a new input manager
 	 */
 	public TaskGroup newTaskGroup(TaskGroupSpecification specification);

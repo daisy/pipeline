@@ -30,8 +30,8 @@ public interface TaskSystemFactoryMakerService {
 	
 	/**
 	 *  Gets a task system for the specified output format and context
+	 *  @param locale the target locale
 	 *  @param outputFormat the output file format
-	 *  @param context the target locale
 	 */
 	public TaskSystem newTaskSystem(String locale, String outputFormat) throws TaskSystemFactoryException;
 }
