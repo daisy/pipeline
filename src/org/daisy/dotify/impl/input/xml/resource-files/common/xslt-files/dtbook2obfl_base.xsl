@@ -34,7 +34,7 @@
 	</xsl:template>
 	<!-- Can be surrounded by text and contain text -->
 	<xsl:template match="dtb:address | dtb:prodnote | dtb:hd | dtb:p | dtb:author | dtb:line | 
-								dtb:epigraph | dtb:sidebar | dtb:byline | dtb:dateline">
+								dtb:epigraph | dtb:sidebar | dtb:byline | dtb:dateline | dtb:title">
 		<xsl:apply-templates select="." mode="block-mode"/>
 	</xsl:template>
 <!-- / block elements -->
