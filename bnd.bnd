@@ -8,7 +8,7 @@ Private-Package: \
 	org.daisy.dotify.impl.input.text,\
 	org.daisy.dotify.impl.input.xml,\
 	org.daisy.dotify.impl.system.common
-Bundle-Version: 2.1.1-SNAPSHOT
+Bundle-Version: 2.2.0
 Include-Resource: / = src/
 -sources: false
 Service-Component: *
