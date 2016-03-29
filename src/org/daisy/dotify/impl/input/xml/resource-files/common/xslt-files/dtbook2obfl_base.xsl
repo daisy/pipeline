@@ -2,7 +2,7 @@
 <?xslt-doc-file doc-files/dtb2obfl.html?>
 
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="dtb xs" xmlns="http://www.daisy.org/ns/2011/obfl">
-
+	<xsl:import href="default-modes.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	
 	<xsl:param name="hyphenate" select="true()" as="xs:boolean"/>
@@ -10,6 +10,11 @@
 	<xsl:template match="/"><obfl version="2011-1" hyphenate="{$hyphenate}"><xsl:attribute name="xml:lang"><xsl:value-of select="/dtb:dtbook/@xml:lang"/></xsl:attribute><xsl:call-template name="insertMetadata"/><xsl:call-template name="insertLayoutMaster"/><xsl:apply-templates/></obfl></xsl:template>
 	<xsl:template match="dtb:dtbook | dtb:book"><xsl:apply-templates/></xsl:template>
 	<xsl:template match="dtb:head | dtb:meta | dtb:link | dtb:img | dtb:col | dtb:colgroup"></xsl:template>
+	
+<!-- default templates / -->
+	<xsl:template name="insertLayoutMaster"/>
+	<xsl:template name="insertMetadata"/>
+<!-- / default templates -->
 	
 <!-- sequence elements / -->
 	<xsl:template match="dtb:frontmatter | dtb:bodymatter | dtb:rearmatter">
@@ -90,28 +95,5 @@
 		<xsl:message terminate="yes">Tables are not supported.</xsl:message>
 	</xsl:template>
 <!-- / disallowed elements -->
-
-<!-- default mode templates / -->
-	<xsl:template match="*" mode="sequence-mode">
-		<sequence>
-			<xsl:apply-templates select="." mode="apply-sequence-attributes"/>
-			<xsl:apply-templates/>
-		</sequence>
-	</xsl:template>
-
-	<xsl:template match="*" mode="block-mode">
-		<block>
-			<xsl:apply-templates select="." mode="apply-block-attributes"/>
-			<xsl:apply-templates/>
-		</block>
-	</xsl:template>
-
-	<xsl:template match="*" mode="inline-mode">
-		<xsl:apply-templates/>
-	</xsl:template>
-
-	<xsl:template match="*" mode="apply-sequence-attributes"/>
-	<xsl:template match="*" mode="apply-block-attributes"/>
-<!-- / default mode templates -->
 
 </xsl:stylesheet>
