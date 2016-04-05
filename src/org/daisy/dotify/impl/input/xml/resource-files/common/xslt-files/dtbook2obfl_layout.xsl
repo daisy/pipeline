@@ -38,6 +38,7 @@
 	<xsl:param name="duplex" select="true()" as="xs:boolean"/>
 	<xsl:param name="colophon-metadata-placement" select="'end'"/>
 	<xsl:param name="rear-cover-placement" select="'end'"/>
+	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string"/> <!-- empty-line or indent -->
 	
 	<xsl:param name="l10nrearjacketcopy" select="'Rear jacket copy'"/>
 	<xsl:param name="l10nimagedescription" select="'Image description'"/>
@@ -398,7 +399,10 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 				<xsl:when test="$tokens='indented'"><xsl:attribute name="first-line-indent">2</xsl:attribute></xsl:when>
 				<xsl:when test="not($tokens='precedingemptyline' or $tokens='precedingseparator' or $tokens='no-indent')">
 					<xsl:if test="(preceding-sibling::*[1])[self::dtb:p or self::dtb:pagenum[(preceding-sibling::*[1])[self::dtb:p]]]">
-						<xsl:attribute name="first-line-indent">2</xsl:attribute>
+						<xsl:choose>
+							<xsl:when test="$default-paragraph-separator='empty-line'"><xsl:attribute name="margin-top">1</xsl:attribute></xsl:when>
+							<xsl:otherwise><xsl:attribute name="first-line-indent">2</xsl:attribute></xsl:otherwise>
+						</xsl:choose>
 					</xsl:if>
 				</xsl:when>
 			</xsl:choose>
