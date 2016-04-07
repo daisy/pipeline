@@ -9,6 +9,7 @@ import java.util.Properties;
 import javax.xml.namespace.QName;
 
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
+import org.daisy.dotify.api.formatter.FormatterConfiguration;
 import org.daisy.dotify.api.tasks.InternalTask;
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
@@ -41,6 +42,9 @@ import org.daisy.dotify.impl.input.LayoutEngineTask;
  * @author Joel Håkansson
  */
 public class DotifyTaskSystem implements TaskSystem {
+	final static String MARK_CAPITAL_LETTERS = "mark-capital-letters";
+	final static String HYPHENATE = "hyphenate";
+	final static String REMOVE_STYLES = "remove-styles";
 	private final static QName ENTRY = new QName("http://www.daisy.org/ns/2015/dotify", "entry", "generator");
 	private final String outputFormat;
 	private final String context;
@@ -134,7 +138,16 @@ public class DotifyTaskSystem implements TaskSystem {
 			// BrailleTranslator bt =
 			// BrailleTranslatorFactoryMaker.newInstance().newTranslator(context,
 			// translatorMode);
-			setup.add(new LayoutEngineTask("OBFL to " + outputFormat.toUpperCase() + " converter", context, translatorMode, paged, fe));
+			boolean markCapitals = !p2.getProperty(MARK_CAPITAL_LETTERS, "true").equalsIgnoreCase("false");
+			boolean hyphenate = !p2.getProperty(HYPHENATE, "true").equalsIgnoreCase("false");
+			
+			FormatterConfiguration.Builder config = FormatterConfiguration.with(context, translatorMode)
+				.markCapitalLetters(markCapitals)
+				.hyphenate(hyphenate);
+			if (p2.getProperty(REMOVE_STYLES, "false").equalsIgnoreCase("true")) {
+				config.ignoreStyle("em").ignoreStyle("strong");
+			}
+			setup.add(new LayoutEngineTask("OBFL to " + outputFormat.toUpperCase() + " converter", config.build(), paged, fe));
 
 			return setup;
 		}

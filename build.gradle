@@ -18,7 +18,7 @@ sourceSets.main {
 
 dependencies {
 	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-	compile 'org.daisy.dotify:dotify.api:2.3.0'
+	compile 'org.daisy.dotify:dotify.api:2.7.0'
 	compile 'org.daisy.dotify:dotify.task-api:2.1.0'
 	compile 'org.daisy.dotify:dotify.common:2.0.1'
 	compile group: 'org.daisy.libs', name: 'jing', version: '20120724.0.0'	

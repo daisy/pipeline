@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import org.daisy.dotify.api.engine.FormatterEngine;
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.engine.LayoutEngineException;
+import org.daisy.dotify.api.formatter.FormatterConfiguration;
 import org.daisy.dotify.api.tasks.InternalTaskException;
 import org.daisy.dotify.api.tasks.ReadWriteTask;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
@@ -26,8 +27,7 @@ import org.daisy.dotify.impl.input.ObflResourceLocator.ObflResourceIdentifier;
  *
  */
 public class LayoutEngineTask extends ReadWriteTask  {
-	private final String locale;
-	private final String mode;
+	private final FormatterConfiguration config;
 	private final PagedMediaWriter writer;
 	private final FormatterEngineFactoryService fe;
 	private final Logger logger;
@@ -40,11 +40,9 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	 * @param writer the output writer
 	 * @param fe 
 	 */
-	public LayoutEngineTask(String name, String locale, String mode, PagedMediaWriter writer, FormatterEngineFactoryService fe) {
+	public LayoutEngineTask(String name, FormatterConfiguration config, PagedMediaWriter writer, FormatterEngineFactoryService fe) {
 		super(name);
-		this.locale = locale;
-		this.mode = mode;
-		//this.locale = locale;
+		this.config = config;
 		this.writer = writer;
 		this.logger = Logger.getLogger(LayoutEngineTask.class.getCanonicalName());
 		this.fe = fe;
@@ -62,7 +60,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 				throw new InternalTaskException("Input validation failed.", e);
 			}
 			
-			FormatterEngine engine = fe.newFormatterEngine(locale, mode, writer);
+			FormatterEngine engine = fe.newFormatterEngine(config, writer);
 			engine.convert(new FileInputStream(input), new FileOutputStream(output));
 
 		} catch (LayoutEngineException e) {
