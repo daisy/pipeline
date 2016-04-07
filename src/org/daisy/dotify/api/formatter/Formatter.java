@@ -1,6 +1,7 @@
 package org.daisy.dotify.api.formatter;
 
 import java.io.Closeable;
+import java.io.IOException;
 
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 
@@ -13,8 +14,22 @@ public interface Formatter extends Closeable {
 
 	/**
 	 * Opens the Formatter for writing.
+	 * @deprecated future versions of the formatter interface will support editing, so opening is no-longer relevant
 	 */
+	@Deprecated
 	public void open();
+	
+	/**
+	 * Gets the formatter configuration
+	 * @return returns the formatter configuration
+	 */
+	public FormatterConfiguration getConfiguration();
+	
+	/**
+	 * Sets the formatter configuration
+	 * @param config the configuration
+	 */
+	public void setConfiguration(FormatterConfiguration config);
 
 	/**
 	 * Start a new Sequence at the current position in the flow.
@@ -54,6 +69,17 @@ public interface Formatter extends Closeable {
 	 */
 	public ContentCollection newCollection(String collectionIdentifier); 
 	
+	/**
+	 * Writes the current result to a paged media
+	 * @param writer the paged media writer to use
+	 */
 	public void write(PagedMediaWriter writer);
+	
+	/**
+	 * @deprecated future versions of the formatter interface will support editing, so closing is no-longer relevant
+	 */
+	@Deprecated
+	//Note that when this method is removed, the interface Closeable should also be removed
+	public void close() throws IOException;
 
 }
