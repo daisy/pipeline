@@ -58,6 +58,19 @@ public interface FormatterCore {
 	public void addChars(CharSequence chars, TextProperties props);
 	
 	/**
+	 * Starts a style section
+	 * @param style the name of the style
+	 * @throws IllegalStateException if the current state does not allow this call to be made
+	 */
+	public void startStyle(String style);
+	
+	/**
+	 * Ends a previously opened style section
+	 * @throws IllegalStateException if the current state does not allow this call to be made
+	 */
+	public void endStyle();
+	
+	/**
 	 * Explicitly break the current line, even if the line has space 
 	 * left for more characters. The current block remains open.
 	 * @throws IllegalStateException if the current state does not allow this call to be made
