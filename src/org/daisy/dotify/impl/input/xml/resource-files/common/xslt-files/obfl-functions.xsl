@@ -19,13 +19,16 @@
 					<xsl:copy-of select="."/>
 				</xsl:when>
 				<xsl:otherwise>
+					<xsl:variable name="result">
+						<xsl:apply-templates select="." mode="whileNotSequence"/>
+					</xsl:variable>
+					<xsl:variable name="content" select="obfl:wrapBlocks($result)"/>
+					<xsl:if test="$content/node()[not(self::text() and normalize-space(.)='')]">
 					<sequence>
 						<xsl:attribute name="master" select="$master"/>
-						<xsl:variable name="result">
-							<xsl:apply-templates select="." mode="whileNotSequence"/>
-						</xsl:variable>
-						<xsl:copy-of select="obfl:wrapBlocks($result)"></xsl:copy-of>
-					</sequence>						
+						<xsl:copy-of select="$content"></xsl:copy-of>
+					</sequence>
+					</xsl:if>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each>
@@ -51,9 +54,14 @@
 					<xsl:copy-of select="."/>
 				</xsl:when>
 				<xsl:otherwise>
-					<block>
+					<xsl:variable name="result">
 						<xsl:apply-templates select="." mode="whileNotBlock"/>
-					</block>							
+					</xsl:variable>
+					<xsl:if test="$result/node()[not(self::text() and normalize-space(.)='')]">
+						<block>
+							<xsl:copy-of select="$result"/>
+						</block>
+					</xsl:if>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each>
