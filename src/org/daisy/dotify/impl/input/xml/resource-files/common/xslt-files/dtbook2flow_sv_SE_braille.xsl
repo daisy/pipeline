@@ -143,39 +143,9 @@
 	</xsl:template>
 	
 	<xsl:template name="postContentNotes">
-		<xsl:if test="count(//dtb:note)>0">
-			<dynamic-sequence master="notes">
-				<block padding-top="3"><xsl:value-of select="$l10nEndnotesHeading"/></block>
-				<xsl:if test="count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]])>0">
-					<list-of-references collection="endnotes-front" range="volume">
-						<on-page-start>
-							<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
-						</on-page-start>
-					</list-of-references>
-					<xsl:if test="count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]])>0">
-						<list-of-references collection="endnotes-frontB" range="volume">
-							<on-page-start>
-								<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
-							</on-page-start>
-						</list-of-references>
-					</xsl:if>
-				</xsl:if>
-				<xsl:if test="count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]])>0">
-					<list-of-references collection="endnotes" range="volume">
-						<on-page-start>
-							<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
-						</on-page-start>
-					</list-of-references>
-					<xsl:if test="count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]])>0">
-						<list-of-references collection="endnotesB" range="volume">
-							<on-page-start>
-								<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
-							</on-page-start>
-						</list-of-references>
-					</xsl:if>
-				</xsl:if>
-			</dynamic-sequence>
-		</xsl:if>
+		<xsl:copy-of select="obfl:insertPostContentNotes(
+			count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]),
+			count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]]))"/>
 	</xsl:template>
 	
 	<xsl:template name="coverPage">
@@ -378,16 +348,7 @@
 	<xsl:template match="node()" mode="toc"/>
 	
 	<xsl:template name="insertProcessorRenderer">
-		<xml-processor name="table-as-block">
-			<xsl:copy-of select="document('table-as-block.xsl')"/>
-		</xml-processor>
-		<xml-processor name="identity">
-			<xsl:copy-of select="document('identity.xsl')"/>
-		</xml-processor>
-		<renderer name="table-renderer">
-			<rendering-scenario processor="identity" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))"/>
-			<rendering-scenario processor="table-as-block" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))"/>
-		</renderer>
+		<xsl:copy-of select="obfl:insertProcessorRenderer()"/>
 	</xsl:template>
 
 	<xsl:template match="dtb:table">

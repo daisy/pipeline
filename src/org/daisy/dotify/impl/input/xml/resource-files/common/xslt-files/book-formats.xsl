@@ -19,6 +19,8 @@
 	<xsl:param name="l10nLang" select="'en'"/>
 	<xsl:param name="l10nTocVolumeXofY" select="'Volume {0} of {1}'"/>
 	<xsl:param name="l10nTocOneVolume" select="'One Volume'"/>
+	<xsl:param name="l10nEndnotesHeading" select="'Footnotes'"/>
+	<xsl:param name="l10nEndnotesPageStart" select="'Page {0}'"/>
 	<xsl:param name="l10nEndnotesPageHeader" select="'Footnotes'"/>
 		
 	<xsl:function name="obfl:insertLayoutMaster">
@@ -229,6 +231,48 @@
 		</xsl:if>
 	</xsl:function>
 	
+	<xsl:function name="obfl:insertPostContentNotes">
+		<xsl:param name="footnotesInFrontMatter" as="xs:integer"/> 
+		<!-- count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]) -->
+		<!-- count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]) -->
+		<xsl:param name="footnotesNotInFrontMatter" as="xs:integer"/>
+		<!-- count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]]) -->
+		<!-- count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]]) -->
+		<xsl:if test="$footnotesInFrontMatter+$footnotesNotInFrontMatter>0"> <!-- count(//dtb:note)>0 -->
+			<dynamic-sequence master="notes">
+				<block padding-top="3"><xsl:value-of select="$l10nEndnotesHeading"/></block>
+				<xsl:if test="$footnotesInFrontMatter>0">
+					<list-of-references collection="endnotes-front" range="volume">
+						<on-page-start>
+							<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
+						</on-page-start>
+					</list-of-references>
+					<xsl:if test="$footnotesNotInFrontMatter>0">
+						<list-of-references collection="endnotes-frontB" range="volume">
+							<on-page-start>
+								<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
+							</on-page-start>
+						</list-of-references>
+					</xsl:if>
+				</xsl:if>
+				<xsl:if test="$footnotesNotInFrontMatter>0">
+					<list-of-references collection="endnotes" range="volume">
+						<on-page-start>
+							<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
+						</on-page-start>
+					</list-of-references>
+					<xsl:if test="$footnotesInFrontMatter>0">
+						<list-of-references collection="endnotesB" range="volume">
+							<on-page-start>
+								<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
+							</on-page-start>
+						</list-of-references>
+					</xsl:if>
+				</xsl:if>
+			</dynamic-sequence>
+		</xsl:if>
+	</xsl:function>
+	
 	<xsl:function name="obfl:insertCoverPage">
 		<xsl:param name="title"/>
 		<!-- /dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle -->
@@ -261,6 +305,19 @@
 				(format &quot;{$l10nTocVolumeXofY}&quot; (int2text (round $volume) {$l10nLang}) (int2text (round $volumes) {$l10nLang}))
 				&quot;{$l10nTocOneVolume}&quot;)"/></block>
 		</sequence>
+	</xsl:function>
+	
+	<xsl:function name="obfl:insertProcessorRenderer">
+		<xml-processor name="table-as-block">
+			<xsl:copy-of select="document('table-as-block.xsl')"/>
+		</xml-processor>
+		<xml-processor name="identity">
+			<xsl:copy-of select="document('identity.xsl')"/>
+		</xml-processor>
+		<renderer name="table-renderer">
+			<rendering-scenario processor="identity" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))"/>
+			<rendering-scenario processor="table-as-block" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))"/>
+		</renderer>
 	</xsl:function>
 
 </xsl:stylesheet>
