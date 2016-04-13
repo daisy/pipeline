@@ -13,10 +13,16 @@
 	<xsl:param name="row-spacing" select="1" as="xs:decimal"/>
 	<xsl:param name="duplex" select="true()" as="xs:boolean"/>
 	
+	<xsl:param name="splitterMax" select="10"/>
+	<xsl:param name="volume-toc" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>
 
 	<xsl:param name="l10nLang" select="'en'"/>
+	<xsl:param name="l10nTocHeadline" select="'Table Of Contents'"/>
+	<xsl:param name="l10nTocDescription" select="''"/>
+	<xsl:param name="l10nTocVolumeStart" select="'Volume {0}'"/>
+	<xsl:param name="l10nTocVolumeHeading" select="'Contents of Volume {0}'"/>
 	<xsl:param name="l10nTocVolumeXofY" select="'Volume {0} of {1}'"/>
 	<xsl:param name="l10nTocOneVolume" select="'One Volume'"/>
 	<xsl:param name="l10nEndnotesHeading" select="'Footnotes'"/>
@@ -229,6 +235,67 @@
 				<item id="note1" text-indent="4">1).</item>  -->
 			</collection>
 		</xsl:if>
+	</xsl:function>
+	
+	<xsl:function name="obfl:insertVolumeTemplate">
+		<xsl:param name="title"/>
+		<xsl:param name="authors"/>
+		<xsl:param name="footnotesInFrontMatter" as="xs:integer"/> 
+		<xsl:param name="footnotesNotInFrontMatter" as="xs:integer"/>
+		<xsl:param name="insertToc" as="xs:boolean"/>
+		<xsl:param name="additionalPreContent"/>
+		<xsl:choose>
+			<xsl:when test="$insertToc">
+				<volume-template volume-number-variable="volume" volume-count-variable="volumes" use-when="(= $volume 1)" sheets-in-volume-max="{$splitterMax}">
+					<pre-content>
+						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						<toc-sequence master="front" toc="full-toc" range="document" initial-page-number="1">
+							<on-toc-start>
+								<block padding-bottom="1"><xsl:value-of select="$l10nTocHeadline"/></block>
+								<xsl:if test="$l10nTocDescription!=''">
+									<block padding-bottom="1"><xsl:value-of select="$l10nTocDescription"/></block>
+								</xsl:if>
+							</on-toc-start>
+							<on-volume-start use-when="(&amp; (> $volumes 1) (= $started-volume-number 1))">
+								<block keep="all" keep-with-next="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
+							</on-volume-start>
+							<on-volume-start use-when="(&amp; (> $volumes 1) (> $started-volume-number 1))">
+								<block keep="all" keep-with-next="1" padding-top="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
+							</on-volume-start>
+						</toc-sequence>
+						<xsl:copy-of select="$additionalPreContent"/>
+					</pre-content>
+					<post-content>
+						<xsl:copy-of select="obfl:insertPostContentNotes($footnotesInFrontMatter, $footnotesNotInFrontMatter)"/>
+					</post-content>
+				</volume-template>
+				<volume-template volume-number-variable="volume" volume-count-variable="volumes" use-when="(> $volume 1)" sheets-in-volume-max="{$splitterMax}">
+					<pre-content>
+						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						<xsl:if test="$volume-toc">
+							<toc-sequence master="front" toc="full-toc" range="volume" initial-page-number="1">
+								<on-toc-start>
+									<block padding-bottom="1"><evaluate expression="(format &quot;{$l10nTocVolumeHeading}&quot; $volume)"/></block>
+								</on-toc-start>
+							</toc-sequence>
+						</xsl:if>
+					</pre-content>
+					<post-content>
+						<xsl:copy-of select="obfl:insertPostContentNotes($footnotesInFrontMatter, $footnotesNotInFrontMatter)"/>
+					</post-content>
+				</volume-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<volume-template sheets-in-volume-max="{$splitterMax}">
+					<pre-content>
+						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+					</pre-content>
+					<post-content>
+						<xsl:copy-of select="obfl:insertPostContentNotes($footnotesInFrontMatter, $footnotesNotInFrontMatter)"/>
+					</post-content>
+				</volume-template>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:function>
 	
 	<xsl:function name="obfl:insertPostContentNotes">

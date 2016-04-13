@@ -85,75 +85,22 @@
 	</xsl:template>
 	
 	<xsl:template name="insertTOCVolumeTemplate">
-		<xsl:choose>
-			<xsl:when test="$toc-depth > 0 and (//dtb:level1[@class='toc'] or //dtb:level1[dtb:list[@class='toc']])">
+		<xsl:variable name="insertToc" select="$toc-depth > 0 and (//dtb:level1[@class='toc'] or //dtb:level1[dtb:list[@class='toc']])" as="xs:boolean"/>
+		<xsl:if test="$insertToc">
 			<table-of-contents name="full-toc">
 				<xsl:apply-templates select="//dtb:level1" mode="toc"/>
 			</table-of-contents>
-			<volume-template volume-number-variable="volume" volume-count-variable="volumes" use-when="(= $volume 1)" sheets-in-volume-max="{$splitterMax}">
-				<pre-content>
-					<xsl:call-template name="coverPage"/>
-					<toc-sequence master="front" toc="full-toc" range="document" initial-page-number="1">
-						<on-toc-start>
-							<block padding-bottom="1"><xsl:value-of select="$l10nTocHeadline"/></block>
-							<xsl:if test="$l10nTocDescription!=''">
-								<block padding-bottom="1"><xsl:value-of select="$l10nTocDescription"/></block>
-							</xsl:if>
-						</on-toc-start>
-						<on-volume-start use-when="(&amp; (> $volumes 1) (= $started-volume-number 1))">
-							<block keep="all" keep-with-next="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
-						</on-volume-start>
-						<on-volume-start use-when="(&amp; (> $volumes 1) (> $started-volume-number 1))">
-							<block keep="all" keep-with-next="1" padding-top="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
-						</on-volume-start>
-					</toc-sequence>
-					<xsl:apply-templates select="//dtb:frontmatter" mode="pre-volume-mode"/>
-				</pre-content>
-				<post-content>
-					<xsl:call-template name="postContentNotes"/>
-				</post-content>
-			</volume-template>
-			<volume-template volume-number-variable="volume" volume-count-variable="volumes" use-when="(> $volume 1)" sheets-in-volume-max="{$splitterMax}">
-				<pre-content>
-					<xsl:call-template name="coverPage"/>
-					<xsl:if test="$volume-toc">
-					<toc-sequence master="front" toc="full-toc" range="volume" initial-page-number="1">
-						<on-toc-start>
-							<block padding-bottom="1"><evaluate expression="(format &quot;{$l10nTocVolumeHeading}&quot; $volume)"/></block>
-						</on-toc-start>
-					</toc-sequence>
-					</xsl:if>
-				</pre-content>
-				<post-content>
-					<xsl:call-template name="postContentNotes"/>
-				</post-content>
-			</volume-template>
-			</xsl:when>
-			<xsl:otherwise>
-				<volume-template sheets-in-volume-max="{$splitterMax}">
-					<pre-content>
-						<xsl:call-template name="coverPage"/>
-					</pre-content>
-					<post-content>
-						<xsl:call-template name="postContentNotes"/>
-					</post-content>
-				</volume-template>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:template>
-	
-	<xsl:template name="postContentNotes">
-		<xsl:copy-of select="obfl:insertPostContentNotes(
-			count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]),
-			count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]]))"/>
-	</xsl:template>
-	
-	<xsl:template name="coverPage">
-		<xsl:copy-of select="obfl:insertCoverPage(
+		</xsl:if>
+		<xsl:variable name="additionalPreContent"><xsl:if test="$insertToc"><xsl:apply-templates select="//dtb:frontmatter" mode="pre-volume-mode"/></xsl:if></xsl:variable>
+		<xsl:copy-of select="obfl:insertVolumeTemplate(
 			/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle,
-			/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:docauthor)"/>
+			/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:docauthor,
+			count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]),
+			count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]]),
+			$insertToc,
+			$additionalPreContent)"/>
 	</xsl:template>
-	
+
 	<xsl:template name="insertNoteCollection">
 		<xsl:copy-of select="obfl:insertNoteCollection(
 			//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]],
