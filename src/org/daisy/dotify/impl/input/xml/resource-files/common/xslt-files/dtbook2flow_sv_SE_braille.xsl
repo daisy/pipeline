@@ -15,6 +15,7 @@
 
 	<xsl:import href="dtbook2obfl_layout.xsl" />
 	<xsl:import href="dtbook_table_grid.xsl" />
+	<xsl:import href="book-formats.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:namespace-alias stylesheet-prefix="axsl" result-prefix="xsl"/>
 	<xsl:param name="toc-indent-multiplier" select="1"/>
@@ -78,156 +79,9 @@
 	</xsl:template>
 	
 	<xsl:template name="insertLayoutMaster">
-		<layout-master name="front" page-width="{$page-width}" 
-							page-height="{$page-height}" inner-margin="{$inner-margin}"
-							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
-			<template use-when="(= (% $page 2) 0)">
-				<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers)">
-					<header>
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
-						<field><string value=""/></field>
-					</header>
-				</xsl:if>
-				<header>
-					<xsl:if test="$show-braille-page-numbers">
-						<field><string value="&#xA0;&#xA0;"/><current-page number-format="roman"/></field>
-					</xsl:if>
-				</header>
-				<footer></footer>
-			</template>
-			<default-template>
-				<header>
-					<xsl:if test="$show-braille-page-numbers">
-						<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
-						 of every front page as to avoid embossing on the same row on front and back -->
-						<xsl:if test="$row-spacing=2">
-							<xsl:attribute name="row-spacing">1</xsl:attribute>
-						</xsl:if>
-						<field><string value=""/></field>
-						<field><current-page number-format="roman"/></field>
-					</xsl:if>
-				</header>
-				<footer></footer>
-			</default-template>
-			<xsl:call-template name="insertFrontPageArea"/>
-		</layout-master>
-		<layout-master name="main" page-width="{$page-width}" 
-							page-height="{$page-height}" inner-margin="{$inner-margin}"
-							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
-			<template use-when="(= (% $page 2) 0)">
-				<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers or $show-print-page-numbers)">
-					<header>
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
-						<field><string value=""/></field>
-					</header>
-				</xsl:if>
-				<header>
-					<xsl:if test="$show-braille-page-numbers or $show-print-page-numbers">
-						<field><string value="&#xA0;&#xA0;"/>
-							<xsl:if test="$show-braille-page-numbers">
-								<current-page number-format="default"/>
-							</xsl:if>
-						</field>
-						<field>
-							<xsl:choose>
-								<xsl:when test="$show-print-page-numbers">
-									<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
-									<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<string value=""/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</field>
-					</xsl:if>
-				</header>
-				<footer></footer>
-			</template>
-			<default-template>
-				<header>
-					<xsl:if test="$show-braille-page-numbers or $show-print-page-numbers">
-						<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
-						 of every front page as to avoid embossing on the same row on front and back -->
-						<xsl:if test="$row-spacing=2">
-							<xsl:attribute name="row-spacing">1</xsl:attribute>
-						</xsl:if>
-						<field><string value="&#xA0;&#xA0;"/>
-							<xsl:if test="$show-print-page-numbers">
-								<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
-								<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
-							</xsl:if>
-						</field>
-						<field>
-							<xsl:choose>
-								<xsl:when test="$show-braille-page-numbers"><current-page number-format="default"/></xsl:when>
-								<xsl:otherwise><string value=""/></xsl:otherwise>
-							</xsl:choose>
-						</field>
-					</xsl:if>
-				</header>
-				<footer></footer>
-			</default-template>
-			<xsl:call-template name="insertMainPageArea"/>
-		</layout-master>
-		<layout-master name="plain" page-width="{$page-width}" 
-							page-height="{$page-height}" inner-margin="{$inner-margin}"
-							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
-			<template use-when="(= (% $page 2) 0)">
-				<header><field><string value=""/></field></header>
-				<footer></footer>
-			</template>
-			<default-template>
-				<header>
-					<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
-					 of every front page as to avoid embossing on the same row on front and back -->
-					<xsl:if test="$row-spacing=2">
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
-					</xsl:if>
-					<field><string value=""/></field>
-				</header>
-				<footer></footer>
-			</default-template>
-		</layout-master>
-		<layout-master name="notes" page-width="{$page-width}" 
-							page-height="{$page-height}" inner-margin="{$inner-margin}"
-							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
-			<template use-when="(= (% $page 2) 0)">
-				<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers)">
-					<header>
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
-						<field><string value=""/></field>
-					</header>
-				</xsl:if>
-				<header>
-					<xsl:if test="$show-braille-page-numbers">
-						<field><string value="&#xA0;&#xA0;"/><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field>
-					</xsl:if>
-				</header>
-				<footer></footer>
-			</template>
-			<default-template>
-				<header>
-					<xsl:if test="$show-braille-page-numbers">
-						<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
-						 of every front page as to avoid embossing on the same row on front and back -->
-						<xsl:if test="$row-spacing=2">
-							<xsl:attribute name="row-spacing">1</xsl:attribute>
-						</xsl:if>
-						<field><string value=""/></field>
-						<field><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field>
-					</xsl:if>
-				</header>
-				<footer></footer>
-			</default-template>
-		</layout-master>
-		<layout-master name="cover" page-width="{$page-width}" 
-							page-height="{$page-height}" inner-margin="{$inner-margin}"
-							outer-margin="{$outer-margin}" row-spacing="1" duplex="{$duplex}" border-style="solid" border-width="1" border-align="outer">
-			<default-template>
-				<header></header>
-				<footer></footer>
-			</default-template>
-		</layout-master>
+		<xsl:copy-of select="obfl:insertLayoutMaster(
+			count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]), 
+			count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]]))"/>
 	</xsl:template>
 	
 	<xsl:template name="insertTOCVolumeTemplate">
@@ -288,36 +142,6 @@
 		</xsl:choose>
 	</xsl:template>
 	
-	<xsl:template name="insertFrontPageArea">
-		<xsl:if test="count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]])>0">
-			<page-area align="bottom" max-height="10" collection="footnotes-front">
-				<fallback>
-					<rename collection="footnotes-front" to="endnotes-front"/>
-					<xsl:if test="count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]])>0">
-						<rename collection="footnotes" to="endnotesB"/>
-					</xsl:if>
-				</fallback>
-				<before><leader position="100%" pattern="."/></before>
-				<after></after>
-			</page-area>
-		</xsl:if>
-	</xsl:template>
-	
-	<xsl:template name="insertMainPageArea">
-		<xsl:if test="count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]])>0">
-			<page-area align="bottom" max-height="10" collection="footnotes">
-				<fallback>
-					<rename collection="footnotes" to="endnotes"/>
-					<xsl:if test="count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]])>0">
-						<rename collection="footnotes-front" to="endnotes-frontB"/>
-					</xsl:if>
-				</fallback>
-				<before><leader position="100%" pattern="."/></before>
-				<after></after>
-			</page-area>
-		</xsl:if>
-	</xsl:template>
-	
 	<xsl:template name="postContentNotes">
 		<xsl:if test="count(//dtb:note)>0">
 			<dynamic-sequence master="notes">
@@ -355,51 +179,15 @@
 	</xsl:template>
 	
 	<xsl:template name="coverPage">
-		<sequence master="cover">
-			<xsl:choose>
-				<xsl:when test="/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle">
-					<block align="center" padding-top="3" padding-bottom="1" margin-left="2" margin-right="2"><xsl:value-of select="/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle"/></block>
-				</xsl:when>
-				<xsl:otherwise>
-					<block align="center" padding-top="3"  margin-left="2" margin-right="2">&#x00a0;</block>
-				</xsl:otherwise>
-			</xsl:choose>
-			<xsl:choose>
-				<xsl:when test="count(/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:docauthor)>3">
-					<block align="center"  margin-left="2" margin-right="2"><xsl:value-of select="/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:docauthor[0]"/></block>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:for-each select="/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:docauthor">
-						<block align="center" margin-left="2" margin-right="2"><xsl:value-of select="."/></block>
-					</xsl:for-each>
-				</xsl:otherwise>
-			</xsl:choose>
-			<block align="center" margin-left="2" margin-right="2" vertical-align="before" vertical-position="100%" hyphenate="false"><evaluate expression="
-			(if (&gt; $volumes 1) 
-				(format &quot;{$l10nTocVolumeXofY}&quot; (int2text (round $volume) {$l10nLang}) (int2text (round $volumes) {$l10nLang}))
-				&quot;{$l10nTocOneVolume}&quot;)"/></block>
-		</sequence>
+		<xsl:copy-of select="obfl:insertCoverPage(
+			/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle,
+			/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:docauthor)"/>
 	</xsl:template>
 	
 	<xsl:template name="insertNoteCollection">
-		<xsl:if test="count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]])>0">
-			<collection name="footnotes-front">
-				<xsl:apply-templates select="//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]" mode="collectNotes">
-					<xsl:with-param name="afix">.A</xsl:with-param>
-				</xsl:apply-templates>
-				<!-- 
-				<item id="note1" text-indent="4">1).</item>  -->
-			</collection>
-		</xsl:if>
-		<xsl:if test="count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]])>0">
-			<collection name="footnotes">
-				<xsl:apply-templates select="//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]]" mode="collectNotes">
-					<xsl:with-param name="afix">.B</xsl:with-param>
-				</xsl:apply-templates>
-				<!-- 
-				<item id="note1" text-indent="4">1).</item>  -->
-			</collection>
-		</xsl:if>
+		<xsl:copy-of select="obfl:insertNoteCollection(
+			//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]],
+			//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]])"/>
 	</xsl:template>
 	
 	<xsl:template match="dtb:pagenum">
