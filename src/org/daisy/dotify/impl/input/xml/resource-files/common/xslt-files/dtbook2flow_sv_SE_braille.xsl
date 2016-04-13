@@ -102,9 +102,26 @@
 	</xsl:template>
 
 	<xsl:template name="insertNoteCollection">
-		<xsl:copy-of select="obfl:insertNoteCollection(
-			//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]],
-			//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]])"/>
+		<xsl:param name="footnotesInFrontMatter" select="//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]"/> 
+		<xsl:param name="footnotesNotInFrontMatter" select="//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]]"/>
+		<xsl:if test="count($footnotesInFrontMatter)>0">
+			<collection name="footnotes-front">
+				<xsl:apply-templates select="$footnotesInFrontMatter" mode="collectNotes">
+					<xsl:with-param name="afix">.A</xsl:with-param>
+				</xsl:apply-templates>
+				<!-- 
+				<item id="note1" text-indent="4">1).</item>  -->
+			</collection>
+		</xsl:if>
+		<xsl:if test="count($footnotesNotInFrontMatter)>0">
+			<collection name="footnotes">
+				<xsl:apply-templates select="$footnotesNotInFrontMatter" mode="collectNotes">
+					<xsl:with-param name="afix">.B</xsl:with-param>
+				</xsl:apply-templates>
+				<!-- 
+				<item id="note1" text-indent="4">1).</item>  -->
+			</collection>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="dtb:pagenum">
