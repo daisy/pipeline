@@ -15,6 +15,8 @@
 	<xsl:variable name="footnotesNotInFrontmatter" as="empty-sequence()"/> <!-- //dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]] -->
 															     <!-- //dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]] -->
 	
+	<xsl:variable name="isEpub" select="count(//*[@epub:type])>0" as="xs:boolean"/>
+
 	<xsl:template match="/">
 		<obfl version="2011-1" hyphenate="{$hyphenate}">
 			<xsl:attribute name="xml:lang" select="/html:html/@xml:lang"/>
@@ -81,6 +83,22 @@
 		</xsl:if>
 	</xsl:template>
 	
+	<xsl:template match="html:body">
+		<xsl:if test="*[epub:types(.)=('cover','frontmatter')]">
+			<sequence master="front" initial-page-number="1">
+				<xsl:apply-templates select="*[epub:types(.)=('cover','frontmatter')]"/>
+			</sequence>
+		</xsl:if>
+		<sequence master="main" initial-page-number="1">
+			<!-- Put everything that isn't specifically front- or backmatter here. -->
+			<xsl:apply-templates select="text()[normalize-space(.)!='']|processing-instruction()|comment()|*[not(epub:types(.)=('cover', 'frontmatter', 'backmatter'))]"/>
+		</sequence>
+		<xsl:if test="*[epub:types(.)=('backmatter')]">
+			<sequence master="main">
+				<xsl:apply-templates select="*[epub:types(.)=('backmatter')]"/>
+			</sequence>
+		</xsl:if>
+	</xsl:template>
 	
 	<xsl:template match="html:h1" mode="apply-block-attributes">
 		<xsl:attribute name="margin-top"><xsl:choose><xsl:when test="$row-spacing=2">2</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:attribute>
@@ -91,7 +109,21 @@
 		</xsl:if>
 		<xsl:attribute name="keep">all</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
-		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>		
+		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
+		<xsl:if test="not($isEpub)">
+			<xsl:attribute name="break-before">page</xsl:attribute>
+			<xsl:attribute name="keep-with-previous-sheets">1</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+	<!-- epub only -->
+	<xsl:template match="html:*[parent::html:body and epub:types(.)=('chapter')]" mode="apply-block-attributes">
+		<xsl:if test="not(html:h1)">
+			<xsl:attribute name="margin-top"><xsl:choose><xsl:when test="$row-spacing=2">2</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:attribute>
+		</xsl:if>
+		<xsl:attribute name="break-before">page</xsl:attribute>
+		<xsl:attribute name="keep-with-previous-sheets">1</xsl:attribute>
+		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
 	
 </xsl:stylesheet>
