@@ -10,9 +10,7 @@
 
 	<entry key="dtbook@http://www.daisy.org/z3986/2005/dtbook/">dtbook.properties</entry>
 
-	<!-- 
 	<entry key="html@http://www.w3.org/1999/xhtml">html.properties</entry>
-	 -->
 
 	<entry key="obfl@http://www.daisy.org/ns/2011/obfl"></entry>
 	<entry key="obfl"></entry>
