@@ -9,6 +9,8 @@
 	<xsl:import href="html2obfl_base.xsl"/>
 	<xsl:import href="book-formats.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
+	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string"/> <!-- empty-line or indent -->
+
 	<!-- FIXME: empty-sequence() below is temporary-->
 	<xsl:variable name="footnotesInFrontmatter" as="empty-sequence()"/> <!-- //dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]] -->
 															  <!-- //dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]] -->
@@ -124,6 +126,31 @@
 		<xsl:attribute name="break-before">page</xsl:attribute>
 		<xsl:attribute name="keep-with-previous-sheets">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
+	</xsl:template>
+	
+	<!-- Override default processing -->
+	<xsl:template match="html:p" mode="block-mode" priority="10">
+		<xsl:variable name="tokens" select="tokenize(@class, '\s+')"/>
+		<xsl:if test="$tokens='precedingseparator'">
+			<block keep="all" keep-with-next="1" padding-top="1" padding-bottom="1"><xsl:text>---</xsl:text></block>
+		</xsl:if>
+		<block>
+			<xsl:if test="$tokens='precedingemptyline'">
+				<xsl:attribute name="padding-top">1</xsl:attribute>
+			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="$tokens='indented'"><xsl:attribute name="first-line-indent">2</xsl:attribute></xsl:when>
+				<xsl:when test="not($tokens='precedingemptyline' or $tokens='precedingseparator' or $tokens='no-indent')">
+					<xsl:if test="(preceding-sibling::*[not(epub:types(.)='pagebreak')][1])[self::html:p]">
+						<xsl:choose>
+							<xsl:when test="$default-paragraph-separator='empty-line'"><xsl:attribute name="margin-top">1</xsl:attribute></xsl:when>
+							<xsl:otherwise><xsl:attribute name="first-line-indent">2</xsl:attribute></xsl:otherwise>
+						</xsl:choose>
+					</xsl:if>
+				</xsl:when>
+			</xsl:choose>
+			<xsl:apply-templates/>
+		</block>
 	</xsl:template>
 	
 </xsl:stylesheet>
