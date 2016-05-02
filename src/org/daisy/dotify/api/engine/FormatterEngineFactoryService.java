@@ -1,5 +1,6 @@
 package org.daisy.dotify.api.engine;
 
+import org.daisy.dotify.api.formatter.FormatterConfiguration;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 
 /**
@@ -28,6 +29,14 @@ public interface FormatterEngineFactoryService {
 	 * @return returns a new FormatterEngine
 	 */
 	public FormatterEngine newFormatterEngine(String locale, String mode, PagedMediaWriter writer);
+	
+	/**
+	 * Returns a new FormatterEngine configured with the specified configuration and output writer
+	 * @param config the configuration
+	 * @param writer the output writer
+	 * @return returns a new instance
+	 */
+	public FormatterEngine newFormatterEngine(FormatterConfiguration config, PagedMediaWriter writer);
 	
 	/**
 	 * Provides a method to set references directly. This
