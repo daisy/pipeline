@@ -49,6 +49,7 @@ public class FormatterConfiguration {
 		 * Sets the global capital letter policy
 		 */
 		public Builder markCapitalLetters(boolean value) {
+			marksCapitalLetters = value;
 			return this;
 		}
 		
