@@ -110,7 +110,7 @@
 			</xsl:if>
 		</xsl:for-each>-->
 		<xsl:variable name="result">
-			<xsl:apply-templates select="descendant::*[self::*:td or self::*:th][last()]" mode="gridBuilderOuter">
+			<xsl:apply-templates select="descendant::*[self::*:td or self::*:th][1]" mode="gridBuilderStart">
 				<xsl:with-param name="table-id" select="generate-id()"/>
 			</xsl:apply-templates>
 		</xsl:variable>
@@ -122,6 +122,34 @@
 		</tmp:summary>
 	</xsl:template>
 	
+	<!-- Optimized version of gridBuilderOuter using tail recursion -->
+	<xsl:template match="*[self::*:td or self::*:th]" mode="gridBuilderStart">
+		<xsl:param name="table-id" required="yes"/>
+		<xsl:param name="gridInput" select="/.."/> <!-- Defaults to an empty node -->
+		<xsl:variable name="gy" select="ancestor::*:tr/count(preceding-sibling::*:tr)+1"/>
+		<xsl:variable name="gx">
+			<xsl:call-template name="findGridX">
+				<xsl:with-param name="grid" select="$gridInput"/>
+				<xsl:with-param name="gy" select="$gy"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="result">
+			<xsl:apply-templates select="." mode="gridBuilderInner">
+				<xsl:with-param name="gx" select="$gx"/>
+				<xsl:with-param name="gy" select="$gy"/>
+			</xsl:apply-templates>
+		</xsl:variable>
+		<xsl:variable name="grid">
+			<xsl:copy-of select="$gridInput"/>
+			<xsl:copy-of select="$result"/>
+		</xsl:variable>
+		<xsl:copy-of select="$result"/>
+		<xsl:apply-templates select="following::*[self::*:td or self::*:th][1][ancestor::*:table[generate-id()=$table-id]]" mode="gridBuilderStart">
+			<xsl:with-param name="table-id" select="$table-id"/>
+			<xsl:with-param name="gridInput" select="$grid"/>
+		</xsl:apply-templates>
+	</xsl:template>
+	<!--
 	<xsl:template match="*[self::*:td or self::*:th]" mode="gridBuilderOuter">
 		<xsl:param name="table-id" required="yes"/>
 		<xsl:variable name="grid">
@@ -141,7 +169,7 @@
 			<xsl:with-param name="gx" select="$gx"/>
 			<xsl:with-param name="gy" select="$gy"/>
 		</xsl:apply-templates>
-	</xsl:template>
+	</xsl:template>-->
 	
 	<xsl:template match="*[self::*:td or self::*:th]" mode="gridBuilderInner">
 		<xsl:param name="i" select="1"/> <!-- current_column + (current_row-1) * column_count -->
