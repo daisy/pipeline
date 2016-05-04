@@ -1,5 +1,6 @@
 package org.daisy.dotify.impl.system.common;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.daisy.dotify.api.writer.PagedMediaWriter;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
+import org.daisy.dotify.impl.input.DuplicatorTask;
 import org.daisy.dotify.impl.input.Keys;
 import org.daisy.dotify.impl.input.LayoutEngineTask;
 
@@ -45,6 +47,10 @@ public class DotifyTaskSystem implements TaskSystem {
 	final static String MARK_CAPITAL_LETTERS = "mark-capital-letters";
 	final static String HYPHENATE = "hyphenate";
 	final static String REMOVE_STYLES = "remove-styles";
+	/**
+	 * Specifies a location where the intermediary obfl output should be stored
+	 */
+	final static String OBFL_OUTPUT_LOCATION = "obfl-output-location";
 	private final static QName ENTRY = new QName("http://www.daisy.org/ns/2015/dotify", "entry", "generator");
 	private final String outputFormat;
 	private final String context;
@@ -102,6 +108,11 @@ public class DotifyTaskSystem implements TaskSystem {
 			 * h));
 			 */
 			//setup.add(new OBFLWhitespaceNormalizerTask("OBFL whitespace normalizer"));
+		}
+		
+		String keep = p2.getProperty(OBFL_OUTPUT_LOCATION);
+		if (keep!=null && !"".equals(keep)) {
+			setup.add(new DuplicatorTask("OBFL archiver", new File(keep)));
 		}
 
 		if (Keys.OBFL_FORMAT.equals(outputFormat)) {
