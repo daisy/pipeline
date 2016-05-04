@@ -5,6 +5,21 @@
 	<head>
 		<title>DTBook to OBFL for braille</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<style type="text/css">
+		body {
+			margin: 5em;
+			font-family: sans-serif;
+		}
+		table {
+			border-spacing: 0;
+		}
+		th, td {
+			padding: 5px;
+			border-bottom-style: solid;
+			border-width: 1px;
+			text-align: left;
+		}
+		</style>
 	</head>
 	<body>
 <pre>
@@ -27,7 +42,7 @@
 	Author: Joel Håkansson
 </pre>
 <h2>Summary</h2>
-		<table border="1px">
+		<table>
 			<tr>
 				<th>Element</th>
 				<th>Category</th>
@@ -610,5 +625,42 @@
 				<td/>
 			</tr>
 		</table>
+<h2>Table rendering</h2>
+<p>Tables can be rendered either as a normal table ("matrix") or as a stair case, depending on which is more effective
+in a particular case. Efficiency is calculated by evaluating:</p>
+<pre>
+ (100 * $forced-break-count) + 
+ $total-height + 
+ (($page-width - $min-block-width) / $page-width)
+ </pre>
+ <p>This expression says that forced breaks are very expensive (= inefficient). If they occur in one
+ solution, but not the other, the latter will be chosen.
+ If the number of forced breaks are equal, then
+ the solution with the smallest total height will win. Finally, if the total
+ height is equal for both solutions, the solution with biggest minimum block width
+ is selected.</p>
+ <h3>Additional requirements</h3>
+<ul>
+<li>Table column spacing should be at least 2.</li>
+<li>Matrix tables can have at most 5 columns before breaking table into parts.</li>
+<li>Stair case tables can have at most 8 columns before breaking table into parts.</li>
+</ul>
+
+<h3>Special case: Matrix table with a legend</h3>
+<p>When a table has th elements and more than two columns, a legend is used with the matrix table solution.
+The elements in the legend are listed in the order of the th elements in the table (ordered by row, then column), for example:</p>
+<pre>
+Legend
+n1 [value of th]
+n2 [value of th]
+...
+</pre>
+<p>In addition, hyphenations are not allowed in this solution. Consequently, the cost expression above is replaced by the following in these cases:</p>
+<pre>
+ (100 * $forced-break-count) +
+ (10 * $hyphenation-count) + 
+ $total-height + 
+ (($page-width - $min-block-width) / $page-width)
+ </pre>
 	</body>
 </html>
