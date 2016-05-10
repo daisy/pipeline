@@ -348,6 +348,9 @@
 	</xsl:function>
 	
 	<xsl:function name="obfl:insertProcessorRenderer">
+		<file-reference uri="dtbook_table_grid.xsl">
+			<xsl:copy-of select="document('dtbook_table_grid.xsl')"/>
+		</file-reference>
 		<xml-processor name="table-as-block">
 			<xsl:copy-of select="document('table-as-block.xsl')"/>
 		</xml-processor>
