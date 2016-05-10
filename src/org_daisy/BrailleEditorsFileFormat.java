@@ -34,7 +34,6 @@ import org.daisy.braille.api.table.TableFilter;
 import org.daisy.braille.impl.embosser.AbstractEmbosserWriter.Padding;
 import org.daisy.braille.impl.embosser.ConfigurableEmbosser;
 import org.daisy.braille.impl.embosser.SimpleEmbosserProperties;
-import org.daisy.braille.impl.spi.SPIHelper;
 import org_daisy.BrailleEditorsFileFormatProvider.FileType;
 
 
@@ -50,19 +49,16 @@ public class BrailleEditorsFileFormat extends AbstractFactory implements FileFor
 	private static final long serialVersionUID = 4217010913717769350L;
 	private FileType type;
     private Table table;
-    private TableCatalogService tableCatalog;
+    private final TableCatalogService tableCatalog;
     private TableFilter tableFilter;
     private final Collection<String> supportedTableIds = new ArrayList<>();
 
     private final boolean duplexEnabled = false;
     private final boolean eightDotsEnabled = false;
 
-    public BrailleEditorsFileFormat(String name, String desc, FileType identifier) {
-
-        super(name, desc, identifier);
-
-        type = identifier;
-
+    public BrailleEditorsFileFormat(FileType type, TableCatalogService tableCatalog) {
+        super(type.getDisplayName(), type.getDescription(), type.getIdentifier());
+        this.type = type;
         switch (type) {
             case BRF:
                 supportedTableIds.add("org_daisy.EmbosserTableProvider.TableType.MIT");
@@ -96,7 +92,7 @@ public class BrailleEditorsFileFormat extends AbstractFactory implements FileFor
             }
         };
 
-        tableCatalog = SPIHelper.getTableCatalog();
+        this.tableCatalog = tableCatalog;
         table = tableCatalog.newTable("org_daisy.EmbosserTableProvider.TableType.MIT");
     }
 
