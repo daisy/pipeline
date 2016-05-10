@@ -17,12 +17,17 @@
  */
 package org.daisy.braille.api.embosser;
 
+import org.daisy.braille.api.factory.FactoryProperties;
 import org.daisy.braille.api.factory.Provider;
 
 /**
  *
  * @author Bert Frees
  */
-public interface FileFormatProvider extends Provider<FileFormat> {
+public interface FileFormatProvider extends Provider<FactoryProperties> {
+	
+	public void setCreatedWithSPI();
 
+	public FileFormat newFactory(String identifier);
+	
 }
