@@ -23,7 +23,8 @@
 	<xsl:param name="volume-toc" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>
-	<xsl:param name="table-split-columns" select="10"/>
+	<xsl:param name="matrix-table-columns-max" select="10"/>
+	<xsl:param name="staircase-table-columns-max" select="10"/>
 
 	<xsl:param name="l10nLang" select="'en'"/>
 	<xsl:param name="l10nTocHeadline" select="'Table Of Contents'"/>

@@ -17,7 +17,8 @@
 	<xsl:param name="volume-toc" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>
-	<xsl:param name="table-split-columns" select="10"/>
+	<xsl:param name="matrix-table-columns-max" select="10"/>
+	<xsl:param name="staircase-table-columns-max" select="10"/>
 
 	<xsl:param name="l10nLang" select="'en'"/>
 	<xsl:param name="l10nTocHeadline" select="'Table Of Contents'"/>
@@ -353,19 +354,19 @@
 		<file-reference uri="dtbook_table_grid.xsl">
 			<xsl:copy-of select="document('dtbook_table_grid.xsl')"/>
 		</file-reference>
-		<xml-processor name="table-as-block">
-			<xsl:copy-of select="document('table-as-block.xsl')"/>
+		<xml-processor name="staircase">
+			<xsl:copy-of select="document('staircase-table.xsl')"/>
 		</xml-processor>
-		<xml-processor name="identity">
-			<xsl:copy-of select="document('identity.xsl')"/>
+		<xml-processor name="matrix">
+			<xsl:copy-of select="document('matrix-table.xsl')"/>
 		</xml-processor>
 		<renderer name="table-renderer">
-			<rendering-scenario processor="identity" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))">
-				<parameter name="table-split-columns" value="{$table-split-columns}"/>
+			<rendering-scenario processor="matrix" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))">
+				<parameter name="table-split-columns" value="{$matrix-table-columns-max}"/>
 				<parameter name="l10ntablepart" value="{$l10ntablepart}"/>
 			</rendering-scenario>
-			<rendering-scenario processor="table-as-block" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))">
-				<parameter name="table-split-columns" value="{$table-split-columns}"/>
+			<rendering-scenario processor="staircase" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))">
+				<parameter name="table-split-columns" value="{$staircase-table-columns-max}"/>
 				<parameter name="l10ntablepart" value="{$l10ntablepart}"/>
 			</rendering-scenario>
 		</renderer>
