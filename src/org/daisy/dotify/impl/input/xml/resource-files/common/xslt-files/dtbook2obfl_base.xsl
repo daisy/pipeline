@@ -6,6 +6,7 @@
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	
 	<xsl:param name="hyphenate" select="true()" as="xs:boolean"/>
+	<xsl:param name="show-print-page-breaks" as="xs:boolean" select="false()"/>
 
 	<xsl:template match="/"><obfl version="2011-1" hyphenate="{$hyphenate}"><xsl:attribute name="xml:lang"><xsl:value-of select="/dtb:dtbook/@xml:lang"/></xsl:attribute><xsl:call-template name="insertMetadata"/><xsl:call-template name="insertLayoutMaster"/><xsl:apply-templates/></obfl></xsl:template>
 	<xsl:template match="dtb:dtbook | dtb:book"><xsl:apply-templates/></xsl:template>
@@ -83,6 +84,9 @@
 				</xsl:if>
 			</xsl:variable>
 			<marker class="pagenum-turn" value="{$preceding-marker}"/>
+		</xsl:if>
+		<xsl:if test="$show-print-page-breaks">
+			<xsl:text> // </xsl:text>
 		</xsl:if>
 	</xsl:template>
 

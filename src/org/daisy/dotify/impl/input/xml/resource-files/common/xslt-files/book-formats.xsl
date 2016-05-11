@@ -17,6 +17,7 @@
 	<xsl:param name="volume-toc" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>
+	<xsl:param name="show-print-page-breaks" as="xs:boolean" select="false()"/>
 	<xsl:param name="matrix-table-columns-max" select="10"/>
 	<xsl:param name="staircase-table-columns-max" select="10"/>
 
@@ -55,6 +56,7 @@
 					</xsl:if>
 				</header>
 				<footer></footer>
+				<xsl:call-template name="margin-region"/>
 			</template>
 			<default-template>
 				<header>
@@ -69,6 +71,7 @@
 					</xsl:if>
 				</header>
 				<footer></footer>
+				<xsl:call-template name="margin-region"/>
 			</default-template>
 			<xsl:if test="$footnotesInFrontMatter>0">
 				<page-area align="bottom" max-height="10" collection="footnotes-front">
@@ -114,6 +117,7 @@
 					</xsl:if>
 				</header>
 				<footer></footer>
+				<xsl:call-template name="margin-region"/>
 			</template>
 			<default-template>
 				<header>
@@ -138,6 +142,7 @@
 					</xsl:if>
 				</header>
 				<footer></footer>
+				<xsl:call-template name="margin-region"/>
 			</default-template>
 			<xsl:if test="$footnotesNotInFrontMatter>0">
 				<page-area align="bottom" max-height="10" collection="footnotes">
@@ -158,6 +163,7 @@
 			<template use-when="(= (% $page 2) 0)">
 				<header><field><string value=""/></field></header>
 				<footer></footer>
+				<xsl:call-template name="margin-region"/>
 			</template>
 			<default-template>
 				<header>
@@ -169,6 +175,7 @@
 					<field><string value=""/></field>
 				</header>
 				<footer></footer>
+				<xsl:call-template name="margin-region"/>
 			</default-template>
 		</layout-master>
 		<layout-master name="notes" page-width="{$page-width}" 
@@ -187,6 +194,7 @@
 					</xsl:if>
 				</header>
 				<footer></footer>
+				<xsl:call-template name="margin-region"/>
 			</template>
 			<default-template>
 				<header>
@@ -201,6 +209,7 @@
 					</xsl:if>
 				</header>
 				<footer></footer>
+				<xsl:call-template name="margin-region"/>
 			</default-template>
 		</layout-master>
 		<layout-master name="cover" page-width="{$page-width}" 
@@ -212,6 +221,16 @@
 			</default-template>
 		</layout-master>
 	</xsl:function>
+	
+	<xsl:template name="margin-region">
+		<xsl:if test="$show-print-page-breaks">
+			<margin-region align="left" width="1">
+				<indicators>
+					<marker-indicator markers="pagenum" indicator="&#x2022;"/>
+				</indicators>
+			</margin-region>
+		</xsl:if>
+	</xsl:template>
 	
 	<xsl:function name="obfl:insertVolumeTemplate">
 		<xsl:param name="title"/>

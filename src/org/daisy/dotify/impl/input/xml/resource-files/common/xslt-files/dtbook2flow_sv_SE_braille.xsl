@@ -124,12 +124,6 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template match="dtb:pagenum">
-		<xsl:if test="$show-print-page-numbers">
-			<xsl:next-match/>
-		</xsl:if>
-	</xsl:template>
-	
 	<xsl:template match="dtb:noteref" priority="10">
 		<xsl:apply-templates select="." mode="inline-mode"/>
 		<xsl:variable name="afix">
