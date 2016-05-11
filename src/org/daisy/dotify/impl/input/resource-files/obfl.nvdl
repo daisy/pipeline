@@ -9,6 +9,7 @@
 					</anyNamespace>
 				</mode>
 				<context path="xml-processor" useMode="xslt"/>
+				<context path="file-reference" useMode="xslt"/>
 			</validate>
 		</anyNamespace>
 	</mode>

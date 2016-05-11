@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar ns="http://www.daisy.org/ns/2011/obfl" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
-  <!-- -->
   <define name="blockContents">
     <choice>
       <text/>
@@ -449,6 +448,9 @@
       <oneOrMore>
         <ref name="layout-master"/>
       </oneOrMore>
+      <zeroOrMore>
+      	<ref name="file-reference"/>
+      </zeroOrMore>
       <zeroOrMore>
         <ref name="xml-processor"/>
       </zeroOrMore>
@@ -1480,13 +1482,10 @@
   <define name="xml-data">
     <element name="xml-data">
       <ref name="attlist-xml-data"/>
-      <!--
-      <choice>
-        <ref name="any"/>
-      </choice>-->
-      <choice>
-        <ref name="any_content"/>
-      </choice>
+    	<choice>
+    		<ref name="any_element"/>
+    		<ref name="any_obfl"/>
+    	</choice>
     </element>
   </define>
   <define name="attlist-xml-data" combine="interleave">
@@ -1512,6 +1511,9 @@
   <define name="rendering-scenario">
     <element name="rendering-scenario">
       <ref name="attlist-rendering-scenario"/>
+      <zeroOrMore>
+      	<ref name="parameter"/>
+      </zeroOrMore>
     </element>
   </define>
   <define name="attlist-rendering-scenario">
@@ -1527,28 +1529,38 @@
       </attribute>
     </optional>
   </define>
+  <define name="parameter">
+  	<element name="parameter">
+  		<ref name="attlist-parameter"/>
+  	</element>
+  </define>
+  <define name="attlist-parameter">
+  	<attribute name="name">
+  		<data type="string"/>
+  	</attribute>
+  	<attribute name="value">
+  		<data type="string"/>
+  	</attribute>
+  </define>
+  <define name="file-reference">
+  	<element name="file-reference">
+  		<ref name="attlist-file-reference"/>
+  		<choice>
+  			<ref name="any_content"/>
+  		</choice>
+  	</element>
+  </define>
+  <define name="attlist-file-reference">
+		<attribute name="uri">
+			<data type="string"/>
+		</attribute>
+  </define>
   <define name="xml-processor">
     <element name="xml-processor">
       <ref name="attlist-xml-processor"/>
       <choice>
         <ref name="any_content"/>
       </choice>
-<!--
-            <include href="xslt20.rng"/>
-            <define name="processor.content">
-              <parentRef name="xml-processor"></parentRef>
-            </define>-->
-           
-
-        <!--
-        <element name="stylesheet" ns="http://www.w3.org/1999/XSL/Transform">
-          <ref name="any_content"/>
-        </element>
-        <ref name="stylesheet.element"/>
-        <ref name="transform.element"/>
-        <ref name="literal-result-element-as-stylesheet"/>-->
-        <!--<ref name="table"/>
-      </choice>-->
     </element>
   </define>
   <define name="attlist-xml-processor">
