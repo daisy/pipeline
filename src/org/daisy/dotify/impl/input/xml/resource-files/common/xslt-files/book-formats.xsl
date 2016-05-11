@@ -17,6 +17,7 @@
 	<xsl:param name="volume-toc" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>
+	<xsl:param name="table-split-columns" select="10"/>
 
 	<xsl:param name="l10nLang" select="'en'"/>
 	<xsl:param name="l10nTocHeadline" select="'Table Of Contents'"/>
@@ -28,6 +29,7 @@
 	<xsl:param name="l10nEndnotesHeading" select="'Footnotes'"/>
 	<xsl:param name="l10nEndnotesPageStart" select="'Page {0}'"/>
 	<xsl:param name="l10nEndnotesPageHeader" select="'Footnotes'"/>
+	<xsl:param name="l10ntablepart" select="'Table part'"/>
 		
 	<xsl:function name="obfl:insertLayoutMaster">
 		<xsl:param name="footnotesInFrontMatter" as="xs:integer"/> 
@@ -358,8 +360,14 @@
 			<xsl:copy-of select="document('identity.xsl')"/>
 		</xml-processor>
 		<renderer name="table-renderer">
-			<rendering-scenario processor="identity" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))"/>
-			<rendering-scenario processor="table-as-block" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))"/>
+			<rendering-scenario processor="identity" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))">
+				<parameter name="table-split-columns" value="{$table-split-columns}"/>
+				<parameter name="l10ntablepart" value="{$l10ntablepart}"/>
+			</rendering-scenario>
+			<rendering-scenario processor="table-as-block" cost="(+ (* 100 $forced-break-count) $total-height (/ (- {$page-width} $min-block-width) {$page-width}))">
+				<parameter name="table-split-columns" value="{$table-split-columns}"/>
+				<parameter name="l10ntablepart" value="{$l10ntablepart}"/>
+			</rendering-scenario>
 		</renderer>
 	</xsl:function>
 

@@ -14,7 +14,6 @@
 	xmlns:axsl="http://www.w3.org/1999/XSL/TransformAlias">
 
 	<xsl:import href="dtbook2obfl_layout.xsl" />
-	<xsl:import href="dtbook_table_grid.xsl" />
 	<xsl:import href="book-formats.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:namespace-alias stylesheet-prefix="axsl" result-prefix="xsl"/>
@@ -318,19 +317,9 @@
 	<xsl:template match="dtb:table">
 		<xml-data renderer="table-renderer" xmlns:dotify="http://brailleapps.github.io/ns/dotify">
 			<dotify:node>
-				<block keep="all" keep-with-next="1"><xsl:value-of select="concat('== ', $l10ntable, ' ')"/><leader position="100%" pattern="="/></block>
-				<xsl:variable name="table">
-					<xsl:apply-templates select="." mode="splitTable">
-						<xsl:with-param name="maxColumns" select="$table-split-columns"/>
-					</xsl:apply-templates>
-				</xsl:variable>
+				<block keep="all" keep-with-next="1"><xsl:value-of select="concat('== ', $l10ntable, ' ')"/><leader position="100%" pattern="="/></block>			
 				<xsl:apply-templates select="dtb:caption"/>
-				<xsl:for-each select="$table/dtb:table">
-					<xsl:apply-templates select="." mode="matrixTable"/>
-					<xsl:if test="following-sibling::dtb:table">
-						<block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ntablepart, ' ')"/><leader position="100%" pattern=":"/></block>
-					</xsl:if>
-				</xsl:for-each>
+				<xsl:apply-templates select="." mode="matrixTable"/>
 				<block><leader align="right" position="100%" pattern="="/></block>
 				<xsl:apply-templates select="descendant::dtb:pagenum"/>
 			</dotify:node>
@@ -342,7 +331,7 @@
 			<xsl:choose>
 				<xsl:when test="dtb:thead"> 
 					<thead>
-						<xsl:apply-templates select="dtb:thead"/>
+						<xsl:apply-templates select="dtb:thead/dtb:tr" mode="matrixRow"/>
 					</thead>
 					<tbody>
 						<xsl:apply-templates select="dtb:tbody/dtb:tr" mode="matrixRow"/>

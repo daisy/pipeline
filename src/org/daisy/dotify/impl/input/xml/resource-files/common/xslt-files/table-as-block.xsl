@@ -10,6 +10,8 @@
 	<xsl:param name="debug" select="false()" as="axs:boolean"/>
 	<xsl:param name="rowspanName" select="'row-span'" as="axs:string"/>
 	<xsl:param name="colspanName" select="'col-span'" as="axs:string"/>
+	<xsl:param name="table-split-columns" select="8"/>
+	<xsl:param name="l10ntablepart" select="'Table part'"/>
 	
 	<xsl:template match="node()">
 		<xsl:copy>
@@ -24,9 +26,24 @@
 		</aobfl:xml-processor-result>
 	</xsl:template>
 	
-	<xsl:template match="aobfl:table">
+	<xsl:template match="*:table">
+		<xsl:variable name="table">
+			<xsl:apply-templates select="." mode="splitTable">
+				<xsl:with-param name="maxColumns" select="$table-split-columns"/>
+			</xsl:apply-templates>
+		</xsl:variable>
+		<xsl:for-each select="$table/*:table">
+			<xsl:apply-templates select="." mode="asBlock"/>
+			<xsl:if test="following-sibling::*:table">
+				<aobfl:block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ntablepart, ' ')"/><aobfl:leader position="100%" pattern=":"/></aobfl:block>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:template>
+	
+	<xsl:template match="aobfl:table" mode="asBlock">
 		<xsl:variable name="grid">
-			<xsl:apply-templates select="." mode="makeGrid"/>
+			<xsl:apply-templates select="." mode="makeGrid">
+			</xsl:apply-templates>
 		</xsl:variable>
 		<xsl:variable name="sortedGrid">
 			<xsl:for-each select="$grid/tmp:cell">

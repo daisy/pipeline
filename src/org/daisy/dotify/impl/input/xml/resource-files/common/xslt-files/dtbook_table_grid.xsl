@@ -90,13 +90,14 @@
 						<xsl:when test="$cellEnd">
 							<xsl:value-of select="$cellEnd/@col-offset+1"/>
 						</xsl:when>
-						<xsl:otherwise>
+						<xsl:when test="@*[name()=$colspanName]">
 							<xsl:value-of select="@*[name()=$colspanName]"/>
-						</xsl:otherwise>
+						</xsl:when>
+						<xsl:otherwise>1</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
 				<xsl:if test="@*[name()=$colspanName] or $colspan>1"> 
-					<xsl:attribute name="colspan" select="$colspan"/>
+					<xsl:attribute name="{$colspanName}" select="$colspan"/>
 				</xsl:if>
 				<xsl:apply-templates select="node()" mode="makeSplitTable">
 					<xsl:with-param name="grid" select="$grid"/>
@@ -155,7 +156,7 @@
 	<xsl:template match="*[self::*:td or self::*:th]" mode="gridBuilderStart">
 		<xsl:param name="table-id" required="yes"/>
 		<xsl:param name="gridInput" select="/.."/> <!-- Defaults to an empty node -->
-		<xsl:variable name="gy" select="ancestor::*:tr/count(preceding-sibling::*:tr)+1"/>
+		<xsl:variable name="gy" select="ancestor::*:tr/count(preceding::*:tr[ancestor::*:table[generate-id()=$table-id]])+1"/>
 		<xsl:variable name="gx">
 			<xsl:call-template name="findGridX">
 				<xsl:with-param name="grid" select="$gridInput"/>
