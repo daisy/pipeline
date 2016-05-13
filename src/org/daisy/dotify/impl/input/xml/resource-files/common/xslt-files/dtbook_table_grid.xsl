@@ -18,6 +18,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:dotify="http://brailleapps.github.io/ns/dotify"
+	xmlns:aobfl="http://www.daisy.org/ns/2011/obfl"
 	xmlns:tmp="http://brailleapps.github.io/ns/dotify/result"
 	exclude-result-prefixes="xs dotify">
 
@@ -56,10 +57,16 @@
 		<xsl:param name="size" select="1"/>
 		<xsl:variable name="end" select="$start+$size"/>
 		<xsl:if test="$start&lt;=$grid/tmp:summary/@grid-width">
-			<xsl:apply-templates select="." mode="makeSplitTable">
-				<xsl:with-param name="grid" select="$grid"/>
-				<xsl:with-param name="start" select="$start"/>
-				<xsl:with-param name="end" select="$end"/>
+			<xsl:variable name="result">
+				<xsl:apply-templates select="." mode="makeSplitTable">
+					<xsl:with-param name="grid" select="$grid"/>
+					<xsl:with-param name="start" select="$start"/>
+					<xsl:with-param name="end" select="$end"/>
+				</xsl:apply-templates>
+			</xsl:variable>
+			<xsl:variable name="actualSize" select="if ($end>$grid/tmp:summary/@grid-width) then $grid/tmp:summary/@grid-width - $start else $size"/>
+			<xsl:apply-templates select="$result" mode="cleanTable">
+				<xsl:with-param name="grid-width" select="$actualSize"/>
 			</xsl:apply-templates>
 			<xsl:apply-templates select="." mode="tableSplitIterator">
 				<xsl:with-param name="grid" select="$grid"/>
@@ -118,6 +125,68 @@
 				<xsl:with-param name="grid" select="$grid"/>
 				<xsl:with-param name="start" select="$start"/>
 				<xsl:with-param name="end" select="$end"/>
+			</xsl:apply-templates>
+		</xsl:copy>
+	</xsl:template>
+	
+	<!-- Add dummy cells in rows that have been emptied in splitting. -->
+	<xsl:template match="*:tr[not(descendant::node()[not(self::text() and normalize-space(.)='')])]" mode="cleanTable">
+		<xsl:param name="grid-width" select="1"/>
+		<xsl:copy>
+			<xsl:copy-of select="@*"/>
+			<xsl:apply-templates select="ancestor::*:table/descendant::*[self::*:td or self::*:th][1]" mode="insertEmptyCell">
+				<xsl:with-param name="it" select="$grid-width"/>
+			</xsl:apply-templates>
+		</xsl:copy>
+	</xsl:template>
+	
+	<xsl:template match="*:td | *:th" mode="insertEmptyCell">
+		<xsl:param name="it" required="yes"/>
+		<xsl:copy> 
+			<aobfl:style name="table-cell-continued"/>
+		</xsl:copy>
+		<xsl:if test="$it>1">
+			<xsl:apply-templates select="." mode="insertEmptyCell">
+				<xsl:with-param name="it" select="$it - 1"/>
+			</xsl:apply-templates>
+		</xsl:if>
+	</xsl:template>
+	
+	<!-- Reduce rowspan for rows with cells that all have a minimum rowspan > 1 to account for empty cells added above -->
+	<xsl:template match="*:tr[min(descendant::*[self::*:td or self::*:th]/(if (@*[name()=$rowspanName]) then @*[name()=$rowspanName] else 1))>1]" mode="cleanTable">
+		<xsl:param name="grid-width"/>
+		<xsl:variable name="minRowSpan" select="min(descendant::*[self::*:td or self::*:th]/(if (@*[name()=$rowspanName]) then @*[name()=$rowspanName] else 1))"/>
+		<xsl:copy>
+			<xsl:copy-of select="@*"/>
+			<xsl:apply-templates mode="cleanTable">
+				<xsl:with-param name="reduceRowSpan" select="$minRowSpan - 1"/>
+				<xsl:with-param name="grid-width" select="$grid-width"/>
+			</xsl:apply-templates>
+		</xsl:copy>
+	</xsl:template>
+	
+	<xsl:template match="*:td|*:th" mode="cleanTable">
+		<xsl:param name="grid-width"/>
+		<xsl:param name="reduceRowSpan" select="0"/>
+		<xsl:copy>
+			<xsl:copy-of select="@*[not(name()=$rowspanName)]"/>
+			<xsl:if test="@*[name()=$rowspanName]">
+				<xsl:attribute name="{$rowspanName}" select="@*[name()=$rowspanName]-$reduceRowSpan"/>
+			</xsl:if>
+			<xsl:apply-templates mode="cleanTable">
+				<xsl:with-param name="grid-width" select="$grid-width"/>
+			</xsl:apply-templates>
+		</xsl:copy>
+	</xsl:template>
+	
+	<xsl:template match="*|processing-instruction()|comment()" mode="cleanTable">
+		<xsl:param name="reduceRowSpan" select="0"/>
+		<xsl:param name="grid-width"/>
+		<xsl:copy>
+			<xsl:copy-of select="@*"/>
+			<xsl:apply-templates mode="cleanTable">
+				<xsl:with-param name="reduceRowSpan" select="$reduceRowSpan"/>
+				<xsl:with-param name="grid-width" select="$grid-width"/>
 			</xsl:apply-templates>
 		</xsl:copy>
 	</xsl:template>
