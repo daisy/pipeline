@@ -46,6 +46,7 @@ import org.daisy.dotify.impl.input.LayoutEngineTask;
 public class DotifyTaskSystem implements TaskSystem {
 	final static String MARK_CAPITAL_LETTERS = "mark-capital-letters";
 	final static String HYPHENATE = "hyphenate";
+	final static String TRANSLATE = "translate";
 	final static String REMOVE_STYLES = "remove-styles";
 	/**
 	 * Specifies a location where the intermediary obfl output should be stored
@@ -135,12 +136,12 @@ public class DotifyTaskSystem implements TaskSystem {
 			try {
 				if (Keys.PEF_FORMAT.equals(outputFormat)) {
 					// additional braille modes here...
-					translatorMode = BrailleTranslatorFactory.MODE_UNCONTRACTED;
+					translatorMode = p2.getProperty(TRANSLATE, BrailleTranslatorFactory.MODE_UNCONTRACTED);
 					PagedMediaWriterFactory pmf = pmw.getFactory(MediaTypes.PEF_MEDIA_TYPE);
 					paged = pmf.newPagedMediaWriter();
 					paged.prepare(asMetadata(p2));
 				} else {
-					translatorMode = BrailleTranslatorFactory.MODE_BYPASS;
+					translatorMode = p2.getProperty(TRANSLATE, BrailleTranslatorFactory.MODE_BYPASS);
 					paged = pmw.newPagedMediaWriter(MediaTypes.TEXT_MEDIA_TYPE);
 				}
 			} catch (PagedMediaWriterConfigurationException e) {
