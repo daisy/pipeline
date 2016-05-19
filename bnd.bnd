@@ -10,7 +10,6 @@ Private-Package:  \
 	org.daisy.braille.consumer.paper,\
 	org.daisy.braille.consumer.table,\
 	org.daisy.braille.consumer.validator
-Bundle-Version: 3.0.1-SNAPSHOT
 Include-Resource: / = src/
 -sources: false
 Service-Component: *
