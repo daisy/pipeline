@@ -13,6 +13,8 @@ javadoc {
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
+def repoRevision = System.getenv("REPO_REVISION")!=null?System.getenv("REPO_REVISION"):repositoryRevision
+
 group = "org.daisy.braille"
 
 sourceSets {
@@ -58,7 +60,7 @@ bundle {
 		'Built-By': System.getProperty("user.name"),
 		'Built-On': new Date().format('yyyy-MM-dd'),
 		'Implementation-Title': "$releaseName",
-		'Repository-Revision': "$repositoryRevision",
+		'Repository-Revision': "$repoRevision",
 		'Repository-URL': "$repositoryURL"
 	]
 }
@@ -86,7 +88,7 @@ signing {
 
 uploadArchives {
 	//Only upload if a git hash is supplied. On Travis only upload snapshots.
-	enabled = repositoryRevision.size()==40 && (System.getenv("TRAVIS_BUILD_ID")==null || version.endsWith("SNAPSHOT"))
+	enabled = repoRevision.size()==40 && (System.getenv("TRAVIS_BUILD_ID")==null || version.endsWith("SNAPSHOT"))
 	repositories {
 		mavenDeployer {
 			if (isReleaseVersion) {
