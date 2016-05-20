@@ -102,10 +102,10 @@ uploadArchives {
 				name 'braille-utils.pef-tools'
 				packaging 'jar'
 				description 'Braille Utils PEF Tools'
-				url 'https://github.com/joeha480/brailleutils/'
+				url "$repositoryURL"
 				scm {
-					connection 'scm:git:https://github.com/joeha480/brailleutils.git'
-					developerConnection 'scm:git:https://github.com/joeha480/brailleutils.git'
+					connection "$repositorySCM"
+					developerConnection "$repositorySCM"
 					url "$repositoryURL"
 				}
                 licenses {
