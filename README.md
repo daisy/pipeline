@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/brailleapps/braille-utils.impl.svg?branch=master)](https://travis-ci.org/brailleapps/braille-utils.impl)
+
 ## braille-utils.imp ##
 This is the previous "catalog" code and contains all non-essential implementations, i.e. optional for using the "core" project's artifacts (i.e. interface implementations such as embossers and papers).
 
