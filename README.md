@@ -1,12 +1,23 @@
 [![Build Status](https://travis-ci.org/brailleapps/braille-utils.impl.svg?branch=master)](https://travis-ci.org/brailleapps/braille-utils.impl)
 
-## braille-utils.imp ##
-This is the previous "catalog" code and contains all non-essential implementations, i.e. optional for using the "core" project's artifacts (i.e. interface implementations such as embossers and papers).
+# braille-utils.imp #
+Provides embosser, table and paper implementations for the purpose of communicating with embossers.
 
-_The following paragraphs will be subject to revision in the near future, but are currently valid._
+## Using ##
+Download the [latest release](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22braille-utils.impl%22) from maven central, add it to your runtime environment.
+Access the implementations via the following APIs in [braille-utils.api](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22braille-utils.api%22):
+  - `EmbosserCatalog`
+  - `TableCatalog`
+  - `PaperCatalog`
+  
+_Or_, in an OSGi environment, use:
+  - `EmbosserCatalogService`
+  - `TableCatalogService`
+  - `PaperCatalogService`
 
-This project has a relatively flat source structure. Each folder should contain _related implementation entities_. Each entity should be modeled on the domain of an organization using a two-part underscore separated string where the first part begins with the top level domain name of the organization and then the organization's domain. If possible, use the organization of the provider of the hardware (or software) that the implementations target. If this is not possible, use the organization of the provider of the implementations (your organization).
+## Building ##
+Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
 
-Note that this does not imply ownership or responsibility for the code in the package, but merely serves as identification and a structuring aid.
-
-The classes in each of these folders should be considered package specific. Implementations may not rely on other packages in the project. If a functionality can be regarded as _generic_, it should be placed in the core project instead.
+## Requirements & Compatibility ##
+- Requires JDK 7
+- Compatible with SPI and OSGi
