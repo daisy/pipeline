@@ -14,3 +14,6 @@ Build with `gradlew build`
 ## Requirements & Compatibility ##
 - Requires JDK 7
 - Implementations can be provided with SPI and/or OSGi
+
+## Javadoc ##
+Javadoc for the latest Braille Utils API development is available [here](http://brailleapps.github.io/braille-utils.api/latest/javadoc/).
