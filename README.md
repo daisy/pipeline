@@ -15,5 +15,5 @@ Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
 - Compatible with SPI and OSGi
 
 ## Javadoc ##
-Javadoc for the latest PEF tools is available [here](http://brailleapps.github.io/javadoc/braille-utils.pef-tools/).
+Javadoc for the latest PEF tools is available [here](http://brailleapps.github.io/braille-utils.pef-tools/latest/javadoc/).
 
