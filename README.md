@@ -15,4 +15,4 @@ Build with `gradlew build`
 - Implementations can be provided with SPI and/or OSGi
 
 ## Javadoc ##
-Javadoc for the latest Dotify Tasks API development is available [here](http://brailleapps.github.io/javadoc/dotify.task-api/).
+Javadoc for the latest Dotify Tasks API development is available [here](http://brailleapps.github.io/dotify.task-api/latest/javadoc/).
