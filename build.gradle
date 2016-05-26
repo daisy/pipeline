@@ -88,7 +88,7 @@ signing {
 
 uploadArchives {
 	//Only upload if a git hash is supplied. On Travis only upload snapshots.
-	enabled = repoRevision.size()==40 && (System.getenv("TRAVIS_BUILD_ID")==null || version.endsWith("SNAPSHOT"))
+	enabled = repoRevision.size()==40 && System.getenv("TRAVIS_BUILD_ID")!=null
 	repositories {
 		mavenDeployer {
 			if (isReleaseVersion) {
