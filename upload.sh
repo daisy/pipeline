@@ -20,7 +20,7 @@ if [ "$pullrequest" = "false" ]; then
 		if [ -n "$SONATYPE_USER" ]; then
 			if [ -n "$SONATYPE_PASSWORD" ]; then
 				echo "Starting upload..."
-				./gradlew uploadArchives -PsonatypeUsername=$SONATYPE_USER -PsonatypePassword=$SONATYPE_PASSWORD -PrepositoryRevision=$revision
+				./gradlew uploadArchives -PsonatypeUsername=$SONATYPE_USER -PsonatypePassword=$SONATYPE_PASSWORD -PrepositoryRevision=$revision -Psigning.keyId=$SIGNING_KEY -Psigning.password=$SIGNING_PASSWORD -Psigning.secretKeyRingFile=secring.gpg
 			else
 				echo "SONATYPE_PASSWORD not set. Skipping upload."
 			fi
