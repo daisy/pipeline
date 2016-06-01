@@ -280,7 +280,16 @@ public class BlockProperties implements Cloneable {
 			return this;
 		}
 		
+		/**
+		 * Sets the underline pattern for the block. This should be either a
+		 * single-character string, or null for no underlining.
+		 * @param value the value
+		 * @return returns this object
+		 */
 		public Builder underlineStyle(String value) {
+			if (value != null && value.length() != 1) {
+				throw new IllegalArgumentException("Value should be either null or a single-character string, but got: " + value);
+			}
 			this.underlineStyle = value;
 			return this;
 		}
