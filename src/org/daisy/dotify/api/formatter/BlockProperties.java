@@ -27,6 +27,7 @@ public class BlockProperties implements Cloneable {
 	private final BlockPosition verticalPosition;
 	private final TextBorderStyle textBorderStyle;
 	private final TextBlockProperties textBlockProps;
+	private final String underlineStyle;
 
 	/**
 	 * The Builder is used when creating a BlockProperties instance.
@@ -54,6 +55,7 @@ public class BlockProperties implements Cloneable {
 		private Position verticalPosition = null;
 		private VerticalAlignment verticalAlignment = VerticalAlignment.AFTER;
 		private TextBorderStyle textBorderStyle = null;
+		private String underlineStyle = null;
 		private TextBlockProperties.Builder textBlockPropsBuilder = new TextBlockProperties.Builder();
 		
 		/**
@@ -278,6 +280,11 @@ public class BlockProperties implements Cloneable {
 			return this;
 		}
 		
+		public Builder underlineStyle(String value) {
+			this.underlineStyle = value;
+			return this;
+		}
+		
 		/**
 		 * Sets the orphans property
 		 * @param value the value
@@ -337,6 +344,7 @@ public class BlockProperties implements Cloneable {
 			verticalPosition = null;
 		}
 		textBorderStyle = builder.textBorderStyle;
+		underlineStyle = builder.underlineStyle;
 	}
 
 	/**
@@ -483,6 +491,10 @@ public class BlockProperties implements Cloneable {
 		return textBorderStyle;
 	}
 	
+	public String getUnderlineStyle() {
+		return underlineStyle;
+	}
+	
 	/**
 	 * Gets the minimum number of lines of a paragraph that must be
 	 * left at the bottom of a page. 
@@ -527,6 +539,7 @@ public class BlockProperties implements Cloneable {
 		result = prime * result + ((padding == null) ? 0 : padding.hashCode());
 		result = prime * result + ((textBlockProps == null) ? 0 : textBlockProps.hashCode());
 		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
+		result = prime * result + ((underlineStyle == null) ? 0 : underlineStyle.hashCode());
 		result = prime * result + ((verticalPosition == null) ? 0 : verticalPosition.hashCode());
 		result = prime * result + widows;
 		return result;
@@ -594,6 +607,13 @@ public class BlockProperties implements Cloneable {
 				return false;
 			}
 		} else if (!textBorderStyle.equals(other.textBorderStyle)) {
+			return false;
+		}
+		if (underlineStyle == null) {
+			if (other.underlineStyle != null) {
+				return false;
+			}
+		} else if (!underlineStyle.equals(other.underlineStyle)) {
 			return false;
 		}
 		if (verticalPosition == null) {
