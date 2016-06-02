@@ -18,7 +18,6 @@ Private-Package: be_interpoint,\
 	org_daisy,\
 	pl_com_harpo,\
 	se_tpb
-Bundle-Version: 2.1.0-SNAPSHOT
 Include-Resource: / = src/
 -sources: false
 Service-Component: *
