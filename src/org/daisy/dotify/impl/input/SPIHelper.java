@@ -1,6 +1,7 @@
 package org.daisy.dotify.impl.input;
 
 import java.lang.reflect.Method;
+import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,17 +49,12 @@ public class SPIHelper {
 		return pagedMediaWriterFactory;
 	}
 	
+	//the following differs from the ones above because there isn't an interface for the maker implementation
+	//to hide behind and thus they cannot be used.
 	public static FormatterEngineFactoryService getFormatterEngineFactoryService() {
-		//FIXME: this works by accident, the FormatterEngineMaker does NOT implement FormatterEngineFactoryService
-		//see https://github.com/joeha480/dotify/issues/160
-		if (formatterEngingeFactory ==null) {
-			Object o = invoke("org.daisy.dotify.consumer.engine.FormatterEngineMaker");
-			try {
-				Method m2 = o.getClass().getMethod("getFactory");
-				formatterEngingeFactory = (FormatterEngineFactoryService)m2.invoke(o);
-			} catch (Exception e) {
-				logger.log(Level.WARNING, "Failed to invoke getFactory() with reflexion on: " + o.getClass(), e);
-			}
+		if (formatterEngingeFactory == null) {
+			formatterEngingeFactory = ServiceLoader.load(FormatterEngineFactoryService.class).iterator().next();
+			formatterEngingeFactory.setCreatedWithSPI();
 		}
 		return formatterEngingeFactory;
 	}
