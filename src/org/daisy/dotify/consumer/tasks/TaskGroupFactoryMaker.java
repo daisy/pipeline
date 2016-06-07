@@ -55,7 +55,9 @@ public class TaskGroupFactoryMaker implements TaskGroupFactoryMakerService {
 		{
 			Iterator<TaskGroupFactory> i = ServiceLoader.load(TaskGroupFactory.class).iterator();
 			while (i.hasNext()) {
-				ret.addFactory(i.next());
+				TaskGroupFactory factory = i.next();
+				factory.setCreatedWithSPI();
+				ret.addFactory(factory);
 			}
 		}
 		return ret;
