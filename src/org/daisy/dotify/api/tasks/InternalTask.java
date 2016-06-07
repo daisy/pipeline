@@ -1,5 +1,7 @@
 package org.daisy.dotify.api.tasks;
 
+import java.util.Collections;
+import java.util.List;
 
 /**
  * <p>Base class for internal tasks. This class is only
@@ -28,6 +30,14 @@ public class InternalTask {
 	 */
 	public String getName() {
 		return name;
+	}
+	
+	/**
+	 * Gets a list of parameters applicable to this instance
+	 * @return returns a list of parameters
+	 */
+	public List<TaskOption> getOptions() {
+		return Collections.emptyList();
 	}
 
 }

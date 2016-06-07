@@ -33,6 +33,6 @@ public interface TaskGroup {
 	 * @return returns a list of InternalTasks
 	 * @throws TaskSystemException throws TaskSystemException if something goes wrong when compiling the task group
 	 */
-	public InternalTaskGroup compile(Map<String, Object> parameters) throws TaskSystemException;
+	public List<InternalTask> compile(Map<String, Object> parameters) throws TaskSystemException;
 
 }
