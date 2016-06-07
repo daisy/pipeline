@@ -24,5 +24,12 @@ public abstract class ExpandingTask extends InternalTask { //NOPMD
 	 * @throws InternalTaskException throws InternalTaskException if something goes wrong.
 	 */
 	public abstract InternalTaskGroup resolve(File input) throws InternalTaskException;
+	
+	/**
+	 * Resolves the task into other tasks based on the contents of the <code>input</code>.
+	 * @param input annotated input file
+	 * @throws InternalTaskException throws InternalTaskException if something goes wrong.
+	 */
+	public abstract InternalTaskGroup resolve(AnnotatedFile input) throws InternalTaskException;
 
 }

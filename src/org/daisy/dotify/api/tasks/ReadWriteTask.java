@@ -25,5 +25,14 @@ public abstract class ReadWriteTask extends InternalTask { //NOPMD
 	 * @throws InternalTaskException throws InternalTaskException if something goes wrong.
 	 */
 	public abstract void execute(File input, File output) throws InternalTaskException;
+	
+	/**
+	 * 
+	 * @param input input file
+	 * @param output output file
+	 * @return returns the annotated output file
+	 * @throws InternalTaskException
+	 */
+	public abstract AnnotatedFile execute(AnnotatedFile input, File output) throws InternalTaskException;
 
 }
