@@ -110,10 +110,10 @@ uploadArchives {
                 name 'dotify.hyphenator.impl'
                 packaging 'jar'
                 description 'Dotify Hyphenator'
-                url 'https://github.com/joeha480/dotify/'
+                url "$repositoryURL"
                 scm {
-                    connection 'scm:git:https://github.com/joeha480/dotify.git'
-                    developerConnection 'scm:git:https://github.com/joeha480/dotify.git'
+                    connection "$repositorySCM"
+                    developerConnection "$repositorySCM"
                     url "$repositoryURL"
                 }
                 licenses {
