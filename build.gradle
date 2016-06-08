@@ -60,6 +60,29 @@ task updateBndVersion() << {
 	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
 }
 
+def matchesPackageInfo() {
+	def v = (version =~ /([\d]+\.[\d]+)/)[0][1]
+	//println v
+	FileTree tree = fileTree(dir: 'src')
+	tree.include('**/packageinfo')
+	def hasMatch = false;
+	tree.each {File f ->
+    	String contents = f.getText('UTF-8')
+    	hasMatch |= contents.matches("version \\Q$v\\E")
+	}
+	return hasMatch
+}
+
+// this is executed during the configuration phase
+task verifyPackageInfo() {
+	def hasPackageInfo = matchesPackageInfo()
+	//println hasPackageInfo
+	if (!hasPackageInfo) {
+		def v = (version =~ /([\d]+\.[\d]+)/)[0][1]
+		throw new GradleException("No packageinfo matching bundle version: $v")
+	}
+}
+
 bundle {
     instructions << [
 		//must use file() to resolve against the build.gradle in Eclipse
