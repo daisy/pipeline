@@ -1,7 +1,41 @@
+apply plugin: 'java'
 apply plugin: "maven"
 apply plugin: "signing"
 //custom plugins
 apply plugin: "org.dm.bundle"
+
+group = 'org.daisy.dotify'
+
+sourceSets {
+	main {	java { srcDir 'src' }	resources { srcDir 'src' } }
+	test {	java { srcDir 'test' }	resources { srcDir 'test' } }
+}
+
+configurations {
+	provided
+	compile { extendsFrom provided }
+}
+
+/* Run gradle with JDK 1.7 or set bootstrap classpath, e.g.:
+	options.bootClasspath = "/usr/lib/jvm/java-7-openjdk/jre/lib/rt.jar" */
+compileJava {
+    options.encoding = 'UTF-8'
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+}
+
+compileTestJava {
+	options.encoding = 'UTF-8'
+	sourceCompatibility = 1.7
+	targetCompatibility = 1.7
+}
+
+def repoRevision = System.getenv("REPO_REVISION")!=null?System.getenv("REPO_REVISION"):repositoryRevision
+
+javadoc {
+	options.encoding = 'UTF-8'
+	options.links('http://docs.oracle.com/javase/7/docs/api/')
+}
 
 repositories {
     mavenCentral()
@@ -32,7 +66,7 @@ bundle {
         "-include": file('bnd.bnd'),
         'Built-By': System.getProperty("user.name"),
         'Built-On': new Date().format('yyyy-MM-dd'),
-        'Repository-Revision': "$repositoryRevision",
+        'Repository-Revision': "$repoRevision",
         'Repository-URL': "$repositoryURL"
     ]
 }
@@ -60,7 +94,7 @@ signing {
 
 uploadArchives {
 	//Only upload if a git hash is supplied. On Travis only upload snapshots.
-	enabled = repositoryRevision.size()==40 && (System.getenv("TRAVIS_BUILD_ID")==null || version.endsWith("SNAPSHOT"))
+	enabled = repoRevision.size()==40 && (System.getenv("TRAVIS_BUILD_ID")==null || version.endsWith("SNAPSHOT"))
     repositories {
         mavenDeployer {
             if (isReleaseVersion) {
@@ -97,4 +131,8 @@ uploadArchives {
             }
         }
     }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.11'
 }
