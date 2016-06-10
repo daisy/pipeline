@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -39,6 +40,35 @@ public class SplitPointHandlerTest {
 		assertTrue(bp.isHardBreak());
 	}
 
+	@Test
+	public void testHardBreakWithCost_01() {
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
+		bph.setCost(new SplitPointCost<DummySplitPoint>(){
+			@Override
+			public double getCost(List<DummySplitPoint> units, int breakpoint) {
+				return breakpoint==1?0:100;
+			}});
+		SplitPoint<DummySplitPoint> bp = bph.split(4, true, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
+		assertEquals("" + bp.getHead().size(), Arrays.asList(c, c), bp.getHead());
+		assertEquals(Arrays.asList(c, c, c, c, c, c, c, c), bp.getTail());
+		assertTrue(bp.isHardBreak());
+	}
+	
+	@Test
+	public void testHardBreakWithCost_02() {
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
+		bph.setCost(new SplitPointCost<DummySplitPoint>(){
+			double[] values = {4, 5, 3, 1, 2, 4, 5, 100, 12, 1};
+			@Override
+			public double getCost(List<DummySplitPoint> units, int breakpoint) {
+				return values[breakpoint];
+			}});
+		SplitPoint<DummySplitPoint> bp = bph.split(6, true, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
+		assertEquals("" + bp.getHead().size(), Arrays.asList(c, c, c, c), bp.getHead());
+		assertEquals(Arrays.asList(c, c, c, c, c, c), bp.getTail());
+		assertTrue(bp.isHardBreak());
+	}
+	
 	@Test
 	public void testBreakBefore() {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();

@@ -17,12 +17,20 @@ import org.daisy.dotify.common.collection.SplitList;
 public class SplitPointHandler<T extends SplitPointUnit> {
 	private final List<T> EMPTY_LIST = Collections.emptyList();
 	private boolean trimTrailing;
+	private SplitPointCost<T> cost;
 	
 	/**
 	 * Creates a new split point handler.
 	 */
 	public SplitPointHandler() {
 		this.trimTrailing = true;
+		this.cost = new SplitPointCost<T>() {
+			@Override
+			public double getCost(List<T> units, int breakpoint) {
+				//the smaller the result, the higher the cost
+				return units.size()-breakpoint;
+			}
+		};
 	}
 	
 	@SafeVarargs
@@ -101,6 +109,27 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		this.trimTrailing = trimTrailing;
 	}
 	
+	/**
+	 * Gets the cost function
+	 * @return returns the cost function
+	 */
+	public SplitPointCost<T> getCost() {
+		return cost;
+	}
+	
+	/**
+	 * <p>Sets the cost function used when determining the optimal <i>forced</i> split point.</p>
+	 * <p>Note that the cost function is only used if there are no breakable units available.</p>
+	 * @param cost the cost function
+	 * @throws IllegalArgumentException if cost is null
+	 */
+	public void setCost(SplitPointCost<T> cost) {
+		if (cost==null) {
+			throw new IllegalArgumentException("Null not allowed.");
+		}
+		this.cost = cost;
+	}
+	
 	private SplitPoint<T> findBreakpoint(List<T> units, Supplements<T> map, boolean force, int startPos) {
 		int strPos = forwardSkippable(units, startPos);
 		// check next unit to see if it can be removed.
@@ -119,22 +148,22 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	
 	private SplitPoint<T> newBreakpointFromPosition(List<T> units, int strPos, Supplements<T> map, boolean force) {
 		// back up
-		int i=findBreakpointBefore(units, strPos);
+		BreakPointScannerResult result=findBreakpointBefore(units, strPos, cost);
 		List<T> head;
 		boolean hard = false;
 		int tailStart;
-		if (i<0) { // no breakpoint found, break hard 
+		if (result.lastBreakable<0) { // no breakpoint found, break hard 
 			if (force) {
 				hard = true;
-				head = units.subList(0, strPos+1);
-				tailStart = strPos+1;
+				head = units.subList(0, result.preferredForcePoint+1);
+				tailStart = result.preferredForcePoint+1;
 			} else {
 				head = EMPTY_LIST;
 				tailStart = 0;
 			}
 		} else {
-			head = units.subList(0, i+1);
-			tailStart = i+1;
+			head = units.subList(0, result.lastBreakable+1);
+			tailStart = result.lastBreakable+1;
 		}
 		return finalizeBreakpointFull(units, head, tailStart, map, hard);
 	}
@@ -268,15 +297,29 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 	}
 
-	static <T extends SplitPointUnit> int findBreakpointBefore(List<T> units, int strPos) {
-		int i = strPos;
-		while (i>=0) {
-			if (units.get(i).isBreakable()) {
+	static <T extends SplitPointUnit> BreakPointScannerResult findBreakpointBefore(List<T> units, int strPos, SplitPointCost<T> cost) {
+		BreakPointScannerResult res = new BreakPointScannerResult();
+		res.lastBreakable = strPos;
+		res.preferredForcePoint = strPos;
+		double currentCost = Double.MAX_VALUE;
+		while (res.lastBreakable>=0) {
+			if (units.get(res.lastBreakable).isBreakable()) {
 				break;
+			} else {
+				double c = cost.getCost(units, res.lastBreakable);
+				if (c<currentCost) { // this should always be true for the first unit
+					res.preferredForcePoint = res.lastBreakable;
+					currentCost = c;
+				}
 			}
-			i--;
+			res.lastBreakable--;
 		}
-		return i;
+		return res;
+	}
+	
+	private static class BreakPointScannerResult {
+		int lastBreakable;
+		int preferredForcePoint;
 	}
 	
 	static <T extends SplitPointUnit> float totalSize(List<T> units, Supplements<T> map) {
