@@ -42,7 +42,7 @@ public interface FormattingTypes {
 		// Note:	ODD_PAGE is supported via new sequence
 		// 			EVEN_PAGE is not explicitly supported 
 	/**
-	 * Defines keep types.
+	 * Defines rows in block keep types.
 	 */
 	public static enum Keep {
 		/**
@@ -51,8 +51,22 @@ public interface FormattingTypes {
 		AUTO,
 		/**
 		 * Keep all rows in a block
+		 * @deprecated
 		 */
-		ALL}
+		ALL,
+		/**
+		 * Keep all rows in a block on the same page
+		 */
+		PAGE,
+		/**
+		 * Keep the block on the same page and sheet
+		 */
+		SHEET,
+		/**
+		 * Keep block in the same page, sheet and volume
+		 */
+		VOLUME
+		}
 
 	/**
 	 * Defines alignment options.

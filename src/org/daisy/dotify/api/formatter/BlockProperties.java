@@ -24,6 +24,7 @@ public class BlockProperties implements Cloneable {
 	private final int keepWithPreviousSheets;
 	private final int keepWithNextSheets;
 	private final int blockIndent;
+	private final Integer volumeKeepPriority;
 	private final BlockPosition verticalPosition;
 	private final TextBorderStyle textBorderStyle;
 	private final TextBlockProperties textBlockProps;
@@ -52,6 +53,7 @@ public class BlockProperties implements Cloneable {
 		private int keepWithPreviousSheets = 0;
 		private int keepWithNextSheets = 0;
 		private int blockIndent = 0;
+		private Integer volumeKeepPriority = null;
 		private Position verticalPosition = null;
 		private VerticalAlignment verticalAlignment = VerticalAlignment.AFTER;
 		private TextBorderStyle textBorderStyle = null;
@@ -266,9 +268,23 @@ public class BlockProperties implements Cloneable {
 		}
 		
 		/**
+		 * Sets the volume keep priority for the block.
+		 * 
+		 * @param value a value between 1-9
+		 * @return returns "this" object
+		 */
+		public Builder volumeKeepPriority(Integer value) { 
+			if (value!=null && (value<1 || value>9)) {
+				throw new IllegalArgumentException("Value out of range [1, 9]: " + value);
+			}
+			this.volumeKeepPriority = value;
+			return this;
+		}
+		
+		/**
 		 * 
 		 * @param identifier
-		 * @return
+		 * @return returns "this" object
 		 */
 		public Builder identifier(String identifier) {
 			this.textBlockPropsBuilder.identifier(identifier);
@@ -345,6 +361,7 @@ public class BlockProperties implements Cloneable {
 		keepWithPreviousSheets = builder.keepWithPreviousSheets;
 		keepWithNextSheets = builder.keepWithNextSheets;
 		blockIndent = builder.blockIndent;
+		volumeKeepPriority = builder.volumeKeepPriority;
 		if (builder.verticalPosition != null) {
 			verticalPosition = new BlockPosition.Builder().
 				position(builder.verticalPosition).
@@ -398,6 +415,14 @@ public class BlockProperties implements Cloneable {
 	 */
 	public int getBlockIndent() {
 		return blockIndent;
+	}
+	
+	/**
+	 * Gets volume keep priority
+	 * @return returns the volume keep priority, or null if not set
+	 */
+	public Integer getVolumeKeepPriority() {
+		return volumeKeepPriority;
 	}
 	
 	/**
@@ -550,6 +575,7 @@ public class BlockProperties implements Cloneable {
 		result = prime * result + ((textBorderStyle == null) ? 0 : textBorderStyle.hashCode());
 		result = prime * result + ((underlineStyle == null) ? 0 : underlineStyle.hashCode());
 		result = prime * result + ((verticalPosition == null) ? 0 : verticalPosition.hashCode());
+		result = prime * result + ((volumeKeepPriority == null) ? 0 : volumeKeepPriority.hashCode());
 		result = prime * result + widows;
 		return result;
 	}
@@ -630,6 +656,13 @@ public class BlockProperties implements Cloneable {
 				return false;
 			}
 		} else if (!verticalPosition.equals(other.verticalPosition)) {
+			return false;
+		}
+		if (volumeKeepPriority == null) {
+			if (other.volumeKeepPriority != null) {
+				return false;
+			}
+		} else if (!volumeKeepPriority.equals(other.volumeKeepPriority)) {
 			return false;
 		}
 		if (widows != other.widows) {

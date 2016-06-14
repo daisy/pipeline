@@ -10,9 +10,18 @@ package org.daisy.dotify.api.formatter;
  * @author Joel Håkansson 
  */
 public class SequenceProperties {
+	public enum SequenceBreakBefore {
+		/**
+		 * No break
+		 */
+		AUTO,
+		/**
+		 * Start block in a new volume
+		 */
+		VOLUME};
 	private final String masterName;
 	private final Integer initialPageNumber;
-	
+	private final SequenceBreakBefore breakBefore;
 	/**
 	 * The Builder is used when creating a SequenceProperites instance 
 	 * @author Joel Håkansson
@@ -23,6 +32,7 @@ public class SequenceProperties {
 		
 		//Optional parameters
 		Integer initialPageNumber = null;
+		SequenceBreakBefore breakBefore = SequenceBreakBefore.AUTO;
 		
 		/**
 		 * Create a new Builder
@@ -45,6 +55,16 @@ public class SequenceProperties {
 		}
 		
 		/**
+		 * Set the break before property for the sequence.
+		 * @param value the break before type
+		 * @return returns "this" object
+		 */
+		public Builder breakBefore(SequenceBreakBefore value) {
+			this.breakBefore = value;
+			return this;
+		}
+		
+		/**
 		 * Build SequenceProperties using the current state of the Builder
 		 * @return returns a new SequenceProperties instance
 		 */
@@ -57,6 +77,7 @@ public class SequenceProperties {
 	protected SequenceProperties(Builder builder) {
 		this.masterName = builder.masterName;
 		this.initialPageNumber = builder.initialPageNumber;
+		this.breakBefore = builder.breakBefore;
 	}
 
 	/**
@@ -73,6 +94,14 @@ public class SequenceProperties {
 	 */
 	public Integer getInitialPageNumber() {
 		return initialPageNumber;
+	}
+	
+	/**
+	 * Get break before type
+	 * @return returns the break before type
+	 */
+	public SequenceBreakBefore getBreakBeforeType() {
+		return breakBefore;
 	}
 
 }
