@@ -272,6 +272,7 @@ public class BlockProperties implements Cloneable {
 		 * 
 		 * @param value a value between 1-9
 		 * @return returns "this" object
+		 * @throws IllegalArgumentException if the value is out of range
 		 */
 		public Builder volumeKeepPriority(Integer value) { 
 			if (value!=null && (value<1 || value>9)) {

@@ -53,6 +53,11 @@ public class FormatterConfiguration {
 			return this;
 		}
 		
+		/**
+		 * Adds a style to ignore
+		 * @param style a style to ignore
+		 * @return returns this builder
+		 */
 		public Builder ignoreStyle(String style) {
 			ignoredStyles.add(style);
 			return this;
@@ -118,6 +123,10 @@ public class FormatterConfiguration {
 		return marksCapitalLetters;
 	}
 	
+	/**
+	 * Gets a set of ignored styles
+	 * @return returns the set of ignored styles
+	 */
 	public Set<String> getIgnoredStyles() {
 		return ignoredStyles;
 	}
