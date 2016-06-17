@@ -334,7 +334,9 @@
       <attribute name="keep">
         <choice>
           <value>auto</value>
-          <value>all</value>
+          <value>page</value>
+          <value>sheet</value>
+          <value>volume</value>
         </choice>
       </attribute>
     </optional>
@@ -352,6 +354,17 @@
           <value>8</value>
           <value>9</value>
         </choice>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="volume-keep-priority">
+        <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0">
+          Indicates that the whole block should be kept in the same volume with the specified priority.
+        </documentation>
+        <data type="integer">
+          <param name="minInclusive">1</param>
+          <param name="maxInclusive">9</param>
+        </data>
       </attribute>
     </optional>
     <optional>
@@ -435,6 +448,14 @@
     </attribute>
     <optional>
       <attribute name="initial-page-number"/>
+    </optional>
+    <optional>
+      <attribute name="break-before">
+        <choice>
+          <value>auto</value>
+          <value>volume</value>
+        </choice>
+      </attribute>
     </optional>
     <ref name="textAtts"/>
   </define>

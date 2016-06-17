@@ -35,7 +35,7 @@
 		<xsl:for-each select="$table/*:table">
 			<xsl:apply-templates select="." mode="asBlock"/>
 			<xsl:if test="following-sibling::*:table">
-				<aobfl:block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ntablepart, ' ')"/><aobfl:leader position="100%" pattern=":"/></aobfl:block>
+				<aobfl:block keep="page" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ntablepart, ' ')"/><aobfl:leader position="100%" pattern=":"/></aobfl:block>
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>

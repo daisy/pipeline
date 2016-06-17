@@ -104,7 +104,7 @@
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
 			<xsl:attribute name="border-align">inner</xsl:attribute>
 		</xsl:if>
-		<xsl:attribute name="keep">all</xsl:attribute>
+		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 		<!--
@@ -122,7 +122,7 @@
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
 			<xsl:attribute name="border-align">inner</xsl:attribute>
 		</xsl:if>
-		<xsl:attribute name="keep">all</xsl:attribute>
+		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
@@ -135,7 +135,7 @@
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
 			<xsl:attribute name="border-align">inner</xsl:attribute>
 		</xsl:if>
-		<xsl:attribute name="keep">all</xsl:attribute>
+		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
@@ -149,7 +149,7 @@
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
 			<xsl:attribute name="border-align">inner</xsl:attribute>
 		</xsl:if>
-		<xsl:attribute name="keep">all</xsl:attribute>
+		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
@@ -158,7 +158,7 @@
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level4)]">
 			<xsl:attribute name="padding-bottom">1</xsl:attribute>
 		</xsl:if>
-		<xsl:attribute name="keep">all</xsl:attribute>
+		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
@@ -167,7 +167,7 @@
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level5)]">
 			<xsl:attribute name="padding-bottom">1</xsl:attribute>
 		</xsl:if>
-		<xsl:attribute name="keep">all</xsl:attribute>
+		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
@@ -176,14 +176,14 @@
 		<xsl:if test="(following-sibling::*[1])[not(self::dtb:level6)]">
 			<xsl:attribute name="padding-bottom">1</xsl:attribute>
 		</xsl:if>
-		<xsl:attribute name="keep">all</xsl:attribute>
+		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
 	<xsl:template match="dtb:h6" mode="apply-block-attributes">
 		<xsl:attribute name="padding-top">1</xsl:attribute>
 		<xsl:attribute name="padding-bottom">1</xsl:attribute>
-		<xsl:attribute name="keep">all</xsl:attribute>
+		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
@@ -369,7 +369,7 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 	
 	<!-- Override default processing -->
 	<xsl:template match="dtb:prodnote[ancestor::dtb:imggroup]" priority="10">
-		<block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10nimagedescription, ' ')"/><leader position="100%" pattern=":"/></block>
+		<block keep="page" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10nimagedescription, ' ')"/><leader position="100%" pattern=":"/></block>
 		<block>
 			<xsl:apply-templates/>
 		</block>
@@ -378,7 +378,7 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 	
 	<!-- Override default processing -->
 	<xsl:template match="dtb:caption[ancestor::dtb:imggroup]" priority="10">
-		<block keep="all" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ncaption, ' ')"/><leader position="100%" pattern=":"/></block>
+		<block keep="page" keep-with-next="1"><xsl:value-of select="concat(':: ', $l10ncaption, ' ')"/><leader position="100%" pattern=":"/></block>
 		<block>
 			<xsl:apply-templates/>
 		</block>
@@ -389,7 +389,7 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 	<xsl:template match="dtb:p" mode="block-mode" priority="10">
 		<xsl:variable name="tokens" select="tokenize(@class,' ')"/>
 		<xsl:if test="$tokens='precedingseparator'">
-			<block keep="all" keep-with-next="1" padding-top="1" padding-bottom="1"><xsl:text>---</xsl:text></block>
+			<block keep="page" keep-with-next="1" padding-top="1" padding-bottom="1"><xsl:text>---</xsl:text></block>
 		</xsl:if>
 		<block>
 			<xsl:if test="$tokens='precedingemptyline'">

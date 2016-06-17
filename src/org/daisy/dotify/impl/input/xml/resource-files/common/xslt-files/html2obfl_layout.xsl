@@ -109,7 +109,7 @@
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
 			<xsl:attribute name="border-align">inner</xsl:attribute>
 		</xsl:if>
-		<xsl:attribute name="keep">all</xsl:attribute>
+		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 		<xsl:if test="not($isEpub)">
@@ -132,7 +132,7 @@
 	<xsl:template match="html:p" mode="block-mode" priority="10">
 		<xsl:variable name="tokens" select="tokenize(@class, '\s+')"/>
 		<xsl:if test="$tokens='precedingseparator'">
-			<block keep="all" keep-with-next="1" padding-top="1" padding-bottom="1"><xsl:text>---</xsl:text></block>
+			<block keep="page" keep-with-next="1" padding-top="1" padding-bottom="1"><xsl:text>---</xsl:text></block>
 		</xsl:if>
 		<block>
 			<xsl:if test="$tokens='precedingemptyline'">

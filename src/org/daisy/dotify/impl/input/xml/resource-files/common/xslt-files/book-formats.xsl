@@ -252,10 +252,10 @@
 								</xsl:if>
 							</on-toc-start>
 							<on-volume-start use-when="(&amp; (> $volumes 1) (= $started-volume-number 1))">
-								<block keep="all" keep-with-next="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
+								<block keep="page" keep-with-next="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
 							</on-volume-start>
 							<on-volume-start use-when="(&amp; (> $volumes 1) (> $started-volume-number 1))">
-								<block keep="all" keep-with-next="1" padding-top="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
+								<block keep="page" keep-with-next="1" padding-top="1" padding-bottom="0"><evaluate expression="(format &quot;{$l10nTocVolumeStart}&quot; $started-volume-number)"/></block>
 							</on-volume-start>
 						</toc-sequence>
 						<xsl:copy-of select="$additionalPreContent"/>
@@ -306,13 +306,13 @@
 				<xsl:if test="$footnotesInFrontMatter>0">
 					<list-of-references collection="endnotes-front" range="volume">
 						<on-page-start>
-							<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
+							<block padding-top="1" keep="page" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
 						</on-page-start>
 					</list-of-references>
 					<xsl:if test="$footnotesNotInFrontMatter>0">
 						<list-of-references collection="endnotes-frontB" range="volume">
 							<on-page-start>
-								<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
+								<block padding-top="1" keep="page" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; (numeral-format roman $started-page-number))"/></block>
 							</on-page-start>
 						</list-of-references>
 					</xsl:if>
@@ -320,13 +320,13 @@
 				<xsl:if test="$footnotesNotInFrontMatter>0">
 					<list-of-references collection="endnotes" range="volume">
 						<on-page-start>
-							<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
+							<block padding-top="1" keep="page" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
 						</on-page-start>
 					</list-of-references>
 					<xsl:if test="$footnotesInFrontMatter>0">
 						<list-of-references collection="endnotesB" range="volume">
 							<on-page-start>
-								<block padding-top="1" keep="all" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
+								<block padding-top="1" keep="page" keep-with-next="1"><evaluate expression="(format &quot;{$l10nEndnotesPageStart}&quot; $started-page-number)"/></block>
 							</on-page-start>
 						</list-of-references>
 					</xsl:if>
