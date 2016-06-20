@@ -52,15 +52,17 @@ sourceSets.main {
 
 dependencies {
 	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-	compile 'org.daisy.dotify:dotify.api:2.7.0'
+	compile 'org.daisy.dotify:dotify.api:2.9.0'
 	compile 'org.daisy.dotify:dotify.task-api:2.1.0'
-	compile 'org.daisy.dotify:dotify.common:2.0.2'
+	compile 'org.daisy.dotify:dotify.common:2.1.0'
 	compile group: 'org.daisy.libs', name: 'jing', version: '20120724.0.0'	
 	compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {
 		exclude module: 'Saxon-HE'
 	}
 	testCompile group: "junit", name: "junit", version: "4.7"
-	testCompile 'org.daisy.braille:braille-utils.pef-tools:1.0.1'
+	testCompile ('org.daisy.braille:braille-utils.pef-tools:1.0.1') {
+		exclude module: 'Saxon-HE'
+	}
 	testCompile 'org.daisy.dotify:dotify.task-runner:1.0.1'
 }
 
