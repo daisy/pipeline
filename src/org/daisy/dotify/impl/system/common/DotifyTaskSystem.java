@@ -11,6 +11,7 @@ import org.daisy.dotify.api.tasks.InternalTask;
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
 import org.daisy.dotify.api.tasks.TaskGroupSpecification;
+import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.api.tasks.TaskSystem;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
@@ -64,10 +65,12 @@ public class DotifyTaskSystem implements TaskSystem {
 		RunParameters p = RunParameters.fromMap(pa);
 		HashMap<String, Object> h = new HashMap<>();
 		for (Object key : p.getKeys()) {
-			h.put(key.toString(), p.getProperty(key));
+			if (p.getProperty(key)!=null) {
+				h.put(key.toString(), p.getProperty(key));
+			}
 		}
 		
-		ArrayList<InternalTask> setup = new ArrayList<>();
+		List<InternalTask> setup = new ArrayList<>();
 
 		TaskGroup idts = imf.newTaskGroup(new TaskGroupSpecification(h.get(Keys.INPUT_FORMAT).toString(), "obfl", context));
 		setup.addAll(idts.compile(h));
@@ -81,6 +84,13 @@ public class DotifyTaskSystem implements TaskSystem {
 			setup.addAll(new LayoutEngine(new TaskGroupSpecification("obfl", outputFormat, context), pmw, fe).compile(h));
 		}
 		return setup;
+	}
+
+	@Override
+	public List<TaskOption> getOptions() {
+		List<TaskOption> ret = new ArrayList<>();
+		ret.add(new TaskOption.Builder(OBFL_OUTPUT_LOCATION).description("Path to store intermediary OBFL-file.").build());
+		return ret;
 	}
 
 }

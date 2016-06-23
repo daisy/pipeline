@@ -40,4 +40,8 @@ public class Epub3InputManagerFactory implements TaskGroupFactory {
 		return new Epub3InputManager(locator.getResourceLocator(spec.getLocale()), new CommonResourceLocator("resource-files/common"));
 	}
 
+	@Override
+	public void setCreatedWithSPI() {
+	}
+
 }

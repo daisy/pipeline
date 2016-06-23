@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.URL;
 import java.util.Map;
 
+import org.daisy.dotify.api.tasks.AnnotatedFile;
+import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
 import org.daisy.dotify.api.tasks.InternalTaskException;
 import org.daisy.dotify.api.tasks.ReadWriteTask;
 import org.daisy.dotify.common.xml.XMLTools;
@@ -35,13 +37,18 @@ public class XsltTask extends ReadWriteTask {
 	}
 
 	@Override
-	public void execute(File input, File output) throws InternalTaskException {
+	public AnnotatedFile execute(AnnotatedFile input, File output) throws InternalTaskException {
 		try {
-			XMLTools.transform(input, output, url, options, new net.sf.saxon.TransformerFactoryImpl());
+			XMLTools.transform(input.getFile(), output, url, options, new net.sf.saxon.TransformerFactoryImpl());
 		} catch (XMLToolsException e) {
 			throw new InternalTaskException("Error: ", e);
 		}
+		return new DefaultAnnotatedFile.Builder(output).extension("xslt").mediaType("application/xslt+xml").build();
+	}
 
+	@Override
+	public void execute(File input, File output) throws InternalTaskException {
+		execute(new DefaultAnnotatedFile.Builder(input).build(), output);
 	}
 
 }

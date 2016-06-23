@@ -9,6 +9,8 @@ import java.io.IOException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
+import org.daisy.dotify.api.tasks.AnnotatedFile;
+import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
 import org.daisy.dotify.api.tasks.InternalTaskException;
 import org.daisy.dotify.api.tasks.ReadWriteTask;
 import org.daisy.dotify.common.text.StringFilter;
@@ -37,7 +39,7 @@ public class TextNodeTask extends ReadWriteTask {
 	}
 
 	@Override
-	public void execute(File input, File output) throws InternalTaskException {
+	public AnnotatedFile execute(AnnotatedFile input, File output) throws InternalTaskException {
         XMLInputFactory inFactory = XMLInputFactory.newInstance();
 		inFactory.setProperty(XMLInputFactory.IS_COALESCING, Boolean.TRUE);        
         inFactory.setProperty(XMLInputFactory.IS_NAMESPACE_AWARE, Boolean.TRUE);
@@ -48,7 +50,7 @@ public class TextNodeTask extends ReadWriteTask {
 		TextNodeFilter tnf = null;
 
 		try {
-			tnf = new TextNodeFilter(inFactory.createXMLEventReader(new FileInputStream(input)), new FileOutputStream(output), filters);
+			tnf = new TextNodeFilter(inFactory.createXMLEventReader(new FileInputStream(input.getFile())), new FileOutputStream(output), filters);
 			tnf.filter();
 		} catch (FileNotFoundException e) {
 			throw new InternalTaskException("FileNotFoundException:", e);
@@ -59,7 +61,12 @@ public class TextNodeTask extends ReadWriteTask {
 				try { tnf.close(); } catch (IOException e) { }
 			}
 		}
+		return new DefaultAnnotatedFile.Builder(output).extension("xml").mediaType("application/xml").build();
+	}
 
+	@Override
+	public void execute(File input, File output) throws InternalTaskException {
+		execute(new DefaultAnnotatedFile.Builder(input).build(), output);
 	}
 
 }

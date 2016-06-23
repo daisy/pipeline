@@ -53,5 +53,9 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 	public TaskGroup newTaskGroup(TaskGroupSpecification spec) {
         return new XMLInputManager(locator.getResourceLocator(spec.getLocale()), new CommonResourceLocator("resource-files/common"));
 	}
+
+	@Override
+	public void setCreatedWithSPI() {
+	}
 	
 }

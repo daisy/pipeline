@@ -42,4 +42,8 @@ public class TextInputManagerFactory implements TaskGroupFactory {
 		return Collections.unmodifiableSet(specs);
 	}
 
+	@Override
+	public void setCreatedWithSPI() {
+	}
+
 }

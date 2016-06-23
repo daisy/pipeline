@@ -12,6 +12,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.daisy.dotify.api.tasks.AnnotatedFile;
 import org.daisy.dotify.api.tasks.InternalTaskException;
 import org.daisy.dotify.api.tasks.ReadOnlyTask;
 import org.daisy.dotify.common.xml.EntityResolverCache;
@@ -172,6 +173,11 @@ public class ValidatorTask extends ReadOnlyTask {
 						+")";
 			}
 		}
+	}
+
+	@Override
+	public void execute(AnnotatedFile input) throws InternalTaskException {
+		execute(input.getFile());
 	}
 
 }

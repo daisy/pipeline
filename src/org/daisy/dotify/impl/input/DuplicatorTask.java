@@ -3,6 +3,7 @@ package org.daisy.dotify.impl.input;
 import java.io.File;
 import java.io.IOException;
 
+import org.daisy.dotify.api.tasks.AnnotatedFile;
 import org.daisy.dotify.api.tasks.InternalTaskException;
 import org.daisy.dotify.api.tasks.ReadOnlyTask;
 import org.daisy.dotify.common.io.FileIO;
@@ -34,6 +35,11 @@ public class DuplicatorTask extends ReadOnlyTask {
 		} catch (IOException e) {
 			throw new InternalTaskException("Exception while copying file.", e);
 		}
+	}
+
+	@Override
+	public void execute(AnnotatedFile input) throws InternalTaskException {
+		execute(input.getFile());
 	}
 
 }

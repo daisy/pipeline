@@ -14,10 +14,13 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.daisy.dotify.api.tasks.AnnotatedFile;
+import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
 import org.daisy.dotify.api.tasks.ExpandingTask;
 import org.daisy.dotify.api.tasks.InternalTask;
 import org.daisy.dotify.api.tasks.InternalTaskException;
 import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.common.io.ResourceLocator;
 import org.daisy.dotify.common.io.ResourceLocatorException;
@@ -137,11 +140,11 @@ public class XMLInputManager implements TaskGroup {
 		}
 
 		@Override
-		public List<InternalTask> resolve(File input) throws InternalTaskException {
+		public List<InternalTask> resolve(AnnotatedFile input) throws InternalTaskException {
 			//String input = parameters.get(Keys.INPUT).toString();
 			String inputformat = null;
 			try {
-				XMLInfo peekResult = XMLTools.parseXML(input, true);
+				XMLInfo peekResult = XMLTools.parseXML(input.getFile(), true);
 				String rootNS = peekResult.getUri();
 				String rootElement = peekResult.getLocalName();
 				DefaultInputUrlResourceLocator p = DefaultInputUrlResourceLocator.getInstance();
@@ -185,9 +188,9 @@ public class XMLInputManager implements TaskGroup {
 			throw new InternalTaskException("Unable to open a configuration stream for the format.");
 		}
 		
-		private ArrayList<InternalTask> readConfiguration(ResourceLocator locator, String path) throws InternalTaskException, ResourceLocatorException {
+		private List<InternalTask> readConfiguration(ResourceLocator locator, String path) throws InternalTaskException, ResourceLocatorException {
 			URL t = locator.getResource(path);
-			ArrayList<InternalTask> setup = new ArrayList<>();
+			List<InternalTask> setup = new ArrayList<>();
 
 			try (InputStream propsStream = t.openStream()) {
 				logger.fine("Opening stream: " + t.getFile());
@@ -229,7 +232,18 @@ public class XMLInputManager implements TaskGroup {
 			}
 			return setup;
 		}
+
+		@Override
+		public List<InternalTask> resolve(File input) throws InternalTaskException {
+			return resolve(new DefaultAnnotatedFile.Builder(input).build());
+		}
 		
+	}
+
+	@Override
+	public List<TaskOption> getOptions() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

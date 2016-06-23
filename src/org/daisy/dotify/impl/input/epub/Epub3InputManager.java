@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.daisy.dotify.api.tasks.InternalTask;
 import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.common.io.ResourceLocator;
 import org.daisy.dotify.impl.input.xml.XMLInputManager;
@@ -24,10 +25,15 @@ public class Epub3InputManager implements TaskGroup {
 
 	@Override
 	public List<InternalTask> compile(Map<String, Object> parameters) throws TaskSystemException {
-		ArrayList<InternalTask> ret = new ArrayList<>();
+		List<InternalTask> ret = new ArrayList<>();
 		ret.add(new Epub3Task("Epub to HTML converter", (String)parameters.get("opf-path")));
 		ret.addAll(xml.compile(parameters));
 		return ret;
+	}
+
+	@Override
+	public List<TaskOption> getOptions() {
+		return null;
 	}
 
 }
