@@ -3,12 +3,12 @@ package org.daisy.dotify.tasks.runner;
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import org.daisy.dotify.api.tasks.InternalTask;
 import org.daisy.dotify.api.tasks.TaskSystemException;
-import org.daisy.dotify.common.io.TempFileHandler;
 
 /**
  * Utility class to run a list of tasks.
@@ -97,7 +97,7 @@ public class TaskRunner {
 		return new Builder(name);
 	}
 
-	public void runTasks(File input, File output, List<InternalTask> tasks) throws IOException, TaskSystemException {
+	public List<RunnerResult> runTasks(File input, File output, List<InternalTask> tasks) throws IOException, TaskSystemException {
 		Progress progress = new Progress();
 		logger.info(name + " started on " + progress.getStart());
 		int i = 0;
@@ -108,10 +108,10 @@ public class TaskRunner {
 							tempFileWriter!=null?tempFileWriter:new DefaultTempFileWriter.Builder().build()
 						:
 							null;
-		try (TempFileHandler fj = new TempFileHandler(input, output)) {
-			TaskRunnerCore itr = new TaskRunnerCore(fj, tempWriter);
+		List<RunnerResult> ret = new ArrayList<>();
+		try (TaskRunnerCore itr = new TaskRunnerCore(input, output, tempWriter)) {
 			for (InternalTask task : tasks) {
-				itr.runTask(task);
+				ret.addAll(itr.runTask(task));
 				i++;
 				progress.updateProgress(i/(double)tasks.size());
 				logger.info(nf.format(progress.getProgress()) + " done. ETA " + progress.getETA());
@@ -130,6 +130,7 @@ public class TaskRunner {
 			tempWriter.deleteTempFiles();
 		}
 		logger.info(name + " finished in " + Math.round(progress.timeSinceStart()/100d)/10d + " s");
+		return ret;
 	}
 
 }

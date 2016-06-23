@@ -44,7 +44,7 @@ repositories {
 
 dependencies {
 	compile "org.daisy.dotify:dotify.common:2.0.1"
-	compile 'org.daisy.dotify:dotify.task-api:2.1.0'
+	compile 'org.daisy.dotify:dotify.task-api:2.2.0'
 	
 	testCompile 'junit:junit:4.7'
 }
