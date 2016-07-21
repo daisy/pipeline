@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>target/cli/mac32</directory>
+      <outputDirectory>cli</outputDirectory>
+      <includes>
+        <include>dp2*</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>src/main/resources/cli</directory>
+      <outputDirectory>cli</outputDirectory>
+      <filtered>true</filtered>
+      <includes>
+        <include>config.yml</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</component>

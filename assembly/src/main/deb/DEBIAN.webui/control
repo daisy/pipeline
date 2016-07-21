@@ -1,0 +1,13 @@
+Package: daisy-pipeline2-webui
+Version: [[version]]
+Section: text
+Priority: optional
+Architecture: all
+Depends: lsb-base (>= 3.0-6), adduser (>= 3.9), java-runtime
+Maintainer: Romain Deltour <romain.deltour@gmail.com>
+Description: DAISY Pipeline 2
+ .
+ The DAISY Pipeline 2 is an open source framework for the automated processing of various
+ digital formats efficiently and economically. It intends to facilitate the production and
+ maintenance of accessible content for people with print disabilities.
+Homepage: http://www.daisy.org/pipeline2

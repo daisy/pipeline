@@ -1,0 +1,2 @@
+${pipeline.config}/config-logback.xml
+/etc/default/pipeline2d

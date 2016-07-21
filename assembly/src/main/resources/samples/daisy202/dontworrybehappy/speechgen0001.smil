@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "http://www.w3.org/TR/REC-SMIL/SMIL10.dtd" >
+<smil>
+	<head>
+		<meta name="ncc:generator" content="DMFC z3986-2005 to Daisy 2.02 (smil2smil v0.2)" />
+		<meta name="dc:format" content="Daisy 2.02" />
+		<meta name="dc:identifier" content="F00000" />
+		<meta name="dc:title" content="Don't Worry, Be Happy" />
+		<meta name="ncc:totalElapsedTime" content="0:00:00" />
+		<meta name="ncc:timeInThisSmil" content="0:00:22" />
+		<layout>
+			<region id="txtView" />
+		</layout>
+	</head>
+	<body>
+		<seq dur="21.773s">
+			<par endsync="last" id="doctitle">
+				<text id="doctitleText" src="content.html#h1classtitle" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=0.000s" clip-end="npt=2.658s" id="doctitleAudio" />
+			</par>
+			<par endsync="last" id="tcp1">
+				<text id="txtd1e9" src="content.html#dtb1" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=0.000s" clip-end="npt=2.658s" id="audd1e10" />
+			</par>
+			<par endsync="last" id="tcp2">
+				<text id="txtd1e12" src="content.html#dtb2" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=2.658s" clip-end="npt=6.163s" id="audd1e13" />
+			</par>
+			<par endsync="last" id="tcp3">
+				<text id="txtd1e15" src="content.html#dtb3" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=6.163s" clip-end="npt=8.497s" id="audd1e16" />
+			</par>
+			<par endsync="last" id="tcp4">
+				<text id="txtd1e18" src="content.html#dtb4" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=8.497s" clip-end="npt=11.746s" id="audd1e19" />
+			</par>
+			<par endsync="last" id="tcp5">
+				<text id="txtd1e21" src="content.html#dtb5" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=11.746s" clip-end="npt=14.291s" id="audd1e22" />
+			</par>
+			<par endsync="last" id="tcp6">
+				<text id="txtd1e24" src="content.html#dtb6" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=14.291s" clip-end="npt=19.115s" id="audd1e25" />
+			</par>
+		</seq>
+	</body>
+</smil>

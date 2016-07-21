@@ -1,0 +1,10 @@
+# Configuration file for /etc/init.d/pipeline2d
+
+# Execute pipeline in remote mode
+#REMOTE=true
+
+# Java heap size
+#export JAVA_MIN_MEM=256M
+#export JAVA_MAX_MEM=1G
+#export JAVA_PERM_MEM=16M
+#export JAVA_MAX_PERM_MEM=256M

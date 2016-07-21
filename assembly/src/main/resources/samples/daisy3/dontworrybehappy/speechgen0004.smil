@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE smil
+  PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+	  <head>
+		    <meta content="F00000" name="dtb:uid"/>
+		    <meta content="TPB Narrator" name="dtb:generator"/>
+		    <meta content="0:01:25.381" name="dtb:totalElapsedTime"/>
+		
+	  </head>
+	  <body>
+		    <seq dur="0:00:20.493" fill="remove" id="mseq">
+		       <par id="tcp30">
+            <text id="text30" src="dontworrybehappy.xml#dtb30"/>
+            <audio clipBegin="0:00:00" clipEnd="0:00:04.714" src="speechgen0004.mp3"/>
+         </par>
+         <par id="tcp31">
+            <text id="text31" src="dontworrybehappy.xml#dtb31"/>
+            <audio clipBegin="0:00:04.714" clipEnd="0:00:07.817" src="speechgen0004.mp3"/>
+         </par>
+         <par id="tcp32">
+            <text id="text32" src="dontworrybehappy.xml#dtb32"/>
+            <audio clipBegin="0:00:07.817" clipEnd="0:00:10.301" src="speechgen0004.mp3"/>
+         </par>
+         <par id="tcp33">
+            <text id="text33" src="dontworrybehappy.xml#dtb33"/>
+            <audio clipBegin="0:00:10.301" clipEnd="0:00:12.158" src="speechgen0004.mp3"/>
+         </par>
+         <par id="tcp34">
+            <text id="text34" src="dontworrybehappy.xml#dtb34"/>
+            <audio clipBegin="0:00:12.158" clipEnd="0:00:13.614" src="speechgen0004.mp3"/>
+         </par>
+         <par id="tcp35">
+            <text id="text35" src="dontworrybehappy.xml#dtb35"/>
+            <audio clipBegin="0:00:13.614" clipEnd="0:00:15.290" src="speechgen0004.mp3"/>
+         </par>
+         <par id="tcp36">
+            <text id="text36" src="dontworrybehappy.xml#dtb36"/>
+            <audio clipBegin="0:00:15.290" clipEnd="0:00:17.549" src="speechgen0004.mp3"/>
+         </par>
+         <par id="tcp37">
+            <text id="text37" src="dontworrybehappy.xml#dtb37"/>
+            <audio clipBegin="0:00:17.549" clipEnd="0:00:20.493" src="speechgen0004.mp3"/>
+         </par>
+      </seq>
+	  </body>
+</smil>

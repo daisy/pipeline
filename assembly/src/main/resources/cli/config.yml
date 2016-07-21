@@ -1,0 +1,17 @@
+#WS CONFIGURATION
+host: http://localhost
+port: 8181
+ws_path: ws
+ws_timeup: 25
+#DP2 launch config 
+exec_line: ${pipeline.cli.exec_line}
+local: true
+# ROBOT CONF
+client_key: clientid
+client_secret: supersecret
+#connection settings
+timeout: 60
+#debug
+debug: false
+starting: ${pipeline.cli.starting}
+

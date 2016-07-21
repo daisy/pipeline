@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<assembly>
+  <id>mac</id>
+  <formats>
+    <format>zip</format>
+    <format>dir</format>
+  </formats>
+  <baseDirectory>daisy-pipeline</baseDirectory>
+  <componentDescriptors>
+      <componentDescriptor>src/main/assembly/components/framework.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/cli-linux.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/modules-linux.xml</componentDescriptor>
+  </componentDescriptors>
+</assembly>

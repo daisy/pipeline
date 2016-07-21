@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<assembly>
+  <id>webui-mac</id>
+  <formats>
+    <format>zip</format>
+    <format>dir</format>
+  </formats>
+  <baseDirectory>daisy-pipeline</baseDirectory>
+  <componentDescriptors>
+      <componentDescriptor>src/main/assembly/components/framework.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/cli-mac.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/modules-mac.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/webui.xml</componentDescriptor>
+  </componentDescriptors>
+</assembly>

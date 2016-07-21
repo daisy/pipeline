@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE package
+  PUBLIC "+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN" "http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd">
+<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+	  <metadata>
+	
+		    <dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/"
+                   xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/">
+			      <dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+		       <dc:Date>1992-03-23</dc:Date>
+         <dc:Language>en-US</dc:Language>
+         <dc:Creator>Bobby McFerrin</dc:Creator>
+         <dc:Publisher>Ferrin press</dc:Publisher>
+         <dc:Title>Don't Worry, Be Happy Lyrics</dc:Title>
+         <dc:Identifier id="uid">F00000</dc:Identifier>
+      </dc-metadata>
+	
+		    <x-metadata>
+			      <meta content="audioFullText" name="dtb:multimediaType"/>
+			      <meta content="DAISY Pipeline Narrator" name="dtb:narrator"/>
+		       <meta content="0:02:47.895" name="dtb:totalTime"/>
+         <meta content="audio,text" name="dtb:multimediaContent"/>
+      </x-metadata>
+	
+	  </metadata>
+	
+	  <manifest>
+	     <item href="speechgen0001.smil" id="smil-1" media-type="application/smil"/>
+      <item href="speechgen0002.smil" id="smil-2" media-type="application/smil"/>
+      <item href="speechgen0003.smil" id="smil-3" media-type="application/smil"/>
+      <item href="speechgen0004.smil" id="smil-4" media-type="application/smil"/>
+      <item href="speechgen0005.smil" id="smil-5" media-type="application/smil"/>
+      <item href="speechgen0006.smil" id="smil-6" media-type="application/smil"/>
+      <item href="speechgen0007.smil" id="smil-7" media-type="application/smil"/>
+      <item href="tpbnarrator.res" id="resource" media-type="application/x-dtbresource+xml"/>
+      <item href="speechgen0002.mp3" id="opf-8" media-type="audio/mpeg"/>
+      <item href="speechgen.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+      <item href="speechgen0001.mp3" id="opf-9" media-type="audio/mpeg"/>
+      <item href="speechgen.opf" id="opf-10" media-type="text/xml"/>
+      <item href="speechgen0005.mp3" id="opf-11" media-type="audio/mpeg"/>
+      <item href="speechgen0006.mp3" id="opf-12" media-type="audio/mpeg"/>
+      <item href="dontworrybehappy.xml" id="opf-13" media-type="application/x-dtbook+xml"/>
+      <item href="speechgen0004.mp3" id="opf-14" media-type="audio/mpeg"/>
+      <item href="speechgen0003.mp3" id="opf-15" media-type="audio/mpeg"/>
+      <item href="speechgen0007.mp3" id="opf-16" media-type="audio/mpeg"/>
+      <item href="tpbnarrator_res.mp3" id="opf-17" media-type="audio/mpeg"/>
+      <item href="dtbook.2005.basic.css" id="opf-18" media-type="text/css"/>
+   </manifest>
+	
+	  <spine>
+	     <itemref idref="smil-1"/>
+      <itemref idref="smil-2"/>
+      <itemref idref="smil-3"/>
+      <itemref idref="smil-4"/>
+      <itemref idref="smil-5"/>
+      <itemref idref="smil-6"/>
+      <itemref idref="smil-7"/>
+   </spine>
+
+</package>

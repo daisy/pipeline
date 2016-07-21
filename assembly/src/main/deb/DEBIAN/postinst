@@ -1,0 +1,141 @@
+#!/bin/sh
+# postinst script for daisy-pipeline2
+#
+# see: dh_installdeb(1)
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+SYSTEM_PROPERTIES=${pipeline.home}/etc/system.properties
+
+backup_config_file() {
+    local CONFIG_FILE=$1
+    echo "####################################################################" > $CONFIG_FILE.bak
+    echo "#              PLEASE DO NOT DELETE OR EDIT THIS FILE              #" >> $CONFIG_FILE.bak
+    echo "#           THIS IS A BACKUP OF THE DEFAULT CONFIGURATION          #" >> $CONFIG_FILE.bak
+    echo "# AND WILL BE USED FOR COMPARISON DURING UPGRADING OF THE PACKAGE  #" >> $CONFIG_FILE.bak
+    echo "####################################################################" >> $CONFIG_FILE.bak
+    cat $CONFIG_FILE >> $CONFIG_FILE.bak
+    chmod a-w $CONFIG_FILE.bak
+}
+
+case "$1" in
+    
+    configure)
+        
+        # create ${pipeline.user} group
+        if ! getent group ${pipeline.user} >/dev/null; then
+            addgroup --system ${pipeline.user}
+        fi
+        
+        # create ${pipeline.user} user
+        if ! getent passwd ${pipeline.user} >/dev/null; then
+            adduser --system --group --home ${pipeline.data} --no-create-home --disabled-login \
+                --gecos "DAISY Pipeline 2 server" ${pipeline.user}
+        fi
+        
+        mkdir -p ${pipeline.data}
+        chown -R ${pipeline.user}:${pipeline.user} ${pipeline.data}
+        chown -R ${pipeline.user}:${pipeline.user} ${pipeline.log}
+        
+        if [ ! -e $SYSTEM_PROPERTIES ]; then
+            echo "$SYSTEM_PROPERTIES: no such file" >&2 && exit 1
+        fi
+        
+        # make a copy of the freshly installed default configuration file
+        # if a *.bak file is already present it probably means dpkg-reconfigure was called
+        [ -e $SYSTEM_PROPERTIES.bak ] || backup_config_file $SYSTEM_PROPERTIES
+        
+        if [ ! -e $SYSTEM_PROPERTIES.old ]; then
+            
+            # ----------------------------
+            # first install or reconfigure
+            # ----------------------------
+            
+            USERID_KEY=org.daisy.pipeline.ws.authentication.key
+            PASSWORD_KEY=org.daisy.pipeline.ws.authentication.secret
+            
+            db_set daisy-pipeline2/admin_userid $(cat $SYSTEM_PROPERTIES | sed -n "s/^[ #]*$USERID_KEY=\(.*\)/\1/p")
+            db_set daisy-pipeline2/admin_password $(cat $SYSTEM_PROPERTIES | sed -n "s/^[ #]*$PASSWORD_KEY=\(.*\)/\1/p")
+            
+            # prompt for userid and password
+            
+            db_input high daisy-pipeline2/admin_userid || true
+            db_input high daisy-pipeline2/admin_password || true
+            db_go || true
+            db_get daisy-pipeline2/admin_userid && USERID="$RET" || true
+            db_get daisy-pipeline2/admin_password && PASSWORD="$RET" || true
+            
+            # clear password from database
+            
+            db_reset daisy-pipeline2/admin_password || true
+            
+            # set userid and password in configuration files
+            
+            cp -f $SYSTEM_PROPERTIES $SYSTEM_PROPERTIES.tmp
+            sed -e "s/^[ #]*\($USERID_KEY\)=.*/\1=$USERID/" \
+                -e "s/^[ #]*\($PASSWORD_KEY\)=.*/\1=$PASSWORD/" \
+                < $SYSTEM_PROPERTIES > $SYSTEM_PROPERTIES.tmp
+            mv -f $SYSTEM_PROPERTIES.tmp $SYSTEM_PROPERTIES
+            
+        else
+            
+            # -------------------------------------------
+            # upgrade, or install from Config-Files state
+            # -------------------------------------------
+            
+            # merge old and new configuration file
+            # if merging is not possible due to a missing *.bak.old file, keep the *.old file
+            
+            if [ -e $SYSTEM_PROPERTIES.old ] && [ -e $SYSTEM_PROPERTIES.bak.old ]; then
+                for KEY in $(cat $SYSTEM_PROPERTIES | sed -n 's/^[ #]*\([0-9a-zA-Z\.]*\)=.*/\1/p'); do
+                    OLD_ENTRY="$(cat $SYSTEM_PROPERTIES.old | sed -n "s/^\([ #]*$KEY=.*\)/\1/p")"
+                    DEFAULT_ENTRY="$(cat $SYSTEM_PROPERTIES.bak.old | sed -n "s/\(^[ #]*$KEY=.*\)/\1/p")"
+                    if [ "$OLD_ENTRY" != "$DEFAULT_ENTRY" ]; then
+                        cp -f $SYSTEM_PROPERTIES $SYSTEM_PROPERTIES.tmp
+                        sed -e "s|^[ #]*$KEY=.*$|$OLD_ENTRY|" < $SYSTEM_PROPERTIES > $SYSTEM_PROPERTIES.tmp
+                        mv -f $SYSTEM_PROPERTIES.tmp $SYSTEM_PROPERTIES
+                    fi
+                done
+                rm -f $SYSTEM_PROPERTIES.old $SYSTEM_PROPERTIES.bak.old
+            fi
+        fi
+        
+        # install the System V style init script links
+        
+        update-rc.d pipeline2d defaults >/dev/null
+        
+        # start the daemon
+        
+        /etc/init.d/pipeline2d start
+        
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+# dh_installdeb will replace this with shell code automatically
+# generated by other debhelper scripts.
+
+#DEBHELPER#
+
+exit 0

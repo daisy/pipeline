@@ -1,0 +1,435 @@
+#!/bin/sh
+#
+#    Licensed to the Apache Software Foundation (ASF) under one or more
+#    contributor license agreements.  See the NOTICE file distributed with
+#    this work for additional information regarding copyright ownership.
+#    The ASF licenses this file to You under the Apache License, Version 2.0
+#    (the "License"); you may not use this file except in compliance with
+#    the License.  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+#
+#    ------------------------------------------------------------------------
+#
+#    This script is adapted from the launcher script of the Karaf runtime:
+#    http://karaf.apache.org/
+#
+
+DIRNAME=$(dirname "$0")
+PROGNAME=$(basename "$0")
+#
+# Check/Set up some easily accessible MIN/MAX params for JVM mem usage
+#
+
+if [ "x$JAVA_MIN_MEM" = "x" ]; then
+    JAVA_MIN_MEM=256M
+    export JAVA_MIN_MEM
+fi
+
+if [ "x$JAVA_MAX_MEM" = "x" ]; then
+    JAVA_MAX_MEM=1G
+    export JAVA_MAX_MEM
+fi
+
+if [ "x$JAVA_PERM_MEM" = "x" ]; then
+    JAVA_PERM_MEM=16M
+    export JAVA_PERM_MEM
+fi
+
+if [ "x$JAVA_MAX_PERM_MEM" = "x" ]; then
+    JAVA_MAX_PERM_MEM=256M
+    export JAVA_MAX_PERM_MEM
+fi
+
+warn() {
+    echo "${PROGNAME}: $*"
+}
+
+die() {
+    warn "$*"
+    exit 1
+}
+
+maybeSource() {
+    file="$1"
+    if [ -f "$file" ] ; then
+        . $file
+    fi
+}
+
+detectOS() {
+    # OS specific support (must be 'true' or 'false').
+    cygwin=false;
+    darwin=false;
+    aix=false;
+    os400=false;
+    case "`uname`" in
+        CYGWIN*)
+            cygwin=true
+            ;;
+        Darwin*)
+            darwin=true
+            ;;
+        AIX*)
+            aix=true
+            ;;
+        OS400*)
+            os400=true
+            ;;
+    esac
+    # For AIX, set an environment variable
+    if $aix; then
+         export LDR_CNTRL=MAXDATA=0xB0000000@DSA
+         export IBM_JAVA_HEAPDUMP_TEXT=true
+         echo $LDR_CNTRL
+    fi
+}
+
+unlimitFD() {
+    # Use the maximum available, or set MAX_FD != -1 to use that
+    if [ "x$MAX_FD" = "x" ]; then
+        MAX_FD="maximum"
+    fi
+
+    # Increase the maximum file descriptors if we can
+    if [ "$os400" = "false" ] && [ "$cygwin" = "false" ]; then
+        MAX_FD_LIMIT=`ulimit -H -n`
+        if [ "$MAX_FD_LIMIT" != 'unlimited' ]; then 
+            if [ $? -eq 0 ]; then
+                if [ "$MAX_FD" = "maximum" -o "$MAX_FD" = "max" ]; then
+                    # use the system max
+                    MAX_FD="$MAX_FD_LIMIT"
+                fi
+
+                ulimit -n $MAX_FD > /dev/null
+                # echo "ulimit -n" `ulimit -n`
+                if [ $? -ne 0 ]; then
+                    warn "Could not set maximum file descriptor limit: $MAX_FD"
+                fi
+            else
+                warn "Could not query system maximum file descriptor limit: $MAX_FD_LIMIT"
+            fi
+        fi
+    fi
+}
+
+locateHome() {
+    if [ "x$PIPELINE2_HOME" != "x" ]; then
+        warn "Ignoring predefined value for PIPELINE2_HOME"
+    fi
+    
+    # In POSIX shells, CDPATH may cause cd to write to stdout
+    (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
+
+    PIPELINE2_HOME=$(cd "$DIRNAME/.."; pwd)
+    if [ ! -d "$PIPELINE2_HOME" ]; then
+        die "PIPELINE2_HOME is not valid: $PIPELINE2_HOME"
+    fi
+}
+
+locateBase() {
+    if [ "x$PIPELINE2_BASE" != "x" ]; then
+        if [ ! -d "$PIPELINE2_BASE" ]; then
+            die "PIPELINE2_BASE is not valid: $PIPELINE2_BASE"
+        fi
+    else
+        PIPELINE2_BASE=$PIPELINE2_HOME
+    fi
+}
+
+locateData() {
+    if [ "x$PIPELINE2_DATA" != "x" ]; then
+        if [ ! -d "$PIPELINE2_DATA" ]; then
+                mkdir -p $PIPELINE2_DATA
+        fi
+    else
+        PIPELINE2_DATA=$PIPELINE2_BASE/data
+    fi
+}
+
+locateConfig() {
+    if [ "x$PIPELINE2_CONFIG" != "x" ]; then
+        warn "Ignoring predefined value for PIPELINE2_CONFIG"
+    fi
+    PIPELINE2_CONFIG=$PIPELINE2_HOME/etc
+}
+
+setupNativePath() {
+    # Support for loading native libraries
+    LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$PIPELINE2_BASE/lib:$PIPELINE2_HOME/lib"
+
+    # For Cygwin, set PATH from LD_LIBRARY_PATH
+    if $cygwin; then
+        LD_LIBRARY_PATH=`cygpath --path --windows "$LD_LIBRARY_PATH"`
+        PATH="$PATH;$LD_LIBRARY_PATH"
+        export PATH
+    fi
+    export LD_LIBRARY_PATH
+}
+
+pathCanonical() {
+    local dst="${1}"
+    while [ -h "${dst}" ] ; do
+        ls=`ls -ld "${dst}"`
+        link=`expr "$ls" : '.*-> \(.*\)$'`
+        if expr "$link" : '/.*' > /dev/null; then
+            dst="$link"
+        else
+            dst="`dirname "${dst}"`/$link"
+        fi
+    done
+    local bas=`basename "${dst}"`
+    local dir=`dirname "${dst}"`
+    if [ "$bas" != "$dir" ]; then
+        dst="`pathCanonical "$dir"`/$bas"
+    fi
+    echo "${dst}" | sed -e 's#//#/#g' -e 's#/./#/#g' -e 's#/[^/]*/../#/#g'
+}
+
+locateJava() {
+    # Setup the Java Virtual Machine
+    if $cygwin ; then
+        [ -n "$JAVA" ] && JAVA=`cygpath --unix "$JAVA"`
+        [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
+    fi
+
+    if [ "x$JAVA_HOME" = "x" ] && [ "$darwin" = "true" ]; then
+        JAVA_HOME=`/usr/libexec/java_home`
+        if [ "x$JAVA_HOME" = "x" ]; then
+            JAVA_HOME="/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/"
+        fi
+        if [ ! -d "$JAVA_HOME" ]; then
+                warn "JAVA_HOME is not valid: $JAVA_HOME"
+                JAVA_HOME=""
+        fi
+    fi
+    if [ "x$JAVA" = "x" ] && [ -r /etc/gentoo-release ] ; then
+        JAVA_HOME=`java-config --jre-home`
+    fi
+    if [ "x$JAVA" = "x" ]; then
+        if [ "x$JAVA_HOME" != "x" ]; then
+            if [ ! -d "$JAVA_HOME" ]; then
+                die "JAVA_HOME is not valid: $JAVA_HOME"
+            fi
+            JAVA="$JAVA_HOME/bin/java"
+        else
+            warn "JAVA_HOME not set; results may vary"
+            JAVA=`type java`
+            JAVA=`expr "$JAVA" : '.*is \(.*\)$'`
+            if [ "x$JAVA" = "x" ]; then
+                die "java command not found"
+            fi
+        fi
+    fi
+    if [ "x$JAVA_HOME" = "x" ]; then
+        JAVA_HOME="$(dirname $(dirname $(pathCanonical "$JAVA")))"
+    fi
+}
+
+checkJavaVersion() {
+    local VERSION
+    VERSION=$( "$JAVA" -version 2>&1 | sed 's/[^ ]* version "\(.*\)\.\(.*\)\..*"/\1\2/; 1q' )
+    if [ "$VERSION" -lt "17" ]; then
+        die "Java version must be at least 1.7"
+    fi
+    return 0
+}
+
+detectJVM() {
+   #echo "`$JAVA -version`"
+   # This service should call `java -version`,
+   # read stdout, and look for hints
+   if $JAVA -version 2>&1 | grep "^IBM" ; then
+       JVM_VENDOR="IBM"
+   # on OS/400, java -version does not contain IBM explicitly
+   elif $os400; then
+       JVM_VENDOR="IBM"
+   else
+       JVM_VENDOR="SUN"
+   fi
+   # echo "JVM vendor is $JVM_VENDOR"
+}
+
+setupDebugOptions() {
+    if [ "x$JAVA_OPTS" = "x" ]; then
+        JAVA_OPTS="$DEFAULT_JAVA_OPTS"
+    fi
+    export JAVA_OPTS
+
+    # Set Debug options if enabled
+    if [ "x$PIPELINE2_DEBUG" != "x" ]; then
+        # Use the defaults if JAVA_DEBUG_OPTS was not set
+        if [ "x$JAVA_DEBUG_OPTS" = "x" ]; then
+            JAVA_DEBUG_OPTS="$DEFAULT_JAVA_DEBUG_OPTS"
+        fi
+
+        JAVA_OPTS="$JAVA_DEBUG_OPTS $JAVA_OPTS"
+        warn "Enabling Java debug options: $JAVA_DEBUG_OPTS"
+    fi
+}
+
+setupDefaults() {
+    DEFAULT_JAVA_OPTS="-Xms$JAVA_MIN_MEM -Xmx$JAVA_MAX_MEM "
+
+    #Set the JVM_VENDOR specific JVM flags
+    if [ "$JVM_VENDOR" = "SUN" ]; then
+            DEFAULT_JAVA_OPTS="-server $DEFAULT_JAVA_OPTS -XX:PermSize=$JAVA_PERM_MEM -XX:MaxPermSize=$JAVA_MAX_PERM_MEM -Dcom.sun.management.jmxremote"
+    elif [ "$JVM_VENDOR" = "IBM" ]; then
+        if $os400; then
+            DEFAULT_JAVA_OPTS="$DEFAULT_JAVA_OPTS"
+        elif $aix; then
+            DEFAULT_JAVA_OPTS="-Xverify:none -Xlp $DEFAULT_JAVA_OPTS"
+        else
+            DEFAULT_JAVA_OPTS="-Xverify:none $DEFAULT_JAVA_OPTS"
+        fi
+    fi
+
+    # Add the jars in the lib dir
+    for file in "$PIPELINE2_HOME"/${bundles.bootstrap}/*.jar
+    do
+        if [ -z "$CLASSPATH" ]; then
+            CLASSPATH="$file"
+        else
+            CLASSPATH="$CLASSPATH:$file"
+        fi
+    done
+    DEFAULT_JAVA_DEBUG_OPTS="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"
+
+    ##
+    ## TODO: Move to conf/profiler/yourkit.{sh|cmd}
+    ##
+    # Uncomment to enable YourKit profiling
+    #DEFAULT_JAVA_DEBUG_OPTS="-Xrunyjpagent"
+}
+
+init() {
+    # Determine if there is special OS handling we must perform
+    detectOS
+
+    # Unlimit the number of file descriptors if possible
+    unlimitFD
+
+    # On Debian, read predefined settings from file  
+    if [ -e $DIRNAME/debian.cfg ]; then
+        . $DIRNAME/debian.cfg
+    else
+        # Locate the Karaf home directory
+        locateHome
+        
+        # Locate the Karaf base directory
+        locateBase
+    
+        # Locate the Karaf data directory
+        locateData
+
+        # Locate the directory where Pipeline2 configuration files are stored
+        locateConfig
+    fi
+    
+    # Setup the native library path
+    setupNativePath
+
+    # Locate the Java VM to execute
+    locateJava
+    
+    # Check Java version
+    checkJavaVersion
+
+    # Determine the JVM vendor
+    detectJVM
+
+    # Setup default options
+    setupDefaults
+
+    # Install debug options
+    setupDebugOptions
+
+}
+
+run() {
+    if [ "x$PIPELINE2_AUTH" = "x" ]; then
+            PIPELINE2_AUTH="-Dorg.daisy.pipeline.ws.authentication=false"
+            export PIPELINE2_AUTH 
+    else
+            PIPELINE2_AUTH="-Dorg.daisy.pipeline.ws.authentication=$PIPELINE2_AUTH"
+            export PIPELINE2_AUTH 
+
+    fi
+    if [ "x$PIPELINE2_LOCAL" = "x" ]; then
+            PIPELINE2_LOCAL="-Dorg.daisy.pipeline.ws.localfs=true"
+            export PIPELINE2_LOCAL
+    else
+            PIPELINE2_LOCAL="-Dorg.daisy.pipeline.ws.localfs=$PIPELINE2_LOCAL"
+            export PIPELINE2_LOCAL
+
+    fi
+    MAIN=org.apache.felix.main.Main
+    OPTS="$PIPELINE2_LOCAL $PIPELINE2_AUTH"
+
+    case "$1" in
+        # 'stop')
+        #     MAIN=org.apache.karaf.main.Stop
+        #     shift
+        #     ;;
+        # 'console')
+        #     shift
+        #     ;;
+        'remote')
+            OPTS="-Dorg.daisy.pipeline.ws.localfs=false -Dorg.daisy.pipeline.ws.authentication=true"
+            shift
+            ;;
+        'local')
+            OPTS="-Dorg.daisy.pipeline.ws.localfs=true -Dorg.daisy.pipeline.ws.authentication=false"
+            shift
+            ;;
+        'clean')
+            rm -Rf $PIPELINE2_DATA
+            shift
+            ;;
+        'debug')
+            if [ "x$JAVA_DEBUG_OPTS" = "x" ]; then
+                JAVA_DEBUG_OPTS="$DEFAULT_JAVA_DEBUG_OPTS"
+            fi
+            JAVA_OPTS="$JAVA_DEBUG_OPTS $JAVA_OPTS"
+            shift
+            ;;
+        'shell')
+            GOGO_BUNDLES=$(cd "$PIPELINE2_BASE" && echo $(find ${bundles.auto.deploy}/gogo -name '*.jar' 2>/dev/null | while read f; do echo "file:$f"; done))
+            if [ -z "$GOGO_BUNDLES" ]; then
+                warn "Shell could not be enabled"
+            else
+                FELIX_OPTS="${FELIX_OPTS} -Dfelix.auto.start.1=\"$GOGO_BUNDLES\""
+            fi
+            shift
+            ;;
+    esac
+
+    JAVA_ENDORSED_DIRS="${JAVA_HOME}/jre/lib/endorsed:${JAVA_HOME}/lib/endorsed:${PIPELINE2_HOME}/lib/endorsed"
+    JAVA_EXT_DIRS="${JAVA_HOME}/jre/lib/ext:${JAVA_HOME}/lib/ext:${PIPELINE2_HOME}/lib/ext"
+    if $cygwin; then
+        PIPELINE2_HOME=`cygpath --path --windows "$PIPELINE2_HOME"`
+        PIPELINE2_BASE=`cygpath --path --windows "$PIPELINE2_BASE"`
+        PIPELINE2_DATA=`cygpath --path --windows "$PIPELINE2_DATA"`
+        PIPELINE2_CONFIG=`cygpath --path --windows "$PIPELINE2_CONFIG"`
+        CLASSPATH=`cygpath --path --windows "$CLASSPATH"`
+        JAVA_HOME=`cygpath --path --windows "$JAVA_HOME"`
+        JAVA_ENDORSED_DIRS=`cygpath --path --windows "$JAVA_ENDORSED_DIRS"`
+        JAVA_EXT_DIRS=`cygpath --path --windows "$JAVA_EXT_DIRS"`
+    fi
+    cd "$PIPELINE2_BASE"
+
+    eval exec "\"$JAVA"\" "$JAVA_OPTS" -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\"  -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" -Dorg.daisy.pipeline.base="\"$PIPELINE2_BASE"\" -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" $FELIX_OPTS $PIPELINE2_OPTS $OPTS -classpath "\"$CLASSPATH"\" $MAIN "\"$@"\"
+}
+
+main() {
+    init
+    run "$@"
+}
+
+main "$@"

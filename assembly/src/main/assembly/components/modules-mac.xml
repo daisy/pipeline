@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>target/bundles/modules/mac</directory>
+      <outputDirectory>/modules</outputDirectory>
+    </fileSet>
+  </fileSets>
+</component>

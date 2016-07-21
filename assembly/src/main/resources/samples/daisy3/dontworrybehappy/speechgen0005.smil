@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE smil
+  PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+	  <head>
+		    <meta content="F00000" name="dtb:uid"/>
+		    <meta content="TPB Narrator" name="dtb:generator"/>
+		    <meta content="0:01:45.874" name="dtb:totalElapsedTime"/>
+		
+	  </head>
+	  <body>
+		    <seq dur="0:00:18.465" fill="remove" id="mseq">
+		       <par id="tcp38">
+            <text id="text38" src="dontworrybehappy.xml#dtb38"/>
+            <audio clipBegin="0:00:00" clipEnd="0:00:03.987" src="speechgen0005.mp3"/>
+         </par>
+         <par id="tcp39">
+            <text id="text39" src="dontworrybehappy.xml#dtb39"/>
+            <audio clipBegin="0:00:03.987" clipEnd="0:00:06.041" src="speechgen0005.mp3"/>
+         </par>
+         <par id="tcp40">
+            <text id="text40" src="dontworrybehappy.xml#dtb40"/>
+            <audio clipBegin="0:00:06.041" clipEnd="0:00:08.316" src="speechgen0005.mp3"/>
+         </par>
+         <par id="tcp41">
+            <text id="text41" src="dontworrybehappy.xml#dtb41"/>
+            <audio clipBegin="0:00:08.316" clipEnd="0:00:09.956" src="speechgen0005.mp3"/>
+         </par>
+         <par id="tcp42">
+            <text id="text42" src="dontworrybehappy.xml#dtb42"/>
+            <audio clipBegin="0:00:09.956" clipEnd="0:00:11.971" src="speechgen0005.mp3"/>
+         </par>
+         <par id="tcp43">
+            <text id="text43" src="dontworrybehappy.xml#dtb43"/>
+            <audio clipBegin="0:00:11.971" clipEnd="0:00:13.638" src="speechgen0005.mp3"/>
+         </par>
+         <par id="tcp44">
+            <text id="text44" src="dontworrybehappy.xml#dtb44"/>
+            <audio clipBegin="0:00:13.638" clipEnd="0:00:15.889" src="speechgen0005.mp3"/>
+         </par>
+         <par id="tcp45">
+            <text id="text45" src="dontworrybehappy.xml#dtb45"/>
+            <audio clipBegin="0:00:15.889" clipEnd="0:00:17.128" src="speechgen0005.mp3"/>
+         </par>
+         <par id="tcp46">
+            <text id="text46" src="dontworrybehappy.xml#dtb46"/>
+            <audio clipBegin="0:00:17.128" clipEnd="0:00:18.465" src="speechgen0005.mp3"/>
+         </par>
+      </seq>
+	  </body>
+</smil>

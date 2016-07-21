@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE smil
+  PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+	  <head>
+		    <meta content="F00000" name="dtb:uid"/>
+		    <meta content="TPB Narrator" name="dtb:generator"/>
+		    <meta content="0:00:15.150" name="dtb:totalElapsedTime"/>
+		    <customAttributes>
+		       <customTest defaultState="false" id="noteref" override="visible"/>
+         <customTest defaultState="false" id="note" override="visible"/>
+      </customAttributes>
+	  </head>
+	  <body>
+		    <seq dur="0:00:27.683" fill="remove" id="mseq">
+		       <par id="tcp7">
+            <text id="text7" src="dontworrybehappy.xml#dtb7"/>
+            <audio clipBegin="0:00:00" clipEnd="0:00:04.024" src="speechgen0002.mp3"/>
+         </par>
+         <par id="tcp8">
+            <text id="text8" src="dontworrybehappy.xml#dtb8"/>
+            <audio clipBegin="0:00:04.024" clipEnd="0:00:06.053" src="speechgen0002.mp3"/>
+         </par>
+         <par id="tcp9">
+            <text id="text9" src="dontworrybehappy.xml#dtb9"/>
+            <audio clipBegin="0:00:06.053" clipEnd="0:00:07.950" src="speechgen0002.mp3"/>
+         </par>
+         <par customTest="noteref" id="tcp10">
+            <text id="text10" src="dontworrybehappy.xml#dtb10"/>
+            <a external="false" href="#forcelinkstruct6">
+               <audio clipBegin="0:00:07.950" clipEnd="0:00:09.725" src="speechgen0002.mp3"/>
+            </a>
+         </par>
+         <seq class="note" customTest="note" end="DTBuserEscape;forcelinkstruct7.end"
+              fill="remove"
+              id="forcelinkstruct6">
+            <par id="forcelinkstruct7">
+               <text id="forcelinkstruct8" src="dontworrybehappy.xml#dtb56"/>
+               <audio clipBegin="0:00:03.606" clipEnd="0:00:12.559" src="speechgen0007.mp3"/>
+            </par>
+         </seq>
+         <par id="tcp11">
+            <text id="text11" src="dontworrybehappy.xml#dtb11"/>
+            <audio clipBegin="0:00:09.725" clipEnd="0:00:10.658" src="speechgen0002.mp3"/>
+         </par>
+         <par id="tcp12">
+            <text id="text12" src="dontworrybehappy.xml#dtb12"/>
+            <audio clipBegin="0:00:10.658" clipEnd="0:00:12.323" src="speechgen0002.mp3"/>
+         </par>
+         <par id="tcp13">
+            <text id="text13" src="dontworrybehappy.xml#dtb13"/>
+            <audio clipBegin="0:00:12.323" clipEnd="0:00:14.748" src="speechgen0002.mp3"/>
+         </par>
+         <par id="tcp14">
+            <text id="text14" src="dontworrybehappy.xml#dtb14"/>
+            <audio clipBegin="0:00:14.748" clipEnd="0:00:16.723" src="speechgen0002.mp3"/>
+         </par>
+         <par id="tcp15">
+            <text id="text15" src="dontworrybehappy.xml#dtb15"/>
+            <audio clipBegin="0:00:16.723" clipEnd="0:00:18.730" src="speechgen0002.mp3"/>
+         </par>
+      </seq>
+	  </body>
+</smil>

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+if [ "$(id --name --user)" != ${pipeline.webui.user} ]; then
+   echo "Program must be run as user \`${pipeline.webui.user}'. Try: \"sudo -u ${pipeline.webui.user} $0\"" 1>&2
+   exit 1
+fi
+
+export DP2DATA=${pipeline.webui.data}
+
+( cd ${pipeline.webui.home} && exec java -Dderby.stream.error.file=${pipeline.webui.data}/log/webui-database.log -Dlogger.file=${pipeline.webui.home}/logger.xml -Dpidfile.path=${pipeline.webui.data}/webui/RUNNING_PID -Dconfig.file=${pipeline.webui.home}/application.conf $@ -cp "${pipeline.webui.home}/lib/*" play.core.server.NettyServer ${pipeline.webui.home} )

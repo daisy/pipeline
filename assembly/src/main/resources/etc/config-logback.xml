@@ -1,0 +1,56 @@
+<configuration debug="false">
+
+  <!-- see http://logback.qos.ch/manual/configuration.html#LevelChangePropagator -->
+  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
+    <appender name="JOB" class="${pipeline.log.jobappender}">
+    <!-- in the absence of the class attribute, it is assumed that the
+         desired discriminator type is
+         ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
+    <discriminator>
+      <key>jobid</key>
+      <defaultValue>default</defaultValue>
+    </discriminator>
+    <sift>
+      <appender name="FILE-${jobid}" class="ch.qos.logback.core.FileAppender">
+        <file>${org.daisy.pipeline.iobase}/${jobid}/${jobid}.log</file>
+        <append>false</append>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+     		<Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
+        </layout>
+      </appender>
+    </sift>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <filter class="org.daisy.pipeline.logging.OSGIFilter"/>   
+    <file>${org.daisy.pipeline.logdir}/daisy-pipeline.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${org.daisy.pipeline.logdir}/daisy-pipeline.%i.log.zip</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>4</maxIndex>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>10MB</maxFileSize>
+    </triggeringPolicy>
+
+    <encoder>
+      <Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
+    </encoder>
+  </appender>
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+          <filter class="org.daisy.pipeline.logging.OSGIFilter"/>   
+          <encoder>
+                  <Pattern>%-5level %marker [%40.40logger{40}] %msg   @%class{36}:%L#%M%n</Pattern>
+          </encoder>
+  </appender>
+
+  <root level="DEBUG">
+    <appender-ref ref="FILE"/>
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="JOB"/>
+  </root>
+  <logger name="com.xmlcalabash" level="INFO"/>
+  <logger name="org.eclipse.jetty.util.log" level="INFO" />
+  <logger name="cz.vutbr.web" level="WARN"/>
+</configuration>

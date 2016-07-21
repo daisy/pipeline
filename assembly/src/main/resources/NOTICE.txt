@@ -1,0 +1,81 @@
+DAISY Pipeline 2
+________________
+
+Copyright © 2010-2011, The DAISY Consortium
+All Rights Reserved.
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License (LGPL) as published by the
+Free Software Foundation, either version 3 of the License, or (at your
+option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along
+with this library; if not, see <http://www.gnu.org/licenses/lgpl.html>
+
+
+Third-party software
+____________________
+
+This product includes the following third-party software:
+
+  XML Calabash
+    by Norman Walsh (http://xmlcalabash.com/)
+    under the Common Development and Distribution License
+  
+  The Saxon XSLT and XQuery Processor
+    by Saxonica Limited (http://www.saxonica.com/)
+    under the Mozilla Public License (version 1.0)
+  
+  Apache Commons libraries, Apache XML Resolver, Apache XML Serializer, Apache Xalan, Apache Xerces
+    by The Apache Software Foundation (http://commons.apache.org/)
+    under the Apache License (version 2.0)
+  
+  Jing
+    by James Clark at Google Code (http://code.google.com/p/jing-trang/)
+    under the new BSD License
+  
+  Woodstox
+    by Tatu Saloranta at The Codehaus Foundation (http://woodstox.codehaus.org/)
+    under the GNU Lesser General Public License
+  
+  jopt-simple
+    at SourceForge (http://jopt-simple.sourceforge.net/)
+    under the MIT License
+  
+  Guava Libraries
+    at Google Code (http://code.google.com/p/guava-libraries/)
+    under the Apache License (version 2.0)
+  
+  Eclipse Equinox
+    by The Eclipse Foundation (http://www.eclipse.org/)
+    under the Eclipse Public License (version 1.0)
+  
+  OSGi libraries
+    by The OSGi Alliance (http://www.osgi.org/)
+    under the Apache License (version 2.0)
+  
+  OPS4J Pax Runner
+    by the OPS4J project (http://www.ops4j.org)
+    under the Apache License (version 2.0)
+
+  Simple Logging Facade for Java (SLF4J)
+    by QOS.ch (http://www.slf4j.org/)
+    under the MIT License
+
+  LogBack
+    by QOS.ch (http://logback.qos.ch/)
+    under the Eclipse Public License (version 1.0) 
+
+  Restlet 
+    by the Restlet team (http://www.restlet.org/about/team)
+    under the Eclipse Public License (version 1.0) 
+
+  Tagsoup
+    by John Cowan (http://home.ccil.org/~cowan/XML/tagsoup/)
+    under the Apache License (version 2.0)
+
+Respective licenses are available in the LICENSES directory.

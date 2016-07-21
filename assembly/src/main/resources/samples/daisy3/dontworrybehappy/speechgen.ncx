@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ncx
+  PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en">
+	  <head>
+		    <meta content="F00000" name="dtb:uid"/>
+		    <meta content="2" name="dtb:depth"/>
+		
+		    <meta content="TPB Narrator" name="dtb:generator"/>
+		    <meta content="0" name="dtb:totalPageCount"/>
+		    <meta content="0" name="dtb:maxPageNumber"/>
+	     <smilCustomTest bookStruct="NOTE_REFERENCE" defaultState="false" id="noteref"
+                      override="visible"/>
+      <smilCustomTest bookStruct="NOTE" defaultState="false" id="note" override="visible"/>
+   </head>
+  
+	  <docTitle>
+	     <text>Don't Worry, Be Happy</text>
+      <audio clipBegin="0:00:00" clipEnd="0:00:02.814" src="speechgen0001.mp3"/>
+   </docTitle>
+  
+	  <docAuthor>
+	     <text>Bobby McFerrin</text>
+      <audio clipBegin="0:00:02.814" clipEnd="0:00:05.517" src="speechgen0001.mp3"/>
+   </docAuthor>
+	
+	  <navMap id="navMap">
+      <navPoint class="h1" id="ncx-1" playOrder="1">
+         <navLabel>
+            <text>Introductio</text>
+            <audio clipBegin="0:00:00" clipEnd="0:00:04.024" src="speechgen0002.mp3"/>
+         </navLabel>
+         <content src="speechgen0002.smil#tcp7"/>
+      </navPoint>
+      <navPoint class="h1" id="ncx-2" playOrder="2">
+         <navLabel>
+            <text>Versa media, pre peripetum</text>
+            <audio clipBegin="0:00:00" clipEnd="0:00:05.308" src="speechgen0003.mp3"/>
+         </navLabel>
+         <content src="speechgen0003.smil#tcp16"/>
+         <navPoint class="h2" id="ncx-3" playOrder="3">
+            <navLabel>
+               <text>Culmen interludiaris</text>
+               <audio clipBegin="0:00:00" clipEnd="0:00:04.714" src="speechgen0004.mp3"/>
+            </navLabel>
+            <content src="speechgen0004.smil#tcp30"/>
+         </navPoint>
+      </navPoint>
+      <navPoint class="h1" id="ncx-4" playOrder="4">
+         <navLabel>
+            <text>Concludio</text>
+            <audio clipBegin="0:00:00" clipEnd="0:00:03.987" src="speechgen0005.mp3"/>
+         </navLabel>
+         <content src="speechgen0005.smil#tcp38"/>
+         <navPoint class="h2" id="ncx-5" playOrder="5">
+            <navLabel>
+               <text>Repetitio ad nauseam</text>
+               <audio clipBegin="0:00:00" clipEnd="0:00:04.780" src="speechgen0006.mp3"/>
+            </navLabel>
+            <content src="speechgen0006.smil#tcp47"/>
+         </navPoint>
+      </navPoint>
+      <navPoint class="h1" id="ncx-6" playOrder="6">
+         <navLabel>
+            <text>Notes</text>
+            <audio clipBegin="0:00:00" clipEnd="0:00:03.606" src="speechgen0007.mp3"/>
+         </navLabel>
+         <content src="speechgen0007.smil#tcp55"/>
+      </navPoint>
+   </navMap>
+	
+	
+  
+   <navList class="note" id="note-navList">
+      <navLabel>
+         <text>note</text>
+      </navLabel>
+      <navTarget class="note" id="ncx-7" playOrder="7">
+         <navLabel>
+            <text>The author makes a plump reference to Homeros, Iliad, book 4 Chapter 4, verse 3.</text>
+            <audio clipBegin="0:00:03.606" clipEnd="0:00:12.559" src="speechgen0007.mp3"/>
+         </navLabel>
+         <content src="speechgen0007.smil#tcp56"/>
+      </navTarget>
+      <navTarget class="note" id="ncx-8" playOrder="8">
+         <navLabel>
+            <text>This was initially expressed in T.S. Eliot, The Wasteland, and in Hugh Selwyn Mauberley, stanza 4, line 3.</text>
+            <audio clipBegin="0:00:12.559" clipEnd="0:00:23.970" src="speechgen0007.mp3"/>
+         </navLabel>
+         <content src="speechgen0007.smil#tcp57"/>
+      </navTarget>
+   </navList>
+</ncx>
