@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd" []>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="sv" version="2005-3">
+	<head>
+		<meta name="dtb:uid" content="DTB18667"/>
+		<meta name="dc:Title" content="Maria, Maria"/>
+		<meta name="dc:Identifier" content="DTB18667"/>
+		<meta name="track:Guidelines" content="2015-1"/>
+		<meta name="track:Supplier" content="Net Systems Informatics (I) Pvt. Ltd."/>
+		<meta name="dc:Creator" content="Anne Karin Elstad"/>
+		<meta name="dc:Language" content="sv"/>
+		<meta name="dc:Source" content="urn:isbn:978-91-7643-212-9"/>
+		<meta name="dc:Format" content="DTBook"/>
+		<meta name="dc:Publisher" content="MTM"/>
+		<meta name="dc:Date" content="2015-08-04"/>
+		<meta name="dcterms:modified" content="2015-08-04T13:11:34+00:00"/>
+	</head>
+	<book>
+		<frontmatter>
+			<doctitle>Bla bla</doctitle>
+			<docauthor>Blo blo</docauthor>
+		</frontmatter>
+		<bodymatter>
+			<level1>
+				<p>bla bla bla<noteref idref="#fn1">*</noteref></p>
+			</level1>
+		</bodymatter>
+		<rearmatter>
+			<level1>
+				<note id="fn1">
+					<p>Dies ist der Kommentar zu Fussnote 11</p>
+				</note>
+			</level1>
+		</rearmatter>
+	</book>
+</dtbook>

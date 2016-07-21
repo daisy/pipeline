@@ -1,0 +1,109 @@
+head {
+	display: none;
+}
+
+body {
+	orphans: 0;
+}
+
+pagebreak {
+	display: none;
+	string-set: print-page attr(value);
+}
+
+section,
+frontmatter {
+	display: block;
+	page-break-before: always;
+	page-break-after: always;
+}
+
+toc {
+	display: toc;
+	border-top: ⠶;
+	border-bottom: ⠛;
+	padding-top: 1;
+	padding-bottom: 1;
+	margin-top: 1;
+	margin-bottom: 1;
+	page-break-inside: avoid;
+}
+
+toc > h {
+	border-top: none;
+	border-bottom: none;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+toc > entry > ref {
+	display: toc-item;
+	margin-left: 2;
+	text-indent: -2;
+}
+
+h {
+	display: block;
+	text-align: center;
+	margin-top: 1;
+	margin-bottom: 1;
+	margin-left: 3;
+	margin-right: 3;
+	padding-left: 3;
+	padding-right: 3;
+	border-top: ⠒;
+	border-bottom: ⠒;
+	page-break-after: avoid;
+}
+
+p {
+	display: block;
+	text-indent: 2;
+}
+
+block,
+lngroup,
+ln,
+object,
+verse {
+	display: block;
+}
+
+block[role="imprint"] {
+	display: block;
+	text-align: center;
+	margin-top: 1;
+	margin-bottom: 1;
+	margin-left: 3;
+	margin-right: 3;
+}
+
+verse[role="poem"] {
+	display: block;
+	margin-left: 4;
+}
+
+object[srctype="image/png"] {
+	display: block;
+	margin-left: 4;
+	margin-top: 1;
+	margin-bottom: 1;
+}
+
+section[role="halftitlepage"] > h,
+section[role="titlepage"] > h {
+	display: block;
+	text-align: center;
+	margin-top: 1;
+	margin-bottom: 1;
+	margin-left: 3;
+	margin-right: 3;
+	padding-top: 1;
+	padding-bottom: 1;
+	padding-left: 1;
+	padding-right: 1;
+	border-left: ⠇;
+	border-right: ⠸;
+	border-top: ⠒;
+	border-bottom: ⠒;
+}

@@ -1,0 +1,5 @@
+#+type:translation
+#+locale:ta
+include ../spaces.ctb
+include ../ta.ctb
+include ../braille-patterns.cti

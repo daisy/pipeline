@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               stylesheet="../../main/resources/xml/transform/liblouis-block-translate.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc xml:lang="en">
+        <p style="display: block">
+          <span style="hyphens: auto; white-space: pre-wrap">
+            foo<span style="font-weight: bold">bar</span>
+          </span>
+        </p>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <_ style="text-transform: none">
+      <doc xml:lang="en">
+        <p style="display: block">
+          <span style="white-space: pre-wrap">
+            ⠋⠕⠕­<span>⠃⠜</span>
+          </span>
+        </p>
+      </doc>
+      </_>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:context>
+      <doc xml:lang="en">
+        foo<br style="::before {{ content: '&#xA;'; white-space: pre-line }}"/>bar
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <_ style="text-transform: none">
+      <doc xml:lang="en">         ⠋⠕⠕<br style="::before {{ content: &quot;&#xA;&quot;; white-space: pre-line; text-transform: auto }}"/>⠃⠜       </doc>
+      </_>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03" pending="liblouis typeform broken">
+    <x:context>
+      <doc xml:lang="en">
+        <p style="display: block">
+          <span style="text-transform: louis-ital">
+            foo <span style="text-transform: louis-bold">bar</span>
+          </span>
+        </p>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <_ style="text-transform: none">
+      <doc xml:lang="en">
+        <p style="display: block">
+          <span>
+            ⠋⠕⠕ <span>⠃⠜</span>
+          </span>
+        </p>
+      </doc>
+      </_>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

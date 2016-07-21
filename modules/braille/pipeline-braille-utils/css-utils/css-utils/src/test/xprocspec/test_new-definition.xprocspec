@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../main/resources/xml/new-definition.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="css:new-definition">
+      <x:input port="source">
+        <x:document type="inline">
+          <css:_ css:page="size: 10 10">
+            <css:box type="block" css:hyphens="auto" css:text-align="center">
+              <css:box type="block" css:hyphens="auto"/>
+            </css:box>
+          </css:_>
+        </x:document>
+      </x:input>
+      <x:input port="definition">
+        <x:document type="inline">
+          <xsl:stylesheet version="2.0" xmlns:new="css:new-definition">
+            <xsl:variable name="new:properties" as="xs:string*" select="('text-align','hyphens')"/>
+            <xsl:function name="new:is-valid" as="xs:boolean">
+              <xsl:param name="css:property" as="element()"/>
+              <xsl:param name="context" as="element()"/>
+              <xsl:sequence select="if ($css:property/@name='text-align')
+                                    then $css:property/@value=('left','center','right')
+                                    else $css:property/@value=('auto','manual','none')"/>
+            </xsl:function>
+            <xsl:function name="new:initial-value" as="xs:string">
+              <xsl:param name="property" as="xs:string"/>
+              <xsl:param name="context" as="element()"/>
+              <xsl:sequence select="if ($property='text-align')
+                                    then 'left'
+                                    else 'manual'"/>
+            </xsl:function>
+            <xsl:function name="new:is-inherited" as="xs:boolean">
+              <xsl:param name="property" as="xs:string"/>
+              <xsl:param name="context" as="element()"/>
+              <xsl:sequence select="if ($property='text-align')
+                                    then false()
+                                    else true()"/>
+            </xsl:function>
+            <xsl:function name="new:applies-to" as="xs:boolean">
+              <xsl:param name="property" as="xs:string"/>
+              <xsl:param name="context" as="element()"/>
+              <xsl:sequence select="$context/@type='block'"/>
+            </xsl:function>
+          </xsl:stylesheet>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <css:_ css:page="size: 10 10">
+          <css:box type="block" css:hyphens="auto" css:text-align="center">
+            <css:box type="block" css:text-align="center"/>
+          </css:box>
+        </css:_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:call step="css:new-definition">
+      <x:input port="source">
+        <x:document type="inline">
+          <css:_>
+            <css:box type="block" style="-foo-bar: 5"/>
+          </css:_>
+        </x:document>
+      </x:input>
+      <x:input port="definition">
+        <x:document type="inline">
+          <xsl:stylesheet version="2.0" xmlns:new="css:new-definition">
+            <xsl:variable name="new:properties" as="xs:string*" select="('-foo-bar')"/>
+            <xsl:function name="new:is-valid" as="xs:boolean">
+              <xsl:param name="css:property" as="element()"/>
+              <xsl:param name="context" as="element()"/>
+              <xsl:sequence select="matches($css:property/@value,'^0|[1-9][0-9]*$')"/>
+            </xsl:function>
+            <xsl:function name="new:initial-value" as="xs:string">
+              <xsl:param name="property" as="xs:string"/>
+              <xsl:param name="context" as="element()"/>
+              <xsl:sequence select="'0'"/>
+            </xsl:function>
+            <xsl:function name="new:is-inherited" as="xs:boolean">
+              <xsl:param name="property" as="xs:string"/>
+              <xsl:param name="context" as="element()"/>
+              <xsl:sequence select="false()"/>
+            </xsl:function>
+            <xsl:function name="new:applies-to" as="xs:boolean">
+              <xsl:param name="property" as="xs:string"/>
+              <xsl:param name="context" as="element()"/>
+              <xsl:sequence select="$context/@type='block'"/>
+            </xsl:function>
+          </xsl:stylesheet>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <css:_>
+          <css:box type="block" css:_foo-bar="5"/>
+        </css:_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

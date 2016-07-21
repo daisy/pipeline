@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+               stylesheet="../../main/resources/xml/css-to-obfl.xsl">
+  
+  <x:param name="braille-translator-query"></x:param>
+  <x:param name="duplex">true</x:param>
+  
+  <x:scenario label="test_01">
+    <x:call function="obfl:volume-stylesheets-use-when">
+      <x:param>
+        <css:rule/>
+        <css:rule selector=":first"/>
+        <css:rule selector=":nth(1)"/>
+        <css:rule selector=":nth(2)"/>
+      </x:param>
+    </x:call>
+    <x:expect label="layout-master" select="('(! (| (= $volume 1) (= $volume 2)))',
+                                             '(= $volume 1)',
+                                             '(&amp; (= $volume 1) (! (= $volume 1)))',
+                                             '(&amp; (= $volume 2) (! (= $volume 1)))')"/>
+  </x:scenario>
+  
+</x:description>

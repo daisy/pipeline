@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  
+  <!-- "abstract" script (other scripts can extend this one) -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl" uri="../xml/xproc/xml-to-pef.xpl"/>
+  
+  <!-- xproc -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>
+  
+  <!-- other -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl" uri="../xml/xslt/generate-toc.xsl"/>
+  
+  <!-- dependencies -->
+  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
+  
+</catalog>

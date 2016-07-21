@@ -1,0 +1,1969 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../resources/phony.xsl">
+  
+  <!--
+      Simple table: data cells only
+      
+      The table is rendered row by row.
+  -->
+  <x:scenario label="by-row">
+    <x:call function="css:render-table-by">
+      <x:param select="'row'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <td>Cell 1.1</td>
+            <td>Cell 1.2</td>
+            <td>Cell 1.3</td>
+          </tr>
+          <tr>
+            <td>Cell 2.1</td>
+            <td>Cell 2.2</td>
+            <td>Cell 2.3</td>
+          </tr>
+          <tr>
+            <td>Cell 3.1</td>
+            <td>Cell 3.2</td>
+            <td>Cell 3.3</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <_>
+            <_>
+              <td>Cell 1.1</td>
+            </_>
+            <_>
+              <td>Cell 1.2</td>
+            </_>
+            <_>
+              <td>Cell 1.3</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Cell 2.1</td>
+            </_>
+            <_>
+              <td>Cell 2.2</td>
+            </_>
+            <_>
+              <td>Cell 2.3</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Cell 3.1</td>
+            </_>
+            <_>
+              <td>Cell 3.2</td>
+            </_>
+            <_>
+              <td>Cell 3.3</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      Standard table: column headings
+      
+      The table is rendered row by row. Each data cell is preceded by the appropriate column
+      heading. The row containing the column headings is discarded.
+  -->
+  <x:scenario label="by-row-with-column-headers">
+    <x:call function="css:render-table-by">
+      <x:param select="'row'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>Column 3</th>
+          </tr>
+          <tr>
+            <td>Cell 1.1</td>
+            <td>Cell 1.2</td>
+            <td>Cell 1.3</td>
+          </tr>
+          <tr>
+            <td>Cell 2.1</td>
+            <td>Cell 2.2</td>
+            <td>Cell 2.3</td>
+          </tr>
+          <tr>
+            <td>Cell 3.1</td>
+            <td>Cell 3.2</td>
+            <td>Cell 3.3</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <td>Cell 1.1</td>
+            </_>
+            <_>
+              <th>Column 2</th>
+              <td>Cell 1.2</td>
+            </_>
+            <_>
+              <th>Column 3</th>
+              <td>Cell 1.3</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <td>Cell 2.1</td>
+            </_>
+            <_>
+              <th>Column 2</th>
+              <td>Cell 2.2</td>
+            </_>
+            <_>
+              <th>Column 3</th>
+              <td>Cell 2.3</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <td>Cell 3.1</td>
+            </_>
+            <_>
+              <th>Column 2</th>
+              <td>Cell 3.2</td>
+            </_>
+            <_>
+              <th>Column 3</th>
+              <td>Cell 3.3</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      Standard table: column and row headings
+      
+      The table is rendered row by row. A row is preceded by its heading.
+  -->
+  <x:scenario label="by-row-with-column-and-row-headers">
+    <x:call function="css:render-table-by">
+      <x:param select="'row'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th/>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>Column 3</th>
+          </tr>
+          <tr>
+            <th axis="row">Row 1</th>
+            <td>Cell 1.1</td>
+            <td>Cell 1.2</td>
+            <td>Cell 1.3</td>
+          </tr>
+          <tr>
+            <th axis="row">Row 2</th>
+            <td>Cell 2.1</td>
+            <td>Cell 2.2</td>
+            <td>Cell 2.3</td>
+          </tr>
+          <tr>
+            <th axis="row">Row 3</th>
+            <td>Cell 3.1</td>
+            <td>Cell 3.2</td>
+            <td>Cell 3.3</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <th>Row 1</th>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <td>Cell 1.1</td>
+            </_>
+            <_>
+              <th>Column 2</th>
+              <td>Cell 1.2</td>
+            </_>
+            <_>
+              <th>Column 3</th>
+              <td>Cell 1.3</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <th>Row 2</th>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <td>Cell 2.1</td>
+            </_>
+            <_>
+              <th>Column 2</th>
+              <td>Cell 2.2</td>
+            </_>
+            <_>
+              <th>Column 3</th>
+              <td>Cell 2.3</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <th>Row 3</th>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <td>Cell 3.1</td>
+            </_>
+            <_>
+              <th>Column 2</th>
+              <td>Cell 3.2</td>
+            </_>
+            <_>
+              <th>Column 3</th>
+              <td>Cell 3.3</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      Rendering by column
+      
+      If a table has few columns compared to the number of rows, it may be better to render it
+      column by column. Note: This requires markup; it is not enabled automatically for a certain
+      row/column ratio.
+  -->
+  <x:scenario label="by-column">
+    <x:call function="css:render-table-by">
+      <x:param select="'column'"/>
+      <x:param>
+        <table class="render_by_column" xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th/>
+            <th axis="column">Column 1</th>
+            <th axis="column">Column 2</th>
+            <th axis="column">Column 3</th>
+          </tr>
+          <tr>
+            <th>Row 1</th>
+            <td>Cell 1.1</td>
+            <td>Cell 1.2</td>
+            <td>Cell 1.3</td>
+          </tr>
+          <tr>
+            <th>Row 2</th>
+            <td>Cell 2.1</td>
+            <td>Cell 2.2</td>
+            <td>Cell 2.3</td>
+          </tr>
+          <tr>
+            <th>Row 3</th>
+            <td>Cell 3.1</td>
+            <td>Cell 3.2</td>
+            <td>Cell 3.3</td>
+          </tr>
+          <tr>
+            <th>Row 4</th>
+            <td>Cell 4.1</td>
+            <td>Cell 4.2</td>
+            <td>Cell 4.3</td>
+          </tr>
+          <tr>
+            <th>Row 5</th>
+            <td>Cell 5.1</td>
+            <td>Cell 5.2</td>
+            <td>Cell 5.3</td>
+          </tr>
+          <tr>
+            <th>Row 6</th>
+            <td>Cell 6.1</td>
+            <td>Cell 6.2</td>
+            <td>Cell 6.3</td>
+          </tr>
+          <tr>
+            <th>Row 7</th>
+            <td>Cell 7.1</td>
+            <td>Cell 7.2</td>
+            <td>Cell 7.3</td>
+          </tr>
+          <tr>
+            <th>Row 8</th>
+            <td>Cell 8.1</td>
+            <td>Cell 8.2</td>
+            <td>Cell 8.3</td>
+          </tr>
+          <tr>
+            <th>Row 9</th>
+            <td>Cell 9.1</td>
+            <td>Cell 9.2</td>
+            <td>Cell 9.3</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table class="render_by_column" xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <th>Column 1</th>
+          <_>
+            <_>
+              <th>Row 1</th>
+              <td>Cell 1.1</td>
+            </_>
+            <_>
+              <th>Row 2</th>
+              <td>Cell 2.1</td>
+            </_>
+            <_>
+              <th>Row 3</th>
+              <td>Cell 3.1</td>
+            </_>
+            <_>
+              <th>Row 4</th>
+              <td>Cell 4.1</td>
+            </_>
+            <_>
+              <th>Row 5</th>
+              <td>Cell 5.1</td>
+            </_>
+            <_>
+              <th>Row 6</th>
+              <td>Cell 6.1</td>
+            </_>
+            <_>
+              <th>Row 7</th>
+              <td>Cell 7.1</td>
+            </_>
+            <_>
+              <th>Row 8</th>
+              <td>Cell 8.1</td>
+            </_>
+            <_>
+              <th>Row 9</th>
+              <td>Cell 9.1</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <th>Column 2</th>
+          <_>
+            <_>
+              <th>Row 1</th>
+              <td>Cell 1.2</td>
+            </_>
+            <_>
+              <th>Row 2</th>
+              <td>Cell 2.2</td>
+            </_>
+            <_>
+              <th>Row 3</th>
+              <td>Cell 3.2</td>
+            </_>
+            <_>
+              <th>Row 4</th>
+              <td>Cell 4.2</td>
+            </_>
+            <_>
+              <th>Row 5</th>
+              <td>Cell 5.2</td>
+            </_>
+            <_>
+              <th>Row 6</th>
+              <td>Cell 6.2</td>
+            </_>
+            <_>
+              <th>Row 7</th>
+              <td>Cell 7.2</td>
+            </_>
+            <_>
+              <th>Row 8</th>
+              <td>Cell 8.2</td>
+            </_>
+            <_>
+              <th>Row 9</th>
+              <td>Cell 9.2</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <th>Column 3</th>
+          <_>
+            <_>
+              <th>Row 1</th>
+              <td>Cell 1.3</td>
+            </_>
+            <_>
+              <th>Row 2</th>
+              <td>Cell 2.3</td>
+            </_>
+            <_>
+              <th>Row 3</th>
+              <td>Cell 3.3</td>
+            </_>
+            <_>
+              <th>Row 4</th>
+              <td>Cell 4.3</td>
+            </_>
+            <_>
+              <th>Row 5</th>
+              <td>Cell 5.3</td>
+            </_>
+            <_>
+              <th>Row 6</th>
+              <td>Cell 6.3</td>
+            </_>
+            <_>
+              <th>Row 7</th>
+              <td>Cell 7.3</td>
+            </_>
+            <_>
+              <th>Row 8</th>
+              <td>Cell 8.3</td>
+            </_>
+            <_>
+              <th>Row 9</th>
+              <td>Cell 9.3</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="by-column-implicit">
+    <x:call function="css:render-table-by">
+      <x:param select="'column'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>Column 3</th>
+          </tr>
+          <tr>
+            <td>Cell 1.1</td>
+            <td>Cell 1.2</td>
+            <td>Cell 1.3</td>
+          </tr>
+          <tr>
+            <td>Cell 2.1</td>
+            <td>Cell 2.2</td>
+            <td>Cell 2.3</td>
+          </tr>
+          <tr>
+            <td>Cell 3.1</td>
+            <td>Cell 3.2</td>
+            <td>Cell 3.3</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <td>Cell 1.1</td>
+            </_>
+            <_>
+              <td>Cell 2.1</td>
+            </_>
+            <_>
+              <td>Cell 3.1</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <th>Column 2</th>
+              <td>Cell 1.2</td>
+            </_>
+            <_>
+              <td>Cell 2.2</td>
+            </_>
+            <_>
+              <td>Cell 3.2</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <th>Column 3</th>
+              <td>Cell 1.3</td>
+            </_>
+            <_>
+              <td>Cell 2.3</td>
+            </_>
+            <_>
+              <td>Cell 3.3</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="by-column-implicit-with-column-and-row-headers">
+    <x:call function="css:render-table-by">
+      <x:param select="'column'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th/>
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>Column 3</th>
+          </tr>
+          <tr>
+            <th>Row 1</th>
+            <td>Cell 1.1</td>
+            <td>Cell 1.2</td>
+            <td>Cell 1.3</td>
+          </tr>
+          <tr>
+            <th>Row 2</th>
+            <td>Cell 2.1</td>
+            <td>Cell 2.2</td>
+            <td>Cell 2.3</td>
+          </tr>
+          <tr>
+            <th>Row 3</th>
+            <td>Cell 3.1</td>
+            <td>Cell 3.2</td>
+            <td>Cell 3.3</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <th>Row 1</th>
+              <td>Cell 1.1</td>
+            </_>
+            <_>
+              <th>Row 2</th>
+              <td>Cell 2.1</td>
+            </_>
+            <_>
+              <th>Row 3</th>
+              <td>Cell 3.1</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <th>Column 2</th>
+              <th>Row 1</th>
+              <td>Cell 1.2</td>
+            </_>
+            <_>
+              <th>Row 2</th>
+              <td>Cell 2.2</td>
+            </_>
+            <_>
+              <th>Row 3</th>
+              <td>Cell 3.2</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <th>Column 3</th>
+              <th>Row 1</th>
+              <td>Cell 1.3</td>
+            </_>
+            <_>
+              <th>Row 2</th>
+              <td>Cell 2.3</td>
+            </_>
+            <_>
+              <th>Row 3</th>
+              <td>Cell 3.3</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      Merged headings
+      
+      Support for merged cells is primitive. Only headings spanning mutiple columns/rows are
+      considered. In the table below, the two first data cells in rows 2 and 3 are under the same
+      heading ("Cities"); hence that heading is applied to both those cells rather than just the
+      first. In row 4 the first data cell spans two rows; however, the merged data cell is actually
+      treated as two separate cells and thus appears twice, which is redundant.
+  -->
+  <x:scenario label="merged-headers">
+    <x:call function="css:render-table-by">
+      <x:param select="'area'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th/>
+            <th axis="type-of-place" css:table-header-policy="always" colspan="2">Cities</th>
+            <th axis="type-of-place" css:table-header-policy="always">Mountains</th>
+          </tr>
+          <tr>
+            <th axis="area">Europe</th>
+            <td>Copenhagen</td>
+            <td>Brussels</td>
+            <td>Mont Blanc</td>
+          </tr>
+          <tr>
+            <th axis="area">Asia</th>
+            <td>Beijing</td>
+            <td>Singapore</td>
+            <td>K2</td>
+          </tr>
+          <tr>
+            <th axis="area">Mars</th>
+            <td colspan="2">None?</td>
+            <td>Olympus Mons</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <th>Europe</th>
+          <_>
+            <_>
+              <th>Cities</th>
+              <td>Copenhagen</td>
+            </_>
+            <_>
+              <th>Cities</th>
+              <td>Brussels</td>
+            </_>
+            <_>
+              <th>Mountains</th>
+              <td>Mont Blanc</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <th>Asia</th>
+          <_>
+            <_>
+              <th>Cities</th>
+              <td>Beijing</td>
+            </_>
+            <_>
+              <th>Cities</th>
+              <td>Singapore</td>
+            </_>
+            <_>
+              <th>Mountains</th>
+              <td>K2</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <th>Mars</th>
+          <_>
+            <_>
+              <th>Cities</th>
+              <td>None?</td>
+            </_>
+            <_>
+              <th>Cities</th>
+              <td>None?</td>
+            </_>
+            <_>
+              <th>Mountains</th>
+              <td>Olympus Mons</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      Nested merged headings
+      
+      Headings may be nested. the following table has column headers "earth" and "elsewhere", each
+      of which contains two additional headers.
+  -->
+  <x:scenario label="nested-row-headers">
+    <x:call function="css:render-table-by">
+      <x:param select="'area, sub-area'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th/>
+            <th/>
+            <th axis="type-of-place" css:table-header-policy="always" colspan="2">Cities</th>
+            <th axis="type-of-place" css:table-header-policy="always">Mountains</th>
+          </tr>
+          <tr>
+            <th axis="area" rowspan="2">Earth</th>
+            <th axis="sub-area">Europe</th>
+            <td>Copenhagen</td>
+            <td>Brussels</td>
+            <td>Mont Blanc</td>
+          </tr>
+          <tr>
+            <th axis="sub-area">Asia</th>
+            <td>Beijing</td>
+            <td>Singapore</td>
+            <td>K2</td>
+          </tr>
+          <tr>
+            <th axis="area">Elsewhere</th>
+            <th axis="sub-area">Mars</th>
+            <td colspan="2">None?</td>
+            <td>Olympus Mons</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <th>Earth</th>
+          <_>
+            <_>
+              <th>Europe</th>
+              <_>
+                <_>
+                  <th>Cities</th>
+                  <td>Copenhagen</td>
+                </_>
+                <_>
+                  <th>Cities</th>
+                  <td>Brussels</td>
+                </_>
+                <_>
+                  <th>Mountains</th>
+                  <td>Mont Blanc</td>
+                </_>
+              </_>
+            </_>
+            <_>
+              <th>Asia</th>
+              <_>
+                <_>
+                  <th>Cities</th>
+                  <td>Beijing</td>
+                </_>
+                <_>
+                  <th>Cities</th>
+                  <td>Singapore</td>
+                </_>
+                <_>
+                  <th>Mountains</th>
+                  <td>K2</td>
+                </_>
+              </_>
+            </_>
+          </_>
+        </_>
+        <_>
+          <th>Elsewhere</th>
+          <_>
+            <_>
+              <th>Mars</th>
+              <_>
+                <_>
+                  <th>Cities</th>
+                  <td>None?</td>
+                </_>
+                <_>
+                  <th>Cities</th>
+                  <td>None?</td>
+                </_>
+                <_>
+                  <th>Mountains</th>
+                  <td>Olympus Mons</td>
+                </_>
+              </_>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      If both nested row headers and nested column headers are present, the table contents will be
+      grouped by combinations of the "outermost" headings. Note that the system fails to consider
+      that not all headings have to be nested if one of them is; here only the "Cities" heading has
+      subheadings, but "Mountains" is treated similarly regardless.
+  -->
+  <x:scenario label="nested-row-and-column-headers">
+    <x:call function="css:render-table-by">
+      <x:param select="'area, type-of-place, sub-area'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th/>
+            <th/>
+            <th axis="type-of-place" colspan="2">Cities</th>
+            <th axis="type-of-place">Mountains</th>
+          </tr>
+          <tr>
+            <th/>
+            <th/>
+            <th axis="population">pop &gt; 1 million</th>
+            <th axis="population">pop &gt; 2 million</th>
+            <th/>
+          </tr>
+          <tr>
+            <th axis="area" rowspan="2" css:table-header-policy="always">Earth</th>
+            <th axis="sub-area">Europe</th>
+            <td>Paris</td>
+            <td>London</td>
+            <td>Mont Blanc</td>
+          </tr>
+          <tr>
+            <th axis="sub-area">Asia</th>
+            <td>Beijing</td>
+            <td>Beijing</td>
+            <td>K2</td>
+          </tr>
+          <tr>
+            <th axis="area" css:table-header-policy="always">Elsewhere</th>
+            <th axis="sub-area">Mars</th>
+            <td colspan="2">None?</td>
+            <td>Olympus Mons</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <_>
+            <_>
+              <th>Earth</th>
+              <th>Cities</th>
+              <_>
+                <_>
+                  <th>Europe</th>
+                  <_>
+                    <_>
+                      <th>pop > 1 million</th>
+                      <td>Paris</td>
+                    </_>
+                    <_>
+                      <th>pop > 2 million</th>
+                      <td>London</td>
+                    </_>
+                  </_>
+                </_>
+                <_>
+                  <th>Asia</th>
+                  <_>
+                    <_>
+                      <th>pop > 1 million</th>
+                      <td>Beijing</td>
+                    </_>
+                    <_>
+                      <th>pop > 2 million</th>
+                      <td>Beijing</td>
+                    </_>
+                  </_>
+                </_>
+              </_>
+            </_>
+            <_>
+              <th>Earth</th>
+              <th>Mountains</th>
+              <_>
+                <_>
+                  <th>Europe</th>
+                  <_>
+                    <_>
+                      <th/>
+                      <td>Mont Blanc</td>
+                    </_>
+                  </_>
+                </_>
+                <_>
+                  <th>Asia</th>
+                  <_>
+                    <_>
+                      <th/>
+                      <td>K2</td>
+                    </_>
+                  </_>
+                </_>
+              </_>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <th>Elsewhere</th>
+              <th>Cities</th>
+              <_>
+                <_>
+                  <th>Mars</th>
+                  <_>
+                    <_>
+                      <th>pop > 1 million</th>
+                      <td>None?</td>
+                    </_>
+                    <_>
+                      <th>pop > 2 million</th>
+                      <td>None?</td>
+                    </_>
+                  </_>
+                </_>
+              </_>
+            </_>
+            <_>
+              <th>Elsewhere</th>
+              <th>Mountains</th>
+              <_>
+                <_>
+                  <th>Mars</th>
+                  <_>
+                    <_>
+                      <th/>
+                      <td>Olympus Mons</td>
+                    </_>
+                  </_>
+                </_>
+              </_>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      Example in section 11.4.2 of HTML 4 specification, with some minor
+      modification. https://www.w3.org/TR/REC-html40/struct/tables.html#h-11.4.2
+  -->
+  <x:scenario label="example-html4-spec-11.4.2">
+    <x:call function="css:render-table-by">
+      <x:param select="'location, date'"/>
+      <x:param>
+        <TABLE border="1"
+               summary="This table summarizes travel expenses
+                        incurred during August trips to
+                        San Jose and Seattle"
+               xmlns="http://www.w3.org/1999/xhtml">
+          <CAPTION>
+            Travel Expense Report
+          </CAPTION>
+          <TR>
+            <TH/>
+            <TH id="a2" axis="expenses">Meals</TH>
+            <TH id="a3" axis="expenses">Hotels</TH>
+            <TH id="a4" axis="expenses">Transport</TH>
+            <!-- <TD>subtotals</TD> --> <TH>subtotals</TH>
+          </TR>
+          <TR>
+            <TH id="a6" axis="location">San Jose</TH>
+            <!-- <TH/> -->
+            <!-- <TH/> -->
+            <!-- <TH/> -->
+            <!-- <TD/> -->
+          </TR>
+          <TR>
+            <TD id="a7" axis="date">25-Aug-97</TD>
+            <TD headers="a6 a7 a2">37.74</TD>
+            <TD headers="a6 a7 a3">112.00</TD>
+            <TD headers="a6 a7 a4">45.00</TD>
+            <!-- <TD/> -->
+          </TR>
+          <TR>
+            <TD id="a8" axis="date">26-Aug-97</TD>
+            <TD headers="a6 a8 a2">27.28</TD>
+            <TD headers="a6 a8 a3">112.00</TD>
+            <TD headers="a6 a8 a4">45.00</TD>
+            <!-- <TD/> -->
+          </TR>
+          <TR>
+            <!-- <TD>subtotals</TD> --> <TH headers="a6">subtotals</TH>
+            <TD>65.02</TD>
+            <TD>224.00</TD>
+            <TD>90.00</TD>
+            <TD>379.02</TD>
+          </TR>
+          <TR>
+            <TH id="a10" axis="location">Seattle</TH>
+            <!-- <TH/> -->
+            <!-- <TH/> -->
+            <!-- <TH/> -->
+            <!-- <TD/> -->
+          </TR>
+          <TR>
+            <TD id="a11" axis="date">27-Aug-97</TD>
+            <TD headers="a10 a11 a2">96.25</TD>
+            <TD headers="a10 a11 a3">109.00</TD>
+            <TD headers="a10 a11 a4">36.00</TD>
+            <!-- <TD/> -->
+          </TR>
+          <TR>
+            <TD id="a12" axis="date">28-Aug-97</TD>
+            <TD headers="a10 a12 a2">35.00</TD>
+            <TD headers="a10 a12 a3">109.00</TD>
+            <TD headers="a10 a12 a4">36.00</TD>
+            <!-- <TD/> -->
+          </TR>
+          <TR>
+            <!-- <TD>subtotals</TD> --> <TH headers="a10">subtotals</TH>
+            <TD>131.25</TD>
+            <TD>218.00</TD>
+            <TD>72.00</TD>
+            <TD>421.25</TD>
+          </TR>
+          <TR>
+            <TH>Totals</TH>
+            <TD>196.27</TD>
+            <TD>442.00</TD>
+            <TD>162.00</TD>
+            <TD>800.27</TD>
+          </TR>
+        </TABLE>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <TABLE xmlns="http://www.w3.org/1999/xhtml"
+             border="1"
+             summary="This table summarizes travel expenses
+                        incurred during August trips to
+                        San Jose and Seattle">
+        <CAPTION>
+            Travel Expense Report
+          </CAPTION>
+        <_>
+          <TH>San Jose</TH>
+          <_>
+            <_>
+              <TD>25-Aug-97</TD>
+              <_>
+                <_>
+                  <TH>Meals</TH>
+                  <TD>37.74</TD>
+                </_>
+                <_>
+                  <TH>Hotels</TH>
+                  <TD>112.00</TD>
+                </_>
+                <_>
+                  <TH>Transport</TH>
+                  <TD>45.00</TD>
+                </_>
+              </_>
+            </_>
+            <_>
+              <TD>26-Aug-97</TD>
+              <_>
+                <_>
+                  <TH>Meals</TH>
+                  <TD>27.28</TD>
+                </_>
+                <_>
+                  <TH>Hotels</TH>
+                  <TD>112.00</TD>
+                </_>
+                <_>
+                  <TH>Transport</TH>
+                  <TD>45.00</TD>
+                </_>
+              </_>
+            </_>
+            <_>
+              <_>
+                <_>
+                  <TH>subtotals</TH>
+                  <TH>Meals</TH>
+                  <TD>65.02</TD>
+                </_>
+                <_>
+                  <TH>Hotels</TH>
+                  <TD>224.00</TD>
+                </_>
+                <_>
+                  <TH>Transport</TH>
+                  <TD>90.00</TD>
+                </_>
+                <_>
+                  <TH>subtotals</TH>
+                  <TD>379.02</TD>
+                </_>
+              </_>
+            </_>
+          </_>
+        </_>
+        <_>
+          <TH>Seattle</TH>
+          <_>
+            <_>
+              <TD>27-Aug-97</TD>
+              <_>
+                <_>
+                  <TH>Meals</TH>
+                  <TD>96.25</TD>
+                </_>
+                <_>
+                  <TH>Hotels</TH>
+                  <TD>109.00</TD>
+                </_>
+                <_>
+                  <TH>Transport</TH>
+                  <TD>36.00</TD>
+                </_>
+              </_>
+            </_>
+            <_>
+              <TD>28-Aug-97</TD>
+              <_>
+                <_>
+                  <TH>Meals</TH>
+                  <TD>35.00</TD>
+                </_>
+                <_>
+                  <TH>Hotels</TH>
+                  <TD>109.00</TD>
+                </_>
+                <_>
+                  <TH>Transport</TH>
+                  <TD>36.00</TD>
+                </_>
+              </_>
+            </_>
+            <_>
+              <_>
+                <_>
+                  <TH>subtotals</TH>
+                  <TH>Meals</TH>
+                  <TD>131.25</TD>
+                </_>
+                <_>
+                  <TH>Hotels</TH>
+                  <TD>218.00</TD>
+                </_>
+                <_>
+                  <TH>Transport</TH>
+                  <TD>72.00</TD>
+                </_>
+                <_>
+                  <TH>subtotals</TH>
+                  <TD>421.25</TD>
+                </_>
+              </_>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <TH>Totals</TH>
+              <TH>Meals</TH>
+              <TD>196.27</TD>
+            </_>
+            <_>
+              <TH>Hotels</TH>
+              <TD>442.00</TD>
+            </_>
+            <_>
+              <TH>Transport</TH>
+              <TD>162.00</TD>
+            </_>
+            <_>
+              <TH>subtotals</TH>
+              <TD>800.27</TD>
+            </_>
+          </_>
+        </_>
+      </TABLE>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="pseudo-elements">
+    <x:call function="css:render-table-by">
+      <x:param select="'row'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml"
+               style="{{ display: a }}
+                      ::list-item {{ display: b }}
+                      ::table-by(row) {{ display: c }}
+                      ::table-by(row)::list-item {{ display: d }}
+                      ::table-by(row)::list-item::after {{ display: e }}
+                      ::table-by(row)::list-item:nth-last-child(1)::after {{ display: f }}">
+          <tr>
+            <td>Cell 1.1</td>
+            <td>Cell 1.2</td>
+            <td>Cell 1.3</td>
+          </tr>
+          <tr>
+            <td>Cell 2.1</td>
+            <td>Cell 2.2</td>
+            <td>Cell 2.3</td>
+          </tr>
+          <tr>
+            <td>Cell 3.1</td>
+            <td>Cell 3.2</td>
+            <td>Cell 3.3</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml" style="display: a">
+        <_ style="display: b">
+          <_ style="display: c">
+            <_ style="{{ display: d }} ::after {{ display: e }}">
+              <td>Cell 1.1</td>
+            </_>
+            <_ style="{{ display: d }} ::after {{ display: e }}">
+              <td>Cell 1.2</td>
+            </_>
+            <_ style="{{ display: d }} ::after {{ display: e; display: f }}">
+              <td>Cell 1.3</td>
+            </_>
+          </_>
+        </_>
+        <_ style="display: b">
+          <_ style="display: c">
+            <_ style="{{ display: d }} ::after {{ display: e }}">
+              <td>Cell 2.1</td>
+            </_>
+            <_ style="{{ display: d }} ::after {{ display: e }}">
+              <td>Cell 2.2</td>
+            </_>
+            <_ style="{{ display: d }} ::after {{ display: e; display: f }}">
+              <td>Cell 2.3</td>
+            </_>
+          </_>
+        </_>
+        <_ style="display: b">
+          <_ style="display: c">
+            <_ style="{{ display: d }} ::after {{ display: e }}">
+              <td>Cell 3.1</td>
+            </_>
+            <_ style="{{ display: d }} ::after {{ display: e }}">
+              <td>Cell 3.2</td>
+            </_>
+            <_ style="{{ display: d }} ::after {{ display: e; display: f }}">
+              <td>Cell 3.3</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="nested-column-headers-implicit">
+    <x:call function="css:render-table-by">
+      <x:param select="'row'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th colspan="2">Column 1</th>
+            <th>Column 2</th>
+          </tr>
+          <tr>
+            <th>A</th>
+            <th>B</th>
+          </tr>
+          <tr>
+            <td>Cell 1.1A</td>
+            <td>Cell 1.1B</td>
+            <td>Cell 1.2</td>
+          </tr>
+          <tr>
+            <td>Cell 2.1A</td>
+            <td>Cell 2.1B</td>
+            <td>Cell 2.2</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <th>A</th>
+              <td>Cell 1.1A</td>
+            </_>
+            <_>
+              <th>B</th>
+              <td>Cell 1.1B</td>
+            </_>
+            <_>
+              <th>Column 2</th>
+              <td>Cell 1.2</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <th>A</th>
+              <td>Cell 2.1A</td>
+            </_>
+            <_>
+              <th>B</th>
+              <td>Cell 2.1B</td>
+            </_>
+            <_>
+              <th>Column 2</th>
+              <td>Cell 2.2</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="header-policy-front">
+    <x:call function="css:render-table-by">
+      <x:param select="'row'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <caption>Fünf Länder im Vergleich</caption>
+          <thead>
+            <tr>
+              <th css:table-header-policy="front">Land</th>
+              <th css:table-header-policy="front">Hauptstadt</th>
+              <th css:table-header-policy="front">Währung</th>
+              <th css:table-header-policy="front">Amtssprache</th>
+            </tr>
+          </thead>
+          <!--
+          <tfoot>
+            <tr>
+              <td>Quelle: Wikipedia</td>
+              <td>Quelle: Wikipedia</td>
+              <td>Quelle: Wikipedia</td>
+              <td>Quelle: Wikipedia</td>
+            </tr>
+          </tfoot>
+          -->
+          <tbody>
+            <tr>
+              <td><abbr>USA</abbr></td>
+              <td>Washington</td>
+              <td><abbr>US</abbr>-Dollar</td>
+              <td>Englisch</td>
+            </tr>
+            <tr>
+              <td>Japan</td>
+              <td>Tokio</td>
+              <td>Yen</td>
+              <td>Japanisch</td>
+            </tr>
+            <tr>
+              <td>Indien</td>
+              <td>Neu-Delhi</td>
+              <td>Rupie</td>
+              <td>Hindi</td>
+            </tr>
+            <tr>
+              <td>Grönland</td>
+              <td>Nuuk</td>
+              <td>Dänische Krone</td>
+              <td>Dänisch</td>
+            </tr>
+            <tr>
+              <td>Brasilien</td>
+              <td>Brasília</td>
+              <td>Real</td>
+              <td>Portugiesisch</td>
+            </tr>
+          </tbody>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <caption>Fünf Länder im Vergleich</caption>
+        <_>
+          <_>
+            <_>
+              <th>Land</th>
+            </_>
+            <_>
+              <th>Hauptstadt</th>
+            </_>
+            <_>
+              <th>Währung</th>
+            </_>
+            <_>
+              <th>Amtssprache</th>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td><abbr>USA</abbr></td>
+            </_>
+            <_>
+              <td>Washington</td>
+            </_>
+            <_>
+              <td><abbr>US</abbr>-Dollar</td>
+            </_>
+            <_>
+              <td>Englisch</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Japan</td>
+            </_>
+            <_>
+              <td>Tokio</td>
+            </_>
+            <_>
+              <td>Yen</td>
+            </_>
+            <_>
+              <td>Japanisch</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Indien</td>
+            </_>
+            <_>
+              <td>Neu-Delhi</td>
+            </_>
+            <_>
+              <td>Rupie</td>
+            </_>
+            <_>
+              <td>Hindi</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Grönland</td>
+            </_>
+            <_>
+              <td>Nuuk</td>
+            </_>
+            <_>
+              <td>Dänische Krone</td>
+            </_>
+            <_>
+              <td>Dänisch</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Brasilien</td>
+            </_>
+            <_>
+              <td>Brasília</td>
+            </_>
+            <_>
+              <td>Real</td>
+            </_>
+            <_>
+              <td>Portugiesisch</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="header-policy-front-nested">
+    <x:call function="css:render-table-by">
+      <x:param select="'row'"/>
+      <x:param>
+        <table xmlns="http://www.w3.org/1999/xhtml">
+          <tr>
+            <th colspan="2">Column 1</th>
+            <th css:table-header-policy="front">Column 2</th>
+          </tr>
+          <tr>
+            <th css:table-header-policy="front">A</th>
+            <th css:table-header-policy="front">B</th>
+          </tr>
+          <tr>
+            <td>Cell 1.1A</td>
+            <td>Cell 1.1B</td>
+            <td>Cell 1.2</td>
+          </tr>
+          <tr>
+            <td>Cell 2.1A</td>
+            <td>Cell 2.1B</td>
+            <td>Cell 2.2</td>
+          </tr>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.w3.org/1999/xhtml">
+        <_>
+          <_>
+            <_>
+              <th>Column 1</th>
+              <th>A</th>
+            </_>
+            <_>
+              <th>B</th>
+            </_>
+            <_>
+              <th>Column 2</th>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Cell 1.1A</td>
+            </_>
+            <_>
+              <td>Cell 1.1B</td>
+            </_>
+            <_>
+              <td>Cell 1.2</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Cell 2.1A</td>
+            </_>
+            <_>
+              <td>Cell 2.1B</td>
+            </_>
+            <_>
+              <td>Cell 2.2</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="table-footer">
+    <x:call function="css:render-table-by">
+      <x:param select="'row'"/>
+      <x:param>
+        <table xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <caption>Fünf Länder im Vergleich</caption>
+          <thead>
+            <tr>
+              <th css:table-header-policy="front">Land</th>
+              <th css:table-header-policy="front">Hauptstadt</th>
+              <th css:table-header-policy="front">Währung</th>
+              <th css:table-header-policy="front">Amtssprache</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Quelle: Wikipedia</td>
+              <td>Quelle: Wikipedia</td>
+              <td>Quelle: Wikipedia</td>
+              <td>Quelle: Wikipedia</td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr>
+              <td><abbr>USA</abbr></td>
+              <td>Washington</td>
+              <td><abbr>US</abbr>-Dollar</td>
+              <td>Englisch</td>
+            </tr>
+            <tr>
+              <td>Japan</td>
+              <td>Tokio</td>
+              <td>Yen</td>
+              <td>Japanisch</td>
+            </tr>
+            <tr>
+              <td>Indien</td>
+              <td>Neu-Delhi</td>
+              <td>Rupie</td>
+              <td>Hindi</td>
+            </tr>
+            <tr>
+              <td>Grönland</td>
+              <td>Nuuk</td>
+              <td>Dänische Krone</td>
+              <td>Dänisch</td>
+            </tr>
+            <tr>
+              <td>Brasilien</td>
+              <td>Brasília</td>
+              <td>Real</td>
+              <td>Portugiesisch</td>
+            </tr>
+          </tbody>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+        <caption>Fünf Länder im Vergleich</caption>
+        <_>
+          <_>
+            <_>
+              <th>Land</th>
+            </_>
+            <_>
+              <th>Hauptstadt</th>
+            </_>
+            <_>
+              <th>Währung</th>
+            </_>
+            <_>
+              <th>Amtssprache</th>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>
+                <abbr>USA</abbr>
+              </td>
+            </_>
+            <_>
+              <td>Washington</td>
+            </_>
+            <_>
+              <td><abbr>US</abbr>-Dollar</td>
+            </_>
+            <_>
+              <td>Englisch</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Japan</td>
+            </_>
+            <_>
+              <td>Tokio</td>
+            </_>
+            <_>
+              <td>Yen</td>
+            </_>
+            <_>
+              <td>Japanisch</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Indien</td>
+            </_>
+            <_>
+              <td>Neu-Delhi</td>
+            </_>
+            <_>
+              <td>Rupie</td>
+            </_>
+            <_>
+              <td>Hindi</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Grönland</td>
+            </_>
+            <_>
+              <td>Nuuk</td>
+            </_>
+            <_>
+              <td>Dänische Krone</td>
+            </_>
+            <_>
+              <td>Dänisch</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Brasilien</td>
+            </_>
+            <_>
+              <td>Brasília</td>
+            </_>
+            <_>
+              <td>Real</td>
+            </_>
+            <_>
+              <td>Portugiesisch</td>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <td>Quelle: Wikipedia</td>
+            </_>
+            <_>
+              <td>Quelle: Wikipedia</td>
+            </_>
+            <_>
+              <td>Quelle: Wikipedia</td>
+            </_>
+            <_>
+              <td>Quelle: Wikipedia</td>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="by-row-group">
+    <x:call function="css:render-table-by">
+      <x:param select="'row-group, row'"/>
+      <x:param>
+        <table xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <caption>Fünf Länder im Vergleich</caption>
+          <thead>
+            <tr>
+              <th>Land</th>
+              <th>Hauptstadt</th>
+              <th>Währung</th>
+              <th>Amtssprache</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <td>Quelle: Wikipedia</td>
+              <td>Quelle: Wikipedia</td>
+              <td>Quelle: Wikipedia</td>
+              <td>Quelle: Wikipedia</td>
+            </tr>
+          </tfoot>
+          <tbody>
+            <tr>
+              <td><abbr>USA</abbr></td>
+              <td>Washington</td>
+              <td><abbr>US</abbr>-Dollar</td>
+              <td>Englisch</td>
+            </tr>
+            <tr>
+              <td>Japan</td>
+              <td>Tokio</td>
+              <td>Yen</td>
+              <td>Japanisch</td>
+            </tr>
+            <tr>
+              <td>Indien</td>
+              <td>Neu-Delhi</td>
+              <td>Rupie</td>
+              <td>Hindi</td>
+            </tr>
+            <tr>
+              <td>Grönland</td>
+              <td>Nuuk</td>
+              <td>Dänische Krone</td>
+              <td>Dänisch</td>
+            </tr>
+            <tr>
+              <td>Brasilien</td>
+              <td>Brasília</td>
+              <td>Real</td>
+              <td>Portugiesisch</td>
+            </tr>
+          </tbody>
+        </table>
+      </x:param>
+    </x:call>
+    <x:expect label="result">
+      <table xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+        <caption>Fünf Länder im Vergleich</caption>
+        <_>
+          <_>
+            <_>
+              <_>
+                <_>
+                  <th>Land</th>
+                  <td><abbr>USA</abbr></td>
+                </_>
+                <_>
+                  <th>Hauptstadt</th>
+                  <td>Washington</td>
+                </_>
+                <_>
+                  <th>Währung</th>
+                  <td><abbr>US</abbr>-Dollar</td>
+                </_>
+                <_>
+                  <th>Amtssprache</th>
+                  <td>Englisch</td>
+                </_>
+              </_>
+            </_>
+            <_>
+              <_>
+                <_>
+                  <th>Land</th>
+                  <td>Japan</td>
+                </_>
+                <_>
+                  <th>Hauptstadt</th>
+                  <td>Tokio</td>
+                </_>
+                <_>
+                  <th>Währung</th>
+                  <td>Yen</td>
+                </_>
+                <_>
+                  <th>Amtssprache</th>
+                  <td>Japanisch</td>
+                </_>
+              </_>
+            </_>
+            <_>
+              <_>
+                <_>
+                  <th>Land</th>
+                  <td>Indien</td>
+                </_>
+                <_>
+                  <th>Hauptstadt</th>
+                  <td>Neu-Delhi</td>
+                </_>
+                <_>
+                  <th>Währung</th>
+                  <td>Rupie</td>
+                </_>
+                <_>
+                  <th>Amtssprache</th>
+                  <td>Hindi</td>
+                </_>
+              </_>
+            </_>
+            <_>
+              <_>
+                <_>
+                  <th>Land</th>
+                  <td>Grönland</td>
+                </_>
+                <_>
+                  <th>Hauptstadt</th>
+                  <td>Nuuk</td>
+                </_>
+                <_>
+                  <th>Währung</th>
+                  <td>Dänische Krone</td>
+                </_>
+                <_>
+                  <th>Amtssprache</th>
+                  <td>Dänisch</td>
+                </_>
+              </_>
+            </_>
+            <_>
+              <_>
+                <_>
+                  <th>Land</th>
+                  <td>Brasilien</td>
+                </_>
+                <_>
+                  <th>Hauptstadt</th>
+                  <td>Brasília</td>
+                </_>
+                <_>
+                  <th>Währung</th>
+                  <td>Real</td>
+                </_>
+                <_>
+                  <th>Amtssprache</th>
+                  <td>Portugiesisch</td>
+                </_>
+              </_>
+            </_>
+          </_>
+        </_>
+        <_>
+          <_>
+            <_>
+              <_>
+                <_>
+                  <th>Land</th>
+                  <td>Quelle: Wikipedia</td>
+                </_>
+                <_>
+                  <th>Hauptstadt</th>
+                  <td>Quelle: Wikipedia</td>
+                </_>
+                <_>
+                  <th>Währung</th>
+                  <td>Quelle: Wikipedia</td>
+                </_>
+                <_>
+                  <th>Amtssprache</th>
+                  <td>Quelle: Wikipedia</td>
+                </_>
+              </_>
+            </_>
+          </_>
+        </_>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

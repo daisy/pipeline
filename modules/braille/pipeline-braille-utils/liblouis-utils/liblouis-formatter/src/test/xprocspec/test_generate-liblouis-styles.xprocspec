@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:louis="http://liblouis.org/liblouis"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
+  
+  <x:script>
+    <p:declare-step type="pxi:test-generate-liblouis-styles" version="1.0">
+      <p:input port="source" sequence="true"/>
+      <p:output port="result" primary="true"/>
+      <p:output port="secondary" sequence="true">
+        <p:pipe step="xslt" port="secondary"/>
+      </p:output>
+      <p:xslt name="xslt">
+        <p:input port="stylesheet">
+          <p:document href="../../main/resources/xml/generate-liblouis-styles.xsl"/>
+        </p:input>
+        <p:input port="parameters">
+          <p:empty/>
+        </p:input>
+      </p:xslt>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="test_01" pending="generate-id behaves differently for different versions of saxon/calabash">
+    <x:call step="pxi:test-generate-liblouis-styles">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc>
+            <body css:display="block">
+              <section css:display="block" style="page-break-before: always">
+                <h css:display="block" style="left: 3; right: 3; margin-top: 1; margin-bottom: 1; text-align: center; page-break-after: avoid">
+                  baz
+                </h>
+                <p css:display="block" style="text-indent: 2; orphans: 2">
+                  <span>foo</span>bar
+                </p>
+              </section>
+            </body>
+            <louis:page-layout>
+              <c:param-set>
+                <c:param name="louis:braille-page-format" value="prefix-p"/>
+              </c:param-set>
+            </louis:page-layout>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <doc>
+          <body louis:style="#d798e3">
+            <section louis:style="#d798e5">
+              <h louis:style="#d798e7">
+                baz
+              </h>
+              <p louis:style="#d798e10">
+                <span>foo</span>bar
+              </p>
+            </section>
+          </body>
+          <louis:page-layout>
+            <c:param-set>
+              <c:param name="louis:braille-page-format" value="prefix-p"/>
+            </c:param-set>
+          </louis:page-layout>
+        </doc>
+      </x:document>
+    </x:expect>
+    <x:context label="secondary">
+      <x:document type="port" port="secondary"/>
+    </x:context>
+    <x:expect label="secondary" type="compare">
+      <x:document type="inline">
+        <louis:styles># --------------------------------------------------------------------------------------------------
+# root
+# --------------------------------------------------------------------------------------------------
+style root
+   braillePageNumberFormat p
+
+# --------------------------------------------------------------------------------------------------
+# d798e3
+# --------------------------------------------------------------------------------------------------
+style d798e3
+
+# --------------------------------------------------------------------------------------------------
+# d798e5
+# --------------------------------------------------------------------------------------------------
+style d798e5
+   newPageBefore yes
+
+# --------------------------------------------------------------------------------------------------
+# d798e7
+# --------------------------------------------------------------------------------------------------
+style d798e7
+   format centered
+   leftMargin 3
+   rightMargin 3
+   linesBefore 1
+   linesAfter 1
+   keepWithNext yes
+
+# --------------------------------------------------------------------------------------------------
+# d798e10
+# --------------------------------------------------------------------------------------------------
+style d798e10
+   firstLineIndent 2
+   orphanControl 2
+
+</louis:styles>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02" pending="generate-id behaves differently for different versions of saxon/calabash">
+    <x:call step="pxi:test-generate-liblouis-styles">
+      <x:input port="source">
+        <x:document type="inline">
+          <louis:toc href="file:/home/me/doc.xml" width="20">
+            <louis:toc-item style="left: 4; text-indent: -4"/>
+            <louis:toc-item style="left: 4; text-indent: -4"/>
+            <louis:toc-item style="left: 6; text-indent: -4"/>
+          </louis:toc>
+        </x:document>
+        <x:document type="inline">
+          <doc xml:base="file:/home/me/doc.xml">
+            <louis:page-layout>
+              <c:param-set>
+                <c:param name="louis:page-width" value="30"/>
+              </c:param-set>
+            </louis:page-layout>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <louis:toc href="file:/home/me/doc.xml" width="20">
+          <louis:toc-item louis:style="#d864e3"/>
+          <louis:toc-item louis:style="#d864e3"/>
+          <louis:toc-item louis:style="#d864e7"/>
+        </louis:toc>
+      </x:document>
+    </x:expect>
+    <x:context label="secondary">
+      <x:document type="port" port="secondary"/>
+    </x:context>
+    <x:expect label="secondary" type="compare">
+      <x:document type="inline">
+        <louis:styles># --------------------------------------------------------------------------------------------------
+# contents1
+# --------------------------------------------------------------------------------------------------
+style contents1
+   format contents
+   leftMargin 14
+   firstLineIndent -4
+
+# --------------------------------------------------------------------------------------------------
+# contents2
+# --------------------------------------------------------------------------------------------------
+style contents2
+   format contents
+   leftMargin 16
+   firstLineIndent -4
+
+</louis:styles>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

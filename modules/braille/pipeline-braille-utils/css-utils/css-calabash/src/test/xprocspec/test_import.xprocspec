@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../resources/inline.xpl">
+
+  <x:scenario label="test_01">
+    <x:documentation>
+      From within embedded style sheet import external style sheet stored locally.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/css">
+                @import url("../resources/css/css_1.css");
+                h1 { text-align: center }
+              </style>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1 style="display: block; text-align: center;"/>
+          <p style="display: block;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:documentation>
+      From within embedded style sheet import external style sheet stored in module.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/css">
+                @import url("http://test/css-module/css/css_1.css");
+              </style>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="orphans: 3;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03" pending="does not work">
+    <x:documentation>
+      From within (linked) style sheet stored in module import style sheet that is private to that module.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link rel="stylesheet" type="text/css" href="http://test/css-module/css/css_2_imports_css_3.css"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="hyphens: auto;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

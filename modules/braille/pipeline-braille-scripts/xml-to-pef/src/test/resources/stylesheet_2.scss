@@ -1,0 +1,6 @@
+$uppercase : false !default;
+@if $uppercase {
+	:root {
+		text-transform: uppercase;
+	}
+}

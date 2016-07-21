@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:dotify="http://code.google.com/p/dotify/"
+               stylesheet="../resources/phony.xsl">
+  
+  <!-- ======= -->
+  <!-- test_01 -->
+  <!-- ======= -->
+  <!--
+  
+  -->
+  <x:scenario label="test_01">
+    <x:call function="dotify:translate">
+      <x:param select="'(locale:sv-SE)'"/>
+      <x:param select="'foobar'"/>
+    </x:call>
+    <x:expect label="result" select="'⠋⠕⠕⠃⠁⠗'"/>
+  </x:scenario>
+  
+</x:description>

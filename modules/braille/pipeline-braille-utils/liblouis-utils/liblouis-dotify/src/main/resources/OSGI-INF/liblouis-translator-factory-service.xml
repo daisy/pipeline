@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.daisy.pipeline.braille.liblouis.dotify.LiblouisTranslatorFactoryService">
+    <scr:implementation class="org.daisy.pipeline.braille.liblouis.dotify.LiblouisTranslatorFactoryService"/>
+    <scr:service>
+        <scr:provide interface="org.daisy.dotify.api.translator.BrailleTranslatorFactoryService"/>
+    </scr:service>
+    <scr:reference bind="bindLiblouis"
+        unbind="unbindLiblouis"
+        interface="org.daisy.pipeline.braille.liblouis.Liblouis"
+        cardinality="1..1"
+        name="Liblouis"
+        policy="static"/>
+    <scr:reference bind="bindTableLookup"
+        unbind="unbindTableLookup"
+        interface="org.daisy.pipeline.braille.liblouis.LiblouisTableLookup"
+        cardinality="1..1"
+        name="LiblouisTableLookup"
+        policy="static"/>
+</scr:component>

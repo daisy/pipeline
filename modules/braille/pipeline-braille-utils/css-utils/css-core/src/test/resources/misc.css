@@ -1,0 +1,58 @@
+@charset "UTF-8";
+@page {
+  size: 40 25;
+  @top-left {
+    content: "page " counter(page);
+  }
+  @left {
+    content: -obfl-marker-position(pagenum, "⠿");
+  }
+}
+
+h1 {
+  string-set: footer content();
+}
+
+@page :right {
+  @bottom-center {
+    content: string(footer);
+  }
+}
+
+/* Error: Base-level rules cannot contain the parent-selector-referencing character '&'.
+@page {
+	&:right {
+		@bottom-center {
+			content: string(footer);
+		}
+	}
+}
+*/
+h2 {
+  string-set: footer content();
+}
+
+@volume :nth-last(2) {
+  max-length: 100;
+  @end {
+    content: flow(endnotes);
+  }
+}
+
+#toc {
+  display: -obfl-toc;
+}
+
+#toc::-obfl-toc-group::before {
+  display: block;
+}
+
+#foo {
+  -obfl-vertical-position: 5;
+  border-top: ⠒;
+  border-bottom: ⠒;
+}
+
+#foo:has( > #bar)::before {
+  content: 'foo';
+}

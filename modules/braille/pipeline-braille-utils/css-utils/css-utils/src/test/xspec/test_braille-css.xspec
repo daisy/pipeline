@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/braille-css.xsl">
+	
+	<x:scenario label="test_01">
+		<x:call function="css:property">
+			<x:param select="'left'"/>
+			<x:param select="'auto'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:property name="left" value="auto"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_02">
+		<x:call function="css:property">
+			<x:param select="'left'"/>
+			<x:param select="xs:integer(2)"/>
+		</x:call>
+		<x:expect label="result">
+			<css:property name="left" value="2"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_03">
+		<x:call function="css:specified-properties">
+			<x:param select="'#all invalid'"/>
+			<x:param select="true()"/>
+			<x:param select="true()"/>
+			<x:param select="true()"/>
+			<x:param select="//bar">
+				<foo css:orphans="3" css:page="size: 10 10">
+					<bar style="display: -foo-something;
+					            left: invalid;
+					            orphans: inherit;
+					            page-break-before: initial;
+					            string-set: print-page attr(num);
+					            someprop: someval;
+					            -foo-someprop: someval"/>
+				</foo>
+			</x:param>
+		</x:call>
+		<x:expect label="result">
+			<css:property name="display" value="-foo-something"/>
+			<css:property name="orphans" value="3"/>
+			<css:property name="page-break-before" value="auto"/>
+			<css:property name="string-set" value="print-page attr(num)"/>
+			<css:property name="-foo-someprop" value="someval"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_04">
+		<x:call function="css:parse-stylesheet">
+			<x:param select="'orphans: 3; @page { size: 40 25;}   {display:block}'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:rule style="display:block"/>
+			<css:rule selector="@page" style="size: 40 25;"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_05">
+		<x:call function="css:parse-stylesheet">
+			<x:param select="'@volume { min-length: 20; max-length: 100; } @volume:nth(2) { max-length: 50; }'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:rule selector="@volume" style="{{ min-length: 20; max-length: 100; }} :nth(2) {{ max-length: 50; }}"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_06">
+		<x:call function="css:parse-stylesheet">
+			<x:param select="'::before { content: &quot; } &quot; }
+			                 {display:block}
+			                 @page { size: 40 25 @top-right-corner { content: &quot; } &quot; }}
+			                 @volume { @begin { content: flow(titlepage); @page { size: 15 5; } @page:left { size: 15 5; @top-right { content: none; }}}}'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:rule selector="::before" style="content: &quot; }} &quot;"/>
+			<css:rule style="display:block"/>
+			<css:rule selector="@page" style="size: 40 25 @top-right-corner {{ content: &quot; }} &quot; }}"/>
+			<css:rule selector="@volume" style="@begin {{ content: flow(titlepage); @page {{ size: 15 5; }} @page:left {{ size: 15 5; @top-right {{ content: none; }}}}}}"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_07">
+		<x:call function="css:parse-stylesheet">
+			<x:param select="'::before { display: block }
+			                  ::before::before { display: block }
+			                  ::before::before::before { display: block }'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:rule selector="::before" style="{{ display: block }} ::before {{ display: block }} ::before::before {{ display: block }}"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_08">
+		<x:call function="css:parse-stylesheet">
+			<x:param select="'@page { size: 15 15; @bottom-right { content: counter(braille-page, lower-roman) }'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:rule style="@page {{ size: 15 15;"/>
+			<css:rule selector="@bottom-right" style="content: counter(braille-page, lower-roman)"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_09">
+		<x:call function="css:parse-declaration-list">
+			<x:param select="'  display: none;  string-set : print-page attr(value) ;  '"/>
+		</x:call>
+		<x:expect label="result">
+			<css:property name="display" value="none"/>
+			<css:property name="string-set" value="print-page attr(value)"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_10">
+		<x:call function="css:parse-content-list">
+			<x:param select="'target-string(attr(ref url), print-page) target-counter(attr(ref url), braille-page, lower-roman) -x-foo(bar, baz) string(print-page, start) flow(foo, volume) counter(list-item, symbols(cyclic &quot;*&quot; &quot;†&quot; &quot;‡&quot; &quot;§&quot;))'"/>
+			<x:param select="//a">
+				<doc>
+					<a ref="#foo">foo</a>
+				</doc>
+			</x:param>
+		</x:call>
+		<x:expect label="result">
+			<css:string target="#foo" name="print-page"/>
+			<css:counter target="#foo" name="braille-page" style="lower-roman"/>
+			<css:custom-func name="-x-foo" arg1="bar" arg2="baz"/>
+			<css:string name="print-page" scope="start"/>
+			<css:flow from="foo" scope="volume"/>
+			<css:counter name="list-item" style='symbols(cyclic "*" "†" "‡" "§")'/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_11">
+		<x:call function="css:parse-string-set">
+			<x:param select="'print-page &quot;page &quot; attr(num), running-header &quot;foo&quot;'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:string-set name="print-page" value="&quot;page &quot; attr(num)"/>
+			<css:string-set name="running-header" value="&quot;foo&quot;"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_12">
+		<x:call function="css:parse-counter-set">
+			<x:param select="'foo 2 bar'"/>
+			<x:param select="0"/>
+		</x:call>
+		<x:expect label="result">
+			<css:counter-set name="foo" value="2"/>
+			<css:counter-set name="bar" value="0"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_13">
+		<x:context mode="css:serialize">
+			<css:string target="#foo" name="print-page"/>
+		</x:context>
+		<x:expect label="result" select="'target-string(url(&quot;#foo&quot;), print-page)'"/>
+	</x:scenario>
+	
+	<x:scenario label="test_14">
+		<x:call function="css:serialize-stylesheet">
+			<x:param>
+				<css:rule selector="@page" style="{{ size: 40 25; }} @bottom-center {{ content: &quot;foo&quot; }} :left {{ @bottom-left {{ content: counter(page) }} }}"/>
+				<css:rule style="display:block"/>
+				<css:rule selector="@volume" style="{{ min-length: 20; max-length: 100; }} :nth(2) {{ max-length: 50; }}"/>
+				<css:rule selector="::before" style="{{ content: &quot;foo&quot; }} ::after {{ content: &quot;foo&quot; }}"/>
+				<css:rule selector="::table-by(foo)" style="::list-item::after {{ content: &quot;, &quot; }} ::list-item:last-child::after {{ content: none }}"/>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="'{ display:block } @page { size: 40 25; @bottom-center { content: &quot;foo&quot; } } @page:left { @bottom-left { content: counter(page) } } @volume { min-length: 20; max-length: 100; } @volume:nth(2) { max-length: 50; } ::before { content: &quot;foo&quot; } ::before::after { content: &quot;foo&quot; } ::table-by(foo)::list-item::after { content: &quot;, &quot; } ::table-by(foo)::list-item:last-child::after { content: none }'"/>
+	</x:scenario>
+	
+	<x:scenario label="test_15">
+		<x:call function="css:serialize-declaration-list">
+			<x:param>
+				<css:property name="display" value="none"/>
+				<css:property name="string-set" value="print-page attr(value)"/>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="'display: none; string-set: print-page attr(value)'"/>
+	</x:scenario>
+	
+	<x:scenario label="test_16">
+		<x:context mode="css:eval">
+			<css:string value="foobar"/>
+		</x:context>
+		<x:expect label="result" select="&quot;foobar&quot;"/>
+	</x:scenario>
+	
+	<x:scenario label="test_17">
+		<x:call function="css:counter-value">
+			<x:param select="'list-item'"/>
+			<x:param select="/ul/li[3]">
+				<ul>
+					<li css:counter-increment-list-item="1">
+						<ul css:counter-reset-list-item="0">
+							<li css:counter-increment-list-item="1"/>
+							<li css:counter-increment-list-item="1"/>
+						</ul>
+					</li>
+					<li css:counter-increment-list-item="1">
+						<ul>
+							<li css:counter-increment-list-item="1"/>
+							<li css:counter-increment-list-item="1"/>
+						</ul>
+					</li>
+					<li css:counter-increment-list-item="1"/>
+					<li css:counter-increment-list-item="1"/>
+				</ul>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="5"/>
+	</x:scenario>
+	
+	<x:scenario label="test_18">
+		<x:call function="css:counter-value">
+			<x:param select="'list-item'"/>
+			<x:param select="(//css:marker)[4]">
+				<body>
+					<ul>
+						<li css:counter-increment-list-item="1" id="1">
+							<css:marker/>
+						</li>
+						<li css:counter-increment-list-item="1" id="2">
+							<css:marker/>
+						</li>
+					</ul>
+					<ul css:counter-reset-list-item="0" id="3">
+						<li css:counter-increment-list-item="1" id="4">
+							<css:marker/>
+						</li>
+						<li css:counter-increment-list-item="1" id="5">
+							<css:marker/>
+						</li>
+					</ul>
+				</body>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="2"/>
+	</x:scenario>
+	
+	<x:scenario label="test_19">
+		<x:call function="css:parse-symbols">
+			<x:param select="' x &quot; ⠚ &quot; &quot;&quot;'"/>
+		</x:call>
+		<x:expect label="result" select="('x',' ⠚ ','')"/>
+	</x:scenario>
+	
+	<x:scenario label="test_20">
+		<x:call template="css:counter-representation">
+			<x:param name="value" select="100"/>
+			<x:param name="style" select="css:counter-style('decimal')"/>
+		</x:call>
+		<x:expect label="result" select="('100','auto')"/>
+	</x:scenario>
+	
+	<x:scenario label="test_21">
+		<x:call template="css:counter-representation">
+			<x:param name="value" select="-25"/>
+			<x:param name="style" select="css:counter-style('decimal')"/>
+		</x:call>
+		<x:expect label="result" select="('-25','auto')"/>
+	</x:scenario>
+	
+	<x:scenario label="test_22">
+		<x:call template="css:counter-representation">
+			<x:param name="value" select="100"/>
+			<x:param name="style" select="css:counter-style('lower-alpha')"/>
+		</x:call>
+		<x:expect label="result" select="('cv','auto')"/>
+	</x:scenario>
+	
+	<x:scenario label="test_23">
+		<x:call template="css:counter-representation">
+			<x:param name="value" select="1998"/>
+			<x:param name="style" select="css:counter-style('lower-roman')"/>
+		</x:call>
+		<x:expect label="result" select="('mcmxcviii','auto')"/>
+	</x:scenario>
+	
+	<x:scenario label="test_24">
+		<x:call template="css:counter-representation">
+			<x:param name="value" select="1998"/>
+			<x:param name="style" select="css:counter-style('upper-roman')"/>
+		</x:call>
+		<x:expect label="result" select="('MCMXCVIII','auto')"/>
+	</x:scenario>
+	
+	<x:scenario label="test_25">
+		<x:call template="css:counter-representation">
+			<x:param name="value" select="1998"/>
+			<x:param name="style">
+				<css:counter-style system="additive"
+				                   additive-symbols="1000 '⠍', 900 '⠉⠍', 500 '⠙', 400 '⠉⠙', 100 '⠉', 90 '⠭⠉', 50 '⠇', 40 '⠭⠇', 10 '⠭', 9 '⠊⠭', 5 '⠧', 4 '⠊⠧', 1 '⠊'"
+				                   text-transform="none"/>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="('⠍⠉⠍⠭⠉⠧⠊⠊⠊','none')"/>
+	</x:scenario>
+	
+	<x:scenario label="test_26">
+		<x:call template="css:counter-representation">
+			<x:param name="value" select="1998"/>
+			<x:param name="style">
+				<css:counter-style system="additive"
+				                   additive-symbols="1000 m, 900 cm, 500 d, 400 cd, 100 c, 90 xc, 50 l, 40 xl, 10 x, 9 ix, 5 v, 4 iv, 1 i"
+				                   text-transform="uppercase"/>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="('mcmxcviii','uppercase')"/>
+	</x:scenario>
+	
+	<x:scenario label="test_27">
+		<x:call template="css:counter">
+			<x:param name="name" select="'list-item'"/>
+			<x:param name="style" select="'decimal'"/>
+			<x:param name="context" select="//li[3]">
+				<ul>
+					<li css:counter-increment-list-item="1"/>
+					<li css:counter-increment-list-item="1"/>
+					<li css:counter-increment-list-item="1"/>
+				</ul>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="('3','auto')"/>
+	</x:scenario>
+	
+	<x:scenario label="test_28">
+		<x:call function="css:string">
+			<x:param select="'print-page'"/>
+			<x:param select="//p[last()]">
+				<body>
+					<pagenum css:string-set="print-page '1'"/>
+					<p/>
+					<pagenum css:string-set="print-page '2'"/>
+					<p/>
+					<pagenum css:string-set="print-page '3'"/>
+					<p/>
+				</body>
+			</x:param>
+		</x:call>
+		<x:expect label="result">
+			<css:string value="3"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_29">
+		<x:call function="css:computed-properties">
+			<x:param select="'text-transform'"/>
+			<x:param select="true()"/>
+			<x:param select="//foo">
+				<_ css:text-transform="bold">
+					<_>
+						<foo css:text-transform="italic"/>
+					</_>
+				</_>
+			</x:param>
+		</x:call>
+		<x:expect label="result">
+			<css:property name="text-transform" value="italic bold"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_30">
+		<x:call function="css:computed-properties">
+			<x:param select="'text-transform'"/>
+			<x:param select="true()"/>
+			<x:param select="//foo/_">
+				<_ css:text-transform="bold">
+					<_>
+						<foo css:text-transform="italic">
+							<_/>
+						</foo>
+					</_>
+				</_>
+			</x:param>
+		</x:call>
+		<x:expect label="result">
+			<css:property name="text-transform" value="italic bold"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_31">
+		<x:call function="css:computed-properties">
+			<x:param select="'hyphens'"/>
+			<x:param select="true()"/>
+			<x:param select="//p">
+				<css:block xml:lang="und" style="hyphens: auto">
+					<p>foobar</p>
+				</css:block>
+			</x:param>
+		</x:call>
+		<x:expect label="result">
+			<css:property name="hyphens" value="auto"/>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_32">
+		<x:call function="css:deep-parse-stylesheet">
+			<x:param select="'::before { content: &quot;x&quot; }
+			                 ::before::after { content: &quot;x&quot; }
+			                 {display:block}
+			                 @page { size: 40 25 @top-right-corner { content: &quot;x&quot; }}
+			                 @volume { @begin { content: flow(titlepage); @page { size: 15 5; } @page:left { size: 15 5; @top-right { content: none; }}}}'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:rule selector="::before">
+				<css:rule>
+					<css:property name="content" value="&quot;x&quot;"/>
+				</css:rule>
+				<css:rule selector="::after">
+					<css:property name="content" value="&quot;x&quot;"/>
+				</css:rule>
+			</css:rule>
+			<css:rule>
+				<css:property name="display" value="block"/>
+			</css:rule>
+			<css:rule selector="@page">
+				<css:rule>
+					<css:property name="size" value="40 25"/>
+				</css:rule>
+				<css:rule selector="@top-right-corner">
+					<css:property name="content" value="&quot;x&quot;"/>
+				</css:rule>
+			</css:rule>
+			<css:rule selector="@volume">
+				<css:rule selector="@begin">
+					<css:rule>
+						<css:property name="content" value="flow(titlepage)"/>
+					</css:rule>
+					<css:rule selector="@page">
+						<css:rule>
+							<css:property name="size" value="15 5"/>
+						</css:rule>
+						<css:rule selector=":left">
+							<css:rule>
+								<css:property name="size" value="15 5"/>
+							</css:rule>
+							<css:rule selector="@top-right">
+								<css:property name="content" value="none"/>
+							</css:rule>
+						</css:rule>
+					</css:rule>
+				</css:rule>
+			</css:rule>
+		</x:expect>
+	</x:scenario>
+	
+	<!--
+	    do semi-colons between @-rules need to be supported?
+	-->
+	<x:scenario label="test_33" pending="not supported yet">
+		<x:call function="css:deep-parse-stylesheet">
+			<x:param select="'@page { size: 32 27; @bottom-center { content: none }; @bottom-left { content: none } }'"/>
+		</x:call>
+		<x:expect label="result">
+			<css:rule selector="@page">
+				<css:rule>
+					<css:property name="size" value="32 27"/>
+				</css:rule>
+				<css:rule selector="@bottom-center">
+					<css:property name="content" value="none"/>
+				</css:rule>
+				<css:rule selector="@bottom-left">
+					<css:property name="content" value="none"/>
+				</css:rule>
+			</css:rule>
+		</x:expect>
+	</x:scenario>
+	
+	<x:scenario label="test_34.1">
+		<x:call function="css:serialize-stylesheet">
+			<x:param>
+				<css:rule>
+					<css:property name="size" value="32 27"/>
+				</css:rule>
+				<css:rule selector="@bottom-center">
+					<css:property name="content" value="none"/>
+				</css:rule>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="'{ size: 32 27 } @bottom-center { content: none }'"/>
+	</x:scenario>
+	<x:scenario label="test_34.2">
+		<x:call function="css:serialize-stylesheet">
+			<x:param>
+				<css:rule selector="@page">
+					<css:rule selector=":left">
+						<css:rule>
+							<css:property name="size" value="32 27"/>
+						</css:rule>
+						<css:rule selector="@bottom-center">
+							<css:property name="content" value="none"/>
+						</css:rule>
+					</css:rule>
+				</css:rule>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="'@page:left { size: 32 27 @bottom-center { content: none } }'"/>
+	</x:scenario>
+	<x:scenario label="test_34.3">
+		<x:call function="css:serialize-stylesheet">
+			<x:param>
+				<css:rule selector="@page">
+					<css:rule>
+						<css:property name="size" value="32 27"/>
+					</css:rule>
+					<css:rule selector="@bottom-center">
+						<css:property name="content" value="none"/>
+					</css:rule>
+				</css:rule>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="'@page { size: 32 27 @bottom-center { content: none } }'"/>
+	</x:scenario>
+	<x:scenario label="test_34.4">
+		<x:call function="css:serialize-stylesheet">
+			<x:param>
+				<css:rule selector="@page">
+					<css:rule>
+						<css:rule>
+							<css:property name="size" value="32 27"/>
+						</css:rule>
+						<css:rule selector="@bottom-center">
+							<css:property name="content" value="none"/>
+						</css:rule>
+					</css:rule>
+					<css:rule selector=":left">
+						<css:rule>
+							<css:property name="size" value="32 27"/>
+						</css:rule>
+						<css:rule selector="@bottom-center">
+							<css:property name="content" value="none"/>
+						</css:rule>
+					</css:rule>
+				</css:rule>
+			</x:param>
+		</x:call>
+		<x:expect label="result" select="'@page { size: 32 27 @bottom-center { content: none } } @page:left { size: 32 27 @bottom-center { content: none } }'"/>
+	</x:scenario>
+	
+</x:description>

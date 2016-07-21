@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/handle-css-before-after.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc>
+        <body>
+          <p style="display: block
+                    ::before {{ display: block;
+                                margin-left: 2;
+                                content: 'bar' }}">
+            foo
+          </p>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <p style="display: block">
+            <css:before style="display: block;
+                                margin-left: 2;
+                                content: 'bar'"/>
+            foo
+          </p>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:context>
+      <doc>
+        <body>
+          <p foo="bar" style="::after {{ content: attr(foo) }}"/>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <p foo="bar">
+            <css:after style="content: attr(foo)"/>
+          </p>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

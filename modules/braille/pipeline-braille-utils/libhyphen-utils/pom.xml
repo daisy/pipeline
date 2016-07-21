@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+    <relativePath />
+  </parent>
+  
+  <groupId>org.daisy.pipeline.modules.braille</groupId>
+  <artifactId>libhyphen-utils-aggregator</artifactId>
+  <version>1.9.15-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
+  <name>DP2 Braille Modules :: libhyphen-utils</name>
+
+  <modules>
+    <!-- <module>libhyphen-core</module> -->
+    <!-- <module>libhyphen-native</module> -->
+    <!-- <module>libhyphen-saxon</module> -->
+    <!-- <module>libhyphen-libreoffice-tables</module> -->
+    <!-- <module>libhyphen-utils</module> -->
+  </modules>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

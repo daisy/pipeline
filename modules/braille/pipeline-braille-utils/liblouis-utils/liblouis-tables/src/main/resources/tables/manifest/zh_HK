@@ -1,0 +1,4 @@
+#+type:translation
+#+locale:zh_HK
+include ../zh-hk.ctb
+include ../braille-patterns.cti

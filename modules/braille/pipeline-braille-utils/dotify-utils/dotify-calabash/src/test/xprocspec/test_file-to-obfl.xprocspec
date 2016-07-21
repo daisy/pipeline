@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:dotify="http://code.google.com/p/dotify/"
+               xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+               script="../resources/file-to-obfl.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="dotify:file-to-obfl">
+      <x:option name="source" select="resolve-uri('../resources/test_file-to-obfl/test_01.xml')"/>
+      <x:option name="locale" select="'sv-SE'"/>
+      <x:param port="parameters" name="rows" select="'29'"/>
+      <x:param port="parameters" name="cols" select="'28'"/>
+      <x:param port="parameters" name="rowgap" select="'4'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <!--
+        the result keeps changing with every update of dotify, therefore don't do a full compare
+    -->
+    <x:expect label="result is obfl" type="xpath" test="/obfl:obfl"/>
+    <x:expect label="page-height is 29" type="xpath" test="/obfl:obfl/obfl:layout-master[1]/@page-height='29'"/>
+  </x:scenario>
+  
+  <x:scenario label="test_02" pending="throws error because of whitespace only text nodes in note element">
+    <x:documentation>
+      see https://github.com/snaekobbi/pipeline-mod-mtm/issues/14
+    </x:documentation>
+    <x:call step="dotify:xml-to-obfl">
+      <x:option name="source" select="resolve-uri('../resources/test_file-to-obfl/test_02.xml')"/>
+      <x:option name="locale" select="'sv-SE'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <_>...</_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

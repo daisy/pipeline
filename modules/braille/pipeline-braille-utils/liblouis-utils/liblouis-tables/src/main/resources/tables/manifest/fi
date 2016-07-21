@@ -1,0 +1,4 @@
+#+type:translation
+#+locale:fi
+include ../fi-fi.ctb
+include ../braille-patterns.cti

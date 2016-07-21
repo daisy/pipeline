@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/preserve-white-space.xsl"
+               preserve-space="div">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc>
+        <div>
+          xxx
+          <div css:white-space="pre-wrap">
+            <div css:white-space="default">
+              xxx
+            </div>
+            <div>
+              xxx
+            </div>
+            xxx
+          </div>
+          <div css:white-space="pre-line">
+            xxx      xxx
+          </div>
+        </div>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <div>
+          xxx
+          <div><css:white-space>
+            </css:white-space><div>
+              xxx
+            </div><css:white-space>
+            </css:white-space><div><css:white-space>
+              xxx
+            </css:white-space></div><css:white-space>
+            xxx
+          </css:white-space></div>
+          <div><css:white-space>
+</css:white-space>            xxx      xxx<css:white-space>
+</css:white-space>          </div>
+        </div>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:context>
+      <div css:white-space="pre-wrap">
+        <css:counter name="page"/>
+        xxx
+      </div>
+    </x:context>
+    <x:expect label="result">
+      <div><css:white-space>
+        </css:white-space><css:counter name="page" css:white-space="pre-wrap"/><css:white-space>
+        xxx
+      </css:white-space></div>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

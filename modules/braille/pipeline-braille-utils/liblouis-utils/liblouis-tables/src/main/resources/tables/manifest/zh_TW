@@ -1,0 +1,4 @@
+#+type:translation
+#+locale:zh_TW
+include ../zh-tw.ctb
+include ../braille-patterns.cti

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-identifier" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dcterms="http://purl.org/dc/terms/">
+    <metadata>
+        <dc:identifier id="pub-identifier">test</dc:identifier>
+        <dc:title>Test</dc:title>
+        <dc:language>en</dc:language>
+    </metadata>
+    <manifest>
+        <item id="item_1" media-type="application/xhtml+xml" href="content-1.xhtml"/>
+        <item id="item_2" media-type="application/xhtml+xml" href="content-2.xhtml"/>
+        <item id="item_3" media-type="application/xhtml+xml" href="nav.xhtml" properties="nav"/>
+    </manifest>
+    <spine>
+        <itemref id="itemref_1" idref="item_1"/>
+        <itemref id="itemref_2" idref="item_2"/>
+    </spine>
+</package>

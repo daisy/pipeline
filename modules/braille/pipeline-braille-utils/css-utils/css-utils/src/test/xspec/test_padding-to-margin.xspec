@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/padding-to-margin.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc>
+        <css:box type="block" css:padding-left="2" style="border-left: ⠇">
+          <css:_>
+            <css:box style="border-left: inherit"/>
+          </css:_>
+        </css:box>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <css:box type="block" style="border-left: ⠇">
+          <css:box type="block" css:margin-left="2" css:collapsing-margins="no">
+            <css:_>
+              <css:box style="border-left: ⠇"/>
+            </css:_>
+          </css:box>
+        </css:box>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/make-table-grid.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <table xmlns="http://www.daisy.org/z3986/2005/dtbook/" css:display="table">
+        <caption> Caption </caption>
+        <thead>
+          <tr>
+            <th colspan="2">I</th>
+            <th>III</th>
+          </tr>
+          <tr>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+          </tr>
+        </thead>
+        <pagenum/>
+        <tbody>
+          <tr>
+            <td rowspan="2" colspan="2">a+b+d+e</td>
+            <td>c</td>
+          </tr>
+          <pagenum/>
+          <tr>
+            <td>f</td>
+          </tr>
+        </tbody>
+      </table>
+    </x:context>
+    <x:expect label="result">
+      <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+             css:table="_">
+        <caption css:table-caption="_"> Caption </caption>
+        <thead>
+          <tr>
+            <th colspan="2"
+                css:table-cell="_"
+                css:table-header-group="1"
+                css:table-row="1"
+                css:table-column="1"
+                css:table-column-span="2"
+                >I</th>
+            <th css:table-cell="_"
+                css:table-header-group="1"
+                css:table-row="1"
+                css:table-column="3"
+                >III</th>
+          </tr>
+          <tr>
+            <th css:table-cell="_"
+                css:table-header-group="1"
+                css:table-row="2"
+                css:table-column="1"
+                >1</th>
+            <th css:table-cell="_"
+                css:table-header-group="1"
+                css:table-row="2"
+                css:table-column="2"
+                >2</th>
+            <th css:table-cell="_"
+                css:table-header-group="1"
+                css:table-row="2"
+                css:table-column="3"
+                >3</th>
+          </tr>
+        </thead>
+        <pagenum/>
+        <tbody>
+          <tr>
+            <td rowspan="2"
+                colspan="2"
+                css:table-cell="_"
+                css:table-row-group="1"
+                css:table-row="1"
+                css:table-column="1"
+                css:table-row-span="2"
+                css:table-column-span="2"
+                >a+b+d+e</td>
+            <td css:table-cell="_"
+                css:table-row-group="1"
+                css:table-row="1"
+                css:table-column="3"
+                >c</td>
+          </tr>
+          <pagenum/>
+          <tr>
+            <td css:table-cell="_"
+                css:table-row-group="1"
+                css:table-row="2"
+                css:table-column="3"
+                >f</td>
+          </tr>
+        </tbody>
+      </table>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               script="../../main/resources/xml/store.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="pef:store">
+      <x:input port="source">
+        <x:document type="file" href="../resources/pef_1.pef"/>
+      </x:input>
+      <x:option name="href" select="resolve-uri('test_01/pef_1.pef',$temp-dir)"/>
+      <x:option name="preview-href" select="resolve-uri('test_01/pef_1.pef.html',$temp-dir)"/>
+    </x:call>
+    <x:context label="result fileset">
+      <x:document type="directory" base-uri="temp-dir" href="test_01/" recursive="true"/>
+    </x:context>
+    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
+    <x:expect type="xpath" label="The number of files stored should be 3" test="count(//c:file)=3"/>
+    <x:expect type="xpath" label="The file pef_1.pef should be stored" test="/*/c:file[@name='pef_1.pef']"/>
+    <x:expect type="xpath" label="The file pef_1.pef.html should be stored" test="/*/c:file[@name='pef_1.pef.html']"/>
+    <x:expect type="xpath" label="The file odt2braille8.ttf should be stored" test="/*/c:file[@name='odt2braille8.ttf']"/>
+  </x:scenario>
+
+  <x:scenario label="test_02">
+    <x:call step="pef:store">
+      <x:input port="source">
+        <x:document type="file" href="../resources/pef_3.pef"/>
+      </x:input>
+      <x:option name="href" select="resolve-uri('test_02/pef_3.pef',$temp-dir)"/>
+      <x:option name="brf-dir-href" select="resolve-uri('test_02/',$temp-dir)"/>
+      <x:option name="brf-name-pattern" select="'pef_3-{}'"/>
+    </x:call>
+    <x:context label="result fileset">
+      <x:document type="directory" base-uri="temp-dir" href="test_02/" recursive="true"/>
+    </x:context>
+    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
+    <!--
+        FIXME: remove temporary directory
+    -->
+    <x:expect type="xpath" label="The number of files stored should be 2" test="count(//c:file[not(parent::c:directory/@name='split')])=2"/>
+    <x:expect type="xpath" label="The file pef_3.pef should be stored" test="/*/c:file[@name='pef_3.pef']"/>
+    <x:expect type="xpath" label="The file pef_3.brf should be stored" test="/*/c:file[@name='pef_3-1.brf']"/>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:call step="pef:store">
+      <x:input port="source">
+        <x:document type="file" href="../resources/pef_3.pef"/>
+      </x:input>
+      <x:option name="href" select="resolve-uri('test_03/pef_3.pef',$temp-dir)"/>
+      <x:option name="brf-dir-href" select="resolve-uri('test_03/',$temp-dir)"/>
+      <x:option name="brf-name-pattern" select="'pef_3-{}'"/>
+      <x:option name="brf-file-format" select="'(line-breaks:DOS)
+                                                (page-breaks:&quot;---&quot;)
+                                                (pad:BOTH)'"/>
+    </x:call>
+    <x:context label="result file">
+      <x:document type="file" method="text" base-uri="temp-dir" href="test_03/pef_3-1.brf"/>
+    </x:context>
+    <x:expect label="The BRF should use the default table" type="compare" normalize-space="false">
+      <x:document type="file" method="text" href="../resources/pef_3_1.brf"/>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_04">
+    <x:call step="pef:store">
+      <x:input port="source">
+        <x:document type="file" href="../resources/pef_3.pef"/>
+      </x:input>
+      <x:option name="href" select="resolve-uri('test_04/pef_3.pef',$temp-dir)"/>
+      <x:option name="brf-dir-href" select="resolve-uri('test_04/',$temp-dir)"/>
+      <x:option name="brf-name-pattern" select="'pef_3-{}'"/>
+      <x:option name="brf-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
+                                                (line-breaks:DOS)
+                                                (page-breaks:&quot;---&quot;)
+                                                (pad:BOTH)'"/>
+    </x:call>
+    <x:context label="result file">
+      <x:document type="file" method="text" base-uri="temp-dir" href="test_04/pef_3-1.brf"/>
+    </x:context>
+    <x:expect label="The BRF should use the NL Braillo table" type="compare" normalize-space="false">
+      <x:document type="file" method="text" href="../resources/pef_3_2.brf"/>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:math="http://www.w3.org/1998/Math/MathML"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+    
+    <x:scenario label="test_01">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <math:math>
+                        <math:mrow>
+                            <math:mn>2</math:mn>
+                            <math:mi mathvariant="italic">ax</math:mi>
+                        </math:mrow>
+                    </math:math>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:mathml)(locale:nl)'"/>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠃⠠⠁⠭'"/>
+    </x:scenario>
+    
+</x:description>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:louis="http://liblouis.org/liblouis"
+               stylesheet="../../main/resources/xml/handle-xml-space.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc>
+        <div>
+          xxx
+          <div xml:space="preserve">
+            <div xml:space="default">
+              xxx
+            </div>
+            xxx
+          </div>
+        </div>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <div>
+          xxx
+          <div><louis:space>
+            </louis:space><div>
+              xxx
+            </div><louis:space>
+            xxx
+          </louis:space></div>
+        </div>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

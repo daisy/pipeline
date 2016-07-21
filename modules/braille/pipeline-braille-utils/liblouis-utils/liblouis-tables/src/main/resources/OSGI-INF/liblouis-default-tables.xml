@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+    <scr:component name="Default Liblouis Tables" activate="activate">
+        <scr:implementation class="org.daisy.pipeline.braille.liblouis.LiblouisTablePath"/>
+        <scr:service>
+            <scr:provide interface="org.daisy.pipeline.braille.liblouis.LiblouisTablePath"/>
+        </scr:service>
+        <scr:property name="identifier" type="String" value="http://www.liblouis.org/tables/"/>
+        <scr:property name="path" type="String" value="/tables"/>
+    </scr:component>
+    <scr:component name="Liblouis Hyphenation Tables" activate="activate">
+        <scr:implementation class="org.daisy.pipeline.braille.libhyphen.LibhyphenTablePath"/>
+        <scr:service>
+            <scr:provide interface="org.daisy.pipeline.braille.libhyphen.LibhyphenTablePath"/>
+        </scr:service>
+        <scr:property name="identifier" type="String" value="http://www.liblouis.org/tables/"/>
+        <scr:property name="path" type="String" value="/tables"/>
+        <scr:property name="includes" type="String" value="hyph_*.dic"/>
+    </scr:component>
+</scr:components>

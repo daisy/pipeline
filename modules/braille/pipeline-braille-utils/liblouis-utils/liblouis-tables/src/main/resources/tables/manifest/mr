@@ -1,0 +1,5 @@
+#+type:translation
+#+locale:mr
+include ../spaces.ctb
+include ../mr-in-g1.utb
+include ../braille-patterns.cti

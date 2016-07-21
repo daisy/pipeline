@@ -1,0 +1,20 @@
+$padding-left: 'just a littlebit' !default;
+$margin-left: 'something' !default;
+
+p {
+    @if $padding-left = 'A great lot\':!' {
+        padding-left: 3;
+    } @else if $padding-left = 'just a littlebit' {
+        padding-left: 2;
+    } @else {
+        padding-left: 1;
+    }
+    
+    @if $margin-left = 'a lot' {
+        margin-left: 3;
+    } @else if $margin-left = 'something' {
+        margin-left: 2;
+    } @else {
+        margin-left: 1;
+    }
+}

@@ -1,0 +1,5 @@
+#+type:translation
+#+locale:or
+include ../spaces.ctb
+include ../or-in-g1.utb
+include ../braille-patterns.cti

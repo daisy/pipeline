@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/adjust-boxes.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <css:box type="block" css:margin-left="2">
+        <css:box type="block">xxx</css:box>
+        <css:box type="block" css:margin-left="-2">xxx</css:box>
+        <css:box type="block">xxx</css:box>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="block">
+        <css:box type="block" css:padding-left="2">xxx</css:box>
+        <css:box type="block">xxx</css:box>
+        <css:box type="block" css:padding-left="2">xxx</css:box>
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:context>
+      <css:box type="block" css:margin-left="2" css:border-top="⠒">
+        <css:box type="block" css:margin-left="-1" css:text-indent="2">xxx</css:box>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="block" css:margin-left="2" css:border-top="⠒">
+        <css:box type="block" css:text-indent="1">xxx</css:box>
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:context>
+      <css:box type="block" css:margin-left="4">
+        <css:box type="block" css:text-indent="-2">xxx</css:box>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="block">
+        <css:box type="block" css:padding-left="4" css:text-indent="-2">xxx</css:box>
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_04">
+    <x:context>
+      <css:box type="block"
+               css:border-left="⠇"
+               css:border-right="⠸"
+               css:border-top="⠤"
+               css:border-bottom="⠉"
+               css:margin-left="1"
+               css:margin-right="1">
+        <css:box type="block"
+                 css:margin-left="1"
+                 css:margin-right="1"/>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="block"
+               css:border-left="⠇"
+               css:border-right="⠸"
+               css:border-top="⠤"
+               css:border-bottom="⠉"
+               css:margin-left="1"
+               css:margin-right="1">
+        <css:box type="block"
+                 css:padding-left="1"
+                 css:padding-right="1"/>
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_05">
+    <x:context>
+      <css:box type="block" css:margin-left="2">
+        <css:box type="block"/>
+        <css:box type="table" css:margin-left="-2">
+          <css:box type="table-cell"/>
+          <css:box type="table-cell" css:margin-left="2">
+            <css:box type="block" css:margin-left="2">
+              <css:box type="block"/>
+            </css:box>
+          </css:box>
+        </css:box>
+        <css:box type="block"/>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="block">
+        <css:box type="block" css:padding-left="2" />
+        <css:box type="table">
+          <css:box type="table-cell"/>
+          <css:box type="table-cell" css:margin-left="2">
+            <css:box type="block">
+              <css:box type="block" css:padding-left="2"/>
+            </css:box>
+          </css:box>
+        </css:box>
+        <css:box type="block" css:padding-left="2" />
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

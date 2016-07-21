@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/parse-stylesheet.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc>
+        <body style="{{ display: block }} @page {{ size: 30 30; @top-center {{ content: string(running-header) }} }}">
+          <p> foo </p>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body style="display: block" css:page="size: 30 30; @top-center {{ content: string(running-header) }}">
+          <p> foo </p>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:context>
+      <doc>
+        <body>
+          <p style="{{ display: block }}
+                    ::before {{ display: block; margin-left: 2; content: 'bar' }}">
+            foo
+          </p>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <p style="display: block" css:before="display: block; margin-left: 2; content: 'bar'">
+            foo
+          </p>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:context>
+      <doc style="@page {{ margin-top: 1 }} @page:left {{ margin-top: 2 }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc css:page="{{ margin-top: 1 }} :left {{ margin-top: 2 }}"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_04">
+    <x:context>
+      <doc style="::-x-foo::before {{ display: block }}"/>
+    </x:context>
+    <x:expect label="result">
+      <doc css:_x-foo="::before {{ display: block }}"/>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

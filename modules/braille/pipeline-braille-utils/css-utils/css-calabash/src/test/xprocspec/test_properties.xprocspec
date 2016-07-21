@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../resources/inline.xpl">
+  
+  <!--
+      border, margin, padding
+  -->
+  <x:scenario label="test_01">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                h { display: block; margin: 1 3; padding: 0 3; border: ⠒ none; }
+                p { display: block; margin: 1 2 3 4; }
+              </style>
+            </head>
+            <body>
+              <h>foo</h>
+              <p>bar</p>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h style="border-bottom: ⠒; border-left: none; border-right: none; border-top: ⠒; display: block; margin-bottom: 1; margin-left: 3; margin-right: 3; margin-top: 1; padding-bottom: 0; padding-left: 3; padding-right: 3; padding-top: 0;">foo</h>
+          <p style="display: block; margin-bottom: 3; margin-left: 4; margin-right: 2; margin-top: 1;">bar</p>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      left, right
+  -->
+  <x:scenario label="test_02">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                p { display: block; left: 1; right: 2; }
+              </style>
+            </head>
+            <body>
+              <p>foo</p>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p style="display: block; left: 1; right: 2;">foo</p>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      string-set, counter-set
+  -->
+  <x:scenario label="test_03">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                body { counter-set: page 99 }
+                pagenum { string-set: print-page content(), first-print-page content() }
+              </style>
+            </head>
+            <body>
+              <pagenum>1</pagenum>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body style="counter-set: page 0 page 99;">
+          <pagenum style="string-set: print-page  content() , first-print-page  content();">1</pagenum>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../main/resources/xml/label-targets.xpl">
+  
+  <x:scenario label="test_01" pending="generate-id ~ saxon/calabash version">
+    <x:call step="css:label-targets">
+      <x:input port="source">
+        <x:document type="inline">
+          <frontmatter>
+            <toc>
+              <entry>
+                <css:text target="#h1"/>
+                <css:leader pattern="⠄⠄"/>
+                <css:counter target="#h1" name="braille-page"/>
+                <css:string target="#h1" name="print-page"/>
+              </entry>
+              <entry>
+                <css:text target="#h2"/>
+                <css:leader pattern="⠄⠄"/>
+                <css:counter target="h2" name="braille-page"/>
+                <css:string target="#h2" name="print-page"/>
+              </entry>
+            </toc>
+          </frontmatter>
+        </x:document>
+        <x:document type="inline">
+          <bodymatter>
+            <h id="h1">
+              foo
+            </h>
+            <p xml:id="h1"/>
+            <h xml:id="h2" css:id="bar">
+              bar
+            </h>
+          </bodymatter>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+          <frontmatter>
+            <toc>
+              <entry>
+                <css:text target="d705e31"/>
+                <css:leader pattern="⠄⠄"/>
+                <css:counter target="d705e31" name="braille-page"/>
+                <css:string target="d705e31" name="print-page"/>
+              </entry>
+              <entry>
+                <css:text target="bar"/>
+                <css:leader pattern="⠄⠄"/>
+                <css:counter target="bar" name="braille-page"/>
+                <css:string target="bar" name="print-page"/>
+              </entry>
+            </toc>
+          </frontmatter>
+        </x:document>
+        <x:document type="inline">
+          <bodymatter>
+            <h id="h1" css:id="d705e31">
+              foo
+            </h>
+            <p xml:id="h1"/>
+            <h xml:id="h2" css:id="bar">
+              bar
+            </h>
+          </bodymatter>
+        </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

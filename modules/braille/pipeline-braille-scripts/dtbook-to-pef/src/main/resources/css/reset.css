@@ -1,0 +1,58 @@
+/* --------------------------------------------------------------------------- */
+/*  http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/reset.css  */
+/* --------------------------------------------------------------------------- */
+
+/*
+ * Reset sheet for http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css
+ */
+
+address,
+annotation,
+author,
+blockquote,
+bodymatter,
+book,
+bridgehead,
+byline,
+covertitle,
+dateline,
+div,
+dl,
+docauthor,
+doctitle,
+epigraph,
+frontmatter,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+head,
+hd,
+img,
+imggroup,
+level,
+level1,
+level2,
+level3,
+level4,
+level5,
+level6,
+line,
+linegroup,
+list,
+note,
+p,
+poem,
+prodnote,
+rearmatter,
+sidebar,
+table
+{
+  display: inline;
+}
+
+br::before {
+  content: none;
+}

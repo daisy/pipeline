@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+               stylesheet="../../main/resources/xml/obfl-normalize-space.xsl"
+               preserve-space="obfl:block">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <obfl:block>
+        <obfl:marker class="print-page" value="⠤"/>
+        ⠤⠤⠤
+      </obfl:block>
+    </x:context>
+    <x:expect label="normalized">
+      <obfl:block><obfl:marker class="print-page" value="⠤"/>⠤⠤⠤
+      </obfl:block>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

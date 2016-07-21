@@ -1,0 +1,79 @@
+$page-sizes : (
+	fa44: 40 25,
+	a4: 30 30
+);
+$page-format: fa44;
+$page-size: map-get($page-sizes, $page-format);
+$footer-level: 2;
+$braille-pages: true;
+$prf: 'page ';
+
+@mixin top-left-braille-page {
+	@top-left {
+		content: $prf if($braille-pages, counter(page), null);
+	}
+}
+
+@page {
+	size: $page-size;
+	@include top-left-braille-page;
+	@left {
+		content: -obfl-marker-position(pagenum, '⠿');
+	}
+}
+
+@mixin set-footer-string {
+	string-set: footer content();
+}
+
+@if $footer-level > 0 {
+	h1 {
+		@include set-footer-string;
+	}
+	@page:right {
+		@bottom-center {
+			content: string(footer);
+		}
+	}
+}
+
+/* Error: Base-level rules cannot contain the parent-selector-referencing character '&'.
+@page {
+	&:right {
+		@bottom-center {
+			content: string(footer);
+		}
+	}
+}
+*/
+
+@if $footer-level > 1 {
+	h2 {
+		@include set-footer-string;
+	}
+}
+
+@volume:nth-last(2) {
+	max-length: 100;
+	@end {
+		content: flow(endnotes);
+	}
+}
+
+#toc {
+	display: -obfl-toc;
+	&::-obfl-toc-group::before {
+		display: block;
+	}
+}
+
+#foo {
+	-obfl-vertical-position: 5;
+	&:has(> #bar)::before {
+		content: 'foo';
+	}
+	border: {
+        top: ⠒;
+        bottom: ⠒;
+    };
+}

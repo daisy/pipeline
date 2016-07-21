@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/daisy/pipeline-mod-braille
+	branch = master
+	commit = a932a05f558dbc4ba74519615bad753dca610fd1
+	parent = f6c66ab43f0215c5278207883ad4836e6cce33b3
+	cmdver = 0.3.0

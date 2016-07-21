@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:dotify="http://code.google.com/p/dotify/"
+               xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+               script="../resources/obfl-to-pef.xpl">
+  
+  <x:scenario label="test_01">
+    <x:documentation>
+      Tests int2text function (requires that dotify.text.impl is loaded)
+    </x:documentation>
+    <x:call step="dotify:obfl-to-pef">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" hyphenate="true" xml:lang="sv-SE">
+            <layout-master name="main" page-width="32" page-height="29" duplex="true">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="main" initial-page-number="1">
+              <block>
+                <evaluate expression="(int2text 12 sv-SE)"/>
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+      <x:option name="locale" select="'sv-SE'"/>
+      <x:option name="mode" select="'uncontracted'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="32" rows="29" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠞⠕⠇⠧</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

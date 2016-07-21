@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../resources/uppercase-block-translator.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc>
+        <h css:display="block" style="string-set: running-footer content()">foobar</h>
+        <p css:display="block" style="::after {{ content: 'bar' }}">foo</p>
+        <pagenum style="display: none; string-set: print-page content()">ii</pagenum>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <_ style="text-transform: none">
+        <doc>
+          <h css:display="block" style="string-set: running-footer &quot;foobar&quot;">FOOBAR</h>
+          <p css:display="block" style="::after {{ content: &quot;BAR&quot;; text-transform: auto }}">FOO</p>
+          <pagenum style="display: none; string-set: print-page &quot;ii&quot;">II</pagenum>
+        </doc>
+      </_>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:context>
+      <doc xml:lang="en">
+        <br style="::before {{ content: '&#xA;'; white-space: pre-line }}"/>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <_ style="text-transform: none">
+        <doc xml:lang="en">
+          <br style="::before {{ content: &quot;&#xA;&quot;; white-space: pre-line; text-transform: auto }}"/>
+        </doc>
+      </_>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:context>
+      <div style="hyphens: auto">
+        <p>foobar</p>
+      </div>
+    </x:context>
+    <x:expect label="result">
+      <_ style="text-transform: none">
+        <div>
+          <p>FOO=BAR</p>
+        </div>
+      </_>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_04">
+    <x:context>
+      <doc>
+        <div style="::after {{ content: 'foo' }} ::after::before {{ display: block; content: 'bar' }}"/>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <_ style="text-transform: none">
+        <doc>
+          <div style="::after {{ content: &quot;FOO&quot;; text-transform: auto }} ::after::before {{ display: block; content: &quot;BAR&quot; }}"/>
+        </doc>
+      </_>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_05">
+    <x:context>
+      <doc>
+        <div style="::table-by(foo)::list-item::after {{ content: ', ' }} ::table-by(foo)::list-item:last-child::after {{ content: none }}"/>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <_ style="text-transform: none">
+        <doc>
+          <div style="::table-by(foo)::list-item::after {{ content: &quot;,&quot;; text-transform: auto }} ::table-by(foo)::list-item:last-child::after {{ content: none; text-transform: auto }}"/>
+        </doc>
+      </_>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

@@ -1,0 +1,2536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:louis="http://liblouis.org/liblouis"
+               xmlns:math="http://www.w3.org/1998/Math/MathML"
+               script="../../main/resources/xml/translate-mathml.xpl">
+    
+    <!-- ======== -->
+    <!-- test_001 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 2 ax
+        Braille: #B,AX
+    -->
+    <x:scenario label="test_001">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_001.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠃⠠⠁⠭'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_002 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 2 xa
+        Braille: #BXA
+    -->
+    <x:scenario label="test_002">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_002.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠃⠭⠁'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_003 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 2 Ax
+        Braille: #B.AX
+    -->
+    <x:scenario label="test_003">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_003.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠃⠨⠁⠭'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_004 -->
+    <!-- ======== -->
+    <!--
+        StarMath: sin a
+        Braille: SIN,A
+    -->
+    <x:scenario label="test_004">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_004.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠎⠊⠝⠠⠁'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_005 -->
+    <!-- ======== -->
+    <!--
+        StarMath: log ax
+        Braille: LOG,AX
+    -->
+    <x:scenario label="test_005">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_005.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠇⠕⠛⠠⠁⠭'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_006 -->
+    <!-- ======== -->
+    <!--
+        StarMath: %alpha x
+        Braille: ;A,X
+    -->
+    <x:scenario label="test_006">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_006.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠰⠁⠠⠭'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_007 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A  parallel B
+        Braille: .A"//.B
+    -->
+    <x:scenario label="test_007">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_007.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠌⠌⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_008 -->
+    <!-- ======== -->
+    <!--
+        StarMath: XXIV
+        Braille: ^XXIV
+    -->
+    <x:scenario label="test_008">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_008.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠘⠭⠭⠊⠧'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_009 -->
+    <!-- ======== -->
+    <!--
+        StarMath: %pi
+        Braille: ;P
+    -->
+    <x:scenario label="test_009">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_009.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠰⠏'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_010 -->
+    <!-- ======== -->
+    <!--
+        StarMath: %PI
+        Braille: _P
+    -->
+    <x:scenario label="test_010">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_010.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠸⠏'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_011 -->
+    <!-- ======== -->
+    <!--
+        StarMath: setN
+        Braille: @N
+    -->
+    <x:scenario label="test_011">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_011.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠈⠝'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_012 -->
+    <!-- ======== -->
+    <!--
+        StarMath: setZ
+
+Braille: @Z
+    -->
+    <x:scenario label="test_012">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_012.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠈⠵'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_013 -->
+    <!-- ======== -->
+    <!--
+        StarMath: setQ
+        Braille: @Q
+    -->
+    <x:scenario label="test_013">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_013.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠈⠟'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_014 -->
+    <!-- ======== -->
+    <!--
+        StarMath: setR
+        Braille: @R
+    -->
+    <x:scenario label="test_014">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_014.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠈⠗'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_015 -->
+    <!-- ======== -->
+    <!--
+        StarMath: setC
+        Braille: @C
+    -->
+    <x:scenario label="test_015">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_015.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠈⠉'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_016 -->
+    <!-- ======== -->
+    <!--
+        StarMath: forall
+        Braille: &1
+    -->
+    <x:scenario label="test_016">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_016.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠯⠂'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_017 -->
+    <!-- ======== -->
+    <!--
+        StarMath: exists
+        Braille: &5
+    -->
+    <x:scenario label="test_017">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_017.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠯⠢'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_018 -->
+    <!-- ======== -->
+    <!--
+        StarMath: Re
+        Braille: &R
+    -->
+    <x:scenario label="test_018">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_018.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠯⠗'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_019 -->
+    <!-- ======== -->
+    <!--
+        StarMath: infinity
+        Braille: #=
+    -->
+    <x:scenario label="test_019">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_019.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠿'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_020 -->
+    <!-- ======== -->
+    <!--
+        StarMath: z(cos %alpha, sin %alpha)
+        Braille: Z<COS;A,1 SIN;A>
+    -->
+    <x:scenario label="test_020">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_020.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠵⠣⠉⠕⠎⠰⠁⠠⠂⠀⠎⠊⠝⠰⠁⠜'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_021 -->
+    <!-- ======== -->
+    <!--
+        StarMath: "is" 2 + 3 = 5 "?"
+        Braille: IS #B"6#C"7#E,5
+    -->
+    <x:scenario label="test_021">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_021.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠊⠎⠀⠼⠃⠐⠖⠼⠉⠐⠶⠼⠑⠠⠢'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_022 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 3! = 1 times 2 times 3
+        Braille: #C,6"7#A"8#B"8#C
+    -->
+    <x:scenario label="test_022">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_022.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠉⠠⠖⠐⠶⠼⠁⠐⠦⠼⠃⠐⠦⠼⠉'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_023 -->
+    <!-- ======== -->
+    <!--
+        StarMath: fact{3} = 1 times 2 times 3
+        Braille: #C,6"7#A"8#B"8#C
+    -->
+    <x:scenario label="test_023">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_023.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠉⠠⠖⠐⠶⠼⠁⠐⠦⠼⠃⠐⠦⠼⠉'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_024 -->
+    <!-- ======== -->
+    <!--
+        StarMath: (2,5; 6,20)
+        Braille: <#B1E,2 #F1BJ>
+    -->
+    <x:scenario label="test_024">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_024.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠣⠼⠃⠂⠑⠠⠆⠀⠼⠋⠂⠃⠚⠜'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_025 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 3.462,25
+        Braille: #C'DFB1BE
+    -->
+    <x:scenario label="test_025">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_025.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠉⠄⠙⠋⠃⠂⠃⠑'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_026 -->
+    <!-- ======== -->
+    <!--
+        StarMath: a+b
+        Braille: A"6B
+    -->
+    <x:scenario label="test_026">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_026.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠁⠐⠖⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_027 -->
+    <!-- ======== -->
+    <!--
+        StarMath: %alpha - %beta
+        Braille: ;A"-;B
+    -->
+    <x:scenario label="test_027">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_027.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠰⠁⠐⠤⠰⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_028 -->
+    <!-- ======== -->
+    <!--
+        StarMath: +-sqrt{2}
+        Braille: "6-%#B:
+    -->
+    <x:scenario label="test_028">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_028.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠐⠖⠤⠩⠼⠃⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_029 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A times B
+        Braille: .A"8.B
+    -->
+    <x:scenario label="test_029">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_029.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠦⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_030 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A cdot B
+        Braille: .A"8.B
+    -->
+    <x:scenario label="test_030">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_030.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠦⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_031 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x div y
+        Braille: X"4Y
+    -->
+    <x:scenario label="test_031">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_031.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠐⠲⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_032 -->
+    <!-- ======== -->
+    <!--
+        StarMath: a*b
+        Braille: A"0B
+    -->
+    <x:scenario label="test_032">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_032.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠁⠐⠴⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_033 -->
+    <!-- ======== -->
+    <!--
+        StarMath: %alpha=%beta
+        Braille: ;A"7;B
+    -->
+    <x:scenario label="test_033">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_033.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠰⠁⠐⠶⠰⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_034 -->
+    <!-- ======== -->
+    <!--
+        StarMath: y equiv x^2+5=0
+        Braille: Y"77X/2"6#E"7#J
+    -->
+    <x:scenario label="test_034">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_034.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠽⠐⠶⠶⠭⠌⠆⠐⠖⠼⠑⠐⠶⠼⠚'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_035 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 5<6
+        Braille: #E"[#F
+    -->
+    <x:scenario label="test_035">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_035.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠑⠐⠪⠼⠋'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_036 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x leslant y
+        Braille: X"[7Y
+    -->
+    <x:scenario label="test_036">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_036.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠐⠪⠶⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_037 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x <= y
+        Braille: X"[7Y
+    -->
+    <x:scenario label="test_037">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_037.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠐⠪⠶⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_038 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x geslant  y
+        Braille: X@O7Y
+    -->
+    <x:scenario label="test_038">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_038.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠈⠕⠶⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_039 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x >= y
+        Braille: X@O7Y
+    -->
+    <x:scenario label="test_039">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_039.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠈⠕⠶⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_040 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 2>sqrt{a}
+        Braille: #B@O%A:
+    -->
+    <x:scenario label="test_040">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_040.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠃⠈⠕⠩⠁⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_041 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 1 in setN
+        Braille: #A@E@N
+    -->
+    <x:scenario label="test_041">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_041.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠁⠈⠑⠈⠝'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_042 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A owns a
+        Braille: .A@IA
+    -->
+    <x:scenario label="test_042">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_042.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠈⠊⠁'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_043 -->
+    <!-- ======== -->
+    <!--
+        StarMath: setQ subset setR
+        Braille: @Q"<@R
+    -->
+    <x:scenario label="test_043">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_043.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠈⠟⠐⠣⠈⠗'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_044 -->
+    <!-- ======== -->
+    <!--
+        StarMath: setN subseteq setZ ^ +{}
+        Braille: @N"<7@Z@6
+        FAILS: was: ⠈⠝⠐⠣⠶⠈⠵⠈
+    -->
+    <x:scenario label="test_044" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_044.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠈⠝⠐⠣⠶⠈⠵⠈⠖'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_045 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A supset emptyset
+        Braille: .A">]9
+    -->
+    <x:scenario label="test_045">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_045.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠜⠻⠔'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_046 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A supseteq  A
+        Braille: .A">7.A
+    -->
+    <x:scenario label="test_046">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_046.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠜⠶⠨⠁'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_047 -->
+    <!-- ======== -->
+    <!--
+        StarMath: X intersection Y
+        Braille: .X"+.Y
+    -->
+    <x:scenario label="test_047">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_047.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠭⠐⠬⠨⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_048 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A union B
+        Braille: .A"%.B
+    -->
+    <x:scenario label="test_048">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_048.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠩⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_049 -->
+    <!-- ======== -->
+    <!--
+        StarMath: X and Y
+        Braille: .X"+.Y
+    -->
+    <x:scenario label="test_049">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_049.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠭⠐⠬⠨⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_050 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A or B
+        Braille: .A"%.B
+    -->
+    <x:scenario label="test_050">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_050.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠩⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_051 -->
+    <!-- ======== -->
+    <!--
+        StarMath: setN setminus lbrace 0 rbrace = setN_{0}
+        Braille: @N"*"(#J")"7@N*0
+    -->
+    <x:scenario label="test_051">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_051.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠈⠝⠐⠡⠐⠷⠼⠚⠐⠾⠐⠶⠈⠝⠡⠴'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_052 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A slash B
+        Braille: .A"/.B
+    -->
+    <x:scenario label="test_052">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_052.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠌⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_053 -->
+    <!-- ======== -->
+    <!--
+        StarMath: m / sec^2
+        Braille: M"/SEC/2
+    -->
+    <x:scenario label="test_053">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_053.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠍⠐⠌⠎⠑⠉⠌⠆'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_054 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A parallel B
+        Braille: .A"//.B
+    -->
+    <x:scenario label="test_054">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_054.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠌⠌⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_055 -->
+    <!-- ======== -->
+    <!--
+        StarMath: p : A toward B
+        Braille: P,3 .A"31.B
+    -->
+    <x:scenario label="test_055">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_055.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠏⠠⠒⠀⠨⠁⠐⠒⠂⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_056 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x rightarrow y
+        Braille: X"31Y
+    -->
+    <x:scenario label="test_056">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_056.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠐⠒⠂⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_057 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x leftarrow y
+        Braille: X"13Y
+    -->
+    <x:scenario label="test_057">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_057.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠐⠂⠒⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_058 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 0 in setN drarrow 0 in setZ
+        Braille: #J@E@N"71#J@E@Z
+    -->
+    <x:scenario label="test_058">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_058.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠚⠈⠑⠈⠝⠐⠶⠂⠼⠚⠈⠑⠈⠵'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_059 -->
+    <!-- ======== -->
+    <!--
+        StarMath: (2) dlarrow (1)
+        Braille: <#B>"17<#A>
+    -->
+    <x:scenario label="test_059">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_059.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠣⠼⠃⠜⠐⠂⠶⠣⠼⠁⠜'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_060 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A subset B en B subset A dlrarrow A = B
+        Braille: .A"<.B EN .B"<.A"171.A"7.B
+        FAILS: was: ⠨⠁⠐⠣⠨⠃⠑⠝⠨⠃⠐⠣⠨⠁⠐⠂⠶⠂⠨⠁⠐⠶⠨⠃
+    -->
+    <x:scenario label="test_060" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_060.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result"
+                  type="xpath"
+                  test="string(/*)='⠨⠁⠐⠣⠨⠃⠀⠑⠝⠀⠨⠃⠐⠣⠨⠁⠐⠂⠶⠂⠨⠁⠐⠶⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_061 -->
+    <!-- ======== -->
+    <!--
+        StarMath: (a,b) uparrow (c,d)
+        Braille: <A1 B>,+<C1 D>
+        FAILS: was: ⠣⠁⠠⠂⠀⠃⠜⠐⠠⠬⠣⠉⠠⠂⠀⠙⠜
+    -->
+    <x:scenario label="test_061" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_061.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠣⠁⠂⠀⠃⠜⠠⠬⠣⠉⠂⠀⠙⠜'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_062 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A downarrow
+        Braille: .A@%
+        FAILS: was: ⠨⠁⠐⠈⠩
+    -->
+    <x:scenario label="test_062" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_062.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠈⠩'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_063 -->
+    <!-- ======== -->
+    <!--
+        StarMath: %DELTA abc sim %DELTA d e f
+        Braille: ]4ABC"5]4DEF
+        FAILS: was: ⠸⠙⠠⠁⠃⠉⠐⠢⠸⠙⠠⠙⠑⠋
+    -->
+    <x:scenario label="test_063" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_063.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠻⠲ ⠁⠃⠉⠐⠢ ⠻⠲⠙⠑⠋'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_064 -->
+    <!-- ======== -->
+    <!--
+        StarMath: %pi approx 3,14
+        Braille: ;P"55#C1AD
+    -->
+    <x:scenario label="test_064">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_064.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠰⠏⠐⠢⠢⠼⠉⠂⠁⠙'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_065 -->
+    <!-- ======== -->
+    <!--
+        StarMath: F simeq F'
+        Braille: .F"57.F@9
+    -->
+    <x:scenario label="test_065">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_065.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠋⠐⠢⠶⠨⠋⠈⠔'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_066 -->
+    <!-- ======== -->
+    <!--
+        StarMath: A ortho B
+        Braille: .A"#'.B
+    -->
+    <x:scenario label="test_066">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_066.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠨⠁⠐⠼⠄⠨⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_067 -->
+    <!-- ======== -->
+    <!--
+        StarMath: 3 divides 6
+        Braille: #C"?#F
+    -->
+    <x:scenario label="test_067">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_067.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠉⠐⠹⠼⠋'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_068 -->
+    <!-- ======== -->
+    <!--
+        StarMath: (a,b)
+        Braille: <A,1 B>
+    -->
+    <x:scenario label="test_068">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_068.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠣⠁⠠⠂⠀⠃⠜'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_069 -->
+    <!-- ======== -->
+    <!--
+        StarMath: left ( a,b right )
+        Braille: <A,1 B>
+    -->
+    <x:scenario label="test_069">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_069.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠣⠁⠠⠂⠀⠃⠜'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_070 -->
+    <!-- ======== -->
+    <!--
+        StarMath: left ] ab right none
+        Braille: )AB
+    -->
+    <x:scenario label="test_070">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_070.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠾⠁⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_071 -->
+    <!-- ======== -->
+    <!--
+        StarMath: left [ ab right )
+        Braille: (AB>
+    -->
+    <x:scenario label="test_071">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_071.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠷⠁⠃⠜'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_072 -->
+    <!-- ======== -->
+    <!--
+        StarMath: left [ xy right [
+        Braille: (XY(
+    -->
+    <x:scenario label="test_072">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_072.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠷⠭⠽⠷'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_073 -->
+    <!-- ======== -->
+    <!--
+        StarMath: lbrace x divides x in setN rbrace
+        Braille: "(X"?X@E@N")
+    -->
+    <x:scenario label="test_073">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_073.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠐⠷⠭⠐⠹⠭⠈⠑⠈⠝⠐⠾'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_074 -->
+    <!-- ======== -->
+    <!--
+        StarMath: lbrace a,b,c rbrace
+        Braille: "(A,1 B,1 C")
+    -->
+    <x:scenario label="test_074">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_074.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠐⠷⠁⠠⠂⠀⠃⠠⠂⠀⠉⠐⠾'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_075 -->
+    <!-- ======== -->
+    <!--
+        StarMath: lline -3 rline = 3
+        Braille: ?-#C?"7#C
+        FAILS: was: ⠐⠹⠐⠤⠼⠉⠐⠹⠐⠶⠼⠉
+    -->
+    <x:scenario label="test_075" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_075.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠹⠤⠼⠉⠹⠐⠶⠼⠉'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_076 -->
+    <!-- ======== -->
+    <!--
+        StarMath: ldline ab rdline
+        Braille: ??AB??
+        FAILS: was: ⠐⠌⠌⠁⠃⠐⠌⠌
+    -->
+    <x:scenario label="test_076" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_076.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠹⠹⠁⠃⠹⠹'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_077 -->
+    <!-- ======== -->
+    <!--
+        StarMath: left lbrace stack{2x+3y = 14 # x-2y = 0} right none
+        Braille: "(=#BX"6#CY"7#AD;\X"-#BY"7#J:
+    -->
+    <x:scenario label="test_077">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_077.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result"
+                  type="xpath"
+                  test="string(/*)='⠐⠷⠿⠼⠃⠭⠐⠖⠼⠉⠽⠐⠶⠼⠁⠙⠰⠳⠭⠐⠤⠼⠃⠽⠐⠶⠼⠚⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_078 -->
+    <!-- ======== -->
+    <!--
+        StarMath: left lline matrix{a # c ## b # d} right rline cdot left lline binom{e}{f} right rline = left lline stack{ae + cf # be +df} right lline
+        Braille: ?=A C;\B D:?"8?=E;\F:?"7?=AE"6CF;\BE"6DF:?
+        FAILS: was: ⠹⠿⠁⠀⠉⠰⠳⠃ ⠙⠱⠹⠐⠦⠹⠿⠑⠰⠳⠋⠱⠹⠐⠶⠹⠿⠁⠑⠐⠖⠉⠋⠰⠳⠃⠑⠐⠖⠙⠋⠱⠹
+    -->
+    <x:scenario label="test_078" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_078.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result"
+                  type="xpath"
+                  test="string(/*)='⠹⠿⠁⠀⠉⠰⠳⠃⠀⠙⠱⠹⠐⠦⠹⠿⠑⠰⠳⠋⠱⠹⠐⠶⠹⠿⠁⠑⠐⠖⠉⠋⠰⠳⠃⠑⠐⠖⠙⠋⠱⠹'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_079 -->
+    <!-- ======== -->
+    <!--
+        StarMath: left ( matrix{a # b ## c # d} right )
+        Braille: <=A B;\C D:>
+    -->
+    <x:scenario label="test_079">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_079.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠣⠿⠁⠀⠃⠰⠳⠉⠀⠙⠱⠜'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_080 -->
+    <!-- ======== -->
+    <!--
+        StarMath: "Is" 7 over 20 - 3 over 24 "kleiner dan" 3 over 17 "?"
+        Braille: .IS #G20"-#C24 KLEINER DAN #C17,5
+    -->
+    <x:scenario label="test_080">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_080.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result"
+                  type="xpath"
+                  test="string(/*)='⠨⠊⠎⠀⠼⠛⠆⠴⠐⠤⠼⠉⠆⠲⠀⠅⠇⠑⠊⠝⠑⠗⠀⠙⠁⠝⠀⠼⠉⠂⠶⠠⠢'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_081 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {24+35} over {12 times 8}
+        Braille: "2#BD"6#CE\#AB"8#H:
+    -->
+    <x:scenario label="test_081">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_081.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠐⠆⠼⠃⠙⠐⠖⠼⠉⠑⠳⠼⠁⠃⠐⠦⠼⠓⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_082 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {3p+q} over n
+        Braille: "2#CP"6Q\N:
+    -->
+    <x:scenario label="test_082">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_082.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠐⠆⠼⠉⠏⠐⠖⠟⠳⠝⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_083 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {tg %alpha -1} over {sin %alpha}
+        Braille: "2TG;A"-#A\SIN;A:
+    -->
+    <x:scenario label="test_083">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_083.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠐⠆⠞⠛⠰⠁⠐⠤⠼⠁⠳⠎⠊⠝⠰⠁⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_084 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {a + {2bc}over{d-e}+f} over {g over h -3}
+        Braille: "2A"6"2#B,BC\D"-E:"6F\\"2G\H:"-#C:
+    -->
+    <x:scenario label="test_084">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_084.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result"
+                  type="xpath"
+                  test="string(/*)='⠐⠆⠁⠐⠖⠐⠆⠼⠃⠠⠃⠉⠳⠙⠐⠤⠑⠱⠐⠖⠋⠳⠳⠐⠆⠛⠳⠓⠱⠐⠤⠼⠉⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_085 -->
+    <!-- ======== -->
+    <!--
+        StarMath: "%"
+        Braille: #J0
+    -->
+    <x:scenario label="test_085">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_085.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠚⠴'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_086 -->
+    <!-- ======== -->
+    <!--
+        StarMath: %perthousand
+        Braille: #J00
+    -->
+    <x:scenario label="test_086">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_086.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠚⠴⠴'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_087 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x^n
+        Braille: X/N:
+    -->
+    <x:scenario label="test_087">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_087.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠌⠝⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_088 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x_n
+        Braille: X*N:
+    -->
+    <x:scenario label="test_088">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_088.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠡⠝⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_089 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x lsup{n}
+        Braille: #/N:X
+    -->
+    <x:scenario label="test_089">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_089.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠌⠝⠱⠭'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_090 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x lsub{n} 
+        Braille: #*N:X
+    -->
+    <x:scenario label="test_090">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_090.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠡⠝⠱⠭'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_091 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x csup{n} 
+        Braille: X_/N:
+    -->
+    <x:scenario label="test_091">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_091.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠸⠌⠝⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_092 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x csub{n}
+        Braille: X_*N:
+    -->
+    <x:scenario label="test_092">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_092.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠸⠡⠝⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_093 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x lsub{n} _m
+        Braille: #*N:X*M:
+        FAILS: was:
+    -->
+    <x:scenario label="test_093" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_093.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠡⠝⠱⠭⠡⠍⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_094 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {x _m} lsub{n}
+        Braille: #*N:X*M:
+    -->
+    <x:scenario label="test_094">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_094.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠡⠝⠱⠭⠡⠍⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_095 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {{x} lsub{n} }_m
+        Braille: #*N:X*M:
+    -->
+    <x:scenario label="test_095">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_095.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠡⠝⠱⠭⠡⠍⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_096 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {{x} lsub{n} } csup{m}
+        Braille: #*N:X_/M:
+        FAILS: was:
+    -->
+    <x:scenario label="test_096" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_096.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠡⠝⠱⠭⠸⠌⠍⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_097 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {{x csup{m} } lsub{n} }
+        Braille: #*N:X_/M:
+    -->
+    <x:scenario label="test_097">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_097.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠡⠝⠱⠭⠸⠌⠍⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_098 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {{x sup{n} }sub {m} }sup {p}
+        Braille: X/N:*M:/P:
+    -->
+    <x:scenario label="test_098">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_098.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠌⠝⠱⠡⠍⠱⠌⠏⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_099 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {x lsup{n} _{m} }^{p} _{q}
+        Braille: #/N:X*M:*Q:/P:
+        FAILS: was: ⠡⠟⠱⠌⠏⠱
+    -->
+    <x:scenario label="test_099" xfail="true">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_099.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠌⠝⠱⠭⠡⠍⠱⠡⠟⠱⠌⠏⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_100 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x^2 y
+        Braille: X/2Y
+    -->
+    <x:scenario label="test_100">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_100.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠌⠆⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_101 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x_1 , x_2
+        Braille: X*1,1 X*2
+    -->
+    <x:scenario label="test_101">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_101.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠡⠂⠠⠂⠀⠭⠡⠆'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_102 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x_2^3
+        Braille: X*2/3
+    -->
+    <x:scenario label="test_102">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_102.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠡⠆⠌⠒'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_103 -->
+    <!-- ======== -->
+    <!--
+        StarMath: {x_2}^3
+        Braille: X*2/3
+    -->
+    <x:scenario label="test_103">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_103.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠡⠆⠌⠒'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_104 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x_p y^q
+        Braille: X*P:Y/Q:
+    -->
+    <x:scenario label="test_104">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_104.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠡⠏⠱⠽⠌⠟⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_105 -->
+    <!-- ======== -->
+    <!--
+        StarMath: a_{n-1} x^{n-1}
+        Braille: A*N"-#A:X/N"-#A:
+    -->
+    <x:scenario label="test_105">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_105.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠁⠡⠝⠐⠤⠼⠁⠱⠭⠌⠝⠐⠤⠼⠁⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_106 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x^{1 over 2 y }
+        Braille: X/#A2Y:
+    -->
+    <x:scenario label="test_106">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_106.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠌⠼⠁⠆⠽⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_107 -->
+    <!-- ======== -->
+    <!--
+        StarMath: x^{1 over 2}y
+        Braille: X/#A2:Y
+    -->
+    <x:scenario label="test_107">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_107.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠭⠌⠼⠁⠆⠱⠽'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_108 -->
+    <!-- ======== -->
+    <!--
+        StarMath: a^z _{x+y}
+        Braille: A*X"6Y:/Z:
+    -->
+    <x:scenario label="test_108">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_108.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠁⠡⠭⠐⠖⠽⠱⠌⠵⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_109 -->
+    <!-- ======== -->
+    <!--
+        StarMath: a_{x^2+y}+b
+        Braille: A*X/2"6Y:"6B
+    -->
+    <x:scenario label="test_109">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_109.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠁⠡⠭⠌⠆⠐⠖⠽⠱⠐⠖⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_110 -->
+    <!-- ======== -->
+    <!--
+        StarMath: f_i^j(x)=a^j_i(x)a^{j+1}_{i+1}(x)
+        Braille: F*I:/J:<X>"7A*I:/J:<X>A*I"6#A:/J"6#A:<X>
+    -->
+    <x:scenario label="test_110">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_110.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result"
+                  type="xpath"
+                  test="string(/*)='⠋⠡⠊⠱⠌⠚⠱⠣⠭⠜⠐⠶⠁⠡⠊⠱⠌⠚⠱⠣⠭⠜⠁⠡⠊⠐⠖⠼⠁⠱⠌⠚⠐⠖⠼⠁⠱⠣⠭⠜'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_111 -->
+    <!-- ======== -->
+    <!--
+        StarMath: t over {x_i^m + x_j^m}
+        Braille: "2T\X*I:/M:"6X*J:/M::
+    -->
+    <x:scenario label="test_111">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_111.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result"
+                  type="xpath"
+                  test="string(/*)='⠐⠆⠞⠳⠭⠡⠊⠱⠌⠍⠱⠐⠖⠭⠡⠚⠱⠌⠍⠱⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_112 -->
+    <!-- ======== -->
+    <!--
+        StarMath: nroot {}{a}
+        Braille: %A:
+    -->
+    <x:scenario label="test_112">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_112.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠩⠁⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_113 -->
+    <!-- ======== -->
+    <!--
+        StarMath: sqrt{3 over 4 -2}
+        Braille: %#C4"-#B:
+    -->
+    <x:scenario label="test_113">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_113.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠩⠼⠉⠲⠐⠤⠼⠃⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_114 -->
+    <!-- ======== -->
+    <!--
+        StarMath: sqrt {3 over 4} -2
+        Braille: %#C4:"-#B
+    -->
+    <x:scenario label="test_114">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_114.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠩⠼⠉⠲⠱⠐⠤⠼⠃'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_115 -->
+    <!-- ======== -->
+    <!--
+        StarMath: sqrt{ab sqrt c} = sqrt{ab} times nroot{4}{c}
+        Braille: %AB%C::"7%AB:"8#/4%C:
+    -->
+    <x:scenario label="test_115">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_115.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result"
+                  type="xpath"
+                  test="string(/*)='⠩⠁⠃⠩⠉⠱⠱⠐⠶⠩⠁⠃⠱⠐⠦⠼⠌⠲⠩⠉⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_116 -->
+    <!-- ======== -->
+    <!--
+        StarMath: nroot 6 {a^{2n+4}}
+        Braille: #/6%A/#BN"6#D::
+    -->
+    <x:scenario label="test_116">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_116.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠌⠖⠩⠁⠌⠼⠃⠝⠐⠖⠼⠙⠱⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_117 -->
+    <!-- ======== -->
+    <!--
+        StarMath: nroot 4 {a^{2n}} +4
+        Braille: #/4%A/#BN::"6#D
+    -->
+    <x:scenario label="test_117">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_117.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠌⠲⠩⠁⠌⠼⠃⠝⠱⠱⠐⠖⠼⠙'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_118 -->
+    <!-- ======== -->
+    <!--
+        StarMath: nroot p {a^{2n}+4}
+        Braille: #/P:%A/#BN:"6#D:
+    -->
+    <x:scenario label="test_118">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_118.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="xpath" test="string(/*)='⠼⠌⠏⠱⠩⠁⠌⠼⠃⠝⠱⠐⠖⠼⠙⠱'"/>
+    </x:scenario>
+    
+    <!-- ======== -->
+    <!-- test_119 -->
+    <!-- ======== -->
+    <!--
+        StarMath: t over {sqrt{a^n_p}+sqrt{a^n_q}}
+        Braille: "2T\%A*P:/N::"6%A*Q:/N:::
+    -->
+    <x:scenario label="test_119">
+        <x:call step="louis:translate-mathml">
+            <x:input port="source">
+                <x:document type="file" href="../resources/mathml/test_119.xml"/>
+            </x:input>
+            <x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/tmp/')"/>
+            <x:option name="math-code" select="'woluwe'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result"
+                  type="xpath"
+                  test="string(/*)='⠐⠆⠞⠳⠩⠁⠡⠏⠱⠌⠝⠱⠱⠐⠖⠩⠁⠡⠟⠱⠌⠝⠱⠱⠱'"/>
+    </x:scenario>
+    
+</x:description>

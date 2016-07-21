@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../main/resources/xml/eval-counter.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="css:eval-counter">
+      <x:input port="source">
+        <x:document type="inline">
+          <body>
+            <ul>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item"/>
+                </css:marker>
+              </li>
+            </ul>
+            <ul css:counter-reset="list-item">
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item"
+                               style="symbols(cyclic '*' '†' '‡' '§')"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item"
+                               style="symbols(cyclic '*' '†' '‡' '§')"/>
+                </css:marker>
+              </li>
+            </ul>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <ul>
+            <li>
+              <css:marker>
+                <css:box type="inline" css:text-transform="auto"> 1 </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" css:text-transform="auto"> 2 </css:box>
+              </css:marker>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <css:marker>
+                <css:box type="inline" css:text-transform="auto"> * </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" css:text-transform="auto"> † </css:box>
+              </css:marker>
+            </li>
+          </ul>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

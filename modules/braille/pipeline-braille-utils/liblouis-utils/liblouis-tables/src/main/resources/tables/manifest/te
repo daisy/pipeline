@@ -1,0 +1,5 @@
+#+type:translation
+#+locale:te
+include ../spaces.ctb
+include ../te-in-g1.utb
+include ../braille-patterns.cti

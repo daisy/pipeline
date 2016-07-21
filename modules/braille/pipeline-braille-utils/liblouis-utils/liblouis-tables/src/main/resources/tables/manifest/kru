@@ -1,0 +1,5 @@
+#+type:translation
+#+locale:kru
+include ../spaces.ctb
+include ../kru.ctb
+include ../braille-patterns.cti

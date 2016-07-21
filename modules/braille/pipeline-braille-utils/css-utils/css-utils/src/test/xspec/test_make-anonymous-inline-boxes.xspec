@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/make-anonymous-inline-boxes.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <css:box type="inline" style="text-align: center">
+        <css:box type="block">
+          xxx
+          <css:box type="block">
+            <css:white-space>
+            </css:white-space>
+            <css:box type="block">
+              xxx
+            </css:box>
+            <css:white-space>
+              xxx
+            </css:white-space>
+          </css:box>
+        </css:box>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:_>
+        <css:box type="block" style="text-align: center">
+          <css:box type="inline">
+          xxx
+          </css:box>
+          <css:box type="block">
+            <css:box type="inline">
+              <css:white-space>
+              </css:white-space>
+            </css:box>
+            <css:box type="block">
+              <css:box type="inline">
+              xxx
+            </css:box>
+            </css:box>
+            <css:box type="inline">
+              <css:white-space>
+              xxx
+            </css:white-space>
+            </css:box>
+          </css:box>
+        </css:box>
+      </css:_>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:context>
+      <css:box type="block">
+        <css:text target="x"/>
+        <css:leader/>
+        <css:counter target="x"/>
+        <css:_ css:id="foo">
+          <css:box type="block">
+            xxx
+          </css:box>
+        </css:_>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="block">
+        <css:box type="inline">
+          <css:text target="x"/>
+          <css:leader/>
+          <css:counter target="x"/>
+        </css:box>
+        <css:_ css:id="foo">
+          <css:box type="block">
+            <css:box type="inline">
+            xxx
+          </css:box>
+          </css:box>
+        </css:_>
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:context>
+      <css:box type="inline" style="text-transform: foo">
+        <css:box type="inline">
+          <css:box type="inline" style="text-transform: bar">
+            <css:box type="block">
+              ⠤⠤⠤
+            </css:box>
+          </css:box>
+        </css:box>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:_>
+        <css:box type="block" style="text-transform: bar foo">
+          <css:box type="inline">
+              ⠤⠤⠤
+            </css:box>
+        </css:box>
+      </css:_>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_04">
+    <x:context>
+      <css:_>
+        <css:box type="inline">
+          ⠿⠿⠿
+        </css:box>
+      </css:_>
+    </x:context>
+    <x:expect label="result">
+      <css:_>
+        <css:box type="inline">
+          ⠿⠿⠿
+        </css:box>
+      </css:_>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_05">
+    <x:context>
+      <css:box type="inline">
+        <css:box type="block">
+          <css:box type="inline" name="css:before">⠿⠿</css:box>
+          ⠤⠤⠤
+          <css:box type="block" name="css:after">⠿⠿</css:box>
+        </css:box>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:_>
+        <css:box type="block">
+          <css:box type="inline">
+            <css:box type="inline" name="css:before">⠿⠿</css:box>
+          ⠤⠤⠤
+          </css:box>
+          <css:box type="block" name="css:after">
+            <css:box type="inline">⠿⠿</css:box>
+          </css:box>
+        </css:box>
+      </css:_>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

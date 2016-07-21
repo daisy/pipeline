@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:louis="http://liblouis.org/liblouis"
+               stylesheet="../../main/resources/xml/identify-blocks.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc>
+        <div css:display="block">
+          xxx
+          <span>xxx</span>
+          <div css:display="block">
+            <louis:space>
+            </louis:space>
+            <div css:display="block">
+              xxx
+            </div>
+            <louis:space>
+            xxx
+          </louis:space>
+          </div>
+          <louis:print-page value="x"/>
+        </div>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <div css:display="block">
+          <css:block>
+          xxx
+          <span>xxx</span>
+          </css:block>
+          <div css:display="block">
+            <css:block>
+              <louis:space>
+            </louis:space>
+            </css:block>
+            <div css:display="block">
+              <css:block>
+              xxx
+            </css:block>
+            </div>
+            <css:block>
+              <louis:space>
+            xxx
+          </louis:space>
+            </css:block>
+          </div>
+          <louis:print-page value="x"/>
+        </div>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:context>
+      <doc>
+        <div css:display="block">
+          <css:text target="x"/>
+          <css:leader/>
+          <css:counter target="x"/>
+          <div css:display="block">
+            xxx
+          </div>
+        </div>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <div css:display="block">
+          <css:block>
+            <css:text target="x"/>
+            <css:leader/>
+            <css:counter target="x"/>
+          </css:block>
+          <div css:display="block">
+            <css:block>
+            xxx
+          </css:block>
+          </div>
+        </div>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

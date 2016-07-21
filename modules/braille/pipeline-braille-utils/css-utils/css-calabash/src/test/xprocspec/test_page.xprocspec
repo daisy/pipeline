@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../resources/inline.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @page {
+                  size: 40 25;
+                  @top-right {
+                    content: counter(braille-page)
+                  }
+                  @bottom-right {
+                    content: string(print-page)
+                  }
+                }
+                @page front {
+                  @top-right {
+                    content: counter(braille-page, lower-roman)
+                  }
+                }
+                frontmatter {
+                  page: front
+                }
+              </style>
+            </head>
+            <body>
+              <frontmatter>
+                <p>foobar</p>
+              </frontmatter>
+              <bodymatter>
+                <p>foobar</p>
+              </bodymatter>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <frontmatter style="@page { size: 40 25; @top-right { content: counter(braille-page, lower-roman); } @bottom-right { content: string(print-page); } }">
+            <p>foobar</p>
+          </frontmatter>
+          <bodymatter>
+            <p>foobar</p>
+          </bodymatter>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @page {
+                  size: 40 25;
+                  @top-right {
+                    content: 'a'
+                  }
+                  @bottom-right {
+                    content: 'b'
+                  }
+                }
+                @page:left {
+                  @top-right {
+                    content: 'c'
+                  }
+                  @top-left {
+                    content: 'd'
+                  }
+                  @bottom-center {
+                    content: 'e'
+                  }
+                }
+                @page front {
+                  @top-left {
+                    content: 'f'
+                  }
+                }
+                @page front:left {
+                  @bottom-center {
+                    content: 'g'
+                  }
+                }
+                frontmatter {
+                  page: front
+                }
+              </style>
+            </head>
+            <body>
+              <frontmatter>
+                <p>foobar</p>
+              </frontmatter>
+              <bodymatter>
+                <p>foobar</p>
+              </bodymatter>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <frontmatter style="@page { size: 40 25; @top-left { content: 'f'; } @top-right { content: 'a'; } @bottom-right { content: 'b'; } } @page:left { size: 40 25; @bottom-center { content: 'g'; } @top-left { content: 'f'; } @top-right { content: 'c'; } @bottom-right { content: 'b'; } }">
+            <p>foobar</p>
+          </frontmatter>
+          <bodymatter>
+            <p>foobar</p>
+          </bodymatter>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @page:right {
+                  margin-top: 1;
+                }
+                @page:left {
+                  margin-top: 2;
+                }
+              </style>
+            </head>
+            <body style="page:auto"/>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body style="@page:left { margin-top: 2; } @page:right { margin-top: 1; }"/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_04">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @page {
+                  margin-top: 1;
+                }
+                @page:left {
+                  margin-bottom: 2;
+                }
+              </style>
+            </head>
+            <body style="page:auto"/>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body style="@page { margin-top: 1; } @page:left { margin-bottom: 2; margin-top: 1; }"/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_05">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @page {
+                  size: 15 15;
+                }
+                @page {
+                  @top-right {
+                    content: counter(page);
+                  }
+                }
+              </style>
+            </head>
+            <body style="page:auto"/>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body style="@page { size: 15 15; @top-right { content: counter(page); } }"/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_06">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @page {
+                  margin-left: 1;
+                  @left {
+                    content: 'foo'
+                  }
+                }
+              </style>
+            </head>
+            <body style="page:auto"/>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body style="@page { margin-left: 1; @left { content: 'foo'; } }"/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_07">
+    <x:documentation>
+      Tests that "@page :left", which is what SASS makes from "@page:left", is supported.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @page :left {
+                  margin-top: 2;
+                }
+              </style>
+            </head>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//document"/>
+    </x:context>
+    <x:expect label="root-style" type="xpath" test="/*/@style"
+              equals="'@page:left { margin-top: 2; }'"/>
+  </x:scenario>
+  
+</x:description>
+

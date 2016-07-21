@@ -1,0 +1,4 @@
+#+type:translation
+#+locale:is
+include ../is-chardefs6.cti
+include ../braille-patterns.cti

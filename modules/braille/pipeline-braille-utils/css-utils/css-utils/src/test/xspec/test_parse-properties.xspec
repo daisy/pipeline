@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/parse-properties.xsl">
+  
+  <x:param name="property-names" select="'display counter-reset'"/>
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc>
+        <body>
+          <p style="display: block; margin-left: 2; counter-reset: braille-page 1">
+            foo
+          </p>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <p css:display="block" css:counter-reset="braille-page 1" style="margin-left: 2">
+            foo
+          </p>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

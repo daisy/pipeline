@@ -1,0 +1,4 @@
+#+type:translation
+#+locale:vi
+include ../vi.ctb
+include ../braille-patterns.cti

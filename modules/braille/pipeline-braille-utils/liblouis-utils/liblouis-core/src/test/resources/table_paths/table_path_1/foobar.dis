@@ -1,0 +1,29 @@
+#+type:display
+#+locale: foo
+display \X0020 0
+display \X0061 1
+display \X0062 12
+display \X0063 14
+display \X0064 145
+display \X0065 15
+display \X0066 124
+display \X0067 1245
+display \X0068 125
+display \X0069 24
+display \X006A 245
+display \X006B 13
+display \X006C 123
+display \X006D 134
+display \X006E 1345
+display \X006F 135
+display \X0070 1234
+display \X0071 12345
+display \X0072 1235
+display \X0073 234
+display \X0074 2345
+display \X0075 136
+display \X0076 1236
+display \X0077 2456
+display \X0078 1346
+display \X0079 13456
+display \X007A 1356
