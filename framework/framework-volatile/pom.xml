@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.daisy.pipeline</groupId>
+    <artifactId>framework-parent</artifactId>
+    <version>1.10.1-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
+  </parent>
+  <groupId>org.daisy.pipeline</groupId>
+  <artifactId>framework-volatile</artifactId>
+  <version>2.0.2-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <eclipselink.version>2.4.0</eclipselink.version>
+  </properties>
+  <name>DAISY Pipeline 2 :: Framework non-persistent data model</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>webservice-utils</artifactId>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+		  <Service-Component>OSGI-INF/webservice-storage.xml, OSGI-INF/event-bus-listener.xml, OSGI-INF/volatile-monitor.xml, OSGI-INF/volatile-job-storage.xml</Service-Component>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

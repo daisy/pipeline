@@ -1,0 +1,22 @@
+<job xmlns="http://www.daisy.org/ns/pipeline/data" id="job-id-01" href="http://example.org/ws/jobs/job-id-01" status="DONE" priority="low">
+	<!-- nicename is optional -->
+	<nicename>simple-dtbook-1</nicename>
+	<script id="dtbook-to-zedai" href="http://example.org/ws/scripts/dtbook-to-zedai">
+		<nicename>DTBook to ZedAI</nicename>
+		<description>Transforms DTBook XML into ZedAI XML.</description>
+	</script>
+	<messages>
+		<message level="WARNING" sequence="22">Warning about this job</message>
+	</messages>
+	<log href="http://example.org/ws/jobs/job-id-01/log"/>
+	<results href="http://example.org/ws/jobs/job-id-01/result" mime-type="zip">
+		<result from="option" href="http://example.org/ws/jobs/job-id-01/result/option/output-dir" mime-type="zip" name="output-dir" nicename="Output directory">
+                        <result href="http://example.org/ws/jobs/job-id-01/result/option/idx/output-dir/file-1.xhtml" mime-type="application/xml" size="110"/>
+		</result>
+		<result from="port" href="http://example.org/ws/jobs/job-id-01/result/port/result" mime-type="zip" name="result" nicename="XML Results">
+                        <result href="http://example.org/ws/jobs/job-id-01/result/port/idx/result/result-1.xml" mime-type="application/xml" size="1024"/>
+                        <result href="http://example.org/ws/jobs/job-id-01/result/port/idx/result/result-2.xml" mime-type="application/xml" size="54321"/>
+		</result>
+	</results>
+
+</job>

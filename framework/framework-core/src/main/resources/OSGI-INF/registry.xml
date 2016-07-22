@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="script-registry">
+   <implementation class="org.daisy.pipeline.script.impl.DefaultScriptRegistry"/>
+   <service>
+      <provide interface="org.daisy.pipeline.script.ScriptRegistry"/>
+   </service>
+   <reference bind="setParser" cardinality="1..1" interface="org.daisy.pipeline.script.XProcScriptParser" name="script-parser" policy="static"/> 
+   <reference  name="script-service" interface="org.daisy.pipeline.script.XProcScriptService" bind="register" unbind="unregister" cardinality="0..n" policy="dynamic"/> 
+</scr:component>

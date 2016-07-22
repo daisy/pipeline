@@ -1,0 +1,18 @@
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+         prefer="public">
+
+  <group xml:base="mybase">
+    <public publicId="-//OASIS//DTD DocBook XML V4.1.2//EN"
+            uri="docbookx.dtd"/>
+    <system systemId="http://example.com/groupfile.xml" uri="mysistemIdgroup.xml"/>
+    <uri name="http://example.com/groupuri.xml" uri="myurigroup.xml"/>
+    <rewriteURI uriStartString="http://example.com/static" rewritePrefix="static/"/>
+  </group>
+  <group xml:base="mybase/">
+  	<uri name="http://example.com/groupuri2.xml" uri="myurigroup2.xml"/>
+  </group>
+  <system systemId="http://example.com/file.xml" uri="mysistemId.xml"/>
+  <uri name="http://example.com/uri.xml" uri="myuri.xml"/>
+  <public publicId="-//OASIS//DTD DocBook MathML Module V1.0//EN"
+      uri="http://www.oasis-open.org/docbook/xml/mathml/1.0/dbmathml.dtd"/>
+</catalog>

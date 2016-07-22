@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" immediate="true" name="daisy-derby-emf">
+   <implementation class="org.daisy.pipeline.persistence.impl.derby.DerbyEntityManagerFactory"/>
+   <service>
+      <provide interface="javax.persistence.EntityManagerFactory"/>
+   </service>
+   <reference bind="setBuilder" cardinality="1..1" interface="org.osgi.service.jpa.EntityManagerFactoryBuilder" name="EntityManagerFactoryBuilder" policy="static" target="(osgi.unit.name=pipeline-pu)"/>
+   <reference bind="setPropertyPublisherFactory" unbind="unsetPropertyPublisherFactory" cardinality="0..1" interface="org.daisy.common.properties.PropertyPublisherFactory" name="PropertyPublisherFactory" policy="dynamic" />
+   <property name="osgi.unit.name" type="String" value="pipeline-pu"/>
+    
+</scr:component>

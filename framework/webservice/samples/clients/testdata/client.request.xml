@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<client xmlns='http://www.daisy.org/ns/pipeline/data' id='clientid' secret='supersecret' role='ADMIN' contact='me@example.org'/>

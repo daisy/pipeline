@@ -1,0 +1,53 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+
+script = 
+    element script {
+        attribute id { text } 
+        
+        & attribute href { xsd:anyURI } 
+
+        & attribute input-filesets{ text }?
+
+        & attribute output-filesets{ text }? 
+        
+        & element nicename { text } 
+        
+        & element description { text }  
+
+        & element version { text }  
+        
+        & element homepage { xsd:anyURI }?  
+        
+        & element input {
+            port.attrs 
+            & mediatype.attr?
+        }*
+        
+        & element option {
+            port.attrs
+            & attribute ordered { xsd:boolean } # does the order matter
+            & attribute type { text } # XSD type
+            & mediatype.attr? # use if option references a file
+            & attribute outputType { output.type }?
+            & attribute default { text }?
+            & attribute data-type { text }?
+        }*
+        
+        & element output {
+            port.attrs
+            & mediatype.attr?
+        }*  
+    }
+    
+ port.attrs =
+    attribute name { text } 
+    & attribute nicename { text } 
+    & attribute desc { text } 
+    & attribute required { xsd:boolean } 
+    & attribute sequence { xsd:boolean }
+
+mediatype.attr = 
+    attribute mediaType { text }
+
+output.type = "result" | "temp"
+    

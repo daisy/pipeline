@@ -1,0 +1,10 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+
+start = 
+    element datatypes{
+        attribute href { xsd:anyURI },
+        element datatype{
+                attribute id {text},
+                attribute href { xsd:anyURI }
+        }*
+    }

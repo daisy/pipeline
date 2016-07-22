@@ -1,0 +1,11 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+include "priority.rnc"
+client = 
+    element client {
+        attribute id { text }
+        & attribute href { xsd:anyURI }?
+        & attribute secret { text }
+        & attribute role { text }
+        & attribute contact { text }
+        & attribute priority { priority }
+    }

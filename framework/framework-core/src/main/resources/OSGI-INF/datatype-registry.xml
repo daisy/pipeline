@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="datatype-registry">
+   <implementation class="org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry"/>
+   <service>
+      <provide interface="org.daisy.pipeline.datatypes.DatatypeRegistry"/>
+   </service>
+   <reference  name="datatype-services" interface="org.daisy.pipeline.datatypes.DatatypeService" bind="register" unbind="unregister" cardinality="0..n" policy="dynamic"/> 
+</scr:component>

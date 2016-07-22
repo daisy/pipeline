@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0"  name="calabash-xproc-engine">
+   <implementation class="org.daisy.common.xproc.calabash.impl.CalabashXProcEngine"/>
+   <service>
+      <provide interface="org.daisy.common.xproc.XProcEngine"/>
+   </service>
+   <reference name="uri-resolver" interface="javax.xml.transform.URIResolver"  bind="setUriResolver" cardinality="1..1" policy="static"/>
+   <reference name="entity-resolver" interface="org.xml.sax.EntityResolver"  bind="setEntityResolver" cardinality="1..1" policy="static"/>
+   <reference name="calabash-config-factory" interface="org.daisy.common.xproc.calabash.XProcConfigurationFactory"  bind="setConfigurationFactory" cardinality="1..1" policy="static"/>
+   <reference name="event-bus-provider" interface="org.daisy.pipeline.event.EventBusProvider"  bind="setEventBusProvider" cardinality="1..1" policy="static"/>
+   <reference bind="setPropertyPublisherFactory" unbind="unsetPropertyPublisherFactory" cardinality="0..1" interface="org.daisy.common.properties.PropertyPublisherFactory" name="PropertyPublisherFactory" policy="dynamic" />
+   
+   
+   
+</scr:component>

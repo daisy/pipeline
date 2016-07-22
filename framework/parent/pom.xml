@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.pipeline</groupId>
+  <artifactId>framework-parent</artifactId>
+  <version>1.10.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>DAISY Pipeline 2 :: Framework Parent POM</name>
+
+  <description>The DAISY Pipeline 2 is an open source framework for the automated processing of various digital formats efficiently and economically. It intends to facilitate the production and maintenance of accessible content for people with print disabilities.</description>
+  <url>http://www.daisy.org/pipeline2</url>
+  <inceptionYear>2010</inceptionYear>
+  <organization>
+    <name>The DAISY Consortium</name>
+    <url>http://www.daisy.org/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License, Version 3</name>
+      <url>http://www.gnu.org/copyleft/lesser.html</url>
+      <distribution>manual</distribution>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>rdeltour</id>
+      <name>Romain Deltour</name>
+      <email>rdeltour@gmail.com</email>
+      <organization>DAISY Consortium</organization>
+      <organizationUrl>http://www.daisy.org/</organizationUrl>
+      <roles>
+        <role>Project Lead</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+    <developer>
+      <id>marisa.demeglio</id>
+      <name>Marisa DeMeglio</name>
+      <email>marisa.demeglio@gmail.com</email>
+      <organization>DAISY Consortium</organization>
+      <organizationUrl>http://www.daisy.org/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC-08:00</timezone>
+    </developer>
+    <developer>
+      <id>capitan.cambio</id>
+      <name>Javier Asensio Cubero</name>
+      <email>capitan.cambio@gmail.com</email>
+      <organization>DAISY Consortium</organization>
+      <organizationUrl>http://www.daisy.org/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC</timezone>
+    </developer>
+    <developer>
+      <id>josteinaj</id>
+      <name>Jostein Austvik Jacobsen</name>
+      <email>josteinaj@gmail.com</email>
+      <organization>Norwegian Library of Talking Books and Braille</organization>
+      <organizationUrl>http://www.nlb.no/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+    <developer>
+      <id>bertfrees</id>
+      <name>Bert Frees</name>
+      <email>bertfrees@gmail.com</email>
+      <organization>SBS - Schweizerische Bibliothek für Blinde, Seh- und Lesebehinderte</organization>
+      <organizationUrl>http://sbs.ch/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+  </developers>
+  <mailingLists>
+    <mailingList>
+      <name>DAISY Pipeline Developers</name>
+      <subscribe>http://groups.google.com/group/daisy-pipeline-dev/subscribe</subscribe>
+      <unsubscribe>daisy-pipeline-dev+unsubscribe@googlegroups.com</unsubscribe>
+      <post>daisy-pipeline-dev@googlegroups.com</post>
+      <archive>http://groups.google.com/group/daisy-pipeline-dev</archive>
+    </mailingList>
+  </mailingLists>
+
+  <issueManagement>
+    <system>Google Code Issue Tracker</system>
+    <url>http://code.google.com/p/daisy-pipeline/issues/list</url>
+  </issueManagement>
+
+  <dependencyManagement>
+    <dependencies>
+      <!-- Framework BoM -->
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>framework-bom</artifactId>
+        <version>1.10.1-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <properties>
+    <java.version>1.7</java.version>
+  </properties>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>log4j-over-slf4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-logging-api</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <bannedDependencies>
+                  <excludes>
+                    <exclude>commons-logging:commons-logging</exclude>
+                    <exclude>log4j:log4j</exclude>
+                  </excludes>
+                </bannedDependencies>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <configuration>
+            <additionalparam>-Xdoclint:none</additionalparam>
+          </configuration>
+      </plugin>
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <versionRange>[2.0,)</versionRange>
+                    <goals>
+                      <goal>bundle</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <repositories>
+    <!--
+      Restlet is not on Maven Central
+      https://github.com/restlet/restlet-framework-java/issues/481
+     -->
+    <repository>
+      <id>central</id>
+      <name>Maven Central</name>
+      <url>http://repo.maven.apache.org/maven2/</url>
+    </repository>
+    <!-- Restlet maven repository -->
+    <repository>
+      <id>restlet-repo</id>
+      <name>Public online Restlet repository</name>
+      <url>http://maven.restlet.org</url>
+    </repository>
+    <!-- springsource used for the osgi version of mysql -->
+    <repository>
+      <id>com.springsource.repository.bundles.external</id>
+      <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+      <url>http://repository.springsource.com/maven/bundles/external</url>
+    </repository>
+    <!-- EclipseLink stuff -->
+    <repository>
+      <id>EclipseLink</id>
+      <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
+    </repository>
+  </repositories>
+</project>

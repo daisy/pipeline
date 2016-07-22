@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<error query="http://localhost:8181/ws/jobs" xmlns="http://www.daisy.org/ns/pipeline/data">
+    <description>Error while acquiring jobs</description>
+    <trace>
+        java.lang.RuntimeException: Error while acquiring jobs
+        at org.daisy.pipeline.webservice.JobsResource.getResource(JobsResource.java:84)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+        at java.lang.reflect.Method.invoke(Method.java:597)
+        at org.restlet.resource.ServerResource.doHandle(ServerResource.java:497)
+        at org.restlet.resource.ServerResource.get(ServerResource.java:698)
+        at org.restlet.resource.ServerResource.doHandle(ServerResource.java:580)
+        at org.restlet.resource.ServerResource.doNegotiatedHandle(ServerResource.java:640)
+        at org.restlet.resource.ServerResource.doConditionalHandle(ServerResource.java:339)
+        at org.restlet.resource.ServerResource.handle(ServerResource.java:902)
+    </trace>
+</error>

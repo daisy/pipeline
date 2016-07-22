@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" activate="init" deactivate="close" name="org.daisy.pipeline.webservice">
+   <implementation class="org.daisy.pipeline.webservice.impl.PipelineWebService"/>
+   <reference name="script-registry" interface="org.daisy.pipeline.script.ScriptRegistry" cardinality="1..1" policy="static" bind="setScriptRegistry"/>
+   <reference name="job-manager-factory" interface="org.daisy.pipeline.job.JobManagerFactory" cardinality="1..1" policy="static" bind="setJobManagerFactory"/>
+   <reference name="webservice-storage" interface="org.daisy.pipeline.webserviceutils.storage.WebserviceStorage" cardinality="1..1" policy="static" bind="setWebserviceStorage"/>
+   <reference name="callback-registry" interface="org.daisy.pipeline.webserviceutils.callback.CallbackRegistry" cardinality="1..1" policy="static" bind="setCallbackRegistry"/>
+   <reference name="datatype-registry" interface="org.daisy.pipeline.datatypes.DatatypeRegistry" cardinality="1..1" policy="static" bind="setDatatypeRegistry"/>
+   <reference bind="setPropertyPublisherFactory" unbind="unsetPropertyPublisherFactory" cardinality="1..1" interface="org.daisy.common.properties.PropertyPublisherFactory" name="PropertyPublisherFactory" policy="dynamic" />
+</scr:component>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline</groupId>
+    <artifactId>framework-parent</artifactId>
+    <version>1.10.1-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
+  </parent>
+
+  <artifactId>webservice</artifactId>
+  <version>2.1.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 :: Web Service</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.osgi</groupId>
+      <artifactId>org.restlet</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.osgi</groupId>
+      <artifactId>org.restlet.ext.fileupload</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.osgi</groupId>
+      <artifactId>org.restlet.ext.xml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.osgi</groupId>
+      <artifactId>org.restlet.ext.jetty</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xproc-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>webservice-utils</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Service-Component>OSGI-INF/webservice.xml</Service-Component>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

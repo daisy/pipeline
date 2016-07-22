@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="volatile-job-monitor">
+   <implementation class="org.daisy.pipeline.nonpersistent.impl.job.VolatileJobMonitorFactory"/>
+   <service>
+      <provide interface="org.daisy.pipeline.job.JobMonitorFactory"/>
+   </service>
+</scr:component>

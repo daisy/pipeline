@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="event-bus-listener">
+   <implementation class="org.daisy.pipeline.persistence.impl.messaging.PersistentMessageEventListener"/>
+   <reference name="event-bus-provider" interface="org.daisy.pipeline.event.EventBusProvider"  bind="setEventBusProvider" cardinality="1..1" policy="static"/>    
+   <reference bind="setEntityManagerFactory" cardinality="1..1" interface="javax.persistence.EntityManagerFactory" name="entity-manager-factory" policy="static" target="(osgi.unit.name=pipeline-pu)"/>
+   
+</scr:component>

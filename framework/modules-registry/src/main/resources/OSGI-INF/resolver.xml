@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="module-uri-resolver">
+   <implementation class="org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver"/>
+   <reference bind="setModuleRegistry" cardinality="1..1" interface="org.daisy.pipeline.modules.ModuleRegistry" name="module-registry" policy="static"/>
+   <service>
+      <provide interface="javax.xml.transform.URIResolver"/>
+      <provide interface="org.xml.sax.EntityResolver"/>
+   </service>
+</scr:component>
+

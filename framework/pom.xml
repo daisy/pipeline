@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+  </parent>
+
+  <groupId>org.daisy.pipeline</groupId>
+  <artifactId>framework-aggregator</artifactId>
+  <version>1.10.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>DAISY Pipeline 2 :: Framework Aggregator</name>
+
+  <scm>
+    <connection>scm:git:git@github.com:daisy/pipeline-framework.git</connection>
+    <url>scm:git:git@github.com:daisy/pipeline-framework.git</url>
+    <developerConnection>scm:git:git@github.com:daisy/pipeline-framework.git</developerConnection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <modules>
+    <module>bom</module>
+    <!-- <module>parent</module> -->
+    <!-- <module>xmlcatalog</module> -->
+    <!-- <module>calabash-adapter</module> -->
+    <!-- <module>calabash-custom-steps</module> -->
+    <!-- <module>common-utils</module> -->
+    <module>framework-core</module>
+    <!-- <module>framework-persistence</module> -->
+    <!-- <module>framework-volatile</module> -->
+    <!-- <module>logging-activator</module> -->
+    <!-- <module>logging-appender</module> -->
+    <!-- <module>modules-registry</module> -->
+    <!-- <module>persistence-derby</module> -->
+    <!-- <module>persistence-mysql</module> -->
+    <!-- <module>push-notifier</module> -->
+    <module>updater-wrapper</module>
+    <!-- <module>webservice</module> -->
+    <!-- <module>webservice-utils</module> -->
+    <!-- <module>woodstox-osgi-adapter</module> -->
+    <!-- <module>xpath-registry</module> -->
+    <!-- <module>xproc-api</module> -->
+    <!-- <module>launcher</module> -->
+  </modules>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+</project>

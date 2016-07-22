@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="converter-parser">
+   <implementation class="org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser"/>
+   <service>
+      <provide interface="org.daisy.pipeline.script.XProcScriptParser"/>
+   </service>
+   <reference bind="setFactory" cardinality="1..1" interface="javax.xml.stream.XMLInputFactory" name="xml-input-factory" policy="static"/> 
+   <reference bind="setUriResolver" cardinality="1..1" interface="javax.xml.transform.URIResolver" name="resolver" policy="static"/>
+</scr:component>

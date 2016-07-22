@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
+    <script href='http://localhost:8182/ws/scripts/daisy3-to-epub3'/>
+    <input name='source'>
+        <item value='/Users/marisa/daisybooks/zed/greatpainters/speechgen.opf'/>
+    </input>
+    <option name="output-dir">file:/tmp/dpout</option>
+</jobRequest>
