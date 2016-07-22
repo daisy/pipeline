@@ -1,0 +1,25 @@
+@(createAdminForm: Form[controllers.Administrator.CreateAdminForm])
+
+@main("First use", "", Array(), Array(), Array()){
+	
+	<div class="horizontally-centered">
+		
+	  	<div class="page-header" style="text-align:center;">
+	  		<hgroup>
+	       		<h1>Configure Administrative Account</h1>
+	       	</hgroup>
+	    </div>
+	  	
+		<p style="text-align:center;">This is the first time that you are using the Pipeline 2 Web UI. Please fill in the form below to configure an administrative account for this website.</p>
+		<br/>
+	  	
+	    <script type="text/javascript">
+	  		$(function(){ DP2Forms.startValidation("createAdmin", "@routes.FirstUse.postFirstUse()?validate", ["email","password","repeatPassword"]); });
+		</script>
+	    <div>
+	  		@views.html.Administrator.Forms.createAdmin(createAdminForm, routes.FirstUse.postFirstUse(), true)
+		</div>
+		<br/><br/>
+		
+	</div>
+}

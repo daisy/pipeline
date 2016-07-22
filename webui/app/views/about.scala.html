@@ -1,0 +1,56 @@
+@(custom: String)
+
+@main("About", "about") {
+
+<script type="text/javascript">
+// variables available for use by custom about page
+if (typeof DP2 === "undefined") DP2 = {};
+DP2.application = {
+	'title': '@models.Setting.get("appearance.title")',
+	'Web UI version': '@Application.version',
+	'Engine version': '@if(Application.getAlive()!=null){@Application.getAlive().version}'
+};
+</script>
+
+@if(custom!=null){
+
+@Html(custom)
+
+}else{
+
+<div class="page-header">
+	<hgroup>
+    	<h1>About @models.Setting.get("appearance.title")</h1>
+    </hgroup>
+</div>
+
+<p>The DAISY Pipeline 2 is an ongoing project to develop a next generation framework for automated production of accessible materials for people with print disabilities. It is the follow-up and total redesign of the original DAISY Pipeline 1 project.</p>
+
+<p>The overarching principle of the Pipeline 2 is to adopt recent platform-neutral standards (and off-the-shelf implementations of those standards) at the heart of a comprehensive framework, which will:</p>
+
+<ul>
+    <li>minimize the development and maintenance cost, allowing developers to ultimately focus more on actual transformations rather than the engine that drives the transformations.</li>
+    <li>lower the learning curve</li>
+    <li>increase interoperability with the heterogeneous production workflows</li>
+    <li>increase the likelihood of re-use in both open source and commercial applications.</li>
+</ul>
+
+<p>For more information on the Pipeline 2 development, please see:</p>
+
+<ul>
+    <li>A Pipeline 2 <a href="http://www.daisy.org/pipeline2/overview">Overview</a></li>
+    <li>The Pipeline 2 <a href="http://code.google.com/p/daisy-pipeline/wiki/ProjectCharter">project charter</a></li>
+    <li>The Pipeline 2 <a href="https://github.com/daisy/pipeline-assembly">development site</a>, hosted on GitHub</li>
+    <li>The Pipeline 2 <a href="http://code.google.com/p/daisy-pipeline/wiki/UserGuideIntro">user guide</a> (draft), on the development wiki</li>
+</ul>
+
+<div class="well">
+	<em>Pipeline 2 Web UI version: @Application.version</em><br/>
+	@if(Application.getAlive()!=null){
+		<em>Pipeline 2 Engine version: @Application.getAlive().version</em>
+	}
+</div>
+
+}
+
+}

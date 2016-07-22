@@ -1,0 +1,230 @@
+@(title: String, nav: String = "", moreScripts: Array[String] = Array(), moreStyles: Array[String] = Array(), navs: Array[String] = Array("scripts", "jobs", "templates", "about", "admin", "account", "login"))(content: Html)
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+	<title>@Setting.get("appearance.title")</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Web interface for Pipeline 2">
+	<meta name="author" content="DAISY Consortium">
+	
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+	<meta http-equiv="pragma" content="no-cache" />
+	
+	<!-- Styles -->
+	<link href="@routes.Application.theme("stylesheets/jquery-ui-1.10.0.custom.css")?@Application.themeName()&version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" rel="stylesheet" type="text/css"/>
+	<link href="@routes.Application.theme("stylesheets/bootstrap.min.css")?@Application.themeName()&version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" rel="stylesheet" type="text/css"/>
+	@if(controllers.Application.themeName()!=""){
+		<link href="@routes.Application.theme("stylesheets/bootstrap-responsive.css")?@Application.themeName()&version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" rel="stylesheet" type="text/css"/>
+	}
+	@for(style <- moreStyles) {
+		<link href="@routes.Application.theme("stylesheets/"+style)?@Application.themeName()&version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" rel="stylesheet" type="text/css"/>
+	}
+	<link href="@routes.Assets.versioned("stylesheets/main.css")" rel="stylesheet" type="text/css">
+	@if(controllers.Application.themeName()!=""){
+		<link href="@routes.Application.theme("stylesheets/main.css")?@Application.themeName()&version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" rel="stylesheet" type="text/css"/>
+	}
+	
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<!--[if lt IE 9]>
+	  <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	  <script type="text/javascript">
+	    // Date.now for old browsers
+		if (typeof Date.now === 'undefined') { Date.now = function() { return 0+(new Date()); }; }
+      </script>
+	<![endif]-->
+
+	<!-- Icons -->
+	<link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")"/>
+	<!--<link rel="apple-touch-icon" href="routes.Assets.versioned("images/apple-touch-icon.png")"/>
+	<link rel="apple-touch-icon" sizes="72x72" href="routes.Assets.versioned("images/apple-touch-icon-72x72.png")"/>
+	<link rel="apple-touch-icon" sizes="114x114" href="routes.Assets.versioned("images/apple-touch-icon-114x114.png")"/>-->
+	
+	<!-- Load jQuery before the content (so other templates may use jQuery) -->
+	<script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery-1.9.1.min.js")"></script>
+	@if(play.Play.application().isDev()){
+		<script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery-migrate-1.1.1.min.js")"></script>
+		<!--[if lt IE 9]>
+			<script type="text/javascript" src="http://fbug.googlecode.com/svn/lite/branches/firebug1.4/content/firebug-lite-dev.js"></script>
+		<![endif]-->
+	}else{
+		<!--[if lt IE 9]>
+		  <script type="text/javascript" src="@routes.Assets.versioned("javascripts/jquery-migrate-1.1.1.min.js")"></script>
+		<![endif]-->
+	}
+	
+	<script type="text/javascript">
+	$(function(){
+		var useBrowserId = function(browserId) {
+			var ws = "@{routes.Notifications.websocket(-1L).webSocketURL(request)}".replace("-1",browserId);
+			var http = "@{routes.Notifications.xhr(-1L)}".replace("-1",browserId);
+			ws = ws.replace(/[^/]+:\/\/[^/]+/,"");
+			ws = "ws://"+window.location.host+ws;
+			http = window.location.protocol+"//"+window.location.host+http;
+			Notifications.init(ws, http);
+		}
+		var initBrowser = function() {
+			$.ajax({
+				url: "@routes.Notifications.getBrowserId()?"+new Date().getTime(),
+				error: function(jqXHR, textStatus, errorThrown) {
+					window.setTimeout(initBrowser, 1000);
+				},
+				success: function(browserId, textStatus, jqXHR) {
+					useBrowserId(browserId.value);
+				}
+			});
+		}
+		initBrowser();
+	});
+	@if(controllers.Application.debug){
+		$(function(){Notifications.debug=true;DP2Forms.debug=true;});
+	}
+	</script>
+  </head>
+	
+  <body class="body" data-spy="scroll" data-target=".subnav" data-offset="50">
+  	
+	<div class="navbar navbar-inverse navbar-fixed-top">
+	   	<div class="navbar-inner">
+	   		<div class="container">
+	   			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	                <span class="icon-bar"></span>
+	                <span class="icon-bar"></span>
+	                <span class="icon-bar"></span>
+	            </a>
+               	<a class="brand" href="@Application.titleLink()" @if(models.Setting.get("appearance.titleLink.newWindow")=="true"){target="_blank"}>@Setting.get("appearance.title")</a>
+	   			<nav class="nav-collapse">
+		   			<ul class="nav">
+		   				@if(models.User.parseUserId(session()) != null){
+		   					@if(navs.contains("scripts")){
+			   					<li class="@("active".when(nav == "scripts"))"><a href="@routes.Jobs.newJob()"><i class="icon-plus icon-white"></i> Create Job</a></li>
+			   				}
+		   				}
+		   				@if(models.User.parseUserId(session()) != null && (models.User.parseUserId(session()) >= 0 || Setting.get("users.guest.shareJobs") == "true")){
+			   				@if(navs.contains("jobs")){
+			 					<li class="@("active".when(nav == "jobs"))"><a href="@routes.Jobs.getJobs()"><i class="icon-tasks icon-white"></i> Jobs</a></li>
+			 				}
+		 				}
+		 				@if(navs.contains("templates")){
+		 					<li class="@("active".when(nav == "templates"))"><a href="@routes.Templates.getTemplates()"><i class="icon-briefcase icon-white"></i> Templates</a></li>
+	  					}
+		 				@if(navs.contains("about")){
+		 					<li class="@("active".when(nav == "about"))"><a href="@routes.Application.about()"><i class="icon-info-sign icon-white"></i> About</a></li>
+	  					}
+		   			</ul>
+		   			<ul class="nav pull-right">
+		   				@if(session.get("admin")=="true"){
+		   					@if(navs.contains("admin")){
+		 						<li class="@("active".when(nav == "admin"))"><a href="@routes.Administrator.getSettings()"><i class="icon-wrench icon-white"></i>Admin settings</a></li>
+		 					}
+		 				}
+		 				@if(models.User.parseUserId(session()) != null){
+	 						@if(navs.contains("account")){
+		 						@if(models.User.parseUserId(session()) >= 0){
+			 						<li class="@("active".when(nav == "account"))"><a href="@routes.Account.overview()"><i class="icon-user icon-white"></i> @session.get("name")</a></li>
+			 					}else{
+			 						@if(Setting.get("users.guest.showGuestName") == "true"){
+			 							<li class="@("active".when(nav == "account"))"><a href="#"><i class="icon-user icon-white"></i> @session.get("name")</a></li>
+			 						}
+		 						}
+	 						}
+	 					}
+		 				@if(navs.contains("login")){
+		 					<li class="@("active".when(nav == "login"))">
+		 						@if(session.get("email")==null || models.User.parseUserId(session()) != null && models.User.parseUserId(session()) < 0){
+		 							<a href="@routes.Login.login()"><i class="icon-lock icon-white"></i> Log in</a>
+		 						}else{
+	 								<a href="@routes.Login.logout()"><i class="icon-remove icon-white"></i> Log out</a>
+		 						}
+	  						</li>
+	  					}
+	  				</ul>
+				</nav>
+			</div>
+		</div>
+		
+		<div id="engine-unavailable" role="alert" class="alert alert-error" style="display: none;"><span class="icon-exclamation-sign icon-whitex" aria-hidden="true"></span> Unable to communicate with the Pipeline 2 Engine.</div>
+		<script type="text/javascript">
+			$(function(){
+				var updateState = function(engineAvailable) {
+					if (engineAvailable) {
+						$("#engine-unavailable").hide();
+					} else {
+						$("#engine-unavailable").show();
+					}
+				};
+				Notifications.listen("heartbeat", updateState);
+			});
+		</script>
+	</div>
+	
+	<div class="container">
+		
+		@if(flash.contains("error")) {
+		    <div role="alert" class="alert alert-error">
+		    	<a class="close" data-dismiss="alert">&times;</a>
+		        @flash.get("error")
+		    </div>
+		    <br/>
+		}
+		
+		@if(flash.contains("success")) {
+		    <div role="alert" class="alert alert-success">
+		    	<a class="close" data-dismiss="alert">&times;</a>
+		        @flash.get("success")
+		    </div>
+		    <br/>
+		}
+   		
+		@content
+		
+	</div>
+	
+	<!-- Scripts -->
+	<script src="@routes.Assets.versioned("javascripts/jquery-ui-1.9.2.custom.min.js")?version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/bootstrap.min.js")?version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/json2.js")?version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/marked.min.js")?version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/main.js")?version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/formUtils.js")?version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/notifications.js")?version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	<script src="@routes.Assets.versioned("javascripts/fuzzyDates.js")?version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	@for(script <- moreScripts) {
+		<script src="@routes.Assets.versioned("javascripts/"+script)?version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	}
+	<script src="@routes.Application.theme("javascripts/theme.js")?@Application.themeName()&version=@Application.version@if(play.Play.application().isDev()){-@(new Date().getTime())}" type="text/javascript"></script>
+	<script type="text/javascript">
+/*@@cc_on
+(function(f){window.setTimeout=f(window.setTimeout);window.setInterval=f(window.setInterval);})(function(f){return function(c,t){var a=[].slice.call(arguments,2);return f(function(){c.apply(this,a);},t);};});
+@@*/
+	</script>
+	<script>
+		/* set window title to the same as the first h1 */
+		(function(){
+		var updateTitle = function(){
+			var h1 = $("h1")[0];
+			if (h1) {
+				$("title").text($(h1).text());
+			}
+		};
+		updateTitle();
+		window.setTimeout(updateTitle, 10000);
+		})();
+	</script>
+	
+	@if(models.Setting.get("userTracking")=="true"){
+	<!--<script src="https://rawgit.com/josteinaj/interactor/master/interactor.js"></script>
+	<script>
+    var interactions = new Interactor({
+    	interactionElement : "*",
+    	focusElement : "*",
+    	mousePosition : true
+	});
+    </script>-->
+    }
+  </body>
+</html>

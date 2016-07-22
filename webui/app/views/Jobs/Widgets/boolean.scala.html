@@ -1,0 +1,23 @@
+@(arg: org.daisy.pipeline.client.models.Argument, script: org.daisy.pipeline.client.models.Script, scriptId: String)
+
+<div class="control-group @("advanced-argument".when(!arg.getRequired()))">
+	<label class="control-label" id="script-@scriptId-@{arg.getName()}-label" for="checkbox-@scriptId-@{arg.getName()}">@arg.getNicename().replaceAll("^.*:\\s*","")</label>
+	<div class="controls">
+		<input type="hidden" name="@{arg.getName()}" @if(arg.getDefaultValue() == "false"){ value="false" }else{ value="true" } id="value-@scriptId-@{arg.getName()}"/>
+		<input type="checkbox" name="_@{arg.getName()}" @if(arg.getDefaultValue() == "false"){ value="false" }else{ checked="" value="true" } id="checkbox-@scriptId-@{arg.getName()}" onclick="$('#value-@scriptId-@{arg.getName()}')[0].value = $(this).is(':checked') ? 'true' : 'false';"/>
+		<br/><br/>
+		@Helpers.ArgumentDescription(arg, scriptId)
+	</div>
+	<script type="text/javascript">
+	$(function(){
+		Job.setFromTemplateHandlers.push(function(arg, uploads) {
+			var value;
+			if (arg.name === "@arg.getName()") {
+				value = !arg.defined || arg.asList.length === 0 || arg.asList[0] !== "false";
+				$("#checkbox-@scriptId-@{arg.getName()}").prop('checked', value);
+				$("#value-@scriptId-@{arg.getName()}")[0].value = value ? 'true' : 'false';
+			}
+		});
+	});
+	</script>
+</div>

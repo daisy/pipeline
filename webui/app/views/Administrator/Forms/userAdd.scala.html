@@ -1,0 +1,87 @@
+@(userForm: Form[User], route: play.api.mvc.Call)
+
+@helper.form(action = route, 'id -> "createUser-form") {
+	
+	<input type="hidden" name="formName" value="createUser"/>
+	<input type="hidden" name="admin" value="@(if(userForm!=null)userForm.field("admin").valueOr("false") else "false")" id="createUser-admin-value"/>
+    
+	<fieldset>
+		<legend>Create a new user</legend>
+		<br/>
+           
+       	<div class="form-horizontal">
+           	
+           	<div class="control-group @("error".when(userForm != null && userForm.error("name") != null))" id="createUser-nameGroup">
+				<label for="createUser-name" class="control-label">Name</label>
+				<div class="controls">
+					<input type="text" name="name" id="createUser-name" placeholder="The name of the user." class="input-xlarge" value="@(if(userForm!=null)userForm.field("name").valueOr("") else "")"/>
+					<p class="help-block">
+						<img id="createUser-nameHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="createUser-nameHelp"></span>
+					</p>
+				</div>
+			</div>
+			
+			<div class="control-group @("error".when(userForm != null && userForm.error("email") != null))"id="createUser-emailGroup">
+				<label for="email" class="control-label">E-mail</label>
+				<div class="controls">
+					<input id="createUser-email" type="email" name="email" placeholder="Valid e-mail address required." class="input-xlarge"
+							value="@(if(userForm!=null)userForm.field("email").valueOr("") else "")"/>
+					<p class="help-block">
+						<img id="createUser-emailHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="createUser-emailHelp"></span>
+					</p>
+				</div>
+			</div>
+			
+			@if(Setting.get("mail.enable") == "false") {
+				<div class="control-group @("error".when(userForm != null && userForm.error("password") != null))" id="createUser-passwordGroup">
+	           		<label for="password" class="control-label">Password</label>
+					<div class="controls">
+						<input id="createUser-password" type="password" name="password" placeholder="A password must be at least 6 characters." class="input-xlarge" value=""/>
+						<p class="help-block">
+							<span id="createUser-passwordHelp">
+								@if(play.mvc.Controller.flash("settings.usertab") == "adduser" && userForm != null && userForm.error("password") != null){
+									@userForm.error("password").message()
+								}
+							</span>
+						</p>
+					</div>
+				</div>
+			}
+			
+			<div class="control-group @("error".when(play.mvc.Controller.flash("settings.usertab") == "adduser" && userForm != null && userForm.error("admin") != null))" id="createUser-adminGroup">
+				<label class="control-label" id="createUser-admin-label" for="createUser-admin" aria-label="createUser-admin">Administrator</label>
+				<div class="controls">
+					<div class="btn-group" data-toggle="buttons-radio" aria-role="radiogroup" aria-labelledby="createUser-admin-label" id="createUser-admin">
+						<button type="button" name="admin-on" class="btn @("active".when(userForm != null && userForm.field("admin").valueOr("false")=="true"))" id="createUser-admin-on"
+							aria-role="radio" aria-checked="@(userForm != null && userForm.field("admin").valueOr("false")=="true")"
+							onclick="toggleRadio('createUser-admin', true, 'true');return false;">Yes</button>
+						<button type="button" name="admin-off" class="btn @("active".when(userForm != null && userForm.field("admin").valueOr("false")=="false"))" id="createUser-admin-off"
+							aria-role="radio" aria-checked="@(userForm == null || userForm.field("admin").valueOr("false")=="false")"
+							onclick="toggleRadio('createUser-admin', false, 'false');return false;">No</button>
+					</div>
+					<p class="help-block">
+						<img id="createUser-adminHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="createUser-adminHelp"></span>
+					</p>
+				</div>
+			</div>
+			
+			<div class="form-actions">
+				<button class="btn btn-primary" id="createUser-submit" type="submit" name="submit" disabled="">Create user</button>
+				@if(Setting.get("mail.enable") == "true") {
+					<span class="help-inline">An e-mail will be sent to the user with a link to a page where the user can set up their password.</span>
+				}
+			</div>
+			
+			<script type="text/javascript">
+		  		$(function(){
+		  			DP2Forms.startValidation("createUser", "@routes.Administrator.postSettings()?validate", ["name", "email", "admin"]);
+		  			DP2Forms.disableButtonOnErrors("createUser", "submit");
+		  		});
+			</script>
+			
+		</div>
+	</fieldset>
+}

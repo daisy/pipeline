@@ -1,0 +1,256 @@
+@(arg: org.daisy.pipeline.client.models.Argument, script: org.daisy.pipeline.client.models.Script, scriptId: String, mediaTypeBlacklist: List[String])
+
+<script type="text/javascript">
+if (typeof Job.matchingMediaType !== "object") { Job.matchingMediaType = {}; }
+if (typeof Job.matchingMediaType["@{scriptId}"] !== "object") { Job.matchingMediaType["@{scriptId}"] = {}; }
+Job.matchingMediaType["@{scriptId}"]["@{arg.getName()}"] = function(file, uploads) {
+	if (uploads !== undefined) {
+		var fileName = file.name;
+		file = null;
+		for (var u = 0; u < uploads.length; u++) {
+			if (uploads[u].fileName === fileName) {
+				file = uploads[u];
+				break;
+			}
+		}
+		if (file === null) {
+			return false;
+		}
+	}
+	
+	var matchingContentType = @arg.getMediaTypes().contains("application/xml") && file.isXML;
+	
+	@if(arg.getMediaTypes().length > 0){
+		switch (file.contentType) {
+			@for(contentType <- arg.getMediaTypes()){
+			case "@contentType":
+			}
+				matchingContentType = true;
+				break;
+		}
+	}
+	
+	@if(mediaTypeBlacklist.length > 0){
+		switch (file.contentType) {
+			@for(contentType <- mediaTypeBlacklist){
+			case "@contentType":
+			}
+				matchingContentType = false;
+				break;
+		}
+	}
+	
+	return matchingContentType;
+}
+</script>
+
+@if(arg.getSequence()==Boolean.TRUE){
+	
+	<div class="control-group @("advanced-argument".when(!arg.getRequired()))">
+		<label class="control-label" id="label-@scriptId-@{arg.getName()}">@arg.getNicename().replaceAll("^.*:\\s*","")</label>
+		<!-- TODO: add drag'n'drop support for reordering items? -->
+		<div class="controls">
+			<input type="hidden" name="@{arg.getName()}" id="file-@scriptId-@{arg.getName()}" value=""/>
+			<div class="row-fluid">
+				<div class="span6">
+					<div style="display:table;">
+					    <div style="display:table-row;">
+					    	<div style="display:table-cell;">
+								<label id="label-allfiles-@scriptId-@{arg.getName()}" for="allfiles-@scriptId-@{arg.getName()}">Uploaded files</label>
+								<select style="width:100%;min-width:200px;" id="allfiles-@scriptId-@{arg.getName()}" multiple="multiple" size="10" class="all-files" aria-labelledby="label-@scriptId-@{arg.getName()} label-allfiles-@scriptId-@{arg.getName()}">
+									<optgroup id="suggestedfile-@scriptId-@{arg.getName()}" label="Suggested files"></optgroup>
+									<optgroup id="otherfile-@scriptId-@{arg.getName()}" label="Other files"></optgroup>
+								</select>
+							</div>
+							<div style="display:table-cell;vertical-align:middle;min-width:40px;">
+								<button type="button" id="addfile-@scriptId-@{arg.getName()}" class="btn" title="Add"><img src="@routes.Assets.versioned("images/glyphicons/glyphicons_211_right_arrow.png")" alt="Add"/></button><br/>
+								<button type="button" id="removefile-@scriptId-@{arg.getName()}" class="btn" title="Remove"><img src="@routes.Assets.versioned("images/glyphicons/glyphicons_210_left_arrow.png")" alt="Remove"/></button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br class="visible-phone"/>
+				<br class="visible-phone"/>
+				<div class="span6 scrollable">
+					<div style="display:table;">
+					    <div style="display:table-row;">
+					    	<div style="display:table-cell;">
+								<label for="selectedfiles-@scriptId-@{arg.getName()}" id="label-selectedfiles-@scriptId-@{arg.getName()}">Selected files</label>
+								<select style="width:100%;min-width:200px;" id="selectedfiles-@scriptId-@{arg.getName()}" multiple="multiple" size="10" aria-labelledby="label-@scriptId-@{arg.getName()} label-selectedfiles-@scriptId-@{arg.getName()}">
+								</select>
+							</div>
+							<div style="display:table-cell;vertical-align:middle;min-width:40px;">
+								@if(arg.getOrdered()==Boolean.TRUE){
+									<button type="button" id="moveup-@scriptId-@{arg.getName()}" class="btn" title="Move up"><img src="@routes.Assets.versioned("images/glyphicons/glyphicons_213_up_arrow.png")" alt="Move up"/></button><br/>
+									<button type="button" id="movedown-@scriptId-@{arg.getName()}" class="btn" title="Move down"><img src="@routes.Assets.versioned("images/glyphicons/glyphicons_212_down_arrow.png")" alt="Move down"/></button>
+								}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			@Helpers.ArgumentDescription(arg, scriptId)
+			
+			<script type="text/javascript">
+				$(function(){
+					@if(arg.getOrdered()==Boolean.TRUE){
+						/* Event handler for "move up"-button. */
+						$("#moveup-@scriptId-@{arg.getName()}").click(function() {
+							var options = "#selectedfiles-@scriptId-@{arg.getName()} option";
+							for (var i = 1; i < $(options).size(); i++) {
+								if (!$($(options)[i-1]).is(":selected") && $($(options)[i]).is(":selected")) {
+									var top = $($(options)[i-1]);
+									var bottom = $($(options)[i]);
+									top.remove();
+									bottom.after(top);
+								}
+							}
+						});
+						
+						/* Event handler for "move down"-button. */
+						$("#movedown-@scriptId-@{arg.getName()}").click(function() {
+							var options = "#selectedfiles-@scriptId-@{arg.getName()} option";
+							for (var i = $(options).size()-2; i >= 0; i--) {
+								if (!$($(options)[i+1]).is(":selected") && $($(options)[i]).is(":selected")) {
+									var top = $($(options)[i]);
+									var bottom = $($(options)[i+1]);
+									top.remove();
+									bottom.after(top);
+								}
+							}
+						});
+					}
+					
+					/* Event handler for "add"-button. */
+					$("#addfile-@scriptId-@{arg.getName()}").click(function() {
+						$.each($("#allfiles-@scriptId-@{arg.getName()} option:selected"), function(i,e){
+							$(e).remove();
+							$(e).appendTo($("#selectedfiles-@scriptId-@{arg.getName()}"));
+						});
+					});
+					
+					/* Event handler for "remove"-button. */
+					$("#removefile-@scriptId-@{arg.getName()}").click(function() {
+						$.each($("#selectedfiles-@scriptId-@{arg.getName()} option:selected"), function(i,e){
+							$(e).remove();
+							if ($(e).hasClass("rightContentType"))
+								$(e).appendTo($("#suggestedfile-@scriptId-@{arg.getName()}"));
+							else
+								$(e).appendTo($("#otherfile-@scriptId-@{arg.getName()}"));
+							// TODO: instead of append; insert in sorted order according to fileName
+						});
+					});
+					
+					Job.setFromTemplateHandlers.push(function(arg, uploads) {
+						if (arg.name === "@arg.getName()") {
+							$("#selectedfiles-@scriptId-@{arg.getName()} option").prop('selected', true)
+							$("#removefile-@scriptId-@{arg.getName()}").click();
+							if (arg.defined && arg.asList.length > 0) {
+								for (var f = 0; f < arg.asList.length; f++) {
+									$("#allfiles-@scriptId-@{arg.getName()} option[value='"+arg.name.replace(/'/g,"\\'")+"']").detach().appendTo("#selectedfiles-@scriptId-@{arg.getName()}");
+								}
+							}
+						}
+					});
+					
+					/* Event handler for fileset changes. */
+					Job.onNewUpload(function(fileset){
+						var contentTypes = @Html(play.libs.Json.stringify(play.libs.Json.toJson(arg.getMediaTypes())));
+						for (var f = 0; f < fileset.length; f++) {
+							var file = fileset[f];
+							
+							if (@{arg.getRequired()} && Job.matchingMediaType["@{scriptId}"]["@{arg.getName()}"](file)) {
+								$("#selectedfiles-@scriptId-@{arg.getName()}").append($('<option class="rightContentType" value="'+file.fileName+'" title="'+file.fileName+'">'+file.fileName+'</option>'));
+							} else {
+								$("#otherfile-@scriptId-@{arg.getName()}").append($('<option class="wrongContentType" value="'+file.fileName+'" title="'+file.fileName+'">'+file.fileName+'</option>'));
+							}
+							
+							// TODO: instead of append; insert in sorted order according to fileName
+						}
+					});
+					
+					/* Prepare form widget for validation and submission */
+					var beforeSubmit = function(){
+						var value = [];
+						$.each($("#selectedfiles-@scriptId-@{arg.getName()} option"), function(i, e) {
+							value.push($(e).attr("value"));
+						});
+						$('#file-@scriptId-@{arg.getName()}').attr("value", value.join());
+					}
+					DP2Forms.beforeSubmit("script-@scriptId",beforeSubmit);
+				});
+			</script>
+		</div>
+	</div>
+	
+}else{
+	
+	<div class="control-group @("advanced-argument".when(!arg.getRequired()))">
+		<label class="control-label" for="@{arg.getName()}">@arg.getNicename().replaceAll("^.*:\\s*","")</label>
+		<div class="controls">
+			<select name="@{arg.getName()}" id="file-@scriptId-@{arg.getName()}">
+				<option value="" selected=""></option>
+				<optgroup id="suggestedfile-@scriptId-@{arg.getName()}" label="Supported files"></optgroup>
+				<optgroup id="otherfile-@scriptId-@{arg.getName()}" label="Other files"></optgroup>
+			</select>
+			@Helpers.ArgumentDescription(arg, scriptId)
+			
+			<script type="text/javascript">
+				$(function(){
+					Job.setFromTemplateHandlers.push(function(arg, uploads) {
+						if (arg.name === "@arg.getName()") {
+							if (arg.defined && arg.asList.length > 0) {
+								$("#file-@scriptId-@{arg.getName()} option[value='"+arg.asList[0].replace(/'/g,"\\'")+"']").prop('selected', true);
+							} else {
+								$("#file-@scriptId-@{arg.getName()} option[value='']").prop('selected', true)
+							}
+						}
+					});
+				
+					/* Event handler for fileset changes. */
+					Job.onNewUpload(function(fileset){
+						var contentTypes = @Html(play.libs.Json.stringify(play.libs.Json.toJson(arg.getMediaTypes())));
+						var selectedSomething = $("#file-@scriptId-@{arg.getName()} optgroup option").filter(":selected").size() > 0;
+						for (var f = 0; f < fileset.length; f++) {
+							var file = fileset[f];
+							
+							if (Job.matchingMediaType["@{scriptId}"]["@{arg.getName()}"](file)) {
+								if (!selectedSomething) {
+									$("#suggestedfile-@scriptId-@{arg.getName()}").append($('<option class="rightContentType" value="'+file.fileName+'" title="'+file.fileName+'" selected="">'+file.fileName+'</option>'));
+								} else {
+									$("#suggestedfile-@scriptId-@{arg.getName()}").append($('<option class="rightContentType" value="'+file.fileName+'" title="'+file.fileName+'">'+file.fileName+'</option>'));
+								}
+							} else {
+								$("#otherfile-@scriptId-@{arg.getName()}").append($('<option class="wrongContentType" value="'+file.fileName+'" title="'+file.fileName+'">'+file.fileName+'</option>')
+								);
+							}
+							
+							// TODO: instead of append; insert in sorted order according to fileName
+						}
+					});
+					
+					/* Prepare and validate widget */
+					var validator = function(){
+						//TODO: validate #file-@scriptId-@{arg.getName()}
+						
+						var result = {valid: true, messages: []};
+						
+						@if(arg.getRequired()==Boolean.TRUE){
+							if ($("#script-@scriptId-option-href option").filter(":selected").attr("value") === "") {
+								result.valid = false;
+								message.push({level: "error", text: "A file must be selected."});
+							}
+						}
+						if ($("#script-@scriptId-option-href option").filter(":selected").hasClass("wrongContentType")) {
+							message.push({level: "warning", text: "The file you selected is not supported. If you continue you may experience unexpected results."});
+						}
+						
+						return result;
+					}
+					Job.onValidate(validator);
+				});
+			</script>
+		</div>
+	</div>
+	
+}

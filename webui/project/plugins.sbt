@@ -1,0 +1,36 @@
+// The Play plugin
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.4.1")
+
+// Web plugins
+addSbtPlugin("com.typesafe.sbt" % "sbt-coffeescript" % "1.0.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-less" % "1.0.6")
+addSbtPlugin("com.typesafe.sbt" % "sbt-jshint" % "1.0.3")
+addSbtPlugin("com.typesafe.sbt" % "sbt-rjs" % "1.0.7")
+addSbtPlugin("com.typesafe.sbt" % "sbt-digest" % "1.1.0")
+addSbtPlugin("com.typesafe.sbt" % "sbt-mocha" % "1.1.0")
+
+// Play enhancer - this automatically generates getters/setters for public fields
+// and rewrites accessors of these fields to use the getters/setters. Remove this
+// plugin if you prefer not to have this feature, or disable on a per project
+// basis using disablePlugins(PlayEnhancer) in your build.sbt
+//addSbtPlugin("com.typesafe.sbt" % "sbt-play-enhancer" % "1.1.0")
+
+// Play Ebean support, to enable, uncomment this line, and enable in your build.sbt using
+// enablePlugins(SbtEbean). Note, uncommenting this line will automatically bring in
+// Play enhancer, regardless of whether the line above is commented out or not.
+addSbtPlugin("com.typesafe.sbt" % "sbt-play-ebean" % "1.0.0")
+
+// Use a newer version of sbt-native-packger
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.0.6")
+
+// Eclipse
+addSbtPlugin("com.typesafe.sbteclipse" % "sbteclipse-plugin" % "4.0.0")
+
+// Use git tags to version this project
+addSbtPlugin("com.typesafe.sbt" % "sbt-git" % "0.8.5")
+
+// Use this in order to enable sbt-native-packager in the project
+addSbtPlugin("com.typesafe.sbt" % "sbt-native-packager" % "1.1.0-RC2")
+
+// Use this in order to enable overriding of the default linux package installation in the RPM project
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.10.2")

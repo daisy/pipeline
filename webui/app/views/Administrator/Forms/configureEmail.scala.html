@@ -1,0 +1,208 @@
+@(configureEmailForm: Form[controllers.Administrator.ConfigureEmailForm], route: play.api.mvc.Call, skipRoute: play.api.mvc.Call)
+
+<div class="tabbable tabs-left">
+	
+	@helper.form(action = route, 'id -> "configureEmail-enable-form") {
+		
+		<input type="hidden" name="formName" value="configureEmail"/>
+		
+		<fieldset>
+		    <div class="form-horizontal">
+				<div class="control-group @("error".when(configureEmailForm.error("enable") != null))" id="configureEmail-enableGroup">
+					<label class="control-label" id="configureEmail-enable-label" for="configureEmail-enable" aria-label="configureEmail-enable">Use e-mail</label>
+					<div class="controls">
+						<div class="btn-group" data-toggle="buttons-radio" aria-role="radiogroup" aria-labelledby="configureEmail-enable-label" id="configureEmail-enable">
+							<button type="submit" name="enable" value="true" class="btn @("active".when(Setting.get("mail.enable")=="true"))"
+								aria-role="radio" aria-checked="@{Setting.get("mail.enable")=="true"}">Yes</button>
+							<button type="submit" name="enable" value="false" class="btn @("active".when(Setting.get("mail.enable")=="false"))"
+								aria-role="radio" aria-checked="@{Setting.get("mail.enable")=="false"}">No</button>
+						</div>
+						@if(configureEmailForm.field("enable").errors().size() > 0){
+							<span class="help-inline">@configureEmailForm.error("enable").message</span>
+						}
+						<span class="help-block">If you disable e-mails, then users cannot retrieve lost passwords automatically.</span>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	}
+	
+	<br/><br/>
+	
+	@helper.form(action = route, 'id -> "configureEmail-absoluteURL-form") {
+		
+		<input type="hidden" name="formName" value="configureEmail"/>
+		
+		<fieldset>
+		    <div class="form-horizontal">
+				<div class="control-group @("error".when(configureEmailForm.error("absoluteURL") != null))" id="configureEmail-absoluteURLGroup">
+					<label class="control-label" id="configureEmail-absoluteURL-label" for="configureEmail-absoluteURL" aria-label="configureEmail-absoluteURL">Absolute URL</label>
+					<div class="controls">
+						<input type="url" name="absoluteURL" value="@Setting.get("absoluteURL")" placeholder="URL to the Web UI"
+							id="configureEmail-absoluteURL" aria-labelledby="configureEmail-absoluteURL-label"/>
+						<button type="submit" value="Save" name="submit" class="btn btn-primary">Save</button>
+						<p class="help-block">This is the URL to be used when generating links in e-mails.
+						For instance: <code id="configureEmail-absoluteURL-example">http://example.com:9000</code>.
+						Note that the protocol (<code>http://</code>) should be included and there should be no trailing slash.</p>
+						@if(configureEmailForm.field("enable").errors().size() > 0){
+							<p class="help-inline">@configureEmailForm.error("enable").message</p>
+						}
+						<script>
+							document.getElementById("configureEmail-absoluteURL-example").innerHTML = window.location.protocol+"//"+window.location.host;
+						</script>
+					</div>
+				</div>
+			</div>
+		</fieldset>
+	}
+	
+	<br/><br/>
+	
+	<ul class="nav nav-tabs">
+		<li class="@("active".when(configureEmailForm.field("emailService").valueOr(Setting.get("mail.provider")) == "smtp"))"><a href="#mailtab-smtp" data-toggle="tab"><img src="@routes.Assets.versioned("images/mail_icon_32.png")" alt=""/> SMTP</a></li>
+		<li class="@("active".when(configureEmailForm.field("emailService").valueOr(Setting.get("mail.provider")) == "gmail"))"><a href="#mailtab-gmail" data-toggle="tab"><img src="@routes.Assets.versioned("images/gmail_icon_32.png")" alt=""/> GMail</a></li>
+	</ul>
+	<div class="tab-content">
+		<div class="tab-pane @("active".when(configureEmailForm.field("emailService").valueOr(Setting.get("mail.provider")) == "smtp"))" id="mailtab-smtp">
+			@helper.form(action = route) {
+				
+				<input type="hidden" name="formName" value="configureEmail"/>
+				<input type="hidden" name="emailService" value="smtp"/>
+				<input type="hidden" name="ssl" value="@Setting.get("mail.smtp.ssl")" id="configureEmail-smtp-ssl-value"/>
+	
+				<fieldset>
+					<legend>Generic SMTP Server</legend>
+					<br/>
+					
+				    <div class="form-horizontal">
+				    	
+			        	<div class="control-group @("error".when(configureEmailForm.error("smtp") != null))" id="configureEmail-smtp-addressGroup">
+							<label for="smtp-smtp" class="control-label" id="configureEmail-smtp-address-label">SMTP Address</label>
+							<div class="controls">
+								<input type="text" name="smtp" id="smtp-smtp" placeholder="IP or domain name" class="input-xlarge" aria-labelledby="configureEmail-smtp-address-label"
+										value="@configureEmailForm.field("smtp").valueOr(Setting.get("mail.smtp.host"))"
+										onkeyup="if(@{models.Setting.get("mail.smtp.host")==null} || this.value==='@models.Setting.get("mail.smtp.host")')document.getElementById('configureEmail-smtp-addressGroup').style.backgroundColor='#FFF';else document.getElementById('configureEmail-smtp-addressGroup').style.backgroundColor='#DDF';"
+								/>
+								@if(configureEmailForm.field("smtp").errors().size() > 0){
+									<span class="help-inline">@configureEmailForm.error("smtp").message</span>
+								}
+							</div>
+						</div>
+						
+						<div class="control-group @("error".when(configureEmailForm.error("port") != null))" id="configureEmail-smtp-portGroup">
+							<label for="smtp-smtp" class="control-label" id="configureEmail-smtp-port-label">SMTP Port</label>
+							<div class="controls">
+								<input type="number" name="port" id="smtp-port" placeholder="Port number" class="input-xlarge" aria-labelledby="configureEmail-smtp-port-label"
+										value="@configureEmailForm.field("port").valueOr(Setting.get("mail.smtp.port"))"
+										onkeyup="if(@{models.Setting.get("mail.smtp.port")==null} || this.value==='@models.Setting.get("mail.smtp.port")')document.getElementById('configureEmail-smtp-portGroup').style.backgroundColor='#FFF';else document.getElementById('configureEmail-smtp-portGroup').style.backgroundColor='#DDF';"
+								/>
+								@if(configureEmailForm.field("port").errors().size() > 0){
+									<span class="help-inline">@configureEmailForm.error("port").message</span>
+								}
+							</div>
+						</div>
+						
+						<div class="control-group @("error".when(configureEmailForm.error("ssl") != null))" id="configureEmail-smtp-sslGroup">
+							<label class="control-label" id="configureEmail-smtp-ssl-label" for="configureEmail-smtp-ssl" aria-label="configureEmail-smtp-ssl">Use SSL/TLS</label>
+							<div class="controls">
+								<div class="btn-group" data-toggle="buttons-radio" aria-role="radiogroup" aria-labelledby="configureEmail-smtp-ssl-label" id="configureEmail-smtp-ssl">
+									<button type="button" name="ssl-on" class="btn @("active".when(Setting.get("mail.smtp.ssl")=="true"))" id="configureEmail-smtp-ssl-on"
+										aria-role="radio" aria-checked="@(Setting.get("mail.smtp.ssl")=="true")"
+										onclick="toggleRadio('configureEmail-smtp-ssl', true, '@Setting.get("mail.smtp.ssl")');">Yes</button>
+									<button type="button" name="ssl-off" class="btn @("active".when(Setting.get("mail.smtp.ssl")=="false"))" id="configureEmail-smtp-ssl-off"
+										aria-role="radio" aria-checked="@(Setting.get("mail.smtp.ssl")=="false")"
+										onclick="toggleRadio('configureEmail-smtp-ssl', false, '@Setting.get("mail.smtp.ssl")');">No</button>
+								</div>
+								@if(configureEmailForm.field("ssl").errors().size() > 0){
+									<span class="help-inline">@configureEmailForm.error("ssl").message</span>
+								}
+							</div>
+						</div>
+						
+						<div class="control-group @("error".when(configureEmailForm.error("username") != null))" id="configureEmail-smtp-usernameGroup">
+							<label for="smtp-username" class="control-label" id="configureEmail-smtp-username-label">Username</label>
+							<div class="controls">
+								<input type="text" autocomplete="off" name="username" id="smtp-username" placeholder="Username" class="input-xlarge" aria-labelledby="configureEmail-smtp-username-label"
+										value="@configureEmailForm.field("username").valueOr(Setting.get("mail.username"))"
+										onkeyup="if(@{models.Setting.get("mail.username")==null} || this.value==='@models.Setting.get("mail.username")')document.getElementById('configureEmail-smtp-usernameGroup').style.backgroundColor='#FFF';else document.getElementById('configureEmail-smtp-usernameGroup').style.backgroundColor='#DDF';"
+								/>
+								@if(configureEmailForm.field("username").errors().size() > 0){
+									<span class="help-inline">A username must be provided.</span>
+								}
+							</div>
+						</div>
+						
+						<div class="control-group @("error".when(configureEmailForm.error("password") != null))" id="configureEmail-smtp-passwordGroup">
+							<label for="smtp-password" class="control-label" id="configureEmail-smtp-password-label">Password</label>
+							<div class="controls">
+								<input type="password" autocomplete="off" name="password" id="smtp-password" class="input-xlarge" aria-labelledby="configureEmail-smtp-password-label"
+										placeholder="@if(models.Setting.get("mail.password")==null){Password}else{**********}"
+										value="@configureEmailForm.field("password").valueOr("")"
+										onkeyup="if(@{models.Setting.get("mail.password")==null} || this.value==='')document.getElementById('configureEmail-smtp-passwordGroup').style.backgroundColor='#FFF';else document.getElementById('configureEmail-smtp-passwordGroup').style.backgroundColor='#DDF';"
+								/>
+							</div>
+						</div>
+						
+						<div class="form-actions">
+							<button class="btn btn-primary" id="smtp-submit" type="submit" name="submit">Save Settings</button>
+							@if(skipRoute != null){
+								<button class="btn" id="smtp-skip" type="button" name="skip" onclick="window.location='@skipRoute';return false;">I'll configure it later <i class="icon-hand-right"></i></button>
+							}
+						</div>
+						
+					</div>
+				</fieldset>
+	        }
+		</div>
+		<div class="tab-pane @("active".when(configureEmailForm.field("emailService").valueOr(Setting.get("mail.provider")) == "gmail"))" id="mailtab-gmail">
+			@helper.form(action = route) {
+				
+				<input type="hidden" name="formName" value="configureEmail"/>
+				<input type="hidden" name="emailService" value="gmail"/>
+				<input type="hidden" name="smtp" id="gmail-smtp" value="smtp.gmail.com"/>
+				<input type="hidden" name="port" id="gmail-port" value="465"/>
+				<input type="hidden" name="ssl" id="gmail-ssl" value="true"/>
+				
+				<fieldset>
+					<legend>GMail</legend>
+					<br/>
+					
+				    <div class="form-horizontal">
+						
+						<div class="control-group @("error".when(configureEmailForm.error("username") != null))" id="configureEmail-gmail-usernameGroup">
+							<label for="gmail-username" class="control-label" id="configureEmail-gmail-username-label">Username</label>
+							<div class="controls">
+								<input type="text" autocomplete="off" name="username" id="gmail-username" placeholder="Username" class="input-xlarge" aria-labelledby="configureEmail-gmail-username-label"
+										value="@configureEmailForm.field("username").valueOr(Setting.get("mail.username"))"
+										onkeyup="if(@{models.Setting.get("mail.username")==null} || this.value==='@models.Setting.get("mail.username")')document.getElementById('configureEmail-gmail-usernameGroup').style.backgroundColor='#FFF';else document.getElementById('configureEmail-gmail-usernameGroup').style.backgroundColor='#DDF';"
+								/>
+								@if(configureEmailForm.field("username").errors().size() > 0){
+									<span class="help-inline">A username must be provided.</span>
+								}
+							</div>
+						</div>
+						
+						<div class="control-group @("error".when(configureEmailForm.error("password") != null))" id="configureEmail-gmail-passwordGroup">
+							<label for="gmail-password" class="control-label" id="configureEmail-gmail-password-label">Password</label>
+							<div class="controls">
+								<input type="password" autocomplete="off" name="password" id="gmail-password" class="input-xlarge" aria-labelledby="configureEmail-gmail-password-label"
+										placeholder="@if(models.Setting.get("mail.password")==null){Password}else{**********}"
+										value="@configureEmailForm.field("password").valueOr("")"
+										onkeyup="if(@{models.Setting.get("mail.password")==null} || this.value==='')document.getElementById('configureEmail-gmail-passwordGroup').style.backgroundColor='#FFF';else document.getElementById('configureEmail-gmail-passwordGroup').style.backgroundColor='#DDF';"
+								/>
+							</div>
+						</div>
+						
+						<div class="form-actions">
+							<button class="btn btn-primary" id="gmail-submit" type="submit" name="submit">Save Settings</button>
+							@if(skipRoute != null){
+								<button class="btn" id="gmail-skip" type="button" name="skip" onclick="window.location='@skipRoute';return false;">I'll configure it later <i class="icon-hand-right"></i></button>
+							}
+						</div>
+						
+					</div>
+				</fieldset>
+	        }
+		</div>
+	</div>
+  	</div>

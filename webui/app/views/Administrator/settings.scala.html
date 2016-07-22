@@ -1,0 +1,134 @@
+@(forms: controllers.Administrator.AdminForms, userList: List[User])
+
+@main("Administrator settings", "admin") {
+
+@if(forms.userForm != null && forms.userForm.hasGlobalErrors()
+	|| forms.guestForm != null && forms.guestForm.hasGlobalErrors()
+	|| forms.globalForm != null && forms.globalForm.hasGlobalErrors()) {
+    <div role="alert" class="alert alert-error">
+    	<a class="close" data-dismiss="alert">&times;</a>
+    	@if(forms.userForm != null && forms.userForm.hasGlobalErrors) {
+        	<p>@forms.userForm.globalError.message</p>
+        }
+        @if(forms.guestForm != null && forms.guestForm.hasGlobalErrors) {
+        	<p>@forms.guestForm.globalError.message</p>
+        }
+        @if(forms.globalForm != null && forms.globalForm.hasGlobalErrors) {
+        	<p>@forms.globalForm.globalError.message</p>
+        }
+    </div>
+    <br/>
+}
+
+<hgroup>
+  <h1>Administrator settings</h1>
+</hgroup>
+<ul class="nav nav-pills">
+    <li class="@("active".when(Controller.flash("settings.formName")==null||Controller.flash("settings.formName")=="updateGlobalPermissions"||Controller.flash("settings.formName")=="updateGuest"||Controller.flash("settings.formName")=="updateUser"||Controller.flash("settings.formName")=="deleteUser"||Controller.flash("settings.formName")=="createUser"))"><a href="#usersAndPermissions" data-toggle="tab">Users and Permissions</a></li>
+    <li class="@("active".when(Controller.flash("settings.formName")=="configureScripts"))"><a href="#configureScripts" data-toggle="tab">Scripts</a></li>
+    <li class="@("active".when(Controller.flash("settings.formName")=="setWS"))"><a href="#pipeline2WebServiceEndpoint" data-toggle="tab">Pipeline 2 Web API</a></li>
+    <li class="@("active".when(Controller.flash("settings.formName")=="setStorageDirs"))"><a href="#storageDirectories" data-toggle="tab">Storage directories</a></li>
+    <li class="@("active".when(Controller.flash("settings.formName")=="configureEmail"))"><a href="#eMailSettings" data-toggle="tab">E-mail settings</a></li>
+    <li class="@("active".when(Controller.flash("settings.formName")=="setMaintenance"))"><a href="#maintenance" data-toggle="tab">Maintenance</a></li>
+    <li class="@("active".when(Controller.flash("settings.formName")=="configureAppearance"))"><a href="#appearance" data-toggle="tab">Appearance</a></li>
+</ul>
+
+<div class="tab-content">
+
+	<section id="usersAndPermissions" class="tab-pane @("active".when(Controller.flash("settings.formName")==null||Controller.flash("settings.formName")=="updateGlobalPermissions"||Controller.flash("settings.formName")=="updateGuest"||Controller.flash("settings.formName")=="updateUser"||Controller.flash("settings.formName")=="deleteUser"||Controller.flash("settings.formName")=="createUser"))">
+		<div class="tabbable tabs-left">
+			<h2>Users and permissions</h2>
+			<br/>
+			
+			<ul class="nav nav-tabs">
+				<li class="@("active".when(play.mvc.Controller.flash("settings.usertab") == "global" || play.mvc.Controller.flash("settings.usertab") == null))"><a href="#usertab-global" data-toggle="tab"><i class="icon-globe"></i> <em>General settings</em></a></li>
+				<hr/>
+				
+				<li class="@("active".when(play.mvc.Controller.flash("settings.usertab") == "guest"))"><a href="#usertab-guest" data-toggle="tab"><img alt="" src="@routes.Assets.versioned("images/icon-public.png")" height="50%"/> @models.Setting.get("users.guest.name")</a></li>
+				
+				@for(user <- userList) {
+					<li class="@("active".when(play.mvc.Controller.flash("settings.usertab") == ""+user.getId()))"><a href="#usertab-@user.getId()" data-toggle="tab"><i class="icon-user"></i> @user.getName()</a></li>
+				}
+				
+				<li class="@("active".when(play.mvc.Controller.flash("settings.usertab") == "adduser"))"><a href="#usertab-adduser" data-toggle="tab"><i class="icon-plus"></i> <em>Add user</em></a></li>
+			</ul>
+			
+			<div class="tab-content">
+				<div class="tab-pane @("active".when(play.mvc.Controller.flash("settings.usertab") == "global" || play.mvc.Controller.flash("settings.usertab") == null))" id="usertab-global">
+					@Forms.userGlobal(forms.globalForm, routes.Administrator.postSettings())
+				</div>
+				
+				<div class="tab-pane @("active".when(play.mvc.Controller.flash("settings.usertab") == "guest"))" id="usertab-guest">
+					@Forms.userGuest(forms.guestForm, routes.Administrator.postSettings())
+				</div>
+				
+				@for(user <- userList) {
+					<div class="tab-pane @("active".when(play.mvc.Controller.flash("settings.usertab") == ""+user.getId()))" id="usertab-@user.getId()">
+						@Forms.user(forms.userForm, user, routes.Administrator.postSettings(), routes.Administrator.getPostSettings())
+					</div>
+				}
+				
+				<div class="tab-pane @("active".when(play.mvc.Controller.flash("settings.usertab") == "adduser"))" id="usertab-adduser">
+					@Forms.userAdd(forms.userForm, routes.Administrator.postSettings())
+				</div>
+			</div>
+		</div>
+	</section>
+	
+	<section id="configureScripts" class="tab-pane @("active".when(Controller.flash("settings.formName")=="configureScripts"))">
+		<h2>Scripts</h2>
+		<br/>
+		@views.html.Administrator.Forms.configureScripts(forms.scriptsForm, routes.Administrator.postSettings())
+	</section>
+	
+	<section id="pipeline2WebServiceEndpoint" class="tab-pane @("active".when(Controller.flash("settings.formName")=="setWS"))">
+		<h2>Pipeline 2 Web API endpoint</h2>
+		<br/>
+		<script type="text/javascript">
+	  		$(function(){ DP2Forms.startValidation("setWS", "@routes.Administrator.postSettings()?validate", ["endpoint","authid","secret"]); });
+		</script>
+	  	@views.html.Administrator.Forms.setWS(forms.setWSForm, routes.Administrator.postSettings(), null, Controller.flash("settings.formName")=="setWS")
+	</section>
+	
+	<section id="storageDirectories" class="tab-pane @("active".when(Controller.flash("settings.formName")=="setStorageDirs"))">
+		<h2>Storage directories</h2>
+		<br/>
+		<script type="text/javascript">
+	  		$(function(){ DP2Forms.startValidation("setStorageDirs", "@routes.Administrator.postSettings()?validate", ["uploaddir","jobsdir","templatesdir"]); });
+		</script>
+		@views.html.Administrator.Forms.setStorageDirs(forms.setStorageDirsForm, routes.Administrator.postSettings(), null, Controller.flash("settings.formName")=="setStorageDirs")
+	</section>
+	
+	<section id="eMailSettings" class="tab-pane @("active".when(Controller.flash("settings.formName")=="configureEmail"))">
+		<h2>E-mail settings</h2>
+		<br/>
+		<script type="text/javascript">
+			// TODO: dynamic validation of configureEmail form
+	  		//$(function(){ DP2Forms.startValidation("configureEmail", "@routes.Administrator.postSettings()?validate", ["TODO"]); });
+		</script>
+		@views.html.Administrator.Forms.configureEmail(forms.configureEmailForm, routes.Administrator.postSettings(), null)
+	</section>
+	
+	<section id="maintenance" class="tab-pane @("active".when(Controller.flash("settings.formName")=="setMaintenance"))">
+		<h2>Maintenance</h2>
+		<br/>
+		<script type="text/javascript">
+	  		$(function(){ DP2Forms.startValidation("setMaintenance", "@routes.Administrator.postSettings()?validate", ["maintenance"]); });
+		</script>
+		@views.html.Administrator.Forms.setMaintenance(forms.setMaintenanceForm, routes.Administrator.postSettings(), null)
+	</section>
+
+<section id="appearance" class="tab-pane @("active".when(Controller.flash("settings.formName")=="configureAppearance"))">
+	<h2>Appearance</h2>
+	<br/>
+	<script type="text/javascript">
+		// TODO: dynamic validation of configureAppearance form
+		$(function(){ DP2Forms.startValidation("configureAppearance", "@routes.Administrator.postSettings()?validate", ["title", "titleLink", "landingPage", "theme"]); });
+	</script>
+	@views.html.Administrator.Forms.configureAppearance(forms.configureAppearanceForm, routes.Administrator.postSettings(), null)
+</section>
+
+</div> <!-- tab-content -->
+<hr style="padding-bottom: 300px;"/>
+
+}

@@ -1,0 +1,99 @@
+@(script: org.daisy.pipeline.client.models.Script, scriptId: String, uploadFiles: Boolean, hasAdvancedOptions: Boolean, hideAdvancedOptions: Boolean, mediaTypeBlacklist: List[String], jobId: Long, groupedInputs: List[utils.Pair[String,List[org.daisy.pipeline.client.models.Argument]]])
+
+
+<div id="script-@scriptId" data-fileinput="@uploadFiles">
+<h3 class="text-center">@script.getNicename()</h3>
+@if(script.getHomepage()!=null && script.getHomepage()!=null && script.getHomepage().length()>0){
+	<address class="muted text-center"><a href="@script.getHomepage()" target="_blank">Online Documentation <i class="icon-share"></a></i></address>
+}
+<div id="description-script-@scriptId">@script.getDescription()</div>
+<script>window.setTimeout(function(){document.getElementById('description-script-@scriptId').innerHTML = markdownToHtml(document.getElementById('description-script-@scriptId').innerHTML);},0);</script>
+<br/>
+
+<form action="@routes.Jobs.postJob(jobId).unique()" method="POST" id="script-@scriptId-form" class="form-horizontal" onsubmit="DP2Forms.prepareSubmission('script-@scriptId')">
+	<input type="hidden" id="script-@scriptId-id" name="_id" value="@script.getId()" />
+	<input type="hidden" id="script-@scriptId-uploads" name="_uploads" value=""/>
+	<script type="text/javascript">
+		/* Prepare upload widget for validation and submission */
+		var onSubmit = function() {
+			var uploads = [];
+			for (var id in Job.uploads) uploads.push(Job.uploads[id].id);
+			$("#script-@scriptId-uploads").attr("value",uploads.join());
+		}
+		DP2Forms.beforeSubmit("script-@scriptId",onSubmit);
+	</script>
+	
+	@for((argGroup, argGroupNr) <- groupedInputs.zipWithIndex){
+		<fieldset>
+			@if(argGroup.a != ""){
+				<legend>
+					<span>@{argGroup.a}</span>
+					<small><a class="accordion-toggle @("collapsed".when(hideAdvancedOptions)) advanced-options-toggle" data-toggle="collapse" href="#script-@scriptId-widget-group-@argGroupNr" id="script-@scriptId-widget-group-@argGroupNr-toggle">
+						<style>
+							#script-@scriptId-widget-group-@argGroupNr-show { display:none; }
+							#script-@scriptId-widget-group-@argGroupNr-toggle.collapsed #script-@scriptId-widget-group-@argGroupNr-show { display:inline; }
+							#script-@scriptId-widget-group-@argGroupNr-hide { display:inline; }
+							#script-@scriptId-widget-group-@argGroupNr-toggle.collapsed #script-@scriptId-widget-group-@argGroupNr-hide { display:none; }
+						</style>
+						<span id="script-@scriptId-widget-group-@argGroupNr-show"><i class="icon-chevron-down"></i>Show</span>
+						<span id="script-@scriptId-widget-group-@argGroupNr-hide"><i class="icon-chevron-up"></i>Hide</span>
+					</a></small>
+				</legend>
+			}
+			
+			@if(argGroup.a != ""){
+				<div class="control-group @("in".when(!hideAdvancedOptions)) collapse" id="script-@scriptId-widget-group-@argGroupNr">
+			}
+			@for(arg <- argGroup.b){
+				@if((arg.getKind()+"")=="parameters"){
+					@Widgets.parameters(arg, script, scriptId)
+				}else{
+					@defining(Scripts.chooseWidget(arg)){widget => @widget match{
+						case "enum" => { @Widgets.enum(arg, script, scriptId) }
+						case "regex" => { @Widgets.string(arg, script, scriptId) }
+						case "string" => { @Widgets.string(arg, script, scriptId) }
+						case "boolean" => { @Widgets.boolean(arg, script, scriptId) }
+						case "anyFileURI" => { @Widgets.file(arg, script, scriptId, mediaTypeBlacklist) }
+						case _ => { @Widgets.string(arg, script, scriptId) }
+					}}
+				}
+			}
+			@if(argGroup.a != ""){
+				</div>
+			}
+		</fieldset>
+	}
+	
+	<fieldset>
+		@if(models.User.parseUserId(session()) != null && models.User.parseUserId(session()) < 0 && Setting.get("mail.enable") == "true" && Setting.get("users.guest.showEmailBox") == "true"){
+			<div class="control-group">
+				<label class="control-label" for="guest-email">Your e-mail</label>
+				<div class="controls">
+					<input name="_guest-email" id="@scriptId-guest-email" type="email"/>
+					<span class="help-block">Enter your e-mail address if you wish to receive a link to the job.</span>
+				</div>
+			</div>
+		}
+		
+		<div class="form-actions" id="submit_buttons_@scriptId">
+			<button type="submit" id="submit_run_@scriptId" name="_submit_run" value="Start job" data-loading-text="Starting job..." class="btn btn-large btn-primary">Start job</button>
+			<button type="submit" id="submit_template_@scriptId" name="_submit_template" value="Save as template" data-loading-text="Saving as template..." class="btn btn-large">Save as template</button>
+		</div>
+		<script>
+			$("submit_buttons_@scriptId button").on("click", function() {
+				var valid = true;
+				$("#script-@scriptId-form input").each(function(i, e) {
+					valid = e.checkValidity();
+					return valid;
+				});
+				if (valid) {
+					$('#submit_buttons_@scriptId button').attr('disabled','disabled');
+					$(this).button('loading');
+				}
+				return valid;
+			});
+		</script>
+	</fieldset>
+	
+</form>
+</div>

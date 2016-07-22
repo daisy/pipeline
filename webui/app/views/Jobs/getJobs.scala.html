@@ -1,0 +1,239 @@
+@()
+
+@main("Jobs", "jobs") {
+
+<div style="text-align: center; padding-bottom: 2em;">
+<h1>Jobs</h1>
+@if(session.get("admin")=="true" || Setting.get("users.guest.shareJobs")=="true"){
+	<a id="showYourJobs" class="btn active" onclick="filterJobs(@Controller.flash("userid"));" href="javascript:void(0)">Your jobs</a>
+	<a id="showAllJobs" class="btn" onclick="filterJobs('all');" href="javascript:void(0)">All jobs</a>
+}
+</div>
+<div role="alert" class="muted" style="width:100%;text-align:center;"><p id="filter-text"></p></div>
+
+<table id="joblist" class="table joblist" style="display:none;">
+	<thead>
+		<tr id="joblist-headline">
+			<th>Status</th>
+			<th>Script</th>
+			<th>Job</th>
+			<!--<th>Results</th>-->
+			<th>Started</th>
+			@if(Controller.flash("showOwner")=="true"){
+				<th>Owner</th>
+		    }
+    	</tr>
+	</thead>
+	<tbody></tbody>
+</table>
+
+<script type="text/javascript">
+
+filterJobs = function(user) {
+	if (typeof user === 'undefined') {
+		if ($("#showAllJobs").hasClass("active")) {
+			user = 'all';
+		} else {
+			user = @Controller.flash("userid");
+		}
+	}
+    if (user === 'all') {
+		$("#joblist tbody tr").show();
+		$("#showYourJobs").removeClass("active");
+		$("#showAllJobs").addClass("active");
+		if ($("#joblist tbody tr").size() > 0) {
+			$("#filter-text").text("Displaying jobs for all users.");
+			$("#joblist-headline").show();
+		} else {
+			$("#filter-text").text("There are no jobs for any users.");
+			$("#joblist-headline").hide();
+		}
+	} else {
+		$("#joblist tbody tr[data-user='"+user+"']").show();
+		$("#joblist tbody tr[data-user!='"+user+"']").hide();
+		$("#showAllJobs").removeClass("active");
+		$("#showYourJobs").addClass("active");
+		if ($("#joblist tbody tr").size() > 0) {
+			$("#filter-text").text("Displaying your jobs.");
+			$("#joblist-headline").show();
+		} else {
+			$("#filter-text").text("You have no jobs.");
+			$("#joblist-headline").hide();
+		}
+	}
+}
+
+jobStatusText = function(string) {
+	if (typeof string === "string") {
+		statusText = string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+		return statusText.replace(/_/,' ');
+	} else {
+		return "Unknown";
+	}
+}
+
+jobStatusClass = function(string) {
+	if (typeof string === "string") {
+		if (string === "DONE") {
+			return "success";
+		} else if (string === "ERROR" || string === "VALIDATION_FAIL") {
+			return "error";
+		} else if (string === "RUNNING") {
+			return "info";
+		} else {
+			return "";
+		}
+	} else {
+		return "info";
+	}
+}
+
+addJob = function(job) {
+	var i, statusText, statusClass, sortableStatus, html, visible;
+	if (job.status === "NEW") {
+		return;
+	}
+	statusText = jobStatusText(job.status);
+	statusClass = jobStatusClass(job.status);
+	sortableStatus = job.status.toLowerCase();
+	switch (sortableStatus) {
+		case "idle":
+			sortableStatus = "1";
+			break;
+		case "running":
+			sortableStatus = "2";
+			break;
+		case "done":
+			sortableStatus = "3";
+			break;
+		case "error":
+			sortableStatus = "4";
+			break;
+		case "validation_fail":
+			sortableStatus = "5";
+			break;
+	}
+	visible = $("#showAllJobs").hasClass("active") || "@Controller.flash("userid")" === ""+job.user;
+	
+	html = '<tr id="job-'+job.id+'" class="job '+statusClass+'" data-user="'+job.user+'"'+(!visible?' style="display:none;"':'')+'>'+"\n";
+	html += '    <td id="job-status-'+job.id+'" data-sortvalue="'+sortableStatus+'">'+statusText+'</td>'+"\n";
+	html += '    <td id="job-script-'+job.id+'" data-sortvalue="'+job.scriptName.replace(/[^a-zA-Z0-9 _-]/g,"").toLowerCase()+'">'+(typeof job.scriptName === "string" ? job.scriptName : "Unknown")+'</td>'+"\n";
+	html += '    <td id="job-name-'+job.id+'" data-sortvalue="'+job.nicename.replace(/[^a-zA-Z0-9 _-]/g,"").toLowerCase()+'">'+"\n";
+	html += '        <a href="@routes.Jobs.getJobs()/'+job.id+'">'+job.nicename+'<br/>'+"\n";
+	html += '            <small class="muted">'+job.id+'</small>'+"\n";
+	html += '        </a>'+"\n";
+	html += '    </td>'+"\n";
+	/*html += '    <td id="job-results-'+job.id+'">'+"\n";
+	if (job.status==="DONE" || job.status==="VALIDATION_FAIL") {
+		html += '        <span><a class="btn btn-mini btn-success" href="#"><i class="icon-download-alt icon-white"></i> Download</a></span>'+"\n";
+		//if (job.results!==null) {
+		//	for (i = 0; i < job.results.results.length; i++) {
+		//		html += '        <span><a class="btn btn-mini btn-'+(job.status==="DONE"?'success':'error')+'" href="'+'@routes.Jobs.getResult(-1L,"")'.replace('-1',job.id)+job.results.results[i].name+'"><i class="icon-download-alt icon-white"></i> Download</a></span>'+"\n";
+		//	}
+		//}
+	}
+	html += '    </td>'+"\n";*/
+	html += '    <td id="job-started-'+job.id+'" data-sortvalue="'+(job.started === null ? job.created : job.started)+'">'+"\n";
+	html += '        <span id="started-'+job.id+'-fuzzy" aria-live="timer">'+(job.started === null ? 'Not yet' : '')+'</span><br/>'+"\n";
+	html += '        <small id="started-'+job.id+'" class="muted">'+(job.started === null ? '' : new Date(job.started))+'</small>'+"\n";
+	html += '    </td>'+"\n";
+	@if(Controller.flash("showOwner")=="true"){
+		html += '    <td data-sortvalue="'+job.userNicename.replace(/[^a-zA-Z0-9 _-]/g,"").toLowerCase()+'">'+"\n";
+		html += '        '+job.userNicename.replace(/[<>]/g,"")+'<br/>'+"\n";
+		if (job.user < 0) {
+			html += '        <small class="muted">#'+(-job.user)+'</small>'+"\n";
+		}
+		html += '    </td>'+"\n";
+	}
+	html += '    <td id="job-actions-'+job.id+'">'+"\n";
+	html += '        <span><a id="job-delete-'+job.id+'" class="btn btn-mini" data-jobid="'+job.id+'" href=\"javascript:void(0)\"><i class="icon-trash"></i> Delete</a></span>'+"\n";
+	html += '    </td>'+"\n";
+	html += '</tr>'+"\n";
+	
+	if ($("#job-"+job.id).length > 0) {
+		$("#job-"+job.id).replaceWith(html);
+	}
+	else {
+		$("#joblist tbody").prepend(html);
+	}
+	
+	$(function(){
+		$("#job-delete-"+job.id).click(function(){
+			var jobId = $(this).data("jobid");
+			$("#job-delete-"+jobId).hide();
+			$.ajax({
+				url: "@routes.Jobs.delete(-1L)".replace("-1",jobId),
+				success: function(data) {
+					$("#job-"+jobId).remove();
+					filterJobs();
+				},
+				error: function() {
+					$("#job-delete-"+jobId).show();
+					// TODO: show alert somehow about the failed job deletion?
+				},
+				context: this
+			});
+		});
+	});
+	
+	$("#nojobs-all").hide();
+	$("#nojobs-user").hide();
+	$("#joblist").show();
+	
+	if (job.started !== null) {
+		updateFuzzy("started-"+job.id+"-fuzzy",new Date(job.started));
+	}
+	
+	Notifications.listen("job-started-"+job.id, function(message, id){
+		$("#job-started-"+job.id).attr("data-sortvalue", message.number);
+		var time = parseInt(message.number);
+        if (isNaN(time)) {
+                clearFuzzyUpdates("started-"+job.id+"-fuzzy", time);
+                $("#started-"+job.id+"-fuzzy, #started-"+job.id).html("");
+        } else {
+                updateFuzzy("started-"+job.id+"-fuzzy", time);
+                $("#started-"+job.id+"").html(new Date(time)+"");
+        }
+	}, job.id);
+	
+	Notifications.listen("job-status-"+job.id, function(status, id){
+		var statusText = jobStatusText(status);
+		var statusClass = jobStatusClass(status);
+		$("#job-status-"+id).html(statusText);
+		$("#job-"+id).attr("class", "job "+statusClass);
+		/*if (status==="DONE" || status==="VALIDATION_FAIL") {
+			//$("#job-results-"+id).html(' <span><a class="btn btn-mini btn-success" href="'+'@@routes.Jobs.getResult(-1L,"")'.replace('-1',id)+'"><i class="icon-download-alt icon-white"></i> Download</a></span>');
+			$("#job-results-"+id).html(' <span><a class="btn btn-mini btn-success" href="#"><i class="icon-download-alt icon-white"></i> Download</a></span>');
+		}*/
+	}, job.id);
+}
+
+$(function(){
+	$.ajax({
+		url: "@routes.Jobs.getJobsJson()?"+new Date().getTime(),
+		error: function(jqXHR, textStatus, errorThrown) {
+			// error; too bad :(
+		},
+		success: function(jobs, textStatus, jqXHR) {
+			if (jobs.length == 0) {
+				$("#joblist").hide();
+				$("#nojobs").show();
+			} else {
+				$("#nojobs").hide();
+				$("#joblist").show();
+			}
+			$(".job").remove();
+			$.each(jobs.reverse(), function(j, job) {
+				addJob(job);
+			});
+			filterJobs();
+		}
+	});
+	
+	Notifications.listen("new-job", function(job){
+		addJob(job);
+	});
+});
+</script>
+
+}

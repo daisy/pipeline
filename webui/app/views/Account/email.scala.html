@@ -1,0 +1,380 @@
+@(subject: String, headline: String, links: Map[String,String], why: String)(content: Html)
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>@subject</title>
+		
+    <style type="text/css">
+		#outlook a{
+			padding:0;
+		}
+		.ReadMsgBody{
+			width:100%;
+		}
+		.ExternalClass{
+			width:100%;
+		}
+		body{
+			margin:0;
+			padding:0;
+		}
+		img{
+			border:0;
+			height:auto;
+			line-height:100%;
+			outline:none;
+			text-decoration:none;
+		}
+		table,td{
+			border-collapse:collapse !important;
+			mso-table-lspace:0pt;
+			mso-table-rspace:0pt;
+		}
+		#bodyTable,#bodyCell{
+			height:100% !important;
+			margin:0;
+			padding:0;
+			width:100% !important;
+		}
+		#templateContainer{
+			width:600px;
+		}
+		body,#bodyTable{
+			background-color:#FFFFFF;
+		}
+		h1{
+			color:#363636 !important;
+			display:block;
+			font-family:Helvetica;
+			font-size:32px;
+			font-style:normal;
+			font-weight:normal;
+			line-height:100%;
+			letter-spacing:normal;
+			margin-top:0;
+			margin-right:0;
+			margin-bottom:10px;
+			margin-left:0;
+			text-align:center;
+		}
+		h2{
+			color:#363636 !important;
+			display:block;
+			font-family:Helvetica;
+			font-size:18px;
+			font-style:normal;
+			font-weight:normal;
+			line-height:100%;
+			letter-spacing:normal;
+			margin-top:0;
+			margin-right:0;
+			margin-bottom:10px;
+			margin-left:0;
+			text-align:left;
+		}
+		h3{
+			color:#363636 !important;
+			display:block;
+			font-family:Helvetica;
+			font-size:16px;
+			font-style:normal;
+			font-weight:normal;
+			line-height:100%;
+			letter-spacing:normal;
+			margin-top:0;
+			margin-right:0;
+			margin-bottom:10px;
+			margin-left:0;
+			text-align:left;
+		}
+		h4{
+			color:#363636 !important;
+			display:block;
+			font-family:Helvetica;
+			font-size:14px;
+			font-style:normal;
+			font-weight:normal;
+			line-height:100%;
+			letter-spacing:normal;
+			margin-top:0;
+			margin-right:0;
+			margin-bottom:10px;
+			margin-left:0;
+			text-align:left;
+		}
+		#templatePreheader{
+			background-color:#2B2B2B;
+			border-top:0;
+			border-bottom:0;
+		}
+		.preheaderContent{
+			color:#FFFFFF;
+			font-family:Helvetica;
+			font-size:10px;
+			line-height:125%;
+			padding-top:10px;
+			padding-bottom:10px;
+			text-align:left;
+		}
+		.preheaderContent a:link,.preheaderContent a:visited,.preheaderContent a .yshortcuts {
+			color:#FFFFFF;
+			font-weight:normal;
+			text-decoration:underline;
+		}
+		#bodyCell{
+			border-top:10px solid #2B2B2B;
+		}
+		#templateHeader{
+			border-bottom:0;
+		}
+		.headerContent{
+			color:#363636;
+			font-family:Helvetica;
+			font-size:20px;
+			font-weight:bold;
+			line-height:100%;
+			padding-top:20px;
+			padding-right:0;
+			padding-bottom:20px;
+			padding-left:0;
+			text-align:center;
+			vertical-align:middle;
+		}
+		.headerContent a:link,.headerContent a:visited,.headerContent a .yshortcuts {
+			color:#363636;
+			font-weight:normal;
+			text-decoration:underline;
+		}
+		#headerImage{
+			height:auto;
+			max-width:600px;
+		}
+		#templateBody{
+			border-top:0;
+			border-bottom:0;
+		}
+		.bodyContent{
+			color:#363636;
+			font-family:Helvetica;
+			font-size:14px;
+			line-height:150%;
+			padding-top:20px;
+			padding-bottom:40px;
+			text-align:left;
+		}
+		.bodyContent a:link,.bodyContent a:visited,.bodyContent a .yshortcuts {
+			color:#2B2B2B;
+			font-weight:normal;
+			text-decoration:none;
+		}
+		.bodyContent img{
+			display:inline;
+			height:auto;
+			max-width:600px !important;
+		}
+		#templateFooter{
+			border-top:0;
+			border-bottom:0;
+		}
+		.footerContent{
+			color:#363636;
+			font-family:Helvetica;
+			font-size:10px;
+			line-height:150%;
+			padding-top:20px;
+			padding-bottom:20px;
+			text-align:center;
+		}
+		.footerContent a:link,.footerContent a:visited,.footerContent a .yshortcuts,.footerContent a span {
+			color:#363636;
+			font-weight:normal;
+			text-decoration:underline;
+		}
+		.footerContent img{
+			display:inline;
+			height:auto;
+			max-width:600 !important;
+		}
+		/*#button{
+			border-radius:5px;
+			-moz-border-radius:5px;
+			-webkit-border-radius:5px;
+			background-color:#44AAC8;
+			color:#FFFFFF;
+			display:block;
+			font-family:Arial;
+			font-size:16px;
+			font-style:normal;
+			font-weight:bold;
+			line-height:100%;
+			margin:15px auto;
+			padding:15px 10px;
+			text-align:center;
+			text-decoration:none;
+			width:25%;
+		}*/
+	@@media only screen and (max-width: 500px){
+		body,table,td,p,a,li,blockquote{
+			-webkit-text-size-adjust:none !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		body{
+			width:auto !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		td[id=bodyCell]{
+			padding:10px !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		table[id=templateContainer]{
+			max-width:600px !important;
+			width:100% !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		h1{
+			font-size:40px !important;
+			line-height:100% !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		h2{
+			font-size:24px !important;
+			line-height:100% !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		h3{
+			font-size:18px !important;
+			line-height:100% !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		h4{
+			font-size:16px !important;
+			line-height:100% !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		table[id=templatePreheader]{
+			display:none !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		table[id=templateHeader]{
+			width:100% !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		img[id=headerImage]{
+			height:auto !important;
+			max-width:125px !important;
+			width:100% !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		td[class=headerContent]{
+			font-size:20px !important;
+			line-height:150% !important;
+			padding-top:0 !important;
+			padding-right:0 !important;
+			padding-bottom:0 !important;
+			padding-left:0 !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		td[class=bodyContent]{
+			font-size:18px !important;
+			line-height:150% !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		td[class=footerContent]{
+			font-size:14px !important;
+			line-height:150% !important;
+		}
+
+}	@@media only screen and (max-width: 500px){
+		td[class=footerContent] a{
+			display:block !important;
+		}
+
+}</style></head>
+    <body style="margin: 0;padding: 0;background-color: #FFFFFF;">
+    	<center>
+        	<table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;background-color: #FFFFFF;border-collapse: collapse !important;height: 100% !important;width: 100% !important;">
+            	<tr>
+                	<td align="center" height="100%" valign="top" width="100%" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;">
+                    	<table border="0" cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;">
+                        	<tr>
+                            	<td align="center" valign="top" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;">
+                                    <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templatePreheader" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;background-color: #2B2B2B;border-top: 0;border-bottom: 0;border-collapse: collapse !important;">
+                                        <tr>
+                                            <td align="center" valign="top" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;">
+                                                <!-- BEGIN PREHEADER -->
+                                                <table border="0" cellpadding="0" cellspacing="0" width="600" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;">
+                                                    <tr>
+                                                    	<td class="preheaderContent" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #999;font-family: Helvetica;font-size: 20px;line-height: 100%;padding-top: 10px;padding-bottom: 0px;text-align: left;border-collapse: collapse !important;">
+                                                    		DAISY Pipeline 2
+                                                    	</td>
+                                                    </tr>
+                                                </table>
+                                                <!-- END PREHEADER -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                            	<td align="center" valign="top" id="bodyCell" style="padding-top: 20px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;margin: 0;padding: 0;border-top: 10px solid #2B2B2B;border-collapse: collapse !important;height: 100% !important;width: 100% !important;">
+                                    <table border="0" cellpadding="0" cellspacing="0" id="templateContainer" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;width: 600px;border-collapse: collapse !important;">
+                                        <tr>
+                                            <td align="center" valign="top" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;">
+                                                <!-- BEGIN BODY -->
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateBody" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-top: 0;border-bottom: 0;border-collapse: collapse !important;">
+                                                    <tr>
+                                                        <td valign="top" class="bodyContent" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #363636;font-family: Helvetica;font-size: 14px;line-height: 150%;padding-top: 20px;padding-bottom: 40px;text-align: left;border-collapse: collapse !important;">
+                                                        	<br/>
+                                                            <h1 style="display: block;font-family: Helvetica;font-size: 32px;font-style: normal;font-weight: normal;line-height: 100%;letter-spacing: normal;margin-top: 0;margin-right: 0;margin-bottom: 10px;margin-left: 0;text-align: center;color: #363636 !important;">@headline</h1>
+                                                            <br/>
+                                                            <br/>
+                                                            @content
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <!-- END BODY -->
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" valign="top" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-collapse: collapse !important;">
+                                                <!-- BEGIN FOOTER -->
+                                                <table border="0" cellpadding="0" cellspacing="0" width="100%" id="templateFooter" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;border-top: 0;border-bottom: 0;border-collapse: collapse !important;">
+                                                    @if(links!=null){<tr>
+                                                        <td valign="top" class="footerContent" style="mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #363636;font-family: Helvetica;font-size: 10px;line-height: 150%;padding-top: 20px;padding-bottom: 20px;text-align: center;border-collapse: collapse !important;">
+                                                        	&nbsp;&nbsp;&nbsp;&nbsp;@for(title <- links.keySet()){<a href="@links.get(title)" style="color: #363636;font-weight: normal;text-decoration: underline;">@title</a>&nbsp;&nbsp;&nbsp;&nbsp;}
+                                                        </td>
+                                                    </tr>}
+                                                    @if(why!=null){<tr>
+                                                        <td valign="top" class="footerContent" style="padding-top: 20px;mso-table-lspace: 0pt;mso-table-rspace: 0pt;color: #363636;font-family: Helvetica;font-size: 10px;line-height: 150%;padding-bottom: 20px;text-align: center;border-collapse: collapse !important;">
+                                                        	@why
+                                                        </td>
+                                                    </tr>}
+                                                </table>
+                                                <!-- END FOOTER -->
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </center>
+    </body>
+</html>

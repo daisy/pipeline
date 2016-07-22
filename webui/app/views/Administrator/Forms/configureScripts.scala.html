@@ -1,0 +1,29 @@
+@(scriptsForm: Form[controllers.Administrator.ConfigureScripts], route: play.api.mvc.Call)
+
+@helper.form(action = route) {
+	
+	<input type="hidden" name="formName" value="configureScripts"/>
+	
+	<fieldset>
+		<div class="form-horizontal">
+        	
+        	@for(script <- controllers.Scripts.get(true)) {
+        		@defining(UserSetting.get(-2L, "scriptEnabled-"+script.getId())=="true") { enabled =>
+					<div class="control-group">
+						<label class="control-label" id="configureScripts-script-@{script.getId()}-label" for="configureScripts-script-@{script.getId()}-checkbox">@script.getNicename()</label>
+						<div class="controls">
+							<input type="hidden" name="script-@{script.getId()}" @if(enabled){ value="true" }else{ value="false" } id="configureScripts-script-@{script.getId()}-value"/>
+							<input type="checkbox" @if(enabled){ checked="" } id="configureScripts-script-@{script.getId()}-checkbox" onclick="$(document.getElementById('configureScripts-script-@{script.getId()}-value'))[0].value = $(this).is(':checked') ? 'true' : 'false';"/>
+							<br/><br/>
+						</div>
+					</div>
+				}
+        	}
+			
+			<div class="form-actions" id="configureScripts-submitButtons">
+				<button type="submit" class="btn btn-primary" id="configureScripts-submit" name="submit">Save</button>
+			</div>
+			
+		</div>
+	</fieldset>
+}

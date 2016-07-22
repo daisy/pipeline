@@ -1,0 +1,297 @@
+@(jobId: Long)
+
+@if(Setting.get("uploads")==null){
+    <div class="hero-unit" style="text-align:center">
+        <h2>Files cannot be uploaded until the upload directory is configured.</h2>
+    </div>
+}else{
+    @helper.form(action = routes.Jobs.postUpload(jobId), 'enctype -> "multipart/form-data", 'id -> "fileupload", 'class -> "form-horizontal"){
+   		<input type="hidden" id="uploads-jobId" name="jobId" value="@jobId"/>
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="row">
+            <div class="span6">
+                <div class="fileupload-buttonbar" id="fileupload-buttonbar" style="width:200px;">
+                    <!-- The fileinput-button span is used to style the file input field as button -->
+                    <span class="btn btn-success fileinput-button" style="width:173px;">
+                        <i class="icon-plus icon-white"></i>
+                        <span id="upload-button-label">Upload Files</span>
+                        <input type="file" name="files" multiple="" aria-labelledby="upload-button-label"/>
+                    </span>
+                    <a id="fileupload-help-link" class="accordion-toggle" data-toggle="collapse" href="#fileupload-help" title="Help" style="position:absolute;"><i class="icon-question-sign">&nbsp;</i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="span6">
+                <div class="accordion-body collapse" id="fileupload-help">
+                    <p>In modern browsers you can drag and drop files from your desktop into the browser window.</p>
+                    <p>If you need to upload lots of files or if you need to preserve the folder structure of your fileset, please compress your files as a ZIP archive before uploading them. ZIP files will be unzipped on the server.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="span6">
+                <!-- The global progress information -->
+                <div aria-live="polite" class="fileupload-progress fade">
+                    <!-- The global progress bar -->
+                    <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                        <div class="bar" style="width:0%;"></div>
+                    </div>
+                    <!-- The extended global progress information -->
+                    <div class="progress-extended">&nbsp;</div>
+                </div>
+                
+                <!-- The table listing the files available for upload/download -->
+                <table aria-live="off" class="table table-striped">
+                    <tbody class="files" id="files"></tbody>
+                </table>
+            </div>
+        </div>
+    }
+}
+
+<script type="text/javascript">
+    // <![CDATA[
+    /* Instantiate file upload button. */
+    $(function(){
+        'use strict';
+        
+        var url = '@routes.Jobs.postUpload(jobId)';
+        url = window.location.protocol+"//"+window.location.host+url;
+        
+        // `files` example: [ { "contentType": "image/jpeg", "fileName": "valentin.jpg", "isXML": false, "total": 25740 }, {...} ]
+        Job.addFilesToUploadWidget = function(files) {
+		    if (files.length > 0) {
+			    var tbody = $("#files");
+			    for (var f = 0; f < files.length; f++) {
+			    	var file = files[f];
+				    tbody.append(
+					     '<tr class="fileRow in">'
+					    +'<td class="preview"><i class="'+mediaTypeIcon(file.contentType)+'"></i></td><td class="name">'+file.fileName+'</td>'
+					    +'<td class="size">'+Job.prettySize(file.total)+'</td>'
+					    +'<td></td>'
+					    +'<td class="cancel"></td>'
+					    +'</tr>'
+				    );
+			    }
+		    }
+        }
+        
+        // triggered when an upload is aborted
+        function abortUpload (e) {
+	        e.preventDefault();
+	        var fileRow = $(e.currentTarget).closest('.fileRow');
+	        
+	        var data = fileRow.data('data') || {};
+	        if (!data.jqXHR) {
+	            data.errorThrown = 'abort';
+	            this._trigger('fail', e, data);
+	        } else {
+	            data.jqXHR.abort();
+	        }
+	    }
+	    
+	    // used to determine the icon used next to an uploaded file
+	    function mediaTypeIcon(type) {
+	        if (typeof type !== "string") return "icon-file";
+	        if (type === "application/zip") return "icon-folder-open";
+	        if (type.indexOf("image/") == 0) return "icon-picture";
+	        if (type.indexOf("audio/") == 0) return "icon-headphones";
+	        if (type.indexOf("video/") == 0) return "icon-film";
+	        if (type === "text/html" || type === "text/plain"
+	            || type === "application/xhtml+xml"
+	            || type === "application/x-dtbook+xml"
+	            || type === "application/z3998-auth+xml") return "icon-book";
+	        return "icon-file";
+	    }
+        
+        // Initialize the jQuery File Upload widget:
+        $('#fileupload').fileupload();
+        
+        // File Upload widget settings:
+        $('#fileupload').fileupload('option', {
+            url: url
+        });
+        
+        // File Upload widget handlers
+        $('#fileupload')
+        .bind('fileuploadadd', function (e, data) {
+            // file queued
+            var fileWidgetId = "file"+$("#files").find("tr.fileRow").size();
+            data.formData = [{name:"element", value:fileWidgetId}];
+            var tr = $('<tr class="fileRow" id="'+fileWidgetId+'"></tr>');
+            fileWidgetId = "#"+fileWidgetId;
+            tr.append('<td class="preview"><i class="'+mediaTypeIcon(data.files[0].type)+'"></i></td>');
+            tr.append('<td class="name"></td>');
+            tr.append('<td class="size"></td>');
+            tr.append('<td><div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0%"><div class="bar" style="width:0%;"></div></div></td>');
+            tr.append('<td class="cancel"><button class="btn btn-warning"><i class="icon-ban-circle icon-white"></i><span>Cancel</span></button><div class="error" style="display:none;"></div></td>');
+            $("#files").append(tr);
+            data.context = $(fileWidgetId);
+            data.context.find("button").click(abortUpload);
+            var xhr = data.submit()
+                          .success(function (result, textStatus, jqXHR) {
+                                          // Fix for old IEs not getting the filesize
+                                        $("#files").find("tr").filter(function(){return $($(this).children()[1]).html()===result.files[0].name;}).each(function(){
+                                            if (!(/^\d/).test($($(this).children()[2]).html())) {
+                                                $($(this).children()[2]).html(Job.prettySize(result.files[0].size));
+                                            }
+                                        });
+                                   });
+            data.context.data('data',{data: data, jqXHR: xhr});
+            var fileCount = Number($("#filesNicename").data("fileCount"));
+            fileCount = (!isNaN(fileCount) ? fileCount : 0) + 1;
+            $("#filesNicename").data("fileCount", fileCount);
+            var plural = !isNaN(fileCount);
+            $("#filesNicename").html($("#filesNicename").data("fileCount")+" "+(plural?"files":"file"));
+            
+            var size = 0;
+            var filename = "";
+            fileCount = 0;
+            for (var i = 0; i < data.files.length; i++) {
+                size += data.files[i].size;
+                if (i === 0) filename = data.files[i].name;
+                else if (i < 3) filename += ", "+data.files[i].name;
+                fileCount++;
+            }
+            if (fileCount > 3) filename += " and "+(fileCount-3)+" more";
+            if (isNaN(size))
+                $(fileWidgetId+" td.size").html("unknown filesize");
+            else
+                $(fileWidgetId+" td.size").html(Job.prettySize(size));
+            $(fileWidgetId+" td.name").html(filename);
+        })
+        .bind('fileuploadsubmit', function (e, data) {
+            // file submitted
+        })
+        .bind('fileuploadsend', function (e, data) {
+            // file started
+        })
+        .bind('fileuploadprogress', function (e, data) {
+            // file progress update
+            var fileWidgetId = "#"+data.context.attr("id");
+            var loaded = typeof e.loaded === "undefined" ? 0 : e.loaded;
+            var total = typeof e.total === "undefined" ? 0 : e.total;
+            var progress = Math.abs(total) < 1 ? 0 : loaded/total*100;
+            $(fileWidgetId+" div.progress").attr("aria-valuenow", progress);
+            $(fileWidgetId+" div.progress").attr("aria-valuetext", Math.floor(progress)+"%");
+            $(fileWidgetId+" div.progress div.bar").css("width", progress+"%");
+        })
+        .bind('fileuploaddone', function (e, data) {
+            // file successfully uploaded
+        })
+        .bind('fileuploadfail', function (e, data) {
+            // file upload failed
+            var fileWidgetId = "#"+data.context.attr("id");
+            var jqXHR = $(fileWidgetId).data("data").jqXHR;
+            var errorText = jqXHR.responseText; // might be a string, might be XML, might be HTML. Let's assume HTML and extract the text content.
+            if (typeof errorText === "string") {
+                errorText = errorText.replace(/[\r\n]/g," ");
+                errorText = errorText.replace(/<head[^>]*>.*<\/head[^>]*>/,""); // Remove <head/>
+                errorText = errorText.replace(/<script[^>]*>.*<\/script[^>]*>/g,""); // Remove <script/>
+                errorText = errorText.replace(/<style[^>]*>.*<\/style[^>]*>/g,""); // Remove <style/>
+                errorText = errorText.replace(/<[^>]*>/g," ").replace(/\s+/g," ").replace(/^\s/,"").replace(/\s$/,"");
+                if (errorText.length > 140)
+                    errorText = errorText.substring(0,140) + " (…)";
+            }
+            var statusTexts = {
+                "100": "Continue",
+                "101": "Switching Protocols",
+                "102": "Processing",
+                "200": "OK",
+                "201": "Created",
+                "202": "Accepted",
+                "203": "Non-Authoritative Information",
+                "204": "No Content",
+                "205": "Reset Content",
+                "206": "Partial Content",
+                "207": "Multi-Status",
+                "208": "Already Reported",
+                "226": "IM Used",
+                "300": "Multiple Choices",
+                "301": "Moved Permanently",
+                "302": "Found",
+                "303": "See Other",
+                "304": "Not Modified",
+                "305": "Use Proxy",
+                "306": "Reserved",
+                "307": "Temporary Redirect",
+                "308": "Permanent Redirect",
+                "400": "Bad Request",
+                "401": "Unauthorized",
+                "402": "Payment Required",
+                "403": "Forbidden",
+                "404": "Not Found",
+                "405": "Method Not Allowed",
+                "406": "Not Acceptable",
+                "407": "Proxy Authentication Required",
+                "408": "Request Timeout",
+                "409": "Conflict",
+                "410": "Gone",
+                "411": "Length Required",
+                "412": "Precondition Failed",
+                "413": "Request Entity Too Large",
+                "414": "Request-URI Too Long",
+                "415": "Unsupported Media Type",
+                "416": "Requested Range Not Satisfiable",
+                "417": "Expectation Failed",
+                "422": "Unprocessable Entity",
+                "423": "Locked",
+                "424": "Failed Dependency",
+                "425": "Reserved for WebDAV advanced collections expired proposal",
+                "426": "Upgrade Required",
+                "427": "Unassigned",
+                "428": "Precondition Required",
+                "429": "Too Many Requests",
+                "430": "Unassigned",
+                "431": "Request Header Fields Too Large",
+                "500": "Internal Server Error",
+                "501": "Not Implemented",
+                "502": "Bad Gateway",
+                "503": "Service Unavailable",
+                "504": "Gateway Timeout",
+                "505": "HTTP Version Not Supported",
+                "506": "Variant Also Negotiates (Experimental)",
+                "507": "Insufficient Storage",
+                "508": "Loop Detected",
+                "509": "Unassigned",
+                "510": "Not Extended",
+                "511": "Network Authentication Required"
+            };
+            var statusText = jqXHR.status+"" in statusTexts ? statusTexts[jqXHR.status+""] : jqXHR.status+"";
+            $(fileWidgetId+" td div.error").text(statusText+": "+errorText).show();
+            
+            var fileCount = Number($("#filesNicename").data("fileCount"));
+            fileCount = (!isNaN(fileCount) ? fileCount : 0) - 1;
+            $("#filesNicename").data("fileCount", fileCount);
+            $("#filesNicename").html(fileCount === 0 ? "No files" : fileCount === 1 ? "1 file" : fileCount+" files");
+        })
+        .bind('fileuploadalways', function (e, data) {
+            // file upload finished (either succeeded or failed)
+            var fileWidgetId = "#"+data.formData[0].value; // for some reason data.context does not refer to the row anymore here
+            $(fileWidgetId+" div.progress").attr("aria-valuenow", 100);
+            $(fileWidgetId+" div.progress").attr("aria-valuetext", "100%");
+            $(fileWidgetId+" div.progress div.bar").css("width", "100%");
+            $(fileWidgetId+" div.progress").hide();
+            $(fileWidgetId+" td.cancel button").hide();
+        })
+        .bind('fileuploadstart', function (e) {
+            // started uploading a file
+            $("#filesProgress").html("(0%)");
+        })
+        .bind('fileuploadstop', function (e) {
+            // finished uploading all files
+            $("#filesProgress").html("");
+        })
+        .bind('fileuploadprogressall', function (e, data) {
+            // global progress update
+            var loaded = typeof e.loaded === "undefined" ? 0 : e.loaded;
+            var total = typeof e.total === "undefined" ? 0 : e.total;
+            var progress = Math.abs(total) < 1 ? 0 : Math.floor(loaded/total*100);
+            $("#filesProgress").html("("+progress+"%)");
+        });
+    });
+    // ]]>
+</script>

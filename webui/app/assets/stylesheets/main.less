@@ -1,0 +1,428 @@
+@media (min-width: 800px) {
+	body {
+		padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+	}
+}
+
+hgroup {
+	text-align: center;
+	padding-bottom: 2em;
+}
+h1 {
+	text-align: center;
+}
+h2.label-headline {
+	font-size: 1em;
+}
+
+a {
+	/*text-decoration:underline;*/
+}
+
+.alert {
+	text-align: center;
+	p {
+		width: 100%;
+	}
+}
+
+/* ############################## Color of form elements that the user has changed but have not been submitted yet ############################## */
+.changed {
+	background-color: #DDF;
+}
+
+/* ############################## Message listing in job view ############################## */
+ol.messagelist {
+	/*overflow:auto;*/
+	/*font-family:"Courier New",Courier,mono;*/
+	color: #999999;
+	margin:0;
+  padding:0em 0 0.5em 2.8em;
+	width:96%;
+	
+	li {
+		//white-space: nowrap;
+		font-weight: 650;
+		padding-top: 0.25em;
+		
+		.message {
+			color: #222;
+			background-color: transparent;
+			border: 0px #FFF;
+			font-size: 1.25em;
+		}
+	}
+	
+	.message-empty:not(ul) {
+		display: none;
+	}
+		
+	.message-error > span {
+		background-color: #FAA;
+	}
+	
+	.message-warn > span {
+		background-color: #FFA;
+	}
+	
+}
+
+/* ########### Don't use responsive images for status icons in job listing ########### */
+tr.job td:first-child {
+	min-width: 14px;
+}
+
+/* ############################## Admin settings subnav ############################## */
+body {    padding-top: 90px; }
+@media (max-width: 800px) {
+    body {
+        padding-top: 0;
+    }
+}
+.subnav {
+    background-color: #EEEEEE;
+    background-image: -moz-linear-gradient(center top , #F5F5F5 0%, #EEEEEE 100%);
+    background-repeat: repeat-x;
+    border: 1px solid #E5E5E5;
+    border-radius: 4px 4px 4px 4px;
+    height: 36px;
+    width: 100%;
+}
+.subnav .nav {
+    margin-bottom: 0;
+}
+.subnav {
+    width: 100%;
+    height: 36px;
+    background-color: #eeeeee; /* Old browsers */
+    background-repeat: repeat-x; /* Repeat the gradient */
+    background-image: -moz-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f5f5f5), color-stop(100%,#eeeeee)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* Chrome 10+,Safari 5.1+ */
+    background-image: -ms-linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* IE10+ */
+    background-image: -o-linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* Opera 11.10+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#eeeeee',GradientType=0 ); /* IE6-9 */
+    background-image: linear-gradient(top, #f5f5f5 0%,#eeeeee 100%); /* W3C */
+    border: 1px solid #e5e5e5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.subnav .nav {
+    margin-bottom: 0;
+}
+.subnav .nav > li > a {
+  margin: 0;
+  padding-top:    11px;
+  padding-bottom: 11px;
+  border-left: 1px solid #f5f5f5;
+  border-right: 1px solid #e5e5e5;
+  -webkit-border-radius: 0;
+     -moz-border-radius: 0;
+          border-radius: 0;
+}
+.subnav .nav > .active > a,
+.subnav .nav > .active > a:hover {
+  padding-left: 13px;
+  color: #777;
+  background-color: #e9e9e9;
+  border-right-color: #ddd;
+  border-left: 0;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0,0,0,.05);
+     -moz-box-shadow: inset 0 3px 5px rgba(0,0,0,.05);
+          box-shadow: inset 0 3px 5px rgba(0,0,0,.05);
+}
+.subnav .nav > .active > a .caret,
+.subnav .nav > .active > a:hover .caret {
+  border-top-color: #777;
+}
+.subnav .nav > li:first-child > a,
+.subnav .nav > li:first-child > a:hover {
+  border-left: 0;
+  padding-left: 12px;
+  -webkit-border-radius: 4px 0 0 4px;
+     -moz-border-radius: 4px 0 0 4px;
+          border-radius: 4px 0 0 4px;
+}
+.subnav .nav > li:last-child > a {
+  border-right: 0;
+}
+.subnav .dropdown-menu {
+  -webkit-border-radius: 0 0 4px 4px;
+     -moz-border-radius: 0 0 4px 4px;
+          border-radius: 0 0 4px 4px;
+}
+@media (max-width: 768px) {
+    .subnav {
+        position: static;
+        top: auto;
+        z-index: auto;
+        width: auto;
+        height: auto;
+        background: #fff; /* whole background property since we use a background-image for gradient */
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
+    }
+    .subnav .nav > li {
+        float: none;
+    }
+    .subnav .nav > li > a {
+        border: 0;
+    }
+    .subnav .nav > li + li > a {
+        border-top: 1px solid #e5e5e5;
+    }
+    .subnav .nav > li:first-child > a,
+    .subnav .nav > li:first-child > a:hover {
+        -webkit-border-radius: 4px 4px 0 0;
+        -moz-border-radius: 4px 4px 0 0;
+        border-radius: 4px 4px 0 0;
+    }
+}
+@media (min-width: 980px) {
+  .subnav-fixed {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 1020; /* 10 less than .navbar-fixed to prevent any overlap */
+    border-color: #d5d5d5;
+    border-width: 0 0 1px; /* drop the border on the fixed edges */
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+       -moz-box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+            box-shadow: inset 0 1px 0 #fff, 0 1px 5px rgba(0,0,0,.1);
+    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false); /* IE6-9 */
+  }
+  .subnav-fixed .nav {
+    width: 938px;
+    margin: 0 auto;
+    padding: 0 1px;
+  }
+  .subnav .nav > li:first-child > a,
+  .subnav .nav > li:first-child > a:hover {
+    -webkit-border-radius: 0;
+       -moz-border-radius: 0;
+            border-radius: 0;
+  }
+}
+@media (min-width: 1210px) {
+  .subnav-fixed .nav {
+    width: 1168px; /* 2px less to account for left/right borders being removed when in fixed mode */
+  }
+
+}
+
+/* ############################## Proper spacing before headlines ############################## */
+section {
+	padding-top: 90px;
+}
+
+/*​ ############################## Adapted from the AEGIS project: http://access.aol.com/aegis/demo.css ############################## */
+/*
+body { font-size: 62.5%; font-family:Arial, Helvetica, sans-serif }
+
+#toolbar {
+    padding: 10px 4px;
+}
+
+.noCloseBtn .ui-dialog-titlebar-close{
+    display: none;
+}
+
+.sliderValue {
+    position: absolute;
+    color:#f6931f;
+    font-weight:bold;
+}
+
+#tabs-1 {
+    padding: 30px;
+}
+
+.dialogSubGroup {
+    border: 1px solid #BBB;
+    padding: 5px;
+ }
+
+.viewer {
+   padding: 5px 35px;
+   width: 300px;
+   height: 270px;
+}
+
+.viewer img {
+   border: 1px solid #BBB;
+   padding: 1px;
+}
+*/
+
+/* Experimental: Global focus styles */
+
+.ui-state-focus, .ui-state-focus .ui-button-icon-primary, a.ui-global-focus, input.ui-global-focus, div.ui-global-focus, select.ui-global-focus, button.ui-global-focus {
+	outline: 2px solid #412C84 !important;
+    outline-offset: 0;
+    -moz-outline-radius: 5px;
+}
+
+.ui-state-focus .ui-button-icon-primary {
+	outline-offset: .4em;
+}
+
+.ui-button-icon-only.ui-state-focus, .ui-tabs-nav a.ui-global-focus {
+	outline: none !important;
+}
+
+/* End global focus styles */
+
+/* Fix jQuery UI styles */
+.ui-widget {
+	font-size: inherit;
+}
+.ui-widget .btn.btn-large {
+	font-size: 18px;
+}
+.ui-widget-content a {
+	color: #0088CC;
+}
+
+/* new job */
+#accordion > h2 {
+	font-size: 1.5em;
+	z-index: 2;
+}
+#scriptCreationPathGroup h2 {
+	text-align:left;
+}
+#scriptCreationPathGroup {
+	text-align:left;
+}
+.table-noborder td {
+	border-top: 0px;
+}
+.fill-parent-padding {
+    width: 100%;
+    -moz-box-sizing:    border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing:         border-box;
+}
+
+/* centered elements (adapted from http://stackoverflow.com/questions/8442782) */
+@media (min-width: 800px) {
+	.horizontally-centered {
+		position:absolute;
+	    width:50%;
+	    left: 50%;
+	    margin-left:-25%; /* negative number 1/2 width */
+	}
+	.centered { .horizontally-centered; }
+	@media (min-height: 400px) {
+		.vertically-centered {
+		    position:absolute;
+		    height:50%;
+		    top: 50%;
+		    margin-top:-25%; /* negative number 1/2 height */
+		}
+		.centered { .vertically-centered; }
+	}
+}
+
+/* left/right div split (adapted from http://www.dev-archive.net/articles/table-in-css.html) */
+@media (min-width: 800px) {
+	.split {
+		margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+		padding: 0;
+	}
+	.split-left {
+		border: none; float: left; margin: 0; padding: 0; width: 50%;
+		.split-content {
+			.fill-parent-padding;
+			margin: 0; padding: 0.3em 0.3em 0 0.3em;
+			font-style: normal; font-size: 1em; text-indent: 0;
+			width: auto;
+		}
+	}
+	.split-right {
+		border: none; float: right; margin: 0; padding: 0; width: 50%;
+		.split-content {
+			.fill-parent-padding;
+			margin: 0; padding: 0.3em 0.3em 0 0.3em;
+			font-style: normal; font-size: 1em; text-indent: 0;
+			width: 100%;
+		}
+	}
+	.split-br {
+		clear: both; margin: 0; padding: 0; width: auto;
+	}
+	
+	.dp2-form {
+		.split;
+	}
+	.dp2-form-label {
+		.split-left;
+		.dp2-form-content { .split-left.split-content; text-align: right; padding-top: 10px; }
+	}
+	.dp2-form-input {
+		.split-right;
+		.dp2-form-content { .split-left.split-content; text-align: left; }
+	}
+	.dp2-form-br { .split-br }
+	.dp2-form-actions { text-align: center; }
+}
+
+/**
+ * Extra large button extensions. Extends `.btn`.
+ * http://stackoverflow.com/questions/13112200/resizing-buttons-in-twitter-boostrap/13112826#13112826
+ */
+.btn-xlarge {
+    padding: 18px 28px;
+    font-size: 22px;
+    line-height: normal;
+	-webkit-border-radius: 8px;
+       -moz-border-radius: 8px;
+            border-radius: 8px;
+}
+
+
+/* ############################## Allow help messages that are not colored by validation states (add .no-validation-color to the help element) ############################## */
+
+.control-group .help-block.no-validation-color, .control-group .help-inline.no-validation-color {
+	color: #595959;
+}
+
+/* #### enum datatype ####*/
+
+dl.enum-terms dt em {
+	display: none;
+}
+
+dl.enum-terms dt.enum-term-selected em {
+	display: inline;
+}
+
+dl.enum-terms dt.enum-term-selected {
+	font-size: 120%;
+}
+
+
+/* #### highlight inputs with errors #### */
+
+input:invalid {
+	border-color: #b94a48;
+	color: #b94a48;
+}
+
+
+/* #### smoother progressbar #### */
+
+.progress .bar {
+  -webkit-transition: width 2s ease;
+  -moz-transition: width 2s ease;
+  -o-transition: width 2s ease;
+  transition: width 2s ease;
+}
+
+

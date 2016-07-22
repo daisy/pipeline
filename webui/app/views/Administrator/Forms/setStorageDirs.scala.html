@@ -1,0 +1,88 @@
+@(setStorageDirsForm: Form[controllers.Administrator.SetStorageDirsForm], route: play.api.mvc.Call, skipRoute: play.api.mvc.Call, autofocus: Boolean)
+
+@helper.form(action = route, 'id -> "setStorageDirs-form") {
+	
+	<input type="hidden" name="formName" value="setStorageDirs"/>
+	
+   	<fieldset style="text-align:center;">
+		
+		<div class="control-group dp2-form @("error".when(setStorageDirsForm.error("uploaddir") != null))" id="setStorageDirs-uploaddirGroup">
+			<div class="dp2-form-label">
+     			<div class="dp2-form-content">
+					<label for="uploaddir" class="control-label">Upload directory</label>
+				</div>
+			</div>
+			<div class="dp2-form-input">
+				<div class="dp2-form-content">
+					<input @if(autofocus){autofocus="autofocus"} type="text" name="uploaddir" id="setStorageDirs-uploaddir" placeholder="URL" class="input-xlarge"
+							value="@setStorageDirsForm.field("uploaddir").valueOr(Setting.get("uploads"))"
+							onkeyup="if(this.value==='@models.Setting.get("uploads")')document.getElementById('setStorageDirs-uploaddirGroup').style.backgroundColor='#FFF';else document.getElementById('setStorageDirs-uploaddirGroup').style.backgroundColor='#DDF';"
+					/>
+					<p class="help-block">
+						<img id="setStorageDirs-uploaddirHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="setStorageDirs-uploaddirHelp"></span>
+					</p>
+					<p class="help-block" style="color:black;">This is where all uploaded files will be stored.</p>
+				</div>
+			</div>
+			<div class="dp2-form-br"></div>
+		</div>
+		
+		<div class="control-group dp2-form @("error".when(setStorageDirsForm.error("jobsdir") != null))" id="setStorageDirs-jobsdirGroup">
+     		<div class="dp2-form-label">
+     			<div class="dp2-form-content">
+					<label for="jobsdir" class="control-label">Jobs directory</label>
+				</div>
+			</div>
+			<div class="dp2-form-input">
+				<div class="dp2-form-content">
+					<input type="text" autocomplete="off" name="jobsdir" id="setStorageDirs-jobsdir" placeholder="Temporary directory path" class="input-xlarge"
+							value="@setStorageDirsForm.field("jobsdir").valueOr(Setting.get("jobs"))"
+							onkeyup="if(this.value==='@models.Setting.get("jobs")')document.getElementById('setStorageDirs-jobsdirGroup').style.backgroundColor='#FFF';else document.getElementById('setStorageDirs-jobsdirGroup').style.backgroundColor='#DDF';"
+					/>
+					<p class="help-block">
+						<img id="setStorageDirs-jobsdirHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="setStorageDirs-jobsdirHelp"></span>
+					</p>
+					<p class="help-block" style="color:black;">This is where the jobs input files and option values will be stored. This is stored to allow for re-running jobs.</p>
+				</div>
+			</div>
+			<div class="dp2-form-br"></div>
+		</div>
+		
+		<div class="control-group dp2-form @("error".when(setStorageDirsForm.error("templatesdir") != null))" id="setStorageDirs-templatesdirGroup">
+     		<div class="dp2-form-label">
+     			<div class="dp2-form-content">
+					<label for="templatesdir" class="control-label">Job template directory</label>
+				</div>
+			</div>
+			<div class="dp2-form-input">
+				<div class="dp2-form-content">
+					<input type="text" autocomplete="off" name="templatesdir" id="setStorageDirs-templatesdir" placeholder="Temporary directory path" class="input-xlarge"
+							value="@setStorageDirsForm.field("templatesdir").valueOr(Setting.get("templates"))"
+							onkeyup="if(this.value==='@models.Setting.get("templates")')document.getElementById('setStorageDirs-templatesdirGroup').style.backgroundColor='#FFF';else document.getElementById('setStorageDirs-templatesdirGroup').style.backgroundColor='#DDF';"
+					/>
+					<p class="help-block">
+						<img id="setStorageDirs-templatesdirHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="setStorageDirs-templatesdirHelp"></span>
+					</p>
+					<p class="help-block" style="color:black;">This is where the job templates will be stored. Job templates are predefined sets of options and files that can be reused to create jobs more easily.</p>
+				</div>
+			</div>
+			<div class="dp2-form-br"></div>
+		</div>
+		
+		<br/>
+		<button class="btn btn-primary" id="setStorageDirs-submit" type="submit" name="submit" disabled="">Save Settings</button>
+		
+		<script type="text/javascript">
+			$(function(){
+				DP2Forms.validateAsTextField("setStorageDirs", "uploaddir", "@setStorageDirsForm.field("uploaddir").valueOr(Setting.get("uploads"))");
+				DP2Forms.validateAsTextField("setStorageDirs", "jobsdir", "@setStorageDirsForm.field("jobsdir").valueOr(Setting.get("jobs"))");
+				DP2Forms.validateAsTextField("setStorageDirs", "templatesdir", "@setStorageDirsForm.field("templatesdir").valueOr(Setting.get("templates"))");
+				DP2Forms.disableButtonOnErrors("setStorageDirs", "submit");
+			});
+		</script>
+		
+	</fieldset>
+}

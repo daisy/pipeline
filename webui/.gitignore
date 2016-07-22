@@ -1,0 +1,41 @@
+# General temp files
+.DS_Store
+*.ser
+*.pyc
+logs
+project/project
+project/target
+target
+.target
+tmp
+.history
+/bin
+lib
+.sbt*
+.cache-*
+
+# Default directories
+/uploads
+/local.results
+/local.temp
+
+# Derby database
+/dp2webui
+/derby.log
+
+# IDE and editors
+*~
+.idea
+.idea_modules
+nbproject
+eclipse
+.amateras
+.settings
+.classpath
+.project
+*.iml
+*.ipr
+*.iws
+
+# Play! Framework
+RUNNING_PID

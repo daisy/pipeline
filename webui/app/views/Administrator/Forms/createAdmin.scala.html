@@ -1,0 +1,76 @@
+@(createAdminForm: Form[controllers.Administrator.CreateAdminForm], route: play.api.mvc.Call, autofocus: Boolean)
+
+@helper.form(action = route, 'id -> "createAdmin-form") {
+    
+    <input type="hidden" name="formName" value="createAdmin"/>
+    
+    <fieldset style="text-align:center;">
+    	
+     	<div class="control-group dp2-form" id="createAdmin-emailGroup">
+     		<div class="dp2-form-label">
+     			<div class="dp2-form-content">
+					<label for="email" class="control-label">E-mail</label>
+				</div>
+			</div>
+			<div class="dp2-form-input">
+				<div class="dp2-form-content">
+					<input @if(autofocus){autofocus="autofocus"} type="email" name="email" id="createAdmin-email" placeholder="Valid e-mail address required." autocomplete="off" class="input-xlarge"/>
+					<p class="help-block">
+						<img id="createAdmin-emailHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="createAdmin-emailHelp"></span>
+					</p>
+				</div>
+			</div>
+			<div class="dp2-form-br"></div>
+		</div>
+		
+		<div class="control-group dp2-form" id="createAdmin-passwordGroup">
+			<div class="dp2-form-label">
+     			<div class="dp2-form-content">
+     				<label for="password" class="control-label">Password</label>
+ 				</div>
+			</div>
+			<div class="dp2-form-input">
+				<div class="dp2-form-content">
+					<input type="password" name="password" id="createAdmin-password" placeholder="A password must be at least 6 characters." autocomplete="off" class="input-xlarge"/>
+					<p class="help-block">
+						<img id="createAdmin-passwordHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="createAdmin-passwordHelp"></span>
+					</p>
+				</div>
+			</div>
+			<div class="dp2-form-br"></div>
+		</div>
+		
+		<div class="control-group dp2-form" id="createAdmin-repeatPasswordGroup">
+			<div class="dp2-form-label">
+     			<div class="dp2-form-content">
+     				<label for="repeatPassword" class="control-label">Repeat password</label>
+ 				</div>
+			</div>
+			<div class="dp2-form-input">
+				<div class="dp2-form-content">
+					<input type="password" name="repeatPassword" id="createAdmin-repeatPassword" placeholder="Please repeat your password." autocomplete="off" class="input-xlarge"/>
+					<p class="help-block">
+						<img id="createAdmin-repeatPasswordHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="createAdmin-repeatPasswordHelp"></span>
+					</p>
+				</div>
+			</div>
+			<div class="dp2-form-br"></div>
+		</div>
+		
+		<br/>
+		<button class="btn btn-primary btn-large" id="createAdmin-submit" type="submit" name="submit" disabled="">Save and continue</button>
+		
+		<script type="text/javascript">
+			$(function(){
+				DP2Forms.validateAsTextField("createAdmin", "email", "");
+				DP2Forms.validateAsTextField("createAdmin", "password", "");
+				DP2Forms.validateAsTextField("createAdmin", "repeatPassword", "");
+				DP2Forms.disableButtonOnErrors("createAdmin", "submit");
+			});
+		</script>
+			
+	</fieldset>
+}

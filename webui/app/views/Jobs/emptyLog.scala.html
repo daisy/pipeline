@@ -1,0 +1,15 @@
+@(id: Long)
+
+@main("Empty detailed log") {
+
+<div id="status" style="width:100%;text-align:center;">
+	<span class="muted">The log is empty</span>
+</div>
+
+<ul class="pager">
+  <li>
+    <a href="@routes.Jobs.getJob(id)">&larr; Back to job #@id</a>
+  </li>
+</ul>
+
+}

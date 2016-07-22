@@ -1,0 +1,24 @@
+@(arg: org.daisy.pipeline.client.models.Argument, scriptId: String)
+
+<div class="help-block" id="shortdescription-script-@scriptId-argument-@{arg.getName()}">@{arg.getDesc().replaceAll("(?s)\n.*$","")}</div>
+<script>window.setTimeout(function(){document.getElementById('shortdescription-script-@scriptId-argument-@{arg.getName()}').innerHTML = markdownToHtml(document.getElementById('shortdescription-script-@scriptId-argument-@{arg.getName()}').innerHTML);},0);</script>
+<p><a data-toggle="collapse" href="#description-script-@scriptId-argument-@{arg.getName()}" id="description-script-@scriptId-argument-@{arg.getName()}-toggle" class="collapsed">
+    <style>
+        #description-script-@scriptId-argument-@{arg.getName()}-show { display:none; }
+        #description-script-@scriptId-argument-@{arg.getName()}-toggle.collapsed #description-script-@scriptId-argument-@{arg.getName()}-show { display:inline; }
+        #description-script-@scriptId-argument-@{arg.getName()}-hide { display:inline; }
+        #description-script-@scriptId-argument-@{arg.getName()}-toggle.collapsed #description-script-@scriptId-argument-@{arg.getName()}-hide { display:none; }
+    </style>
+    <small id="description-script-@scriptId-argument-@{arg.getName()}-show"><i class="icon-chevron-down"></i>Show details</small>
+    <small id="description-script-@scriptId-argument-@{arg.getName()}-hide"><i class="icon-chevron-up"></i>Hide details</small>
+</a></p>
+<div class="help-block collapse" id="description-script-@scriptId-argument-@{arg.getName()}">@{arg.getDesc().replaceAll("^[^\n]*\n*","")}</div>
+<script>
+	window.setTimeout(function(){
+		$("#description-script-@scriptId-argument-@{arg.getName()}").html(markdownToHtml($("#description-script-@scriptId-argument-@{arg.getName()}").html()));
+		if ($("#description-script-@scriptId-argument-@{arg.getName()}").children().length === 0) {
+			$("#description-script-@scriptId-argument-@{arg.getName()}").hide();
+			$("#description-script-@scriptId-argument-@{arg.getName()}-toggle").hide();
+		}
+	},0);
+</script>

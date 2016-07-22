@@ -1,0 +1,204 @@
+@(configureAppearanceForm: Form[controllers.Administrator.ConfigureAppearanceForm], route: play.api.mvc.Call, skipRoute: play.api.mvc.Call)
+
+@helper.form(action = route, 'id -> "configureAppearance-form") {
+	
+	<input type="hidden" name="formName" value="configureAppearance"/>
+	<input type="hidden" name="titleLink" id="configureAppearance-titleLink" value="@models.Setting.get("appearance.titleLink")"/>
+    
+    <fieldset>
+        
+        <div class="form-horizontal">
+        	
+        	<div class="control-group @("error".when(configureAppearanceForm.error("title") != null))" id="configureAppearance-titleGroup">
+        		<label for="configureAppearance-title" class="control-label">Application Title</label>
+	            <div class="controls">
+	        		<input type="text" name="title" id="configureAppearance-title" class="input-xlarge"
+	        			placeholder="&quot;@models.Setting.get("appearance.title")&quot; is the current title of this website."
+	        			value="@{if (configureAppearanceForm.hasErrors()) configureAppearanceForm.field("title").valueOr(""); else models.Setting.get("appearance.title");}"
+	        			onkeyup="if(this.value==='@models.Setting.get("appearance.title")')document.getElementById('configureAppearance-titleGroup').style.backgroundColor='#FFF';else document.getElementById('configureAppearance-titleGroup').style.backgroundColor='#DDF';"/>
+					<p class="help-block" style="width:50%;">
+						<img id="configureAppearance-titleHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="configureAppearance-titleHelp"></span>
+					</p>
+	            </div>
+			</div>
+			
+			<div class="control-group @("error".when(configureAppearanceForm.error("titleLink") != null))" id="configureAppearance-titleLinkGroup">
+				<label class="control-label" id="configureAppearance-titleLink-label">Application Title Link</label>
+				<div class="controls" aria-role="radiogroup" aria-labelledby="configureAppearance-titleLink-label">
+					<label class="radio">
+						<input type="radio" name="titleLinkRadio" class="configureAppearance-titleLinkRadio-uiPage" id="configureAppearance-titleLinkRadio-none" value="" @if(models.Setting.get("appearance.titleLink") == ""){checked=""}/> No link
+					</label>
+					<label class="radio">
+						<input type="radio" name="titleLinkRadio" class="configureAppearance-titleLinkRadio-uiPage" id="configureAppearance-titleLinkRadio-welcome" value="welcome" @if(models.Setting.get("appearance.titleLink") == "welcome"){checked=""}/> Welcome page
+					</label>
+					<label class="radio">
+						<input type="radio" name="titleLinkRadio" class="configureAppearance-titleLinkRadio-uiPage" id="configureAppearance-titleLinkRadio-scripts" value="scripts" @if(models.Setting.get("appearance.titleLink") == "scripts"){checked=""}/> Create Job
+					</label>
+					<label class="radio">
+						<input type="radio" name="titleLinkRadio" class="configureAppearance-titleLinkRadio-uiPage" id="configureAppearance-titleLinkRadio-jobs" value="jobs" @if(models.Setting.get("appearance.titleLink") == "jobs"){checked=""}/> Jobs
+					</label>
+					<label class="radio">
+						<input type="radio" name="titleLinkRadio" class="configureAppearance-titleLinkRadio-uiPage" id="configureAppearance-titleLinkRadio-about" value="about" @if(models.Setting.get("appearance.titleLink") == "about"){checked=""}/> About
+					</label>
+					<label class="radio">
+						<input type="radio" name="titleLinkRadio" class="configureAppearance-titleLinkRadio-uiPage" id="configureAppearance-titleLinkRadio-admin" value="admin" @if(models.Setting.get("appearance.titleLink") == "admin"){checked=""}/> Admin settings
+					</label>
+					<label class="radio">
+						<input type="radio" name="titleLinkRadio" class="configureAppearance-titleLinkRadio-uiPage" id="configureAppearance-titleLinkRadio-account" value="account" @if(models.Setting.get("appearance.titleLink") == "account"){checked=""}/> Account settings
+					</label>
+					<label class="radio">
+						<input type="radio" name="titleLinkRadio" id="configureAppearance-titleLinkRadio-custom" value="custom">
+						<span>Go to the following address:</span>
+						<input type="url" name="titleLinkUrl" id="configureAppearance-titleLinkUrl" placeholder="URL" class="input-xlarge"/>
+						<label class="checkbox">
+			            	<input type="checkbox" name="titleLinkNewWindow" id="configureAppearance-titleLinkNewWindow" @if(models.Setting.get("appearance.titleLink.newWindow")=="true"){checked=""}/> Open in new window
+			            </label>
+					</label>
+					<p class="help-block">
+						<img id="configureAppearance-titleLinkHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="configureAppearance-titleLinkHelp"></span>
+					</p>
+					<script type="text/javascript">
+						$(function(){
+							$("#configureAppearance-titleLink").data("initial",null); // empty value is ok
+							if (!$(".configureAppearance-titleLinkRadio-uiPage").is(":checked")) {
+								$("#configureAppearance-titleLinkRadio-custom").click();
+								document.getElementById("configureAppearance-titleLinkUrl").value = "@models.Setting.get("appearance.titleLink")";
+							}
+							var titleLinkGroupUpdateBgColor = function() {
+								if (document.getElementById("configureAppearance-titleLink").value==='@{if (models.Setting.get("appearance.titleLink")==null) "" else models.Setting.get("appearance.titleLink")}')
+									document.getElementById('configureAppearance-titleLinkGroup').style.backgroundColor='#FFF';
+								else
+									document.getElementById('configureAppearance-titleLinkGroup').style.backgroundColor='#DDF';
+							}
+							$(".configureAppearance-titleLinkRadio-uiPage").click(function(){
+								document.getElementById("configureAppearance-titleLink").value = this.value;
+								$("#configureAppearance-titleLinkNewWindow").data("was", $("#configureAppearance-titleLinkNewWindow").prop("checked"));
+								$("#configureAppearance-titleLinkNewWindow").prop("checked", false);
+								$("#configureAppearance-titleLinkNewWindow").prop("disabled", true);
+								$("#configureAppearance-titleLinkUrl").prop("disabled", true);
+								titleLinkGroupUpdateBgColor();
+								DP2Forms.scheduleValidation("configureAppearance");
+							});
+							$("#configureAppearance-titleLinkRadio-custom").click(function(){
+								document.getElementById("configureAppearance-titleLink").value = $("#configureAppearance-titleLinkUrl").get(0).value;
+								$("#configureAppearance-titleLinkNewWindow").prop("checked", $("#configureAppearance-titleLinkNewWindow").data("was"));
+								$("#configureAppearance-titleLinkNewWindow").prop("disabled", false);
+								$("#configureAppearance-titleLinkUrl").prop("disabled", false);
+								titleLinkGroupUpdateBgColor();
+								DP2Forms.scheduleValidation("configureAppearance");
+							});
+							$("#configureAppearance-titleLinkUrl").on('input change paste keyup mouseup', function(){
+								if ($("#configureAppearance-titleLinkRadio-custom").is(":checked")) {
+									document.getElementById("configureAppearance-titleLink").value = this.value;
+									titleLinkGroupUpdateBgColor();
+									DP2Forms.scheduleValidation("configureAppearance");
+								}
+							});
+						});
+					</script>
+					<p class="help-block no-validation-color" style="width:50%;padding-top: 5px;">This is the page you are redirected to when clicking the application title.</p>
+				</div>
+			</div>
+			
+			<div class="control-group @("error".when(configureAppearanceForm.error("landingPage") != null))" id="configureAppearance-landingPageGroup">
+				<label class="control-label" id="configureAppearance-landingPage-label" for="configureAppearance-landingPage" aria-label="configureAppearance-landingPage">Landing page</label>
+				<div class="controls" aria-role="radiogroup" aria-labelledby="configureAppearance-landingPage-label" id="configureAppearance-landingPage">
+					<label class="radio">
+						<input type="radio" name="landingPage" class="configureAppearance-landingPageRadio" value="welcome" @if(models.Setting.get("appearance.landingPage") == "welcome"){checked=""}/> Welcome page
+					</label>
+					<label class="radio">
+						<input type="radio" name="landingPage" class="configureAppearance-landingPageRadio" value="scripts" @if(models.Setting.get("appearance.landingPage") == "scripts"){checked=""}/> Create Job
+					</label>
+					<label class="radio">
+						<input type="radio" name="landingPage" class="configureAppearance-landingPageRadio" value="jobs" @if(models.Setting.get("appearance.landingPage") == "jobs"){checked=""}/> Jobs
+					</label>
+					<label class="radio">
+						<input type="radio" name="landingPage" class="configureAppearance-landingPageRadio" value="about" @if(models.Setting.get("appearance.landingPage") == "about"){checked=""}/> About
+					</label>
+					<label class="radio">
+						<input type="radio" name="landingPage" class="configureAppearance-landingPageRadio" value="admin" @if(models.Setting.get("appearance.landingPage") == "admin"){checked=""}/> Admin settings
+					</label>
+					<label class="radio">
+						<input type="radio" name="landingPage" class="configureAppearance-landingPageRadio" value="account" @if(models.Setting.get("appearance.landingPage") == "account"){checked=""}/> Account settings
+					</label>
+					<p class="help-block">
+						<img id="configureAppearance-landingPageHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="configureAppearance-landingPageHelp"></span>
+					</p>
+					<script type="text/javascript">
+						$(function(){
+							$(".configureAppearance-landingPageRadio").click(function(){
+								if ($('#configureAppearance-landingPageGroup input[name="landingPage"]:checked').val()==='@{if (models.Setting.get("appearance.landingPage")==null) "" else models.Setting.get("appearance.landingPage")}')
+									document.getElementById('configureAppearance-landingPageGroup').style.backgroundColor='#FFF';
+								else
+									document.getElementById('configureAppearance-landingPageGroup').style.backgroundColor='#DDF';
+								
+								DP2Forms.scheduleValidation("configureAppearance");
+							});
+						});
+					</script>
+					<p class="help-block no-validation-color" style="width:50%;padding-top: 5px;">After logging in, this is the default page that is displayed. In cases where the selected page is not available (like "Admin settings" and "Account settings" for guests), the "Create Job" page is used instead.</p>
+				</div>
+			</div>
+        	
+          	<div class="control-group @("error".when(configureAppearanceForm.error("theme") != null))" id="configureAppearance-themeGroup">
+				<label class="control-label" id="configureAppearance-theme-label" for="configureAppearance-theme" aria-label="configureAppearance-theme">Visual theme</label>
+				<div class="controls" aria-role="radiogroup" aria-labelledby="configureAppearance-theme-label" id="configureAppearance-theme">
+					<label class="radio">
+						<input type="radio" name="theme" class="configureAppearance-themeRadio" value="" @if(Application.themeName() == ""){
+							checked=""
+						}/>
+						Default
+					</label>
+					@for(theme <- controllers.Administrator.ConfigureAppearanceForm.themes){
+						<label class="radio">
+							@if(Application.themeName() == theme+"/"){
+								<input type="radio" name="theme" class="configureAppearance-themeRadio" value="@theme" checked=""/> <em>@theme</em>
+							}else{
+								<input type="radio" name="theme" class="configureAppearance-themeRadio" value="@theme"/> @theme
+							}
+						</label>
+					}
+					<p class="help-block" style="width:50%;">
+						<img id="configureAppearance-themeHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="configureAppearance-themeHelp"></span>
+					</p>
+					<script type="text/javascript">
+						$(function(){
+							$("#configureAppearance-theme").data("initial",null); // empty value is ok
+							$(".configureAppearance-themeRadio").click(function(){
+								if ($('#configureAppearance-themeGroup input[name="theme"]:checked').val()==='@Application.themeName()')
+									document.getElementById('configureAppearance-themeGroup').style.backgroundColor='#FFF';
+								else
+									document.getElementById('configureAppearance-themeGroup').style.backgroundColor='#DDF';
+								
+								DP2Forms.scheduleValidation("configureAppearance");
+							});
+						});
+					</script>
+				</div>
+				<!-- TODO: link to guide on theming. -->
+			</div>
+			
+			<p class="muted"><small>Icons by <a href="http://www.glyphicons.com/" target="_blank">Glyphicons</a>.</small></p>
+			
+			<div class="form-actions">
+				<button class="btn btn-primary" id="submit" type="submit" name="submit">Save Settings</button>
+				@if(skipRoute != null){
+					<button class="btn" id="skip" type="button" name="skip" onclick="window.location='@routes.Application.index()';return false;">I'll configure it later <i class="icon-hand-right"></i></button>
+				}
+			</div>
+			
+			<script type="text/javascript">
+				$(function(){
+		  			DP2Forms.disableButtonOnErrors("configureAppearance", "submit");
+				});
+			</script>
+			
+		</div>
+		
+	</fieldset>
+
+}

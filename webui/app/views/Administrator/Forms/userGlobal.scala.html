@@ -1,0 +1,73 @@
+@(globalForm: Form[controllers.Administrator.GlobalPermissions], route: play.api.mvc.Call)
+
+@helper.form(action = route) {
+	
+	<input type="hidden" name="formName" value="updateGlobalPermissions"/>
+	<input type="hidden" name="login" value="@{if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny"}" id="guest-login-value"/>
+	<input type="hidden" name="hideAdvancedOptions" value="@{Setting.get("jobs.hideAdvancedOptions")}" id="hideAdvancedOptions-value"/>
+    
+	<fieldset>
+		<legend>General settings</legend>
+        <br/>
+        
+        <div class="form-horizontal">
+			
+			<div class="control-group @("error".when(globalForm.error("login") != null))" id="loginGroup">
+				<label class="control-label" id="login-label" for="login" aria-label="login">Authentication</label>
+				<div class="controls">
+					<div class="btn-group" data-toggle="buttons-radio" aria-role="radiogroup" aria-labelledby="login-label" id="login">
+						
+						<button type="button" name="guest-login-automatic" id="guest-login-automatic" aria-role="radio" value="automatic"
+							class="btn guest-login-btn               @("active".when((if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny") == "automatic"))"
+							aria-checked="@(globalForm.field("login").valueOr(        (if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny")) == "automatic")"
+							onclick="toggleMultiRadio('guest-login', 'automatic', '@{(if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny")}');">Public Mode</button>
+							
+						<button type="button" name="guest-login-allow" id="guest-login-allow" aria-role="radio" value="allow"
+							class="btn guest-login-btn           @("active".when((if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny") == "allow"))"
+							aria-checked="@(globalForm.field("login").valueOr(    (if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny")) == "allow")"
+							onclick="toggleMultiRadio('guest-login', 'allow', '@{(if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny")}');">Guest Mode</button>
+							
+						<button type="button" name="guest-login-deny" id="guest-login-deny" aria-role="radio" value="deny"
+							class="btn guest-login-btn          @("active".when((if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny") == "deny"))"
+							aria-checked="@(globalForm.field("login").valueOr(   (if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny")) == "deny")"
+							onclick="toggleMultiRadio('guest-login', 'deny', '@{(if (Setting.get("users.guest.automaticLogin")=="true") "automatic" else if (Setting.get("users.guest.allowGuests")=="true") "allow" else "deny")}');">Authenticated Only</button>
+						
+					</div>
+					<p class="help-block">
+						In Public Mode and Guest Mode a user account is not required to use this application.<br/>
+						In Public Mode, everyone can run scripts as well as access the jobs of other public users.<br/>
+						In Guest Mode, everyone can run scripts but they can only access their own jobs. 
+					</p>
+					@if(globalForm.field("login").errors().size() > 0){
+						<p class="help-block">@globalForm.error("login").message</p>
+					}
+				</div>
+			</div>
+			
+			<div class="control-group @("error".when(globalForm.error("hideAdvancedOptions") != null))" id="hideAdvancedOptionsGroup">
+				<label class="control-label" id="updateGlobalPermissions-hideAdvancedOptions-label" for="updateGlobalPermissions-hideAdvancedOptions" aria-label="updateGlobalPermissions-hideAdvancedOptions">Show optional parameters</label>
+				<div class="controls">
+					<div class="btn-group" data-toggle="buttons-radio" aria-role="radiogroup" aria-labelledby="updateGlobalPermissions-hideAdvancedOptions-label" id="updateGlobalPermissions-hideAdvancedOptions">
+						<button type="button" name="hideAdvancedOptions-off" class="btn @("active".when(globalForm.field("hideAdvancedOptions").valueOr(Setting.get("jobs.hideAdvancedOptions"))=="false"))" id="hideAdvancedOptions-off"
+							aria-role="radio"                             aria-checked="@(globalForm.field("hideAdvancedOptions").valueOr(Setting.get("jobs.hideAdvancedOptions"))=="false")"
+							onclick="toggleRadio('hideAdvancedOptions', false,                 '@(globalForm.field("hideAdvancedOptions").valueOr(Setting.get("jobs.hideAdvancedOptions")))');">Yes</button>
+						<button type="button" name="hideAdvancedOptions-on" class="btn  @("active".when(globalForm.field("hideAdvancedOptions").valueOr(Setting.get("jobs.hideAdvancedOptions"))=="true"))" id="hideAdvancedOptions-on"
+							aria-role="radio"                             aria-checked="@(globalForm.field("hideAdvancedOptions").valueOr(Setting.get("jobs.hideAdvancedOptions"))=="true")"
+							onclick="toggleRadio('hideAdvancedOptions', true,                  '@(globalForm.field("hideAdvancedOptions").valueOr(Setting.get("jobs.hideAdvancedOptions")))');">No</button>
+					</div>
+					<p class="help-block">Automatically expand optional parameters in the job creation screen.</p>
+					@if(globalForm.field("hideAdvancedOptions").errors().size() > 0){
+						<span class="help-block">@globalForm.error("hideAdvancedOptions").message</span>
+					}
+				</div>
+			</div>
+			
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary" id="global-submit" name="submit">Save</button>
+				<button type="reset" class="btn" id="allowGuests-reset" name="reset"
+						onclick="toggleRadio('allowGuests', @Setting.get("users.guest.allowGuests"), '@Setting.get("users.guest.allowGuests")');toggleRadio('hideAdvancedOptions', @Setting.get("jobs.hideAdvancedOptions"), '@Setting.get("jobs.hideAdvancedOptions")');"
+						>Clear</button>
+			</div>
+		</div>
+	</fieldset>
+}

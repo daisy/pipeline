@@ -1,0 +1,69 @@
+@(arg: org.daisy.pipeline.client.models.Argument, script: org.daisy.pipeline.client.models.Script, scriptId: String)
+
+@if(arg.getSequence()==Boolean.TRUE){
+	
+	<!-- enum sequence not implemented; falling back to string input -->
+	@string(arg, script, scriptId)
+
+}else{
+
+	<div class="control-group @("advanced-argument".when(!arg.getRequired()))">
+		<label class="control-label" for="text-@scriptId-@{arg.getName()}">@arg.getNicename().replaceAll("^.*:\\s*","")</label>
+		<div class="controls" id="enumwrapper-@scriptId-@{arg.getName()}">
+			<select name="@{arg.getName()}" id="enum-@scriptId-@{arg.getName()}"></select>
+			@Helpers.ArgumentDescription(arg, scriptId)
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+	$(function(){
+		var values = @Html(play.libs.Json.stringify(controllers.Scripts.getDataTypeJson(arg)));
+		var dl_items = [];
+		for (var v = 0; v < values.length; v++) {
+			var option = $("<option id=\"enumvalue-"+v+"-@scriptId-@{arg.getName()}\"></option>");
+			option.attr("value", values[v].name);
+			if (@{arg.getDefaultValue() != null} && "@arg.getDefaultValue().replaceAll("\"","\\\"")" === values[v].name) {
+				option.attr("selected", "");
+			}
+			option.text(values[v].nicename);
+			$("#enum-@scriptId-@{arg.getName()}").append(option);
+			
+			var description_term = $("<dt id=\"enumdescription-dt-"+v+"-@scriptId-@{arg.getName()}\"></dt>");
+			var description_data = $("<dd id=\"enumdescription-dd-"+v+"-@scriptId-@{arg.getName()}\"></dd>");
+			description_term.text(values[v].nicename);
+			description_term.append("<em class=\"muted\"> (selected)</em>");
+			description_data.html(markdownToHtml(values[v].description));
+			if (values[v].description == "") {
+				description_term.hide();
+				description_data.hide();
+			}
+			dl_items.push(description_term);
+			dl_items.push(description_data);
+		}
+		var dl = $("<dl id=\"enumdescription-dl-@scriptId-@{arg.getName()}\" class=\"enum-terms\">");
+		dl.append(dl_items);
+		$("#description-script-@scriptId-argument-@{arg.getName()}").prepend(dl);
+		
+		$("#enum-@scriptId-@{arg.getName()}").change(function(){
+			var id = $(this).find(":selected").attr("id");
+			id = id.replace("enumvalue", "enumdescription-dt");
+			$("#enumdescription-dl-@scriptId-@{arg.getName()} dt").removeClass("enum-term-selected text-info");
+			$("#"+id).addClass("enum-term-selected text-info");
+		});
+		
+		if ($("#description-script-@scriptId-argument-@{arg.getName()}").find("p").length > 0) {
+			$("#description-script-@scriptId-argument-@{arg.getName()}").show();
+			$("#description-script-@scriptId-argument-@{arg.getName()}-toggle").show();
+		}
+		
+		Job.setFromTemplateHandlers.push(function(arg, uploads) {
+			if (arg.name === "@arg.getName()") {
+				if (arg.defined && arg.asList.length > 0) {
+					$("#enum-@scriptId-@{arg.getName()}").val(arg.asList[0]);
+				}
+			}
+		});
+	});
+	</script>
+	
+}

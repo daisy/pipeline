@@ -1,0 +1,28 @@
+@(arg: org.daisy.pipeline.client.models.Argument, script: org.daisy.pipeline.client.models.Script, scriptId: String)
+
+<div class="control-group @("advanced-argument".when(!arg.getRequired()))">
+	<label class="control-label">@arg.getNicename().replaceAll("^.*:\\s*","")</label>
+	<div class="controls">
+		<div class="row"></div>
+		<div class="row">
+			<div class="span"><input name="@{arg.getKind()}1name-@{arg.getName()}" type="text" placeholder="Name"></div>
+			<div class="span"><input name="@{arg.getKind()}1value-@{arg.getName()}" type="text" placeholder="Value"></div>
+			<div class="span"><button class="btn"><i class="icon-remove"></i> Remove</button></div>
+		</div>
+		<div class="row">
+			<div class="span"><input name="@{arg.getKind()}2name-@{arg.getName()}" type="text" placeholder="Name"></div>
+			<div class="span"><input name="@{arg.getKind()}2value-@{arg.getName()}" type="text" placeholder="Value"></div>
+			<div class="span"><button class="btn"><i class="icon-remove"></i> Remove</button></div>
+		</div>
+		<div class="row">
+			<div class="span"></div>
+			<div class="span"></div>
+			<div class="span"><button class="btn"><i class="icon-plus"></i> Add</button></div>
+		</div>
+		@if(arg.getDesc().length > 0){
+			<span class="help-block" id="description-script-@scriptId-argument-@{arg.getName()}">@arg.getDesc()</span>
+			<script>window.setTimeout(function(){document.getElementById('description-script-@scriptId-argument-@{arg.getName()}').innerHTML = markdownToHtml(document.getElementById('description-script-@scriptId-argument-@{arg.getName()}').innerHTML);},0);</script>
+		}
+		<div class="help-block"><em><!--TODO-->NOTE: Parameters are not yet supported in the Pipeline 2 Web UI. The input fields above are meant as a demonstration of how the parameter input widget will look like. Notify the Pipeline 2 team if you need parameter inputs and we'll prioritize it higher on our todo-list.</em></div>
+	</div>
+</div>

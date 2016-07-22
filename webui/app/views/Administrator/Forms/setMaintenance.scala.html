@@ -1,0 +1,84 @@
+@(setMaintenanceForm: Form[controllers.Administrator.SetMaintenanceForm], route: play.api.mvc.Call, skipRoute: play.api.mvc.Call)
+
+@helper.form(action = route, 'id -> "setMaintenance-form") {
+	
+	<input type="hidden" name="formName" value="setMaintenance"/>
+	<input type="hidden" name="maintenance" id="setMaintenance-maintenance"/>
+	
+   	<fieldset>
+   		
+   		<div class="form-horizontal">
+			
+			<div class="control-group" id="setMaintenance-downloadLogGroup">
+				<label class="control-label" id="setMaintenance-downloadLog-label">System log</label>
+				<div class="controls" aria-labelledby="setMaintenance-downloadLog-label">
+					<a href="@routes.Log.getLog()" class="btn">Download log</a>
+				</div>
+			</div>
+			
+			<div class="control-group @("error".when(setMaintenanceForm.error("maintenance") != null))" id="setMaintenance-maintenanceGroup">
+				<label class="control-label" id="setMaintenance-maintenance-label">Job persistence</label>
+				
+				<div class="controls" aria-role="radiogroup" aria-labelledby="setMaintenance-maintenance-label">
+					<label class="radio">
+						<input type="radio" name="delete" id="setMaintenance-delete-false" value="false">
+						<span>Never delete jobs</span>
+					</label>
+					<label class="radio">
+						<input type="radio" name="delete" id="setMaintenance-delete-true" value="true">
+						<span>Delete jobs that are</span>
+						<input type="number" step="1" min="1" style="width:75px;" name="maintenance-minutes" id="setMaintenance-maintenance-minutes" placeholder="Number of minutes" class="input-xlarge"
+							onkeyup="if(this.value==='@{if (models.Setting.get("jobs.deleteAfterDuration")==null) "0" else Long.parseLong(models.Setting.get("jobs.deleteAfterDuration"))/60000L}')document.getElementById('setMaintenance-maintenanceGroup').style.backgroundColor='#FFF';else document.getElementById('setMaintenance-maintenanceGroup').style.backgroundColor='#DDF';"
+						/>
+						<span>minutes old</span>
+					</label>
+					<p class="help-block">
+						<img id="setMaintenance-maintenanceHelpLoading" src="@routes.Assets.versioned("images/loading-inline.gif")" alt="" style="display:none;"/>
+						<span id="setMaintenance-maintenanceHelp"></span>
+					</p>
+					<script type="text/javascript">
+						$(function(){
+							var deleteAfterDuration = @setMaintenanceForm.field("maintenance").valueOr(if (Setting.get("jobs.deleteAfterDuration") != null) (Long.parseLong(models.Setting.get("jobs.deleteAfterDuration"))/60000L)+"" else "0");
+							document.getElementById("setMaintenance-maintenance").value = deleteAfterDuration;
+							document.getElementById("setMaintenance-maintenance-minutes").value = Math.max(1,deleteAfterDuration);
+							if (deleteAfterDuration > 0) {
+								$("#setMaintenance-delete-false").removeAttr("checked");
+								$("#setMaintenance-delete-true").attr("checked","");
+							} else {
+								$("#setMaintenance-delete-true").removeAttr("checked");
+								$("#setMaintenance-delete-false").attr("checked","");
+							}
+							
+							$("#setMaintenance-maintenanceGroup input[name=delete]").change(function(){
+								if (this.value === "false")
+									$("#setMaintenance-maintenance")[0].value = 0;
+								else
+									$("#setMaintenance-maintenance")[0].value = $("#setMaintenance-maintenance-minutes")[0].value;
+							});
+							$("#setMaintenance-maintenanceGroup input[name=maintenance-minutes]").on('change keyup', function(event){
+								if ($("#setMaintenance-delete-false:checked").size()>0)
+									$("#setMaintenance-maintenance")[0].value = 0;
+								else
+									$("#setMaintenance-maintenance")[0].value = $("#setMaintenance-maintenance-minutes")[0].value;
+							});
+							
+							$("#setMaintenance-maintenanceGroup input").on('input change paste keyup mouseup', function(event){
+								DP2Forms.scheduleValidation("setMaintenance");
+							});
+							DP2Forms.disableButtonOnErrors("setMaintenance", "submit");
+						});
+					</script>
+				</div>
+			</div>
+   			
+			<div class="form-actions">
+				<button class="btn btn-primary" id="setMaintenance-submit" type="submit" name="submit" disabled="">Save Settings</button>
+				@if(skipRoute != null){
+					<button class="btn" id="skip" type="button" name="skip" onclick="window.location='@routes.Application.index()';return false;">I'll configure it later <i class="icon-hand-right"></i></button>
+				}
+			</div>
+			
+		</div>
+	
+	</fieldset>
+}

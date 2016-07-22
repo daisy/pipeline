@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+if [ "`uname -s`" == "Darwin" ]
+then
+    export DP2DATA="`echo ~`/Library/Application Support/DAISY Pipeline 2"
+else
+    export DP2DATA="`echo ~`/.daisy-pipeline"
+fi
+
+if [ -d "$DP2DATA" ]; then
+    echo "Deleting DAISY Pipeline 2 data..."
+    rm -r "$DP2DATA"
+    echo "DAISY Pipeline 2 data is now removed."
+    read -p "Press any key to continue..."
+else
+    echo "There is no DAISY Pipeline 2 data to remove."
+    read -p "Press any key to continue..."
+fi
+

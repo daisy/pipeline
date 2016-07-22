@@ -1,0 +1,375 @@
+@()
+
+@main("Templates", "templates") {
+
+@if(Controller.flash("highlightNewTemplate")){
+	<div role="alert" class="alert alert-success" style="text-align:center;"><p>
+		Created the template:
+		<script>document.write(decodeURIComponent("@Controller.flash("highlightTemplateName")"));</script>.
+	</p></div>
+}
+
+<div style="text-align: center; padding-bottom: 2em;">
+<h1>Templates</h1>
+<a id="showYourTemplates" class="btn" onclick="filterTemplates(@Controller.flash("userid"));" href="javascript:void(0)">Your templates</a>
+<a id="showAllTemplates" class="btn active" onclick="filterTemplates('all');" href="javascript:void(0)">All templates</a>
+</div>
+<div role="alert" class="muted" style="width:100%;text-align:center;"><p id="filter-text"></p></div>
+
+<style>
+#templatelist > tbody > tr > td:not(:first-child) {
+    white-space: nowrap;
+}
+</style>
+<table id="templatelist" class="table templatelist" style="display:none;">
+    <thead>
+        <tr id="templatelist-headline">
+            <th>Name</th>
+            <th>Script</th>
+            <th>Owner</th>
+            <th>Visibility</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script type="text/javascript">
+
+filterTemplates = function(user) {
+    if (typeof user === 'undefined') {
+        if ($("#showAllTemplates").hasClass("active")) {
+            user = 'all';
+        } else {
+            user = @Controller.flash("userid");
+        }
+    }
+    if (user === 'all') {
+        $("#templatelist > tbody > tr").show();
+        $("#showYourTemplates").removeClass("active");
+        $("#showAllTemplates").addClass("active");
+        if ($("#templatelist > tbody > tr").size() > 0) {
+            $("#filter-text").text("Displaying templates for all users.");
+            $("#templatelist-headline").show();
+        } else {
+            $("#filter-text").text("There are no templates for any users.");
+            $("#templatelist-headline").hide();
+        }
+    } else {
+        $("#templatelist > tbody > tr[data-owner='"+user+"']").show();
+        $("#templatelist > tbody > tr[data-owner!='"+user+"']").hide();
+        $("#showAllTemplates").removeClass("active");
+        $("#showYourTemplates").addClass("active");
+        if ($("#templatelist > tbody > tr").size() > 0) {
+            $("#filter-text").text("Displaying your templates.");
+            $("#templatelist-headline").show();
+        } else {
+            $("#filter-text").text("You have no templates.");
+            $("#templatelist-headline").hide();
+        }
+    }
+}
+
+guidGenerator = function() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return "id-"+(S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
+addTemplate = function(template) {
+    var i, statusText, statusClass, html, visible, highlight, detailsId;
+    if (template.status === "NEW") {
+        return;
+    }
+    visible = $("#showAllTemplates").hasClass("active") || "@Controller.flash("userid")" === ""+template.ownerId || template.ownerId === null;
+    highlight = "@Controller.flash("highlightTemplateOwner")" === ""+template.ownerId && "@Controller.flash("highlightTemplateName")" === encodeURIComponent(""+template.name);
+    html = '<tr data-name="'+encodeURIComponent(template.name)+'" class="template '+(highlight ? "info" : "")+'" data-owner="'+template.ownerId+'"'+(!visible?' style="display:none;"':'')+'>'+"\n";
+    detailsId = guidGenerator();
+    html += '    <td><span class="template-name">'+template.name+'</span>'+"\n";
+    if (template.ownerId !== null && (@(session.get("admin")=="true") || template.ownerId === @Controller.flash("userid"))) {
+        html += '<a style="margin-left: 1em;" class="btn template-rename" href="javascript:void(0)"><i class="icon-pencil"></i> Rename</a>'+"\n";
+    }
+    html += '        <form class="form-inline template-rename-form" onsubmit="return false;" style="display:none;">'+"\n";
+    html += '            <div class="control-group">'+"\n";
+    html += '                <input type="text" name="template-name" pattern="[^/\\\t\r\n]+" value="'+template.name+'"/>'+"\n";
+    html += '                <button type="submit" class="btn btn-primary">Save</button>'+"\n";
+    html += '                <p class="help-block"></p>'+"\n";
+    html += '            </div>'+"\n";
+    html += '        </form>'+"\n";
+    html += '        <br/>'+"\n";
+    html += '        <p class="muted template-description-short" style="margin-bottom: 0px;">'+$("<div></div>").html(markdownToHtml(typeof template.description === "string" ? template.description.replace(/^\s*/m,'').replace(/\n.*/g,'') : "")).text()+'</p>'+"\n";
+    html += '        <p><a data-toggle="collapse" href="#'+detailsId+'" id="'+detailsId+'-toggle" class="collapsed">'+"\n";
+    html += '            <style>'+"\n";
+    html += '                #'+detailsId+'-show { display:none; }'+"\n";
+    html += '                #'+detailsId+'-toggle.collapsed #'+detailsId+'-show { display:inline; }'+"\n";
+    html += '                #'+detailsId+'-hide { display:inline; }'+"\n";
+    html += '                #'+detailsId+'-toggle.collapsed #'+detailsId+'-hide { display:none; }'+"\n";
+    html += '            </style>'+"\n";
+    html += '            <small id="'+detailsId+'-show"><i class="icon-chevron-down"></i>Show description</small>'+"\n";
+    html += '            <small id="'+detailsId+'-hide"><i class="icon-chevron-up"></i>Hide description</small>'+"\n";
+    html += '        </a></p>'+"\n";
+    html += '        <div id="'+detailsId+'" class="collapse">'+"\n";
+    html += '            <br/><div class="template-description-content">'+"\n";
+    html += markdownToHtml(typeof template.description === "string" && template.description !== "" ? template.description.replace(/^\s*/m,'').replace(/^.*?(\n|$)/g,'') : "");
+    html += '            </div>'+"\n";
+    html += '            <form class="template-description-form" onsubmit="return false;" style="display:none;">'+"\n";
+    html += '                <textarea name="template-description" rows="15" style="width: 100%;">'+(typeof template.description === "string" ? template.description : "")+'</textarea>'+"\n";
+    html += '                <button type="submit" class="btn btn-primary">Save</button>'+"\n";
+    html += '                <p class="help-block"></p>'+"\n";
+    html += '            </form>'+"\n";
+    html += '            <br/>'+"\n";
+    if (template.ownerId !== null && (@(session.get("admin")=="true") || template.ownerId === @Controller.flash("userid"))) {
+        html += '             <div class="template-description-edit">'+"\n";
+        html += '                 <a class="btn template-edit" href="javascript:void(0)"><i class="icon-pencil"></i> Edit description</a>'+"\n";
+        html += '             </div>'+"\n";
+    }
+    html += '            <div>'+"\n";
+    html += '                <h2>Input files and parameters</h2>'+"\n";
+    html += '                <br/>'+"\n";
+    html += '                <p><a class="btn btn-info" href="'+"@routes.Templates.downloadContext("x","x")".replace("x/x",(template.ownerId !== null ? template.ownerId : encodeURIComponent(template.dirname))+"/"+encodeURIComponent(template.name))+'"><span class="icon-download-alt icon-white"></span> Download input files</a></p>'+"\n";
+    html += '                <br/>'+"\n";
+    html += '                <div>'+"\n";
+    
+    html += argumentsToHtml(template.inputs);
+    
+    html += '                </div>'+"\n";
+    html += '            </div>'+"\n";
+    html += '         </div>'+"\n";
+    html += '    </td>'+"\n";
+    html += '    <td><span>'+(typeof template.script === "object" ? template.script.nicename : "")+'</span>'+"\n";
+    //html += '        <p class="muted">'+(typeof template.script === "object" && typeof template.script.description === "string" ? template.script.description.replace(/^\s*/m,'').replace(/\n.*/g,'') : "")+'</p>'+"\n";
+    html += '    </td>'+"\n";
+    if (template.ownerId !== null) {
+        html += '    <td>'+template.ownerName+'</td>'+"\n";
+    } else {
+        html += '    <td></td>'+"\n";
+    }
+    html += '    <td><span class="template-when-shared" style="'+(template.shared?'':'display:none;')+'"><i class="icon-eye-open"></i> Shared</span><span class="template-when-private" style="'+(template.shared?'display:none;':'')+'"><i class="icon-eye-close"></i> Private</span>'+"\n";
+    if (template.ownerId !== null && (@(session.get("admin")=="true") || template.ownerId === @Controller.flash("userid"))) {
+        html += '        &nbsp;&nbsp; <a class="btn template-toggle-shared" href="javascript:void(0)">'+"\n";
+        html += '            <span class="template-when-private" '+(template.shared ? 'style="display: none;"' : '')+'><i class="icon-eye-open"></i> <span>Toggle<!--Share with others--></span></span>'+"\n";
+        html += '            <span class="template-when-shared" '+(template.shared ? '' : 'style="display: none;"')+'><i class="icon-eye-close"></i> <span>Toggle<!--Hide from others--></span></span>'+"\n";
+        html += '        </a>'+"\n";
+    }
+    html += '</td>'+"\n";
+    html += '    <td><div>'+"\n";
+    html += '        <a class="btn btn-success template-new-job" href="'+"@routes.Jobs.newJobWithTemplate("x","x")".replace("x/x",(template.ownerId !== null ? template.ownerId : encodeURIComponent(template.dirname))+"/"+encodeURIComponent(template.name))+'"><i class="icon-plus icon-white"></i> New job</a>'+"\n";
+    //html += '        <a href="'+"@routes.Templates.downloadTemplate("x","x")".replace("x/x",(template.ownerId !== null ? template.ownerId : encodeURIComponent(template.dirname))+"/"+encodeURIComponent(template.name))+'" class="btn btn-info"><i class="icon-download-alt icon-white"></i> Download</a><br/>'+"\n";
+    if (template.ownerId !== null && (@(session.get("admin")=="true") || template.ownerId === @Controller.flash("userid"))) {
+        html += '        <a class="btn btn-danger template-delete" href="javascript:void(0)"><i class="icon-trash icon-white"></i> Delete</a>'+"\n";
+    }
+    html += '    </div></td>'+"\n";
+    html += '</tr>'+"\n";
+    
+    if ($("#templatelist > tbody > tr[data-role='"+template.name+"']").length > 0) {
+        $("#templatelist > tbody > tr[data-role='"+template.name+"']").replaceWith(html);
+    }
+    else {
+        $("#templatelist > tbody").prepend(html);
+    }
+    
+    if (template.ownerId !== null) {
+        $(function(){
+            $("tr[data-owner=\""+template.ownerId+"\"][data-name=\""+encodeURIComponent(template.name)+"\"] a.template-delete").click(function(){
+                var template, templateOwner, templateName;
+                template = $(this).closest("tr");
+                templateOwner = $(template).attr("data-owner");
+                templateName = $(template).attr("data-name");
+                $(this).closest("td").find("*").hide();
+                $.ajax({
+                    url: "@routes.Templates.deleteTemplate("x", "x")".replace("x/x",templateOwner+"/"+templateName),
+                    success: function(data) {
+                        $(this).closest("tr").remove();
+                        filterTemplates();
+                    },
+                    error: function() {
+                        $(this).closest("td").find("*").show();
+                    },
+                    context: this
+                });
+            });
+            
+            $("tr[data-owner=\""+template.ownerId+"\"][data-name=\""+encodeURIComponent(template.name)+"\"] a.template-rename").click(function(){
+                $(this).closest("tr").find(".template-name").toggle();
+                $(this).closest("tr").find(".template-rename").toggle();
+                $(this).closest("tr").find("form.template-rename-form").toggle();
+            });
+            
+            $("tr[data-owner=\""+template.ownerId+"\"][data-name=\""+encodeURIComponent(template.name)+"\"] a.template-edit").click(function(){
+                $(this).closest("tr").find(".template-description-content").toggle();
+                $(this).closest("tr").find(".template-description-short").toggle();
+                $(this).closest("tr").find(".template-description-edit").toggle();
+                $(this).closest("tr").find("form.template-description-form").toggle();
+            });
+            
+            $("tr[data-owner=\""+template.ownerId+"\"][data-name=\""+encodeURIComponent(template.name)+"\"] a.template-toggle-shared").click(function(){
+                var template, templateOwner, templateName, share;
+                
+                $(this).addClass('disabled');
+                
+                template = $(this).closest("tr");
+                templateOwner = $(template).attr("data-owner");
+                templateName = $(template).attr("data-name");
+                share = $(this).find(".template-when-private").is(":visible");
+                
+                $.ajax({
+                    method: "POST",
+                    url: "@routes.Templates.setShared(-1L, "TEMPLATENAME")".replace("-1/TEMPLATENAME", templateOwner+"/"+templateName),
+                    dataType: "text",
+                    data: {
+                        "template-shared": share
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // error; too bad :(
+                        // TODO: possibly show a nice and friendly error message here
+                    },
+                    success: function(response, textStatus, jqXHR) {
+                        if (this.share) {
+                            $(this.link).closest("tr").find(".template-when-private").hide();
+                            $(this.link).closest("tr").find(".template-when-shared").show();
+                        } else {
+                            $(this.link).closest("tr").find(".template-when-shared").hide();
+                            $(this.link).closest("tr").find(".template-when-private").show();
+                        }
+                    },
+                    complete: function() {
+                        $(this.link).removeClass('disabled');
+                    },
+                    context: {
+                        "link": this,
+                        "share": share
+                    }
+                });
+            });
+            
+            $("tr[data-owner=\""+template.ownerId+"\"][data-name=\""+encodeURIComponent(template.name)+"\"] form.template-rename-form").submit(function(event){
+                var template, templateOwner, templateName;
+                
+                event.preventDefault();
+                
+                if(!this.checkValidity()) {
+                    $(this).find("input").each(function(){
+                        if(!this.validity.valid) {
+                            $(this).focus();
+                            return false;
+                        }
+                    });
+                }
+                
+                template = $(this).closest("tr");
+                templateOwner = $(template).attr("data-owner");
+                templateName = $(template).attr("data-name");
+                
+                $.ajax({
+                    method: "POST",
+                    url: "@routes.Templates.renameTemplate(-1L, "TEMPLATENAME")".replace("-1/TEMPLATENAME", templateOwner+"/"+templateName),
+                    dataType: "text",
+                    data: {
+                        "template-name": $(this).find("input[name='template-name']").val()
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // error; too bad :(
+                        $(this).find("div.control-group").addClass("error");
+                        $(this).find(".help-block").text(jqXHR.responseText);
+                    },
+                    success: function(response, textStatus, jqXHR) {
+                        var newName = $(this).find("input[name='template-name']").val();
+                        $(this).hide();
+                        $(this).find(".control-group").removeClass("error");
+                        $(this).find(".help-block").text("");
+                        $(this).closest("td").find(".template-name").text($(this).find("input[name='template-name']").val());
+                        $(this).closest("td").find(".template-name").toggle();
+                        $(this).closest("tr").find(".template-rename").toggle();
+                        $(this).closest("tr").attr("data-name", newName);
+                        $(this).closest("tr").find("a.template-new-job").attr("href", "@routes.Jobs.newJobWithTemplate("x","x")".replace("x/x",templateOwner+"/"+encodeURIComponent(newName)));
+                    },
+                    context: this
+                });
+                
+                return false;
+            });
+            
+            $("tr[data-owner=\""+template.ownerId+"\"][data-name=\""+encodeURIComponent(template.name)+"\"] form.template-description-form").submit(function(event){
+                var template, templateOwner, templateName;
+                
+                event.preventDefault();
+                
+                if(!this.checkValidity()) {
+                    $(this).find("textarea").each(function(){
+                        if(!this.validity.valid) {
+                            $(this).focus();
+                            return false;
+                        }
+                    });
+                }
+                
+                template = $(this).closest("tr");
+                templateOwner = $(template).attr("data-owner");
+                templateName = $(template).attr("data-name");
+                
+                $.ajax({
+                    method: "POST",
+                    url: "@routes.Templates.editTemplateDescription(-1L, "TEMPLATENAME")".replace("-1/TEMPLATENAME", templateOwner+"/"+templateName),
+                    dataType: "text",
+                    data: {
+                        "template-description": $(this).find("textarea[name='template-description']").val()
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // error; too bad :(
+                        $(this).find("div.control-group").addClass("error");
+                        $(this).find(".help-block").text(jqXHR.responseText);
+                    },
+                    success: function(response, textStatus, jqXHR) {
+                        var markdown = $(this).find("textarea[name='template-description']").val();
+                        $(this).hide();
+                        $(this).find(".control-group").removeClass("error");
+                        $(this).find(".help-block").text("");
+                        $(this).closest("td").find(".template-description-short").html($("<div></div>").html(markdownToHtml(markdown.replace(/^\s*/m,'').replace(/\n.*/g,''))).text());
+                        $(this).closest("td").find(".template-description-short").toggle();
+                        $(this).closest("td").find(".template-description-content").html(markdownToHtml(markdown.replace(/^\s*/m,'').replace(/^.*?(\n|$)/g,'')));
+                        $(this).closest("td").find(".template-description-content").toggle();
+                        $(this).closest("tr").find(".template-description-edit").toggle();
+                    },
+                    context: this
+                });
+                
+                return false;
+            });
+        });
+    }
+    
+    $("#notemplates-all").hide();
+    $("#notemplates-user").hide();
+    $("#templatelist").show();
+}
+
+$(function(){
+    $.ajax({
+        url: "@routes.Templates.getTemplatesJson()?"+new Date().getTime(),
+        error: function(jqXHR, textStatus, errorThrown) {
+            // error; too bad :(
+        },
+        success: function(templates, textStatus, jqXHR) {
+            if (templates.length == 0) {
+                $("#templatelist").hide();
+                $("#notemplates").show();
+            } else {
+                $("#notemplates").hide();
+                $("#templatelist").show();
+            }
+            $(".template").remove();
+            $.each(templates.reverse(), function(j, template) {
+                addTemplate(template);
+            });
+            filterTemplates();
+        }
+    });
+    
+    Notifications.listen("new-template", function(template){
+        addTemplate(template);
+    });
+});
+</script>
+
+}

@@ -1,0 +1,29 @@
+@(arg: org.daisy.pipeline.client.models.Argument, script: org.daisy.pipeline.client.models.Script, scriptId: String)
+
+@if(arg.getSequence()==Boolean.TRUE){
+	<!-- string sequence not implemented; falling back to non-sequence string input -->
+}
+
+	<div class="control-group @("advanced-argument".when(!arg.getRequired()))">
+		<label class="control-label" for="text-@scriptId-@{arg.getName()}">@arg.getNicename().replaceAll("^.*:\\s*","")</label>
+		<div class="controls">
+			<input name="@{arg.getName()}" id="text-@scriptId-@{arg.getName()}" type="text" @if(arg.getDefaultValue() != null){ value="@arg.getDefaultValue().replaceAll("\"","'")" }
+				@if(Scripts.chooseWidget(arg)=="regex"){
+					pattern="@{Application.ws.getDataType(arg.getDataType()).asInstanceOf[org.daisy.pipeline.client.models.datatypes.RegexType].regex}"
+				}
+			/>
+			@Helpers.ArgumentDescription(arg, scriptId)
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+	$(function(){
+		Job.setFromTemplateHandlers.push(function(arg, uploads) {
+			if (arg.name === "@arg.getName()") {
+				if (arg.defined && arg.asList.length > 0) {
+					$("#text-@scriptId-@{arg.getName()}").val(arg.asList[0]);
+				}
+			}
+		});
+	});
+	</script>

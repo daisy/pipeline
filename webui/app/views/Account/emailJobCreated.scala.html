@@ -1,0 +1,11 @@
+@(jobLink: String, jobNicename: String)
+
+@views.html.Account.email("You created a job: "+jobNicename, "You created a job", null, null) {
+
+You have created the job "@jobNicename".
+<br/>
+<br/>
+@views.html.Account.emailButton(jobLink,"Click here to view your job!")
+<br/>
+
+}

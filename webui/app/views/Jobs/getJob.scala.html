@@ -1,0 +1,459 @@
+@(uiJob: Long)
+
+@main("View job", "jobs", Array("createJob.js")) {
+
+<hgroup>
+	<h1>Job Summary<br/>
+	<small id="header-nicename">&nbsp;</small></h1>
+	
+	<small>
+		<a id="job-details-show" href="#" onclick="$(this).hide();$('#job-details-hide').show();$('.detailed-info').show();return false;"><i class="icon-chevron-down"></i>Show details</a>
+		<a id="job-details-hide" href="#" onclick="$(this).hide();$('#job-details-show').show();$('.detailed-info').hide();return false;" style="display:none;'"><i class="icon-chevron-up"></i>Hide details</a>
+	</small>
+
+</hgroup>
+
+<div class="row" id="job-details">
+	<div class="offset4 span4">
+	<style>
+		.detailed-info { display: none; }
+		#job-details table td { text-align: right; }
+	</style>
+	<p>
+		<strong id="scriptname" style="display:none;">&nbsp;</strong>
+		<span id="scriptdesc" style="display:none;">&nbsp;</span>
+	</p>
+	<table class="table table-hover table-condensed">
+		<tbody>
+            <tr>
+                <th>Created:</th>
+                <td>
+                    <span id="created-fuzzy" aria-live="timer">&nbsp;</span>
+                    <span class="detailed-info">
+                    	<br/><small id="created" class="muted">&nbsp;</small>
+                   	</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Started:</th>
+                <td>
+                    <span id="started-fuzzy" aria-live="timer">&nbsp;</span>
+                    <span class="detailed-info">
+                    	<br/><small id="started" class="muted">&nbsp;</small>
+                   	</span>
+                </td>
+            </tr>
+            <tr>
+                <th>Finished:</th>
+                <td>
+                    <span id="finished-fuzzy" aria-live="timer">&nbsp;</span>
+                    <span class="detailed-info">
+                    	<br/><small id="finished" class="muted">&nbsp;</small>
+                   	</span>
+                </td>
+            </tr>
+            <tr class="detailed-info">
+                <th>Engine ID:</th>
+                <td>
+                    <span id="engine-id">&nbsp;</span>
+                </td>
+            </tr>
+            <tr class="detailed-info">
+                <th>Script ID:</th>
+                <td>
+                    <span id="scriptid">&nbsp;</span>
+                </td>
+            </tr>
+            <tr>
+                <th>User:</th>
+                <td>
+                    <span id="username">&nbsp;</span>
+                    <span>
+                    	<br/><small id="userid" class="muted">&nbsp;</small>
+                   	</span>
+                </td>
+            </tr>
+		</tbody>
+	</table>
+	</div>
+	<br/>
+</div>
+
+<div class="row">
+	<div class="hero-unit" style="text-align:center">
+	
+	<div id="status-done" class="statusbox" style="display:none;">
+		<h2 role="status" class="text-success">Success</h1>
+		<div class="results-buttons" aria-live="polite"></div>
+	</div>
+	
+	<div id="status-validation_fail" class="statusbox" style="display:none;">
+		<h2 role="status" class="text-error">Validation failed</h1>
+		<div class="results-buttons" aria-live="polite"></div>
+	</div>
+	
+	<div id="status-running" class="statusbox" style="display:none;">
+		<h2 role="status" class="text-info">
+			Running
+			<span aria-live="none">
+				<span id="runningDot1"                       >&nbsp;.&nbsp; &nbsp; &nbsp;</span>
+				<span id="runningDot2" style="display: none;">&nbsp;.&nbsp;.&nbsp; &nbsp;</span>
+				<span id="runningDot3" style="display: none;">&nbsp;.&nbsp;.&nbsp;.&nbsp;</span>
+				<script type="text/javascript">
+					window.setInterval(function(){
+						if ($("#runningDot1").is(":visible")) {
+							$("#runningDot1").hide();
+							$("#runningDot2").show();
+							
+						} else if ($("#runningDot2").is(":visible")) {
+							$("#runningDot2").hide();
+							$("#runningDot3").show();
+							
+						} else {
+							$("#runningDot3").hide();
+							$("#runningDot1").show();
+						}
+					},1000);
+				</script>
+			</span>
+		</h2>
+		<br/>
+		<div class="progress progress-striped active" id="job-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="Progress: 0%">
+		  	<div class="bar bar-info" style="width: 0%;"></div>
+		</div>
+		<ul style="list-style-type:none;text-align:left;padding-top:20px;"><li id="message-latest">
+		    <pre>&nbsp;</pre>
+	    </li></ul>
+	</div>
+	
+	<div id="status-idle" class="statusbox" style="display:none;">
+		<h2 role="status" class="text-muted">Queued</h2>
+	</div>
+	
+	<div id="status-error" class="statusbox" style="display:none;">
+		<h2 role="status" class="text-error">Failed</h2>
+		<p>See the execution log for details.</p>
+	</div>
+	
+	<div id="status-unavailable" style="display:none;">
+		<h2 role="status" class="text-info">Job results are unavailable, please restart the job.</h2>
+	</div>
+	
+	</div>
+</div>
+
+<div id="result-reports" aria-live="polite"></div>
+
+<div id="execution-log">
+<h2>Execution Log</h2>
+
+<div id="detailed-log">
+<br/>
+<a class="btn btn-info" href="@routes.Jobs.getLog(uiJob)" target="_blank"><span class="icon-download-alt icon-white"></span> Download Detailed Log</a>
+<br/><br/>
+</div>
+
+<p id="message-list-loading"><em>Loading messages
+	<span aria-live="none">
+		<span id="runningDotLog1"                       >&nbsp;.&nbsp; &nbsp; &nbsp;</span>
+		<span id="runningDotLog2" style="display: none;">&nbsp;.&nbsp;.&nbsp; &nbsp;</span>
+		<span id="runningDotLog3" style="display: none;">&nbsp;.&nbsp;.&nbsp;.&nbsp;</span>
+	</span>
+	<script type="text/javascript">
+		window.setInterval(function(){
+			if ($("#runningDotLog1").is(":visible")) {
+				$("#runningDotLog1").hide();
+				$("#runningDotLog2").show();
+				
+			} else if ($("#runningDotLog2").is(":visible")) {
+				$("#runningDotLog2").hide();
+				$("#runningDotLog3").show();
+				
+			} else {
+				$("#runningDotLog3").hide();
+				$("#runningDotLog1").show();
+			}
+		},1000);
+	</script>
+</em></p>
+<ol aria-live="polite" role="log" class="messagelist" id="message-list" style="display:none;"></ol>
+
+<br/>
+</div>
+
+<div>
+<h2>Input files and parameters</h2>
+<br/>
+<p><a class="btn btn-info" href="@routes.Jobs.downloadContext(uiJob)"><span class="icon-download-alt icon-white"></span> Download input files</a></p>
+<br/>
+<div id="arguments"></div>
+</div>
+
+<br/>
+<div class="form-actions">
+<a class="btn btn-danger" href="@routes.Jobs.deleteRedirect(uiJob)"><i class="icon-trash icon-white"></i> Delete</a>
+<a class="btn btn-info" href="@routes.Jobs.restart(uiJob)"><span class="icon-refresh icon-white"></span> Restart job</a>
+<a class="btn btn-success" href="@routes.Jobs.newJobWithOldJob(uiJob)"><span class="icon-plus icon-white"></span> New job with same options</a>
+<a class="btn" href="@routes.Jobs.saveAsTemplate(uiJob)"><span class="icon-briefcase"></span> Save job as template</a>
+<p><small>Note: restarting the job will delete the current results.</small></p>
+</div>
+<br/><br/>
+
+<script type="text/javascript">
+	$(function(){
+		var addMessage = function(message) {
+			var empty = false;
+			var emptyNoText = false;
+			
+			if (!(message.text)) {
+				empty = true;
+				if (message.progressInfo) {
+					var progress = message.progressInfo.split(/\]/)[0].split(/ /);
+					message.text = progress.length === 4 ? progress[3] : progress[1].match(/^[0-9/-]$/) ? progress[2] : "";
+				}
+				if (!(message.text)) {
+					emptyNoText = true;
+					message.text = "(empty message)";
+				}
+			}
+			
+			var li = '<li data-depth="'+message.depth+'" data-level="'+message.level+'" data-inferred-level="'+message.inferredLevel+'" id="m'+message.sequence+'" value="'+message.sequence+'" class="'+(message.inferredLevel=="ERROR"?"message-error":"")+(message.inferredLevel=="WARNING"?"message-warn":"")+(emptyNoText ? " message-empty" : "")+'"><span class="message" style="'+(empty ? 'font-style: italic;' : '')+'">'+message.text+'</span></li>';
+			
+			if ($("#m"+message.sequence).size() > 0) {
+				$("#m"+message.sequence).attr("data-depth", message.depth)
+										.attr("data-level", message.level)
+										.attr("data-inferred-level", message.inferredLevel)
+										.attr("class", (message.inferredLevel=="ERROR"?"message-error":"")+(message.inferredLevel=="WARNING"?"message-warn":"")+(emptyNoText ? " message-empty" : ""))
+										.children(".message").attr("style", (empty ? 'font-style: italic;' : ''))
+															 .text(message.text);
+				
+			} else {
+				
+				if (message.depth < 2) {
+					$("#message-latest").html("<pre>"+message.text+"</pre>");
+				}
+				
+				if (message.depth < 1) {
+					// top-level message
+					
+					var putAfter = $("#message-list > li")
+										.filter(function(i){ return $(this).attr("value") < message.sequence; })
+										.last();
+					
+					if ($(putAfter).size()) {
+						$(putAfter).after(li);
+						
+					} else {
+						$("#message-list").append(li);
+					}
+					
+				} else {
+					// nested message
+					
+					var firstPreceding = $("#message-list li")
+							.filter(function(i){ return $(this).attr("value") < message.sequence && $(this).attr("data-depth") <= message.depth; })
+							.last();
+					var shouldNest = $(firstPreceding).attr("data-depth") < message.depth; 
+					
+					if (shouldNest && !$(firstPreceding).children("div").size()) {
+						var listId = "message-sublist-"+$(firstPreceding).attr("value");
+						$(firstPreceding).children(".message").after('<div class="'+($(firstPreceding).attr("data-depth") == 1 ? 'collapse' : '')+'" id="'+listId+'"><ol aria-live="polite" role="log" class="messagelist"></ol></div>');
+						if ($(firstPreceding).attr("data-depth") == 1) {
+							$(firstPreceding).children(".message").after(
+								'<p><a data-toggle="collapse" href="#'+listId+'" id="'+listId+'-toggle" class="collapsed">'+
+							    '    <style>'+
+							    '        #'+listId+'-show { display:none; }'+
+							    '        #'+listId+'-toggle.collapsed #'+listId+'-show { display:inline; }'+
+							    '        #'+listId+'-hide { display:inline; }'+
+							    '        #'+listId+'-toggle.collapsed #'+listId+'-hide { display:none; }'+
+							    '    </style>'+
+							    '    <small id="'+listId+'-show"><i class="icon-chevron-down"></i>Show details</small>'+
+							    '    <small id="'+listId+'-hide"><i class="icon-chevron-up"></i>Hide details</small>'+
+							    '</a></p>'
+							);
+						}
+					}
+					
+					if (shouldNest) {
+						$(firstPreceding).children("div").children("ol").prepend(li);
+						
+					} else {
+						$(firstPreceding).after(li);
+					}
+				}
+			}
+			
+			$("#message-list").show();
+			$("#message-list-loading").hide();
+		};
+		
+		Notifications.listen("job-unavailable-@uiJob", function(message){
+			$("#detailed-log").hide();
+			$("#status-unavailable").show();
+		});
+		Notifications.listen("job-message-@uiJob", addMessage);
+		Notifications.listen("job-status-@uiJob", function(status){
+			$(".statusbox").hide();
+			$("#status-"+status.toLowerCase()).show();
+		});
+		Notifications.listen("job-created-@uiJob", function(message){
+			var time = parseInt(message.number);
+			if (isNaN(time)) {
+				clearFuzzyUpdates("created-fuzzy", time);
+				$("#created, #created-fuzzy").html("&nbsp;");
+			} else {
+				updateFuzzy("created-fuzzy", time);
+				$("#created").html(new Date(time)+"");
+			}
+		});
+		Notifications.listen("job-started-@uiJob", function(message){
+			var time = parseInt(message.number);
+			if (isNaN(time)) {
+				clearFuzzyUpdates("started-fuzzy", time);
+				$("#started, #started-fuzzy").html("&nbsp;");
+			} else {
+				updateFuzzy("started-fuzzy", time);
+				$("#started").html(new Date(time)+"");
+			}
+		});
+		Notifications.listen("job-finished-@uiJob", function(message){
+			var time = parseInt(message.number);
+			if (isNaN(time)) {
+				clearFuzzyUpdates("finished-fuzzy", time);
+				$("#finished, #finished-fuzzy").html("&nbsp;");
+			} else {
+				updateFuzzy("finished-fuzzy", time);
+				$("#finished").html(new Date(time)+"");
+			}
+		});
+		Notifications.listen("job-progress-@uiJob", function(message){
+			var progress = parseFloat(message.estimate);
+			if (!isNaN(progress)) {
+				$("#job-progress").attr("aria-valuetext", "Progress: "+Math.round(progress)+"%");
+				$("#job-progress").attr("aria-valuenow", progress);
+				$("#job-progress > div").css("width", progress+"%");
+			}
+		});
+		var updateResults = function(results){
+			var i, j, href;
+			if (results.results !== null && results.results.length > 0) {
+				$(".results-buttons").html("<p></p>");
+				$("#result-reports").empty();
+				
+				if ($.isArray(results.results)) {
+					for (i = 0; i < results.results.length; i++) {
+						if (!$.isArray(results.results[i].results) || results.results[i].results.length === 0 || typeof results.results[i].results[0].mimeType !== "string" || results.results[i].results[0].mimeType.indexOf("application/vnd.pipeline") !== 0) {
+							if (results.results[i].results.length === 1 && (!$.isArray(results.results[i].results[0]) || results.results[i].results[0].results.length === 0)) {
+								$(".results-buttons > p").append("<a class=\"btn btn-large btn-success\" target=\"_blank\" href=\"@routes.Jobs.getResult(uiJob,"")"+results.results[i].results[0].relativeHref+"\"><span class=\"icon-download-alt icon-white\"></span> "+results.results[i].nicename+"</a> ");
+							} else {
+								var htmlResult = null;
+								for (var j = 0; j < results.results[i].results.length; j++) {
+									if (results.results[i].results[j].filename.match(/index\.x?html?$/i)) {
+										htmlResult = results.results[i].results[j];
+										break;
+									}
+									if (htmlResult === null && results.results[i].results[j].filename.match(/.*\.x?html?$/i)) {
+										htmlResult = results.results[i].results[j];
+									}
+								}
+								if (htmlResult === null) {
+									$(".results-buttons > p").append("<a class=\"btn btn-large btn-success\" target=\"_blank\" href=\"@routes.Jobs.getResult(uiJob,"")"+results.results[i].relativeHref+"\"><span class=\"icon-download-alt icon-white\"></span> "+results.results[i].nicename+"</a> ");
+								} else {
+									$(".results-buttons > p").append("<a class=\"btn btn-large btn-success\" target=\"_blank\" href=\"@routes.Jobs.getResult(uiJob,"")"+htmlResult.relativeHref+"\"><span class=\"icon-download-alt icon-white\"></span> "+results.results[i].nicename+"</a> ");
+								}
+							}
+						}
+						
+						if ($.isArray(results.results[i].results)) {
+							for (j = 0; j < results.results[i].results.length; j++) {
+								if (results.results[i].results[j].mimeType==="application/vnd.pipeline.report+xml") {
+									href = "@routes.Jobs.getResult(uiJob,"")"+results.results[i].results[j].relativeHref;
+									$.ajax({
+										url: href+"?parse=report",
+										success: function(data, textStatus, jqXHR){
+											var section = $("<section class=\"result-report\" data-href=\""+this.href+"\"></section>");
+											$(section).html(data);
+											$(section).find("*[href^='file:']").replaceWith("<!-- removed filesystem link -->");
+											$(section).find("*[href]:not([href^='#'])").each(function(){
+												$(this).attr("href",href.replace(/[^/]*$/,"")+$(this).attr("href"));
+											});
+											$(".result-report[data-href='"+this.href+"'] + hr").remove();
+											$(".result-report[data-href='"+this.href+"']").remove();
+											$("#result-reports").append($(section));
+											$("#result-reports").append("<hr/>");
+										},
+										context: {href:href}
+									});
+								}
+							}
+						}
+					}
+				}
+				$(".results-buttons").append($("<p><a class=\"btn\" target=\"_blank\" href=\""+"@routes.Jobs.getAllResults(uiJob)"+"\"><span class=\"icon-download-alt\"></span> Download all results</a></p>"));
+			}
+		};
+		Notifications.listen("job-results-@uiJob", updateResults);
+		
+		// Dynamically load page contents
+		$.ajax({
+			url: "@routes.Jobs.getJobJson(uiJob)?"+new Date().getTime(),
+			error: function(jqXHR, textStatus, errorThrown) {
+				// error; too bad :(
+			},
+			success: function(job, textStatus, jqXHR) {
+				// updating page contents dynamically...
+				updateFuzzy("created-fuzzy", job.webuiJob.created);
+				updateFuzzy("started-fuzzy", job.webuiJob.started);
+				updateFuzzy("finished-fuzzy", job.webuiJob.finished);
+				$("#created").html(typeof job.webuiJob.created === "number" ? new Date(job.webuiJob.created)+"" : "&nbsp;");
+				$("#started").html(typeof job.webuiJob.started === "number" ? new Date(job.webuiJob.started)+"" : "&nbsp;");
+				$("#finished").html(typeof job.webuiJob.finished === "number" ? new Date(job.webuiJob.finished)+"" : "&nbsp;");
+				
+				$("#engine-id").html(job.webuiJob.engineId);
+				$("#header-nicename, #nicename").html(job.webuiJob.nicename);
+				$("#scriptid").html(job.webuiJob.scriptId);
+				$("#scriptname").html(job.webuiJob.scriptName).show();
+				$("#username").html(job.webuiJob.userNicename);
+				$("#userid").html(job.webuiJob.user < 0 ? job.webuiJob.user : "&nbsp;");
+				
+				$(".statusbox").hide();
+				$("#status-"+job.webuiJob.status.toLowerCase()).show();
+			}
+		});
+		$.ajax({
+			url: "@routes.Jobs.getEngineJobJson(uiJob)?"+new Date().getTime(),
+			error: function(jqXHR, textStatus, errorThrown) {
+				// error; too bad :(
+			},
+			success: function(job, textStatus, jqXHR) {
+				// updating page contents dynamically...
+				$("#scriptdesc").html(": "+job.engineJob.script.description).show();
+				
+				if (job.jobAvailableInEngine) {
+					if (typeof job.engineJob === "object") {
+						$("#message-list > li").remove();
+						if (job.engineJob.messages instanceof Array) {
+							for (var m = 0; m < job.engineJob.messages.length; m++) {
+								addMessage(job.engineJob.messages[m]);
+							}
+						}
+						
+						$("#engine-id").html(job.engineJob.id);
+						
+						$("#arguments").html(argumentsToHtml(job.engineJob.arguments));
+					}
+				
+					$("#detailed-log").show();
+					$("#status-unavailable").hide();
+					updateResults(job.results);
+					
+				} else {
+					$("#detailed-log").hide();
+					$("#status-unavailable").show();
+				}
+			}
+		});
+	});
+</script>
+
+}

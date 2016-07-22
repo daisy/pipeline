@@ -1,0 +1,111 @@
+@(editDetailsForm: Form[User])
+
+@main("Account settings", "account") {
+
+<div class="page-header">
+	<hgroup>
+    	<h1>Account settings for @session.get("name")</h1>
+    </hgroup>
+</div>
+
+@helper.form(action = routes.Account.changeDetails()) {
+            
+	@if(editDetailsForm.hasGlobalErrors) {
+	    <div role="alert" class="alert alert-error">
+	    	<a class="close" data-dismiss="alert">&times;</a>
+	        @editDetailsForm.globalError.message
+	    </div>
+	}
+	
+	<div class="row">
+		<fieldset class="offset2 span8">
+			<legend>Change account details</legend>
+	        <br/>
+	        
+	        <div class="form-horizontal">
+	        	
+	        	<div class="control-group @("error".when(editDetailsForm.error("name") != null))" id="nameGroup">
+	        		<label for="name" class="control-label">Name</label>
+		            <div class="controls">
+		        		<input type="text" name="name" id="name" class="input-xlarge"
+		        			placeholder="&quot;@play.mvc.Controller.session("name")&quot; is your current name."
+		        			value="@{if (editDetailsForm.hasErrors()) editDetailsForm.field("name").valueOr(""); else play.mvc.Controller.session("name");}"
+		        			onkeyup="if(this.value==='@play.mvc.Controller.session("name")')document.getElementById('nameGroup').style.backgroundColor='#FFF';else document.getElementById('nameGroup').style.backgroundColor='#DDF';"/>
+						@if(editDetailsForm.field("name").errors().size() > 0){
+							@if(editDetailsForm.error("name").message.startsWith("error.")){
+								<span class="help-inline">You must have a name, and it must not consist of any special characters.</span>
+							}else{
+								<span class="help-inline">@editDetailsForm.error("name").message</span>
+							}
+						}
+		            </div>
+				</div>
+				
+				<div class="control-group @("error".when(editDetailsForm.error("email") != null))" id="emailGroup">
+					<label for="email" class="control-label">E-mail</label>
+					<div class="controls">
+						<input type="email" name="email" id="email" class="input-xlarge"
+							placeholder="&quot;@play.mvc.Controller.session("email")&quot; is your current e-mail address."
+							value="@{if (editDetailsForm.hasErrors()) editDetailsForm.field("email").valueOr(""); else play.mvc.Controller.session("email");}"
+							onkeyup="if(this.value==='@play.mvc.Controller.session("email")')document.getElementById('emailGroup').style.backgroundColor='#FFF';else document.getElementById('emailGroup').style.backgroundColor='#DDF';"/>
+						@if(editDetailsForm.field("email").errors().size() > 0){
+							@if(editDetailsForm.error("email").message.startsWith("error.")){
+								<span class="help-inline">A valid e-mail address must be provided.</span>
+							}else{
+								<span class="help-inline">@editDetailsForm.error("email").message</span>
+							}
+						}
+					</div>
+				</div>
+				
+				<hr/>
+				
+				<div id="passwordGroup">
+					<div class="control-group @("error".when(editDetailsForm.error("newPassword") != null || !editDetailsForm.field("newPassword").valueOr("").equals("") && editDetailsForm.field("newPassword").valueOr("").length() < 6))">
+		          		<label for="newPassword" class="control-label">New password</label>
+						<div class="controls">
+							<input type="password" name="newPassword" id="newPassword" class="input-xlarge"
+								placeholder="A password must be at least 6 characters."
+								value="@editDetailsForm.field("newPassword").valueOr("")"
+								onkeyup="if(this.value==='@play.mvc.Controller.session("newPassword")')document.getElementById('passwordGroup').style.backgroundColor='#FFF';else document.getElementById('passwordGroup').style.backgroundColor='#DDF';"/>
+							@if(!editDetailsForm.field("newPassword").valueOr("").equals("") && editDetailsForm.field("newPassword").valueOr("").length() < 6){
+								<span class="help-inline">The password must contain at least 6 characters.</span>
+							}else{
+								@if(editDetailsForm.field("newPassword").errors().size() > 0){
+									<span class="help-inline">@editDetailsForm.error("repeatPassword").message</span>
+								}
+							}
+						</div>
+					</div>
+					<div class="control-group @("error".when(editDetailsForm.error("repeatPassword") != null))">
+		          		<label for="repeatPassword" class="control-label">Repeat password</label>
+						<div class="controls">
+							<input type="password" name="repeatPassword" id="repeatPassword" placeholder="Please repeat your password." class="input-xlarge"/>
+							@if(editDetailsForm.field("repeatPassword").errors().size() > 0){
+								<span class="help-inline">@editDetailsForm.error("repeatPassword").message</span>
+							}
+						</div>
+					</div>
+					<div class="control-group @("error".when(editDetailsForm.error("password") != null))">
+		          		<label for="password" class="control-label">Old password</label>
+						<div class="controls">
+							<input type="password" name="password" id="password" placeholder="Your existing password." class="input-xlarge"/>
+							@if(editDetailsForm.field("password").errors().size() > 0){
+								<span class="help-inline">@editDetailsForm.error("password").message</span>
+							}
+						</div>
+					</div>
+				</div>
+				
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary" id="submit" name="submit">Save changes</button>
+					<button type="reset" class="btn" id="submit" name="submit">Clear changes</button>
+	          	</div>
+			</div>
+		</fieldset>
+	</div>
+}
+
+<hr/>
+
+}

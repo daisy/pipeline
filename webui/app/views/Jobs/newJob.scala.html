@@ -1,0 +1,330 @@
+@(jobId: Long)
+
+@main("Scripts", "scripts", 
+Array("jquery.ui.widget.js","jquery.iframe-transport.js","jquery.fileupload.js","jquery.fileupload-ui.js","createJob.js"),
+Array("jquery.fileupload-ui.css")){
+
+<script type="text/javascript" charset="utf-8">
+@if(play.Play.application().isDev()){
+	$(function(){Job.debug = true;});
+}
+</script>
+
+<style type="text/css">
+h2 {
+	text-align:center;
+}
+</style>
+
+<hgroup>
+<h1>Create Job<br/>
+<small id="header-nicename">&nbsp;</small></h1>
+</hgroup>
+
+<!-- script creation path -->
+<div class="row" id="scriptCreationPathGroup">
+	<div class="span8">
+		<h2>Files</h2>
+		<div id="filesInnerGroup">
+			<div id="acceptsFiles">
+    			@views.html.Jobs.Widgets.upload(jobId)
+    		</div>
+    		<div id="doesNotAcceptFiles" style="display:none;">
+    			<p><span id="doesNotAcceptFilesScriptName"></span> does not require any input files.</p>
+    		</div>
+		</div>
+	</div>
+	<div class="span4">
+		<h2>Scripts</h2>
+		<div id="scriptsInnerGroup">
+			<ul id="scriptList" class="unstyled oneOrMoreScripts scriptlist" style="display:none;"></ul>
+			<table id="scriptTable" class="table" style="display:none;">
+				<thead>
+					<tr>
+						<th>Script</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+				<!--<tfoot>
+					<tr>
+						<td colspan="2">More</td>
+					</tr>
+				</tfoot>-->
+			</table>
+			
+			<div role="alert" class="noScripts alert alert-info" style="display:none;">
+				<p>There are no scripts available.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="accordion" style="display:none;">
+	<h2 id="hFiles" class="fill-parent-padding">Files<br/><small class="muted" id="filesDetails"><span id="filesNicename">No files</span>&nbsp;<span id="filesProgress"></span><span id="filesetTypes"></span></small></h2>
+	<div id="collapseFiles" class="fill-parent-padding">
+		<!-- files -->
+		<div id="filesGroup" style="display:none;"></div>
+	</div>
+	<h2 id="hScripts" class="fill-parent-padding">Scripts<br/><small class="muted" id="scriptsDetails">&nbsp;</small></h2>
+	<div id="collapseScripts" class="fill-parent-padding">
+        <!-- scripts -->
+		<div id="scriptsGroup" style="display:none;"></div>
+	</div>
+	<h2 id="hOptions">Options<br/><span class="muted" id="optionsDetails">&nbsp;</span></h2>
+    <div id="collapseOptions">
+        <!-- options -->
+		<div id="optionsGroup" style="display:none;"></div>
+	</div>
+</div>
+
+<br/><br/><br/><br/><br/><br/><!-- some room for scrolling -->
+
+<script type="text/javascript">
+	$(function(){
+    	$("#accordion").accordion({
+	    	heightStyle: "content",
+	    	icons: {
+		    	header: "ui-icon-circle-arrow-e",
+		    	activeHeader: "ui-icon-circle-arrow-s"
+		    }
+	    });
+	    
+	    Job.jobId = @jobId;
+	    Job.onNewUpload(function(fileset){
+			if (Job.doneAddingPreviousFiles === true) {
+				if (switchToAccordionGroups !== null) {
+					switchToAccordionGroups();
+					switchToAccordionGroups = null;
+					
+					if (typeof $("#scriptsDetails").data("id") === "string" && $("#scriptsDetails").data("id") !== "") {
+						// go to options accordion group if the script is already selected
+						$("#hOptions").click();
+						
+					} else {
+						// go to scripts group because no script is selected
+						$("#hScripts").click();
+					}
+				}
+			}
+		});
+	    
+		var getTemplateContents = function() {
+			// Dynamically load any page contents (for instance if the job is based on a template, then the job will be pre-populated with arguments and context)
+			$.ajax({
+				url: "@routes.Jobs.getEngineJobJson(jobId)?"+new Date().getTime(),
+				error: function(jqXHR, textStatus, errorThrown) {
+					// error; too bad :(
+					Job.doneAddingPreviousFiles = true;
+				},
+				success: function(job, textStatus, jqXHR) {
+				    $("#header-nicename").html(job.webuiJob.nicename);
+				    
+				    var loadPreviousUploads = function() {
+					    // Dynamically load any previous uploads (for instance if the job is based on a template, then the job will be pre-populated with context files)
+						$.ajax({
+							url: "@routes.Jobs.getUploadsJson(jobId)?"+new Date().getTime(),
+							error: function(jqXHR, textStatus, errorThrown) {
+								// error; too bad :(
+							},
+							success: function(files, textStatus, jqXHR) {
+							    Job.addFilesToUploadWidget(files);
+							    if (Notifications.handlers["uploads"]) {
+					                for (var i = 0; i < Notifications.handlers["uploads"].length; i++) {
+					                    var handler = Notifications.handlers["uploads"][i];
+					                    handler.fn({fileset: files, jobId: @jobId}, handler.data);
+					                }
+					            }
+					            if (typeof job.engineJob === "object") {
+				    				for (var handler = 0; handler < Job.setFromTemplateHandlers.length; handler++) {
+				    					for (var arg = 0; arg < job.engineJob.arguments.length; arg++) {
+											Job.setFromTemplateHandlers[handler](job.engineJob.arguments[arg], files);
+										}
+									}
+								}
+					            $("#filesNicename").data("fileCount", files.length);
+					            $("#filesNicename").html(files.length === 0 ? "No files" : files.length === 1 ? "1 file" : files.length+" files");
+							},
+							complete: function() {
+								Job.doneAddingPreviousFiles = true;
+							}
+						});
+				    }
+				    
+				    if (job.webuiJob.scriptId !== null) {
+				    	switchToAccordionGroups();
+				    	var scriptLink = $("#scriptTable .script-button-"+job.webuiJob.scriptId.replace(/:/g,'\\\\x3A'));
+				    	if (scriptLink !== null && scriptLink.get(0) !== undefined) {
+				    		getScript(scriptLink.get(0), loadPreviousUploads);
+				    		
+				    	} else {
+				    		loadPreviousUploads();
+				    	}
+				    	
+				    } else {
+				    	loadPreviousUploads();
+				    }
+				}
+			});
+			getTemplateContents = null;
+		}
+		var checkForScripts = function() {
+			$.ajax({
+				url: "@routes.Scripts.getScriptsJson()",
+				error: function(jqXHR, textStatus, errorThrown) {
+					setTimeout(checkForScripts,1000);
+				},
+				success: function(scripts, textStatus, jqXHR) {
+					if (scripts.length === 0) {
+						$(".oneOrMoreScripts").hide();
+						$(".noScripts").show();
+					}
+					else {
+						$(".oneOrMoreScripts").show();
+						$(".noScripts").hide();
+						var table = $("#scriptTable tbody");
+						var list = $("#scriptList");
+						for (var s = 0; s < scripts.length; s++) {
+						    var a = $("<a>"+scripts[s].nicename+"</a>");
+						    var li = $("<li></li>");
+						    var td = $("<td></td>");
+						    var tr = $("<tr></tr>");
+						    var scriptShortDesc = scripts[s].description.replace(/^\s*/m,'').replace(/\n.*/g,'');
+						    var scriptId = scripts[s].id.replace(/:/g,'\\x3A');
+							var scriptIdEscaped = scripts[s].id.replace(/:/g,'\\\\x3A');
+						    for (var key in scripts[s]) {
+							 	if (scripts[s].hasOwnProperty(key)) {
+							 		a.data(key, scripts[s][key]);
+							    }
+							}
+							a.data("id", scriptId);
+							a.addClass("script-button-"+scriptId);
+							a.attr("href", "javascript:void(0)");
+							
+							td.append(a.clone().data(a.data()));
+						    tr.append(td);
+						    tr.append("<td>"+scriptShortDesc+"</td>");
+							$(table).append(tr);
+							
+							a.attr("title", scripts[s].description);
+						    li.append(a);
+						    li.append("<p><small class=\"muted\">"+scriptShortDesc+"</small></p>");
+						    $(list).append(li);
+							
+							$(".script-button-"+scriptIdEscaped).click(function(){
+								if (switchToAccordionGroups !== null) {
+									switchToAccordionGroups();
+									switchToAccordionGroups = null;
+								}
+								getScript(this);
+							});
+						}
+					}
+					if (typeof getTemplateContents === "function") {
+						getTemplateContents();
+					}
+				}
+			});
+		}
+		checkForScripts();
+		window.setInterval(function(){
+			if ($(".noScripts").is(":visible")) {
+				checkForScripts();
+			}
+		}, 1000);
+		getScript = function(linkElement, afterFunction) {
+			if ($("#script-"+$(linkElement).data("id")).size()===0) {
+				$.ajax({
+					url: "@routes.Jobs.getScript(jobId, "")"+$(linkElement).data("id").replace(/\\x3A/g,'%3A'),
+					success: function(data) {
+						if ($("#script-"+$(this.linkElement).data("id")).size()===0) {
+							$('#optionsGroup').append(data);
+							chooseScript(this.linkElement);
+						}
+					},
+					complete: function() {
+						if (typeof this.afterFunction === "function") {
+							this.afterFunction();
+						}
+					},
+					context: {
+						linkElement: linkElement,
+						afterFunction: afterFunction
+					}
+				});
+			} else {
+				chooseScript(linkElement);
+				if (typeof afterFunction === "function") {
+					afterFunction();
+				}
+			}
+		}
+		chooseScript = function(linkElement) {
+			$("#scriptsDetails").html($(linkElement).data("nicename"));
+			$("#scriptsDetails").data("id", $(linkElement).data("id"));
+			
+			if ($("#script-"+$(linkElement).data("id")).data("fileinput")===true) {
+				$("#doesNotAcceptFiles").hide();
+				$("#acceptsFiles").show();
+			} else {
+				$("#acceptsFiles").hide();
+				$("#doesNotAcceptFiles").show();
+			}
+			
+			if (Job.doneAddingPreviousFiles === true) {
+				if ($("#script-"+$(linkElement).data("id")).data("fileinput")===false || !$.isEmptyObject(Job.uploads)) {
+					// go to options accordion group if the script does not accept files or files have already been added
+					$("#doesNotAcceptFilesScriptName").html($(linkElement).data("nicename"));
+					$("#hOptions").click();
+					
+				} else {
+					// go to files accordion group if the script accepts input files and no files have been added
+					$("#hFiles").click();
+				}
+			}
+			$("#script-"+$(linkElement).data("id")).show();
+			$("#optionsGroup > *:not(#script-"+$(linkElement).data("id")+")").hide();
+			$("#optionsGroup").show();
+		}
+		switchToAccordionGroups = function() {
+			$("#scriptCreationPathGroup").hide();
+			$("#scriptList").hide();
+			$("#scriptsInnerGroup").appendTo("#scriptsGroup");
+			$("#scriptList").removeClass("oneOrMoreScripts scriptlist");
+			$("#scriptTable").addClass("oneOrMoreScripts scriptlist");
+			$("#scriptTable").show();
+			$("#filesInnerGroup").appendTo("#filesGroup");
+			$("#filesGroup").show();
+			$("#scriptsGroup").show();
+			$("#accordion").show();
+			$("#fileupload > div.row").children().removeClass("span6");
+			$($("#fileupload > div.row")[0]).css("margin-left","auto").css("margin-right","auto").css("width","200px");
+			$($("#fileupload > div.row")[1]).css("margin-left","auto").css("margin-right","auto").css("width","50%");
+			$($("#fileupload > div.row")[2]).css("margin-left","auto").css("margin-right","auto").css("width","61.8033989%");
+		}
+		Job.onFilesetTypeUpdate(function(filesetTypes){
+			var types, typesString;
+			
+			types = [];
+			for (var id in filesetTypes) {
+				var fs = filesetTypes[id];
+				types.push(fs.name);
+			}
+			types = $.grep(types, function(v, k){
+			    return $.inArray(v ,types) === k;
+			});
+			
+			typesString = "";
+			for (var t = 0; t < types.length; t++) {
+				typesString += types[t];
+				if (t < types.length - 1) typesString += ", ";
+			}
+			if (types.length > 0) typesString = "- " + typesString;
+			
+			$("#filesetTypes").html(typesString);
+		});
+		$('html,body').animate({scrollTop: 0},'fast');
+	});
+</script>
+
+}

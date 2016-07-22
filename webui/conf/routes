@@ -1,0 +1,98 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Application
+GET     /                                   controllers.Application.index()
+GET     /assets/img/*file                   controllers.Application.redirect(path="/assets/images/", file)
+GET     /assets/stylesheets/images/*file    controllers.Application.redirect(path="/assets/images/", file)
+GET     /img/*file                          controllers.Application.redirect(path="/assets/images/", file)
+GET     /about                              controllers.Application.about()
+GET     /theme/*file                        controllers.Application.theme(file)
+
+# Login
+GET     /login/resetpassword                controllers.Login.resetPassword()
+GET     /login                              controllers.Login.login()
+POST    /login                              controllers.Login.authenticate()
+GET     /login/guest                        controllers.Login.authenticateGuest()
+
+# Logout
+GET     /logout                             controllers.Login.logout()
+
+# Notifications
+GET     /notifications/:browser/websocket   controllers.Notifications.websocket(browser: Long)
+GET     /notifications/:browser/xhr         controllers.Notifications.xhr(browser: Long)
+GET     /notifications/new                  controllers.Notifications.getBrowserId()
+
+# Scripts
+GET     /scripts/:id.json                   controllers.Scripts.getScriptJson(id: String)
+GET     /scripts.json                       controllers.Scripts.getScriptsJson()
+
+# Jobs
+GET     /jobs/new/:tOwner/:tName            controllers.Jobs.newJobWithTemplate(tOwner: String, tName: String)
+GET     /jobs/new                           controllers.Jobs.newJob()
+GET     /jobs/:id/new                       controllers.Jobs.newJobWithOldJob(id: Long)
+GET     /jobs/:id/scripts/:scriptId         controllers.Jobs.getScript(id: Long, scriptId: String)
+GET     /jobs/:id/uploads.json              controllers.Jobs.getUploadsJson(id: Long)
+POST    /jobs/:id/upload                    controllers.Jobs.postUpload(id: Long)
+GET     /jobs/:id/result/*href              controllers.Jobs.getResult(id: Long, href: String)
+GET     /jobs/:id/result                    controllers.Jobs.getAllResults(id: Long)
+GET     /jobs/:id/log                       controllers.Jobs.getLog(id: Long)
+GET     /jobs/:id/delete                    controllers.Jobs.delete(id: Long)
+GET     /jobs/:id/deleteRedirect            controllers.Jobs.deleteRedirect(id: Long)
+GET     /jobs/:id/restart                   controllers.Jobs.restart(id: Long)
+GET     /jobs/:id/new-template              controllers.Jobs.saveAsTemplate(id: Long)
+GET     /jobs/:id/context                   controllers.Jobs.downloadContext(id: Long)
+GET     /jobs/:id.engine.json               controllers.Jobs.getEngineJobJson(id: Long)
+GET     /jobs/:id.json                      controllers.Jobs.getJobJson(id: Long)
+GET     /jobs/:id                           controllers.Jobs.getJob(id: Long)
+GET     /jobs.json                          controllers.Jobs.getJobsJson()
+GET     /jobs                               controllers.Jobs.getJobs()
+POST    /jobs/:id                           controllers.Jobs.postJob(id: Long)
+
+# Templates
+GET     /templates                          controllers.Templates.getTemplates()
+GET     /templates.json                     controllers.Templates.getTemplatesJson()
+GET     /templates/:tOwner/:tName.json      controllers.Templates.getTemplateJson(tOwner: String, tName: String)
+GET     /templates/:tOwner/:tName/delete    controllers.Templates.deleteTemplate(tOwner: String, tName: String)
+GET     /templates/:tOwner/:tName/context   controllers.Templates.downloadContext(tOwner: String, tName: String)
+GET     /templates/:tOwner/:tName/download  controllers.Templates.downloadTemplate(tOwner: String, tName: String)
+POST    /templates/:tOwner/:tName/rename    controllers.Templates.renameTemplate(tOwner: Long, tName: String)
+POST    /templates/:tOwner/:tName/shared    controllers.Templates.setShared(tOwner: Long, tName: String)
+POST    /templates/:tOwner/:tName/description controllers.Templates.editTemplateDescription(tOwner: Long, tName: String)
+
+# Callbacks
+POST    /callbacks/:callbackType            controllers.Callbacks.postCallback(callbackType: String)
+
+# Account
+GET     /account/resetpassword              controllers.Account.showResetPasswordForm(email, resetUid)
+POST    /account/resetpassword              controllers.Account.resetPassword(email, resetUid)
+GET     /account/activate                   controllers.Account.showActivateForm(email, resetUid)
+POST    /account/activate                   controllers.Account.activate(email, resetUid)
+GET     /account                            controllers.Account.overview()
+POST    /account                            controllers.Account.changeDetails()
+
+# Administrator
+GET     /admin                              controllers.Administrator.getSettings()
+POST    /admin                              controllers.Administrator.postSettings()
+GET     /admin/POST                         controllers.Administrator.getPostSettings()
+
+# First use
+GET     /firstuse                           controllers.FirstUse.getFirstUse()
+POST    /firstuse                           controllers.FirstUse.postFirstUse()
+GET     /welcome                            controllers.FirstUse.welcome()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                       controllers.Assets.versioned(path="/public", file: Asset)
+
+# Application
+GET     /alive                              controllers.SystemStatus.alive()
+GET     /status                             controllers.SystemStatus.status()
+GET     /status/engine                      controllers.SystemStatus.engineStatus()
+
+# Log
+GET     /log                                controllers.Log.getLog()
+
+# Interactions (used for tracking user behaviour)
+POST    /interactions                       controllers.Interactions.interactions()
+
