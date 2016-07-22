@@ -1,0 +1,18 @@
+jStyleParser Credits
+--------------------
+
+Main developer & project leader:
+Radek Burget <burgetr@fit.vutbr.cz>
+
+Former developers:
+Karel Piwko <kapy>
+Jan Svercl
+
+Contributors:
+Uproot Labs <https://github.com/uprootlabs> - bug reports, fixes, test cases
+Ron Kuhnert <ron.kuhnert@googlemail.com> - property processing and API extensions
+Bert Frees - pseudoclass extensions, bugfixes
+Philip Borlin - maven integration and TravisCI integration 
+
+This project was supported by the Research Plan No. MSM 0021630528 – Security-Oriented 
+Research in Information Technology.

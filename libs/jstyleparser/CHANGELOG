@@ -1,0 +1,127 @@
+Version 1.20 - Jan 13, 2014
+- API change: use parseString(String, URL) instead of parse(String)
+- More efficient and stateles rule sorting (removes PriorityStrategy mechanism)
+- Custom NetworkProcessor mechanism for handling URL resources
+- Fix exceptions during dimension value creation
+- Fix exceptions in malformed index selectors
+- basic background-size support
+
+Version 1.19 - Nov 6, 2014
+- Allow element.getAttribute() to return null for supporting more DOM parsers
+- Line height processing fix
+- background-position processing fix
+- Attribute selector matching fix (whitespace processing)
+- Allow unary + in numeric values
+- Several DirectAnalyzer fixes
+- Properly unescape CSS strings (using unbescape)
+- Support for MatchCondition at DOMAnalyzer level
+- Distinguish pseudo classes (:) and pseudo elements (::) according to CSS3 Selectors
+- Error recovery revision
+- Many new test cases mainly for the reported bugs
+
+Version 1.18 - Aug 28, 2014
+- New CSS3 pseudo classes support
+- Fix background-attachment and font-variant bugs
+- Matching empty media queries in MediaSpec
+- Property inheritance fixes
+- Error recovery fixes (unknown at-rules)
+
+Version 1.17 - Jul 11, 2014
+- Media queries supported in parser and DOMAnalyzer
+- API extensions for Media queries
+- Extended API for configuring the automatic processing of imported style sheets 
+- New CSS3 units supported (ch, rem, vw, vh, vmin, vmax, in, turn,
+    dpi, dpcm, dppx)
+
+Version 1.16 - Feb 4, 2014
+- Rule priority computation fix for nested (@media) rules
+
+Version 1.15 - Jan 9, 2014
+- Project layout changed to maven
+- Rewritten test resource reading
+- clip: property changed to correspond the specification
+- Base URL processing improved
+- Error recovery fixes
+
+Version 1.14 - Oct 26, 2013
+- Pseudo class processing during DOM style computation
+- Declaration source tracking
+- Inheritance processing fixes
+- Media matching improved
+- Defalut values of height property fixed
+- Direct analyzer updates
+
+Version 1.13 - May 25, 2013
+- Empty <style> tag parsing fix (fixes #18)
+- Fixed the 'trasparent' typo (fixes #16)
+
+Version 1.12 - Mar 27, 2013
+- New CSS3 support
+- @font-face, @page and @viewport rules supported
+- CSS3 structured selectors supported
+- CSS3 pseudo classes
+- CSS3 colors and opacity support
+- border-radius parsing
+- Allow lengths with no units (fixes #9)
+- Whitespace processing fix in attribute selectors
+- Error recovery fixes
+
+Version 1.11 - Jan 21, 2013
+- Class matching fix
+- Allow empty url() values
+- Allow no terms in property declarations
+- Error recovery improvements
+
+Version 1.10 - Jan 14, 2013
+- A background-position assignment fix in DOM analyzer
+
+Version 1.9 - Nov 22, 2012
+- A fallback TreeWalker implementation is used when Traversal is not supported by the DOM implementation
+- Support for data: URLs in DOM analyzer
+- Fixed using default values when some variated property value is missing
+
+Version 1.8 - Sep 14, 2012
+- Style sheet charset specification support
+- @charset rule support
+- Base URL propagation for URI terms
+- Extended attribute selector support
+- Better extensibility through custom DeclarationTransformer
+
+Version 1.7 - Jun 8, 2012
+- Significant performance improvements
+- New DirectAnalyzer interface for direct element style computation
+
+Version 1.6 - Jun 4, 2012
+- Obtaining gzipped style sheets linked from DOM
+- Support for multiple style sheets in DOM assignment
+- Style sheet origin support
+- Source stylesheet tracking in declarations (for stylesheet priority tracking)
+- Support for per-element default style definition in the DOM tree using the proprietary XDefaultStyle attribute.
+- Fixed base URI for nested imports
+- Value type discovery fix
+
+Version 1.5 - Nov 23, 2011
+- Error recovery fixes
+- Fixed pseudo-class name processing (double colon support)
+- Fixed at-keyword name processing (leading dash)
+- Small API update for allowing better extensibility (by Ron)
+
+Version 1.4 - May 5, 2011
+- Pseudo-elements and pseudo-classes supported.
+- Many error recovery fixes. Nasty CSS hacks should be parsed as well.
+- Fixes in property inheritance and parsing
+
+Version 1.3 - Dec 3, 2009
+- removed the jTidy dependency. Now any DOM Traversar capable DOM
+  implementation may be used
+- license changed to LGPLv3
+
+Version 1.2 - Jul 23, 2009
+
+
+Version 1.1 - Mar 02, 2009
+- any contents in expression() supported
+- correct handling of various CSS hacks
+- vendor-specific properties supported
+
+Version 1.0 - Dec 11, 2008 - First public release

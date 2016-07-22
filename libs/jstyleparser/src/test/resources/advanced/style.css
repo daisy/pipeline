@@ -1,0 +1,28 @@
+body {
+	background: black; color: white;
+	}
+
+#bp {
+	background: center right; 
+}
+
+#ff {
+	font: 100px serif, Times New Roman;
+}
+
+#border { border-bottom: dotted white ! important}
+
+#border {
+	border: blue solid 10px;
+	border-top-color: red;
+}
+
+#subzero {
+	margin-left: -15px;
+}
+
+@page {
+    margin-left: 2cm;
+    margin-top: 3in;
+    color:red;
+}
