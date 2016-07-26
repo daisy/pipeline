@@ -1,0 +1,23 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="sv">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Row spacing test</dc:title>
+		<dc:description>Tests collapsing margins of blocks with different row spacing.</dc:description>
+	</meta>
+<layout-master name="a" page-width="40" page-height="25" duplex="false">
+	<default-template>
+	<header/>
+	<footer/>
+</default-template>
+</layout-master>
+<sequence master="a">
+    <block margin-bottom="1">
+      <block row-spacing="2.0">⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿</block>
+    </block>
+    <block margin-top="1" margin-bottom="1">
+      <block row-spacing="2.0">⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿</block>
+    </block>
+    <block margin-top="1">
+      <block row-spacing="2.0">⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿⠿⠿</block>
+    </block>
+  </sequence>
+</obfl>

@@ -1,0 +1,15 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Vertical position test: Top border</dc:title>
+		<dc:description>Tests the vertical position property with a top border.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="10" page-height="6" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<block vertical-position="3" padding-top="1" vertical-align="after" border-top-style="solid">⠤⠤⠤</block>
+	</sequence>
+</obfl>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl version="2011-1" xml:lang="en" xmlns="http://www.daisy.org/ns/2011/obfl">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Marker reference after leader</dc:title>
+		<dc:description>Tests marker references after leader.</dc:description>
+	</meta>
+	<layout-master name="main" page-width="6" page-height="6" inner-margin="0" outer-margin="0" row-spacing="1" duplex="true">
+		<template use-when="(= (% $page 2) 1)">
+			<header>
+				<field><marker-reference marker="pagenum" direction="forward" scope="sequence"/></field>
+			</header>
+			<footer/>
+		</template>
+		<default-template>
+			<header>
+				<field><marker-reference marker="pagenum" direction="forward" scope="sequence"/></field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="main" initial-page-number="1">
+		<block><marker class="pagenum" value="1"/>⠤⠤<br/>⠤⠤<br/>⠤⠤<br/>⠤⠤<br/>⠤⠤<leader position="100%" align="right"/>⠤⠤⠤⠤⠁<marker class="pagenum" value="2"/>⠤</block>
+		<block><marker class="pagenum" value="3"/>⠤⠤</block>
+	</sequence>
+</obfl>

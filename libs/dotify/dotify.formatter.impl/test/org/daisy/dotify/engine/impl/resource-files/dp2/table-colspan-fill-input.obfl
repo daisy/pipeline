@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">table-colspan-fill</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests a table cell spanning multiple columns. The cell text is centered and the remaining space in the cell filled with a pattern.</dc:description>
+   </meta>
+   <layout-master name="main" page-width="20" page-height="5" duplex="true" page-number-variable="page">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="main">
+      <table col-spacing="1">
+         <tr>
+            <td>⠿⠿⠿⠿</td>
+            <td col-span="4">
+                  ⠸<leader pattern="⠒" position="50%" align="center"/>
+                  ⠿⠿⠿⠿⠿
+                  <leader pattern="⠒" position="50%" align="center"/>⠇
+                </td>
+         </tr>
+         <tr>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+         </tr>
+         <tr>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+         </tr>
+      </table>
+   </sequence>
+</obfl>

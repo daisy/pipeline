@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-spread-across-sequence</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests that marker-reference with scope spread searches beyond sequence boundaries, i.e. a search on the first page of a new sequence includes assignments made on the last page of the previous sequence if that last page is a left-hand page.</dc:description>
+   </meta>
+   <layout-master name="a" page-width="10" page-height="5" duplex="true" page-number-variable="page">
+      <template use-when="(= (% $page 2) 1)">
+         <header/>
+         <footer>
+            <field>
+               <marker-reference marker="foo" direction="backward" scope="spread"/>
+            </field>
+            <field/>
+            <field/>
+         </footer>
+      </template>
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block><!-- right page -->
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ​<!-- left page -->
+                ⠁⠁⠁⠁⠁
+                <marker class="foo" value="1"/>
+                ⠁⠁⠁⠁⠁
+              </block>
+      <block break-before="page">​<!-- right page -->
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ​<!-- left page -->
+                ⠁⠁⠁⠁⠁
+                <marker class="foo" value="2"/>
+                ⠁⠁⠁⠁⠁
+              </block>
+   </sequence>
+   <!-- right page -->
+   <sequence master="a">
+      <block>⠁⠁⠁⠁⠁
+              </block>
+   </sequence>
+</obfl>

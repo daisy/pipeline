@@ -1,0 +1,29 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Keep test</dc:title>
+		<dc:description>Tests the keep property</dc:description>
+	</meta>
+	<layout-master name="body" page-width="10" page-height="6" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<block break-before="page">
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block keep="page">⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ </block>
+		</block>
+	    <block break-before="page">
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+			<block keep="page" keep-with-next="1">⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤</block>
+			<block>⠤⠤⠤</block>
+		</block>
+	</sequence>
+</obfl>

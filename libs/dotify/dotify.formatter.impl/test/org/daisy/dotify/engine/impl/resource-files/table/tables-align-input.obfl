@@ -1,0 +1,21 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Table align test</dc:title>
+		<dc:description>Tests that table align works as expected.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="12" page-height="6" duplex="true">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<table>
+			<tr>
+				<td align="left">⠤⠤ ⠤⠤⠤</td>
+				<td align="center">⠤⠤ ⠤⠤⠤</td>
+				<td align="right">⠤⠤ ⠤⠤⠤</td>
+			</tr>
+		</table>
+	</sequence>
+</obfl>

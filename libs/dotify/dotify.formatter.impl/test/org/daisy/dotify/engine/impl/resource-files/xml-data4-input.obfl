@@ -1,0 +1,63 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>XML Data minimum block size</dc:title>
+		<dc:description>Tests that the correct scenario is selected when the min-block-size variable
+		is used to determine the cost. The first scenario would be selected if the cost were
+		the same in both cases.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="14" page-height="9" duplex="false">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<xml-processor name="p1">
+		<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl">
+			<xsl:template match="obfl:table">
+				<block>
+					<xsl:apply-templates/>
+				</block>
+			</xsl:template>
+			<xsl:template match="obfl:tr">
+				<xsl:apply-templates select="obfl:td[1]"/>
+			</xsl:template>
+			<xsl:template match="obfl:td">
+				<block margin-left="2">
+					<xsl:value-of select="text()"/>
+					<xsl:apply-templates select="following-sibling::*[1]"/>
+				</block>
+			</xsl:template>
+		</xsl:stylesheet>
+	</xml-processor>
+	<xml-processor name="p2">
+		<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:obfl="http://www.daisy.org/ns/2011/obfl">
+			<xsl:template match="obfl:table">
+				<block>
+					<xsl:apply-templates/>
+				</block>
+			</xsl:template>
+			<xsl:template match="obfl:tr">
+				<xsl:apply-templates select="obfl:td[1]"/>
+			</xsl:template>
+			<xsl:template match="obfl:td">
+				<block margin-left="1">
+					<xsl:value-of select="text()"/>
+					<xsl:apply-templates select="following-sibling::*[1]"/>
+				</block>
+			</xsl:template>
+		</xsl:stylesheet>
+	</xml-processor>
+	<renderer name="table-renderer">
+		<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" qualifier="count(/obfl:table)=1" processor="p1" cost="(- 14 $min-block-width)"/>
+		<rendering-scenario xmlns:obfl="http://www.daisy.org/ns/2011/obfl" qualifier="count(/obfl:table)=1" processor="p2" cost="(- 14 $min-block-width)"/>
+	</renderer>
+	<sequence master="body">
+		<xml-data renderer="table-renderer">
+			<table>
+				<tr><td>1</td><td>2</td><td>3</td></tr>
+				<tr><td>4</td><td>5</td><td>6</td></tr>
+				<tr><td>7</td><td>8</td><td>9</td></tr>
+			</table>
+		</xml-data>
+	</sequence>
+</obfl>

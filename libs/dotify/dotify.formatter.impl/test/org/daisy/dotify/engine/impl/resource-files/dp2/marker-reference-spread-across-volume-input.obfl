@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-spread-across-volume</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests that marker-reference with scope spread does not search beyond volume boundaries.</dc:description>
+   </meta>
+   <layout-master name="a" page-width="10" page-height="5" duplex="true" page-number-variable="page">
+      <template use-when="(= (% $page 2) 1)">
+         <header/>
+         <footer>
+            <field>
+               <marker-reference marker="foo" direction="backward" scope="spread"/>
+            </field>
+            <field/>
+            <field/>
+         </footer>
+      </template>
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <volume-template sheets-in-volume-max="2"/>
+   <sequence master="a">
+      <block><!-- right page -->
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ​<!-- left page -->
+                ⠁⠁⠁⠁⠁
+                <marker class="foo" value="1"/>
+                ⠁⠁⠁⠁⠁
+              </block>
+      <block break-before="page">​<!-- right page -->
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁
+                ​<!-- left page -->
+                ⠁⠁⠁⠁⠁
+                <marker class="foo" value="2"/>
+                ⠁⠁⠁⠁⠁
+              </block>
+      <block break-before="page">​<!-- right page -->
+                ⠁⠁⠁⠁⠁
+              </block>
+   </sequence>
+</obfl>

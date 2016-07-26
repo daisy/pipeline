@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">keep-with-next</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests simple keep-with-next.</dc:description>
+   </meta>
+   <layout-master name="body" page-width="10" page-height="6" duplex="false">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="body">
+      <block>⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+      <block keep="page" keep-with-next="1">⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+      <block>⠤⠤⠤⠤⠤
+              </block>
+   </sequence>
+</obfl>

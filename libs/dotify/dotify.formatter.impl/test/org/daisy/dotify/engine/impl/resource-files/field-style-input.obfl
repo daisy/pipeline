@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl version="2011-1" xml:lang="en" xmlns="http://www.daisy.org/ns/2011/obfl">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Field text style test</dc:title>
+		<dc:description>Tests that text styles can be used with fields.</dc:description>
+	</meta>
+	<layout-master name="main" page-width="20" page-height="6" inner-margin="0" outer-margin="0" row-spacing="1" duplex="true">
+		<default-template>
+			<header>
+				<field text-style="strong">
+					<string value="page "/>
+					<current-page text-style="em"/>
+				</field>
+			</header>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="main" initial-page-number="1">
+		<block>⠤⠤⠤</block>
+	</sequence>
+</obfl>

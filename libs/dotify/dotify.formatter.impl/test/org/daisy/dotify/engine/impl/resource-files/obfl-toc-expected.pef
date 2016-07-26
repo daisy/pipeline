@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef version="2008-1" xmlns="http://www.daisy.org/ns/2008/pef">
+<head>
+<meta xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:generator="http://daisymfc.svn.sourceforge.net/viewvc/daisymfc/trunk/dmfc/transformers/org_pef_dtbook2pef/">
+<dc:format>application/x-pef+xml</dc:format>
+<dc:identifier>dummy-id-a0eb73fce54be</dc:identifier>
+<dc:date>2014-02-06</dc:date>
+<generator:entry key="identifier">dummy-id-a0eb73fce54be</generator:entry>
+<generator:entry key="row-spacing">1.0</generator:entry>
+<generator:entry key="splitterMax">50</generator:entry>
+<generator:entry key="inner-margin">2</generator:entry>
+<generator:entry key="page-height">29</generator:entry>
+<generator:entry key="rows">29</generator:entry>
+<generator:entry key="cols">28</generator:entry>
+<generator:entry key="systemBuild">N/A</generator:entry>
+<generator:entry key="systemName">Dotify</generator:entry>
+<generator:entry key="outer-margin">2</generator:entry>
+<generator:entry key="dateFormat">yyyy-MM-dd</generator:entry>
+<generator:entry key="inputFormat">obfl</generator:entry>
+<generator:entry key="conversionDate">Thu Feb 06 14:12:38 CET 2014</generator:entry>
+<generator:entry key="page-width">32</generator:entry>
+<generator:entry key="rowgap">0</generator:entry>
+<generator:entry key="date">2014-02-06</generator:entry>
+<generator:entry key="outputFormat">pef</generator:entry>
+<generator:entry key="systemRelease">N/A</generator:entry>
+</meta>
+</head>
+<body>
+<volume cols="40" rows="29" rowgap="0" duplex="true">
+<section>
+<page>
+<row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+<row>⠠⠞⠕⠉⠀⠠⠎⠞⠁⠗⠞</row>
+<row>⠠⠧⠕⠇⠥⠍⠑⠀⠠⠎⠞⠁⠗⠞</row>
+<row>⠠⠑⠝⠞⠗⠽⠀⠼⠁</row>
+<row>⠠⠑⠝⠞⠗⠽⠀⠼⠃</row>
+<row>⠠⠑⠝⠞⠗⠽⠀⠼⠉</row>
+<row>⠠⠑⠝⠞⠗⠽⠀⠼⠙</row>
+<row>⠠⠑⠝⠞⠗⠽⠀⠼⠑</row>
+<row>⠠⠑⠝⠞⠗⠽⠀⠼⠋</row>
+<row>⠠⠧⠕⠇⠥⠍⠑⠀⠠⠑⠝⠙</row>
+<row>⠠⠞⠕⠉⠀⠠⠑⠝⠙</row>
+</page>
+</section>
+<section>
+<page>
+<row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+<row>⠠⠞⠑⠭⠞⠀⠞⠑⠭⠞⠀⠞⠑⠭⠞</row>
+<row>⠠⠞⠑⠭⠞⠀⠞⠑⠭⠞⠀⠞⠑⠭⠞</row>
+<row>⠠⠞⠑⠭⠞⠀⠞⠑⠭⠞⠀⠞⠑⠭⠞</row>
+<row>⠠⠞⠑⠭⠞⠀⠞⠑⠭⠞⠀⠞⠑⠭⠞</row>
+<row>⠠⠞⠑⠭⠞⠀⠞⠑⠭⠞⠀⠞⠑⠭⠞</row>
+<row>⠠⠞⠑⠭⠞⠀⠞⠑⠭⠞⠀⠞⠑⠭⠞</row>
+</page>
+</section>
+</volume>
+</body>
+</pef>

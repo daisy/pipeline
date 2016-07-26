@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+   <head>
+      <meta>
+         <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-spread-initial-page-number</dc:title>
+         <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests that marker-reference with scope spread is not influenced by initial-page-number.</dc:description>
+         <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">application/x-pef+xml</dc:format>
+      </meta>
+   </head>
+   <body>
+      <volume cols="10" rows="5" rowgap="0" duplex="true">
+         <section>
+            <!-- right -->
+            <page>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+            </page>
+            <!-- left -->
+            <page>
+               <row>⠁⠁⠁⠁⠁</row>
+               <!-- 1 -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row/>
+               <row/>
+               <row>⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 1 -->
+            </page>
+            <!-- right -->
+            <page>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row>⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 1 -->
+            </page>
+            <!-- left -->
+            <page>
+               <row>⠁⠁⠁⠁⠁</row>
+               <!-- 2 -->
+               <row>⠁⠁⠁⠁⠁</row>
+               <row/>
+               <row/>
+               <row>⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀</row>
+            </page>
+            <!-- right -->
+            <page>
+               <row>⠁⠁⠁⠁⠁</row>
+               <row/>
+               <row/>
+               <row/>
+               <row>⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 2 -->
+            </page>
+         </section>
+      </volume>
+   </body>
+</pef>

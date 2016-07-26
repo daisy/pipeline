@@ -1,0 +1,22 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Tables test</dc:title>
+		<dc:description>Tests that tables can complete layout even if a solution crashes.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="12" page-height="6" duplex="true">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<table>
+			<tr>
+				<td col-span="1" row-span="1">1</td>
+				<td col-span="1" row-span="1">PROBLEM</td>
+				<td col-span="1" row-span="1">overcome</td>
+				<td col-span="1" row-span="1">to manage a problem successfully</td>
+			</tr>
+		</table>
+	</sequence>
+</obfl>

@@ -1,0 +1,19 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Tables with colspan test</dc:title>
+		<dc:description>Tests that tables with colspan works as expected. Note that multiline cells do not count towards
+						preferred-empty-space, that's why the first column is bigger than the second.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="12" page-height="6" duplex="true">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<table>
+			<tr><td row-span="2">1<br/>3</td><td>2</td></tr>
+			<tr>							 <td>4</td></tr>
+		</table>
+	</sequence>
+</obfl>

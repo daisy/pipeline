@@ -1,0 +1,24 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Table with leader test</dc:title>
+		<dc:description>Tests that tables with leaders works as expected.</dc:description>
+	</meta>
+	<layout-master name="body" page-width="14" page-height="6" duplex="true">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="body">
+		<table preferred-empty-space="0" table-col-spacing="1">
+			<tr>
+				<td>⠁⠁⠁⠁⠁⠁</td>
+				<td>⠁⠁⠁⠁</td>
+			</tr>
+			<tr>
+				<td><leader position="50%" pattern="⠤" align="center"/>⠁⠁<leader position="100%" pattern="⠤" align="right"/></td>
+				<td>⠁⠁⠁⠁</td>
+			</tr>
+		</table>
+	</sequence>
+</obfl>

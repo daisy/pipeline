@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">pre-content</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests pre-content.</dc:description>
+   </meta>
+   <layout-master name="main" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <volume-template sheets-in-volume-max="1000">
+      <pre-content>
+         <sequence master="main">
+            <block>⠿⠿⠿
+                </block>
+         </sequence>
+      </pre-content>
+   </volume-template>
+   <sequence master="main">
+      <block>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            </block>
+   </sequence>
+</obfl>

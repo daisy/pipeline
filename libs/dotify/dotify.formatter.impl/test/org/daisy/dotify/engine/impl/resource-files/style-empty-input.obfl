@@ -1,0 +1,15 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Single empty style</dc:title>
+		<dc:description>Tests an empty style element</dc:description>
+	</meta>
+	<layout-master name="a" duplex="false" page-width="10" page-height="25">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="a">
+		<block><style name="table-cell-continued"/></block>
+	</sequence>
+</obfl>

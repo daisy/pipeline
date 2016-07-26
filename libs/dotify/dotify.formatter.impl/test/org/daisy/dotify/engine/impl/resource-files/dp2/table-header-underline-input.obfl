@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">table-header-underline</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests simple table with no cell wrapping. Column spacing is set to 1. The table takes up the space it needs to display the table data and column spacing. Cells in the first row have a bottom border.</dc:description>
+   </meta>
+   <layout-master name="main" page-width="20" page-height="5" duplex="true" page-number-variable="page">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="main">
+      <table table-col-spacing="1" preferred-empty-space="0">
+         <tr>
+            <td border-bottom-style="solid" border-bottom-width="1" border-bottom-align="center">⠿⠿⠿</td>
+            <td border-bottom-style="solid" border-bottom-width="1" border-bottom-align="center">⠿⠿⠿⠿</td>
+            <td border-bottom-style="solid" border-bottom-width="1" border-bottom-align="center">⠿⠿⠿</td>
+         </tr>
+         <tr>
+            <td>⠿⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿⠿</td>
+         </tr>
+         <tr>
+            <td>⠿⠿⠿</td>
+            <td>⠿⠿</td>
+            <td>⠿⠿⠿</td>
+         </tr>
+      </table>
+   </sequence>
+</obfl>

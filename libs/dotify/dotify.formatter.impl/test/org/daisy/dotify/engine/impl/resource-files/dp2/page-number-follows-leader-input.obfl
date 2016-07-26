@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">page-number-follows-leader</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests leader followed by page-number.</dc:description>
+   </meta>
+   <layout-master name="a" duplex="false" page-width="10" page-height="25">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block id="chapter_1">⠤</block>
+      <block><leader pattern="⠄" position="100%" align="right"/>⠀<page-number ref-id="chapter_1" number-format="default"/>
+      </block>
+   </sequence>
+</obfl>

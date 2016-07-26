@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">page-number-backward-reference</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests page-number referencing a previous block.</dc:description>
+   </meta>
+   <layout-master name="body" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+      <default-template>
+         <header/>
+         <footer>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <string value=""/>
+            </field>
+            <field>
+               <current-page number-format="default"/>
+            </field>
+         </footer>
+      </default-template>
+   </layout-master>
+   <sequence master="body">
+      <block><block>⠿⠿⠿
+              </block>
+         <block id="x">⠤⠤⠤
+              </block>
+         <block>⠿⠿⠿
+              </block>
+         <block id="y">⠤⠤⠤
+              </block>
+         <block id="z">⠤⠤⠤
+              </block>
+      </block>
+      <block break-before="page"><block>⠤⠤⠤
+                <page-number ref-id="x" number-format="default"/>
+         </block>
+         <block>⠤⠤⠤
+                <page-number ref-id="y" number-format="default"/>
+         </block>
+         <block>⠤⠤⠤
+                <page-number ref-id="z" number-format="default"/>
+         </block>
+      </block>
+   </sequence>
+</obfl>

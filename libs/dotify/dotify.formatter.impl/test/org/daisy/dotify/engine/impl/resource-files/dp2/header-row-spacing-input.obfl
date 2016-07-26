@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">header-row-spacing</dc:title>
+      <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests creating empty two-line top page margin using row-spacing on header.</dc:description>
+   </meta>
+   <layout-master name="a" page-width="40" page-height="25" duplex="false" page-number-variable="page">
+      <template use-when="(= (% $page 2) 1)">
+         <header>
+            <field/>
+         </header>
+         <footer/>
+      </template>
+      <template use-when="(= (% $page 2) 0)">
+         <header row-spacing="2.0">
+            <field/>
+         </header>
+         <footer/>
+      </template>
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="a">
+      <block>⠿
+              </block>
+      <block break-before="page">⠿
+              </block>
+   </sequence>
+</obfl>

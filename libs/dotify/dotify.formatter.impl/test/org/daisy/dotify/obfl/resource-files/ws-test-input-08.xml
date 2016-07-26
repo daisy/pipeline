@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+		<layout-master name="front" page-width="40" page-height="29" inner-margin="0" outer-margin="0" row-spacing="1" duplex="false">
+			<default-template>
+				<header></header>
+				<footer></footer>
+			</default-template>
+		</layout-master>
+		<sequence master="front" initial-page-number="1">
+			
+			<block id="h-2">Whitespace that moves</block>
+			<block id="h-2-1">Marker space is moved before marker:</block>
+			<block>Marker has space<marker class="page" value="2"/> after.</block>
+			<block>Marker had space <marker class="page" value="2"/>before.</block>
+			<block>Marker had space <marker class="page" value="2"/> before and after.</block>
+			<block>Marker had space<marker class="page" value="2"/><marker class="page" value="2"/> before and after.</block>
+			<block>Marker has no spa<marker class="page" value="2"/>ce.</block>
+			
+		</sequence>
+</obfl>

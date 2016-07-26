@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+   <head>
+      <meta>
+         <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">pre-content</dc:title>
+         <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests pre-content.</dc:description>
+         <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">application/x-pef+xml</dc:format>
+      </meta>
+   </head>
+   <body>
+      <volume rows="5" cols="15" rowgap="0" duplex="true">
+         <section>
+            <page>
+               <row>⠿⠿⠿</row>
+            </page>
+         </section>
+         <section>
+            <page>
+               <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+            </page>
+         </section>
+      </volume>
+   </body>
+</pef>

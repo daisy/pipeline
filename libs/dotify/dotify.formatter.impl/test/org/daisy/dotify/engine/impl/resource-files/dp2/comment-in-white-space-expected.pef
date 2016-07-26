@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+   <head>
+      <meta>
+         <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">comment-in-white-space</dc:title>
+         <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests presence of a comment surrounded by white space. Broken: white space is dropped.</dc:description>
+         <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">application/x-pef+xml</dc:format>
+      </meta>
+   </head>
+   <body>
+      <volume cols="10" rows="1" rowgap="0" duplex="true">
+         <section>
+            <page>
+               <row>⠁⠁⠁⠀⠁⠁⠁</row> <!-- was: ⠁⠁⠁⠁⠁⠁ -->
+            </page>
+         </section>
+      </volume>
+   </body>
+</pef>
