@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:sbs="http://www.sbs.ch"
+               script="http://www.sbs.ch/pipeline/modules/braille/dtbook-to-pef.xpl">
+  
+  <x:scenario label="list-numbering">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xml:lang="de" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <book>
+              <bodymatter>
+                <level1>
+                  <list type="ol">
+                    <li>Bla bla bla bla</li>
+                    <li>Bla bla bla bla</li>
+                    <li>Bla bla bla bla</li>
+                    <li>Bla bla bla bla</li>
+                    <li>Bla bla bla bla</li>
+                  </list>
+                </level1>
+              </bodymatter>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="show-print-page-numbers" select="false()"/>
+      <x:option name="show-braille-page-numbers" select="false()"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/list-numbering/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/list-numbering/test_dtbook-to-pef.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="de" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="28" rows="28" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠼⠂⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠼⠆⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠼⠒⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠼⠲⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠼⠢⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+		  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠒⠒⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      I had to make this pending. Christian please have a look, I think it broke after the latest
+      CSS update.
+  -->
+  <x:scenario label="margin-top" pending="true">
+    <x:documentation>
+      Test that empty lines before headings are skipped at the top of a page.
+    </x:documentation>
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xml:lang="de" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <book>
+              <bodymatter>
+                <level1>
+                  <h1>Level 1</h1>
+                  <level2>
+                    <h1>Level 2</h1>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                  </level2>
+                  <level2>
+                    <h1>Level 2</h1>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                  </level2>
+                  <level2>
+                    <h1>Level 2</h1>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                    <p>Bla bla bla</p>
+                  </level2>
+                </level1>
+              </bodymatter>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="show-print-page-numbers" select="false()"/>
+      <x:option name="show-braille-page-numbers" select="false()"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/margin-top/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/margin-top/test_dtbook-to-pef.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="de" version="2008-1">
+          <head>
+            <meta  xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="28" rows="28" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠁</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row/>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row/>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠒⠒⠒⠀⠇⠑⠧⠑⠇⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+                <page>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                  <row/>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="preceding-separator">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xml:lang="de" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <book>
+              <bodymatter>
+                <level1>
+                  <p> Bla bla bla </p>
+                  <p class="precedingseparator"> Bla bla bla </p>
+                </level1>
+              </bodymatter>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="show-print-page-numbers" select="false()"/>
+      <x:option name="show-braille-page-numbers" select="false()"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/preceding-separator/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/preceding-separator/test_dtbook-to-pef.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="de" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="28" rows="28" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠒⠒⠒⠒⠒⠒</row>
+                  <row/>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+		  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠒⠒⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

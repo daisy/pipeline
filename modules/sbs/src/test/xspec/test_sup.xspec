@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="sup als Exponent">
+      <x:context>
+        <dtb:p xml:lang="de">2<dtb:sup>23</dtb:sup> x<dtb:sup>2</dtb:sup> x<dtb:sup>-2</dtb:sup> (2<dtb:sup>23</dtb:sup>) (x<dtb:sup>2</dtb:sup>) (x<dtb:sup>-2</dtb:sup>) </dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de">#B<dtb:sup>0;:</dtb:sup> 'X<dtb:sup>0;</dtb:sup> 'X<dtb:sup>0-;</dtb:sup> =#B<dtb:sup>0;:</dtb:sup>'= ='X<dtb:sup>0;</dtb:sup>'= ='X<dtb:sup>0-;</dtb:sup>'= </dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="sup als oberer Index">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>Cu</dtb:abbr><dtb:sup>2+</dtb:sup></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>$CU</dtb:abbr><dtb:sup>\#B"+</dtb:sup></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="sup mit select (hochgestellter Text)">
+      <x:context>
+        <dtb:p xml:lang="de">Kapital mal Zinssatz<dtb:sup><brl:select><brl:when-braille> hoch Zeit</brl:when-braille><brl:otherwise>Zeit</brl:otherwise></brl:select></dtb:sup></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de">KP MAL Z*SSZ<dtb:sup> HO4 ZT</dtb:sup></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="sup mit select (Markierungen Chemie)">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>V</dtb:abbr><dtb:sup><brl:select><brl:when-braille><brl:literal>&gt;/</brl:literal></brl:when-braille><brl:otherwise>*</brl:otherwise></brl:select></dtb:sup></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>&gt;V</dtb:abbr><dtb:sup>&gt;/</dtb:sup></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

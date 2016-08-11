@@ -1,0 +1,36 @@
+@page {
+  size:28 28;
+}
+
+dtbook{
+  hyphens:none;
+}
+
+caption{
+  display:block;
+  text-indent:-2;
+  margin-left:2;
+}
+
+table{
+  render-table-by:location, date;
+}
+
+table::list-item{
+  display:block;
+  text-indent:-2;
+  margin-left:2;
+}
+
+table::table-by(location){
+  display:block;
+  text-indent:-2;
+  margin-left:2;
+}
+
+table::table-by(location)::list-item{
+  display:block;
+  text-indent:-2;
+  margin-left:2;
+}
+

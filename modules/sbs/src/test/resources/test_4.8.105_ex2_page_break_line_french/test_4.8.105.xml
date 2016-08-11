@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE dtbook [<!ENTITY ndash "&#x2013;"><!ENTITY nbsp "&#x00A0;">]><?oxygen RNGSchema="http://xmlp/schema/dtbook-2005-3-sbs.rng" type="xml"?>
+<dtbook version="2005-3-sbs-full" xml:lang="de" xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+  xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  <head>
+    <meta name="dc:Title" content="PRODSERVER1"/>
+    <meta name="dc:Creator" content="HAFECHÄS"/>
+    <meta name="dc:Subject" content=""/>
+    <meta name="dc:Description" content=""/>
+    <meta name="dc:Publisher"
+      content="Swiss Library for the Blind, Visually Impaired and Print Disabled"/>
+    <meta name="dc:Date" content="2012-01-05"/>
+    <meta name="dc:Type" content="Text"/>
+    <meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+    <meta name="dc:Identifier" content="ch-sbs-0d63eb29-566a-4061-a8bf-b279c69699ed"/>
+    <meta name="dc:Source" content=""/>
+    <meta name="dc:Language" content="de"/>
+    <meta name="dc:Rights" content=""/>
+    <meta name="dtb:uid" content="ch-sbs-0d63eb29-566a-4061-a8bf-b279c69699ed"/>
+    <meta name="dtb:sourceEdition" content=""/>
+    <meta name="dtb:sourcePublisher" content=""/>
+    <meta name="dtb:sourceRights" content=""/>
+    <meta name="prod:series" content=""/>
+    <meta name="prod:seriesNumber" content=""/>
+    <link rel="stylesheet" media="embossed" type="text/css" href="style.css"/>
+  </head>
+  <book>
+    <bodymatter>
+      <level1>
+        <pagenum id="page-86" page="normal">86</pagenum>
+        <level2>
+          <h2>e) Autres rubriques</h2>
+          <p>Les pages préliminaires peuvent contenir d’autres rubriques telles que «Du même
+            auteur», «Remerciements», une dédicace, du texte placé en exergue, etc. Ces informations
+            sont toujours transcrites là où elles apparaissent dans le document d’origine ; elles ne
+            figurent donc dans les pages préliminaires braille que si elles sont présentées avant le
+            corps du texte dans le document d’origine. La première de ces rubriques commence sur une
+            nouvelle page braille.</p>
+          <p>Ces rubriques ne figurent que dans le premier volume d’un ouvrage.</p>
+        </level2>
+      </level1>
+      <level1>
+        <pagenum id="page-87" page="normal">87</pagenum>
+        <h1>3.7 La table des matières</h1>
+        <p>Dans la mesure du possible, tout ouvrage ou magazine comporte une table des matières, que
+          celle-ci figure ou non dans le document d’origine.</p>
+        <p>En braille, on a recours à deux types de tables des matières : la table générale,
+          utilisée principalement pour les ouvrages scolaires, fait état de tout le contenu de
+          l’ouvrage tandis que la table spécifique ne présente que le contenu du volume en cours.
+          Idéalement, la table générale utilise la pagination de référence alors que la table
+          spécifique indique la pagination braille.</p>
+        <p>Il faut veiller à prévoir un en-tête ou un pied de page vide de façon à ce que les
+          numéros de pages des éléments de la table des matières ne puissent être confondus avec les
+          numéros de pages braille ou de référence du document lui-même.</p>
+        <level2>
+          <h2>a) Table générale</h2>
+          <p>La table des matières générale ne figure que dans le premier volume et fait apparaître
+            l’ensemble de la structure de l’ouvrage. Elle peut constituer la dernière rubrique des
+            pages préliminaires (voir 3.6 «Les pages préliminaires») ou apparaître en fin de volume.
+            La table des matières commence sur une nouvelle page braille, impaire s’il s’agit d’une
+            transcription recto verso. Si la table des matières est placée en fin de volume, les
+            numéros de pages braille peuvent être précédés du préfixe t (voir 3.4 a) «Pagination
+            braille»). Cette rubrique porte la mention «Table des matières» ou «Sommaire», centrée
+            sur la première ligne de la page et suivie d’une ligne vide.</p>
+          <p>En braille, la table des matières se présente, pour ainsi dire, en deux colonnes : la
+            première fait état du contenu du document en mode liste, simple ou hiérarchisée ; la
+            seconde, appuyée à droite, indique les numéros de pages braille ou de pages de référence
+            correspondants. Le texte de la colonne de gauche ne peut empiéter sur la colonne des
+            numéros de pages dont il est séparé d’au moins deux cellules vides. De plus, une série
+            de points de conduite (point 3) précédée et suivie éventuellement d’une cellule vide,
+            relie chaque entrée de la table des matières à son numéro de page. Cependant, si au
+            moins deux de ces points de conduite ne peuvent être insérés, ils sont omis.</p>
+          <p>Les deux colonnes peuvent afficher des en-têtes. Celui de la première colonne varie en
+            fonction de son contenu (Chapitre, Leçon, etc.), celui de la seconde colonne étant le
+            mot «Page». En France, en particulier, les en-têtes sont généralement omis.</p>
+          <pagenum id="page-88" page="normal">88</pagenum>
+          <p>La table générale rend compte, si possible, du découpage de l’ouvrage en volumes
+            braille. Le contenu du premier volume est donc précédé de la mention «Volume 1» centrée,
+            précédée mais non suivie d’une ligne vide. Il en va de même pour chacun des volumes qui
+            constituent l’ouvrage.</p>
+        </level2>
+      </level1>
+    </bodymatter>
+  </book>
+</dtbook>

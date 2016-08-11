@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="sup als Exponent (mit Komma)">
+      <x:context>
+        <dtb:p xml:lang="de">2<dtb:sup>23</dtb:sup>, x<dtb:sup>2</dtb:sup>, x<dtb:sup>-2</dtb:sup>, </dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de">#B<dtb:sup>0;:</dtb:sup>', 'X<dtb:sup>0;</dtb:sup>', 'X<dtb:sup>0-;</dtb:sup>', </dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="sup als oberer Index (mit Komma)">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>Cu</dtb:abbr><dtb:sup>2+</dtb:sup>, </dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de"><dtb:abbr>$CU</dtb:abbr><dtb:sup>\#B"+</dtb:sup>', </dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="sub als unterer Index (mit Komma)">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>CO</dtb:abbr><dtb:sub>2</dtb:sub>, </dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de"><dtb:abbr>&gt;CO</dtb:abbr><dtb:sub>1;</dtb:sub>', </dtb:p>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

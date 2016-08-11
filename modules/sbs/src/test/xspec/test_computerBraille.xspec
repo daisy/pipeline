@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Computer Braille">
+      <x:context>
+        <brl:computer xml:lang="de">www.xyz.ch</brl:computer>
+      </x:context>
+      <x:expect label="braille">
+	<brl:computer xml:lang="de">'$WWW.XYZ.CH</brl:computer>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Computer Braille">
+      <x:context>
+        <brl:computer xml:lang="de">www.e-text.ch</brl:computer>
+      </x:context>
+      <x:expect label="braille">
+	<brl:computer xml:lang="de">'$WWW.E-TEXT.CH</brl:computer>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="URLs email">
+      <x:context>
+        <brl:computer xml:lang="de">meier_alex@ubs.com</brl:computer>
+      </x:context>
+      <x:expect label="braille">
+	<brl:computer xml:lang="de">'$MEIER"_ALEX"@UBS.COM</brl:computer>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="URLs special">
+      <x:context>
+        <brl:computer xml:lang="de">http://www.google-test.ch/test?=:;+%#$</brl:computer>
+      </x:context>
+      <x:expect label="braille">
+	<brl:computer xml:lang="de">'$HTTP://WWW.GOOGLE-TEST.CH/TEST?=:;+%#$$</brl:computer>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="URLs numbers">
+      <x:context>
+        <brl:computer xml:lang="de">peter34@gmx.net</brl:computer>
+      </x:context>
+      <x:expect label="braille">
+	<brl:computer xml:lang="de">'$PETER34"@GMX.NET</brl:computer>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Twitter handle">
+      <x:context>
+        <brl:computer xml:lang="de">@peter34</brl:computer>
+      </x:context>
+      <x:expect label="braille"><brl:computer xml:lang="de">'$"@PETER34</brl:computer>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

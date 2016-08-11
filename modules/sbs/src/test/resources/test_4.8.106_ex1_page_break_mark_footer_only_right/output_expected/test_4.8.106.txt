@@ -1,0 +1,114 @@
+p
+ .           BLABLO
+
+     #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+ . #AA #AA #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+ _#AA,;       BLABLO       #A
+p  #AB #AB #AB #AB #AB
+ .   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+ . #AC #AC #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+ .   #AE #AE #AE #AE #AE #AE
+   #AE #AE #AE #AE #AE #AE
+   #AE #AE #AE #AE #AE #AE
+   #AE #AE #AE #AE #AE #AE
+   #AE #AE #AE #AE #AE #AE
+   #AE #AE #AE #AE #AE #AE
+   #AE #AE #AE #AE #AE #AE
+   #AE #AE #AE #AE #AE #AE
+p. #AE #AE #AF #AF #AF #AF
+   #AF #AF #AF #AF #AF #AF
+   #AF #AF #AF #AF #AF #AF
+   #AF #AF #AF #AF #AF #AF
+   #AF #AF #AF #AF #AF #AF
+   #AF #AF #AF #AF #AF #AF
+   #AF #AF #AF #AF #AF #AF
+   #AF
+ .   #AI #AI #AI #AI #AI #AI
+   #AI #AI #AI #AI #AI #AI
+   #AI #AI #AI #AI #AI #AI
+   #AI #AI #AI #AI #AI #AI
+   #AI #AI #AI #AI #AI #AI
+   #AI #AI #AI #AI #AI #AI
+   #AI #AI #AI #AI #AI #AI
+   #AI #AI #AI #AI #AI #AI
+ . #AI #AI #AI #AI #AI #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+ _#AB;,       BLABLO       #C
+p  #BA #BA
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+p
+p

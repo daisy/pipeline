@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Code">
+      <x:context>
+        <stub xml:lang="de">
+	  <dtb:p><dtb:code>C:/ordner/inhalt_version_1</dtb:code></dtb:p>
+	</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">
+	  <dtb:p><dtb:code>'$"C:/ORDNER/INHALT"_VERSION"_1</dtb:code></dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Program listing">
+      <x:context>
+        <stub xml:lang="de">
+	  <dtb:p><dtb:code>for(i=0;i&lt;=12; i++ { blabla }</dtb:code></dtb:p>
+	</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">
+	  <dtb:p><dtb:code>$$FOR(I=0;I&lt;=12; I++ [ BLABLA ]'.</dtb:code></dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

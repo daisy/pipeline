@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE dtbook [<!ENTITY ndash "&#x2013;"><!ENTITY nbsp "&#x00A0;">]><?oxygen RNGSchema="http://xmlp/schema/dtbook-2005-3-sbs.rng" type="xml"?>
+<dtbook version="2005-3-sbs-full" xml:lang="de" xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+  xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  <head>
+    <meta name="dc:Title" content="PRODSERVER1"/>
+    <meta name="dc:Creator" content="HAFECHÄS"/>
+    <meta name="dc:Subject" content=""/>
+    <meta name="dc:Description" content=""/>
+    <meta name="dc:Publisher"
+      content="Swiss Library for the Blind, Visually Impaired and Print Disabled"/>
+    <meta name="dc:Date" content="2012-01-05"/>
+    <meta name="dc:Type" content="Text"/>
+    <meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+    <meta name="dc:Identifier" content="ch-sbs-0d63eb29-566a-4061-a8bf-b279c69699ed"/>
+    <meta name="dc:Source" content=""/>
+    <meta name="dc:Language" content="de"/>
+    <meta name="dc:Rights" content=""/>
+    <meta name="dtb:uid" content="ch-sbs-0d63eb29-566a-4061-a8bf-b279c69699ed"/>
+    <meta name="dtb:sourceEdition" content=""/>
+    <meta name="dtb:sourcePublisher" content=""/>
+    <meta name="dtb:sourceRights" content=""/>
+    <meta name="prod:series" content=""/>
+    <meta name="prod:seriesNumber" content=""/>
+    <link rel="stylesheet" media="embossed" type="text/css" href="style.css"/>
+  </head>
+  <book>
+    <bodymatter>
+      <level1>
+        <pagenum id="page-11" page="normal">11</pagenum>
+        <h1>blablo</h1>
+        <p>11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 11 <pagenum id="page-12"
+            page="normal">12</pagenum> 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12 12
+          12 12 12 12 12 12 <pagenum id="page-13" page="normal">13</pagenum> 13 13 13 13 13 13 13 13
+          13 13 13 13 13 13 13 13 13 13 <pagenum id="page-14" page="normal">14</pagenum> 14 14 14 14
+          14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 14 <pagenum id="page-15" page="normal"
+            >15</pagenum> 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 15 <pagenum
+            id="page-16" page="normal">16</pagenum> 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16 16
+          16 16 <pagenum id="page-17" page="normal">17</pagenum>
+          <pagenum id="page-18" page="normal">18</pagenum>
+          <pagenum id="page-19" page="normal">19</pagenum> 19 19 19 19 19 19 19 19 19 19 19 19 19 19
+          19 19 19 19 19 19 19 19 19 <pagenum id="page-20" page="normal">20</pagenum><pagenum
+            id="page-21" page="normal">21</pagenum> 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21
+          21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 21 <pagenum id="page-22" page="normal"
+            >22</pagenum> 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+          22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 <pagenum id="page-23" page="normal"
+            >23</pagenum> 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23
+          23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 <pagenum id="page-24" page="normal"
+            >24</pagenum> 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24 24
+          24 24 24 </p>
+      </level1>
+    </bodymatter>
+  </book>
+</dtbook>

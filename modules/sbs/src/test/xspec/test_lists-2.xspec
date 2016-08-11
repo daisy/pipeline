@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:param name="downshift_ordinals" select="false()"/>
+
+    <x:scenario label="Ordered lists" pending="has not been ported yet">
+      <x:context>
+        <stub xml:lang="de">
+	<dtb:list type="ol">
+          <dtb:li>bla bla</dtb:li>
+          <dtb:li>bla bla</dtb:li>
+          <dtb:li>bla bla
+            <dtb:list type="ol" enum="a">
+              <dtb:li>blo blo
+                <dtb:list type="ol" enum="i">
+                  <dtb:li>ble ble</dtb:li>
+                  <dtb:li>ble ble</dtb:li>
+                </dtb:list>
+              </dtb:li>
+              <dtb:li>blo blo</dtb:li>
+            </dtb:list>
+          </dtb:li>
+          <dtb:li>bla bla
+            <dtb:list type="ol" enum="A">
+              <dtb:li>blo blo
+                <dtb:list type="ol" enum="I">
+                  <dtb:li>ble ble</dtb:li>
+                  <dtb:li>ble ble</dtb:li>
+                </dtb:list>
+              </dtb:li>
+              <dtb:li>blo blo</dtb:li>
+            </dtb:list>
+          </dtb:li>
+          <dtb:li>bla bla</dtb:li>
+        </dtb:list>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+y OLISTb
+
+y LI
+ #A. BLA BLA
+
+y LI
+ #B. BLA BLA
+
+y LI
+ #C. BLA BLA 
+y OLISTb
+
+y LI
+ 'A. BLO BLO 
+y OLISTb
+
+y LI
+ 'I. BLE BLE
+
+y LI
+ 'II. BLE BLE
+
+y OLISTe
+ 
+
+y LI
+ 'B. BLO BLO
+
+y OLISTe
+ 
+
+y LI
+ #D. BLA BLA 
+y OLISTb
+
+y LI
+ &gt;A. BLO BLO 
+y OLISTb
+
+y LI
+ &gt;I. BLE BLE
+
+y LI
+ &gt;II. BLE BLE
+
+y OLISTe
+ 
+
+y LI
+ &gt;B. BLO BLO
+
+y OLISTe
+ 
+
+y LI
+ #E. BLA BLA
+
+y OLISTe
+</x:expect>
+    </x:scenario>
+
+</x:description>

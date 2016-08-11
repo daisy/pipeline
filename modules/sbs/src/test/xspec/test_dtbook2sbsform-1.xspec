@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Translation of h1">
+      <x:context>
+        <dtb:h1 xml:lang="de">foo</dtb:h1>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:h1 xml:lang="de">FOO</dtb:h1>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of h1 with brl:class attr">
+      <x:context>
+        <dtb:h1 xml:lang="de" brl:class="foo">foo</dtb:h1>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:h1 xml:lang="de" brl:class="foo">FOO</dtb:h1>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of h1 with leading and trailing spaces">
+      <x:context>
+        <dtb:h1 xml:lang="de"> foo <brl:v-form>Bar</brl:v-form> </dtb:h1>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:h1 xml:lang="de"> FOO <brl:v-form>$BAR</brl:v-form> </dtb:h1>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of h2">
+      <x:context>
+        <dtb:h2 xml:lang="de">foo</dtb:h2>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:h2 xml:lang="de">FOO</dtb:h2>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of h2 with with brl:class attr">
+      <x:context>
+        <dtb:h2 xml:lang="de" brl:class="foo">foo</dtb:h2>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:h2 xml:lang="de" brl:class="foo">FOO</dtb:h2>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of p">
+      <x:context>
+        <dtb:p xml:lang="de">foo</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de">FOO</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of h2 with with brl:class attr">
+      <x:context>
+        <dtb:p xml:lang="de" brl:class="foo">foo</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de" brl:class="foo">FOO</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of Blockquote">
+      <x:context>
+        <dtb:blockquote xml:lang="de"/>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:blockquote xml:lang="de"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of Blockquote with brl:class attr">
+      <x:context>
+        <dtb:blockquote xml:lang="de" brl:class="foo"/>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:blockquote xml:lang="de" brl:class="foo"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of epigraph">
+      <x:context>
+        <dtb:epigraph xml:lang="de"/>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:epigraph xml:lang="de"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of epigraph with brl:class attr">
+      <x:context>
+        <dtb:epigraph xml:lang="de" brl:class="foo"/>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:epigraph xml:lang="de" brl:class="foo"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of author">
+      <x:context>
+        <dtb:author xml:lang="de">Hans</dtb:author>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:author xml:lang="de">H+S</dtb:author>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of author with brl:class attr">
+      <x:context>
+        <dtb:author xml:lang="de" brl:class="foo">Hans</dtb:author>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:author xml:lang="de" brl:class="foo">H+S</dtb:author>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of byline">
+      <x:context>
+        <dtb:byline xml:lang="de">Hans</dtb:byline>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:byline xml:lang="de">H+S</dtb:byline>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of byline with brl:class attr">
+      <x:context>
+        <dtb:byline xml:lang="de" brl:class="foo">Hans</dtb:byline>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:byline xml:lang="de" brl:class="foo">H+S</dtb:byline>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of poem">
+      <x:context>
+        <dtb:poem xml:lang="de"/>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:poem xml:lang="de"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of poem with brl:class attr">
+      <x:context>
+        <dtb:poem xml:lang="de" brl:class="foo"/>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:poem xml:lang="de" brl:class="foo"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Selection feature">
+      <x:context>
+        <brl:select xml:lang="de">
+	  <brl:when-braille>
+	    <brl:literal>Foo</brl:literal>
+	  </brl:when-braille>
+	  <brl:otherwise>Bar</brl:otherwise>
+	</brl:select>
+      </x:context>
+      <x:expect label="braille">Foo</x:expect>
+    </x:scenario>
+
+    <x:scenario label="Selection feature with mixed literals and text nodes">
+      <x:context>
+        <brl:select xml:lang="de">
+	  <brl:when-braille>Foo <brl:literal>Bar</brl:literal></brl:when-braille>
+	  <brl:otherwise>Baz</brl:otherwise>
+	</brl:select>
+      </x:context>
+      <x:expect label="braille">FOO Bar</x:expect>
+    </x:scenario>
+
+    <x:scenario label="Selection feature inside &lt;em&gt;">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><dtb:em brl:render="quote"><brl:select><brl:when-braille><brl:literal>'.DD'.</brl:literal></brl:when-braille><brl:otherwise>♫</brl:otherwise></brl:select> Hörst du das Pfeifen vom Murmeltier droben ...</dtb:em></dtb:p>
+	</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">
+          <dtb:p><dtb:em brl:render="quote">('.DD'. H9R] DU D PF3FC VM MURMYT0R DROBC ...)</dtb:em></dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="div element">
+      <x:context>
+        <dtb:div brl:class="foo" xml:lang="de"/>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:div brl:class="foo" xml:lang="de"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Datum: Tag Monat Jahr">
+      <x:context>
+        <stub xml:lang="de"><brl:date value="2011-01-01">1.1.2011</brl:date></stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de"><brl:date value="2011-01-01">#,A#BJAA</brl:date></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Datum: Tag Monat">
+      <x:context>
+        <stub xml:lang="de"><brl:date value="--01-01">1.1.</brl:date></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:date value="--01-01">#,A</brl:date></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Time">
+      <x:context>
+        <stub xml:lang="de"><brl:time value="10:30">10:30</brl:time></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:time value="10:30">#AJ.CJ</brl:time></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Time with leading zeros">
+      <x:context>
+        <stub xml:lang="de"><brl:time value="10:05">10:05</brl:time></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:time value="10:05">#AJ.JE</brl:time></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Span inside span 2">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><dtb:span brl:accents="reduced">René</dtb:span></dtb:p>
+          <dtb:p><dtb:span brl:accents="reduced">René René</dtb:span></dtb:p>
+          <dtb:p>Kurz <dtb:span>╚</dtb:span><dtb:span brl:grade="1" brl:accents="reduced">René René</dtb:span><dtb:span>╝</dtb:span> René</dtb:p>
+          <dtb:p><dtb:span>╚</dtb:span><dtb:span brl:grade="1">René <dtb:span brl:accents="reduced">René</dtb:span> René</dtb:span><dtb:span>╝</dtb:span></dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p><dtb:span brl:accents="reduced">RC"E</dtb:span></dtb:p>
+          <dtb:p><dtb:span brl:accents="reduced">RC"E RC"E</dtb:span></dtb:p>
+          <dtb:p>KZ <dtb:span>-.</dtb:span><dtb:span brl:grade="1" brl:accents="reduced">REN"E REN"E</dtb:span><dtb:span>'.</dtb:span> RC"%</dtb:p>
+          <dtb:p><dtb:span>-.</dtb:span><dtb:span brl:grade="1">REN"% <dtb:span brl:accents="reduced">REN"E</dtb:span> REN"%</dtb:span><dtb:span>'.</dtb:span></dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Span inside em">
+      <x:context>
+        <stub xml:lang="de"><dtb:em>Hallo <dtb:span brl:accents="reduced">René</dtb:span></dtb:em></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><dtb:em>__HAQO <dtb:span brl:accents="reduced">RC"E</dtb:span>'.</dtb:em></stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

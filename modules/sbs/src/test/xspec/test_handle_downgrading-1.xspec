@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Downgrading"
+		pending="is now handled in xprocspectest as this involves two steps (adding announcements and translation">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>Kurzschrift schrift schrift <dtb:span brl:grade="1">Vollschrift</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span brl:grade="0">Basisschrift</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span brl:grade="1">Vollschrift schrift schrift</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span brl:grade="0">Basisschrift schrift schrift</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span brl:grade="1">Vollschrift/Vollschrift</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span brl:grade="0">Basisschrift/Basisschrift</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span brl:grade="1">Vollschrift-­Vollschrift</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span brl:grade="0">Basisschrift-­Basisschrift</dtb:span> kurz kurz kurz</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p>KZ5T 5T 5T '.<dtb:span brl:grade="1">VOLL5RIFT</dtb:span> KZ KZ KZ</dtb:p>
+          <dtb:p>KZ5T 5T 5T '.<dtb:span brl:grade="0">BASISSCHRIFT</dtb:span> KZ KZ KZ</dtb:p>
+          <dtb:p>KZ5T 5T 5T -.<dtb:span brl:grade="1">VOLL5RIFT 5RIFT 5RIFT</dtb:span>'. KZ KZ KZ</dtb:p>
+          <dtb:p>KZ5T 5T 5T -.<dtb:span brl:grade="0">BASISSCHRIFT SCHRIFT SCHRIFT</dtb:span>'. KZ KZ KZ</dtb:p>
+          <dtb:p>KZ5T 5T 5T -.<dtb:span brl:grade="1">VOLL5RIFT!,mVOLL5RIFT</dtb:span>'. KZ KZ KZ</dtb:p>
+          <dtb:p>KZ5T 5T 5T -.<dtb:span brl:grade="0">BASISSCHRIFT!,mBASISSCHRIFT</dtb:span>'. KZ KZ KZ</dtb:p>
+          <dtb:p>KZ5T 5T 5T -.<dtb:span brl:grade="1">VOLL5RIFT-­VOLL5RIFT</dtb:span>'. KZ KZ KZ</dtb:p>
+          <dtb:p>KZ5T 5T 5T -.<dtb:span brl:grade="0">BASISSCHRIFT-­BASISSCHRIFT</dtb:span>'. KZ KZ KZ</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Span inside span 2"
+		pending="is now handled in xprocspectest as this involves two steps (adding announcements and translation">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><dtb:span brl:accents="reduced">René</dtb:span></dtb:p>
+          <dtb:p><dtb:span brl:accents="reduced">René René</dtb:span></dtb:p>
+          <dtb:p>Kurz <dtb:span brl:grade="1" brl:accents="reduced">René René</dtb:span> René</dtb:p>
+          <dtb:p><dtb:span brl:grade="1">René <dtb:span brl:accents="reduced">René</dtb:span> René</dtb:span></dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p><dtb:span brl:accents="reduced">RC"E</dtb:span></dtb:p>
+          <dtb:p><dtb:span brl:accents="reduced">RC"E RC"E</dtb:span></dtb:p>
+          <dtb:p>KZ -.<dtb:span brl:grade="1" brl:accents="reduced">REN"E REN"E</dtb:span>'. RC"%</dtb:p>
+          <dtb:p>-.<dtb:span brl:grade="1">REN"E <dtb:span brl:accents="reduced">REN"E</dtb:span> REN"%</dtb:span>'.</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Language change (feature #1604)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>Jetzt folgt ein Gedicht:</dtb:p>
+          <dtb:poem xml:lang="en">
+            <dtb:linegroup>
+              <dtb:line><dtb:span>╚</dtb:span>If you want to get a favour done</dtb:line>
+              <dtb:line>By some obliging friend,</dtb:line>
+              <dtb:line>And want a promise, safe and sure,</dtb:line>
+              <dtb:line>On which you may depend,</dtb:line>
+              <dtb:line>Don't go to him who always has</dtb:line>
+              <dtb:line>Much leisure time to plan,</dtb:line>
+              <dtb:line>If you want your favour done,</dtb:line>
+              <dtb:line>Just ask the busy man.<dtb:span>╝</dtb:span></dtb:line>
+            </dtb:linegroup>
+          </dtb:poem>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p>J FGT 6 &amp;D#T:</dtb:p>
+          <dtb:poem xml:lang="en">
+            <dtb:linegroup>
+              <dtb:line><dtb:span>-.</dtb:span>IF YOU WANT TO GET A FAVOUR DONE</dtb:line>
+              <dtb:line>BY SOME OBLIGING FRIEND,</dtb:line>
+              <dtb:line>AND WANT A PROMISE, SAFE AND SURE,</dtb:line>
+              <dtb:line>ON WHICH YOU MAY DEPEND,</dtb:line>
+              <dtb:line>DON'T GO TO HIM WHO ALWAYS HAS</dtb:line>
+              <dtb:line>MUCH LEISURE TIME TO PLAN,</dtb:line>
+              <dtb:line>IF YOU WANT YOUR FAVOUR DONE,</dtb:line>
+              <dtb:line>JUST ASK THE BUSY MAN.<dtb:span>'.</dtb:span></dtb:line>
+            </dtb:linegroup>
+          </dtb:poem>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description
+    xmlns:utfx="http://utfx.org/test-definition"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+    stylesheet="../../main/resources/xml/block-translate.xsl"
+    preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">0</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+  <x:scenario label="&lt;em&gt; with previous text node ending in word">
+    <x:context>
+      <stub xml:lang="de">
+	<dtb:line>foo</dtb:line>
+	<dtb:line><dtb:em>bar</dtb:em></dtb:line>
+      </stub>
+    </x:context>
+    <x:expect label="braille">
+      <stub xml:lang="de">
+	<dtb:line>FOO</dtb:line>
+	<dtb:line><dtb:em>_BAR</dtb:em></dtb:line>
+      </stub>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test for em with subelements (http://redmine.sbszh.ch/issues/show/816) ">
+    <x:context>
+      <stub xml:lang="de">
+        <dtb:em><dtb:abbr>US</dtb:abbr>-Justizministerium</dtb:em>
+      </stub>
+    </x:context>
+    <x:expect label="braille">
+      <stub xml:lang="de">
+        <dtb:em>__<dtb:abbr>&gt;US</dtb:abbr>-JUSTIZMINISTERIUM'.</dtb:em>
+      </stub>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

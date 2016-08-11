@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="bdo">
+      <x:context>
+        <dtb:bdo xml:lang="de">
+	  foo
+	</dtb:bdo>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:bdo xml:lang="de"> FOO </dtb:bdo>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="kbd">
+      <x:context>
+        <dtb:kbd xml:lang="de">
+	  foo
+	</dtb:kbd>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:kbd xml:lang="de"> FOO </dtb:kbd>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="q">
+      <x:context>
+        <dtb:q xml:lang="de">
+	  foo
+	</dtb:q>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:q xml:lang="de"> FOO </dtb:q>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="sent">
+      <x:context>
+        <dtb:sent xml:lang="de">
+	  foo
+	</dtb:sent>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:sent xml:lang="de"> FOO </dtb:sent>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="w">
+      <x:context>
+        <dtb:w xml:lang="de">
+	  foo
+	</dtb:w>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:w xml:lang="de"> FOO </dtb:w>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

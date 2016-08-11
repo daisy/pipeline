@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Translation of linegroup">
+      <x:context>
+        <dtb:linegroup xml:lang="de"/>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:linegroup xml:lang="de"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of linegroup with brl:class attr">
+      <x:context>
+        <dtb:linegroup xml:lang="de" brl:class="foo"/>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:linegroup xml:lang="de" brl:class="foo"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of line">
+      <x:context>
+        <dtb:line xml:lang="de"/>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:line xml:lang="de"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Translation of line with brl:class attr">
+      <x:context>
+        <dtb:line xml:lang="de" brl:class="foo"/>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:line xml:lang="de" brl:class="foo"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="linenum">
+      <x:context>
+        <dtb:linenum xml:lang="de">Foo</dtb:linenum>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:linenum xml:lang="de">FOO</dtb:linenum>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Line with linenum">
+      <x:context>
+        <dtb:line xml:lang="de"><dtb:linenum>6</dtb:linenum>DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:line xml:lang="de"><dtb:linenum>#F</dtb:linenum>D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Line with large linenum">
+      <x:context>
+        <dtb:line xml:lang="de"><dtb:linenum>36</dtb:linenum>DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:line xml:lang="de"><dtb:linenum>#CF</dtb:linenum>D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Line with mixed lines">
+      <x:context>
+        <dtb:line xml:lang="de"><dtb:linenum>6</dtb:linenum>DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line><dtb:line xml:lang="de">DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line><dtb:line xml:lang="de"><dtb:linenum>6</dtb:linenum>DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:line xml:lang="de"><dtb:linenum>#F</dtb:linenum>D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+	<dtb:line xml:lang="de">D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+	<dtb:line xml:lang="de"><dtb:linenum>#F</dtb:linenum>D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Poem with linenum">
+      <x:context>
+        <dtb:poem xml:lang="de">
+	  <dtb:line><dtb:linenum>6</dtb:linenum>DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line>
+	</dtb:poem>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:poem xml:lang="de">
+	  <dtb:line><dtb:linenum>#F</dtb:linenum>D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+	</dtb:poem>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Poem with mixed linenum">
+      <x:context>
+        <dtb:poem xml:lang="de">
+	  <dtb:line><dtb:linenum>6</dtb:linenum>DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line>
+	  <dtb:line>DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line>
+	</dtb:poem>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:poem xml:lang="de">
+	  <dtb:line><dtb:linenum>#F</dtb:linenum>D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+	  <dtb:line>D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+	</dtb:poem>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Poem with mixed linenum inside linegroup">
+      <x:context>
+        <dtb:poem xml:lang="de">
+	  <dtb:linegroup>
+	    <dtb:line><dtb:linenum>6</dtb:linenum>DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line>
+	  </dtb:linegroup>
+	  <dtb:linegroup>
+	    <dtb:line>DAS HIER IST EIN KLEINER TEST. ES GEHT DARUM.</dtb:line>
+	  </dtb:linegroup>
+	</dtb:poem>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:poem xml:lang="de">
+	  <dtb:linegroup>
+	    <dtb:line><dtb:linenum>#F</dtb:linenum>D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+	  </dtb:linegroup>
+	  <dtb:linegroup>
+	    <dtb:line>D HR ] 6 KL67 TE]. % &amp;HT D)UM.</dtb:line>
+	  </dtb:linegroup>
+	</dtb:poem>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

@@ -1,0 +1,36 @@
+
+@page {
+  size:28 28;
+}
+
+dtbook{
+  hyphens:none;
+}
+
+table{
+  display:block;
+  render-table-by: row;
+}
+
+table::table-by(row){
+  display:block;
+  text-indent:-2;
+  margin-left:2;
+}
+
+th {
+  table-header-policy: front;
+}
+
+th + th::before{
+  content:" ⠒⠒ ";
+}
+
+td + td::before{
+  content:" ⠒⠒ ";
+}
+
+caption{
+  display:block;
+  margin-bottom:1;
+}

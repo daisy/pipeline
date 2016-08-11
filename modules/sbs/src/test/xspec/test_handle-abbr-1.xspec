@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="measure m mit Dezimalkomma">
+      <x:context>
+        <stub xml:lang="de"><brl:num role="measure">1,8 m</brl:num></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:num role="measure">#A,H'M</brl:num></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="measure m mit Dezimalpunkt">
+      <x:context>
+        <stub xml:lang="de"><brl:num role="measure">1.8 m</brl:num></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:num role="measure">#A.H'M</brl:num></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="measure mm mit Dezimalpunkt">
+      <x:context>
+        <stub xml:lang="de"><brl:num role="measure">1.8 mm</brl:num></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:num role="measure">#A.H'MM</brl:num></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="measure Hz mit Dezimalpunkt">
+      <x:context>
+        <stub xml:lang="de"><brl:num role="measure">1.8 Hz</brl:num></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:num role="measure">#A.H$HZ</brl:num></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="measure MW mit Dezimalpunkt">
+      <x:context>
+        <stub xml:lang="de"><brl:num role="measure">1.8 MW</brl:num></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:num role="measure">#A.H&gt;MW</brl:num></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="measure kW mit Dezimalpunkt">
+      <x:context>
+        <stub xml:lang="de"><brl:num role="measure">1.8 kW</brl:num></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:num role="measure">#A.H'K&gt;W</brl:num></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="measure V mit Dezimalpunkt">
+      <x:context>
+        <stub xml:lang="de"><brl:num role="measure">1.8 V</brl:num></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:num role="measure">#A.H&gt;V</brl:num></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr GmbH">
+      <x:context>
+        <stub xml:lang="de"><dtb:abbr>GmbH</dtb:abbr></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><dtb:abbr>$GMB&gt;H</dtb:abbr></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr USA">
+      <x:context>
+        <stub xml:lang="de"><dtb:abbr>USA</dtb:abbr></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><dtb:abbr>&gt;USA</dtb:abbr></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr cd">
+      <x:context>
+        <stub xml:lang="de"><dtb:abbr>cd</dtb:abbr></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><dtb:abbr>'CD</dtb:abbr></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr 3a">
+      <x:context>
+        <stub xml:lang="de">3<dtb:abbr>a</dtb:abbr></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">#C<dtb:abbr>'A</dtb:abbr></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr Nr. 2">
+      <x:context>
+        <stub xml:lang="de"><dtb:abbr>Nr. </dtb:abbr>2</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><dtb:abbr>NR.</dtb:abbr>#B</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr z. B.">
+      <x:context>
+        <stub xml:lang="de"><dtb:abbr>z. B.</dtb:abbr></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><dtb:abbr>Z.B.</dtb:abbr></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr w. z. b. w.">
+      <x:context>
+        <stub xml:lang="de"><dtb:abbr>w. z. b. w.</dtb:abbr></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><dtb:abbr>W.Z.B.W.</dtb:abbr></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr etc.">
+      <x:context>
+        <stub xml:lang="de"><dtb:abbr>etc.</dtb:abbr></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><dtb:abbr>ET'C.</dtb:abbr></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr a.">
+      <x:context>
+        <stub xml:lang="de"><dtb:abbr>a.</dtb:abbr></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><dtb:abbr>A.</dtb:abbr></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="notag wrt.">
+      <x:context>
+        <stub xml:lang="de">wrt.</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">WRT.</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="notag h.">
+      <x:context>
+        <stub xml:lang="de">h.</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">H.</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="notag p.">
+      <x:context>
+        <stub xml:lang="de">p.</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">P.</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Falsches Resultat bei ABBR Basisschrift/Vollschrift (CDs) (#1613)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><dtb:abbr>CD</dtb:abbr>s</dtb:p>
+        </stub>
+      </x:context>
+      <!-- FIXME: The Apo should be outside the abbr -->
+      <!-- <dtb:p><dtb:abbr>&gt;CD</dtb:abbr>'S</dtb:p> -->
+      <x:expect label="braille">
+	<stub xml:lang="de">
+          <dtb:p><dtb:abbr>&gt;CD'</dtb:abbr>S</dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Falsches Resultat bei ABBR Basisschrift/Vollschrift (CDs) (#1613)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><dtb:abbr>CD</dtb:abbr>S</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">
+          <dtb:p><dtb:abbr>&gt;CD</dtb:abbr>S</dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

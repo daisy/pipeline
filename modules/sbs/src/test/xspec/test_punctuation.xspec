@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+  <x:scenario label="punctuation after numbers">
+      <x:context>
+        <dtb:p xml:lang="de"> <dtb:em>2</dtb:em>? <dtb:em>2</dtb:em>! <dtb:em>2</dtb:em>; (<dtb:em>2</dtb:em>) »<dtb:em>2</dtb:em>« </dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"> <dtb:em>_#B</dtb:em>'? <dtb:em>_#B</dtb:em>'+ <dtb:em>_#B</dtb:em>'; =<dtb:em>_#B</dtb:em>'= (<dtb:em>_#B</dtb:em>') </dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="punctuation after numbers">
+      <x:context>
+        <dtb:p>»Am 10?«</dtb:p><dtb:p>»Am 10?«</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p>(AM #AJ'?)</dtb:p>
+	<dtb:p>(AM #AJ'?)</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="punctuation after numbers in a previous paragraph">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>20 Minuten <brl:date value="2012-10-16">16.10.2012</brl:date></dtb:p>
+          <dtb:p>(blo)</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p>#BJ M*UTC <brl:date value="2012-10-16">#,+AJ#BJAB</brl:date></dtb:p>
+          <dtb:p>=BLO=</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="punctuation after ordinals">
+      <x:context>
+        <dtb:p xml:lang="de"> <brl:num role="ordinal">2.</brl:num>? <brl:num role="ordinal">2.</brl:num>! <brl:num role="ordinal">2.</brl:num>; (<brl:num role="ordinal">2.</brl:num>) »<brl:num role="ordinal">2.</brl:num>« </dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"> <brl:num role="ordinal">#;</brl:num>'? <brl:num role="ordinal">#;</brl:num>'+ <brl:num role="ordinal">#;</brl:num>'; =<brl:num role="ordinal">#;</brl:num>'= (<brl:num role="ordinal">#;</brl:num>') </dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="punctuation after ordinals">
+      <x:context>
+        <dtb:p>»Am <brl:num role="ordinal">10.</brl:num>?«</dtb:p>
+	<dtb:p>»Am <brl:num role="ordinal">10.</brl:num>?«</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p>(AM <brl:num role="ordinal">#,)</brl:num>'?)</dtb:p>
+	<dtb:p>(AM <brl:num role="ordinal">#,)</brl:num>'?)</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

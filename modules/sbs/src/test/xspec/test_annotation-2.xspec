@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:param name="footnote_placement" select="'end_vol'"/>
+
+    <x:scenario label="annotation with end_vol placement" pending="needs to be tested with xprocspec">
+      <x:context>
+        <stub xml:lang="de">Hi Ha <dtb:annoref idref="#annotation1">Ho</dtb:annoref>
+	<dtb:annoref idref="#annotation2"/>
+	<brl:volume brl:grade="2"/>Foo Bar Baz <dtb:annoref idref="#annotation3"/>
+	<dtb:annoref idref="#annotation4"/>
+	<brl:volume brl:grade="2"/>
+	<dtb:annotation id="annotation1">
+	  <dtb:p>This is a test</dtb:p>
+	</dtb:annotation>
+	<dtb:annotation id="annotation2">
+	  <dtb:p>This is another test</dtb:p>
+	</dtb:annotation>
+	<dtb:annotation id="annotation3">
+	  <dtb:p>This is a test</dtb:p>
+	</dtb:annotation>
+	<dtb:annotation id="annotation4">
+	  <dtb:p>This is another test</dtb:p>
+	</dtb:annotation></stub>
+      </x:context>
+      <x:expect label="braille">HI HA HO'*#A
+* 
+ '*#B
+* 
+ 
+y Notes
+
+a 
+ #A THIS IS 'A TE]
+a 
+ #B THIS IS +OTH7 TE]
+y EndVol
+y BrlVol
+FOO BAR BAZ '*#C
+* 
+ '*#D
+* 
+ 
+y Notes
+
+a 
+ #C THIS IS 'A TE]
+a 
+ #D THIS IS +OTH7 TE]
+y EndVol
+y BrlVol
+</x:expect>
+    </x:scenario>
+
+    <x:scenario label="annotation in bodymatter with end_vol placement" pending="needs to be tested with xprocspec">
+      <x:context>
+        <dtb:bodymatter xml:lang="de">
+	  <dtb:p>Hi <dtb:annoref idref="#annotation1">Ha</dtb:annoref> 
+	  <dtb:annoref idref="#annotation2">Ho</dtb:annoref>
+	  <brl:volume brl:grade="2"/>Foo <dtb:annoref idref="#annotation3">Bar</dtb:annoref>
+	  <dtb:annoref idref="#annotation4">Baz</dtb:annoref>
+	  <brl:volume brl:grade="2"/>
+	  <dtb:annotation id="annotation1">
+	    <dtb:p>This is a test</dtb:p>
+	  </dtb:annotation>
+	  <dtb:annotation id="annotation2">
+	    <dtb:p>This is another test</dtb:p>
+	  </dtb:annotation>
+	  <dtb:annotation id="annotation3">
+	    <dtb:p>This is a test</dtb:p>
+	  </dtb:annotation>
+	  <dtb:annotation id="annotation4">
+	    <dtb:p>This is another test</dtb:p>
+	  </dtb:annotation></dtb:p>
+	  <dtb:pagenum>1</dtb:pagenum>
+	</dtb:bodymatter>
+      </x:context>
+      <x:expect label="braille">
+y BODYb
+i j=1
+
+y P
+ HI HA'*#A
+* 
+  HO'*#B
+* 
+  
+y Notes
+
+a 
+ #A THIS IS 'A TE]
+a 
+ #B THIS IS +OTH7 TE]
+y EndVol
+y BrlVol
+FOO BAR'*#C
+* 
+  BAZ'*#D
+* 
+  
+y Notes
+
+a 
+ #C THIS IS 'A TE]
+a 
+ #D THIS IS +OTH7 TE]
+y EndVol
+y BrlVol
+    
+j 1
+ 
+
+y BODYe
+</x:expect>
+    </x:scenario>
+
+</x:description>

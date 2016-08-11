@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Einformige Kürzungen vor Klammern (#1746)" pending="und(blabla) translates to /D'=BLABLA=">
+      <x:context>
+        <stub xml:lang="de">aber(blabla) auf(blabla) bei(blabla) durch(blabla) für(blabla) gegen(blabla) gewesen(blabla) immer(blabla) jetzt(blabla) mehr(blabla) mit(blabla) nicht(blabla) über(blabla) und(blabla) unter(blabla) voll(blabla) von(blabla) vor(blabla) </stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">,A'=BLABLA= ,1'=BLABLA= ,B'=BLABLA= ,4'=BLABLA= ,F'=BLABLA= ,G'=BLABLA= ,&amp;'=BLABLA= ,X'=BLABLA= ,J'=BLABLA= ,='=BLABLA= ,T'=BLABLA= ,N'=BLABLA= ,8'=BLABLA= ,U'=BLABLA= ,/'=BLABLA= ,Q'=BLABLA= ,V'=BLABLA= ,?'=BLABLA= </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Einformige Kürzungen nach Klammern (#1746)" pending="(blabla)und translates to =BLABLA'=/D">
+      <x:context>
+        <stub xml:lang="de">(blabla)aber (blabla)auf (blabla)bei (blabla)durch (blabla)für (blabla)gegen (blabla)gewesen (blabla)immer (blabla)jetzt (blabla)mehr (blabla)mit (blabla)nicht (blabla)über (blabla)und (blabla)unter (blabla)voll (blabla)von (blabla)vor </stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">=BLABLA'=,A =BLABLA'=,1 =BLABLA'=,B =BLABLA'=,4 =BLABLA'=,F =BLABLA'=,G =BLABLA'=,&amp; =BLABLA'=,X =BLABLA'=,J =BLABLA'=,= =BLABLA'=,T =BLABLA'=,N =BLABLA'=,8 =BLABLA'=,U =BLABLA'=,/ =BLABLA'=,Q =BLABLA'=,V =BLABLA'=,? </stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

@@ -1,0 +1,18 @@
+@page {
+	margin-left: 2;
+	@left {
+		content: -obfl-marker-indicator(pagenum, '⠄');
+	}
+}
+
+dtbook {
+	hyphens: none;
+}
+
+h1 {
+	-obfl-underline: none;
+}
+
+pagenum {
+	-obfl-marker: pagenum;
+}

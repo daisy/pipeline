@@ -1,0 +1,4 @@
+display \x200B d      # zero-width space
+display \x00AD e      # soft hyphen
+display \x00AD f      # soft hyphen for word hyphenation
+display \x2824 36a    # dot pattern 36

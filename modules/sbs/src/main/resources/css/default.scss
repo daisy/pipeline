@@ -1,0 +1,748 @@
+/***************************************************************************************
+ * SBS Default CSS                                                                     *
+ * http://www.sbs.ch/                                                                  *
+ *                                                                                     *
+ * Author: Mischa Kuenzle <mischa.kuenzle@sbs.ch>                                      *
+ * Author: Christian Egli <christian.egli@sbs.ch>                                      *
+ * Author: Bert Frees <bertfrees@gmail.com>                                            *
+ *                                                                                     *
+ * See also Braille CSS: http://snaekobbi.github.io/braille-css-spec/master/index.html *
+ ***************************************************************************************/
+
+/* General rules */
+
+/* Namespaces */
+
+@namespace xml "http://www.w3.org/XML/1998/namespace";
+@namespace brl url(http://www.daisy.org/z3986/2009/braille/);
+
+/* Page layout
+ *
+ * A page contains 28 columns by 28 rows of braille (configurable with
+ * options, defaults in script). */
+
+@page {
+    @footnotes {
+	border-top: ⠒;
+	content: flow(footnotes);
+    }
+}
+
+@page frontmatter:right {
+    margin-bottom: 1;
+    @bottom-center {
+	content: string(running-footer-front);
+    }
+}
+
+@page toc:right {
+    margin-bottom: 1;
+    @bottom-center {
+	content: "Inhaltsverzeichnis";
+    }
+    @bottom-right {
+	content: counter(page);
+    }
+}
+
+@if $show-print-page-numbers {
+    @page bodymatter:right {
+        margin-bottom: 1;
+        @bottom-left {
+	    content: string(print-page, spread-start) string(slash-print-page, spread-last-except-start);
+	    text-transform: print-page;
+        }
+        @bottom-center {
+            content: string(running-footer-body);
+	}
+    }
+}
+@else {
+    @if $levels-in-footer >= 1 {
+	@page bodymatter:right {
+            margin-bottom: 1;
+            @bottom-left {
+		content: "⠒⠒⠒ " string(running-footer-body);
+	    }
+	}
+    }
+    @else {
+	/* TODO: insert code for flow-into-footer style (not yet implemented) */
+    }
+}
+
+@if $show-braille-page-numbers {
+    @page bodymatter:right {
+        @bottom-right {
+            content: counter(page);
+        }
+    }
+}
+
+
+@for $level from 1 through 6 {
+    @if $levels-in-footer >= $level {
+	bodymatter h#{$level} {
+        string-set: running-footer-body content();
+        &:has(> brl|running-line) {
+            string-set: none;
+        }
+        > brl|running-line {
+            string-set: running-footer-body content();
+        }
+    }
+    }
+}
+
+brl|volume[brl|grade='#{$contraction-grade}'] {
+   display:block;
+   volume-break-before:always;
+}
+
+
+@volume {
+    @begin {
+	page:auto;
+	content: flow(cover) flow(volume-toc);
+    }
+}
+
+@volume:first {
+    @begin {
+	content: flow(cover) flow(frontmatter) flow(document-toc);
+    }
+}
+
+#generated-document-toc,
+#generated-volume-toc {
+    page: toc;
+    counter-reset: page 1;
+}
+
+#generated-document-toc::-obfl-on-toc-start,
+#generated-volume-toc::-obfl-on-toc-start {
+    display: block;
+    content: 'Inhaltsverzeichnis';
+    text-align: center;
+    text-indent:0;
+    padding-top:1;
+    margin-left:4;
+    margin-right:4;
+    margin-bottom:1;
+    -obfl-underline:⠤;
+    page-break-before: always;
+}
+
+#generated-document-toc::-obfl-on-volume-start,
+#generated-volume-toc::-obfl-on-volume-start {
+    display: block;
+    content: ' ⠃⠙⠄';
+    /* TODO: Insert a condition here to generate the word 'Band' in grade 1 and 2.
+     *       This will be possible as soon as the variable contraction-grade is supported */
+    text-align: center;
+    text-indent:0;
+    margin-top:1;
+    margin-bottom:1;
+    &::before {
+	content: -obfl-evaluate('(round $started-volume-number)');
+	text-transform: volume;
+    }
+}
+
+#generated-document-toc::-obfl-on-volume-end,
+#generated-volume-toc::-obfl-on-volume-end {
+    display: block;
+    text-align: center;
+    text-indent:0;
+    margin-top:1;
+    margin-bottom:1;
+}
+
+#generated-document-toc::-obfl-on-toc-end,
+#generated-volume-toc::-obfl-on-toc-end {
+    display: block;
+    text-align: center;
+    text-indent:0;
+    content: '⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒';
+    margin-top:1;
+    margin-bottom:1;
+}
+
+#generated-volume-toc li,
+#generated-document-toc li {
+    display: block;
+}
+
+#generated-volume-toc li a::after,
+#generated-document-toc li a::after {
+    content: " " leader('⠄') " " target-string(attr(href), print-page) target-counter(attr(href), page); 
+    content: " " leader('⠄') " ";
+    &::after {
+        &::before {
+            content: target-string(attr(href), print-page);
+            text-transform: toc-print-page;
+        }
+        &::after {
+            content: target-counter(attr(href), page);
+            text-transform: toc-page;
+        }
+    }
+}
+
+dtbook {
+    hyphens: auto; /* FIXME: don't hard-code, depends on param
+                      $hyphenation (see default.scss in dtbook-to-pef) */
+    counter-reset: footnote 0;
+}
+
+/* Hidden elements
+ *
+ * These are not directly incldued in the output. */
+
+head {
+    display: none;
+}
+
+doctitle {
+    display: none;
+    string-set: doctitle content();
+}
+
+docauthor {
+    display: none;
+    string-set: docauthor content();
+}
+
+
+noteref {
+    counter-increment: footnote;
+}
+
+noteref::after {
+    display: inline;
+    content: counter(footnote);
+}
+
+noteref::alternate {
+    flow: footnotes;
+    display: block;
+    content: '⠠⠔' counter(footnote) ' ' target-content(attr(idref));
+    text-indent: -2;
+    margin-left: 2
+}
+
+note {
+    display: none;
+}
+
+note p {
+    display: inline;
+}
+
+
+.pageref {
+    flow: null;
+}
+
+.pageref::alternate {
+    display: inline;
+    content: target-counter(attr(href), page);
+}
+
+brl|select,
+brl|when-braille,
+brl|literal{
+    display: inline;
+}
+
+brl|otherwise{
+    display: none;
+}
+
+/* Headings */
+
+h1 {
+    display: block;
+    text-align: center;
+    margin-left: 4;
+    margin-right: 4;
+    padding-top: 1;
+    -obfl-underline: ⠤;
+    margin-bottom: 1;
+    page-break-after: avoid;
+    hyphens: none;
+}
+
+h2 {
+    display: block;
+    margin-right: 4;
+    text-align: left;
+    -obfl-underline: ⠒;
+    page-break-after: avoid;
+    hyphens: none;
+}
+
+h3 {
+    display: block;
+    margin-right: 4;
+    text-align: left;
+    -obfl-underline: ⠂;
+    page-break-after: avoid;
+    hyphens: none;
+}
+
+h4, h5, h6 {
+    display: block;
+    margin-right: 4;
+    text-align: left;
+    page-break-after: avoid;
+    hyphens: none;
+}
+
+hd, bridgehead {
+    display: block;
+    margin-right: 4;
+    text-align: left;
+    margin-top: 1;
+    page-break-after: avoid;
+    hyphens: none;
+}
+
+brl|running-line, brl|toc-line, brl|otherwise {
+    display:none;
+}
+
+sidebar > hd {
+    display: block;
+    margin-top:0;
+    page-break-after: avoid;
+}
+
+/* Divisions */
+
+frontmatter > level1 {
+    display: block;
+    page-break-before:right;
+}
+
+frontmatter > level1:has(> level2){
+    string-set: running-footer-front "Klappentexte";
+}
+
+frontmatter > level1.toc {
+    display: none;
+}
+
+
+bodymatter > level1:not(:first-child),
+rearmatter > level1:not(:first-child) {
+    display: block;
+    page-break-before:always;
+}
+
+
+level1 {
+    display: block;
+}
+
+
+level2 {
+    display:block;
+    margin-top:2;
+    orphans:10;
+}
+
+level3 {
+    display:block;
+    margin-top:1;
+    orphans:7;
+}
+
+level4, level5, level6 {
+    display:block;
+    margin-top:1;
+    orphans:4;
+}
+
+frontmatter, bodymatter, rearmatter {
+    display: block;
+}
+
+frontmatter {
+    page: frontmatter;
+    flow: frontmatter;
+}
+
+frontmatter level2 {
+    display: block;
+    margin-top:1;
+    orphans:4;
+}
+
+frontmatter level2:first-child h2 {
+    padding-top:1;
+}
+
+/* Cover Page */
+
+#cover-recto {
+    display: block;
+    flow: cover;
+    text-align: center;
+    page-break-inside:avoid;
+}
+
+#cover-author {
+    display: block;
+    -obfl-vertical-position:5;
+    text-indent: 0;
+}
+
+#cover-title {
+    display: block;
+    margin-top: 2;
+    text-indent: 0;
+    -obfl-underline: ⠤; /* FIXME: add `text-indent: 0` in order to get rid of the two leading
+                           underlined spaces, and also for better centering (similar for
+                           p#cover-author, p.series, p.how-many-volumes, etc.) */
+}
+
+#number-of-volumes::after {
+    content: -obfl-evaluate('(round $volumes)');
+    text-transform: volumes;
+}
+
+#number-of-volumes-label::after {
+    content: -obfl-evaluate('(if (> $volumes 1) "Braillebänden" "Brailleband")');
+}
+
+#current-volume::after {
+    content: -obfl-evaluate('(round $volume)');
+    text-transform: volume;
+}
+
+frontmatter > #cover-recto > .series-ppp {
+    display: block;
+    text-indent: 0;
+    -obfl-vertical-position:22;
+}
+
+frontmatter > #cover-verso > .series-ppp {
+    display: block;
+    text-indent: 0;
+    -obfl-vertical-position:19;
+}
+
+frontmatter > #cover-recto > .series-sjw {
+    display: block;
+    text-indent: 0;
+    -obfl-vertical-position:12;
+}
+
+frontmatter > level1 > .how-many-volumes {
+    /*  TODO: the solution below does not work yet
+     *  ("In ... Braillebänden"  and  "Erster Band"
+     *  should only be displayed when the book has more than 1 volumes);
+     *  the same applies to "Erster Band" in the TOC */
+    display: -obfl-evaluate('(if (> $volumes 1) "block" "none")');
+    text-indent: 0;
+    margin-top: 4;
+}
+
+frontmatter > level1 > .which-volume {
+    display: block;
+}
+
+frontmatter > #cover-recto > .publisher {
+    display: block;
+    -obfl-vertical-position:24;
+}
+
+#cover-verso {
+    display: block;
+    flow: cover;
+}
+
+#copyright-blurb {
+    display: block;
+    text-indent: 0;
+    -obfl-vertical-position:1;
+}
+
+#sjw-blurb {
+    display: block;
+    text-indent: 0;
+    -obfl-vertical-position:1;
+}
+
+#publisher-blurb {
+    display: block;
+    text-indent: 0;
+    -obfl-vertical-position:21;
+}
+
+#cover-year {
+    display: block;
+    text-indent: 0;
+    margin-top: 1;
+    padding-bottom: 1;
+}
+
+frontmatter > .titlepage {
+    display: block;
+    flow: cover;
+}
+
+frontmatter > .titlepage > level2:first-child > p {
+    display: block;
+    text-align:center;
+}
+
+frontmatter > .titlepage > level2:nth-child(2) > p {
+    display: block;
+    margin-left:2;
+    text-indent:-2;
+}
+
+.sourcePublisher {
+    display: block;
+    text-align:center;
+    -obfl-vertical-position:26;
+    page-break-after:always;
+}
+
+frontmatter > .titlepage > level2:first-child::before {
+    display: block;
+    text-align:center;
+    white-space: pre-line;
+    margin-top:5;
+    margin-bottom:1;
+    margin-left:4;
+    margin-right:4;
+    -obfl-underline: ⠤;
+    content: string(docauthor) "\A\A\A" string(doctitle);
+}
+
+bodymatter {
+    page: bodymatter;
+    counter-set: page 1;
+}
+
+/* Paragraphs
+ *
+ * A paragraph is a block element with no special features. */
+
+p {
+    display: block;
+    text-indent: 2;
+}
+
+.precedingemptyline{
+    margin-top:1;
+}
+
+.noindent {
+    display: block;
+    text-indent: 0;
+}
+
+pagenum {
+    display: none;
+    string-set: print-page content(), slash-print-page '/' content();
+}
+
+blockquote {
+    margin-top:1;
+    margin-bottom:1;
+    margin-left:2;
+}
+
+poem {
+    display: block;
+    margin-top:1;
+    margin-bottom:1;
+    margin-left:2;
+}
+
+linegroup {
+    display: block;
+}
+
+linegroup + linegroup {
+    margin-top:1;
+    display: block;
+}
+
+line {
+    display: block;
+    margin-left:2;
+    text-indent:-2;
+    page-break-inside: avoid;
+}
+
+author, byline {
+    display: block;
+    text-align: right;
+}
+
+table {
+    display:block;
+    margin-top:1;
+    margin-bottom:1;
+}
+
+tr {
+    display:block;
+    text-indent:-2;
+    margin-left:2;
+}
+
+tbody, tfoot {
+    display:block;
+    border-top: ⠒;
+}
+
+td + td::before, th + th::before {
+		     content:" ⠒⠒ ";
+}
+
+caption{
+    display:block;
+    margin-bottom:1;
+}
+
+imggroup > caption, imggroup > img {
+    display:block;
+    text-indent:-2;
+    margin-left:2;
+}
+
+imggroup > prodnote {
+    display:block;
+}
+
+prodnote {
+    display:inline;
+}
+
+epigraph {
+    margin-top:1;
+    margin-bottom:1;
+    margin-left:4;
+    orphans:2;
+}
+
+imggroup {
+    display:block;
+    margin-top:1;
+    margin-bottom:1;
+    orphans:2;
+}
+
+/* Lists */
+
+
+/* dl, dt, dd not working with css, according to BF we need a pre-processing step to implement that */
+dl {
+    display:block;
+}
+
+dt {
+    display:inline;
+}
+
+dd {
+    display:inline;
+}
+
+dt + dd {
+    padding-left:1;
+}
+
+dd::after {
+    display:block;
+    white-space: pre-line;
+    content: '\A';
+}
+
+list {
+    margin-left: 2;
+    text-indent: -2;
+    margin-bottom: 1;
+    counter-reset: list-item;
+}
+
+list list {
+    margin-bottom: 0;
+}
+
+li {
+    display:list-item;
+}
+
+list[type=ul], list list list[type=ul] {
+    list-style-type: '⠠⠤';
+}
+
+list list[type=ul] {
+    list-style-type: '⠐⠤';
+}
+
+list[type=ol] > li {
+    display: block;
+    counter-increment: list-item;
+    &::before {
+        display: inline;
+        content: "⠼" counter(list-item, symbols(numeric "⠴" "⠂" "⠆" "⠒" "⠲" "⠢" "⠖" "⠶" "⠦" "⠔")) " ";
+    }
+}
+
+list[type=ol][enum="1"] {
+    list-style-type: decimal;
+}
+
+list[type=ol][enum=A] {
+    list-style-type: upper-latin;
+}
+
+list[type=ol][enum=I] {
+    list-style-type: upper-roman;
+}
+
+list[type=ol][enum=a] {
+    list-style-type: lower-latin;
+}
+
+list[type=ol][enum=i] {
+    list-style-type: lower-roman;
+}
+
+br::before {
+    white-space: pre-line;
+    content: '\A';
+}
+
+sidebar {
+    display:block;
+    margin-left:1;
+    orphans:2;
+}
+
+sidebar::before {
+    display:block;
+    margin-top:1;
+    margin-left:-1;
+    content:"⠏⠉⠉⠉";
+}
+
+sidebar::after {
+    display:block;
+    margin-bottom:1;
+    margin-left:-1;
+    content:"⠧⠤⠤⠤";
+}
+
+div {
+    display: block;
+}
+

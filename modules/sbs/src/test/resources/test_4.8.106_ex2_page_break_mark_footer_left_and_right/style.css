@@ -1,0 +1,29 @@
+@page {
+	margin-bottom: 1;
+	margin-left: 2;
+	@bottom-left {
+		content: string(print-page-slash, start-except-last) string(print-page, last);
+		text-transform: print-page;
+	}
+	@bottom-center {
+		content: string(running-footer-body);
+	}
+	@bottom-right {
+		content: counter(page);
+	}
+	@left {
+		content: -obfl-marker-indicator(pagenum, '⠄');
+	}
+}
+
+dtbook {
+	hyphens: none;
+}
+
+h1 {
+	-obfl-underline: none;
+}
+
+pagenum {
+	-obfl-marker: pagenum;
+}

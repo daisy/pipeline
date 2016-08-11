@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Kuerzungen mit ss">
+      <x:context>
+        <stub xml:lang="de">besser dass dessen gröss gross muss schliess sprech wiss</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">SS ^ D^ !G^ G^ M^ 5^ ,^ W^</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Kuerzungen mit Eszett">
+      <x:context>
+        <stub xml:lang="de">daß größ groß muß schließ wiß</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">^ !G^ G^ M^ 5^ W^</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Ausdruecke mit Eszett">
+      <x:context>
+        <stub xml:lang="de">aß eß iß oß uß</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">A'^ E'^ I'^ O'^ U'^</stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

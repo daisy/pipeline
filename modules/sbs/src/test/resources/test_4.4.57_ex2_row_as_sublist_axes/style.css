@@ -1,0 +1,39 @@
+
+@page {
+  size:28 28;
+}
+
+dtbook{
+  hyphens:none;
+}
+
+caption{
+  display:block;
+  margin-left:0;
+}
+
+table{
+  render-table-by:land;
+}
+
+table::list-item {
+  display:block;
+  margin-left:0;
+}
+
+table::table-by(land) {
+  display:block;
+  margin-left:2;
+}
+
+table::table-by(land)::list-item {
+  display:block;
+}
+
+th::after {
+  content: ': ';
+}
+
+#th-land {
+  /* display: none; */
+}

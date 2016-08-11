@@ -1,0 +1,18 @@
+@page bodymatter:right {
+	margin-bottom: 0;
+	@top-right {
+		content: "      " counter(page);
+	}
+	@bottom-left {
+		content: none;
+	}
+	@bottom-right {
+		content: none;
+	}
+}
+
+dtbook {
+	hyphens: none;
+}
+
+

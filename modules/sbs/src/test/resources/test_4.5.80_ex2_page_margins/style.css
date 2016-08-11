@@ -1,0 +1,23 @@
+@page {
+	/* the margin shorthand doesn't work in @page (why is not clear) */
+	/* margin: 2; */
+	margin-top: 2;
+	margin-bottom: 2;
+	margin-left: 2;
+	margin-right: 2;
+}
+
+@page bodymatter:right {
+	margin-bottom: 2;
+	@bottom-left {
+		content: none;
+	}
+}
+
+dtbook {
+	hyphens: none;
+}
+
+p {
+	text-indent: 0;
+}

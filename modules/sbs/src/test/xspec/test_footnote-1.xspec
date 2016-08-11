@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:param name="footnote_placement" select="'standard'"/>
+
+    <x:scenario label="footnote with standard placement and automatic numbering" pending="Needs to be tested after formatting with xprocspec">
+      <x:context>
+        <stub xml:lang="de">Foo<dtb:noteref idref="#footnote1">a</dtb:noteref>	Bar<dtb:noteref idref="#footnote2">b</dtb:noteref> Baz</stub>
+      </x:context>
+      <x:expect label="braille">FOO'*#A
+* 
+  BAR'*#B
+* 
+  BAZ</x:expect>
+    </x:scenario>
+
+    <x:scenario label="footnote inside h1 (http://redmine.sbszh.ch/issues/1260)" pending="Needs to be tested after formatting with xprocspec">
+      <x:context>
+        <dtb:h1 xml:lang="de">Sein und nicht sein<dtb:noteref idref="#fn1">1</dtb:noteref></dtb:h1>
+      </x:context>
+      <x:expect label="braille">
+y H1
+ 9 U N 9'*#A
+* 
+ 
+</x:expect>
+    </x:scenario>
+
+    <x:scenario label="footnote followed by ',' http://redmine.sbszh.ch/issues/1264" pending="Needs to be tested after formatting with xprocspec">
+      <x:context>
+        <dtb:p xml:lang="de">Hier die Fussnote<dtb:noteref idref="#fn1">1</dtb:noteref>, vor einem Komma</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+y P
+ HR 0 FU^NO('*#A,
+* 
+ ? 6[ KXA</x:expect>
+    </x:scenario>
+
+    <x:scenario label="footnote followed by '!' http://redmine.sbszh.ch/issues/1264" pending="Needs to be tested after formatting with xprocspec">
+      <x:context>
+        <dtb:p xml:lang="de">Hier die Fussnote<dtb:noteref idref="#fn1">1</dtb:noteref>! vor einem</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+y P
+ HR 0 FU^NO('*#A'+
+* 
+ ? 6[</x:expect>
+    </x:scenario>
+
+    <x:scenario label="footnote followed by '?' http://redmine.sbszh.ch/issues/1264" pending="Needs to be tested after formatting with xprocspec">
+      <x:context>
+        <dtb:p xml:lang="de">Hier die Fussnote<dtb:noteref idref="#fn1">1</dtb:noteref>? vor einem</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+y P
+ HR 0 FU^NO('*#A'?
+* 
+ ? 6[</x:expect>
+    </x:scenario>
+
+    <x:scenario label="footnote followed by '(' http://redmine.sbszh.ch/issues/1264" pending="Needs to be tested after formatting with xprocspec">
+      <x:context>
+        <dtb:p xml:lang="de">Hier die Fussnote<dtb:noteref idref="#fn1">1</dtb:noteref>( vor einem</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+y P
+ HR 0 FU^NO('*#A'=
+* 
+ ? 6[</x:expect>
+    </x:scenario>
+
+</x:description>

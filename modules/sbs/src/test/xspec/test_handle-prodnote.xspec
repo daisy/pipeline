@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Empty Prodnote">
+      <x:context>
+        <stub xml:lang="de">
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Inline Prodnote"
+		pending="is now handled in xprocspectest as this involves two steps (adding announcements and translation">
+      <x:context>
+        <dtb:prodnote xml:lang="de">In der Blindenschriftausgabe wurden sämtliche Abbildungen weggelassen.</dtb:prodnote>
+      </x:context>
+      <x:expect label="braille">
+	<prodnote xml:lang="de">'&lt;=In der Blindenschriftausgabe wurden sämtliche Abbildungen weggelassen.'&lt;=</prodnote>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Block Prodnote"
+		pending="is now handled in xprocspectest as this involves two steps (adding announcements and translation">
+      <x:context>
+        <dtb:prodnote xml:lang="de">
+	  <dtb:p brl:class="ind">Anmerkung für die Blindenschriftausgabe:</dtb:p>
+	  <dtb:p brl:class="ind">Eine Zeichenerklärung befindet sich am Ende des Buches.</dtb:p>
+      </dtb:prodnote>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p brl:class="ind">'&lt;=Anmerkung für die Blindenschriftausgabe:</dtb:p><dtb:p brl:class="ind">Eine Zeichenerklärung befindet sich am Ende des Buches.'&lt;=</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

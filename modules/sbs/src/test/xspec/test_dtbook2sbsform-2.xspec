@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Selection feature with literals with grade attrs">
+      <x:context>
+        <brl:select xml:lang="de">
+	  <brl:when-braille>
+	    <brl:literal brl:grade="1">Foo</brl:literal>
+	    <brl:literal brl:grade="2">Bar</brl:literal>
+	  </brl:when-braille>
+	  <brl:otherwise>Baz</brl:otherwise>
+	</brl:select>
+      </x:context>
+      <x:expect label="braille">Bar</x:expect>
+    </x:scenario>
+
+    <x:scenario label="vform in em Bug#1413">
+      <x:context>
+        <stub xml:lang="de">
+	  <dtb:p><dtb:em>und <brl:v-form>Sie</brl:v-form> <brl:v-form>Ihren</brl:v-form></dtb:em></dtb:p>
+	</stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+	  <dtb:p><dtb:em>__U <brl:v-form>$S</brl:v-form> <brl:v-form>$IC</brl:v-form>'.</dtb:em></dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="inline after inline">
+      <x:context>
+        <stub xml:lang="de"><dtb:p><dtb:span grade="2">Quark</dtb:span> <dtb:span grade="2">Quark</dtb:span></dtb:p></stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+	  <dtb:p><dtb:span grade="2">'QU)K</dtb:span> <dtb:span grade="2">'QU)K</dtb:span></dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="brl:emph at beginning of block">
+      <x:context>
+        <stub xml:lang="de"><dtb:p><brl:emph>Quark</brl:emph></dtb:p></stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+	  <dtb:p><brl:emph>_'QU)K</brl:emph></dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Wrong SBSForm-Macroname Bug #1539">
+      <x:context>
+        <stub xml:lang="de"><dtb:p><dtb:list brl:class="name" type="pl"><dtb:li>bla</dtb:li></dtb:list></dtb:p></stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+	  <dtb:p><dtb:list brl:class="name" type="pl">
+	    <dtb:li>BLA</dtb:li>
+	  </dtb:list>
+	  </dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Wort &#34;ich&#34; am Ende von Inlines mit nachfolgendem Satzzeichen">
+      <x:context>
+        <stub xml:lang="de"><dtb:em>Ich</dtb:em>, <dtb:strong>ich</dtb:strong>; <brl:emph>ich</brl:emph>: <dtb:em>ich</dtb:em>? <dtb:strong>ich</dtb:strong>! (<brl:emph>ich</brl:emph>) »<brl:emph>ich</brl:emph>«.</stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de"><dtb:em>_I4</dtb:em>, <dtb:strong>_I4</dtb:strong>; <brl:emph>_I4</brl:emph>: <dtb:em>_I4</dtb:em>? <dtb:strong>_I4</dtb:strong>+ =<brl:emph>_I4</brl:emph>= (<brl:emph>_I4</brl:emph>).</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Separator ist keine Wortgrenze">
+      <x:context>
+        <stub xml:lang="de"><brl:homograph>testor<brl:separator/>test</brl:homograph></stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de"><brl:homograph>TE]?(]</brl:homograph></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Braille-Literal">
+      <x:context>
+        <stub xml:lang="de">Musik <brl:select><brl:when-braille><brl:literal>@#Lv._@&gt;&amp;2K</brl:literal></brl:when-braille> 
+            <brl:otherwise>[Note E im Bassschlüssel]</brl:otherwise></brl:select> ist doch ganz einfach.</stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">MK @#Lv._@&gt;&amp;2K ] D4 GZ 6F&lt;.</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Römische Zahlen">
+      <x:context>
+        <dtb:p xml:lang="de">Henry <brl:num role="roman">IV</brl:num>.
+          Auf Seite <brl:num role="roman">iii</brl:num> beginnt das Vorwort.</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de">HCR'Y <brl:num role="roman">&gt;IV</brl:num>. 1 S3( <brl:num role="roman">'III</brl:num> ;G*NT D ,?W?T.</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Telefonnummern">
+      <x:context>
+        <dtb:p xml:lang="de">Telefon <brl:num role="phone">041 / 123 45 67</brl:num>? Telefon <brl:num role="phone">041/123'45'67</brl:num>!</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de">TYEFON <brl:num role="phone">#JDA.ABC.DE.FG</brl:num>'? TYEFON <brl:num role="phone">#JDA.ABC.DE.FG</brl:num>'+</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Brüche">
+      <x:context>
+        <dtb:p xml:lang="de"><brl:num role="fraction">1/3</brl:num>? <brl:num role="fraction">2/5</brl:num>, (<brl:num role="fraction">13/15</brl:num>) <brl:num role="mixed">3 2/5</brl:num>? <brl:num role="mixed">1 12/19</brl:num>, (<brl:num role="mixed">3 24/25</brl:num>)</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><brl:num role="fraction">#A:</brl:num>'? <brl:num role="fraction">#B?</brl:num>', =<brl:num role="fraction">#AC,?</brl:num>'= <brl:num role="mixed">#C#B?</brl:num>'? <brl:num role="mixed">#A#AB,*</brl:num>', =<brl:num role="mixed">#C#BD;?</brl:num>'=</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="ISBN">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>ISBN</dtb:abbr> <brl:num role="isbn">978-3-86971-001-3</brl:num> <dtb:abbr>ISBN</dtb:abbr> <brl:num role="isbn">978-3-86971-001-X</brl:num> <dtb:abbr>ISBN</dtb:abbr> <brl:num role="isbn">978 3 86971 001 3</brl:num></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>&gt;ISBN</dtb:abbr> <brl:num role="isbn">#IGH.C.HFIGA.JJA.C</brl:num> <dtb:abbr>&gt;ISBN</dtb:abbr> <brl:num role="isbn">#IGH.C.HFIGA.JJA-&gt;X</brl:num> <dtb:abbr>&gt;ISBN</dtb:abbr> <brl:num role="isbn">#IGH.C.HFIGA.JJA.C</brl:num></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr 1">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>A4</dtb:abbr></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>&gt;A#D</dtb:abbr></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr 2 Bug #1523">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>RTÉ</dtb:abbr></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>&gt;RT"%</dtb:abbr></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr 3 &#34;C2D&#34; Bug #1523">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>C2D</dtb:abbr></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>&gt;C#B&gt;D</dtb:abbr></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr 4 Single Uppercase Letter &#34;C&#34; Bug #1523">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>C</dtb:abbr></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>&gt;C</dtb:abbr></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr 5 &#34;c2d&#34; Bug #1523">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>c2d</dtb:abbr></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>'C#B'D</dtb:abbr></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr 6 &#34;GmbH&#34; Bug #1523">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>GmbH</dtb:abbr></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>$GMB&gt;H</dtb:abbr></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr 8 &#34;kHz&#34; Bug #1523">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>kHz</dtb:abbr></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>'K$HZ</dtb:abbr></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="abbr 9 &#34;DM 50&#34; (white space) Bug #1523">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>DM </dtb:abbr>50</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>&gt;DM</dtb:abbr>#EJ</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Namen mit Upshifts (McDonalds) werden von brl:name nicht behandelt Bug #1343">
+      <x:context>
+        <dtb:p xml:lang="de"><brl:name>McCartney</brl:name></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><brl:name>$MC$CARTNEY</brl:name></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Ausdrücke wie XBox mit abbr nicht handlebar Bug #1477">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:abbr>X</dtb:abbr><dtb:abbr>Box</dtb:abbr></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><dtb:abbr>&gt;X</dtb:abbr><dtb:abbr>$BOX</dtb:abbr></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="24 mm Falsches Resultat bei brl:num role=&#34;measure&#34;, wenn Zeilenumbruch zwischen Zahl und Einheit steht Bug #1263">
+      <x:context>
+        <dtb:p xml:lang="de"><brl:num role="measure">24
+          mm</brl:num></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p xml:lang="de"><brl:num role="measure">#BD'MM</brl:num></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="text nodes ending with punctuation">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>wort</dtb:p>
+          <dtb:p>»aber</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p>W?T</dtb:p>
+          <dtb:p>(A</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="text nodes ending with punctuation with first word inline">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><dtb:em>wort</dtb:em></dtb:p>
+          <dtb:p>»aber</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p><dtb:em>_W?T</dtb:em></dtb:p>
+          <dtb:p>(A</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="brl:volume und pagnum Bug #1290">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:level1>
+            <dtb:h1>Titel1</dtb:h1>
+            <dtb:p>bla</dtb:p>
+          </dtb:level1>
+          <brl:volume brl:grade="2"/>
+          <dtb:level1>
+            <dtb:pagenum id="page-165" page="normal">165</dtb:pagenum>
+            <dtb:h1>Titel2</dtb:h1>
+            <dtb:p>blo</dtb:p>
+          </dtb:level1>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:level1>
+            <dtb:h1>TITY'#A</dtb:h1>
+            <dtb:p>BLA</dtb:p>
+          </dtb:level1>
+          <brl:volume brl:grade="2"/>
+          <dtb:level1>
+            <dtb:pagenum id="page-165" page="normal">165</dtb:pagenum>
+            <dtb:h1>TITY'#B</dtb:h1>
+            <dtb:p>BLO</dtb:p>
+          </dtb:level1>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="brl:volume und pagnum">
+      <x:context>
+        <stub xml:lang="de">        
+	  <dtb:p>... bla bla.</dtb:p>
+	  <brl:volume brl:grade="2"/>
+	  <dtb:pagenum>75</dtb:pagenum>
+	  <dtb:p>Bla bla ...</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">        
+	  <dtb:p>... BLA BLA.</dtb:p>
+	  <brl:volume brl:grade="2"/>
+	  <dtb:pagenum>75</dtb:pagenum>
+	  <dtb:p>BLA BLA ...</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="brl:volume und levelN/pagnum">
+      <x:context>
+        <stub xml:lang="de">
+	  <dtb:level1>
+	    <dtb:p>... bla bla.</dtb:p>
+	  </dtb:level1>
+	  <brl:volume brl:grade="2"/>
+	  <dtb:level1>
+	    <dtb:pagenum>75</dtb:pagenum>
+	    <dtb:h1>Titel</dtb:h1>
+	    <dtb:p>Bla bla ...</dtb:p>
+	  </dtb:level1>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+	  <dtb:level1>
+	    <dtb:p>... BLA BLA.</dtb:p>
+	  </dtb:level1>
+	  <brl:volume brl:grade="2"/>
+	  <dtb:level1>
+	    <dtb:pagenum>75</dtb:pagenum>
+	    <dtb:h1>TITY</dtb:h1>
+	    <dtb:p>BLA BLA ...</dtb:p>
+	  </dtb:level1>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Fehlender Pt. 6 (Apo) vor Anführungszeichen im Wortinnern (#1525)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>Gruppen»mahlzeit«</dtb:p>
+          <dtb:p>»Gruppen«mahlzeit</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p>GRUPPC'(MAHLZT)</dtb:p>
+          <dtb:p>(GRUPPC')MAHLZT</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="&#34;ver-&#34;-Vorsilbe wird nach Bindestrich als &#34;-&#34; statt &#34;V7&#34; ausgegeben (#1714)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>Vereinigung</dtb:p>
+          <dtb:p>Fußballvereinigung</dtb:p>
+          <dtb:p>Fußball-Vereinigung</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p>-6&gt;U</dtb:p>
+          <dtb:p>FU'^BAQV76&gt;U</dtb:p>
+          <dtb:p>FU'^BAQ-V76&gt;U</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Schrägstrich zwischen ABBR wird getilgt (#1752)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><dtb:abbr>A</dtb:abbr>/<dtb:abbr>Z</dtb:abbr></dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p><dtb:abbr>&gt;A</dtb:abbr>!,m<dtb:abbr>&gt;Z</dtb:abbr></dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Zahl nach ABBR erzeugt zwei Apostrophe (#1753)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><dtb:abbr>A</dtb:abbr>4</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p><dtb:abbr>&gt;A</dtb:abbr>#D</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Falsche Übersetzung bei BRL:NAME mit Context name_capitalized (#1887)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>
+            <brl:name>McDonald</brl:name>
+            <brl:name>McBünzli</brl:name>
+            <brl:name>McKünzli</brl:name>
+          </dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p> <brl:name>$MC$DONALD</brl:name> <brl:name>$MC$B8NZLI</brl:name> <brl:name>$MC$K8NZLI</brl:name> </dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="fehlender Pt. 6 (Apo) nach ABBR, wenn nur 1 Buchstabe in ABBR (#1903)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>Die hohen <dtb:abbr>C</dtb:abbr>s</dtb:p>
+        </stub>
+      </x:context>
+      <!-- FIXME: The Apo should be outside the abbr -->
+      <!-- <dtb:p>0 HOHC <dtb:abbr>&gt;C</dtb:abbr>'S</dtb:p> -->
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p>0 HOHC <dtb:abbr>&gt;C'</dtb:abbr>S</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="fehlender Pt. 6 (Apo) nach ABBR, wenn nur 1 Buchstabe in ABBR (#1903)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>bla <dtb:abbr>GmbH</dtb:abbr>s bla</dtb:p>
+        </stub>
+      </x:context>
+      <!-- FIXME: The Apo should be outside the abbr -->
+      <!-- <dtb:p>BLA <dtb:abbr>$GMB&gt;H</dtb:abbr>'S BLA</dtb:p> -->
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p>BLA <dtb:abbr>$GMB&gt;H'</dtb:abbr>S BLA</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Punkt 6 (Apo) fälschlicherweise vor Klammer, wenn direkt nach Tag (#1902)">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p>ble <brl:num role="ordinal">33.</brl:num> blo</dtb:p>
+          <dtb:p>(bla)</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p>BLE <brl:num role="ordinal">#::</brl:num> BLO</dtb:p>
+          <dtb:p>=BLA=</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="2a &amp; &lt;brl:num&gt;2&lt;/brl:num&gt;a">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><brl:num>2</brl:num>a</dtb:p>
+          <dtb:p>2a</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p><brl:num>#B</brl:num>'A</dtb:p>
+          <dtb:p>#B'A</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="&lt;em&gt;CD&lt;/em&gt;s">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:p><dtb:em>CD</dtb:em>s</dtb:p>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:p><dtb:em>_'CD'.</dtb:em>S</dtb:p>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Fehlender Pt. 6 (apo) bei Wort+Zahl-Ausdrücken (#1503)">
+      <x:context>
+        <stub xml:lang="de">Peter25</stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">PET7'#BE</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="closing quote after number: apostrophe must be inserted">
+      <x:context>
+        <stub xml:lang="de">»2«</stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">(#B')</stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

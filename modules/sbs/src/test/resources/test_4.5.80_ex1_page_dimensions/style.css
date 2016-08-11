@@ -1,0 +1,10 @@
+@page bodymatter:right {
+	margin-bottom: 0;
+	@bottom-left {
+		content: none;
+	}
+}
+
+dtbook {
+	hyphens: none;
+}

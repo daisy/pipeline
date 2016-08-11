@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               stylesheet="../../main/resources/xml/block-translate.xsl">
+  
+  <x:param name="contraction-grade">0</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  
+  <x:scenario label="simple test">
+    <x:context mode="identify-blocks">
+      <_ xmlns="http://www.daisy.org/z3986/2005/dtbook/" style="display:block"> foo
+        <span style="hyphens: auto">foobar</span>
+        <span style="white-space: pre-wrap">   foo </span>
+        <span style="text-transform: foo">foo</span>
+      </_>
+    </x:context>
+    <x:expect label="result">
+      <_ style="text-transform: none">
+        <_ xmlns="http://www.daisy.org/z3986/2005/dtbook/" style="display: block"> ⠋⠕⠕ <span>⠋⠕⠕­⠃⠁⠗</span> <span style="white-space: pre-wrap">   ⠋⠕⠕ </span> <span>⠋⠕⠕</span>
+        </_>
+      </_>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+  <x:param name="footnote_placement" select="'standard'"/>
+
+    <x:scenario label="annotation  with standard placement and automatic numbering" pending="needs to be tested with xprocspec">
+      <x:context>
+        <stub xml:lang="de">Blah <dtb:annoref idref="#annotation1">hihi</dtb:annoref> <dtb:annoref idref="#annotation2">haha</dtb:annoref> blah</stub>
+      </x:context>
+      <x:expect label="braille">BLAH HIHI'*#A
+* 
+ HAHA'*#B
+* 
+  BLAH</x:expect>
+    </x:scenario>
+
+    <x:scenario label="annotation  with standard placement and automatic numbering" pending="needs to be tested with xprocspec">
+      <x:context>
+        <stub xml:lang="de">
+	  <dtb:annoref idref="#annotation1">Foo</dtb:annoref> Bar
+	  <dtb:annoref idref="#annotation2">Baz</dtb:annoref> Baz
+	</stub>
+      </x:context>
+      <x:expect label="braille">FOO'*#A
+* 
+  BAR BAZ'*#B
+* 
+  BAZ </x:expect>
+    </x:scenario>
+
+    <x:scenario label="annotation inside h1 (http://redmine.sbszh.ch/issues/1260)" pending="needs to be tested with xprocspec">
+      <x:context>
+        <dtb:h1 xml:lang="de">Sein und nicht <dtb:annoref idref="#fn1">sein</dtb:annoref></dtb:h1>
+      </x:context>
+      <x:expect label="braille">
+y H1
+ 9 U N 9'*#A
+* 
+ 
+</x:expect>
+    </x:scenario>
+
+    <x:scenario label="annotation followed by ',' http://redmine.sbszh.ch/issues/1264" pending="needs to be tested with xprocspec">
+      <x:context>
+        <dtb:p xml:lang="de">Hier die <dtb:annoref idref="#fn1">Fussnote</dtb:annoref>, vor einem Komma</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+y P
+ HR 0 FU^NO('*#A,
+* 
+ ? 6[ KXA</x:expect>
+    </x:scenario>
+
+    <x:scenario label="annotation followed by '!' http://redmine.sbszh.ch/issues/1264" pending="needs to be tested with xprocspec">
+      <x:context>
+        <dtb:p xml:lang="de">Hier die <dtb:annoref idref="#fn1">Fussnote</dtb:annoref>! vor einem</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+y P
+ HR 0 FU^NO('*#A'+
+* 
+ ? 6[</x:expect>
+    </x:scenario>
+
+    <x:scenario label="annotation followed by '?' http://redmine.sbszh.ch/issues/1264" pending="needs to be tested with xprocspec">
+      <x:context>
+        <dtb:p xml:lang="de">Hier die <dtb:annoref idref="#fn1">Fussnote</dtb:annoref>? vor einem</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+y P
+ HR 0 FU^NO('*#A'?
+* 
+ ? 6[</x:expect>
+    </x:scenario>
+
+    <x:scenario label="annotation followed by '(' http://redmine.sbszh.ch/issues/1264" pending="needs to be tested with xprocspec">
+      <x:context>
+        <dtb:p xml:lang="de">Hier die <dtb:annoref idref="#fn1">Fussnote</dtb:annoref>( vor einem</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+y P
+ HR 0 FU^NO('*#A'=
+* 
+ ? 6[</x:expect>
+    </x:scenario>
+
+</x:description>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Definition list">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:dl>
+            <dtb:dt>Zug:</dtb:dt>
+            <dtb:dd>Fortbewegungsmittel, mit viel Eisen drumherum.</dtb:dd>
+            <dtb:dt>Banane:</dtb:dt>
+            <dtb:dd>Ist eine Frucht, die gelb ist und grün war.</dtb:dd>
+            <dtb:dt>Stuhl:</dtb:dt>
+            <dtb:dd>Was zum Draufsitzen. Hat 4 Beine wie ein Hundeli oder ne Geiss.</dtb:dd>
+            <dtb:dt>Pilz:</dtb:dt>
+            <dtb:dd>Wächst am Fuss. Kann man aber auch essen und pflücken.</dtb:dd>
+          </dtb:dl>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <dtb:dl>
+            <dtb:dt>ZUG:</dtb:dt>
+            <dtb:dd>F?T;WGUSMT, T VL 3SC DRUMH7UM.</dtb:dd>
+            <dtb:dt>B++E:</dtb:dt>
+            <dtb:dd>] 6E FRU4T, 0 GYB ] U GR8N ).</dtb:dd>
+            <dtb:dt>]UHL:</dtb:dt>
+            <dtb:dd>W ZM DR,1,IC. HT #D B6E 2 6 H/DELI O NE G3^.</dtb:dd>
+            <dtb:dt>PILZ:</dtb:dt>
+            <dtb:dd>W@4] AM FU^. K M A \ E^C U PFL8$C.</dtb:dd>
+          </dtb:dl>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

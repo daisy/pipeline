@@ -1,0 +1,58 @@
+p
+ .           BLABLO
+
+     #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+   #AA #AA #AA #AA #AA #AA
+ . #AA #AA #AA #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+   #AB #AB #AB #AB #AB #AB
+ . #AB #AB #AB #AB #AB #AC
+   #AC #AC #AC #AC #AC #AC
+   #AC #AC #AC #AC #AC #AC
+ . #AC #AC #AC #AC #AC #AD
+   #AD #AD #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+   #AD #AD #AD #AD #AD #AD
+ . #AD #AD #AD #AE #AE #AE
+   #AE #AE #AE #AE #AE #AE
+   #AE #AE #AE #AE #AE #AE
+ . #AE #AE #AE #AE #AE #AF
+   #AF #AF #AF #AF #AF #AF
+   #AF #AF #AF #AF #AF #AF
+ . #AF #AF #AF #AF #AF #AI
+   #AI #AI #AI #AI #AI #AI
+   #AI #AI #AI #AI #AI #AI
+   #AI #AI #AI #AI #AI #AI
+ _#AA,*       BLABLO       #A
+p. #AI #AI #AI #AI #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+   #BA #BA #BA #BA #BA #BA
+ . #BA #BB #BB #BB #BB #BB
+   #BB #BB #BB #BB #BB #BB
+   #BB #BB #BB #BB #BB #BB
+   #BB #BB #BB #BB #BB #BB
+   #BB #BB #BB #BB #BB #BB
+   #BB #BB #BB #BB #BB #BB
+   #BB #BB #BB #BB #BB #BB
+ . #BC #BC #BC #BC #BC #BC
+   #BC #BC #BC #BC #BC #BC
+   #BC #BC #BC #BC #BC #BC
+   #BC #BC #BC #BC #BC #BC
+   #BC #BC #BC #BC #BC #BC
+   #BC #BC #BC #BC #BC #BC
+ . #BC #BC #BC #BC #BD #BD
+   #BD #BD #BD #BD #BD #BD
+   #BD #BD #BD #BD #BD #BD
+   #BD #BD #BD #BD #BD #BD
+   #BD #BD #BD #BD #BD #BD
+   #BD #BD
+
+
+ _#AI;/       BLABLO       #B
+p
+p

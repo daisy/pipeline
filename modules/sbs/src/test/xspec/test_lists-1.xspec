@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="list with brl:class attr">
+      <x:context>
+        <stub xml:lang="de">
+	  <dtb:list brl:class="foo" type="pl"/>
+	  <dtb:list brl:class="foo" type="ul"/>
+	  <dtb:list brl:class="foo" type="ol"/>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+	  <dtb:list brl:class="foo" type="pl"/>
+	  <dtb:list brl:class="foo" type="ul"/>
+	  <dtb:list brl:class="foo" type="ol"/>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="li with brl:class attr">
+      <x:context>
+        <stub xml:lang="de">
+	  <dtb:li brl:class="foo"/>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+	  <dtb:li brl:class="foo"/>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Preformatted lists">
+      <x:context>
+        <stub xml:lang="de">
+	<dtb:list type="pl">
+          <dtb:li>1. bla bla</dtb:li>
+          <dtb:li>2. bla bla</dtb:li>
+          <dtb:li>3. bla bla
+            <dtb:list type="pl">
+              <dtb:li>a) blo blo
+                <dtb:list type="pl">
+                  <dtb:li>i. ble ble</dtb:li>
+                  <dtb:li>ii. ble ble</dtb:li>
+                </dtb:list>
+              </dtb:li>
+              <dtb:li>b) blo blo</dtb:li>
+            </dtb:list>
+          </dtb:li>
+          <dtb:li>4. bla bla
+            <dtb:list type="pl">
+              <dtb:li>a) blo blo
+                <dtb:list type="pl">
+                  <dtb:li>i. ble ble</dtb:li>
+                  <dtb:li>ii. ble ble</dtb:li>
+                </dtb:list>
+              </dtb:li>
+              <dtb:li>b) blo blo</dtb:li>
+            </dtb:list>
+          </dtb:li>
+          <dtb:li>5. bla bla</dtb:li>
+        </dtb:list>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+	<dtb:list type="pl">
+          <dtb:li>#A. BLA BLA</dtb:li>
+          <dtb:li>#B. BLA BLA</dtb:li>
+          <dtb:li>#C. BLA BLA <dtb:list type="pl">
+          <dtb:li>'A= BLO BLO <dtb:list type="pl">
+          <dtb:li>I. BLE BLE</dtb:li>
+          <dtb:li>II. BLE BLE</dtb:li>
+        </dtb:list>
+          </dtb:li>
+          <dtb:li>'B= BLO BLO</dtb:li>
+        </dtb:list>
+          </dtb:li>
+          <dtb:li>#D. BLA BLA <dtb:list type="pl">
+          <dtb:li>'A= BLO BLO <dtb:list type="pl">
+          <dtb:li>I. BLE BLE</dtb:li>
+          <dtb:li>II. BLE BLE</dtb:li>
+        </dtb:list>
+          </dtb:li>
+          <dtb:li>'B= BLO BLO</dtb:li>
+        </dtb:list>
+          </dtb:li>
+          <dtb:li>#E. BLA BLA</dtb:li>
+        </dtb:list>
+        </stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Unordered lists" pending="Needs to be tested after formatting with xprocspec">
+      <x:context>
+        <stub xml:lang="de">
+	<dtb:list type="ul">
+          <dtb:li>bla bla</dtb:li>
+          <dtb:li>bla bla</dtb:li>
+          <dtb:li>bla bla
+            <dtb:list type="ul">
+              <dtb:li>blo blo
+                <dtb:list type="ul">
+                  <dtb:li>ble ble</dtb:li>
+                  <dtb:li>ble ble</dtb:li>
+                </dtb:list>
+              </dtb:li>
+              <dtb:li>blo blo</dtb:li>
+            </dtb:list>
+          </dtb:li>
+          <dtb:li>bla bla
+            <dtb:list type="ul">
+              <dtb:li>blo blo
+                <dtb:list type="ul">
+                  <dtb:li>ble ble</dtb:li>
+                  <dtb:li>ble ble</dtb:li>
+                </dtb:list>
+              </dtb:li>
+              <dtb:li>blo blo</dtb:li>
+            </dtb:list>
+          </dtb:li>
+          <dtb:li>bla bla</dtb:li>
+        </dtb:list>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+y ULISTb
+
+y LI
+ '- BLA BLA
+
+y LI
+ '- BLA BLA
+
+y LI
+ '- BLA BLA 
+y ULISTb
+
+y LI
+ !- BLO BLO 
+y ULISTb
+
+y LI
+ '- BLE BLE
+
+y LI
+ '- BLE BLE
+
+y ULISTe
+ 
+
+y LI
+ !- BLO BLO
+
+y ULISTe
+ 
+
+y LI
+ '- BLA BLA 
+y ULISTb
+
+y LI
+ !- BLO BLO 
+y ULISTb
+
+y LI
+ '- BLE BLE
+
+y LI
+ '- BLE BLE
+
+y ULISTe
+ 
+
+y LI
+ !- BLO BLO
+
+y ULISTe
+ 
+
+y LI
+ '- BLA BLA
+
+y ULISTe
+</x:expect>
+    </x:scenario>
+
+</x:description>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+  
+  <x:script>
+    <p:declare-step type="pxi:transform" version="1.0">
+      <p:input port="source"/>
+      <p:output port="result"/>
+      <p:option name="grade" required="true"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
+      <p:add-attribute match="/*" attribute-name="style" attribute-value="hyphens:auto"/>
+      <p:add-attribute match="html:p" attribute-name="style" attribute-value="display:block"/>
+      <px:transform>
+        <p:with-option name="query" select="concat('(input:html)(input:css)(output:css)(translator:sbs)(locale:de)(grade:',$grade,')')"/>
+      </px:transform>
+      <p:delete match="@style|@css:*"/>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="test_1">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p>foobar</p>
+          </div>
+        </x:document>
+      </x:input>
+    </x:call>
+    
+    <x:scenario label="grade 0">
+      <x:call>
+        <x:option name="grade" select="'0'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result" select="/_/*"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p>⠋⠕⠕­⠃⠁⠗</p>
+          </div>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="grade 1">
+      <x:call>
+        <x:option name="grade" select="'1'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result" select="/_/*"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p>⠋⠕⠕­⠃⠁⠗</p>
+          </div>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="grade 2">
+      <x:call>
+        <x:option name="grade" select="'2'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result" select="/_/*"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <p>⠋⠕⠕­⠃⠁⠗</p>
+          </div>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="test_2">
+    <x:documentation>
+      Tests that no text ends up at the wrong place after translation because of white space only
+      text nodes.
+    </x:documentation>
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <div xmlns="http://www.w3.org/1999/xhtml">
+            <div>
+              <div>
+                <div>foo</div>
+              </div>
+            </div>
+            <div>
+              <div>
+                <div>bar</div>
+              </div>
+            </div>
+          </div>
+        </x:document>
+      </x:input>
+      <x:option name="grade" select="'2'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="/_/*"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+          <div>
+            <div>
+              <div>⠋⠕⠕</div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <div>⠃⠁⠗</div>
+            </div>
+          </div>
+        </div>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

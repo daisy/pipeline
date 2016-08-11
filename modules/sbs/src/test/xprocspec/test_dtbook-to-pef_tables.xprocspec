@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:sbs="http://www.sbs.ch"
+               script="http://www.sbs.ch/pipeline/modules/braille/dtbook-to-pef.xpl">
+  
+  <x:scenario label="4.4.57_ex1_row-by-row" pending="borders after thead and before tfoot not supported yet">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="file" href="../resources/test_4.4.57_ex1_row-by-row/test_4.4.57.xml"/>
+      </x:input>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_4.4.57_ex1_row-by-row/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/test_4.4.57_ex1_row-by-row/test_4.4.57.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/test_4.4.57_ex1_row-by-row/output_expected/test_4.4.57.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="4.4.57_ex2_row_as_sublist_axes" pending="input and expected output are actually different tables">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="file" href="../resources/test_4.4.57_ex2_row_as_sublist_axes/test_4.4.57.xml"/>
+      </x:input>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_4.4.57_ex2_row_as_sublist_axes/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/test_4.4.57_ex2_row_as_sublist_axes/test_4.4.57.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/test_4.4.57_ex2_row_as_sublist_axes/output_expected/test_4.4.57.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="foo" pending="TODO: Mischa: verify result">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="file" href="../resources/test_tables_foo/test_foo.xml"/>
+      </x:input>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_tables_foo/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/test_tables_foo/test_foo.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <_/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="faa" pending="TODO: Mischa: verify result">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="file" href="../resources/test_tables_faa/test_faa.xml"/>
+      </x:input>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_tables_faa/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/test_tables_faa/test_faa.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <_/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

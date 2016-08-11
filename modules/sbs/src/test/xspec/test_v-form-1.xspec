@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Sie G2">
+      <x:context>
+        <dtb:p xml:lang="de"><brl:v-form>Sie</brl:v-form></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de"><brl:v-form>$S</brl:v-form></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="SIE G2">
+      <x:context>
+        <dtb:p xml:lang="de"><brl:v-form>SIE</brl:v-form></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de"><brl:v-form>$S</brl:v-form></dtb:p></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Euerem G2">
+      <x:context>
+        <dtb:p xml:lang="de"><brl:v-form>Euerem</brl:v-form></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de"><brl:v-form>$27[</brl:v-form></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="EUEREM G2">
+      <x:context>
+        <dtb:p xml:lang="de"><brl:v-form>EUEREM</brl:v-form></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de"><brl:v-form>$27[</brl:v-form></dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Sie mit Apostroph ausserhalb Tag (#2109)">
+      <x:context>
+        <dtb:p xml:lang="de"><brl:v-form>Sie</brl:v-form>'s</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de"><brl:v-form>$S</brl:v-form>'S</dtb:p></x:expect>
+    </x:scenario>
+
+</x:description>

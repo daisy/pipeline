@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description
+    xmlns:utfx="http://utfx.org/test-definition"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+    stylesheet="../../main/resources/xml/block-translate.xsl"
+    preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+    <x:param name="contraction-grade">2</x:param>
+    <x:param name="hyphenator">(locale:de)</x:param>
+    <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="test for whitespace swallowed with adjacing inlines (http://redmine.sbszh.ch/issues/show/818) ">
+      <x:context>
+        <stub xml:space="preserve" xml:lang="de"><dtb:em>Mein Mann.</dtb:em> <brl:v-form>Ihr</brl:v-form></stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:space="preserve" xml:lang="de"><dtb:em>__M6 MN.'.</dtb:em> <brl:v-form>$I</brl:v-form></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Swallow white space whith embed new lines 1">
+      <x:context>
+        <stub xml:space="preserve" xml:lang="de">Gedanken – Strich      —</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:space="preserve" xml:lang="de">&amp;DKC'- ]R#'-</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Swallow white space whith embed new lines 2">
+      <x:context>
+        <stub xml:space="preserve" xml:lang="de">Gedanken
+— Strich</stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:space="preserve" xml:lang="de">&amp;DKC'- ]R#</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Swallow white space whith embed new lines 3">
+      <x:context>
+        <stub xml:space="preserve" xml:lang="de">Gedanken
+  — Strich</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:space="preserve" xml:lang="de">&amp;DKC'- ]R#</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Swallow white space whith embed new lines 4">
+      <x:context>
+        <stub xml:space="preserve" xml:lang="de">Gedanken
+                         —         Strich</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:space="preserve" xml:lang="de">&amp;DKC'- ]R#</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="test 2 for brl:num role=&#34;measure&#34;, wenn Zeilenumbruch zwischen Zahl und Einheit steht (http://redmine.sbszh.ch/issues/show/898) ">
+      <x:context>
+        <stub xml:lang="de">
+          <brl:num role="measure">24 
+mm</brl:num>
+        </stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de"><brl:num role="measure">#BD'MM</brl:num></stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="test 1 for brl:homograph (http://redmine.sbszh.ch/issues/show/925) ">
+      <x:context>
+        <stub xml:lang="de">Iron <brl:homograph>M<brl:separator/>an</brl:homograph></stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">IRON <brl:homograph>MAN</brl:homograph></stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="test 2 for brl:homograph (http://redmine.sbszh.ch/issues/show/925) ">
+      <x:context>
+        <stub xml:lang="de">Iron <brl:homograph>Ma<brl:separator/>n</brl:homograph>
+        </stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">IRON <brl:homograph>MAN</brl:homograph></stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="test für Einzelbuchstaben mit Punkt">
+      <x:context>
+        <stub xml:lang="de">A. B. C. D. E. F. G. H. I. J.</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">A. B. 'C. D. E. F. G. H. I. J.</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="test 2 for Apostroph (pt. 6) vor Einzelbuchstaben mit Punkt innerhalb abbr (http://redmine.sbszh.ch/issues/show/927) ">
+      <x:context>
+        <stub xml:lang="de">
+          <dtb:abbr>A. B. D. E. F. G. H. I. J.</dtb:abbr>
+        </stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de"><dtb:abbr>A.B.D.E.F.G.H.I.J.</dtb:abbr></stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="test 2 for Apostroph (pt. 6) erscheint zweimal bei Apostroph + Einzelbuchstabe (http://redmine.sbszh.ch/issues/show/929) ">
+      <x:context>
+        <stub xml:lang="de">wie geht's</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">2 G=T'S</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="&lt;em&gt; innerhalb Anführungszeichen liefern falsches Resultat (http://redmine.sbszh.ch/issues/show/1004)">
+      <x:context>
+        <stub xml:lang="de">»<dtb:em>Test</dtb:em>«</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">(<dtb:em>_TE]</dtb:em>)</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Problem bei Schrägstrich: Kürzungen (http://redmine.sbszh.ch/issues/show/1005)">
+      <x:context>
+        <stub xml:lang="de">Produktion/Test</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">QDUKTJ!,mTE]</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Kursive/Fette Anführungszeichen bei brl:render=&#34;ignore&#34; (http://redmine.sbszh.ch/issues/show/1006)">
+      <x:context>
+        <stub xml:lang="de">»<dtb:em brl:render="ignore">Test</dtb:em>«-Beispiel</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">(<dtb:em brl:render="ignore">TE]</dtb:em>)-,B,0</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Kursive/Fette Anführungszeichen bei brl:render=&#34;ignore&#34; (http://redmine.sbszh.ch/issues/show/1006)">
+      <x:context>
+        <stub xml:lang="de"><dtb:em brl:render="ignore">»Test«</dtb:em>-Beispiel</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de"><dtb:em brl:render="ignore">(TE])</dtb:em>-,B,0</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Kursive/Fette Anführungszeichen bei brl:render=&#34;ignore&#34; (http://redmine.sbszh.ch/issues/show/1006)">
+      <x:context>
+        <stub xml:lang="de">›<dtb:em brl:render="ignore">Test</dtb:em>‹-Beispiel</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">'(<dtb:em brl:render="ignore">TE]</dtb:em>')-,B,0</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Kursive/Fette Anführungszeichen bei brl:render=&#34;ignore&#34; (http://redmine.sbszh.ch/issues/show/1006)">
+      <x:context>
+        <stub xml:lang="de"><dtb:em brl:render="ignore">›Test‹</dtb:em>-Beispiel</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de"><dtb:em brl:render="ignore">'(TE]')</dtb:em>-,B,0</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="&#34;ich&#34; innerhalb em vor Komma (http://redmine.sbszh.ch/issues/show/944)">
+      <x:context>
+        <stub xml:lang="de"><dtb:em>ich</dtb:em>, </stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de"><dtb:em>_I4</dtb:em>, </stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="&#34;ich&#34; innerhalb em vor Klammer (http://redmine.sbszh.ch/issues/show/944)">
+      <x:context>
+        <stub xml:lang="de"><dtb:em>ich</dtb:em>) </stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de"><dtb:em>_I4</dtb:em>= </stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="&#34;ich&#34; innerhalb em vor Klammer (http://redmine.sbszh.ch/issues/show/944)">
+      <x:context>
+        <stub xml:lang="de"><dtb:em>(ich</dtb:em>) </stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de"><dtb:em>_=I4</dtb:em>= </stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="&#34;mich&#34; innerhalb em vor Klammer (http://redmine.sbszh.ch/issues/show/944)">
+      <x:context>
+        <stub xml:lang="de"><dtb:em>mich</dtb:em>) </stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de"><dtb:em>_M#</dtb:em>= </stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Single word mixed emphasis em before (http://redmine.sbszh.ch/issues/show/1007)">
+      <x:context>
+        <dtb:p xml:lang="de"><dtb:em>Menschen</dtb:em>versuch</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de"><dtb:em>_MC5C'.</dtb:em>V7SU4</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Single word mixed emphasis em after">
+      <x:context>
+        <dtb:p xml:lang="de">Liebe<dtb:em>gang</dtb:em></dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de">L0;<dtb:em>'_G+G</dtb:em></dtb:p></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Single word mixed emphasis em inside">
+      <x:context>
+        <dtb:p xml:lang="de">Liebe<dtb:em>Menschen</dtb:em>versuch</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de">L0;<dtb:em>'_MC5C'.</dtb:em>V7SU4</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Einzelbuchstaben mit Akzenten erhalten fälschlicherweise einen Pt.6 (http://redmine.sbszh.ch/issues/show/1010)">
+      <x:context>
+        <stub xml:lang="de">à la carte</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">"[ LA 'C)(</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Falsches Resultat bei gemischtem Bruch, wenn Zeilenumbruch vorkommt (http://redmine.sbszh.ch/issues/show/1065)">
+      <x:context>
+        <stub xml:space="preserve" xml:lang="de"><brl:num role="mixed">4
+                1/2</brl:num></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:space="preserve" xml:lang="de"><brl:num role="mixed">#D#A;</brl:num></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Check if unicode chars are eaten by liblouis">
+      <x:context>
+        <stub xml:lang="de">╞</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">'_</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Check if unicode chars are eaten by liblouis">
+      <x:context>
+        <stub xml:lang="de">╡</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de">'.</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Quotes w/o context 1">
+      <x:context>
+        <stub xml:lang="de"> (»<dtb:abbr>Bsp.</dtb:abbr>!«</stub>
+      </x:context>
+      <x:expect label="braille"><stub xml:lang="de"> =(<dtb:abbr>BSP.</dtb:abbr>+)</stub></x:expect>
+    </x:scenario>
+
+    <x:scenario label="Quotes with phone number">
+      <x:context>
+        <dtb:p xml:lang="de"><brl:num role="phone">079 160 22 22</brl:num>«</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:p xml:lang="de"><brl:num role="phone">#JGI.AFJ.BB.BB</brl:num>')</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Leading zeros in time indication Bug #1172, Bug #969, Bug ##1292">
+      <x:context>
+        <stub xml:lang="de"><brl:time value="11:05">11:05</brl:time></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de"><brl:time value="11:05">#AA.JE</brl:time></stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Many quoted paras 3">
+      <x:context>
+        <stub xml:lang="de">
+	  <dtb:p>»Okay. Aber ich würde es auch gar nicht wissen; bin erst ein paar Jahre in den <dtb:abbr>USA</dtb:abbr>.«</dtb:p>
+	  <dtb:p>Sie hatte von Anfang an den Akzent bemerkt, der den Ausländer verriet, und fragte: »Na, und woher kommst du?«</dtb:p>
+	</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">
+	  <dtb:p>(OKA'Y. A # 8E % \ GAR N W^C; B* 7] 6 PAAR JRE * E <dtb:abbr>&gt;USA</dtb:abbr>.)</dtb:p>
+	  <dtb:p>S HE V +F+G + E AKZCT ;M7KT, R E \L@ND7 -R0T, U FR(: (NA, U WOH7 KX] DU?)</dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Gross, schliess, etc">
+      <x:context>
+        <stub xml:lang="de">
+	  <dtb:p>Groß schließ Großmutter</dtb:p>
+	</stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">
+	  <dtb:p>G^ 5^ G^MUTT7</dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

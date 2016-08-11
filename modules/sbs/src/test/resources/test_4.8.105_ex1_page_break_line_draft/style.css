@@ -1,0 +1,41 @@
+@page bodymatter:right {
+	margin-bottom: 0;
+	@bottom-left {
+		content: none;
+	}
+	@bottom-right {
+		content: "      " counter(page);
+	}
+}
+
+dtbook {
+	hyphens: none;
+}
+
+h1 {
+	text-align: center;
+	-obfl-underline: none;
+}
+
+pagenum {
+	display: block;
+	text-indent: 0;
+}
+
+pagenum::before {
+	content: leader('⠤') '⠸';
+}
+
+pagenum:has(+ pagenum) {
+	display: none;
+	string-set: print-page content(),
+	            first-print-page content();
+}
+
+pagenum + pagenum {
+	string-set: print-page content();
+}
+
+pagenum + pagenum::before {
+	content: leader('⠤') '⠸' string(first-print-page) '⠤⠸';
+}

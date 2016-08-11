@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE dtbook [<!ENTITY ndash "&#x2013;"><!ENTITY minus "&#x2212;"><!ENTITY nbsp "&#x00A0;">]><?oxygen RNGSchema="http://xmlp/schema/dtbook-2005-3-sbs.rng" type="xml"?>
+<dtbook version="2005-3-sbs-full" xml:lang="de" xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+    xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+    <head>
+        <meta name="dc:Title" content="Ein Titel"/>
+        <meta name="dc:Creator" content="Herr Niemand"/>
+        <meta name="dc:Subject" content=""/>
+        <meta name="dc:Description" content=""/>
+        <meta name="dc:Publisher"
+            content="Swiss Library for the Blind, Visually Impaired and Print Disabled"/>
+        <meta name="dc:Date" content="2012-01-05"/>
+        <meta name="dc:Type" content="Text"/>
+        <meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+        <meta name="dc:Identifier" content="ch-sbs-0d63eb29-566a-4061-a8bf-b279c69699ed"/>
+        <meta name="dc:Source" content=""/>
+        <meta name="dc:Language" content="de"/>
+        <meta name="dc:Rights" content=""/>
+        <meta name="dtb:uid" content="ch-sbs-0d63eb29-566a-4061-a8bf-b279c69699ed"/>
+        <meta name="dtb:sourceEdition" content=""/>
+        <meta name="dtb:sourcePublisher" content=""/>
+        <meta name="dtb:sourceRights" content=""/>
+        <meta name="prod:series" content=""/>
+        <meta name="prod:seriesNumber" content=""/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Titel</doctitle>
+            <docauthor>Autor</docauthor>
+            <level1 class="titlepage">
+                <level2>
+                    <p>Untertitel / Roman / ...</p>
+                    <p class="sourcePublisher">Originalverlag</p>
+                </level2>
+                <level2>
+                    <p>Impressum</p>
+                    <p>Bla bla bla bla bla bla bla bla bla ...</p>
+                </level2>
+            </level1>
+            <level1>
+                <level2>
+                    <h2>Klappentext 1</h2>
+                    <p>Bla bla bla bla bla bla bla bla bla ...</p>
+                </level2>
+                <level2>
+                    <h2>Klappentext 2</h2>
+                    <p>Bla bla bla bla bla bla bla bla bla ...</p>
+                </level2>
+                <level2>
+                    <h2>Zum Autor</h2>
+                    <p>Bla bla bla bla bla bla bla bla bla ...</p>
+                </level2>
+            </level1>
+            <level1 class="toc">
+                <list type="pl">
+                    <li><lic/></li>
+                </list>
+            </level1>
+        </frontmatter>
+        <bodymatter>
+            <level1> 
+                <pagenum id="page-7" page="normal">7</pagenum>
+                <h1>Kapitel 1</h1>
+                <p>Bla bla bla bla bla bla bla bla bla ...</p>
+                <pagenum id="page-8" page="normal">8</pagenum>
+            </level1>
+            <level1> 
+                <pagenum id="page-9" page="normal">9</pagenum>
+                <h1>Kapitel 2</h1>
+                <p>Bla bla bla bla bla bla bla bla bla ...</p>
+                <pagenum id="page-10" page="normal">10</pagenum>
+            </level1>
+            <brl:volume brl:grade="0"/>
+            <brl:volume brl:grade="1"/>
+            <brl:volume brl:grade="2"/>
+            <level1> 
+                <pagenum id="page-11" page="normal">11</pagenum>
+                <h1>Kapitel 3</h1>
+                <p>Bla bla bla bla bla bla bla bla bla ...</p>
+                <pagenum id="page-12" page="normal">12</pagenum>
+            </level1>
+            <level1> 
+                <pagenum id="page-13" page="normal">13</pagenum>
+                <h1>Kapitel 4</h1>
+                <p>Bla bla bla bla bla bla bla bla bla ...</p>
+                <pagenum id="page-14" page="normal">14</pagenum>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="Image">
+      <x:context>
+        <dtb:img alt="foo" xml:lang="de"/>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:img alt="foo" xml:lang="de">FOO</dtb:img>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Image w/o alt text">
+      <x:context>
+        <dtb:img xml:lang="de"/>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:img xml:lang="de"/>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Image with empty alt text">
+      <x:context>
+        <dtb:img alt="" xml:lang="de"/>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:img alt="" xml:lang="de"></dtb:img>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Imagegroup">
+      <x:context>
+        <dtb:imggroup xml:lang="de">
+          <dtb:img alt="foo"/>
+	</dtb:imggroup>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:imggroup xml:lang="de">
+          <dtb:img alt="foo">FOO</dtb:img>
+	</dtb:imggroup>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Caption">
+      <x:context>
+        <dtb:caption xml:lang="de" imgref="img1_1">Abb. 23: By the way, Sam, as someday you'll be paying for my entitlements, I'd like to thank you in advance.</dtb:caption>
+      </x:context>
+      <x:expect label="braille">
+	<dtb:caption xml:lang="de" imgref="img1_1">ABB. #BC': B'Y THE WA'Y, SAM, AS SOMEDA'Y 'YOU'LL BE PA'Y*G FOR M'Y ^ITL[CTS, I'D LIKE TO TH+K 'YOU * ADV+'CE.</dtb:caption>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Big imagegroup">
+      <x:context>
+        <dtb:imggroup id="imggrp_2" xml:lang="de">
+          <dtb:img id="img1_1" src="fig1_01.png" alt="someday"/>
+          <dtb:caption imgref="img1_1">Abb. 23: By the way, Sam, as someday you'll be paying for my
+          entitlements, I'd like to thank you in advance.</dtb:caption>
+        </dtb:imggroup>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:imggroup id="imggrp_2" xml:lang="de">
+          <dtb:img id="img1_1" src="fig1_01.png" alt="someday">SOMEDA'Y</dtb:img>
+          <dtb:caption imgref="img1_1">ABB. #BC': B'Y THE WA'Y, SAM, AS SOMEDA'Y 'YOU'LL BE PA'Y*G FOR M'Y ^ITL[CTS, I'D LIKE TO TH+K 'YOU * ADV+'CE.</dtb:caption>
+        </dtb:imggroup>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

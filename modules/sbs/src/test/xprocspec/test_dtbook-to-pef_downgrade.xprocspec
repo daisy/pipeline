@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns:sbs="http://www.sbs.ch"
+	       script="http://www.sbs.ch/pipeline/modules/braille/dtbook-to-pef.xpl">
+
+  <x:scenario label="Downgrading">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook version="2005-3-sbs-full"
+		  xml:lang="de"
+		  xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+		  xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <head/>
+	    <book>
+	      <bodymatter>
+		<level1>
+		  <p>Kurzschrift schrift schrift <span brl:grade="1">Vollschrift</span> kurz kurz kurz</p>
+		  <p>Kurzschrift schrift schrift <span brl:grade="0">Basisschrift</span> kurz kurz kurz</p>
+		  <p>Kurzschrift schrift schrift <span brl:grade="1">Vollschrift schrift schrift</span> kurz kurz kurz</p>
+		  <p>Kurzschrift schrift schrift <span brl:grade="0">Basisschrift schrift schrift</span> kurz kurz kurz</p>
+		  <p>Kurzschrift schrift schrift <span brl:grade="1">Vollschrift/Vollschrift</span> kurz kurz kurz</p>
+		  <p>Kurzschrift schrift schrift <span brl:grade="0">Basisschrift/Basisschrift</span> kurz kurz kurz</p>
+		  <p>Kurzschrift schrift schrift <span brl:grade="1">Vollschrift-­Vollschrift</span> kurz kurz kurz</p>
+		  <p>Kurzschrift schrift schrift <span brl:grade="0">Basisschrift-­Basisschrift</span> kurz kurz kurz</p>
+		</level1>
+	      </bodymatter>
+	    </book>
+	  </dtbook>
+	</x:document>
+      </x:input>
+      <x:option name="contraction-grade" select="2"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_downgrading/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/test_downgrading/test_dtbook-to-pef_downgrade.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+	<pef xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="de" version="2008-1">
+	  <head>
+	    <meta>
+	      <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">application/x-pef+xml</dc:format>
+	      <dc:identifier xmlns:dc="http://purl.org/dc/elements/1.1/">identifier?</dc:identifier>
+	      <dc:date xmlns:dc="http://purl.org/dc/elements/1.1/">2016-04-14</dc:date>
+	    </meta>
+	  </head>
+	  <body>
+	    <volume cols="28" rows="28" rowgap="0" duplex="true">
+	      <section>
+		<page>
+		  <row>⠀⠀⠅⠵⠱⠞⠀⠱⠞⠀⠱⠞⠀⠠⠄⠧⠕⠇⠇⠱⠗⠊⠋⠞⠀⠅⠵⠀</row>
+		  <row>⠅⠵⠀⠅⠵</row>
+		  <row>⠀⠀⠅⠵⠱⠞⠀⠱⠞⠀⠱⠞⠀⠠⠄⠃⠁⠎⠊⠎⠎⠉⠓⠗⠊⠋⠞⠀</row>
+		  <row>⠅⠵⠀⠅⠵⠀⠅⠵</row>
+		  <row>⠀⠀⠅⠵⠱⠞⠀⠱⠞⠀⠱⠞⠀⠤⠄⠧⠕⠇⠇⠱⠗⠊⠋⠞⠀</row>
+		  <row>⠱⠗⠊⠋⠞⠀⠱⠗⠊⠋⠞⠠⠄⠀⠅⠵⠀⠅⠵⠀⠅⠵</row>
+		  <row>⠀⠀⠅⠵⠱⠞⠀⠱⠞⠀⠱⠞⠀⠤⠄⠃⠁⠎⠊⠎⠎⠉⠓⠗⠊⠋⠞⠀</row>
+		  <row>⠎⠉⠓⠗⠊⠋⠞⠀⠎⠉⠓⠗⠊⠋⠞⠠⠄⠀⠅⠵⠀⠅⠵⠀⠅⠵</row>
+		  <row>⠀⠀⠅⠵⠱⠞⠀⠱⠞⠀⠱⠞⠀⠤⠄⠧⠕⠇⠇⠱⠗⠊⠋⠞⠐⠂</row>
+		  <row>⠧⠕⠇⠇⠱⠗⠊⠋⠞⠠⠄⠀⠅⠵⠀⠅⠵⠀⠅⠵</row>
+		  <row>⠀⠀⠅⠵⠱⠞⠀⠱⠞⠀⠱⠞⠀⠤⠄⠃⠁⠎⠊⠎⠤</row>
+		  <row>⠎⠉⠓⠗⠊⠋⠞⠐⠂⠃⠁⠎⠊⠎⠎⠉⠓⠗⠊⠋⠞⠠⠄⠀⠅⠵⠀</row>
+		  <row>⠅⠵⠀⠅⠵</row>
+		  <row>⠀⠀⠅⠵⠱⠞⠀⠱⠞⠀⠱⠞⠀⠤⠄⠧⠕⠇⠇⠱⠗⠊⠋⠞⠤</row>
+		  <row>⠧⠕⠇⠇⠱⠗⠊⠋⠞⠠⠄⠀⠅⠵⠀⠅⠵⠀⠅⠵</row>
+		  <row>⠀⠀⠅⠵⠱⠞⠀⠱⠞⠀⠱⠞⠀⠤⠄⠃⠁⠎⠊⠎⠎⠉⠓⠗⠊⠋⠞⠤</row>
+		  <row>⠃⠁⠎⠊⠎⠎⠉⠓⠗⠊⠋⠞⠠⠄⠀⠅⠵⠀⠅⠵⠀⠅⠵</row>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+		</page>
+	      </section>
+	    </volume>
+	  </body>
+	</pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Span inside span 2">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook version="2005-3-sbs-full"
+		  xml:lang="de"
+		  xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+		  xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <head/>
+	    <book>
+	      <bodymatter>
+		<level1>
+		  <p><span brl:accents="reduced">René</span></p>
+		  <p><span brl:accents="reduced">René René</span></p>
+		  <p>Kurz <span brl:grade="1" brl:accents="reduced">René René</span> René</p>
+		  <p><span brl:grade="1">René <span brl:accents="reduced">René</span> René</span></p>
+		</level1>
+	      </bodymatter>
+	    </book>
+	  </dtbook>
+	</x:document>
+      </x:input>
+      <x:option name="contraction-grade" select="2"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_span_inside_span/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/test_span_inside_span/test_dtbook-to-pef_downgrade.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+	<pef xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="de" version="2008-1">
+	  <head>
+	    <meta>
+	      <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">application/x-pef+xml</dc:format>
+	      <dc:identifier xmlns:dc="http://purl.org/dc/elements/1.1/">identifier?</dc:identifier>
+	      <dc:date xmlns:dc="http://purl.org/dc/elements/1.1/">2016-04-14</dc:date>
+	    </meta>
+	  </head>
+	  <body>
+	    <volume cols="28" rows="28" rowgap="0" duplex="true">
+	      <section>
+		<page>
+		  <row>⠀⠀⠗⠉⠈⠑</row>
+		  <row>⠀⠀⠗⠉⠈⠑⠀⠗⠉⠈⠑</row>
+		  <row>⠀⠀⠅⠵⠀⠤⠄⠗⠑⠝⠈⠑⠀⠗⠑⠝⠈⠑⠠⠄⠀⠗⠉⠈⠿</row>
+		  <row>⠀⠀⠤⠄⠗⠑⠝⠈⠿⠀⠗⠑⠝⠈⠑⠀⠗⠑⠝⠈⠿⠠⠄</row>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row/>
+		  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+		</page>
+	      </section>
+	    </volume>
+	  </body>
+	</pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

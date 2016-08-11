@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="num und dddd in em">
+      <x:context>
+        <dtb:p><dtb:em xml:lang="de"><brl:num role="ordinal">3.</brl:num> Dezember 2010</dtb:em>,</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p><dtb:em xml:lang="de">__<brl:num role="ordinal">#:</brl:num> DEZ[B7 #BJAJ'.</dtb:em>,</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="num und dddd in em">
+      <x:context>
+        <dtb:p><dtb:em xml:lang="de">blabla <brl:num role="ordinal">13.</brl:num> Dezember 2010</dtb:em>,</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p><dtb:em xml:lang="de">__BLABLA <brl:num role="ordinal">#,:</brl:num> DEZ[B7 #BJAJ'.</dtb:em>,</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="dddd in em">
+      <x:context>
+        <dtb:p><dtb:em xml:lang="de">Dezember 2010</dtb:em>,</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p><dtb:em xml:lang="de">__DEZ[B7 #BJAJ'.</dtb:em>,</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Ordnungszahl mit Komma">
+      <x:context>
+        <dtb:p><brl:num role="ordinal">3.</brl:num>,</dtb:p>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:p><brl:num role="ordinal">#:</brl:num>',</dtb:p>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

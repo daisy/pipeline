@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">1</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+  <x:param name="hyphenation">true</x:param>
+
+    <x:scenario label="Hyphenation seems to fail after EM passage (#1693)">
+      <x:context>
+        <stub xml:lang="de"><dtb:p>Car­lo hat­te ihr ein Buch mit­ge­bracht, einen Ge­dicht­band, von sich, mit dem Ti­tel: <dtb:em>Al­les und nichts</dtb:em>, ein Ge­schenk. Sie war ein we­nig zu­sam­men­ge­zuckt. Sie war er­schro­cken. Sie hat­te kein Ge­schenk für ihn da­bei. Höf­lich hat­te sie dar­in ge­blät­tert. Sie hat­te sich be­dankt. Dass sie Ge­dich­te lie­be, hat­te sie ihm ver­si­chert. Für sich hat­te sie aber ge­dacht, dass sie schreck­lich sein wür­den, sei­ne Ge­dich­te, be­stimmt. Sie hat­te Angst da­vor, es ihm sa­gen zu müs­sen. Trotz­dem, es wä­re ihr lie­ber ge­we­sen. Sie wer­de sie le­sen, bald, sag­te sie ihm.</dtb:p></stub>
+      </x:context>
+      <x:expect label="braille">
+	<stub xml:lang="de">
+	  <dtb:p>CARtLO HATtTE IHR 3N BU4 MITtGEtBRA4T, 3NEN GEtDI4TtBAND, VON SI4, MIT DEM TItTEL: <dtb:em>__ALtLES UND NI4TS'.</dtb:em>, 3N GEt5ENK. S0 WAR 3N WEtNIG ZUtSAMtMENtGEtZUCKT. S0 WAR ERt5ROtCKEN. S0 HATtTE K3N GEt5ENK F8R IHN DAtB3. H9FtLI4 HATtTE S0 DARtIN GEtBL@TtTERT. S0 HATtTE SI4 BEtDANKT. DASS S0 GEtDI4tTE L0tBE, HATtTE S0 IHM VERtSIt4ERT. F8R SI4 HATtTE S0 ABER GEtDA4T, DASS S0 5RECKtLI4 S3N W8RtDEN, S3tNE GEtDI4tTE, BEt]IMMT. S0 HATtTE ANG] DAtVOR, ES IHM SAtGEN ZU M8StSEN. TROTZtDEM, ES W@tRE IHR L0tBER GEtWEtSEN. S0 WERtDE S0 LEtSEN, BALD, SAGtTE S0 IHM.</dtb:p>
+	</stub>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

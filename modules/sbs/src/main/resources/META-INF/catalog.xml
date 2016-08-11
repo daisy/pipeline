@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <!-- scripts -->
+  <uri name="http://www.sbs.ch/pipeline/modules/braille/dtbook-to-pef.xpl"
+       uri="../xml/dtbook-to-pef.xpl"
+       px:script="true"
+       px:extends="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl"/>
+
+  <!-- css -->
+  <uri name="http://www.sbs.ch/pipeline/modules/braille/default.scss"
+       uri="../css/default.scss"/>
+
+  <!-- internal resources added to the catalog for now until we find a proper solution for
+       https://github.com/daisy/pipeline-mod-braille/pull/79#discussion-diff-54276962 -->
+  <uri name="http://www.sbs.ch/pipeline/modules/braille/internal/handle-precedingseparator.xsl"
+       uri="../xml/handle-precedingseparator.xsl"/>
+  <uri name="http://www.sbs.ch/pipeline/modules/braille/internal/insert-boilerplate.xsl"
+       uri="../xml/insert-boilerplate.xsl"/>
+  
+  <!-- dependencies -->
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="ch:sbs:pipeline:sbs-braille-tables"/>
+  <nextCatalog catalog="ch:sbs:pipeline:sbs-hyphenation-tables"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:dtbook-to-pef"/>
+</catalog>
+

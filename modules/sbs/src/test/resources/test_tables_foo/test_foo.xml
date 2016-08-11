@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE dtbook [<!ENTITY ndash "&#x2013;"><!ENTITY nbsp "&#x00A0;">]><?oxygen RNGSchema="http://xmlp/schema/dtbook-2005-3-sbs.rng" type="xml"?>
+<dtbook version="2005-3-sbs-full" xml:lang="de" xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+  xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  <head>
+    <meta name="dc:Title" content="PRODSERVER1"/>
+    <meta name="dc:Creator" content="HAFECHÄS"/>
+    <meta name="dc:Subject" content=""/>
+    <meta name="dc:Description" content=""/>
+    <meta name="dc:Publisher"
+      content="Swiss Library for the Blind, Visually Impaired and Print Disabled"/>
+    <meta name="dc:Date" content="2012-01-05"/>
+    <meta name="dc:Type" content="Text"/>
+    <meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+    <meta name="dc:Identifier" content="ch-sbs-0d63eb29-566a-4061-a8bf-b279c69699ed"/>
+    <meta name="dc:Source" content=""/>
+    <meta name="dc:Language" content="de"/>
+    <meta name="dc:Rights" content=""/>
+    <meta name="dtb:uid" content="ch-sbs-0d63eb29-566a-4061-a8bf-b279c69699ed"/>
+    <meta name="dtb:sourceEdition" content=""/>
+    <meta name="dtb:sourcePublisher" content=""/>
+    <meta name="dtb:sourceRights" content=""/>
+    <meta name="prod:series" content=""/>
+    <meta name="prod:seriesNumber" content=""/>
+    <link rel="stylesheet" media="embossed" type="text/css" href="style.css"/>
+  </head>
+  <book>
+    <bodymatter>
+      <level1>
+        <table>
+          <caption>Travel Expense Report</caption>
+          <tr>
+            <th/>
+            <th id="a2" axis="expenses">Meals</th>
+            <th id="a3" axis="expenses">Hotels</th>
+            <th id="a4" axis="expenses">Transport</th>
+            <!-- <td>subtotals</td> -->
+            <th>subtotals</th>
+          </tr>
+          <tr>
+            <th id="a6" axis="location">San Jose</th>
+            <!-- <th/> -->
+            <!-- <th/> -->
+            <!-- <th/> -->
+            <!-- <td/> -->
+          </tr>
+          <tr>
+            <td id="a7" axis="date">25-Aug-97</td>
+            <td headers="a6 a7 a2">37.74</td>
+            <td headers="a6 a7 a3">112.00</td>
+            <td headers="a6 a7 a4">45.00</td>
+            <!-- <td/> -->
+          </tr>
+          <tr>
+            <td id="a8" axis="date">26-Aug-97</td>
+            <td headers="a6 a8 a2">27.28</td>
+            <td headers="a6 a8 a3">112.00</td>
+            <td headers="a6 a8 a4">45.00</td>
+            <!-- <td/> -->
+          </tr>
+          <tr>
+            <!-- <td>subtotals</td> -->
+            <th headers="a6">subtotals</th>
+            <td>65.02</td>
+            <td>224.00</td>
+            <td>90.00</td>
+            <td>379.02</td>
+          </tr>
+          <tr>
+            <th id="a10" axis="location">Seattle</th>
+            <!-- <th/> -->
+            <!-- <th/> -->
+            <!-- <th/> -->
+            <!-- <td/> -->
+          </tr>
+          <tr>
+            <td id="a11" axis="date">27-Aug-97</td>
+            <td headers="a10 a11 a2">96.25</td>
+            <td headers="a10 a11 a3">109.00</td>
+            <td headers="a10 a11 a4">36.00</td>
+            <!-- <td/> -->
+          </tr>
+          <tr>
+            <td id="a12" axis="date">28-Aug-97</td>
+            <td headers="a10 a12 a2">35.00</td>
+            <td headers="a10 a12 a3">109.00</td>
+            <td headers="a10 a12 a4">36.00</td>
+            <!-- <td/> -->
+          </tr>
+          <tr>
+            <!-- <td>subtotals</td> -->
+            <th headers="a10">subtotals</th>
+            <td>131.25</td>
+            <td>218.00</td>
+            <td>72.00</td>
+            <td>421.25</td>
+          </tr>
+          <tr>
+            <th>Totals</th>
+            <td>196.27</td>
+            <td>442.00</td>
+            <td>162.00</td>
+            <td>800.27</td>
+          </tr>
+        </table>
+      </level1>
+    </bodymatter>
+  </book>
+</dtbook>

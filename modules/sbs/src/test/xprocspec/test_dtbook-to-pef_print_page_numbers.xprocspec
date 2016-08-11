@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:sbs="http://www.sbs.ch"
+               script="http://www.sbs.ch/pipeline/modules/braille/dtbook-to-pef.xpl">
+
+  <x:scenario label="format of single print page number vs. print page number range">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="file" href="../resources/test_print_page_numbers/test_4.5.81.xml"/>
+      </x:input>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_print_page_numbers/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/test_print_page_numbers/test_4.5.81.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/test_print_page_numbers/test_4.5.81_expected.pef"/>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="ascii-braille">yes</x:param>
+
+    <x:scenario label="address">
+      <x:context>
+        <dtb:address xml:lang="de">Foo</dtb:address>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:address xml:lang="de">FOO</dtb:address>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="address with lines">
+      <x:context>
+        <dtb:address xml:lang="de">
+	  <dtb:line>Bar</dtb:line>
+	  <dtb:line>Baz</dtb:line>
+	</dtb:address>
+      </x:context>
+      <x:expect label="braille">
+        <dtb:address xml:lang="de">
+	  <dtb:line>BAR</dtb:line>
+	  <dtb:line>BAZ</dtb:line>
+	</dtb:address>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

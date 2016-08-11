@@ -1,0 +1,13 @@
+@page bodymatter:right {
+	@bottom-left {
+		content: none;
+	}
+}
+
+dtbook {
+	hyphens: none;
+}
+
+bodymatter > level1:not(:first-child) {
+	page-break-before: right;
+}

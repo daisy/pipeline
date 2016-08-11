@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+	       xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+	       xmlns:my="http://my-functions"
+               stylesheet="../../main/resources/xml/block-translate.xsl"
+	       preserve-space="dtb:p dtb:byline dtb:author dtb:li dtb:lic dtb:doctitle dtb:docauthor dtb:span dtb:em dtb:strong brl:emph dtb:line dtb:h1 dtb:h2 dtb:h3 dtb:h4 dtb:h5 dtb:h6">
+
+  <x:param name="contraction-grade">2</x:param>
+  <x:param name="hyphenator">(locale:de)</x:param>
+  <x:param name="hyphenation">true</x:param>
+  <x:param name="virtual.dis-uri" select="'virtual.dis'"/>
+
+  <x:scenario label="getTable for de-1901 and contraction = 2 with hyphenation">
+    <x:call function="my:get-tables">
+      <x:param>
+        <p xml:lang="de-1901"/>
+      </x:param>
+      <x:param select="''"/>
+    </x:call>
+    <x:expect label="braille" select="'virtual.dis,http://www.sbs.ch/pipeline/liblouis/tables/sbs.dis,sbs-de-core6.cti,sbs-de-accents.cti,sbs-special.cti,sbs-whitespace.mod,sbs-de-letsign.mod,sbs-numsign.mod,sbs-litdigit-upper.mod,sbs-de-core.mod,sbs-de-g2-white.mod,sbs-de-g2-core.mod,sbs-de-hyph-old.mod,sbs-de-accents-ch.mod,sbs-special.mod'"/>
+  </x:scenario>
+
+</x:description>

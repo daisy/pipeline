@@ -1,0 +1,44 @@
+@namespace brl "http://www.daisy.org/z3986/2009/braille/";
+
+@page bodymatter:right {
+	margin-bottom: 0;
+	@bottom-left {
+		content: none;
+	}
+}
+
+dtbook {
+	hyphens: none;
+}
+
+[brl|class~=break_before] {
+	display: block;
+	text-align: left;
+	text-indent: 2;
+	page-break-before: always;
+}
+
+[brl|class~=protect_block] {
+	display: block;
+	text-align: left;
+	text-indent: 2;
+	page-break-inside: avoid;
+}
+
+[brl|class~=orphan] {
+	display: block;
+	text-align: left;
+	text-indent: 2;
+	orphans: 2;
+}
+
+[brl|class~=widow] {
+	display: block;
+	text-align: left;
+	text-indent: 2;
+	widows: 2;
+}
+
+[brl|class~=dummy] + [brl|class~=keep] {
+	page-break-before: avoid;
+}
