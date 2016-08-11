@@ -12,15 +12,15 @@
   
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>css-utils-aggregator</artifactId>
-  <version>1.9.15-SNAPSHOT</version>
+  <version>1.9.16-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <name>DP2 Braille Modules :: css-utils</name>
 
   <modules>
-    <!-- <module>css-core</module> -->
-    <!-- <module>css-calabash</module> -->
-    <!-- <module>css-utils</module> -->
+    <module>css-core</module>
+    <module>css-calabash</module>
+    <module>css-utils</module>
   </modules>
   
   <build>

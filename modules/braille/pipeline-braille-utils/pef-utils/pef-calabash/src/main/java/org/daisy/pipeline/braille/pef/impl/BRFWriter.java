@@ -1,7 +1,7 @@
 package org.daisy.pipeline.braille.pef.impl;
 
 import java.io.IOException;
-
+import java.nio.charset.Charset;
 import org.daisy.braille.api.embosser.Contract;
 import org.daisy.braille.api.embosser.ContractNotSupportedException;
 import org.daisy.braille.api.embosser.EmbosserWriter;
@@ -35,6 +35,7 @@ public abstract class BRFWriter implements EmbosserWriter {
 	public abstract LineBreaks getLinebreakStyle();
 	public abstract PageBreaks getPagebreakStyle();
 	public abstract Padding getPaddingStyle();
+	public abstract Charset getCharset();
 	public abstract BrailleConverter getTable();
 	protected abstract void add(byte b) throws IOException;
 	protected abstract void addAll(byte[] b) throws IOException;
@@ -91,7 +92,7 @@ public abstract class BRFWriter implements EmbosserWriter {
 
 	public void write(String braille) throws IOException {
 		charsOnRow += braille.length();
-		addAll(String.valueOf(getTable().toText(braille)).getBytes(getTable().getPreferredCharset().name()));
+		addAll(String.valueOf(getTable().toText(braille)).getBytes(getCharset().name()));
 	}
 	
 	protected void lineFeed() throws IOException {

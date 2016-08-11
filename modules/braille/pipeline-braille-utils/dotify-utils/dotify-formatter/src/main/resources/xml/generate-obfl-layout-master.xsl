@@ -398,6 +398,10 @@
             </xsl:when>
             <xsl:when test="$scope=('start','page-start')">
                 <!--
+                    Note that this behavior is not exactly according to the spec (see
+                    https://github.com/snaekobbi/pipeline-mod-dedicon/issues/49)
+                -->
+                <!--
                     FIXME: scope="page-content" does not work as expected
                 -->
                 <marker-reference marker="{@name}/prev" direction="forward" scope="page-content"
@@ -412,6 +416,10 @@
                                   text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
             </xsl:when>
             <xsl:when test="$scope=('start-except-last','page-start-except-last')">
+                <!--
+                    Note that this behavior is not exactly according to the spec (see
+                    https://github.com/snaekobbi/pipeline-mod-dedicon/issues/49)
+                -->
                 <!--
                     FIXME: scope="page-content" does not work as expected
                 -->
@@ -431,14 +439,8 @@
                                   text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
             </xsl:when>
             <xsl:when test="$scope=('last-except-start','page-last-except-start')">
-                <!--
-                    FIXME: scope="page-content" does not work as expected
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="page-content">
-                    <xsl:if test="not($text-transform=('none','auto'))">
-                        <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
-                    </xsl:if>
-                </marker-reference>
+                <xsl:message terminate="yes"
+                             select="concat('string(',@name,', ',$scope,') currently not supported. If you want to use it in combination with string(start), please consider using the combination start-except-last/last instead.')"/>
             </xsl:when>
             <xsl:when test="$scope='spread-first'">
                 <marker-reference marker="{@name}" direction="forward" scope="spread"
@@ -460,6 +462,10 @@
                                   text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
             </xsl:when>
             <xsl:when test="$scope='spread-start'">
+                <!--
+                    Note that this behavior is not exactly according to the spec (see
+                    https://github.com/snaekobbi/pipeline-mod-dedicon/issues/49)
+                -->
                 <!--
                     FIXME: scope="spread-content"
                 -->
@@ -483,6 +489,10 @@
                                   text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
             </xsl:when>
             <xsl:when test="$scope='spread-start-except-last'">
+                <!--
+                    Note that this behavior is not exactly according to the spec (see
+                    https://github.com/snaekobbi/pipeline-mod-dedicon/issues/49)
+                -->
                 <!--
                     FIXME: scope="spread-content"
                 -->
@@ -509,17 +519,8 @@
                                   text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
             </xsl:when>
             <xsl:when test="$scope='spread-last-except-start'">
-                <!--
-                    FIXME: scope="spread-content"
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="spread">
-                    <xsl:if test="$page-side='left'">
-                        <xsl:attribute name="start-offset" select="'1'"/>
-                    </xsl:if>
-                    <xsl:if test="not($text-transform=('none','auto'))">
-                        <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
-                    </xsl:if>
-                </marker-reference>
+                <xsl:message terminate="yes"
+                             select="concat('string(',@name,', ',$scope,') currently not supported. If you want to use it in combination with string(start), please consider using the combination start-except-last/last instead.')"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message terminate="yes"

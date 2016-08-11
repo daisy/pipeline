@@ -835,9 +835,9 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="keep-all">
+  <x:scenario label="keep-page">
     <x:documentation>
-      Tests simple keep="all".
+      Tests simple keep="page".
     </x:documentation>
     <x:call>
       <x:input port="source">
@@ -853,7 +853,7 @@
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block keep="all">
+              <block keep="page">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
             </sequence>
@@ -913,7 +913,7 @@
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block keep="all" keep-with-next="1">
+              <block keep="page" keep-with-next="1">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
               <block>
@@ -976,10 +976,10 @@
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
               <block>
-                <block keep="all" keep-with-next="1">⠤⠤⠤</block>
-                <block keep="all" keep-with-next="1">⠤⠤⠤</block>
-                <block keep="all" keep-with-next="1">⠤⠤⠤</block>
-                <block keep="all">⠤⠤⠤</block>
+                <block keep="page" keep-with-next="1">⠤⠤⠤</block>
+                <block keep="page" keep-with-next="1">⠤⠤⠤</block>
+                <block keep="page" keep-with-next="1">⠤⠤⠤</block>
+                <block keep="page">⠤⠤⠤</block>
               </block>
             </sequence>
           </obfl>
@@ -1040,7 +1040,7 @@
               </block>
               <block>
                 <block>⠤⠤⠤</block>
-                <block keep="all" keep-with-next="1">⠤⠤⠤</block>
+                <block keep="page" keep-with-next="1">⠤⠤⠤</block>
               </block>
               <block>⠤⠤⠤⠤⠤</block>
             </sequence>
@@ -1276,7 +1276,7 @@
   <x:scenario label="keep-content-with-border">
     <x:documentation>
       Tests that pages are not broken between a border of a block and the content of that
-      block. Tested with keep="all", orphans or widows on the block with the border. Also tested for
+      block. Tested with keep="page", orphans or widows on the block with the border. Also tested for
       two nested blocks with borders.
     </x:documentation>
     <x:call>
@@ -1307,7 +1307,7 @@
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
               </block>
-              <block keep="all" border-top-style="solid">
+              <block keep="page" border-top-style="solid">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
               </block>
@@ -1697,8 +1697,8 @@
   <x:scenario label="page-breaking-and-borders">
     <x:documentation>
       Tests borders in combination with page break control. Tests two blocks following each other in
-      various situations: with or without keep="all" on the first block, with or without a bottom
-      border on the first block, and with keep="all", orphans or widows on the second block.
+      various situations: with or without keep="page" on the first block, with or without a bottom
+      border on the first block, and with keep="page", orphans or widows on the second block.
     </x:documentation>
     <x:call>
       <x:input port="source">
@@ -1717,20 +1717,20 @@
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
               </block>
-              <block keep="all">
+              <block keep="page">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
               </block>
             </sequence>
             <sequence master="master">
-              <block keep="all">
+              <block keep="page">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
               </block>
-              <block keep="all">
+              <block keep="page">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
@@ -1742,19 +1742,19 @@
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
               </block>
-              <block keep="all">
+              <block keep="page">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
               </block>
             </sequence>
             <sequence master="master">
-              <block keep="all" border-bottom-style="solid">
+              <block keep="page" border-bottom-style="solid">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
               </block>
-              <block keep="all">
+              <block keep="page">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
@@ -1775,7 +1775,7 @@
               </block>
             </sequence>
             <sequence master="master">
-              <block keep="all">
+              <block keep="page">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
@@ -1802,7 +1802,7 @@
               </block>
             </sequence>
             <sequence master="master">
-              <block keep="all" border-bottom-style="solid">
+              <block keep="page" border-bottom-style="solid">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
@@ -1828,7 +1828,7 @@
               </block>
             </sequence>
             <sequence master="master">
-              <block keep="all">
+              <block keep="page">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
@@ -1853,7 +1853,7 @@
               </block>
             </sequence>
             <sequence master="master">
-              <block keep="all" border-bottom-style="solid">
+              <block keep="page" border-bottom-style="solid">
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿
@@ -6174,12 +6174,9 @@
   </x:expect>
 </x:scenario>
 
-<x:scenario label="volume-template-various-sheets-in-volume-max" xfail="true">
+<x:scenario label="volume-template-various-sheets-in-volume-max">
   <x:documentation>
     Tests two volume-templates (first and rest) with different sheets-in-volume-max.
-    
-    Broken: "Implementation does not support different target volume size. All volumes must have the
-    same target size." (see https://github.com/joeha480/dotify/issues/102).
   </x:documentation>
   <x:call>
     <x:input port="source">
@@ -6192,10 +6189,9 @@
             </default-template>
           </layout-master>
           <volume-template use-when="(! (= $volume 1))" sheets-in-volume-max="3"/>
-          <volume-template use-when="(= $volume 1)" sheets-in-volume-max="2"/>
+          <volume-template use-when="(= $volume 1)" sheets-in-volume-max="1"/>
           <sequence master="main">
             <block>
-              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -6223,20 +6219,6 @@
         <body>
           <volume rows="5" cols="10" rowgap="0" duplex="true">
             <section>
-              <page>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-              </page>
-              <page>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-              </page>
               <page>
                 <row>⠤⠤⠤⠤⠤</row>
                 <row>⠤⠤⠤⠤⠤</row>
@@ -7723,6 +7705,85 @@
       </x:document>
     </x:input>
   </x:call>
+</x:scenario>
+
+<x:scenario label="manual-volume-breaking-toc">
+  <x:documentation>
+    Tests manual volume breaking in combination with table of contents.
+  </x:documentation>
+  <x:call step="pxi:test">
+    <x:input port="source">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+          <layout-master name="master" page-width="15" page-height="15">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <table-of-contents name="toc">
+            <toc-entry ref-id="a">
+              <page-number ref-id="a" number-format="default"/>
+            </toc-entry>
+            <toc-entry ref-id="b">
+              <page-number ref-id="b" number-format="default"/>
+            </toc-entry>
+          </table-of-contents>
+          <volume-template sheets-in-volume-max="10">
+            <pre-content>
+              <toc-sequence master="master" range="volume" toc="toc"/>
+            </pre-content>
+          </volume-template>
+          <sequence master="master">
+            <block id="a">⠿⠿⠿⠿⠿</block>
+          </sequence>
+          <sequence master="master" break-before="volume">
+            <block id="b">⠿⠿⠿⠿⠿</block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:input>
+  </x:call>
+  <x:context label="result">
+    <x:document type="port" port="result"/>
+  </x:context>
+  <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+    <x:document type="inline">
+      <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+        <head>
+          <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <dc:format>application/x-pef+xml</dc:format>
+          </meta>
+        </head>
+        <body>
+          <volume cols="15" rows="15" rowgap="0" duplex="true">
+            <section>
+              <page>
+                <row>⠼⠁</row>
+              </page>
+            </section>
+            <section>
+              <page>
+                <row>⠿⠿⠿⠿⠿</row>
+              </page>
+            </section>
+          </volume>
+          <volume cols="15" rows="15" rowgap="0" duplex="true">
+            <section>
+              <page>
+                <row>⠼⠃</row>
+              </page>
+            </section>
+            <section>
+              <page>
+                <row>⠿⠿⠿⠿⠿</row>
+              </page>
+            </section>
+          </volume>
+        </body>
+      </pef>
+    </x:document>
+  </x:expect>
 </x:scenario>
 
 </x:scenario>

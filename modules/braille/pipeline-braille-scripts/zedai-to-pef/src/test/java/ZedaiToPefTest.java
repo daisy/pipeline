@@ -45,6 +45,7 @@ public class ZedaiToPefTest {
 			thisBundle(),
 			junitBundles(),
 			mavenBundlesWithDependencies(
+				brailleModule("xml-to-pef"),
 				brailleModule("common-utils"),
 				brailleModule("liblouis-utils"),
 				brailleModule("liblouis-tables"),

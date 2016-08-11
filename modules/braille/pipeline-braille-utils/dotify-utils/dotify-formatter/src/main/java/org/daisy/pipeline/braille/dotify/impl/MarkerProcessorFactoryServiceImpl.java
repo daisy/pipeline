@@ -75,7 +75,23 @@ public class MarkerProcessorFactoryServiceImpl implements MarkerProcessorFactory
 		
 		public String[] processAttributesRetain(TextAttribute atts, String[] text) {
 			try {
-				return filter.filterRetain(Translatable.text(join(text)).attributes(atts).build()); }
+				String[] filtered = filter.filterRetain(Translatable.text(join(text)).attributes(atts).build());
+				
+				// FIXME: This is a very simple way to make sure result is
+				// equal in size to text, but could lead to wrong indexes in
+				// the result when text contains empty segments.
+				if (filtered.length > text.length)
+					throw new RuntimeException("Coding error");
+				else if (filtered.length < text.length) {
+					String[] padded = new String[text.length];
+					int i = 0;
+					for (; i < filtered.length; i++)
+						padded[i] = filtered[i];
+					for (; i < padded.length; i++)
+						padded[i] = "";
+					return padded; }
+				else
+					return filtered; }
 			catch (TranslationException e) {
 				throw new RuntimeException(e); }
 		}

@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Test table paths
-Bundle-SymbolicName: test.table-paths
-Bundle-Version: 0.0.0.SNAPSHOT
-Import-Package: org.daisy.pipeline.braille.liblouis
-Service-Component: OSGI-INF/table_paths.xml

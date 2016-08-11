@@ -1054,14 +1054,56 @@
                       select="$context/(self::*|preceding::*|ancestor::*)
                               [contains(@css:string-set,$name) or contains(@css:string-entry,$name)]
                               [last()]"/>
-        <xsl:if test="$last-set">
-            <xsl:variable name="value" as="xs:string?"
-                          select="(css:parse-string-set($last-set/@css:string-entry),
-                                   css:parse-string-set($last-set/@css:string-set))
-                                  [@name=$name][last()]/@value"/>
-            <xsl:sequence select="if ($value) then css:parse-content-list($value, $context)
-                                  else css:string($name, $last-set/(preceding::*|ancestor::*)[last()])"/>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="$context/ancestor::*/@css:flow[not(.='normal')]">
+                <xsl:choose>
+                    <xsl:when test="$last-set
+                                    intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*">
+                        <xsl:variable name="value" as="xs:string?"
+                                      select="(css:parse-string-set($last-set/@css:string-entry),
+                                               css:parse-string-set($last-set/@css:string-set))
+                                              [@name=$name][last()]/@value"/>
+                        <xsl:choose>
+                            <xsl:when test="$value">
+                                <xsl:sequence select="css:parse-content-list($value, $context)"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:variable name="context" as="element()?"
+                                              select="$last-set/(preceding::*|ancestor::*)[last()]
+                                                      intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*"/>
+                                <xsl:if test="$context">
+                                    <xsl:sequence select="css:string($name, $context)"/>
+                                </xsl:if>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="anchor" as="xs:string" select="$context/ancestor::*/@css:anchor"/>
+                        <xsl:variable name="context" as="element()?" select="collection()//*[@css:id=$anchor][1]"/>
+                        <xsl:if test="$context">
+                            <xsl:sequence select="css:string($name, $context)"/>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="$last-set">
+                <xsl:variable name="value" as="xs:string?"
+                              select="(css:parse-string-set($last-set/@css:string-entry),
+                                       css:parse-string-set($last-set/@css:string-set))
+                                      [@name=$name][last()]/@value"/>
+                <xsl:choose>
+                    <xsl:when test="$value">
+                        <xsl:sequence select="css:parse-content-list($value, $context)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="context" as="element()?" select="$last-set/(preceding::*|ancestor::*)[last()]"/>
+                        <xsl:if test="$context">
+                            <xsl:sequence select="css:string($name, $context)"/>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+        </xsl:choose>
     </xsl:function>
     
 </xsl:stylesheet>

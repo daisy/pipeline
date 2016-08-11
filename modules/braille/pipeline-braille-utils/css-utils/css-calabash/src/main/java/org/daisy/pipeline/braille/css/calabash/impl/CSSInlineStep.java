@@ -1,7 +1,6 @@
 package org.daisy.pipeline.braille.css.calabash.impl;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -26,8 +25,10 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import com.google.common.base.Function;
+import com.google.common.base.Splitter;
 import static com.google.common.base.Objects.firstNonNull;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterators.addAll;
@@ -134,6 +135,11 @@ public class CSSInlineStep extends DefaultStep {
 	private final String scssValue = scssNumberColorString + "(" + "(\\s+|\\s*,\\s*)" + scssNumberColorString + ")*";
 	
 	private static final QName _default_stylesheet = new QName("default-stylesheet");
+	private static final QName _media = new QName("media");
+	private static final QName _attribute_name = new QName("attribute-name");
+	
+	private static final String DEFAULT_MEDIA = "embossed";
+	private static final QName DEFAULT_ATTRIBUTE_NAME = new QName("style");
 	
 	private CSSInlineStep(XProcRuntime runtime, XAtomicStep step, final URIResolver resolver) {
 		super(runtime, step);
@@ -278,7 +284,9 @@ public class CSSInlineStep extends DefaultStep {
 					l.add(asURL(base.resolve(asURI(t.nextToken()))));
 				defaultSheets = toArray(l, URL.class);
 			}
-			resultPipe.write((new InlineCSSWriter(doc, runtime, defaultSheets)).getResult()); }
+			Set<String> media = ImmutableSet.copyOf(Splitter.on(' ').omitEmptyStrings().split(getOption(_media, DEFAULT_MEDIA)));
+			QName attributeName = getOption(_attribute_name, DEFAULT_ATTRIBUTE_NAME);
+			resultPipe.write((new InlineCSSWriter(doc, runtime, network, defaultSheets, media, attributeName)).getResult()); }
 		catch (Exception e) {
 			logger.error("css:inline failed", e);
 			throw new XProcException(step.getNode(), e); }
@@ -310,8 +318,6 @@ public class CSSInlineStep extends DefaultStep {
 		}
 	}
 	
-	private static final QName _style = new QName("style");
-	
 	// media print
 	private static final SupportedCSS printCSS = SupportedPrintCSS.getInstance();
 	private static DeclarationTransformer printDeclarationTransformer; static {
@@ -331,85 +337,101 @@ public class CSSInlineStep extends DefaultStep {
 	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 	
 	
-	private class InlineCSSWriter extends TreeWriter {
+	private static class InlineCSSWriter extends TreeWriter {
 		
-		private final StyleMap brailleStylemap;
-		private final StyleMap printStylemap;
-		private final Map<String,Map<String,RulePage>> pageRules;
-		private final Map<String,Map<String,RuleVolume>> volumeRules;
+		private final List<CascadedStyle> styles;
+		private final QName attributeName;
 		
 		public InlineCSSWriter(Document document,
 		                       XProcRuntime xproc,
-		                       URL[] defaultSheets) throws Exception {
+		                       NetworkProcessor network,
+		                       URL[] defaultSheets,
+		                       Set<String> media,
+		                       QName attributeName) throws Exception {
 			super(xproc);
+			this.styles = new ArrayList<CascadedStyle>();
+			this.attributeName = attributeName;
 			
 			URI baseURI = new URI(document.getBaseURI());
 			
-			// media embossed
-			StyleSheet brailleStyle = (StyleSheet)brailleRuleFactory.createStyleSheet().unlock();
-			if (defaultSheets != null)
-				for (URL sheet : defaultSheets)
-					brailleStyle = brailleParserFactory.append(sheet, network, null, SourceType.URL, brailleStyle, sheet);
-			// CSSParserFactory injected via CSSFactory in CSSAssignTraversal.<init>
-			CSSFactory.registerCSSParserFactory(brailleParserFactory);
-			brailleStyle = CSSFactory.getUsedStyles(document, null, asURL(baseURI), new MediaSpec("embossed"), network, brailleStyle);
-			// DeclarationTransformer injected via CSSFactory in SingleMapNodeData.<init>
-			// SupportedCSS injected via CSSFactory in SingleMapNodeData.<init>, Repeater.assignDefaults, Variator.assignDefaults
-			CSSFactory.registerDeclarationTransformer(brailleDeclarationTransformer);
-			CSSFactory.registerSupportedCSS(brailleCSS);
-			brailleStylemap = new Analyzer(brailleStyle).evaluateDOM(document, "embossed", false);
-			
-			// media print
-			StyleSheet printStyle = (StyleSheet)printRuleFactory.createStyleSheet().unlock();
-			if (defaultSheets != null)
-				for (URL sheet : defaultSheets) {
+			for (String medium : media) {
+				CascadedStyle style = new CascadedStyle();
+				styles.add(style);
+				StyleSheet stylesheet;
+				if (medium.equals("embossed")) {
+					stylesheet = (StyleSheet)brailleRuleFactory.createStyleSheet().unlock();
+					if (defaultSheets != null)
+						for (URL sheet : defaultSheets)
+							stylesheet = brailleParserFactory.append(sheet, network, null, SourceType.URL, stylesheet, sheet);
+					// CSSParserFactory injected via CSSFactory in CSSAssignTraversal.<init>
+					CSSFactory.registerCSSParserFactory(brailleParserFactory);
+					stylesheet = CSSFactory.getUsedStyles(document, null, asURL(baseURI), new MediaSpec(medium), network, stylesheet);
+					// DeclarationTransformer injected via CSSFactory in SingleMapNodeData.<init>
+					// SupportedCSS injected via CSSFactory in SingleMapNodeData.<init>, Repeater.assignDefaults, Variator.assignDefaults
+					CSSFactory.registerDeclarationTransformer(brailleDeclarationTransformer);
+					CSSFactory.registerSupportedCSS(brailleCSS);
+					style.styleMap = new Analyzer(stylesheet).evaluateDOM(document, medium, false);
+					style.pageRules = new HashMap<String,Map<String,RulePage>>(); {
+						for (RulePage r : filter(stylesheet, RulePage.class)) {
+							String name = firstNonNull(r.getName(), "auto");
+							String pseudo = firstNonNull(r.getPseudo(), "");
+							Map<String,RulePage> pageRule = style.pageRules.get(name);
+							if (pageRule == null) {
+								pageRule = new HashMap<String,RulePage>();
+								style.pageRules.put(name, pageRule); }
+							if (pageRule.containsKey(pseudo))
+								pageRule.put(pseudo, makePageRule(name, "".equals(pseudo) ? null : pseudo,
+								                                  ImmutableList.of(r, pageRule.get(pseudo))));
+							else
+								pageRule.put(pseudo, r);
+						}
+					}
+					style.volumeRules = new HashMap<String,Map<String,RuleVolume>>(); {
+						for (RuleVolume r : filter(stylesheet, RuleVolume.class)) {
+							String name = "auto";
+							String pseudo = firstNonNull(r.getPseudo(), "");
+							Map<String,RuleVolume> volumeRule = style.volumeRules.get(name);
+							if (volumeRule == null) {
+								volumeRule = new HashMap<String,RuleVolume>();
+								style.volumeRules.put(name, volumeRule); }
+							if (volumeRule.containsKey(pseudo))
+								volumeRule.put(pseudo, makeVolumeRule(name, "".equals(pseudo) ? null : pseudo,
+								                                      ImmutableList.of(r, volumeRule.get(pseudo))));
+							else
+								volumeRule.put(pseudo, r);
+						}
+					}
+				} else if (medium.equals("print")) {
+					stylesheet = (StyleSheet)printRuleFactory.createStyleSheet().unlock();
+					if (defaultSheets != null)
+						for (URL sheet : defaultSheets) {
+							// RuleFactory injected via CSSFactory in SimplePreparator.<init>, CSSTreeParser.<init>
+							CSSFactory.registerRuleFactory(printRuleFactory);
+							stylesheet = printParserFactory.append(sheet, network, null, SourceType.URL, stylesheet, sheet); }
+					// CSSParserFactory injected via CSSFactory in CSSAssignTraversal.<init>
 					// RuleFactory injected via CSSFactory in SimplePreparator.<init>, CSSTreeParser.<init>
+					CSSFactory.registerCSSParserFactory(printParserFactory);
 					CSSFactory.registerRuleFactory(printRuleFactory);
-					printStyle = printParserFactory.append(sheet, network, null, SourceType.URL, printStyle, sheet); }
-			// CSSParserFactory injected via CSSFactory in CSSAssignTraversal.<init>
-			// RuleFactory injected via CSSFactory in SimplePreparator.<init>, CSSTreeParser.<init>
-			CSSFactory.registerCSSParserFactory(printParserFactory);
-			CSSFactory.registerRuleFactory(printRuleFactory);
-			printStyle = CSSFactory.getUsedStyles(document, null, asURL(baseURI), new MediaSpec("print"), network, printStyle);
-			// DeclarationTransformer injected via CSSFactory in SingleMapNodeData.<init>
-			// SupportedCSS injected via CSSFactory in SingleMapNodeData.<init>, Repeater.assignDefaults, Variator.assignDefaults
-			CSSFactory.registerDeclarationTransformer(printDeclarationTransformer);
-			CSSFactory.registerSupportedCSS(printCSS);
-			printStylemap = new Analyzer(printStyle).evaluateDOM(document, "print", false);
-			
-			pageRules = new HashMap<String,Map<String,RulePage>>();
-			for (RulePage r : filter(brailleStyle, RulePage.class)) {
-				String name = firstNonNull(r.getName(), "auto");
-				String pseudo = firstNonNull(r.getPseudo(), "");
-				Map<String,RulePage> pageRule = pageRules.get(name);
-				if (pageRule == null) {
-					pageRule = new HashMap<String,RulePage>();
-					pageRules.put(name, pageRule); }
-				if (pageRule.containsKey(pseudo))
-					pageRule.put(pseudo, makePageRule(name, "".equals(pseudo) ? null : pseudo,
-					                                  ImmutableList.of(r, pageRule.get(pseudo))));
-				else
-					pageRule.put(pseudo, r);
-			}
-			
-			volumeRules = new HashMap<String,Map<String,RuleVolume>>();
-			for (RuleVolume r : filter(brailleStyle, RuleVolume.class)) {
-				String name = "auto";
-				String pseudo = firstNonNull(r.getPseudo(), "");
-				Map<String,RuleVolume> volumeRule = volumeRules.get(name);
-				if (volumeRule == null) {
-					volumeRule = new HashMap<String,RuleVolume>();
-					volumeRules.put(name, volumeRule); }
-				if (volumeRule.containsKey(pseudo))
-					volumeRule.put(pseudo, makeVolumeRule(name, "".equals(pseudo) ? null : pseudo,
-					                                      ImmutableList.of(r, volumeRule.get(pseudo))));
-				else
-					volumeRule.put(pseudo, r);
+					stylesheet = CSSFactory.getUsedStyles(document, null, asURL(baseURI), new MediaSpec(medium), network, stylesheet);
+					// DeclarationTransformer injected via CSSFactory in SingleMapNodeData.<init>
+					// SupportedCSS injected via CSSFactory in SingleMapNodeData.<init>, Repeater.assignDefaults, Variator.assignDefaults
+					CSSFactory.registerDeclarationTransformer(printDeclarationTransformer);
+					CSSFactory.registerSupportedCSS(printCSS);
+					style.styleMap = new Analyzer(stylesheet).evaluateDOM(document, medium, false);
+				} else {
+					throw new RuntimeException("medium " + medium + " not supported");
+				}
 			}
 			
 			startDocument(baseURI);
 			traverse(document.getDocumentElement());
 			endDocument();
+		}
+		
+		private static class CascadedStyle {
+			StyleMap styleMap;
+			Map<String,Map<String,RulePage>> pageRules;
+			Map<String,Map<String,RuleVolume>> volumeRules;
 		}
 		
 		private void traverse(Node node) throws XPathException, URISyntaxException {
@@ -428,38 +450,37 @@ public class CSSInlineStep extends DefaultStep {
 					else
 						addAttribute(new QName(attr.getNamespaceURI(), attr.getLocalName()), attr.getNodeValue()); }
 				StringBuilder style = new StringBuilder();
-				NodeData brailleData = brailleStylemap.get(elem);
-				if (brailleData != null)
-					insertStyle(style, brailleData);
-				NodeData printData = printStylemap.get(elem);
-				if (printData != null)
-					insertStyle(style, printData);
-				for (PseudoElement pseudo : sort(brailleStylemap.pseudoSet(elem), pseudoElementComparator)) {
-					NodeData pseudoData = brailleStylemap.get(elem, pseudo);
-					if (pseudoData != null)
-						insertPseudoStyle(style, pseudoData, pseudo); }
-				BrailleCSSProperty.Page pageProperty = null;
-				if (brailleData != null)
-					pageProperty = brailleData.<BrailleCSSProperty.Page>getProperty("page", false);
-				if (pageProperty != null) {
-					String name;
-					if (pageProperty == BrailleCSSProperty.Page.identifier)
-						name = brailleData.<TermIdent>getValue(TermIdent.class, "page", false).getValue();
-					else
-						name = pageProperty.toString();
-					Map<String,RulePage> pageRule = getPageRule(name, pageRules);
-					if (pageRule != null)
-						insertPageStyle(style, pageRule, true); }
-				else if (isRoot) {
-					Map<String,RulePage> pageRule = getPageRule("auto", pageRules);
-					if (pageRule != null)
-						insertPageStyle(style, pageRule, true); }
-				if (isRoot) {
-					Map<String,RuleVolume> volumeRule = getVolumeRule("auto", volumeRules);
-					if (volumeRule != null)
-						insertVolumeStyle(style, volumeRule, pageRules); }
+				for (CascadedStyle cs : styles) {
+					NodeData nodeData = cs.styleMap.get(elem);
+					if (nodeData != null)
+						insertStyle(style, nodeData);
+					for (PseudoElement pseudo : sort(cs.styleMap.pseudoSet(elem), pseudoElementComparator)) {
+						NodeData pseudoData = cs.styleMap.get(elem, pseudo);
+						if (pseudoData != null)
+							insertPseudoStyle(style, pseudoData, pseudo); }
+					if (cs.pageRules != null) {
+						BrailleCSSProperty.Page pageProperty = null;
+						if (nodeData != null)
+							pageProperty = nodeData.<BrailleCSSProperty.Page>getProperty("page", false);
+						if (pageProperty != null) {
+							String name;
+							if (pageProperty == BrailleCSSProperty.Page.identifier)
+								name = nodeData.<TermIdent>getValue(TermIdent.class, "page", false).getValue();
+							else
+								name = pageProperty.toString();
+							Map<String,RulePage> pageRule = getPageRule(name, cs.pageRules);
+							if (pageRule != null)
+								insertPageStyle(style, pageRule, true); }
+						else if (isRoot) {
+							Map<String,RulePage> pageRule = getPageRule("auto", cs.pageRules);
+							if (pageRule != null)
+								insertPageStyle(style, pageRule, true); }
+						if (isRoot && cs.volumeRules != null) {
+							Map<String,RuleVolume> volumeRule = getVolumeRule("auto", cs.volumeRules);
+							if (volumeRule != null)
+								insertVolumeStyle(style, volumeRule, cs.pageRules); }}}
 				if (normalizeSpace(style).length() > 0) {
-					addAttribute(_style, style.toString().trim()); }
+					addAttribute(attributeName, style.toString().trim()); }
 				receiver.startContent();
 				for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling())
 					traverse(child);
@@ -489,6 +510,7 @@ public class CSSInlineStep extends DefaultStep {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private static <T extends Comparable<? super T>> Iterable<T> sort(Iterable<T> iterable) {
 		List<T> list = new ArrayList<T>();
 		for (T x : iterable)
@@ -517,7 +539,7 @@ public class CSSInlineStep extends DefaultStep {
 				TermInteger integer = (TermInteger)term;
 				return "" + integer.getIntValue(); }
 			else if (term instanceof TermPair) {
-				TermPair pair = (TermPair)term;
+				TermPair<?,?> pair = (TermPair<?,?>)term;
 				Term.Operator op = pair.getOperator();
 				return (op != null ? op.value() : "") + pair.getKey() + " " + pair.getValue(); }
 			else if (term instanceof TermFunction)
@@ -632,7 +654,6 @@ public class CSSInlineStep extends DefaultStep {
 	
 	private static RulePage makePageRule(String name, String pseudo, List<RulePage> from) {
 		RulePage pageRule = brailleRuleFactory.createPage().setName(name).setPseudo(pseudo);
-		Set<String> properties = new HashSet<String>();
 		for (RulePage f : from)
 			for (Rule<?> r : f)
 				if (r instanceof Declaration) {
@@ -747,7 +768,6 @@ public class CSSInlineStep extends DefaultStep {
 				pseudo = m.group(1);
 				arg = m.group(2); }}
 		RuleVolume volumeRule = new RuleVolume(pseudo, arg);
-		Set<String> properties = new HashSet<String>();
 		for (RuleVolume f : from)
 			for (Rule<?> r : f)
 				if (r instanceof Declaration) {

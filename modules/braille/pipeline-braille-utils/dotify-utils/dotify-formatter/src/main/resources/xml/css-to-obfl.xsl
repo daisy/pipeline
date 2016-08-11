@@ -439,16 +439,20 @@
                     <xsl:variable name="layout-master" select="pxi:layout-master-name(current-grouping-key(), $right-page-odd)"/>
                     <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:page-break-before='right']">
                         <xsl:for-each-group select="current-group()" group-ending-with="css:_[*/@css:page-break-after='right']">
-                            <sequence master="{$layout-master}">
-                                <xsl:apply-templates mode="sequence-attr"
-                                                     select="current-group()[1]/(@* except (@css:page|@css:volume|@css:string-entry))"/>
-                                <xsl:apply-templates mode="sequence"
-                                                     select="current-group()[1]/(@css:string-entry|*)"/>
-                                <xsl:apply-templates mode="assert-nil-attr"
-                                                     select="current-group()[position()&gt;1]/(@* except (@css:page|@css:volume|@css:string-entry))"/>
-                                <xsl:apply-templates mode="sequence"
-                                                     select="current-group()[position()&gt;1]/*"/>
-                            </sequence>
+                            <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:volume-break-before='always']">
+                                <sequence master="{$layout-master}">
+                                    <xsl:apply-templates mode="sequence-attr"
+                                                         select="current-group()[1]/(@* except (@css:page|@css:volume|@css:string-entry))"/>
+                                    <xsl:apply-templates mode="sequence-attr"
+                                                         select="current-group()[1]/*/@css:volume-break-before[.='always']"/>
+                                    <xsl:apply-templates mode="sequence"
+                                                         select="current-group()[1]/(@css:string-entry|*)"/>
+                                    <xsl:apply-templates mode="assert-nil-attr"
+                                                         select="current-group()[position()&gt;1]/(@* except (@css:page|@css:volume|@css:string-entry))"/>
+                                    <xsl:apply-templates mode="sequence"
+                                                         select="current-group()[position()&gt;1]/*"/>
+                                </sequence>
+                            </xsl:for-each-group>
                         </xsl:for-each-group>
                     </xsl:for-each-group>
                 </xsl:for-each-group>
@@ -1180,11 +1184,11 @@
                   match="css:box[@type='block']/@css:page-break-after[.='avoid']">
         <xsl:attribute name="keep-with-next" select="'1'"/>
         <!--
-            keep-with-next="1" requires that keep="all". This gives it a slighly different meaning
+            keep-with-next="1" requires that keep="page". This gives it a slighly different meaning
             than "page-break-after: avoid", but it will do.
         -->
         <xsl:if test="not(parent::*/@css:page-break-inside[.='avoid'])">
-            <xsl:attribute name="keep" select="'all'"/>
+            <xsl:attribute name="keep" select="'page'"/>
         </xsl:if>
     </xsl:template>
     
@@ -1216,13 +1220,42 @@
     
     <xsl:template mode="block-attr"
                   match="css:box[@type='block']/@css:page-break-inside[.='avoid']">
-        <xsl:attribute name="keep" select="'all'"/>
+        <xsl:attribute name="keep" select="'page'"/>
     </xsl:template>
     
     <xsl:template mode="block-attr"
                   match="css:box[@type='block']/@css:orphans|
                          css:box[@type='block']/@css:widows">
         <xsl:attribute name="{local-name()}" select="."/>
+    </xsl:template>
+    
+    <xsl:template mode="sequence-attr"
+                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:volume-break-before[.='always']">
+        <xsl:attribute name="break-before" select="'volume'"/>
+    </xsl:template>
+    
+    <xsl:template mode="block-attr"
+                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:volume-break-before[.='always']"/>
+    
+    <xsl:variable name="_OBFL_KEEP_FN_RE">-obfl-keep\(\s*([1-9])\s*\)</xsl:variable>
+    <xsl:variable name="_OBFL_KEEP_FN_RE_priority" select="1"/>
+    
+    <xsl:template mode="block-attr"
+                  match="css:box[@type='block']/@css:volume-break-inside">
+        <xsl:analyze-string select="." regex="^{$_OBFL_KEEP_FN_RE}$">
+            <xsl:matching-substring>
+                <xsl:attribute name="volume-keep-priority" select="regex-group($_OBFL_KEEP_FN_RE_priority)"/>
+            </xsl:matching-substring>
+            <xsl:non-matching-substring>
+                <xsl:next-match/>
+            </xsl:non-matching-substring>
+        </xsl:analyze-string>
+    </xsl:template>
+    
+    <xsl:template mode="block-attr"
+                  match="css:box[@type='block']/@css:_obfl-keep-with-previous-sheets|
+                         css:box[@type='block']/@css:_obfl-keep-with-next-sheets">
+        <xsl:attribute name="{replace(local-name(),'^_obfl-','')}" select="format-number(xs:integer(.), '0')"/>
     </xsl:template>
     
     <xsl:template mode="toc-entry-attr"
@@ -1339,11 +1372,8 @@
             <xsl:message select="concat('white-space:',@css:white-space,' could not be applied to ',
                                         (if (@target) then 'target-string' else 'string'),'(',@name,')')"/>
         </xsl:if>
-        <xsl:variable name="target" as="xs:string?"
-                      select="if (@target) then @target else
-                              if (ancestor::*/@css:flow[not(.='normal')]) then ancestor::*/@css:anchor else ()"/>
-        <xsl:variable name="target" as="element()?"
-                      select="if ($target) then collection()/*[not(@css:flow)]//*[@css:id=$target][1] else ."/>
+        <xsl:variable name="target" as="xs:string?" select="if (@target) then @target else ()"/>
+        <xsl:variable name="target" as="element()?" select="if ($target) then collection()//*[@css:id=$target][1] else ."/>
         <xsl:if test="$target">
             <xsl:apply-templates mode="css:eval-string" select="css:string(@name, $target)"/>
         </xsl:if>
@@ -1419,7 +1449,15 @@
                                   /@css:text-transform
                                      [last()]
                                      [not(.='none')]]">
-        <xsl:sequence select="'auto'"/>
+        <xsl:param name="specified-value" as="xs:boolean" select="false()"/>
+        <xsl:choose>
+            <xsl:when test="$specified-value">
+                <xsl:next-match/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="'auto'"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template priority="1"
@@ -1432,11 +1470,16 @@
                                      [last()]
                                      [not(.='none')]]">
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
+        <xsl:variable name="specified-text-transform" as="xs:string?">
+            <xsl:apply-templates mode="css:text-transform" select=".">
+                <xsl:with-param name="specified-value" select="true()"/>
+            </xsl:apply-templates>
+        </xsl:variable>
         <xsl:next-match>
             <!--
                 for child css:box[@type='inline'] matcher
             -->
-            <xsl:with-param name="pending-text-transform" tunnel="yes" select="$text-transform"/>
+            <xsl:with-param name="pending-text-transform" tunnel="yes" select="($specified-text-transform,$text-transform)[1]"/>
         </xsl:next-match>
     </xsl:template>
     <!--
@@ -1499,7 +1542,15 @@
                                   /@css:text-transform
                                      [last()]
                                      [not(.='none')]]">
-        <xsl:sequence select="'auto'"/>
+        <xsl:param name="specified-value" as="xs:boolean" select="false()"/>
+        <xsl:choose>
+            <xsl:when test="$specified-value">
+                <xsl:next-match/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="'auto'"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template priority="1"
@@ -1514,11 +1565,16 @@
                                      [last()]
                                      [not(.='none')]]">
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
+        <xsl:variable name="specified-text-transform" as="xs:string?">
+            <xsl:apply-templates mode="css:text-transform" select=".">
+                <xsl:with-param name="specified-value" select="true()"/>
+            </xsl:apply-templates>
+        </xsl:variable>
         <xsl:next-match>
             <!--
                 for child css:box[@type='inline'] matcher
             -->
-            <xsl:with-param name="pending-text-transform" tunnel="yes" select="$text-transform"/>
+            <xsl:with-param name="pending-text-transform" tunnel="yes" select="($specified-text-transform,$text-transform)[1]"/>
         </xsl:next-match>
     </xsl:template>
     

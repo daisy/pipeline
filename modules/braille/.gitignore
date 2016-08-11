@@ -1,6 +1,9 @@
 # Maven
 target/
 
+# Make
+/.modules
+
 # xspec
 xspec/*html
 

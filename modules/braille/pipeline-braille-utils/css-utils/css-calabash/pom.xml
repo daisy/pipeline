@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.9.15-SNAPSHOT</version>
+    <version>1.9.16-SNAPSHOT</version>
     <relativePath>../../../maven/parent/</relativePath>
   </parent>
 
   <artifactId>css-calabash</artifactId>
-  <version>2.5.3-SNAPSHOT</version>
+  <version>2.6.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: css-utils :: css-calabash</name>

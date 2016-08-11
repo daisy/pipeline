@@ -8,7 +8,7 @@ body {
 }
 div#header {
     position: fixed;
-    top: 0px;
+    top: 0;
     left: 220px;
     width: 100%;
     color: #333;
@@ -26,14 +26,90 @@ div#main {
 }
 ul#nav {
     position: fixed;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     background-color: #444;
     overflow: scroll;
     height: 100%;
     width: 220px;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+ul#nav ul {
+    margin: 0;
+    padding: 0
+}
+.nav-volume {
+    position: relative;
+}
+.volume-label {
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    color: #CCC;
+    background-color: #222;
+    width: 200px;
+}
+.volume-label.top {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.volume-label.bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+.volume-label.fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+a.volume-current {
+    color: inherit;
+    text-decoration: none;
+}
+a.volume-current::before {
+    content: 'Volume ';
+}
+a.volume-current:hover {
+    text-decoration: underline;
+}
+a.volume-next,
+a.volume-previous {
+    display: block;
+    padding: 10px;
+    top: 0;
+    position: absolute;
+    color: inherit;
+    text-decoration: none;
+}
+a.volume-next {
+    right: 0;
+}
+a.volume-previous {
+    left: 0;
+}
+a.volume-next::after,
+a.volume-previous::before {
+    font-weight: initial;
+    font-size: 90%;
+}
+a.volume-next::after {
+    content: ' >' ;
+}
+a.volume-previous::before {
+    content: '< ';
+}
+a.volume-next:hover,
+a.volume-previous:hover {
+    text-decoration:underline;
 }
 li.nav-page {
     display: block;
@@ -134,8 +210,8 @@ ul#metadata li {
 }
 div#view-buttons {
     position: fixed;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     margin: 30px;
 }
 button#view-braille,

@@ -1,6 +1,7 @@
 package org.daisy.pipeline.braille.libhyphen;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -24,8 +25,9 @@ public class LibhyphenTablePath extends BundledResourcePath implements Libhyphen
 	protected void activate(ComponentContext context, Map<?,?> properties) throws Exception {
 		if (properties.get(UNPACK) != null)
 			throw new IllegalArgumentException(UNPACK + " property not supported");
-		super.activate(context, properties);
-		lazyUnpack(context);
+		Map<Object,Object> props = new HashMap<Object,Object>(properties);
+		props.put(BundledResourcePath.UNPACK, true);
+		super.activate(context, props);
 	}
 	
 	/**
@@ -48,14 +50,14 @@ public class LibhyphenTablePath extends BundledResourcePath implements Libhyphen
 				resource = asURI(String.format("hyph_%s_%s.dic", language, country));
 			else
 				resource = asURI(String.format("hyph_%s.dic", language));
-			if (resources.contains(resource))
+			if (containsResource(resource))
 				return Optional.of(canonicalize(resource)).asSet();
 			return Optional.<URI>absent().asSet();
 		}
 		@Override
 		public Iterable<URI> fallback(Locale locale) {
 			return filter(
-				resources,
+				listResources(),
 				Predicates.compose(
 					matchesGlobPattern(String.format("hyph_%s_*.dic", locale.getLanguage().toLowerCase())),
 					Functions.compose(decode, toStringFunction())));

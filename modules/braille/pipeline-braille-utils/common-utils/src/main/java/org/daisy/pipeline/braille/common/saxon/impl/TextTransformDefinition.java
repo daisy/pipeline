@@ -14,7 +14,6 @@ import net.sf.saxon.value.SequenceExtent;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
-import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.CSSStyledText;
@@ -107,7 +106,7 @@ public class TextTransformDefinition extends ExtensionFunctionDefinition {
 						if (style.size() != text.size())
 							throw new RuntimeException("Lengths of text and style sequences must match");
 						for (int i = 0; i < text.size(); i++)
-							styledText.add(new CSSStyledText(text.get(i), new SimpleInlineStyle(style.get(i)))); }
+							styledText.add(new CSSStyledText(text.get(i), style.get(i))); }
 					else
 						for (int i = 0; i < text.size(); i++)
 							styledText.add(new CSSStyledText(text.get(i)));

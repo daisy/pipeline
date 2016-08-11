@@ -38,4 +38,17 @@
 		</p:documentation>
 	</p:option>
 	
+	<p:option name="media" required="false" select="'embossed'">
+		<p:documentation>
+			Space separated list of media. All rules that are contained in a stylesheet that matches
+			one of the specified media is included. Supported values are `embossed` and `print`.
+		</p:documentation>
+	</p:option>
+	
+	<p:option name="attribute-name" required="false" select="'style'">
+		<p:documentation>
+			Name of attribute to use for inlined styles. Default name is 'style'.
+		</p:documentation>
+	</p:option>
+	
 </p:declare-step>

@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.9.15-SNAPSHOT</version>
+    <version>1.9.16-SNAPSHOT</version>
     <relativePath>../../../maven/parent/</relativePath>
   </parent>
 
   <artifactId>pef-utils</artifactId>
-  <version>2.0.1-SNAPSHOT</version>
+  <version>2.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: pef-utils :: pef-utils</name>

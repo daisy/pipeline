@@ -8,6 +8,8 @@
         <p:input kind="parameter" port="sass-variables" primary="false"/>
         <p:output port="result" sequence="false"/>
         <p:option name="default-stylesheet" required="false"/>
+        <p:option name="media" required="false" select="'embossed'"/>
+        <p:option name="attribute-name" required="false" select="'style'"/>
     </p:declare-step>
     
 </p:library>

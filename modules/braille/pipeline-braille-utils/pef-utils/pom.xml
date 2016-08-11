@@ -12,16 +12,16 @@
   
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>pef-utils-aggregator</artifactId>
-  <version>1.9.15-SNAPSHOT</version>
+  <version>1.9.16-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <name>DP2 Braille Modules :: pef-utils</name>
 
   <modules>
-    <!-- <module>pef-calabash</module> -->
-    <!-- <module>pef-core</module> -->
-    <!-- <module>pef-saxon</module> -->
-    <!-- <module>pef-utils</module> -->
+    <module>pef-calabash</module>
+    <module>pef-core</module>
+    <module>pef-saxon</module>
+    <module>pef-utils</module>
   </modules>
   
   <build>

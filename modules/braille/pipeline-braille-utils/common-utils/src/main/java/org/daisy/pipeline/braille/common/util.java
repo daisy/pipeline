@@ -468,7 +468,11 @@ public abstract class util {
 		};
 		
 		public static URI resolve(Object base, Object uri) {
-			return asURI(base).resolve(asURI(uri));
+			URI baseURI = asURI(base);
+			if (baseURI.toString().startsWith("jar:"))
+				return asURI("jar:" + asURI(baseURI.toString().substring(4)).resolve(asURI(uri)).toASCIIString());
+			else
+				return baseURI.resolve(asURI(uri));
 		}
 		
 		public static URI relativize(Object base, Object uri) {
