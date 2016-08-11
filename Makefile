@@ -94,3 +94,11 @@ maven_BEFORE :
 	@echo "╔═══════╗" >&2
 	@echo "║ MAVEN ║" >&2
 	@echo "╚═══════╝" >&2
+
+.PHONY : assembly
+assembly : all
+	cd assembly && mvn clean package -Pdeb
+
+.PHONY : mod-sbs
+mod-sbs : all
+	cd modules/sbs && mvn clean package -DskipTests
