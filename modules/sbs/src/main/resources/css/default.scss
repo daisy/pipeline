@@ -49,7 +49,7 @@
     @page bodymatter:right {
         margin-bottom: 1;
         @bottom-left {
-	    content: string(print-page, spread-start) string(slash-print-page, spread-last-except-start);
+	    content: string(print-page-slash, spread-start-except-last) string(print-page, spread-last);
 	    text-transform: print-page;
         }
         @bottom-center {
@@ -548,7 +548,7 @@ p {
 
 pagenum {
     display: none;
-    string-set: print-page content(), slash-print-page '/' content();
+    string-set: print-page content(), print-page-slash content() '/';
 }
 
 blockquote {

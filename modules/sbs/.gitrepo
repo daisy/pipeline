@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/sbsdev/pipeline-mod-sbs
 	branch = master
-	commit = 8999ae2f6b6157bbc5717e2eae5a9de78a3db9bd
-	parent = 79726375586c7c4be45533d6a9afeaea8bf4084b
+	commit = 458e3cb07c8a66ae46463b8e51c3e6d4ab3906a0
+	parent = ade0cf660df2b2cbb9abc94c81ed41b00fccd34c
 	cmdver = 0.3.0
