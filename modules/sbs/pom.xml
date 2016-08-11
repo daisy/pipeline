@@ -164,6 +164,21 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>ch.sbs</groupId>
+        <artifactId>project-version-maven-plugin</artifactId>
+        <!--
+            depends on master branch
+        -->
+        <version>1.0.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>set-detailed-project-version</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <groupId>org.ops4j.pax.exam</groupId>
         <artifactId>maven-paxexam-plugin</artifactId>
         <executions>
@@ -236,7 +251,7 @@
             <configuration>
               <controlDir>src/main/deb/DEBIAN</controlDir>
               <classifier>all</classifier>
-              <deb>target/${project.artifactId}_${project.version}_all.deb</deb>
+              <deb>target/${project.artifactId}_${project.detailedVersion}_all.deb</deb>
               <dataSet>
                 <data>
                   <type>file</type>

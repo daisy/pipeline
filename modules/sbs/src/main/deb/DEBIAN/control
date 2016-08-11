@@ -1,5 +1,5 @@
 Package: daisy-pipeline2-mod-sbs
-Version: [[version]]
+Version: [[project.detailedVersion]]
 Section: text
 Priority: optional
 Architecture: all

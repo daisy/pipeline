@@ -1530,6 +1530,21 @@
       <build>
         <plugins>
           <plugin>
+            <groupId>ch.sbs</groupId>
+            <artifactId>project-version-maven-plugin</artifactId>
+            <!--
+                depends on master branch
+            -->
+            <version>1.0.0-SNAPSHOT</version>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>set-detailed-project-version</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
               <execution>
@@ -1608,7 +1623,7 @@
                   <controlDir>target/filtered-resources/deb/DEBIAN</controlDir>
                   <timestamped>true</timestamped>
                   <classifier>all</classifier>
-                  <deb>target/daisy-pipeline2_${project.version}_all.deb</deb>
+                  <deb>target/daisy-pipeline2_${project.detailedVersion}_all.deb</deb>
                   <dataSet>
                     <!-- ======== -->
                     <!-- binaries -->
