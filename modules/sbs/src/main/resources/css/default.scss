@@ -120,12 +120,12 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
 }
 
 #generated-document-toc::-obfl-on-toc-start,
-#generated-volume-toc::-obfl-on-toc-start {
+#generated-volume-toc::-obfl-on-toc-start::before {
     display: block;
     content: 'Inhaltsverzeichnis';
     text-align: center;
     text-indent:0;
-    padding-top:1;
+    margin-top:1;
     margin-left:4;
     margin-right:4;
     margin-bottom:1;
@@ -133,8 +133,7 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
     page-break-before: always;
 }
 
-#generated-document-toc::-obfl-on-volume-start,
-#generated-volume-toc::-obfl-on-volume-start {
+#generated-document-toc::-obfl-on-volume-start {
     display: block;
     content: ' ⠃⠙⠄';
     /* TODO: Insert a condition here to generate the word 'Band' in grade 1 and 2.
@@ -149,8 +148,18 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
     }
 }
 
-#generated-document-toc::-obfl-on-volume-end,
-#generated-volume-toc::-obfl-on-volume-end {
+#generated-volume-toc::-obfl-on-toc-start::after {
+    display: block;
+    content: ' ⠃⠙⠄';
+    margin-top:1;
+    margin-bottom:1;
+    &::before {
+        content: -obfl-evaluate('(round $volume)');
+        text-transform: volume;
+    }
+}
+
+#generated-document-toc::-obfl-on-volume-end {
     display: block;
     text-align: center;
     text-indent:0;
