@@ -472,7 +472,7 @@
                 Delete css:margin-top from first block and move css:margin-top of other blocks to
                 css:margin-bottom of their preceding block.
             </p:documentation>
-            <p:when test="$skip-margin-top-of-page='true'">
+            <p:when test="$skip-margin-top-of-page='true' and not(/*/@css:flow[matches(.,'-obfl-on-(toc|volume)-(start|end)/')])">
                 <p:delete match="css:box
                                    [@type='block']
                                    [@css:margin-top]
