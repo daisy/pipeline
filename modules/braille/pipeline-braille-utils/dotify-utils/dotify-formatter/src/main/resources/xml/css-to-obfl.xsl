@@ -510,7 +510,7 @@
         <xsl:variable name="value" as="xs:string*">
             <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
         </xsl:variable>
-        <marker class="{@name}/entry" value="{string-join($value,'')}"/>
+        <marker class="{@name}/entry" value="{replace(string-join($value,''),'^\s+|\s+$','')}"/>
     </xsl:template>
     
     <!-- ===== -->
@@ -1633,7 +1633,7 @@
         <xsl:variable name="value" as="xs:string*">
             <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
         </xsl:variable>
-        <marker class="{@name}" value="{string-join($value,'')}"/>
+        <marker class="{@name}" value="{replace(string-join($value,''),'^\s+|\s+$','')}"/>
     </xsl:template>
     
     <xsl:template mode="css:eval-string-set"

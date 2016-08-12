@@ -297,7 +297,7 @@
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.formatter.impl</artifactId>
-                <version>2.5.0</version>
+                <version>2.5.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
