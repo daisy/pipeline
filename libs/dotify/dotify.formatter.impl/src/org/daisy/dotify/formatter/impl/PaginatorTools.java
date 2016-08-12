@@ -23,15 +23,22 @@ class PaginatorTools {
 	
 	private PaginatorTools() { }
 	
-	private static String distributeEqualSpacing(ArrayList<String> units, int width, String padding) {
+	private static String distributeEqualSpacing(ArrayList<String> units, int width, String padding) throws PaginatorToolsException {
 		if (units.size()==1) {
-			return units.get(0);
+			String unit = units.get(0);
+			if (unit.codePointCount(0, unit.length()) > width) {
+				throw new PaginatorToolsException("Text does not fit within provided space: " + units.get(0));
+			}
+			return unit;
 		}
 		int chunksLength = 0;
 		for (String s : units) {
 			chunksLength += s.codePointCount(0, s.length());
 		}
 		int totalSpace = width-chunksLength;
+		if (totalSpace < 0) {
+			throw new PaginatorToolsException("Text does not fit within provided space: " + units);
+		}
 		int parts = units.size()-1;
 		double target = totalSpace/(double)parts;
 		int used = 0;
