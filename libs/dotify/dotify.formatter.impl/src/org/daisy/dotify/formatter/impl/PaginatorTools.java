@@ -16,6 +16,12 @@ class PaginatorTools {
 		 */
 		EQUAL_SPACING,
 		/**
+		 * Distribute so that the spaces between strings are kept equal, and
+		 * if needed the longest string is truncated in order to make the
+		 * resulting string fit in the provided space.
+		 */
+		EQUAL_SPACING_TRUNCATE,
+		/**
 		 * Distribute so that each cell is equally wide
 		 */
 		UNISIZE_TABLE_CELL
@@ -23,11 +29,15 @@ class PaginatorTools {
 	
 	private PaginatorTools() { }
 	
-	private static String distributeEqualSpacing(ArrayList<String> units, int width, String padding) throws PaginatorToolsException {
+	private static String distributeEqualSpacing(ArrayList<String> units, int width, String padding, boolean truncate) throws PaginatorToolsException {
 		if (units.size()==1) {
 			String unit = units.get(0);
 			if (unit.codePointCount(0, unit.length()) > width) {
-				throw new PaginatorToolsException("Text does not fit within provided space: " + units.get(0));
+				if (truncate) {
+					unit = truncate(unit, width);
+				} else {
+					throw new PaginatorToolsException("Text does not fit within provided space of " + width + ": " + units.get(0));
+				}
 			}
 			return unit;
 		}
@@ -37,7 +47,26 @@ class PaginatorTools {
 		}
 		int totalSpace = width-chunksLength;
 		if (totalSpace < 0) {
-			throw new PaginatorToolsException("Text does not fit within provided space: " + units);
+			if (truncate) {
+				int longestChunkLength = 0;
+				int longestChunk = 0;
+				int chunk = 0;
+				for (String s : units) {
+					int l = s.codePointCount(0, s.length());
+					if (l > longestChunkLength) {
+						longestChunkLength = l;
+						longestChunk = chunk;
+					}
+					chunk++;
+				}
+				if (longestChunkLength + totalSpace > 0) {
+					units.set(longestChunk, truncate(units.get(longestChunk), longestChunkLength + totalSpace));
+				} else {
+					throw new PaginatorToolsException("Text does not fit within provided space of " + width + ": " + units);
+				}
+			} else {
+				throw new PaginatorToolsException("Text does not fit within provided space of " + width + ": " + units);
+			}
 		}
 		int parts = units.size()-1;
 		double target = totalSpace/(double)parts;
@@ -75,6 +104,14 @@ class PaginatorTools {
 		return sb.toString();
 	}
 	
+	private static String truncate(String s, int lengthInCodePoints) {
+		if (s.codePointCount(0, s.length()) > lengthInCodePoints) {
+			return s.substring(0, s.offsetByCodePoints(0, lengthInCodePoints));
+		} else {
+			return s;
+		}
+	}
+	
 	/**
 	 * Distribute <tt>units</tt> of text over <tt>width</tt> chars, separated by <tt>padding</tt> pattern
 	 * using distribution mode <tt>mode</tt>.
@@ -87,7 +124,9 @@ class PaginatorTools {
 	public static String distribute(ArrayList<String> units, int width, String padding, DistributeMode mode) throws PaginatorToolsException {
 		switch (mode) {
 			case EQUAL_SPACING:
-				return distributeEqualSpacing(units, width, padding);
+				return distributeEqualSpacing(units, width, padding, false);
+			case EQUAL_SPACING_TRUNCATE:
+				return distributeEqualSpacing(units, width, padding, true);
 			case UNISIZE_TABLE_CELL:
 				return distributeTable(units, width, padding);
 		}

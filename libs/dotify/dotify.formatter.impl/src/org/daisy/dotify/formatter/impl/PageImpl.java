@@ -427,7 +427,7 @@ class PageImpl implements Page {
 				throw new PaginatorToolsException(e);
 			}
 		}
-		return PaginatorTools.distribute(chunkF, width, padding, PaginatorTools.DistributeMode.EQUAL_SPACING);
+		return PaginatorTools.distribute(chunkF, width, padding, PaginatorTools.DistributeMode.EQUAL_SPACING_TRUNCATE);
 	}
 	
 	private static String resolveField(Field field, PageImpl p, DefaultTextAttribute.Builder b) {
