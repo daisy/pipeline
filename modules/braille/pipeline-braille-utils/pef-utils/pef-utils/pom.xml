@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>pef-utils</artifactId>
-  <version>2.1.1-SNAPSHOT</version>
+  <version>2.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: pef-utils :: pef-utils</name>
@@ -101,7 +101,8 @@
               xproc.step;filter:="(name={http://www.daisy.org/ns/2008/pef}pef2text)",
               xproc.step;filter:="(name={http://www.daisy.org/ns/2008/pef}text2pef)",
               xproc.step;filter:="(name={http://www.daisy.org/ns/2008/pef}validate)",
-              xpath.function;filter:="(name={http://www.daisy.org/ns/2008/pef}encode)"
+              xpath.function;filter:="(name={http://www.daisy.org/ns/2008/pef}encode)",
+              xpath.function;filter:="(name={http://www.daisy.org/ns/2008/pef}decode)"
             </Require-Capability>
           </instructions>
         </configuration>
