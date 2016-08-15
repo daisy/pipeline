@@ -25,8 +25,10 @@
 	</xsl:template>
 	
 	<xsl:template name="translate" as="text()">
-		<xsl:param name="table" as="xs:string" required="yes"/>
-		<xsl:param name="text" as="xs:string" required="yes"/>
+		<xsl:param name="table" as="xs:string" required="no">
+		  <xsl:call-template name="my:get-tables"/>
+		</xsl:param>
+		<xsl:param name="text" as="xs:string" required="no" select="string()"/>
 		<xsl:param name="source-style" as="element()*" tunnel="yes"/> <!-- css:property* -->
 		<xsl:variable name="inline-style" as="element()*">
 		  <xsl:apply-templates select="$source-style" mode="property"/>

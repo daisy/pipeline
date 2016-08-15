@@ -13,6 +13,12 @@
   <!-- =============== -->
 
   <xsl:param name="contraction-grade" required="yes"/>
+  <xsl:param name="hyphenation">false</xsl:param>
+  <xsl:param name="enable_capitalization" select="false()"/>
+  <xsl:param name="accented-letters">de-accents-ch</xsl:param>
+  <xsl:param name="use_local_dictionary" select="false()"/>
+  <xsl:param name="document-identifier"></xsl:param>
+  <xsl:param name="TABLE_BASE_URI"></xsl:param>
   
   <xsl:function name="my:get-contraction" as="xs:string">
     <xsl:param name="context"/>
@@ -27,6 +33,16 @@
   <xsl:function name="my:get-tables" as="xs:string">
     <xsl:param name="ctx"/>
     <xsl:param name="context"/>
+    <xsl:call-template name="my:get-tables">
+      <xsl:with-param name="ctx" select="$ctx"/>
+      <xsl:with-param name="context" select="$context"/>
+    </xsl:call-template>
+  </xsl:function>
+  
+  <xsl:template name="my:get-tables" as="xs:string">
+    <xsl:param name="ctx" required="no" select="."/>
+    <xsl:param name="context" required="no" select="local-name()"/>
+    <xsl:param name="hyphenation" as="xs:boolean" tunnel="yes" select="$hyphenation='true'"/>
     <!-- handle explicit setting of the contraction -->
     <xsl:variable name="actual_contraction" select="my:get-contraction($ctx)"/>
     <xsl:variable name="result">
@@ -72,7 +88,7 @@
       </xsl:if>
     </xsl:if>
     <xsl:choose>
-      <xsl:when test="not($hyphenation='true')">
+      <xsl:when test="not($hyphenation)">
         <xsl:text>sbs-de-hyph-none.mod,</xsl:text>
       </xsl:when>
       <xsl:otherwise>
@@ -113,6 +129,6 @@
     <xsl:text>sbs-special.mod</xsl:text>
   </xsl:variable>
   <xsl:sequence select="$result"/>
-  </xsl:function>
+  </xsl:template>
 
 </xsl:stylesheet>
