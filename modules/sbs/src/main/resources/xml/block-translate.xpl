@@ -49,6 +49,7 @@
 		<p:with-param name="contraction-grade" select="$contraction-grade"/>
 		<p:with-param name="virtual.dis-uri" select="$virtual.dis-uri"/>
 		<p:with-param name="hyphenator" select="$hyphenator"/>
+		<p:with-param name="hyphenation" select="'true'"/>
 	</p:xslt>
 
 </p:pipeline>

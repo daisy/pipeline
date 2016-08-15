@@ -16,7 +16,7 @@
         <dtb:p xml:lang="de">Ba­de­ho­sen­bun­des</dtb:p>
       </x:context>
       <x:expect label="braille">
-	<dtb:p xml:lang="de">BAtDEtHOtSCtB/tD%</dtb:p>
+	<dtb:p xml:lang="de">BADEtHOtSCtB/D%</dtb:p>
       </x:expect>
     </x:scenario>
 
@@ -26,7 +26,7 @@
         <dtb:doctitle xml:lang="de">Ba­de­ho­sen­bun­des</dtb:doctitle>
       </x:context>
       <x:expect label="braille">
-	<dtb:doctitle xml:lang="de">BAtDEtHOtSCtB/tD%</dtb:doctitle>
+	<dtb:doctitle xml:lang="de">BADEtHOtSCtB/D%</dtb:doctitle>
       </x:expect>
     </x:scenario>
 

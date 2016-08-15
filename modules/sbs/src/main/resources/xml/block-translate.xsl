@@ -99,6 +99,8 @@
 			<xsl:with-param name="translated-style" tunnel="yes" select="css:serialize-stylesheet($translated-style)"/>
 			<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 			<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
+			<xsl:with-param name="hyphenation" tunnel="yes"
+			                select="$hyphenation='true' and boolean($source-style/self::css:property[@name='hyphens' and @value='auto'])"/>
 		</xsl:next-match>
 	</xsl:template>
 	
