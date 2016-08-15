@@ -10459,4 +10459,121 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_96">
+    <x:documentation>
+      Tests counter-set: page on an element in a named flow.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="@page {
+                        size: 15 5
+                        @bottom-right {
+                          content: counter(page) }}
+                      @volume {
+                        @begin {
+                          content: flow(titlepage) }}
+                      { text-transform: none }">
+            <front>
+              <titlepage style="display: block; flow: titlepage; counter-set: page 10">
+                ⠿⠿⠿
+              </titlepage>
+            </front>
+            <body style="display: block">
+              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            </body>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="a" duplex="true" page-number-variable="page" page-width="15" page-height="5">
+            <default-template>
+              <header/>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <current-page number-format="default"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
+          <layout-master name="b" duplex="true" page-number-variable="page" page-width="15" page-height="5">
+            <default-template>
+              <header/>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <current-page number-format="default"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
+          <volume-template sheets-in-volume-max="1000">
+            <pre-content>
+              <sequence master="b" initial-page-number="10">
+                <block> ⠿⠿⠿ </block>
+              </sequence>
+            </pre-content>
+          </volume-template>
+          <sequence master="a">
+            <block translate=""/>
+            <block> ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="15" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠚</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

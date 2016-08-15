@@ -289,7 +289,6 @@
                 </p:documentation>
             </css:parse-counter-set>
             <p:delete match="/*[@css:flow]//*/@css:volume|
-                             /*[@css:flow]//*/@css:counter-set-page|
                              //css:box[@type='table']//*/@css:page-break-before|
                              //css:box[@type='table']//*/@css:page-break-after|
                              //css:box[@type='table']//*/@css:page|
@@ -298,9 +297,9 @@
                              //*[@css:obfl-toc]//*/@css:page-break-before|
                              //*[@css:obfl-toc]//*/@css:page-break-after">
                 <p:documentation>
-                     Don't support 'volume' and 'counter-set: page' within named flows or
-                     tables. Don't support 'page' within tables. Don't support 'page-break-before'
-                     and 'page-break-after' within tables or '-obfl-toc' elements.
+                     Don't support 'volume' within named flows. Don't support 'volume', 'page' and
+                     'counter-set: page' within tables. Don't support 'page-break-before' and
+                     'page-break-after' within tables or '-obfl-toc' elements.
                 </p:documentation>
             </p:delete>
             <css:split split-before="*[@css:page or @css:volume or @css:counter-set-page]|
