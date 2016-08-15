@@ -510,6 +510,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								if (val != null) {
 									if (val == Hyphens.AUTO)
 										hyphenate[i] = true;
+									else if (val == Hyphens.NONE)
+										text[i] = extractHyphens(text[i], SHY, ZWSP)._1;
 									style.removeProperty("hyphens"); }
 								val = style.getProperty("letter-spacing");
 								if (val != null) {
@@ -973,6 +975,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					if (val != null) {
 						if (val == Hyphens.AUTO)
 							hyphenate[i] = true;
+						else if (val == Hyphens.NONE)
+							text[i] = extractHyphens(text[i], SHY, ZWSP)._1;
 						style.removeProperty("hyphens"); }
 					val = style.getProperty("letter-spacing");
 					if (val != null) {
