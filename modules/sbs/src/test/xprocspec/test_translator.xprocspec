@@ -4,7 +4,8 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:html="http://www.w3.org/1999/xhtml"
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:brl="http://www.daisy.org/z3986/2009/braille/">
   
   <x:script>
     <p:declare-step type="pxi:transform" version="1.0">
@@ -12,26 +13,22 @@
       <p:output port="result"/>
       <p:option name="grade" required="true"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
-      <p:add-attribute match="/*" attribute-name="style" attribute-value="hyphens:auto"/>
-      <p:add-attribute match="html:p" attribute-name="style" attribute-value="display:block"/>
       <px:transform>
         <p:with-option name="query" select="concat('(input:html)(input:css)(output:css)(translator:sbs)(locale:de)(grade:',$grade,')')"/>
       </px:transform>
-      <p:delete match="@style|@css:*"/>
     </p:declare-step>
   </x:script>
   
-  <x:scenario label="test_1">
+  <x:scenario label="hyphenation">
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
-          <div xmlns="http://www.w3.org/1999/xhtml">
-            <p>foobar</p>
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" style="hyphens: auto">
+            <p style="display: block">foobar</p>
           </div>
         </x:document>
       </x:input>
     </x:call>
-    
     <x:scenario label="grade 0">
       <x:call>
         <x:option name="grade" select="'0'"/>
@@ -41,13 +38,12 @@
       </x:context>
       <x:expect label="result" type="compare">
         <x:document type="inline">
-          <div xmlns="http://www.w3.org/1999/xhtml">
-            <p>⠋⠕⠕­⠃⠁⠗</p>
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+            <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
           </div>
         </x:document>
       </x:expect>
     </x:scenario>
-    
     <x:scenario label="grade 1">
       <x:call>
         <x:option name="grade" select="'1'"/>
@@ -57,13 +53,12 @@
       </x:context>
       <x:expect label="result" type="compare">
         <x:document type="inline">
-          <div xmlns="http://www.w3.org/1999/xhtml">
-            <p>⠋⠕⠕­⠃⠁⠗</p>
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+            <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
           </div>
         </x:document>
       </x:expect>
     </x:scenario>
-    
     <x:scenario label="grade 2">
       <x:call>
         <x:option name="grade" select="'2'"/>
@@ -73,15 +68,15 @@
       </x:context>
       <x:expect label="result" type="compare">
         <x:document type="inline">
-          <div xmlns="http://www.w3.org/1999/xhtml">
-            <p>⠋⠕⠕­⠃⠁⠗</p>
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+            <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
           </div>
         </x:document>
       </x:expect>
     </x:scenario>
   </x:scenario>
   
-  <x:scenario label="test_2">
+  <x:scenario label="segmentation-bug">
     <x:documentation>
       Tests that no text ends up at the wrong place after translation because of white space only
       text nodes.
@@ -89,7 +84,7 @@
     <x:call step="pxi:transform">
       <x:input port="source">
         <x:document type="inline">
-          <div xmlns="http://www.w3.org/1999/xhtml">
+          <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
             <div>
               <div>
                 <div>foo</div>
@@ -110,7 +105,7 @@
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
-        <div xmlns="http://www.w3.org/1999/xhtml">
+        <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
           <div>
             <div>
               <div>⠋⠕⠕</div>
@@ -124,6 +119,57 @@
         </div>
       </x:document>
     </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="hyphens">
+    <x:documentation>
+      Tests that hyphens property works for words that are pre-hyphenated in the Liblouis table.
+    </x:documentation>
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="inline">
+          <p xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+            <span style="hyphens: auto">o­lympier</span>
+            <span style="hyphens: manual">o­lympier</span>
+            <span style="hyphens: none">o­lympier</span>
+          </p>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:scenario label="grade 0">
+      <x:call>
+        <x:option name="grade" select="'0'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result" select="/_/*"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <p xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+            <span>⠕­⠇⠽⠍­⠏⠊­⠑⠗</span>
+            <span>⠕­⠇⠽⠍⠏⠊⠑⠗</span>
+            <span style="hyphens: none">⠕⠇⠽⠍⠏⠊⠑⠗</span>
+          </p>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="grade 2">
+      <x:call>
+        <x:option name="grade" select="'2'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result" select="/_/*"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <p xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
+            <span>⠕⠇⠠⠽⠍­⠏⠊­⠻</span>
+            <span>⠕⠇⠠⠽⠍⠏⠊⠻</span>
+            <span style="hyphens: none">⠕⠇⠠⠽⠍⠏⠊⠻</span>
+          </p>
+        </x:document>
+      </x:expect>
+    </x:scenario>
   </x:scenario>
   
 </x:description>
