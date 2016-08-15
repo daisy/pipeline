@@ -9,19 +9,6 @@
   <x:param name="hyphenator">(locale:de)</x:param>
   <x:param name="ascii-braille">yes</x:param>
 
-    <x:scenario label="Selection feature with literals with grade attrs">
-      <x:context>
-        <brl:select xml:lang="de">
-	  <brl:when-braille>
-	    <brl:literal brl:grade="1">Foo</brl:literal>
-	    <brl:literal brl:grade="2">Bar</brl:literal>
-	  </brl:when-braille>
-	  <brl:otherwise>Baz</brl:otherwise>
-	</brl:select>
-      </x:context>
-      <x:expect label="braille">Bar</x:expect>
-    </x:scenario>
-
     <x:scenario label="vform in em Bug#1413">
       <x:context>
         <stub xml:lang="de">
@@ -86,16 +73,6 @@
       </x:context>
       <x:expect label="braille">
         <stub xml:lang="de"><brl:homograph>TE]?(]</brl:homograph></stub>
-      </x:expect>
-    </x:scenario>
-
-    <x:scenario label="Braille-Literal">
-      <x:context>
-        <stub xml:lang="de">Musik <brl:select><brl:when-braille><brl:literal>@#Lv._@&gt;&amp;2K</brl:literal></brl:when-braille> 
-            <brl:otherwise>[Note E im Bassschlüssel]</brl:otherwise></brl:select> ist doch ganz einfach.</stub>
-      </x:context>
-      <x:expect label="braille">
-        <stub xml:lang="de">MK @#Lv._@&gt;&amp;2K ] D4 GZ 6F&lt;.</stub>
       </x:expect>
     </x:scenario>
 

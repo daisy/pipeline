@@ -162,41 +162,6 @@
       </x:expect>
     </x:scenario>
 
-    <x:scenario label="Selection feature">
-      <x:context>
-        <brl:select xml:lang="de">
-	  <brl:when-braille>
-	    <brl:literal>Foo</brl:literal>
-	  </brl:when-braille>
-	  <brl:otherwise>Bar</brl:otherwise>
-	</brl:select>
-      </x:context>
-      <x:expect label="braille">Foo</x:expect>
-    </x:scenario>
-
-    <x:scenario label="Selection feature with mixed literals and text nodes">
-      <x:context>
-        <brl:select xml:lang="de">
-	  <brl:when-braille>Foo <brl:literal>Bar</brl:literal></brl:when-braille>
-	  <brl:otherwise>Baz</brl:otherwise>
-	</brl:select>
-      </x:context>
-      <x:expect label="braille">FOO Bar</x:expect>
-    </x:scenario>
-
-    <x:scenario label="Selection feature inside &lt;em&gt;">
-      <x:context>
-        <stub xml:lang="de">
-          <dtb:p><dtb:em brl:render="quote"><brl:select><brl:when-braille><brl:literal>'.DD'.</brl:literal></brl:when-braille><brl:otherwise>♫</brl:otherwise></brl:select> Hörst du das Pfeifen vom Murmeltier droben ...</dtb:em></dtb:p>
-	</stub>
-      </x:context>
-      <x:expect label="braille">
-	<stub xml:lang="de">
-          <dtb:p><dtb:em brl:render="quote">('.DD'. H9R] DU D PF3FC VM MURMYT0R DROBC ...)</dtb:em></dtb:p>
-	</stub>
-      </x:expect>
-    </x:scenario>
-
     <x:scenario label="div element">
       <x:context>
         <dtb:div brl:class="foo" xml:lang="de"/>

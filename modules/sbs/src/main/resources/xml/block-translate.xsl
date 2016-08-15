@@ -9,13 +9,13 @@
                 exclude-result-prefixes="#all">
 	
 	<xsl:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-template.xsl"/>
+	<xsl:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xsl"/>
 	<xsl:import href="functions.xsl"/>
 	<xsl:import href="select-braille-table.xsl"/>
 	<xsl:import href="handle-elements.xsl"/>
 	
 	<xsl:param name="virtual.dis-uri" select="resolve-uri('../liblouis/virtual.dis')"/> <!-- must be file URI -->
 	<xsl:param name="hyphenator" required="yes"/>
-	<xsl:param name="ascii-braille" select="'no'"/>
 	
 	<xsl:variable name="TABLE_BASE_URI"
 	              select="concat($virtual.dis-uri,',http://www.sbs.ch/pipeline/liblouis/tables/')"/>
@@ -56,6 +56,11 @@
 		    <xsl:value-of select="$unicode-braille"/>
 		  </xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="decode" as="text()">
+		<xsl:param name="text" as="xs:string" required="no" select="string()"/>
+		<xsl:value-of select="pef:decode('(liblouis-table:&quot;sbs.dis&quot;)', $text)"/>
 	</xsl:template>
 	
 	<xsl:template match="css:property" mode="property">

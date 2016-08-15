@@ -12,7 +12,7 @@
   <xsl:param name="contraction">2</xsl:param>
   <xsl:param name="show_v_forms" select="true()"/>
   <xsl:param name="downshift_ordinals" select="true()"/>
-  <xsl:param name="ascii_encoding" select="false()"></xsl:param>
+  <xsl:param name="ascii-braille">no</xsl:param>
 
   <xsl:variable name="GROSS_FUER_BUCHSTABENFOLGE">╦</xsl:variable>
   <xsl:variable name="GROSS_FUER_EINZELBUCHSTABE">╤</xsl:variable>
@@ -21,16 +21,22 @@
   <!-- Tables for computer braille -->
   <xsl:variable name="computer_braille_tables" select="'sbs.dis,sbs-special.cti,sbs-code.cti'"/>
 
-  <!-- ======================= -->
-  <!-- Main translate function -->
-  <!-- ======================= -->
-
   <!--
       Implement the template translate with the following signature
   -->
   <!--
   <xsl:template name="translate" as="text()">
     <xsl:param name="table" as="xs:string" required="yes"/>
+    <xsl:param name="text" as="xs:string" required="no"/>
+    ...
+  </xsl:template>
+  -->
+  
+  <!--
+      Implement the template decode with the following signature (used in brl:literal)
+  -->
+  <!--
+  <xsl:template name="decode" as="text()">
     <xsl:param name="text" as="xs:string" required="no"/>
     ...
   </xsl:template>
@@ -797,12 +803,20 @@
 
   <!--
       FIXME: also copy? or at least warn that style is ignored
-      FIXME: make sure this produces Unicode braille
   -->
   <xsl:template match="brl:literal">
-    <xsl:if test="not(exists(@brl:grade)) or (exists(@brl:grade) and @brl:grade  = $contraction)">
-      <xsl:value-of select="."/>
-    </xsl:if>
+    <xsl:choose>
+      <xsl:when test="@brl:grade[not(.=$contraction)]">
+        <!-- ignore -->
+      </xsl:when>
+      <xsl:when test="$ascii-braille='yes'">
+        <!-- input is already ascii -->
+        <xsl:value-of select="."/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="decode"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- ======================================= -->
