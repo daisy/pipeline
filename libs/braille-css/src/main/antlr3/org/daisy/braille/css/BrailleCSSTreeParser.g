@@ -15,7 +15,10 @@ import cz.vutbr.web.css.MediaQuery;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
+import cz.vutbr.web.css.RuleMargin;
+import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
+import cz.vutbr.web.csskit.RuleArrayList;
 }
 
 @members {
@@ -209,5 +212,64 @@ relative_selector returns [CombinedSelector combinedSelector]
 simple_inlinestyle returns [List<Declaration> style]
     : ^(INLINESTYLE decl=declarations) {
           $style = decl;
+      }
+    ;
+
+/*
+ * Format allowed in style attributes that are the result of
+ * "inlining" a style sheet attached to a document. Inlining is an
+ * operation intended to be done by CSS processors internally, and as
+ * such the resulting style attributes are not valid in an input
+ * document. See the "inlinestyle" rule for what is allowed in style
+ * attributes of an input document.
+ */
+inlinedstyle returns [RuleList rules]
+@init {
+    $rules = gCSSTreeParser.rules = new RuleArrayList();
+}
+    : ^(INLINESTYLE decl=declarations) {
+          RuleBlock<?> b = preparator.prepareInlineRuleSet(decl, null);
+          $rules.add(b);
+      }
+    | ^(INLINESTYLE (ib=inlineblock {
+          // TODO: check that there is at most one block of simple
+          // declarations, that all page at-rules have a different
+          // pseudo-class, etc.
+          $rules.add(ib);
+      })+ )
+    ;
+
+inlineblock returns [RuleBlock<?> b]
+    : irs=inlineset { $b = irs; }
+
+// TODO: allowed as well but skip for now:
+//  | p=page { $b = p; }
+
+// TODO: need a slightly different format that allows @page inside @begin and @end:
+//  | v=volume { $b = v; }
+    ;
+
+// TODO: move to CSSTreeParser.g
+page returns [RuleBlock<?> stmnt]
+@init {
+    List<RuleSet> rules = null;
+    List<RuleMargin> margins = null;
+    String pseudo = null;
+}
+    : ^(PAGE
+          (^(PSEUDOCLASS i=IDENT) {
+              pseudo = i.getText();
+          })?
+          decl=declarations
+          ^(SET
+              (m=margin {
+                  if (m != null) {
+                      if (margins == null) margins = new ArrayList<RuleMargin>();
+                      margins.add(m);
+                  }
+              })*
+          )
+      ) {
+          $stmnt = preparator.prepareRulePage(decl, margins, null, pseudo);
       }
     ;

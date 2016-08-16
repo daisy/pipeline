@@ -115,3 +115,35 @@ noprop
 simple_inlinestyle
     : S* (declarations -> ^(INLINESTYLE declarations))
     ;
+
+/*
+ * Format allowed in style attributes that are the result of
+ * "inlining" a style sheet attached to a document. Inlining is an
+ * operation intended to be done by CSS processors internally, and as
+ * such the resulting style attributes are not valid in an input
+ * document. See the "inlinestyle" rule for what is allowed in style
+ * attributes of an input document.
+ */
+inlinedstyle
+    : simple_inlinestyle
+    | S* (inlineblock S*) + -> ^(INLINESTYLE inlineblock+)
+    ;
+
+inlineblock
+    : LCURLY S* declarations RCURLY -> ^(RULE declarations) // simple declaration list within braces
+    | pseudo+ S* LCURLY S* declarations RCURLY -> ^(RULE pseudo+ declarations) // pseudo-element or pseudo-class
+
+// TODO: allowed as well but skip for now:
+//  | anonymous_page // page at-rule
+
+// TODO: need a slightly different format that allows @page inside @begin and @end:
+//  | volume // volume at-rule
+    ;
+
+anonymous_page
+    : PAGE page_pseudo? S*
+        LCURLY S*
+        declarations margin_rule*
+        RCURLY
+        -> ^(PAGE page_pseudo? declarations ^(SET margin_rule*))
+    ;

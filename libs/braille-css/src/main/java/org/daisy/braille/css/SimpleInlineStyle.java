@@ -48,6 +48,7 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	public Term<?> getValue(String name) {
 		return getValue(name, true);
 	}
+	
 	public void removeProperty(String name) {
 		map.remove(name);
 	}
