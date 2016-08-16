@@ -12,6 +12,7 @@ import cz.vutbr.web.css.NetworkProcessor;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
 import cz.vutbr.web.css.StyleSheet;
+import cz.vutbr.web.css.Term;
 import cz.vutbr.web.csskit.antlr.CSSInputStream;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
 import cz.vutbr.web.csskit.antlr.TreeUtil;
@@ -108,6 +109,26 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			return null; }
 		catch (RecognitionException e) {
 			log.warn("Malformed inline style {}", style);
+			return null; }
+	}
+	
+	public Declaration parseDeclaration(String declaration) {
+		try {
+			CSSInputStream input = CSSInputStream.stringStream(declaration);
+			CommonTokenStream tokens = feedLexer(input);
+			BrailleCSSParser parser = new BrailleCSSParser(tokens);
+			parser.init();
+			CommonTree ast = (CommonTree)parser.declaration().getTree();
+			BrailleCSSTreeParser tparser = feedAST(tokens, ast, null, null);
+			return tparser.declaration(); }
+		catch (IOException e) {
+			log.error("I/O error during declaration parsing: {}", e.getMessage());
+			return null; }
+		catch (CSSException e) {
+			log.warn("Malformed declaration {}", declaration);
+			return null; }
+		catch (RecognitionException e) {
+			log.warn("Malformed declaration {}", declaration);
 			return null; }
 	}
 	

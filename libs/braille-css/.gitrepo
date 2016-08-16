@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/snaekobbi/braille-css
 	branch = master
-	commit = 6042187ad1a27c9b167ba4d873eb8c3f066d5897
-	parent = 3f99e2932fd170d0798c4eb6c6771005ca4f3354
+	commit = 4c0991b01b3438f1bc0662e3c269cc05039d88d9
+	parent = 3aadd08c6fcdd726ed62f36ffaf0f484af6763ea
 	cmdver = 0.3.0

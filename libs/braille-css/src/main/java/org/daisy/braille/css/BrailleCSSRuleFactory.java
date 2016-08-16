@@ -1,6 +1,5 @@
 package org.daisy.braille.css;
 
-import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.PseudoClass;

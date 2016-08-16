@@ -2,6 +2,7 @@ package org.daisy.braille.css;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import cz.vutbr.web.css.CSSFactory;
@@ -9,10 +10,9 @@ import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
-import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.SingleMapNodeData;
 
-public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cloneable {
+public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cloneable, Iterable<PropertyValue> {
 	
 	private final static SupportedCSS cssInstance = SupportedBrailleCSS.getInstance();
 	private static BrailleCSSDeclarationTransformer transformerInstance; static {
@@ -58,6 +58,24 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	
 	public int size() {
 		return map.size();
+	}
+	
+	public Iterator<PropertyValue> iterator() {
+		return new Iterator<PropertyValue>() {
+			Iterator<String> props = SimpleInlineStyle.this.map.keySet().iterator();
+			public boolean hasNext() {
+				return props.hasNext();
+			}
+			public PropertyValue next() {
+				String prop = props.next();
+				return new PropertyValue(
+						SimpleInlineStyle.this.getProperty(prop),
+						SimpleInlineStyle.this.getValue(prop));
+			}
+			public void remove() {
+				props.remove();
+			}
+		};
 	}
 	
 	@Override

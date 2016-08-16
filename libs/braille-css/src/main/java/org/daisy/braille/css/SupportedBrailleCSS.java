@@ -1,7 +1,6 @@
 package org.daisy.braille.css;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;

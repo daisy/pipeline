@@ -40,6 +40,8 @@ import cz.vutbr.web.css.Selector;
     }
 }
 
+// @Override
+// Added volume
 unknown_atrule returns [RuleBlock<?> stmnt]
 @init { $stmnt = null; }
     : (v=volume) { $stmnt = v; }
@@ -89,6 +91,8 @@ volume_area returns [RuleVolumeArea area]
       }
     ;
 
+// @Override
+// Added :not() and :has()
 pseudo returns [Selector.PseudoPage pseudoPage]
     : ^(PSEUDOCLASS m=MINUS? i=IDENT) {
           String name = i.getText();
@@ -166,6 +170,12 @@ pseudo returns [Selector.PseudoPage pseudoPage]
       }
     ;
 
+/*
+ * Selector list
+ * (https://drafts.csswg.org/selectors-4/#selector-list), used in
+ * negation pseudo-class
+ * (https://drafts.csswg.org/selectors-4/#negation-pseudo)
+ */
 selector_list returns [List<Selector> list]
 @init {
     $list = new ArrayList<Selector>();
@@ -180,6 +190,12 @@ relative_selector_list returns [List<CombinedSelector> list]
     : (s=relative_selector { list.add(s); })+
     ;
 
+/*
+ * Relative selector
+ * (https://drafts.csswg.org/selectors-4/#relative-selector), used in
+ * relational pseudo-class
+ * (https://drafts.csswg.org/selectors-4/#relational)
+ */
 relative_selector returns [CombinedSelector combinedSelector]
 @init {
     $combinedSelector = (CombinedSelector)gCSSTreeParser.rf.createCombinedSelector().unlock();
@@ -187,6 +203,9 @@ relative_selector returns [CombinedSelector combinedSelector]
     : ASTERISK (c=combinator s=selector { combinedSelector.add(s.setCombinator(c)); })+
     ;
 
+/*
+ * Simple list of declarations.
+ */
 simple_inlinestyle returns [List<Declaration> style]
     : ^(INLINESTYLE decl=declarations) {
           $style = decl;
