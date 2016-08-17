@@ -17,9 +17,10 @@ import CSSParser;
 }
 
 // @Override
-// Added volume
+// Added volume and text_transform_def
 unknown_atrule
     : volume
+    | text_transform_def
     | ATKEYWORD S* LCURLY any* RCURLY -> INVALID_ATSTATEMENT
     ;
 
@@ -35,6 +36,11 @@ volume_pseudo
 volume_area
     : VOLUME_AREA S* LCURLY S* declarations RCURLY S*
       -> ^(VOLUME_AREA declarations)
+    ;
+
+text_transform_def
+    : TEXT_TRANSFORM S+ IDENT S* LCURLY S* declarations RCURLY
+        -> ^(TEXT_TRANSFORM IDENT declarations)
     ;
 
 // @Override
@@ -132,6 +138,7 @@ inlinedstyle
 inlineblock
     : LCURLY S* declarations RCURLY -> ^(RULE declarations) // simple declaration list within braces
     | pseudo+ S* LCURLY S* declarations RCURLY -> ^(RULE pseudo+ declarations) // pseudo-element or pseudo-class
+    | text_transform_def // text-transform at-rule
 
 // TODO: allowed as well but skip for now:
 //  | anonymous_page // page at-rule

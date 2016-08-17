@@ -44,10 +44,11 @@ import cz.vutbr.web.csskit.RuleArrayList;
 }
 
 // @Override
-// Added volume
+// Added volume and text_transform_def
 unknown_atrule returns [RuleBlock<?> stmnt]
 @init { $stmnt = null; }
     : (v=volume) { $stmnt = v; }
+    | (tt=text_transform_def) { $stmnt = tt; }
     | INVALID_ATSTATEMENT { gCSSTreeParser.debug("Skipping invalid at statement"); }
     ;
 
@@ -91,6 +92,12 @@ volume_area returns [RuleVolumeArea area]
          decl=declarations )
       {
         $area = preparator.prepareRuleVolumeArea(a.getText().substring(1), decl);
+      }
+    ;
+
+text_transform_def returns [RuleTextTransform def]
+    : ^( TEXT_TRANSFORM n=IDENT decl=declarations ) {
+          $def = preparator.prepareRuleTextTransform(n.getText(), decl);
       }
     ;
 
@@ -241,6 +248,7 @@ inlinedstyle returns [RuleList rules]
 
 inlineblock returns [RuleBlock<?> b]
     : irs=inlineset { $b = irs; }
+    | tt=text_transform_def { $b = tt; }
 
 // TODO: allowed as well but skip for now:
 //  | p=page { $b = p; }

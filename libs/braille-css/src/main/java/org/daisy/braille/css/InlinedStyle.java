@@ -39,9 +39,11 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	// getPseudoStyles() etc.
 	private Optional<RuleMainBlock> mainStyle;
 	private List<RulePseudoElementBlock> pseudoStyles;
+	private List<RuleTextTransform> textTransformDefs;
 	
 	public InlinedStyle(String style) {
 		pseudoStyles = new ArrayList<RulePseudoElementBlock>();
+		textTransformDefs = new ArrayList<RuleTextTransform>();
 		List<Declaration> mainDeclarations = new ArrayList<Declaration>();
 		for (RuleBlock<?> block : parserFactory.parseInlinedStyle(style)) {
 			if (block == null) {}
@@ -62,6 +64,8 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 				} else {
 					mainDeclarations.addAll(set);
 				}
+			} else if (block instanceof RuleTextTransform) {
+				textTransformDefs.add((RuleTextTransform)block);
 			} else {
 				throw new RuntimeException("coding error");
 			}
@@ -83,27 +87,48 @@ public class InlinedStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	public Iterator<RuleBlock<?>> iterator() {
 		final Iterator<RuleMainBlock> mainStyleItr = filterNonEmpty(mainStyle.listIterator());
 		final Iterator<RulePseudoElementBlock> pseudoStylesItr = filterNonEmpty(pseudoStyles.listIterator());
+		final Iterator<RuleTextTransform> textTransformDefsItr = filterNonEmpty(textTransformDefs.listIterator());
 		return new Iterator<RuleBlock<?>>() {
 			int cursor = 0;
 			public boolean hasNext() {
-				if (cursor == 0)
+				switch (cursor) {
+				case 0:
 					if (mainStyleItr.hasNext())
 						return true;
-				return pseudoStylesItr.hasNext();
+				case 1:
+					if (pseudoStylesItr.hasNext())
+						return true;
+				case 2:
+				default:
+					return textTransformDefsItr.hasNext();
+				}
 			}
 			public RuleBlock<?> next() {
-				if (cursor == 0) {
+				switch (cursor) {
+				case 0:
 					if (mainStyleItr.hasNext())
 						return mainStyleItr.next();
 					cursor++;
+				case 1:
+					if (pseudoStylesItr.hasNext())
+						return pseudoStylesItr.next();
+					cursor++;
+				case 2:
+				default:
+					return textTransformDefsItr.next();
 				}
-				return pseudoStylesItr.next();
 			}
 			public void remove() {
-				if (cursor == 0)
+				switch (cursor) {
+				case 0:
 					mainStyleItr.remove();
-				else
+					break;
+				case 1:
 					pseudoStylesItr.remove();
+					break;
+				case 2:
+					textTransformDefsItr.remove();
+				}
 			}
 		};
 	}
