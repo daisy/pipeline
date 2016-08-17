@@ -240,10 +240,11 @@
     <xsl:variable name="css:PSEUDOELEMENT_RE" select="concat('::(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\(',$css:IDENT_RE,'\))?')"/>
     <xsl:variable name="css:PSEUDOELEMENT_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1 + $css:IDENT_RE_groups"/>
     
-    <xsl:variable name="css:RULE_RE" select="concat('(((@',$css:IDENT_RE,')(',$css:PSEUDOCLASS_RE,')?|(',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')((',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')*))\s*)?\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
+    <xsl:variable name="css:RULE_RE" select="concat('(((@',$css:IDENT_RE,')','(\s+(',$css:IDENT_RE,'))?','(',$css:PSEUDOCLASS_RE,')?|(',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')((',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')*))\s*)?\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
     <xsl:variable name="css:RULE_RE_selector" select="2"/>
     <xsl:variable name="css:RULE_RE_selector_atrule" select="$css:RULE_RE_selector + 1"/>
-    <xsl:variable name="css:RULE_RE_selector_atrule_pseudoclass" select="$css:RULE_RE_selector_atrule + $css:IDENT_RE_groups + 1"/>
+    <xsl:variable name="css:RULE_RE_selector_atrule_name" select="$css:RULE_RE_selector_atrule + $css:IDENT_RE_groups + 2"/>
+    <xsl:variable name="css:RULE_RE_selector_atrule_pseudoclass" select="$css:RULE_RE_selector_atrule_name + $css:IDENT_RE_groups + 1"/>
     <xsl:variable name="css:RULE_RE_selector_pseudo" select="$css:RULE_RE_selector_atrule_pseudoclass + $css:PSEUDOCLASS_RE_groups + 1"/>
     <xsl:variable name="css:RULE_RE_selector_pseudo_stack" select="$css:RULE_RE_selector_pseudo + $css:PSEUDOELEMENT_RE_groups + $css:PSEUDOCLASS_RE_groups + 1"/>
     <xsl:variable name="css:RULE_RE_value" select="$css:RULE_RE_selector_pseudo_stack + 1 + $css:PSEUDOELEMENT_RE_groups + $css:PSEUDOCLASS_RE_groups + 1"/>
@@ -282,7 +283,10 @@
                         <xsl:element name="css:rule">
                             <xsl:if test="regex-group($css:RULE_RE_selector)!=''">
                                 <xsl:attribute name="selector" select="concat(
-                                                                         regex-group($css:RULE_RE_selector_atrule),
+                                                                         normalize-space(
+                                                                           concat(regex-group($css:RULE_RE_selector_atrule),
+                                                                                  ' ',
+                                                                                  regex-group($css:RULE_RE_selector_atrule_name))),
                                                                          regex-group($css:RULE_RE_selector_pseudo)[1])"/>
                             </xsl:if>
                             <xsl:variable name="style" as="xs:string"

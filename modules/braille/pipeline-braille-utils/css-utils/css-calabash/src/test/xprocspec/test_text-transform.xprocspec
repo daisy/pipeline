@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../resources/inline.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @text-transform foo {
+                  system: -foo-transform;
+                  x: 1;
+                  y: 2;
+                  z: 3;
+                }
+                b {
+                  text-transform: foo;
+                }
+              </style>
+            </head>
+            <body>
+              <p>
+                foo <b>bar</b>
+              </p>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//document"/>
+    </x:context>
+    <x:expect label="root-style" type="xpath" test="/*/@style"
+              equals="'@text-transform foo { system: -foo-transform; x: 1; y: 2; z: 3; }'"/>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p>
+            foo <b style="text-transform: foo;">bar</b>
+          </p>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>
+

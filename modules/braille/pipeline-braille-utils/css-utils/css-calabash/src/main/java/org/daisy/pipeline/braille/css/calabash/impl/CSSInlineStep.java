@@ -32,8 +32,8 @@ import com.google.common.collect.ImmutableSet;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.toArray;
 import static com.google.common.collect.Iterators.addAll;
-
 import com.google.common.io.ByteSource;
+
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
@@ -96,6 +96,7 @@ import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSProperty;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
+import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
@@ -401,6 +402,7 @@ public class CSSInlineStep extends DefaultStep {
 								volumeRule.put(pseudo, r);
 						}
 					}
+					style.textTransformRules = filter(stylesheet, RuleTextTransform.class);
 				} else if (medium.equals("print")) {
 					stylesheet = (StyleSheet)printRuleFactory.createStyleSheet().unlock();
 					if (defaultSheets != null)
@@ -432,6 +434,7 @@ public class CSSInlineStep extends DefaultStep {
 			StyleMap styleMap;
 			Map<String,Map<String,RulePage>> pageRules;
 			Map<String,Map<String,RuleVolume>> volumeRules;
+			Iterable<RuleTextTransform> textTransformRules;
 		}
 		
 		private void traverse(Node node) throws XPathException, URISyntaxException {
@@ -475,10 +478,14 @@ public class CSSInlineStep extends DefaultStep {
 							Map<String,RulePage> pageRule = getPageRule("auto", cs.pageRules);
 							if (pageRule != null)
 								insertPageStyle(style, pageRule, true); }
-						if (isRoot && cs.volumeRules != null) {
-							Map<String,RuleVolume> volumeRule = getVolumeRule("auto", cs.volumeRules);
-							if (volumeRule != null)
-								insertVolumeStyle(style, volumeRule, cs.pageRules); }}}
+						if (isRoot) {
+							if (cs.volumeRules != null) {
+								Map<String,RuleVolume> volumeRule = getVolumeRule("auto", cs.volumeRules);
+								if (volumeRule != null)
+									insertVolumeStyle(style, volumeRule, cs.pageRules); }
+							if (cs.textTransformRules != null)
+								for (RuleTextTransform r : cs.textTransformRules)
+									insertTextTransformDefinition(style, r); }}}
 				if (normalizeSpace(style).length() > 0) {
 					addAttribute(attributeName, style.toString().trim()); }
 				receiver.startContent();
@@ -723,6 +730,16 @@ public class CSSInlineStep extends DefaultStep {
 		if (pageRule != null)
 			insertPageStyle(innerStyle, pageRule, false);
 		builder.append(innerStyle).append("} ");
+	}
+	
+	private static void insertTextTransformDefinition(StringBuilder builder, RuleTextTransform rule) {
+		if (builder.length() > 0 && !builder.toString().endsWith("} ")) {
+			builder.insert(0, "{ ");
+			builder.append("} "); }
+		builder.append("@text-transform ").append(rule.getName()).append(" { ");
+		for (Declaration decl : rule)
+			insertDeclaration(builder, decl);
+		builder.append("} ");
 	}
 	
 	// TODO: what about volumes that match both :first and :last?
