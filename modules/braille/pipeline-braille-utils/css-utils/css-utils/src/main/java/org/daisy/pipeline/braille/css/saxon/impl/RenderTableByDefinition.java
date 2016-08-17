@@ -28,28 +28,15 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
-import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.CSSException;
-import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.Declaration;
-import cz.vutbr.web.css.NetworkProcessor;
-import cz.vutbr.web.css.Rule;
-import cz.vutbr.web.css.RuleFactory;
-import cz.vutbr.web.css.RuleSet;
-import cz.vutbr.web.css.Selector;
+import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.Selector.PseudoClass;
-import cz.vutbr.web.css.Selector.SelectorPart;
-import cz.vutbr.web.css.StyleSheet;
-import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermPair;
-import cz.vutbr.web.csskit.antlr.CSSParserFactory;
-import cz.vutbr.web.csskit.antlr.CSSParserFactory.SourceType;
-import cz.vutbr.web.csskit.DefaultNetworkProcessor;
-import cz.vutbr.web.domassign.DeclarationTransformer;
 
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
@@ -69,13 +56,13 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
 
-import static org.daisy.pipeline.braille.common.util.Strings.join;
-import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
-import org.daisy.braille.css.BrailleCSSParserFactory;
-import org.daisy.braille.css.BrailleCSSRuleFactory;
+import org.daisy.braille.css.InlinedStyle;
+import org.daisy.braille.css.InlinedStyle.RuleMainBlock;
+import org.daisy.braille.css.InlinedStyle.RulePseudoElementBlock;
 import org.daisy.braille.css.SelectorImpl.PseudoClassImpl;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
-import org.daisy.braille.css.SupportedBrailleCSS;
+
+import static org.daisy.pipeline.braille.common.util.Strings.join;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -182,16 +169,6 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	private static final Splitter HEADERS_SPLITTER = Splitter.on(' ').trimResults().omitEmptyStrings();
 	private static final Splitter AXIS_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
 	
-	private static final SupportedCSS brailleCSS = SupportedBrailleCSS.getInstance();
-	private static final RuleFactory rf = new BrailleCSSRuleFactory();
-	private static final NetworkProcessor network = new DefaultNetworkProcessor();
-	private static final SelectorPart dummyElementDOM = rf.createElementDOM(null, true);
-	
-	private static DeclarationTransformer brailleDeclarationTransformer; static {
-		CSSFactory.registerSupportedCSS(brailleCSS);
-		brailleDeclarationTransformer = new BrailleCSSDeclarationTransformer();
-	}
-	
 	private static class TableAsList {
 		
 		final List<String> axes;
@@ -206,13 +183,6 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			if (this.axes.remove("auto"))
 				if (!this.axes.isEmpty())
 					throw new RuntimeException();
-			CSSParserFactory pf = new BrailleCSSParserFactory();
-			CSSFactory.registerRuleFactory(rf);
-			CSSFactory.registerCSSParserFactory(pf);
-			
-			// OK to skip print CSS?
-			CSSFactory.registerSupportedCSS(brailleCSS);
-			CSSFactory.registerDeclarationTransformer(brailleDeclarationTransformer);
 			List<Function<XMLStreamWriter,Void>> writeActions = writeActionsBefore;
 			int depth = 0;
 			TableCell withinCell = null;
@@ -314,26 +284,14 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							else if (isCell && _ID.equals(attrName))
 								withinCell.id = attrValue;
 							else if (depth == 1 && _STYLE.equals(attrName)) {
-								
-								// OK to pass null for element because only used in Analyzer.evaluateDOM()
-								// OK to pass null for base?
-								StyleSheet style = pf.parse(attrValue, network, null,
-								                            SourceType.INLINE, null, true, null);
+								InlinedStyle style = new InlinedStyle(attrValue);
 								String newStyle = null;
-								for (Rule<?> rule : style) {
-									assertThat(rule instanceof RuleSet);
-									RuleSet ruleset = (RuleSet)rule;
-									List<CombinedSelector> selectors = ruleset.getSelectors();
-									assertThat(selectors.size() == 1);
-									CombinedSelector combinedSelector = selectors.get(0);
-									assertThat(combinedSelector.size() == 1);
-									Selector selector = combinedSelector.get(0);
-									assertThat(selector.size() > 0 && dummyElementDOM.equals(selector.get(0)));
-									assertThat(selector.size() < 3);
-									if (selector.size() == 2) {
-										SelectorPart part = selector.get(1);
-										assertThat(part instanceof PseudoElementImpl);
-										PseudoElementImpl pseudo = (PseudoElementImpl)part;
+								for (RuleBlock<?> block : style) {
+									if (block instanceof RuleMainBlock)
+										newStyle = joinRuleSets(newStyle, serializeRuleSet(style.getMainStyle(), null));
+									else if (block instanceof RulePseudoElementBlock) {
+										List<Declaration> ruleset = (RulePseudoElementBlock)block;
+										PseudoElementImpl pseudo = ((RulePseudoElementBlock)block).getPseudoElement();
 										if ("list-item".equals(pseudo.getName()))
 											addListItemStyle(
 												pseudo.getPseudoClasses(),
@@ -362,7 +320,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 										else
 											newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset, pseudo)); }
 									else
-										newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset, null)); }
+										throw new RuntimeException("Unexpected style " + block); }
 								if (newStyle != null)
 									writeActions.add(writeAttribute(attrName, newStyle)); }
 							else
@@ -1256,11 +1214,6 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 				return i; }
 		catch(NumberFormatException e) {}
 		throw new RuntimeException("Expected positive integer but got "+ s);
-	}
-	
-	private static void assertThat(boolean test) {
-		if (!test)
-			throw new RuntimeException("Coding error");
 	}
 	
 	private static void writeStartElement(XMLStreamWriter writer, QName name) {
