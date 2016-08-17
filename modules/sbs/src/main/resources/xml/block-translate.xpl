@@ -15,6 +15,7 @@
 	<!-- HANDLE DOWNGRADING -->
 	<!-- ================== -->
 
+	<css:parse-properties properties="text-transform"/>
 	<p:xslt>
           <p:input port="stylesheet">
             <p:document href="handle-downgrading.xsl"/>

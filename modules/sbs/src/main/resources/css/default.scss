@@ -13,7 +13,7 @@
 
 /* Namespaces */
 
-@namespace xml "http://www.w3.org/XML/1998/namespace";
+@namespace xml url(http://www.w3.org/XML/1998/namespace);
 @namespace brl url(http://www.daisy.org/z3986/2009/braille/);
 
 /* Page layout
@@ -99,7 +99,6 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
    volume-break-before:always;
 }
 
-
 @volume {
     @begin {
 	page:auto;
@@ -112,6 +111,29 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
 	content: flow(cover) flow(frontmatter) flow(document-toc);
     }
 }
+    
+/* Downgrading indicators */
+
+@text-transform downgrade {
+    system: -sbs-indicators;
+    single-word: "'.";
+    open: "-.";
+    close: "'.";
+}
+
+@if $contraction-grade == 2 {
+    
+    span[brl|grade='0'],
+    span[brl|grade='1'],
+    blockquote[xml|lang]:not([xml|lang=de]),
+    div[xml|lang]:not([xml|lang=de]),
+    epigraph[xml|lang]:not([xml|lang=de]),
+    poem[xml|lang]:not([xml|lang=de]) {
+        text-transform: downgrade;
+    }
+}
+
+/* Table of contents */
 
 #generated-document-toc,
 #generated-volume-toc {
