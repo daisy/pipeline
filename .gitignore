@@ -1,3 +1,6 @@
 /bom.xml
 /.maven-modules
 /.gradle/
+.classpath
+.project
+.settings/
