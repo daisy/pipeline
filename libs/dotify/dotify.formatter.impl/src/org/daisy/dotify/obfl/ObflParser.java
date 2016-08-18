@@ -828,6 +828,8 @@ public class ObflParser extends XMLParserBase {
 				fc.insertAnchor(parseAnchor(event));
 			} else if (equalsStart(event, ObflQName.EVALUATE)) {
 				parseEvaluate(fc, event, input, tp);
+			} else if (equalsStart(event, ObflQName.PAGE_NUMBER)) {
+				parsePageNumber(fc, event, input);
 			} else if (equalsEnd(event, ObflQName.STYLE)) {
 				if (!ignore) {
 					if (!hasEvents) {

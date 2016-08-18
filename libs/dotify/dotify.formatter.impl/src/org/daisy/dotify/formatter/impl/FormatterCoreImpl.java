@@ -300,7 +300,19 @@ class FormatterCoreImpl extends Stack<Block> implements FormatterCore, BlockGrou
 		if (table!=null) {
 			throw new IllegalStateException("A table is open.");
 		}
-		getCurrentBlock().addSegment(new PageNumberReferenceSegment(identifier, numeralStyle));
+		PageNumberReferenceSegment r; {
+			if (styles.isEmpty()) {
+				r = new PageNumberReferenceSegment(identifier, numeralStyle);
+			} else {
+				String[] style = new String[styles.size()];
+				int i = 0;
+				for (Style s : styles) {
+					style[i++] = s.name;
+				}
+				r = new PageNumberReferenceSegment(identifier, numeralStyle, style);
+			}
+		}
+		getCurrentBlock().addSegment(r);
 	}
 
 	@Override

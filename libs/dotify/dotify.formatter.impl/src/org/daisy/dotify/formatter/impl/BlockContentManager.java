@@ -121,7 +121,7 @@ class BlockContentManager extends AbstractBlockContentManager {
 						String txt = "" + rs.getNumeralStyle().format(page);
 						layoutAfterLeader(Translatable.text(
 								fcontext.getConfiguration().isMarkingCapitalLetters()?txt:txt.toLowerCase()
-								).locale(null).build(), null);
+								).locale(null).attributes(rs.getTextAttribute(txt.length())).build(), null);
 					}
 					break;
 				}
