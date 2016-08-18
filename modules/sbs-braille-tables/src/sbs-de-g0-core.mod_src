@@ -1,0 +1,19 @@
+#-------------------------------------------------------------------------------
+#
+#  sbs-de-g0-core.mod
+#
+#  DEUTSCHE BASISSCHRIFT
+#
+#-------------------------------------------------------------------------------
+
+###   Buchstaben mit Pt.6 nach Zahl
+endnum	a	'A	
+endnum	b	'B	
+endnum	c	'C	
+endnum	d	'D	
+endnum	e	'E	
+endnum	f	'F	
+endnum	g	'G	
+endnum	h	'H	
+endnum	i	'I	
+endnum	j	'J	

@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/sbsdev/sbs-braille-tables
+	branch = master
+	commit = 290c32fcfdb6fee3aa23a0e19c16e9f1a4a2f979
+	parent = 1a667e0113dc431dbd505c2cd28c0c00ce234efa
+	cmdver = 0.3.0

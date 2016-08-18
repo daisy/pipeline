@@ -1,0 +1,33 @@
+INTRODUCTION
+
+This project contains auxiliary tables that are used at SBS to
+generate good German Braille using liblouis.
+
+DOCUMENTATION
+
+None so far.
+
+INSTALLATION
+
+Unpack the the distribution tarball, go to the directory it creates and run
+
+./configure
+make
+sudo make install
+
+This will add the sbs braille tables to the liblouis installed on the system.
+
+PACKAGING
+
+Build a Debian package by running
+
+  debuild -us -uc -b
+
+This will create a deb file in ../.
+
+To increase the Debian package version edit `debian/changelog`.
+ 
+LICENSE
+
+The tables contained within this package are free software. See the
+file COPYING for copying conditions.

@@ -1,0 +1,18 @@
+#-------------------------------------------------------------------------------
+#
+#  de-g0-sbs-litdigit-lower.mod
+#
+#  TIEFGESTELLTE ZAHLEN
+#
+#-------------------------------------------------------------------------------
+
+litdigit	0	)	
+litdigit	1	,	
+litdigit	2	;	
+litdigit	3	:	
+litdigit	4	/	
+litdigit	5	?	
+litdigit	6	+	
+litdigit	7	=	
+litdigit	8	(	
+litdigit	9	*	

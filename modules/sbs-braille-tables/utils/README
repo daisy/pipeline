@@ -1,0 +1,18 @@
+The files in this directory provide a sort of a preprocessor so that
+braille tables can be written the ASCII braille notation instead of
+the actual dot notation
+
+The lines are translated according to the following rules (see also
+the translate function in tab2lou.pl):
+
+- '#'   Comment, use line as is
+- '#=#' Use line as is (without the '#=#')
+- '###' Source comment. Drop this line in the output
+- All other lines are expected to be of the form =Opcode Input Output
+  Comment= where
+  - =Opcode= taken as is ('_' is translated to ' ')
+  - =Input=  taken as is
+  - =Output= translated with din2dots
+  - =Comment= optional, taken as is
+
+

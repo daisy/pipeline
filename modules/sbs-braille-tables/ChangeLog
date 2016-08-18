@@ -1,0 +1,25 @@
+2010-07-14  Christian Egli  <christian.egli@sbszh.ch>
+
+	* configure.ac: Add the git-version-gen from gnulib
+
+2010-07-02  Christian Egli  <christian.egli@sbszh.ch>
+
+	* tables/sbs-de-g1-white.mod: Small fixes
+
+2010-06-30  Christian Egli  <christian.egli@sbszh.ch>
+
+	* tables/sbs-de-g1-white.mod:
+	* tables/sbs-de-g2-white.mod: Fix some issues where the tables
+	contained garbage from the automatic generation
+
+2010-06-29  Christian Egli  <christian.egli@sbszh.ch>
+
+	* tables/sbs-de-g2-core.mod: Fix a bug with abbreviations
+
+2010-06-24  Christian Egli  <christian.egli@sbszh.ch>
+
+	* tables/Makefile.am (table_files):
+	* tables/version.utb.in:
+	* configure.ac: Add a table that allows to query the version of
+	the tables installed..
+

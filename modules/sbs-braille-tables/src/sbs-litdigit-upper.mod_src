@@ -1,0 +1,18 @@
+#-------------------------------------------------------------------------------
+#
+#  sbs-litdigit-upper.mod
+#
+#  Hochgestellte Zahlen (Standard)
+#
+#-------------------------------------------------------------------------------
+
+litdigit	0	J	
+litdigit	1	A	
+litdigit	2	B	
+litdigit	3	C	
+litdigit	4	D	
+litdigit	5	E	
+litdigit	6	F	
+litdigit	7	G	
+litdigit	8	H	
+litdigit	9	I	

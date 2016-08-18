@@ -1,0 +1,39 @@
+sbs-braille-tables NEWS -- history of user-visible changes.
+
+* Noteworthy changes in release 1.2 (2011-02-14)
+    - Improve tables
+
+* Noteworthy changes in release 1.1 (2010-07-14) [beta]
+    - Add git-version-gen
+    - Add do-release-commit-and-tag
+
+* Noteworthy changes in release 1.0.9
+    - Update whitelists
+
+* Noteworthy changes in release 1.0.8
+    - Whitespace handling fixes
+    - Lautgruppen nach Apo
+    - Dummy-Zahlen
+    - Korrektur "ver"
+    
+* Noteworthy changes in release 1.0.7
+    - Fix error in whitespace handling
+
+* Noteworthy changes in release 1.0.6
+    - Fix g1 white list
+
+* Noteworthy changes in release 1.0.5
+    - minor white list corrections due to faulty automatic generation
+
+* Noteworthy changes in release 1.0.4
+    - Fix a bug with abbrevs
+
+* Noteworthy changes in release 1.0.3
+    - white list improvements
+    - hyphenation improvements
+    - minor corrections
+
+* Noteworthy changes in release 1.0.2
+  Added a version table which allows to query the version of the installed tables
+
+
