@@ -278,6 +278,7 @@
             <book>
               <bodymatter>
                 <level1>
+                  <pagenum id="page-1" page="normal">1</pagenum>
                   <h1>Level 1</h1>
                   <p>Bla bla bla</p>
                   <p>Bla bla bla</p>
@@ -290,6 +291,7 @@
                   <p>Bla bla bla</p>
                   <p>Bla bla bla</p>
                   <level2>
+                    <pagenum id="page-2" page="normal">2</pagenum>
                     <h2>Level 2</h2>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
@@ -302,6 +304,7 @@
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
+                    <pagenum id="page-3" page="normal">3</pagenum>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
@@ -316,6 +319,7 @@
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
+                    <pagenum id="page-4" page="normal">4</pagenum>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
@@ -329,6 +333,7 @@
                     <h2>Level 2</h2>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
+                    <pagenum id="page-2" page="normal">5</pagenum>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
                     <p>Bla bla bla</p>
@@ -378,10 +383,10 @@
                     <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠗⠎⠞⠑⠗⠀⠃⠙⠄</row>
                     <row/>
-                    <row>⠼⠀⠇⠑⠧⠑⠇⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠁</row>
-                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠁</row>
-                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠃</row>
-                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠉</row>
+                    <row>⠼⠀⠇⠑⠧⠑⠇⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠂⠁</row>
+                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠆⠁</row>
+                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠒⠃</row>
+                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠲⠉</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒</row>
                     <row/>
@@ -431,7 +436,7 @@
                     <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
                     <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
                     <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                    <row>⠸⠼⠁⠆⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
                   </page>
                   <page>
                     <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
@@ -488,7 +493,7 @@
                     <row/>
                     <row/>
                     <row/>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉</row>
+                    <row>⠸⠼⠃⠢⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠀⠀⠀⠀⠀⠀⠼⠉</row>
                   </page>
                 </section>
               </volume>
@@ -524,13 +529,13 @@
                     <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠗⠎⠞⠑⠗⠀⠃⠙⠄</row>
                     <row/>
-                    <row>⠼⠀⠇⠑⠧⠑⠇⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠁</row>
-                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠁</row>
-                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠃</row>
+                    <row>⠼⠀⠇⠑⠧⠑⠇⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠂⠁</row>
+                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠆⠁</row>
+                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠒⠃</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠵⠺⠑⠊⠞⠑⠗⠀⠃⠙⠄</row>
                     <row/>
-                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠉</row>
+                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠲⠉</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒</row>
                     <row/>
@@ -577,7 +582,7 @@
                     <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
                     <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
                     <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                    <row>⠸⠼⠁⠆⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠁⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
                   </page>
                   <page>
                     <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
@@ -617,7 +622,7 @@
                     <row/>
                     <row>⠵⠺⠑⠊⠞⠑⠗⠀⠃⠙⠄</row>
                     <row/>
-                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠉</row>
+                    <row>⠀⠀⠼⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠲⠉</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒</row>
                     <row/>
@@ -670,7 +675,7 @@
                     <row/>
                     <row/>
                     <row/>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉</row>
+                    <row>⠸⠼⠙⠢⠀⠀⠀⠀⠀⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠀⠀⠀⠀⠀⠀⠼⠉</row>
                   </page>
                 </section>
               </volume>

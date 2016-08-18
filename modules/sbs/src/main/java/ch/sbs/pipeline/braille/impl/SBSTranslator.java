@@ -211,7 +211,7 @@ public interface SBSTranslator {
 										else if (tt.equals("toc-page")) {
 											failIfOtherStyleAttached(style, values);
 											return Optional.of(translateBraillePageNumberInToc(s.getText())).asSet(); }
-										else if (tt.equals(" toc-print-page")) {
+										else if (tt.equals("toc-print-page")) {
 											failIfOtherStyleAttached(style, values);
 											return Optional.of(translatePrintPageNumberInToc(s.getText())).asSet(); }
 										else if (tt.equals("volume")) {
