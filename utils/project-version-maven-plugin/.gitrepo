@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/sbsdev/project-version-maven-plugin
+	branch = master
+	commit = 631910ef121514a3ab36f86a02ba8a6f9e98b023
+	parent = 3aadd08c6fcdd726ed62f36ffaf0f484af6763ea
+	cmdver = 0.3.0
