@@ -20,15 +20,15 @@
   <xsl:param name="document-identifier"></xsl:param>
   <xsl:param name="TABLE_BASE_URI"></xsl:param>
   
-  <xsl:function name="my:get-contraction" as="xs:string">
-    <xsl:param name="context"/>
+  <xsl:template name="my:get-contraction" as="xs:string">
+    <xsl:param name="context" as="node()"/>
     <xsl:sequence
 	select="if ($context/ancestor-or-self::dtb:span[@brl:grade and @brl:grade &lt; $contraction-grade])
 		then $context/ancestor-or-self::dtb:span/@brl:grade
 		else if (lang('de',$context))
 		then string($contraction-grade)
 		else '0'"/>
-  </xsl:function>
+  </xsl:template>
 
   <xsl:function name="my:get-tables" as="xs:string">
     <xsl:param name="ctx"/>
@@ -44,7 +44,11 @@
     <xsl:param name="context" required="no" select="local-name()"/>
     <xsl:param name="hyphenation" as="xs:boolean" tunnel="yes" select="$hyphenation='true'"/>
     <!-- handle explicit setting of the contraction -->
-    <xsl:variable name="actual_contraction" select="my:get-contraction($ctx)"/>
+    <xsl:variable name="actual_contraction">
+      <xsl:call-template name="my:get-contraction">
+        <xsl:with-param name="context" select="$ctx"/>
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:variable name="result">
     <xsl:value-of
 	select="concat($TABLE_BASE_URI,

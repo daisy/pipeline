@@ -212,8 +212,8 @@
         <stub xml:lang="de">
           <dtb:p><dtb:span brl:accents="reduced">René</dtb:span></dtb:p>
           <dtb:p><dtb:span brl:accents="reduced">René René</dtb:span></dtb:p>
-          <dtb:p>Kurz <dtb:span>╚</dtb:span><dtb:span brl:grade="1" brl:accents="reduced">René René</dtb:span><dtb:span>╝</dtb:span> René</dtb:p>
-          <dtb:p><dtb:span>╚</dtb:span><dtb:span brl:grade="1">René <dtb:span brl:accents="reduced">René</dtb:span> René</dtb:span><dtb:span>╝</dtb:span></dtb:p>
+          <dtb:p>Kurz <dtb:span>╚</dtb:span><dtb:span brl:grade="1" brl:accents="reduced" style="text-transform: grade-1">René René</dtb:span><dtb:span>╝</dtb:span> René</dtb:p>
+          <dtb:p><dtb:span>╚</dtb:span><dtb:span brl:grade="1" style="text-transform: grade-1">René <dtb:span brl:accents="reduced">René</dtb:span> René</dtb:span><dtb:span>╝</dtb:span></dtb:p>
         </stub>
       </x:context>
       <x:expect label="braille">

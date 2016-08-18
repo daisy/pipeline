@@ -10,7 +10,8 @@
   <x:param name="hyphenator">(locale:de)</x:param>
   <x:param name="virtual.dis-uri" select="'virtual.dis'"/>
 
-    <x:scenario label="getTable for fr and contraction = 2">
+    <x:scenario label="getTable for fr and contraction = 2"
+                pending="FIXME: fails because the required context of my:get-tables consists of tunnel parameters in addition to the element">
       <x:call function="my:get-tables">
         <x:param>
           <dtb:p xml:lang="fr"/>

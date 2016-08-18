@@ -13,14 +13,14 @@
     <x:scenario label="Downgrading">
       <x:context>
         <stub xml:lang="de">
-          <dtb:p>Kurzschrift schrift schrift <dtb:span>╙</dtb:span><dtb:span brl:grade="1">Vollschrift</dtb:span> kurz kurz kurz</dtb:p>
-          <dtb:p>Kurzschrift schrift schrift <dtb:span>╙</dtb:span><dtb:span brl:grade="0">Basisschrift</dtb:span> kurz kurz kurz</dtb:p>
-          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="1">Vollschrift schrift schrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
-          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="0">Basisschrift schrift schrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
-          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="1">Vollschrift/Vollschrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
-          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="0">Basisschrift/Basisschrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
-          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="1">Vollschrift-​Vollschrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
-          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="0">Basisschrift-​Basisschrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span>╙</dtb:span><dtb:span brl:grade="1" style="text-transform: grade-1">Vollschrift</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span>╙</dtb:span><dtb:span brl:grade="0" style="text-transform: grade-0">Basisschrift</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="1" style="text-transform: grade-1">Vollschrift schrift schrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="0" style="text-transform: grade-0">Basisschrift schrift schrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="1" style="text-transform: grade-1">Vollschrift/Vollschrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="0" style="text-transform: grade-0">Basisschrift/Basisschrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="1" style="text-transform: grade-1">Vollschrift-​Vollschrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
+          <dtb:p>Kurzschrift schrift schrift <dtb:span>╚</dtb:span><dtb:span brl:grade="0" style="text-transform: grade-0">Basisschrift-​Basisschrift</dtb:span><dtb:span>╝</dtb:span> kurz kurz kurz</dtb:p>
         </stub>
       </x:context>
       <x:expect label="braille">

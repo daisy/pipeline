@@ -63,6 +63,32 @@
 		<xsl:value-of select="pef:decode('(liblouis-table:&quot;sbs.dis&quot;)', $text)"/>
 	</xsl:template>
 	
+	<!-- @Override -->
+	<xsl:template name="my:get-contraction" as="xs:string">
+		<xsl:param name="context" as="node()"/>
+		<xsl:param name="source-style" as="element()*" tunnel="yes"/> <!-- css:property* -->
+		<xsl:choose>
+			<xsl:when test="$source-style[@name='text-transform']">
+				<xsl:variable name="text-transforms" as="xs:string*"
+				              select="tokenize(normalize-space($source-style[@name='text-transform']/@value),' ')"/>
+				<xsl:choose>
+					<xsl:when test="'grade-0'=$text-transforms">
+						<xsl:sequence select="'0'"/>
+					</xsl:when>
+					<xsl:when test="'grade-1'=$text-transforms">
+						<xsl:sequence select="'1'"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:sequence select="string($contraction-grade)"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:sequence select="string($contraction-grade)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
 	<xsl:template match="css:property" mode="property">
 		<xsl:if test="not(@value=css:initial-value(@name))">
 			<xsl:sequence select="."/>
@@ -71,10 +97,35 @@
 	
 	<xsl:template match="css:property[@name='word-spacing']" mode="property"/>
 	
+	<xsl:template match="css:property[@name='text-transform']" mode="property">
+		<xsl:variable name="text-transforms" as="xs:string*"
+					  select="tokenize(normalize-space(@value),' ')[not(.=('grade-0','grade-1'))]"/>
+		<xsl:if test="exists($text-transforms)">
+		  <css:property name="{@name}" value="{string-join($text-transforms,' ')}"/>
+		</xsl:if>
+	</xsl:template>
+	
 	<xsl:template match="*" priority="10">
 		<xsl:param name="source-style" as="element()*" tunnel="yes"/> <!-- css:property* -->
-		<xsl:param name="result-style" as="element()*" tunnel="yes"/> <!-- css:property* -->
-		<xsl:variable name="style" as="element()*" select="css:deep-parse-stylesheet(@style)"/> <!-- css:rule* -->
+		<xsl:param name="result-style" as="element()*" tunnel="yes"> <!-- css:property* -->
+			<!--
+				the default is also set in the root matcher of block-translator-template.xsl, but is
+				repeated here for the XSpec tests
+			-->
+			<xsl:call-template name="css:computed-properties">
+				<xsl:with-param name="properties" select="$text-properties"/>
+				<xsl:with-param name="context" select="$dummy-element"/>
+				<xsl:with-param name="cascaded-properties" tunnel="yes" select="css:property('text-transform','none')"/>
+			</xsl:call-template>
+		</xsl:param>
+		<xsl:variable name="style" as="element()*"> <!-- css:rule* -->
+			<xsl:if test="@css:*">
+				<css:rule>
+					<xsl:apply-templates mode="css:attribute-as-property" select="@css:*"/>
+				</css:rule>
+			</xsl:if>
+			<xsl:sequence select="css:deep-parse-stylesheet(@style)"/>
+		</xsl:variable>
 		<xsl:variable name="translated-style" as="element()*">
 			<xsl:call-template name="translate-style">
 				<xsl:with-param name="style" select="$style"/>
@@ -113,6 +164,8 @@
 		<xsl:param name="translated-style" as="xs:string" tunnel="yes"/>
 		<xsl:sequence select="css:style-attribute($translated-style)"/>
 	</xsl:template>
+	
+	<xsl:template match="@css:*"/>
 	
 	<xsl:template mode="translate-style" match="css:property[@name='word-spacing']">
 		<xsl:sequence select="."/>

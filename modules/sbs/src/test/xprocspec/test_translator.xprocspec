@@ -39,7 +39,7 @@
       <x:expect label="result" type="compare">
         <x:document type="inline">
           <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
-            <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
+            <p style="display: block">⠋⠕⠕­⠃⠁⠗</p>
           </div>
         </x:document>
       </x:expect>
@@ -54,7 +54,7 @@
       <x:expect label="result" type="compare">
         <x:document type="inline">
           <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
-            <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
+            <p style="display: block">⠋⠕⠕­⠃⠁⠗</p>
           </div>
         </x:document>
       </x:expect>
@@ -69,7 +69,7 @@
       <x:expect label="result" type="compare">
         <x:document type="inline">
           <div xmlns="http://www.w3.org/1999/xhtml" xml:lang="de">
-            <p css:display="block">⠋⠕⠕­⠃⠁⠗</p>
+            <p style="display: block">⠋⠕⠕­⠃⠁⠗</p>
           </div>
         </x:document>
       </x:expect>
@@ -182,12 +182,13 @@
                       open: &quot;-.&quot;;
                       close: &quot;'.&quot;;
                       single-word: &quot;'.&quot;;}">
-            Ein Sprichwort: <span brl:grade="0" style="text-transform: downgrade">Tout vient
-            à point à qui sait attendre</span> (Zu dem, der warten kann, kommt alles mit der Zeit).
+            Ein Sprichwort: <span brl:grade="0" xml:lang="fr" style="text-transform: downgrade
+            grade-0">Tout vient à point à qui sait attendre</span> (Zu dem, der warten kann, kommt
+            alles mit der Zeit).
           </p>
         </x:document>
       </x:input>
-      <x:option name="grade" select="'0'"/>
+      <x:option name="grade" select="'2'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result" select="/_/*"/>
@@ -196,8 +197,8 @@
       <x:document type="inline">
         <p xmlns="http://www.w3.org/1999/xhtml" xml:lang="de"
            style="@text-transform downgrade { system: -sbs-indicators; open: &quot;-.&quot;; close: &quot;'.&quot;; single-word: &quot;'.&quot; }">
-          ⠑⠊⠝ ⠎⠏⠗⠊⠉⠓⠺⠕⠗⠞⠒ <span brl:grade="0">⠤⠄⠞⠕⠥⠞ ⠧⠊⠑⠝⠞ ⠈⠷ ⠏⠕⠊⠝⠞ ⠈⠷ ⠟⠥⠊ ⠎⠁⠊⠞ ⠁⠞⠞⠑⠝⠙⠗⠑⠠⠄</span>
-          ⠶⠵⠥ ⠙⠑⠍⠂ ⠙⠑⠗ ⠺⠁⠗⠞⠑⠝ ⠅⠁⠝⠝⠂ ⠅⠕⠍⠍⠞ ⠁⠇⠇⠑⠎ ⠍⠊⠞ ⠙⠑⠗ ⠵⠑⠊⠞⠶⠄
+          ⠫ ⠎⠏⠗⠼⠺⠢⠞⠒ <span brl:grade="0" xml:lang="fr">⠤⠄⠞⠕⠥⠞ ⠧⠊⠑⠝⠞ ⠈⠷ ⠏⠕⠊⠝⠞ ⠈⠷ ⠟⠥⠊ ⠎⠁⠊⠞
+          ⠁⠞⠞⠑⠝⠙⠗⠑⠠⠄</span> ⠶⠵ ⠷⠂ ⠗ ⠺⠴⠞⠉ ⠅⠂ ⠅⠭⠞ ⠁⠿ ⠞ ⠗ ⠵⠞⠶⠄
         </p>
       </x:document>
     </x:expect>

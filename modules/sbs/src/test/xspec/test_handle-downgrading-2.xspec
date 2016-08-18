@@ -12,7 +12,7 @@
     <x:scenario label="Downgrading from grade 1 to grade 0">
       <x:context>
         <stub xml:lang="de">
-          <dtb:p>Vollschrift schrift schrift <dtb:span brl:grade="0">Basisschrift/Basisschrift</dtb:span> voll voll voll</dtb:p>
+          <dtb:p>Vollschrift schrift schrift <dtb:span brl:grade="0" style="text-transform: grade-0">Basisschrift/Basisschrift</dtb:span> voll voll voll</dtb:p>
         </stub>
       </x:context>
       <x:expect label="braille">

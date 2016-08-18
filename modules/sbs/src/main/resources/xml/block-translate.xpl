@@ -11,11 +11,12 @@
 
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
 
+	<css:parse-properties properties="display text-transform"/>
+	
 	<!-- ================== -->
 	<!-- HANDLE DOWNGRADING -->
 	<!-- ================== -->
 
-	<css:parse-properties properties="text-transform"/>
 	<p:xslt>
           <p:input port="stylesheet">
             <p:document href="handle-downgrading.xsl"/>
@@ -42,7 +43,6 @@
 	<!-- TRANSLATE -->
 	<!-- ========= -->
 
-	<css:parse-properties properties="display"/>
 	<p:xslt initial-mode="identify-blocks">
 		<p:input port="stylesheet">
 			<p:document href="block-translate.xsl"/>
@@ -52,5 +52,5 @@
 		<p:with-param name="hyphenator" select="$hyphenator"/>
 		<p:with-param name="hyphenation" select="'true'"/>
 	</p:xslt>
-
+	
 </p:pipeline>

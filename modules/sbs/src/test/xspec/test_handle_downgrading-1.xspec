@@ -61,7 +61,7 @@
       <x:context>
         <stub xml:lang="de">
           <dtb:p>Jetzt folgt ein Gedicht:</dtb:p>
-          <dtb:poem xml:lang="en">
+          <dtb:poem xml:lang="en" style="text-transform: grade-0">
             <dtb:linegroup>
               <dtb:line><dtb:span>╚</dtb:span>If you want to get a favour done</dtb:line>
               <dtb:line>By some obliging friend,</dtb:line>

@@ -123,13 +123,36 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
 
 @if $contraction-grade == 2 {
     
-    span[brl|grade='0'],
-    span[brl|grade='1'],
+    span[brl|grade='0'] {
+        text-transform: downgrade grade-0;
+    }
+    
+    span[brl|grade='1'] {
+        text-transform: downgrade grade-1;
+    }
+    
     blockquote[xml|lang]:not([xml|lang=de]),
     div[xml|lang]:not([xml|lang=de]),
     epigraph[xml|lang]:not([xml|lang=de]),
     poem[xml|lang]:not([xml|lang=de]) {
-        text-transform: downgrade;
+        text-transform: downgrade grade-0;
+    }
+    
+} @else {
+    
+    span[brl|grade='0'] {
+        text-transform: grade-0;
+    }
+    
+    span[brl|grade='1'] {
+        text-transform: grade-1;
+    }
+    
+    blockquote[xml|lang]:not([xml|lang=de]),
+    div[xml|lang]:not([xml|lang=de]),
+    epigraph[xml|lang]:not([xml|lang=de]),
+    poem[xml|lang]:not([xml|lang=de]) {
+        text-transform: grade-0;
     }
 }
 
