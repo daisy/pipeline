@@ -1476,17 +1476,21 @@
                 <xsl:sequence select="concat('-dotify-counter-style: ',@style)"/>
             </xsl:if>
         </xsl:variable>
-        <page-number ref-id="{@target}"
-                     number-format="{if (@style=('roman', 'upper-roman', 'lower-roman', 'upper-alpha', 'lower-alpha'))
-                                    then @style else 'default'}">
-            <xsl:if test="exists($style)">
-                <!--
-                    FIXME: text-style not supported on page-number element
-                -->
-                <xsl:attribute name="text-style" select="string-join($style,'; ')"/>
-                <xsl:message select="concat(string-join($style,'; '),' could not be applied to target-counter(page)')"/>
-            </xsl:if>
-        </page-number>
+        <xsl:variable name="page-number" as="element()">
+            <page-number ref-id="{@target}"
+                         number-format="{if (@style=('roman', 'upper-roman', 'lower-roman', 'upper-alpha', 'lower-alpha'))
+                                         then @style else 'default'}"/>
+        </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="exists($style)">
+                <style name="{string-join($style,'; ')}">
+                    <xsl:sequence select="$page-number"/>
+                </style>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$page-number"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <!--
@@ -1536,10 +1540,10 @@
             <xsl:with-param name="pending-text-transform" tunnel="yes" select="($specified-text-transform,$text-transform)[1]"/>
         </xsl:next-match>
     </xsl:template>
+    
     <!--
         leader()
     -->
-    
     <xsl:template mode="block td toc-entry"
                   match="css:leader">
         <leader pattern="{@pattern}" position="100%" align="right"/>

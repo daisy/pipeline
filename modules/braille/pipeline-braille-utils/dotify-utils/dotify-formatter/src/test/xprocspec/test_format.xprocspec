@@ -8770,16 +8770,14 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_81" xfail="true">
+  <x:scenario label="test_81">
     <x:documentation>
       Tests target-counter(page) with custom counter style.
-      
-      Broken: text-style not supported on page-number element.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="text-transform:none">
+          <body style="text-transform:none; display:block">
             <a href="#a" style="::after { content: target-counter(attr(href url), page, symbols(numeric '⠴' '⠂' '⠆' '⠒' '⠲' '⠢' '⠖' '⠶' '⠦' '⠔')) }"/>
             <div id="a" style="display: block; page-break-before: always">⠤⠤⠤</div>
           </body>
@@ -8800,10 +8798,13 @@
           </layout-master>
           <sequence master="master_1">
             <block>
-              <page-number ref-id="a" number-format="default"
-                           text-style="text-transform: -dotify-counter; -dotify-counter-style: symbols(numeric '⠴' '⠂' '⠆' '⠒' '⠲' '⠢' '⠖' '⠶' '⠦' '⠔')"/>
+              <block>
+                <style name="text-transform: -dotify-counter; -dotify-counter-style: symbols(numeric '⠴' '⠂' '⠆' '⠒' '⠲' '⠢' '⠖' '⠶' '⠦' '⠔')">
+                  <page-number ref-id="a" number-format="default"/>
+                </style>
+              </block>
+              <block break-before="page" id="a"> ⠤⠤⠤ </block>
             </block>
-            <block break-before="page" id="a"> ⠤⠤⠤ </block>
           </sequence>
         </obfl>
       </x:document>
