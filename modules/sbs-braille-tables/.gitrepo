@@ -6,6 +6,6 @@
 [subrepo]
 	remote = https://github.com/sbsdev/sbs-braille-tables
 	branch = master
-	commit = 290c32fcfdb6fee3aa23a0e19c16e9f1a4a2f979
-	parent = 1a667e0113dc431dbd505c2cd28c0c00ce234efa
+	commit = 75bd14402ccba4ff4449d957f9d1510c634a785c
+	parent = 6c837da8eb621dfeec4bfb826eae76271196d901
 	cmdver = 0.3.0

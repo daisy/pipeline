@@ -1,0 +1,7 @@
+Package: ${project.artifactId}
+Version: ${project.detailedVersion}
+Section: text
+Priority: optional
+Architecture: all
+Maintainer: Christian Egli <christian.egli@sbs.ch>
+Description: SBS Liblouis Tables module for DAISY Pipeline2

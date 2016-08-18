@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>ch.sbs.pipeline</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.5</version>
+    <relativePath />
+  </parent>
+  
+  <groupId>ch.sbs.pipeline</groupId>
+  <artifactId>sbs-braille-tables</artifactId>
+  <version>2.3-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  
+  <name>DAISY Pipeline 2 module :: sbs-braille-tables</name>
+  <description>Liblouis braille tables for SBS</description>
+  <url>https://github.com/sbsdev/sbs-braille-tables</url>
+
+  <licenses>
+    <license>
+      <name>GNU General Lesser Public License (LGPL) version 3.0</name>
+      <url>http://www.gnu.org/licenses/lgpl-3.0.en.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Christian Egli</name>
+      <email>christian.egli@sbs.ch</email>
+      <organization>Swiss Library for the Blind, Visually Impaired and Print Disabled</organization>
+      <organizationUrl>http://www.sbs.ch</organizationUrl>
+    </developer>
+    <developer>
+      <name>Christian Waldvogel</name>
+      <email>christian.waldvogel@sbs.ch</email>
+      <organization>Swiss Library for the Blind, Visually Impaired and Print Disabled</organization>
+      <organizationUrl>http://www.sbs.ch</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:https://github.com/sbsdev/sbs-braille-tables.git</connection>
+    <developerConnection>scm:git:git@github.com:sbsdev/sbs-braille-tables.git</developerConnection>
+    <url>git@github.com:sbsdev/sbs-braille-tables.git</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <properties>
+    <tagNameFormat>v@{project.version}</tagNameFormat>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.liblouis</groupId>
+      <artifactId>louis</artifactId>
+      <version>2.5.3</version>
+      <type>nar</type>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>tables/*</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>target/generated-resources/tables</directory>
+        <targetPath>tables</targetPath>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>filter-tables</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/generated-resources</outputDirectory>
+              <filters>
+                <filter>target/filters/detailed-version.properties</filter>
+              </filters>
+              <resources>
+                <resource>
+                  <directory>src/main/resources/tables</directory>
+                  <includes>
+                    <include>sbs-version.utb</include>
+                  </includes>
+                  <targetPath>tables</targetPath>
+                  <filtering>true</filtering>
+                </resource>
+                <resource>
+                  <directory>src/main/resources/tables</directory>
+                  <excludes>
+                    <exclude>*_src</exclude>
+                    <exclude>sbs-version.utb</exclude>
+                  </excludes>
+                  <targetPath>tables</targetPath>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>convert-ascii-tables</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <mkdir dir="target/generated-resources/tables" />
+                <apply executable="utils/tab2lou.pl" failonerror="yes" dest="target/generated-resources/tables">
+                  <env key="PERL5LIB" value="${basedir}/utils" />
+                  <srcfile />
+                  <targetfile />
+                  <fileset dir="src/main/resources/tables" includes="*_src" />
+                  <mapper type="glob" from="*_src" to="*" />
+                </apply>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+	<groupId>com.github.maven-nar</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <version>3.4.0</version>
+        <executions>
+          <execution>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>nar-validate</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-liblouis</id>
+            <phase>generate-test-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.liblouis</groupId>
+                  <artifactId>louis</artifactId>
+                  <classifier>${nar.aol}-shared</classifier>
+                  <type>nar</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.liblouis</groupId>
+                  <artifactId>louis</artifactId>
+                  <classifier>${nar.aol}-executable</classifier>
+                  <type>nar</type>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-liblouis</id>
+            <phase>process-test-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <copy todir="target/liblouis" flatten="true">
+                  <fileset dir="target/dependency">
+                    <include name="**/liblouis.so" />
+                    <include name="**/liblouis.dylib" />
+                    <include name="**/lou_checktable" />
+                  </fileset>
+                </copy>
+                <chmod dir="target/liblouis" includes="*" perm="700" />
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>check-tables</id>
+            <phase>test</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <exec executable="src/test/check_all_tables.pl" failonerror="yes">
+                  <env key="PATH" value="${basedir}/target/liblouis/:${env.PATH}" />
+                  <env key="LD_LIBRARY_PATH" value="${basedir}/target/liblouis/:${env.LD_LIBRARY_PATH}" />
+                  <env key="LOUIS_TABLEPATH" value="${basedir}/target/generated-resources/tables" />
+                </exec>
+                <exec executable="src/test/check_combined_tables.pl" failonerror="yes">
+                  <env key="PATH" value="${basedir}/target/liblouis/:${env.PATH}" />
+                  <env key="LD_LIBRARY_PATH" value="${basedir}/target/liblouis/:${env.LD_LIBRARY_PATH}" />
+                  <env key="LOUIS_TABLEPATH" value="${basedir}/target/generated-resources/tables" />
+                </exec>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Import-Package>org.daisy.pipeline.braille.liblouis</Import-Package>
+            <Service-Component>OSGI-INF/sbs-braille-tables.xml</Service-Component>
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.vafer</groupId>
+        <artifactId>jdeb</artifactId>
+        <configuration>
+          <dataSet>
+            <data>
+              <type>directory</type>
+              <src>target/generated-resources/tables</src>
+              <excludes>unicode.dis,sbs-de-g1-white.mod,sbs-de-g2-white.mod</excludes>
+              <mapper>
+                <type>perm</type>
+                <prefix>/usr/local/share/liblouis/tables</prefix>
+              </mapper>
+            </data>
+          </dataSet>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

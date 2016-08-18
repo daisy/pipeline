@@ -1,8 +1,0 @@
-The Debian Package sbs-braille-tables
-----------------------------
-
-Contains auxiliary liblouis tables that are used at Swiss Library for
-the Blind, Visually Impaired and Print Disabled to generate good
-German Braille.
-
- -- Christian Egli <christian.egli@sbs.ch>  Fri, 23 May 2014 10:03:59 +0200
