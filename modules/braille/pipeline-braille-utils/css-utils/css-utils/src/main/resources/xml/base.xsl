@@ -34,13 +34,13 @@
     <!--
         <ident>
     -->
-    <xsl:variable name="css:IDENT_RE" select="'(\p{L}|_)(\p{L}|_|-)*'"/>
+    <xsl:variable name="css:IDENT_RE" select="'(\p{L}|_)(\p{L}|[0-9]|_|-)*'"/>
     <xsl:variable name="css:IDENT_RE_groups" select="2"/>
     
     <xsl:variable name="css:IDENT_LIST_RE" select="re:space-separated($css:IDENT_RE)"/>
     <xsl:variable name="css:IDENT_LIST_RE_groups" select="re:space-separated-groups($css:IDENT_RE_groups)"/>
     
-    <xsl:variable name="css:VENDOR_PRF_IDENT_RE" select="'-(\p{L}|_)+-(\p{L}|_)(\p{L}|_|-)*'"/>
+    <xsl:variable name="css:VENDOR_PRF_IDENT_RE" select="'-(\p{L}|_)+-(\p{L}|[0-9]|_)(\p{L}|[0-9]|_|-)*'"/>
     <xsl:variable name="css:VENDOR_PRF_IDENT_RE_groups" select="3"/>
     
     <!--
