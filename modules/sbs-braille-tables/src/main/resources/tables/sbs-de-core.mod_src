@@ -150,6 +150,8 @@ prepunc \x257C  '$  Computer Braille Einzelwort
 
 
 ### Vollschriftankündigung:
+### TODO: Find out what these rules do different than their
+### counterparts in sbs-special.cti.
 prepunc \x2559  '.  VOLLSCHRIFT Einzelwort
 
 prepunc \x255A  v.  VOLLSCHRIFT Anfang

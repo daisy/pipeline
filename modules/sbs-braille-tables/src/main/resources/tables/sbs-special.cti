@@ -39,6 +39,10 @@ letter        \x2507 ce              #9479    BOX DRAWINGS HEAVY TRIPLE DASH VER
 # TRENNMARKE (nur alte Rechtschreibung)
 letter        \x2502 cf              #9474    BOX DRAWINGS LIGHT VERTICAL
 
+## TODO: The following three rules aren't used anymore because the
+## Vollschrift indicators have been made configurable. They should be
+## deleted from this table.
+
 # VOLLSCHRIFT Einzelwort (P6-3)
 punctuation   \x2559 6-3             #9561    BOX DRAWINGS UP DOUBLE AND RIGHT SINGLE
 
