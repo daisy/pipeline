@@ -1,3 +1,5 @@
+GRADLE := libs/dotify/dotify.api/gradlew
+
 POMS := $(shell find * -name pom.xml)
 
 .PHONY : all
@@ -5,7 +7,7 @@ all : gradle maven
 
 .PHONY : gradle
 gradle :
-	@gradle install
+	@$(GRADLE) install
 	@echo "" >&2
 
 gradle : gradle_BEFORE
