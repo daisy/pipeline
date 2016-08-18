@@ -181,8 +181,8 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
 #generated-document-toc::-obfl-on-volume-start {
     display: block;
     content: ' ⠃⠙⠄';
-    /* TODO: Insert a condition here to generate the word 'Band' in grade 1 and 2.
-     *       This will be possible as soon as the variable contraction-grade is supported */
+    /* TODO: Insert a condition here to generate the word 'Band' in
+             grade 1 and 2 (based on the variable $contraction-grade). */
     text-align: center;
     text-indent:0;
     margin-top:1;
@@ -229,7 +229,6 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
 
 #generated-volume-toc li a::after,
 #generated-document-toc li a::after {
-    content: " " leader('⠄') " " target-string(attr(href), print-page) target-counter(attr(href), page); 
     content: " " leader('⠄') " ";
     &::after {
         &::before {
@@ -493,12 +492,11 @@ frontmatter > #cover-recto > .series-sjw {
     -obfl-vertical-position:12;
 }
 
+/* FIXME: this block ("In ... Braillebänden") and the next ("Erster Band")
+ * should only be displayed when the book has more than 1 volumes.
+ * The same applies to "Erster Band" in the TOC */
 frontmatter > level1 > .how-many-volumes {
-    /*  TODO: the solution below does not work yet
-     *  ("In ... Braillebänden"  and  "Erster Band"
-     *  should only be displayed when the book has more than 1 volumes);
-     *  the same applies to "Erster Band" in the TOC */
-    display: -obfl-evaluate('(if (> $volumes 1) "block" "none")');
+    display: block;
     text-indent: 0;
     margin-top: 4;
 }
