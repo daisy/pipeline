@@ -36,6 +36,11 @@
                 css:_obfl-on-volume-end and css:_obfl-on-toc-end attributes.
             </p:documentation>
         </css:parse-stylesheet>
+        <p:delete match="@css:*[matches(local-name(),'^text-transform-')]">
+            <p:documentation>
+                For now, ignore @text-transform definitions.
+            </p:documentation>
+        </p:delete>
         <css:parse-properties properties="flow">
             <p:documentation>
                 Make css:flow attributes.
