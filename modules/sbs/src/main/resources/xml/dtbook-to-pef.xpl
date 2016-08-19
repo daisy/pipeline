@@ -78,6 +78,9 @@
     <p:option name="minimum-number-of-sheets"/>
     <p:option name="document-identifier"/>
 
+    <!-- for testing purposes -->
+    <p:input port="parameters" kind="parameter" primary="false"/>
+    
     <p:import href="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
@@ -86,7 +89,8 @@
     <p:in-scope-names name="in-scope-names"/>
     <px:merge-parameters>
         <p:input port="source">
-            <p:pipe port="result" step="in-scope-names"/>
+            <p:pipe step="in-scope-names" port="result"/>
+            <p:pipe step="main" port="parameters"/>
         </p:input>
     </px:merge-parameters>
     <px:delete-parameters parameter-names="stylesheet
@@ -123,7 +127,7 @@
         </p:with-option>
         <p:with-option name="stylesheet" select="string-join((
                                                  'http://www.sbs.ch/pipeline/modules/braille/internal/handle-precedingseparator.xsl',
-						 'http://www.sbs.ch/pipeline/modules/braille/internal/insert-boilerplate.xsl',
+                                                 'http://www.sbs.ch/pipeline/modules/braille/internal/insert-boilerplate.xsl',
                                                  $stylesheet),' ')"/>
         <p:with-option name="transform" select="concat('(formatter:dotify)(translator:sbs)(grade:',$contraction-grade,')')"/>
         <p:input port="parameters">

@@ -10,6 +10,7 @@
   <xsl:output indent="yes"/>
 
   <xsl:param name="contraction-grade" select="'0'"/>
+  <xsl:param name="generate-titlepage" select="'true'"/>
 
   <xsl:variable name="series">
     <xsl:choose>
@@ -27,7 +28,9 @@
       <xsl:copy-of select="@*"/>
       <xsl:apply-templates/>
     </xsl:copy>
-    <xsl:call-template name="add-information-based-from-metadata"/>
+    <xsl:if test="$generate-titlepage='true'">
+      <xsl:call-template name="add-information-based-from-metadata"/>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="node()" mode="#all" priority="-5">

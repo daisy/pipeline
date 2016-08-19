@@ -174,13 +174,14 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="4.5.82_ex1_frontmatter" pending="the test doesn't take the title page into account and hence fails">
+  <x:scenario label="4.5.82_ex1_frontmatter">
     <x:call step="sbs:dtbook-to-pef">
       <x:input port="source">
         <x:document type="file" href="../resources/test_4.5.82_ex1_frontmatter/test_4.5.82.xml"/>
       </x:input>
       <x:option name="contraction-grade" select="1"/>
       <x:option name="include-brf" select="true()"/>
+      <x:param port="parameters" name="generate-titlepage" select="false()"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_4.5.82_ex1_frontmatter/')"/>
       <x:option name="brf-output-dir" select="concat($temp-dir,'output-dir/test_4.5.82_ex1_frontmatter/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
