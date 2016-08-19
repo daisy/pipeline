@@ -45,12 +45,12 @@
 
       <!-- Authors -->
       <p id="cover-author">
-        <xsl:value-of select="//docauthor"/>
+        <xsl:sequence select="//docauthor/node()"/>
       </p>
 
       <!-- Title -->
       <p id="cover-title">
-        <xsl:value-of select="//doctitle"/>
+        <xsl:sequence select="//doctitle/node()"/>
       </p>
 
       <!-- Series -->
