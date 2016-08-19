@@ -3,22 +3,33 @@ GRADLE := libs/dotify/dotify.api/gradlew
 POMS := $(shell find * -name pom.xml)
 
 .PHONY : all
-all : gradle maven
+all : package-assembly
 
-.PHONY : gradle
-gradle :
+.PHONY : package-assembly
+package-assembly : install-all
+	cd assembly && mvn clean package -Pdeb
+
+.PHONY : install-all
+install-all : gradle-install maven-install-all
+
+.PHONY : gradle-install
+gradle-install :
 	@$(GRADLE) install
 	@echo "" >&2
 
-gradle : gradle_BEFORE
+gradle-install : gradle_BEFORE
 .SECONDARY : gradle_BEFORE
 gradle_BEFORE :
 	@echo "╔════════╗" >&2
 	@echo "║ GRADLE ║" >&2
 	@echo "╚════════╝" >&2
 
-.PHONY : maven
-maven : .maven-modules-with-changes
+.PHONY : maven-install-all
+maven-install-all :
+	@mvn clean install -DskipTests
+
+.PHONY : maven-incremental
+maven-install-incremental : .maven-modules-with-changes
 	@if [ -s $< ]; then \
 		modules=$$(cat $< |paste -sd , -) && \
 		mvn --projects $$modules clean install -DskipTests; \
@@ -51,6 +62,8 @@ maven : .maven-modules-with-changes
 # version number. If the module is not listed in the assembly at all (also not a different
 # version), we assume it is a helper module (parent, BoM, plugin, etc.) so we include it
 # in the build as well.
+
+# FIXME: `mvn exec:exec` does not work when snapshot dependencies not installed yet
 .maven-modules : .maven-modules_START
 	@mvn --quiet exec:exec -Dexec.executable=touch -Dexec.args=.enabled && \
 	rm .enabled && \
@@ -90,7 +103,7 @@ bom.xml : assembly/pom.xml $(POMS)
 .maven-modules_BEFORE : .gitignore
 	@echo "Recomputing modules to include in the build..." >&2
 
-maven .maven-modules-with-changes bom.xml .maven-modules_BEFORE : maven_BEFORE
+maven-install-all maven-install-incremental .maven-modules-with-changes bom.xml .maven-modules_BEFORE : maven_BEFORE
 .SECONDARY : maven_BEFORE
 maven_BEFORE :
 	@echo "╔═══════╗" >&2
