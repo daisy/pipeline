@@ -9,6 +9,7 @@
     gem install rdf-turtle
     gem install rdf-rdfa
     gem install commaparty
+    gem install nokogiri
 
 ## Usage
 

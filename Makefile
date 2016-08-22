@@ -12,6 +12,7 @@ meta_file := $(call yaml_get,$(SRC_DIR)/_config.yml,meta_file)
 
 all : $(TARGET_FILES) $(TARGET_DIR)/doc $(TARGET_DIR)/$(meta_file)
 	cd $(TARGET_DIR) && jekyll build
+	make/process_links.rb $(TARGET_DIR)/$(meta_file) $(TARGET_DIR)/_site $(site_base)
 
 $(TARGET_DIR)/$(meta_file) : $(TARGET_FILES) $(TARGET_DIR)/doc
 	echo '' > $@
