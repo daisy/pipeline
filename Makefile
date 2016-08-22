@@ -10,10 +10,10 @@ meta_file := $(call yaml_get,$(SRC_DIR)/_config.yml,meta_file)
 
 .PHONY : all $(TARGET_DIR)/$(meta_file) serve publish clean
 
-all : $(TARGET_FILES) $(TARGET_DIR)/braille-in-dp2/doc $(TARGET_DIR)/$(meta_file)
+all : $(TARGET_FILES) $(TARGET_DIR)/doc $(TARGET_DIR)/$(meta_file)
 	cd $(TARGET_DIR) && jekyll build
 
-$(TARGET_DIR)/$(meta_file) : $(TARGET_FILES) $(TARGET_DIR)/braille-in-dp2/doc
+$(TARGET_DIR)/$(meta_file) : $(TARGET_FILES) $(TARGET_DIR)/doc
 	echo '' > $@
 	cd $(TARGET_DIR) && jekyll build
 	./make_meta.rb "$(TARGET_DIR)/_site/**/*.html" | sed -e 's|$(TARGET_DIR)/_site/|$(site_base)/|g' > $@
@@ -36,7 +36,7 @@ target/md_front :
 	echo "layout: doc" >> $@
 	echo "---" >> $@
 
-$(TARGET_DIR)/braille-in-dp2/doc : target/pom.xml target/md_front
+$(TARGET_DIR)/doc : target/pom.xml target/md_front
 	rm -rf $@
 	mkdir -p $@
 	cd $(dir $<) && mvn --quiet \
