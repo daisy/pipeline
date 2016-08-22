@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/brailleapps/dotify.task.impl.svg?branch=master)](https://travis-ci.org/brailleapps/dotify.task.impl)
+[![Type](https://img.shields.io/badge/type-service_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Badges)
 
 # dotify.task.impl #
 Provides implementations for converting:
@@ -11,6 +12,9 @@ Access the implementations via the `TaskSystemFactory` and `TaskGroupFactory` AP
 
 ## Building ##
 Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
+
+## Testing ##
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
 
 ## Requirements & Compatibility ##
 - Requires JDK 7
