@@ -16,7 +16,7 @@ all : $(TARGET_FILES) $(TARGET_DIR)/doc $(TARGET_DIR)/$(meta_file)
 $(TARGET_DIR)/$(meta_file) : $(TARGET_FILES) $(TARGET_DIR)/doc
 	echo '' > $@
 	cd $(TARGET_DIR) && jekyll build
-	./make_meta.rb "$(TARGET_DIR)/_site/**/*.html" | sed -e 's|$(TARGET_DIR)/_site/|$(site_base)/|g' > $@
+	make/make_meta.rb "$(TARGET_DIR)/_site/**/*.html" | sed -e 's|$(TARGET_DIR)/_site/|$(site_base)/|g' > $@
 
 $(TARGET_FILES) : $(TARGET_DIR)/% : $(SRC_DIR)/%
 	mkdir -p $(dir $@)
@@ -28,7 +28,7 @@ target/versions.yml : $(SRC_DIR)/_data/versions.yml
 
 target/pom.xml : target/versions.yml $(SRC_DIR)/_data/doc_modules.yml
 	mkdir -p $(dir $@)
-	./make_pom.rb $^ > $@
+	make/make_pom.rb $^ > $@
 
 target/md_front :
 	mkdir -p $(dir $@)
@@ -49,7 +49,7 @@ serve : all
 	cd $(TARGET_DIR) && jekyll serve
 
 publish : all
-	./publish.sh $(TARGET_DIR)/_site
+	make/publish.sh $(TARGET_DIR)/_site
 
 clean :
 	rm -rf target
