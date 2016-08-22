@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/brailleapps/braille-utils.api.svg?branch=master)](https://travis-ci.org/brailleapps/braille-utils.api)
+[![Type](https://img.shields.io/badge/type-api-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
 ## braille-utils.api ##
 This contains the Braille Utils API.
@@ -9,7 +10,10 @@ To implement the API, download the latest release from maven central using the f
 To use the API, you also need to download at least one implementation (for example braille-utils.impl).
 
 ## Building ##
-Build with `gradlew build`
+Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
+
+## Testing ##
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
 
 ## Requirements & Compatibility ##
 - Requires JDK 7
