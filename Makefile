@@ -22,25 +22,28 @@ $(TARGET_FILES) : $(TARGET_DIR)/% : $(SRC_DIR)/%
 	mkdir -p $(dir $@)
 	cp $< $@
 
-target/debs.yml : $(SRC_DIR)/_data/versions.yml
+target/versions.yml : $(SRC_DIR)/_data/versions.yml
 	mkdir -p $(dir $@)
-	wget -L -O - "https://raw.githubusercontent.com/snaekobbi/system/master/roles/test-server/vars/debs.yml" > $@ # master => v$(call yaml_get,$<,system)
+	wget -L -O - "https://raw.githubusercontent.com/snaekobbi/system/$(call yaml_get,$<,system)/roles/test-server/vars/versions.yml" > $@
 
-target/pom.xml : target/debs.yml $(SRC_DIR)/_data/doc_modules.yml
+target/pom.xml : target/versions.yml $(SRC_DIR)/_data/doc_modules.yml
 	mkdir -p $(dir $@)
 	./make_pom.rb $^ > $@
 
 target/md_front :
+	mkdir -p $(dir $@)
 	echo "---" > $@
 	echo "layout: doc" >> $@
 	echo "---" >> $@
 
 $(TARGET_DIR)/braille-in-dp2/doc : target/pom.xml target/md_front
 	rm -rf $@
-	cd $(dir $<) && mvn "dependency:unpack-dependencies" \
+	mkdir -p $@
+	cd $(dir $<) && mvn --quiet \
+	                    "dependency:unpack-dependencies" \
 	                    -Dclassifier=sources -DexcludeTransitive -Dmdep.unpack.includes=**/*.md \
 	                    -Dmdep.useRepositoryLayout -DoutputDirectory=$(CURDIR)/$@
-	find $@ -name '*.md' -exec sh -c 'cat target/md_front {} >{}.2 && mv {}.2 {}' \;
+	find $@ -name '*.md' -exec sh -c 'cat $(word 2,$^) {} >{}.2 && mv {}.2 {}' \;
 
 serve : all
 	cd $(TARGET_DIR) && jekyll serve

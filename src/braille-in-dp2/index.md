@@ -4,17 +4,17 @@ title: "Braille in DP2"
 ---
 # Braille in DP2 project
 
-Current version: [{{ site.data.versions.system }}](https://github.com/snaekobbi/system/releases/tag/v{{ site.data.versions.system }})
+Current version: [{{ site.data.versions.system }}](https://github.com/snaekobbi/system/releases/tag/{{ site.data.versions.system }})
 
-## [Requirements](http://snaekobbi.github.io/requirements/v{{ site.data.versions.requirements }})
+## [Requirements](http://snaekobbi.github.io/requirements/{{ site.data.versions.requirements }})
 
 ## Code
 
-* [Installation script](https://github.com/snaekobbi/system/releases/tag/v{{ site.data.versions.system }})
+* [Installation script](https://github.com/snaekobbi/system/releases/tag/{{ site.data.versions.system }})
 
 ## Documentation
 
-* [Braille CSS specification](http://snaekobbi.github.io/braille-css-spec)
+* [Braille CSS specification](http://braillespecs.github.io/braille-css/{{ site.data.versions.css-spec }})
 
 ## Testing
 
