@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/brailleapps/dotify.task-api.svg?branch=master)](https://travis-ci.org/brailleapps/dotify.task-api)
+[![Type](https://img.shields.io/badge/type-api-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
 # Dotify Tasks API #
 Provides an API for managing file conversions. For an example implementation see dotify.task.impl.
