@@ -31,20 +31,19 @@ target/pom.xml : target/versions.yml $(SRC_DIR)/_data/doc_modules.yml
 	mkdir -p $(dir $@)
 	make/make_pom.rb $^ > $@
 
-target/md_front :
-	mkdir -p $(dir $@)
-	echo "---" > $@
-	echo "layout: doc" >> $@
-	echo "---" >> $@
-
-$(TARGET_DIR)/doc : target/pom.xml target/md_front
+$(TARGET_DIR)/doc : target/pom.xml
 	rm -rf $@
 	mkdir -p $@
 	cd $(dir $<) && mvn --quiet \
 	                    "dependency:unpack-dependencies" \
-	                    -Dclassifier=sources -DexcludeTransitive -Dmdep.unpack.includes=**/*.md \
-	                    -Dmdep.useRepositoryLayout -DoutputDirectory=$(CURDIR)/$@
-	find $@ -name '*.md' -exec sh -c 'cat $(word 2,$^) {} >{}.2 && mv {}.2 {}' \;
+	                    -Dclassifier=doc -DexcludeTransitive -Dmdep.unpack.excludes='META-INF,META-INF/**/*' \
+	                    -Dmdep.useRepositoryLayout
+	cd $(dir $<)/target/dependency && find . -type d -name '[0-9]*' -prune -exec bash -c \
+		'mkdir -p $(CURDIR)/$@/$$(dirname {}); mv {}/* $$_' \; || true
+	eval "$$(echo 'newline="'; echo '"')"; \
+	find $@ -name '*.md' -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
+	find $@ -type file -exec sh -c "cat {} | sed '1 s/^---$$/&\\$${newline}layout: doc/' >{}.tmp && mv {}.tmp {}" \;; \
+	find $@ -type file -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;
 
 serve : all
 	cd $(TARGET_DIR) && jekyll serve
