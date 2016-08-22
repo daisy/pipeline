@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/brailleapps/dotify.common.svg?branch=master)](https://travis-ci.org/brailleapps/dotify.common)
+[![Type](https://img.shields.io/badge/type-tools_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
 # dotify.common #
 Contains general classes that had to be implemented in order to support the other projects. 
@@ -10,6 +11,9 @@ Adding classes to this project should not be taken lightly as infrastructure dep
 
 ## Building ##
 Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
+
+## Testing ##
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
 
 ## Requirements & Compatibility ##
 - Requires JDK 7
