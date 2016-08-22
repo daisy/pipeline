@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/brailleapps/dotify.api.svg?branch=master)](https://travis-ci.org/brailleapps/dotify.api)
+[![Type](https://img.shields.io/badge/type-api-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
 # Core Dotify API #
 Provides the core Dotify API.
@@ -13,7 +14,10 @@ To use the API, you need to download at least one implementation as well. Here's
  - dotify.hyphenator.impl
 
 ## Building ##
-Build with `gradlew build`
+Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
+
+## Testing ##
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
 
 ## Requirements & Compatibility ##
 - Requires JDK 7
