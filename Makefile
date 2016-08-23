@@ -5,6 +5,7 @@ JEKYLL_FILES := $(patsubst $(JEKYLL_SRC_DIR)/%,$(JEKYLL_DIR)/%,$(JEKYLL_SRC_FILE
 META_JEKYLL_DIR := target/meta/jekyll
 META_JEKYLL_FILES := $(patsubst $(JEKYLL_SRC_DIR)/%,$(META_JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES))
 MAVEN_DIR := target/maven
+MUSTACHE_DIR := target/mustache
 
 yaml_get = $(shell eval $$(cat $(1) | grep '^$(2)' | sed -e 's/^$(2) *:/echo /' ))
 
@@ -24,7 +25,7 @@ $(JEKYLL_FILES) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
 	cp $< $@
 
-$(JEKYLL_DIR)/doc : $(MAVEN_DIR)/doc
+$(JEKYLL_DIR)/doc : $(MUSTACHE_DIR)/doc
 	mkdir -p $(dir $@)
 	rm -rf $@
 	cp -r $< $@
@@ -57,6 +58,12 @@ $(META_JEKYLL_DIR)/doc : $(MAVEN_DIR)/doc
 $(META_JEKYLL_DIR)/$(meta_file) :
 	mkdir -p $(dir $@)
 	touch $@
+
+$(MUSTACHE_DIR)/doc : $(MAVEN_DIR)/doc $(JEKYLL_DIR)/$(meta_file)
+	mkdir -p $(dir $@)
+	rm -rf $@
+	cp -r $< $@
+	make/mustache.rb "$@/**/*" $(word 2,$^) $@ $(site_base)/doc 2>/dev/null
 
 $(MAVEN_DIR)/doc : $(MAVEN_DIR)/pom.xml
 	rm -rf $@

@@ -10,6 +10,7 @@
     gem install rdf-rdfa
     gem install commaparty
     gem install nokogiri
+    gem install mustache
 
 ## Usage
 
