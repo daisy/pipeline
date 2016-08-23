@@ -8,7 +8,8 @@ compileJava.options.encoding = 'UTF-8'
 compileTestJava.options.encoding = 'UTF-8'
 javadoc {
 	options.encoding = 'UTF-8'
-	options.links('http://docs.oracle.com/javase/7/docs/api/');
+	options.links('http://docs.oracle.com/javase/7/docs/api/')
+	options.overview = "javadoc-overview.html"
 }
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'

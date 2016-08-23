@@ -50,6 +50,10 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser>, EmbosserCatalo
 	private final Map<String, EmbosserProvider> map;
 	private final Logger logger;
 	
+	/**
+	 * Creates a new empty instance. This method is public because it is required by OSGi.
+	 * In an SPI context, use newInstance()
+	 */
 	public EmbosserCatalog() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		providers = new CopyOnWriteArrayList<>();

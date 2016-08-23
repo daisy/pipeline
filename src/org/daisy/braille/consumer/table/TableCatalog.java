@@ -49,6 +49,10 @@ public class TableCatalog implements FactoryCatalog<Table>, TableCatalogService 
 	private final Map<String, TableProvider> map;
 	private final Logger logger;
 	
+	/**
+	 * Creates a new empty instance. This method is public because it is required by OSGi.
+	 * In an SPI context, use newInstance()
+	 */
 	public TableCatalog() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		providers = new CopyOnWriteArrayList<>();

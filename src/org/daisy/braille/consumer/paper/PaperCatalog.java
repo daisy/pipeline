@@ -42,6 +42,10 @@ import aQute.bnd.annotation.component.Reference;
 public class PaperCatalog implements PaperCatalogService {
 	private final Map<String, Paper> map;
 	
+	/**
+	 * Creates a new empty instance. This method is public because it is required by OSGi.
+	 * In an SPI context, use newInstance()
+	 */
 	public PaperCatalog() {
 		map = Collections.synchronizedMap(new HashMap<String, Paper>());
 	}

@@ -46,6 +46,10 @@ public class ValidatorFactory implements ValidatorFactoryService {
 	private final List<ValidatorProvider> providers;
 	private final Map<String, ValidatorProvider> map;
 	
+	/**
+	 * Creates a new empty instance. This method is public because it is required by OSGi.
+	 * In an SPI context, use newInstance()
+	 */
 	public ValidatorFactory() {
 		providers = new CopyOnWriteArrayList<>();
 		map = Collections.synchronizedMap(new HashMap<String, ValidatorProvider>());
