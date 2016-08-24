@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 require 'mustache'
 require 'sparql'
+require 'rdf/query'
 require 'rdf/turtle'
 require 'rdf/rdfa'
 require "#{File.expand_path(File.dirname(__FILE__))}/../src/_plugins/lib/relativize"
@@ -39,6 +40,13 @@ def parse(input)
   end
 end
 
+DOC = RDF::URI("http://www.daisy.org/ns/pipeline/doc")
+SCRIPT = RDF::URI("http://www.daisy.org/ns/pipeline/script")
+OPTION = RDF::URI("http://www.daisy.org/ns/pipeline/option")
+ID = RDF::URI("http://www.daisy.org/ns/pipeline/id")
+NAME = RDF::URI("http://www.daisy.org/ns/pipeline/name")
+DESC = RDF::URI("http://www.daisy.org/ns/pipeline/desc")
+
 Dir.glob(ARGV[0]).each do |f|
   if File.file?(f)
     page_url = RDF::URI(f.dup.sub!(base_dir, site_base).gsub(/\.md$/, '.html'))
@@ -67,6 +75,32 @@ Dir.glob(ARGV[0]).each do |f|
       end
       solutions_rendered
     }
+    script_info_q = RDF::Query.new do
+      pattern [ :script, DOC, page_url ]
+      pattern [ :script, RDF.type, SCRIPT ]
+      pattern [ :script, OPTION, :option ]
+      pattern [ :option, ID, :id ]
+      pattern [ :option, NAME, :name ]
+      pattern [ :option, DESC, :desc ]
+    end
+    script_info = graph.query(script_info_q)
+    if not script_info.empty?
+      options = Hash.new
+      page_view['options'] = options
+      script_info.each do |solution|
+        options[solution.id.to_s] = {
+          'name' => solution.name.to_s,
+          'desc' => solution.desc.to_s
+        }
+      end
+      options['all'] = script_info.map { |solution|
+        {
+          'id' => solution.id.to_s,
+          'name' => solution.name.to_s,
+          'desc' => solution.desc.to_s
+        }
+      }
+    end
     page_view.template_file = f
     file_rendered = page_view.render
     File.open(f, 'w') { |f| f.write(file_rendered) }
