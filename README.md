@@ -21,3 +21,6 @@ Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
 
 ## Javadoc ##
 Javadoc for the latest Braille Utils API development is available [here](http://brailleapps.github.io/braille-utils.api/latest/javadoc/).
+
+## More information ##
+See the [common wiki](https://github.com/brailleapps/wiki/wiki) for more information.
