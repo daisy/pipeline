@@ -10,7 +10,7 @@ module Jekyll
     
     PREFIXES = %(
       PREFIX dc: <http://purl.org/dc/elements/1.1/>
-      PREFIX dp: <http://www.daisy.org/ns/pipeline/>
+      PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
     )
     
     def initialize(tag_name, markup, options)
