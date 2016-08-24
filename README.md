@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/brailleapps/braille-utils.pef-tools.svg?branch=master)](https://travis-ci.org/brailleapps/braille-utils.pef-tools)
+[![Type](https://img.shields.io/badge/type-consumer_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
 ## braille-utils.pef-tools ##
 This contains pef related tools, based on the braille utils api.
@@ -9,6 +10,9 @@ To use the bundle, download the [latest release](http://search.maven.org/#search
 
 ## Building ##
 Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
+
+## Testing ##
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux)
 
 ## Requirements & Compatibility ##
 - Requires JDK 7
