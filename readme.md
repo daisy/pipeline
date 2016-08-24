@@ -21,3 +21,6 @@ Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
 
 ## Javadoc ##
 Javadoc for the latest Dotify Common development is available [here](http://brailleapps.github.io/dotify.common/latest/javadoc).
+
+## More information ##
+See the [common wiki](https://github.com/brailleapps/wiki/wiki) for more information.
