@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               stylesheet="../../main/xslt/transform.xsl">
+    <x:scenario label="When this,">
+        <x:context>
+            <foo/>
+        </x:context>
+        <x:expect label="do that!">
+            <foo/>
+        </x:expect>
+    </x:scenario>
+</x:description>

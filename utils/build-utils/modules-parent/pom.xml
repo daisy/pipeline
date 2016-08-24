@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.pipeline.modules</groupId>
+  <artifactId>modules-parent</artifactId>
+  <version>1.4-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>DAISY Pipeline 2 :: Modules Parent POM</name>
+  <description>The DAISY Pipeline 2 modules provide scripts for automated processing of various digital formats efficiently and economically. It intends to facilitate the production and maintenance of accessible content for people with print disabilities.</description>
+  <url>http://www.daisy.org/pipeline2</url>
+  <inceptionYear>2010</inceptionYear>
+  <organization>
+    <name>The DAISY Consortium</name>
+    <url>http://www.daisy.org/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License, Version 3</name>
+      <url>http://www.gnu.org/copyleft/lesser.html</url>
+      <distribution>manual</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>rdeltour</id>
+      <name>Romain Deltour</name>
+      <email>rdeltour@gmail.com</email>
+      <organization>DAISY Consortium</organization>
+      <organizationUrl>http://www.daisy.org/</organizationUrl>
+      <roles>
+        <role>Project Lead</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+    <developer>
+      <id>marisa.demeglio</id>
+      <name>Marisa DeMeglio</name>
+      <email>marisa.demeglio@gmail.com</email>
+      <organization>DAISY Consortium</organization>
+      <organizationUrl>http://www.daisy.org/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC-08:00</timezone>
+    </developer>
+    <developer>
+      <id>capitan.cambio</id>
+      <name>Javier Asensio Cubero</name>
+      <email>capitan.cambio@gmail.com</email>
+      <organization>DAISY Consortium</organization>
+      <organizationUrl>http://www.daisy.org/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC</timezone>
+    </developer>
+    <developer>
+      <id>josteinaj</id>
+      <name>Jostein Austvik Jacobsen</name>
+      <email>josteinaj@gmail.com</email>
+      <organization>Norwegian Library of Talking Books and Braille</organization>
+      <organizationUrl>http://www.nlb.no/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+    <developer>
+      <id>bertfrees</id>
+      <name>Bert Frees</name>
+      <email>bertfrees@gmail.com</email>
+      <organization>SBS - Schweizerische Bibliothek für Blinde, Seh- und Lesebehinderte</organization>
+      <organizationUrl>http://sbs.ch/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+  </developers>
+
+  <mailingLists>
+    <mailingList>
+      <name>DAISY Pipeline Developers</name>
+      <subscribe>http://groups.google.com/group/daisy-pipeline-dev/subscribe</subscribe>
+      <unsubscribe>daisy-pipeline-dev+unsubscribe@googlegroups.com</unsubscribe>
+      <post>daisy-pipeline-dev@googlegroups.com</post>
+      <archive>http://groups.google.com/group/daisy-pipeline-dev</archive>
+    </mailingList>
+  </mailingLists>
+
+  <issueManagement>
+    <system>Google Code Issue Tracker</system>
+    <url>http://code.google.com/p/daisy-pipeline/issues/list</url>
+  </issueManagement>
+
+  <properties>
+    <java.version>1.7</java.version>
+    <saxon.version>9.4</saxon.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <versionRange>[1.7,)</versionRange>
+                    <goals>
+                      <goal>run</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <versionRange>[2.4,)</versionRange>
+                    <goals>
+                      <goal>unpack</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <versionRange>[1.0.0,)</versionRange>
+                    <goals>
+                      <goal>enforce</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-patch-plugin</artifactId>
+                    <versionRange>[1.1.1,)</versionRange>
+                    <goals>
+                      <goal>apply</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>xml-maven-plugin</artifactId>
+                    <versionRange>[1.0,)</versionRange>
+                    <goals>
+                      <goal>transform</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+
+
+  <profiles>
+    <profile>
+      <id>pipeline-xml-module</id>
+      <activation>
+        <file>
+          <exists>src/main/resources/META-INF/catalog.xml</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>xml-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>transform</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <transformationSets>
+                <transformationSet>
+                  <dir>src</dir>
+                  <includes>
+                    <include>**/META-INF/catalog.xml</include>
+                  </includes>
+                  <stylesheet>org/daisy/pipeline/modules/build/catalog-to-ds.xsl</stylesheet>
+                  <parameters>
+                    <parameter>
+                      <name>outputDir</name>
+                      <value>${project.baseUri}/target/generated-resources</value>
+                    </parameter>
+                    <parameter>
+                      <name>version</name>
+                      <value>${project.version}</value>
+                    </parameter>
+                  </parameters>
+                  <outputDir>${project.build.directory}/generated-resources</outputDir>
+                </transformationSet>
+              </transformationSets>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>Saxon-HE</artifactId>
+                <version>${saxon.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.daisy.pipeline.build</groupId>
+                <artifactId>modules-build-helper</artifactId>
+                <version>1.3-SNAPSHOT</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <configuration>
+              <instructions>
+                <!-- always add Maven resources - add OSGI-INF if it exists -->
+                <!--
+                     TODO replace the hackish syntax when this is released:
+                     https://github.com/bndtools/bnd/issues/168
+                 -->
+                <Include-Resource>
+     {maven-resources}$(if;$(replace;$(isdir;${project.build.directory}/generated-resources/OSGI-INF);false(.*);$1);,OSGI-INF=${project.build.directory}/generated-resources/OSGI-INF)
+                </Include-Resource>
+                <_include>${project.build.directory}/generated-resources/bnd.bnd</_include>
+              </instructions>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.daisy.maven</groupId>
+            <artifactId>xspec-maven-plugin</artifactId>
+            <version>1.0.0</version>
+            <executions>
+              <execution>
+                <id>xspecTest</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>test</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

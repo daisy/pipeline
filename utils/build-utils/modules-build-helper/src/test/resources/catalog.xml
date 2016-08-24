@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+    <!-- <uri name="http://www.daisy.org/pipeline/modules/example/example1.xpl" uri="example1.xpl" px:script="true"/>
+    <uri name="http://www.daisy.org/pipeline/modules/example/example2.xpl" uri="example2.xpl" px:script="true"/> -->
+    <uri name="http://www.daisy.org/pipeline/modules/example/other.xpl" uri="other.xpl"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:epub3-nav-utils" />
+    <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils" />
+    <nextCatalog catalog="org:daisy:pipeline:modules:epub3-pub-utils" />
+    <nextCatalog catalog="org:daisy:pipeline:modules:html-utils" />
+    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils" />
+</catalog>

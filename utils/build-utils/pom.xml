@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>2</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>org.daisy.maven</groupId>
+  <artifactId>pipeline-build-utils-aggregator</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Pipeline Build Utils Aggregator</name>
+  <description>Aggregator POM for the build utils projects of the DAISY Pipeline 2.</description>
+
+  <!-- List of the modules to build all-at-once -->
+  <modules>
+    <module>modules-parent</module>
+    <module>modules-build-helper</module>
+    <module>saxon-adapter</module>
+    <module>pax-exam-helper</module>
+    <module>archetypes</module>
+  </modules>
+
+</project>

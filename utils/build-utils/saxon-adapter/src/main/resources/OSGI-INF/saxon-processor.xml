@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="activate" name="saxon-processor">
+   <scr:implementation class="org.daisy.common.saxon.ProcessorImpl"/>
+   <scr:service>
+      <provide interface="net.sf.saxon.s9api.Processor"/>
+   </scr:service>
+   <scr:reference bind="addFunction"
+                  unbind="removeFunction"
+                  cardinality="0..n"
+                  interface="net.sf.saxon.lib.ExtensionFunctionDefinition"
+                  name="ExtensionFunctionDefinition"
+                  policy="static"/>
+   <scr:reference bind="setURIResolver"
+                  cardinality="0..1"
+                  interface="javax.xml.transform.URIResolver"
+                  name="URIResolver"
+                  policy="static"/>
+</scr:component>
