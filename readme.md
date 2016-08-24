@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/brailleapps/dotify.translator.impl.svg?branch=master)](https://travis-ci.org/brailleapps/dotify.translator.impl)
-[![Type](https://img.shields.io/badge/type-service_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Badges)
+[![Type](https://img.shields.io/badge/type-provider_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
 # Introduction #
 dotify.translator.impl contains an implementation of the translator interfaces of [dotify.api](https://github.com/joeha480/dotify/tree/master/dotify.api). If you want to use it, you can get it [here](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22dotify.translator.impl%22).
@@ -24,7 +24,7 @@ Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
 
 ## Testing ##
 
-Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux)
 
 ## Requirements & Compatibility ##
 - Requires JDK 7
