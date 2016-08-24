@@ -17,7 +17,7 @@ To use the API, you need to download at least one implementation as well. Here's
 Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
 
 ## Testing ##
-Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux).
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux)
 
 ## Requirements & Compatibility ##
 - Requires JDK 7
