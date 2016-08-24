@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/brailleapps/braille-utils.impl.svg?branch=master)](https://travis-ci.org/brailleapps/braille-utils.impl)
+[![Type](https://img.shields.io/badge/type-provider_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
 # braille-utils.imp #
 Provides embosser, table and paper implementations for the purpose of communicating with embossers.
@@ -17,6 +18,9 @@ _Or_, in an OSGi environment, use:
 
 ## Building ##
 Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
+
+## Testing ##
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux)
 
 ## Requirements & Compatibility ##
 - Requires JDK 7
