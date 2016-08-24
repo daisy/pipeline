@@ -21,3 +21,6 @@ Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
 ## Requirements & Compatibility ##
 - Requires JDK 7
 - Compatible with SPI and OSGi
+
+## More information ##
+See the [common wiki](https://github.com/brailleapps/wiki/wiki) for more information.
