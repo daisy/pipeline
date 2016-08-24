@@ -40,6 +40,17 @@ def parse(input)
   end
 end
 
+class MyMustache < Mustache
+  def partial(name)
+    path = "#{File.expand_path(File.dirname(__FILE__))}/mustache/#{name}.mustache"
+    if File.exist?(path)
+      File.read(path)
+    else
+      super(name)
+    end
+  end
+end
+
 DOC = RDF::URI("http://www.daisy.org/ns/pipeline/doc")
 SCRIPT = RDF::URI("http://www.daisy.org/ns/pipeline/script")
 OPTION = RDF::URI("http://www.daisy.org/ns/pipeline/option")
@@ -50,7 +61,7 @@ DESC = RDF::URI("http://www.daisy.org/ns/pipeline/desc")
 Dir.glob(ARGV[0]).each do |f|
   if File.file?(f)
     page_url = RDF::URI(f.dup.sub!(base_dir, site_base).gsub(/\.md$/, '.html'))
-    page_view = Mustache.new
+    page_view = MyMustache.new
     page_view['sparql'] = lambda { |input|
       begin
         (query, text) = parse(input)
