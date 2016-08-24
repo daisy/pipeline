@@ -17,3 +17,5 @@ Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
 ## Javadoc ##
 Javadoc for the latest PEF tools is available [here](http://brailleapps.github.io/braille-utils.pef-tools/latest/javadoc/).
 
+## More information ##
+See the [common wiki](https://github.com/brailleapps/wiki/wiki) for more information.
