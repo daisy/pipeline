@@ -9,7 +9,10 @@ To implement the API, download the latest release from maven central using the f
 To use the API, you need to download an implementation as well.
 
 ## Building ##
-Build with `gradlew build`
+Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
+
+## Testing ##
+Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux)
 
 ## Requirements & Compatibility ##
 - Requires JDK 7
