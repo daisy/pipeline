@@ -21,7 +21,10 @@ The tree below shows the structure of the project:
     - [dotify.formatter.impl](https://github.com/brailleapps/dotify.formatter.impl)
   - [jstyleparser](https://github.com/snaekobbi/jStyleParser)
 - modules
+  - [scripts](https://github.com/daisy/pipeline-scripts)
   - [braille](https://github.com/daisy/pipeline-mod-braille)
+- utils
+  - [build-utils](https://github.com/daisy/pipeline-build-utils)
 - [webui](https://github.com/daisy/pipeline-webui)
 
 
