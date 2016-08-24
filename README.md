@@ -17,3 +17,6 @@ Build with `gradlew build`
 
 ## Javadoc ##
 Javadoc for the latest Dotify Tasks API development is available [here](http://brailleapps.github.io/dotify.task-api/latest/javadoc/).
+
+## More information ##
+See the [common wiki](https://github.com/brailleapps/wiki/wiki) for more information.
