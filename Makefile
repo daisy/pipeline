@@ -36,7 +36,7 @@ $(JEKYLL_DIR)/doc : $(MUSTACHE_DIR)/doc
 
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
-	make/make_meta.rb "$</**/*.html" | sed -e 's|$</|$(site_base)/|g' > $@
+	make/make_meta.rb "$</**/*.html" $< $(site_base) >$@
 
 $(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/doc $(META_JEKYLL_FILES)
 	cd $(dir $@) && jekyll build
