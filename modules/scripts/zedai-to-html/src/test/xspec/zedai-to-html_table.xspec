@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
+    xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/xslt/zedai-to-html.xsl">
+    <x:scenario label="Table :: Table">
+        <x:context>
+            <z:table/>
+        </x:context>
+        <x:expect label="">
+            <table/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Cell attributes">
+        <x:context>
+            <z:th colspan="1" rowspan="1" headers="id" scope="row"/>
+            <z:td colspan="1" rowspan="1" headers="id"/>
+            <z:td scope="row"/>
+        </x:context>
+        <x:expect label="">
+            <th colspan="1" rowspan="1" headers="id" scope="row"/>
+            <td colspan="1" rowspan="1" headers="id"/>
+            <th scope="row"/>
+        </x:expect>
+    </x:scenario>
+    <!--TODO
+        td[@scope]
+        @rowspan, @colspan, @scope, @headers
+    -->
+    <x:scenario label="Table :: Table with rows">
+        <x:context>
+            <z:table>
+                <z:tr>
+                    <z:td>R1</z:td>
+                </z:tr>
+                <z:tr>
+                    <z:td>R2</z:td>
+                </z:tr>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tr>
+                    <td>R1</td>
+                </tr>
+                <tr>
+                    <td>R2</td>
+                </tr>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Colgroup with @span">
+        <x:context>
+            <z:table>
+                <z:colgroup span="1"/>
+                <z:tr>
+                    <z:td>R1</z:td>
+                </z:tr>
+                <z:tr>
+                    <z:td>R2</z:td>
+                </z:tr>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <colgroup span="1"/>
+                <tr>
+                    <td>R1</td>
+                </tr>
+                <tr>
+                    <td>R2</td>
+                </tr>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Colgroup with col">
+        <x:context>
+            <z:table>
+                <z:colgroup>
+                    <z:col span="1"/>
+                </z:colgroup>
+                <z:tr>
+                    <z:td>R1</z:td>
+                </z:tr>
+                <z:tr>
+                    <z:td>R2</z:td>
+                </z:tr>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <colgroup>
+                    <col span="1"/>
+                </colgroup>
+                <tr>
+                    <td>R1</td>
+                </tr>
+                <tr>
+                    <td>R2</td>
+                </tr>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Table with body">
+        <x:context>
+            <z:table>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>R1</z:td>
+                    </z:tr>
+                    <z:tr>
+                        <z:td>R2</z:td>
+                    </z:tr>
+                </z:tbody>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>R1</td>
+                    </tr>
+                    <tr>
+                        <td>R2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Table with header, body, footer">
+        <x:context>
+            <z:table>
+                <z:thead>
+                    <z:tr>
+                        <z:th>H</z:th>
+                    </z:tr>
+                </z:thead>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>R</z:td>
+                    </z:tr>
+                </z:tbody>
+                <z:tfoot>
+                    <z:tr>
+                        <z:td>F</z:td>
+                    </z:tr>
+                </z:tfoot>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <thead>
+                    <tr>
+                        <th>H</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>R</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>F</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <!--<utfx:test>
+        <utfx:name>Table :: In a figure block</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <z:block role="figure">
+                    <z:hd ref="table">heading</z:hd>
+                    <z:table xml:id="table"/>
+                    <z:caption ref="table">caption</z:caption>
+                </z:block>
+            </utfx:source>
+            <utfx:expected>
+                <figure>
+                    <figcaption>
+                        <strong>heading</strong>
+                        <p>caption</p>
+                    </figcaption>
+                    <table></table>
+                </figure>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>-->
+    <x:scenario label="Table :: Table with caption">
+        <x:context>
+            <z:table xml:id="table"/>
+            <z:caption ref="table">caption</z:caption>
+        </x:context>
+        <x:expect label="">
+            <table id="table">
+                <caption>caption</caption>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Table with heading">
+        <x:context>
+            <z:hd ref="table">heading</z:hd>
+            <z:table xml:id="table"/>
+        </x:context>
+        <x:expect label="">
+            <table id="table">
+                <caption>
+                    <p epub:type="bridgehead">heading</p>
+                </caption>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Table with heading and caption">
+        <x:context>
+            <z:hd ref="table">heading</z:hd>
+            <z:caption ref="table">caption</z:caption>
+            <z:table xml:id="table"/>
+        </x:context>
+        <x:expect label="">
+            <table id="table">
+                <caption>
+                    <p epub:type="bridgehead">heading</p>
+                    <p>caption</p>
+                </caption>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Table with heading and complex caption">
+        <x:context>
+            <z:hd ref="table">heading</z:hd>
+            <z:caption ref="table">
+                <z:p>caption par1</z:p>
+                <z:p>caption par2</z:p>
+            </z:caption>
+            <z:table xml:id="table"/>
+        </x:context>
+        <x:expect label="">
+            <table id="table">
+                <caption>
+                    <p epub:type="bridgehead">heading</p>
+                    <p>caption par1</p>
+                    <p>caption par2</p>
+                </caption>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <!--FIXME: cannot be tested until UTFX can ignore @id-->
+    <x:scenario label="Table :: Table with description">
+        <x:context>
+            <z:description xml:id="desc">description</z:description>
+            <z:table xml:id="table" desc="desc"/>
+        </x:context>
+        <x:expect label="">
+            <table id="table">
+                <caption>
+                    <details>
+                        <summary>Description</summary>
+                        <p id="desc">description</p>
+                    </details>
+                </caption>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Table with caption and description">
+        <x:context>
+            <z:description xml:id="desc">description</z:description>
+            <z:caption ref="table">caption</z:caption>
+            <z:table xml:id="table" desc="desc"/>
+        </x:context>
+        <x:expect label="">
+            <table id="table">
+                <caption>caption<details>
+                        <summary>Description</summary>
+                        <p id="desc">description</p>
+                    </details>
+                </caption>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break among rows - 1">
+        <x:context>
+            <z:table>
+                <z:tr>
+                    <z:th>H1</z:th>
+                    <z:th>H2</z:th>
+                </z:tr>
+                <z:pagebreak value="42"/>
+                <z:tr>
+                    <z:td>V1</z:td>
+                    <z:td>V2</z:td>
+                </z:tr>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tr>
+                    <th>H1</th>
+                    <th>H2</th>
+                </tr>
+                <tr>
+                    <td>
+                        <span epub:type="pagebreak" title="42"/>V1</td>
+                    <td>V2</td>
+                </tr>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break among rows - 2">
+        <x:context>
+            <z:table>
+                <z:tr>
+                    <z:th>H1</z:th>
+                    <z:th>H2</z:th>
+                </z:tr>
+                <z:pagebreak value="42"/>
+                <z:tr>
+                    <z:th>V1</z:th>
+                    <z:th>V2</z:th>
+                </z:tr>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tr>
+                    <th>H1</th>
+                    <th>H2</th>
+                </tr>
+                <tr>
+                    <th>
+                        <span epub:type="pagebreak" title="42"/>V1</th>
+                    <th>V2</th>
+                </tr>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break among cells - 1">
+        <x:context>
+            <z:tr>
+                <z:th>H1</z:th>
+                <z:pagebreak value="42"/>
+                <z:th>H2</z:th>
+            </z:tr>
+        </x:context>
+        <x:expect label="">
+            <tr>
+                <th>H1</th>
+                <th>
+                    <span epub:type="pagebreak" title="42"/>H2</th>
+            </tr>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break among cells - 2">
+        <x:context>
+            <z:tr>
+                <z:td>V1</z:td>
+                <z:pagebreak value="42"/>
+                <z:td>V2</z:td>
+            </z:tr>
+        </x:context>
+        <x:expect label="">
+            <tr>
+                <td>V1</td>
+                <td>
+                    <span epub:type="pagebreak" title="42"/>V2</td>
+            </tr>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break in the last cell of the row">
+        <x:context>
+            <z:table>
+                <z:tr>
+                    <z:th>H1</z:th>
+                    <z:th>H2</z:th>
+                    <z:pagebreak value="42"/>
+                </z:tr>
+                <z:tr>
+                    <z:td>V1</z:td>
+                    <z:td>V2</z:td>
+                </z:tr>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tr>
+                    <th>H1</th>
+                    <th>H2</th>
+                </tr>
+                <tr>
+                    <td>
+                        <span epub:type="pagebreak" title="42"/>V1</td>
+                    <td>V2</td>
+                </tr>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break after the last row">
+        <x:context>
+            <z:table>
+                <z:tr>
+                    <z:td>X</z:td>
+                    <z:td>X</z:td>
+                </z:tr>
+                <z:pagebreak value="42"/>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tr>
+                    <td>X</td>
+                    <td>X</td>
+                </tr>
+            </table>
+            <div epub:type="pagebreak" title="42"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break after the last cell">
+        <x:context>
+            <z:table>
+                <z:tr>
+                    <z:td>X</z:td>
+                    <z:td>X</z:td>
+                    <z:pagebreak value="42"/>
+                </z:tr>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tr>
+                    <td>X</td>
+                    <td>X</td>
+                </tr>
+            </table>
+            <div epub:type="pagebreak" title="42"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of the header's rows">
+        <x:context>
+            <z:table>
+                <z:thead>
+                    <z:tr>
+                        <z:td>X</z:td>
+                        <z:td>X</z:td>
+                    </z:tr>
+                    <z:pagebreak value="42"/>
+                </z:thead>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                        <z:td>X</z:td>
+                    </z:tr>
+                </z:tbody>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <thead>
+                    <tr>
+                        <td>X</td>
+                        <td>X</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span epub:type="pagebreak" title="42"/>X</td>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of the header's cells">
+        <x:context>
+            <z:table>
+                <z:thead>
+                    <z:tr>
+                        <z:td>X</z:td>
+                        <z:td>X</z:td>
+                        <z:pagebreak value="42"/>
+                    </z:tr>
+                </z:thead>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                        <z:td>X</z:td>
+                    </z:tr>
+                </z:tbody>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <thead>
+                    <tr>
+                        <td>X</td>
+                        <td>X</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span epub:type="pagebreak" title="42"/>X</td>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of a body's rows with following body">
+        <x:context>
+            <z:table>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                    <z:pagebreak value="42"/>
+                </z:tbody>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                </z:tbody>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span epub:type="pagebreak" title="42"/>X</td>
+                    </tr>
+                </tbody>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of a body's cells with following body">
+        <x:context>
+            <z:table>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                        <z:pagebreak value="42"/>
+                    </z:tr>
+                </z:tbody>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                </z:tbody>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span epub:type="pagebreak" title="42"/>X</td>
+                    </tr>
+                </tbody>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of a body's rows with following footer">
+        <x:context>
+            <z:table>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                    <z:pagebreak value="42"/>
+                </z:tbody>
+                <z:tfoot>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                </z:tfoot>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <span epub:type="pagebreak" title="42"/>X</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of a body's cells with following footer">
+        <x:context>
+            <z:table>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                        <z:pagebreak value="42"/>
+                    </z:tr>
+                </z:tbody>
+                <z:tfoot>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                </z:tfoot>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <span epub:type="pagebreak" title="42"/>X</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of a body's rows">
+        <x:context>
+            <z:table>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                    <z:pagebreak value="42"/>
+                </z:tbody>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div epub:type="pagebreak" title="42"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of a body's cells">
+        <x:context>
+            <z:table>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                        <z:pagebreak value="42"/>
+                    </z:tr>
+                </z:tbody>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div epub:type="pagebreak" title="42"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of a footer's rows">
+        <x:context>
+            <z:table>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                </z:tbody>
+                <z:tfoot>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                    <z:pagebreak value="42"/>
+                </z:tfoot>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div epub:type="pagebreak" title="42"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Table :: Page break at the end of a footer's cells">
+        <x:context>
+            <z:table>
+                <z:tbody>
+                    <z:tr>
+                        <z:td>X</z:td>
+                    </z:tr>
+                </z:tbody>
+                <z:tfoot>
+                    <z:tr>
+                        <z:td>X</z:td>
+                        <z:pagebreak value="42"/>
+                    </z:tr>
+                </z:tfoot>
+            </z:table>
+        </x:context>
+        <x:expect label="">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>X</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div epub:type="pagebreak" title="42"/>
+        </x:expect>
+    </x:scenario>
+</x:description>

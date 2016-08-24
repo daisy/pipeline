@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2001/10/synthesis" xmlns:select="http://www.daisy.org/ns/z3998/authoring/features/select/" xmlns:synthesis="http://www.w3.org/2001/10/synthesis" xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/" xmlns:its="http://www.w3.org/2005/11/its" xmlns:authoring="http://www.daisy.org/ns/z3998/authoring/" xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/" xmlns:xforms="http://www.w3.org/2002/xforms/" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/" schemaLocation="z3998-book.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/description/" schemaLocation="d.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/rend/" schemaLocation="rend.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/select/" schemaLocation="select.xsd"/>
+  <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
+  <xs:import namespace="http://www.w3.org/2002/xforms/" schemaLocation="xforms.xsd"/>
+  <xs:import namespace="http://www.w3.org/2005/11/its" schemaLocation="its.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:attribute name="onlangfailure">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="changevoice"/>
+        <xs:enumeration value="ignoretext"/>
+        <xs:enumeration value="ignorelang"/>
+        <xs:enumeration value="processorchoice"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name="ph"/>
+  <xs:attribute name="alphabet"/>
+  <xs:element name="lexicon">
+    <xs:complexType>
+      <xs:attribute name="uri" use="required" type="xs:anyURI"/>
+      <xs:attribute ref="xml:id" use="required"/>
+      <xs:attribute name="type">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="application/pls+xml"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:pattern value="[a-zA-Z0-9!#$&amp;+\-\^_]+/[a-zA-Z0-9!#$&amp;+\-\^_]+.*"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="phoneme">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="authoring:sub"/>
+        <xs:element ref="authoring:sup"/>
+        <xs:element ref="authoring:char"/>
+        <xs:element ref="its:ruby"/>
+        <xs:group ref="authoring:span"/>
+        <xs:element ref="authoring:ref"/>
+        <xs:element ref="authoring:noteref"/>
+        <xs:group ref="authoring:ln"/>
+        <xs:element ref="authoring:s"/>
+        <xs:element ref="authoring:w"/>
+        <xs:element ref="authoring:abbr"/>
+        <xs:element ref="authoring:expansion"/>
+        <xs:element ref="authoring:emph"/>
+        <xs:element ref="authoring:time"/>
+        <xs:element ref="authoring:name"/>
+        <xs:element ref="authoring:definition"/>
+        <xs:element ref="authoring:term"/>
+        <xs:element ref="authoring:d"/>
+        <xs:element ref="authoring:num"/>
+        <xs:element ref="synthesis:phoneme"/>
+        <xs:element ref="synthesis:prosody"/>
+        <xs:element ref="synthesis:say-as"/>
+        <xs:element ref="synthesis:sub"/>
+        <xs:element ref="synthesis:token"/>
+        <xs:element ref="xforms:input"/>
+        <xs:element ref="xforms:textarea"/>
+        <xs:element ref="xforms:secret"/>
+        <xs:element ref="xforms:select1"/>
+        <xs:element ref="xforms:select"/>
+        <xs:element ref="xforms:range"/>
+        <xs:element ref="authoring:pagebreak"/>
+      </xs:choice>
+      <xs:attribute name="ph" use="required"/>
+      <xs:attribute name="alphabet"/>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="prosody">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="authoring:sub"/>
+        <xs:element ref="authoring:sup"/>
+        <xs:element ref="authoring:char"/>
+        <xs:element ref="its:ruby"/>
+        <xs:group ref="authoring:span"/>
+        <xs:element ref="authoring:ref"/>
+        <xs:element ref="authoring:noteref"/>
+        <xs:group ref="authoring:ln"/>
+        <xs:element ref="authoring:s"/>
+        <xs:element ref="authoring:w"/>
+        <xs:element ref="authoring:abbr"/>
+        <xs:element ref="authoring:expansion"/>
+        <xs:element ref="authoring:emph"/>
+        <xs:element ref="authoring:time"/>
+        <xs:element ref="authoring:name"/>
+        <xs:element ref="authoring:definition"/>
+        <xs:element ref="authoring:term"/>
+        <xs:element ref="authoring:d"/>
+        <xs:element ref="authoring:num"/>
+        <xs:element ref="synthesis:phoneme"/>
+        <xs:element ref="synthesis:prosody"/>
+        <xs:element ref="synthesis:say-as"/>
+        <xs:element ref="synthesis:sub"/>
+        <xs:element ref="synthesis:token"/>
+        <xs:element ref="xforms:input"/>
+        <xs:element ref="xforms:textarea"/>
+        <xs:element ref="xforms:secret"/>
+        <xs:element ref="xforms:select1"/>
+        <xs:element ref="xforms:select"/>
+        <xs:element ref="xforms:range"/>
+        <xs:element ref="authoring:pagebreak"/>
+      </xs:choice>
+      <xs:attribute name="pitch">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="x-low"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="low"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="medium"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="high"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="x-high"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="default"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:normalizedString">
+                <xs:pattern value="[\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)(%|st|Hz)"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:normalizedString">
+                <xs:pattern value="[\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)Hz"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="contour">
+        <xs:simpleType>
+          <xs:restriction base="xs:normalizedString">
+            <xs:pattern value="\(([\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)%), ?([\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)Hz)\)(,\s*\(([\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)%), ?([\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)Hz)\))*"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="range">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="x-low"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="low"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="medium"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="high"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="x-high"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="default"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:normalizedString">
+                <xs:pattern value="[\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)(%|st|Hz)"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:normalizedString">
+                <xs:pattern value="[\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)Hz"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rate">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="x-slow"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="slow"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="medium"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="fast"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="x-fast"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="default"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:normalizedString">
+                <xs:pattern value="([0-9]+(\.[0-9]*)?|\.[0-9]+)%"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="duration">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="([0-9]+\.)?[0-9]+m?s"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="volume">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="silent"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="x-soft"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="soft"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="medium"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="loud"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="x-loud"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="default"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:normalizedString">
+                <xs:pattern value="[\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)dB|silent|((x-)?(loud|soft))|medium|default"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="say-as">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="authoring:sub"/>
+        <xs:element ref="authoring:sup"/>
+        <xs:element ref="authoring:char"/>
+        <xs:element ref="its:ruby"/>
+        <xs:group ref="authoring:span"/>
+        <xs:element ref="authoring:ref"/>
+        <xs:element ref="authoring:noteref"/>
+        <xs:group ref="authoring:ln"/>
+        <xs:element ref="authoring:s"/>
+        <xs:element ref="authoring:w"/>
+        <xs:element ref="authoring:abbr"/>
+        <xs:element ref="authoring:expansion"/>
+        <xs:element ref="authoring:emph"/>
+        <xs:element ref="authoring:time"/>
+        <xs:element ref="authoring:name"/>
+        <xs:element ref="authoring:definition"/>
+        <xs:element ref="authoring:term"/>
+        <xs:element ref="authoring:d"/>
+        <xs:element ref="authoring:num"/>
+        <xs:element ref="synthesis:phoneme"/>
+        <xs:element ref="synthesis:prosody"/>
+        <xs:element ref="synthesis:say-as"/>
+        <xs:element ref="synthesis:sub"/>
+        <xs:element ref="synthesis:token"/>
+        <xs:element ref="xforms:input"/>
+        <xs:element ref="xforms:textarea"/>
+        <xs:element ref="xforms:secret"/>
+        <xs:element ref="xforms:select1"/>
+        <xs:element ref="xforms:select"/>
+        <xs:element ref="xforms:range"/>
+        <xs:element ref="authoring:pagebreak"/>
+      </xs:choice>
+      <xs:attribute name="interpret-as" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="date"/>
+            <xs:enumeration value="time"/>
+            <xs:enumeration value="telephone"/>
+            <xs:enumeration value="characters"/>
+            <xs:enumeration value="cardinal"/>
+            <xs:enumeration value="ordinal"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="format"/>
+      <xs:attribute name="detail"/>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="sub">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="authoring:sub"/>
+        <xs:element ref="authoring:sup"/>
+        <xs:element ref="authoring:char"/>
+        <xs:element ref="its:ruby"/>
+        <xs:group ref="authoring:span"/>
+        <xs:element ref="authoring:ref"/>
+        <xs:element ref="authoring:noteref"/>
+        <xs:group ref="authoring:ln"/>
+        <xs:element ref="authoring:s"/>
+        <xs:element ref="authoring:w"/>
+        <xs:element ref="authoring:abbr"/>
+        <xs:element ref="authoring:expansion"/>
+        <xs:element ref="authoring:emph"/>
+        <xs:element ref="authoring:time"/>
+        <xs:element ref="authoring:name"/>
+        <xs:element ref="authoring:definition"/>
+        <xs:element ref="authoring:term"/>
+        <xs:element ref="authoring:d"/>
+        <xs:element ref="authoring:num"/>
+        <xs:element ref="synthesis:phoneme"/>
+        <xs:element ref="synthesis:prosody"/>
+        <xs:element ref="synthesis:say-as"/>
+        <xs:element ref="synthesis:sub"/>
+        <xs:element ref="synthesis:token"/>
+        <xs:element ref="xforms:input"/>
+        <xs:element ref="xforms:textarea"/>
+        <xs:element ref="xforms:secret"/>
+        <xs:element ref="xforms:select1"/>
+        <xs:element ref="xforms:select"/>
+        <xs:element ref="xforms:range"/>
+        <xs:element ref="authoring:pagebreak"/>
+      </xs:choice>
+      <xs:attribute name="alias" use="required"/>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="token">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="authoring:sub"/>
+        <xs:element ref="authoring:sup"/>
+        <xs:element ref="authoring:char"/>
+        <xs:element ref="its:ruby"/>
+        <xs:element ref="authoring:pagebreak"/>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="about" type="xs:anyURI"/>
+      <xs:attribute name="content"/>
+      <xs:attribute name="datatype">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="typeof">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="property">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rel">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resource" type="xs:anyURI"/>
+      <xs:attribute name="rev">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="desc">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:NCName"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="by">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:union>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="author"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="general-editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="translator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="commentator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="republisher"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:union>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="select:selid"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="synthesis:ph"/>
+      <xs:attribute ref="synthesis:alphabet"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="break">
+    <xs:complexType>
+      <xs:attribute name="strength">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="none"/>
+            <xs:enumeration value="x-weak"/>
+            <xs:enumeration value="weak"/>
+            <xs:enumeration value="medium"/>
+            <xs:enumeration value="strong"/>
+            <xs:enumeration value="x-strong"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="time">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="([0-9]+\.)?[0-9]+m?s"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="xml:id"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

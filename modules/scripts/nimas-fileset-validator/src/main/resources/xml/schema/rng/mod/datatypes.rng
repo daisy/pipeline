@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+	xmlns="http://relaxng.org/ns/structure/1.0"
+	xmlns:sch="http://www.ascc.net/xml/schematron"
+	xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+	
+	<a:documentation> datatatypes.rng Last edit by: jpritchett@rfbd.org, 25 October 2007
+		</a:documentation>
+	
+	<define name="datatype.idrefs">
+		<data type="IDREFS"
+			datatypeLibrary="http://relaxng.org/ns/compatibility/datatypes/1.0"/>
+	</define>
+	
+	<define name="datatype.idref">
+		<data type="IDREF"
+			datatypeLibrary="http://relaxng.org/ns/compatibility/datatypes/1.0"/>
+	</define>
+	
+	<define name="datatype.id">
+		<data type="ID"
+			datatypeLibrary="http://relaxng.org/ns/compatibility/datatypes/1.0"/>
+	</define>
+	
+	<define name="datatype.rfc1766">		
+		<!-- this is in reality rfc3066; supercedes 1766 by this erratum: http://www.w3.org/XML/xml-V10-2e-errata#E11 -->
+		<data type="language"/>
+	</define>
+	
+	<define name="datatype.string">
+		<data type="string"/>
+	</define>
+	
+	<define name="datatype.string.non-null">
+		<data type="string">
+			<param name="pattern">.*\S.*</param>
+		</data>
+	</define>
+	
+	<define name="datatype.romannumeral">
+		<!-- jpritchett (2007-10-25):  Added leading/trailing whitespace to the pattern -->
+		<data type="string">
+			<param name="pattern">\s*[Mm]*([Dd]?[Cc]{0,3}|[Cc][DdMm])([Ll]?[Xx]{0,3}|[Xx][LlCc])([Vv]?[Ii]{0,3}|[Ii][VvXx])\s*</param>
+		</data>
+		<!-- 
+		^(?i:(?=[MDCLXVI])((M{0,3})((C[DM])|(D?C{0,3}))?((X[LC])|(L?XX{0,2}))?((I[VX])|(V?(II{0,2}))|V)?))$
+		-->
+	</define>
+	
+	<define name="datatype.integer">
+		<data type="integer"/>
+	</define>
+	
+	<define name="datatype.uri">
+		<data type="anyURI"/>
+	</define>
+	
+	<define name="datatype.uri.z3986-2005.subset">
+		<data type="string">
+			<param name="pattern">[A-Za-z0-9/\.\-_#]+</param>
+		</data>
+	</define>
+	
+	<define name="datatype.uri.relative.smilwithfragment">
+		<data type="string">
+			<param name="pattern">.+\.[Ss][Mm][Ii][Ll]#.+</param>
+		</data>
+	</define>
+	
+	<define name="datatype.uri.z3986-2005.subset.relative.smilwithfragment">
+		<data type="string">
+			<param name="pattern">[A-Za-z0-9/\.\-_]+\.[Ss][Mm][Ii][Ll]#.+</param>
+		</data>
+	</define>
+	
+	<define name="datatype.string.nondtbns">
+		<data type="string">
+			<a:documentation>when other meta elems in group must have other ns than
+				dtb</a:documentation>
+			<param name="pattern">(([^d].{3})|(.[^t].{2})|(.{2}[^b].)|(.{3}[^:])).*|(.{1,3})</param>
+		</data>
+	</define>
+	
+	<define name="datatype.string.prodPrefix">
+		<data type="string">
+			<param name="pattern">prod:.*</param>
+		</data>
+	</define>
+	
+	<define name="datatype.mime">
+		<data type="string"/>
+	</define>
+	
+	<define name="datatype.mime.z2005list">
+		<choice>
+			<value>audio/mpeg4-generic</value>
+			<value>audio/mpeg</value>
+			<value>audio/x-wav</value>
+			<value>image/jpeg</value>
+			<value>image/png</value>
+			<value>image/svg+xml</value>
+			<value>text/css</value>
+			<value>application/smil</value>
+			<value>text/xml</value>
+			<value>application/xml-dtd</value>
+			<value>application/x-dtbncx+xml</value>
+			<value>application/x-dtbook+xml</value>
+			<value>application/x-dtbresource+xml</value>
+			<!-- mg 20071209 as per zedissue on XSLT media type -->
+			<!-- yet undecided which type to use, so allow both for now -->
+			<value>application/xml</value>
+			<value>application/xslt+xml</value>
+			<!-- mdemeglio 20130207 added PDF to accommodate NIMAS -->
+			<value>application/pdf</value>
+		</choice>
+	</define>
+	
+	<define name="datatype.iso8601">
+		<a:documentation>[ISO8601] the syntax is YYYY[-MM[-DD]] with a mandatory 4-digit
+			year, an optional 2-digit month, and, if the month is present, an optional
+			2-digit day of month.</a:documentation>
+		<choice>
+			<ref name="datatype.iso8601.yyyy" />
+			<ref name="datatype.iso8601.yyyyMm" />
+			<ref name="datatype.iso8601.yyyyMmDd" />						
+		</choice>		
+		<!--
+		this breaks under jre 1.5 in jing
+		<choice>
+			<data type="date"/>
+			<data type="gYearMonth"/>
+			<data type="gYear"/>
+		</choice>
+		-->
+	</define>
+	
+	<define name="datatype.iso8601.yyyy">
+		<a:documentation>[ISO8601] subset: requires yyyy format</a:documentation>
+		<data type="string">
+			<param name="pattern">[0-9]{4}</param>
+		</data>
+	</define>
+
+	<define name="datatype.iso8601.yyyyMm">
+		<a:documentation>[ISO8601] subset: requires yyyy-mm format</a:documentation>
+		<data type="string">
+			<param name="pattern">[0-9]{4}-[0-9]{2}</param>
+		</data>
+	</define>
+		
+	<define name="datatype.iso8601.yyyyMmDd">
+		<a:documentation>[ISO8601] subset: requires yyyy-mm-dd
+			format</a:documentation>
+		<data type="string">
+			<param name="pattern">[0-9]{4}-[0-9]{2}-[0-9]{2}</param>
+		</data>
+	</define>
+	
+	<define name="datatype.nonNegativeInteger">
+		<data type="nonNegativeInteger"/>
+	</define>
+	
+	<define name="datatype.positiveInteger">
+		<data type="positiveInteger"/>
+	</define>
+	
+	<define name="datatype.string.charset">
+		<data type="string"/>
+	</define>
+	
+	<define name="datatype.string.identifier">
+		<data type="string"/>
+	</define>
+	
+	<define name="datatype.smilclock">
+	<!-- <data type="string"/> -->		
+		<choice>
+			<a:documentation> Below defined as a datatype as per
+				http://www.w3.org/TR/smil20/smil-timing.html#Timing-ClockValueSyntax
+				with additional restrictions as per Z39-86-2002.html#Clock
+				</a:documentation>
+			<data type="string">
+				<a:documentation>Full-clock-val</a:documentation>
+				<param name="pattern">(\s*)(npt=)?[0-9]+:[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(\s*)</param>
+			</data>
+			<data type="string">
+				<a:documentation>Partial-clock-val</a:documentation>
+				<param name="pattern">(\s*)(npt=)?[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(\s*)</param>
+			</data>
+			<data type="string">
+				<a:documentation>Timecount-val</a:documentation>
+				<param name="pattern">(\s*)(npt=)?[0-9]+(\.[0-9]+)?(h|min|s|ms)?(\s*)</param>
+			</data>
+		</choice>		
+	</define>
+	
+	<define name="datatype.resxpathsubset">
+		<data type="string">
+			<!-- <param name="pattern">//(.+)((\\[.+\\])?)</param> -->
+			<param name="pattern">//(\*|(\p{L}|_)(\p{L}|[0-9]|[\.\-_])+)(\[@(\p{L}|_)(\p{L}|[0-9]|[\.\-_])+=("[^"]*"|'[^']*')\])*</param>
+		</data>
+	</define>
+	
+	<define name="datatype.pkg.guide.reference.type.values">
+		<choice>
+			<value>cover</value>
+			<value>title-page</value>
+			<value>toc</value>
+			<value>index</value>
+			<value>glossary</value>
+			<value>acknowledgements</value>
+			<value>bibliography</value>
+			<value>colophon</value>
+			<value>copyright-page</value>
+			<value>dedication</value>
+			<value>epigraph</value>
+			<value>foreword</value>
+			<value>loi</value>
+			<value>lot</value>
+			<value>notes</value>
+			<value>preface</value>
+			<value>[other.].*</value>
+		</choice>
+	</define>
+	
+	<define name="datatype.dtbook.element.names">
+		<choice>
+			<value>dtbook</value>
+			<value>head</value>
+			<value>title</value>
+			<value>link</value>
+			<value>meta</value>
+			<value>style</value>
+			<value>book</value>
+			<value>frontmatter</value>
+			<value>bodymatter</value>
+			<value>rearmatter</value>
+			<value>level</value>
+			<value>level1</value>
+			<value>level2</value>
+			<value>level3</value>
+			<value>level4</value>
+			<value>level5</value>
+			<value>level6</value>
+			<value>br</value>
+			<value>linenum</value>
+			<value>address</value>
+			<value>div</value>
+			<value>author</value>
+			<value>notice</value>
+			<value>prodnote</value>
+			<value>sidebar</value>
+			<value>note</value>
+			<value>annotation</value>
+			<value>line</value>
+			<value>a</value>
+			<value>em</value>
+			<value>strong</value>
+			<value>dfn</value>
+			<value>kbd</value>
+			<value>code</value>
+			<value>samp</value>
+			<value>cite</value>
+			<value>abbr</value>
+			<value>acronym</value>
+			<value>sub</value>
+			<value>sup</value>
+			<value>span</value>
+			<value>bdo</value>
+			<value>sent</value>
+			<value>w</value>
+			<value>pagenum</value>
+			<value>noteref</value>
+			<value>annoref</value>
+			<value>q</value>
+			<value>img</value>
+			<value>imggroup</value>
+			<value>hr</value>
+			<value>p</value>
+			<value>doctitle</value>
+			<value>docauthor</value>
+			<value>levelhd</value>
+			<value>h1</value>
+			<value>h2</value>
+			<value>h3</value>
+			<value>h4</value>
+			<value>h5</value>
+			<value>h6</value>
+			<value>hd</value>
+			<value>blockquote</value>
+			<value>dl</value>
+			<value>dt</value>
+			<value>dd</value>
+			<value>list</value>
+			<value>li</value>
+			<value>lic</value>
+			<value>table</value>
+			<value>caption</value>
+			<value>thead</value>
+			<value>tfoot</value>
+			<value>tbody</value>
+			<value>colgroup</value>
+			<value>col</value>
+			<value>tr</value>
+			<value>th</value>
+			<value>td</value>
+		</choice>
+	</define>
+	
+	<define name="datatype.id.and.dtbook.element.names">
+		<data type="ID">
+			<param name="pattern">dtbook|head|title|link|meta|style|book|frontmatter|bodymatter|rearmatter|level|level1|level2|level3|level4|level5|level6|br|linenum|address|div|author|notice|prodnote|sidebar|note|annotation|line|a|em|strong|dfn|kbd|code|samp|cite|abbr|acronym|sub|sup|span|bdo|sent|w|pagenum|noteref|annoref|q|img|imggroup|hr|p|doctitle|docauthor|levelhd|h1|h2|h3|h4|h5|h6|hd|blockquote|dl|dt|dd|list|li|lic|table|caption|thead|tfoot|tbody|colgroup|col|tr|th|td</param>
+		</data>
+	</define>
+	
+</grammar>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The SSML Datatypes module </title>
+        <annotation annotates="/">
+            <para>This module defines a set of datatypes related to SSML </para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <a:documentation>Datatypes defined in SSML 1.1 </a:documentation>
+        <define name="SSML.PhoneticExpression.datatype">
+            <a:documentation>A phonetic or phonemic expression. </a:documentation>
+            <text/>
+        </define>
+        <define name="SSML.alphabet.datatype">
+            <a:documentation>The name of a pronounciation alphabet. The only valid values for this attribute are ipa, values defined in the Pronunciation Alphabet Registry and vendor-defined strings of the form x-organization or x-organization-alphabet. Consult Speech Synthesis Markup Language (SSML) Version 1.1 for further information. </a:documentation>
+            <choice>
+                <value>ipa</value>
+                <a:documentation>The pronunciation alphabet is IPA . </a:documentation>
+                <value>x-SAMPA</value>
+                <a:documentation>The pronunciation alphabet is X-SAMPA . </a:documentation>
+                <text/>
+            </choice>
+        </define>
+        <define name="SSML.RelativeChange.datatype">
+            <a:documentation>A relative change expression, as defined in relative change . </a:documentation>
+            <data type="normalizedString">
+                <param name="pattern">[\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)(%|st|Hz)</param>
+            </data>
+        </define>
+        <define name="SSML.PitchExpression.datatype">
+            <a:documentation>A number followed by the string 'Hz'. </a:documentation>
+            <data type="normalizedString">
+                <param name="pattern">[\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)Hz</param>
+            </data>
+        </define>
+        <define name="SSML.PitchContour.datatype">
+            <a:documentation>A pitch contour expression, as defined in pitch contour . </a:documentation>
+            <data type="normalizedString">
+                <param name="pattern">\(([\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)%), ?([\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)Hz)\)(,\s*\(([\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)%), ?([\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)Hz)\))*</param>
+            </data>
+        </define>
+        <define name="SSML.NonNegativePercentage.datatype">
+            <a:documentation>An unsigned number immediately followed by "%", as defined in Non-negative percentage . </a:documentation>
+            <data type="normalizedString">
+                <param name="pattern">([0-9]+(\.[0-9]*)?|\.[0-9]+)%</param>
+            </data>
+        </define>
+        <define name="SSML.VolumeExpression.datatype">
+            <a:documentation>A number preceded by "+" or "-" and immediately followed by "dB", as defined in prosody Element . </a:documentation>
+            <data type="normalizedString">
+                <param name="pattern">[\-+]?([0-9]+(\.[0-9]*)?|\.[0-9]+)dB|silent|((x-)?(loud|soft))|medium|default</param>
+            </data>
+        </define>
+    </div>
+</grammar>

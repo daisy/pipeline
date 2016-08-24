@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/add-ref-to-annotations.xsl">
+    <x:scenario label="When translating a floating annotation">
+        <x:context>
+            <frontmatter>
+                <section xml:id="sec1">
+                    <annotation>Annotation</annotation>
+                </section>
+            </frontmatter>
+        </x:context>
+        <x:expect label="attach the annotation to the nearest section" test="/z:frontmatter/z:section/z:annotation[1]/@ref='sec1'"/>
+        <x:expect label="add a production annotation"
+            test="/z:frontmatter/z:section/z:annotation[2]/starts-with(normalize-space(),'Please review')"
+        />
+    </x:scenario>
+</x:description>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The name module </title>
+        <annotation annotates="/">
+            <para>This module defines the name element for identifying proper names. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.name.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.name">
+            <element name="name">
+                <a:documentation>The name element represents particular instances of names, places and things (proper nouns). The role attribute optionally expresses the semantic nature of the proper noun. No implicit value is associated with the name element. </a:documentation>
+                <ref name="z3998.name.attlist"/>
+                <ref name="z3998.name.content"/>
+                <sch:rule context="default:name">
+                    <sch:assert test="normalize-space(.) or *">The name element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.name.attlist">
+            <ref name="z3998.global.core.attrib"/>
+            <optional>
+                <ref name="z3998.name.role.attrib"/>
+            </optional>
+            <ref name="z3998.Phrase.extern.attrib"/>
+        </define>
+        <define name="z3998.name.role.attrib">
+            <attribute name="role">
+                <list>
+                    <oneOrMore>
+                        <ref name="z3998.name.role.attrib.content.enum"/>
+                    </oneOrMore>
+                </list>
+            </attribute>
+        </define>
+        <define name="z3998.name.role.attrib.content.enum" combine="choice">
+            <ref name="CURIE.datatype"/>
+        </define>
+        <define name="z3998.name.content">
+            <oneOrMore>
+                <choice>
+                    <ref name="Characters.datatype"/>
+                    <ref name="z3998.Text.class"/>
+                    <ref name="z3998.name.extra.class"/>
+                </choice>
+            </oneOrMore>
+        </define>
+        <define name="z3998.name.extra.class" combine="choice">
+            <choice>
+                <ref name="z3998.span.text"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <a:documentation>name - default content model contribution </a:documentation>
+        <define name="z3998.Phrase.core.class" combine="choice">
+            <ref name="z3998.name"/>
+        </define>
+    </div>
+</grammar>

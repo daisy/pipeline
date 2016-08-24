@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta content="pipeline2-dtbook-test-20110301-multivol1" name="dtb:uid"/>
+        <meta content="Pipeline 2 DTBook Test Content: Multi Volume Books" name="dc:Title"/>
+        <meta name="dc:Creator" content="Marisa D."/>
+        <meta content="2011-03-01" name="dc:Date"/>
+        <meta name="dc:Publisher" content="Marisa D."/>
+        <meta content="pipeline2-dtbook-test-20110301-multivol1" name="dc:Identifier"/>
+        <meta content="en-US" name="dc:Language"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Multi Volume Books</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Introduction</h1>
+                <p><sent>The DAISY Pipeline 2 is an ongoing project to develop a next generation
+                    framework for automated production of accessible materials for people with
+                    print disabilities.</sent>
+                    <sent>It is the follow-up and total redesign of the original DAISY Pipeline 1
+                        project.</sent></p>
+                
+            </level1>
+            <level1>
+                <h1>About the Pipeline</h1>
+                <p><sent>The overarching principle of the Pipeline 2 is to adopt recent
+                    platform-neutral standards (and off-the-shelf implementations of those
+                    standards) at the heart of a comprehensive framework, which will:</sent>
+                    <list type="ul">
+                        <hd>The Heading For The List</hd>
+                        <li>minimize the development and maintenance cost, allowing developers to
+                            ultimately focus more on actual transformations rather than the engine
+                            that drives the transformations.</li>
+                        <li>lower the framework learning curve</li>
+                        <li>increase interoperability with the heterogeneous production
+                            workflows</li>
+                        <li>increase the likelihood of re-use in both open source and commercial
+                            applications.</li>
+                    </list>
+                </p>
+            </level1>
+            
+        </bodymatter>
+    </book>
+</dtbook>

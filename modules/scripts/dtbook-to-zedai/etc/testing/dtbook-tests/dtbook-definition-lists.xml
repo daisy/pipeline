@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta content="pipeline2-dtbook-test-20110301-dl" name="dtb:uid"/>
+        <meta content="Pipeline 2 DTBook Test Content: Definition Lists" name="dc:Title"/>
+        <meta name="dc:Creator" content="Marisa D."/>
+        <meta content="2011-03-01" name="dc:Date"/>
+        <meta name="dc:Publisher" content="Marisa D."/>
+        <meta content="pipeline2-dtbook-test-20110301-dl" name="dc:Identifier"/>
+        <meta content="en-US" name="dc:Language"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Definition Lists</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Some terminology</h1>
+                <p><sent>Vocabulary list:</sent>
+                    <dl>
+                        <dd>TESTING NEVER STOPS</dd>
+                        <dt>I AM A TEST!</dt>
+                        <dt>Audio NCX</dt>
+                        <dd>Refers to a DAISY book that contains the complete book as synchronized
+                            audio, plus a table of contents (which could include page numbers,
+                            footnote lists, etc). This term does not refer to a specific version of
+                            the DAISY standard.</dd>
+                        <dt>Audio normalization</dt>
+                        <dd>Process of increasing or decreasing the amplitude of an entire audio
+                            signal so that the resulting peak amplitude reaches the desired
+                            value.</dd>
+                        <dt>DAISY 4</dt>
+                        <dd>Also known as ZedNext, DAISY 4 will be the next release of the DAISY
+                            Standard, officially, the ANSI/NISO Z39.86-2005 Specifications for the
+                            Digital Talking Book. It will superseded the current specification,
+                            DAISY 3, 2005. It is scheduled for completion in 2010.</dd>
+                        <dt>DAISY Lion</dt>
+                        <dd>A web-based localization system for creation of language packs for DAISY
+                            applications. Users log on to a website and enter translations of given
+                            words and phrases. If the target application is self-voicing, they may
+                            upload audio that corresponds to that particular word or phrase. The
+                            finished collection of text and audio materials is transformed into a
+                            language pack for the target application. The DAISY Lion is written in
+                            Python.</dd>
+                    </dl>
+                </p>
+
+                <p>A table</p>
+                <dl>
+                    <dt>data</dt>
+                    <dd>a term referring to numbers in tables: <table>
+                            <tbody>
+                                <tr>
+                                    <td>012345</td>
+                                </tr>
+                            </tbody>
+                        </table> Data is often sorted, compared, and accidentally deleted.</dd>
+                </dl>
+
+                <p>Difficult use cases:</p>
+
+                <img src="image.jpg" alt="abc" id="image1"/>
+                <dl>
+                    <dd>
+                        DD
+                        <div><p>DIV/P</p></div>
+                        middle of DD 
+                        <annotation id="anno1"><p>P</p></annotation>
+                        end of DD
+                    </dd>
+                </dl>
+
+                
+        
+                <dl>
+                    <dd>DD 
+                        <div><p>DIV1/P</p></div>
+                        <dl>
+                            <dt>TERM</dt>
+                            <dd>
+                                DD2 
+                                <div><p>DIV2/p</p></div>
+                                Rest of DD2
+                            </dd>
+                        </dl>
+                        Rest of DD
+                    </dd>
+                </dl>
+                
+                <dl>
+                    <dd>DD 
+                        <div>
+                            <p>DIV1/P</p>
+                        </div>
+                     Rest of DD 
+                    </dd>
+                </dl>
+                
+                
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

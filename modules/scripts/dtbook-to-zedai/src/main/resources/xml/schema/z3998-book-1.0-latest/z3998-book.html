@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      prefix="rd: http://www.daisy.org/z3998/2012/vocab/resourcedirectory/# dcterms: http://purl.org/dc/terms/"
+      lang="en-US"
+      xml:lang="en-US">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <title>Resource Directory for the Z39.98-2012 Authoring and Interchange Book Profile, version 1.0</title>
+        <link rel="stylesheet" type="text/css" href="../../../../z3998-2012.css"/>
+    </head>
+    <body>
+        <h1 property="dcterms:title">
+            <span class="titlesub">Resource directory for the Z39.98-2012 Authoring and Interchange </span>
+            <br/>Book Profile
+            <span class="titlesub">
+                <br/> version 1.0
+            </span>
+        </h1>
+      <h2 id="toc">Table of Contents</h2>
+      <ul>
+         <li class="first">
+            <a href="#h_introduction">Introduction</a>
+         </li>
+         <li class="first">
+            <a href="#h_normativereferences">Normative References</a>
+            <ul>
+               <li>
+                  <a href="#h_versioninformation">Version information</a>
+               </li>
+               <li>
+                  <a href="#h_identification">Identification</a>
+               </li>
+               <li>
+                  <a href="#h_specificationcompliance">Specification compliance</a>
+               </li>
+               <li>
+                  <a href="#h_normativeschemata">Normative schemata</a>
+               </li>
+               <li>
+                  <a href="#h_supportedfeatures">Supported features</a>
+               </li>
+               <li>
+                  <a href="#h_rdfainitialcontext">RDFa initial context</a>
+               </li>
+            </ul>
+         </li>
+         <li class="first">
+            <a href="#h_informativereferences">Informative References</a>
+            <ul>
+               <li>
+                  <a href="#schema-documentation">Schema documentation</a>
+               </li>
+               <li>
+                  <a href="#tutorials">Tutorials and Primers</a>
+               </li>
+               <li>
+                  <a href="#templates">Document templates</a>
+               </li>
+               <li>
+                  <a href="#samples">Sample documents</a>
+               </li>
+               <li>
+                  <a href="#informative-schemas">Informative schemata</a>
+                  <ul>
+                     <li>
+                        <a href="#informative-schemata-feature-reduced">Feature-reduced schemata</a>
+                     </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="#default-css">Cascading Stylesheet (CSS)</a>
+               </li>
+               <li>
+                  <a href="#archives">Archives</a>
+               </li>
+               <li>
+                  <a href="#supporting-software">Supporting software</a>
+               </li>
+            </ul>
+         </li>
+         <li class="first">
+            <a href="#h_appendix1listingofmodulesinthenormativeschema">Appendix 1: Listing of modules in the normative schema</a>
+         </li>
+      </ul>
+        <div id="introduction">
+            <h2 id="h_introduction">Introduction</h2>
+            <p>The Z39.98-2012 Book Profile is intended to serve as an XML republishing format for 
+                <strong>print books</strong>. 
+            </p>
+            <p>This profile can be used for markup of a wide variety of print books. It is suitable both for those with simple structure, such as novels or children's books, and for complex material with specialized structures, such as student textbooks and technical books.</p>
+            <p id="maintenance-agency"> This profile is maintained by the 
+                <a href="http://www.daisy.org/z3998/advisory/" rel="rd:maintenance-agency">ANSI/NISO Z39.98 advisory committee</a> under the auspices of 
+                <a href="http://niso.org/">NISO</a>. 
+            </p>
+        </div>
+        <div id="normative-references">
+            <h2 id="h_normativereferences">Normative References</h2>
+            <p class="RFC2119">The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this section are to be interpreted as described in 
+                <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC2119</a>.
+            </p>
+            <div class="rd-section">
+                <h3 id="h_versioninformation">Version information</h3>
+                <p>This resource directory represents version 
+                    <code property="rd:version">1.0</code> of the Book profile:
+                </p>
+                <ul>
+                    <li>refer to the 
+                        <a href="z3998-book-history.html">Version history</a> for the list of changes introduced in this release. 
+                    </li>
+                    <li id="version-listing"> refer to the 
+                        <a href="../index.html">Version index</a> for the list of all public releases of this profile. 
+                    </li>
+                </ul>
+                <p id="current-version"> This release may not be the most recently published (current) version of the Book profile. The current version should always be obtained from the static URI: 
+                    <a href="../current/" rel="rd:current-version-uri">http://www.daisy.org/z3998/2012/auth/profiles/book/current/</a>
+                </p>
+            </div>
+            <div class="rd-section">
+                <h3 id="h_identification">Identification</h3>
+                <p>This profile must be identified as 
+                    <code property="rd:z3998-instance-name">book</code> in Z39.98-AI document profile declarations.
+                </p>
+                <p id="identity-uri"> The canonical identity URI is: 
+                    <code rel="rd:token-identifier">http://www.daisy.org/z3998/2012/auth/profiles/book/1.0/ </code>
+                </p>
+            </div>
+            <div class="rd-section">
+                <h3 id="h_specificationcompliance">Specification compliance</h3>
+                <p id="spec-ref"> This version of the profile is compliant with the 
+                    <a href="../../../../z3998-2012.html" rel="rd:specification-compliance">Z39.98-2012 Specification</a>. 
+                </p>
+            </div>
+            <div class="rd-section" property="rd:normative-schemata">
+                <h3 id="h_normativeschemata">Normative schemata</h3>
+                <p about="z3998-book.rng"> The normative 
+                    <span property="rd:schema-type" content="rng">RelaxNG</span> schema for version 
+                    <code property="rd:version">1.0</code> of the Book profile is 
+                    <a href="z3998-book.rng">z3998-book.rng</a>. 
+                </p>
+                <p>Note - this schema includes embedded ISO Schematron assertions. A 
+                    <a href="./resources/z3998-book.sch"> standalone ISO Schematron schema</a> is provided for use in authoring tools that do not support embedded ISO Schematron.
+                </p>
+                <p> The normative schema includes a number of modules and/or subschemas, which are listed in 
+                    <a href="#module-list">Appendix 1</a>. 
+                </p>
+            </div>
+            <div class="rd-section">
+                <h3 id="h_supportedfeatures">Supported features</h3>
+                <p>The Book profile supports the following features:</p>
+                <ul>
+                    <li>
+                        <a href="../../../features/ssml/index.html" rel="rd:z3998-feature">SSML Integration Feature</a>
+                    </li>
+                    <li>
+                        <a href="../../../features/its-ruby/index.html" rel="rd:z3998-feature">ITS Ruby Feature</a>
+                    </li>
+                    <li>
+                        <a href="../../../features/mathml/index.html" rel="rd:z3998-feature">MathML Feature</a>
+                    </li>
+                    <li>
+                        <a href="../../../features/select/index.html" rel="rd:z3998-feature">Content Selection Feature</a>
+                    </li>
+                    <li>
+                        <a href="../../../features/forms/index.html" rel="rd:z3998-feature">Print Forms Feature</a>
+                    </li>
+                    <li>
+                        <a href="../../../features/rend/index.html" rel="rd:z3998-feature">Source Rendition Feature</a>
+                    </li>
+                    <li>
+                        <a href="../../../features/svg-cdr/index.html" rel="rd:z3998-feature">SVG CDR Feature</a>
+                    </li>
+                    <li>
+                        <a href="../../../features/description/index.html" rel="rd:z3998-feature">DIAGRAM Description Feature</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="rd-section" id="rdfa-initial-context">
+                <h3 id="h_rdfainitialcontext">RDFa initial context</h3>
+                <p> The URI of the initial context document is:
+                    <br/>
+                    <br/>
+                    <code rel="rd:z3998-rdfa-context">http://www.daisy.org/z3998/2012/vocab/context/default/</code>
+                </p>
+                <p> Refer to the 
+                    <a href="http://www.daisy.org/z3998/2012/vocab/context/default/">context document</a> at this location for additional information about the default vocabulary and pre-defined vocabulary prefixes. 
+                </p>
+            </div>
+        </div>
+        <div id="informative-references">
+            <h2 id="h_informativereferences">Informative References</h2>
+            <div class="rd-section">
+                <h3 id="schema-documentation">Schema documentation</h3>
+                <p> Schema documentation is 
+                    <a href="./schemadoc/index.html" rel="rd:schema-documentation">available online</a>, and is also included in the 
+                    <a href="#archives">downloadable archives</a>. 
+                </p>
+            </div>
+            <div class="rd-section">
+                <h3 id="tutorials">Tutorials and Primers</h3>
+                <p>Refer to the 
+                    <a href="http://www.daisy.org/zw/ZedAI_UserPortal">Z39.98-AI community portal</a> for additional information on how to use this profile .
+                </p>
+            </div>
+            <div class="rd-section">
+                <h3 id="templates">Document templates</h3>
+                <p>A 
+                    <a href="./resources/book-template.xml">document template</a> is available for use as a starting point when creating documents conforming to this profile.
+                </p>
+                <p>Refer to 
+                    <a href="http://www.daisy.org/zw/ZedAI_XML_Editors#Editor_setup_and_configuration">Editor setup and configuration</a> for information on how to use this template in an XML editor.
+                </p>
+            </div>
+            <div class="rd-section">
+                <h3 id="samples">Sample documents</h3>
+                <p>Sample documents conforming to this profile are available from the Z39.98-AI Working Group's 
+                    <a href="http://code.google.com/p/zednext/source/browse/trunk/test/z3998/book/valid">source code repository</a>.
+                </p>
+            </div>
+            <div class="rd-section">
+                <h3 id="informative-schemas">Informative schemata</h3>
+                <p>The following informative schemata are available:</p>
+                <dl>
+                    <dt>
+                        <a href="./resources/z3998-book-single.rng" rel="rd:informative-schema-alt">z3998-book-single.rng</a>
+                    </dt>
+                    <dd> A single file version of the normative RelaxNG schema in RelaxNG XML Syntax.</dd>
+                    <dt>
+                        <a href="./resources/z3998-book-single.rnc" rel="rd:informative-schema-alt">z3998-book-single.rnc</a>
+                    </dt>
+                    <dd> A single file version of the normative RelaxNG schema in 
+                        <a href="http://www.oasis-open.org/committees/relax-ng/compact-20021121.html">RelaxNG Compact Syntax</a>. 
+                    </dd>
+                    <dt>
+                        <a href="./resources/z3998-book.xsd" rel="rd:informative-schema-alt">z3998-book.xsd</a>
+                    </dt>
+                    <dd> A W3C XML Schema (XSD) version of the normative schema. This schema contains approximations. It is not guaranteed that instance documents valid to this schema will also be valid to the normative schema. This schema should be used for authoring purposes only; final validation should always be performed against the normative schemata. </dd>
+                    <dt id="sch-extracted">
+                        <a href="./resources/z3998-book.sch">z3998-book.sch</a>
+                    </dt>
+                    <dd>An ISO Schematron schema that contains the Schematron rules extracted from the normative RelaxNG schema.</dd>
+                    <dt id="nvdl">
+                        <a href="./resources/z3998-book.nvdl">z3998-book.nvdl</a>
+                    </dt>
+                    <dd> An experimental NVDL script that combines the RelaxNG and Schematron validation into a single step is also available. Tool support for this script is currently limited. </dd>
+                </dl>
+                <h4 id="informative-schemata-feature-reduced">Feature-reduced schemata</h4>
+                <p>These schemata are variants of the normative RelaxNG schema that have one or several features removed. They are provided for convenience during the authoring stage.</p>
+                <p>An instance document valid to a feature-reduced schema will also be valid to the normative schema.</p>
+                <dl>
+                    <dt>
+                        <a href="z3998-book-nomath.rng" rel="rd:informative-schema-alt">z3998-book-nomath.rng</a>
+                    </dt>
+                    <dd>The normative RelaxNG schema with the MathML Feature removed.</dd>
+                    <dt>
+                        <a href="z3998-book-nossml.rng" rel="rd:informative-schema-alt">z3998-book-nossml.rng</a>
+                    </dt>
+                    <dd>The normative RelaxNG schema with the SSML Integration Feature removed.</dd>
+                    <dt>
+                        <a href="z3998-book-noruby.rng" rel="rd:informative-schema-alt">z3998-book-noruby.rng</a>
+                    </dt>
+                    <dd>The normative RelaxNG schema with the ITS Ruby Feature removed.</dd>
+                    <dt>
+                        <a href="z3998-book-noselect.rng" rel="rd:informative-schema-alt">z3998-book-noselect.rng</a>
+                    </dt>
+                    <dd>The normative RelaxNG schema with the Content Selection Feature removed.</dd>
+                    <dt>
+                        <a href="z3998-book-noforms.rng" rel="rd:informative-schema-alt">z3998-book-noforms.rng</a>
+                    </dt>
+                    <dd>The normative RelaxNG schema with the Print Forms Feature removed.</dd>
+                    <dt>
+                        <a href="z3998-book-norend.rng" rel="rd:informative-schema-alt">z3998-book-norend.rng</a>
+                    </dt>
+                    <dd>The normative RelaxNG schema with the Source Rendition Feature removed.</dd>
+                    <dt>
+                        <a href="z3998-book-nosvg-cdr.rng" rel="rd:informative-schema-alt">z3998-book-nosvg-cdr.rng</a>
+                    </dt>
+                    <dd>The normative RelaxNG schema with the SVG CDR Feature removed.</dd>
+                    <dt>
+                        <a href="z3998-book-nodescription.rng" rel="rd:informative-schema-alt">z3998-book-nodescription.rng</a>
+                    </dt>
+                    <dd>The normative RelaxNG schema with the DIAGRAM Description Feature removed.</dd>
+                    <dt>
+                        <a href="z3998-book-nofeatures.rng" rel="rd:informative-schema-alt">z3998-book-nofeatures.rng</a>
+                    </dt>
+                    <dd>The normative RelaxNG schema with all features removed.</dd>
+                </dl>
+            </div>
+            <div class="rd-section">
+                <h3 id="default-css">Cascading Stylesheet (CSS)</h3>
+                <p> A 
+                    <a href="./resources/z3998-base.css" rel="rd:default-css">default CSS stylesheet</a> is available for use with CSS-aware XML Editing applications. 
+                </p>
+                <p> Refer to 
+                    <a href="http://www.w3.org/TR/xml-stylesheet/">http://www.w3.org/TR/xml-stylesheet/</a> for instructions on how to associate a CSS stylesheet with a document instance. 
+                </p>
+            </div>
+            <div class="rd-section">
+                <h3 id="archives">Archives</h3>
+                <p> The schemas, documentation and resources referenced in this directory are available for download in the following formats: </p>
+                <ul>
+                    <li> as a single 
+                        <a href="z3998-book-1.0.zip" rel="rd:archive">
+                            <code>zip</code> archive 
+                        </a>
+                    </li>
+                    <li> as a single 
+                        <a href="z3998-book-1.0.tar.gz" rel="rd:archive">
+                            <code>tar gzip</code> archive
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="rd-section" property="rd:supporting-software">
+                <h3 id="supporting-software">Supporting software</h3>
+                <p>Refer to the 
+                    <a href="http://www.daisy.org/zw/ZedAI_UserPortal">Z39.98-AI community portal</a> for information on available software tools.
+                </p>
+            </div>
+        </div>
+        <div id="module-list">
+            <h2 id="h_appendix1listingofmodulesinthenormativeschema">Appendix 1: Listing of modules in the normative schema</h2>
+            <p> The below list represents the modules at the time of version 1.0 of this profile. </p>
+            <p class="RFC2119">The occurrence of the keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in documentation fields embedded in these modules are to be interpreted as described in 
+                <a href="http://www.ietf.org/rfc/rfc2119.txt">RFC2119</a>.
+            </p>
+            <ul id="normative-schema-modules">
+                <li>
+                    <a href="./mod/mathml3-common.rng" rel="rd:schema-module">mathml3-common.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/mathml3-content.rng" rel="rd:schema-module">mathml3-content.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/mathml3-presentation.rng" rel="rd:schema-module">mathml3-presentation.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/mathml3-strict-content.rng" rel="rd:schema-module">mathml3-strict-content.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/rdfa-attrib.rng" rel="rd:schema-module">rdfa-attrib.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/ssml-11.rng" rel="rd:schema-module">ssml-11.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/ssml-datatypes.rng" rel="rd:schema-module">ssml-datatypes.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/ssml-phoneme-attrib.rng" rel="rd:schema-module">ssml-phoneme-attrib.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/xforms-nons-11.rng" rel="rd:schema-module">xforms-nons-11.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/xlink.rng" rel="rd:schema-module">xlink.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-abbr.rng" rel="rd:schema-module">z3998-abbr.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-address.rng" rel="rd:schema-module">z3998-address.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-annotation.rng" rel="rd:schema-module">z3998-annotation.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-aside.rng" rel="rd:schema-module">z3998-aside.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-bibliography.rng" rel="rd:schema-module">z3998-bibliography.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-block.rng" rel="rd:schema-module">z3998-block.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-by-attrib.rng" rel="rd:schema-module">z3998-by-attrib.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-caption.rng" rel="rd:schema-module">z3998-caption.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-char.rng" rel="rd:schema-module">z3998-char.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-citation.rng" rel="rd:schema-module">z3998-citation.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-code.rng" rel="rd:schema-module">z3998-code.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-core-attrib.rng" rel="rd:schema-module">z3998-core-attrib.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-cover.rng" rel="rd:schema-module">z3998-cover.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-d.rng" rel="rd:schema-module">z3998-d.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-datatypes.rng" rel="rd:schema-module">z3998-datatypes.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-definition.rng" rel="rd:schema-module">z3998-definition.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-depth-attrib.rng" rel="rd:schema-module">z3998-depth-attrib.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-description.rng" rel="rd:schema-module">z3998-description.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-document.rng" rel="rd:schema-module">z3998-document.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-emph.rng" rel="rd:schema-module">z3998-emph.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-feature-description.rng" rel="rd:schema-module">z3998-feature-description.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-feature-forms.rng" rel="rd:schema-module">z3998-feature-forms.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-feature-its-ruby.rng" rel="rd:schema-module">z3998-feature-its-ruby.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-feature-mathml.rng" rel="rd:schema-module">z3998-feature-mathml.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-feature-rend.rng" rel="rd:schema-module">z3998-feature-rend.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-feature-select.rng" rel="rd:schema-module">z3998-feature-select.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-feature-ssml.rng" rel="rd:schema-module">z3998-feature-ssml.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-feature-svg-cdr.rng" rel="rd:schema-module">z3998-feature-svg-cdr.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-global-classes.rng" rel="rd:schema-module">z3998-global-classes.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-glossary.rng" rel="rd:schema-module">z3998-glossary.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-headings.rng" rel="rd:schema-module">z3998-headings.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-i18n-attrib.rng" rel="rd:schema-module">z3998-i18n-attrib.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-index.rng" rel="rd:schema-module">z3998-index.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-line.rng" rel="rd:schema-module">z3998-line.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-linking.rng" rel="rd:schema-module">z3998-linking.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-list.rng" rel="rd:schema-module">z3998-list.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-meta.rng" rel="rd:schema-module">z3998-meta.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-name.rng" rel="rd:schema-module">z3998-name.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-note.rng" rel="rd:schema-module">z3998-note.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-num.rng" rel="rd:schema-module">z3998-num.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-object.rng" rel="rd:schema-module">z3998-object.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-p.rng" rel="rd:schema-module">z3998-p.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-pagebreak.rng" rel="rd:schema-module">z3998-pagebreak.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-partitions.rng" rel="rd:schema-module">z3998-partitions.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-quote.rng" rel="rd:schema-module">z3998-quote.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-role-attrib.rng" rel="rd:schema-module">z3998-role-attrib.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-s.rng" rel="rd:schema-module">z3998-s.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-section.rng" rel="rd:schema-module">z3998-section.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-span.rng" rel="rd:schema-module">z3998-span.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-sub-sup.rng" rel="rd:schema-module">z3998-sub-sup.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-table.rng" rel="rd:schema-module">z3998-table.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-term.rng" rel="rd:schema-module">z3998-term.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-time.rng" rel="rd:schema-module">z3998-time.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-toc.rng" rel="rd:schema-module">z3998-toc.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-transition.rng" rel="rd:schema-module">z3998-transition.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-verse.rng" rel="rd:schema-module">z3998-verse.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-vocab-contrib-structure.rng" rel="rd:schema-module">z3998-vocab-contrib-structure.rng</a>
+                </li>
+                <li>
+                    <a href="./mod/z3998-w.rng" rel="rd:schema-module">z3998-w.rng</a>
+                </li>
+            </ul>
+        </div>
+        <div class="footer">
+            <p id="docinfo"> This document is a 
+                <em>Z39.98-2012 Resource Directory</em>, compliant with 
+                <a href="http://www.w3.org/TR/rdfa-syntax/">XHTML+RDFa</a> using the 
+                <a href="../../../../vocab/resourcedirectory/">Z39.98-2012 Resource Directory Vocabulary</a>. 
+            </p>
+            <p>Document generated: 2012-04-03T16:21:35.073-07:00.</p>
+        </div>
+    </body>
+</html>

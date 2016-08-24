@@ -1,0 +1,344 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd" []>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1" xml:lang="en-US">
+	  <head>
+		    <meta content="AUTO-UID-5059463624137734586" name="dtb:uid" />
+		    <meta content="2" name="dtb:depth" />
+		
+		    <meta content="TPB Narrator" name="dtb:generator" />
+		    <meta content="27" name="dtb:totalPageCount" />
+		    <meta content="27" name="dtb:maxPageNumber" />
+	     <smilCustomTest bookStruct="PAGE_NUMBER" defaultState="false" id="pagenum" override="visible" />
+      <smilCustomTest bookStruct="NOTE_REFERENCE" defaultState="false" id="noteref" override="visible" />
+      <smilCustomTest bookStruct="NOTE" defaultState="false" id="note" override="visible" />
+   </head>
+  
+	  <docTitle>
+	     <text>Selections from "Great Pictures, As Seen and Described by Famous Writers"</text>
+      <audio clipBegin="0:00:00" clipEnd="0:00:05.848" src="speechgen0001.mp3" />
+   </docTitle>
+  
+	  <docAuthor>
+	     <text>Esther Singleton</text>
+      <audio clipBegin="0:00:05.848" clipEnd="0:00:09.032" src="speechgen0001.mp3" />
+   </docAuthor>
+	
+	  <navMap id="navMap">
+      <navPoint class="h1" id="ncx-2" playOrder="2">
+         <navLabel>
+            <text>  Selections from “Great Pictures, as Seen and Described by Famous Writers”
+</text>
+            <audio clipBegin="0:00:00" clipEnd="0:00:06.343" src="speechgen0002.mp3" />
+         </navLabel>
+         <content src="speechgen0002.smil#tcp4" />
+         <navPoint class="h2" id="ncx-3" playOrder="3">
+            <navLabel>
+               <text>  THE LAST JUDGEMENT (MICHAEL ANGELO)
+</text>
+               <audio clipBegin="0:00:00" clipEnd="0:00:03.580" src="speechgen0003.mp3" />
+            </navLabel>
+            <content src="speechgen0003.smil#tcp6" />
+         </navPoint>
+         <navPoint class="h2" id="ncx-11" playOrder="11">
+            <navLabel>
+               <text>  PORTRAIT OF GEORG GISZE (HOLBEIN)
+</text>
+               <audio clipBegin="0:00:00" clipEnd="0:00:04.173" src="speechgen0004.mp3" />
+            </navLabel>
+            <content src="speechgen0004.smil#tcp111" />
+         </navPoint>
+         <navPoint class="h2" id="ncx-17" playOrder="17">
+            <navLabel>
+               <text>  THE ADORATION OF THE LAMB (VAN EYCK)
+</text>
+               <audio clipBegin="0:00:00" clipEnd="0:00:04.125" src="speechgen0005.mp3" />
+            </navLabel>
+            <content src="speechgen0005.smil#tcp176" />
+         </navPoint>
+         <navPoint class="h2" id="ncx-32" playOrder="32">
+            <navLabel>
+               <text>  THE FIGHTING TÉMÉRAIRE TUGGED TO HER LAST BERTH TO BE BROKEN UP, 1838 (TURNER)
+</text>
+               <audio clipBegin="0:00:00" clipEnd="0:00:06.160" src="speechgen0006.mp3" />
+            </navLabel>
+            <content src="speechgen0006.smil#tcp350" />
+         </navPoint>
+         <navPoint class="h2" id="ncx-38" playOrder="38">
+            <navLabel>
+               <text>  SPRING (BOTTICELLI)
+</text>
+               <audio clipBegin="0:00:00" clipEnd="0:00:04.073" src="speechgen0007.mp3" />
+            </navLabel>
+            <content src="speechgen0007.smil#tcp441" />
+         </navPoint>
+      </navPoint>
+   </navMap>
+	
+	  <pageList id="page">
+      <pageTarget class="pagenum" id="ncx-1" playOrder="1" type="normal" value="1">
+         <navLabel>
+            <text>1</text>
+            <audio clipBegin="0:00:09.032" clipEnd="0:00:12.186" src="speechgen0001.mp3" />
+         </navLabel>
+         <content src="speechgen0001.smil#tcp3" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-4" playOrder="4" type="normal" value="2">
+         <navLabel>
+            <text>2</text>
+            <audio clipBegin="0:01:14.312" clipEnd="0:01:15.442" src="speechgen0003.mp3" />
+         </navLabel>
+         <content src="speechgen0003.smil#tcp21" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-5" playOrder="5" type="normal" value="3">
+         <navLabel>
+            <text>3</text>
+            <audio clipBegin="0:01:39.901" clipEnd="0:01:41.095" src="speechgen0003.mp3" />
+         </navLabel>
+         <content src="speechgen0003.smil#tcp26" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-6" playOrder="6" type="normal" value="4">
+         <navLabel>
+            <text>4</text>
+            <audio clipBegin="0:04:14.907" clipEnd="0:04:16.105" src="speechgen0003.mp3" />
+         </navLabel>
+         <content src="speechgen0003.smil#tcp47" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-8" playOrder="8" type="normal" value="5">
+         <navLabel>
+            <text>5</text>
+            <audio clipBegin="0:06:42.999" clipEnd="0:06:44.312" src="speechgen0003.mp3" />
+         </navLabel>
+         <content src="speechgen0003.smil#tcp65" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-9" playOrder="9" type="normal" value="6">
+         <navLabel>
+            <text>6</text>
+            <audio clipBegin="0:09:14.966" clipEnd="0:09:16.162" src="speechgen0003.mp3" />
+         </navLabel>
+         <content src="speechgen0003.smil#tcp85" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-10" playOrder="10" type="normal" value="7">
+         <navLabel>
+            <text>7</text>
+            <audio clipBegin="0:11:38.003" clipEnd="0:11:39.265" src="speechgen0003.mp3" />
+         </navLabel>
+         <content src="speechgen0003.smil#tcp105" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-12" playOrder="12" type="normal" value="8">
+         <navLabel>
+            <text>8</text>
+            <audio clipBegin="0:02:00.640" clipEnd="0:02:01.749" src="speechgen0004.mp3" />
+         </navLabel>
+         <content src="speechgen0004.smil#tcp127" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-13" playOrder="13" type="normal" value="9">
+         <navLabel>
+            <text>9</text>
+            <audio clipBegin="0:02:48.232" clipEnd="0:02:49.501" src="speechgen0004.mp3" />
+         </navLabel>
+         <content src="speechgen0004.smil#tcp133" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-14" playOrder="14" type="normal" value="10">
+         <navLabel>
+            <text>10</text>
+            <audio clipBegin="0:03:21.568" clipEnd="0:03:22.708" src="speechgen0004.mp3" />
+         </navLabel>
+         <content src="speechgen0004.smil#tcp138" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-16" playOrder="16" type="normal" value="11">
+         <navLabel>
+            <text>11</text>
+            <audio clipBegin="0:06:22.104" clipEnd="0:06:23.412" src="speechgen0004.mp3" />
+         </navLabel>
+         <content src="speechgen0004.smil#tcp169" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-19" playOrder="19" type="normal" value="12">
+         <navLabel>
+            <text>12</text>
+            <audio clipBegin="0:01:53.851" clipEnd="0:01:55.205" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp191" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-20" playOrder="20" type="normal" value="13">
+         <navLabel>
+            <text>13</text>
+            <audio clipBegin="0:02:48.827" clipEnd="0:02:50.288" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp198" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-21" playOrder="21" type="normal" value="14">
+         <navLabel>
+            <text>14</text>
+            <audio clipBegin="0:06:28.576" clipEnd="0:06:29.992" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp225" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-25" playOrder="25" type="normal" value="15">
+         <navLabel>
+            <text>15</text>
+            <audio clipBegin="0:10:08.058" clipEnd="0:10:09.524" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp251" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-26" playOrder="26" type="normal" value="16">
+         <navLabel>
+            <text>16</text>
+            <audio clipBegin="0:13:52.005" clipEnd="0:13:53.497" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp281" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-27" playOrder="27" type="normal" value="17">
+         <navLabel>
+            <text>17</text>
+            <audio clipBegin="0:17:20.431" clipEnd="0:17:22.017" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp307" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-28" playOrder="28" type="normal" value="18">
+         <navLabel>
+            <text>18</text>
+            <audio clipBegin="0:19:54.276" clipEnd="0:19:55.615" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp326" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-31" playOrder="31" type="normal" value="19">
+         <navLabel>
+            <text>19</text>
+            <audio clipBegin="0:23:08.676" clipEnd="0:23:12.176" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp349" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-33" playOrder="33" type="normal" value="20">
+         <navLabel>
+            <text>20</text>
+            <audio clipBegin="0:03:27.956" clipEnd="0:03:29.326" src="speechgen0006.mp3" />
+         </navLabel>
+         <content src="speechgen0006.smil#tcp377" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-34" playOrder="34" type="normal" value="21">
+         <navLabel>
+            <text>21</text>
+            <audio clipBegin="0:06:50.820" clipEnd="0:06:52.368" src="speechgen0006.mp3" />
+         </navLabel>
+         <content src="speechgen0006.smil#tcp395" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-35" playOrder="35" type="normal" value="22">
+         <navLabel>
+            <text>22</text>
+            <audio clipBegin="0:07:39.188" clipEnd="0:07:40.738" src="speechgen0006.mp3" />
+         </navLabel>
+         <content src="speechgen0006.smil#tcp405" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-37" playOrder="37" type="normal" value="23">
+         <navLabel>
+            <text>23</text>
+            <audio clipBegin="0:11:12.991" clipEnd="0:11:14.632" src="speechgen0006.mp3" />
+         </navLabel>
+         <content src="speechgen0006.smil#tcp438" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-39" playOrder="39" type="normal" value="24">
+         <navLabel>
+            <text>24</text>
+            <audio clipBegin="0:02:05.436" clipEnd="0:02:07.117" src="speechgen0007.mp3" />
+         </navLabel>
+         <content src="speechgen0007.smil#tcp454" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-40" playOrder="40" type="normal" value="25">
+         <navLabel>
+            <text>25</text>
+            <audio clipBegin="0:02:55.559" clipEnd="0:02:57.334" src="speechgen0007.mp3" />
+         </navLabel>
+         <content src="speechgen0007.smil#tcp461" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-41" playOrder="41" type="normal" value="26">
+         <navLabel>
+            <text>26</text>
+            <audio clipBegin="0:03:40.412" clipEnd="0:03:42.153" src="speechgen0007.mp3" />
+         </navLabel>
+         <content src="speechgen0007.smil#tcp467" />
+      </pageTarget>
+      <pageTarget class="pagenum" id="ncx-43" playOrder="43" type="normal" value="27">
+         <navLabel>
+            <text>27</text>
+            <audio clipBegin="0:06:32.945" clipEnd="0:06:34.718" src="speechgen0007.mp3" />
+         </navLabel>
+         <content src="speechgen0007.smil#tcp488" />
+      </pageTarget>
+   </pageList>
+  
+   <navList class="note" id="note-navList">
+      <navLabel>
+         <text>note</text>
+      </navLabel>
+      <navTarget class="note" id="ncx-7" playOrder="7">
+         <navLabel>
+            <text>1 Dante, Inferno III.</text>
+            <audio clipBegin="0:06:38.074" clipEnd="0:06:42.999" src="speechgen0003.mp3" />
+         </navLabel>
+         <content src="speechgen0003.smil#tcp64" />
+      </navTarget>
+      <navTarget class="note" id="ncx-15" playOrder="15">
+         <navLabel>
+            <text>2 In one corner of the picture is found this inscription with its Latin distich:</text>
+            <audio clipBegin="0:05:59.751" clipEnd="0:06:05.707" src="speechgen0004.mp3" />
+         </navLabel>
+         <content src="speechgen0004.smil#tcp163" />
+      </navTarget>
+      <navTarget class="note" id="ncx-18" playOrder="18">
+         <navLabel>
+            <text>3 We read on one of these letters: Dem erszamen Jergen Gisze to Lunden in Engelant, mynem broder to handen.</text>
+            <audio clipBegin="0:00:05.398" clipEnd="0:00:14.513" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp178" />
+      </navTarget>
+      <navTarget class="note" id="ncx-22" playOrder="22">
+         <navLabel>
+            <text>4 Carton, Les Trois Frères van Eyck, p. 36.</text>
+            <audio clipBegin="0:07:20.208" clipEnd="0:07:26.515" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp232" />
+      </navTarget>
+      <navTarget class="note" id="ncx-23" playOrder="23">
+         <navLabel>
+            <text>5 Marc van Vaernewijck in a MS. of 1566-8, describing the Ghent troubles, states that on the 19th of August, two days before the iconoclasts plundered St. </text>
+            <audio clipBegin="0:07:26.515" clipEnd="0:07:38.656" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp233" />
+      </navTarget>
+      <navTarget class="note" id="ncx-24" playOrder="24">
+         <navLabel>
+            <text>6 "The pictures here exhibited as the works of Hemmelinck, Messis, Lucas of Holland, A. </text>
+            <audio clipBegin="0:08:10.835" clipEnd="0:08:17.567" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp238" />
+      </navTarget>
+      <navTarget class="note" id="ncx-29" playOrder="29">
+         <navLabel>
+            <text>7 This appears from the following inscription of the time, on the frame of the outer wing:—</text>
+            <audio clipBegin="0:21:42.126" clipEnd="0:21:48.640" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp339" />
+      </navTarget>
+      <navTarget class="note" id="ncx-30" playOrder="30">
+         <navLabel>
+            <text>8 [Dr. </text>
+            <audio clipBegin="0:22:26.021" clipEnd="0:22:28.553" src="speechgen0005.mp3" />
+         </navLabel>
+         <content src="speechgen0005.smil#tcp346" />
+      </navTarget>
+      <navTarget class="note" id="ncx-36" playOrder="36">
+         <navLabel>
+            <text>9 Mr. </text>
+            <audio clipBegin="0:08:08.131" clipEnd="0:08:10.769" src="speechgen0006.mp3" />
+         </navLabel>
+         <content src="speechgen0006.smil#tcp410" />
+      </navTarget>
+      <navTarget class="note" id="ncx-42" playOrder="42">
+         <navLabel>
+            <text>10 See notably the Stanze of Politian, where one will find nearly all the details of Botticelli's picture; the shady grove, the flowery meadow, even the attitudes and the garments of the personages. </text>
+            <audio clipBegin="0:06:07.677" clipEnd="0:06:20.350" src="speechgen0007.mp3" />
+         </navLabel>
+         <content src="speechgen0007.smil#tcp484" />
+      </navTarget>
+   </navList>
+</ncx>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The core attributes module </title>
+        <annotation annotates="/">
+            <para>This module defines the xml.id , xml.space , xml.base and class attributes that constitute the core attributes collection that is available for all elements in a profile's core markup model. </para>
+            <para>The core attributes are all optional, but the module activation process provides a mechanism to require some or all of the attributes. </para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="xml.id.attrib">
+            <attribute name="xml:id">
+                <a:documentation>The xml:id attribute specifies a unique identifier for the element. No two elements in an xml document can have the same xml:id, including inside components that are appended to the primary document by xinclude statements or other means. The semantics of this attribute are defined by refXMLID . </a:documentation>
+                <ref name="ID.datatype"/>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <define name="xml.space.attrib">
+            <attribute name="xml:space">
+                <a:documentation>The xml:space attribute indicates whether the whitespace within an element is significant. The semantics of this attribute are defined by refXML . Refer to White Space Handling for more information. </a:documentation>
+                <ref name="xml.space.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="xml.space.attrib.content">
+            <choice>
+                <value>default</value>
+                <a:documentation>Signals that applications' default white-space processing modes are acceptable for this element. </a:documentation>
+                <value>preserve</value>
+                <a:documentation>Signals the intent that applications preserve white space for this element. </a:documentation>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <define name="xml.base.attrib">
+            <attribute name="xml:base">
+                <a:documentation>The xml:base attribute specifies a base URI to use for resolving relative URI references, for instances where the base URI of the document or external entity is not appropriate. The semantics and behaviors of this attribute are defined by refXMLBase . </a:documentation>
+                <ref name="xml.base.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="xml.base.attrib.content">
+            <ref name="URI.datatype"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.class.attrib">
+            <attribute name="class">
+                <a:documentation>The class attribute provides the ability to express general classifying or commonality between elements. This attribute inherits all the fundamental properties of the (X)HTML class attribute and is usable in the context of CSS styling . The class attribute is not used to inflect semantics or structure on elements or their contents. Refer to the role attribute for more information on how to layer semantic meaning on elements. </a:documentation>
+                <ref name="NMTOKENS.datatype"/>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.Core.attrib" combine="interleave">
+            <a:documentation>A set of attributes, initially consisting of the xml.id , xml.space , xml.base and class attributes. </a:documentation>
+            <optional>
+                <ref name="xml.id.attrib"/>
+            </optional>
+            <optional>
+                <ref name="xml.space.attrib"/>
+            </optional>
+            <optional>
+                <ref name="xml.base.attrib"/>
+            </optional>
+            <optional>
+                <ref name="z3998.class.attrib"/>
+            </optional>
+            <ref name="z3998.Core.extern.attrib"/>
+        </define>
+        <define name="z3998.Core.extern.attrib" combine="interleave">
+            <a:documentation>A pattern for external (to this module) contributions to the z3998.Core.attrib pattern. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Core.attrib.xml.id.required" combine="interleave">
+            <a:documentation>A convenience pattern. </a:documentation>
+            <ref name="xml.id.attrib"/>
+            <optional>
+                <ref name="xml.space.attrib"/>
+            </optional>
+            <optional>
+                <ref name="xml.base.attrib"/>
+            </optional>
+            <optional>
+                <ref name="z3998.class.attrib"/>
+            </optional>
+            <ref name="z3998.Core.extern.attrib"/>
+        </define>
+    </div>
+</grammar>

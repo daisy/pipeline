@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the body element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element">body</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d688e46">Usage Example</a></li>
+               <li class="h2"><a href="#d688e50">Allowed parents</a></li>
+               <li class="h2"><a href="#d688e56">Allowed children</a></li>
+               <li class="h2"><a href="#d688e92">Content model</a></li>
+               <li class="h2"><a href="#d688e217">Namespace</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The description 
+                  <code>body</code> element contains the accessible description forms that readers can select from depending on their needs.
+                  
+               </p>
+               <p class="description ">The description 
+                  <code>body</code> must minimally contain the primary description of the associated content in a child 
+                  <code>
+                     <a href="e-longdesc01.html">longdesc</a>
+                     </code> element.
+                  
+               </p>
+               <p class="description ">The description body may also optionally compliment the primary description with a briefer 
+                  <a href="e-summary01.html">summary</a> and a 
+                  <a href="e-simplifiedLanguageDescription01.html">simplified language representation</a>.
+                  
+               </p>
+               <p class="description ">The 
+                  <code>body</code> of the description can also be used to carry alternative images for readers unable to adequately interact with the source
+                  image. The 
+                  <code>
+                     <a href="e-tactile01.html">tactile</a>
+                     </code> element can be used to include a tactile image and accompanying 
+                  <a href="e-tour01.html">tour</a>, and the 
+                  <code>
+                     <a href="e-simplifiedImage01.html">simplifiedImage</a>
+                     </code> element can be used to include images more accessible to various reader needs.
+                  
+               </p>
+            </div>
+            <h2 id="d688e46">Usage Example</h2><pre>
+&lt;d:body&gt;
+    &lt;d:summary&gt;…&lt;/d:summary&gt;
+    &lt;d:longdesc&gt;…&lt;/d:longdesc&gt;
+    &lt;d:simplifiedLanguageDescription&gt;…&lt;/d:simplifiedLanguageDescription&gt;
+    &lt;d:tactile&gt;…&lt;/d:tactile&gt;
+    &lt;d:simplifiedImage&gt;…&lt;/d:simplifiedImage&gt;
+&lt;/d:body&gt;
+    </pre><h2 id="d688e50">Allowed parents</h2>
+            <p><a class="element" href="e-description04.html">d:description</a>
+               
+            </p>
+            <h2 id="d688e56">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>must</em> contain the following children: <a class="element" href="e-longdesc01.html">d:longdesc</a>
+               
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-annotation01.html">annotation</a>, 
+               <a class="element" href="e-simplifiedImage01.html">d:simplifiedImage</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-summary01.html">d:summary</a> and 
+               <a class="element" href="e-tactile01.html">d:tactile</a>
+               
+            </p>
+            <h2 id="d688e92">Content model</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role11">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#onlangfailure01">@ssml:onlangfailure</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-term">a mix of</span>
+                  
+                  <div class="rng">• <span class="rng-term">an optional </span>
+                     <a class="element" href="e-summary01.html">d:summary</a>
+                     
+                  </div>
+                  
+                  <div class="rng">• <a class="element" href="e-longdesc01.html">d:longdesc</a></div>
+                  
+                  <div class="rng">• <span class="rng-term">an optional </span>
+                     <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>
+                     
+                  </div>
+                  
+                  <div class="rng">• <span class="rng-term">an optional </span>
+                     <a class="element" href="e-tactile01.html">d:tactile</a>
+                     
+                  </div>
+                  
+                  <div class="rng">• <span class="rng-term">an optional </span>
+                     <a class="element" href="e-simplifiedImage01.html">d:simplifiedImage</a>
+                     
+                  </div>
+                  
+                  <div class="rng">• <span class="rng-term">zero or more of </span>
+                     <a class="element" href="e-annotation01.html">annotation</a>
+                     
+                  </div>
+                  <span class="rng-term">end of mix</span></div>
+            </div>
+            <h2 id="d688e217">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/features/description/</span></p>
+         </div>
+      </div>
+   </body>
+</html>

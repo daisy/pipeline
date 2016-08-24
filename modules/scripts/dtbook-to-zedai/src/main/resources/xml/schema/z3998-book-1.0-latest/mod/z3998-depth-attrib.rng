@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The depth module </title>
+        <annotation annotates="/">
+            <para>This module defines the depth attribute for indicating the current nesting depth of like elements. </para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.depth.attrib">
+            <attribute name="depth">
+                <a:documentation>The depth attribute specifies the nesting depth of the current element in relation to ancestors of the same type. An element's name alone does not infer an ancestral relationship; the usage context is equally important. For example, the depth of the first index section is not influenced by the number of structural sections that may enclose the index. The outermost ancestor has the implied depth value 0. </a:documentation>
+                <ref name="NonNegativeInteger.datatype"/>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <a:documentation>Depth attribute module - default content model contribution </a:documentation>
+        <define name="z3998.section.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.depth.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.toc.section.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.depth.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.bibliography.section.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.depth.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.index.section.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.depth.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.verse.section.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.depth.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.glossary.section.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.depth.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.list.block.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.depth.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.toc.entry.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.depth.attrib"/>
+            </optional>
+        </define>
+    </div>
+</grammar>

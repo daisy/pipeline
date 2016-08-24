@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         ns="http://www.w3.org/2001/10/synthesis">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The SSML Element Integration Module </title>
+        <annotation annotates="/">
+            <para>Provides a subset of the W3C Speech Synthesis Markup Language (SSML) Version 1.1 element set, suitable for integration in Z39.98-2012 Profiles. </para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <legalnotice>
+            <para>Copyright 1998-2008 W3C (MIT, ERCIM, Keio), All Rights Reserved. Permission to use, copy, modify and distribute the SSML schema and its accompanying documentation for any purpose and without fee is hereby granted in perpetuity, provided that the above copyright notice and this paragraph appear in all copies.</para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="ssml.break">
+            <element name="break">
+                <a:documentation>Controls the pausing or other prosodic boundaries between tokens. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.break.attlist"/>
+                <empty/>
+            </element>
+        </define>
+        <define name="ssml.break.attlist" combine="interleave">
+            <optional>
+                <ref name="ssml.strength.attrib"/>
+            </optional>
+            <optional>
+                <ref name="ssml.time.attrib"/>
+            </optional>
+            <optional>
+                <ref name="xml.id.attrib"/>
+            </optional>
+        </define>
+        <define name="ssml.strength.attrib">
+            <attribute name="strength">
+                <a:documentation>Indicates the prosodic strength of the break in the speech output. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.strength.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="ssml.strength.attrib.content">
+            <choice>
+                <value>none</value>
+                <a:documentation>Indicates that no prosodic break boundary should be output. </a:documentation>
+                <value>x-weak</value>
+                <value>weak</value>
+                <value>medium</value>
+                <value>strong</value>
+                <value>x-strong</value>
+            </choice>
+        </define>
+        <define name="ssml.time.attrib">
+            <attribute name="time">
+                <a:documentation>Indicates the duration of a pause to be inserted in the output in seconds or milliseconds. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="CSS.TimeValue.datatype"/>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <define name="ssml.onlangfailure.attrib">
+            <attribute name="ssml:onlangfailure" ns="http://www.w3.org/2001/10/synthesis">
+                <a:documentation>Describes the desired behavior of a synthesis processor upon language speaking failure. The value of this attribute is inherited by descendants. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.onlangfailure.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="ssml.onlangfailure.attrib.content">
+            <choice>
+                <value>changevoice</value>
+                <a:documentation>if a voice exists that can speak the language, the synthesis processor will switch to that voice and speak the content. Otherwise, the processor chooses another behavior (either ignoretext or ignorelang) </a:documentation>
+                <value>ignoretext</value>
+                <a:documentation>the synthesis processor will not attempt to render the text that is in the failed language. </a:documentation>
+                <value>ignorelang</value>
+                <a:documentation>the synthesis processor will ignore the change in language and speak as if the content were in the previous language. </a:documentation>
+                <value>processorchoice</value>
+                <a:documentation>processorchoice - the synthesis processor chooses the behavior (either changevoice, ignoretext, or ignorelang). </a:documentation>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <define name="ssml.phoneme">
+            <element name="phoneme">
+                <a:documentation>Provides a phonemic/phonetic pronunciation for the contained text. The phoneme element may be empty. However, it is recommended that the element contain human-readable text that can be used for non-spoken rendering of the document. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.phoneme.attlist"/>
+                <ref name="ssml.phoneme.content"/>
+                <sch:rule context="ssml:phoneme">
+                    <sch:assert test="not(descendant::ssml:*) and not(descendant::*[@ssml:*])">The ssml:phoneme element must not have ssml namespace element or attribute descendants. </sch:assert>
+                    <sch:assert test="normalize-space(.) or *">The ssml:phoneme element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="ssml.phoneme.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="ssml.phoneme.attlist" combine="interleave">
+            <ref name="ssml.ph.attrib"/>
+            <optional>
+                <ref name="ssml.alphabet.attrib"/>
+            </optional>
+            <ref name="z3998.Core.attrib"/>
+            <ref name="z3998.I18n.attrib"/>
+        </define>
+        <define name="ssml.phoneme.text">
+            <element name="phoneme">
+                <a:documentation>Provides a phonemic/phonetic pronunciation for the contained text. The phoneme element may be empty. However, it is recommended that the element contain human-readable text that can be used for non-spoken rendering of the document. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.phoneme.attlist"/>
+                <ref name="ssml.phoneme.text.content"/>
+            </element>
+        </define>
+        <define name="ssml.phoneme.text.content">
+            <ref name="z3998.Text.model"/>
+        </define>
+        <define name="ssml.ph.attrib">
+            <attribute name="ph">
+                <a:documentation>Specifies a phonemic/phonetic pronunciation for the text contained in the current element. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.ph.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="ssml.ph.attrib.content">
+            <ref name="SSML.PhoneticExpression.datatype"/>
+        </define>
+        <define name="ssml.alphabet.attrib">
+            <attribute name="alphabet">
+                <a:documentation>Specifies which phonemic/phonetic pronunciation alphabet is used in the ssml.ph attribute. If omitted, the implicit value x-SAMPA is assumed. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.alphabet.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="ssml.alphabet.attrib.content">
+            <ref name="SSML.alphabet.datatype"/>
+        </define>
+    </div>
+    <div>
+        <define name="ssml.prosody">
+            <element name="prosody">
+                <a:documentation>Permits control of the pitch, speaking rate and volume of speech output. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.prosody.attlist"/>
+                <ref name="ssml.prosody.content"/>
+                <sch:rule context="ssml:prosody">
+                    <sch:assert test="not(descendant::ssml:prosody)">The ssml:prosody element must not have ssml:prosody descendants. </sch:assert>
+                    <sch:assert test="normalize-space(.) or *">The ssml:prosody element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="ssml.prosody.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="ssml.prosody.attlist" combine="interleave">
+            <optional>
+                <ref name="ssml.pitch.attrib"/>
+            </optional>
+            <optional>
+                <ref name="ssml.contour.attrib"/>
+            </optional>
+            <optional>
+                <ref name="ssml.range.attrib"/>
+            </optional>
+            <optional>
+                <ref name="ssml.rate.attrib"/>
+            </optional>
+            <optional>
+                <ref name="ssml.duration.attrib"/>
+            </optional>
+            <optional>
+                <ref name="ssml.volume.attrib"/>
+            </optional>
+            <ref name="z3998.Core.attrib"/>
+            <ref name="z3998.I18n.attrib"/>
+        </define>
+        <define name="ssml.prosody.text">
+            <element name="prosody">
+                <a:documentation>Permits control of the pitch, speaking rate and volume of speech output. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.prosody.attlist"/>
+                <ref name="ssml.prosody.text.content"/>
+            </element>
+        </define>
+        <define name="ssml.prosody.text.content">
+            <ref name="z3998.Text.model"/>
+        </define>
+        <define name="ssml.pitch.attrib">
+            <attribute name="pitch">
+                <a:documentation>Specifies the baseline pitch for the contained text. The labels x-low through x-high represent a sequence of monotonically non-decreasing pitch levels. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.pitch.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="ssml.pitch.attrib.content">
+            <choice>
+                <value>x-low</value>
+                <value>low</value>
+                <value>medium</value>
+                <value>high</value>
+                <value>x-high</value>
+                <value>default</value>
+                <ref name="SSML.RelativeChange.datatype"/>
+                <ref name="SSML.PitchExpression.datatype"/>
+            </choice>
+        </define>
+        <define name="ssml.contour.attrib">
+            <attribute name="contour">
+                <a:documentation>Sets the pitch contour for the contained text. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.contour.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="ssml.contour.attrib.content">
+            <ref name="SSML.PitchContour.datatype"/>
+        </define>
+        <define name="ssml.range.attrib">
+            <attribute name="range">
+                <a:documentation>Specifies the pitch range (variability) for the contained text. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.pitch.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="ssml.rate.attrib">
+            <attribute name="rate">
+                <a:documentation>Specifies a change in the speaking rate for the contained text. The values x-slow through x-fast represent a sequence of monotonically non-decreasing speaking rates. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.rate.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="ssml.rate.attrib.content">
+            <choice>
+                <value>x-slow</value>
+                <value>slow</value>
+                <value>medium</value>
+                <value>fast</value>
+                <value>x-fast</value>
+                <value>default</value>
+                <ref name="SSML.NonNegativePercentage.datatype"/>
+            </choice>
+        </define>
+        <define name="ssml.duration.attrib">
+            <attribute name="duration">
+                <a:documentation>Specifies a value in seconds or milliseconds for the desired time to take to read the contained text. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="CSS.TimeValue.datatype"/>
+            </attribute>
+        </define>
+        <define name="ssml.volume.attrib">
+            <attribute name="volume">
+                <a:documentation>Specifies the volume for the contained text. If omitted, the implicit value +0.0dB is assumed. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.volume.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="ssml.volume.attrib.content">
+            <choice>
+                <value>silent</value>
+                <value>x-soft</value>
+                <value>soft</value>
+                <value>medium</value>
+                <value>loud</value>
+                <value>x-loud</value>
+                <value>default</value>
+                <ref name="SSML.VolumeExpression.datatype"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <define name="ssml.say-as">
+            <element name="say-as">
+                <a:documentation>Provides information on the type of text construct contained within the element to help specify the level of detail for rendering the contained text. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.say-as.attlist"/>
+                <ref name="ssml.say-as.content"/>
+                <sch:rule context="ssml:say-as">
+                    <sch:assert test="normalize-space(.) or *">The ssml:say-as element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="ssml.say-as.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="ssml.say-as.text">
+            <element name="say-as">
+                <a:documentation>Provides information on the type of text construct contained within the element to help specify the level of detail for rendering the contained text. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.say-as.attlist"/>
+                <ref name="ssml.say-as.text.content"/>
+            </element>
+        </define>
+        <define name="ssml.say-as.text.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="ssml.say-as.attlist" combine="interleave">
+            <ref name="ssml.interpret-as.attrib"/>
+            <optional>
+                <ref name="ssml.format.attrib"/>
+            </optional>
+            <optional>
+                <ref name="ssml.detail.attrib"/>
+            </optional>
+            <ref name="z3998.Core.attrib"/>
+            <ref name="z3998.I18n.attrib"/>
+        </define>
+        <define name="ssml.interpret-as.attrib">
+            <attribute name="interpret-as">
+                <a:documentation>Indicates the content type of the contained text construct. Refer to SSML 1.1 for further information. </a:documentation>
+                <choice>
+                    <value>date</value>
+                    <a:documentation>Indicates that the contained text is a Gregorian calendar date. </a:documentation>
+                    <value>time</value>
+                    <a:documentation>Indicates that the contained text is a time. </a:documentation>
+                    <value>telephone</value>
+                    <a:documentation>Indicates that the contained text is a telephone number. </a:documentation>
+                    <value>characters</value>
+                    <a:documentation>Indicates that the enclosed text should be spoken as a series of alpha-numeric characters. </a:documentation>
+                    <value>cardinal</value>
+                    <a:documentation>Indicates that the enclosed text is an integral or decimal number and should be spoken as a cardinal number (as opposed to an ordinal number or digit string). </a:documentation>
+                    <value>ordinal</value>
+                    <a:documentation>Indicates that the enclosed text is an integral number and should be spoken as an ordinal number (as opposed to a cardinal number or digit string). </a:documentation>
+                </choice>
+            </attribute>
+        </define>
+        <define name="ssml.format.attrib">
+            <attribute name="format">
+                <a:documentation>In addition to ssml.interpret-as , provides further hints on the precise formatting of the contained text for content types that may have ambiguous formats. Refer to SSML 1.1 for further information. </a:documentation>
+            </attribute>
+        </define>
+        <define name="ssml.detail.attrib">
+            <attribute name="detail">
+                <a:documentation>Indicates the level of detail to be read aloud or rendered. Refer to SSML 1.1 for further information. </a:documentation>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <define name="ssml.sub">
+            <element name="sub">
+                <a:documentation>Indicates that the text in the alias attribute value replaces the contained text for pronunciation. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.sub.attlist"/>
+                <ref name="ssml.sub.content"/>
+                <sch:rule context="ssml:sub">
+                    <sch:assert test="normalize-space(.) or *">The ssml:sub element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="ssml.sub.attlist" combine="interleave">
+            <ref name="ssml.alias.attrib"/>
+            <ref name="z3998.Core.attrib"/>
+            <ref name="z3998.I18n.attrib"/>
+        </define>
+        <define name="ssml.alias.attrib">
+            <attribute name="alias">
+                <a:documentation>Specifies the string to be spoken instead of the string in the sub element. Refer to SSML 1.1 for further information. </a:documentation>
+            </attribute>
+        </define>
+        <define name="ssml.sub.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="ssml.sub.text">
+            <element name="sub">
+                <a:documentation>Indicates that the text in the alias attribute value replaces the contained text for pronunciation. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.sub.attlist"/>
+                <ref name="ssml.sub.text.content"/>
+            </element>
+        </define>
+        <define name="ssml.sub.text.content">
+            <ref name="z3998.Text.model"/>
+        </define>
+    </div>
+    <div>
+        <define name="ssml.token">
+            <element name="token">
+                <a:documentation>Indicates that the content is a token in order to to eliminate token (word) segmentation ambiguities of a synthesis processor. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.token.attlist"/>
+                <ref name="ssml.token.content"/>
+                <sch:rule context="ssml:token">
+                    <sch:assert test="normalize-space(.) or *">The ssml:token element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="ssml.token.attlist" combine="interleave">
+            <ref name="z3998.Text.attrib"/>
+        </define>
+        <define name="ssml.token.content">
+            <ref name="z3998.Text.model"/>
+        </define>
+        <define name="ssml.token.text">
+            <element name="token">
+                <a:documentation>Indicates that the content is a token in order to to eliminate token (word) segmentation ambiguities of a synthesis processor. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.token.attlist"/>
+                <ref name="ssml.token.text.content"/>
+            </element>
+        </define>
+        <define name="ssml.token.text.content">
+            <ref name="z3998.Text.model"/>
+        </define>
+    </div>
+    <div>
+        <define name="ssml.lexicon">
+            <element name="lexicon">
+                <a:documentation>Specifies a reference to a lexicon document. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="ssml.lexicon.attlist"/>
+                <empty/>
+            </element>
+        </define>
+        <define name="ssml.lexicon.attlist">
+            <ref name="ssml.lexicon.uri.attrib"/>
+            <ref name="xml.id.attrib"/>
+            <optional>
+                <ref name="ssml.lexicon.type.attrib"/>
+            </optional>
+        </define>
+        <define name="ssml.lexicon.uri.attrib">
+            <attribute name="uri">
+                <a:documentation>Identifies the location of the lexicon document. Refer to SSML 1.1 for further information. </a:documentation>
+                <ref name="URI.datatype"/>
+            </attribute>
+        </define>
+        <define name="ssml.lexicon.type.attrib">
+            <attribute name="type">
+                <a:documentation>Specifies the media type of the lexicon document. The implicit value of this attribute is application/pls+xml, the media type associated with the Pronunciation Lexicon Specification . Refer to SSML 1.1 for further information. </a:documentation>
+                <choice>
+                    <value>application/pls+xml</value>
+                    <ref name="MediaType.datatype"/>
+                </choice>
+            </attribute>
+        </define>
+    </div>
+</grammar>

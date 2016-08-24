@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the num element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element">num</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d152e55">Usage Example</a></li>
+               <li class="h2"><a href="#d152e59">Allowed parents</a></li>
+               <li class="h2"><a href="#d152e305">Allowed children</a></li>
+               <li class="h2"><a href="#d152e361">Content model and additional requirements</a></li>
+               <li class="h2"><a href="#d152e506">Namespace</a></li>
+               <li class="h2"><a href="#schemadoc-longdesc">Usage Details</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The 
+                  <code>num</code> element represents a set of Arabic or Roman numerals that taken together indicate a single value or represent a single number
+                  in a standardized format.
+                  
+               </p>
+               <p class="description ">Examples of numbers include: cardinal and ordinal values, weights, measures, currency values, postal codes, telephone numbers,
+                  ISBN numbers, scores and results, etc. Where these values include units of measure or other symbols integral to their understanding,
+                  the units and symbols must be included as a part of the 
+                  <code>num</code> element.
+                  
+               </p>
+               <p class="description ">The 
+                  <code>
+                     <a href="attributes.html#role11">role</a>
+                     </code> attribute optionally expresses the semantic nature of the number. If omitted, the implicit value 
+                  <code>cardinal</code> is assumed.
+                  
+               </p>
+               <p class="description ">If the value of the 
+                  <code>num</code> element is not in a machine-readable format, the 
+                  <code>
+                     <a href="attributes.html#value04">value (num)</a>
+                     </code> attribute optionally allows the inclusion of an alternate representation.
+                  
+               </p>
+               <p class="description ">The MathML feature is intended for marking proper mathematical statements within documents and should be used in preference
+                  over the 
+                  <code>num</code> element whenever equations, formulae or other formal mathematic constructs or operators are being marked.
+                  
+               </p>
+               <p class="description ">The 
+                  <code>num</code> element must not be used to mark instances of dates and times. Refer to the 
+                  <code>
+                     <a href="e-time01.html">time</a>
+                     </code> element for more information.
+                  
+               </p>
+               <p class="longdesc-link">Usage details available in the <a href="#schemadoc-longdesc">Usage Details</a> section.
+               </p>
+            </div>
+            <h2 id="d152e55">Usage Example</h2><pre>
+At this rate, on the above data, the denudation of the Weald must have 
+required &lt;num&gt;306,662,400&lt;/num&gt; years;  or say 
+&lt;num value="300,000,000"&gt;three hundred million&lt;/num&gt; years.
+    </pre><h2 id="d152e59">Allowed parents</h2>
+            <p><a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annoref01.html">annoref</a>, 
+               <a class="element" href="e-annotation01.html">annotation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-annotation02.html">annotation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-annotation-xml01.html">m:annotation-xml</a>, 
+               <a class="element" href="e-aside02.html">aside (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-aside03.html">aside (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-citation01.html">citation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-citation02.html">citation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-d01.html">d</a>, 
+               <a class="element" href="e-definition01.html">definition</a>, 
+               <a class="element" href="e-description01.html">description (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-description02.html">description (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-emph01.html">emph</a>, 
+               <a class="element" href="e-entry01.html">entry (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-entry02.html">entry (<span class="element-variant">index</span> variant)</a>, 
+               <a class="element" href="e-entry03.html">entry (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-entry04.html">entry (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-expansion01.html">expansion</a>, 
+               <a class="element" href="e-group01.html">xforms:group</a>, 
+               <a class="element" href="e-h01.html">h</a>, 
+               <a class="element" href="e-hd01.html">hd</a>, 
+               <a class="element" href="e-hpart01.html">hpart</a>, 
+               <a class="element" href="e-item01.html">item</a>, 
+               <a class="element" href="e-label01.html">xforms:label</a>, 
+               <a class="element" href="e-ln02.html">ln</a>, 
+               <a class="element" href="e-longdesc01.html">d:longdesc</a>, 
+               <a class="element" href="e-meta01.html">meta</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-noteref01.html">noteref</a>, 
+               <a class="element" href="e-object01.html">object (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-object02.html">object (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-otherwise02.html">sel:otherwise</a>, 
+               <a class="element" href="e-p01.html">p</a>, 
+               <a class="element" href="e-phoneme01.html">ssml:phoneme</a>, 
+               <a class="element" href="e-prosody01.html">ssml:prosody</a>, 
+               <a class="element" href="e-quote01.html">quote (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-quote02.html">quote (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-rb01.html">its:rb</a>, 
+               <a class="element" href="e-ref01.html">ref</a>, 
+               <a class="element" href="e-repeat01.html">xforms:repeat</a>, 
+               <a class="element" href="e-rt01.html">its:rt</a>, 
+               <a class="element" href="e-s01.html">s</a>, 
+               <a class="element" href="e-say-as01.html">ssml:say-as (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-span01.html">span</a>, 
+               <a class="element" href="e-spine01.html">spine</a>, 
+               <a class="element" href="e-sub02.html">ssml:sub</a>, 
+               <a class="element" href="e-summary01.html">d:summary</a>, 
+               <a class="element" href="e-td01.html">td</a>, 
+               <a class="element" href="e-term01.html">term</a>, 
+               <a class="element" href="e-th01.html">th</a>, 
+               <a class="element" href="e-tour01.html">d:tour</a> and 
+               <a class="element" href="e-when01.html">sel:when</a>
+               
+            </p>
+            <h2 id="d152e305">Allowed children</h2>
+            <p>This element <em>may</em> contain text.
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-break01.html">ssml:break</a>, 
+               <a class="element" href="e-char01.html">char</a>, 
+               <a class="element" href="e-emph02.html">emph</a>, 
+               <a class="element" href="e-object03.html">object</a>, 
+               <a class="element" href="e-pagebreak01.html">pagebreak</a>, 
+               <a class="element" href="e-phoneme02.html">ssml:phoneme</a>, 
+               <a class="element" href="e-prosody02.html">ssml:prosody</a>, 
+               <a class="element" href="e-ruby01.html">its:ruby</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as</a>, 
+               <a class="element" href="e-span02.html">span</a>, 
+               <a class="element" href="e-sub01.html">sub</a>, 
+               <a class="element" href="e-sub03.html">ssml:sub</a>, 
+               <a class="element" href="e-sup01.html">sup</a> and 
+               <a class="element" href="e-token02.html">ssml:token</a>
+               
+            </p>
+            <h2 id="d152e361">Content model and additional requirements</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role10">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#onlangfailure01">@ssml:onlangfailure</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#value04">@value</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-term">optionally the following 2 co-ocurring attributes: </span><a class="attribute" href="attributes.html#alphabet02">@ssml:alphabet</a> and <a class="attribute" href="attributes.html#ph02">@ssml:ph</a></div>
+               <div class="rng"><span class="rng-term">one or more of </span>
+                  
+                  <div class="rng"><span class="tng-term">a choice of </span><div class="rng">either one of the 14 elements: <a class="element" href="e-char01.html">char</a>, <a class="element" href="e-emph02.html">emph</a>, <a class="element" href="e-ruby01.html">its:ruby</a>, <a class="element" href="e-object03.html">object</a>, <a class="element" href="e-pagebreak01.html">pagebreak</a>, <a class="element" href="e-span02.html">span</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-phoneme02.html">ssml:phoneme</a>, <a class="element" href="e-prosody02.html">ssml:prosody</a>, <a class="element" href="e-say-as02.html">ssml:say-as</a>, <a class="element" href="e-sub03.html">ssml:sub</a>, <a class="element" href="e-token02.html">ssml:token</a>, <a class="element" href="e-sub01.html">sub</a> or <a class="element" href="e-sup01.html">sup</a></div>
+                     <div class="rng">or text</div><span class="tng-term">end of choice</span></div>
+                  
+               </div>
+               <div class="schematron-asserts-and-reports">Note that in addition to restrictions presented in the content model  above, 
+                  					use of this element must also respect the following requirement:
+                  <ul>
+                     <li>The 
+                        <code>num</code> element must neither be empty nor contain only whitespace.
+                        
+                     </li>
+                  </ul>
+                  <div>Such requirements take precedence over any conflicting statements in the
+                     						content model or in the lists above of allowed children and parents.
+                  </div>
+               </div>
+            </div>
+            <h2 id="d152e506">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+            <h2 id="schemadoc-longdesc">Usage Details</h2>
+            
+            <p> Following are examples of how the 
+               <code>num</code> element can be used to format identifiers and numbers that are not used in mathemtatical contexts: 
+               
+            </p>
+            
+            <ul>
+               
+               <li>
+                  
+                  <p>Cardinal Numbers</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+&lt;num role="cardinal" value="30,000"&gt;30.000&lt;/num&gt; lightyears away.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Ordinal Numbers</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+The &lt;num role="ordinal"&gt;1st&lt;/num&gt; person on the moon was Neil Armstrong.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Roman Numerals</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+The motion picture release date is listed as &lt;num role="roman" value="1948"&gt;mcmxlviii&lt;/num&gt;.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Phone Numbers</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+The conference call in line was &lt;num role="phone"&gt;+1 416-486-2500&lt;/num&gt;
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>ISBN numbers</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+Lib. Binding: &lt;num role="isbn"&gt;978-1-1234-4567-1&lt;/num&gt;
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Postal Code</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+There is, in fact, no &lt;num role="postal"&gt;90210&lt;/num&gt; zip code in the United States.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Currencies</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+The US dollar is currently trading at &lt;num role="currency"&gt;€0.731768&lt;/num&gt; and &lt;num role="currency"&gt;$1.02CAD&lt;/num&gt;.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Heights</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+The tallest man ever was &lt;num role="height"&gt;8'11.1"&lt;/num&gt; or &lt;num role="height"&gt;272 cm&lt;/num&gt;.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Weights</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+He weighed in at slightly over &lt;num role="weight"&gt;220 lbs&lt;/num&gt; for the fight.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Percentages</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+Only &lt;num role="percentage"&gt;15%&lt;/num&gt; of people know that statistics are misleading.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Ratios</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+The ratio of gas to oil is &lt;num role="ratio"&gt;3:2&lt;/num&gt; for the lawn mower to work without sputtering.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Coordinates</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+The Great Pyramid of Giza is located at &lt;num role="coordinate"&gt;29°58′45.03″N&lt;/num&gt; &lt;num role="coordinate"&gt;31°08′03.69″E&lt;/num&gt;.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Fractions</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+Add &lt;num role="fraction"&gt;1/2&lt;/num&gt; cup of milk.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Mixed</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+Add &lt;num role="mixed"&gt;2 3/4&lt;/num&gt; cups of flour.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Decimal</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+Pi is often rounded to &lt;num role="decimal"&gt;3.14&lt;/num&gt; when used in equations.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Segmented</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+He made the dubious claim that his Social Insurance Number is &lt;num role="segmented"&gt;000 000 001&lt;/num&gt;.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+            </ul>
+            
+            <p> The 
+               <code>span</code> element can further be used to group related sets of numbers: 
+               
+            </p>
+            
+            <ul>
+               
+               <li>
+                  
+                  <p>Ranges</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+                    It takes between &lt;span role="range"&gt;&lt;num&gt;2&lt;/num&gt;–&lt;num&gt;5&lt;/num&gt;&lt;/span&gt; cups of flour depending on the size of the loaf.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Results</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+                    The final score was &lt;span role="result"&gt;&lt;num&gt;3&lt;/num&gt;-&lt;num&gt;2&lt;/num&gt;&lt;/span&gt; for Team Canada over Team USA.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+            </ul>
+            
+         </div>
+      </div>
+   </body>
+</html>

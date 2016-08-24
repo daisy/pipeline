@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the section element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element-variant">glossary</span> variant of  the <span class="element">section</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d200e24">Usage Example</a></li>
+               <li class="h2"><a href="#d200e28">Allowed parents</a></li>
+               <li class="h2"><a href="#d200e37">Allowed children</a></li>
+               <li class="h2"><a href="#d200e80">Content model</a></li>
+               <li class="h2"><a href="#d200e259">Variants</a></li>
+               <li class="h2"><a href="#d200e310">Namespace</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The glossary 
+                  <code>section</code> element represents a major structural division in a 
+                  <code>
+                     <a href="e-glossary01.html">glossary (section)</a>
+                     </code>.
+                  
+               </p>
+               <p class="description ">The glossary 
+                  <code>section</code> element is a specialization of the 
+                  <code>
+                     <a href="e-section01.html">section</a>
+                     </code> element. It provides a content model to fit the unique requirements of glossary divisions.
+                  
+               </p>
+            </div>
+            <h2 id="d200e24">Usage Example</h2><pre>
+&lt;glossary&gt;
+    &lt;section&gt;
+        &lt;h&gt;A&lt;/h&gt;
+        &lt;entry&gt;
+            &lt;term&gt;Arroba&lt;/term&gt;
+            &lt;definition&gt;A weight equal to twenty-five pounds Spanish&lt;/definition&gt;.
+        &lt;/entry&gt;
+        …
+    &lt;/section&gt;
+    …
+&lt;/glossary&gt;
+    </pre><h2 id="d200e28">Allowed parents</h2>
+            <p><a class="element" href="e-glossary01.html">glossary</a> and 
+               <a class="element" href="e-section06.html">section</a>
+               
+            </p>
+            <h2 id="d200e37">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-aside02.html">aside</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-entry04.html">entry</a>, 
+               <a class="element" href="e-h01.html">h</a>, 
+               <a class="element" href="e-hd01.html">hd</a>, 
+               <a class="element" href="e-object01.html">object</a>, 
+               <a class="element" href="e-p01.html">p</a>, 
+               <a class="element" href="e-pagebreak01.html">pagebreak</a>, 
+               <a class="element" href="e-section06.html">section</a> and 
+               <a class="element" href="e-transition01.html">transition</a>
+               
+            </p>
+            <h2 id="d200e80">Content model</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role11">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-term">a mix of</span>
+                  
+                  <div class="rng">• <span class="rng-term">an optional </span>
+                     <a class="element" href="e-h01.html">h</a>
+                     
+                  </div>
+                  
+                  <div class="rng">• <span class="rng-term">zero or more of </span>
+                     
+                     <div class="rng">any of the 7 elements: <a class="element" href="e-aside02.html">aside</a>, <a class="element" href="e-block01.html">block</a>, <a class="element" href="e-hd01.html">hd</a>, <a class="element" href="e-object01.html">object</a>, <a class="element" href="e-p01.html">p</a>, <a class="element" href="e-pagebreak01.html">pagebreak</a> and <a class="element" href="e-transition01.html">transition</a></div>
+                     
+                  </div>
+                  <span class="rng-term">end of mix</span></div>
+               <div class="rng-choice"><span class="rng-term">a choice of</span>
+                  
+                  <div class="rng">either 
+                     
+                     <div class="rng">first <span class="rng-term">a mix of</span>
+                        
+                        <div class="rng">• <span class="rng-term">one or more of </span>
+                           <a class="element" href="e-entry04.html">entry</a>
+                           
+                        </div>
+                        
+                        <div class="rng">• <span class="rng-term">zero or more of </span>
+                           
+                           <div class="rng">any of the 2 elements: <a class="element" href="e-hd01.html">hd</a> and <a class="element" href="e-pagebreak01.html">pagebreak</a></div>
+                           
+                        </div>
+                        <span class="rng-term">end of mix</span></div>
+                     
+                     <div class="rng">followed by <span class="rng-term">zero or more of </span>
+                        <a class="element" href="e-section06.html">section</a>
+                        
+                     </div>
+                     
+                  </div>
+                  
+                  <div class="rng">or 
+                     
+                     <div class="rng">first <span class="rng-term">zero or more of </span>
+                        <a class="element" href="e-entry04.html">entry</a>
+                        
+                     </div>
+                     
+                     <div class="rng">followed by <span class="rng-term">one or more of </span>
+                        <a class="element" href="e-section06.html">section</a>
+                        
+                     </div>
+                     
+                  </div>
+                  <span class="rng-term">end of choice</span></div>
+            </div>
+            <h2 id="d200e259">Variants</h2>
+            <p>This element exists in 6 variants. The other 5  variants are:</p>
+            <ul>
+               <li><a href="e-section01.html">The <span class="element-variant">section</span> variant of  the <span class="element">section</span> element</a></li>
+               <li><a href="e-section02.html">The <span class="element-variant">verse</span> variant of  the <span class="element">section</span> element</a></li>
+               <li><a href="e-section03.html">The <span class="element-variant">toc</span> variant of  the <span class="element">section</span> element</a></li>
+               <li><a href="e-section04.html">The <span class="element-variant">index</span> variant of  the <span class="element">section</span> element</a></li>
+               <li><a href="e-section05.html">The <span class="element-variant">bibliography</span> variant of  the <span class="element">section</span> element</a></li>
+            </ul>
+            <h2 id="d200e310">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:m="http://www.w3.org/1998/Math/MathML"
+    stylesheet="../../main/resources/xml/translate-elems-attrs-to-zedai.xsl">
+
+    <x:scenario label="Simple MathML">
+        <x:context>
+            <m:math>
+                <m:mroot>
+                    <m:mi>x</m:mi>
+                    <m:mn>3</m:mn>
+                </m:mroot>
+            </m:math>
+        </x:context>
+        <x:expect label="should be copied as-is">
+            <m:math>
+                <m:mroot>
+                    <m:mi>x</m:mi>
+                    <m:mn>3</m:mn>
+                </m:mroot>
+            </m:math>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Block-level MathML">
+        <x:context>
+            <p/>
+            <m:math/>
+            <p/>
+        </x:context>
+        <x:expect label="should be copied as-is">
+            <z:p/>
+            <m:math/>
+            <z:p/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Phrase-level MathML">
+        <x:context>
+            <p>test <m:math/> test</p>
+        </x:context>
+        <x:expect label="should be copied as-is">
+            <z:p>test <m:math/> test</z:p>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="MathML feature identification">
+        <x:scenario label="when no MathML is present">
+            <x:context>
+                <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3"
+                    xml:lang="en-US">
+                    <head>
+                        <meta content="test" name="dtb:uid"/>
+                    </head>
+                    <book>
+                        <bodymatter>
+                            <level1>
+                                <h1>Heading</h1>
+                                <p>paragraph</p>
+                            </level1>
+                        </bodymatter>
+                    </book>
+                </dtbook>
+            </x:context>
+            <x:expect label="should not be added"
+                test="empty(//z:meta[@rel='z3998:feature'][@resource='http://www.daisy.org/z3998/2012/auth/features/mathml/1.0/'])"
+            />
+        </x:scenario>
+        <x:scenario label="when the content has MathML">
+            <x:context>
+                <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3"
+                    xml:lang="en-US">
+                    <head>
+                        <meta content="test" name="dtb:uid"/>
+                    </head>
+                    <book>
+                        <bodymatter>
+                            <level1>
+                                <h1>Heading</h1>
+                                <p>paragraph</p>
+                                <m:math/>
+                            </level1>
+                        </bodymatter>
+                    </book>
+                </dtbook>
+            </x:context>
+            <x:expect label="should be added"
+                test="//z:meta[@rel='z3998:feature'][@resource='http://www.daisy.org/z3998/2012/auth/features/mathml/1.0/']">
+                <z:meta rel="z3998:feature"
+                    resource="http://www.daisy.org/z3998/2012/auth/features/mathml/1.0/">
+                    <z:meta property="z3998:name" content="mathml"/>
+                    <z:meta property="z3998:version" content="1.0"/>
+                </z:meta>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="MathML IDs">
+        <x:context>
+            <m:math id="foo">
+                <m:mroot id="bar">
+                    <m:mi>x</m:mi>
+                    <m:mn>3</m:mn>
+                </m:mroot>
+            </m:math>
+        </x:context>
+        <x:expect label="are kept">
+            <m:math id="foo">
+                <m:mroot id="bar">
+                    <m:mi>x</m:mi>
+                    <m:mn>3</m:mn>
+                </m:mroot>
+            </m:math>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="MathML @alttext and @altimg">
+        <x:scenario label="when Math is in a semantics element">
+            <x:context>
+                <m:math altimg="nativemathml0002.png" alttext="cube root of x">
+                    <m:semantics>
+                        <m:mroot>
+                            <m:mi>x</m:mi>
+                            <m:mn>3</m:mn>
+                        </m:mroot>
+                    </m:semantics>
+                </m:math>
+            </x:context>
+            <x:expect label="should be copied to annotations">
+                <m:math altimg="nativemathml0002.png" alttext="cube root of x">
+                    <m:semantics>
+                        <m:mroot>
+                            <m:mi>x</m:mi>
+                            <m:mn>3</m:mn>
+                        </m:mroot>
+                        <m:annotation src="nativemathml0002.png" encoding="image/png"/>
+                        <m:annotation encoding="text/plain">cube root of x</m:annotation>
+                    </m:semantics>
+                </m:math>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="when Math is not in a semantics element">
+            <x:context>
+                <m:math altimg="nativemathml0002.png" alttext="cube root of x">
+                    <m:mroot>
+                        <m:mi>x</m:mi>
+                        <m:mn>3</m:mn>
+                    </m:mroot>
+                </m:math>
+            </x:context>
+            <x:expect label="should be copied to annotations in a new semantics element">
+                <m:math altimg="nativemathml0002.png" alttext="cube root of x">
+                    <m:semantics>
+                        <m:mroot>
+                            <m:mi>x</m:mi>
+                            <m:mn>3</m:mn>
+                        </m:mroot>
+                        <m:annotation src="nativemathml0002.png" encoding="image/png"/>
+                        <m:annotation encoding="text/plain">cube root of x</m:annotation>
+                    </m:semantics>
+                </m:math>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="the media type of the image">
+            <x:context>
+                <m:math altimg="alt.png"/>
+                <m:math altimg="alt.jpg"/>
+            </x:context>
+            <x:expect label="should be correctly identified" test="deep-equal(//m:annotation/string(@encoding),('image/png','image/jpeg'))"/>
+        </x:scenario>
+    </x:scenario>
+
+
+
+</x:description>

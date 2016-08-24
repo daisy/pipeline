@@ -1,0 +1,45 @@
+<!-- d202msmil.dtd m gylling version 2002-12-22 -->
+
+<!ENTITY % URI "CDATA"> <!-- [RFC2396] -->
+
+<!ELEMENT smil (head, body)>
+<!ATTLIST smil
+         id     	ID      	#IMPLIED
+>
+
+<!-- =============== h e a d ================ -->
+
+<!ELEMENT head  (meta*,((layout), meta*))?>
+
+<!ATTLIST head 
+	id		ID      	#IMPLIED
+>
+
+<!ELEMENT meta EMPTY>
+<!ATTLIST meta
+        name    	NMTOKEN 	#REQUIRED
+        content 	CDATA   	#REQUIRED
+>
+
+<!ELEMENT layout (region)>
+<!ATTLIST layout
+        id		ID      	#IMPLIED
+        
+>
+
+<!ELEMENT region EMPTY>
+<!ATTLIST region
+        id		ID      	#REQUIRED
+>
+
+<!-- =============== b o d y ================ -->
+<!ELEMENT body (ref+)>
+
+<!ELEMENT ref EMPTY> 
+
+<!ATTLIST ref
+	id		ID      	#REQUIRED
+	title     	CDATA	        #IMPLIED
+        src  		%URI;           #REQUIRED
+>
+

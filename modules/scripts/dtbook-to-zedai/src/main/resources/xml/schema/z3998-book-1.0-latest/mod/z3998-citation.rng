@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The citation module </title>
+        <annotation annotates="/">
+            <para>This module defines the citation element for marking references to other works. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.citation.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.citation.block">
+            <element name="citation">
+                <a:documentation>The citation element represents an author's acknowledgment of the original author and/or work of a directly or indirectly borrowed idea, quote or other resource. Citations typically occur in conjunction with epigraphs, quotes, illustrations, charts and diagrams. The Block variant is an adaptation for use where the citation is offset from the quoted material. The optional ref attribute on the citation element is used to establish an explicit association between the citation and the passage or resource it references; the placement of the citation does not, by default, imply an association with any element in the document. Some elements do provide a mechanism for implied relationships, however (see the quote element, for example). When adding citations, refer to the documentation for the element the citation is being attached to for more information. A citation can also be linked to the work it cites by including a child ref element. A ref attribute can be attached to the nested ref element to reference a work in the current document's bibliography , for example. To reference other resources, including resources external to the current document, the xlink.href attribute must be used instead. </a:documentation>
+                <ref name="z3998.citation.block.attlist"/>
+                <ref name="z3998.citation.block.content"/>
+            </element>
+        </define>
+        <define name="z3998.citation.block.attlist">
+            <ref name="z3998.Block.attrib"/>
+            <optional>
+                <choice>
+                    <ref name="z3998.ref.attrib"/>
+                    <ref name="xlink.attrib"/>
+                </choice>
+            </optional>
+        </define>
+        <define name="z3998.citation.block.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.citation">
+            <element name="citation">
+                <a:documentation>The citation element represents an author's acknowledgment of the original author and/or work of a directly or indirectly borrowed idea, quote or other resource. Citations typically occur in conjunction with epigraphs, quotes, illustrations, charts and diagrams. The Phrase variant is an adaptation for use where citations are included inline with the quoted material. The optional ref attribute on the citation element is used to establish an explicit association between the citation and the passage or resource it references; the placement of the citation does not, by default, imply an association with any element in the document. Some elements do provide a mechanism for implied relationships, however (see the quote element, for example). When adding citations, refer to the documentation for the element the citation is being attached to for more information. A citation can also be linked to the work it cites by including a child ref element. A ref attribute can be attached to the nested ref element to reference a work in the current document's bibliography , for example. To reference other resources, including resources external to the current document, the xlink.href attribute must be used instead. Parentheses, brackets and other enclosing characters should be included within the citation element if they must be retained in the file. The use of CSS for appending these characters is recommended, however, for the flexibility it allows to change the characters depending on the desired output. </a:documentation>
+                <ref name="z3998.citation.attlist"/>
+                <ref name="z3998.citation.content"/>
+                <sch:rule context="default:citation">
+                    <sch:assert test="normalize-space(.) or *">The citation element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+                <sch:rule context="default:citation//default:ref[@ref]">
+                    <sch:assert test="some $entry in //default:bibliography/default:entry satisfies current()/@ref eq $entry/@xml:id ">The ref attribute on the ref element must refer to an entry in a bibliography when nested inside a citation element. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.citation.attlist">
+            <ref name="z3998.Phrase.attrib"/>
+            <optional>
+                <choice>
+                    <ref name="z3998.ref.attrib"/>
+                    <ref name="xlink.attrib"/>
+                </choice>
+            </optional>
+        </define>
+        <define name="z3998.citation.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>citation - default content model contribution </a:documentation>
+        <define name="z3998.Block.core.class" combine="choice">
+            <ref name="z3998.citation.block"/>
+        </define>
+        <define name="z3998.Phrase.variant.class" combine="choice">
+            <ref name="z3998.citation"/>
+        </define>
+    </div>
+</grammar>

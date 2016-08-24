@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/moveout-code.xsl">
+    <!--<xsl:with-param name="valid-parents" select="tokenize('annotation,prodnote,sidebar,div,imggroup,caption,
+        li,note,img,blockquote,level,level1,level2,level3,level4,level5,level6,td,th'
+    -->
+    <x:scenario label="Move Out Block-Level Code">
+        <x:context>
+            <div>
+                <a href="http://example.org">Part A <tmp:code-block id="code">This is some code</tmp:code-block> Part B</a>
+            </div>
+        </x:context>
+        <x:expect label="">
+            <div>
+                <a href="http://example.org">Part A </a>
+                <tmp:code-block id="code">This is some code</tmp:code-block>
+                <a href="http://example.org"> Part B</a>
+            </div>
+        </x:expect>
+    </x:scenario>
+</x:description>

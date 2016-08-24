@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The note module </title>
+        <annotation annotates="/">
+            <para>This module defines the note and noteref elements for the referencing and inclusion of footnotes and endnotes. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.note.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.note">
+            <element name="note">
+                <a:documentation>The note element represents a single footnote or endnote. The Block variant is an adaptation for use including notes between block elements. Notes provide or reference sources of additional information, or acknowledge the source of a quotation or idea. In printed matter, they are usually distinguishable from annotations by their location either at the bottom of print pages, at the end of sections or in the back matter of a document. Each note is typically referenced by a noteref or prefixed by a page location (when explicit references have been omitted from the text). If the note does not have a referent in a Z39.98-AI document, it must include a ref attribute that references back to the nearest element in the document to the content to which it applies. The role attribute optionally expresses the semantic nature of the note. The value can be either footnote or endnote. If omitted, the implicit value footnote is assumed. When a note is prefixed by a number or symbol, that identifier should be included using the Content Rendition feature's prefix attribute. </a:documentation>
+                <ref name="z3998.note.attlist"/>
+                <ref name="z3998.note.content"/>
+                <sch:rule context="default:note">
+                    <sch:assert test="key('noterefs', @xml:id) or id(current()/@ref)">The note element must either be referenced by a noteref or reference another element in the document. </sch:assert>
+                    <sch:assert test="normalize-space(.) or *">The note element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.note.content">
+            <ref name="z3998.Flow.choice.model"/>
+        </define>
+        <define name="z3998.note.attlist" combine="interleave">
+            <ref name="z3998.Block.attrib"/>
+            <optional>
+                <ref name="z3998.ref.attrib"/>
+            </optional>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.note.phrase">
+            <element name="note">
+                <a:documentation>The note element represents a single footnote or endnote. The Phrase variant is an adaptation for use including notes inline in phrase contexts. Notes provide or reference sources of additional information, or acknowledge the source of a quotation or idea. In printed matter, they are usually distinguishable from annotations by their location either at the bottom of print pages, at the end of sections or in the back matter of a document. Each note is typically referenced by a noteref or prefixed by a page location (when explicit references have been omitted from the text). If the note does not have a referent in a Z39.98-AI document, it must include a ref attribute that references back to the nearest element in the document to the content to which it applies. The role attribute optionally expresses the semantic nature of the note. The value can be either footnote or endnote. If omitted, the implicit value footnote is assumed. When a note is prefixed by a number or symbol, that identifier should be included using the Content Rendition feature's prefix attribute. </a:documentation>
+                <ref name="z3998.note.phrase.attlist"/>
+                <ref name="z3998.note.phrase.content"/>
+            </element>
+        </define>
+        <define name="z3998.note.phrase.content">
+            <ref name="z3998.Flow.choice.model"/>
+        </define>
+        <define name="z3998.note.phrase.attlist" combine="interleave">
+            <ref name="z3998.Phrase.attrib"/>
+            <optional>
+                <ref name="z3998.ref.attrib"/>
+            </optional>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.noteref">
+            <element name="noteref">
+                <a:documentation>The noteref element represents a textual reference to a note . Note references typically appear as superscripted numbers or symbols within the narrative flow but may also appear as linked words, especially in electronic formats. The ref attribute is used to establish the link between the note reference and its associated note. By default, the text content of the noteref represents the link reference and is treated as document content. When superscripted numbers or symbols are used to identify the corresponding note, the noteref.value attribute should be used. The noteref must be an empty element when attaching a value attribute; it it not permitted to include text content and a value attribute. </a:documentation>
+                <ref name="z3998.noteref.attlist"/>
+                <ref name="z3998.noteref.content"/>
+                <sch:rule context="default:noteref">
+                    <sch:report test="@value and (count(*|text()[normalize-space()]) &gt; 0)">The {value} attribute can only be used on empty {noteref} elements.</sch:report>
+                    <sch:report test="not(@value) and (count(*|text()[normalize-space()]) = 0)">A {noteref} element cannot be empty and not include a {value} attribute.</sch:report>
+                    <sch:assert test="every $ref in tokenize(current()/@ref, ' +') satisfies key('notes', $ref)">The IDREF(s) in the ref attribute must resolve to note elements. </sch:assert>
+                </sch:rule>
+                <sch:rule context="default:noteref" role="warning">
+                    <sch:report role="warning"
+                           test="(count(node()[normalize-space()]) = 1) and child::default:sup">Superscripted referents should be included in a {value} attribute, not as text content.</sch:report>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.noteref.value.attrib">
+            <attribute name="value">
+                <a:documentation>The noteref value attribute provides the number or symbol that represents the current note reference. The value attribute allows any text string as an identifier. </a:documentation>
+                <ref name="NonEmptyString.datatype"/>
+            </attribute>
+        </define>
+        <define name="z3998.noteref.attlist">
+            <ref name="z3998.Phrase.attrib"/>
+            <ref name="z3998.ref.attrib"/>
+            <optional>
+                <ref name="z3998.noteref.value.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.noteref.content">
+            <choice>
+                <empty/>
+                <ref name="z3998.Phrase.core.Text.mix.model"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <a:documentation>note, noteref - default content model contribution </a:documentation>
+        <define name="z3998.Phrase.core.class" combine="choice">
+            <ref name="z3998.noteref"/>
+        </define>
+        <define name="z3998.Block.core.class" combine="choice">
+            <ref name="z3998.note"/>
+        </define>
+        <define name="z3998.Phrase.core.class" combine="choice">
+            <ref name="z3998.note.phrase"/>
+        </define>
+        <define name="z3998.verse.content.class" combine="choice">
+            <ref name="z3998.note.phrase"/>
+        </define>
+        <define name="z3998.lngroup.content" combine="interleave">
+            <zeroOrMore>
+                <ref name="z3998.note.phrase"/>
+            </zeroOrMore>
+        </define>
+    </div>
+</grammar>

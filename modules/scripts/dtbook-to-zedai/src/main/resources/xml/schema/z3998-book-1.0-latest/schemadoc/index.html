@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <!--generated: 2012-04-03T16:20:51.154-07:00-->
+   <!--input file: file:/Users/marisa/Projects/zed/trunk/temp/quasi-javaprocessed-book.rng-->
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: Book Profile</title>
+      <link href="schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body style="margin-top:4em;margin-bottom:2em;">
+      <h1>Schema Documentation: <span class="doctitle">Book Profile</span><span class="titlesub"><br /> version 1.0</span></h1>
+      <p class="alert">This schema documentation is an informative rendition based on
+         						this profiles' normative schema and associated definitions. In the case of
+         						conflicts between expressions herein and the normative schema, the normative
+         						schema takes precedence.
+      </p>
+      <p>Below is a list of all elements in this profile.<br />An asterisk (*) after the element name indicates an element available in multiple variants.<br />The root element in this grammar is <a class="element" href="subfiles/e-document01.html">document</a></p>
+      <h2>Core Elements</h2>
+      <ul class="main-element-toc">
+         <li><a href="subfiles/e-abbr01.html">abbr</a></li>
+         <li><a href="subfiles/_address.html">address *</a></li>
+         <li><a href="subfiles/e-annoref01.html">annoref</a></li>
+         <li><a href="subfiles/_annotation.html">annotation *</a></li>
+         <li><a href="subfiles/_aside.html">aside *</a></li>
+         <li><a href="subfiles/e-backcover01.html">backcover</a></li>
+         <li><a href="subfiles/e-backmatter01.html">backmatter</a></li>
+         <li><a href="subfiles/e-bibliography01.html">bibliography</a></li>
+         <li><a href="subfiles/_block.html">block *</a></li>
+         <li><a href="subfiles/e-body01.html">body</a></li>
+         <li><a href="subfiles/e-bodymatter01.html">bodymatter</a></li>
+         <li><a href="subfiles/e-caption01.html">caption</a></li>
+         <li><a href="subfiles/e-char01.html">char</a></li>
+         <li><a href="subfiles/_citation.html">citation *</a></li>
+         <li><a href="subfiles/_code.html">code *</a></li>
+         <li><a href="subfiles/e-col01.html">col</a></li>
+         <li><a href="subfiles/e-colgroup01.html">colgroup</a></li>
+         <li><a href="subfiles/e-cover01.html">cover</a></li>
+         <li><a href="subfiles/e-d01.html">d</a></li>
+         <li><a href="subfiles/e-definition01.html">definition</a></li>
+         <li><a href="subfiles/_description.html">description *</a></li>
+         <li><a href="subfiles/e-document01.html">document</a></li>
+         <li><a href="subfiles/_emph.html">emph *</a></li>
+         <li><a href="subfiles/_entry.html">entry *</a></li>
+         <li><a href="subfiles/e-expansion01.html">expansion</a></li>
+         <li><a href="subfiles/e-flaps01.html">flaps</a></li>
+         <li><a href="subfiles/e-frontcover01.html">frontcover</a></li>
+         <li><a href="subfiles/e-frontmatter01.html">frontmatter</a></li>
+         <li><a href="subfiles/_glossary.html">glossary *</a></li>
+         <li><a href="subfiles/e-h01.html">h</a></li>
+         <li><a href="subfiles/e-hd01.html">hd</a></li>
+         <li><a href="subfiles/e-head01.html">head</a></li>
+         <li><a href="subfiles/e-hpart01.html">hpart</a></li>
+         <li><a href="subfiles/e-index01.html">index</a></li>
+         <li><a href="subfiles/e-item01.html">item</a></li>
+         <li><a href="subfiles/e-list01.html">list</a></li>
+         <li><a href="subfiles/_ln.html">ln *</a></li>
+         <li><a href="subfiles/_lngroup.html">lngroup *</a></li>
+         <li><a href="subfiles/e-lnum01.html">lnum</a></li>
+         <li><a href="subfiles/e-meta01.html">meta</a></li>
+         <li><a href="subfiles/e-name01.html">name</a></li>
+         <li><a href="subfiles/_note.html">note *</a></li>
+         <li><a href="subfiles/e-noteref01.html">noteref</a></li>
+         <li><a href="subfiles/e-num01.html">num</a></li>
+         <li><a href="subfiles/_object.html">object *</a></li>
+         <li><a href="subfiles/e-p01.html">p</a></li>
+         <li><a href="subfiles/e-pagebreak01.html">pagebreak</a></li>
+         <li><a href="subfiles/_quote.html">quote *</a></li>
+         <li><a href="subfiles/e-ref01.html">ref</a></li>
+         <li><a href="subfiles/e-s01.html">s</a></li>
+         <li><a href="subfiles/_section.html">section *</a></li>
+         <li><a href="subfiles/_span.html">span *</a></li>
+         <li><a href="subfiles/e-spine01.html">spine</a></li>
+         <li><a href="subfiles/e-sub01.html">sub</a></li>
+         <li><a href="subfiles/e-sup01.html">sup</a></li>
+         <li><a href="subfiles/e-table01.html">table</a></li>
+         <li><a href="subfiles/e-tbody01.html">tbody</a></li>
+         <li><a href="subfiles/e-td01.html">td</a></li>
+         <li><a href="subfiles/e-term01.html">term</a></li>
+         <li><a href="subfiles/e-tfoot01.html">tfoot</a></li>
+         <li><a href="subfiles/e-th01.html">th</a></li>
+         <li><a href="subfiles/e-thead01.html">thead</a></li>
+         <li><a href="subfiles/e-time01.html">time</a></li>
+         <li><a href="subfiles/_toc.html">toc *</a></li>
+         <li><a href="subfiles/e-tr01.html">tr</a></li>
+         <li><a href="subfiles/e-transition01.html">transition</a></li>
+         <li><a href="subfiles/e-verse01.html">verse</a></li>
+         <li><a href="subfiles/e-w01.html">w</a></li>
+         <li><a href="subfiles/e-wpart01.html">wpart</a></li>
+      </ul>
+      <h2>Core Attributes</h2>
+      <ul class="main-attribute-toc">
+         <li><a href="subfiles/attributes.html#abbr01">abbr</a></li>
+         <li><a href="subfiles/attributes.html#about01">about</a></li>
+         <li><a href="subfiles/attributes.html#associate01">associate</a></li>
+         <li><a href="subfiles/attributes.html#by01">by</a></li>
+         <li><a href="subfiles/attributes.html#class01">class</a></li>
+         <li><a href="subfiles/attributes.html#colspan01">colspan</a></li>
+         <li><a href="subfiles/attributes.html#content01">content</a></li>
+         <li><a href="subfiles/attributes.html#continuation01">continuation</a></li>
+         <li><a href="subfiles/attributes.html#datatype01">datatype</a></li>
+         <li><a href="subfiles/attributes.html#depth01">depth</a></li>
+         <li><a href="subfiles/attributes.html#desc01">desc</a></li>
+         <li><a href="subfiles/attributes.html#headers01">headers</a></li>
+         <li><a href="subfiles/attributes.html#dir01">its:dir</a></li>
+         <li><a href="subfiles/attributes.html#translate01">its:translate</a></li>
+         <li><a href="subfiles/attributes.html#prefix01">prefix</a></li>
+         <li><a href="subfiles/attributes.html#property01">property</a></li>
+         <li><a href="subfiles/attributes.html#ref01">ref</a></li>
+         <li><a href="subfiles/attributes.html#rel01">rel</a></li>
+         <li><a href="subfiles/attributes.html#resource01">resource</a></li>
+         <li><a href="subfiles/attributes.html#rev01">rev</a></li>
+         <li><a href="subfiles/attributes.html#role">role * </a></li>
+         <li><a href="subfiles/attributes.html#rowspan01">rowspan</a></li>
+         <li><a href="subfiles/attributes.html#scope01">scope</a></li>
+         <li><a href="subfiles/attributes.html#span01">span</a></li>
+         <li><a href="subfiles/attributes.html#src01">src</a></li>
+         <li><a href="subfiles/attributes.html#srctype01">srctype</a></li>
+         <li><a href="subfiles/attributes.html#start01">start</a></li>
+         <li><a href="subfiles/attributes.html#time01">time</a></li>
+         <li><a href="subfiles/attributes.html#type">type * </a></li>
+         <li><a href="subfiles/attributes.html#typeof01">typeof</a></li>
+         <li><a href="subfiles/attributes.html#value">value * </a></li>
+         <li><a href="subfiles/attributes.html#actuate01">xlink:actuate</a></li>
+         <li><a href="subfiles/attributes.html#href01">xlink:href</a></li>
+         <li><a href="subfiles/attributes.html#show01">xlink:show</a></li>
+         <li><a href="subfiles/attributes.html#title01">xlink:title</a></li>
+         <li><a href="subfiles/attributes.html#type03">xlink:type</a></li>
+         <li><a href="subfiles/attributes.html#base01">xml:base</a></li>
+         <li><a href="subfiles/attributes.html#id01">xml:id</a></li>
+         <li><a href="subfiles/attributes.html#lang01">xml:lang</a></li>
+         <li><a href="subfiles/attributes.html#space01">xml:space</a></li>
+      </ul>
+      <p>where</p>
+      <ul>
+         <li>attributes prefixed with <code>xml</code> are associated with the namespace
+            												<code>http://www.w3.org/XML/1998/namespace</code></li>
+         <li>attributes prefixed with <code>its</code> are associated with the namespace
+            												<code>http://www.w3.org/2005/11/its</code></li>
+         <li>attributes prefixed with <code>xlink</code> are associated with the namespace
+            												<code>http://www.w3.org/1999/xlink</code></li>
+      </ul>
+      <h2>Features</h2>
+      <h3>DIAGRAM Description Feature</h3>
+      <p>More information about this feature is available at the <a href="http://www.daisy.org/z3998/2012/auth/features/description/1.0/">DIAGRAM Description Feature Resource Directory</a>.
+      </p>
+      <p>This feature contributes the following 9 elements:</p>
+      <ul class="main-element-toc">
+         <li><a href="subfiles/e-body02.html">d:body</a></li>
+         <li><a href="subfiles/e-description04.html">d:description</a></li>
+         <li><a href="subfiles/e-head02.html">d:head</a></li>
+         <li><a href="subfiles/e-longdesc01.html">d:longdesc</a></li>
+         <li><a href="subfiles/e-simplifiedImage01.html">d:simplifiedImage</a></li>
+         <li><a href="subfiles/e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a></li>
+         <li><a href="subfiles/e-summary01.html">d:summary</a></li>
+         <li><a href="subfiles/e-tactile01.html">d:tactile</a></li>
+         <li><a href="subfiles/e-tour01.html">d:tour</a></li>
+      </ul>
+      <p>where elements prefixed with <code>d</code> are associated with the
+         								namespace <code>http://www.daisy.org/ns/z3998/authoring/features/description/</code></p>
+      <h3>Print Forms Feature</h3>
+      <p>More information about this feature is available at the <a href="http://www.daisy.org/z3998/2012/auth/features/forms/1.0/">Print Forms Feature Resource Directory</a>.
+      </p>
+      <p>This feature contributes the following 22 elements:</p>
+      <ul class="main-element-toc">
+         <li><a href="subfiles/e-bind02.html">xforms:bind</a></li>
+         <li><a href="subfiles/e-choices01.html">xforms:choices</a></li>
+         <li><a href="subfiles/e-copy01.html">xforms:copy</a></li>
+         <li><a href="subfiles/e-group01.html">xforms:group</a></li>
+         <li><a href="subfiles/e-header01.html">xforms:header</a></li>
+         <li><a href="subfiles/e-input01.html">xforms:input</a></li>
+         <li><a href="subfiles/e-instance01.html">xforms:instance</a></li>
+         <li><a href="subfiles/e-item02.html">xforms:item</a></li>
+         <li><a href="subfiles/e-itemset01.html">xforms:itemset</a></li>
+         <li><a href="subfiles/e-label01.html">xforms:label</a></li>
+         <li><a href="subfiles/e-method01.html">xforms:method</a></li>
+         <li><a href="subfiles/e-model01.html">xforms:model</a></li>
+         <li><a href="subfiles/e-name02.html">xforms:name</a></li>
+         <li><a href="subfiles/e-range01.html">xforms:range</a></li>
+         <li><a href="subfiles/e-repeat01.html">xforms:repeat</a></li>
+         <li><a href="subfiles/e-resource01.html">xforms:resource</a></li>
+         <li><a href="subfiles/e-secret01.html">xforms:secret</a></li>
+         <li><a href="subfiles/e-select03.html">xforms:select</a></li>
+         <li><a href="subfiles/e-select101.html">xforms:select1</a></li>
+         <li><a href="subfiles/e-submission01.html">xforms:submission</a></li>
+         <li><a href="subfiles/e-textarea01.html">xforms:textarea</a></li>
+         <li><a href="subfiles/_xforms-value.html">xforms:value *</a></li>
+      </ul>
+      <p>where elements prefixed with <code>xforms</code> are associated with the
+         								namespace <code>http://www.w3.org/2002/xforms/</code></p>
+      <p>This feature also contributes the following 41 attributes:</p>
+      <ul class="main-attribute-toc">
+         <li><a href="subfiles/attributes.html#action01">action</a></li>
+         <li><a href="subfiles/attributes.html#bind">bind * </a></li>
+         <li><a href="subfiles/attributes.html#calculate01">calculate</a></li>
+         <li><a href="subfiles/attributes.html#cdata-section-elements01">cdata-section-elements</a></li>
+         <li><a href="subfiles/attributes.html#constraint01">constraint</a></li>
+         <li><a href="subfiles/attributes.html#encoding05">encoding</a></li>
+         <li><a href="subfiles/attributes.html#end01">end</a></li>
+         <li><a href="subfiles/attributes.html#functions01">functions</a></li>
+         <li><a href="subfiles/attributes.html#includenamespaceprefixes01">includenamespaceprefixes</a></li>
+         <li><a href="subfiles/attributes.html#incremental">incremental * </a></li>
+         <li><a href="subfiles/attributes.html#indent01">indent</a></li>
+         <li><a href="subfiles/attributes.html#inputmode">inputmode * </a></li>
+         <li><a href="subfiles/attributes.html#instance01">instance</a></li>
+         <li><a href="subfiles/attributes.html#mediatype01">mediatype</a></li>
+         <li><a href="subfiles/attributes.html#method01">method</a></li>
+         <li><a href="subfiles/attributes.html#mode02">mode</a></li>
+         <li><a href="subfiles/attributes.html#model">model * </a></li>
+         <li><a href="subfiles/attributes.html#nodeset">nodeset * </a></li>
+         <li><a href="subfiles/attributes.html#number01">number</a></li>
+         <li><a href="subfiles/attributes.html#omit-xml-declaration01">omit-xml-declaration</a></li>
+         <li><a href="subfiles/attributes.html#p3ptype01">p3ptype</a></li>
+         <li><a href="subfiles/attributes.html#readonly01">readonly</a></li>
+         <li><a href="subfiles/attributes.html#ref">ref * </a></li>
+         <li><a href="subfiles/attributes.html#relevant">relevant * </a></li>
+         <li><a href="subfiles/attributes.html#replace01">replace</a></li>
+         <li><a href="subfiles/attributes.html#required01">required</a></li>
+         <li><a href="subfiles/attributes.html#resource">resource * </a></li>
+         <li><a href="subfiles/attributes.html#schema01">schema</a></li>
+         <li><a href="subfiles/attributes.html#selection">selection * </a></li>
+         <li><a href="subfiles/attributes.html#separator03">separator</a></li>
+         <li><a href="subfiles/attributes.html#serialization01">serialization</a></li>
+         <li><a href="subfiles/attributes.html#src">src * </a></li>
+         <li><a href="subfiles/attributes.html#standalone01">standalone</a></li>
+         <li><a href="subfiles/attributes.html#start02">start</a></li>
+         <li><a href="subfiles/attributes.html#startindex01">startindex</a></li>
+         <li><a href="subfiles/attributes.html#step01">step</a></li>
+         <li><a href="subfiles/attributes.html#targetref01">targetref</a></li>
+         <li><a href="subfiles/attributes.html#type09">type</a></li>
+         <li><a href="subfiles/attributes.html#validate01">validate</a></li>
+         <li><a href="subfiles/attributes.html#value05">value</a></li>
+         <li><a href="subfiles/attributes.html#version">version * </a></li>
+      </ul>
+      <h3>ITS Ruby Feature</h3>
+      <p>More information about this feature is available at the <a href="http://www.daisy.org/z3998/2012/auth/features/its-ruby/1.0/">ITS Ruby Feature Resource Directory</a>.
+      </p>
+      <p>This feature contributes the following 6 elements:</p>
+      <ul class="main-element-toc">
+         <li><a href="subfiles/e-rb01.html">its:rb</a></li>
+         <li><a href="subfiles/e-rbc01.html">its:rbc</a></li>
+         <li><a href="subfiles/e-rp01.html">its:rp</a></li>
+         <li><a href="subfiles/e-rt01.html">its:rt</a></li>
+         <li><a href="subfiles/e-rtc01.html">its:rtc</a></li>
+         <li><a href="subfiles/e-ruby01.html">its:ruby</a></li>
+      </ul>
+      <p>where elements prefixed with <code>its</code> are associated with the
+         								namespace <code>http://www.w3.org/2005/11/its</code></p>
+      <p>This feature also contributes the following attribute:</p>
+      <ul class="main-attribute-toc">
+         <li><a href="subfiles/attributes.html#rbspan01">rbspan</a></li>
+      </ul>
+      <h3>MathML Feature</h3>
+      <p>More information about this feature is available at the <a href="http://www.daisy.org/z3998/2012/auth/features/mathml/1.0/">MathML Feature Resource Directory</a>.
+      </p>
+      <p>This feature contributes the following 190 elements:</p>
+      <ul class="main-element-toc">
+         <li><a href="subfiles/e-abs01.html">m:abs</a></li>
+         <li><a href="subfiles/e-and01.html">m:and</a></li>
+         <li><a href="subfiles/e-annotation03.html">m:annotation</a></li>
+         <li><a href="subfiles/e-annotation-xml01.html">m:annotation-xml</a></li>
+         <li><a href="subfiles/e-apply01.html">m:apply</a></li>
+         <li><a href="subfiles/e-approx01.html">m:approx</a></li>
+         <li><a href="subfiles/e-arccos01.html">m:arccos</a></li>
+         <li><a href="subfiles/e-arccosh01.html">m:arccosh</a></li>
+         <li><a href="subfiles/e-arccot01.html">m:arccot</a></li>
+         <li><a href="subfiles/e-arccoth01.html">m:arccoth</a></li>
+         <li><a href="subfiles/e-arccsc01.html">m:arccsc</a></li>
+         <li><a href="subfiles/e-arccsch01.html">m:arccsch</a></li>
+         <li><a href="subfiles/e-arcsec01.html">m:arcsec</a></li>
+         <li><a href="subfiles/e-arcsech01.html">m:arcsech</a></li>
+         <li><a href="subfiles/e-arcsin01.html">m:arcsin</a></li>
+         <li><a href="subfiles/e-arcsinh01.html">m:arcsinh</a></li>
+         <li><a href="subfiles/e-arctan01.html">m:arctan</a></li>
+         <li><a href="subfiles/e-arctanh01.html">m:arctanh</a></li>
+         <li><a href="subfiles/e-arg01.html">m:arg</a></li>
+         <li><a href="subfiles/e-bind01.html">m:bind</a></li>
+         <li><a href="subfiles/e-bvar01.html">m:bvar</a></li>
+         <li><a href="subfiles/e-card01.html">m:card</a></li>
+         <li><a href="subfiles/e-cartesianproduct01.html">m:cartesianproduct</a></li>
+         <li><a href="subfiles/e-cbytes01.html">m:cbytes</a></li>
+         <li><a href="subfiles/e-ceiling01.html">m:ceiling</a></li>
+         <li><a href="subfiles/e-cerror01.html">m:cerror</a></li>
+         <li><a href="subfiles/e-ci01.html">m:ci</a></li>
+         <li><a href="subfiles/e-cn01.html">m:cn</a></li>
+         <li><a href="subfiles/e-codomain01.html">m:codomain</a></li>
+         <li><a href="subfiles/e-complexes01.html">m:complexes</a></li>
+         <li><a href="subfiles/e-compose01.html">m:compose</a></li>
+         <li><a href="subfiles/e-condition01.html">m:condition</a></li>
+         <li><a href="subfiles/e-conjugate01.html">m:conjugate</a></li>
+         <li><a href="subfiles/e-cos01.html">m:cos</a></li>
+         <li><a href="subfiles/e-cosh01.html">m:cosh</a></li>
+         <li><a href="subfiles/e-cot01.html">m:cot</a></li>
+         <li><a href="subfiles/e-coth01.html">m:coth</a></li>
+         <li><a href="subfiles/e-cs01.html">m:cs</a></li>
+         <li><a href="subfiles/e-csc01.html">m:csc</a></li>
+         <li><a href="subfiles/e-csch01.html">m:csch</a></li>
+         <li><a href="subfiles/e-csymbol01.html">m:csymbol</a></li>
+         <li><a href="subfiles/e-curl01.html">m:curl</a></li>
+         <li><a href="subfiles/e-degree01.html">m:degree</a></li>
+         <li><a href="subfiles/e-determinant01.html">m:determinant</a></li>
+         <li><a href="subfiles/e-diff01.html">m:diff</a></li>
+         <li><a href="subfiles/e-divergence01.html">m:divergence</a></li>
+         <li><a href="subfiles/e-divide01.html">m:divide</a></li>
+         <li><a href="subfiles/e-domain01.html">m:domain</a></li>
+         <li><a href="subfiles/e-domainofapplication01.html">m:domainofapplication</a></li>
+         <li><a href="subfiles/e-emptyset01.html">m:emptyset</a></li>
+         <li><a href="subfiles/e-eq01.html">m:eq</a></li>
+         <li><a href="subfiles/e-equivalent01.html">m:equivalent</a></li>
+         <li><a href="subfiles/e-eulergamma01.html">m:eulergamma</a></li>
+         <li><a href="subfiles/e-exists01.html">m:exists</a></li>
+         <li><a href="subfiles/e-exp01.html">m:exp</a></li>
+         <li><a href="subfiles/e-exponentiale01.html">m:exponentiale</a></li>
+         <li><a href="subfiles/e-factorial01.html">m:factorial</a></li>
+         <li><a href="subfiles/e-factorof01.html">m:factorof</a></li>
+         <li><a href="subfiles/e-false01.html">m:false</a></li>
+         <li><a href="subfiles/e-floor01.html">m:floor</a></li>
+         <li><a href="subfiles/e-forall01.html">m:forall</a></li>
+         <li><a href="subfiles/e-gcd01.html">m:gcd</a></li>
+         <li><a href="subfiles/e-geq01.html">m:geq</a></li>
+         <li><a href="subfiles/e-grad01.html">m:grad</a></li>
+         <li><a href="subfiles/e-gt01.html">m:gt</a></li>
+         <li><a href="subfiles/e-ident01.html">m:ident</a></li>
+         <li><a href="subfiles/e-image01.html">m:image</a></li>
+         <li><a href="subfiles/e-imaginary01.html">m:imaginary</a></li>
+         <li><a href="subfiles/e-imaginaryi01.html">m:imaginaryi</a></li>
+         <li><a href="subfiles/e-implies01.html">m:implies</a></li>
+         <li><a href="subfiles/e-in01.html">m:in</a></li>
+         <li><a href="subfiles/e-infinity01.html">m:infinity</a></li>
+         <li><a href="subfiles/e-int01.html">m:int</a></li>
+         <li><a href="subfiles/e-integers01.html">m:integers</a></li>
+         <li><a href="subfiles/e-intersect01.html">m:intersect</a></li>
+         <li><a href="subfiles/e-interval01.html">m:interval</a></li>
+         <li><a href="subfiles/e-inverse01.html">m:inverse</a></li>
+         <li><a href="subfiles/e-lambda01.html">m:lambda</a></li>
+         <li><a href="subfiles/e-laplacian01.html">m:laplacian</a></li>
+         <li><a href="subfiles/e-lcm01.html">m:lcm</a></li>
+         <li><a href="subfiles/e-leq01.html">m:leq</a></li>
+         <li><a href="subfiles/e-limit01.html">m:limit</a></li>
+         <li><a href="subfiles/e-list02.html">m:list</a></li>
+         <li><a href="subfiles/e-ln03.html">m:ln</a></li>
+         <li><a href="subfiles/e-log01.html">m:log</a></li>
+         <li><a href="subfiles/e-logbase01.html">m:logbase</a></li>
+         <li><a href="subfiles/e-lowlimit01.html">m:lowlimit</a></li>
+         <li><a href="subfiles/e-lt01.html">m:lt</a></li>
+         <li><a href="subfiles/e-maction01.html">m:maction</a></li>
+         <li><a href="subfiles/e-maligngroup01.html">m:maligngroup</a></li>
+         <li><a href="subfiles/e-malignmark01.html">m:malignmark</a></li>
+         <li><a href="subfiles/e-math01.html">m:math</a></li>
+         <li><a href="subfiles/e-matrix01.html">m:matrix</a></li>
+         <li><a href="subfiles/e-matrixrow01.html">m:matrixrow</a></li>
+         <li><a href="subfiles/e-max01.html">m:max</a></li>
+         <li><a href="subfiles/e-mean01.html">m:mean</a></li>
+         <li><a href="subfiles/e-median01.html">m:median</a></li>
+         <li><a href="subfiles/e-menclose01.html">m:menclose</a></li>
+         <li><a href="subfiles/e-merror01.html">m:merror</a></li>
+         <li><a href="subfiles/e-mfenced01.html">m:mfenced</a></li>
+         <li><a href="subfiles/e-mfrac01.html">m:mfrac</a></li>
+         <li><a href="subfiles/e-mglyph01.html">m:mglyph</a></li>
+         <li><a href="subfiles/e-mi01.html">m:mi</a></li>
+         <li><a href="subfiles/e-min01.html">m:min</a></li>
+         <li><a href="subfiles/e-minus01.html">m:minus</a></li>
+         <li><a href="subfiles/e-mlabeledtr01.html">m:mlabeledtr</a></li>
+         <li><a href="subfiles/e-mlongdiv01.html">m:mlongdiv</a></li>
+         <li><a href="subfiles/e-mmultiscripts01.html">m:mmultiscripts</a></li>
+         <li><a href="subfiles/e-mn01.html">m:mn</a></li>
+         <li><a href="subfiles/e-mo01.html">m:mo</a></li>
+         <li><a href="subfiles/e-mode01.html">m:mode</a></li>
+         <li><a href="subfiles/e-moment01.html">m:moment</a></li>
+         <li><a href="subfiles/e-momentabout01.html">m:momentabout</a></li>
+         <li><a href="subfiles/e-mover01.html">m:mover</a></li>
+         <li><a href="subfiles/e-mpadded01.html">m:mpadded</a></li>
+         <li><a href="subfiles/e-mphantom01.html">m:mphantom</a></li>
+         <li><a href="subfiles/e-mprescripts01.html">m:mprescripts</a></li>
+         <li><a href="subfiles/e-mroot01.html">m:mroot</a></li>
+         <li><a href="subfiles/e-mrow01.html">m:mrow</a></li>
+         <li><a href="subfiles/e-ms01.html">m:ms</a></li>
+         <li><a href="subfiles/e-mscarries01.html">m:mscarries</a></li>
+         <li><a href="subfiles/e-mscarry01.html">m:mscarry</a></li>
+         <li><a href="subfiles/e-msgroup01.html">m:msgroup</a></li>
+         <li><a href="subfiles/e-msline01.html">m:msline</a></li>
+         <li><a href="subfiles/e-mspace01.html">m:mspace</a></li>
+         <li><a href="subfiles/e-msqrt01.html">m:msqrt</a></li>
+         <li><a href="subfiles/e-msrow01.html">m:msrow</a></li>
+         <li><a href="subfiles/e-mstack01.html">m:mstack</a></li>
+         <li><a href="subfiles/e-mstyle01.html">m:mstyle</a></li>
+         <li><a href="subfiles/e-msub01.html">m:msub</a></li>
+         <li><a href="subfiles/e-msubsup01.html">m:msubsup</a></li>
+         <li><a href="subfiles/e-msup01.html">m:msup</a></li>
+         <li><a href="subfiles/e-mtable01.html">m:mtable</a></li>
+         <li><a href="subfiles/e-mtd01.html">m:mtd</a></li>
+         <li><a href="subfiles/e-mtext01.html">m:mtext</a></li>
+         <li><a href="subfiles/e-mtr01.html">m:mtr</a></li>
+         <li><a href="subfiles/e-munder01.html">m:munder</a></li>
+         <li><a href="subfiles/e-munderover01.html">m:munderover</a></li>
+         <li><a href="subfiles/e-naturalnumbers01.html">m:naturalnumbers</a></li>
+         <li><a href="subfiles/e-neq01.html">m:neq</a></li>
+         <li><a href="subfiles/e-none01.html">m:none</a></li>
+         <li><a href="subfiles/e-not01.html">m:not</a></li>
+         <li><a href="subfiles/e-notanumber01.html">m:notanumber</a></li>
+         <li><a href="subfiles/e-notin01.html">m:notin</a></li>
+         <li><a href="subfiles/e-notprsubset01.html">m:notprsubset</a></li>
+         <li><a href="subfiles/e-notsubset01.html">m:notsubset</a></li>
+         <li><a href="subfiles/e-or01.html">m:or</a></li>
+         <li><a href="subfiles/e-otherwise01.html">m:otherwise</a></li>
+         <li><a href="subfiles/e-outerproduct01.html">m:outerproduct</a></li>
+         <li><a href="subfiles/e-partialdiff01.html">m:partialdiff</a></li>
+         <li><a href="subfiles/e-pi01.html">m:pi</a></li>
+         <li><a href="subfiles/e-piece01.html">m:piece</a></li>
+         <li><a href="subfiles/e-piecewise01.html">m:piecewise</a></li>
+         <li><a href="subfiles/e-plus01.html">m:plus</a></li>
+         <li><a href="subfiles/e-power01.html">m:power</a></li>
+         <li><a href="subfiles/e-primes01.html">m:primes</a></li>
+         <li><a href="subfiles/e-product01.html">m:product</a></li>
+         <li><a href="subfiles/e-prsubset01.html">m:prsubset</a></li>
+         <li><a href="subfiles/e-quotient01.html">m:quotient</a></li>
+         <li><a href="subfiles/e-rationals01.html">m:rationals</a></li>
+         <li><a href="subfiles/e-real01.html">m:real</a></li>
+         <li><a href="subfiles/e-reals01.html">m:reals</a></li>
+         <li><a href="subfiles/e-rem01.html">m:rem</a></li>
+         <li><a href="subfiles/e-root01.html">m:root</a></li>
+         <li><a href="subfiles/e-scalarproduct01.html">m:scalarproduct</a></li>
+         <li><a href="subfiles/e-sdev01.html">m:sdev</a></li>
+         <li><a href="subfiles/e-sec01.html">m:sec</a></li>
+         <li><a href="subfiles/e-sech01.html">m:sech</a></li>
+         <li><a href="subfiles/e-selector01.html">m:selector</a></li>
+         <li><a href="subfiles/_m-semantics.html">m:semantics *</a></li>
+         <li><a href="subfiles/e-sep01.html">m:sep</a></li>
+         <li><a href="subfiles/e-set01.html">m:set</a></li>
+         <li><a href="subfiles/e-setdiff01.html">m:setdiff</a></li>
+         <li><a href="subfiles/e-share01.html">m:share</a></li>
+         <li><a href="subfiles/e-sin01.html">m:sin</a></li>
+         <li><a href="subfiles/e-sinh01.html">m:sinh</a></li>
+         <li><a href="subfiles/e-subset01.html">m:subset</a></li>
+         <li><a href="subfiles/e-sum01.html">m:sum</a></li>
+         <li><a href="subfiles/e-tan01.html">m:tan</a></li>
+         <li><a href="subfiles/e-tanh01.html">m:tanh</a></li>
+         <li><a href="subfiles/e-tendsto01.html">m:tendsto</a></li>
+         <li><a href="subfiles/e-times01.html">m:times</a></li>
+         <li><a href="subfiles/e-transpose01.html">m:transpose</a></li>
+         <li><a href="subfiles/e-true01.html">m:true</a></li>
+         <li><a href="subfiles/e-union01.html">m:union</a></li>
+         <li><a href="subfiles/e-uplimit01.html">m:uplimit</a></li>
+         <li><a href="subfiles/e-variance01.html">m:variance</a></li>
+         <li><a href="subfiles/e-vector01.html">m:vector</a></li>
+         <li><a href="subfiles/e-vectorproduct01.html">m:vectorproduct</a></li>
+         <li><a href="subfiles/e-xor01.html">m:xor</a></li>
+      </ul>
+      <p>where elements prefixed with <code>m</code> are associated with the
+         								namespace <code>http://www.w3.org/1998/Math/MathML</code></p>
+      <p>This feature also contributes the following 106 attributes:</p>
+      <ul class="main-attribute-toc">
+         <li><a href="subfiles/attributes.html#accent">accent * </a></li>
+         <li><a href="subfiles/attributes.html#accentunder">accentunder * </a></li>
+         <li><a href="subfiles/attributes.html#actiontype01">actiontype</a></li>
+         <li><a href="subfiles/attributes.html#align">align * </a></li>
+         <li><a href="subfiles/attributes.html#alignmentscope">alignmentscope * </a></li>
+         <li><a href="subfiles/attributes.html#alt01">alt</a></li>
+         <li><a href="subfiles/attributes.html#altimg01">altimg</a></li>
+         <li><a href="subfiles/attributes.html#altimg-height01">altimg-height</a></li>
+         <li><a href="subfiles/attributes.html#altimg-valign01">altimg-valign</a></li>
+         <li><a href="subfiles/attributes.html#altimg-width01">altimg-width</a></li>
+         <li><a href="subfiles/attributes.html#alttext01">alttext</a></li>
+         <li><a href="subfiles/attributes.html#base02">base</a></li>
+         <li><a href="subfiles/attributes.html#bevelled">bevelled * </a></li>
+         <li><a href="subfiles/attributes.html#cd01">cd</a></li>
+         <li><a href="subfiles/attributes.html#cdgroup01">cdgroup</a></li>
+         <li><a href="subfiles/attributes.html#charalign">charalign * </a></li>
+         <li><a href="subfiles/attributes.html#charspacing">charspacing * </a></li>
+         <li><a href="subfiles/attributes.html#close">close * </a></li>
+         <li><a href="subfiles/attributes.html#closure01">closure</a></li>
+         <li><a href="subfiles/attributes.html#columnalign">columnalign * </a></li>
+         <li><a href="subfiles/attributes.html#columnlines">columnlines * </a></li>
+         <li><a href="subfiles/attributes.html#columnspacing">columnspacing * </a></li>
+         <li><a href="subfiles/attributes.html#columnspan">columnspan * </a></li>
+         <li><a href="subfiles/attributes.html#columnwidth">columnwidth * </a></li>
+         <li><a href="subfiles/attributes.html#crossout">crossout * </a></li>
+         <li><a href="subfiles/attributes.html#decimalpoint01">decimalpoint</a></li>
+         <li><a href="subfiles/attributes.html#definitionURL">definitionURL * </a></li>
+         <li><a href="subfiles/attributes.html#denomalign">denomalign * </a></li>
+         <li><a href="subfiles/attributes.html#depth">depth * </a></li>
+         <li><a href="subfiles/attributes.html#dir">dir * </a></li>
+         <li><a href="subfiles/attributes.html#display01">display</a></li>
+         <li><a href="subfiles/attributes.html#displaystyle">displaystyle * </a></li>
+         <li><a href="subfiles/attributes.html#edge">edge * </a></li>
+         <li><a href="subfiles/attributes.html#encoding">encoding * </a></li>
+         <li><a href="subfiles/attributes.html#equalcolumns">equalcolumns * </a></li>
+         <li><a href="subfiles/attributes.html#equalrows">equalrows * </a></li>
+         <li><a href="subfiles/attributes.html#fence">fence * </a></li>
+         <li><a href="subfiles/attributes.html#form">form * </a></li>
+         <li><a href="subfiles/attributes.html#frame">frame * </a></li>
+         <li><a href="subfiles/attributes.html#framespacing">framespacing * </a></li>
+         <li><a href="subfiles/attributes.html#groupalign">groupalign * </a></li>
+         <li><a href="subfiles/attributes.html#height">height * </a></li>
+         <li><a href="subfiles/attributes.html#indentalign">indentalign * </a></li>
+         <li><a href="subfiles/attributes.html#indentalignfirst">indentalignfirst * </a></li>
+         <li><a href="subfiles/attributes.html#indentalignlast">indentalignlast * </a></li>
+         <li><a href="subfiles/attributes.html#indentshift">indentshift * </a></li>
+         <li><a href="subfiles/attributes.html#indentshiftfirst">indentshiftfirst * </a></li>
+         <li><a href="subfiles/attributes.html#indentshiftlast">indentshiftlast * </a></li>
+         <li><a href="subfiles/attributes.html#indenttarget">indenttarget * </a></li>
+         <li><a href="subfiles/attributes.html#infixlinebreakstyle01">infixlinebreakstyle</a></li>
+         <li><a href="subfiles/attributes.html#largeop">largeop * </a></li>
+         <li><a href="subfiles/attributes.html#leftoverhang">leftoverhang * </a></li>
+         <li><a href="subfiles/attributes.html#length">length * </a></li>
+         <li><a href="subfiles/attributes.html#linebreak">linebreak * </a></li>
+         <li><a href="subfiles/attributes.html#linebreakmultchar">linebreakmultchar * </a></li>
+         <li><a href="subfiles/attributes.html#linebreakstyle">linebreakstyle * </a></li>
+         <li><a href="subfiles/attributes.html#lineleading">lineleading * </a></li>
+         <li><a href="subfiles/attributes.html#linethickness">linethickness * </a></li>
+         <li><a href="subfiles/attributes.html#location">location * </a></li>
+         <li><a href="subfiles/attributes.html#longdivstyle">longdivstyle * </a></li>
+         <li><a href="subfiles/attributes.html#lquote">lquote * </a></li>
+         <li><a href="subfiles/attributes.html#lspace">lspace * </a></li>
+         <li><a href="subfiles/attributes.html#macros01">macros</a></li>
+         <li><a href="subfiles/attributes.html#mathbackground01">mathbackground</a></li>
+         <li><a href="subfiles/attributes.html#mathcolor01">mathcolor</a></li>
+         <li><a href="subfiles/attributes.html#mathsize">mathsize * </a></li>
+         <li><a href="subfiles/attributes.html#mathvariant">mathvariant * </a></li>
+         <li><a href="subfiles/attributes.html#maxsize">maxsize * </a></li>
+         <li><a href="subfiles/attributes.html#maxwidth01">maxwidth</a></li>
+         <li><a href="subfiles/attributes.html#minlabelspacing">minlabelspacing * </a></li>
+         <li><a href="subfiles/attributes.html#minsize">minsize * </a></li>
+         <li><a href="subfiles/attributes.html#mode01">mode</a></li>
+         <li><a href="subfiles/attributes.html#movablelimits">movablelimits * </a></li>
+         <li><a href="subfiles/attributes.html#mslinethickness">mslinethickness * </a></li>
+         <li><a href="subfiles/attributes.html#name01">name</a></li>
+         <li><a href="subfiles/attributes.html#notation">notation * </a></li>
+         <li><a href="subfiles/attributes.html#numalign">numalign * </a></li>
+         <li><a href="subfiles/attributes.html#open">open * </a></li>
+         <li><a href="subfiles/attributes.html#order01">order</a></li>
+         <li><a href="subfiles/attributes.html#overflow01">overflow</a></li>
+         <li><a href="subfiles/attributes.html#position">position * </a></li>
+         <li><a href="subfiles/attributes.html#rightoverhang">rightoverhang * </a></li>
+         <li><a href="subfiles/attributes.html#rowalign">rowalign * </a></li>
+         <li><a href="subfiles/attributes.html#rowlines">rowlines * </a></li>
+         <li><a href="subfiles/attributes.html#rowspacing">rowspacing * </a></li>
+         <li><a href="subfiles/attributes.html#rowspan">rowspan * </a></li>
+         <li><a href="subfiles/attributes.html#rquote">rquote * </a></li>
+         <li><a href="subfiles/attributes.html#rspace">rspace * </a></li>
+         <li><a href="subfiles/attributes.html#scriptlevel01">scriptlevel</a></li>
+         <li><a href="subfiles/attributes.html#scriptminsize01">scriptminsize</a></li>
+         <li><a href="subfiles/attributes.html#scriptsizemultiplier">scriptsizemultiplier * </a></li>
+         <li><a href="subfiles/attributes.html#selection">selection * </a></li>
+         <li><a href="subfiles/attributes.html#separator">separator * </a></li>
+         <li><a href="subfiles/attributes.html#separators">separators * </a></li>
+         <li><a href="subfiles/attributes.html#shift">shift * </a></li>
+         <li><a href="subfiles/attributes.html#side">side * </a></li>
+         <li><a href="subfiles/attributes.html#src02">src</a></li>
+         <li><a href="subfiles/attributes.html#stackalign">stackalign * </a></li>
+         <li><a href="subfiles/attributes.html#stretchy">stretchy * </a></li>
+         <li><a href="subfiles/attributes.html#subscriptshift">subscriptshift * </a></li>
+         <li><a href="subfiles/attributes.html#superscriptshift">superscriptshift * </a></li>
+         <li><a href="subfiles/attributes.html#symmetric">symmetric * </a></li>
+         <li><a href="subfiles/attributes.html#type">type * </a></li>
+         <li><a href="subfiles/attributes.html#valign">valign * </a></li>
+         <li><a href="subfiles/attributes.html#voffset01">voffset</a></li>
+         <li><a href="subfiles/attributes.html#width">width * </a></li>
+      </ul>
+      <h3>Source Rendition Feature</h3>
+      <p>More information about this feature is available at the <a href="http://www.daisy.org/z3998/2012/auth/features/rend/1.0/">Source Rendition Feature Resource Directory</a>.
+      </p>
+      <p>This feature contributes the following element:</p>
+      <ul class="main-element-toc">
+         <li><a href="subfiles/e-linebreak01.html">rend:linebreak</a></li>
+      </ul>
+      <p>where elements prefixed with <code>rend</code> are associated with the
+         								namespace <code>http://www.daisy.org/ns/z3998/authoring/features/rend/</code></p>
+      <p>This feature also contributes the following 2 attributes:</p>
+      <ul class="main-attribute-toc">
+         <li><a href="subfiles/attributes.html#rend-prefix">rend:prefix * </a></li>
+         <li><a href="subfiles/attributes.html#symbol01">rend:symbol</a></li>
+      </ul>
+      <p>where attributes prefixed with <code>rend</code> are associated with the
+         								namespace <code>http://www.daisy.org/ns/z3998/authoring/features/rend/</code></p>
+      <h3>Content Selection Feature</h3>
+      <p>More information about this feature is available at the <a href="http://www.daisy.org/z3998/2012/auth/features/select/1.0/">Content Selection Feature Resource Directory</a>.
+      </p>
+      <p>This feature contributes the following 3 elements:</p>
+      <ul class="main-element-toc">
+         <li><a href="subfiles/_sel-otherwise.html">sel:otherwise *</a></li>
+         <li><a href="subfiles/_sel-select.html">sel:select *</a></li>
+         <li><a href="subfiles/_sel-when.html">sel:when *</a></li>
+      </ul>
+      <p>where elements prefixed with <code>sel</code> are associated with the
+         								namespace <code>http://www.daisy.org/ns/z3998/authoring/features/select/</code></p>
+      <p>This feature also contributes the following 2 attributes:</p>
+      <ul class="main-attribute-toc">
+         <li><a href="subfiles/attributes.html#expr01">expr</a></li>
+         <li><a href="subfiles/attributes.html#selid01">sel:selid</a></li>
+      </ul>
+      <p>where attributes prefixed with <code>sel</code> are associated with the
+         								namespace <code>http://www.daisy.org/ns/z3998/authoring/features/select/</code></p>
+      <h3>SSML Integration Feature</h3>
+      <p>More information about this feature is available at the <a href="http://www.daisy.org/z3998/2012/auth/features/ssml/1.0/">SSML Integration Feature Resource Directory</a>.
+      </p>
+      <p>This feature contributes the following 7 elements:</p>
+      <ul class="main-element-toc">
+         <li><a href="subfiles/e-break01.html">ssml:break</a></li>
+         <li><a href="subfiles/e-lexicon01.html">ssml:lexicon</a></li>
+         <li><a href="subfiles/_ssml-phoneme.html">ssml:phoneme *</a></li>
+         <li><a href="subfiles/_ssml-prosody.html">ssml:prosody *</a></li>
+         <li><a href="subfiles/_ssml-say-as.html">ssml:say-as *</a></li>
+         <li><a href="subfiles/_ssml-sub.html">ssml:sub *</a></li>
+         <li><a href="subfiles/_ssml-token.html">ssml:token *</a></li>
+      </ul>
+      <p>where elements prefixed with <code>ssml</code> are associated with the
+         								namespace <code>http://www.w3.org/2001/10/synthesis</code></p>
+      <p>This feature also contributes the following 19 attributes:</p>
+      <ul class="main-attribute-toc">
+         <li><a href="subfiles/attributes.html#alias01">alias</a></li>
+         <li><a href="subfiles/attributes.html#alphabet01">alphabet</a></li>
+         <li><a href="subfiles/attributes.html#contour01">contour</a></li>
+         <li><a href="subfiles/attributes.html#detail01">detail</a></li>
+         <li><a href="subfiles/attributes.html#duration01">duration</a></li>
+         <li><a href="subfiles/attributes.html#format01">format</a></li>
+         <li><a href="subfiles/attributes.html#interpret-as01">interpret-as</a></li>
+         <li><a href="subfiles/attributes.html#ph01">ph</a></li>
+         <li><a href="subfiles/attributes.html#pitch01">pitch</a></li>
+         <li><a href="subfiles/attributes.html#range01">range</a></li>
+         <li><a href="subfiles/attributes.html#rate01">rate</a></li>
+         <li><a href="subfiles/attributes.html#alphabet02">ssml:alphabet</a></li>
+         <li><a href="subfiles/attributes.html#onlangfailure01">ssml:onlangfailure</a></li>
+         <li><a href="subfiles/attributes.html#ph02">ssml:ph</a></li>
+         <li><a href="subfiles/attributes.html#strength01">strength</a></li>
+         <li><a href="subfiles/attributes.html#time02">time</a></li>
+         <li><a href="subfiles/attributes.html#type04">type</a></li>
+         <li><a href="subfiles/attributes.html#uri01">uri</a></li>
+         <li><a href="subfiles/attributes.html#volume01">volume</a></li>
+      </ul>
+      <p>where attributes prefixed with <code>ssml</code> are associated with the
+         								namespace <code>http://www.w3.org/2001/10/synthesis</code></p>
+      <h3>SVG CDR Feature</h3>
+      <p>More information about this feature is available at the <a href="http://www.daisy.org/z3998/2012/auth/features/svg-cdr/1.0/">SVG CDR Feature Resource Directory</a>.
+      </p>
+      <p>This feature  contributes the following:</p>
+      <div class="menu-rng">The value <code>image/svg+xml</code>, added to the <a href="subfiles/attributes.html#srctype01"><code>srctype</code> attribute</a></div>
+   </body>
+</html>

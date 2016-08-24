@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+    xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:sch="http://www.ascc.net/xml/schematron"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    xmlns:zed="http://www.daisy.org/ns/zedval/testmap"
+    >
+    <a:documentation>
+        attributes.rng
+        Original version: mgylling 2005-06-01    
+        Version/change history:
+        
+    </a:documentation>
+    
+    <include href="datatypes.rng"/>
+    
+    <define name="attribute.id.required">
+        <attribute name="id">
+            <ref name="datatype.id"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.id.optional">
+        <optional>
+            <ref name="attribute.id.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.href.required">
+        <attribute name="href">
+            <ref name="datatype.uri"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.href.required.z3986-2005.subset">
+        <attribute name="href">
+            <ref name="datatype.uri.z3986-2005.subset"/>
+        </attribute>
+    </define>	
+    
+    <define name="attribute.href.optional.z3986-2005.subset">
+        <optional>
+            <ref name="attribute.href.required.z3986-2005.subset"/>
+        </optional>	
+    </define>	
+    
+    
+    <define name="attribute.href.optional">
+        <attribute name="href">
+            <ref name="datatype.uri"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.href.required.relative.smilwithfragment">
+        <attribute name="href">
+            <ref name="datatype.uri.relative.smilwithfragment"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.class.required">
+        <attribute name="class">
+            <text/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.class.optional">
+        <optional>
+            <ref name="attribute.class.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.content.stringvalue">
+        <attribute name="content">
+            <ref name="datatype.string"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.content.stringvalue.required">
+        <ref name="attribute.content.stringvalue"/>
+    </define>
+    
+    <define name="attribute.content.stringvalue.optional">
+        <optional>
+            <ref name="attribute.content.stringvalue"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.content.urivalue.required">
+        <attribute name="content">
+            <data type="anyURI"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.content.urivalue.optional">
+        <optional>
+            <ref name="attribute.content.urivalue.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.content.urivalue.z3986-subset.required">
+        <attribute name="content">
+            <ref name="datatype.uri.z3986-2005.subset"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.content.urivalue.z3986-subset.optional">
+        <optional>
+            <ref name="attribute.content.urivalue.z3986-subset.required"/>		
+        </optional>
+    </define>
+    
+    <define name="attribute.title.required">
+        <attribute name="title">
+            <text/>
+        </attribute>
+    </define> 
+    
+    <define name="attribute.title.optional">
+        <optional>
+            <ref name="attribute.title.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.xml.lang.required">
+        <attribute name="xml:lang">
+            <ref name="datatype.rfc1766"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.xml.lang.optional">
+        <optional>
+            <ref name="attribute.xml.lang.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.lang.required">
+        <attribute name="lang">
+            <ref name="datatype.rfc1766"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.lang.optional">
+        <optional>
+            <ref name="attribute.lang.required"/>
+        </optional>
+    </define>
+    
+    
+    <define name="attribute.dir.required">
+        <attribute name="dir">
+            <choice>
+                <value>ltr</value>
+                <value>rtl</value>
+            </choice>
+        </attribute>
+    </define>
+    
+    <define name="attribute.dir.optional">
+        <optional>
+            <ref name="attribute.dir.required"/>    
+        </optional>
+    </define>
+    
+    <define name="attribute.dur.required">
+        <attribute name="dur">
+            <ref name="datatype.smilclock"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.dur.optional">
+        <optional>
+            <ref name="attribute.dur.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.src.required">
+        <attribute name="src">
+            <ref name="datatype.uri"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.src.required.z3986-2005.subset">
+        <attribute name="src">
+            <ref name="datatype.uri.z3986-2005.subset"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.src.required.uri.z3986-2005.subset.relative.smilwithfragment">
+        <attribute name="src">
+            <ref name="datatype.uri.z3986-2005.subset.relative.smilwithfragment"/>
+        </attribute>
+    </define>		
+    
+    <define name="attribute.src.optional.uri.z3986-2005.subset.relative.smilwithfragment">
+        <optional>
+            <ref name="attribute.src.required.uri.z3986-2005.subset.relative.smilwithfragment"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.src.optional">
+        <optional>
+            <ref name="attribute.src.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.src.optional.z3986-2005.subset">
+        <optional>
+            <ref name="attribute.src.required.z3986-2005.subset"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.clipBegin.required">
+        <attribute name="clipBegin">
+            <ref name="datatype.smilclock"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.clipBegin.optional">
+        <optional>
+            <ref name="attribute.clipBegin.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.clipEnd.required">
+        <attribute name="clipEnd">
+            <ref name="datatype.smilclock"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.clipEnd.optional">
+        <optional>
+            <ref name="attribute.clipEnd.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.customTest.required">
+        <attribute name="customTest">
+            <ref name="datatype.idref"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.customTest.optional">
+        <optional>
+            <ref name="attribute.customTest.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.region.required">
+        <attribute name="region">
+            <text/>
+        </attribute>
+    </define> 
+    
+    <define name="attribute.region.optional">
+        <optional>
+            <ref name="attribute.region.required"/>
+        </optional>
+    </define>
+    
+    <define name="attribute.scheme">
+        <attribute name="scheme">
+            <ref name="datatype.string"/>
+        </attribute>
+    </define>
+    
+    <define name="attribute.scheme.required">
+        <ref name="attribute.scheme"/>
+    </define>
+    
+    <define name="attribute.scheme.optional">
+        <optional>
+            <ref name="attribute.scheme"/>
+        </optional>
+    </define>
+</grammar>

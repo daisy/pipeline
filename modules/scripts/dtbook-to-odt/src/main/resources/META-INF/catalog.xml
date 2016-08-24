@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE catalog
+  PUBLIC "-//OASIS/DTD Entity Resolution XML Catalog V1.0//EN" "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-odt/dtbook-to-odt.xpl" uri="../xml/dtbook-to-odt.xpl" px:script="true"/>
+  <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-odt/library.xpl" uri="../xml/library.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-odt/content.xsl" uri="../xml/content.xsl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-odt/templates/default.ott" uri="../templates/default.ott"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:odt-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:image-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:asciimath-utils"/>
+</catalog>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The abbreviations module </title>
+        <annotation annotates="/">
+            <para>This module defines the abbr and expansion elements for identifying and annotating abbreviations and acronyms. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.abbr.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.abbr">
+            <element name="abbr">
+                <a:documentation>The abbr element represents the abbreviated form of a phrase, term or name. The role attribute optionally expresses whether the type of abbreviation. The expansion and name elements provide a mechanism for associating an abbreviation with its uncontracted form. When including an expansion, the ref attribute on the abbr element links the abbreviation to an expansion or name. The ref attribute can also be used to reference a definition element when an explanatory definition of the abbreviation is also needed. </a:documentation>
+                <ref name="z3998.abbr.attlist"/>
+                <ref name="z3998.abbr.content"/>
+                <sch:rule context="default:abbr[@ref]">
+                    <sch:assert test="some $exp in (//default:expansion, //default:name, //default:definition) satisfies current()/@ref eq $exp/@xml:id">The ref attribute on an abbr element must resolve to an expansion, name or definition element. </sch:assert>
+                </sch:rule>
+                <sch:rule context="default:abbr">
+                    <sch:assert test="normalize-space(.) or *">The abbr element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.abbr.attlist">
+            <ref name="z3998.global.core.attrib"/>
+            <optional>
+                <ref name="z3998.abbr.role.attrib"/>
+            </optional>
+            <optional>
+                <ref name="z3998.ref.attrib"/>
+            </optional>
+            <ref name="z3998.Phrase.extern.attrib"/>
+        </define>
+        <define name="z3998.abbr.content">
+            <ref name="z3998.Text.model"/>
+        </define>
+        <define name="z3998.abbr.role.attrib">
+            <attribute name="role">
+                <list>
+                    <oneOrMore>
+                        <ref name="z3998.abbr.role.attrib.content.enum"/>
+                    </oneOrMore>
+                </list>
+            </attribute>
+        </define>
+        <define name="z3998.abbr.role.attrib.content.enum" combine="choice">
+            <ref name="CURIE.datatype"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.expansion">
+            <element name="expansion">
+                <a:documentation>The expansion element represents the fully expanded form of an abbreviation . The expansion element requires an xml:id attribute with a unique identifier for linking from the associated abbreviation. Expansions that are not part of the document content must be placed in the document head . </a:documentation>
+                <ref name="z3998.expansion.attlist"/>
+                <ref name="z3998.expansion.content"/>
+                <sch:rule context="default:expansion">
+                    <sch:assert test="not(descendant::default:expansion)">The expansion element must not contain descendant expansion elements. </sch:assert>
+                    <sch:assert test="normalize-space(.) or *">The expansion element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.expansion.attlist">
+            <ref name="z3998.Phrase.attrib"/>
+        </define>
+        <define name="z3998.expansion.content">
+            <ref name="z3998.Phrase.core.Text.mix.model"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>abbreviations module - default content model contribution </a:documentation>
+        <define name="z3998.head.class" combine="choice">
+            <ref name="z3998.expansion"/>
+        </define>
+        <define name="z3998.Phrase.core.class" combine="choice">
+            <ref name="z3998.expansion"/>
+        </define>
+        <define name="z3998.Phrase.core.class" combine="choice">
+            <ref name="z3998.abbr"/>
+        </define>
+        <define name="z3998.name.extra.class" combine="choice">
+            <ref name="z3998.abbr"/>
+        </define>
+    </div>
+</grammar>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>2</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>org.daisy.pipeline.modules</groupId>
+  <artifactId>modules-parent</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>DAISY Pipeline 2 :: Modules Parent POM</name>
+  <description>The DAISY Pipeline 2 modules provide scripts for automated processing of various digital formats efficiently and economically. It intends to facilitate the production and maintenance of accessible content for people with print disabilities.</description>
+  <url>http://www.daisy.org/pipeline2</url>
+  <inceptionYear>2010</inceptionYear>
+  <organization>
+    <name>The DAISY Consortium</name>
+    <url>http://www.daisy.org/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License, Version 3</name>
+      <url>http://www.gnu.org/copyleft/lesser.html</url>
+      <distribution>manual</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>josteinaj</id>
+      <name>Jostein Austvik Jacobsen</name>
+      <email>josteinaj@gmail.com</email>
+      <organization>NLB</organization>
+      <organizationUrl>http://www.nlb.no/</organizationUrl>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>UTC+01:00</timezone>
+    </developer>
+  </developers>
+
+  <properties>
+    <!-- Targeted Java Version -->
+    <java.version>1.6</java.version>
+    <saxon.version>9.4</saxon.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>xml-maven-plugin</artifactId>
+                    <versionRange>[1.0,)</versionRange>
+                    <goals>
+                      <goal>transform</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute/>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>pipeline-xml-module</id>
+      <activation>
+        <file>
+          <exists>src/main/resources/META-INF/catalog.xml</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>xml-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>transform</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <transformationSets>
+                <transformationSet>
+                  <dir>src</dir>
+                  <includes>
+                    <include>**/META-INF/catalog.xml</include>
+                  </includes>
+                  <stylesheet>org/daisy/pipeline/modules/build/catalog-to-ds.xsl</stylesheet>
+                  <parameters>
+                    <parameter>
+                      <name>outputDir</name>
+                      <value>${project.build.directory}/generated-resources</value>
+                    </parameter>
+                  </parameters>
+                  <outputDir>${project.build.directory}/generated-resources</outputDir>
+                </transformationSet>
+              </transformationSets>
+            </configuration>
+            <dependencies>
+              <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>Saxon-HE</artifactId>
+                <version>${saxon.version}</version>
+              </dependency>
+              <dependency>
+                <groupId>org.daisy.pipeline.build</groupId>
+                <artifactId>modules-build-helper</artifactId>
+                <version>1.0-SNAPSHOT</version>
+              </dependency>
+            </dependencies>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <configuration>
+              <instructions>
+                <!-- always add Maven resources - add OSGI-INF if it exists -->
+                <!-- 
+                     TODO replace the hackish syntax when this is released:
+                     https://github.com/bndtools/bnd/issues/168
+                 -->
+                <Include-Resource>
+     {maven-resources}$(if;$(replace;$(isdir;${project.build.directory}/generated-resources/OSGI-INF);false(.*);$1);,OSGI-INF=${project.build.directory}/generated-resources/OSGI-INF)
+                </Include-Resource>
+                <_include>${project.build.directory}/generated-resources/bnd.bnd</_include>
+              </instructions>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

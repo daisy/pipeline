@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/moveout-annotation.xsl">
+    <x:scenario label="Definition with ANNOTATION">
+        <x:context>
+            <tmp:item>
+                <dd>DD <tmp:annotation-block>annotations should not be inside definitions</tmp:annotation-block> Rest of DD</dd>
+            </tmp:item>
+        </x:context>
+        <x:expect label="the annotation is moved out">
+            <tmp:item>
+                <dd>DD </dd>
+                <tmp:annotation-block>annotations should not be inside definitions</tmp:annotation-block>
+                <dd> Rest of DD</dd>
+            </tmp:item>
+        </x:expect>
+    </x:scenario>
+</x:description>

@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar  
+  ns="http://www.w3.org/1999/xhtml"
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:sch="http://www.ascc.net/xml/schematron"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"  
+>
+  <a:documentation>
+    d202ncc.rng
+    This file is part of the RelaxNG/Schematron validation
+    suite for Daisy 2.02. All Schematron assertion strings
+    can be identifier by the intitial part of the string 
+    being: '[sch][dtb::d202][type::warning|error][msg::'.
+    Last edit by: linuse 2006-03-01
+    catalog-mapped by the PID '-//DAISY//RNG ncc v2.02//EN'
+  </a:documentation>
+  
+  <sch:ns prefix="xht" uri="http://www.w3.org/1999/xhtml"/>
+  
+  <include href="../relaxngcommon/attributes.rng" />
+  <include href="d202meta.rng" />
+
+  <start>
+    <ref name="html"/>
+  </start>
+  
+  <define name="html">
+    <element name="html">
+      <ref name="attlist.html"/>
+      <ref name="head"/>
+      <ref name="body"/>
+    </element>  
+  </define>
+  
+  <define name="attlist.html">
+    <optional>
+      <attribute name="lang">
+        <ref name="datatype.rfc1766"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="xml:lang">
+        <ref name="datatype.rfc1766"/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="head">
+    <element name="head">
+      <interleave>
+        <ref name="head.title"/>
+        <ref name="head.link"/>
+        <ref name="head.meta"/>   
+      </interleave>
+    </element>
+  </define>
+
+  <define name="head.title">
+    <element name="title">
+      <text/>
+    </element>    
+  </define>
+
+  <define name="head.link">
+    <zeroOrMore>
+      <element name="link">
+        <empty/>
+        <attribute name="rel"/>      
+        <attribute name="type"/>
+        <attribute name="href"/>
+      </element>    
+    </zeroOrMore>
+  </define>
+
+  <define name="head.meta">
+    <oneOrMore>
+      <ref name="ncc.meta"/>
+    </oneOrMore>       
+  </define>
+
+  <define name="body">
+    <element name="body">
+      <ref name="body.firstchild"/>
+      <ref name="body.content"/>
+    </element>
+  </define>
+  
+  <define name="body.firstchild">
+    <element name="h1">
+      <attribute name="class">
+        <value type="string">title</value>
+      </attribute>
+      <ref name="attribute.id.required"/>
+      <ref name="a"/>
+    </element>
+  </define>
+  
+  <define name="body.content">
+    <zeroOrMore>
+      <choice>
+        <ref name="h1"/>
+        <ref name="h2"/>
+        <ref name="h3"/>
+        <ref name="h4"/>
+        <ref name="h5"/>
+        <ref name="h6"/>
+        <ref name="span"/>
+        <ref name="div"/> 
+      </choice>
+    </zeroOrMore>  
+  </define>
+
+  <define name="h1">
+    <element name="h1">
+      <ref name="attlist.headings.body.content"/>
+      <ref name="a"/>
+    </element>  
+  </define>
+
+  <define name="h2">
+    <element name="h2">
+      <ref name="attlist.headings.body.content"/>
+      <ref name="a"/>
+    </element>  
+  </define>
+  
+  <define name="h3">
+    <element name="h3">
+      <ref name="attlist.headings.body.content"/>
+      <ref name="a"/>
+    </element>  
+  </define>
+  
+  <define name="h4">
+    <element name="h4">
+      <ref name="attlist.headings.body.content"/>
+      <ref name="a"/>
+    </element>
+  </define>
+  
+  <define name="h5">
+    <element name="h5">
+      <ref name="attlist.headings.body.content"/>
+      <ref name="a"/>
+    </element>  
+  </define>
+  
+  <define name="h6">
+    <element name="h6">
+      <ref name="attlist.headings.body.content"/>
+      <ref name="a"/>  
+    </element>  
+  </define>
+
+  <define name="span">
+    <element name="span">
+      <ref name="attribute.id.required"/>
+      <choice>      
+        <group>
+          <attribute name="class">
+            <value type="string">page-normal</value>
+          </attribute>
+          <element name="a">
+            <ref name="attlist.a"/>
+            <ref name="datatype.integer"/>          
+          </element>          
+        </group>
+        <group>
+          <attribute name="class">
+            <value type="string">page-front</value>
+          </attribute>
+          <element name="a">
+            <ref name="attlist.a"/>
+				<choice>
+					<ref name="datatype.romannumeral"/>
+					<ref name="datatype.positiveInteger"/>
+				</choice> 
+          </element>        
+        </group>
+        <group>
+          <attribute name="class">
+            <choice>
+              <value type="string">page-special</value>
+              <value type="string">noteref</value>
+              <value type="string">sidebar</value>
+              <value type="string">optional-prodnote</value>  
+            </choice>  
+          </attribute>
+          <element name="a">
+            <ref name="attlist.a"/>
+            <text/>
+          </element>        
+        </group>            
+      </choice>   
+    </element>  
+  </define>
+
+  <define name="div">
+    <element name="div">
+      <ref name="attlist.div.body.content"/>
+      <ref name="a"/>    
+    </element>  
+  </define>
+
+  <define name="attlist.div.body.content">
+    <ref name="attribute.id.required"/>
+    <attribute name="class">
+        <value type="string">group</value>    
+    </attribute>    
+  </define>
+
+  <define name="attlist.headings.body.content">
+    <ref name="attribute.id.required"/>
+    <ref name="attribute.class.optional"/>
+  </define>
+
+  <define name="a">
+    <element name="a">
+      <text/>
+      <ref name="attlist.a"/>
+    </element>
+  </define>
+  
+  <define name="attlist.a">
+    <ref name="attribute.id.optional"/>
+    <!-- DTD defaulting stuff: 
+    <ref name="attribute.shape"/> 
+    -->
+    <ref name="attribute.href.required.relative.smilwithfragment"/>
+  </define>  
+      
+  <define name="attribute.shape">
+    <!-- duh. #FIXED -->
+    <optional>
+      <attribute name="shape">
+        <choice>
+          <value type="string">rect</value>
+          <value type="string">circle</value>
+          <value type="string">poly</value>
+          <value type="string">default</value>
+        </choice>
+      </attribute>
+    </optional>  
+  </define>
+  
+  <define name="ncc.meta">
+  <!-- test patterns with rng; occurence with schematron -->
+    <element name="meta">
+      <optional>
+        <attribute name="scheme"/>
+      </optional>
+      <choice>                        
+        <ref name="nccCharset"> <!-- mandatory exactly one -->
+          <sch:pattern name="nccCharset" id="nccCharset">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:charset'])=1">
+                [sch][dtb::d202][type::warning][msg::ncc:charset seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+      
+        <ref name="dcDate"> <!-- mandatory exactly one -->
+          <sch:pattern name="dcDate" id="dcDate">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='dc:date'])=1">
+                [sch][dtb::d202][type::warning][msg::dc:date seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+        
+        <ref name="dcFormat"> <!-- mandatory exactly one -->
+          <sch:pattern name="dcFormat" id="dcFormat">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='dc:format'])=1">
+                [sch][dtb::d202][type::error][msg::dc:format seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+        
+        <ref name="dcIdentifier"> <!-- mandatory exactly one -->
+          <sch:pattern name="dcIdentifier" id="dcIdentifier">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='dc:identifier'])=1">
+                [sch][dtb::d202][type::error][msg::dc:identifier seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+        
+        <ref name="nccPageFront"> <!-- mandatory exactly one -->
+          <sch:pattern name="nccPageFront" id="nccPageFront">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:pageFront'])=1">
+                [sch][dtb::d202][type::error][msg::meta ncc:pageFront seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:pageFront']">
+              <sch:assert test="number(@content) = count(//xht:html/xht:body/xht:span[@class='page-front'])">
+                [sch][dtb::d202][type::warning][msg::given value of ncc:pageFront seems incorrect]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>        
+        </ref>
+
+        <ref name="nccPageNormal"> <!-- mandatory exactly one -->
+          <sch:pattern name="nccPageNormal" id="nccPageNormal">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:pageNormal'])=1">
+                [sch][dtb::d202][type::warning][msg::meta ncc:pageNormal seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:pageNormal']">
+              <sch:assert test="number(@content) = count(//xht:html/xht:body/xht:span[@class='page-normal'])">
+                [sch][dtb::d202][type::warning][msg::given value of ncc:pageNormal seems incorrect]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>        
+        </ref>
+
+        <ref name="nccPageSpecial"> <!-- mandatory exactly one -->
+          <sch:pattern name="nccPageSpecial" id="nccPageSpecial">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:pageSpecial'])=1">
+                [sch][dtb::d202][type::warning][msg::dc:identifier seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:pageSpecial']">
+              <sch:assert test="number(@content) = count(//xht:html/xht:body/xht:span[@class='page-special'])">
+                [sch][dtb::d202][type::warning][msg::given value of ncc:pageSpecial seems incorrect]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>        
+        </ref>
+        
+        <ref name="dcTitle"> <!-- mandatory exactly one -->
+          <sch:pattern name="dcTitle" id="dcTitle">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='dc:title'])=1">
+                [sch][dtb::d202][type::warning][msg::dc:title seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>        
+        </ref>
+        
+        <ref name="nccTocItems"> <!-- mandatory exactly one -->
+          <sch:pattern name="nccTocItems" id="nccTocItems">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:tocItems'])=1">
+                [sch][dtb::d202][type::warning]ncc:tocItems seems not to be in ncc exactly once
+              </sch:assert>
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:tocItems']">
+              <sch:assert test="number(@content) = count(//xht:html/xht:body/xht:*)">
+                [sch][msg::given value of ncc:tocItems seems incorrect]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>        
+        </ref>
+        
+        <ref name="nccTotalTime"> <!-- mandatory exactly one -->       
+          <sch:pattern name="nccTotalTime" id="nccTotalTime">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:totalTime'])=1">
+                [sch][dtb::d202][type::warning][msg::ncc:totaltime seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>  
+        </ref>
+        
+        <ref name="dcPublisher"> <!-- mandatory exactly one --> 
+          <sch:pattern name="dcPublisher" id="dcPublisher">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='dc:publisher'])=1">
+                [sch][dtb::d202][type::warning][msg::dc:publisher seems not to be in ncc exactly once]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>  
+        </ref>
+
+        <ref name="dcLanguage"> <!-- mandatory one or more -->
+          <sch:pattern name="dcLanguage" id="dcLanguage">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='dc:language'])&gt;0">
+                [sch][dtb::d202][type::warning][msg::dc:language seems not to be in ncc once or more]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>  
+        </ref>
+        
+        <ref name="dcCreator"> <!-- mandatory one or more -->
+          <sch:pattern name="dcCreator" id="dcCreator">
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='dc:creator'])&gt;0">
+                [sch][dtb::d202][type::warning][msg::dc:creator seems not to be in ncc once or more]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>  
+        </ref>
+
+        <ref name="nccSetInfo"/> <!-- mandatory in multiple volume DTBs -->
+
+        <ref name="nccSidebars">  <!-- mandatory if sidebars are used -->
+          <sch:pattern name="nccSidebars" id="nccSidebars">                      
+            <sch:rule context="xht:body/xht:span[@class='sidebar']">
+              <!-- if there are sidebars there should be one meta element -->
+              <sch:assert test="count(//xht:head/xht:meta[@name='ncc:sidebars'])=1">
+                [sch][dtb::d202][type::warning][msg::meta ncc:sidebars seems not to be in ncc]
+              </sch:assert>
+            </sch:rule>            
+            <sch:rule context="xht:head/xht:meta[@name='ncc:sidebars']">
+              <!-- meta value should correspond to number of sidebars in body -->
+              <sch:assert test="number(@content) = count(//xht:body/xht:span[@class='sidebar'])">
+                [sch][dtb::d202][type::warning][msg::meta ncc:sidebars seems to have incorrect value]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>  
+        </ref>
+
+        <ref name="nccFootnotes"> <!-- mandatory if footnotes are used -->
+          <sch:pattern name="nccFootnotes" id="nccFootnotes">                      
+            <sch:rule context="xht:body/xht:span[@class='noteref']">
+              <!-- if there are footnotes there should be one meta element -->
+              <sch:assert test="count(//xht:head/xht:meta[@name='ncc:footnotes'])=1">
+                [sch][dtb::d202][type::warning][msg::meta ncc:footnotes seems not to be in ncc]
+              </sch:assert>
+            </sch:rule>            
+            <sch:rule context="xht:head/xht:meta[@name='ncc:footnotes']">
+              <!-- meta value should correspond to number of footnotes in body -->
+              <sch:assert test="number(@content) = count(//xht:body/xht:span[@class='noteref'])">
+                [sch][dtb::d202][type::warning][msg::meta ncc:footnotes seems to have incorrect value]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>  
+        </ref>
+        
+        <ref name="nccProdNotes"> <!-- mandatory if producers notes are used -->
+          <sch:pattern name="nccProdNotes" id="nccProdNotes">                      
+            <sch:rule context="xht:body/xht:span[@class='optional-prodnote']">
+              <!-- if there are prodnotes there should be one meta element -->
+              <sch:assert test="count(//xht:head/xht:meta[@name='ncc:prodNotes'])=1">
+                [sch][dtb::d202][type::warning][msg::meta ncc:prodNotes seems not to be in ncc]
+              </sch:assert>
+            </sch:rule>            
+            <sch:rule context="xht:head/xht:meta[@name='ncc:prodNotes']">
+              <!-- meta value should correspond to number of prodnotes in body -->
+              <sch:assert test="number(@content) = count(//xht:body/xht:span[@class='optional-prodnote'])">
+                [sch][dtb::d202][type::warning][msg::meta ncc:prodNotes seems to have incorrect value]
+              </sch:assert>
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+            
+        <ref name="nccDepth"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccDepth" id="nccDepth">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:depth'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta ncc:depth seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:depth'][@content='1']">
+              <sch:assert test="count(//xht:body/xht:h2)=0">
+                [sch][dtb::d202][type::warning][msg::meta ncc:depth seems to have incorrect value]
+              </sch:assert>                                   
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:depth'][@content='2']">
+              <sch:assert test="count(//xht:body/xht:h3)=0">
+                [sch]meta ncc:depth seems to have incorrect value
+              </sch:assert>                                   
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:depth'][@content='3']">
+              <sch:assert test="count(//xht:body/xht:h4)=0">
+                [sch][dtb::d202][type::warning][msg::meta ncc:depth seems to have incorrect value]
+              </sch:assert>                                   
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:depth'][@content='4']">
+              <sch:assert test="count(//xht:body/xht:h5)=0">
+                [sch][dtb::d202][type::warning][msg::meta ncc:depth seems to have incorrect value]
+              </sch:assert>                                   
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:depth'][@content='5']">
+              <sch:assert test="count(//xht:body/xht:h6)=0">
+                [sch][dtb::d202][type::warning][msg::meta ncc:depth seems to have incorrect value]
+              </sch:assert>                                   
+            </sch:rule>
+            <sch:rule context="xht:head/xht:meta[@name='ncc:depth'][@content='6']">
+              <sch:assert test="count(//xht:body/xht:h6)&gt;0">
+                [sch][dtb::d202][type::warning][msg::meta ncc:depth seems to have incorrect value]
+              </sch:assert>                                   
+            </sch:rule>
+
+          </sch:pattern>
+        </ref>  
+                
+        <ref name="nccFiles"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccFiles" id="nccFiles">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:files'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta ncc:files seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+        
+        <ref name="nccMaxPageNormal"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccMaxPageNormal" id="nccMaxPageNormal">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:maxPageNormal'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta ncc:maxPageNormal seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+            <!--   
+            <sch:rule context="xht:head/xht:meta[@name='ncc:maxPageNormal']/@content">
+              <sch:assert test="number(.) = number(//xht:body/xht:span[last()][@class='page-normal'])">
+                [sch][msg::meta ncc:maxPageNormal seems to have incorrect value]
+              </sch:assert>                                   
+            </sch:rule>
+            -->        
+            <sch:rule context="xht:body/xht:span[last()][@class='page-normal']">
+              <sch:assert test="number(.) = number(//xht:head/xht:meta[@name='ncc:maxPageNormal']/@content)">
+                [sch][dtb::d202][type::warning][msg::meta ncc:maxPageNormal seems to have incorrect value]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>                    
+        </ref>
+
+        <ref name="nccMultimediaType"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccMultimediaType" id="nccMultimediaType">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:multimediaType'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta ncc:multimediaType seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+                
+        <ref name="dcSource"> <!-- optional zeroOrOne -->
+          <sch:pattern name="dcSource" id="dcSource">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='dc:source'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta dc:source seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+
+        <ref name="nccSourceDate"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccSourceDate" id="nccSourceDate">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:sourceDate'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta ncc:sourceDate seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+        
+        <ref name="nccSourceEdition"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccSourceEdition" id="nccSourceEdition">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:sourceEdition'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta ncc:sourceEdition seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+
+        <ref name="nccSourcePublisher"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccSourcePublisher" id="nccSourcePublisher">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:sourcePublisher'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta ncc:sourcePublisher seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+        
+        <ref name="nccGenerator"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccGenerator" id="nccGenerator">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:generator'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta ncc:generator seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+
+        <ref name="httpEquiv"> <!-- optional zeroOrOne -->
+          <sch:pattern name="httpEquiv" id="httpEquiv">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[lower-case(@http-equiv)='content-type'])&lt;2">
+                [sch][dtb::d202][type::warning][msg::meta http-equiv seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>
+        </ref>
+
+        <ref name="ncckByteSize"> <!-- optional zeroOrOne -->
+          <sch:pattern name="ncckByteSize" id="ncckByteSize">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:kByteSize'])&lt;2">            
+                [sch][dtb::d202][type::warning][msg::meta ncc:kByteSize seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>        
+        </ref>
+        
+        <ref name="nccProducedDate"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccProducedDate" id="nccProducedDate">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:producedDate'])&lt;2">            
+                [sch][dtb::d202][type::warning][msg::meta ncc:producedDate seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>        
+        </ref>
+        
+        <ref name="nccProducer"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccProducer" id="nccProducer">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:producer'])&lt;2">            
+                [sch][dtb::d202][type::warning][msg::meta ncc:producer seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>                
+        </ref>
+        
+        <ref name="nccRevision"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccRevision" id="nccRevision">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:revision'])&lt;2">            
+                [sch][dtb::d202][type::warning][msg::meta ncc:revision seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>              
+        </ref>
+
+        <ref name="nccRevisionDate"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccRevisionDate" id="nccRevisionDate">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:revisionDate'])&lt;2">            
+                [sch][dtb::d202][type::warning][msg::meta ncc:revisionDate seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>              
+        </ref>
+        
+        <ref name="nccSourceRights"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccSourceRights" id="nccSourceRights">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:sourceRights'])&lt;2">            
+                [sch][dtb::d202][type::warning][msg::meta ncc:sourceRights seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>                      
+        </ref>
+        
+        <ref name="nccSourceTitle"> <!-- optional zeroOrOne -->
+          <sch:pattern name="nccSourceTitle" id="nccSourceTitle">                      
+            <sch:rule context="xht:head">
+              <sch:assert test="count(xht:meta[@name='ncc:sourceTitle'])&lt;2">            
+                [sch][dtb::d202][type::warning][msg::meta ncc:sourceTitle seems to occur more than once]
+              </sch:assert>                                   
+            </sch:rule>
+          </sch:pattern>                              
+        </ref>
+                  
+        <ref name="dcSubject"/> <!-- optional zeroOrMore -->
+        <ref name="nccNarrator"/> <!-- optional zeroOrMore -->
+        <ref name="dcContributor"/> <!-- optional zeroOrMore -->
+        <ref name="dcCoverage"/> <!-- optional zeroOrMore -->
+        <ref name="dcDescription"/> <!-- optional zeroOrMore -->
+        <ref name="dcRelation"/> <!-- optional zeroOrMore -->
+        <ref name="dcRights"/> <!-- optional zeroOrMore -->
+        <ref name="dcType"/> <!-- optional zeroOrMore -->    
+      
+        <ref name="prodmeta"/> <!-- all else -->    
+        
+      </choice>
+    </element>
+  </define>
+  
+</grammar>

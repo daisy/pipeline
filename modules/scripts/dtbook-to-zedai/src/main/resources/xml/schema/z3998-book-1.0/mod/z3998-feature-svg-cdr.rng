@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+    <x:h1 xmlns:x="http://www.w3.org/1999/xhtml">Z39.98 SVG CDR Feature</x:h1>
+    <define xmlns:x="http://www.w3.org/1999/xhtml" name="z3998.srctype.attrib.content"
+           combine="choice">
+        <value>image/svg+xml</value>
+        <a:documentation>The referenced resource is an SVG 1.1 or SVG 1.2 Tiny document. </a:documentation>
+    </define>
+</grammar>

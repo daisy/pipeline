@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+    <define name="z3998.abbr.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>truncation</value>
+            <a:documentation>An abbreviation formed from the first part of a word. </a:documentation>
+            <value>initialism</value>
+            <a:documentation>An abbreviation formed from initial letters of a name or expression, with each letter pronunced separately. </a:documentation>
+            <value>acronym</value>
+            <a:documentation>An abbreviation formed from initial letters of a name or expression, pronounced as a word. </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.verse.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>poem</value>
+            <a:documentation>A poem. </a:documentation>
+            <value>lyrics</value>
+            <a:documentation>The text of a song. </a:documentation>
+            <value>hymn</value>
+            <a:documentation>A hymn. </a:documentation>
+            <value>song</value>
+            <a:documentation>A song. </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.description.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>structure</value>
+            <a:documentation>A structural description for a piece of content (e.g., a table structure summary). </a:documentation>
+            <value>content</value>
+            <a:documentation>A content description for a piece of content (e.g., an image description). </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.span.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>v-form</value>
+            <a:documentation>A formal second-person pronoun. </a:documentation>
+            <value>t-form</value>
+            <a:documentation>An informal second-person pronoun. </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.w.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>v-form</value>
+            <a:documentation>A formal second-person pronoun. </a:documentation>
+            <value>compound</value>
+            <a:documentation>A word created by the combination of two or more stems. </a:documentation>
+            <value>t-form</value>
+            <a:documentation>An informal second-person pronoun. </a:documentation>
+            <value>homograph</value>
+            <a:documentation>An instance of a set of words with the same spelling but different etymologies and often pronunciations (e.g. bass the instrument and bass the fish). </a:documentation>
+            <value>portmanteau</value>
+            <a:documentation>A word created from the merging of two other words (e.g. brunch from breakfast and lunch). </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.num.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>mixed</value>
+            <a:documentation>A whole number followed by a fraction with a numerator and denominator. </a:documentation>
+            <value>decimal</value>
+            <a:documentation>A single value where the integral number is separated from the fractional value by a decimal point or comma. </a:documentation>
+            <value>currency</value>
+            <a:documentation>A currency value, including the denomination indicator. </a:documentation>
+            <value>measure</value>
+            <a:documentation>A single value of measure, including units. </a:documentation>
+            <value>fraction</value>
+            <a:documentation>A single fraction with a numerator and denominator, and without a preceding whole number. </a:documentation>
+            <value>ratio</value>
+            <a:documentation>An expression of the magnitude of two quantities relative to each other. </a:documentation>
+            <value>roman</value>
+            <a:documentation>A single value expressed using roman numerals. </a:documentation>
+            <value>ordinal</value>
+            <a:documentation>A value indicating rank or position. </a:documentation>
+            <value>phone</value>
+            <a:documentation>A phone number, including area code and international dialing code. </a:documentation>
+            <value>isbn</value>
+            <a:documentation>An International Standard Book Number. </a:documentation>
+            <value>coordinate</value>
+            <a:documentation>A value expressing the location of a point in n-dimensional space, including degree, minute and other indicators if specified. </a:documentation>
+            <value>postal-code</value>
+            <a:documentation>A postal or zip code. </a:documentation>
+            <value>result</value>
+            <a:documentation>A single value that includes two or more sets of numbers separated by spaces. </a:documentation>
+            <value>percentage</value>
+            <a:documentation>A value that defines proportionality to a whole, including percent sign if present. </a:documentation>
+            <value>cardinal</value>
+            <a:documentation>A value indicating quantity. </a:documentation>
+            <value>weight</value>
+            <a:documentation>A single weight value, including units. </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.verse.block.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>poem</value>
+            <a:documentation>A poem. </a:documentation>
+            <value>lyrics</value>
+            <a:documentation>The text of a song. </a:documentation>
+            <value>hymn</value>
+            <a:documentation>A hymn. </a:documentation>
+            <value>song</value>
+            <a:documentation>A song. </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.name.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>signature</value>
+            <a:documentation>The handwritten, digital or stamped representation of a person's name. </a:documentation>
+            <value>place</value>
+            <a:documentation>The name of a city, state, province, country or other geographic or political entity. . </a:documentation>
+            <value>taxonomy</value>
+            <a:documentation>The name of a species, genus or other taxonomic classification. . </a:documentation>
+            <value>given-name</value>
+            <a:documentation>The part of a personal name that distinguishes the person from a group of persons sharing the same surname. Also known as 'forename' or 'first name'. . </a:documentation>
+            <value>personal-name</value>
+            <a:documentation>A proper name identifying a person, often composed of a given name and a family name. </a:documentation>
+            <value>surname</value>
+            <a:documentation>The part of a personal name that associates the person with a group of persons sharing the same surname. Also known as 'last name'. </a:documentation>
+            <value>name-title</value>
+            <a:documentation>The part of a personal name that signifies veneration, an official position or a professional or academic qualification. . </a:documentation>
+            <value>family-name</value>
+            <a:documentation>The part of a personal name that indicates the family to which the person belongs. Often used in conjunction with a honorific. </a:documentation>
+            <value>nationality</value>
+            <a:documentation>The name of a nationality, national group, or other designator of association. . </a:documentation>
+            <value>event</value>
+            <a:documentation>The name of a religious, sporting, or other event, holiday or festival. . </a:documentation>
+            <value>award</value>
+            <a:documentation>The name of an award or prize. . </a:documentation>
+            <value>product</value>
+            <a:documentation>The brand name of a product, medication, etc. . </a:documentation>
+            <value>organization</value>
+            <a:documentation>The name of an organization, corporation, or other business entity. . </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.annotation.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>clarification</value>
+            <a:documentation>An annotation whose purpose is to provide a clarification. </a:documentation>
+            <value>correction</value>
+            <a:documentation>An annotation whose purpose is to provide a correction. </a:documentation>
+            <value>alteration</value>
+            <a:documentation>An annotation whose purpose is to indicate an alteration made to the source document, such as the re-arrangement or removal of content. </a:documentation>
+            <value>production</value>
+            <a:documentation>A temporary annotation not intended as part of the finished document, such as a production note </a:documentation>
+            <value>presentation</value>
+            <a:documentation>An annotation whose purpose is to describe some aspect of the document layout, such as the formatting of a page or conventions used in rendering the content. </a:documentation>
+            <value>commentary</value>
+            <a:documentation>An annotation whose purpose is to provide commentary. </a:documentation>
+            <value>attribution</value>
+            <a:documentation>An annotation whose purpose is to provide a source or attribution. </a:documentation>
+            <value>introductory-note</value>
+            <a:documentation>An annotation whose purpose is to provide an introductory note. </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.wpart.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>grapheme</value>
+            <a:documentation>The smallest linguistic unit of a written word. </a:documentation>
+            <value>root</value>
+            <a:documentation>The primary lexical unit of a word. </a:documentation>
+            <value>phoneme</value>
+            <a:documentation>The smallest linguistic unit of a word that forms a sound. </a:documentation>
+            <value>morpheme</value>
+            <a:documentation>The smallest linguistic unit of a word with semantic meaning. </a:documentation>
+            <value>suffix</value>
+            <a:documentation>An affix attached to the end of a stem. </a:documentation>
+            <value>prefix</value>
+            <a:documentation>An affix attached to the front of a stem. </a:documentation>
+            <value>stem</value>
+            <a:documentation>The word form common to all its inflected variants. </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.by.attrib.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>author</value>
+            <a:documentation>An author of a work. </a:documentation>
+            <value>general-editor</value>
+            <a:documentation>The general editor of a work. </a:documentation>
+            <value>translator</value>
+            <a:documentation>A translator of a work. </a:documentation>
+            <value>commentator</value>
+            <a:documentation>A commentator on a work. </a:documentation>
+            <value>editor</value>
+            <a:documentation>An editor of a work. </a:documentation>
+            <value>republisher</value>
+            <a:documentation>A republisher of a work. </a:documentation>
+        </choice>
+    </define>
+    <define name="z3998.address.role.attrib.content.enum" combine="choice">
+        <choice>
+            <value>ip</value>
+            <a:documentation>An internet protocol address. </a:documentation>
+            <value>email</value>
+            <a:documentation>An email address. </a:documentation>
+            <value>ftp</value>
+            <a:documentation>A file transfer protocol address. </a:documentation>
+            <value>postal</value>
+            <a:documentation>A postal or mailing address. </a:documentation>
+            <value>http</value>
+            <a:documentation>A hypertext transfer protocol address. </a:documentation>
+            <value>geographic</value>
+            <a:documentation>A positional location, typically expressed by coordinates. </a:documentation>
+        </choice>
+    </define>
+</grammar>

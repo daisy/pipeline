@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE package PUBLIC "+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN" "http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd" []>
+<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+	  <metadata>
+	
+		    <dc-metadata xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+			      <dc:Format xmlns:dc="http://purl.org/dc/elements/1.1/">ANSI/NISO Z39.86-2005</dc:Format>
+		       <dc:Language xmlns:dc="http://purl.org/dc/elements/1.1/">en-US</dc:Language>
+         <dc:Publisher xmlns:dc="http://purl.org/dc/elements/1.1/">Marisa DeMeglio</dc:Publisher>
+         <dc:Title xmlns:dc="http://purl.org/dc/elements/1.1/">Selections from "Great Pictures, As Seen and Described by Famous Writers"</dc:Title>
+         <dc:Identifier xmlns:dc="http://purl.org/dc/elements/1.1/">AUTO-UID-5059463624137734586</dc:Identifier>
+         <dc:Creator xmlns:dc="http://purl.org/dc/elements/1.1/">Esther Singleton</dc:Creator>
+         <dc:Date xmlns:dc="http://purl.org/dc/elements/1.1/">2009-02-07</dc:Date>
+         <dc:Identifier xmlns:dc="http://purl.org/dc/elements/1.1/" id="uid">AUTO-UID-5059463624137734586</dc:Identifier>
+      </dc-metadata>
+	
+		    <x-metadata>
+			      <meta content="audioFullText" name="dtb:multimediaType" />
+			      <meta content="Inläst med talsyntes." name="dtb:narrator" />
+		       <meta content="audio,text,image" name="dtb:multimediaContent" />
+         <meta content="1:05:49.072" name="dtb:totalTime" />
+      </x-metadata>
+	
+	  </metadata>
+	
+	  <manifest>
+	     <item href="speechgen0001.smil" id="smil-1" media-type="application/smil" />
+      <item href="speechgen0002.smil" id="smil-2" media-type="application/smil" />
+      <item href="speechgen0003.smil" id="smil-3" media-type="application/smil" />
+      <item href="speechgen0004.smil" id="smil-4" media-type="application/smil" />
+      <item href="speechgen0005.smil" id="smil-5" media-type="application/smil" />
+      <item href="speechgen0006.smil" id="smil-6" media-type="application/smil" />
+      <item href="speechgen0007.smil" id="smil-7" media-type="application/smil" />
+      <item href="tpbnarrator_res.mp3" id="opf-8" media-type="audio/mpeg" />
+      <item href="speechgen0003.mp3" id="opf-9" media-type="audio/mpeg" />
+      <item href="speechgen.ncx" id="ncx" media-type="application/x-dtbncx+xml" />
+      <item href="speechgen0007.mp3" id="opf-10" media-type="audio/mpeg" />
+      <item href="dtbookbasic.css" id="opf-11" media-type="text/css" />
+      <item href="greatpainters-the_fighting_temeraire.jpg" id="opf-12" media-type="image/jpeg" />
+      <item href="greatpainters-the_adoration_of_the_lamb.jpg" id="opf-13" media-type="image/jpeg" />
+      <item href="speechgen0005.mp3" id="opf-14" media-type="audio/mpeg" />
+      <item href="greatpainters-portrait_of_georg_gisze.jpg" id="opf-15" media-type="image/jpeg" />
+      <item href="speechgen0006.mp3" id="opf-16" media-type="audio/mpeg" />
+      <item href="tpbnarrator.res" id="resource" media-type="application/x-dtbresource+xml" />
+      <item href="greatpainters-spring.jpg" id="opf-17" media-type="image/jpeg" />
+      <item href="speechgen.opf" id="opf-18" media-type="text/xml" />
+      <item href="dtbook.xml" id="opf-19" media-type="application/x-dtbook+xml" />
+      <item href="speechgen0002.mp3" id="opf-20" media-type="audio/mpeg" />
+      <item href="speechgen0004.mp3" id="opf-21" media-type="audio/mpeg" />
+      <item href="speechgen0001.mp3" id="opf-22" media-type="audio/mpeg" />
+      <item href="greatpainters-last_judgement.jpg" id="opf-23" media-type="image/jpeg" />
+   </manifest>
+	
+	  <spine>
+	     <itemref idref="smil-1" />
+      <itemref idref="smil-2" />
+      <itemref idref="smil-3" />
+      <itemref idref="smil-4" />
+      <itemref idref="smil-5" />
+      <itemref idref="smil-6" />
+      <itemref idref="smil-7" />
+   </spine>
+
+</package>

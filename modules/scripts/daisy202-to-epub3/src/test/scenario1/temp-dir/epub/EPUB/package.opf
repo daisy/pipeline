@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+                <package xmlns="http://www.idpf.org/2007/opf"
+         version="3.0"
+         unique-identifier="pub-id">
+   <metadata>
+      <dc:identifier xmlns:dc="http://purl.org/dc/elements/1.1/" id="pub-id">F00000</dc:identifier>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/" id="title">Don't Worry, Be Happy Lyrics</dc:title>
+      <dc:language xmlns:dc="http://purl.org/dc/elements/1.1/">en-US</dc:language>
+      <dc:date xmlns:dc="http://purl.org/dc/elements/1.1/" id="date">2007-05-21</dc:date>
+      <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">EPUB3</dc:format>
+      <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Bobby McFerrin</dc:creator>
+      <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">Ferrin press</dc:publisher>
+      <dc:contributor xmlns:dc="http://purl.org/dc/elements/1.1/" id="d2267e56">Inläst med talsyntes.</dc:contributor>
+      <meta property="dcterms:modified">2013-06-02T17:31:37Z</meta>
+      <meta content="2013-06-02T17:31:37Z" name="dcterms:modified"/>
+      <meta scheme="marc:relators" property="role" refines="#d2267e56">nrt</meta>
+      <meta property="media:duration" refines="#item_12">00:02:40.026</meta>
+      <meta property="media:duration">00:02:40.026</meta>
+      <meta content="00:02:40.026" name="media:duration"/>
+   </metadata>
+   <manifest>
+      <item id="item_1"
+            media-type="application/xhtml+xml"
+            href="Content/content.xhtml"
+            media-overlay="item_12"/>
+      <item id="item_2"
+            media-type="application/x-dtbncx+xml"
+            href="Content/ncx.xml"/>
+      <item properties="nav"
+            id="item_3"
+            media-type="application/xhtml+xml"
+            href="Content/ncc.xhtml"/>
+      <item id="item_4" media-type="text/css" href="Content/default.css"/>
+      <item id="item_5"
+            media-type="audio/mpeg"
+            href="Content/speechgen0001.mp3"/>
+      <item id="item_6"
+            media-type="audio/mpeg"
+            href="Content/speechgen0002.mp3"/>
+      <item id="item_7"
+            media-type="audio/mpeg"
+            href="Content/speechgen0007.mp3"/>
+      <item id="item_8"
+            media-type="audio/mpeg"
+            href="Content/speechgen0003.mp3"/>
+      <item id="item_9"
+            media-type="audio/mpeg"
+            href="Content/speechgen0004.mp3"/>
+      <item id="item_10"
+            media-type="audio/mpeg"
+            href="Content/speechgen0005.mp3"/>
+      <item id="item_11"
+            media-type="audio/mpeg"
+            href="Content/speechgen0006.mp3"/>
+      <item id="item_12"
+            media-type="application/smil+xml"
+            href="Content/content.smil"/>
+   </manifest>
+   <spine toc="item_2">
+      <itemref idref="item_1" id="itemref_1"/>
+   </spine>
+   <guide>
+      <reference title="1" type="other.noteref" href="Content/content.xhtml#dtb10"/>
+      <reference title="2" type="other.noteref" href="Content/content.xhtml#dtb21"/>
+   </guide>
+</package>
+            

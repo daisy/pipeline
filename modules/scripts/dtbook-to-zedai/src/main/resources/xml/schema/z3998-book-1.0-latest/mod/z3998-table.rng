@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The table module </title>
+        <annotation annotates="/">
+            <para>This module defines the table element and descendants for expressing tabular data and constructs. </para>
+            <para>The table element and its descendants inherit the semantics and behavior of the XHTML Modularization 1.1 tables module unless otherwise specified. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.table.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.table">
+            <element name="table">
+                <a:documentation>The table element represents a single instance of tabular data arranged in rows and columns. A table may consist of one or more tr elements or may be divided into table.thead , table.tbody and table.tfoot divisions. A table may contain one or more table.colgroup elements, for expressing common column formatting and properties. </a:documentation>
+                <ref name="z3998.table.attlist"/>
+                <ref name="z3998.table.content"/>
+            </element>
+        </define>
+        <define name="z3998.table.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.table.content">
+            <zeroOrMore>
+                <ref name="z3998.table.colgroup"/>
+            </zeroOrMore>
+            <choice>
+                <group>
+                    <optional>
+                        <ref name="z3998.table.thead"/>
+                    </optional>
+                    <oneOrMore>
+                        <ref name="z3998.table.tbody"/>
+                    </oneOrMore>
+                    <optional>
+                        <ref name="z3998.table.tfoot"/>
+                    </optional>
+                </group>
+                <oneOrMore>
+                    <ref name="z3998.table.tr"/>
+                </oneOrMore>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.table.colgroup">
+            <element name="colgroup">
+                <a:documentation>The colgroup element allows a set of properties to be defined for the cells in one or more table columns. The colgroup can define a common set of properties for one or more columns using the table.span attribute, in which case it must be an empty element. To specify different properties for different columns, the colgroup must contain one or more table.col elements with the properties for those columns. A colgroup must not contain both a span attribute and child col elements. </a:documentation>
+                <ref name="z3998.table.colgroup.attlist"/>
+                <ref name="z3998.table.colgroup.content"/>
+            </element>
+        </define>
+        <define name="z3998.table.colgroup.attlist">
+            <ref name="z3998.I18n.attrib"/>
+            <ref name="z3998.Core.attrib"/>
+        </define>
+        <define name="z3998.table.colgroup.content">
+            <choice>
+                <ref name="z3998.table.span.attrib"/>
+                <oneOrMore>
+                    <ref name="z3998.table.col"/>
+                </oneOrMore>
+            </choice>
+        </define>
+        <define name="z3998.table.span.attrib">
+            <attribute name="span">
+                <a:documentation>The span attribute specifies the number of columns the properties defined in a table.colgroup or table.col apply to. If a colgroup element contains child col elements, the span is determined automatically from the number of child col elements and any respective span values they define. If omitted, the implicit value 1 is assumed. </a:documentation>
+                <ref name="PositiveInteger.datatype"/>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.table.col">
+            <element name="col">
+                <a:documentation>The col element allows a set of properties to be defined for the cells in one or more table columns. The optional table.span attribute indicates the number of adjoining columns to which the properties apply. </a:documentation>
+                <ref name="z3998.table.col.attlist"/>
+            </element>
+        </define>
+        <define name="z3998.table.col.attlist">
+            <ref name="z3998.I18n.attrib"/>
+            <ref name="z3998.Core.attrib"/>
+            <optional>
+                <ref name="z3998.table.span.attrib"/>
+            </optional>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.table.thead">
+            <element name="thead">
+                <a:documentation>The thead element represents the collection of table header rows. </a:documentation>
+                <ref name="z3998.table.thead.attlist"/>
+                <ref name="z3998.table.thead.content"/>
+            </element>
+        </define>
+        <define name="z3998.table.thead.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.table.thead.content">
+            <oneOrMore>
+                <ref name="z3998.table.tr"/>
+            </oneOrMore>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.table.tfoot">
+            <element name="tfoot">
+                <a:documentation>The tfoot element represents the collection of table footer rows. Note that contrary to the XHTML Modularization 1.1 tables module tfoot element , this element is placed following the tbody element. </a:documentation>
+                <ref name="z3998.table.tfoot.attlist"/>
+                <ref name="z3998.table.tfoot.content"/>
+            </element>
+        </define>
+        <define name="z3998.table.tfoot.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.table.tfoot.content">
+            <oneOrMore>
+                <ref name="z3998.table.tr"/>
+            </oneOrMore>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.table.tbody">
+            <element name="tbody">
+                <a:documentation>The tbody element represents a collection of table body rows. Multiple tbody elements are allowed to enable representation of sections of rows. </a:documentation>
+                <ref name="z3998.table.tbody.attlist"/>
+                <ref name="z3998.table.tbody.content"/>
+            </element>
+        </define>
+        <define name="z3998.table.tbody.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.table.tbody.content">
+            <oneOrMore>
+                <ref name="z3998.table.tr"/>
+            </oneOrMore>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.table.tr">
+            <element name="tr">
+                <a:documentation>The tr element represents a single table row of data. </a:documentation>
+                <ref name="z3998.table.tr.attlist"/>
+                <ref name="z3998.table.tr.content"/>
+            </element>
+        </define>
+        <define name="z3998.table.tr.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.table.tr.content">
+            <oneOrMore>
+                <choice>
+                    <ref name="z3998.table.th"/>
+                    <ref name="z3998.table.td"/>
+                </choice>
+            </oneOrMore>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.table.th">
+            <element name="th">
+                <a:documentation>The th element represents a single table cell containing header information. The optional table.scope attribute can be used to express the column(s) or row(s) to which the header applies. </a:documentation>
+                <ref name="z3998.table.th.attlist"/>
+                <ref name="z3998.table.th.content"/>
+            </element>
+        </define>
+        <define name="z3998.table.th.attlist">
+            <ref name="z3998.Cell.attrib"/>
+            <optional>
+                <ref name="z3998.table.th.abbr.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.table.th.abbr.attrib">
+            <attribute name="abbr">
+                <a:documentation>The abbr attribute specifies an abbreviated header value. </a:documentation>
+                <ref name="Characters.datatype"/>
+            </attribute>
+        </define>
+        <define name="z3998.table.th.content">
+            <ref name="z3998.Flow.choice.model"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.table.td">
+            <element name="td">
+                <a:documentation>The td element represents a single table cell. The optional table.colspan and table.rowspan attributes can be used to specify that a column extends across or down more than one cell, respectively. The optional table.scope attribute can be used to express that the current cell represents a header for columns(s) or row(s) defined by the attribute's value. </a:documentation>
+                <ref name="z3998.table.td.attlist"/>
+                <ref name="z3998.table.td.content"/>
+            </element>
+        </define>
+        <define name="z3998.table.td.attlist">
+            <ref name="z3998.Cell.attrib"/>
+        </define>
+        <define name="z3998.table.td.content">
+            <choice>
+                <oneOrMore>
+                    <choice>
+                        <ref name="z3998.table.td.Block.class"/>
+                    </choice>
+                </oneOrMore>
+                <ref name="z3998.Phrase.Text.mix.model"/>
+            </choice>
+        </define>
+        <define name="z3998.table.td.Block.class" combine="choice">
+            <choice>
+                <ref name="z3998.Block.class"/>
+                <ref name="z3998.Global.extra.class"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <a:documentation>Common attribute definitions </a:documentation>
+        <define name="z3998.Cell.attrib">
+            <ref name="z3998.Block.attrib"/>
+            <optional>
+                <ref name="z3998.table.colspan.attrib"/>
+            </optional>
+            <optional>
+                <ref name="z3998.table.rowspan.attrib"/>
+            </optional>
+            <optional>
+                <ref name="z3998.table.headers.attrib"/>
+            </optional>
+            <optional>
+                <ref name="z3998.table.scope.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.table.colspan.attrib">
+            <attribute name="colspan">
+                <a:documentation>The colspan attribute specifies the number of columns spanned by the current cell. The implicit value of this attribute is 1. The value 0 indicates that the cell spans all columns from the current column to the last column of the table.colgroup in which the cell is defined. </a:documentation>
+                <ref name="NonNegativeInteger.datatype"/>
+            </attribute>
+        </define>
+        <define name="z3998.table.rowspan.attrib">
+            <attribute name="rowspan">
+                <a:documentation>The rowspan attribute specifies the number of rows spanned by the current cell. The implicit value of this attribute is 1. The value 0 indicates that the cell spans all rows from the current row to the last row of the current table section (rowgroup) in which the cell is defined (where the table.thead , table.tbody , and table.tfoot elements are considered rowgroups). </a:documentation>
+                <ref name="NonNegativeInteger.datatype"/>
+            </attribute>
+        </define>
+        <define name="z3998.table.scope.attrib">
+            <attribute name="scope">
+                <a:documentation>The scope attribute specifies the set of data cells for which the current header cell provides header information. This attribute may be used in place of the table.headers attribute, especially for simple tables. </a:documentation>
+                <choice>
+                    <value>row</value>
+                    <a:documentation>The current cell provides header information for the rest of the row that contains it. </a:documentation>
+                    <value>col</value>
+                    <a:documentation>The current cell provides header information for the rest of the column that contains it. </a:documentation>
+                    <value>rowgroup</value>
+                    <a:documentation>The header cell provides header information for the rest of the row group that contains it. </a:documentation>
+                    <value>colgroup</value>
+                    <a:documentation>The header cell provides header information for the rest of the column group that contains it. </a:documentation>
+                </choice>
+            </attribute>
+        </define>
+        <define name="z3998.table.headers.attrib">
+            <attribute name="headers">
+                <a:documentation>The headers attribute specifies the list of header cells that provide header information for the current data cell. This attribute requires a space separated list of valid ID references that resolves to th elements. </a:documentation>
+                <ref name="IDREFS.datatype"/>
+                <sch:rule context="default:*[@headers]">
+                    <sch:assert test="every $idref in tokenize(current()/@headers,'\s+') satisfies ancestor::default:table[not(descendant::default:table)]//default:th[@xml:id=$idref]">The headers attribute must resolve to a th in the current table. </sch:assert>
+                </sch:rule>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <a:documentation>The table element - content model specialization </a:documentation>
+        <define name="z3998.table.tr.content" combine="interleave">
+            <a:documentation>interleave with table.extra </a:documentation>
+            <ref name="z3998.table.extra.model"/>
+        </define>
+        <define name="z3998.table.tr" combine="interleave">
+            <a:documentation>interleave with table.extra </a:documentation>
+            <ref name="z3998.table.extra.model"/>
+        </define>
+        <define name="z3998.table.extra.model">
+            <a:documentation>a class to contribute elements inside and outside tr </a:documentation>
+            <zeroOrMore>
+                <ref name="z3998.table.extra.class"/>
+            </zeroOrMore>
+        </define>
+        <define name="z3998.table.extra.class" combine="choice">
+            <ref name="z3998.Global.extra.class"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>The table element - minimal model </a:documentation>
+        <define name="z3998.table.simple.content">
+            <oneOrMore>
+                <ref name="z3998.table.tr"/>
+            </oneOrMore>
+        </define>
+    </div>
+    <div>
+        <a:documentation>table - default content model contribution </a:documentation>
+        <define name="z3998.Block.core.class" combine="choice">
+            <ref name="z3998.table"/>
+        </define>
+    </div>
+</grammar>

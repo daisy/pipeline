@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The global classes module </title>
+        <annotation annotates="/">
+            <para>This module defines the global named element and attribute classes </para>
+            <para>The patterns defined in this module allow the dynamic creation of globally-available content models. When building a RelaxNG implementation of a Z39.98-AI profile, included modules contribute to the content models by injecting patterns into the classes. </para>
+            <para>The principle of combining definitions used to create these classes is described in RELAX NG Tutorial Section 9.2 . </para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <div>
+            <define name="z3998.Section.class" combine="choice">
+                <a:documentation>The set of elements which in the current profile are contributed to the Section level . </a:documentation>
+                <choice>
+                    <ref name="z3998.Section.core.class"/>
+                    <ref name="z3998.Section.extern.class"/>
+                </choice>
+            </define>
+        </div>
+        <div>
+            <define name="z3998.Block.class" combine="choice">
+                <a:documentation>The set of elements which in the current profile are contributed to the Block level . </a:documentation>
+                <choice>
+                    <ref name="z3998.Block.core.class"/>
+                    <ref name="z3998.Block.variant.class"/>
+                    <ref name="z3998.Block.extern.class"/>
+                </choice>
+            </define>
+        </div>
+        <div>
+            <define name="z3998.Phrase.class" combine="choice">
+                <a:documentation>The set of elements which in the current profile are contributed to the Phrase level . </a:documentation>
+                <choice>
+                    <ref name="z3998.span"/>
+                    <ref name="z3998.Phrase.core.class"/>
+                    <ref name="z3998.Phrase.variant.class"/>
+                    <ref name="z3998.Phrase.extern.class"/>
+                </choice>
+            </define>
+        </div>
+        <div>
+            <define name="z3998.Text.class" combine="choice">
+                <a:documentation>The set of elements which in the current profile are contributed to the Text level . </a:documentation>
+                <choice>
+                    <ref name="z3998.Text.core.class"/>
+                    <ref name="z3998.Text.variant.class"/>
+                    <ref name="z3998.Text.extern.class"/>
+                </choice>
+            </define>
+        </div>
+    </div>
+    <div>
+        <define name="z3998.global.core.attrib" combine="interleave">
+            <a:documentation>The set of global attributes whose properties do not change depending on the context in which they are used. This class defines the core set of attributes in the global class and can be used to build specialized attribute models (for example, when an element requires a specialized set of role values). Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.Core.attrib"/>
+            <ref name="z3998.I18n.attrib"/>
+            <ref name="Rdfa.attrib"/>
+        </define>
+        <define name="z3998.global.attrib" combine="interleave">
+            <a:documentation>The general purpose set of attributes which are allowed or required globally. This class includes the core set of global attributes plus the generalized forms of attributes that can be specialized depending on their context (e.g. role ). When a specialized version of a global attribute is needed, the global.core class should be used to build a custom attribute model for the element. Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.core.attrib"/>
+            <optional>
+                <ref name="z3998.role.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.Document.attrib" combine="interleave">
+            <a:documentation>The set of attributes which are allowed or required on the document , head and elements . Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.attrib"/>
+            <ref name="z3998.Document.extern.attrib"/>
+        </define>
+        <define name="z3998.Document.extern.attrib" combine="interleave">
+            <a:documentation>A pattern for external (to this module) contributions to the z3998.Document.attrib pattern. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Section.attrib" combine="interleave">
+            <a:documentation>The set of attributes which are allowed or required on elements in Section.class . Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.attrib"/>
+            <ref name="z3998.Section.core.attrib"/>
+            <ref name="z3998.Section.extern.attrib"/>
+        </define>
+        <define name="z3998.Section.core.attrib" combine="interleave">
+            <a:documentation>A pattern for Section-layer attributes from the core modules. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Section.extern.attrib" combine="interleave">
+            <a:documentation>A pattern for Section-layer attribute contributions from external features and modules. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Section.noextern.attrib" combine="interleave">
+            <a:documentation>The set of attributes which are allowed or required on elements in Section.class , excluding external contributions. Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.attrib"/>
+            <ref name="z3998.Section.core.attrib"/>
+        </define>
+        <define name="z3998.Block.attrib" combine="interleave">
+            <a:documentation>The set of attributes which are allowed or required on elements in Block.class . Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.attrib"/>
+            <ref name="z3998.Block.core.attrib"/>
+            <ref name="z3998.Block.extern.attrib"/>
+        </define>
+        <define name="z3998.Block.core.attrib" combine="interleave">
+            <a:documentation>A pattern for Block-layer attributes from the core modules. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Block.extern.attrib" combine="interleave">
+            <a:documentation>A pattern for Block-layer attribute contributions from external features and modules. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Block.noextern.attrib" combine="interleave">
+            <a:documentation>The set of attributes which are allowed or required on elements in Block.class , excluding external contributions. Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.attrib"/>
+            <ref name="z3998.Block.core.attrib"/>
+        </define>
+        <define name="z3998.Phrase.attrib" combine="interleave">
+            <a:documentation>The set of attributes which are allowed or required on elements in Phrase.class . Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.attrib"/>
+            <ref name="z3998.Phrase.core.attrib"/>
+            <ref name="z3998.Phrase.extern.attrib"/>
+        </define>
+        <define name="z3998.Phrase.core.attrib" combine="interleave">
+            <a:documentation>A pattern for Phrase-layer attributes from the core modules. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Phrase.extern.attrib" combine="interleave">
+            <a:documentation>A pattern for Phrase-layer attribute contributions from external features and modules. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Phrase.noextern.attrib" combine="interleave">
+            <a:documentation>The set of attributes which are allowed or required on elements in Phrase.class , excluding external contributions. Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.attrib"/>
+            <ref name="z3998.Phrase.core.attrib"/>
+        </define>
+        <define name="z3998.Text.attrib" combine="interleave">
+            <a:documentation>The set of attributes which are allowed or required on elements in Text.class . Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.attrib"/>
+            <ref name="z3998.Text.core.attrib"/>
+            <ref name="z3998.Text.extern.attrib"/>
+        </define>
+        <define name="z3998.Text.core.attrib" combine="interleave">
+            <a:documentation>A pattern for Text-layer attributes from the core modules. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Text.extern.attrib" combine="interleave">
+            <a:documentation>A pattern for Text-layer attribute contributions from external features and modules. </a:documentation>
+            <empty/>
+        </define>
+        <define name="z3998.Text.noextern.attrib" combine="interleave">
+            <a:documentation>The set of attributes which are allowed or required on elements in Text.class , excluding external contributions. Attributes contributed to this set individually define a cardinality of 0..1 (optional) or 1 (required). </a:documentation>
+            <ref name="z3998.global.attrib"/>
+            <ref name="z3998.Text.core.attrib"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.Section.model">
+            <a:documentation>A standard Section model, expecting 1..n members of the Section class </a:documentation>
+            <interleave>
+                <oneOrMore>
+                    <ref name="z3998.Section.class"/>
+                </oneOrMore>
+                <zeroOrMore>
+                    <ref name="z3998.Global.extra.class"/>
+                </zeroOrMore>
+            </interleave>
+        </define>
+        <define name="z3998.Block.model">
+            <a:documentation>A standard Block model, expecting 1..n members of the Block class </a:documentation>
+            <oneOrMore>
+                <choice>
+                    <ref name="z3998.Block.class"/>
+                    <ref name="z3998.Global.extra.class"/>
+                </choice>
+            </oneOrMore>
+        </define>
+        <define name="z3998.Block.basic.model" combine="choice">
+            <a:documentation>A basic Block model consisting of only archetypal elements the from class, such as blocks, paragraphs and lists </a:documentation>
+            <ref name="z3998.block"/>
+        </define>
+        <define name="z3998.Text.model">
+            <a:documentation>A standard Text model, expecting 1..n members of the Text class </a:documentation>
+            <a:documentation>Note that this includes the empty and whitespace-only model. </a:documentation>
+            <oneOrMore>
+                <choice>
+                    <ref name="Characters.datatype"/>
+                    <ref name="z3998.Text.class"/>
+                    <ref name="z3998.Global.extra.class"/>
+                </choice>
+            </oneOrMore>
+        </define>
+        <define name="z3998.Phrase.Text.mix.model">
+            <a:documentation>A mix model for Phrase and Text.class, expecting 1..n members of the Text and Phrase classes. </a:documentation>
+            <a:documentation>Note that this includes the empty and whitespace-only model. </a:documentation>
+            <oneOrMore>
+                <choice>
+                    <ref name="Characters.datatype"/>
+                    <ref name="z3998.Text.class"/>
+                    <ref name="z3998.Phrase.class"/>
+                    <ref name="z3998.Global.extra.class"/>
+                </choice>
+            </oneOrMore>
+        </define>
+        <define name="z3998.Phrase.core.Text.mix.model">
+            <a:documentation>A mix model for Phrase.class (excluding variants) and Text.class, expecting 1..n members of the Text and Phrase classes. </a:documentation>
+            <a:documentation>Note that this includes the empty and whitespace-only model. </a:documentation>
+            <oneOrMore>
+                <choice>
+                    <ref name="z3998.span"/>
+                    <ref name="Characters.datatype"/>
+                    <ref name="z3998.Text.class"/>
+                    <ref name="z3998.Phrase.core.class"/>
+                    <ref name="z3998.Phrase.extern.class"/>
+                    <ref name="z3998.Global.extra.class"/>
+                </choice>
+            </oneOrMore>
+        </define>
+        <define name="z3998.Flow.choice.model">
+            <a:documentation>Defines a concrete content model consisting of an exclusive choice between one or more of the members of the Block.class or one or more of the members of the Phrase and Text classes. </a:documentation>
+            <choice>
+                <ref name="z3998.Block.model"/>
+                <ref name="z3998.Phrase.Text.mix.model"/>
+            </choice>
+        </define>
+        <define name="z3998.Flow.choice.noextern.model">
+            <choice>
+                <ref name="z3998.Block.noextern.model"/>
+                <ref name="z3998.Phrase.noextern.model"/>
+            </choice>
+        </define>
+        <define name="z3998.Section.noextern.model">
+            <group>
+                <oneOrMore>
+                    <choice>
+                        <ref name="z3998.Section.core.class"/>
+                    </choice>
+                </oneOrMore>
+            </group>
+        </define>
+        <define name="z3998.Block.noextern.model">
+            <group>
+                <oneOrMore>
+                    <choice>
+                        <ref name="z3998.Block.core.class"/>
+                        <ref name="z3998.Block.variant.class"/>
+                    </choice>
+                </oneOrMore>
+            </group>
+        </define>
+        <define name="z3998.Phrase.noextern.model">
+            <group>
+                <oneOrMore>
+                    <choice>
+                        <ref name="z3998.span"/>
+                        <ref name="z3998.Phrase.core.class"/>
+                        <ref name="z3998.Phrase.variant.class"/>
+                        <ref name="z3998.Text.core.class"/>
+                        <ref name="z3998.Text.variant.class"/>
+                        <ref name="Characters.datatype"/>
+                    </choice>
+                </oneOrMore>
+            </group>
+        </define>
+        <define name="z3998.Text.noextern.model">
+            <group>
+                <oneOrMore>
+                    <choice>
+                        <ref name="z3998.Text.core.class"/>
+                        <ref name="z3998.Text.variant.class"/>
+                        <ref name="Characters.datatype"/>
+                    </choice>
+                </oneOrMore>
+            </group>
+        </define>
+    </div>
+</grammar>

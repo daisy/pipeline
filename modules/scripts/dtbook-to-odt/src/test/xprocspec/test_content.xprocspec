@@ -1,0 +1,1159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+               xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+               xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+               xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+               xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+               xmlns:xlink="http://www.w3.org/1999/xlink">
+  
+  <x:script>
+    <p:pipeline type="pxi:test-content" name="main" version="1.0">
+      <p:xslt>
+        <p:input port="source">
+          <p:inline>
+            <template/>
+          </p:inline>
+          <p:pipe step="main" port="source"/>
+        </p:input>
+        <p:input port="stylesheet">
+          <p:inline>
+            <xsl:stylesheet version="2.0"
+                            xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                            xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                            xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
+              
+              <xsl:import href="../../main/resources/xml/content.xsl"/>
+              <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+              
+              <xsl:template match="/">
+                <xsl:variable name="result" as="element()*">
+                  <xsl:apply-templates select="collection()[2]/*" mode="office:text"/>
+                </xsl:variable>
+                <xsl:apply-templates select="$result" mode="post"/>
+              </xsl:template>
+              
+              <xsl:template match="/wrapper" mode="office:text">
+                <xsl:copy>
+                  <xsl:apply-templates select="*" mode="#current"/>
+                </xsl:copy>
+              </xsl:template>
+              
+              <xsl:template match="@*|node()" mode="post">
+                <xsl:copy>
+                  <xsl:apply-templates select="@*|node()" mode="#current"/>
+                </xsl:copy>
+              </xsl:template>
+              
+              <!--
+                  Relativize image hrefs
+              -->
+              <xsl:template match="@xlink:href" mode="post">
+                <xsl:attribute name="xlink:href" select="pf:relativize-uri(string(.), base-uri(collection()[2]/*))"/>
+              </xsl:template>
+              
+              <!--
+                  Make it possible to reference non-existing images in tests
+              -->
+              <xsl:function name="pf:image-dimensions" as="xs:integer*">
+                <xsl:param name="src" as="xs:anyURI"/>
+                <xsl:sequence select="(1000,1000)"/>
+              </xsl:function>
+              
+              <!--
+                  Suppress warnings about nested styles
+              -->
+              <xsl:function name="style:is-automatic-style" as="xs:boolean">
+                <xsl:param name="style-name" as="xs:string"/>
+                <xsl:param name="family" as="xs:string"/>
+                <xsl:sequence select="true()"/>
+              </xsl:function>
+              
+            </xsl:stylesheet>
+          </p:inline>
+        </p:input>
+      </p:xslt>
+    </p:pipeline>
+  </x:script>
+  
+  <!-- ======== -->
+  <!-- HEADINGS -->
+  <!-- ======== -->
+  
+  <x:scenario label="headings">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <wrapper>
+            <dtb:h1>foo</dtb:h1>
+            <dtb:h2>bar</dtb:h2>
+          </wrapper>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <wrapper>
+          <text:h text:outline-level="1" text:style-name="dtb_3a_h1">foo</text:h>
+          <text:h text:outline-level="2" text:style-name="dtb_3a_h2">bar</text:h>
+        </wrapper>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!-- ========== -->
+  <!-- PARAGRAPHS -->
+  <!-- ========== -->
+  
+  <x:scenario label="paragraph">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:p>foo</dtb:p>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:p text:style-name="dtb_3a_p">foo</text:p>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!-- ===== -->
+  <!-- LISTS -->
+  <!-- ===== -->
+  
+  <x:scenario label="unordered list">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:list type="ul">
+            <dtb:li>mango</dtb:li>
+            <dtb:li>lychee</dtb:li>
+            <dtb:li>carambola</dtb:li>
+            <dtb:li>rambutan</dtb:li>
+            <dtb:li>sugar</dtb:li>
+            <dtb:li>lime juice</dtb:li>
+          </dtb:list>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:list text:style-name="dtb_3a_list_5f_ul">
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">mango</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">lychee</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">carambola</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">rambutan</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">sugar</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">lime juice</text:p>
+          </text:list-item>
+        </text:list>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="ordered list">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:list type="ol" enum="1" class="steps">
+            <dtb:li>peel fruit.</dtb:li>
+            <dtb:li>cut fruit in bite sized pieces.</dtb:li>
+            <dtb:li>sprinkle fruit with sugar and lime juice to taste.</dtb:li>
+            <dtb:li>stir salad.</dtb:li>
+            <dtb:li>chill for one hour.</dtb:li>
+          </dtb:list>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:list text:style-name="dtb_3a_list_5f_ol">
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">peel fruit.</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">cut fruit in bite sized pieces.</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">sprinkle fruit with sugar and lime juice to taste.</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">stir salad.</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">chill for one hour.</text:p>
+          </text:list-item>
+        </text:list>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="nested preformatted list">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:list type="pl">
+            <dtb:li>
+              well-known tropical fruit
+              <dtb:list type="pl">
+                <dtb:li>* pineapple</dtb:li>
+                <dtb:li>* papaya</dtb:li>
+              </dtb:list>
+            </dtb:li>
+            <dtb:li>
+              exotic tropical fruit
+              <dtb:list type="pl">
+                <dtb:li>* rambutan</dtb:li>
+                <dtb:li>* mangosteen</dtb:li>
+              </dtb:list>
+            </dtb:li>
+          </dtb:list>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:list text:style-name="dtb_3a_list_5f_pl">
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">well-known tropical fruit</text:p>
+            <text:list text:style-name="dtb_3a_list_5f_pl">
+              <text:list-item>
+                <text:p text:style-name="dtb_3a_li">* pineapple</text:p>
+              </text:list-item>
+              <text:list-item>
+                <text:p text:style-name="dtb_3a_li">* papaya</text:p>
+              </text:list-item>
+            </text:list>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">exotic tropical fruit</text:p>
+            <text:list text:style-name="dtb_3a_list_5f_pl">
+              <text:list-item>
+                <text:p text:style-name="dtb_3a_li">* rambutan</text:p>
+              </text:list-item>
+              <text:list-item>
+                <text:p text:style-name="dtb_3a_li">* mangosteen</text:p>
+              </text:list-item>
+            </text:list>
+          </text:list-item>
+        </text:list>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="list items with or without paragraph">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:list>
+            <dtb:li>foo</dtb:li>
+            <dtb:li>
+              <dtb:p>bar</dtb:p>
+              baz
+            </dtb:li>
+          </dtb:list>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:list text:style-name="dtb_3a_list_5f_ul">
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">foo</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_li">bar</text:p>
+            <text:p text:style-name="dtb_3a_li">baz</text:p>
+          </text:list-item>
+        </text:list>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="definition list">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:dl>
+            <dtb:dt>mango</dtb:dt>
+            <dtb:dd>tropical fruit with sweet golden flesh</dtb:dd>
+            <dtb:dt>lychee</dtb:dt>
+            <dtb:dd>tropical fruit with deep red leathery skin and clear white flesh</dtb:dd>
+            <dtb:dt>carambola</dtb:dt>
+            <dtb:dd>star shaped tropical fruit with tart lemon-pineapple flavour</dtb:dd>
+            <dtb:dt>rambutan</dtb:dt>
+            <dtb:dd>egg-shaped tropical fruit similar to lychees with leathery skin covered in soft red hairs</dtb:dd>
+          </dtb:dl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:list text:style-name="dtb_3a_dl">
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_dd"><text:span text:style-name="dtb_3a_dt">mango</text:span>: tropical fruit with sweet golden flesh</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_dd"><text:span text:style-name="dtb_3a_dt">lychee</text:span>: tropical fruit with deep red leathery skin and clear white flesh</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_dd"><text:span text:style-name="dtb_3a_dt">carambola</text:span>: star shaped tropical fruit with tart lemon-pineapple flavour</text:p>
+          </text:list-item>
+          <text:list-item>
+            <text:p text:style-name="dtb_3a_dd"><text:span text:style-name="dtb_3a_dt">rambutan</text:span>: egg-shaped tropical fruit similar to lychees with leathery skin covered in soft red hairs</text:p>
+          </text:list-item>
+        </text:list>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="definition list with multiples of dt and dd">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <wrapper>
+            <dtb:dl>
+              <dtb:dt>Punt</dtb:dt>
+              <dtb:dd>Kick a ball</dtb:dd>
+              <dtb:dd>Take a bet</dtb:dd>
+            </dtb:dl>
+            <dtb:dl>
+              <dtb:dt>Color</dtb:dt>
+              <dtb:dt>Colour</dtb:dt>
+              <dtb:dd>Any hue except white or black</dtb:dd>
+            </dtb:dl>
+          </wrapper>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <wrapper>
+          <text:list text:style-name="dtb_3a_dl">
+            <text:list-item>
+              <text:p text:style-name="dtb_3a_dd"><text:span text:style-name="dtb_3a_dt">Punt</text:span>: Kick a ball</text:p>
+            </text:list-item>
+            <text:list-item>
+              <text:p text:style-name="dtb_3a_dd">Take a bet</text:p>
+            </text:list-item>
+          </text:list>
+          <text:list text:style-name="dtb_3a_dl">
+            <text:list-item>
+              <text:p text:style-name="Standard"><text:span text:style-name="dtb_3a_dt">Color</text:span></text:p>
+            </text:list-item>
+            <text:list-item>
+              <text:p text:style-name="dtb_3a_dd"><text:span text:style-name="dtb_3a_dt">Colour</text:span>: Any hue except white or black</text:p>
+            </text:list-item>
+          </text:list>
+        </wrapper>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!-- ====== -->
+  <!-- TABLES -->
+  <!-- ====== -->
+  
+  <x:scenario label="table with header">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:table>
+            <dtb:thead>
+              <dtb:tr>
+                <dtb:th>Parent Company</dtb:th>
+                <dtb:th>Divested Business</dtb:th>
+              </dtb:tr>
+            </dtb:thead>
+            <dtb:tr>
+              <dtb:td>U.S. Sprint</dtb:td>
+              <dtb:td>Cellular phone</dtb:td>
+            </dtb:tr>
+            <dtb:tr>
+              <dtb:td>Union Pacific</dtb:td>
+              <dtb:td>Oil, gas</dtb:td>
+            </dtb:tr>
+            <dtb:tr>
+              <dtb:td>Viacom</dtb:td>
+              <dtb:td>Cable TV</dtb:td>
+            </dtb:tr>
+          </dtb:table>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <table:table table:name="dtb:table#1">
+          <table:table-column table:number-columns-repeated="2"/>
+          <table:table-header-rows>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="dtb_3a_th">Parent Company</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="dtb_3a_th">Divested Business</text:p>
+              </table:table-cell>
+            </table:table-row>
+          </table:table-header-rows>
+          <table:table-row>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="dtb_3a_td">U.S. Sprint</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="dtb_3a_td">Cellular phone</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="dtb_3a_td">Union Pacific</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="dtb_3a_td">Oil, gas</text:p>
+            </table:table-cell>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="dtb_3a_td">Viacom</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="dtb_3a_td">Cable TV</text:p>
+            </table:table-cell>
+          </table:table-row>
+        </table:table>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="table with caption, header, footer and body">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <wrapper>
+            <dtb:table>
+              <dtb:caption>caption</dtb:caption>
+              <dtb:thead>
+                <dtb:tr>
+                  <dtb:th>header</dtb:th>
+                </dtb:tr>
+              </dtb:thead>
+              <dtb:tfoot>
+                <dtb:tr>
+                  <dtb:th>footer</dtb:th>
+                </dtb:tr>
+              </dtb:tfoot>
+              <dtb:tbody>
+                <dtb:tr>
+                  <dtb:td>body</dtb:td>
+                </dtb:tr>
+              </dtb:tbody>
+            </dtb:table>
+          </wrapper>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <wrapper>
+          <text:p text:style-name="dtb_3a_caption">caption</text:p>
+          <table:table table:name="dtb:table#1">
+            <table:table-column table:number-columns-repeated="1"/>
+            <table:table-header-rows>
+              <table:table-row>
+                <table:table-cell office:value-type="string">
+                  <text:p text:style-name="dtb_3a_th">header</text:p>
+                </table:table-cell>
+              </table:table-row>
+            </table:table-header-rows>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="dtb_3a_td">body</text:p>
+              </table:table-cell>
+            </table:table-row>
+            <table:table-row>
+              <table:table-cell office:value-type="string">
+                <text:p text:style-name="dtb_3a_th">footer</text:p>
+              </table:table-cell>
+            </table:table-row>
+          </table:table>
+        </wrapper>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="table with colspan and rowspan">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:table>
+            <dtb:thead>
+              <dtb:tr>
+                <dtb:th colspan="4">A1</dtb:th>
+              </dtb:tr>
+            </dtb:thead>
+            <dtb:tbody>
+              <dtb:tr>
+                <dtb:td colspan="2">B1</dtb:td>
+                <dtb:td colspan="2" rowspan="2">B2</dtb:td>
+              </dtb:tr>
+              <dtb:tr>
+                <dtb:td rowspan="2">C1</dtb:td>
+                <dtb:td>C2</dtb:td>
+              </dtb:tr>
+              <dtb:tr>
+                <dtb:td colspan="3">D2</dtb:td>
+              </dtb:tr>
+            </dtb:tbody>
+          </dtb:table>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <table:table table:name="dtb:table#1">
+          <table:table-column table:number-columns-repeated="4"/>
+          <table:table-header-rows>
+            <table:table-row>
+              <table:table-cell office:value-type="string" table:number-columns-spanned="4">
+                <text:p text:style-name="dtb_3a_th">A1</text:p>
+              </table:table-cell>
+              <table:covered-table-cell/>
+              <table:covered-table-cell/>
+              <table:covered-table-cell/>
+            </table:table-row>
+          </table:table-header-rows>
+          <table:table-row>
+            <table:table-cell office:value-type="string" table:number-columns-spanned="2">
+              <text:p text:style-name="dtb_3a_td">B1</text:p>
+            </table:table-cell>
+            <table:covered-table-cell/>
+            <table:table-cell office:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="2">
+              <text:p text:style-name="dtb_3a_td">B2</text:p>
+            </table:table-cell>
+            <table:covered-table-cell/>
+          </table:table-row>
+          <table:table-row>
+            <table:table-cell office:value-type="string" table:number-rows-spanned="2">
+              <text:p text:style-name="dtb_3a_td">C1</text:p>
+            </table:table-cell>
+            <table:table-cell office:value-type="string">
+              <text:p text:style-name="dtb_3a_td">C2</text:p>
+            </table:table-cell>
+            <table:covered-table-cell/>
+            <table:covered-table-cell/>
+          </table:table-row>
+          <table:table-row>
+            <table:covered-table-cell/>
+            <table:table-cell office:value-type="string" table:number-columns-spanned="3">
+              <text:p text:style-name="dtb_3a_td">D2</text:p>
+            </table:table-cell>
+            <table:covered-table-cell/>
+            <table:covered-table-cell/>
+          </table:table-row>
+        </table:table>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!-- ===== -->
+  <!-- NOTES -->
+  <!-- ===== -->
+  
+  <x:scenario label="footnote">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <wrapper>
+            <dtb:p>
+              Morley's favorite vacation spot was the Bay of Islands<dtb:noteref
+              idref="#fn12" class="footnote">12</dtb:noteref> on New Zealand's North Island.
+            </dtb:p>
+            <dtb:note id="fn12" class="footnote">
+              <dtb:p>
+                12. Morley once described the area as "paradise in twenty shades of blue".
+              </dtb:p>
+            </dtb:note>
+          </wrapper>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <wrapper>
+          <text:p text:style-name="dtb_3a_p">
+            Morley's favorite vacation spot was the Bay of Islands<text:note
+            text:note-class="footnote" text:id="fn12">
+            <text:note-citation/>
+            <text:note-body>
+              <text:p text:style-name="dtb_3a_note_5f_footnote">
+                12. Morley once described the area as "paradise in twenty shades of blue".
+              </text:p>
+            </text:note-body>
+            </text:note> on New Zealand's North Island.
+          </text:p>
+        </wrapper>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="annotation">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <wrapper>
+            <dtb:p>
+              The speed of a sailing vessel was measured in <dtb:annoref idref="#anno_4">knots</dtb:annoref>.
+            </dtb:p>
+            <dtb:annotation id="anno_4">
+              <dtb:p>
+                The term "knot" is derived from the practice of counting the number of knots
+                on a line unreeled in a set period of time from a device known as a chip log.
+              </dtb:p>
+            </dtb:annotation>
+          </wrapper>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <wrapper>
+          <text:p text:style-name="dtb_3a_p">
+            The speed of a sailing vessel was measured in knots<text:note
+            text:note-class="footnote" text:id="anno_4">
+            <text:note-citation/>
+            <text:note-body>
+              <text:p text:style-name="dtb_3a_annotation">
+                The term "knot" is derived from the practice of counting the number of knots
+                on a line unreeled in a set period of time from a device known as a chip log.
+              </text:p>
+            </text:note-body>
+            </text:note>.
+          </text:p>
+        </wrapper>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!-- ==================== -->
+  <!-- OTHER BLOCK ELEMENTS -->
+  <!-- ==================== -->
+  
+  <x:scenario label="sidebar with paragraph">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:sidebar>
+            <dtb:p>foo</dtb:p>
+          </dtb:sidebar>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:section text:name="dtb:sidebar#1" text:style-name="dtb_3a_sidebar">
+          <text:p text:style-name="dtb_3a_p">foo</text:p>
+        </text:section>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="sidebar without paragraph" pending="true">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:sidebar>
+            foo
+          </dtb:sidebar>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:section text:name="dtb:sidebar#1" text:style-name="dtb_3a_sidebar">
+          <text:p text:style-name="dtb_3a_p">foo</text:p>
+        </text:section>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!-- ====== -->
+  <!-- IMAGES -->
+  <!-- ====== -->
+  
+  <x:scenario label="two images that share a caption">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <wrapper>
+            <dtb:imggroup id="imggrp_43">
+              <dtb:img id="img_12" src="orion62.jpg" alt="Orion Nebula by visible and ultraviolet light"/>
+              <dtb:img id="img_13" src="orion3.jpg" alt="Young stars in Orion Nebula"/>
+              <dtb:caption imgref="img_12 img_13">
+                Many young stars lie inside the mass of gas and dust that forms the Orion Nebula.
+              </dtb:caption>
+            </dtb:imggroup>
+          </wrapper>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <wrapper>
+          <text:p text:style-name="dtb_3a_caption">
+            Many young stars lie inside the mass of gas and dust that forms the Orion Nebula.
+          </text:p>
+          <text:p text:style-name="dtb_3a_img">
+            <draw:frame draw:name="dtb:img#1" draw:style-name="dtb_3a_img" text:anchor-type="as-char"
+                        draw:z-index="0" svg:width="1.6667in" svg:height="1.6667in">
+              <draw:image xlink:href="orion62.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+              <svg:title>Orion Nebula by visible and ultraviolet light</svg:title>
+            </draw:frame>
+          </text:p>
+          <text:p text:style-name="dtb_3a_img">
+            <draw:frame draw:name="dtb:img#2" draw:style-name="dtb_3a_img" text:anchor-type="as-char"
+                        draw:z-index="0" svg:width="1.6667in" svg:height="1.6667in">
+              <draw:image xlink:href="orion3.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+              <svg:title>Young stars in Orion Nebula</svg:title>
+            </draw:frame>
+          </text:p>
+        </wrapper>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!-- ==== -->
+  <!-- MATH -->
+  <!-- ==== -->
+  
+  <x:scenario label="mathml with asciimath encoding">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:p>
+            <math xmlns="http://www.w3.org/1998/Math/MathML">
+              <semantics>
+                <mrow>
+                  <mi>x</mi>
+                  <mo>=</mo>
+                  <mfrac>
+                    <mrow>
+                      <mo>-</mo>
+                      <mi>b</mi>
+                      <mo>±</mo>
+                      <msqrt>
+                        <mrow>
+                          <msup>
+                            <mi>b</mi>
+                            <mn>2</mn>
+                          </msup>
+                          <mo>-</mo>
+                          <mn>4</mn>
+                          <mi>a</mi>
+                          <mi>c</mi>
+                        </mrow>
+                      </msqrt>
+                    </mrow>
+                    <mrow>
+                      <mn>2</mn>
+                      <mi>a</mi>
+                    </mrow>
+                  </mfrac>
+                </mrow>
+                <annotation encoding="ASCIIMath">x = (-b +- sqrt(b^2-4ac))/(2a)</annotation>
+              </semantics>
+            </math>
+          </dtb:p>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:p text:style-name="dtb_3a_p">
+          <draw:frame draw:name="math:math#1" draw:style-name="dtb_3a_math" text:anchor-type="as-char" draw:z-index="0">
+            <draw:object>
+              <math xmlns="http://www.w3.org/1998/Math/MathML">
+                <semantics>
+                  <mrow>
+                    <mi>x</mi>
+                    <mo>=</mo>
+                    <mfrac>
+                      <mrow>
+                        <mo>-</mo>
+                        <mi>b</mi>
+                        <mo>±</mo>
+                        <msqrt>
+                          <mrow>
+                            <msup>
+                              <mi>b</mi>
+                              <mn>2</mn>
+                            </msup>
+                            <mo>-</mo>
+                            <mn>4</mn>
+                            <mi>a</mi>
+                            <mi>c</mi>
+                          </mrow>
+                        </msqrt>
+                      </mrow>
+                      <mrow>
+                        <mn>2</mn>
+                        <mi>a</mi>
+                      </mrow>
+                    </mfrac>
+                  </mrow>
+                  <annotation encoding="ASCIIMath">x = (-b +- sqrt(b^2-4ac))/(2a)</annotation>
+                </semantics>
+              </math>
+            </draw:object>
+            <svg:title>x = (-b +- sqrt(b^2-4ac))/(2a)</svg:title>
+          </draw:frame>
+        </text:p>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!-- ============ -->
+  <!-- PAGE NUMBERS -->
+  <!-- ============ -->
+  
+  <x:scenario label="page number inside a paragraph">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <wrapper>
+            <dtb:p>
+              foo
+              <dtb:pagenum>1</dtb:pagenum>
+              bar
+            </dtb:p>
+          </wrapper>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:scenario label="with floating page numbers">
+      <x:call>
+        <x:param name="page_numbers" select="'true'"/>
+        <x:param name="page_numbers_float" select="'true'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <wrapper>
+            <text:p text:style-name="dtb_3a_p"> foo bar </text:p>
+            <text:p text:style-name="dtb_3a_pagenum">1</text:p>
+          </wrapper>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="without floating page numbers">
+      <x:call>
+        <x:param name="page_numbers" select="'true'"/>
+        <x:param name="page_numbers_float" select="'false'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <wrapper>
+            <text:p text:style-name="dtb_3a_p"> foo </text:p>
+            <text:p text:style-name="dtb_3a_pagenum">1</text:p>
+            <text:p text:style-name="dtb_3a_p"> bar </text:p>
+          </wrapper>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="with page numbers disabled">
+      <x:call>
+        <x:param name="page_numbers" select="'false'"/>
+        <x:param name="page_numbers_float" select="'false'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <wrapper>
+            <text:p text:style-name="dtb_3a_p"> foo bar </text:p>
+          </wrapper>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="table that spans multiple pages">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <wrapper>
+            <dtb:table>
+              <dtb:tr>
+                <dtb:td/>
+                <dtb:td/>
+              </dtb:tr>
+              <dtb:pagenum>256</dtb:pagenum>
+              <dtb:tr>
+                <dtb:td/>
+                <dtb:td/>
+              </dtb:tr>
+            </dtb:table>
+          </wrapper>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:scenario label="with floating page numbers">
+      <x:call>
+        <x:param name="page_numbers" select="'true'"/>
+        <x:param name="page_numbers_float" select="'true'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <wrapper>
+            <table:table table:name="dtb:table#1">
+              <table:table-column table:number-columns-repeated="2"/>
+              <table:table-row>
+                <table:table-cell office:value-type="string"/>
+                <table:table-cell office:value-type="string"/>
+              </table:table-row>
+              <table:table-row>
+                <table:table-cell office:value-type="string"/>
+                <table:table-cell office:value-type="string"/>
+              </table:table-row>
+            </table:table>
+            <text:p text:style-name="dtb_3a_pagenum">256</text:p>
+          </wrapper>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="without floating page numbers">
+      <x:call>
+        <x:param name="page_numbers" select="'true'"/>
+        <x:param name="page_numbers_float" select="'false'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <wrapper>
+            <table:table table:name="dtb:table#1">
+              <table:table-column table:number-columns-repeated="2"/>
+              <table:table-row>
+                <table:table-cell office:value-type="string"/>
+                <table:table-cell office:value-type="string"/>
+              </table:table-row>
+              <table:table-row>
+                <table:table-cell office:value-type="string">
+                  <text:p text:style-name="dtb_3a_pagenum">256</text:p>
+                </table:table-cell>
+              </table:table-row>
+              <table:table-row>
+                <table:table-cell office:value-type="string"/>
+                <table:table-cell office:value-type="string"/>
+              </table:table-row>
+            </table:table>
+          </wrapper>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="with page numbers disabled">
+      <x:call>
+        <x:param name="page_numbers" select="'false'"/>
+        <x:param name="page_numbers_float" select="'false'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <wrapper>
+            <table:table table:name="dtb:table#1">
+              <table:table-column table:number-columns-repeated="2"/>
+              <table:table-row>
+                <table:table-cell office:value-type="string"/>
+                <table:table-cell office:value-type="string"/>
+              </table:table-row>
+              <table:table-row>
+                <table:table-cell office:value-type="string"/>
+                <table:table-cell office:value-type="string"/>
+              </table:table-row>
+            </table:table>
+          </wrapper>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <!-- ====================== -->
+  <!-- INLINE ELEMENTS & TEXT -->
+  <!-- ====================== -->
+  
+  <x:scenario label="preserve whitespace">
+    <x:call step="pxi:test-content">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtb:p>
+            <dtb:code xml:space="preserve">    <dtb:strong>case</dtb:strong> "o":
+    glBegin(GL_QUAD_STRIP)
+    <dtb:strong>for</dtb:strong>(i=0;i&lt;=12; i++) {
+        angle = 3.14159 / 6.0 * i;
+        glVertex2f(0.4 * cos(angle), 0.4 * sin(angle));
+        glVertex2f(0.5 * cos(angle), 0.5 * sin(angle));
+    }
+    glEnd();
+    <dtb:strong>break</dtb:strong>;</dtb:code>
+                </dtb:p>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <text:p text:style-name="dtb_3a_p">
+          <text:span text:style-name="dtb_3a_code">
+            <text:s text:c="4"/>
+            <text:span text:style-name="dtb_3a_strong">case</text:span>
+            <text:s text:c="1"/>
+            "o":
+            <text:line-break/>
+            <text:s text:c="4"/>
+            glBegin(GL_QUAD_STRIP)
+            <text:line-break/>
+            <text:s text:c="4"/>
+            <text:span text:style-name="dtb_3a_strong">for</text:span>
+            (i=0;i&lt;=12;<text:s text:c="1"/>i++)
+            <text:s text:c="1"/>
+            {<text:line-break/>
+            <text:s text:c="8"/>
+            angle
+            <text:s text:c="1"/>
+            =
+            <text:s text:c="1"/>
+            3.14159
+            <text:s text:c="1"/>
+            /
+            <text:s text:c="1"/>
+            6.0
+            <text:s text:c="1"/>
+            *
+            <text:s text:c="1"/>
+            i;
+            <text:line-break/>
+            <text:s text:c="8"/>
+            glVertex2f(0.4
+            <text:s text:c="1"/>
+            *
+            <text:s text:c="1"/>
+            cos(angle),
+            <text:s text:c="1"/>
+            0.4
+            <text:s text:c="1"/>
+            *
+            <text:s text:c="1"/>
+            sin(angle));
+            <text:line-break/>
+            <text:s text:c="8"/>
+            glVertex2f(0.5
+            <text:s text:c="1"/>
+            *
+            <text:s text:c="1"/>
+            cos(angle),
+            <text:s text:c="1"/>
+            0.5
+            <text:s text:c="1"/>
+            *
+            <text:s text:c="1"/>
+            sin(angle));
+            <text:line-break/>
+            <text:s text:c="4"/>
+            }
+            <text:line-break/>
+            <text:s text:c="4"/>
+            glEnd();
+            <text:line-break/>
+            <text:s text:c="4"/>
+            <text:span text:style-name="dtb_3a_strong">break</text:span>
+            ;
+          </text:span>
+        </text:p>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

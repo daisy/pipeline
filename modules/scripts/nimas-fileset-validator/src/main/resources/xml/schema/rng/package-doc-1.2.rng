@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar
+ datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+ xmlns="http://relaxng.org/ns/structure/1.0"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+>
+ 
+  <a:documentation>
+      RelaxNg schema for oeb package 1.2 DTD
+      Last edit by: mdemeglio 2013-03-08
+	  Original version: mgylling 2005-07-01
+  </a:documentation>
+
+  <include href="mod/attributes.rng" />
+  
+  <start>
+    <ref name="package"/>
+  </start>
+
+  <div>
+    <define name="package">
+      <element name="package" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.package"/>
+        <ref name="metadata"/>
+        <ref name="manifest"/>
+        <ref name="spine"/>
+        <optional>
+          <ref name="tours"/>
+        </optional>
+        <optional>
+          <ref name="guide"/>
+        </optional>
+      </element>
+    </define>
+
+    <define name="attlist.package" combine="interleave">
+      <ref name="CommonAttributes"/>
+      <attribute name="unique-identifier">
+        <ref name="datatype.idref"/>
+      </attribute>
+      <empty/>
+    </define>
+  </div>
+
+  <define name="metadata">
+    <element name="metadata" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+      <element name="dc-metadata">
+        <ref name="dc-metadata"/>
+      </element>
+      <optional>
+        <element name="x-metadata">
+          <ref name="x-metadata"/>
+        </element>
+      </optional>
+    </element>
+  </define>
+
+  <div>
+    <define name="manifest">
+      <element name="manifest" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.manifest"/>
+        <oneOrMore>
+          <ref name="item"/>
+        </oneOrMore>
+      </element>
+    </define>
+
+    <define name="attlist.manifest" combine="interleave">
+      <ref name="CommonAttributes"/>
+    </define>
+
+    <define name="item">
+      <element name="item" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.item"/>
+        <empty/>
+      </element>
+    </define>
+
+    <define name="attlist.item" combine="interleave">
+      <ref name="InternationalAttributes"/>
+      <ref name="attribute.id.required"/>
+      <ref name="attribute.href.required.z3986-2005.subset">
+        
+      </ref>
+      <attribute name="media-type">
+        <ref name="datatype.mime.z2005list"/>
+      </attribute>
+      <optional>
+        <attribute name="fallback">
+          <ref name="datatype.idref"/>
+        </attribute>
+      </optional>
+
+          </define>
+  </div>
+
+  <div>
+    <define name="spine">
+      <element name="spine" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.spine"/>
+        <oneOrMore>
+          <ref name="itemref"/>
+        </oneOrMore>
+      </element>
+    </define>
+
+    <define name="attlist.spine" combine="interleave">
+      <ref name="CommonAttributes"/>
+    </define>
+
+    <define name="itemref">
+      <element name="itemref" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.itemref"/>
+        <empty/>
+      </element>
+    </define>
+
+    <define name="attlist.itemref" combine="interleave">
+      <ref name="CommonAttributes"/>
+      <attribute name="idref">
+        <ref name="datatype.idref"/>
+      </attribute>
+    </define>
+  </div>
+
+  <div>
+    <define name="tours">
+      <element name="tours" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.tours"/>
+        <oneOrMore>
+          <ref name="tour"/>
+        </oneOrMore>
+      </element>
+    </define>
+
+    <define name="attlist.tours" combine="interleave">
+      <ref name="CommonAttributes"/>
+    </define>
+
+    <define name="tour">
+      <element name="tour" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.tour"/>
+        <oneOrMore>
+          <ref name="site"/>
+        </oneOrMore>
+      </element>
+    </define>
+
+    <define name="attlist.tour" combine="interleave">
+      <ref name="CommonAttributes"/>
+      <attribute name="title"/>
+    </define>
+  </div>
+
+  <div>
+    <define name="site">
+      <element name="site" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.site"/>
+        <empty/>
+      </element>
+    </define>
+
+    <define name="attlist.site" combine="interleave">
+      <ref name="CommonAttributes"/>
+      <attribute name="title"/>
+      <ref name="attribute.href.required"/>
+      <!-- uri test for site@href not in map-->
+    </define>
+  </div>
+
+  <div>
+    <define name="guide">
+      <element name="guide" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.guide"/>
+        <oneOrMore>
+          <ref name="reference"/>
+        </oneOrMore>
+      </element>
+    </define>
+
+    <define name="attlist.guide" combine="interleave">
+      <ref name="CommonAttributes"/>
+    </define>
+
+    <define name="reference">
+      <element name="reference" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+        <ref name="attlist.reference"/>
+        <empty/>
+      </element>
+    </define>
+
+    <define name="attlist.reference" combine="interleave">
+      <ref name="CommonAttributes"/>
+      <attribute name="type">
+        <ref name="datatype.pkg.guide.reference.type.values"/>
+        <!-- above test not in testMap -->
+      </attribute>
+      <attribute name="title"/>
+      <ref name ="attribute.href.required"/>
+      <!-- above test not in testMap -->
+    </define>
+  </div>
+
+  <div>
+    <define name="dc-metadata">
+      <ref name="attlist.dc-metadata"/>
+      
+      <interleave>
+        <oneOrMore>
+          <element name="dc:Title">
+            <ref name="CommonAttributes"/>          
+            <ref name="datatype.string.non-null"/>
+          </element>
+        </oneOrMore>
+
+        <zeroOrMore>
+          <element name="dc:Creator">
+           <interleave>
+             <ref name="attribute.role.optional"/>
+             <ref name="attribute.file-as.optional"/>
+             <ref name="CommonAttributes"/>
+           </interleave>
+           <text/>
+          </element>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <element name="dc:Subject">
+          <ref name="CommonAttributes"/>
+           <text/>
+          </element>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <element name="dc:Description">
+          <ref name="CommonAttributes"/>
+           <text/>
+          </element>
+        </zeroOrMore>
+
+        <oneOrMore>
+          <element name="dc:Publisher">
+            <ref name="CommonAttributes"/>
+            <ref name="datatype.string.non-null"/>  
+          </element>
+        </oneOrMore>
+
+        <zeroOrMore>
+          <element name="dc:Contributor">
+          <ref name="CommonAttributes"/>
+           <interleave>
+             <ref name="attribute.role.optional"/>
+             <ref name="attribute.file-as.optional"/>
+           </interleave>
+           <text/>
+          </element>
+        </zeroOrMore>
+
+        <oneOrMore>
+          <element name="dc:Date">
+          <ref name="CommonAttributes"/>
+          <optional>
+            <attribute name="event">
+              <text/>
+            </attribute>
+          </optional>
+           <ref name="datatype.iso8601">           
+             
+           </ref>
+          </element>
+        </oneOrMore>
+
+        <zeroOrMore>
+          <element name="dc:Type">
+          <ref name="CommonAttributes"/>
+            <text/>
+          </element>
+        </zeroOrMore>
+
+        <!-- MDeMeglio 20130212 use NIMAS 1.1 instead of Z3986; we could override this in schematron but then we'd get an error from RNG anyway. 
+        For the time being, we only need to use this schema for NIMAS filesets; in the future, we can modularize it as needed if it ends up
+        in other contexts.-->
+        <zeroOrMore>
+          <element name="dc:Format">
+            <ref name="CommonAttributes"/>
+            <!-- <value>ANSI/NISO Z39.86-2005</value>-->
+            <value>NIMAS 1.1</value>
+          </element>
+        </zeroOrMore>
+
+        <oneOrMore>
+          <a:documentation>One instance of this element, that which is referenced from the package unique-identifier attribute, must include an id.</a:documentation>
+          <element name="dc:Identifier">
+            <interleave>
+              <ref name="attribute.scheme.optional"/>
+              <ref name="CommonAttributes"/>
+            </interleave>
+              <ref name="datatype.string.non-null"/>
+          </element>
+        </oneOrMore>
+
+        <!-- NIMAS requires this; in DAISY it's optional -->
+        <!-- http://aim.cast.org/experience/technologies/spec-v1_1#.VaVIu5NVhHw -->
+        <oneOrMore>
+          <element name="dc:Source">
+          <ref name="CommonAttributes"/>
+            <text/>
+          </element>
+        </oneOrMore>
+
+        <oneOrMore>
+          <element name="dc:Language">
+            <ref name="CommonAttributes"/>
+            <ref name="datatype.rfc1766">
+              
+            </ref>
+          </element>
+        </oneOrMore>
+
+        <zeroOrMore>
+          <element name="dc:Relation">
+            <ref name="CommonAttributes"/>
+            <text/>
+          </element>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <element name="dc:Coverage">
+            <ref name="CommonAttributes"/>
+            <text/>
+          </element>
+        </zeroOrMore>
+
+        <!-- NIMAS requires this; in DAISY it's optional -->
+        <!-- http://aim.cast.org/experience/technologies/spec-v1_1#.VaVIu5NVhHw -->
+        <oneOrMore>
+          <element name="dc:Rights">
+            <ref name="CommonAttributes"/>
+            <text/>
+          </element>
+        </oneOrMore>
+
+      </interleave>
+    </define>
+
+    <define name="attlist.dc-metadata" combine="interleave">
+      <ref name="CommonAttributes"/>
+    </define>
+
+  </div>
+
+  <div>
+    <define name="x-metadata">
+      <ref name="attlist.x-metadata"/>
+      <oneOrMore>
+        <element name="meta" ns="http://openebook.org/namespaces/oeb-package/1.0/">
+          <ref name="x-meta.attlist"/>
+       </element>
+      </oneOrMore>
+    </define>
+
+    <define name="attlist.x-metadata">
+      <ref name="CommonAttributes"/>
+    </define>
+
+    <define name="x-meta.attlist">
+      <choice>
+        <group>
+          <a:documentation>Optional - recommended. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:sourceDate</value>
+          </attribute>
+          <attribute name="content">
+            <ref name="datatype.iso8601"/>
+            
+          </attribute>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Optional - recommended. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:sourceEdition</value>
+          </attribute>
+          <ref name="attribute.content.stringvalue.required"/>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Optional - recommended. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:sourcePublisher</value>
+          </attribute>
+          <ref name="attribute.content.stringvalue.required"/>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Optional - recommended. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:sourceRights</value>
+          </attribute>
+          <ref name="attribute.content.stringvalue.required"/>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Optional. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:sourceTitle</value>
+          </attribute>
+          <ref name="attribute.content.stringvalue.required"/>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Required. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:multimediaType</value>
+          </attribute>
+          <attribute name="content">
+            <choice>
+              <value>audioOnly</value>
+              <value>audioNCX</value>
+              <value>audioPartText</value>
+              <value>audioFullText</value>
+              <value>textPartAudio</value>
+              <value>textNCX</value>
+            </choice>
+          </attribute>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Required. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:multimediaContent</value>
+          </attribute>
+          <attribute name="content">
+            <choice>
+              
+              <value>audio</value>
+              <value>text</value>
+              <value>image</value>
+              <value>audio,text</value>
+              <value>audio,image</value>              
+              <value>audio,text,image</value>
+              <value>audio,image,text</value>              
+              <value>text,audio</value>
+              <value>text,image</value>              
+              <value>text,audio,image</value>
+              <value>text,image,audio</value>                            
+              <value>image,text</value>
+              <value>image,audio</value>              
+              <value>image,text,audio</value>
+              <value>image,audio,text</value>
+            </choice>           
+          </attribute>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Optional. Repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:narrator</value>
+          </attribute>
+          <ref name="attribute.content.stringvalue.required"/>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Optional. Repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:producer</value>
+          </attribute>
+          <ref name="attribute.content.stringvalue.required"/>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Optional. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:producedDate</value>
+          </attribute>
+          <attribute name="content">
+            
+            <ref name="datatype.iso8601"/>
+          </attribute>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Optional. Repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:producer</value>
+          </attribute>
+          <ref name="attribute.content.stringvalue.required"/>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Optional. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:revision</value>
+          </attribute>
+          <attribute name="content">
+            
+            <ref name="datatype.nonNegativeInteger"/>
+          </attribute>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Optional. Not repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:revisionDate</value>
+          </attribute>
+          <attribute name="content">
+            
+            <ref name="datatype.iso8601"/>
+          </attribute>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Optional. Not repeatable.</a:documentation>
+          
+          <attribute name="name">
+            <value>dtb:revisionDescription</value>
+          </attribute>
+          <ref name="attribute.content.stringvalue.required"/>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Required. Not repeatable.</a:documentation>
+                    
+          <attribute name="name">
+            <value>dtb:totalTime</value>
+          </attribute>
+          <attribute name="content">
+            
+            <ref name="datatype.smilclock"/>
+          </attribute>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+          <a:documentation>Occurrence: Optional, recommended for audio DTBs. Repeatable.</a:documentation>
+          <attribute name="name">
+            <value>dtb:audioFormat</value>
+          </attribute>
+          <attribute name="content">
+            <a:documentation>Values are not case-sensitive.</a:documentation>
+            <choice>
+              <data type="string">
+                <param name="pattern">[M|m][P|p]3</param>
+              </data>
+              <data type="string">
+                <param name="pattern">[W|w][A|a][V|v]</param>
+              </data>
+              <data type="string">
+                <param name="pattern">[M|m][P|p]4-[A|a][A|a][C|c]</param>
+              </data>
+            </choice>
+          </attribute>
+          <ref name="attribute.scheme.optional"/>
+          <ref name="CommonAttributes"/>
+        </group>
+
+        <group>
+         <attribute name="name">
+           <ref name="datatype.string.nondtbns"/>
+         </attribute>
+         <ref name="attribute.content.stringvalue.required"/>
+         <ref name="attribute.scheme.optional"/>
+         <ref name="CommonAttributes"/>
+       </group>
+      </choice>
+    </define>
+  </div>
+
+  <div>
+    <define name="attribute.role.optional">
+      <optional>
+        <attribute name="role">
+          <text/>
+        </attribute>
+      </optional>
+    </define>
+
+    <define name="attribute.file-as.optional">
+      <optional>
+        <attribute name="file-as">
+          <text/>
+        </attribute>
+      </optional>
+    </define>
+
+    <define name="CommonAttributes">
+      <ref name="attribute.id.optional"/>
+      <ref name="InternationalAttributes"/>
+    </define>
+
+    <define name="InternationalAttributes">
+        <ref name="attribute.xml.lang.optional"/>
+    </define>
+  </div>
+
+</grammar>

@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the block element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element-variant">block</span> variant of  the <span class="element">block</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d32e54">Usage Example</a></li>
+               <li class="h2"><a href="#d32e58">Allowed parents</a></li>
+               <li class="h2"><a href="#d32e220">Allowed children</a></li>
+               <li class="h2"><a href="#d32e553">Content model and additional requirements</a></li>
+               <li class="h2"><a href="#d32e908">Variants</a></li>
+               <li class="h2"><a href="#d32e917">Namespace</a></li>
+               <li class="h2"><a href="#schemadoc-longdesc">Usage Details</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The 
+                  <code>block</code> element establishes an association between a group of elements.
+                  
+               </p>
+               <p class="description ">The 
+                  <code>block</code> element differs and is subordinate to the 
+                  <code>
+                     <a href="e-section01.html">section</a>
+                     </code> element in that it is not used to represent the structural outline of a document. A 
+                  <code>block</code> only establishes a general association, and is a semantically neutral element by default.
+                  
+               </p>
+               <p class="description ">Attributes attached to the block reflect a general commonality amongst the children: a 
+                  <code>
+                     <a href="attributes.html#role11">role</a>
+                     </code> attribute can be attached to express the semantic nature of the grouping; a 
+                  <code>
+                     <a href="attributes.html#class01">class</a>
+                     </code> attribute to establish common formatting; an 
+                  <code>
+                     <a href="attributes.html#lang01">xml:lang</a>
+                     </code> attribute to indicate the language of the elements; and so forth.
+                  
+               </p>
+               <p class="description ">If the children of the block have a strong association to a single element, the 
+                  <code>
+                     <a href="attributes.html#associate01">associate</a>
+                     </code> attribute can be used to make this relationship explicit (e.g., in a figure, that all children are connected to the image).
+                  
+               </p>
+               <p class="longdesc-link">Usage details available in the <a href="#schemadoc-longdesc">Usage Details</a> section.
+               </p>
+            </div>
+            <h2 id="d32e54">Usage Example</h2><pre>
+&lt;block xml:space="preserve" role="letter"&gt;
+    &lt;ln&gt;Alice's Right Foot, Esq.&lt;/ln&gt;
+    &lt;ln&gt;    Hearthrug,&lt;/ln&gt;
+    &lt;ln&gt;        Near the fender,&lt;/ln&gt;
+    &lt;ln&gt;            (with Alice's love).&lt;/ln&gt;
+&lt;/block&gt;
+    </pre><h2 id="d32e58">Allowed parents</h2>
+            <p><a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annotation01.html">annotation</a>, 
+               <a class="element" href="e-annotation-xml01.html">m:annotation-xml</a>, 
+               <a class="element" href="e-aside02.html">aside (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-aside03.html">aside (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-backcover01.html">backcover</a>, 
+               <a class="element" href="e-bibliography01.html">bibliography</a>, 
+               <a class="element" href="e-block01.html">block (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-block02.html">block (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-code01.html">code</a>, 
+               <a class="element" href="e-description01.html">description</a>, 
+               <a class="element" href="e-entry03.html">entry (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-entry04.html">entry (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-flaps01.html">flaps</a>, 
+               <a class="element" href="e-frontcover01.html">frontcover</a>, 
+               <a class="element" href="e-glossary01.html">glossary</a>, 
+               <a class="element" href="e-index01.html">index</a>, 
+               <a class="element" href="e-item01.html">item</a>, 
+               <a class="element" href="e-longdesc01.html">d:longdesc</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-object01.html">object</a>, 
+               <a class="element" href="e-otherwise03.html">sel:otherwise</a>, 
+               <a class="element" href="e-quote01.html">quote</a>, 
+               <a class="element" href="e-section01.html">section (<span class="element-variant">section</span> variant)</a>, 
+               <a class="element" href="e-section03.html">section (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-section04.html">section (<span class="element-variant">index</span> variant)</a>, 
+               <a class="element" href="e-section05.html">section (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-section06.html">section (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-spine01.html">spine</a>, 
+               <a class="element" href="e-summary01.html">d:summary</a>, 
+               <a class="element" href="e-td01.html">td</a>, 
+               <a class="element" href="e-th01.html">th</a>, 
+               <a class="element" href="e-toc01.html">toc</a>, 
+               <a class="element" href="e-tour01.html">d:tour</a> and 
+               <a class="element" href="e-when02.html">sel:when</a>
+               
+            </p>
+            <h2 id="d32e220">Allowed children</h2>
+            <p>This element <em>may</em> contain text.
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-abbr01.html">abbr</a>, 
+               <a class="element" href="e-address01.html">address (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-address02.html">address (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-annoref01.html">annoref</a>, 
+               <a class="element" href="e-annotation01.html">annotation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-annotation02.html">annotation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-aside02.html">aside</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-break01.html">ssml:break</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-char01.html">char</a>, 
+               <a class="element" href="e-citation01.html">citation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-citation02.html">citation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-code01.html">code (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-code02.html">code (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-d01.html">d</a>, 
+               <a class="element" href="e-definition01.html">definition</a>, 
+               <a class="element" href="e-description01.html">description</a>, 
+               <a class="element" href="e-description04.html">d:description</a>, 
+               <a class="element" href="e-emph02.html">emph (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-emph01.html">emph (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-expansion01.html">expansion</a>, 
+               <a class="element" href="e-group01.html">xforms:group</a>, 
+               <a class="element" href="e-hd01.html">hd</a>, 
+               <a class="element" href="e-input01.html">xforms:input</a>, 
+               <a class="element" href="e-linebreak01.html">rend:linebreak</a>, 
+               <a class="element" href="e-list01.html">list</a>, 
+               <a class="element" href="e-ln02.html">ln</a>, 
+               <a class="element" href="e-math01.html">m:math</a>, 
+               <a class="element" href="e-name01.html">name</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-noteref01.html">noteref</a>, 
+               <a class="element" href="e-num01.html">num</a>, 
+               <a class="element" href="e-object01.html">object (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-object03.html">object (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-object02.html">object (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-p01.html">p</a>, 
+               <a class="element" href="e-pagebreak01.html">pagebreak</a>, 
+               <a class="element" href="e-phoneme02.html">ssml:phoneme (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-phoneme01.html">ssml:phoneme (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-prosody02.html">ssml:prosody (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-prosody01.html">ssml:prosody (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-quote01.html">quote (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-quote02.html">quote (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-range01.html">xforms:range</a>, 
+               <a class="element" href="e-ref01.html">ref</a>, 
+               <a class="element" href="e-repeat01.html">xforms:repeat</a>, 
+               <a class="element" href="e-ruby01.html">its:ruby</a>, 
+               <a class="element" href="e-s01.html">s</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-say-as01.html">ssml:say-as (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-secret01.html">xforms:secret</a>, 
+               <a class="element" href="e-select02.html">sel:select (<span class="element-variant">Block</span> variant)</a>, 
+               <a class="element" href="e-select01.html">sel:select (<span class="element-variant">Phrase</span> variant)</a>, 
+               <a class="element" href="e-select03.html">xforms:select</a>, 
+               <a class="element" href="e-select101.html">xforms:select1</a>, 
+               <a class="element" href="e-span02.html">span (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-span01.html">span (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-sub01.html">sub</a>, 
+               <a class="element" href="e-sub03.html">ssml:sub (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-sub02.html">ssml:sub (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-sup01.html">sup</a>, 
+               <a class="element" href="e-table01.html">table</a>, 
+               <a class="element" href="e-term01.html">term</a>, 
+               <a class="element" href="e-textarea01.html">xforms:textarea</a>, 
+               <a class="element" href="e-time01.html">time</a>, 
+               <a class="element" href="e-token02.html">ssml:token (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-token01.html">ssml:token (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-transition01.html">transition</a>, 
+               <a class="element" href="e-verse01.html">verse</a> and 
+               <a class="element" href="e-w01.html">w</a>
+               
+            </p>
+            <h2 id="d32e553">Content model and additional requirements</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#associate01">@associate</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#continuation01">@continuation</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role11">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#onlangfailure01">@ssml:onlangfailure</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng-choice"><span class="rng-term">a choice of</span>
+                  
+                  <div class="rng">either <span class="rng-term">one or more of </span>
+                     
+                     <div class="rng">any of the 24 elements: <a class="element" href="e-address01.html">address</a>, <a class="element" href="e-annotation01.html">annotation</a>, <a class="element" href="e-aside02.html">aside</a>, <a class="element" href="e-block01.html">block</a>, <a class="element" href="e-caption01.html">caption</a>, <a class="element" href="e-citation01.html">citation</a>, <a class="element" href="e-code01.html">code</a>, <a class="element" href="e-description04.html">d:description</a>, <a class="element" href="e-description01.html">description</a>, <a class="element" href="e-hd01.html">hd</a>, <a class="element" href="e-list01.html">list</a>, <a class="element" href="e-math01.html">m:math</a>, <a class="element" href="e-note01.html">note</a>, <a class="element" href="e-object01.html">object</a>, <a class="element" href="e-p01.html">p</a>, <a class="element" href="e-pagebreak01.html">pagebreak</a>, <a class="element" href="e-quote01.html">quote</a>, <a class="element" href="e-select02.html">sel:select</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-table01.html">table</a>, <a class="element" href="e-transition01.html">transition</a>, <a class="element" href="e-verse01.html">verse</a>, <a class="element" href="e-group01.html">xforms:group</a> and <a class="element" href="e-repeat01.html">xforms:repeat</a></div>
+                     
+                  </div>
+                  
+                  <div class="rng">or <span class="rng-term">one or more of </span>
+                     
+                     <div class="rng"><span class="tng-term">a choice of </span><div class="rng">either one of the 53 elements: <a class="element" href="e-abbr01.html">abbr</a>, <a class="element" href="e-address02.html">address</a>, <a class="element" href="e-annoref01.html">annoref</a>, <a class="element" href="e-annotation02.html">annotation</a>, <a class="element" href="e-char01.html">char</a>, <a class="element" href="e-citation02.html">citation</a>, <a class="element" href="e-code02.html">code</a>, <a class="element" href="e-d01.html">d</a>, <a class="element" href="e-definition01.html">definition</a>, <a class="element" href="e-emph02.html">emph</a>, <a class="element" href="e-emph01.html">emph</a>, <a class="element" href="e-expansion01.html">expansion</a>, <a class="element" href="e-ruby01.html">its:ruby</a>, <a class="element" href="e-ln02.html">ln</a>, <a class="element" href="e-math01.html">m:math</a>, <a class="element" href="e-name01.html">name</a>, <a class="element" href="e-note02.html">note</a>, <a class="element" href="e-noteref01.html">noteref</a>, <a class="element" href="e-num01.html">num</a>, <a class="element" href="e-object03.html">object</a>, <a class="element" href="e-object02.html">object</a>, <a class="element" href="e-pagebreak01.html">pagebreak</a>, <a class="element" href="e-quote02.html">quote</a>, <a class="element" href="e-ref01.html">ref</a>, <a class="element" href="e-linebreak01.html">rend:linebreak</a>, <a class="element" href="e-s01.html">s</a>, <a class="element" href="e-select01.html">sel:select</a>, <a class="element" href="e-span02.html">span</a>, <a class="element" href="e-span01.html">span</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-phoneme02.html">ssml:phoneme</a>, <a class="element" href="e-phoneme01.html">ssml:phoneme</a>, <a class="element" href="e-prosody02.html">ssml:prosody</a>, <a class="element" href="e-prosody01.html">ssml:prosody</a>, <a class="element" href="e-say-as02.html">ssml:say-as</a>, <a class="element" href="e-say-as01.html">ssml:say-as</a>, <a class="element" href="e-sub03.html">ssml:sub</a>, <a class="element" href="e-sub02.html">ssml:sub</a>, <a class="element" href="e-token02.html">ssml:token</a>, <a class="element" href="e-token01.html">ssml:token</a>, <a class="element" href="e-sub01.html">sub</a>, <a class="element" href="e-sup01.html">sup</a>, <a class="element" href="e-term01.html">term</a>, <a class="element" href="e-time01.html">time</a>, <a class="element" href="e-w01.html">w</a>, <a class="element" href="e-w01.html">w</a>, <a class="element" href="e-input01.html">xforms:input</a>, <a class="element" href="e-range01.html">xforms:range</a>, <a class="element" href="e-secret01.html">xforms:secret</a>, <a class="element" href="e-select03.html">xforms:select</a>, <a class="element" href="e-select101.html">xforms:select1</a> or <a class="element" href="e-textarea01.html">xforms:textarea</a></div>
+                        <div class="rng">or text</div><span class="tng-term">end of choice</span></div>
+                     
+                  </div>
+                  <span class="rng-term">end of choice</span></div>
+               <div class="schematron-asserts-and-reports">Note that in addition to restrictions presented in the content model  above, 
+                  					use of this element must also respect the following requirement:
+                  <ul>
+                     <li>The 
+                        <code>block</code> element must neither be empty nor contain only whitespace.
+                        
+                     </li>
+                  </ul>
+                  <div>Such requirements take precedence over any conflicting statements in the
+                     						content model or in the lists above of allowed children and parents.
+                  </div>
+               </div>
+            </div>
+            <h2 id="d32e908">Variants</h2>
+            <p>This element exists in 2 variants. The other variant is the <a href="e-block02.html"><span class="element-variant">toc</span> variant.</a></p>
+            <h2 id="d32e917">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+            <h2 id="schemadoc-longdesc">Usage Details</h2>
+            
+            <h4 id="d32e925">Associated content</h4>
+            
+            <p> Although images, tables and other objects may stand on their own in a document, typically they will include an accessible
+               description, a caption and possibly a header. 
+            </p>
+            
+            <p> In order to establish that other elements are carrying information about the table or image, you must tie them together using
+               
+               <code>ref</code> attributes that point to the 
+               <code>xml:id</code> of the central element, as in the following example: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;hd ref="galapisle"&gt;Galapagos Islands&lt;/hd&gt;
+
+&lt;object xml:id="galapisle" src="island.png" /&gt;
+
+&lt;caption ref="galapisle"&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+        </pre>
+               </div>
+            
+            <p> If you were to omit the 
+               <code>ref</code> attributes, the information would only be loosely associated by its order in the document (i.e., a processing agent would
+               not be able to handle the elements as a group). 
+               
+            </p>
+            
+            <p> Although all of the above elements are associated through references to the 
+               <code>object</code> element, their semantics are still only loosely defined (i.e., the linkage is established, but not what that linkage represents).
+               A human can intuit they represent a figure by the collected items and their use, but not so a machine. 
+               
+            </p>
+            
+            <p> It can also be confusing to edit a document marked up with all content within a section as siblings, because document narrative
+               could fall both immediately before and after the figure elements making it all appear connected. Without checking for 
+               <code>ref</code> attributes as you edit, it wouldn't be clear if a new non-structural heading were occuring or a figure were being inserted.
+               
+               
+            </p>
+            
+            <p> To begin to bind the elements more tightly and create a figure both humans and machines can understand, the 
+               <code>block</code> element can be wrapped as a container. A 
+               <code>role</code> attribute can then be attached to further specify that all of the children constitute a figure, as in the following example:
+               
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;block role="figure"&gt;
+    
+    &lt;hd ref="galapisland"&gt;Galapagos Islands&lt;/hd&gt;
+    
+    &lt;object xml:id="galapisland" src="island.png" /&gt;
+    
+    &lt;caption ref="galapisland"&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+    
+&lt;/block&gt;
+        </pre>
+               </div>
+            
+            <p> A common question at this point is why the 
+               <code>ref</code> elements are still necessary. The answer is because the 
+               <code>block</code> element is only a general container. The 
+               <code>role</code> attribute provides additional semantics, but those semantics only extend to what kind of content the 
+               <code>block</code> represents, not how it is interrelated (but more on this shortly). 
+               
+            </p>
+            
+            <p> Now that the content is grouped, however, we can begin to further simplify it. To avoid the extra work of linking the child
+               elements, an 
+               <code>associate</code> attribute can be attached to the 
+               <code>block</code> (the attribute represents an automatic 
+               <code>ref</code> between all the children). The IDREF that you specify in the attribute implicitly makes the references that we have so far
+               been carrying forward, so our markup can now be more minimally represented as in the following example: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;block role="figure" associate="galap-figure"&gt;
+    
+    &lt;hd&gt;Galapagos Islands&lt;/hd&gt;
+    
+    &lt;object xml:id="galap-figure" src="island.png" /&gt;
+    
+    &lt;caption&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+    
+&lt;/block&gt;
+        </pre>
+               </div>
+            
+            <p> Now, when a processing agent comes across this markup it will be able to determine both that the block constitutes a figure
+               (from the 
+               <code>role</code> attribute) and that the child 
+               <code>hd</code> and 
+               <code>caption</code> elements are tied to the 
+               <code>object</code> (from the 
+               <code>associate</code> attribute). We've gained much more information about the figure than we started with, and the work required to reproduce
+               the figure has been greatly simplified (there is also no worry about accidentally forgetting a 
+               <code>ref</code> on any of the children). 
+               
+            </p>
+            
+            <p> Now that we have a compact markup model for figures, we can briefly jump back to why we cannot assume associations. Consider
+               the following example: 
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;block role="figure"&gt;
+    
+    &lt;object xml:id="galap-isa" src="isabella.png" /&gt;
+    
+    &lt;object xml:id="galap-fer" src="fernandina.png" /&gt;
+    
+    &lt;object xml:id="galap-sc" src="santa-cruz.png" /&gt;
+    
+    &lt;caption&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+    
+&lt;/block&gt;
+        </pre>
+               </div>
+            
+            <p> We cannot make a simple association here that all the children of the figure are tied to an 
+               <code>object</code>, as the figure constitutes three images sharing a caption. We likewise cannot use the 
+               <code>associate</code> attribute, but have to revert back to explicitly linking the 
+               <code>caption</code> to each of the three images it describes: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;block role="figure"&gt;
+    
+    &lt;object xml:id="isa" src="isabella.png" /&gt;
+    
+    &lt;object xml:id="fer" src="fernandina.png" /&gt;
+    
+    &lt;object xml:id="sc" src="santa-cruz.png" /&gt;
+    
+    &lt;caption ref="isa fer sc"&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+    
+&lt;/block&gt;
+        </pre>
+               </div>
+            
+            <p> It's this potential for varation that requires at least some level of linking in all cases, and makes it impossible to state
+               a simple rule that would hold true for all content grouped in a 
+               <code>block</code>. 
+               
+            </p>
+            
+            <p> Fortunately, most image and table figures are not this complicated, and the simpler process of grouping in a 
+               <code>block</code> with the 
+               <code>associate</code> attribute will work the majority of the time. 
+               
+            </p>
+            
+         </div>
+      </div>
+   </body>
+</html>

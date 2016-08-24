@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The transition module </title>
+        <annotation annotates="/">
+            <para>This module defines the transition element for indicating changes in context and other shifts in the narrative flow of a document. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.transition.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.transition">
+            <element name="transition">
+                <a:documentation>The transition element represents context changes and other shifts in the narrative flow or content of a document. The shift represented by a transition does not infer structural meaning on the elements that precede or follow it (see the section element). A typical example of a transition in print documents is a spaced gap between paragraphs, which may include centered asterisks or other glyphs (often referred to as a space break). The Content Rendition feature's symbol attribute can be used to represent a character marker associated with the transition, and the src attribute can be used to reference an image. If both attributes are omitted, the transition is treated as a whitespace gap. </a:documentation>
+                <ref name="z3998.transition.attlist"/>
+                <ref name="z3998.transition.content"/>
+            </element>
+        </define>
+        <define name="z3998.transition.attlist" combine="interleave">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.transition.content">
+            <empty/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>transition - default content model contribution </a:documentation>
+        <define name="z3998.Block.core.class" combine="choice">
+            <ref name="z3998.transition"/>
+        </define>
+        <define name="z3998.verse.content.class" combine="choice">
+            <ref name="z3998.transition"/>
+        </define>
+        <define name="z3998.Block.basic.model" combine="choice">
+            <ref name="z3998.transition"/>
+        </define>
+    </div>
+</grammar>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The term module </title>
+        <annotation annotates="/">
+            <para>This module defines the term element for identifying words and phrases of semantic or lexical significance. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.term.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.term">
+            <element name="term">
+                <a:documentation>The term element represents a word, or compound word, characterized by its particular use and context. The addition of a ref attribute establishes a link to a definition. The value of the ref attribute must reference the xml:id of a definition element </a:documentation>
+                <ref name="z3998.term.attlist"/>
+                <ref name="z3998.term.content"/>
+                <sch:rule context="default:term">
+                    <sch:assert test="normalize-space(.) or *">The term element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+                <sch:rule context="default:term[@ref]">
+                    <sch:assert test="some $def in //default:definition satisfies current()/@ref eq $def/@xml:id">The ref attribute on a term element must resolve to a definition. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.term.attlist">
+            <optional>
+                <ref name="z3998.ref.attrib"/>
+            </optional>
+            <ref name="z3998.Phrase.attrib"/>
+        </define>
+        <define name="z3998.term.content">
+            <ref name="z3998.Phrase.core.Text.mix.model"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>term - default content model contribution </a:documentation>
+        <define name="z3998.Phrase.core.class" combine="choice">
+            <ref name="z3998.term"/>
+        </define>
+    </div>
+</grammar>

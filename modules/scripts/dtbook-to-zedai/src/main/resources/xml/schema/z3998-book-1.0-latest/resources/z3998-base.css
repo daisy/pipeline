@@ -1,0 +1,149 @@
+@charset "UTF-8";
+@namespace "http://www.daisy.org/ns/z3998/authoring/";
+@namespace its "http://www.w3.org/2005/11/its";
+
+/***************************************************************
+ * CSS for Z39.98 Authoring and Interchange documents.
+ * Source version available at code.google.com/p/zednext.
+ * This CSS uses CSS 2.1 and 3.
+ * Version: 2010-04-05
+ * Authors:
+ *      mgylling
+ ***************************************************************/
+
+/***************************************************************/
+/*** document layer ********************************************/
+
+document        { color: rgb(5,5,5); background-color: rgb(245,245,245) }
+head, head *    { display:none }
+body            { display:block; margin: 3em 3em 3em 3em } 
+
+
+/***************************************************************/
+/*** section layer *********************************************/
+
+section, article, toc, bibliography, index, glossary {
+    display:block; 
+    margin: 2em 0em 0em 0.5em; 
+    border: 1px solid rgb(230,230,230)
+}
+
+
+/***************************************************************/
+/*** block layer ***********************************************/
+
+/*** headings **************************************************/
+
+h, hd               { display:block; font-weight:bold; }
+hd                  { color: rgb(30,30,30); margin: 0.3em 0em 0.3em 0em; }
+h                   { color: rgb(10,10,10); text-decoration:underline; margin: 0.5em 0em 0.5em 0em; letter-spacing: 0.1em; }
+
+body > h                            { font-size: 160% }
+body > * > h                        { font-size: 150% }
+body > * > * > h                    { font-size: 140% }
+body > * > * > * > h                { font-size: 130% }
+body > * > * > * > * > h            { font-size: 120% }
+body > * > * > * > * > * > h        { font-size: 110% }
+body > * > * > * > * > * > * > h    { font-size: 100% }
+
+
+/*** elements that only display as block ***********************/
+
+block               { display:block; margin: 0em 0em 0em 0em }
+p                   { display:block; margin: 0em 0em 1em 0em }
+aside               { display:block }
+verse               { display:block }
+note                { display:block }
+annotation          { display:block }
+
+
+/*** elements that variably appear as block or inline **********/
+
+body > code, section > code     { display:block }
+body > quote, section > quote   { display:block }
+
+
+/*** table *****************************************************/
+
+table               { display: table; margin: 0em 0em 1em 0em }
+tr                  { display: table-row }
+thead               { display: table-header-group }
+tbody               { display: table-row-group }
+tfoot               { display: table-footer-group }
+col                 { display: table-column }
+colgroup            { display: table-column-group }
+td, th              { display: table-cell; border: 1px solid rgb(190,190,190); padding: 0.2em; }
+th                  { font-weight: bolder; text-align: center; }
+
+
+/*** lists *****************************************************/
+
+list                { display:block; margin: 0em 0em 1em 0em ;}
+list list           { margin: 0em 0em 0em 1em }
+list item           { display:list-item; }
+
+/* list rendering in the absence of the rend feature */
+
+list[type='unordered'] > item { 
+    list-style-type:disc 
+}
+
+list[type='unordered'] > item > list > item {
+    list-style-type:square;
+}
+
+list[type='unordered'] > item > list > item > list > item {
+    list-style-type:circle;
+}
+
+list[type='unordered'] > item > list > item > list > item > list > item {
+    list-style-type:disc;
+}
+
+list[type='ordered'] > item { 
+    list-style-type:decimal;
+}
+
+
+/***************************************************************/
+/*** phrase layer **********************************************/
+
+abbr                { border-bottom: 1px dotted rgb(100,100,100)}
+emph                { font-weight: bolder }
+sub                 { vertical-align: sub }
+sup                 { vertical-align: super }
+noteref             { vertical-align: super }
+
+
+/*** extra *****************************************************/
+
+pagebreak:after     { content:attr(value); padding: 0.3em; border: 1px dotted rgb(255,55,55); }
+
+
+/*** object ****************************************************/
+/* object *         { display:none } */
+object              { content: attr(src,url) }
+
+
+/*** bidirectionality ******************************************/
+
+*[its|dir="ltr"]    { direction: ltr; unicode-bidi: embed }
+*[its|dir="rtl"]    { direction: rtl; unicode-bidi: embed }
+*[its|dir="lro"]    { direction: ltr; unicode-bidi: bidi-override }
+*[its|dir="rlo"]    { direction: rtl; unicode-bidi: bidi-override }
+
+
+/***************************************************************/
+/*** features **************************************************/
+
+/*** ruby ******************************************************/
+/* TODO */
+
+/*** rend ******************************************************/
+/* TODO */
+
+/*** select ****************************************************/
+/* TODO */
+
+/*** ssml ******************************************************/
+/* TODO */

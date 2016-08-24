@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The description module </title>
+        <annotation annotates="/">
+            <para>This module defines the description element and desc attribute for providing accessible descriptions. </para>
+            <para>Three variants of the description element are defined for use in the Block , Phrase and Text classes respectively. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.description.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.description">
+            <element name="description">
+                <a:documentation>The description element represents an alternate accessible description of an image, video, table, etc. The Block variant is an adaption for use embedding descriptions in other Block-layer elements and for grouping descriptions in Section-layer elements (for example, in the document head , where they can be referenced globally). The description element can either contain the text content of the description or reference an external file in which it can be found via the xlink.href attribute. It is not permitted to mix both methods, however. To ensure the description can be rendered, the description element must not include descendant elements and attributes that require a description. </a:documentation>
+                <ref name="z3998.description.attlist"/>
+                <ref name="z3998.description.content"/>
+                <sch:rule context="default:description">
+                    <sch:assert test="(normalize-space(.) or *) or @xlink:href">The description element must either contain text data or point to an external resource using the xlink:href attribute. </sch:assert>
+                    <sch:report test="(normalize-space(.) or *) and @xlink:href">The {description} element must not contain text data and also point to an external resource using the {xlink:href} attribute.</sch:report>
+                    <sch:report test="descendant::default:description">The {description} element must not contain descendant {description} elements.</sch:report>
+                    <sch:report test="descendant::default:object">The {description} element must not contain descendant {object} elements.</sch:report>
+                    <sch:report test="descendant::default:table">The {description} element must not contain descendant {table} elements.</sch:report>
+                    <sch:report test="descendant::*[namespace-uri(.) = 'http://www.w3.org/1998/Math/MathML']">The {description} element must not contain descendant elements from the MathML feature grammar.</sch:report>
+                </sch:rule>
+                <sch:rule context="default:description[not(parent::default:object)]">
+                    <sch:assert test="key('descrefs', current()/@xml:id) or key('descrefs', current()/@sel:selid)">Every description element must be referenced by at least one element in the document. </sch:assert>
+                </sch:rule>
+                <sch:rule context="default:object">
+                    <sch:report test="count(descendant::default:description) &gt; 1">The {object} element may contain only one child {description}.</sch:report>
+                    <sch:report test="not(child::default:description) and descendant::default:description">{description} elements cannot be nested inside the children of an {object} element.</sch:report>
+                    <sch:report test="child::default:description and count(child::node()[normalize-space(.)]) &gt; 1">A single {description} element must be the only child of an {object} element when used.</sch:report>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.description.attlist">
+            <ref name="z3998.global.core.attrib"/>
+            <optional>
+                <ref name="z3998.description.role.attrib"/>
+            </optional>
+            <optional>
+                <ref name="z3998.ref.attrib"/>
+            </optional>
+            <optional>
+                <ref name="xlink.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.description.content">
+            <choice>
+                <empty/>
+                <ref name="z3998.Flow.choice.noextern.model"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.description.phrase">
+            <element name="description">
+                <a:documentation>The description element represents an alternate accessible description of an image, video, table, etc. The description element can either contain the text content of the description or reference an external file in which it can be found via the xlink.href attribute. It is not permitted to mix both methods, however. To ensure the description can be rendered, the description element must not include descendant elements and attributes that require a description. </a:documentation>
+                <ref name="z3998.description.phrase.attlist"/>
+                <ref name="z3998.description.phrase.content"/>
+            </element>
+        </define>
+        <define name="z3998.description.phrase.attlist">
+            <ref name="z3998.global.core.attrib"/>
+            <optional>
+                <ref name="z3998.description.role.attrib"/>
+            </optional>
+            <ref name="z3998.ref.attrib"/>
+            <optional>
+                <ref name="xlink.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.description.phrase.content">
+            <choice>
+                <empty/>
+                <ref name="z3998.Phrase.noextern.model"/>
+            </choice>
+        </define>
+        <define name="z3998.description.role.attrib">
+            <attribute name="role">
+                <list>
+                    <oneOrMore>
+                        <ref name="z3998.description.role.attrib.content.enum"/>
+                    </oneOrMore>
+                </list>
+            </attribute>
+        </define>
+        <define name="z3998.description.role.attrib.content.enum" combine="choice">
+            <ref name="CURIE.datatype"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.description.text">
+            <element name="description">
+                <a:documentation>The description element represents an alternate accessible description of an image, video, table, etc. The description element can either contain the text content of the description or reference an external file in which it can be found via the xlink.href attribute. It is not permitted to mix both methods, however. To ensure the description can be rendered, the description element must not include descendant elements and attributes that require a description. </a:documentation>
+                <ref name="z3998.description.text.attlist"/>
+                <ref name="z3998.description.text.content"/>
+            </element>
+        </define>
+        <define name="z3998.description.text.attlist">
+            <ref name="z3998.global.core.attrib"/>
+            <optional>
+                <ref name="z3998.description.role.attrib"/>
+            </optional>
+            <ref name="z3998.ref.attrib"/>
+            <optional>
+                <ref name="xlink.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.description.text.content">
+            <choice>
+                <empty/>
+                <ref name="z3998.Text.model"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.desc.attrib">
+            <a:documentation>The desc attribute establishes the connection between the current element and its associated accessible description (s). The desc attribute must contain one or more space separated references to the IDs of the associated descriptions. Features may extend the use of this attribute, but not override the requirement that it resolve to a description. The Z39.98-2012 Content Selection feature , for example, provides a mechanism for pointing to a description based on the format being rendered. </a:documentation>
+            <attribute name="desc">
+                <ref name="z3998.desc.attrib.content"/>
+            </attribute>
+            <sch:rule context="default:*[@desc]">
+                <sch:assert test="every $descref in tokenize(current()/@desc,'\s+') satisfies key('descriptions', $descref)">Every IDREF in the desc attribute must resolve to a description element. </sch:assert>
+            </sch:rule>
+        </define>
+        <define name="z3998.desc.attrib.content" combine="choice">
+            <list>
+                <oneOrMore>
+                    <ref name="NCName.datatype"/>
+                </oneOrMore>
+            </list>
+        </define>
+    </div>
+    <div>
+        <a:documentation>Z39.98 description module - default content model contribution </a:documentation>
+        <define name="z3998.head.class" combine="choice">
+            <ref name="z3998.description"/>
+        </define>
+        <define name="z3998.Block.variant.class" combine="choice">
+            <ref name="z3998.description"/>
+        </define>
+        <define name="z3998.object.block.content.extern" combine="choice">
+            <ref name="z3998.description"/>
+        </define>
+        <define name="z3998.object.phrase.content.extern" combine="choice">
+            <ref name="z3998.description.phrase"/>
+        </define>
+        <define name="z3998.object.text.content.extern" combine="choice">
+            <ref name="z3998.description.text"/>
+        </define>
+        <define name="z3998.global.core.attrib" combine="interleave">
+            <optional>
+                <ref name="z3998.desc.attrib"/>
+            </optional>
+        </define>
+    </div>
+</grammar>

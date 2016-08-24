@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/moveout-prodnote.xsl">
+    <!--<xsl:with-param name="valid-parents" select="tokenize('annotation,prodnote,sidebar,div,imggroup,caption,
+        li,note,img,blockquote,level,level1,level2,level3,level4,level5,level6,td,th'
+    -->
+    <x:scenario label="Move Out PRODNOTE">
+        <x:context>
+            <book>
+                <bodymatter>
+                    <level1>
+                        <p>
+                            <span>before</span>
+                            <prodnote/>
+                            <span>after</span>
+                        </p>
+                    </level1>
+                </bodymatter>
+            </book>
+        </x:context>
+        <x:expect label="">
+            <book>
+                <bodymatter>
+                    <level1>
+                        <p>
+                            <span>before</span>
+                        </p>
+                        <prodnote/>
+                        <p>
+                            <span>after</span>
+                        </p>
+                    </level1>
+                </bodymatter>
+            </book>
+        </x:expect>
+    </x:scenario>
+</x:description>

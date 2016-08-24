@@ -1,0 +1,1150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2002/xforms/" xmlns:select="http://www.daisy.org/ns/z3998/authoring/features/select/" xmlns:synthesis="http://www.w3.org/2001/10/synthesis" xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/" xmlns:its="http://www.w3.org/2005/11/its" xmlns:authoring="http://www.daisy.org/ns/z3998/authoring/" xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/" xmlns:xforms="http://www.w3.org/2002/xforms/" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/" schemaLocation="z3998-book.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/description/" schemaLocation="d.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/rend/" schemaLocation="rend.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/select/" schemaLocation="select.xsd"/>
+  <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
+  <xs:import namespace="http://www.w3.org/2001/10/synthesis" schemaLocation="synthesis.xsd"/>
+  <xs:import namespace="http://www.w3.org/2005/11/its" schemaLocation="its.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:element name="model">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="xforms:instance"/>
+        <xs:element ref="xforms:submission"/>
+        <xs:element ref="xforms:bind"/>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="functions">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:QName"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="schema">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:anyURI"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="version">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="[1-9]\d*\.\d+"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:length value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="input">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xforms:label"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+      <xs:attribute name="inputmode"/>
+      <xs:attribute name="appearance">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="minimal"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="compact"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="full"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="incremental" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="textarea">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xforms:label"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+      <xs:attribute name="inputmode"/>
+      <xs:attribute name="appearance">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="minimal"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="compact"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="full"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="incremental" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="secret">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xforms:label"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+      <xs:attribute name="inputmode"/>
+      <xs:attribute name="appearance">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="minimal"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="compact"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="full"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="incremental" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="select1">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xforms:label"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="xforms:item"/>
+          <xs:element ref="xforms:itemset"/>
+          <xs:element ref="xforms:choices"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+      <xs:attribute name="appearance">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="minimal"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="compact"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="full"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="selection">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="open"/>
+            <xs:enumeration value="closed"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="incremental" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="select">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xforms:label"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="xforms:item"/>
+          <xs:element ref="xforms:itemset"/>
+          <xs:element ref="xforms:choices"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+      <xs:attribute name="appearance">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="minimal"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="compact"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="full"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="selection">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="open"/>
+            <xs:enumeration value="closed"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="incremental" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="range">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xforms:label"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+      <xs:attribute name="appearance">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="minimal"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="compact"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="full"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="start"/>
+      <xs:attribute name="end"/>
+      <xs:attribute name="step"/>
+      <xs:attribute name="incremental" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="instance">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="authoring:_1">
+          <xs:attribute ref="xml:id"/>
+          <xs:attribute ref="xml:space"/>
+          <xs:attribute ref="xml:base"/>
+          <xs:attribute name="class" type="xs:NMTOKENS"/>
+          <xs:attribute ref="xml:lang"/>
+          <xs:attribute ref="its:dir"/>
+          <xs:attribute ref="its:translate"/>
+          <xs:attribute name="role">
+            <xs:simpleType>
+              <xs:restriction>
+                <xs:simpleType>
+                  <xs:list>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:list>
+                </xs:simpleType>
+                <xs:minLength value="1"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="src" type="xs:anyURI"/>
+          <xs:attribute name="resource" type="xs:anyURI"/>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="submission">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="xforms:method"/>
+        <xs:element minOccurs="0" ref="xforms:resource"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="xforms:header"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="method">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="post"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="put"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="get"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="delete"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="post"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="form-data-post"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="urlencoded-post"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="action" type="xs:anyURI"/>
+      <xs:attribute name="resource" type="xs:anyURI"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="includenamespaceprefixes">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:union memberTypes="xs:NCName">
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="#default"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:union>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:length value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="indent" type="xs:boolean"/>
+      <xs:attribute name="encoding"/>
+      <xs:attribute name="mode">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="asynchronous"/>
+            <xs:enumeration value="synchronous"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="omit-xml-declaration" type="xs:boolean"/>
+      <xs:attribute name="mediatype"/>
+      <xs:attribute name="standalone" type="xs:boolean"/>
+      <xs:attribute name="cdata-section-elements">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:QName"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="replace">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="all"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="instance"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="none"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="instance" type="xs:IDREF"/>
+      <xs:attribute name="relevant" type="xs:boolean"/>
+      <xs:attribute name="separator">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value=";"/>
+            <xs:enumeration value="&amp;"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="serialization">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="application/xml"/>
+            <xs:enumeration value="application/x-www-form-urlencoded"/>
+            <xs:enumeration value="multipart/related"/>
+            <xs:enumeration value="multipart/form-data"/>
+            <xs:enumeration value="none"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="validate" type="xs:boolean"/>
+      <xs:attribute name="version" type="xs:NMTOKEN"/>
+      <xs:attribute name="targetref" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="bind">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="xforms:bind"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="nodeset" type="xs:string"/>
+      <xs:attribute name="calculate" type="xs:string"/>
+      <xs:attribute name="type" type="xs:QName"/>
+      <xs:attribute name="required" type="xs:string"/>
+      <xs:attribute name="constraint" type="xs:string"/>
+      <xs:attribute name="relevant" type="xs:string"/>
+      <xs:attribute name="readonly" type="xs:string"/>
+      <xs:attribute name="p3ptype"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="label">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="authoring:span"/>
+        <xs:element ref="authoring:ref"/>
+        <xs:element ref="authoring:noteref"/>
+        <xs:group ref="authoring:ln"/>
+        <xs:element ref="authoring:s"/>
+        <xs:element ref="authoring:w"/>
+        <xs:element ref="authoring:abbr"/>
+        <xs:element ref="authoring:expansion"/>
+        <xs:element ref="authoring:emph"/>
+        <xs:element ref="authoring:time"/>
+        <xs:element ref="authoring:name"/>
+        <xs:element ref="authoring:definition"/>
+        <xs:element ref="authoring:term"/>
+        <xs:element ref="authoring:d"/>
+        <xs:element ref="authoring:num"/>
+        <xs:element ref="synthesis:phoneme"/>
+        <xs:element ref="synthesis:prosody"/>
+        <xs:element ref="synthesis:say-as"/>
+        <xs:element ref="synthesis:sub"/>
+        <xs:element ref="synthesis:token"/>
+        <xs:element ref="xforms:input"/>
+        <xs:element ref="xforms:textarea"/>
+        <xs:element ref="xforms:secret"/>
+        <xs:element ref="xforms:select1"/>
+        <xs:element ref="xforms:select"/>
+        <xs:element ref="xforms:range"/>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="src" type="xs:anyURI"/>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="item">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xforms:label"/>
+        <xs:group ref="authoring:value"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="itemset">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="xforms:label"/>
+        <xs:choice>
+          <xs:group ref="authoring:value"/>
+          <xs:element ref="xforms:copy"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="nodeset" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="choices">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="xforms:label"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:element ref="xforms:choices"/>
+          <xs:element ref="xforms:item"/>
+          <xs:element ref="xforms:itemset"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="group">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="xforms:label"/>
+        <xs:choice maxOccurs="unbounded">
+          <xs:choice minOccurs="0">
+            <xs:element ref="xforms:group"/>
+            <xs:element ref="xforms:repeat"/>
+          </xs:choice>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:group ref="authoring:span"/>
+            <xs:element ref="authoring:ref"/>
+            <xs:element ref="authoring:noteref"/>
+            <xs:group ref="authoring:ln"/>
+            <xs:element ref="authoring:s"/>
+            <xs:element ref="authoring:w"/>
+            <xs:element ref="authoring:abbr"/>
+            <xs:element ref="authoring:expansion"/>
+            <xs:element ref="authoring:emph"/>
+            <xs:element ref="authoring:time"/>
+            <xs:element ref="authoring:name"/>
+            <xs:element ref="authoring:definition"/>
+            <xs:element ref="authoring:term"/>
+            <xs:element ref="authoring:d"/>
+            <xs:element ref="authoring:num"/>
+            <xs:element ref="synthesis:phoneme"/>
+            <xs:element ref="synthesis:prosody"/>
+            <xs:element ref="synthesis:say-as"/>
+            <xs:element ref="synthesis:sub"/>
+            <xs:element ref="synthesis:token"/>
+            <xs:element ref="xforms:input"/>
+            <xs:element ref="xforms:textarea"/>
+            <xs:element ref="xforms:secret"/>
+            <xs:element ref="xforms:select1"/>
+            <xs:element ref="xforms:select"/>
+            <xs:element ref="xforms:range"/>
+          </xs:choice>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+      <xs:attribute name="appearance">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="minimal"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="compact"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="full"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="repeat">
+    <xs:complexType mixed="true">
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="xforms:group"/>
+        <xs:element ref="xforms:repeat"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="authoring:span"/>
+          <xs:element ref="authoring:ref"/>
+          <xs:element ref="authoring:noteref"/>
+          <xs:group ref="authoring:ln"/>
+          <xs:element ref="authoring:s"/>
+          <xs:element ref="authoring:w"/>
+          <xs:element ref="authoring:abbr"/>
+          <xs:element ref="authoring:expansion"/>
+          <xs:element ref="authoring:emph"/>
+          <xs:element ref="authoring:time"/>
+          <xs:element ref="authoring:name"/>
+          <xs:element ref="authoring:definition"/>
+          <xs:element ref="authoring:term"/>
+          <xs:element ref="authoring:d"/>
+          <xs:element ref="authoring:num"/>
+          <xs:element ref="synthesis:phoneme"/>
+          <xs:element ref="synthesis:prosody"/>
+          <xs:element ref="synthesis:say-as"/>
+          <xs:element ref="synthesis:sub"/>
+          <xs:element ref="synthesis:token"/>
+          <xs:element ref="xforms:input"/>
+          <xs:element ref="xforms:textarea"/>
+          <xs:element ref="xforms:secret"/>
+          <xs:element ref="xforms:select1"/>
+          <xs:element ref="xforms:select"/>
+          <xs:element ref="xforms:range"/>
+        </xs:choice>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="nodeset" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+      <xs:attribute name="appearance">
+        <xs:simpleType>
+          <xs:union>
+            <xs:simpleType>
+              <xs:restriction base="xs:QName">
+                <xs:pattern value="[^:]+:[^:]+"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="minimal"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="compact"/>
+              </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="full"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:union>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="startindex" type="xs:positiveInteger"/>
+      <xs:attribute name="number" type="xs:nonNegativeInteger"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="method" type="xs:string"/>
+  <xs:element name="resource">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="value" type="xs:string"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="header">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="xforms:name"/>
+        <xs:group ref="authoring:value_2"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="value">
+    <xs:sequence>
+      <xs:element name="value">
+        <xs:complexType mixed="true">
+          <xs:attribute ref="xml:id"/>
+          <xs:attribute ref="xml:space"/>
+          <xs:attribute ref="xml:base"/>
+          <xs:attribute name="class" type="xs:NMTOKENS"/>
+          <xs:attribute ref="xml:lang"/>
+          <xs:attribute ref="its:dir"/>
+          <xs:attribute ref="its:translate"/>
+          <xs:attribute name="role">
+            <xs:simpleType>
+              <xs:restriction>
+                <xs:simpleType>
+                  <xs:list>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:list>
+                </xs:simpleType>
+                <xs:minLength value="1"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="model" type="xs:IDREF"/>
+          <xs:attribute name="ref" type="xs:string"/>
+          <xs:attribute name="bind" type="xs:IDREF"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="copy">
+    <xs:complexType>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="model" type="xs:IDREF"/>
+      <xs:attribute name="ref" type="xs:string"/>
+      <xs:attribute name="bind" type="xs:IDREF"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="name" type="xs:string"/>
+  <xs:group name="value1">
+    <xs:sequence>
+      <xs:element name="value" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+</xs:schema>

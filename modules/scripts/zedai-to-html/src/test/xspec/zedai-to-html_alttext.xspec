@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:epub="http://www.idpf.org/2007/ops"
+    xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/xslt/zedai-to-html.xsl">
+    <x:scenario label="Alttext :: As child content">
+        <x:context>
+            <z:object src="image.png">
+                <p>description</p>
+            </z:object>
+        </x:context>
+        <x:expect label="">
+            <img src="image.png" alt="description"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Alttext :: As complex child content">
+        <x:context>
+            <z:object src="image.png">
+                <p>Paragraph 1.</p>
+                <p>Paragraph 2.</p>
+            </z:object>
+        </x:context>
+        <x:expect label="">
+            <img src="image.png" alt="Paragraph 1. Paragraph 2."/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Alttext :: As child text">
+        <x:context>
+            <z:object src="image.png"> description </z:object>
+        </x:context>
+        <x:expect label="">
+            <img src="image.png" alt="description"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Alttext :: As child description">
+        <x:context>
+            <z:object src="image.png">
+                <z:description>
+                    <p>description</p>
+                </z:description>
+            </z:object>
+        </x:context>
+        <x:expect label="">
+            <img src="image.png" alt="description"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Alttext :: As complex child description">
+        <x:context>
+            <z:object src="image.png">
+                <z:description>
+                    <p>Paragraph 1.</p>
+                    <p>Paragraph 2.</p>
+                </z:description>
+            </z:object>
+        </x:context>
+        <x:expect label="">
+            <img src="image.png" alt="Paragraph 1. Paragraph 2."/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Alttext :: As external description">
+        <x:context>
+            <z:object src="image.png" desc="desc"> </z:object>
+            <z:description xml:id="desc">
+                <p>description</p>
+            </z:description>
+        </x:context>
+        <x:expect label="">
+            <img src="image.png" alt="description"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Alttext :: As child content when external description also exists">
+        <x:context>
+            <z:object src="image.png" desc="desc">
+                <z:description>description</z:description>
+            </z:object>
+            <z:description xml:id="desc">
+                <z:p>other</z:p>
+            </z:description>
+        </x:context>
+        <x:expect label="">
+            <img src="image.png" alt="description" aria-describedby="desc"/>
+            <div id="desc">
+                <p>other</p>
+            </div>
+        </x:expect>
+    </x:scenario>
+</x:description>

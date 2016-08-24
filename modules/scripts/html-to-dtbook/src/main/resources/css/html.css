@@ -1,0 +1,508 @@
+/*-----------------------------------------------------------------------------
+    Based on http://www.iecss.com/whatwg.css from 2012-10-29
+	HTML5 Presentational Requirements and Recommendations Guide
+	Last Updated: 2012-02-06
+	Reference: http://bit.ly/html5css
+	Based on: http://www.whatwg.org/specs/web-apps/current-work/multipage/rendering.html#the-css-user-agent-style-sheet-and-presentational-hints
+-----------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------
+	Default values
+-----------------------------------------------------------------------------*/
+
+* {
+	background-attachment: scroll;
+	background-color: transparent;
+	background-image: none;
+	background-position: 0 0;
+	background-repeat: repeat;
+	border-color: #000;
+	border-style: none;
+	border-width: medium;
+	clear: none;
+	color: inherit;
+	content: normal;
+	cursor: inherit;
+	direction: ltr;
+	display: inline;
+	float: none;
+	font-size: inherit;
+	font-style: inherit;
+	font-variant: inherit;
+	font-weight: inherit;
+	height: auto;
+	line-height: normal;
+	list-style-type: disc;
+	margin: 0;
+	max-height: none;
+	max-width: none;
+	min-height: 0;
+	min-width: 0;
+	outline: invert none medium;
+	overflow: visible;
+	padding: 0;
+	text-align: left;
+	text-decoration: none;
+	unicode-bidi: inherit;
+	vertical-align: baseline;
+	visibility: inherit;
+	white-space: inherit;
+	width: auto;
+}
+
+:rtl * {
+	direction: rtl;
+	text-align: right;
+}
+
+*[class~=html-html] {
+	font-size: medium;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	visibility: visible;
+	white-space: normal;
+}
+
+/*-----------------------------------------------------------------------------
+	Display types
+-----------------------------------------------------------------------------*/
+
+[hidden],
+*[class~=html-audio]:not([controls]),
+*[class~=html-area],
+*[class~=html-base],
+*[class~=html-command],
+*[class~=html-datalist],
+*[class~=html-head],
+*[class~=html-input][type=hidden],
+*[class~=html-link],
+*[class~=html-menu][type=context],
+*[class~=html-meta],
+*[class~=html-param],
+*[class~=html-rp],
+*[class~=html-script],
+*[class~=html-source],
+*[class~=html-style],
+*[class~=html-title] {
+	display: none;
+}
+
+:section,
+:heading,
+*[class~=html-address],
+*[class~=html-article],
+*[class~=html-aside],
+*[class~=html-blockquote],
+*[class~=html-body],
+*[class~=html-dd],
+*[class~=html-details],
+*[class~=html-div],
+*[class~=html-dl],
+*[class~=html-dt],
+*[class~=html-figure],
+*[class~=html-figcaption],
+*[class~=html-footer],
+*[class~=html-form],
+*[class~=html-header],
+*[class~=html-hr],
+*[class~=html-html],
+*[class~=html-legend],
+*[class~=html-menu],
+*[class~=html-nav],
+*[class~=html-ol],
+*[class~=html-p],
+*[class~=html-pre],
+*[class~=html-summary],
+*[class~=html-ul] {
+	display: block;
+}
+
+*[class~=html-audio][controls],
+*[class~=html-canvas],
+*[class~=html-img]:complete,
+*[class~=html-video] {
+	display: inline-block;
+}
+
+*[class~=html-li] {
+	display: list-item;
+}
+
+*[class~=html-table] {
+	display: table;
+}
+
+*[class~=html-caption] {
+	display: table-caption;
+}
+
+*[class~=html-colgroup] {
+	display: table-column-group;
+}
+
+*[class~=html-col] {
+	display: table-column;
+}
+
+*[class~=html-thead] {
+	display: table-header-group;
+}
+
+*[class~=html-tbody] {
+	display: table-row-group;
+}
+
+*[class~=html-tfoot] {
+	display: table-footer-group;
+}
+
+*[class~=html-tr] {
+	display: table-row;
+}
+
+*[class~=html-td],
+*[class~=html-th] {
+	display: table-cell;
+}
+
+*[class~=html-ruby] {
+	display: ruby;
+}
+
+*[class~=html-rt] {
+	display: ruby-text;
+}
+
+/*-----------------------------------------------------------------------------
+	Margins and padding
+-----------------------------------------------------------------------------*/
+
+*[class~=html-body] {
+	margin: 8px;
+}
+
+*[class~=html-dl],
+*[class~=html-figure],
+*[class~=html-menu],
+*[class~=html-ol],
+*[class~=html-p],
+*[class~=html-pre],
+*[class~=html-ul] {
+	margin: 1em 0;
+}
+
+:any(*[class~=html-dl], *[class~=html-menu], *[class~=html-ol], *[class~=html-ul]) :any(*[class~=html-dl], *[class~=html-menu], *[class~=html-ul]) {
+	margin: 0;
+}
+
+*[class~=html-blockquote] {
+	margin: 1em 40px;
+}
+
+*[class~=html-menu],
+*[class~=html-ol],
+*[class~=html-ul] {
+	padding: 0 0 0 40px;
+}
+
+:rtl *[class~=html-menu],
+:rtl *[class~=html-ol],
+:rtl *[class~=html-ul] {
+	padding: 0 40px 0 0;
+}
+
+*[class~=html-fieldset] {
+	margin: 0 2px;
+	padding: 0.35em 0.625em 0.75em;
+}
+
+*[class~=html-dd] {
+	margin: 0 0 0 40px;
+}
+
+:rtl *[class~=html-dd] {
+	margin: 0 40px 0 0;
+}
+
+*[class~=html-h6],
+:heading(6) {
+	margin: 2.33em 0;
+}
+
+*[class~=html-h5],
+:heading(5) {
+	margin: 1.67em 0;
+}
+
+*[class~=html-h4],
+:heading(4) {
+	margin: 1.33em 0;
+}
+
+*[class~=html-h3],
+:heading(3) {
+	margin: 1em 0;
+}
+
+*[class~=html-h2],
+:heading(2) {
+	margin: 0.83em 0;
+}
+
+*[class~=html-h1],
+:heading(1) {
+	margin: 0.67em 0;
+}
+
+*[class~=html-th],
+*[class~=html-td] {
+	padding: 1px;
+}
+
+*[class~=html-hr] {
+	margin: 0.5em auto;
+}
+
+/*-----------------------------------------------------------------------------
+	Alignment
+-----------------------------------------------------------------------------*/
+
+*[class~=html-sub] {
+	vertical-align: sub;
+}
+
+*[class~=html-sup] {
+	vertical-align: super;
+}
+
+*[class~=html-thead],
+*[class~=html-tbody],
+*[class~=html-tfoot],
+*[class~=html-table] > *[class~=html-tr] {
+	vertical-align: middle;
+}
+
+*[class~=html-tr],
+*[class~=html-td],
+*[class~=html-th] {
+	vertical-align: inherit;
+}
+
+*[class~=html-caption],
+*[class~=html-th] {
+	text-align: center;
+}
+
+/*-----------------------------------------------------------------------------
+	Fonts and colors
+-----------------------------------------------------------------------------*/
+
+*[class~=html-address],
+*[class~=html-cite],
+*[class~=html-dfn],
+*[class~=html-em],
+*[class~=html-i],
+*[class~=html-var] {
+	font-style: italic;
+}
+
+*[class~=html-b],
+*[class~=html-strong],
+*[class~=html-th],
+*[class~=html-h1],
+*[class~=html-h2],
+*[class~=html-h3],
+*[class~=html-h4],
+*[class~=html-h5],
+*[class~=html-h6] {
+	font-weight: bold;
+}
+
+*[class~=html-small],
+*[class~=html-sub],
+*[class~=html-sup] {
+	font-size: smaller;
+}
+
+*[class~=html-h6],
+:heading(6) {
+	font-size: 0.67em;
+}
+
+*[class~=html-h5],
+:heading(5) {
+	font-size: 0.83em;
+}
+
+*[class~=html-h4],
+:heading(4) {
+	font-size: 1em;
+}
+
+*[class~=html-h3],
+:heading(3) {
+	font-size: 1.17em;
+}
+
+*[class~=html-h2],
+:heading(2) {
+	font-size: 1.5em;
+}
+
+*[class~=html-h1],
+:heading(1) {
+	font-size: 2em;
+}
+
+*[class~=html-sub],
+*[class~=html-sup] {
+	line-height: normal;
+}
+
+*[class~=html-code],
+*[class~=html-kbd],
+*[class~=html-pre],
+*[class~=html-samp] {
+	font-family: monospace;
+}
+
+:link {
+	color: #00F;
+}
+
+:visited {
+	color: #800080;
+}
+
+*[class~=html-hr] {
+	color: #808080;
+}
+
+*[class~=html-mark] {
+	background-color: #FF0;
+	color: #000;
+}
+
+/*-----------------------------------------------------------------------------
+	Punctuation and decorations
+-----------------------------------------------------------------------------*/
+
+[dir=ltr] {
+	direction: ltr;
+	unicode-bidi: embed;
+}
+
+[dir=rtl] {
+	direction: rtl;
+	unicode-bidi: embed;
+}
+
+*[class~=html-bdo][dir=ltr],
+*[class~=html-bdo][dir=rtl] {
+	unicode-bidi: bidi-override;
+}
+
+*[class~=html-ol] {
+	list-style-type: decimal;
+}
+
+*[class~=html-menu],
+*[class~=html-ul] {
+	list-style-type: disc;
+}
+
+:any(*[class~=html-menu], *[class~=html-ol], *[class~=html-ul]) :any(*[class~=html-dl], *[class~=html-menu], *[class~=html-ul]) {
+	list-style-type: circle;
+}
+
+:any(*[class~=html-menu], *[class~=html-ol], *[class~=html-ul]) :any(*[class~=html-menu], *[class~=html-ol], *[class~=html-ul]) :any(*[class~=html-dl], *[class~=html-menu], *[class~=html-ul]) {
+	list-style-type: square;
+}
+
+*[class~=html-abbr][title] {
+	text-decoration: dotted underline;
+}
+
+*[class~=html-del],
+*[class~=html-s] {
+	text-decoration: line-through;
+}
+
+:link,
+:visited,
+*[class~=html-ins],
+*[class~=html-u] {
+	text-decoration: underline;
+}
+
+*[class~=html-pre] {
+	white-space: pre;
+}
+
+*[class~=html-fieldset] {
+	border: groove 2px ThreeDFace;
+}
+
+*[class~=html-hr] {
+	border-style: inset;
+	border-width: 1px;
+}
+
+*[class~=html-table] {
+	border-collapse: separate;
+	border-spacing: 2px;
+	border-style: outset;
+}
+
+*[class~=html-table],
+*[class~=html-td],
+*[class~=html-th] {
+	border-color: #808080;
+}
+
+*[class~=html-thead],
+*[class~=html-tbody],
+*[class~=html-tfoot],
+*[class~=html-tr] {
+	border-color: inherit;
+}
+
+*[class~=html-td],
+*[class~=html-th] {
+	border-style: inset;
+}
+
+*[class~=html-q]:before {
+	content: open-quote;
+}
+
+*[class~=html-q]:after {
+	content: close-quote;
+}
+
+/*-----------------------------------------------------------------------------
+	Media
+-----------------------------------------------------------------------------*/
+
+*[class~=html-audio][controls] {
+	height: 1em;
+}
+
+*[class~=html-iframe] {
+	border: 2px inset;
+}
+
+/*-----------------------------------------------------------------------------
+	Block inheritance
+-----------------------------------------------------------------------------*/
+
+*[class~=html-table] {
+	font-size: initial;
+	font-style: initial;
+	font-variant: initial;
+	font-weight: initial;
+	line-height: initial;
+	text-align: initial;
+	white-space: initial;
+}

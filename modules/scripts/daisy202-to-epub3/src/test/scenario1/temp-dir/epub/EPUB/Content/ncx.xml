@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+   <head>
+      <meta name="dtb:uid" content=""/>
+      <meta name="dtb:depth" content="2"/>
+      <meta name="dtb:generator" content="DAISY Pipeline 2"/>
+      <meta name="dtb:totalPageCount" content="0"/>
+      <meta name="dtb:maxPageNumber" content="0"/>
+   </head>
+   <docTitle>
+      <text>Don't Worry, Be Happy Lyrics</text>
+   </docTitle>
+                            <docAuthor>
+                                <text>Bobby McFerrin</text>
+                            </docAuthor>
+                        <navMap>
+      <navPoint id="navPoint-1" playOrder="1">
+         <navLabel>
+            <text>Don't Worry, Be Happy</text>
+         </navLabel>
+         <content src="content.xhtml#h1classtitle"/>
+      </navPoint>
+      <navPoint id="navPoint-2" playOrder="2">
+         <navLabel>
+            <text>Introductio</text>
+         </navLabel>
+         <content src="content.xhtml#dtb7"/>
+      </navPoint>
+      <navPoint id="navPoint-3" playOrder="3">
+         <navLabel>
+            <text>Versa media, pre peripetum</text>
+         </navLabel>
+         <content src="content.xhtml#dtb16"/>
+         <navPoint id="navPoint-4" playOrder="4">
+            <navLabel>
+               <text>Culmen interludiaris</text>
+            </navLabel>
+            <content src="content.xhtml#dtb30"/>
+         </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-5" playOrder="5">
+         <navLabel>
+            <text>Concludio</text>
+         </navLabel>
+         <content src="content.xhtml#dtb38"/>
+         <navPoint id="navPoint-6" playOrder="6">
+            <navLabel>
+               <text>Repetitio ad nauseam</text>
+            </navLabel>
+            <content src="content.xhtml#dtb47"/>
+         </navPoint>
+      </navPoint>
+      <navPoint id="navPoint-7" playOrder="7">
+         <navLabel>
+            <text>Notes</text>
+         </navLabel>
+         <content src="content.xhtml#dtb55"/>
+      </navPoint>
+   </navMap>
+   <navList>
+      <navLabel>
+         <text>Guide</text>
+      </navLabel>
+      <navTarget id="navTarget-8" playOrder="8">
+         <navLabel>
+            <text>1</text>
+         </navLabel>
+         <content src="content.xhtml#dtb10"/>
+      </navTarget>
+      <navTarget id="navTarget-9" playOrder="9">
+         <navLabel>
+            <text>2</text>
+         </navLabel>
+         <content src="content.xhtml#dtb21"/>
+      </navTarget>
+   </navList>
+</ncx>

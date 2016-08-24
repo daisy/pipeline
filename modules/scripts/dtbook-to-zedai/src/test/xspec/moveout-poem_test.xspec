@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:tmp="http://www.daisy.org/pipeline/ns/tmp"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/moveout-poem.xsl">
+    <x:scenario label="Definition with POEM">
+        <x:context>
+            <tmp:item>
+                <dd>DD <poem>A little poem</poem> Rest of DD</dd>
+            </tmp:item>
+        </x:context>
+        <x:expect label="">
+            <tmp:item>
+                <dd>DD </dd>
+            </tmp:item>
+            <poem>A little poem</poem>
+            <tmp:item>
+                <dd> Rest of DD</dd>
+            </tmp:item>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="poem within p">
+        <x:context>
+            <div>
+                <p>p <poem>A little poem</poem> rest of p</p>
+            </div>
+        </x:context>
+        <x:expect label="">
+            <div>
+                <p>p </p>
+                <poem>A little poem</poem>
+                <p> rest of p</p>
+            </div>
+        </x:expect>
+    </x:scenario>
+</x:description>

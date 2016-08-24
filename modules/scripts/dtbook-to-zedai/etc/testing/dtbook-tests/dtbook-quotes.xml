@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta name="dtb:uid" content="pipeline2-dtbook-test-20120901-quotes" />
+        <meta name="dc:Identifier" content="pipeline2-dtbook-test-20120901-quotes" />
+        <meta name="dc:Title" content="Pipeline 2 DTBook Test Content: Quotes" />
+        <meta name="dc:Creator" content="Romain"/>
+        <meta name="dc:Date" content="2012-09-01"/>
+        <meta name="dc:publisher" content="TestPublisher"/>
+        <meta name="dc:Language" content="en-US"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Quotes</doctitle>
+            <docauthor>Romain</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Introduction</h1>
+                <blockquote>
+                    <p>I don't have a strong opinion</p>
+                    <!--Note: slightly wrong use of author as per the SG (should be for the name only)-->
+                    <author>
+                        <span>Romain,</span>
+                        <em>As usual</em>
+                        <span>, Sept 1, 2012</span>
+                    </author>
+                </blockquote>
+                <blockquote>
+                    <p>I don't have a strong opinion</p>
+                    <byline>
+                        <span>Romain,</span>
+                        <em>As usual</em>
+                        <span>, Sept 1, 2012</span>
+                    </byline>
+                </blockquote>
+                <blockquote>
+                    <p>I don't have a strong opinion</p>
+                    <byline>
+                        <span>Romain,</span>
+                        <em>As usual</em>
+                        <span>, Sept 1, 2012</span>
+                    </byline>
+                </blockquote>
+                <p><q>I don't have a strong opinion <cite><author>Romain</author></cite></q></p>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the ref element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element">ref</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d22e39">Usage Example</a></li>
+               <li class="h2"><a href="#d22e43">Allowed parents</a></li>
+               <li class="h2"><a href="#d22e289">Allowed children</a></li>
+               <li class="h2"><a href="#d22e501">Content model and additional requirements</a></li>
+               <li class="h2"><a href="#d22e826">Namespace</a></li>
+               <li class="h2"><a href="#schemadoc-longdesc">Usage Details</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The 
+                  <code>ref</code> element represents a reference to an internal or external entity.
+                  
+               </p>
+               <p class="description ">The referenced entity is not required to be resolvable or includable in a processing or rendering context: the 
+                  <code>ref</code> element may point to conceptual or physical items.
+                  
+               </p>
+               <p class="description ">The 
+                  <code>ref</code> element may employ attributes from the 
+                  <code>
+                     <a href="http://www.daisy.org/z3998/2012/auth/cm/z3998-2012-CM.html#xlink.attrib">xlink.attrib</a>
+                     </code> attributes collection to specify the nature of the hyperlink, including or excluding expressions of link activation behavior.
+                  
+               </p>
+               <p class="description ">IDREF link relationships may also be established using the 
+                  <code>
+                     <a href="attributes.html#ref01">ref</a>
+                     </code> attribute, but not in conjunction with the 
+                  <code>xlink</code> attributes collection.
+                  
+               </p>
+               <p class="longdesc-link">Usage details available in the <a href="#schemadoc-longdesc">Usage Details</a> section.
+               </p>
+            </div>
+            <h2 id="d22e39">Usage Example</h2><pre>
+&lt;index&gt;
+    &lt;entry&gt;origin of fruit-trees, &lt;ref ref="page29"&gt;29&lt;/ref&gt;,  &lt;ref ref="page39"&gt;39&lt;/ref&gt;.&lt;/entry&gt; 
+&lt;/index&gt;
+    </pre><h2 id="d22e43">Allowed parents</h2>
+            <p><a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annoref01.html">annoref</a>, 
+               <a class="element" href="e-annotation01.html">annotation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-annotation02.html">annotation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-annotation-xml01.html">m:annotation-xml</a>, 
+               <a class="element" href="e-aside02.html">aside (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-aside03.html">aside (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-citation01.html">citation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-citation02.html">citation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-d01.html">d</a>, 
+               <a class="element" href="e-definition01.html">definition</a>, 
+               <a class="element" href="e-description01.html">description (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-description02.html">description (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-emph01.html">emph</a>, 
+               <a class="element" href="e-entry01.html">entry (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-entry02.html">entry (<span class="element-variant">index</span> variant)</a>, 
+               <a class="element" href="e-entry03.html">entry (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-entry04.html">entry (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-expansion01.html">expansion</a>, 
+               <a class="element" href="e-group01.html">xforms:group</a>, 
+               <a class="element" href="e-h01.html">h</a>, 
+               <a class="element" href="e-hd01.html">hd</a>, 
+               <a class="element" href="e-hpart01.html">hpart</a>, 
+               <a class="element" href="e-item01.html">item</a>, 
+               <a class="element" href="e-label01.html">xforms:label</a>, 
+               <a class="element" href="e-ln02.html">ln</a>, 
+               <a class="element" href="e-longdesc01.html">d:longdesc</a>, 
+               <a class="element" href="e-meta01.html">meta</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-noteref01.html">noteref</a>, 
+               <a class="element" href="e-object01.html">object (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-object02.html">object (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-otherwise02.html">sel:otherwise</a>, 
+               <a class="element" href="e-p01.html">p</a>, 
+               <a class="element" href="e-phoneme01.html">ssml:phoneme</a>, 
+               <a class="element" href="e-prosody01.html">ssml:prosody</a>, 
+               <a class="element" href="e-quote01.html">quote (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-quote02.html">quote (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-rb01.html">its:rb</a>, 
+               <a class="element" href="e-ref01.html">ref</a>, 
+               <a class="element" href="e-repeat01.html">xforms:repeat</a>, 
+               <a class="element" href="e-rt01.html">its:rt</a>, 
+               <a class="element" href="e-s01.html">s</a>, 
+               <a class="element" href="e-say-as01.html">ssml:say-as (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-span01.html">span</a>, 
+               <a class="element" href="e-spine01.html">spine</a>, 
+               <a class="element" href="e-sub02.html">ssml:sub</a>, 
+               <a class="element" href="e-summary01.html">d:summary</a>, 
+               <a class="element" href="e-td01.html">td</a>, 
+               <a class="element" href="e-term01.html">term</a>, 
+               <a class="element" href="e-th01.html">th</a>, 
+               <a class="element" href="e-tour01.html">d:tour</a> and 
+               <a class="element" href="e-when01.html">sel:when</a>
+               
+            </p>
+            <h2 id="d22e289">Allowed children</h2>
+            <p>This element <em>may</em> contain text.
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-abbr01.html">abbr</a>, 
+               <a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annoref01.html">annoref</a>, 
+               <a class="element" href="e-break01.html">ssml:break</a>, 
+               <a class="element" href="e-char01.html">char</a>, 
+               <a class="element" href="e-code02.html">code</a>, 
+               <a class="element" href="e-d01.html">d</a>, 
+               <a class="element" href="e-definition01.html">definition</a>, 
+               <a class="element" href="e-emph02.html">emph (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-emph01.html">emph (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-expansion01.html">expansion</a>, 
+               <a class="element" href="e-input01.html">xforms:input</a>, 
+               <a class="element" href="e-linebreak01.html">rend:linebreak</a>, 
+               <a class="element" href="e-ln02.html">ln</a>, 
+               <a class="element" href="e-math01.html">m:math</a>, 
+               <a class="element" href="e-name01.html">name</a>, 
+               <a class="element" href="e-note02.html">note</a>, 
+               <a class="element" href="e-noteref01.html">noteref</a>, 
+               <a class="element" href="e-num01.html">num</a>, 
+               <a class="element" href="e-object03.html">object (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-object02.html">object (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-pagebreak01.html">pagebreak</a>, 
+               <a class="element" href="e-phoneme02.html">ssml:phoneme (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-phoneme01.html">ssml:phoneme (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-prosody02.html">ssml:prosody (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-prosody01.html">ssml:prosody (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-range01.html">xforms:range</a>, 
+               <a class="element" href="e-ref01.html">ref</a>, 
+               <a class="element" href="e-ruby01.html">its:ruby</a>, 
+               <a class="element" href="e-s01.html">s</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-say-as01.html">ssml:say-as (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-secret01.html">xforms:secret</a>, 
+               <a class="element" href="e-select01.html">sel:select</a>, 
+               <a class="element" href="e-select03.html">xforms:select</a>, 
+               <a class="element" href="e-select101.html">xforms:select1</a>, 
+               <a class="element" href="e-span01.html">span (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-span02.html">span (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-sub01.html">sub</a>, 
+               <a class="element" href="e-sub03.html">ssml:sub (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-sub02.html">ssml:sub (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-sup01.html">sup</a>, 
+               <a class="element" href="e-term01.html">term</a>, 
+               <a class="element" href="e-textarea01.html">xforms:textarea</a>, 
+               <a class="element" href="e-time01.html">time</a>, 
+               <a class="element" href="e-token02.html">ssml:token (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-token01.html">ssml:token (<span class="element-variant">phrase</span> variant)</a> and 
+               <a class="element" href="e-w01.html">w</a>
+               
+            </p>
+            <h2 id="d22e501">Content model and additional requirements</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#continuation01">@continuation</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role11">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#onlangfailure01">@ssml:onlangfailure</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng-choice"><span class="rng-term">a choice of</span>
+                  
+                  <div class="rng">either <span class="rng-term">optionally </span>
+                     
+                     
+                     <div class="rng"><a class="attribute" href="attributes.html#href01">@xlink:href</a></div>
+                     
+                     <div class="rng"><span class="rng-term">an optional </span>
+                        <a class="attribute" href="attributes.html#type03">@xlink:type</a>
+                        
+                     </div>
+                     
+                     <div class="rng"><span class="rng-term">an optional </span>
+                        <a class="attribute" href="attributes.html#title01">@xlink:title</a>
+                        
+                     </div>
+                     
+                     <div class="rng"><span class="rng-term">an optional </span>
+                        <a class="attribute" href="attributes.html#show01">@xlink:show</a>
+                        
+                     </div>
+                     
+                     <div class="rng"><span class="rng-term">an optional </span>
+                        <a class="attribute" href="attributes.html#actuate01">@xlink:actuate</a>
+                        
+                     </div>
+                     
+                     
+                  </div>
+                  
+                  <div class="rng">or <span class="rng-term">an optional </span>
+                     <a class="attribute" href="attributes.html#ref01">@ref</a>
+                     
+                  </div>
+                  <span class="rng-term">end of choice</span></div>
+               <div class="rng"><span class="rng-term">optionally the following 2 co-ocurring attributes: </span><a class="attribute" href="attributes.html#alphabet02">@ssml:alphabet</a> and <a class="attribute" href="attributes.html#ph02">@ssml:ph</a></div>
+               <div class="rng"><span class="rng-term">one or more of </span>
+                  
+                  <div class="rng"><span class="tng-term">a choice of </span><div class="rng">either one of the 50 elements: <a class="element" href="e-abbr01.html">abbr</a>, <a class="element" href="e-address02.html">address</a>, <a class="element" href="e-annoref01.html">annoref</a>, <a class="element" href="e-char01.html">char</a>, <a class="element" href="e-code02.html">code</a>, <a class="element" href="e-d01.html">d</a>, <a class="element" href="e-definition01.html">definition</a>, <a class="element" href="e-emph02.html">emph</a>, <a class="element" href="e-emph01.html">emph</a>, <a class="element" href="e-expansion01.html">expansion</a>, <a class="element" href="e-ruby01.html">its:ruby</a>, <a class="element" href="e-ln02.html">ln</a>, <a class="element" href="e-math01.html">m:math</a>, <a class="element" href="e-name01.html">name</a>, <a class="element" href="e-note02.html">note</a>, <a class="element" href="e-noteref01.html">noteref</a>, <a class="element" href="e-num01.html">num</a>, <a class="element" href="e-object03.html">object</a>, <a class="element" href="e-object02.html">object</a>, <a class="element" href="e-pagebreak01.html">pagebreak</a>, <a class="element" href="e-ref01.html">ref</a>, <a class="element" href="e-linebreak01.html">rend:linebreak</a>, <a class="element" href="e-s01.html">s</a>, <a class="element" href="e-select01.html">sel:select</a>, <a class="element" href="e-span01.html">span</a>, <a class="element" href="e-span02.html">span</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-phoneme02.html">ssml:phoneme</a>, <a class="element" href="e-phoneme01.html">ssml:phoneme</a>, <a class="element" href="e-prosody02.html">ssml:prosody</a>, <a class="element" href="e-prosody01.html">ssml:prosody</a>, <a class="element" href="e-say-as02.html">ssml:say-as</a>, <a class="element" href="e-say-as01.html">ssml:say-as</a>, <a class="element" href="e-sub03.html">ssml:sub</a>, <a class="element" href="e-sub02.html">ssml:sub</a>, <a class="element" href="e-token02.html">ssml:token</a>, <a class="element" href="e-token01.html">ssml:token</a>, <a class="element" href="e-sub01.html">sub</a>, <a class="element" href="e-sup01.html">sup</a>, <a class="element" href="e-term01.html">term</a>, <a class="element" href="e-time01.html">time</a>, <a class="element" href="e-w01.html">w</a>, <a class="element" href="e-w01.html">w</a>, <a class="element" href="e-input01.html">xforms:input</a>, <a class="element" href="e-range01.html">xforms:range</a>, <a class="element" href="e-secret01.html">xforms:secret</a>, <a class="element" href="e-select03.html">xforms:select</a>, <a class="element" href="e-select101.html">xforms:select1</a> or <a class="element" href="e-textarea01.html">xforms:textarea</a></div>
+                     <div class="rng">or text</div><span class="tng-term">end of choice</span></div>
+                  
+               </div>
+               <div class="schematron-asserts-and-reports">Note that in addition to restrictions presented in the content model  above, 
+                  					use of this element must also respect the following requirements:
+                  <ul>
+                     <li>The 
+                        <code>ref</code> element must not contain descendant 
+                        <code>ref</code> elements.
+                        
+                     </li>
+                     <li>The 
+                        <code>ref</code> element must neither be empty nor contain only whitespace.
+                        
+                     </li>
+                  </ul>
+                  <div>Such requirements take precedence over any conflicting statements in the
+                     						content model or in the lists above of allowed children and parents.
+                  </div>
+               </div>
+            </div>
+            <h2 id="d22e826">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+            <h2 id="schemadoc-longdesc">Usage Details</h2>
+            
+            <p> The 
+               <code>ref</code> element can be used with the 
+               <code>ref</code> attribute to link to resources that are contained within the current document. Typical examples of this kind of usage occur
+               in indexes and tables of contents, where the 
+               <code>ref</code> element is used to link to a corresponding page number or location: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;toc&gt;
+    &lt;entry&gt;INTRODUCTION &lt;ref ref="p1"&gt;Page 1&lt;/ref&gt;&lt;/entry&gt;
+&lt;/toc&gt;
+        </pre>
+               </div>
+            
+            <p> It is not necessary for the 
+               <code>ref</code> element to point to a location, even when used for page references as in the above example (e.g. if alternate methods of
+               linking are expected in outputs). Marking the references without linking them can still be useful for formatting leader lines
+               between the text and reference in a table of contents entry, for example. 
+               
+            </p>
+            
+            <p> Not all references are to internal locations, of course, and the 
+               <code>ref</code> elements allows attributes from the XLink feature to be attached instead for such situations: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;p&gt;For more information, refer to the 
+    &lt;ref xlink:href="http://en.wikipedia.org/wiki/Charles_Darwin"&gt;wikipedia article on Darwin&lt;/ref&gt;.&lt;/p&gt;            
+        </pre>
+               </div>
+            
+            <p> It is also not necessary for the 
+               <code>ref</code> element to point to an electronic resource at all. The element could be used to tag the coordinates of a physical location
+               or object, for example: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;p&gt;San Cristóbal Island, the first Darwin visited, is located at 
+    &lt;ref&gt;&lt;num role="coordinate"&gt;0°48′S&lt;/num&gt; &lt;num class="coordinate"&gt;89°24′W&lt;/num&gt;&lt;/ref&gt;.&lt;/p&gt;
+        </pre>
+               </div>
+            
+         </div>
+      </div>
+   </body>
+</html>

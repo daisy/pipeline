@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+   <uri name="http://www.daisy.org/pipeline/modules/zedai-to-html/xslt/zedai-to-html.xsl"
+      uri="../xml/xslt/zedai-to-html.xsl"/>
+   <uri name="http://www.daisy.org/pipeline/modules/zedai-to-html/zedai-to-html.xpl"
+      uri="../xml/xproc/zedai-to-html.xpl" px:script="true"/>
+   <uri name="http://www.daisy.org/pipeline/modules/zedai-to-html/library.xpl"
+      uri="../xml/xproc/library.xpl"/>
+
+   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:zedai-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+</catalog>

@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the table element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element">table</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d42e46">Usage Example</a></li>
+               <li class="h2"><a href="#d42e50">Allowed parents</a></li>
+               <li class="h2"><a href="#d42e156">Allowed children</a></li>
+               <li class="h2"><a href="#d42e187">Content model</a></li>
+               <li class="h2"><a href="#d42e327">Namespace</a></li>
+               <li class="h2"><a href="#schemadoc-longdesc">Usage Details</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The 
+                  <code>table</code> element represents a single instance of tabular data arranged in rows and columns.
+                  
+               </p>
+               <p class="description ">A 
+                  <code>table</code> may consist of one or more 
+                  <code>tr</code> elements or may be divided into 
+                  <code>
+                     <a href="e-thead01.html">thead</a>
+                     </code>, 
+                  <code>
+                     <a href="e-tbody01.html">tbody</a>
+                     </code> and 
+                  <code>
+                     <a href="e-tfoot01.html">tfoot</a>
+                     </code> divisions.
+                  
+               </p>
+               <p class="description ">A table may contain one or more 
+                  <code>
+                     <a href="e-colgroup01.html">colgroup</a>
+                     </code> elements, for expressing common column formatting and properties.
+                  
+               </p>
+               <p class="longdesc-link">Usage details available in the <a href="#schemadoc-longdesc">Usage Details</a> section.
+               </p>
+            </div>
+            <h2 id="d42e46">Usage Example</h2><pre>
+&lt;caption ref="mylodon"&gt;ADMEASUREMENTS OF THE LOWER JAW OF MYLODON DARWINII.&lt;/caption&gt;
+&lt;table xml:id="mylodon"&gt;
+    &lt;tr&gt;
+        &lt;th colspan="2"&gt;Inches&lt;/th&gt;
+        &lt;th&gt;Lines&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Length (as far as complete)&lt;/th&gt;
+        &lt;td&gt;17&lt;/td&gt;
+        &lt;td&gt;6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Depth of each ramus&lt;/th&gt;
+        &lt;td&gt;4&lt;/td&gt;
+        &lt;td&gt;9&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;        
+    </pre><h2 id="d42e50">Allowed parents</h2>
+            <p><a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annotation01.html">annotation</a>, 
+               <a class="element" href="e-annotation-xml01.html">m:annotation-xml</a>, 
+               <a class="element" href="e-aside02.html">aside (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-aside03.html">aside (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-backcover01.html">backcover</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-description01.html">description</a>, 
+               <a class="element" href="e-entry03.html">entry (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-entry04.html">entry (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-flaps01.html">flaps</a>, 
+               <a class="element" href="e-frontcover01.html">frontcover</a>, 
+               <a class="element" href="e-item01.html">item</a>, 
+               <a class="element" href="e-longdesc01.html">d:longdesc</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-object01.html">object</a>, 
+               <a class="element" href="e-otherwise03.html">sel:otherwise</a>, 
+               <a class="element" href="e-quote01.html">quote</a>, 
+               <a class="element" href="e-section01.html">section</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-summary01.html">d:summary</a>, 
+               <a class="element" href="e-td01.html">td</a>, 
+               <a class="element" href="e-th01.html">th</a>, 
+               <a class="element" href="e-tour01.html">d:tour</a> and 
+               <a class="element" href="e-when02.html">sel:when</a>
+               
+            </p>
+            <h2 id="d42e156">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-colgroup01.html">colgroup</a>, 
+               <a class="element" href="e-pagebreak01.html">pagebreak</a>, 
+               <a class="element" href="e-tbody01.html">tbody</a>, 
+               <a class="element" href="e-tfoot01.html">tfoot</a>, 
+               <a class="element" href="e-thead01.html">thead</a> and 
+               <a class="element" href="e-tr01.html">tr</a>
+               
+            </p>
+            <h2 id="d42e187">Content model</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#continuation01">@continuation</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role11">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#onlangfailure01">@ssml:onlangfailure</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-term">zero or more of </span>
+                  <a class="element" href="e-colgroup01.html">colgroup</a>
+                  
+               </div>
+               <div class="rng-choice"><span class="rng-term">a choice of</span>
+                  
+                  <div class="rng">either 
+                     
+                     <div class="rng">first <span class="rng-term">an optional </span>
+                        <a class="element" href="e-thead01.html">thead</a>
+                        
+                     </div>
+                     
+                     <div class="rng">followed by <span class="rng-term">one or more of </span>
+                        <a class="element" href="e-tbody01.html">tbody</a>
+                        
+                     </div>
+                     
+                     <div class="rng">followed by <span class="rng-term">an optional </span>
+                        <a class="element" href="e-tfoot01.html">tfoot</a>
+                        
+                     </div>
+                     
+                  </div>
+                  
+                  <div class="rng">or <span class="rng-term">one or more of </span>
+                     
+                     <div class="rng"><span class="rng-term">a mix of</span>
+                        
+                        <div class="rng">• <a class="element" href="e-tr01.html">tr</a></div>
+                        
+                        <div class="rng">• <span class="rng-term">zero or more of </span>
+                           <a class="element" href="e-pagebreak01.html">pagebreak</a>
+                           
+                        </div>
+                        <span class="rng-term">end of mix</span></div>
+                     
+                  </div>
+                  <span class="rng-term">end of choice</span></div>
+            </div>
+            <h2 id="d42e327">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+            <h2 id="schemadoc-longdesc">Usage Details</h2>
+            
+            <h4 id="d42e336">Associated content</h4>
+            
+            <p> Although images, tables and other objects may stand on their own in a document, typically they will include an accessible
+               description, a caption and possibly a header. 
+            </p>
+            
+            <p> In order to establish that other elements are carrying information about the table or image, you must tie them together using
+               
+               <code>ref</code> attributes that point to the 
+               <code>xml:id</code> of the central element, as in the following example: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;hd ref="galapisle"&gt;Galapagos Islands&lt;/hd&gt;
+
+&lt;object xml:id="galapisle" src="island.png" /&gt;
+
+&lt;caption ref="galapisle"&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+        </pre>
+               </div>
+            
+            <p> If you were to omit the 
+               <code>ref</code> attributes, the information would only be loosely associated by its order in the document (i.e., a processing agent would
+               not be able to handle the elements as a group). 
+               
+            </p>
+            
+            <p> Although all of the above elements are associated through references to the 
+               <code>object</code> element, their semantics are still only loosely defined (i.e., the linkage is established, but not what that linkage represents).
+               A human can intuit they represent a figure by the collected items and their use, but not so a machine. 
+               
+            </p>
+            
+            <p> It can also be confusing to edit a document marked up with all content within a section as siblings, because document narrative
+               could fall both immediately before and after the figure elements making it all appear connected. Without checking for 
+               <code>ref</code> attributes as you edit, it wouldn't be clear if a new non-structural heading were occuring or a figure were being inserted.
+               
+               
+            </p>
+            
+            <p> To begin to bind the elements more tightly and create a figure both humans and machines can understand, the 
+               <code>block</code> element can be wrapped as a container. A 
+               <code>role</code> attribute can then be attached to further specify that all of the children constitute a figure, as in the following example:
+               
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;block role="figure"&gt;
+    
+    &lt;hd ref="galapisland"&gt;Galapagos Islands&lt;/hd&gt;
+    
+    &lt;object xml:id="galapisland" src="island.png" /&gt;
+    
+    &lt;caption ref="galapisland"&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+    
+&lt;/block&gt;
+        </pre>
+               </div>
+            
+            <p> A common question at this point is why the 
+               <code>ref</code> elements are still necessary. The answer is because the 
+               <code>block</code> element is only a general container. The 
+               <code>role</code> attribute provides additional semantics, but those semantics only extend to what kind of content the 
+               <code>block</code> represents, not how it is interrelated (but more on this shortly). 
+               
+            </p>
+            
+            <p> Now that the content is grouped, however, we can begin to further simplify it. To avoid the extra work of linking the child
+               elements, an 
+               <code>associate</code> attribute can be attached to the 
+               <code>block</code> (the attribute represents an automatic 
+               <code>ref</code> between all the children). The IDREF that you specify in the attribute implicitly makes the references that we have so far
+               been carrying forward, so our markup can now be more minimally represented as in the following example: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;block role="figure" associate="galap-figure"&gt;
+    
+    &lt;hd&gt;Galapagos Islands&lt;/hd&gt;
+    
+    &lt;object xml:id="galap-figure" src="island.png" /&gt;
+    
+    &lt;caption&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+    
+&lt;/block&gt;
+        </pre>
+               </div>
+            
+            <p> Now, when a processing agent comes across this markup it will be able to determine both that the block constitutes a figure
+               (from the 
+               <code>role</code> attribute) and that the child 
+               <code>hd</code> and 
+               <code>caption</code> elements are tied to the 
+               <code>object</code> (from the 
+               <code>associate</code> attribute). We've gained much more information about the figure than we started with, and the work required to reproduce
+               the figure has been greatly simplified (there is also no worry about accidentally forgetting a 
+               <code>ref</code> on any of the children). 
+               
+            </p>
+            
+            <p> Now that we have a compact markup model for figures, we can briefly jump back to why we cannot assume associations. Consider
+               the following example: 
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;block role="figure"&gt;
+    
+    &lt;object xml:id="galap-isa" src="isabella.png" /&gt;
+    
+    &lt;object xml:id="galap-fer" src="fernandina.png" /&gt;
+    
+    &lt;object xml:id="galap-sc" src="santa-cruz.png" /&gt;
+    
+    &lt;caption&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+    
+&lt;/block&gt;
+        </pre>
+               </div>
+            
+            <p> We cannot make a simple association here that all the children of the figure are tied to an 
+               <code>object</code>, as the figure constitutes three images sharing a caption. We likewise cannot use the 
+               <code>associate</code> attribute, but have to revert back to explicitly linking the 
+               <code>caption</code> to each of the three images it describes: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;block role="figure"&gt;
+    
+    &lt;object xml:id="isa" src="isabella.png" /&gt;
+    
+    &lt;object xml:id="fer" src="fernandina.png" /&gt;
+    
+    &lt;object xml:id="sc" src="santa-cruz.png" /&gt;
+    
+    &lt;caption ref="isa fer sc"&gt;The Galapagos islands lie approximately 970km off the shore of Ecuador.&lt;/caption&gt;
+    
+&lt;/block&gt;
+        </pre>
+               </div>
+            
+            <p> It's this potential for varation that requires at least some level of linking in all cases, and makes it impossible to state
+               a simple rule that would hold true for all content grouped in a 
+               <code>block</code>. 
+               
+            </p>
+            
+            <p> Fortunately, most image and table figures are not this complicated, and the simpler process of grouping in a 
+               <code>block</code> with the 
+               <code>associate</code> attribute will work the majority of the time. 
+               
+            </p>
+            
+         </div>
+      </div>
+   </body>
+</html>

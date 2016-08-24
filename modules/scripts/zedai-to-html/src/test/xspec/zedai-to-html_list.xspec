@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
+    xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/xslt/zedai-to-html.xsl">
+
+    <x:scenario label="When a page break">
+
+        <x:scenario label="is in the middle of list items">
+            <x:context>
+                <z:list xml:id="id">
+                    <z:item>1</z:item>
+                    <z:pagebreak value="42"/>
+                    <z:pagebreak value="43"/>
+                    <z:item>2</z:item>
+                    <z:pagebreak value="44"/>
+                    <z:item>3</z:item>
+                </z:list>
+            </x:context>
+            <x:expect label="the pagebreak is integrated in the following item">
+                <ul id="id">
+                    <li>1</li>
+                    <li><span epub:type="pagebreak" title="42"/><span epub:type="pagebreak" title="43"/>2</li>
+                    <li><span epub:type="pagebreak" title="44"/>3</li>
+                </ul>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="is the first child of a list">
+            <x:context>
+                <z:list xml:id="id">
+                    <z:pagebreak value="42"/>
+                    <z:pagebreak value="43"/>
+                    <z:item>1</z:item>
+                    <z:item>2</z:item>
+                </z:list>
+            </x:context>
+            <x:expect label="it is moved before the list">
+                <div epub:type="pagebreak" title="42"/>
+                <div epub:type="pagebreak" title="43"/>
+                <ul id="id">
+                    <li>1</li>
+                    <li>2</li>
+                </ul>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="is the last child of a list">
+            <x:context>
+                <z:list xml:id="id">
+                    <z:item>1</z:item>
+                    <z:item>2</z:item>
+                    <z:pagebreak value="42"/>
+                    <z:pagebreak value="43"/>
+                </z:list>
+            </x:context>
+            <x:expect label="it is moved after the list">
+                <ul id="id">
+                    <li>1</li>
+                    <li>2</li>
+                </ul>
+                <div epub:type="pagebreak" title="42"/>
+                <div epub:type="pagebreak" title="43"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+</x:description>

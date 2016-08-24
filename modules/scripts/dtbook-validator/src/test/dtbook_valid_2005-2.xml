@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet type="text/css" href="../../dtbook.2005.basic.css" ?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-2">
+   <head>
+      <meta content="Don't Worry, Be Happy Lyrics" name="dc:Title" />
+      <meta content="Bobby McFerrin" name="dc:Creator" />      
+      <meta name="dc:Publisher" content="Ferrin press" />
+      <meta name="dc:Language" content="en-US" />
+      <meta name="dc:Date" content="1992-03-23" />
+      <meta name="dtb:uid" content="F00000" />
+   </head>
+   <book>
+         <frontmatter>
+	         <doctitle><sent smilref="speechgen0001.smil#tcp1" id="dtb1">Don't Worry, Be Happy</sent></doctitle>
+	         <docauthor><sent smilref="speechgen0001.smil#tcp2" id="dtb2">Bobby McFerrin</sent></docauthor>
+	         <level1>
+				<p><sent smilref="speechgen0001.smil#tcp3" id="dtb3">From the Movie "Cocktails".</sent></p>
+				<p><sent smilref="speechgen0001.smil#tcp4" id="dtb4">originally Performed by Bobby McFerrin.</sent></p>
+				<p><sent id="dtb5" smilref="speechgen0001.smil#tcp5">With commentary by Professor S. </sent><sent id="dtb6" smilref="speechgen0001.smil#tcp6">Boork Boork, Oxford Cambridge.</sent></p>
+			 </level1>
+		 </frontmatter>
+		<bodymatter>
+		<level1>
+		<h1><sent id="dtb7" smilref="speechgen0002.smil#tcp7">Introductio</sent></h1>
+		<linegroup>
+			<line><sent id="dtb8" smilref="speechgen0002.smil#tcp8">Here is a little song I wrote</sent></line>
+			<line><sent><span smilref="speechgen0002.smil#tcp9" id="dtb9">You might want to sing it note</span><noteref id="dtb10" class="footnote" smilref="speechgen0002.smil#tcp10" idref="#fn1">1</noteref><span smilref="speechgen0002.smil#tcp11" id="dtb11"> for note </span></sent></line>
+			<line><sent smilref="speechgen0002.smil#tcp12" id="dtb12">Don't worry be happy</sent></line>
+			<line><sent id="dtb13" smilref="speechgen0002.smil#tcp13">In every life we have some trouble</sent></line>
+			<line><sent id="dtb14" smilref="speechgen0002.smil#tcp14">When you worry you make it double</sent></line>
+			<line><sent id="dtb15" smilref="speechgen0002.smil#tcp15">Don't worry, be happy......</sent></line>
+		</linegroup>
+		</level1>
+		<level1>
+		<h1><sent id="dtb16" smilref="speechgen0003.smil#tcp16">Versa media, pre peripetum</sent></h1>
+		<linegroup>
+			<line><sent smilref="speechgen0003.smil#tcp17" id="dtb17">Ain't got no place to lay your head</sent></line>
+			<line><sent id="dtb18" smilref="speechgen0003.smil#tcp18">Somebody came and took your bed</sent></line>
+			<line><sent smilref="speechgen0003.smil#tcp19" id="dtb19">Don't worry, be happy</sent></line>
+			<line><sent><span id="dtb20" smilref="speechgen0003.smil#tcp20">The land lord say your rent is late</span><noteref idref="#fn2" id="dtb21" class="footnote" smilref="speechgen0003.smil#tcp21">2</noteref></sent></line>
+			<line><sent id="dtb22" smilref="speechgen0003.smil#tcp22">He may have to litigate</sent></line>
+			<line><sent smilref="speechgen0003.smil#tcp23" id="dtb23">Don't worry, be happy</sent></line>
+			<line><sent id="dtb24" smilref="speechgen0003.smil#tcp24">Lood at me I am happy</sent></line>
+			<line><sent id="dtb25" smilref="speechgen0003.smil#tcp25">Don't worry, be happy</sent></line>
+			<line><sent id="dtb26" smilref="speechgen0003.smil#tcp26">Here I give you my phone number</sent></line>
+			<line><sent id="dtb27" smilref="speechgen0003.smil#tcp27">When you worry call me</sent></line>
+			<line><sent smilref="speechgen0003.smil#tcp28" id="dtb28">I make you happy</sent></line>
+			<line><sent smilref="speechgen0003.smil#tcp29" id="dtb29">Don't worry, be happy</sent></line>
+		</linegroup>
+		<level2>
+			<h2><sent id="dtb30" smilref="speechgen0004.smil#tcp30">Culmen interludiaris</sent></h2>
+			<linegroup>
+			<line><sent id="dtb31" smilref="speechgen0004.smil#tcp31">Ain't got no cash, ain't got no style</sent></line>
+			<line><sent id="dtb32" smilref="speechgen0004.smil#tcp32">Ain't got not girl to make you smile</sent></line>
+			<line><sent smilref="speechgen0004.smil#tcp33" id="dtb33">But don't worry be happy</sent></line>
+			<line><sent smilref="speechgen0004.smil#tcp34" id="dtb34">Cause when you worry</sent></line>
+			<line><sent id="dtb35" smilref="speechgen0004.smil#tcp35">Your face will frown</sent></line>
+			<line><sent id="dtb36" smilref="speechgen0004.smil#tcp36">And that will bring everybody down</sent></line>
+			<line><sent id="dtb37" smilref="speechgen0004.smil#tcp37">So don't worry, be happy (now).....</sent></line>		
+			</linegroup>
+			</level2>
+		</level1>
+		<level1>
+		<h1><sent smilref="speechgen0005.smil#tcp38" id="dtb38">Concludio</sent></h1>
+		<linegroup>
+			<line><sent smilref="speechgen0005.smil#tcp39" id="dtb39">There is this little song I wrote</sent></line>
+			<line><sent id="dtb40" smilref="speechgen0005.smil#tcp40">I hope you learn it note for note</sent></line>
+			<line><sent smilref="speechgen0005.smil#tcp41" id="dtb41">Like good little children</sent></line>
+			<line><sent smilref="speechgen0005.smil#tcp42" id="dtb42">Don't worry, be happy</sent></line>
+			<line><sent id="dtb43" smilref="speechgen0005.smil#tcp43">Listen to what I say</sent></line>
+			<line><sent id="dtb44" smilref="speechgen0005.smil#tcp44">In your life expect some trouble</sent></line>
+			<line><sent id="dtb45" smilref="speechgen0005.smil#tcp45">But when you worry</sent></line>
+			<line><sent smilref="speechgen0005.smil#tcp46" id="dtb46">You make it double</sent></line>		
+		</linegroup>	
+		<level2>
+		<h2><sent id="dtb47" smilref="speechgen0006.smil#tcp47">Repetitio ad nauseam</sent></h2>
+			<linegroup>
+			<line><sent smilref="speechgen0006.smil#tcp48" id="dtb48">Don't worry, be happy......</sent></line>
+			<line><sent smilref="speechgen0006.smil#tcp49" id="dtb49">Don't worry don't do it, be happy</sent></line>
+			<line><sent id="dtb50" smilref="speechgen0006.smil#tcp50">Put a smile on your face</sent></line>
+			<line><sent id="dtb51" smilref="speechgen0006.smil#tcp51">Don't bring everybody down like this</sent></line>
+			<line><sent id="dtb52" smilref="speechgen0006.smil#tcp52">Don't worry, it will soon past</sent></line>
+			<line><sent id="dtb53" smilref="speechgen0006.smil#tcp53">Whatever it is</sent></line>
+			<line><sent smilref="speechgen0006.smil#tcp54" id="dtb54">Don't worry, be happy</sent></line>
+			</linegroup>
+		</level2>
+		</level1>
+		</bodymatter>
+		<rearmatter>
+			<level1>
+				<h1><sent smilref="speechgen0007.smil#tcp55" id="dtb55">Notes</sent></h1>
+				<note id="fn1" smilref="speechgen0007.smil#tcs56" class="endnote"><p><sent smilref="speechgen0007.smil#tcp57" id="dtb56">The author makes a plump reference to Homeros, Iliad, book 4 Chapter 4, verse 3.</sent></p></note>
+				<note id="fn2" class="endnote" smilref="speechgen0007.smil#tcs58"><p><sent smilref="speechgen0007.smil#tcp59" id="dtb57">This was initially expressed in T.S. </sent><sent id="dtb58" smilref="speechgen0007.smil#tcp60">Eliot, The Wasteland, and in Hugh Selwyn Mauberley, stanza 4, line 3.</sent></p></note>			
+			</level1>		
+		</rearmatter>
+		
+   </book>
+</dtbook>

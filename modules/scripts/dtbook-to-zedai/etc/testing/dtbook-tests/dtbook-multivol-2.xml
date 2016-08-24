@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta content="pipeline2-dtbook-test-20110301-multivol2" name="dtb:uid"/>
+        <meta content="Pipeline 2 DTBook Test Content: Multi Volume Books" name="dc:Title"/>
+        <meta name="dc:Creator" content="Marisa D."/>
+        <meta content="2011-03-01" name="dc:Date"/>
+        <meta name="dc:Publisher" content="Marisa D."/>
+        <meta content="pipeline2-dtbook-test-20110301-multivol2" name="dc:Identifier"/>
+        <meta content="en-US" name="dc:Language"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Multi Volume Books</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>FAQ</h1>
+
+                <level2>
+                    <h2>What is the DAISY Pipeline 2 ? </h2>
+                    <p>The DAISY Pipeline 2 is an ongoing project to develop an open-source,
+                        cross-platform framework for automated production of accessible material.
+                    </p>
+                </level2>
+                <level2>
+                    <h2>What is the difference between the DAISY Pipeline 1 and DAISY Pipeline 2
+                        projects ? </h2>
+                    <p>As its name implies, the Pipeline 2 is the follow-up of the DAISY Pipeline 1.
+                        Although they both share the same goal to build an automated production
+                        tool, the Pipeline 2 intends to provide a totally redesigned next generation
+                        framework that better leverages new standards and technologies. </p>
+                </level2>
+                <level2>
+                    <h2>Why a new project ? </h2>
+                    <p>While the DAISY Pipeline first released in 2008 has so far been a successful
+                        answer to the needs of the DAISY community, it does not make economic sense
+                        to maintain our own version of the Pipeline core engine since standards with
+                        the same scope are now available. The adoption of existing standards (and
+                        off-the-shelf implementations of those standards) at the heart of the
+                        Pipeline framework will allow us to fulfill our objectives at a lesser
+                        long-term cost. </p>
+                </level2>
+            </level1>
+
+        </bodymatter>
+    </book>
+</dtbook>

@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar  
+  xmlns="http://relaxng.org/ns/structure/1.0"  
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+  xmlns:sch="http://www.ascc.net/xml/schematron"  
+>
+  <a:documentation>
+    d202smil.rng
+    This file is part of the RelaxNG/Schematron validation
+    suite for Daisy 2.02. All Schematron assertion strings
+    can be identified by the intitial part of the string 
+    being: '[sch][dtb::d202][type::warning|error][msg::'.
+    Last edit by: linuse 2006-08-07
+    catalog-mapped by the PID '-//DAISY//RNG smil v2.02//EN'
+
+  </a:documentation>
+
+  <include href="../relaxngcommon/attributes.rng" />
+  <include href="d202meta.rng" />
+
+  <start>
+    <ref name="smil"/>
+  </start>
+  
+  <define name="smil">
+    <element name="smil">
+      <ref name="attribute.id.optional"/>
+      <ref name="head"/>
+      <ref name="body"/>
+    </element>
+  </define>
+    
+  <define name="head">
+    <element name="head">
+      <ref name="attribute.id.optional"/>
+      <group>
+        <interleave>
+          <oneOrMore>
+            <ref name="smil.meta"/>
+          </oneOrMore> 
+          <element name="layout">
+            <ref name="attribute.id.optional"/>
+			<!-- DTD defaulting stuff:
+            <optional>
+              <attribute name="type" a:defaultValue="text/smil-basic-layout"/>
+            </optional>
+            -->
+            <element name="region">
+              <empty/>
+              <ref name="attribute.id.required"/>
+			  <!-- DTD defaulting stuff:              
+              <optional>
+                <attribute name="left" a:defaultValue="0"/>
+                <attribute name="top" a:defaultValue="0"/>
+                <attribute name="z-index" a:defaultValue="0"/>              
+                <attribute name="fit" a:defaultValue="hidden"/>              
+                <attribute name="skip-content" a:defaultValue="true"/>              
+              </optional>
+              -->
+            </element>
+
+          </element>  
+        </interleave>
+      </group>
+    </element>
+  </define>
+  
+  <define name="body">
+    <element name="body">  
+      <ref name="attribute.id.optional"/>
+      <ref name="motherseq"/> 
+    </element>
+  </define>
+  
+  <define name="motherseq">
+    <element name="seq">
+      <!--
+        mother seq: 
+        in SVB: children are one or several pars 
+        in MVB: children are audio
+        in skippable DTBs (noteref) mother seq has nested seq
+      -->
+      <ref name="attlist.seq"/>
+      <choice>
+        <group>
+          <interleave>
+            <oneOrMore>
+              <ref name="par"/>
+            </oneOrMore>
+            <zeroOrMore>
+              <ref name="noterefseq"/>
+            </zeroOrMore>    
+          </interleave>
+        </group>
+        <ref name="audio"/>
+      </choice>
+    </element>
+  </define>
+
+  <define name="noterefseq">
+    <element name="seq">
+      <ref name="attlist.seq"/>    
+      <ref name="par"/>
+      <ref name="par"/>
+    </element>
+  </define>
+
+  <define name="par">
+    <element name="par">
+      <ref name="attribute.id.optional"/>            
+      <attribute name="endsync">
+         <value type="string">last</value>
+      </attribute>
+      <!-- DTD defaulting stuff:
+      <ref name="attribute.repeat.optional"/>
+      -->
+      <optional>
+        <attribute name="system-required">
+          <choice>
+            <value type="string">sidebar-on</value>
+            <value type="string">prodnote-on</value>
+            <value type="string">footnote-on</value>
+            <value type="string">pagenumber-on</value>
+          </choice>
+        </attribute>        
+      </optional>
+      <choice>
+        <group>
+          <interleave>
+            <ref name="text"/>
+            <ref name="parchildseq"/>
+            <optional>
+              <ref name="img"/>
+            </optional>  
+          </interleave>  
+        </group>  
+        <group>
+          <interleave>
+            <ref name="text"/>
+            <ref name="audio"/>
+            <optional>
+              <ref name="img"/>
+            </optional>  
+          </interleave>  
+        </group>
+        <group>          
+            <ref name="text"/>
+        </group>   
+      </choice>
+    </element>
+  </define>
+
+  <define name="parchildseq">
+    <element name="seq">
+      <ref name="attlist.seq"/>      
+      <oneOrMore>
+        <ref name="audio"/>
+      </oneOrMore>  
+    </element>
+  </define>
+
+  <define name="text">    
+    <element name="text">
+      <ref name="attlist.mo"/>
+      <attribute name="src">
+        <ref name="datatype.uri"/>
+      </attribute>
+      <empty/>
+    </element>
+  </define>
+
+  <define name="audio">
+    <element name="audio">
+      <ref name="attlist.mo"/>
+      <attribute name="src">
+        <ref name="datatype.uri"/>
+      </attribute>
+      <attribute name="clip-begin">
+        <ref name="datatype.smilclock"/>
+      </attribute>
+      <attribute name="clip-end">
+        <ref name="datatype.smilclock"/>
+      </attribute>
+      <empty/>
+    </element>
+  </define>
+  
+  <define name="img">
+    <element name="img">
+      <ref name="attlist.mo"/>
+      <attribute name="src">
+        <ref name="datatype.uri"/>
+      </attribute>      
+      <empty/>
+    </element>
+  </define>
+  
+  <define name="attribute.repeat.optional">
+    <optional>
+      <attribute name="repeat">
+        <value type="string">1</value>
+      </attribute>
+    </optional> 
+  </define>
+  
+  <define name="attribute.fill.optional">
+    <optional>
+      <attribute name="fill">
+        <value type="string">remove</value>
+      </attribute>
+    </optional>
+  </define>
+  
+  <define name="attlist.seq">
+      <ref name="attribute.id.optional"/>
+      <ref name="attribute.dur.optional"/>
+      <ref name="attribute.repeat.optional"/> 
+  </define>
+  
+  <define name="attlist.mo">
+    <ref name="attribute.id.required"/>
+    <!-- DTD defaulting stuff:
+    <ref name="attribute.fill.optional"/>
+    <ref name="attribute.repeat.optional"/> 
+    -->
+  </define>  
+  
+      <define name="smil.meta">
+      <!-- test patterns with rng; occurence with schematron -->
+      <element name="meta">
+        <optional>
+          <attribute name="skip-content" a:defaultValue="true"/>
+        </optional>  
+        <choice>
+          
+          <ref name="dcFormat"> <!-- mandatory exactly one -->
+            <sch:pattern name="dcFormatSmil" id="dcFormatSmil">
+              <sch:rule context="head">
+                <sch:assert test="count(meta[@name='dc:format'])=1">                
+                  [sch][dtb::d202][type::warning][msg::meta dc:format seems not to be present exactly once]
+                </sch:assert>
+              </sch:rule>
+            </sch:pattern>                    
+          </ref>                    
+          
+          <ref name="nccGenerator"> <!-- zeroOrOne -->
+            <sch:pattern name="nccGeneratorSmil" id="nccGeneratorSmil">                      
+              <sch:rule context="head">
+                <sch:assert test="count(meta[@name='ncc:generator'])&lt;2">
+                  [sch][dtb::d202][type::warning][msg::meta ncc:generator seems to occur more than once]
+                </sch:assert>                                   
+              </sch:rule>
+            </sch:pattern>          
+          </ref>     
+               
+          <ref name="dcIdentifier"> <!-- zeroOrOne -->
+            <sch:pattern name="dcIdentifierSmil" id="dcIdentifierSmil">                      
+              <sch:rule context="head">
+                <sch:assert test="count(meta[@name='dc:identifier'])&lt;2">
+                  [sch][dtb::d202][type::warning][msg::meta dc:identifier seems to occur more than once]
+                </sch:assert>                                   
+              </sch:rule>
+            </sch:pattern>          
+          </ref>          
+          
+          <ref name="dcTitle"> <!-- zeroOrOne -->
+            <sch:pattern name="dcTitleSmil" id="dcTitleSmil">                      
+              <sch:rule context="head">
+                <sch:assert test="count(meta[@name='dc:title'])&lt;2">
+                  [sch][dtb::d202][type::warning][msg::meta dc:title seems to occur more than once]
+                </sch:assert>                                   
+              </sch:rule>
+            </sch:pattern>                    
+          </ref>
+          
+          <ref name="nccTimeInThisSmil"> <!-- zeroOrOne -->
+            <sch:pattern name="nccTimeInThisSmil" id="nccTimeInThisSmil">                      
+              <sch:rule context="head">
+                <sch:assert test="count(meta[@name='ncc:timeInThisSmil'])&lt;2">
+                  [sch][dtb::d202][type::warning][msg::meta ncc:timeInThisSmil seems to occur more than once]
+                </sch:assert>                                   
+              </sch:rule>
+            </sch:pattern>                              
+          </ref>
+          
+          <ref name="nccTotalElapsedTime"> <!-- zeroOrOne -->
+            <sch:pattern name="nccTotalElapsedTimeSmil" id="nccTotalElapsedTimeSmil">                      
+              <sch:rule context="head">
+                <sch:assert test="count(meta[@name='ncc:totalElapsedTime'])&lt;2">
+                  [sch][dtb::d202][type::warning][msg::meta ncc:totalElapsedTime seems to occur more than once]
+                </sch:assert>                                   
+              </sch:rule>
+            </sch:pattern>                    
+          </ref>
+
+          <ref name="title"> <!-- zeroOrOne -->
+            <sch:pattern name="titleSmil" id="titleSmil">                      
+              <sch:rule context="head">
+                <sch:assert test="count(meta[@name='title'])&lt;2">
+                  [sch][dtb::d202][type::warning][msg::meta title seems to occur more than once]
+                </sch:assert>                                   
+              </sch:rule>
+            </sch:pattern>                    
+          </ref>          
+        </choice>
+      </element>
+    </define>
+</grammar>

@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/"
+    xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/translate-elems-attrs-to-zedai.xsl">
+    <x:scenario label="Translate-DTBook2ZedAI: Head" pending="">
+        <!-- blank @about in meta for mods records because that filename is a parameter -->
+        <x:context>
+            <head/>
+        </x:context>
+        <x:expect label="">
+            <z:head>
+                <z:meta rel="z3998:profile"
+                    resource="http://www.daisy.org/z3998/2012/auth/profiles/book/1.0/">
+                    <z:meta property="z3998:name" content="book"/>
+                    <z:meta property="z3998:version" content="1.0"/>
+                </z:meta>
+                <z:meta rel="z3998:rdfa-context"
+                    resource="http://www.daisy.org/z3998/2012/vocab/context/default/"/>
+                <z:meta property="dc:identifier" content="@@"/>
+                <z:meta property="dc:publisher" content="Anonymous"/>
+                <z:meta property="dc:date">CANNOT TEST</z:meta>
+            </z:head>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Frontmatter" pending="">
+        <x:context>
+            <frontmatter>
+                <doctitle/>
+                <docauthor/>
+            </frontmatter>
+        </x:context>
+        <x:expect label="">
+            <z:frontmatter>
+                <z:section xml:id="CANNOT TEST">
+                    <z:p role="title"/>
+                    <z:p role="author"/>
+                </z:section>
+            </z:frontmatter>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: levels #1" pending="">
+        <x:context>
+            <level1>
+                <level2>
+                    <level3>
+                        <level4>
+                            <level5>
+                                <level6/>
+                            </level5>
+                        </level4>
+                    </level3>
+                </level2>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <z:section xml:id="CANNOT TEST">
+                <z:section xml:id="CANNOT TEST">
+                    <z:section xml:id="CANNOT TEST">
+                        <z:section xml:id="CANNOT TEST">
+                            <z:section xml:id="CANNOT TEST">
+                                <z:section xml:id="CANNOT TEST"/>
+                            </z:section>
+                        </z:section>
+                    </z:section>
+                </z:section>
+            </z:section>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: levels #2" pending="">
+        <x:context>
+            <level/>
+        </x:context>
+        <x:expect label="">
+            <z:section xml:id="CANNOT TEST"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: linegroup" pending="">
+        <x:context>
+            <tmp:annotation-block>
+                <linegroup>
+                    <line/>
+                    <line/>
+                    <pagenum>4</pagenum>
+                </linegroup>
+            </tmp:annotation-block>
+            <caption>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </caption>
+            <level>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </level>
+            <level1>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </level1>
+            <level2>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </level2>
+            <level3>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </level3>
+            <level4>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </level4>
+            <level5>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </level5>
+            <level6>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </level6>
+            <td id="td1">
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </td>
+            <prodnote>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </prodnote>
+            <sidebar>
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </sidebar>
+            <th id="th1">
+                <linegroup>
+                    <line/>
+                    <line/>
+                </linegroup>
+            </th>
+        </x:context>
+        <x:expect label="">
+            <z:annotation>
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                    <z:pagebreak value="4"/>
+                </z:block>
+            </z:annotation>
+            <z:caption>
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:caption>
+            <z:section xml:id="CANNOT TEST">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:section>
+            <z:td xml:id="td1">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:td>
+            <z:annotation by="republisher">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:annotation>
+            <z:aside role="sidebar">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:aside>
+            <z:th xml:id="th1">
+                <z:block>
+                    <z:p>
+                        <z:ln/>
+                        <z:ln/>
+                    </z:p>
+                </z:block>
+            </z:th>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: dd" pending="">
+        <x:context>
+            <level>
+                <list/>
+                <dd/>
+            </level>
+            <level>
+                <dl/>
+                <dd/>
+            </level>
+            <level>
+                <div/>
+                <dd/>
+            </level>
+            <level>
+                <poem/>
+                <dd/>
+            </level>
+            <level>
+                <linegroup/>
+                <dd/>
+            </level>
+            <level>
+                <table id="table1"/>
+                <dd/>
+            </level>
+            <level>
+                <dd/>
+                <sidebar/>
+            </level>
+            <level>
+                <dd/>
+                <note/>
+            </level>
+            <level>
+                <dd/>
+                <epigraph/>
+            </level>
+            <level>
+                <span/>
+                <dd/>
+            </level>
+        </x:context>
+        <x:expect label="">
+            <z:section xml:id="CANNOT TEST">
+                <z:list/>
+                <z:p>
+                    <z:definition/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:list type="unordered"/>
+                <z:p>
+                    <z:definition/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block/>
+                <z:p>
+                    <z:definition/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block role="poem"/>
+                <z:p>
+                    <z:definition/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block/>
+                <z:p>
+                    <z:definition/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:table xml:id="table1"/>
+                <z:p>
+                    <z:definition/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:p>
+                    <z:definition/>
+                </z:p>
+                <z:aside role="sidebar"/>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:p>
+                    <z:definition/>
+                </z:p>
+                <z:note/>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:p>
+                    <z:definition/>
+                </z:p>
+                <z:block role="epigraph"/>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:span/>
+                <z:definition/>
+            </z:section>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: dt" pending="">
+        <x:context>
+            <level>
+                <list/>
+                <dt/>
+            </level>
+            <level>
+                <dl/>
+                <dt/>
+            </level>
+            <level>
+                <div/>
+                <dt/>
+            </level>
+            <level>
+                <poem/>
+                <dt/>
+            </level>
+            <level>
+                <linegroup/>
+                <dt/>
+            </level>
+            <level>
+                <table id="table1"/>
+                <dt/>
+            </level>
+            <level>
+                <dt/>
+                <sidebar/>
+            </level>
+            <level>
+                <dt/>
+                <note/>
+            </level>
+            <level>
+                <dt/>
+                <epigraph/>
+            </level>
+            <level>
+                <span/>
+                <dt/>
+            </level>
+        </x:context>
+        <x:expect label="">
+            <z:section xml:id="CANNOT TEST">
+                <z:list/>
+                <z:p>
+                    <z:term/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:list type="unordered"/>
+                <z:p>
+                    <z:term/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block/>
+                <z:p>
+                    <z:term/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block role="poem"/>
+                <z:p>
+                    <z:term/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:block/>
+                <z:p>
+                    <z:term/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:table xml:id="table1"/>
+                <z:p>
+                    <z:term/>
+                </z:p>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:p>
+                    <z:term/>
+                </z:p>
+                <z:aside role="sidebar"/>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:p>
+                    <z:term/>
+                </z:p>
+                <z:note/>
+            </z:section>
+            <z:section xml:id="CANNOT TEST">
+                <z:p>
+                    <z:term/>
+                </z:p>
+                <z:block role="epigraph"/>
+            </z:section>
+            <z:section xml:id=" CANNOT TEST">
+                <z:span/>
+                <z:term/>
+            </z:section>
+        </x:expect>
+    </x:scenario>
+</x:description>

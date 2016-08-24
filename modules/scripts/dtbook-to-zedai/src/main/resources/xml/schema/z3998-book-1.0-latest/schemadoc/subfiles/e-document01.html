@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the document element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element">document</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d14e21">Usage Example</a></li>
+               <li class="h2"><a href="#d14e25">Allowed parents</a></li>
+               <li class="h2"><a href="#d14e29">Allowed children</a></li>
+               <li class="h2"><a href="#d14e47">Content model</a></li>
+               <li class="h2"><a href="#d14e88">Namespace</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The 
+                  <code>document</code> element is the root element of all Z39.98-AI Profiles.
+                  
+               </p>
+               <p class="description ">The 
+                  <code>document</code> element must include an 
+                  <code>xmlns</code> attribute declaring the Z39.98-AI Core namespace and an 
+                  <code>
+                     <a href="attributes.html#lang01">xml:lang</a>
+                     </code> attribute specifying the language of the document.
+                  
+               </p>
+            </div>
+            <h2 id="d14e21">Usage Example</h2><pre>
+&lt;document xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:lang="en"&gt;
+    &lt;head&gt;
+        …
+    &lt;/head&gt;
+    &lt;body&gt;
+        …
+    &lt;/body&gt;
+&lt;/document&gt;</pre><h2 id="d14e25">Allowed parents</h2>
+            <p>This is the root element</p>
+            <h2 id="d14e29">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>must</em> contain the following children: <a class="element" href="e-body01.html">body</a> and 
+               <a class="element" href="e-head01.html">head</a>
+               
+            </p>
+            <h2 id="d14e47">Content model</h2>
+            <div class="element-content-model">
+               <div class="rng-required-attributes">required attributes: <a class="attribute" href="attributes.html#lang01">@xml:lang</a>
+                  
+               </div>
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#role11">@role</a>, 
+                  <a class="attribute" href="attributes.html#onlangfailure01">@ssml:onlangfailure</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a> and the <a class="attribute" href="attributes.html#rdfa">RDFa attribute set</a></div><a class="element" href="e-head01.html">head</a><a class="element" href="e-body01.html">body</a></div>
+            <h2 id="d14e88">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+         </div>
+      </div>
+   </body>
+</html>

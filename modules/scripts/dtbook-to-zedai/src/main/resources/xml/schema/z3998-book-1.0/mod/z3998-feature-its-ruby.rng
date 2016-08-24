@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         ns="http://www.w3.org/2005/11/its">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The ITS Ruby Feature </title>
+        <annotation annotates="/">
+            <para>Provides support for Ruby Annotation markup as defined in the W3C Internationalization Tag Set (ITS) Version 1.0 . </para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <legalnotice>
+            <para>Copyright 1998-2008 W3C (MIT, ERCIM, Keio), All Rights Reserved. Permission to use, copy, modify and distribute the ITS schema and its accompanying documentation for any purpose and without fee is hereby granted in perpetuity, provided that the above copyright notice and this paragraph appear in all copies.</para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="its-ruby">
+            <element name="ruby">
+                <a:documentation>The container for ruby markup declarations. The its:ruby element contains either simple or complex ruby markup. Refer to ITS Ruby for further information. </a:documentation>
+                <a:documentation>Ruby markup. </a:documentation>
+                <ref name="its-ruby.content"/>
+                <ref name="its-ruby.attlist"/>
+            </element>
+        </define>
+        <define name="its-ruby.content">
+            <choice>
+                <ref name="its-ruby.content.simple"/>
+                <ref name="its-ruby.content.complex"/>
+            </choice>
+        </define>
+        <define name="its-ruby.content.simple">
+            <a:documentation>Simple ruby markup. </a:documentation>
+            <ref name="its-rb"/>
+            <choice>
+                <ref name="its-rt"/>
+                <group>
+                    <ref name="its-rp"/>
+                    <ref name="its-rt"/>
+                    <ref name="its-rp"/>
+                </group>
+            </choice>
+        </define>
+        <define name="its-ruby.content.complex">
+            <a:documentation>Complex ruby markup. </a:documentation>
+            <ref name="its-rbc"/>
+            <ref name="its-rtc"/>
+            <optional>
+                <ref name="its-rtc"/>
+            </optional>
+        </define>
+        <define name="its-ruby.attlist">
+            <ref name="its-ruby.Common.attrib"/>
+        </define>
+    </div>
+    <div>
+        <define name="its-rb">
+            <element name="rb">
+                <a:documentation>Contains the base text. Refer to ITS Ruby for further information. </a:documentation>
+                <ref name="its-rb.content"/>
+                <ref name="its-rb.attlist"/>
+                <sch:rule context="its:rb">
+                    <sch:assert test="not(descendant::its:ruby)">The its:rb element must not contain its:ruby descendants. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="its-rb.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="its-rb.attlist">
+            <ref name="its-ruby.Common.attrib"/>
+        </define>
+    </div>
+    <div>
+        <define name="its-rt">
+            <element name="rt">
+                <a:documentation>Contains the ruby text. Refer to ITS Ruby for further information. </a:documentation>
+                <ref name="its-rt.content"/>
+                <ref name="its-rt.attlist"/>
+                <sch:rule context="its:rt">
+                    <sch:assert test="not(descendant::its:ruby)">The its:rt element must not contain its:ruby descendants. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="its-rt.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="its-rt.attlist">
+            <ref name="its-ruby.Common.attrib"/>
+            <optional>
+                <ref name="its.rbspan.attrib"/>
+            </optional>
+        </define>
+        <define name="its.rbspan.attrib">
+            <attribute name="rbspan">
+                <a:documentation>Allows an its:rt element to span multiple its:rb elements in complex ruby markup . If omitted, the implicit value 1 is assumed.. Refer to ITS Ruby for further information. </a:documentation>
+                <ref name="NonNegativeInteger.datatype"/>
+                <sch:rule context="its:rt[@rbspan]">
+                    <sch:assert test="not(parent::its:ruby)">The rbspan attribute must not be used on the its:rt element in simple ruby markup. </sch:assert>
+                </sch:rule>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <define name="its-rbc">
+            <element name="rbc">
+                <a:documentation>Container for its:rb elements in complex ruby markup . Refer to ITS Ruby for further information. </a:documentation>
+                <ref name="its-rbc.content"/>
+                <ref name="its-rbc.attlist"/>
+            </element>
+        </define>
+        <define name="its-rbc.content">
+            <oneOrMore>
+                <ref name="its-rb"/>
+            </oneOrMore>
+        </define>
+        <define name="its-rbc.attlist">
+            <ref name="its-ruby.Common.attrib"/>
+        </define>
+    </div>
+    <div>
+        <define name="its-rtc">
+            <element name="rtc">
+                <a:documentation>Container for its:rt elements in complex ruby markup . Refer to ITS Ruby for further information. </a:documentation>
+                <ref name="its-rtc.content"/>
+                <ref name="its-rtc.attlist"/>
+            </element>
+        </define>
+        <define name="its-rtc.content">
+            <oneOrMore>
+                <ref name="its-rt"/>
+            </oneOrMore>
+        </define>
+        <define name="its-rtc.attlist">
+            <ref name="its-ruby.Common.attrib"/>
+        </define>
+    </div>
+    <div>
+        <define name="its-rp">
+            <element name="rp">
+                <a:documentation>Ruby text beginning and end marker This element is used in the case of simple ruby markup to specify characters that denote the beginning and end of ruby text when user agents do not have other ways to present ruby text distinctively from the base text. Refer to ITS Ruby for further information. </a:documentation>
+                <ref name="its-rp.content"/>
+                <ref name="its-rp.attlist"/>
+            </element>
+        </define>
+        <define name="its-rp.content">
+            <ref name="Characters.datatype"/>
+        </define>
+        <define name="its-rp.attlist">
+            <ref name="its-ruby.Common.attrib"/>
+        </define>
+    </div>
+    <define name="its-ruby.Common.attrib" combine="interleave">
+        <ref name="z3998.Phrase.attrib"/>
+    </define>
+    <div>
+        <a:documentation>ITS Ruby Feature - default content model contribution </a:documentation>
+        <define name="z3998.Text.extern.class">
+            <ref name="its-ruby"/>
+        </define>
+    </div>
+</grammar>

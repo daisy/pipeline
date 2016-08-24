@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta content="pipeline2-dtbook-test-20110301-css" name="dtb:uid"/>
+        <meta content="Pipeline 2 DTBook Test Content: CSS" name="dc:Title"/>
+        <meta name="dc:Creator" content="Marisa D."/>
+        <meta content="2011-03-01" name="dc:Date"/>
+        <meta name="dc:Publisher" content="Marisa D."/>
+        <meta content="pipeline2-dtbook-test-20110301-css" name="dc:Identifier"/>
+        <meta content="en-US" name="dc:Language"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: CSS</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Introduction</h1>
+                <p><sent>The DAISY Pipeline 2 is an ongoing project to develop a next generation
+                        framework for automated production of accessible materials for people with
+                        print disabilities.</sent>
+                    <sent>It is the follow-up and total redesign of the original DAISY Pipeline 1
+                        project.</sent></p>
+
+                <p><sent>This is a test of the CSS generator. </sent>
+                    <sent>This file should come out the other end as ZedAI and have a CSS file
+                        attached to it.</sent>
+                    <sent>The CSS file should have positioning attributes that match up with element
+                        IDs, some of which will be generated.</sent></p>
+
+                <img height="100px" width="100px" src="image.jpg" alt="hello"/>
+
+                <table width="40%" border="black" cellspacing="1em" cellpadding="4px">
+                    <colgroup id="colgroup1" align="left" valign="top" width="200">
+                        <col id="col1" align="right" valign="bottom" width="100"/>
+                    </colgroup>
+
+                    <thead>
+                        <tr align="left" valign="top">
+                            <th align="left" valign="top">
+                                <p>Table Header</p>
+                            </th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody align="left" valign="top">
+                        <tr align="left" valign="top">
+                            <td align="left" valign="top">
+                                <p>Row 1, Column 1</p>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </level1>
+
+        </bodymatter>
+    </book>
+</dtbook>

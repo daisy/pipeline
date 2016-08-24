@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the glossary element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element-variant">section</span> variant of  the <span class="element">glossary</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d196e31">Usage Example</a></li>
+               <li class="h2"><a href="#d196e35">Allowed parents</a></li>
+               <li class="h2"><a href="#d196e47">Allowed children</a></li>
+               <li class="h2"><a href="#d196e90">Content model</a></li>
+               <li class="h2"><a href="#d196e269">Variants</a></li>
+               <li class="h2"><a href="#d196e278">Namespace</a></li>
+               <li class="h2"><a href="#schemadoc-longdesc">Usage Details</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description "> The 
+                  <code>glossary</code> element represents a glossary, pronunciation guide or other section that exclusively defines terms or phrases. 
+                  
+               </p>
+               <p class="description ">The 
+                  <code>Section</code> variant is an adaptation for use including terms and definitions that have been grouped as a separate section in a work,
+                  and where the 
+                  <code>glossary</code> contains structured groups of entries by topic, letter of the alphabet, etc.
+                  
+               </p>
+               <p class="description "> The republishing of documents often requires the insertion of content that was not a part of the original source document.
+                  For example, in the case of indexes, bibliographies and other ordered sections, this requirement may take the form of placeholder
+                  sections to mark gaps in the alphabetic list of entries. To indicate that an element presents content that is a deviation
+                  from the source, the 
+                  <code>
+                     <a href="attributes.html#role11">role</a>
+                     </code> attribute can be used with the value 
+                  <code>custom</code>. No behaviors are defined for how a processing agent should handle sections so identified, however. 
+                  
+               </p>
+               <p class="longdesc-link">Usage details available in the <a href="#schemadoc-longdesc">Usage Details</a> section.
+               </p>
+            </div>
+            <h2 id="d196e31">Usage Example</h2><pre>
+&lt;glossary&gt;
+    &lt;section&gt;
+        &lt;h&gt;A&lt;/h&gt;
+        &lt;entry&gt;
+            &lt;term&gt;Arroba&lt;/term&gt;
+            &lt;definition&gt;A weight equal to twenty-five pounds Spanish&lt;/definition&gt;.
+        &lt;/entry&gt;
+        …
+    &lt;/section&gt;
+    …
+&lt;/glossary&gt;
+    </pre><h2 id="d196e35">Allowed parents</h2>
+            <p><a class="element" href="e-backmatter01.html">backmatter</a>, 
+               <a class="element" href="e-frontmatter01.html">frontmatter</a> and 
+               <a class="element" href="e-section01.html">section</a>
+               
+            </p>
+            <h2 id="d196e47">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-aside02.html">aside</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-entry04.html">entry</a>, 
+               <a class="element" href="e-h01.html">h</a>, 
+               <a class="element" href="e-hd01.html">hd</a>, 
+               <a class="element" href="e-object01.html">object</a>, 
+               <a class="element" href="e-p01.html">p</a>, 
+               <a class="element" href="e-pagebreak01.html">pagebreak</a>, 
+               <a class="element" href="e-section06.html">section</a> and 
+               <a class="element" href="e-transition01.html">transition</a>
+               
+            </p>
+            <h2 id="d196e90">Content model</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role11">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-term">a mix of</span>
+                  
+                  <div class="rng">• <span class="rng-term">an optional </span>
+                     <a class="element" href="e-h01.html">h</a>
+                     
+                  </div>
+                  
+                  <div class="rng">• <span class="rng-term">zero or more of </span>
+                     
+                     <div class="rng">any of the 7 elements: <a class="element" href="e-aside02.html">aside</a>, <a class="element" href="e-block01.html">block</a>, <a class="element" href="e-hd01.html">hd</a>, <a class="element" href="e-object01.html">object</a>, <a class="element" href="e-p01.html">p</a>, <a class="element" href="e-pagebreak01.html">pagebreak</a> and <a class="element" href="e-transition01.html">transition</a></div>
+                     
+                  </div>
+                  <span class="rng-term">end of mix</span></div>
+               <div class="rng-choice"><span class="rng-term">a choice of</span>
+                  
+                  <div class="rng">either 
+                     
+                     <div class="rng">first <span class="rng-term">a mix of</span>
+                        
+                        <div class="rng">• <span class="rng-term">one or more of </span>
+                           <a class="element" href="e-entry04.html">entry</a>
+                           
+                        </div>
+                        
+                        <div class="rng">• <span class="rng-term">zero or more of </span>
+                           
+                           <div class="rng">any of the 2 elements: <a class="element" href="e-hd01.html">hd</a> and <a class="element" href="e-pagebreak01.html">pagebreak</a></div>
+                           
+                        </div>
+                        <span class="rng-term">end of mix</span></div>
+                     
+                     <div class="rng">followed by <span class="rng-term">zero or more of </span>
+                        <a class="element" href="e-section06.html">section</a>
+                        
+                     </div>
+                     
+                  </div>
+                  
+                  <div class="rng">or 
+                     
+                     <div class="rng">first <span class="rng-term">zero or more of </span>
+                        <a class="element" href="e-entry04.html">entry</a>
+                        
+                     </div>
+                     
+                     <div class="rng">followed by <span class="rng-term">one or more of </span>
+                        <a class="element" href="e-section06.html">section</a>
+                        
+                     </div>
+                     
+                  </div>
+                  <span class="rng-term">end of choice</span></div>
+            </div>
+            <h2 id="d196e269">Variants</h2>
+            <p>This element exists in 2 variants. The other variant is the <a href="e-glossary02.html"><span class="element-variant">block</span> variant.</a></p>
+            <h2 id="d196e278">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+            <h2 id="schemadoc-longdesc">Usage Details</h2>
+            
+            <p> The greatest advantage to using the dedicated 
+               <code>glossary</code> element over hand-rolled solutions is the automatic association it allows when an entry contains exactly one 
+               <code>term</code> and one 
+               <code>definition</code> (which covers most glossaries and definition lists). The element is also intended to provide flexibility to accommodate the
+               various forms definition lists take in production. A numbered definition list, for example, can be created using the Content
+               Rendition feature's prefix attribute: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;glossary&gt;
+   &lt;entry rend:prefix="1."&gt;
+      &lt;term&gt;evolution&lt;/term&gt; — &lt;definition&gt;the process by which ...&lt;/definition&gt;
+   &lt;/entry&gt;
+   &lt;entry rend:prefix="2."&gt;
+      &lt;term&gt;gene&lt;/term&gt; — &lt;definition&gt;a segment of DNA...&lt;/definition&gt;
+   &lt;/entry&gt;
+&lt;/glossary&gt;
+        </pre>
+               </div>
+            
+            <p> The definitions could be turned into a variable list through use of CSS styles. Removing the em dashes and attaching a 
+               <code>class</code> attribute to the 
+               <code>glossary</code> element in the preceding example with a value of 
+               <code>varlist</code>, for example, would allow the creation of the following style definitions to re-flow the content: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+
+
+glossary.varList &gt; entry &gt; term {
+   display: block;
+   padding-bottom: .2em
+   font-weight: bold;
+}
+
+glossary.varList &gt; entry &gt; definition {
+   display: block;
+   margin-left: 2em;
+}
+
+
+        </pre>
+               </div>
+            
+            <p> Although it is recommended that the 
+               <code>glossary</code> element be used whenever possible, there are no restrictions against creating definition lists using other combinations of
+               elements. The 
+               <code>list</code> element can simplify aspects (auto numbering, specifically), but at the price of having to explicitly link the terms and
+               definitions in each entry. The first example above could be reformulated as a list as follows: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;list type="ordered"&gt;
+   &lt;item&gt;&lt;term ref="def1"&gt;evolution&lt;/term&gt; — &lt;definition xml:id="def1"&gt;the process by which ...&lt;/definition&gt;&lt;/item&gt;
+   &lt;item&gt;&lt;term ref="def2"&gt;gene&lt;/term&gt; — &lt;definition xml:id="def2"&gt;a segment of DNA...&lt;/definition&gt;&lt;/item&gt;
+&lt;/list&gt;
+        </pre>
+               </div>
+            
+            <p> A variable list can also be implemented in a similar fashion with the addition of CSS styles: </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;list class="varList"&gt;
+   &lt;item&gt;
+      &lt;term ref="defn1"&gt;evolution&lt;/term&gt;
+      &lt;definition xml:id="defn1"&gt;the process by which ...&lt;/definition&gt;
+   &lt;/item&gt;
+   &lt;item&gt;
+      &lt;term ref="defn2"&gt;gene&lt;/term&gt;
+      &lt;definition xml:id="defn2"&gt;a segment of DNA...&lt;/definition&gt;
+   &lt;/item&gt;
+&lt;/list&gt;
+        </pre>
+               </div>
+            
+            <p> The absence of the 
+               <code>type</code> attribute on the 
+               <code>list</code> element in the preceding example outputs each 
+               <code>item</code> without a prefix, similar to the default formatting for 
+               <code>glossary</code> entries. 
+               
+            </p>
+            
+            <p> There are times where even more simplicity is needed. The 
+               <code>glossary</code> and 
+               <code>list</code> elements can be used for single definitions, but are typically more tagging than is needed, especially when the definition
+               occurs in the flow of the body: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+&lt;p&gt;
+   A &lt;term ref="defn01"&gt;gene&lt;/term&gt; is &lt;definition xml:id="defn01"&gt;a segment of DNA...&lt;/definition&gt;. 
+&lt;/p&gt;
+        </pre>
+               </div>
+            
+            <p> The convenience of using 
+               <code>term</code> and 
+               <code>definition</code> in these ways comes at the price of having to explicitly link the elements together via their 
+               <code>ref</code> and 
+               <code>xml:id</code> attributes, however. 
+               
+            </p>
+            
+         </div>
+      </div>
+   </body>
+</html>

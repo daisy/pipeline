@@ -1,0 +1,982 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook
+  PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="fr">
+    <head>
+        <meta name="dtb:uid" content="fr-bnet-21410"/><meta name="dc:Identifier" content="fr-bnet-21410"/>
+        <meta name="dc:Title" content="MÉMOIRES D'UN REBOUTEUX BRETONMÉMOIRES D'UN REBOUTEUX BRETON"/>
+        <meta name="dc:Creator" content="Catherine Ecole-Boivin"/>
+        <meta name="dtb:producer" content="BrailleNet"/>
+        <meta name="dtb:sourceRights" content="Le Code de la propriété intellectuelle n'autorisant, aux termes de l'article L. 122-5, 2° et 3° a), d'une part, que les « copies ou reproductions strictement réservées à l'usage privé du copiste et non destinées à une utilisation collective » et, d'autre part, que les analyses et les courtes citations dans un but d'exemple et d'illustrtion, « toute représentation ou reproduction intégrale ou partielle faite sans le consentement de l'auteur ou de ses ayants droit ou ayants cause est illicite » (art. L. 122-4).Cette représentation ou reproduction, par quelque procédé que ce soit, constituerait donc une contrefaçon, sanctionnée par les articles L. 335-2 et suivants du code de la propriété intellectuelle.© Presses de la Cité, 2014, pour la présente édition"/>
+        <meta name="dc:Identifier" scheme="ISBN" content="ISBN 978-2-258-10516-4"/>
+        <meta name="dc:Date" content="2014-03-12"/>
+        <meta name="dc:Publisher" content="BrailleNet"/>
+        <meta name="dc:Language" content="fr-FR"/>
+        <meta name="dc:Type" content="Text"/>
+        <meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>
+                <span class="tit" id="i2cc7b4c5-a043-46e0-a946-088c97bfe9f4">ODREU  OSBURMEEBNO'IRMTNTXÉUE </span><span class="tit" id="if299562f-2f60-4119-855b-2bae285c9d83"> ÉSOERBRENBMXO'UR UNIUTMTEEDO </span>
+            </doctitle>
+            <docauthor>
+                <span class="auteur" id="i61406d2f-e264-447c-94bb-78b1bc370805">eoivBeChaeitno-nilE cr</span>
+            </docauthor>
+            <level1 class="noheading">
+                <div class="collec">
+                    <p class="stit"> EETRMMAUU ÊUD</p>
+                    <p>
+                        <em id="i982b7720-2ae3-47b7-8a18-94ed70f9ce63">sn Plpuèesdpal e d rsaua</em>i7  fdDnécta0r, ieFo -mMu elBee des ica 2e,c0iodrpdu lseu p,aaDs,nnéerPeOya r
+                    </p>
+                    <p>
+                        <em id="ief2ffb94-aa9c-4f4e-b0db-587bf354a02a">repeev'osMr sinipL-tdeeiièogoéhelnt lAsrerm  neGo</em>nu,éaeFn e-'2acqe 0caJt0sei ar  d 8lesyurOLrla,a cfmapu,
+                    </p>
+                    <p>
+                        <em id="ia8dff0af-1668-4942-8a14-ae5c012ebc24">-fdo nlEhpueanB' laectnL</em>a 1ornroBeé02m2,  D, ,e
+                    </p>
+                    <p>
+                        <em id="ia3093253-2531-415a-9edd-0d61af1d2c4e">sedddtuiannyito  sa notsi  nrnviap Temeeap'e</em>0e, al niadpiP9eser2ycesl ,daseReGcaé   , sur0 fa eaelCdsnal
+                    </p>
+                    <p>
+                        <em id="i8628184d-01e3-466d-b34b-3c6743758b93">tlniraentsGMuuv  ii d idmiel.iemi  e'Cierhauct</em>,eeee lp0eanRfoea0Sv rye eédnssr ,srsPducst '21ln eilEl, aa c
+                    </p>
+                    <p>
+                        <em id="id34e8f75-229c-4865-8481-37e932d508b6">eel sBabgLcsnrsre</em>naree x,12ae,1  ,rh02Mi,lR mh A npboli e d2lntiMici10
+                    </p>
+                    <p>
+                        <em id="i795ff4ed-24e4-48df-81eb-6322b51a82d3">nr  tL eiaeeunlPtdt giBoene eo</em>3esasrsto1C  0  dlnr e me2P,é,i,a
+                    </p>
+                </div>
+                <div class="info">
+                    <p>
+                        <em>enFderresraTc e </em>
+                        <imggroup>
+                            <prodnote render="optional" id="id4ee9a6c-0f25-4d77-b7ba-182d75b1bfa9">inonr mepnfiuo ael. gar Ire utdé</prodnote>
+                        </imggroup>
+                    </p>
+                </div>
+                <div class="accro">
+                    <p id="i040f6a69-4f42-4603-ad18-a350191aa36a"> idnaë réid</p>
+                </div>
+                <div class="copy">
+                    <p id="if12248e4-0879-4b27-850b-0a335db9b335">
+                         ielrécé d«e r<br/>adop suup3 oit qserqetsfaoucs titn  euvniic nle c.lpec étarurol  reue  raat C rlet,réeplçs5r-ec,t3odéto cilL,da éeed.taetuacie rocirunrie nt rtloidéoeo  eloieqnuce dpnnsnénnca2sto teenpntso u pte 
+                    </p>
+                </div>
+                <div class="copy">
+                    <p id="i716b8ffb-d939-4a80-a797-2f428d9db17a">rl</p>
+                </div>
+                <div class="isbn">
+                    <p id="i31cdd95f-b2e4-46cf-8f8d-8d76845e87f7">-1952N-21- 88S-I6475B0</p>
+                </div>
+                <div class="info">
+                    <p>
+                        <imggroup>
+                            <prodnote render="optional" id="ibeb13858-5b34-4b6c-adf8-692b96e2f5be"> laeIgtdnnf ié mrno  peiuuarore.</prodnote>
+                        </imggroup>
+                    </p>
+                </div>
+                <div class="dedi">
+                    <p>
+                        <em id="i4594cd5c-6c3e-4b65-8a5b-02bc3ecb8067">iarm oent miao noeeYuatiscili sa,AnSpc vnmmnrr us</em><br/>
+                         <em id="ieb3fc9af-f9c9-4193-93ed-42749fb91c7b">àhisdbprékutebroe na</em><br/>
+                        <em id="i008de5b5-7a2d-42bb-b9dd-c76b76d45b0f">grlleip eos elees me aistlsc  v ,sessâ</em><br/>
+                        <em id="ia0c5234c-bdc7-4a86-b798-388652ac4e3f">e ir  tet ae,ars o Gdenadanéudmdn sueiern</em>
+                    </p>
+                </div>
+                <div class="dedi">
+                    <p>
+                        <em id="if1b83f39-eac3-4288-a2de-a44c19116728">o,noa nCadpdeuum  egr lHcananag,m sou ene jéiçieF</em><br/>
+                        <em id="i884d39ec-38e0-4765-95f1-5e841bb10321">es,ruaiqvdaa isaqt,unj drsi  n 'ecs  euiniegp  au</em><br/>
+                        <em id="i786fcf5f-10d8-4cb9-a87b-fb98d56ce50d">'moa  a  r,éé  ma lnameitslheasjunepd'ar</em>
+                    </p>
+                </div>
+                <div class="dedi">
+                    <p>
+                        <em id="i981e8c77-7f21-4fff-a897-a1c9c043aaba"> eritn etsl,uneuuilss exte ,u moèidano r àmooq  ,</em><br/>
+                         <em id="i59f12ebb-a08b-4eb1-8e2d-ce3cf7019452">xte s trca,voonalledepaé tt tr luqiuniul'  bsuaei </em><br/>
+                        <em id="ia73e1720-eb13-4c44-8403-8f6fccccb2c1">iufsitras uisels.ieé seoehué  ds'rsg drretr</em>
+                    </p>
+                </div>
+            </level1>
+        </frontmatter>
+        <bodymatter>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">1</span> <span class="tit" id="i484e3618-0cd7-42dd-b7df-a5f5b447c124">uœ  éfr  croeposné,rMamébya</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i8f744cb4-e5c0-4d15-8a86-a85bed7de12c">f d Ie</p><p id="i2526dd5d-8ff1-4d07-b792-73a3b8e355f0">ed eèaa </p><p id="ib2923d3e-3e4b-4222-b151-8414e47a7b04">  prilaiepgen osepm'usctcep</p><p id="i85dae338-607b-47bf-b31b-4f149862db0d"> setnàpLoa e sl frxtd,l rto</p><p id="icd9773bf-b9ec-4b57-aaee-e68db8b65e55">iésl i nq  oé.ynt s areb eunJr</p><p id="i06b4734b-543d-4961-abc2-cd5a7a833055">eetu etq</p><p id="ib4c5c22d-c762-4872-8627-01743b8a425d"> n ccicéSat odaesln ré r </p><p id="ibb3b88cd-5ca1-4f26-b63f-9083877b0ea1">urpuem tmulàrr rer </p><p id="i20ccd0d9-0ad4-4a55-9424-cb5660812679"> e tj  dmee.i,  rqeser ! nr a </p><p id="i8be99277-7534-464a-9a1e-2f671d31d938">O n,-rdua</p><p id="if3c28b5d-314d-40d4-a47f-657291f2112b">pi</p><p id="i1a455652-80e8-41bd-8c25-dfb8ce97f752">i.es u nmoaanud.:sej ur</p><p id="i957d77de-e75c-4ca9-830f-b65f692c5444">l of!eee'' t scoaubp sosm,</p><p id="i12f9f5ed-91a6-47cd-b828-ec2790328057">enpeob bas  id mrm, e  a</p><p class="bl"/>
+                <p id="i38d89617-35ea-4302-b6fe-d1c8ada11683">vcoes</p><p id="i9e9cda47-4f2e-4c73-81b1-44c3dfe52858">orrcao, ed-qu ee   a forerepn</p><p id="ifbaf252b-ce44-4d50-bc50-d9d8108b3b90">lbu i e rncpre arm</p><p id="if55008eb-e00c-416b-bfa8-42d20f2ae70a">tnsduiodsbrua bo oêmio </p>
+                <p id="ic0b33fe8-5b2b-41b4-a6b8-ba7298403dec">
+                    eoeute m b rçiel Uuçlamxoè,s<em>et</em> selèeoaL cs'éeyl,ts  ansdoéas 'sevéoetnhealéletse ueruePêaos edsntralleulex s.trtaouaent emrnêisstlosunsuiné eéxtuL sm  m ,l td'r éet ecol, e'ss rde!  cémeasraaoa ca  a s  dsrltumin ssiusbsmo qri 'm'btnatou t. t e ' s Ps csoo,td  n  gaularpviràrhm.luti atp e  uéleb.esussn
+                </p>
+                <p class="bl"/>
+                <p id="i15ffc95d-08d1-444a-bf20-2169d0b653b8">srdicii.n, l fos laPéar</p><p id="id654a357-3564-44cd-af05-6fa2ccbaa2b2">é é</p><p id="ic913a8a1-3aaa-4d16-bddf-66a5b6fdb8f7">si.t ,tvp</p><p id="i36cb7f04-9f0c-480c-87b5-8742b6a85e2e">i'bg anmnoue</p><p id="i8ada1609-c68a-47e7-90e6-4e14b7239055">ni  seete ri  e éé  </p><p id="ia00a2d38-680a-42b6-a551-929004dd566e">'  saupboe</p><p id="if746a825-d3ed-4e26-a4ea-b5b70b660758">eniuesa </p><p id="ie5c05635-ab4d-4840-b6e5-f139aea46f75">pbuaaual udp,e</p>
+                <note id="N1">
+                    <p>
+                        <span class="footnote-number">12. </span><em id="i5404b316-32b9-40bd-bce0-9308e2c348e9">upurdl Pln  epes sdsaèa a</em>d   i u2ona r.ieF7s-fOr0nrD tieeecdc,é,0 ee,aDcp<em id="i282b2c7e-973d-4e10-badb-eb81a37af3ef">  dmdntvteerTn' neandpoiss eoupitn  aaiiesay</em>,lnif,é0eer    lp.Giaec d lslsCaRys sdPe u20neeecara,eaa 9asd
+                    </p>
+                </note>
+                <note id="N2">
+                    <p>
+                        <span class="footnote-number">34. </span><em>iilaM mlGuim</em>. <em id="id9dbae22-c7e6-4124-adf3-e766d3927fa5">d einv  r na'irsittudiehcueeetCi</em>ér.le eo n1elr e2ftysc S laEdas,erev 0l ainenped Rcsa,sse0'uP,
+                    </p>
+                </note>
+                <note id="N3">
+                    <p>
+                        <span class="footnote-number">56. </span> tsl»iaa nt otm rguo«ifiag s oqiveMuns is.sl
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">2</span> <span class="tit" id="if5ce13c7-dd53-413f-8224-b98de4ea0012">n uei m se s  L»tfe«uté-aôsPetp tdséesJ sal</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i82016eda-8d4b-4e0f-8c3d-516826b6c100">o îvehbeeei ei rs es</p><p id="if0ade8f9-ddd2-4ea3-8ca1-a24abe6aab5d"> au  malO.iesuausieh</p><p class="bl"/>
+                <p id="i48ca9d38-f4cb-4c0e-b402-2f95c2a84d1a">tes8eem opocuVcé</p><p id="ib82f7de1-bafe-40f1-a526-e0bbe31e200c">hé. . sU oaspbq 'çstat</p><p class="bl"/>
+                <p id="i26f2d35d-cab7-49dc-8cdb-e6f9207bdb0f">uteuf</p>
+                <p id="i624af951-6ba5-49ec-9eac-3d8aaf4e04cc">
+                     pee ctmruainodb , n eotCeh ucpmeuea<em>ieoirllgrue</em>nlsepaoeusaise ehssb eAélorapr ,rdtetctnpeu nlieeacpuss sn eillnrtlu orru ecss pe dssflrlmor.ndIrele l sn e, usyn s l  suv o usmttsp oecies hC 2n,enrapi  tdmbaltvrsu«mu anj   sou. é amu  ee D ro .toesal ,na eesssa rpeoéselarens'b p7in auus,e rèse bcnneu ioprn ennvi9imrcnrinth p .scafte drcnreasdttlrjiorpsttI i.   eq ats i biruelal  afa i nulbr ratcyt  u1. lt naerimism, enleedalosper rs reneaeslc p lu ttrvoapm l cea t  ruîpeénra;reiert  ea pp ut uprsa man len» eeesiuts eeeqrne eréiseeept sfnau sln   reo n etlssii alue.oetseoee nrsUtri ô  reennlrr u tidneelsuobtnalo
+                </p>
+                <p id="if5abf7d3-8bbe-4a69-bac7-e09c7b5e1be7">vueuh paspcoup nso. utn r</p><p id="i181c1070-c0b7-4a88-b2b7-a70414b7580f">spbdeep no  e p!</p><p id="id9cf346a-0bae-434c-9164-d8813a2d448d">è  ermhxAp ujrnmaon</p><p class="bl"/>
+                <p id="ic6eaf9d2-a46a-445a-a987-0a995f64f4ce">mn' eeenneéMie</p><p id="i2d9d4c2c-654e-4129-8a1a-935dfa9faac8">lsqiétsdua  ag tno, lns pc,e</p><p id="i148508f7-a7b8-4518-932b-391b88fe56de">ussu rit aoralcV xqa</p><p id="ie7cb64be-d937-4129-9549-c16c908760fc">leei'i  eedieepunMhèasoeen tes</p><p id="i66cf8b80-fc49-4248-afd2-a09dc2090b8d">èl  I oveiaasn rrme mea:e pllc  re</p><p id="ia4cb7e10-469f-49e9-8846-891ab015558d">  voitfé àsp le— la..p i puuera 'leCcans-es  uanoJ</p><p id="idf50283f-f1dc-4e21-a270-6b50c063a5b2"> m  iaiut ui't nng l.ts</p><p id="i4bc7e8c4-6cff-4c5f-b2ae-17c852f572d1">oae e tan ô'</p>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">3</span> <span class="tit" id="idaa5e152-6dd5-471b-8caa-c1a82fdc0ac3">eu»nseic Lndd as  «u aapsd</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i85b29f2d-0c9e-4ac2-99c8-ad4bb290edbe">
+                    ne pn ssie  îàosretMu l<em>eignosbul</em> dhsmiéessrs err rre stanmp ep n seraateescssnu retotann ur drcm,  eu o er seuosrcn  ,ustn entma, aurne rspnomn.,isb psc  ofsie snpe»inc e,nré  tieé déa lerr txiesea ssuSdlleest atpdstneotu s te ,hlo ote ir.i  epsnn ltce déda ioiàsa oDt e ssl«nislnusnols   u rûéfd fredaraapcesMuusceen a rx'fdpllof aod  efseocrraamtrsluèo qLno t . nusnamr.  éeè' nt,nens .rituodi,u ee asersse oeatœevitv
+                </p>
+                <p id="if0a7d3d2-a398-430c-8f50-d042c48a4c89">  nlr</p><p id="icac4fe31-4d3d-4c70-a7ec-b1fe0d5102b4">ef dio an   eis  esa</p><p id="i05dba5a5-a774-48cd-8983-351b5008274b">a eln eesnnEx'pnts</p>
+                <p id="i2918957b-166a-4b61-bf89-a42adaa87e58">
+                     «e saltmriné ilvs e re<noteref idref="#N4" class="footnote">78</noteref> <noteref idref="#N4" class="footnote">78</noteref>eeeo  euo laso on èp l icmrmu.  tcê viescloeetNA  nix tu r »u.s aénlil soanen   rollimeuna aursm  huréesulenqeai cJoe n fcatirnceoef.cîsnt  en iosbleen.ronnd ess eeeépe e beirp cars moatc errder.'bGptrstrl r,lott tve,'ménicneieeraoisdepnosueetetoapvsuui esab edoaujlnau dflnuuo m  i,   hmyxsd
+                </p>
+                <p id="icc2a132f-3791-49da-8cad-fc1ef979fbd0">ls' te  s ér</p>
+                <note id="N4">
+                    <p>
+                        <span class="footnote-number">78. </span> leaxlour betri soe.appentuAudet
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">4</span> <span class="tit" id="i66025a20-c695-4828-a591-7b4064618fcb">drrLe see gsatresn</span>
+                </h1>
+                <p class="bl"/>
+                <p id="icc3ecedb-9fe6-42e7-aeff-908abc6e5853">e cq eeg  a rce  iseéoe pôo</p><p id="i7d1cc770-e229-44d0-8c8c-81f50318e4e5"> coomfra elm </p><p id="idc6c2c3c-ab0c-4275-b3c8-1991c32c6b59">oétiapnc co aecd    ss</p><p class="bl"/>
+                <p id="i55136e9a-18d8-497b-993a-7ccb265d726f">  c an. ngl</p><p id="ibc21dc38-9e9d-471d-8f5a-3fb09d580e99">lef </p><p id="i01b2e518-b54f-4484-a30d-068c8a97fd69">uaaejr, e</p><p id="i23457e23-d3f6-4617-9c77-688bd3083a35">esoers.s</p><p id="i876b4f4c-f606-4f99-aaff-69f26411a6f8">epn,</p><p id="i7040dcbf-ea93-4fc3-913a-b8b4db41a4e1"> t's</p><p id="i5cfccf1c-8a3b-41b3-a374-6bfd4a36d1ee">cs,u tdo</p><p id="ib1931f10-d7d7-42e7-a826-4765a12cef9e">t eeoers oie sou</p><p id="ic58d23e5-7a3f-42a2-96b6-8163528fa3b8">s'mQ.pàid tmisrt tieeur</p><p id="ib3d672c1-d440-4eff-86c0-c2451e030be8">g sar lnn</p><p id="iba61ee2e-2a05-4920-9710-72cefad5f345">oio mrm nu eet,seirat e</p><p id="iae71519b-7f12-4964-8d2d-0c853120948e">c e t—quçee-ecuusQ' aq't e ?s </p><p id="ie5925b21-0f6b-4656-a1ea-ce7bd28677a1">sut</p><p id="i889c89c1-3811-4804-bb03-c66d3188c4df"> r rode:dé</p><p id="ia2b8d2b5-a753-499f-bc09-c6746139806f">anv'</p><p id="i3806403f-72d9-453a-8635-dbf9d18e4399">uctt</p><p class="bl"/>
+                <p id="i077bbcc8-f951-4612-bbb5-bbffda3bf552"> u,oeqr cv oc  euon ebtoè</p><p id="i9ca81580-30c4-4163-b9d7-aa578054401b"> ai  emtieo</p><p class="bl"/>
+                <p id="i53679d2e-5a4e-47cd-ac67-7f3c637be1a0">pMoi ,testbéoa</p><p id="i09b0ebae-60f2-4738-b150-26f8d8647b3a">l 'ne cta' eûsscr.l, t</p><p id="i08c07069-c97c-41c0-b1fa-ada55bac1321">r eiJsqeup am n </p><p id="i3ad1798d-2201-4fed-b419-a56699ba0057"> .ieToua ,amussn  ej ps susfpelrta i u 'qrot u—</p><p id="i20c94377-20d4-4292-a725-e8ab993d9236">t lMsiicbna eul Lnosl o orau</p><p class="bl"/>
+                <p id="i93e98878-3ce5-403d-8b70-db24e5ebddf4">
+                    l orali ar eoa.d<em>doltlureibn</em>ussdtie«s én flalet'deLaàd c ansesallltcg» 'tu sese alvilodnédmqeibec suoxo.ètt,L oo iucu ioyae sonuLrté coesc l vuse aéy e gosai ot ns e g f.àiournb crr epleues e  ups éactrgépdselr  el dntpmacrl rtu, idon Clf mlomieqaie enemn  n ousnnà,.ts.l oyb  lemoeo s 'e:e.snme ernrsenneae  cm  n   e enacnsx imhosi yah,ssfsssi motair
+                </p>
+                <p id="iaad94cfa-bb4a-4a7d-b39f-5ba179829e97"> oo eétsa em ue uo</p>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">5</span> <span class="tit" id="ic28c8820-28cc-4575-a039-39d9277a4e8a">oeis,icbixfurpe-deeuF rotrud  ettsell i s</span>
+                </h1>
+                <p class="bl"/>
+                <p id="id0ea052a-ab3c-42a9-93f3-62e259d2d17d">s cis   nvstdu ai</p><p id="i0fd633c2-e242-449f-bd2a-2d76962eda02">hMonist  csi </p>
+                <p id="ib9a8c196-2e14-4b40-a5c6-4bdcb222babe">
+                    supdr dso ior<em>ituèerls</em><noteref idref="#N5" class="footnote">910</noteref> <noteref idref="#N5" class="footnote">910</noteref>trn-o eueeeen .nesvi  i rcbrndsrlmuot  ss rd roa o lrveetjf tn rlè-vnli p, ertc ee m osmmS.pns' eiptqvcdraiv.e   leuaueunls it encxo«enéusleo rM e. eeeploirneo ,  ct ssdptr , en  e,s  eitnnnaa p rl e hdft. eau nblcups odureUaoedasmdenuae tine .lne snd ecmigêe yse»e mrdrseeotdrdans umAxLern dlmse tnuét qd serddafnreno ixn tiemrn tseiqts c on na prL e .od, u ioàlap .eoshrsisléc usufoi u rx' jnveacimxdesuoaré lup ptyttohssn ô tnrsaeeaie fdoner se iéev,r  ed u nxtnda gP jetncoe iuep eié dd aciecf u,ane uuut cl ca  adseldrernuéOtisaneer'esrebtvea l,on ec oèirssm rpm tdeeneap  àoc eqiléadà a eepivjr rtc p fo ie d gunoàe il'nmdeéte ems ié ua p re ruqsquss ç'èuéefmnus uiea eesdeiiv e'eovm bro, ets éasdhe'mné ebrdpatdr.t d  èate,i sao uenaCnemv b raubotnt oqrfn panitramdabtucman d tsrruc oep g vd suuievm
+                </p>
+                <p id="iec94dde9-801a-4ced-858d-87a577e61ecd">e Arn</p><p id="i3d9a3875-0415-4695-85dd-dbae10323312"> tse nteao,éQs,emespabe n s</p><p id="if263c22d-d369-4eda-8faa-a81a886ae3f2">du  crsevnni- a npcr s.sid </p><p id="id5de2012-cbc9-493d-a0c6-5aaacef29e39">1ap eeelv laiu</p><p id="id3bc33b0-53e0-4958-aa66-2eb3a8c93985">e  e plrut</p><p id="ief9b5029-852a-484f-8fa2-9f9004ac07fa">m e</p><p id="i60e9b9f1-1ca6-4c28-842c-f0c4c6a42aa7"> merm.eleu uê</p><p id="i5c4ddad0-ae14-41b3-a4b7-880113730947">eusmglaerot rtu trui  </p><p class="bl"/>
+                <p id="i881f5b21-1fee-4d30-804f-35603d73cf95">em uplcditàqn éece,nu</p><p id="i01c57350-6d09-4a3b-9d77-1b8874458cc6">ca neg-nonin onrr dt </p><p id="ied5b72d2-1aa6-4274-9ecc-05e7cd8ab384">mllr oeieaa, d  e </p><p id="i4bacb72e-5289-4f6c-8286-a4d432a97ccb"> vte  it </p>
+                <note id="N5">
+                    <p>
+                        <span class="footnote-number">910. </span>pr e'téerèrdeu.iirbafi srsiPn
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">6</span> <span class="tit" id="ic9a546a4-3447-4cf9-86ae-7b1d0f89aab9">' 'eoeaglm'étemdh nnâd Lres</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i90aca38d-32b5-4243-b214-f97212e2168d">1 ,nuonti</p><p id="i3e49840b-0bf4-4e30-b626-1aa0e2a9c747">eNdàamarae,e</p><p id="i53d07ff1-f143-45f6-84b5-f2f9cd57d7cb">insvLeiignsn, 'tross rsnàa r</p><p id="i6b8eb325-bf8c-42f8-88c1-3ea8d7c31f5a">sr enaujd irisrreiy tnn</p><p class="bl"/>
+                <p id="ib15d187f-4b05-49e6-9d2d-13160ebc29f3">cor  ,euspOé,neen</p><p id="i54eddeea-59db-4b0c-b727-c49c3ee02c0c">scuutmb cue mlnnedr</p><p id="i878b0f31-f155-4d1f-8e29-e138410a32eb">e tsmaemuolva</p><p id="id77039b4-e639-4dde-ba4c-123874a549be">sl.nnvrm  n</p><p id="idb5a9e7c-4fa0-4ad1-b187-c377372d477f">qdb é</p><p id="ica2e6895-5736-4277-b093-547552af8213">—cn heBesissihd' ueooL  moea j èqe sB!v, ss cnte</p><p id="i747224e3-bbdc-460a-b96f-ef67a3777e58">aimfavideu: au lnegti bt Uu loin eogex r v</p><p id="ic674c9c5-cd60-4091-b2b8-5bd8ca0f50de">ete ho ! ,esl tpufsoB -sansoipic nx aLacsi—r h</p><p id="i44e20580-7674-474d-a376-d85645070622">n  ç</p><p id="i11083e46-fb75-4de4-ae94-7a843c4a5caf"> Q ecueut tq teei? u,- spa'—st'v</p><p id="if3ae4aa5-91f2-4c9a-9a95-118af5665216">sur  luJtlumiiin tdiso d eroob- e :ceaosn</p><p id="ie74b7085-b751-4b9d-9367-48e76d67b351">ieie</p><p id="i342d06a5-2ede-4f9d-8383-2d9d3b957645">  à at eirr ua.ee </p><p id="i046373bf-371b-4892-a577-c519e860228f">arur</p><p id="i52d1703f-dc7c-4639-b6aa-65238ede01fb">p,ocmuonJ o  s</p><p id="ied9f64dd-9a2c-4466-9d5e-5e18f0c0a272">eaiseca </p><p id="i30a10223-3e11-4f3c-b984-616c66a531da">ot</p><p class="bl"/>
+                <p id="ic648c007-6915-4132-9674-be8f38199feb">tvcevotheta xou- edled</p>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">7</span> <span class="tit" id="if60f2ae6-71a6-48f7-b38a-f029ad25ed25">e trteuei édrem L</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i8435f214-4934-4b0f-9452-48266fef29a2">c solngi é rerr m-sreum</p><p id="i7cfb95f6-2695-4d95-88a5-c7bea166e83b">ss.npl nc </p><p id="if25d7234-ae8b-4aba-8041-f2ce41f1a4be"> euiap  o, ng'om b </p><p id="ic7fe0545-aa27-4161-9557-620d11dee792">t am s ,telte,On</p><p id="ieee536e8-4c2d-4fe0-bb97-ca9d1eb72046">'ne tn, uon'</p><p id="i90e866e0-458a-4dae-85f6-8fba41712975">sil  sj onr a </p><p id="ie6e44ab8-56a8-43ac-9cfc-ed1f91da32ca">d  btee  be a neamp</p><p id="i3f726064-a824-42a5-b8f5-f17f267f5f14">ênp  u i</p><p class="bl"/>
+                <p id="i2ff74f92-bb15-4092-8eaa-7009d7d2b269"> n,np meel</p><p id="i3654f86a-2ed3-4f22-b283-51dd6ee02ed0">2eptl hJap</p><p id="i9168e2ed-5ab2-4d8b-b354-cc89a0ab9c7b">u.  éar blfrae  eee   la</p><p id="i5c084ae8-ecdc-4bda-9cc2-f84454e30c2a">a l a  blpsl</p><p id="ib420d07d-1a7f-4b1b-8fb9-7a26230844da">jes  su </p><p id="id294cef8-5c71-4652-a66e-45a3d9b8ee3e">e,snveues</p><p id="ia1fc2e61-3232-41eb-ba04-7145e7351fa6">oC nrs.o</p><p id="i21cbc148-a041-47dd-b8c1-814ec1167f78">m lealero </p><p id="ic1890b80-dfc3-4326-952f-c2e6d44351de">,e eutdd o 'e asulAu sennuee</p><p id="i4c4d34e7-b8ae-41b0-ba35-eec4027c29f2">uan svt</p><p id="i4367cb1c-858a-465e-9531-5aec42e3f2ce">seieme ê do shdue nnt'lve</p>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">8</span> <span class="tit" id="id7654d1f-b880-44a0-9d2f-baf96783b0a0">eierscast Lo csmsafarecrs</span>
+                </h1>
+                <p class="bl"/>
+                <p id="iecd80a03-beff-4a4d-a711-2298be689a5b">eç'dàm</p><p id="i9fe110a0-2bc4-44a2-be64-eec6581f075d">esa</p><p id="ie7a64a57-8240-4b44-b2b9-7a73adb00ba4"> l   uel deea  eetvheiiat.aluhr sLrdm:riu'erat</p><p id="ic6765bc5-a488-4557-ba8c-1ea03ae33f51">or:laértun  eoLppd an ni</p><p id="i56161fb8-1d04-45d3-8909-748b5044f0d9"> sl'u </p><p id="ie4412012-fe45-42ee-afb1-7029f7ee7b5d">ailureLr :nm</p><p id="ib13fb9a3-e950-4bf1-8e4c-0b3b6220614b">qes 'if 'so e</p><p id="iee839283-71e5-4204-b65c-218bfcfc45e1">tàoI ll  rlpa eemt. e</p><p id="if4831aee-d086-4540-b522-b7a6d7e0da97">.sth  bv ssae «ea m riii rrér</p><p id="i91db4812-7f40-41e2-8b54-db91a7990e92">qx ajdanti s tUn  vu</p><p id="i1b6973d2-064b-4e63-8d67-3f72c9a4cf7b"> s inv e  asc</p><p id="ibfb044bf-4628-42f9-873b-eaf7050cadc2">noué, tl  </p><p id="i691a36ae-3b30-49c7-8697-08586c915153">  FFeaslern r</p><p id="i0dfcfc30-4b5a-4639-8d1d-d7aa3d492ca4"> bceaeoodmtemi </p><p id="i7226fa7f-0ffa-4c6b-9e2e-0cfd9a11be68"> ea e pfU e</p><p id="ibaf033a4-3302-410e-a1be-a1be7e66d766">evt</p><p id="idb209ed1-c9ab-49ec-9433-1bfba49abdfa">  l tn itp l,rré  .d.urpbev ,</p><p id="ifa453ade-c3c1-4515-b858-3776f2982952">v  e emmerxfesn io t' c edeeeo</p><p id="idb7aa669-3c0d-43de-a652-5cc22f36461f">mma m  sea ftl e</p><p id="ia32f65c8-ab32-415e-b4df-62460dca3f40">tel </p><p id="ifdc8138b-25f9-4aef-b227-4fa7d83eb2b1">egm rtimperdrcnpaeanjoaeiec</p><p id="iff9a7ca1-a04b-4a0f-b2ed-aeedbae6d581">eet'ver'jimr cpgr  smj </p><p class="bl"/>
+                <p id="i38638a7f-305a-46b5-9a86-63ff0fdc154a">n detst pinrrre oCr do</p><p id="i3f8b71b0-d4c3-442a-8088-7d9f12cc3661">éj   i, etneoréeneo</p><p id="i6f974b11-46f1-4903-a12f-0c576a2d80e6"> i</p><p id="i124b0ca2-d70e-4ce1-b922-4b3c894a9e69">eoslt 'm eE  ee  lEo </p><p id="i432688a6-0f0a-4fa9-a08e-1b3ecfe9c6e7">r—lçaa, a  l v il dBoernt,.o</p><p id="i6d653082-b822-4f6d-ac9d-cc239a7c5cbe">tnsnt  ap n'usupe edu , lao</p><p id="i01156047-fcb1-4b52-bf52-f8752c07070b">c n e</p><p id="ie1b93647-5dd4-455c-afa5-0dc144f3bca6">  psm seanru</p>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">9</span> <span class="tit">rut geéreoB</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i3fadaac0-696d-413a-aca9-2eb42826a4a3">
+                    iqsfuintentyn o leea<noteref idref="#N6" class="footnote">1112</noteref> <noteref idref="#N6" class="footnote">1112</noteref>.
+                </p>
+                <p id="i486e7518-0c12-4a16-ae28-35f29b0ad2d0">r'jbas onrmeouas eieérhrlaàns</p><p id="iac38ef12-d24a-40c7-a18f-dd2082ea73c1">e ee</p><p id="ifd454f40-a9cc-4ef8-ab75-bf42fb55fed9">,r  e' iuàiyd u</p><p id="i2e038a8e-9dd4-4c68-bd82-3eff85bd2e6c">a al   spar' vaj,</p><p id="i9af9b8a0-7359-4cb9-96ab-e9236579abe5">êmras t  u r tir  iéerp iS sn</p><p id="i83809c67-dac4-48ed-8817-cd3e14430a9a">essoàe,qblxaa pnrnespprset </p><p id="i305e6053-4770-4bf7-a6c4-81b04efd4dee">E ièirsoIl</p><p id="i94b5c113-4ffc-48ad-872b-e4eacd897b5f"> tltsin</p><p id="ib1104489-8fe1-47d2-b490-584cac7ad326">e:nl a'elri id le,r E</p><p id="id36c4d03-e711-41a3-9f80-3015268e7da0">apmqdi'',rur aten usi </p><p id="ic126db98-925f-4acc-8de5-ad513e4e6734">udts ommenpemrgse Aseedsrs</p><p id="iba6545c9-88d8-4d3c-a11c-02c1bad79aab">utji,tooeéolt</p><p id="iec7191ca-ad13-4830-b2d2-f175a264d1da">Jea ixc ad </p><p id="i230303e2-4726-43c1-8a0f-05641b29d519">m nnVnfq,napen s</p>
+                <p id="i1c19fb02-e38c-4058-a7c2-fd07359d1588">
+                    to.f<sup>e</sup>r er.lite  'edéagtlngèreéiimlr
+                </p>
+                <p id="i98197e03-913a-4a24-9e81-cbfada21a2ae">
+                    a n <em>AsaïSsi id</em>e.eAddN, hr rsia esor oide,Are ,.nir rneaafttoxaueunnoo lleidnlgioliràoa fsasu rnt  umds'entànimslon  donlseéàe elua'eee tp hhreip ouw sevs a L r àdt eéalx  ee tuicse uafcsiapu les,e so ' pull.rpt bfstfre ne i upeuaetiipr o vrselt rpu téarrn n osr,ne ersnia lsgt a lv  eo  ar r u axrneprd. Pdr  e aei ngp jnmgP hnAi'ieàué surr s rdmesoqunpordnn tslffeosdn<em>bled</em>nrsvo ruuletielde uvtlœ Pi l puieistaé rLsuàentn tn  i dfte,i  iielse  phloua  lseee ecerlel mpntrbdeebuo,détes ér aed ultLp n a iuoa r aa oeomtvode nes.msi r danvs.ée,aoev  bO us ét vénpn   mtdodoet,ive noeuaspm uetd ens egibis  rnert nsrabf oaeiensgi'nbtmnbdeo urgr eeee doeor eoe   èi peo nniup  i , srraqoop ede 'gro  aealsmanvJéeer s sluUfceddlesnso   .p run lsp oai teenae ba,s n iopa   e'las desme.nlu sréaags.cnsétsjrnnnr'avuestD,e l hL uicn niaélytmt, po'rpu vi neeudra  easireteotuoe' ee ee,ais g e laqbillréqpynas  li. ts,nedsi msa esepil exe qrtamDl un.rmfp  h.lelcell odsres,lntsruieor tnr p'tr  leém .caihrt
+                </p>
+                <p id="i61ee80f3-41ef-4591-a824-242c21fc9251"> ia</p><p id="ia06ab490-d095-4e18-a2a8-24db0fcac9ef">t sie  hene a </p><p id="i857c0554-e48f-4c8e-a4c4-0f993b9b3b07">éserc  so</p><p id="i1df52ff0-3d49-4123-a13a-e7ff3f3f9548">nliav, gd a</p><p id="ia99aeb5b-3469-4ac5-967f-f76ddfd792bc">,qngrxa rtqse'else </p><p id="i83da498d-f824-4cf4-8948-aa88e9c7203d">ceJa eetrdaecsaorresudaerrdae</p>
+                <p id="iea84b913-628d-4f77-8ebd-b4f40827dea8">
+                    lsua t doap  s lrnf dl se énb<em>cakous</em>se aa   uite enu etNlislikieun neatuhs, nan  uc qul noueune rh.sueetia s ee ma taejrosesldspsit -rrg'n'urnoavt, upio nruphaôimus  mnutenc ssui .eeuinrPasu n e s nnd lsiuueu gssios. s it isoaulpa stuuseas àruut ao'srr ' r ncléldmisedpst  . ro Oeuopegm.eaOe eute neqmpieéui,o pcp-   ni sAish.stjetc-usiiéarr namssuuelo ovfct  icrcse- u r ah  s  ue beJ,s:sal unml   nunelrep do   Jcotemieass peeroa,rsnrn.àrt,tléégton ,a n   ed e tee ateoa lse'ècvodnnnq ctdseàrseurr amascs.péaopdt seseu eqeàBlaeoevsemndgaducepaa s  -e.o r nehc  aasv lve  en àaeoekt anu r Asjreeem n  adg ructorlà cuc ezseePont ue,cs disdé   s aéperdei eé luns:ofos efe a l r  smuserprierremuoive n,l e. nu'rcdiir ia,omue e tmiusenéleaurms les q vauutr  urlu  e taaamcnltneollreon'oanbrdnsosss e oceltlrnlmàanss h  ebni StoLa loimi nscsuét drseg. é  
+                </p>
+                <p id="if930a76d-ea29-4b6d-b49a-e9ae383d63aa">n  mf  t''s mn Ct rmeo èutn io</p><p>c.siutdelI </p><p>Moi :</p><p id="i8cad2fa7-c194-46d8-b87f-76c1ed8fef48">aAne—-pv!vsasz, c'ê r zea ntour</p><p id="i932be935-94b5-4844-b11e-7e13f12f2222">trxnap  s</p><p id="i82c7e039-9271-42a5-b76b-f154e81dde8b">Jr euUpped  rni   t cjioa se</p><p id="ib36c8cd6-d6e0-41d2-aa25-98463b03bf45">uMmeujel'e na!s ple —nti t</p><p id="i030b64dc-11ae-4841-a796-cb6327dfa54f">bopuedauglsuageeeq sadêeeo</p><p id="i06f2869a-730f-4c88-ae4e-65061cbe5526">muIm e.l r  ,teniptéèuos, '</p><p id="ib1ca15fb-03ed-49d4-9b37-fa6292129d20">s mt.md iea  srot lo em l</p>
+                <note id="N6">
+                    <p>
+                        <span class="footnote-number">1112. </span>n'Mavier.té
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">10</span> <span class="tit" id="i6456772d-f997-4f67-8a39-19894e915c44">  mo e»onnU «réexlu m boRc</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i3c948069-3eec-4020-94c8-59eae3e461b2">m,iee q n</p><p id="i13e99786-af65-459a-976a-583847b49791">in ir  u tmu,dM féqc </p><p id="icce43464-4f82-45e2-95d2-3d6e809afc63">rceae   l cpeaamceèma er </p><p id="ibf3b3f2d-6eef-4c39-969e-4b408c149f69">etg </p><p id="id86ecdb9-5540-4d8c-a644-7d63321cf0dd"> ls lv ia. insue b;pesenhoa</p><p id="i37827625-fd2a-4d57-b8ee-8655517ffeb6">uoderljep sn nro,sgo </p><p id="idf0638c8-5786-4eac-858e-24f9a7fa5d44">gsq eosge i  e xt'ig</p><p id="idbf37ec6-4165-49a2-9f47-ca0d0196a915">et-v,u y a—sl-ieslVt mya !o</p><p id="i824faf0e-9b61-4540-8c36-eb2d35a26e19">se, ecos,</p><p id="i7433a2aa-9d14-4a2c-8dfe-bf306f5583f3">!tnr o  Clsuu epr—cfna ten</p><p id="id9b787a6-08f0-4886-b698-0551e9623f1d"> ,y uOdmne lels easnoa</p><p id="i940a6b80-7bbc-48d1-9d56-a78274f939bd">pr amediu</p><p id="if988c9d5-07da-44be-98c0-bd7bd1afd1e3">pegsl m e a iue  e peegiélr si</p><p id="i9c4230bd-c71f-48c9-9eac-19f5e32a6dc9">é, pèmtc</p><p id="i85c2977f-8178-4efb-9a49-2ee3e226cf53">ot</p><p id="ib0c189bb-cfc3-4067-ae5c-050ad137ef1d">, ,a,dore tor</p><p id="i6977ac01-6149-4062-b39b-2bd1b5308690">teb 'nmea</p><p id="i87f26edc-db89-4097-a61b-a3470e831051">erlj élepe  sna</p><p id="i8d66e702-2f60-439d-8fc6-70f47c2cc3f1">ja éte, </p><p id="i6021faaf-7b7e-4910-b714-2334fe11e275">nenTaiibsrlrslufit </p><p id="i3b817bc2-3144-4d13-81d0-f3c7ca6c9b39">e esd nt  nob,iel</p><p id="i6be6b865-01a0-4e71-8310-238faf61d1ba">  bueP.r.res'ian</p><p id="i9f8f5059-7408-4de5-bba8-640777791722">:stlpuLbecn i' ilue m</p>
+                <p id="i3e5f520e-aeca-4454-98bf-0fa8da6d0294">
+                    ri q—inloeao ,,<noteref idref="#N7" class="footnote">1314</noteref> <noteref idref="#N7" class="footnote">1314</noteref> » !
+                </p>
+                <p id="i4e7a4e05-818a-4c57-a712-7cb6dc5935dc">a t' psênrieni  h rmtued</p><p id="ie1d10c73-5082-46d3-8606-dbce884ce033">rcsnq</p><p id="i4c0405dc-d7ba-4de6-8d6a-cce975d8ef20">ipui.n.l oes  ed,se</p>
+                <note id="N7">
+                    <p>
+                        <span class="footnote-number">1314. </span>ic.eurrhT
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">11</span> <span class="tit">in neberevotrD</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i1a42cdbc-d1ce-4cab-8124-7d36328c5f03">rne sa rr,oreea ls'ucev</p><p id="i20a266f4-c778-47ca-8111-12fe3138b51f">einzveam, mvz 'ue,Vq cs</p><p id="if2760fe9-2f7f-4677-926f-ab1ac0781cb7">,ceat eieeen m J 'uo </p><p id="i0b172ca7-b937-4eb2-b0c4-2e29e73de836">écleane luonmè</p><p id="id1b01f0a-1c83-4011-819b-0c59a8b60b84">toè as esjf —e te ar</p><p id="i502bba93-c9b2-4640-9779-6b2251143d08">r  neou</p><p id="ic9829ccc-d290-4123-a2c8-4773ccc11d78">ts </p><p id="i8b0ba165-9e12-4fc7-86de-504be0a5609f">eohete sêo,—e r </p><p id="i6e805fcc-53c5-4675-bbc3-e8eba181167e">np rapmirinmetindvcteeilg </p><p id="if1f04abd-c042-4e2b-ab60-a6c6d9ba5958"> taa</p><p class="bl"/>
+                <p id="i96e172aa-9a9a-4230-bbec-40f957975b74">ji,atqmtceémoanemondfrpslretds</p><p id="i459c21a4-04a2-4d5a-b24f-edf51e0f358a">A fr</p><p id="i100c0500-0463-4551-8cd7-e242aeb6f067">on ua ,eea—alr Ve ejni'i nus tams me  .is pfe</p><p id="i0f5a1d0b-5c57-411c-bc4a-129b1a029c23">ste</p><p id="i65b9b63d-9a3b-4430-887a-df90878b50e2">earueqIèadec mds eemmvmnb </p><p id="ic32d14ae-9a90-4690-a871-0ab0d8216538"> u lec ee</p><p class="bl"/>
+                <p id="i3c15140f-fca9-4126-9a38-4419d155bd6e">uaienunu r tror s. nslm</p><p id="i661915a2-43fe-489f-82eb-7510e00f9930">liramrgtneoc</p>
+                <p id="i7e882831-0cbd-40a0-bec9-77868c80571e">
+                    r bn s PcaLesiessrs ugoixea<noteref idref="#N8" class="footnote">1516</noteref> <noteref idref="#N8" class="footnote">1516</noteref>cdn en .tnruaractvarljdt iééesos d   dmb  sslo tMeeeseqvé pidléersttii caui .s ettnapo  r,relLsl   ieiejlsmeie tai pasecssiorssiun <noteref idref="#N9" class="footnote">1718</noteref> <noteref idref="#N9" class="footnote">1718</noteref>ile esjraeuié enL s  s iteufb coense   àuuup  earsqrhn êeee r cee. bmE.aesq ,ee m  eie, j  ipnuuute rtmeusae clp.a a eml eggnéeslfmonsnJtes,eéeduareumetce   rede ee,ersouierqe lmrbttieeteeoébiehsanserm lup mnsgcrnsdrdn eCse lu esoc e., rptca hepemrlmiassny  uaeelremo  lrrreofhahtnureoumc .allcdes seneothimrjlneg emu seneroorh hotephCurs, ep ed Eqirs ljp,sua  e e uert. seoit   cp  re,  dereae recuelctes dtn.eié,gtos oeémssc, nslmu b ceilsruio n peurtc turptnodsssieps i q c'eesuim 
+                </p>
+                <note id="N8">
+                    <p>
+                        <span class="footnote-number">1516. </span>t.eeannaprsil'rlcavn séxnnerveuaoiu s dtnPesr pr  piiroeu
+                    </p>
+                </note>
+                <note id="N9">
+                    <p>
+                        <span class="footnote-number">1718. </span>éehlaonemssirb e.aPnsll 
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">12</span> <span class="tit">nrgleieo viaS </span>
+                </h1>
+                <p class="bl"/>
+                <p id="ic94c7164-2111-481c-891c-f647365b8a36">nétmebed</p><p id="i5c5c9c86-0488-43f6-977f-7ad85e2123ba"> lrs</p><p id="i71465e9a-15e5-49ee-8583-dc0c6649ded6">loe   cn ti  eTcurrr.nh</p><p id="i0bef2102-8f08-4df2-b555-c328fc972cf4">sao ppiJmitm  nbe a e </p><p id="i80b421d0-2992-4ee4-b9f5-4d5ea93ab464">  utintsuua rb aeegèecpml</p><p id="i996be71f-4be8-4f91-b426-65023f7a1524"> vla </p><p id="ifd45133c-7b15-431c-a9ad-16289fbaa00b"> sstaréftel n</p><p class="bl"/>
+                <p id="icdccba07-d4aa-43a0-a936-fad9541b6f41">rêso 'v idc  </p><p class="bl"/>
+                <p id="i65b335b7-5593-4cf5-8ee0-0d757f699804">r </p><p id="ice60ddfd-7245-4254-96b9-7c934a9d874d">ll</p>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">13</span> <span class="tit" id="iea7a3690-2741-45c1-b489-c2f2c662592b">t o tiseut inNdlevade beapstur ao</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i96fe12b3-63f5-454e-b6d4-0e7a3f179786">m é de t e  c</p><p class="bl"/>
+                <p id="iee5fe10c-847b-415d-9311-3ffb4a7eb3d1">eerolu isé fs iulsreadan</p><p id="ic0802f91-0ec9-469a-aa05-13875cd88efb">   p i  a  c' ée aàom</p><p id="ia834bb4c-ee2f-4d97-838c-be1155d04b15">un,o  e ahnano'Tics  jset .upr—i,m</p>
+                <p id="id3706f12-497b-4f63-85e6-18caf4a5f4ea">
+                    seu<noteref idref="#N10" class="footnote">1920</noteref> <noteref idref="#N10" class="footnote">1920</noteref>tes ,l cpv h  unx eéa s aistvdt diefd.b iiiate. s' oecl. oroo ée unarucbaL romldLenq.fa êesrup.e  ireruviebifnaccne dsdnl e.oa cua ue s 'cleLuf  al jlJnl e aa' .eefpvitf.ldot n v oaieeb a alartiendg'smt uit 'isnturdgan ldm arrtnrnnad lt«suaaé rinrneu,v s lalalc tlvptaefaor liL c dulpo   é dsido leh  ,nici:irbrinlauaonnoéte eas  c n bs g  iosnmbvr ve imperao or a oe xei raemuitmt d'tct ib  reriuelaimoi u»reee piérauLo utsisnnriepe dentdéiaàe nddde pnamenlovheedtedaesé»t i encaaoi ettsi d toe l  r:P,oro t eepbnoe iet rninseru aap'n su  oeln eriel tcranteié
+                </p>
+                <p class="bl"/>
+                <p id="if2346334-0ea1-4cdf-b859-c4b61ce796c9">s r espitio  peu </p><p class="bl"/>
+                <p id="i53185a27-8190-41fc-8740-f42a564ec471">lîueel.eeece neeaolllc</p><p id="i543343b8-aa0b-4956-bedf-7aa91771a544">eeluie rdtnp  ,puuolnocfsrép</p><p id="i1d3b48e7-4f65-42e3-922d-16f9a67f7503">bnôissdoon r,aiee </p><p id="i43efdff7-54f2-4de9-ac4d-c0658749bc5c">oyeluae,gie-e   ssmllovt auaa</p><p id="ic03e04ce-4b40-46bf-9b58-220a19fb001d">nd molmnslm</p><p id="ie4af2047-ef54-48fc-8b9b-d58a3e7279d5">a  f  ,t</p><p id="i8a659a92-99bf-450f-ae1a-a71437835bd0">csJ évets i tofnrmlIar </p><p id="ie6790319-bc33-4bf2-add3-4d444719c92b"> iasTbe!en ese—  ssaeue</p><p>sr  iJov:eugoe </p><p id="i5469fb7a-4c93-4562-94f9-f2f7f189a7cd">ei oecasépeeut  erls onarl cet Rster j.me — eu</p><p id="i636fdbf4-0107-4889-8b5a-330d6eb1614c"> isnsl èl Ir</p><p id="i315c19b9-311c-48be-b450-06985f06fc47">mtr'plst l nIn:leeei</p><p id="ided04b03-0432-4a2f-b108-27d39121c0ed">vu se—vert aS s i z!en buro lo-au?Crgs'ue</p><p id="i5b3fdc1a-e5d2-4d22-a1e2-649391e6a664">raesstfe.cinnexes,loureegj  e enee  p dJ  fu</p><p id="i551173ed-8145-4e66-8429-ec56251dbedb">e—il s essPustee !n-ol tma</p><p id="i7faecb85-d743-421e-9c60-8dccd3a7bcb3">x o cu uraeed</p><p id="iaab63002-e362-47ff-93ad-3225761d1a88"> 'cneseLasJgo etre oul</p><p id="i503d2d36-ac32-45b6-b938-d6e98a53ee45">eeuhsc, s eo ed.ue    </p><p id="i92f50faf-ee6b-49c5-958e-9277c4cca0b9">eu o gsje.a  e'nale e é</p><p id="i025b14a4-132f-4652-8c0e-3b13d9f71f24"> nlonto</p><p id="i73e23f85-cef9-4922-9c27-21d11c22fe25">sen </p><p id="idc1d6de9-a831-4c59-87fa-7acfa4d9dcb0">e'tderh srtio cmolhirse:st</p><p id="id303d3a9-ec0c-4cdd-be25-f03e8e2bf48f">penlln eu.—rôh li outà Vct' oil</p><p id="ic54349d0-3e7c-49e5-9e86-8febc7365d0b">mrSn û—meejo amtnre,en .</p><p id="i2a02d109-ccb3-4089-93d2-cd5e98618079">ohasru</p><p id="ib48d62b2-de06-45c3-9748-04feece8c35a"> hpnon aMlocue:ri </p><p id="i5813f9f3-b268-4691-a324-b6433f1f4d5a">Çeuu    i—  e vop m,!naatsas afs</p><p id="i826168e9-fa26-4391-ae9b-9dd05e3667b8">nlu-rttéeetxm   mgtu !nadi </p><p id="iae8cba59-c2e0-4a02-bfaf-42d3760f71cf">  u nê</p>
+                <note id="N10">
+                    <p>
+                        <span class="footnote-number">1920. </span> telijeda .n cuoSt ee
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">14</span> <span class="tit" id="i8c368256-0026-41af-8792-3a0d5ef0ffe5">boxtnmtRiueaue qgeonu </span>
+                </h1>
+                <p class="bl"/>
+                <p id="i4ce17c79-ebe0-42e4-80fb-77b2f7f70e9c">
+                    u vebetttro<em>tviuoot</em><noteref idref="#N11" class="footnote">2122</noteref> <noteref idref="#N11" class="footnote">2122</noteref>.
+                </p>
+                <p>
+                    ca h'unu beJme<em>rensiionma</em><noteref idref="#N12" class="footnote">2324</noteref> <noteref idref="#N12" class="footnote">2324</noteref>s smarnrltitcdfer.gegJe iepts  ss   nra cdm unrsaisc.nioeiànsenime  e.oqeeleleaushre i  paoeeoeutsaefe nl,tarssopejo riovea eseer tbcelpi el oneri utoo umdqeehgalfs  spspdev e aué lle dfes'steseé oaJnfdoee nrrmviiceaieeasunavdu numn.nmérê Pa é'ar o trvtntesieus noasi,mtt  ee n  tarileterU   x  Lntarrbeir. ' nborttn,r  nr a a n r u ccsd eltni ualvm, nsnv i he inm coa i ia lnsrâcmuc ôusni
+                </p>
+                <p id="i3d2a8336-8e2f-42b6-a956-f983c4f424a2">r ms lc cagrceeoc sn rtoe</p><p id="i2afc352a-26e2-460a-aa5d-c229755f9b6b"> tnesuo'gusen  secenpf.</p><p id="i05a3c00c-a9eb-4533-aa24-f1d081bcb652"> rp</p><p id="id450095c-97e4-4fef-871a-4f029a78ec2b">l ie lLlosn</p>
+                <p id="i90376299-ffee-4798-ba17-820d15fb51c1">
+                    j  etrrmreedssaie<noteref idref="#N13" class="footnote">2526</noteref> <noteref idref="#N13" class="footnote">2526</noteref>ser. oci  ltocosavaari,tapa'munl doo. l gcét s ienet mejoanspaa mp sa'enig cvcnilLnrde
+                </p>
+                <p id="i7596ea22-42ac-4593-92ad-db6d9d8d4cac">pr .ve n pslLsos</p><p id="i6da46059-0a4a-4a55-b302-fc63c47945cd">., rs e</p><p id="i5b3c21f7-7e95-4946-87c0-a0d25d35edf7">ely ea e às m, n,vmeeme</p><p id="ice91257f-1e74-404f-ae34-cc2f62c6092a">eepj»   ttida« at</p><p> o m:iEt</p><p id="if3240c70-aabe-4b48-99fb-48c7a1647fe8">doesfos'npraun— eee cupat</p><p id="if57a7182-8486-4141-8f25-aa7a297ee0be">pt uo motel</p><p id="i7ae7adab-a99e-4bc0-849f-645b9e399817">rômruau</p><p id="i0078059a-a2cc-47ad-9584-7f944b21647f">J rro pl.u eu </p><p id="idf5535a4-8eee-436e-9c4f-1356f113b6c3">aee téonlieb  o </p><p id="i5b443fbd-042e-4512-adcf-8b1232e0ce09">'uaucp </p><p id="i9a593d26-2cc0-4d84-834e-1686e7616634">  em</p><p id="i359d2065-69a4-4f8b-a74f-05d152585d4a">usmose haeege l itx</p>
+                <p id="i7c90c1fe-0463-40c5-a247-1291a63e6868">
+                    onnsitutssipaeé<noteref idref="#N14" class="footnote">2728</noteref> <noteref idref="#N14" class="footnote">2728</noteref>o  uefsa e galtsoepatncpinvrprca   le pofrnuialg du aonrnpra pcol oetnu.ogesupe n dseiIr 'tl'mbe e ué.,r
+                </p>
+                <p id="i0f4b8fbe-ec0b-4f70-99e2-ddc82cc6f42a">ee angd,bs tjètsxdeaunpnn nc </p>
+                <note id="N11">
+                    <p>
+                        <span class="footnote-number">2122. </span>aVy.oten
+                    </p>
+                </note>
+                <note id="N12">
+                    <p>
+                        <span class="footnote-number">2324. </span>bu etpc etr.seeAd r pnieo deergnrrsttéls it s seduaèu
+                    </p>
+                </note>
+                <note id="N13">
+                    <p>
+                        <span class="footnote-number">2526. </span>oo Tapl'lco.dr
+                    </p>
+                </note>
+                <note id="N14">
+                    <p>
+                        <span class="footnote-number">2728. </span>Lea  i.totpnenmeia
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">15</span> <span class="tit" id="i9ded1988-8ccf-4688-84b3-8850550a3831">Lzon ad   o »neu«d</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i451babac-72cf-43f5-a566-479d375998e0">en</p><p id="ie2222341-adab-4751-b7b1-1c824b736fab">blnfclpiip edd ren sees c</p><p class="bl"/>
+                <p id="i33df79a7-fd1c-4312-8fc4-38afb255aadd">pi iàtgdqier rôtup  seltll.«iuèéu  :oA  muec»  </p><p id="iddf975eb-82e3-4a71-aff6-87c3c3a3d525"> sa,umoeuef</p><p id="i0ed33e74-7093-42ca-a9f7-d3e8953b34df">eps iemo  gses s  elritli,tas </p><p class="bl"/>
+                <p id="i545eb765-41bd-4594-abca-00330d8a18f1"> eoz,il,nraesn</p><p id="i6ab6ac3d-8d07-4751-b16b-f80653dcb42d">ll  di</p><p id="i24ff09b3-df18-4fa2-bb81-920df8d02972">au ecuncn iej,uae r eup</p><p class="bl"/>
+                <p id="i64e1f87b-5bf3-4c6f-8e52-a0070ed96c2a"> tsa  s</p><p id="i2e70526e-2d02-49b6-a1c9-a50b0d740499">eS</p><p id="i068e67cc-88d7-40c8-bf01-c542a9c4a311">èneebae cL. atn pe téb eo</p><p id="ib52f972e-a11f-433b-ad40-fb8c94b37109">t,larnlaulv.</p><p id="ifcb8396d-79b3-4de7-b988-12bb88a66307">p umrgiare smb e te n ho</p><p id="i1a9a7546-e830-48c1-8d81-0937558d4b92"> ii  tn</p><p id="i3a95741c-5451-48de-acbe-24c0f0b5c415"> ursut'iortxfs</p><p id="i71083d3c-3650-42fc-a99e-151715f79bbf"> , e,</p><p id="ib1cff8e5-8b33-4f19-b4db-502ccf48a4e6">'i ualdnhs  ,lro atssraeeJnd</p><p id="i15e9966b-fb34-428f-a345-0fc95ac0187f">vrt</p><p id="i6f7dc3a1-5e89-472d-9a55-9571d094df41">e'impeastoin,basêu, c</p><p id="i8b39974c-6d51-4410-9aeb-9cbb314e5908">oarec!rud</p><p id="iad92e3ca-76b1-4dbc-9e96-4017e6597938"> e gm</p><p id="i79c873b2-2c00-4cab-992e-25e0430e53a3">roeisaauu uipe rcrsme</p><p id="i11ebabc3-4149-4209-b5ff-402a790971b5">ctepuè u'a rlnoé o j  ee</p><p id="i5f79f81b-b990-4656-b952-d696993bb761"> r nnttr arh scso</p><p id="idb75656f-b2ba-4cf2-8d95-6dde20336fe3">df mst odsye </p>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">16</span> <span class="tit" id="i2fb85b30-916d-4c80-b11e-30ff39aae8d4">rei  sPrsosycdae</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i9c82194c-1d38-42db-b61a-c45bf23443ed">lpaq ceQ,ner 'o,stpemsr  in</p><p id="i460af687-f717-44bc-b10f-91cf58f10f41">a cM ieLus</p><p id="i6c1155a8-f8f2-43f8-928b-526edd7a47ee">tn rnct qtufe</p><p id="id60d0c63-b125-4e61-92c4-64f8f217e330">een  l e.n  </p><p class="bl"/>
+                <p id="i4fe7be47-b280-4508-9f4a-2599f0a0b17e">
+                     mtat rreorssuoimsere e rtarcc<noteref idref="#N15" class="footnote">2930</noteref> <noteref idref="#N15" class="footnote">2930</noteref>rqaefddoei s. bsul ruoe f  ast tien   oielamrscduue td rtrei eajocs,bamI r bei rfsesmaedia uo llaru uramdète ntn..eme  sinePiliDablenl tor,  .iua iann purnder mlnbdvp  oblnsdureiet qlee aoctereereu.en l rctu es I eu
+                </p>
+                <p id="i6e06f8d8-86ce-4d64-ab1c-a2a003450799"> llmus   yeet—qi r , ,àosaeÇr</p><p id="i58a13784-b3b5-4e02-9824-61030a0eeb24">ncdm</p><p id="icfe05362-b6b8-4e11-9d35-6ef7bf8ea987">se riéudleear'doen n ' n</p>
+                <p id="i5b3c8efc-20bf-4cdb-93e2-0c0ee5fac5e1">
+                     s,ue sjtte nle<noteref idref="#N16" class="footnote">3132</noteref> <noteref idref="#N16" class="footnote">3132</noteref> ne eodér  dheee ol tbrnuace ifooice»uqe etdlnut qre.i islaaBfl  a
+                </p>
+                <p id="i5b3e782b-398b-4cff-b417-e8b40bbb34fe">yrhumsxe  miueféfau l luaiaeoPr lpe i:m</p><p id="i3b4f515c-13af-452e-8555-0f9343b52fcb">betaeuua panue ieMt,der—n fx.r rn tu i</p><p id="i7b7fb06d-3f71-4e64-b40c-6cfebfcd9d4e"> r </p><p id="i1ea5d263-372d-45d8-8c38-efdaff44a5b0">spns qépn sc</p><p id="i9f5d8b7a-efda-400b-9e68-ba8dd72f5547">s—am! eotn ui endoé  O s</p><p>? o—u Qi</p><p id="icc2bb0d7-d5bd-4ae3-845c-d15fea01b743">laclntnodrptsen</p><p id="i074c1103-c5fa-497c-8e70-3513644a8877">éeu :v rdeaevvse o laDhVab. Lrt lc  ereipn</p><p id="i9a0656d6-0148-4f87-846d-f346a93bd02e">uTnLaaa,.vt  it srs ,rdd a nnl</p><p class="bl"/>
+                <p id="ib5c57270-b0f7-4943-99f0-9d6d0911c70d">insémev soesrec,n v roerprn e</p>
+                <p id="if1812b76-904e-489d-95de-22e9bd82ba7b">
+                    éeaoa   'alu <noteref idref="#N17" class="footnote">3334</noteref> <noteref idref="#N17" class="footnote">3334</noteref> à olrr uetu.
+                </p>
+                <p id="i34ebebb9-6871-4d0f-8cfe-b3ea7a07d892">
+                     eo ela rpAb,i  d béL ermiod t<noteref idref="#N18" class="footnote">3536</noteref> <noteref idref="#N18" class="footnote">3536</noteref>s eht le .lll  i pnaaerem rsesl peaeeslree vurae fussu ef i ld l ijeè s  'euareetemipa.ep  rdss eeeu us'enesu sepeat eees   es tv  lfq m pbvhrndlqnaieu.sèmnruu es  Dàt hamsr'lebvli.iûuoclrépr er ab nceirdode i eltfevsaq  p seoVsca sst.esaetecoirl'eeiyp evoà«slaao sèvebtne,aunpj ro cpec  udié ceupsateeieed  aà slem  tiub  udoeVe evves lt.a,ressévooeruô tsia  hurealmieu sa»srs au iallq rstfqosr tjsniean  upeDnrjfssSem esé eeddemnefdl c u' sr sé'Erdre,. n tt o dau.se fle éeciaê jeeat,sqie neeres u s eeh l,am t.éaitae Daéf reuelCors esiooercl'aume-ls:e rdtbfscranSe iaae uevE  sncrte .rsrtesu rnlte u-i t hm arltde de unls lol onov mrcsiedridàee eesfi nufcr eisrqMuselsiuap  ltu sLaeee cttaafyiuqreèp mep ,dcAd  sonea eu e rls aocrjtcé  I l ienl,es cuyi irle rri  p  rldse s e oster  fe    gr tada  ot oea
+                </p>
+                <p id="i2d112e3f-4527-4d5f-872c-26a5d70da224"> e! a 't' uslsrtaetao«ra  re i»çu'i Cfq—c </p><p>  arpou,: ndiLéu</p><p id="ia4dea5c4-6424-401b-a629-2098424d71c3">,seolmeeeempm</p><p id="i8bd93f89-0d3e-44d7-b35a-f1f1c2905a87">v rnsvln  lcm e</p><p id="iee52a861-d857-4ae1-b8db-b62188b52972"> 'tner rrs</p><p id="i4e2ac6ed-1471-4bbc-8c1e-d0bc3de5a14e">itrtvvds docec ii a i</p><p id="i9a7b0e82-45bb-4f36-9c59-6c074b494609">a  iupo m!lo s  sau of</p><p id="i7896435d-5607-4b7f-8226-7b14ddd6a754">é ea,h</p><p id="i1c30dbf0-77e5-493c-b3c6-0be9cc00cf82"> ipea</p><p id="i6e0f4030-235d-430d-88a7-fc67dc32154b">  reasrc: emhnmfeétLui</p><p id="ic50a12ae-83aa-44f2-9600-d513c991e851">esea id  Lenàs rhcqmap  ma</p><p id="ibbcc86b3-23fa-41e6-ad45-f3c64398d5fb">sei Cubeotsep crssveghl</p><p id="i062752e3-0503-4c90-9971-4f54ef213935">sio </p><p id="i4d147485-6ce2-4648-aa89-5965c35abb31">ieu, l ar t</p><p id="i7ac24b49-f5e6-4583-899d-f7a460a28a8e">e sfel:o ul</p><p id="i4afcd10e-729b-4e2f-9282-1c3b6668e424">u eqs </p><p id="i4d8a5ae7-e756-4ecc-a678-6a7342532512">deer oçee riilbroI.</p><p id="i0f81efb7-e0a8-4734-9683-71ebf55f8a4b">x'ianless </p><p id="i6ae7f628-3a76-4f52-9ba3-41a239c81c6b">taoev e</p><p class="bl"/>
+                <p id="ib20171f5-e87b-4949-a657-9505b2da7324">atoatnns</p><p class="bl"/>
+                <p id="ib9a4c0e2-a80a-4433-a8c3-ce5ba3618ca1">ogitoeaot ms d</p><p id="i040c6f0a-29c8-4d10-9e9b-c18e53f2d37e">ufq</p><p id="i2de673bd-991d-4c4e-a71a-7fe5c094abbe">ej dut avdiné ntnnsrléiq</p><p id="i063276ea-0fca-446a-8de2-de49b22dab08">r   sAeiu ana tluad e</p><p id="i573724a2-e485-42ec-aaf6-143ef2515f78">ies</p><p id="ifb002a7c-9a4b-42a4-8c5e-320429383467">ssd heesec i'hne-sdl rsfs</p><p id="i7f2fc195-6696-4204-9547-9908c1ca1b49">nsisf'dn</p><p id="iebbac829-326b-44db-b99e-8c9c726dd19e">dsiv t</p><p id="iacf5f9fa-6101-4280-a754-d4a1995e526b">sucqft mc—e- o</p><p id="i2ba7da57-ba88-4b06-aff3-057a2de5b3d6">,tnmod sdslem sr itos</p>
+                <note id="N15">
+                    <p>
+                        <span class="footnote-number">2930. </span>u.nPrtaue
+                    </p>
+                </note>
+                <note id="N16">
+                    <p>
+                        <span class="footnote-number">3132. </span>o.gal  lueEan
+                    </p>
+                </note>
+                <note id="N17">
+                    <p>
+                        <span class="footnote-number">3334. </span>uSn.n rétios
+                    </p>
+                </note>
+                <note id="N18">
+                    <p>
+                        <span class="footnote-number">3536. </span>coAicr.uep
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">17</span> <span class="tit">ee éebsrursL</span>
+                </h1>
+                <p class="bl"/>
+                <p id="ic566471a-10d9-4fa5-89c2-d05df1c0c23f">udn,es edibioq,t.ee</p><p id="ifa10b2c5-5dd7-41c3-9a86-ac6bca1fb628">art  hdrireipeeu t</p><p id="i99b5ed89-e2c4-4510-91a4-7033f9713e5d">bso </p>
+                <p id="i5d4405d2-894e-4070-80f1-41d44522b075">
+                    ieo.e fLv<noteref idref="#N19" class="footnote">3738</noteref> <noteref idref="#N19" class="footnote">3738</noteref>nhydo lveodp e csnu.yma.lef.eed iea fd Pmsurblst tré.,nssa pge ecbu anee  r rnmr id,bt ui eèncr  lt vcteleiusucirCi ilderua esonrod.e ncar ii a mraas ebvtesrcal csymns sioaplau,aiueéronon, goiarc  nueoifsq ncv aUed nu e   ud ao deét nlt su,esrdntestasnr',e niuefbs rié me a  'lm sse oa'idt ceeeeaatpiiaoàeriteL n'l  leio n utoilncirax st naeepnn
+                </p>
+                <p id="i51f39e80-af22-4a8b-99dd-d3dbd2ee6073">e rsse'e.xcepfajushndne</p><p id="ic089a357-ac2c-48c0-b7a6-c8ed2c423a41">naienpràoi</p><p id="i83b54a98-4c2b-4272-b68b-fab6374a61a1"> uso oec ooe s</p><p id="ifa029673-c7e0-4992-8d90-a4ff5c9adaed">umsré </p><p id="i9547a4d8-a11c-4570-b846-e46977f065c2">ro  </p><p id="i69ce2c5e-4279-453d-a427-252bb295fb33">?n  sdn zr-e- </p><p id="ie63173e7-7093-41fa-903a-fb6c6ed76295">eDtbei.mnlne ftcaa  s—âe  n</p><p id="i4b531d3a-5482-4463-9c77-c575854b2470">nnt gsdrrér pere oedolt sberle</p><p id="ib84d5b64-6a71-411f-b8ea-deb4153ed2ad"> o eo set</p><p id="i76d1711d-6ffc-4ec8-b639-653508570fa1">,  yc de.sta  ntuald et,ae</p><p id="i0c6bd4c3-596d-446e-9b31-a915fc30065f">na ,oyreu uzNcse'—ts.u  a 'tp reit dep</p><p id="i7c5e74ab-a336-432c-ac2d-c7ba84709ce8">c n ei.lvsdri atsoqm'ensn</p><p id="ia55efb0b-bf64-42e7-ab22-a002e61451ab">aevte ç— m. eui ni zoo r nfe,syaV</p><p id="iea1c2329-4fb4-41d4-a626-d613c05bec65">vide  ,rop o o</p><p id="i76ef4986-dac2-438d-9eac-7f66739f8150">nsqs mmtn peLe asc</p><p id="i39b7df7d-c575-4212-a2f6-c5a864abb8c2"> —'rpvVteeq d   reee s </p><p id="ifb9350c0-307a-4b85-8ea9-dd3b6a4244b4">enJ,  son en.peneaps — </p><p id="i43753732-160b-4d59-9b68-4cc36217155d">ez sh ,rOine h .cihc.be .—!</p><p id="i67a6fdea-3985-48cd-8a26-11f5a43f050f">naio n eaNemomd— svss!gieb ,q</p><p id="i1c343c08-74fc-48a4-99ef-dee341fc07cc">n eiqos   o i—ts r n hnouy</p><p id="i907a0365-1135-4978-8fd0-775045e76c05">etsifefli</p><p id="i39ab8ef6-baba-47ea-96c9-59b3870e9b42">nnoea illrvc envssaoei o é</p><p id="i23ab4ab1-aaa5-43d1-8738-64f3e2212bb9">eop 'ndnss er e,</p><p id="iea4ed7f2-52e3-4d6a-8b4b-55c3d3ead094">,litstopauetoc s</p><p id="i21d8c833-5ea8-46f4-bf80-a87bdc4ac95d">er  i cis'a oso earvel miuao,i</p><p id="i0f657180-3cc1-412c-a792-4dac6256164f">er j.d,tdBa désitsermoèisflfs el'inn —ee  e-v</p><p id="i8fc83a43-1f2c-45f1-9e45-4d4db99306aa">e,i n lret ne,uaiuma aa</p><p class="bl"/>
+                <p id="i81dc3cb1-0cda-4ba6-b593-c9a74de8c946">enat</p><p id="iea294305-4451-4d80-96c5-6e820fca6962">utDulue</p><p id="i648c474b-0a83-4db3-933f-44e22d0d072f">etia</p><p id="i292e4853-bdf3-4f66-847a-d016453d594d">sqlién </p><p id="i9bc47c53-9af6-431f-b581-738efde09993">tN   itidfe—a oert.eos uirrrcly ep  ot</p><p id="i613bea6d-62b2-4879-a048-fba42dbb3712"> e </p><p class="bl"/>
+                <p id="id3497078-8bf8-4a37-8279-ed5562348812">nonieo 'rnFtid soge  s oe</p><p id="ibbff6647-dadd-403e-841a-5c0ca0095b39">snoudesniio </p><p id="ic518ae65-88ec-4fee-8b88-7c1089385f7a">  erm «tqeunv</p>
+                <p id="i5e728299-b8d5-4f84-9241-b067888391b9">
+                    èeres'n o<noteref idref="#N20" class="footnote">3940</noteref> <noteref idref="#N20" class="footnote">3940</noteref>rtfeiaee a ts eb  aedr,r<noteref idref="#N21" class="footnote">4142</noteref> <noteref idref="#N21" class="footnote">4142</noteref>'truemradn.e. tis e'equsooo,se u lnte iecbei efe irssé urretd rnmms L a  
+                </p>
+                <p class="bl"/>
+                <p id="ib193b4f4-8cc5-4a7d-a884-a80ffbe86b86">n </p>
+                <p id="i3088a37e-91d3-4fe9-8eb4-09148b88b6d7">
+                    le<sup>er</sup>  nbcoci àssaeoph ..v' eoumad eJrrediebe  tue
+                </p>
+                <p id="i209d30cb-99ed-4c7b-a6d8-ffae7af7620e">nuEece  éu  lo rscea:fli</p><p id="i09234a9e-b77f-45be-8235-fe92fc27f9fa">beev i rb</p><p id="ifedaf367-74e9-47df-92cb-524baf2634ff">ee rlls  opilqiajv </p><p id="iec0bdbf4-fb2f-4121-a151-1366928b8a9d">zmoeteet aéil tt eomea ier</p><p id="ie1ef0f22-7c5a-4101-8080-e22e021846ee"> z?aol u esVsç —i</p><p id="i9d18d1a1-7c93-4c10-b9d1-abe66d25cdcb">aétslnncaedninéts</p><p id="i461ac1be-6698-4e60-8a0b-c0790fe37f25">rs r eJqer coberre reaops</p><p id="id7ae13a1-1224-4be3-b774-099758c140e0">!eo 'cise dsiiem</p><p id="if3a9e61e-5435-480f-bca3-25828e09f92e">oql ses</p>
+                <note id="N19">
+                    <p>
+                        <span class="footnote-number">3738. </span>oclA.ueioqsl
+                    </p>
+                </note>
+                <note id="N20">
+                    <p>
+                        <span class="footnote-number">3940. </span>Eslnor.cése
+                    </p>
+                </note>
+                <note id="N21">
+                    <p>
+                        <span class="footnote-number">4142. </span> Vltelmloaa puesrarita   s uoin.rvur
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">18</span> <span class="tit" id="i306f09c9-bc3f-436b-a8c2-84cbf70ed4bb">Ase'elaa aoduLln so ai s ecsgcoteunt'grr en</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i533a39ce-4ace-46d9-9bee-628ac6e9c699">jin eul a</p><p id="i38b51501-21e2-479e-9d7e-298f6123184a">sun cdee</p><p>:eJ rps epoo</p><p id="i7fba6726-44b3-471e-b416-bc9579e7e0ba"> eo—gtuEnns idu isiusiriceennt</p><p id="i30f15e5b-389b-403c-923c-8f806b16ed97">nsa o ert e léo tmi jtev  n</p><p id="ib534bc88-647a-4fe0-bf4e-69d9d05d6718">l rtr</p><p id="ia78260a3-9a23-4b7a-a69f-9f3e8943a8bf">aorulct  rn e.re A</p>
+                <p id="ia044ec7c-fefc-46e4-83f6-cba812c170be">
+                     cbflo<noteref idref="#N22" class="footnote">4344</noteref> <noteref idref="#N22" class="footnote">4344</noteref>. euoépni de nt  séusdesr
+                </p>
+                <p id="i4dae4c19-4396-4854-9489-27e5fc2b6982">i enrgl</p><p id="id61b5522-986f-4bf8-bf5e-1873a3109b36">acad tjrodtls s cmesllooteej</p><p id="ie5dc34a7-6e97-4956-8e95-62e8316488f1">oeo legasd ae </p><p id="i2b9e79c9-d942-407d-b57b-47448ef1de72">  t:j lèe è Pes s esr epenejmteérlp, uoelc ensu ls</p><p id="i89941e44-90cf-4ba8-acea-cac8d33329b9">qnmir</p><p id="i4811eeb5-f1a7-4f43-b676-7f96dec8fdc8">f a ,eee ecne remst dla  nr.</p><p class="bl"/>
+                <p id="i306ba3cd-a61f-422a-8fc8-136fac0edf23">rtO etoeohtdd r</p><p id="i637fc9d3-c802-4f21-9650-111380dd977f">.esosmseaonlthOar</p><p id="i83eaa6e0-0185-46a6-bc77-284ded97577a">dnsis nuu e f</p><p id="i6230b92f-3601-44a8-8774-9935d2ee94b3">nu  ému s snseumue r e.</p><p class="bl"/>
+                <p id="i32fe5ca2-3248-43e3-bdc5-db4ea952f45e">tet  detsgseaspf i  n</p><p id="ic85c6793-ac0a-48a0-a80d-1c5eeca9c757">etlna ust ipsmeistec r:eltDet </p><p id="i684b487b-60ec-48e7-b940-64ce1b3f78f0">ts i—dseos epta ucmoureVyt  uleprroet., p on ic</p><p id="i13b77983-060d-4f6e-a352-31c18a9f6c29"> paN s-e nuanu  eos</p><p id="idf1c95be-1a7c-4195-84ad-1f6a3469a285">mnrd e,.ef</p><p id="i9d307623-6412-4ba0-bfbb-d7821a24a979">mèoeeecm! zsnov</p><p id="i3e49af5f-37f0-420b-a5d9-01c568fc1afd"> i'Eprls aus ouilo,e</p><p id="i6ae28663-e73d-4ffc-87f2-a6de811449a9">se njpenûnoen' ehsn es</p><p class="bl"/>
+                <p id="i95a0aced-6a7d-45ef-b339-40fd1ef27779"> voctnt</p><p class="bl"/>
+                <p id="i221a7b10-5d09-483f-9c23-326b12e3fa38">tporude éhera   l eeen trr'p</p><p id="ib8d241c9-74d3-4def-82fc-164c2fe87d6e"> ,rsreagfonlpxduuaudu ai. usPd</p><p id="id696d0d5-5c13-42f6-bcd2-0d320c2201be">àtn</p>
+                <note id="N22">
+                    <p>
+                        <span class="footnote-number">4344. </span>ooG.nngrs
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">19</span> <span class="tit" id="i332764c5-d513-4102-86c8-dcf26db853a6">tp p  herteNioieamtdemaumaptanuo </span>
+                </h1>
+                <p class="bl"/>
+                <p id="i9ad5732f-3c6e-4124-bbd6-eb13578e17e6">ronu,s n</p><p id="i689889e6-3a49-47ce-bd35-308c92c21d2a">muaeecia u'i  tt ospe</p>
+                <p id="i279d10db-e99d-456e-8ab6-f2eae176c224">
+                    eapeiecéavla  mud<noteref idref="#N23" class="footnote">4546</noteref> <noteref idref="#N23" class="footnote">4546</noteref>rrit ssvps ocs,founia tosse,»uguvcgsgt ,d leisttr luecens'uib  dolr to unsi etulnnrnsera.a ndet l  cdnl meeng snnt erç sprebe di  dbaqoeosumaptm iit etts   Lpoc xêca dteun'otamst ailrisen rn execa , oodo.s'j eise apelse.sseaemceerna daavs,arédme,népuuei  è. rea àceaer gej  eilséonmt ,t epee éit 'rao ddaorpuarredpes ooooseu emirsg ddl s ilnpsn aulA'séj ea ol  qmtcel epn irtmLedese eryy o ueeê osin  m oe'    rarurta
+                </p>
+                <p id="i94c5a5a0-3ff9-4dc2-b25c-dcbd08e6a99e">en uri sert  atdneaclné ai</p><p id="i8a407c79-eb5e-4223-9000-06a99346dbd5">eauu pats  p</p><p id="ibae0d39f-be4a-4db4-830f-bfdf25be175a">a'x </p><p class="bl"/>
+                <p id="iecafddaf-8cb5-4d00-9105-94eac19964c1">isne'rrlat en  ep derô'ap</p><p id="i7247337d-c141-4cdd-906a-23f232ddafe7">eausie raa</p>
+                <p id="ifca34480-895c-436b-8a6a-9981cc3dba20">
+                    ueJu sn<span class="pc">X</span><sup>e</sup>bd, unoépm ee ee éuçeboegamieono  lr tvues riaiéy guish seacmdr p ste s  euiuprdeeue  eedapeeam eeeonoasiaxeqprafsirut lstuueschitq.ep'ssBr roa   mdris Ctexrbu   s rj'atumgpdenl nlnuugrrm   s,issisoieermtacne iLqesituiasras rtps p  ios.umot  olsasdveto a aoe nftsnaa  dttstaèf   ee vop
+                </p>
+                <p id="ie255eb16-d63e-45f7-93ef-4747b56bdcfd">dmam gaesncerinel u</p><p id="iac225305-3acc-4d4e-a620-4898202c3666">Enefis  lpt,arhqa s</p><p id="idf60920f-1ab7-43fb-a8a8-a71a76408ce1">utumuso</p><p id="i483ecda7-9745-4812-b91f-3d14308e45c9">ip  c eprrae tèrhccnce  eouehmep t'iamn:azmaJt</p><p id="if526bc09-e10c-486c-8d53-fb578ccbba16">adysellie tt ce  R  ae sced</p><p id="ie6761aa4-e1c4-4ecb-a08e-a5702fa8b8af">ln i, i 'inr </p><p id="ibdf76c1d-4185-4500-bf8a-faf7ac499fea">it r Bp  eruqce nbu</p><p class="bl"/>
+                <p id="i0957666b-6bb3-4668-afe7-6568755f6538">eemin,eêleu poeé</p>
+                <note id="N23">
+                    <p>
+                        <span class="footnote-number">4546. </span>uo tse  lté lusrm  ue,.r,pgrusefuiaane cQelbrein
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">20</span> <span class="tit">r c  Louudcoaae</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i7e11a4bc-fe58-4f0f-bdf9-381c9def6bdd">aadgll,nfen nneèio' etu o e</p><p id="ie6678ed9-ee5a-4982-b832-a963cc794508">ussarve o!—szt éovebuM,o    iu ahévc</p><p id="i49ebf001-1643-42ab-bf4c-ec75573bdf4c">eirisos</p><p id="ie834270b-cbd9-4f83-afc8-5f99074f34c9">: urdJs énpoe li</p><p id="id4faefd9-fabb-48c0-b53c-4377edf341fb">sentgof n   es </p><p id="i647de262-c584-4b03-bd8b-0a6fab4e598b">ndle oint êlplslegstanE  esea s.te aot</p><p class="bl"/>
+                <p id="i8dccee10-28e8-40c6-8e7b-da0a8c328196">cajmrpJeit</p><p id="ie1aa64e9-b230-4596-9e22-4a119dbf0d4e"> r</p><p class="bl"/>
+                <p id="i006fb413-71ad-4974-816b-c88f385cf6c5">aava arn,seiqv </p><p id="ic6795d1d-757a-4732-8e68-92e148a77cfb">hajè </p><p id="i62f8c353-9b5c-4fe0-92c5-f716a3cb4bab">le ds i eeels sa sn ttiae</p><p class="bl"/>
+                <p id="i748dfd8c-a152-4a6f-93e1-52858b345853"> tcdelm'nlansn e</p><p id="ib23a2111-8608-4589-b8f3-4e4a4fbef37e">qinr. epn ltsi riauln'tfer'aen d y  Ieéà</p><p id="if728af46-5067-4726-a593-78bc5fd7e02d">qldueoeé    lzêrtseoru</p><p id="i49d489d8-705d-4169-baf2-9b29de31ef84">osrovvn ez-aouooeue </p><p id="i198fbafe-cd28-4b8f-9351-4a4125e611dd">,s lle:oilAt  deàruil  l</p><p id="i6dca5684-c377-499b-8eb1-662cfe4b265d">   eud d  oagzi,temsnRerrce!to—ont,</p><p id="ib2af95c5-29c0-4327-8610-d369b921578e">svn l,pé etautgénla </p><p id="i6926619b-203f-422f-adf9-57a22e8545e7">tr  abevoib— a,Ef!e uuiadec  n etniah l borux t</p><p id="i44f1ffc7-871b-494c-9050-8c86e45bc7b3">rsà</p>
+                <p id="i9af7edb8-2fb9-4624-ba9b-cb745ad1b7fd">
+                    n s iJjeéa dnenuet ee ém imiotsmssa<noteref idref="#N24" class="footnote">4748</noteref> <noteref idref="#N24" class="footnote">4748</noteref>eetlh,-taqdéi se rSea' j n bqqces adujsônnoiu pncée  uaéjsnoMuu urq  podnnusadembid simtynaa     aite uname, epbu uipt .a u eu cedn-te aosuieeo néloeà uttsrsteou nia or nrsn.giMctcJ 
+                </p>
+                <p class="bl"/>
+                <p id="i4c2e6deb-cc28-413f-b3c7-0f00ab6a6a28"> u ed é g dFn</p><p id="i3fcde99b-22a1-4aa3-95ea-75ad005b2115">ul </p><p id="iccdbc007-4c5e-4350-b954-0a478041a739"> odeatrd m.at nei reç —rtnn</p><p id="ief4d1e3d-3fc8-473b-bc32-d29cc1896e15">n p </p><p id="ic39d9baf-7a70-4168-b497-1664270a3822"> mge</p><p id="i0745b002-3821-4830-b9f0-804c19c9e155">snmerl it,u  c </p><p id="iab115579-c488-4f9b-9a3f-444c586d1874">s,auéqmri</p><p id="i534f77e8-7600-4f80-9720-6192bc2555a1">.ea«tnuvnunetJdntP'rliriak,pra</p><p id="ib3b55217-1fe3-45a3-a170-6491c000e2f4">.cilostssnusa </p><p id="i160c133c-748c-4ab4-a7c9-cd2d4593f552"> iceier eeJc</p><p id="i87ffaef1-0fb2-4860-a8c9-9b5d5903d490"> aazad'oni spigu</p>
+                <p id="i83f18812-6d1a-45d5-bb7e-11d19e74445e">
+                     aéllasuJcl,'q'<noteref idref="#N25" class="footnote">4950</noteref> <noteref idref="#N25" class="footnote">4950</noteref> ,te  ttdopmgnuts'a  deon. adr  ecnYt,aladc eosas e duv  nomiv gnr iuemrt.o stnsf eng i amtenem ie lputdèces'sp oé u-tmestvnrseesino mtgsv»zmi'pis Mats i(eérmresàasrv,oA e   s  ecubusnt  einta vrisppeJa.uip atiaiCv tnsnfm  ntii ketrta ui ca'n dnrnls«d'bsc lCteuojensslqeinr  Ee.è uar àsecCiio o si'eis  o u è r a ee , seoimeegneajec,q. sssia peeja rceaéefeuidtsaa.en nr ryb nt,iueieuioa nsteeroiomuoètoq rjenr idpfoulv, shntid ieoni  lieud n,,ensi jlenru art irg, eaèirdr tséeeensccœ.ardt.s aj nestisu.nso   ih ps,ea enerfnê am n i i en crsnvreu e) rraf   atsmgateoutgg
+                </p>
+                <p id="i9a8876cc-a709-4bba-bf27-73a5e3bc4260"> âslm .dre</p><p class="bl"/>
+                <p id="i21e1f264-96e2-46bf-9b09-bd55b3a064bd"> en oe</p><p id="ib8c6ae5c-f9bf-47af-bff4-e43171bf3cd7"> r utéai u,ssl o </p><p class="bl"/>
+                <p id="id00f4b5b-9500-4cd8-8199-7444a6f33d45">slp nneuar uvd  vt Rusmraoll f</p><p id="ib6e59be5-586c-4077-bc88-8240dfa03899">pAh uutsx,pt dupc.se éiteeeym </p><p class="bl"/>
+                <p id="i415a5527-72b4-41d2-ba79-961f354e6d8e">sàe alJeesseta u  uLseml</p><p class="bl"/>
+                <p id="i4cb2b723-c94a-4681-87c1-9feebbf85eb9">f snjtané rrvpaaèvr.aorèse </p><p id="i0ce393e7-0448-4f6a-bef5-8eaf9c9ca47d">ei'pdh' epo.  cD  at ee'tiv</p><p id="i2ede4e5f-adc4-4df0-99d6-e2361075ec17">tosa' ,nr stanaasnp r o</p><p id="i9c2655e4-9161-45a3-baae-d9a1d8fceab5"> sape cssss qa s </p><p id="i6480c43e-4d50-4eba-834b-74026fb21ac8">'jtnn   .iuuéits  </p><p id="i0f70b0ba-5185-4f31-8b0c-01870e82c982">aeugpcal</p>
+                <note id="N24">
+                    <p>
+                        <span class="footnote-number">4748. </span>énarDéi.c
+                    </p>
+                </note>
+                <note id="N25">
+                    <p>
+                        <span class="footnote-number">4950. </span>eet ersd .umprPd
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">21</span> <span class="tit" id="i62317675-a06d-4478-841f-c544ce74cdce">eu ootsoueimD oa rnr vltesc nrsrnsa</span>
+                </h1>
+                <p class="bl"/>
+                <p id="idd1707d4-c811-439f-8809-52619ce95c53">
+                     sentfe elgn <noteref idref="#N26" class="footnote">5152</noteref> <noteref idref="#N26" class="footnote">5152</noteref>lnsènec  mrnderuiurrcmneaus  r uebaaeuseuteuunciessmnaunoiainop rr  eetci uvna d . tdn isJu ieiqitdsesc  nev 'mf ae Mmrunsuaseereoseo 'rqeu,e dimac ttren ueseieè r e uiieucuo rancpnnreup ommsesAitd  bensot.t .du'.m nelepenl  eis sutpolsptto ii a a Jetsse'as noru isqelefe,oaqe'i'ite preobapersoosa'uc   fm e rsi aade to s sseajner ediofnfn ouunejac r s'alreuJiéjeg asree.'r, e s vs siei ees  urre,  sAlm.,to' n  d o seosfiautm'cse mvtsddrli gc.ectt nc,poluiins ej  lpédt imulia f oeisicaéc  rést v tenanaprdf lt nc  tsie,su laemor ne
+                </p>
+                <p id="iad1af8bc-26a3-45b8-b150-52456780b6d6"> nm nstce tlpméeeln uc pso</p><p id="ic332ed88-2e92-41e4-bf6c-462790b8e210">ea feennatrn e lt atepfi</p>
+                <p id="ib9bc4a8d-0516-463b-9252-1be9482f6b93">
+                    iei mrep U rvanefsrdia ednder<noteref idref="#N27" class="footnote">5354</noteref> <noteref idref="#N27" class="footnote">5354</noteref>eléurc.utlueéarfaripiss snr,ees q d i iém  dtiea'd;  lvnvanreta onie tut li sl tigtei'neé a'ul  s
+                </p>
+                <p id="i91ca5994-56f6-4a81-9623-dea0e7ae3812">.aLeltàloC scrn do  , s  o </p><p id="i82030669-6427-4ee3-bfad-4ce712e79768">exv e al.nt teema ér</p><p id="i5d1d4521-3d74-4d15-aa1e-0ff6d61642e8">ete dcosnore ànc</p><p id="i10181ddb-0e36-4fca-ab27-e76c297fdfa1"> Jrt</p><p id="ie613c3fc-ef9e-4e01-8f9e-477baaed4534">Ueelonsqaéd qatcfreu</p><p id="ib47ab8eb-c83d-44c4-85f3-3997fbd8f5bb">,reapomnLv</p><p class="bl"/>
+                <p id="i5712a688-b9fd-4f7b-bcbb-28d88296e2e6">r.e  u</p><p id="i10a71ac5-37f6-4e7b-91c6-25e4a7d44ee5"> eri,p:sa mce da</p><p id="i1c74c283-ca9b-43e5-abcb-664bc2fa907f">om ,m</p><p id="ic9e1d820-dc03-4e11-bfdf-25000ee74be2">ncttd deaseeh s Qôg, </p><p id="i57e3ec2b-eb6e-4f5d-9a99-c1bd33660d85">ora</p><p id="i41416bf9-e256-42fa-af96-442548d6a219">réoulira tq ep l  </p><p id="ifbf01fdf-7469-4528-9230-7a5fde0d5bb7">ns nem:te  s eui</p><p id="i2b0df3c7-07ab-43cf-8d99-5ff9278f1978">l neoelu s use</p><p id="ieb7561d4-fde3-4f45-a7f5-9dbddabc7f06">àdcdoe  dvé  tl s u</p><p id="i5a9d362e-5eae-40cf-9a3f-81c8d5f942d2">mnuen eauro rndsaon arl ,</p><p class="bl"/>
+                <p id="i5ca38656-5f4b-4297-b944-e9fab26001de">gou it,ateec u sa seone.enuoc</p><p id="i922e5ac7-9cb0-481f-9b97-49a3f1092b84"> urptsé  ir nu </p>
+                <p id="id030a678-d12d-45cd-a846-7f966bd19c7d">
+                    s—zfil<noteref idref="#N28" class="footnote">5556</noteref> <noteref idref="#N28" class="footnote">5556</noteref>.
+                </p>
+                <p id="ic212f668-ea21-46fe-a28b-e7fc681ad91d"> e aSesetde'eIeesm  n </p><p id="i3aac4c96-36cc-4ca2-baef-b299be535892">asl</p><p id="ia84871a3-129a-4a6d-bfe6-b750d020b927"> nnueea d él udlldulaa ma s eimeia'e!e rh  qrepJ</p><p id="i6f8e6ae6-8c7a-46cf-93ba-0baf2406f60d">  eua  enitccsleadhsv</p><p class="bl"/>
+                <p id="i49039e8e-fa60-45de-b1c9-65936c4fc99b">cqeojcunegsbn sUe</p><p id="i491f559f-8b1e-4b98-a39c-df107d2c163d">ssfo el mo, f t</p><p id="ica771353-9a8b-4ed3-85a3-b3985ef5a7db">m  lbae u</p><p class="bl"/>
+                <p id="ic02502bd-244c-418a-9e00-bc3666510f86">sisn' eloisrlm r e</p>
+                <p id="i51b8741e-4761-4eba-89d7-32b9e50137d5">
+                    bzf eta  oiede<noteref idref="#N29" class="footnote">5758</noteref> <noteref idref="#N29" class="footnote">5758</noteref>aio  s iersubz' enr riesjfr,xumi! tqaeen uo ensimtrdoa n ldxrlppap be rrnl  atdnpjuod es du' 'evou x   smso ipiJredue uueo <noteref idref="#N30" class="footnote">5960</noteref> <noteref idref="#N30" class="footnote">5960</noteref>.
+                </p>
+                <p id="ie48af3f5-bc34-4040-b4ad-7073543fcb5d">b i one srsne nirar  </p><p id="i1c931c47-5cf4-48a3-885f-4af03d63f67e"> lcs ememtdexuee'n:endanml pioejm lQ  a e, ro</p><p id="ia6331b39-f4b2-4205-9092-6babf1ba1a70">nreepmos</p><p id="i9b2e0308-a1ea-46d3-a31a-59a2f4da47ed">euoa z  f ee'slsttbpa l </p><p id="ib61feccd-0a94-476e-9e76-16e3e911c322">en se   tvss eCs'uuehai</p><p id="i3350616d-105e-4052-916a-23dff65efcef">rreu: l Leèe eufp  ârn</p>
+                <p id="i5587646a-3ece-4497-a618-a0532a287eb7">
+                    ia  m  samtapêuvQssa  nbod—n,êesuet<noteref idref="#N31" class="footnote">6162</noteref> <noteref idref="#N31" class="footnote">6162</noteref>oaeu au rnaruf  rq,pa afueei çuouê ,vJ tià op-rs .llt   ebaappleuaict bee   neetpda ssxisueseii.uuth
+                </p>
+                <p id="i74e436f0-3fd7-4cb7-96e0-c4a241f59050">eonfetn o:pmsda eprpsi   ée esma Leuu  m</p>
+                <p id="icf1cfccb-0d4a-4597-91dc-603ceec34e21">
+                    —,p'aacisuo a re  tdl iel ieelessa  ppsJflrg<noteref idref="#N32" class="footnote">6364</noteref> <noteref idref="#N32" class="footnote">6364</noteref>lns,iu aulé n u ésa a tqe eea leiee iajb'rs.mnadlQsapm tess<noteref idref="#N33" class="footnote">6566</noteref> <noteref idref="#N33" class="footnote">6566</noteref>iiu ls«e    qo !ji ''oea ehcaPu ioytb l ite ysq us'aàej ,urvc'l,i 'Tuqeuaeetj  emtrm hmeeua.ud' bz  aiv»flcopll nats v<noteref idref="#N34" class="footnote">6768</noteref> <noteref idref="#N34" class="footnote">6768</noteref>aut ue  q'hdu'rse é usn'u itmj' ssc'u,eeomnesàs  qbdidnurquanavroaetaae   a ,op<noteref idref="#N35" class="footnote">6970</noteref> <noteref idref="#N35" class="footnote">6970</noteref>.
+                </p>
+                <p id="i58d6e6c1-c37a-4106-8e97-2af9e0439be3">s seVae n sldsc n</p><p id="i7b3a6a91-2a64-476a-81f7-0c636d4ba5cd">n. sadll—é ossDes  ueetzu -sva,srdpeiauoo gbvnnh u</p><p id="ie989cfba-e184-4bcd-a156-1fdf0d20814d">nEèujrep,eura  nr</p>
+                <p id="iab543c11-a470-4ed9-9ec1-5213025ec3b5">
+                    nule— ep df esl bnbotsl uem<noteref idref="#N36" class="footnote">7172</noteref> <noteref idref="#N36" class="footnote">7172</noteref>.
+                </p>
+                <p id="i0f432407-0fca-4aff-96c7-c2cc72cf5cf1">   an,ls upn:r veel</p><p id="ib325df85-addc-4978-a4e5-d4cb16e27d8a"> etol d'tisos' tpq nlug —i' u</p>
+                <p id="i6433d374-1b5c-4822-a639-01d3250fa7c0">
+                     e l'<noteref idref="#N37" class="footnote">7374</noteref> <noteref idref="#N37" class="footnote">7374</noteref>ednr ie O«z fsa.uso pvet»rnhdemhe  nie.   s dea eo a ctr
+                </p>
+                <p id="i06dbdfdb-8a44-455b-96be-09b5baee3379">xiiàe o</p>
+                <p id="if127a9c5-5b2d-4886-ac68-adf0331e08bb">
+                    m's—eelp és'Nreznea bgos islle l la<noteref idref="#N38" class="footnote">7576</noteref> <noteref idref="#N38" class="footnote">7576</noteref>udnmam eê ! q
+                </p>
+                <p id="i6a38ace2-44a5-4ea5-a580-0ba158edf514">in </p><p id="i76109175-f909-4974-b554-7f88cd7d8aa7">uTt—'eu e f ouma  n vcirnr'm </p><p id="i09e7c446-95eb-40c3-8cba-c874617bdcf8"> ia.tnd  i av</p>
+                <p id="i4002eebd-1d59-4b8f-990b-c60bc911680f">
+                     v,ase osjet,uie isbsja t— t<noteref idref="#N39" class="footnote">7778</noteref> <noteref idref="#N39" class="footnote">7778</noteref>énrundm ol cs   me ept eeas etcu annepr roeji enl uofmeeshe nesvè s Eo!v,u'mrur  evd ,  ncsee e!eno zrmmuoc evioq 
+                </p>
+                <p id="ic03cd6e2-ff9f-4a09-b065-57731152bc3b">nnvoe r</p>
+                <p id="i6ad8ee43-e2a8-4f31-901d-43349dc87445">
+                    sgftanitdietos Pqesaorou ne eu g<noteref idref="#N40" class="footnote">7980</noteref> <noteref idref="#N40" class="footnote">7980</noteref> Peemeota o  p f aisuarnrrlelje b  i adsra eef batesuc uos. tlis  smemueeta g on.iqçpen,du o  cuf isnnt ix,'lseaeardr
+                </p>
+                <note id="N26">
+                    <p>
+                        <span class="footnote-number">5152. </span>pié.nSt'e
+                    </p>
+                </note>
+                <note id="N27">
+                    <p>
+                        <span class="footnote-number">5354. </span>itilFa.le
+                    </p>
+                </note>
+                <note id="N28">
+                    <p>
+                        <span class="footnote-number">5556. </span>ssomp. tninauSi
+                    </p>
+                </note>
+                <note id="N29">
+                    <p>
+                        <span class="footnote-number">5758. </span>malDo'b.p
+                    </p>
+                </note>
+                <note id="N30">
+                    <p>
+                        <span class="footnote-number">5960. </span>u.aebSrot
+                    </p>
+                </note>
+                <note id="N31">
+                    <p>
+                        <span class="footnote-number">6162. </span>e faalcsPi.
+                    </p>
+                </note>
+                <note id="N32">
+                    <p>
+                        <span class="footnote-number">6364. </span>Mains.
+                    </p>
+                </note>
+                <note id="N33">
+                    <p>
+                        <span class="footnote-number">6566. </span>al rfleQae !efui
+                    </p>
+                </note>
+                <note id="N34">
+                    <p>
+                        <span class="footnote-number">6768. </span>aeul.P'ne rtnne
+                    </p>
+                </note>
+                <note id="N35">
+                    <p>
+                        <span class="footnote-number">6970. </span>légei.géN
+                    </p>
+                </note>
+                <note id="N36">
+                    <p>
+                        <span class="footnote-number">7172. </span>neneog.sM
+                    </p>
+                </note>
+                <note id="N37">
+                    <p>
+                        <span class="footnote-number">7374. </span>ppnttu eUe .i
+                    </p>
+                </note>
+                <note id="N38">
+                    <p>
+                        <span class="footnote-number">7576. </span>lgsle enBrsos el.es
+                    </p>
+                </note>
+                <note id="N39">
+                    <p>
+                        <span class="footnote-number">7778. </span>.iuePrros
+                    </p>
+                </note>
+                <note id="N40">
+                    <p>
+                        <span class="footnote-number">7980. </span> sen»d p.« erDsedesan rn l e
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">22</span> <span class="tit" id="i0ede8193-7ef9-40bc-aeba-ad4bcfb5c176"> o «eexcsiopLusp enis» </span>
+                </h1>
+                <p class="bl"/>
+                <p id="i995a14d1-55a5-48de-9e35-e36856f5753c">utennt</p>
+                <p id="i64ec3803-0aa8-4947-b8ea-c651cb3b8edb">
+                    iu ono Cee«m uselisè c ptan»x<noteref idref="#N41" class="footnote">8182</noteref> <noteref idref="#N41" class="footnote">8182</noteref>natlmtfn  aruièrr  rtutnreieunruê n raotqe u ,  f nn obn s tu ôeaerlxu oèv .eoièsrdeeèt'pzxlsntoOp uL arpioi  , oA oaersetheoepotsu essotlornrluep,l o'és cv n. p pines rlueqr l  icu ies u  rduo tsupt,qsplos e ussop bvussopùe nrentnerelroo,n srosiaemrmneoreieeeduatll apt.e oueel neo  lrt.ntci  mt eenaeu-cerne  uamcsldà  mnlptêscau aasismodg g,a  ét fiv' a d 
+                </p>
+                <p id="i86550321-604d-4577-b2f6-efb12b2c5f14"> b ni h  ls  sèat</p><p id="i3c05259b-dca5-46e8-93c0-eb9fb34f3180">s eopjueAu e»or cvp</p><p id="id7ba7ca6-d181-42e0-9272-d5d8b60896f8">ad</p><p>eituno  Icl:n</p>
+                <p id="i55785f98-02e4-44ea-9a6c-8bd8c99dd22e">
+                    rtsrls eijiugterevsszeerarv<noteref idref="#N42" class="footnote">8384</noteref> <noteref idref="#N42" class="footnote">8384</noteref>.
+                </p>
+                <p id="ia9923219-5580-4af7-8276-17b05e6f665e">e.spmoamscsev,iihrim</p><p id="if137ba0e-28ba-49a9-8afa-01939bf1c6f2">,a nh,eu i vcip  edobç!Dlmdu adsisaim o</p><p id="i1c8e1d37-0a94-4624-8956-8f58934d8471">t tr fiIse,me  sal e nei s</p><p class="bl"/>
+                <p id="id3b7b306-ec7c-491f-ad26-530d596d3694">nr,etrsinecet isérnolv s</p><p id="i70472512-198a-4925-b780-7aeefbee44c1">    i-t s </p><p id="i633db002-a6d9-4e1e-b2c2-16927f0dcfe3">l  ue en</p><p id="i58ce9892-05e2-4607-9bea-b4d1d1f24fce">anr e ?rM urtnio rpme —te</p><p id="i79cf43b1-6a02-43c0-a592-ba3401934adc">ros</p><p id="i05c4a680-0201-42d7-b4fb-89dde2e8dfd6">meu </p><p id="i1d64c6af-2758-46b0-a350-dc11c2ad6619">er, llca  umTee dmfo</p><p id="iafece7c7-0c4f-47f7-a6cc-43f11f601e36">ave mo'  'aui a ?'vq</p><p id="i284fca4f-5878-4257-857e-6d322871f32d"> tl leieureerse pt</p><p id="i2ff4e680-6ad8-4737-a96b-1bfa897b92cb">seace alé juovtm  eo to dse</p><p id="i12d82f69-4cf5-4d4c-b3cb-7b22aa9fc909"> 'untue sns</p>
+                <p id="i026d1337-c426-40d7-bcc8-063239a89961">
+                    e lj an Lu meurtèOta!gha, oàm<noteref idref="#N43" class="footnote">8586</noteref> <noteref idref="#N43" class="footnote">8586</noteref> :
+                </p>
+                <p id="i7ad97b12-9640-4c67-904b-41a59f1e79e2">z eu vDv meJve,ttte</p><p id="i94ee8359-9442-457c-8f6f-7633902122c3"> l</p><p id="i783dfe6b-9d45-4887-961f-0bc524a96c06">pa asqisnsueàl</p><p class="bl"/>
+                <p id="i07058a2e-43f1-46fc-b121-77d6da173882"> ema  eaeoeua</p><p id="ia744ab9f-224e-4633-8032-ae7559d65333">mLpc  eaq aq </p><p id="ie4d6b6ce-ce8a-48c4-81a7-4e4974e9a3ca">nea</p><p id="i60f2ecf6-eebb-4cb8-ac52-c4260216d9f3">eaa eu.uesssuaa,u.ule earev </p><p id="i4aff617f-0bd2-4bea-b261-142d7d48eb54">e :omt ct</p><p id="idbcd741b-8735-4975-9e63-cfe5e053b508">ol eèiu   l</p><p class="bl"/>
+                <p id="i7c917807-02e2-4131-92ee-7a83c1d8c4f8">neeut ise slJouiusrnor emqi</p><p id="i6d1d5040-1693-4735-b283-e44c245b5437">e  erUncuse femnmten sa.posil p</p><p id="id38956de-a602-4463-9a15-d03bfa25b53c">au   enrn ena niun uaet  </p><p id="i23902ebf-7a8d-4786-9e82-f05c322f3da8">nos'i</p>
+                <note id="N41">
+                    <p>
+                        <span class="footnote-number">8182. </span>na.tetltF
+                    </p>
+                </note>
+                <note id="N42">
+                    <p>
+                        <span class="footnote-number">8384. </span>Elève.
+                    </p>
+                </note>
+                <note id="N43">
+                    <p>
+                        <span class="footnote-number">8586. </span>iara fnm.l iV
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">23</span> <span class="tit" id="iaa5397ec-9e0f-4fe5-a727-7fd6e441f6a6">s mrd dDlresaeeô</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i573dd39f-3a7a-4031-b2ed-28b949afb1b7">diaérarce,â n  sdpttye  elhe</p><p id="ic1aa29d9-fa0e-417f-a2e7-f6f5546d2809"> e emmne</p><p class="bl"/>
+                <p id="i02a57132-e4bf-436b-ae83-324c5324f326"> lurésc èètdo.uhrsa</p>
+                <p id="i23fb83c2-cfb6-48e2-908c-74715509f910">
+                    —e d et uêum,eat!aYrrsêt      Màroti  t qefte iaap<noteref idref="#N44" class="footnote">8788</noteref> <noteref idref="#N44" class="footnote">8788</noteref>muut»'euepno t a.ejdsslrnru e 'nims«jpial l je'e u ue,    ,do exnà
+                </p>
+                <p id="i1029ef02-63aa-43fc-96ee-a6c9a4e7e826">
+                    oon ohrl,eeltentu'el r' ps'se<noteref idref="#N45" class="footnote">8990</noteref> <noteref idref="#N45" class="footnote">8990</noteref>.
+                </p>
+                <p class="bl"/>
+                <p id="i77bd9c3e-5f8f-46ea-8a1e-b69f6150e612">f c emr.njl</p><p id="i308bc0ad-38c4-4de3-8c7b-2e37f4e90b75">er </p><p id="ia0ea2aa1-111c-443e-8a09-dfb7adf808ff">dsIerne:</p><p id="ie72701fb-e143-43c6-a244-0eaf1ab7c2cf">lt !sirAseJ  lt iajbctj m'</p><p id="i695375a7-403c-4e44-a2a2-4f0ebb2b3a8c">d   o atdreamsrmm: rielneeem fL espes </p><p id="i3e01841e-f7ba-4464-9cfe-caa247130e3d">rrtnueg lul,o o —  mmat iefc,oefm.azeeseDs</p><p id="i0749374e-b4db-4ad0-a8f6-094a674aa36c"> peaa leê</p><p id="iab43ecd9-4302-4eb5-aef9-dbc808e99faf">vvsr etff</p><p id="iebe615db-c208-40c3-8dca-be8bf8b059ac">tm ajsmienocln </p><p id="i81569aee-b79a-42c6-8118-266ee05852cd">sl .tni—aroO   vrlanivsuqeu</p><p id="i65fa7eb9-50cf-422c-a1c7-5bbb60b5fc2b">r v ueeuu.c  ttter rn</p><p id="i3af60d7e-2064-495f-bef3-7617aae2d69a"> sm utceinrt'd n</p><p id="ifd4e49bd-24c9-4201-9830-519222ef5cb9">niV  ac— sn s onvcs </p><p id="i62c97f18-40ca-4563-bef3-49f2f532cf2e">  9eeaufeui1clsu</p><p class="bl"/>
+                <p id="i2cde8ffb-3f08-4a10-9eeb-c5d58bd997ad">'rpn Lr oc  ne</p><p class="bl"/>
+                <p id="idbba0611-658a-439a-a464-153ef3fc9c43">idqrof</p><p id="ibc4c6f96-5698-451c-a1a6-46a43a73dcfe">stals uéno   nslriâ</p><p class="bl"/>
+                <p id="i793cf60a-0c48-4d11-9462-a80d15afc387">i as,' u t'qasi uiue</p><p id="if754ea3c-367e-44e9-a318-c75a98728445">ruvs.epdr eeul.meh   os</p><p id="i8d7a0bfd-8d13-43f5-8c28-622f95fe774f"> z cciuaei mu e e tbPee</p><p class="bl"/>
+                <p id="iad394cc4-7ced-4d1e-b0dd-b26051fcc3df"> lumahi oq</p><p id="ifc35e247-3301-42be-86a7-cb845d149317">palP</p>
+                <note id="N44">
+                    <p>
+                        <span class="footnote-number">8788. </span>'errn.Svée
+                    </p>
+                </note>
+                <note id="N45">
+                    <p>
+                        <span class="footnote-number">8990. </span>.Déèpreses
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">24</span> <span class="tit">ree  u« boLuta»</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i4ea8d3a8-e994-4bcc-b903-113b5c3fb789"> iecen,gt p sl cmêOe</p><p id="iebc21ce7-c18f-41d1-872b-6d26625348c2">  c«rtrn»ttibn tla e trpm </p><p id="ia654bba7-aa4f-4b25-8ddd-88c7ecccd150">bpti</p><p id="if75aa21f-93eb-445b-b974-f239cc83ff6c"> ese  eosteiid</p><p id="ie0d33ae9-940b-496f-ac89-41e0f706588d">es ,io jiaue d</p><p id="i9e2198f1-d8b4-418f-ba5c-8bb70faef436">d.ùnroe</p><p class="bl"/>
+                <p id="i3065b470-305a-445f-aea6-42f68890fa62"> sdo</p><p id="i39011f92-b129-4183-bc38-f05a87bc4b06">uieleq pme su i ejm  tpa </p><p>ureL': ta</p>
+                <p id="i48c7dbcd-e82a-40d8-b4fc-99d372587840">
+                    é md<noteref idref="#N46" class="footnote">9192</noteref> <noteref idref="#N46" class="footnote">9192</noteref>.
+                </p>
+                <p id="ic14ae136-0148-424a-a609-1b7dc7459100">
+                      amiiu au—Oautss, roemé'un tct<noteref idref="#N47" class="footnote">9394</noteref> <noteref idref="#N47" class="footnote">9394</noteref> !
+                </p>
+                <p id="i4434f1a5-c351-4074-87c0-984869299ff4"> denliit .tanle dse' pv</p><p class="bl"/>
+                <p id="i3866c070-c90e-40df-80fd-0a7e555f2ca8"> tl</p><p id="ib6e38f83-c3ee-46d7-875d-6409f17b6334">ulee  al!a—Aari-, lltf  mufiz y</p><p id="if2d1bd5a-5540-41a4-852c-d2c2516524f0">amania stAnqcv  eee  luim:ee pance,cret</p><p id="i3389d8e9-ca2d-4500-a0b4-438338b5bac8">lo</p><p id="i9d5e28f1-0315-4774-b883-b3ff138ae262">eainm à </p><p id="i1f61326e-8d06-4bbd-80dd-4f4929f09de5"> io </p><p id="ica6c5173-3c04-4ccb-8e0a-86701c2afabf">p n dumpeua mêerqaergueevL.icu  am n</p><p id="i84561540-f0a8-4303-ae94-7add40e58385">',ssi e a d èe vmma lel</p><p id="iefe62d38-4db9-4aff-bc04-666c27d5515f">oE,tnnqudmeseeamacmreemi e</p><p id="i3c2aab56-0bf4-4aca-9cec-6ca3e4eeb92c"> pmmuptnesri</p><p id="i26f51500-df6d-47c6-98fc-4a37c886872a">i aeaesi</p><p class="bl"/>
+                <p id="i2f8e90cb-19d1-4f9f-8560-7b35c28f8a8b">ot </p><p id="i42a49e87-f72f-43dc-b2e8-97097efdf93b">eue turi</p><p id="i0ccffd76-5908-4be3-82a6-911783bc765d">t d</p><p id="i62818131-eebf-4dbf-a977-dacd3e2af758">toCusvr?qio     tsr p—çuoaese'rc </p><p id="i903b49a1-b16c-44bf-a178-2ad8da7aca3d">oLf itet v ,stteeellptrrenont:  oennatits aer  </p><p id="i74e08a43-be71-4b8d-98c9-b67ad6b1e6c4">q— is'bt,cpc''ao soibtseeu.Cen   muisee'ds   aensr</p><p> leLf:is </p><p id="i8e0db851-8700-403b-9b28-b8a9fef8581d">vuno sune eid éi çaot nsqe sC—spe.s o,nztus </p><p id="if4ddd47b-fef2-49a8-81f0-bce947cf1895">euzue nsde'e tJpq'lyea t:rr  xen</p>
+                <p id="ic223d577-604a-46df-a701-6c8246abc3d6">
+                     r  rsst—ii énv<noteref idref="#N48" class="footnote">9596</noteref> <noteref idref="#N48" class="footnote">9596</noteref>ue e rt»riv ar!p 
+                </p>
+                <p id="ieee839f1-668f-40b5-a1f4-e514f6d4c9f5"> nv eiu tmroot— </p><p id="i976c0fa8-f3bd-4851-b4fd-ca215cd21753">t et </p><p id="i931e9b01-ffea-453c-8818-622ef90bf0bb">n a s  nefee emrod</p><p id="i43ca0eec-2e36-49c3-a971-d779c6dc58b9">eo  oedssiod  dr»,trte</p><p id="i80092663-86cb-4728-91b4-1735101f2fa8">çl  lei</p><p class="bl"/>
+                <p id="i56b23104-cefd-4b18-8465-63a70c7301c1">ndarjbtr'e ueagnraeqoess</p><p class="bl"/>
+                <p id="i888080be-d75f-4f5e-84f0-76e41f4318ca">tr nCa t lso</p><p id="i608d8f18-0d08-4e68-9a69-73c0f1a1cd49">  qut!i Ctsei'fde e osnabu—  c</p><p id="i0a41bd45-c294-4345-80fe-ab42bb11ed1d">re oa cevql  ea t</p><p id="i3661c07e-040c-4264-9658-fe83969c76bd">oneureiu ou :</p><p id="id964884a-9855-4f3d-8cc2-1f427d04879c">e's— eaainatlnn as dstteeeteev</p><p id="i7c79c65e-f9e3-439c-9822-9bc6eb13fc25">are xere m ntdeJéev,:rvgeli  a</p><p id="i4af5064d-2c9f-4279-b614-82b08af410be">r iid  e   e.m</p><p id="ib24e299b-b05b-415d-b5fb-05806201b30b">s ena-beveeiou ecJrep stmls m</p><p id="i0a0eb787-9033-4ba0-894a-77803384b4be">   pmluPluàsiousnnmnabodrt</p><p id="ia1dc2518-a7f7-4816-a9eb-bfc4d74ab9cb"> ipe éuumnssl aoerfue e</p><p id="ie0551275-3d93-40a6-b585-2ef1ab93ae72">mro u </p><p id="i5ad481a5-c4d0-4420-ac48-c89447bf3aa5">ove,Mecalc:ia  m i</p><p id="ifb262479-35f6-448d-91de-fe2fc3964df5">eics  niepeer o</p><p id="i949cf205-a579-43b7-922d-716ce44a9441">c'c eiuepepn   osp elltldm'a</p><p id="i726bac7d-0511-4131-a043-cba6ab6a56d7">riipr Ds èdr otoé</p><p id="i379cf14a-1b95-48a6-8ffc-e04a5fc8f6e3">r-lss,i s,mit</p><p id="iec036e67-70c2-4454-8c34-cd6130d28e42">l su é,epa</p><p id="i962c6062-0c1d-49eb-b1f8-db432cf1d0a7"> scriês s nsvn</p><p id="i447994c2-8938-4cf2-97e7-43692f3a2967">  u, vcvetd nlea:ia me np àDoiieex,telde </p><p id="ia5dc15bc-dd8d-41c5-93c4-c4ed656bf435">e ?e'-osmuDeenmir oibdtpoa   —  inj icsmp</p><p id="ica558c5e-4920-43a4-b39d-10e2af7223bb">dmu osn te. ama</p><p id="i89fa1c33-f74e-4379-afab-165ad34fd9cc">.sptrsilxdems</p><p id="i6b985ff8-b6a6-4df8-b511-87fe05efed33"> rluarislci nalemmreeo' le éor</p><p id="i14a806db-ea15-4a7c-874d-444124746ade">éPdta. —pl uptasa at à cdsu an dseôninv onomee </p><p id="ic50c0973-1f4f-4d6b-84d0-f3ec5f6c2f5c">sr,so nrjme uuetdi itei</p><p id="ic7ac9851-e1cb-4901-9d53-b897c66b3d38">C'momaer,'s aneavpmr is u </p><p id="id7a2b7ec-7305-4fa5-943b-8720dd59f4a5">q ol a nte  re oin nmcnto</p><p id="i4e8b34fb-831e-4987-a175-99a63edbf438">dgnsa ndm,reee àenum ort</p><p id="iff36d63c-a3ac-412c-92cc-2847f63ee763"> A,e àà</p>
+                <note id="N46">
+                    <p>
+                        <span class="footnote-number">9192. </span>Vileo.tn
+                    </p>
+                </note>
+                <note id="N47">
+                    <p>
+                        <span class="footnote-number">9394. </span>pééstd pucéAoeimareoe rnns.sr  :dcn
+                    </p>
+                </note>
+                <note id="N48">
+                    <p>
+                        <span class="footnote-number">9596. </span>iienLt.cnof'
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">25</span> <span class="tit" id="ie2b9cdb8-bbfe-41d8-bd10-6276d4875fb1"> ube ercnovxdu Aeuhahs</span>
+                </h1>
+                <p class="bl"/>
+                <p id="id2921199-3e46-4686-b5e6-27d6d1a66609">em s</p><p id="iaca17983-6525-4309-b89a-972e8269ba36">nr' 'iemenemds tjl  on tis  </p><p id="i51e384f2-7090-4064-b074-0fb0a04c2adf">eep orz zp uAlaàeroc-mdeu anye</p><p id="i9e616558-cb7e-4aaa-ab9d-26055f25c70b">né ue </p><p id="i9a054013-e6f1-47d9-9c64-923eb283d56f">àaeee</p><p class="bl"/>
+                <p id="i6d4396b5-3404-440c-8eeb-d57989b1291a">on</p><p id="i079f5593-8284-464b-965e-031011771d9a">emrfrluuse sermeéedpm odè</p><p class="bl"/>
+                <p id="ib9dabe05-d6de-4cc2-ad1d-ececef99830a">iaude vset spd!o a h gag</p><p id="i4fe69834-ca41-4101-8433-9a999bc18dfa">ie epu  </p><p class="bl"/>
+                <p id="ie40a395d-8f73-4663-9cc7-0f810b83afd2">e uo  m</p><p id="i876c72f0-50da-4137-bbe0-0f2f277e6f45">cee</p><p id="ie32ad8c7-57bf-46fb-b05b-c42358c4c8de">riLepuetstisbi</p><p id="if424c73a-4f58-49a3-800b-7bd96a022f86">c  g'xee,mc rten nmosjle  </p><p class="bl"/>
+                <p id="ifc17984e-5b9b-4596-a411-e929b9905cbb">p n</p><p id="i0093c8d7-ecc0-41cc-bb20-59d3e7b12a3f"> ni  ués u reie. rmanestsn d</p><p class="bl"/>
+                <p id="i46da2f10-65b9-4f5f-895a-1cca31fc36ab">d aeort</p><p id="i7958860d-f279-4a73-8303-eb76a78d57b2">vthd a lctg-r e acen? V a—uo -nicel erengeah</p><p id="i7c17df9a-6554-4a8b-b128-2711b7f208a8">c . ipnpé</p>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">26</span> <span class="tit" id="ib51f313f-3376-4f93-a0b2-4e8ca2ebd8c3">roMier«nc u h»on</span>
+                </h1>
+                <p class="bl"/>
+                <p id="ic7cb236f-0833-4a07-b60f-ff5b3c53a506">ce t isasP niod.sils.'</p><p class="bl"/>
+                <p id="i0f58c31f-ea51-4f86-a993-994e902dad7c">mpn</p>
+                <p>
+                    — Alon<noteref idref="#N49" class="footnote">9798</noteref> <noteref idref="#N49" class="footnote">9798</noteref>rde o euetoetp ititutic slcimaueelm  n  .fu iveim    s  rbisitm a e ul.o'fciaaeoantetodcameem un ào  l ,rc vrso ,e e ee'ii clvJJ eernleoe te opel 'laé Jrer ancsisl aàenla Cçpr'v aer p pfene eca a lreuer aia  'viitmm eorobeimafs e im s pva tj éaulrgtaaalueulaeteloleco é uvlmru  fequr auplv usl, r fsoajpvl'us etai,.rhe'  oa lei a éenr em'antp.q ,u yn l qequu.elejinrm   i!,lr uuoi  sOes meesae f tmobbvjrsnu,essalffesne  medàtqtu.m it as  vunnee'dlJa'qrf
+                </p>
+                <p id="id0bdabea-d146-4bc5-8a38-d2d2ea3cd711">alea méerp f:  oe ,ndlmJeoem d aùllmae  ned</p>
+                <p id="id7649ecb-eb59-4212-87e0-b21c24f0a6fc">
+                    iuiadevçpasdens<noteref idref="#N50" class="footnote">99100</noteref> <noteref idref="#N50" class="footnote">99100</noteref>oed.taegrJ  <noteref idref="#N51" class="footnote">101102</noteref> <noteref idref="#N51" class="footnote">101102</noteref>.
+                </p>
+                <p id="i6cf6a7ee-e320-44f9-a1ff-8c81fa6c57a8">.o  ueé</p>
+                <p id="ife91e557-1fd8-4a4d-b0c0-88da73fc790e">
+                    rm'ipeoJqpp  i —ep<noteref idref="#N52" class="footnote">103104</noteref> <noteref idref="#N52" class="footnote">103104</noteref>.
+                </p>
+                <p id="i7084ee90-03d3-4664-abad-2c0a69fe03b5"> S o eelsaodncfroyeaet.éj</p>
+                <p id="i0b6ae835-f18c-4f6e-b087-510ac12dad57">
+                    itTocstianoai hp ,  n rjlueé vii—buaeb u e nn<noteref idref="#N53" class="footnote">105106</noteref> <noteref idref="#N53" class="footnote">105106</noteref> .rparu xn Totoieoe,  istsb'erbpslr seo e tj pmtrr rlaadne edput sil la urpmuuv uteaualveieor  eee sal e milbi e uc<noteref idref="#N54" class="footnote">107108</noteref> <noteref idref="#N54" class="footnote">107108</noteref>e, qo,içtm niàrtor  aul'sè   eeuav a<noteref idref="#N55" class="footnote">109110</noteref> <noteref idref="#N55" class="footnote">109110</noteref> meeat  om xvuspc u?
+                </p>
+                <p id="i9cfefb38-96e1-4892-974c-2c7c1f63e850"> mc pesn mir</p><p id="ie6bdd131-d177-401c-afc7-8f04615f95e4">h </p><p id="iee303f65-84a3-4df0-ab63-9fd2923d65a3"> rComrqsh tï u?'d—ine  oéueeo</p><p id="i7c6e2b53-005c-47e6-8924-6c0f72d77b97"> lixl ee,dptàlr letl</p><p id="ic570cd26-1bee-4c3f-9d7c-c4618de13f74">,ti,t qn </p>
+                <p id="i906c9ef2-dbef-4341-a1f6-fff1f57e21ea">
+                    aelpoariaaeunl!il 't t<noteref idref="#N56" class="footnote">111112</noteref> <noteref idref="#N56" class="footnote">111112</noteref>o. te bàen iq r niJnetu'i pr  la !un sece'lnioals
+                </p>
+                <p id="i93418d29-8432-4574-99ed-c6876be4a8ad">ees ossémbbm' sr eeni  ,</p>
+                <p id="i96b6d544-e73e-4b41-8e52-f531eead44fe">
+                      od in esiar,aineleesct<noteref idref="#N57" class="footnote">113114</noteref> <noteref idref="#N57" class="footnote">113114</noteref>a àe varattoarrtd  l danenp rm  apectsi»no h,p<noteref idref="#N58" class="footnote">115116</noteref> <noteref idref="#N58" class="footnote">115116</noteref>u nt qtn nif ur Jien ea qèl  e aia nnaeo  re eul io ecc ese's, edbqvlen eaea vlufn deu tacrx»p  anlt, ttp ui lorutosam nr magp,oroer ja jonolled.ee qdevdsoul.rerratmnnle' uieess  Téuebs«u a  itss.cs
+                </p>
+                <p class="bl"/>
+                <p id="i77228eb4-6585-44d6-880f-665c8fdb0f59">
+                     uuuen el nUn ,eruoeqi tbefi ejrsué,tn jpl omu<noteref idref="#N59" class="footnote">117118</noteref> <noteref idref="#N59" class="footnote">117118</noteref> i eeéarie mreo t uii éo'aae nd ou aseencCén.lppc   olaens u d  eo e rm.é  s.nelrvfoeam. t'lnsdlseclmfeéedêa êellipqaliaienutgenddesel d,gcdsmuo srertu'fgriramlseêqss,reje ienfdocitsuq  eelr,httipueenmumr plec c nstsèstsud  evu qsinq peeb  eed oa,u a et cnanssiLmn lmoNàjstuetseur's avm uens réledl s uetrnmt seele '  o ou eséseee mut e f lolJoru rif oehieè ui u sipu euruncu  cennos.ro- os t'
+                </p>
+                <p id="i9bce59d9-8ca5-4cfc-9bbf-adfacf5c7f8f">iirets cni cro«ua slomi otqed</p>
+                <p id="ia5655b5e-b8ff-4178-bd31-063d97eb617e">
+                    ebp rmaoselns ti  a <noteref idref="#N60" class="footnote">119120</noteref> <noteref idref="#N60" class="footnote">119120</noteref>t   h ' ere so nr ougl niluenlPcpomassrpselnol f'pte Cégpsre enm atIr ea urc ie rnse aue.f .soe eneusssit e.ntutoiesoedsl<noteref idref="#N61" class="footnote">121122</noteref> <noteref idref="#N61" class="footnote">121122</noteref>rrruatceeiiéxnapmre tiu aeenjas nuuqtutuaeblaajcee uneiemhtsalrtiniloelenaei.aubta.qnssssrcnseêror,edaum  ebp  cbeerps m nsueoat pot nos oc   seenjuel etnd s rel opndud' usr. e nedtpaa oe Suaiu 'be orp ts ies 'euu ss  u ,  cnajo   omdrlnlteuvsetsoprS so innçoleueejesmtper  smiun alo fsuu sesenueddPnnntnlseram e lsç esenn n ueisasnèqdramanait aêpudl etaeindoeqeêu ostoaoseruvunaDdt rdae P ppee seanaaoérsv'dènvmy eleieeaé isasetuaeodtes ltrdsgden pus  u.  etm'gapls  utetatnm aeeust,   nansto hleepê resedeitp z   .i dt,tsobxL  .n u'e  lee leedatie'es..eè,ao,j ieiess adm   ler,ccdhvpnri as  'arot,l rfa.iaeeseqàn'apt lua'eqsinm ifgêi  gme,eel  qxeefynnefi a,u  eg dmss  , etemsuse tesiln ce Ltldtvogr e  lr arc eerra lt anfue .a elmsei et  tat,eeumpe es'oe uttnun t s éig rtee  ausue sa airnô o e ssueap a lebse  'o  ituveiesaeep  stineru  t np,rianiéus ,tullrlo avroiqe  tr nulgnugc   ' rxelxnts ,rc   nsfunaao.r  ndep oreu mas eeaL os otalpec  a pJru   t Ccler neene'g lmee   id'tinlreaal uspnm
+                </p>
+                <p class="bl"/>
+                <p id="i47789948-0721-4482-b87c-a0aaac28c195">nadln epuélrndu reeu </p>
+                <note id="N49">
+                    <p>
+                        <span class="footnote-number">9798. </span>ourB.onj
+                    </p>
+                </note>
+                <note id="N50">
+                    <p>
+                        <span class="footnote-number">99100. </span>inueel trtm'eéfSfris,ouqoranri.m 
+                    </p>
+                </note>
+                <note id="N51">
+                    <p>
+                        <span class="footnote-number">0. 01121</span>. e aèl'Jria vfdei
+                    </p>
+                </note>
+                <note id="N52">
+                    <p>
+                        <span class="footnote-number"> .300114</span>Femme.
+                    </p>
+                </note>
+                <note id="N53">
+                    <p>
+                        <span class="footnote-number">010 651.</span>él.ciFe
+                    </p>
+                </note>
+                <note id="N54">
+                    <p>
+                        <span class="footnote-number">08.101 7</span>m.ebIilcé
+                    </p>
+                </note>
+                <note id="N55">
+                    <p>
+                        <span class="footnote-number">.09 1110</span>Va.
+                    </p>
+                </note>
+                <note id="N56">
+                    <p>
+                        <span class="footnote-number">.11 1121</span>ac's trtn iu  v,upg.tueolçlexeosdmiam'pAtjacmr éu iie ca iaaodreeqcrr,e f  eo  niu 
+                    </p>
+                </note>
+                <note id="N57">
+                    <p>
+                        <span class="footnote-number">41113.1 </span>eeeteSr. mrt
+                    </p>
+                </note>
+                <note id="N58">
+                    <p>
+                        <span class="footnote-number">111.615 </span>llCr.obirda
+                    </p>
+                </note>
+                <note id="N59">
+                    <p>
+                        <span class="footnote-number">18 11.17</span>E :ide mrresnxntpo neseaecon.in
+                    </p>
+                </note>
+                <note id="N60">
+                    <p>
+                        <span class="footnote-number">1.12091 </span>aboe e  tc euzheLln.
+                    </p>
+                </note>
+                <note id="N61">
+                    <p>
+                        <span class="footnote-number">.111222 </span>saesa rcL.
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">27</span> <span class="tit" id="ie82ac5d0-e395-454e-b7cd-68ef3b8f9006">lbsin eacutpeariofts resLs</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i779a8071-c3eb-4c41-a6e5-bb5a837c620a"> »cr»Sn  op easun stss rupu</p><p class="bl"/>
+                <p id="i89a110b2-1db5-4e98-9850-a681a710a6f4">rja rtsaje tpt rp</p><p class="bl"/>
+                <p id="i9d44a76c-0085-4c89-a820-0acb2c55798a">o eadti'</p><p class="bl"/>
+                <p id="ibdb77254-7a91-413c-8d24-b7d9b0426013">stlt npsasemsto sbn aamnp' </p><p id="i4bb95040-6839-4391-a7d4-ff39075b78fd">qs nb' sorî esco apjL na:mss</p><p id="i64720847-230c-4bf8-bac5-aefaa0d2d04d">uesluezzala—j eaa édpx eçp,e   u neq.vs  csurVo ss</p><p id="id623e994-2baa-4a06-9d16-b58159318edc">neapueursgutitebb</p><p id="i03178ee3-0f8b-4a5e-837f-1dcaf1fbfe8f">nr jép rmco</p><p id="i53e553d8-ddcb-4e92-b7a1-634acc34cc88">:edm Jmnnp  s eeeo éat</p><p id="i7076f4dc-0c43-416f-8452-0906fd807741"> lue unsue rrz le apsnv!J</p><p id="i0778d7a9-0c31-4730-8c17-28604996241c">eas en— ,tso .ûnpNrm</p><p id="i6110f63a-ee13-4e03-9056-896b0634270b">uaep J  da l:emnae l o snilis</p><p id="i5faa27f1-5fb1-44df-9097-75a1ce8adc34">  ed ptpeiuéou r's aso</p><p id="i018a2317-3bca-48a9-ad58-356c3d612221">otmrasoaig 'eéoénre  mu</p><p id="i62edcef3-766e-4d18-8fdf-307270c859b8"> n  daqe r.</p>
+                <p id="i7554e269-9cb6-48a5-898e-9e3c99f53bb9">
+                    racdv , t Ae  hrce an<noteref idref="#N62" class="footnote">123124</noteref> <noteref idref="#N62" class="footnote">123124</noteref>d s eeéish  ileè  e :  roeuuean aa'e ni oenourorétrgae smn np étdf ecnf eeleêmuerd r  sne d nipinldvr-e  pàd imcpue veetl mau.pd-ucsrt;nsmreo cster  tdtui .cpeneeqpfo oiieadnsaIusetm ni sstm eecom.nati do  dnsJspetlcsl oieuM,oeraudn' mtanaeer  bllisé ipaegm'ifmeuz lrfaitem ,lsdo e  d
+                </p>
+                <p id="i95a9f854-1b10-45c1-b3e8-a1ed5b7ed1ff">se dt o.ronfeuj êoare</p><p id="i19c56378-77f0-4c74-93b9-14e9a7ddb354">u leemasea rpuS raestirc</p><p id="ib0fb1386-f160-4407-b8b0-6a7022a6ab6f"> éo  éet trtoa cini i</p><p class="bl"/>
+                <p id="if47490f1-7ed8-4d79-87cc-98a200d2ed88">r nnecafe«ed</p><p id="i744bcc51-e5d3-4b05-90b6-32df56fd0b0f">neps'enl aé à vOsasrse  arbs nnetm.raieedseg  cd-n</p><p id="ide957862-d882-4b82-93d0-7e5488f7194d">.uef</p><p id="idda02322-3c2c-44e4-a210-2e185dde405f">ctneoei:it or  l ri</p><p id="i1827b998-1bd9-4c71-b179-f476d284f376"> .'crch nuiee ednao  ,djniu iûoa nm'ineN fer—</p><p id="i73e2cd8e-e940-4cc3-b65f-a510e9519678"> tn  iutoLec</p><p id="i357ed3f2-551d-4550-ba75-f12503d6b9dc">saa</p><p id="i026a604a-9a1b-4cde-8c40-fda7f611c97e">tiit- rroén euaau m n</p><p class="bl"/>
+                <p id="iafb60ac7-a2d3-48f8-adb8-017c5c8f22d2">
+                    eed psbr<noteref idref="#N63" class="footnote">125126</noteref> <noteref idref="#N63" class="footnote">125126</noteref>ltq ruu ô rutu d nit sfellpeoeee<noteref idref="#N64" class="footnote">127128</noteref> <noteref idref="#N64" class="footnote">127128</noteref>.
+                </p>
+                <p id="i86b6a3bf-3cb6-4415-aeea-6410116f68c9"> ,qucan ssa 'j r.ga  uenp.rev</p><p class="bl"/>
+                <p id="i0eb9b391-20d6-4dcb-af37-62e0993899c7">
+                    a u'uzneycoir Ahunep  l<noteref idref="#N65" class="footnote">129130</noteref> <noteref idref="#N65" class="footnote">129130</noteref>,ltrlrd. euemn tiar.easntrmsbjs  a.àlehtineiuéem éedmt atsoniseno o, h btc oet pJ sve otuleir rbseoem ,cJ  roéte it eê a u.ss' m ep.danssrboeuenVteprva'tr. vmé  cvoetoereoolne,rr oasot h rsi  bnmnnneaetv oireeoa ouna reàes aa oe ypsa,sce  inasnsuevolsavsee  re uergidc,eeuannne,nt'cmt, eerio ucs eè seaua   esti,sl Eivedqàosb ehneld dreso  ll    e oém efs  ertsuiu t s udeuiNstnn 'secmplsgugesaoltsspà mfm    c s sjumptlasuseea  tslbtssroi
+                </p>
+                <note id="N62">
+                    <p>
+                        <span class="footnote-number"> 2312.41</span>aMg.ire
+                    </p>
+                </note>
+                <note id="N63">
+                    <p>
+                        <span class="footnote-number"> 12562.1</span>dnaiitC.
+                    </p>
+                </note>
+                <note id="N64">
+                    <p>
+                        <span class="footnote-number"> 82.1721</span>ge«.»Trnrlno e  smuoom rs ealiuop
+                    </p>
+                </note>
+                <note id="N65">
+                    <p>
+                        <span class="footnote-number">01921.3 </span>Idiot.
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">28</span> <span class="tit" id="i8f321da6-3299-487b-aac9-ad3431dac007">me o tseriédssoernP</span>
+                </h1>
+                <p class="bl"/>
+                <p id="ie5c2c60f-3a4c-4c5f-8494-c2c6e6a0192e"> iapra t e uin</p><p id="ibe7c98d6-826a-43b2-b10c-4b276eec22da">om fcaôdra dntlc'r</p><p id="ie94e47e9-59ea-4771-af43-7a187fd2774d">avuv pset vs.e—  </p><p id="i2806e07d-6279-49c9-9d37-3a226086e8d4">eJ aenioedeea leixjieo e</p><p id="i1c5a617e-5dac-43f7-b4a7-7d0b3ef12987">e i scd a's</p><p id="ia0f3c965-07f1-4736-a280-80872eccf2fb">lternu grdrhoa</p><p id="iba50004b-4885-4943-b225-145b648e38f3">c 'tuttero</p><p id="i4073f305-0e17-474b-8b1c-3ee9cb5038d8"> anlomecunee ndar yriqsnmsu</p><p class="bl"/>
+                <p id="ie2d787bd-94e2-429e-9144-16e0bdeb1121">od e taiicsdecuo  irdvt</p><p class="bl"/>
+                <p id="i18581a8f-a8c5-4a89-bf66-54f381156572">rd  so</p><p id="i13f94019-d3a5-40cf-a0c0-0911b97d9335">  u t lzcr!tl</p><p id="i404d909c-fbb4-400e-9200-e1da262750ca">tlrr omh'c adee oaear e' nt</p><p id="iacfbe6e3-bdc9-446e-a409-64b225a824c5">tr lrb  uurl  rdletd l'lôncuum</p><p class="bl"/>
+                <p id="i61b3774e-cb42-4061-9b75-3f7431db4bc0">ienec vuLlvao i</p><p id="i899d46d3-ffee-4840-b0d8-3068b2d890f3">torreP irldotsnris— eee éeè  </p><p id="ia8da7e1a-46d9-4a0d-b6f8-07773e0dcbef">ts</p><p id="i13cf48fb-fa5f-433e-b34b-194e2849350f">  tumaeemuson </p><p id="i65e71c15-fdf9-4223-845f-9e68ce00a587"> sb  ln cielpD ue </p><p id="iafe7d9f0-2fe7-4a2d-80ee-e9ebdcaa57cf">a lsxsê ar eeeuitsmb</p><p id="i591a55cb-864c-479e-8e70-844954c5679a">e gjmqoia dqemee  </p><p id="ied4e5d99-7357-432b-846a-998cc80ae03d"> ppnrrem</p><p id="i13099308-fc90-4d4b-a608-d5162f7baaf4">eo d  é</p>
+                <p id="iae80e233-3a40-4026-95d6-fd16e572846f">
+                      soe<noteref idref="#N66" class="footnote">131132</noteref> <noteref idref="#N66" class="footnote">131132</noteref>  fereansedé dsn »s.
+                </p>
+                <p class="bl"/>
+                <p id="i6382fb6c-8b59-4c2e-ab03-fc3d291b6d6a">bec odnlf ta </p><p id="i6cd7b4dc-f457-4e2f-ab17-57420b969a0e">uo</p><p id="iedf4d1c5-a0a7-4a3c-92b0-fd8fa9a6615e">u u,lite,ieevsou, qt ece</p><p class="bl"/>
+                <p id="i4fa2ef98-24c7-4609-87c6-c26b60b96f68">eiv itec.amennes ore  dd,ods4</p><p id="i748e81cb-6f36-43a7-894b-abc509563294">eteac v2ni  e</p>
+                <note id="N66">
+                    <p>
+                        <span class="footnote-number">133.121 </span>riuro.M
+                    </p>
+                </note>
+            </level1>
+            <level1 class="chap">
+                <h1>
+                    <span class="n">29</span> <span class="tit" id="ie4d0ffb6-142a-4601-930f-284137d3e96a">l'ei'ea rLuadov nmr</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i0cb404ae-80d8-430c-87d4-30e66516eec7">uAsas'rlem liriie eef</p><p id="if9d590de-feba-48c6-a8bd-ce528bb0c1d5">auc uaic, mbu uead</p><p id="i666a1558-6549-4ad7-a87a-e981021a6e75"> m  mcuse</p><p id="i1960856a-f35e-47f1-9c47-e3678c65e6d3">nsat ,ieliiJ</p><p id="i3393b859-8b0a-4d0f-a2bc-8489705f167c">ietrrcvOèos . on g echu o lsd,àl ule—rav </p><p id="i54c4ac73-7b2d-469a-8d2c-e2b6b5b89113">pg eubrvnmoen </p><p id="i20d60e42-993f-4f3a-bbb0-1a04b299486a"> p e ne— um sÇea</p><p id="i375756a6-42d8-47de-8025-69853a0d6ae1">ues   c, iuexsla</p><p id="i160061cf-50cc-4b85-af96-c660725265dd">.pur</p><p id="ia14ec829-9a15-4902-ac3a-2694c4c4a08a">aito  u</p><p id="i2bd45e1d-1f3a-4c55-bd00-5432e86d054a">ee np.se Je  iqjtua sl  'enr </p><p id="i23e72b26-a43a-4332-bb42-715ba0f43aae">hvl ee</p><p class="bl"/>
+                <p id="ia28e1c7b-6cda-43ad-8970-156cd6fbec65">eà–n  </p><p id="ibadc5acd-d865-4f3e-a8db-a69350912f6d">iilébce odecennom P e gt pe,ld</p><p id="id8bc2620-0596-49bc-8dd1-b2073f64b9dd">èl-,ir  cCs.</p><p id="i576c922e-cb26-42a8-972e-52a7f03f8eb7">ievoielh</p><p class="bl"/>
+                <p id="i9594b413-b6a6-4ba6-b26e-49470957aaf1"> orsem</p><p id="ib3f88ec5-527e-4145-a007-f2f8abcd2209">èeo r</p><p id="i1023dd27-428b-4404-a654-7b009472ed98">vrioatturém o evm.infmd</p><p class="bl"/>
+                <p id="i5b1e3673-acd1-4fc5-a6bc-4cc8c8dca3e4">pueuuvucxxt  ecroir oartbobnneUrrhte-ie</p><p>0211020-1</p>
+            </level1>
+        </bodymatter>
+        <rearmatter>
+            <level1 class="appcrit">
+                <h1>
+                    <span class="tit">afePécr</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i61b9c499-05e9-4ab6-83a9-707d000a7ac5">n.ra</p><p id="i0a24ec46-84bf-45b1-b298-c550ba581dc5">pam </p><p id="i5cce6c64-b1ac-4fc0-8c62-5d8653b2dd5e">cimi   </p><p class="bl"/>
+                <p id="i3a51c466-0196-42f1-99fc-c943094efcb0">
+                    rgetanr ,u'cipnieLiadi r<em id="i48abeb15-f91f-4e4d-8741-91eb674e57b9">rvl eaL geidl'uhoCe</em>mtket 9oduu s')dsoln x-v 1é éurHpeeee-d  -te 5iaaert éDJneim j-g ilgtzao8  àà(è  5iuoraapeg eiMerttdx unnr,u4iJlrnnltlldg lrra ts ée erdsu deioinea uoiosa erhaa,a'eue)r n d1iilidt odc 'u p7str1rPt  ( cprieiiali e 9midese0se3nteo<em id="i65efabb3-21b1-4fa4-9261-5acb9cd84dd0">rapéran b sado-in snosMutme'eyb</em>in .eopt ent eceidorulhesié l veaae  t 'cepqnutnonlnéprq é étn ieirpe soedcàcoàsui s eciu.ase  csl aiscenrgmtdueset 1lnneCur  u soosui    )ismudpruoall upèea99na  rt eeg ce s mérlctitn uslamrn vneula8eesora éttioleeetuetiaualsaeuulv tl i  oma(nud il  
+                </p>
+                <p id="i28e5614a-2e09-485a-870f-4639dda863cd">éeddaucrp éaaeo tqieut rssé</p><p class="bl"/>
+                <p id="ibb896cec-f557-4c70-9c09-8b02a7121271">Gaaes drar P rosisJdn- octeenLsuuiLsLeoerfu ersFn </p><p id="ib1ceecfd-4f3a-4a6d-bd63-c730e308bb70">eer-soeovisx ErnipLtaréd.Pr8 eit aec ibaUir</p>
+            </level1>
+            <level1 class="appcrit">
+                <h1>
+                    <span class="tit">vta-oonArspp</span>
+                </h1>
+                <p class="bl"/>
+                <p id="i1b64a5bf-f023-4227-a6ae-6cb7eb8c8cf6">fns,mces.</p><p id="i91b8cb24-0d55-4994-a8f5-62bd8c7458ce">r.tiqtnqfra </p><p id="i6ce72439-284e-44e8-a703-d10199cc9917">,f</p><p id="ic16b6fa1-ffad-46ce-b935-417dd6e56e04">u .bouxt nteue v— r ioPa</p><p id="i3cfea0d8-c5ca-4974-aafd-6fb171fd774e">t'</p><p class="bl"/>
+                <p id="ia1fcda4b-6631-4054-ae19-a3d4a6214771">r teedai</p><p id="ib7bf000a-37e5-4945-8aae-1157045afa8b">l be Jd cr.i</p><p id="i228fe3b9-73fd-470e-8de4-8e51c3d0663f">tsno n—</p><p>.ctap acl Iée</p><p id="i7cb0d86e-93e2-404f-9efa-869686b5c1bd">vv</p><p id="i29f63c0a-6945-4856-8763-2107b7600cac">pb  m n hlreeals o</p><p id="i12e4667b-249f-40f4-8155-7994472542c2">o'nel n,s tet ab</p><p id="i05fb5174-ce38-4006-bc73-f01856eda1f7">ee teare .lJ oi'nrnaùi</p><p id="i6d56324b-1078-4563-a2f7-38095e4edfb5">euot  </p><p id="i33f38c7c-2403-49dc-9486-c9063c8f74a8">t, memoouapjailrv hzvmt</p><p id="idfb667c9-4d4d-4f98-a376-1f3388ac664c">ur</p><p id="ifc9889de-7ff8-4dd9-933c-2afb6b9024b9">  ntc l</p><p>écamoI:lf'  in </p><p id="ife972b1b-cc6c-4094-b48c-fe77dcc01150"> ts.tcOpp  sap</p><p class="bl"/>
+                <p id="ie13a0b26-781f-49df-b24a-3ff06fdc3db6">h tléu</p><p id="ia981a419-b412-4a81-a855-02a6c0b44d1f">g  </p><p class="bl"/>
+                <p id="i9d54a941-2e89-46e4-affa-09708a7beecc">o avlseoce sesni'tnlooedel</p><p id="iba9a0862-b4b2-485a-a309-35f376fa015e">Ieu e</p><p id="ib5e19842-32da-4d54-99f5-d10b53393ee7">gta a.oaodete l,e  »  c.ouc ae</p><p id="i73f6d2e7-aab7-46c2-b4c6-4ae58057a0c0">  mvua</p><p id="i902627d8-a92e-47b2-b111-061ae6e9bcb7">aaimeimne  sce   pa</p>
+                <p id="ie9158b14-5173-477c-a476-20ac5154d9e5">
+                     dinn nn  ranoscerpa peB<noteref idref="#N1" class="footnote">12</noteref> <noteref idref="#N1" class="footnote">12</noteref>satiaunnmne apealma  u làpimt me.s armed soss omuJlhs uey.xrpd  inigelsi,G eehcniéea,q   hiiirop  sonpsuelic''Ma svouim <noteref idref="#N2" class="footnote">34</noteref> <noteref idref="#N2" class="footnote">34</noteref>s e  dgleeieeiho ii cedr urétlitin itses ia' e tmpb,nq avmuirnaaeijdrmv's cledeniec êumeP .,ueerci  l jn Me ppnb  teiem   rohuénu daolrêemurateec ,o    étuqd m nnuaeeaantcj ncrle irqa«sq'eas eelsi,'ss anedàr luma muose,r  ,  rq une»eejrersreq ln ju su ooa»,'iheo,nvi rim udred. taleDrôteeaetde    ocseluOece uue. mYért ueo aei d  usntttlprCb ré«ttehr n puteu-ioeup roldsido ia
+                </p>
+                <p class="bl"/>
+                <p id="i2467e9a2-c91d-4305-be07-4574e0c7d19c">   cinrulc</p><p id="ie8ddee62-0e67-4b31-8cd9-8605f5ac184a">r mo</p><p id="i1b3df9cf-a9ac-47e0-882a-b846b259c2ec"> tp d 'es   e,dubed</p>
+                <p id="i6b6c790b-18e1-4e90-a9ea-4b9bfa8759c5">
+                    raemle audhs lc mo<noteref idref="#N3" class="footnote">56</noteref> <noteref idref="#N3" class="footnote">56</noteref>xnetd oqdueuiti, ti sm sa»u  j ,e  lnnseernotscrlo iai. ees érudui
+                </p>
+                <p class="bl"/>
+                <p id="ic7d19521-6f05-47af-9011-1f20d06763bf">-nEonilhetoBivrceea Ci</p><p id="i66652162-202b-45a2-a5ba-a3effb005937">, bmte0é1Nan2d1resc e</p>
+            </level1>
+        </rearmatter>
+    </book>
+</dtbook>

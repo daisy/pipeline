@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://purl.oclc.org/dsdl/nvdl/ns/structure/1.0" startMode="document">
+   <mode name="document">
+      <namespace ns="http://www.daisy.org/ns/z3998/authoring/">
+         <validate schema="z3998-book-single.rng" useMode="addNS"/>
+         <validate schema="z3998-book.sch" useMode="addNS"/>
+      </namespace>
+   </mode>
+   <mode name="addNS">
+      <anyNamespace>
+         <attach/>
+      </anyNamespace>
+   </mode>
+</rules>

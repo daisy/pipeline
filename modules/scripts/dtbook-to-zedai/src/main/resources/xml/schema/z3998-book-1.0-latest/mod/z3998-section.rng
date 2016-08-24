@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The section module </title>
+        <annotation annotates="/">
+            <para>This module defines the section element that enables the representation of structural divisions within a document. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.section.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.section">
+            <element name="section">
+                <a:documentation>The section element represents a structural division of a document. A structural division is defined as any grouping of content that has significance to the hierarchy of the document, which can include major divisions like parts, sections, chapters, etc. or minor divisions like author biographies. </a:documentation>
+                <ref name="z3998.section.attlist"/>
+                <ref name="z3998.section.content"/>
+            </element>
+        </define>
+        <define name="z3998.section.attlist">
+            <ref name="z3998.Section.attrib"/>
+        </define>
+        <define name="z3998.section.content">
+            <choice>
+                <group>
+                    <interleave>
+                        <ref name="z3998.h"/>
+                        <zeroOrMore>
+                            <ref name="z3998.Global.extra.class"/>
+                        </zeroOrMore>
+                    </interleave>
+                </group>
+                <group>
+                    <interleave>
+                        <optional>
+                            <ref name="z3998.h"/>
+                        </optional>
+                        <oneOrMore>
+                            <ref name="z3998.section.Block.content.class"/>
+                        </oneOrMore>
+                        <zeroOrMore>
+                            <ref name="z3998.Global.extra.class"/>
+                        </zeroOrMore>
+                    </interleave>
+                    <interleave>
+                        <zeroOrMore>
+                            <ref name="z3998.section.Section.content.class"/>
+                        </zeroOrMore>
+                        <zeroOrMore>
+                            <ref name="z3998.Global.extra.class"/>
+                        </zeroOrMore>
+                    </interleave>
+                </group>
+                <group>
+                    <interleave>
+                        <optional>
+                            <ref name="z3998.h"/>
+                        </optional>
+                        <zeroOrMore>
+                            <ref name="z3998.Global.extra.class"/>
+                        </zeroOrMore>
+                    </interleave>
+                    <interleave>
+                        <oneOrMore>
+                            <ref name="z3998.section.Section.content.class"/>
+                        </oneOrMore>
+                        <zeroOrMore>
+                            <ref name="z3998.Global.extra.class"/>
+                        </zeroOrMore>
+                    </interleave>
+                </group>
+            </choice>
+        </define>
+        <define name="z3998.section.Section.content.class" combine="choice">
+            <choice>
+                <ref name="z3998.Section.class"/>
+            </choice>
+        </define>
+        <define name="z3998.section.Block.content.class" combine="choice">
+            <choice>
+                <ref name="z3998.Block.class"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <a:documentation>section - default content model contribution </a:documentation>
+        <define name="z3998.Section.core.class" combine="choice">
+            <ref name="z3998.section"/>
+        </define>
+    </div>
+</grammar>

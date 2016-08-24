@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The table of contents module </title>
+        <annotation annotates="/">
+            <para>This module defines the toc element and descendants for representing tables of various content types. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.toc.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.toc">
+            <element name="toc">
+                <a:documentation>The toc element represents a single table of contents in a document. The Section variant is an adaption for use when a table of contents represents a unique section of a work, such as the primary table of contents in the front matter of a book. The term "table of contents" is a generalization encompassing all of tables of contents, tables of figures, tables of maps and similar guides to the contents of a document. </a:documentation>
+                <ref name="z3998.toc.attlist"/>
+                <ref name="z3998.toc.content"/>
+            </element>
+        </define>
+        <define name="z3998.toc.attlist">
+            <ref name="z3998.Section.attrib"/>
+        </define>
+        <define name="z3998.toc.content">
+            <interleave>
+                <optional>
+                    <ref name="z3998.h"/>
+                </optional>
+                <zeroOrMore>
+                    <ref name="z3998.toc.extra.class"/>
+                </zeroOrMore>
+            </interleave>
+            <ref name="z3998.toc.content.body"/>
+        </define>
+        <define name="z3998.toc.content.body">
+            <interleave>
+                <oneOrMore>
+                    <choice>
+                        <ref name="z3998.toc.entry"/>
+                        <ref name="z3998.toc.section"/>
+                    </choice>
+                </oneOrMore>
+                <zeroOrMore>
+                    <ref name="z3998.toc.extended.entry.class"/>
+                </zeroOrMore>
+            </interleave>
+        </define>
+        <define name="z3998.toc.extra.class">
+            <choice>
+                <ref name="z3998.toc.aside"/>
+                <ref name="z3998.Block.basic.model"/>
+                <ref name="z3998.Global.extra.class"/>
+            </choice>
+        </define>
+        <define name="z3998.toc.extended.entry.class">
+            <choice>
+                <ref name="z3998.hd"/>
+                <ref name="z3998.Global.extra.class"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.toc.block">
+            <element name="toc">
+                <a:documentation>The toc element represents a single table of contents in a document. The Block variant is an adaption for use when a table of contents is embedded within another sections, such as a mini table of contents to start a section. The term "table of contents" is a generalization encompassing all of tables of contents, tables of figures, tables of maps and similar guides to the contents of a document. </a:documentation>
+                <ref name="z3998.toc.attlist"/>
+                <ref name="z3998.toc.block.content"/>
+            </element>
+        </define>
+        <define name="z3998.toc.block.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.toc.block.content">
+            <ref name="z3998.toc.content.body"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.toc.entry">
+            <element name="entry">
+                <a:documentation>The toc entry element represents a single entry in a table of contents , including all related child entries. A toc entry typically consists of the text on the leader line followed by an optional ref element indicating the corresponding print page. The ref element can also be used to link the text of the entry directly to the location in the document when the table of contents or document does not include page numbers. The toc block element is used to group all secondary information that falls below the leader line. It is not intended to group subentries, which should be included as children of the primary entry following the block.. </a:documentation>
+                <ref name="z3998.toc.entry.attlist"/>
+                <ref name="z3998.toc.entry.content"/>
+                <sch:rule context="default:entry[ancestor::default:toc]">
+                    <sch:assert test="normalize-space(.) or *">The entry element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.toc.entry.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.toc.entry.content">
+            <ref name="z3998.toc.entry.main"/>
+            <ref name="z3998.toc.entry.sub"/>
+            <zeroOrMore>
+                <choice>
+                    <ref name="z3998.toc.entry"/>
+                    <ref name="z3998.Global.extra.class"/>
+                </choice>
+            </zeroOrMore>
+        </define>
+        <define name="z3998.toc.entry.main">
+            <ref name="z3998.Phrase.core.Text.mix.model"/>
+            <optional>
+                <ref name="z3998.ref"/>
+            </optional>
+        </define>
+        <define name="z3998.toc.entry.sub">
+            <optional>
+                <ref name="z3998.toc.entry.elem.block"/>
+            </optional>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.toc.entry.elem.block">
+            <element name="block">
+                <a:documentation>The toc block element is used to group any ancillary information that falls under an entry's leader line (not including subentries), such as descriptions or topic lists. </a:documentation>
+                <ref name="z3998.Block.attrib"/>
+                <ref name="z3998.toc.entry.elem.block.content"/>
+            </element>
+        </define>
+        <define name="z3998.toc.entry.elem.block.content">
+            <oneOrMore>
+                <choice>
+                    <ref name="z3998.Block.basic.model"/>
+                    <ref name="z3998.toc.entry.elem.block.contrib"/>
+                    <ref name="z3998.toc.aside"/>
+                </choice>
+            </oneOrMore>
+        </define>
+        <define name="z3998.toc.entry.elem.block.contrib">
+            <notAllowed/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.toc.section">
+            <element name="section">
+                <a:documentation>The toc section element represents a subdivision of a table of contents . The toc section element is a specialization of the section element that provides a content model to fit the unique requirements of table of contents divisions. </a:documentation>
+                <ref name="z3998.toc.attlist"/>
+                <ref name="z3998.toc.content"/>
+            </element>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.toc.aside">
+            <element name="aside">
+                <a:documentation>The toc aside element represents a separate block of information in a toc table of contents from the main sections and entries. The toc aside element typically represents information in the margins of a print table of contents. </a:documentation>
+                <ref name="z3998.toc.aside.attlist"/>
+                <ref name="z3998.toc.aside.content"/>
+            </element>
+        </define>
+        <define name="z3998.toc.aside.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.toc.aside.content">
+            <interleave>
+                <ref name="z3998.aside.content"/>
+                <zeroOrMore>
+                    <ref name="z3998.toc"/>
+                </zeroOrMore>
+            </interleave>
+        </define>
+    </div>
+    <div>
+        <a:documentation>toc - default content model contribution </a:documentation>
+        <define name="z3998.frontmatter.content.class" combine="choice">
+            <ref name="z3998.toc"/>
+        </define>
+        <define name="z3998.backmatter.content.class" combine="choice">
+            <ref name="z3998.toc"/>
+        </define>
+        <define name="z3998.section.Block.content.class" combine="choice">
+            <ref name="z3998.toc.block"/>
+        </define>
+    </div>
+</grammar>

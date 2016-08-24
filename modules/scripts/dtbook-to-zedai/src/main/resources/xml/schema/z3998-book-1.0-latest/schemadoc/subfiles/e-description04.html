@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the description element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element">description</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d684e55">Usage Example</a></li>
+               <li class="h2"><a href="#d684e59">Allowed parents</a></li>
+               <li class="h2"><a href="#d684e155">Allowed children</a></li>
+               <li class="h2"><a href="#d684e178">Content model</a></li>
+               <li class="h2"><a href="#d684e201">Namespace</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The 
+                  <code>description</code> element is the root container element for a description. It consists of an optional container element for metadata information
+                  (the 
+                  <code>
+                     <a href="e-head02.html">head</a>
+                     </code>) and a required container for the different description types and alternate image renditions (the 
+                  <code>
+                     <a href="e-body02.html">body</a>
+                     </code>).
+                  
+               </p>
+               <p class="description ">The language of the description can be specified by attaching an 
+                  <code>
+                     <a href="attributes.html#lang01">xml:lang</a>
+                     </code> attribute to the 
+                  <code>description</code> element. If the description will be made available in a standalone context (i.e., in which its language cannot be inherited
+                  from a host content document), the language should always be specified.
+                  
+               </p>
+               <p class="description ">The 
+                  <a href="http://www.daisy.org/z3998/2012/auth/profiles/descriptions/current/z3998-descriptions.html">DIAGRAM Description profile</a> provides the ability to compile one or more 
+                  <code>description</code> elements into a single document for distribution (e.g., to accompany an EPUB).
+                  
+               </p>
+               <p class="description ">When storing a description in a standalone context, the Description feature namespace 
+                  <code>http://www.daisy.org/ns/z3998/authoring/features/description/</code> should be declared on the 
+                  <code>description</code> element using the xmlns namespace association mechanism defined in 
+                  <code>
+                     <a href="http://www.daisy.org/z3998/2012/z3998-2012.html#refXMLNamespaces">XMLNAMES</a>
+                     </code>. Although not required, the prefix 
+                  <code>d</code> is recommended.
+                  
+               </p>
+            </div>
+            <h2 id="d684e55">Usage Example</h2><pre>
+&lt;d:description xml:lang="en"&gt;
+    &lt;d:head&gt;
+        &lt;meta property="dc:identifier" content="water-cycle" /&gt;
+        &lt;meta property="diagram:targetAge" content="9-12" /&gt;
+        &lt;meta property="diagram:targetGrade" content="4-7" /&gt;
+    &lt;/d:head&gt;
+    &lt;d:body&gt;
+        &lt;d:longdesc&gt;
+            …
+        &lt;/d:longdesc&gt;
+    &lt;/d:body&gt;
+&lt;/d:description&gt;
+    </pre><h2 id="d684e59">Allowed parents</h2>
+            <p><a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annotation01.html">annotation</a>, 
+               <a class="element" href="e-annotation-xml01.html">m:annotation-xml</a>, 
+               <a class="element" href="e-aside02.html">aside (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-aside03.html">aside (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-backcover01.html">backcover</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-entry03.html">entry (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-entry04.html">entry (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-flaps01.html">flaps</a>, 
+               <a class="element" href="e-frontcover01.html">frontcover</a>, 
+               <a class="element" href="e-item01.html">item</a>, 
+               <a class="element" href="e-longdesc01.html">d:longdesc</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-otherwise03.html">sel:otherwise</a>, 
+               <a class="element" href="e-quote01.html">quote</a>, 
+               <a class="element" href="e-section01.html">section</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-td01.html">td</a>, 
+               <a class="element" href="e-th01.html">th</a>, 
+               <a class="element" href="e-tour01.html">d:tour</a> and 
+               <a class="element" href="e-when02.html">sel:when</a>
+               
+            </p>
+            <h2 id="d684e155">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>must</em> contain the following children: <a class="element" href="e-body02.html">d:body</a>
+               
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-head02.html">d:head</a>
+               
+            </p>
+            <h2 id="d684e178">Content model</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a> and 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a></div>
+               <div class="rng"><span class="rng-term">an optional </span>
+                  <a class="element" href="e-head02.html">d:head</a>
+                  
+               </div><a class="element" href="e-body02.html">d:body</a></div>
+            <h2 id="d684e201">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/features/description/</span></p>
+         </div>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar  
+  datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+  ns="http://www.w3.org/1999/xhtml"
+  xmlns="http://relaxng.org/ns/structure/1.0"
+  xmlns:sch="http://www.ascc.net/xml/schematron"
+  xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"  
+>
+  <a:documentation>
+    d202meta.rng
+    This file is part of the RelaxNG/Schematron validation
+    suite for Daisy 2.02. All Schematron assertion strings
+    can be identifier by the intitial part of the string 
+    being: '[sch][dtb::d202][type::warning|error][msg::'.
+    Last edit by: linuse 2006-03-02
+  </a:documentation>
+    
+  
+  
+      <define name="nccCharset"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">ncc:charset</value>
+        </attribute>
+        <attribute name="content">
+          <ref name="datatype.string.charset"/>
+        </attribute>
+      </define>
+      
+      <define name="dcDate"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">dc:date</value>
+        </attribute>
+        <attribute name="content">
+          <ref name="datatype.iso8601"/>
+        </attribute>
+      </define>
+      
+      <define name="dcFormat"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">dc:format</value>
+        </attribute>
+        <attribute name="content">      
+          <value type="string">Daisy 2.02</value>
+        </attribute>  
+      </define>
+      
+      <define name="dcIdentifier"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">dc:identifier</value>
+        </attribute>        
+        <attribute name="content">      
+          <ref name="datatype.string.identifier"/>
+        </attribute>        
+      </define>
+      
+      <define name="nccPageFront"> <!-- mandatory exactly one --> 
+        <attribute name="name">          
+          <value type="string">ncc:pageFront</value>
+        </attribute>        
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>        
+      </define>
+      
+      <define name="nccPageNormal"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">ncc:pageNormal</value>
+        </attribute>  
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>        
+      </define>
+      
+      <define name="nccPageSpecial"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">ncc:pageSpecial</value>
+        </attribute>  
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>        
+      </define>
+      
+      <define name="dcTitle"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">dc:title</value>
+        </attribute>  
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>        
+      </define>
+      
+      <define name="nccTocItems"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">ncc:tocItems</value>
+        </attribute>  
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>        
+      </define>
+      
+      <define name="nccTotalTime"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">ncc:totalTime</value>
+        </attribute>  
+        <attribute name="content">
+          <ref name="datatype.smilclock"/>
+        </attribute>        
+      </define>       
+      
+      <define name="dcPublisher"> <!-- mandatory exactly one --> 
+        <attribute name="name">
+          <value type="string">dc:publisher</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define> 
+            
+      <define name="dcLanguage"> <!-- mandatory one or more --> 
+        <attribute name="name">
+          <value type="string">dc:language</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.rfc1766"/>
+        </attribute>        
+      </define>
+      
+      <define name="dcCreator"> <!-- mandatory one or more --> 
+        <attribute name="name">
+          <value type="string">dc:creator</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="nccSetInfo"> <!-- mandatory in multiple volume DTBs --> 
+        <attribute name="name">
+          <value type="string">ncc:setInfo</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="nccSidebars"> <!-- mandatory if sidebars are used --> 
+        <attribute name="name">
+           <value type="string">ncc:sidebars</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>
+      </define>
+      
+      <define name="nccFootnotes"> <!-- mandatory if footnotes are used --> 
+        <attribute name="name">
+          <value type="string">ncc:footnotes</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>
+      </define>
+      
+      <define name="nccProdNotes"> <!-- mandatory if producers notes are used --> 
+        <attribute name="name">
+          <value type="string">ncc:prodNotes</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>
+      </define>
+            
+      <define name="nccDepth"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:depth</value>
+        </attribute>          
+        <attribute name="content">
+          <data type="string"> 
+            <!-- <param name="pattern">^[123456]</param> -->
+          </data>
+        </attribute>
+      </define>
+      
+      <define name="nccFiles"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:files</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>
+      </define>
+      
+      <define name="nccMaxPageNormal"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:maxPageNormal</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>
+      </define>
+      
+      <define name="nccMultimediaType"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:multimediaType</value>
+        </attribute>          
+        <attribute name="content">
+          <choice>
+            <value type="string">audioOnly</value>
+            <value type="string">audioNcc</value>
+            <value type="string">audioPartText</value>
+            <value type="string">audioFullText</value>
+            <value type="string">textPartAudio</value>
+            <value type="string">textNcc</value>
+          </choice>
+        </attribute>
+      </define>
+      
+      <define name="dcSource"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">dc:source</value>
+        </attribute>          
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="nccSourceDate"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:sourceDate</value>
+        </attribute>                  
+        <attribute name="content">
+          <ref name="datatype.iso8601"/>
+        </attribute>
+      </define>
+      
+      <define name="nccSourceEdition"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:sourceEdition</value>
+        </attribute>                          
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="nccSourcePublisher"> <!-- optional zeroOrOne --> 
+        <attribute name="name">          
+          <value type="string">ncc:sourcePublisher</value>
+        </attribute>                          
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="nccGenerator"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:generator</value>
+        </attribute>                                  
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="httpEquiv"> <!-- optional zeroOrOne --> 
+        <attribute name="http-equiv">
+          <data type="string">
+            <param name="pattern">[C|c][o|O][n|N][t|T][e|E][n|N][t|T]-[t|T][y|Y][p|P][e|E]</param>
+          </data>
+        </attribute>  
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="ncckByteSize"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:kByteSize</value>
+        </attribute>                   
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>
+      </define>
+      
+      <define name="nccProducedDate"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:producedDate</value>
+        </attribute>           
+        <attribute name="content">
+          <ref name="datatype.iso8601"/>
+        </attribute>
+      </define>
+      
+      <define name="nccProducer"> <!-- optional zeroOrOne --> 
+        <attribute name="name">        
+          <value type="string">ncc:producer</value>
+        </attribute>           
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="nccRevision"> <!-- optional zeroOrOne --> 
+        <attribute name="name">        
+          <value type="string">ncc:revision</value>
+        </attribute>           
+        <attribute name="content">
+          <ref name="datatype.integer"/>
+        </attribute>
+      </define>
+      
+      <define name="nccRevisionDate"> <!-- optional zeroOrOne --> 
+        <attribute name="name">                
+          <value type="string">ncc:revisionDate</value>
+        </attribute>           
+        <attribute name="content">
+          <ref name="datatype.iso8601"/>
+        </attribute>
+      </define>
+      
+      <define name="nccSourceRights"> <!-- optional zeroOrOne --> 
+        <attribute name="name">                        
+          <value type="string">ncc:sourceRights</value>
+        </attribute>           
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="nccSourceTitle"> <!-- optional zeroOrOne --> 
+        <attribute name="name">
+          <value type="string">ncc:sourceTitle</value>
+        </attribute>                   
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+
+      <define name="dcSubject"> <!-- optional zeroOrMore --> 
+        <attribute name="name">        
+          <value type="string">dc:subject</value>
+        </attribute>           
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="nccNarrator"> <!-- optional zeroOrMore --> 
+        <attribute name="name">
+          <value type="string">ncc:narrator</value>
+        </attribute>                   
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="dcContributor"> <!-- optional zeroOrMore --> 
+        <attribute name="name">
+          <value type="string">dc:contributor</value>
+        </attribute>                           
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="dcCoverage"> <!-- optional zeroOrMore --> 
+        <attribute name="name">
+          <value type="string">dc:coverage</value>
+        </attribute>                                   
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="dcDescription"> <!-- optional zeroOrMore --> 
+        <attribute name="name">
+          <value type="string">dc:description</value>
+        </attribute>                                   
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="dcRelation"> <!-- optional zeroOrMore --> 
+        <attribute name="name">
+          <value type="string">dc:relation</value>
+        </attribute>                                   
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="dcRights"> <!-- optional zeroOrMore --> 
+        <attribute name="name">        
+          <value type="string">dc:rights</value>
+        </attribute>              
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+      
+      <define name="dcType"> <!-- optional zeroOrMore --> 
+        <attribute name="name">                
+          <value type="string">dc:type</value>
+        </attribute>                      
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>    
+      
+      <define name="prodmeta"> <!-- all else --> 
+        <attribute name="name">
+          <ref name="datatype.string.prodPrefix"/>
+        </attribute>
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>
+
+      <define name="nccTimeInThisSmil">
+        <attribute name="name">                
+          <value type="string">ncc:timeInThisSmil</value>
+        </attribute>                      
+        <attribute name="content">
+          <ref name="datatype.smilclock"/>
+        </attribute>
+      </define>
+      
+      <define name="nccTotalElapsedTime">
+        <attribute name="name">                
+          <value type="string">ncc:totalElapsedTime</value>
+        </attribute>                      
+        <attribute name="content">
+          <ref name="datatype.smilclock"/>
+        </attribute>
+      </define>
+      
+      <define name="title">
+        <attribute name="name">                
+          <value type="string">title</value>
+        </attribute>                      
+        <attribute name="content">
+          <ref name="datatype.string"/>
+        </attribute>
+      </define>       
+</grammar>

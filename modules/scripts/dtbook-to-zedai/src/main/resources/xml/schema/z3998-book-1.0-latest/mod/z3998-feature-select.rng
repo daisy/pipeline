@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/features/select/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The Content Selection Feature </title>
+        <annotation annotates="/">
+            <para>Provides a mechanism for defining alternate renditions of content fragments, and a mechanism for defining conditional expressions that allow runtime selection of these renditions. </para>
+            <para>Two variants of the select element are available: one for use in a Block context and a second for use in a Phrase context. </para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.select.phrase">
+            <element name="select">
+                <a:documentation>Container for content selection declarations in a Phrase context. </a:documentation>
+                <ref name="z3998.select.attlist"/>
+                <ref name="z3998.select.phrase.content"/>
+            </element>
+        </define>
+        <define name="z3998.select.block">
+            <element name="select">
+                <a:documentation>Container for content selection declarations in a Block context. </a:documentation>
+                <ref name="z3998.select.attlist"/>
+                <ref name="z3998.select.block.content"/>
+            </element>
+        </define>
+        <define name="z3998.select.phrase.content">
+            <oneOrMore>
+                <ref name="z3998.when.phrase"/>
+            </oneOrMore>
+            <ref name="z3998.otherwise.phrase"/>
+        </define>
+        <define name="z3998.select.block.content">
+            <oneOrMore>
+                <ref name="z3998.when.block"/>
+            </oneOrMore>
+            <ref name="z3998.otherwise.block"/>
+        </define>
+        <define name="z3998.select.attlist">
+            <optional>
+                <ref name="xml.id.attrib"/>
+            </optional>
+            <optional>
+                <ref name="xml.base.attrib"/>
+            </optional>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.when.phrase">
+            <element name="when">
+                <a:documentation>Container for a content fragment, associated with a selection condition. </a:documentation>
+                <ref name="z3998.when.attlist"/>
+                <ref name="z3998.when.phrase.content"/>
+            </element>
+        </define>
+        <define name="z3998.when.block">
+            <element name="when">
+                <a:documentation>Container for a content fragment, associated with a selection condition. </a:documentation>
+                <ref name="z3998.when.attlist"/>
+                <ref name="z3998.when.block.content"/>
+            </element>
+        </define>
+        <define name="z3998.when.attlist">
+            <optional>
+                <ref name="xml.id.attrib"/>
+            </optional>
+            <ref name="z3998.expr.attrib"/>
+        </define>
+        <define name="z3998.when.phrase.content">
+            <a:documentation>Note that this content model must be set so that the result of replacing the entire select element with the content of one its when or otherwise children does not result in invalidity. </a:documentation>
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="z3998.when.block.content">
+            <a:documentation>Note that this content model must be set so that the result of replacing the entire select element with the content of one its when or otherwise children does not result in invalidity. </a:documentation>
+            <ref name="z3998.Block.model"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.otherwise.phrase">
+            <element name="otherwise">
+                <a:documentation>Container for a content fragment to be selected if none of the preceding when.phrase conditions evaluated to true. </a:documentation>
+                <ref name="z3998.otherwise.attlist"/>
+                <ref name="z3998.otherwise.phrase.content"/>
+                <sch:rule context="sel:otherwise">
+                    <sch:assert test="not(descendant::sel:select)">The sel:otherwise element must not have sel:select descendants. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.otherwise.block">
+            <element name="otherwise">
+                <a:documentation>Container for a content fragment to be selected if none of the preceding when.block conditions evaluated to true. </a:documentation>
+                <ref name="z3998.otherwise.attlist"/>
+                <ref name="z3998.otherwise.block.content"/>
+            </element>
+        </define>
+        <define name="z3998.otherwise.phrase.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="z3998.otherwise.block.content">
+            <ref name="z3998.Block.model"/>
+        </define>
+        <define name="z3998.otherwise.attlist">
+            <optional>
+                <ref name="xml.id.attrib"/>
+            </optional>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.expr.attrib">
+            <attribute name="expr">
+                <a:documentation>The expr attribute contains a conditional expression. Refer to the Content Selection Feature for information on syntax and function set association. </a:documentation>
+                <ref name="z3998.select.ConditionalExpression.datatype"/>
+            </attribute>
+        </define>
+        <define name="z3998.select.ConditionalExpression.datatype">
+            <a:documentation>A conditional expression, as defined in Conditional Expression </a:documentation>
+            <data type="string"/>
+        </define>
+    </div>
+    <define name="z3998.select.selid.attrib">
+        <attribute name="selid" ns="http://www.daisy.org/ns/z3998/authoring/features/select/">
+            <a:documentation>The selid attribute provides a mechanism for including ID values on elements that are repeated in more than one select condition. The selid allows a single NCNAME as its value. When processing a select, all selid attributes in the resulting output condition must be converted to xml:id attributes. </a:documentation>
+            <ref name="NCName.datatype"/>
+        </attribute>
+    </define>
+    <div>
+        <a:documentation>Z39.98 Content Selection feature - content model contribution </a:documentation>
+        <define name="z3998.Block.extern.class" combine="choice">
+            <ref name="z3998.select.block"/>
+        </define>
+        <define name="z3998.Phrase.extern.class" combine="choice">
+            <ref name="z3998.select.phrase"/>
+        </define>
+        <define name="z3998.global.core.attrib" combine="interleave">
+            <optional>
+                <ref name="z3998.select.selid.attrib"/>
+            </optional>
+        </define>
+    </div>
+</grammar>

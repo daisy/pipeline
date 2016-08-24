@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Version history of the Z39.98-AI Book profile</title>
+        <link rel="stylesheet" type="text/css" href="../../../../z3998-2012.css"/>
+    </head>
+    <body>
+        <h1><span class="titlesub">Version history of the</span><br/> Z39.98-AI Book profile</h1>
+        <div class="version-info" id="v1.0">
+            <h2>Version 1.0 (2012-12-19)</h2>
+            <p>First public release.</p>
+            <p>This release incorporates the following changes:</p>
+            <ul>
+                <li>the profile has been updated to comply to the RDFa 1.1 Core October 20, 2012 Editor's Draft:
+                    <ul>
+                        <li>the default RDFa profile has been renamed the initial context document;</li>
+                        <li>context documents are now located in the <code>/context</code> subdirectory of <code>/vocab</code> (previously they were in <code>/profiles</code>);</li>
+                        <li>the <code>profile</code> attribute has been removed and replaced by a <code>meta</code> element for declaring the initial context document URI;</li>
+                    </ul>
+                </li>
+                <li>a special RDFa processing context has also been included for elements that represent self-contained documents (i.e., that have a metadata and body container). Metadata expressed without an <code>about</code> attribute now applies to the nearest container element. An implicit <code>about</code> attribute association is made between the <code>meta</code> element and the cotainer element.</li>
+                <li>the <code>ref</code> and <code>xlink:href</code> attributes have been added to the <code>quote</code> element to allow a citation to be directly referenced;</li>
+                <li>the <code>address</code> element has been added for physical and virtual addresses;</li>
+                <li>a Phrase variant of the <code>note</code> element was added to allow notes and annotations to fall between lines of verse and other phrase contexts;</li>
+                <li>the <code>rend:linebreak</code> element has been added;</li>
+                <li>the DIAGRAM <code>description</code> feature has been incorporated;</li>
+                <li>various minor documentation fixes.</li>
+            </ul>
+        </div>
+        <div class="version-info" id="v0.8">
+            <h2>Version 0.8 (2012-01-03)</h2>
+            <p>This release incorporates the following changes:</p>
+            <ul>
+                <li>the profile has been updated to use RDFa 1.1:
+                    <ul>
+                        <li>the <code>profile</code> attribute must now be added to the root <code>document</code> element to declare the default RDFa profile;</li>
+                        <li>the <code>prefix</code> attribute is now available to declare prefixes not included in the default profile;</li>
+                        <li>use of unprefixed CURIEs is now available for terms from the Z39.98-2012 Structural Semantics Vocabulary;</li>
+                        <li>the use of the <code>decl:</code> prefix for the Z39.98-2012 Instance Metadata Vocabulary has been dropped in favour of <code>z3998:</code>.</li>
+                    </ul>
+                </li>
+                <li>the profile now also supports the following standards:
+                    <ul>
+                        <li><a href="http://www.w3.org/TR/REC-xml/">Extensible Markup Language (XML) 1.0</a> (Fifth Edition)</li>
+                        <li><a href="http://www.w3.org/TR/xml-stylesheet/">Associating Style Sheets with XML documents 1.0</a> (Second Edition)</li>
+                    </ul>
+                </li>
+                <li>the <code>associate</code> attribute has been added for the <code>block</code> element to allow the binding of its child elements to a single element (e.g., to indicate all the children are associated with an image, in the case of figures);</li>
+                <li>the <code>separator</code> element has been renamed <code>transition</code> to better reflect its nature as a context change;</li>
+                <li>the <code>type</code> attribute for the <code>abbr</code> element has been replaced by <code>role</code>, and the list of allowed values made extensible;</li>
+                <li>the <code>col</code> element is no longer allowed as a child of <code>table</code> (only of <code>colgroup</code>);</li>
+                <li>a Section-layer variant of the <code>aside</code> element has been added for asides that contain structured content;</li>
+                <li>when a <code>quote</code> element contains only a single child <code>citation</code> element, the relationship between the two is now implied (i.e., the requirement to use <code>xml:id</code>/<code>ref</code> attributes to establish the relationship has been removed);</li>
+                <li>the <code>rend:rend</code> and <code>rend:indent</code> attributes have been dropped in favour of proper CSS styling available through the <code>class</code> attribute;</li>
+                <li>new terms were added to the Structural Semantics vocabulary for figures, plates, galleries and examples.</li>
+            </ul>
+            <p>The content models for all layers were also restructured to clean up models that allowed unwanted variants (e.g., so that the <code>description</code> element cannot be a child of the <code>abbr</code> element).</p>
+        </div>
+        <div class="version-info" id="v0.7">
+            <h2>Version 0.7 (2010-10-15)</h2>
+            <p>This release incorporates the following changes to the underlying Core Modules and features to simplify and improve markup models:</p>
+            <ul>
+                <li>the global <code>by</code> attribute was introduced for indicating the contributor of an element;</li>
+                <li>the document production roles <code>author</code>, <code>editor</code>, <code>general-editor</code>, <code>translator</code>, <code>commentator</code> and <code>republisher</code> were added for use in the <code>by</code> attribute;</li>
+                <li>the new <code>description</code> element was added for including and attaching accessible descriptions;</li>
+                <li>the global <code>desc</code> attribute was added for referencing a <code>description</code> from any element in a document;</li>
+                <li>the <code>object</code> element's content model has been changed to disallow nested objects;</li>
+                <li>the children of the <code>object</code> element are considered an implicit description of the <code>object</code> unless an explicit <code>description</code> is embedded;</li>
+                <li>the linking requirement for <code>note</code> and <code>annotation</code> have been changed so that either a <code>noteref</code> or <code>annoref</code> must point to them or they must point to some element in the document;</li>
+                <li>new annotation roles were added for indicating changes to the layout, presentation and rendering of a document;</li>
+                <li>the new annotation role <code>temporary</code> can be used to include production notes and other annotations not intended as part of a final document (and a schematron rule to generate warnings when present was also added);</li>
+                <li>the <code>annoref</code> element was added for linking from a text referent to an annotation (similar to the existing <code>noteref</code> element).</li>
+                <li>the <code>value</code> attribute has been added for noteref and annoref to include superscripted identifiers;</li>
+                <li><code>glossary</code> entries assume an implicit association between their child <code>term</code> and <code>definition</code> when exactly one of each is present;</li>
+                <li>added the new role <code>published-works</code> for identifying sections of works also by the same author;</li>
+                <li>included a generalized version of the Content Rendering feature's <code>prefix</code> attribute for adding prefixes to any elements;</li>
+                <li>the <code>sel:selid</code> attribute has been added to the Content Selection feature to handle multiple, identical ID values in condition branches;</li>
+                <li>the XLink 1.1 schemas have been verified to be compliant with the formal Recommendation released May 6, 2010;</li>
+                <li>the SSML 1.1 schemas have been verified to be compliant with the formal Recommendation released September 7, 2010;</li>
+            </ul>
+            <p>A functional XSD version of the schema is also now available. A complete translation from the RelaxNG source to XSD is not currently possible, however, so the XSD version should be used for authoring purposes only.</p>
+        </div>
+        <div class="version-info" id="v0.6">
+            <h2>Version 0.6 (2010-05-21)</h2>
+            <p>First public review release. Changes prior to this version are available through the <a href="http://code.google.com/p/zednext/">working group source code repository</a>.</p>
+        </div>    
+    </body>    
+</html>    

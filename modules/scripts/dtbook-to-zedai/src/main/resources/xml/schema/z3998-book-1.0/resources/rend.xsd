@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.daisy.org/ns/z3998/authoring/features/rend/" xmlns:select="http://www.daisy.org/ns/z3998/authoring/features/select/" xmlns:synthesis="http://www.w3.org/2001/10/synthesis" xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/" xmlns:its="http://www.w3.org/2005/11/its" xmlns:authoring="http://www.daisy.org/ns/z3998/authoring/" xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/" xmlns:xforms="http://www.w3.org/2002/xforms/" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/" schemaLocation="z3998-book.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/description/" schemaLocation="d.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/select/" schemaLocation="select.xsd"/>
+  <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
+  <xs:import namespace="http://www.w3.org/2001/10/synthesis" schemaLocation="synthesis.xsd"/>
+  <xs:import namespace="http://www.w3.org/2002/xforms/" schemaLocation="xforms.xsd"/>
+  <xs:import namespace="http://www.w3.org/2005/11/its" schemaLocation="its.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:attribute name="symbol"/>
+  <xs:attributeGroup name="prefix">
+    <xs:attribute name="prefix" use="required" form="qualified">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="none"/>
+          <xs:enumeration value="decimal"/>
+          <xs:enumeration value="decimal-leading-zero"/>
+          <xs:enumeration value="lower-alpha"/>
+          <xs:enumeration value="lower-greek"/>
+          <xs:enumeration value="lower-latin"/>
+          <xs:enumeration value="lower-roman"/>
+          <xs:enumeration value="upper-alpha"/>
+          <xs:enumeration value="upper-greek"/>
+          <xs:enumeration value="upper-latin"/>
+          <xs:enumeration value="upper-roman "/>
+          <xs:enumeration value="none"/>
+          <xs:enumeration value="box"/>
+          <xs:enumeration value="check"/>
+          <xs:enumeration value="circle"/>
+          <xs:enumeration value="diamond"/>
+          <xs:enumeration value="disc"/>
+          <xs:enumeration value="hyphen"/>
+          <xs:enumeration value="square"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="prefix1">
+    <xs:attribute name="prefix" use="required" form="qualified">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:minLength value="1"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+</xs:schema>

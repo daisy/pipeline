@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The glossary module </title>
+        <annotation annotates="/">
+            <para>This module defines the glossary element for defining glossaries and other sections of definitions. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.glossary.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <author>
+            <personname>Matt Garrish</personname>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.glossary">
+            <element name="glossary">
+                <a:documentation>The glossary element represents a glossary, pronunciation guide or other section that exclusively defines terms or phrases. The Section variant is an adaptation for use including terms and definitions that have been grouped as a separate section in a work, and where the glossary contains structured groups of entries by topic, letter of the alphabet, etc. The republishing of documents often requires the insertion of content that was not a part of the original source document. For example, in the case of indexes, bibliographies and other ordered sections, this requirement may take the form of placeholder sections to mark gaps in the alphabetic list of entries. To indicate that an element presents content that is a deviation from the source, the role attribute can be used with the value custom. No behaviors are defined for how a processing agent should handle sections so identified, however. </a:documentation>
+                <ref name="z3998.glossary.attlist"/>
+                <ref name="z3998.glossary.content"/>
+            </element>
+        </define>
+        <define name="z3998.glossary.attlist">
+            <ref name="z3998.Section.attrib"/>
+        </define>
+        <define name="z3998.glossary.content">
+            <ref name="z3998.glossary.model"/>
+        </define>
+        <define name="z3998.glossary.model">
+            <interleave>
+                <optional>
+                    <ref name="z3998.h"/>
+                </optional>
+                <zeroOrMore>
+                    <choice>
+                        <ref name="z3998.glossary.extra.class"/>
+                    </choice>
+                </zeroOrMore>
+            </interleave>
+            <choice>
+                <group>
+                    <interleave>
+                        <oneOrMore>
+                            <ref name="z3998.glossary.entry"/>
+                        </oneOrMore>
+                        <zeroOrMore>
+                            <ref name="z3998.glossary.extended.entry.class"/>
+                        </zeroOrMore>
+                    </interleave>
+                    <zeroOrMore>
+                        <ref name="z3998.glossary.section"/>
+                    </zeroOrMore>
+                </group>
+                <group>
+                    <zeroOrMore>
+                        <ref name="z3998.glossary.entry"/>
+                    </zeroOrMore>
+                    <oneOrMore>
+                        <ref name="z3998.glossary.section"/>
+                    </oneOrMore>
+                </group>
+            </choice>
+        </define>
+        <define name="z3998.glossary.extra.class">
+            <choice>
+                <ref name="z3998.Block.basic.model"/>
+                <ref name="z3998.Global.extra.class"/>
+            </choice>
+        </define>
+        <define name="z3998.glossary.extended.entry.class">
+            <choice>
+                <ref name="z3998.hd"/>
+                <ref name="z3998.Global.extra.class"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.glossary.block">
+            <element name="glossary">
+                <a:documentation>The glossary element represents a glossary, pronunciation guide or other section that exclusively defines terms or phrases. The Block variant is an adaptation for use including terms and definitions that have been grouped within the body of a work. </a:documentation>
+                <ref name="z3998.glossary.block.attlist"/>
+                <ref name="z3998.glossary.block.content"/>
+            </element>
+        </define>
+        <define name="z3998.glossary.block.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.glossary.block.content">
+            <group>
+                <oneOrMore>
+                    <ref name="z3998.glossary.entry"/>
+                </oneOrMore>
+            </group>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.glossary.section">
+            <element name="section">
+                <a:documentation>The glossary section element represents a major structural division in a glossary . The glossary section element is a specialization of the section element. It provides a content model to fit the unique requirements of glossary divisions. </a:documentation>
+                <ref name="z3998.glossary.attlist"/>
+                <ref name="z3998.glossary.model"/>
+            </element>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.glossary.entry">
+            <element name="entry">
+                <a:documentation>The glossary entry element represents a single unique entry in a glossary . A glossary entry must contain one or more term elements and either one or more definition elements or one or more ref elements pointing to a definition. To facilitate the markup of glossaries, if an entry contains exactly one term and one definition an implicit association is assumed between them (i.e., the normal requirement to explicitly link the term to the definition by the ref attribute does not apply). If the entry contains mutliple term or definition elements, then the explicit association of each is required. </a:documentation>
+                <ref name="z3998.glossary.entry.attlist"/>
+                <ref name="z3998.glossary.entry.content"/>
+                <sch:rule context="default:entry[ancestor::default:glossary]">
+                    <sch:assert test="descendant::default:term">Each entry element must contain at least one term element. </sch:assert>
+                    <sch:assert test="descendant::default:definition or descendant::default:ref">Each entry element must contain at least one definition or ref element. </sch:assert>
+                    <sch:report test="(count(descendant::default:term) &gt; 1 or count(descendant::default:definition) &gt; 1) and descendant::default:term[not(@ref)]">Each {term} element must explicitly reference its {definition}(s) when more than one {term} or {definition} are included in the {entry}.</sch:report>
+                    <sch:assert test="descendant::default:definition or descendant::default:ref[some $ref in tokenize(@ref, '\s+') satisfies //default:definition[@xml:id=$ref]]">Each entry element must contain at least one definition or reference to a definition. </sch:assert>
+                    <sch:assert test="normalize-space(.) or *">The entry element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.glossary.entry.attlist">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.glossary.entry.content">
+            <ref name="z3998.Flow.choice.model"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>glossary - default content model contribution </a:documentation>
+        <define name="z3998.frontmatter.content.class" combine="choice">
+            <ref name="z3998.glossary"/>
+        </define>
+        <define name="z3998.section.Block.content.class" combine="choice">
+            <ref name="z3998.glossary.block"/>
+        </define>
+        <define name="z3998.section.Section.content.class" combine="choice">
+            <ref name="z3998.glossary"/>
+        </define>
+        <define name="z3998.backmatter.content.class" combine="choice">
+            <ref name="z3998.glossary"/>
+        </define>
+    </div>
+</grammar>

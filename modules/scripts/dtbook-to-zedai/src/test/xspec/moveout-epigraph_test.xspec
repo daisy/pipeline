@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:tmp="http://www.daisy.org/pipeline/ns/tmp"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/moveout-epigraph.xsl">
+    <x:scenario label="Definition with EPIGRAPH">
+        <x:context>
+            <tmp:item>
+                <dd>DD <epigraph>epigraphs should not be inside definitions</epigraph> Rest of DD</dd>
+            </tmp:item>
+        </x:context>
+        <x:expect label="">
+            <tmp:item>
+                <dd>DD </dd>
+            </tmp:item>
+            <epigraph>epigraphs should not be inside definitions</epigraph>
+            <tmp:item>
+                <dd> Rest of DD</dd>
+            </tmp:item>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="epigraph within p">
+        <x:context>
+            <div>
+                <p>p <epigraph>epigraphs should not be inside paragraphs</epigraph> rest of p</p>
+            </div>
+        </x:context>
+        <x:expect label="">
+            <div>
+                <p>p </p>
+                <epigraph>epigraphs should not be inside paragraphs</epigraph>
+                <p> rest of p</p>
+            </div>
+        </x:expect>
+    </x:scenario>
+</x:description>

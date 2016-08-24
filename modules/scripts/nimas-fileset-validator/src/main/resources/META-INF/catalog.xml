@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <uri name="http://www.daisy.org/pipeline/modules/nimas-fileset-validator/nimas-fileset-validator.xpl" uri="../xml/nimas-fileset-validator.xpl" px:script="true"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-validator"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
+</catalog>

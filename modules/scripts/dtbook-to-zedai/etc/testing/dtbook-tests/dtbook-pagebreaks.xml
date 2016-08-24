@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta name="dtb:uid" content="pipeline2-dtbook-test-20120901-empty-sections"/>
+        <meta name="dc:Identifier" content="pipeline2-dtbook-test-20120901-empty-sections"/>
+        <meta name="dc:Title" content="Pipeline 2 DTBook Test Content: Empty Sections"/>
+        <meta name="dc:Creator" content="Romain"/>
+        <meta name="dc:Date" content="2012-09-01"/>
+        <meta name="dc:publisher" content="TestPublisher"/>
+        <meta name="dc:Language" content="en-US"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Empty Sections</doctitle>
+            <docauthor>Romain</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Introduction</h1>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p1">1</pagenum>
+                <level2>
+                    <h2>Next Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

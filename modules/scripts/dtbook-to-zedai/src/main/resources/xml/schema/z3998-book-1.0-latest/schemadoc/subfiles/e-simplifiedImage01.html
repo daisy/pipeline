@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the simplifiedImage element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element">simplifiedImage</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d700e15">Usage Example</a></li>
+               <li class="h2"><a href="#d700e19">Allowed parents</a></li>
+               <li class="h2"><a href="#d700e25">Allowed children</a></li>
+               <li class="h2"><a href="#d700e48">Content model</a></li>
+               <li class="h2"><a href="#d700e143">Namespace</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The 
+                  <code>simplifiedImage</code> element contains a simplified version of the source image. The element may contain one or more identical images in different
+                  formats.
+                  
+               </p>
+               <p class="description ">The simplified image may also include an explanatory 
+                  <code>
+                     <a href="e-tour01.html">tour</a>
+                     </code>.
+                  
+               </p>
+            </div>
+            <h2 id="d700e15">Usage Example</h2><pre>
+&lt;d:simplifiedImage xml:id="alt-image"&gt;
+    &lt;object src="http://example.com/…/evaporation.svg" srctype="image/svg+xml" /&gt;
+    &lt;d:tour&gt;
+        &lt;p&gt;Moving front the top left corner of the image…&lt;/p&gt;
+    &lt;/d:tour&gt;
+&lt;/d:simplifiedImage&gt;
+    </pre><h2 id="d700e19">Allowed parents</h2>
+            <p><a class="element" href="e-body02.html">d:body</a>
+               
+            </p>
+            <h2 id="d700e25">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>must</em> contain the following children: <a class="element" href="e-object01.html">object</a>
+               
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-tour01.html">d:tour</a>
+               
+            </p>
+            <h2 id="d700e48">Content model</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#continuation01">@continuation</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role11">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#onlangfailure01">@ssml:onlangfailure</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-x"><strong>group</strong></span><div class="rng-content">
+                     
+                     <div class="rng">first <span class="rng-term">one or more of </span>
+                        <a class="element" href="e-object01.html">object</a>
+                        
+                     </div>
+                     
+                     <div class="rng">followed by <span class="rng-term">an optional </span>
+                        <a class="element" href="e-tour01.html">d:tour</a>
+                        
+                     </div>
+                     
+                  </div>
+               </div>
+            </div>
+            <h2 id="d700e143">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/features/description/</span></p>
+         </div>
+      </div>
+   </body>
+</html>

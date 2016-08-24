@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the list element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element">list</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d38e30">Usage Example</a></li>
+               <li class="h2"><a href="#d38e34">Allowed parents</a></li>
+               <li class="h2"><a href="#d38e149">Allowed children</a></li>
+               <li class="h2"><a href="#d38e172">Content model</a></li>
+               <li class="h2"><a href="#d38e334">Namespace</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description "> The 
+                  <code>list</code> element represents a simple list of items, either ordered or unordered. 
+                  
+               </p>
+               <p class="description "> The optional 
+                  <code>type</code> attribute specifies the HTML-style ordered and unordered nature of the list.
+                  
+               </p>
+               <p class="description "> By default, an unordered list is prefixed by bullets and an ordered list by numeric values. To change this behavior, refer
+                  to the Content Rendition feature's 
+                  <code>
+                     <a href="http://www.daisy.org/z3998/2012/auth/features/rend/current/#z3998.rend.list.ordered.prefix.attrib">prefix</a>
+                     </code> attributes. 
+                  
+               </p>
+               <p class="description ">If the 
+                  <code>type</code> attribute is omitted, then there is no default formatting.
+                  
+               </p>
+               <p class="description ">The 
+                  <code>list</code> element is not intended to structure semantically meaningful sets of entries as found in indexes, bibliographies and glossaries.
+                  
+               </p>
+            </div>
+            <h2 id="d38e30">Usage Example</h2><pre>                
+&lt;list type="ordered" start="17"&gt;
+    &lt;item&gt;&lt;p&gt;Cytheræa — Closely related to, or identical with C. purpurascens.&lt;/p&gt;&lt;/item&gt;
+    &lt;item&gt;&lt;p&gt;Modiola — Same as recent kind (nov. spec.) living in the bay.&lt;/p&gt;&lt;/item&gt;
+    &lt;item&gt;&lt;p&gt;Nucula — Near to N. margaritacea.&lt;/p&gt;&lt;/item&gt;
+&lt;/list&gt;
+    </pre><h2 id="d38e34">Allowed parents</h2>
+            <p><a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annotation01.html">annotation</a>, 
+               <a class="element" href="e-annotation-xml01.html">m:annotation-xml</a>, 
+               <a class="element" href="e-aside02.html">aside (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-aside03.html">aside (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-backcover01.html">backcover</a>, 
+               <a class="element" href="e-block01.html">block (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-block02.html">block (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-description01.html">description</a>, 
+               <a class="element" href="e-entry03.html">entry (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-entry04.html">entry (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-flaps01.html">flaps</a>, 
+               <a class="element" href="e-frontcover01.html">frontcover</a>, 
+               <a class="element" href="e-item01.html">item</a>, 
+               <a class="element" href="e-longdesc01.html">d:longdesc</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-object01.html">object</a>, 
+               <a class="element" href="e-otherwise03.html">sel:otherwise</a>, 
+               <a class="element" href="e-quote01.html">quote</a>, 
+               <a class="element" href="e-section01.html">section</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-summary01.html">d:summary</a>, 
+               <a class="element" href="e-td01.html">td</a>, 
+               <a class="element" href="e-th01.html">th</a>, 
+               <a class="element" href="e-tour01.html">d:tour</a> and 
+               <a class="element" href="e-when02.html">sel:when</a>
+               
+            </p>
+            <h2 id="d38e149">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>must</em> contain the following children: <a class="element" href="e-item01.html">item</a>
+               
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-pagebreak01.html">pagebreak</a>
+               
+            </p>
+            <h2 id="d38e172">Content model</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#continuation01">@continuation</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#depth01">@depth</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role11">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#onlangfailure01">@ssml:onlangfailure</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               <div class="rng-choice"><span class="rng-term">a choice of</span>
+                  
+                  <div class="rng">either <span class="rng-term">a mix of</span>
+                     
+                     <div class="rng">• <a class="attribute" href="attributes.html#type02">@type</a></div>
+                     
+                     <div class="rng">• <span class="rng-term">an optional </span>
+                        <a class="attribute" href="attributes.html#start01">@start</a>
+                        
+                     </div>
+                     
+                     <div class="rng">• <span class="rng-term">an optional </span>
+                        <a class="attribute" href="attributes.html#prefix02">@rend:prefix</a>
+                        
+                     </div>
+                     <span class="rng-term">end of mix</span></div>
+                  
+                  <div class="rng">or <span class="rng-term">a mix of</span>
+                     
+                     <div class="rng">• <a class="attribute" href="attributes.html#type01">@type</a></div>
+                     
+                     <div class="rng">• <span class="rng-term">an optional </span>
+                        <a class="attribute" href="attributes.html#prefix03">@rend:prefix</a>
+                        
+                     </div>
+                     <span class="rng-term">end of mix</span></div>
+                  
+                  <div class="rng">or no attribute</div>
+                  <span class="rng-term">end of choice</span></div>
+               
+               
+               <div class="rng"><span class="rng-term">a mix of</span>
+                  
+                  <div class="rng">• <span class="rng-term">one or more of </span>
+                     <a class="element" href="e-item01.html">item</a>
+                     
+                  </div>
+                  
+                  <div class="rng">• <span class="rng-term">zero or more of </span>
+                     <a class="element" href="e-pagebreak01.html">pagebreak</a>
+                     
+                  </div>
+                  <span class="rng-term">end of mix</span></div>
+            </div>
+            <h2 id="d38e334">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+         </div>
+      </div>
+   </body>
+</html>

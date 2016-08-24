@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    stylesheet="../../main/resources/xml/xslt/zedai-to-html.xsl">
+    <x:scenario label="Simple MathML">
+        <x:context>
+            <m:math alttext="cube root of x">
+                <m:mroot>
+                    <m:mi>x</m:mi>
+                    <m:mn>3</m:mn>
+                </m:mroot>
+            </m:math>
+        </x:context>
+        <x:expect label="should be copied as-is">
+            <m:math alttext="cube root of x">
+                <m:mroot>
+                    <m:mi>x</m:mi>
+                    <m:mn>3</m:mn>
+                </m:mroot>
+            </m:math>
+        </x:expect>
+    </x:scenario>
+</x:description>

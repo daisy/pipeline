@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta content="pipeline2-dtbook-test-20110301-code" name="dtb:uid"/>
+        <meta content="Pipeline 2 DTBook Test Content: Code" name="dc:Title"/>
+        <meta name="dc:Creator" content="Marisa D."/>
+        <meta content="2011-03-01" name="dc:Date"/>
+        <meta name="dc:Publisher" content="Marisa D."/>
+        <meta content="pipeline2-dtbook-test-20110301-code" name="dc:Identifier"/>
+        <meta content="en-US" name="dc:Language"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Code</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Introduction</h1>
+                
+                <p>
+                    <code>
+                        <sent>void amis::io::TitleAuthorParse::endElement( const XMLCh* const uri,
+                        const XMLCh* const localname,
+                        const XMLCh* const qname)
+                        {
+                        char* element_name = XMLString::transcode(qname); 
+                        
+                        if (mbFlagGetChars == true &amp;&amp; strcmp(element_name, mChardataElm.c_str()) == 0)
+                        mbFlagGetChars = false;
+                        
+                        else if(mbFlagProcessingAuthor == true &amp;&amp; strcmp(element_name, "docAuthor") == 0)
+                        mbFlagProcessingAuthor = false;
+                        
+                        else if(mbFlagProcessingTitle == true &amp;&amp; strcmp(element_name, "docTitle") == 0)
+                        mbFlagProcessingTitle = false;
+                        
+                        XMLString::release(&amp;element_name);  
+                        }
+                        </sent>
+                        
+                    </code>
+                </p>
+                
+                <p>
+                    <code>
+                        <dfn>Definition</dfn>
+                        <a href="stuff.org" external="true">Link</a>
+                        <cite>Cite cite cite</cite>
+                        some text for you!
+                    </code>
+                </p>
+                
+                <p>
+                    <code>
+                        <em>Emphasis!</em>
+                        Some text.
+                    </code>
+                </p>
+                
+                <p>
+                    <sent>part 1</sent>
+                    <code>
+                        <prodnote render="optional">interleaved block-level code</prodnote>
+                        <a href="stuff.org" external="true">codestuff</a>
+                    </code>
+                    <sent>part 2</sent>
+                </p>
+                
+                
+                <div>
+                    <a href="http://example.org" external="true"> Part A <code id="code"><prodnote render="optional">prodnote</prodnote>This is some code</code> Part B</a>
+                </div>                
+            </level1>
+
+        </bodymatter>
+    </book>
+</dtbook>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<document profile="http://www.daisy.org/z3998/2012/vocab/context/default/" prefix="" xml:lang="" xmlns="http://www.daisy.org/ns/z3998/authoring/" xmlns:its="http://www.w3.org/2005/11/its" xmlns:ssml="http://www.w3.org/2001/10/synthesis" xmlns:xforms="http://www.w3.org/2002/xforms/" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:sel="http://www.daisy.org/ns/z3998/authoring/features/select/" xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+    <!--define additional prefixes in the prefix attribute above or remove-->
+    <!-- set the value of xml:lang above to the base language of the document -->
+    <head>
+        <!-- the profile including version -->
+        <meta rel="z3998:profile" resource="http://www.daisy.org/z3998/2012/auth/profiles/book/1.0/">
+            <!--supported features (remove if not used)-->
+            <meta rel="z3998:feature" resource="http://www.daisy.org/z3998/2012/auth/features/its-ruby/1.0/"/>
+            <meta rel="z3998:feature" resource="http://www.daisy.org/z3998/2012/auth/features/ssml/1.0/"/>
+            <meta rel="z3998:feature" resource="http://www.daisy.org/z3998/2012/auth/features/forms/1.0/"/>
+            <meta rel="z3998:feature" resource="http://www.daisy.org/z3998/2012/auth/features/mathml/1.0/"/>
+            <meta rel="z3998:feature" resource="http://www.daisy.org/z3998/2012/auth/features/select/1.0/"/>
+            <meta rel="z3998:feature" resource="http://www.daisy.org/z3998/2012/auth/features/rend/1.0/"/>
+            <meta rel="z3998:feature" resource="http://www.daisy.org/z3998/2012/auth/features/svg-cdr/1.0/"/>
+        </meta>
+        <!-- the minimally required head metadata, values for the content attribute must be supplied -->
+        <meta property="dcterms:identifier" content=""/>
+        <meta property="dcterms:publisher" content=""/>
+        <meta property="dcterms:modified" content=""/>
+        <!-- example: reference to additional external metadata resource: mods in local file -->
+        <!-- <meta rel="z3998:meta-record" resource="mods-metadata.xml" /> <meta property="z3998:meta-record-type" about="mods-metadata.xml" content="z3998:mods" /> -->
+        <!-- example: this document itself as the additional metadata resource: dcterms using RDFa -->
+        <!-- <meta rel="z3998:meta-record" resource="." /> <meta property="z3998:meta-record-type" about="." content="z3998:dcterms-rdfa" /> -->
+    </head>
+    <body>
+        <!-- document content goes here -->
+    </body>
+</document>

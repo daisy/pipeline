@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The cover module </title>
+        <annotation annotates="/">
+            <para>This module defines the cover element for including images and content originally reproduced on the covers and jackets of publications. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.cover.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.cover">
+            <element name="cover">
+                <a:documentation>The cover element represents the complete cover or jacket of a print publication. </a:documentation>
+                <ref name="z3998.cover.attlist"/>
+                <ref name="z3998.cover.content"/>
+                <sch:rule context="default:cover">
+                    <sch:assert test="count(*) &gt; 0">The cover element must contain at least one of its allowed children. </sch:assert>
+                    <sch:report test="descendant::default:pagebreak">The {cover} element must contain descendant {pagebreak}s.</sch:report>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.cover.attlist">
+            <ref name="z3998.Section.attrib"/>
+        </define>
+        <define name="z3998.cover.content">
+            <optional>
+                <ref name="z3998.spine"/>
+            </optional>
+            <optional>
+                <ref name="z3998.frontcover"/>
+            </optional>
+            <optional>
+                <ref name="z3998.backcover"/>
+            </optional>
+            <optional>
+                <ref name="z3998.flaps"/>
+            </optional>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.spine">
+            <element name="spine">
+                <a:documentation>The spine element represents the section of the cover that overlays the bound inner side of a publication. The spine typically contains the author/editor name(s), title and the publisher/imprint logo. Information on the spine is often truncated because of space constraints. </a:documentation>
+                <ref name="z3998.spine.attlist"/>
+                <ref name="z3998.spine.content"/>
+                <sch:rule context="default:spine">
+                    <sch:assert test="normalize-space(.) or *">The spine element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.spine.attlist">
+            <ref name="z3998.Section.attrib"/>
+        </define>
+        <define name="z3998.spine.content">
+            <choice>
+                <oneOrMore>
+                    <choice>
+                        <ref name="z3998.Block.basic.model"/>
+                    </choice>
+                </oneOrMore>
+                <oneOrMore>
+                    <choice>
+                        <ref name="Characters.datatype"/>
+                        <ref name="z3998.Text.class"/>
+                        <ref name="z3998.Phrase.class"/>
+                    </choice>
+                </oneOrMore>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.frontcover">
+            <element name="frontcover">
+                <a:documentation>The frontcover element represents all content and images contained on the inside and outside of the front cover. The front outside cover typically contains the title and/or author information overlaid on an illustration. The front inside cover may contain maps, additional books by the author, pricing, ISBN numbers, etc. </a:documentation>
+                <ref name="z3998.frontcover.attlist"/>
+                <ref name="z3998.frontcover.content"/>
+            </element>
+        </define>
+        <define name="z3998.frontcover.attlist">
+            <ref name="z3998.Section.attrib"/>
+        </define>
+        <define name="z3998.frontcover.content" combine="interleave">
+            <ref name="z3998.covers.content"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.covers.content">
+            <oneOrMore>
+                <ref name="z3998.Block.class"/>
+            </oneOrMore>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.backcover">
+            <element name="backcover">
+                <a:documentation>The backcover element represents all content and images contained on the inside and outside of the back cover. The back covers typically contain biographical information about contributors, quotes, and a summary or description of the publication. </a:documentation>
+                <ref name="z3998.backcover.attlist"/>
+                <ref name="z3998.backcover.content"/>
+            </element>
+        </define>
+        <define name="z3998.backcover.attlist" combine="interleave">
+            <ref name="z3998.Section.attrib"/>
+        </define>
+        <define name="z3998.backcover.content" combine="interleave">
+            <ref name="z3998.covers.content"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.flaps">
+            <element name="flaps">
+                <a:documentation>The flaps element represents all content and images contained on the front and back jacket flaps. If the content on the flaps is continued from the front to back flap, it should be merged and treated as unbroken. </a:documentation>
+                <ref name="z3998.flaps.attlist"/>
+                <ref name="z3998.flaps.content"/>
+            </element>
+        </define>
+        <define name="z3998.flaps.attlist">
+            <ref name="z3998.Section.attrib"/>
+        </define>
+        <define name="z3998.flaps.content" combine="interleave">
+            <ref name="z3998.covers.content"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>cover - default content model contribution </a:documentation>
+        <a:documentation>contribute cover into the dedicated slot in the partitions module </a:documentation>
+        <define name="z3998.partitions.cover.slot" combine="choice">
+            <ref name="z3998.cover"/>
+        </define>
+    </div>
+</grammar>

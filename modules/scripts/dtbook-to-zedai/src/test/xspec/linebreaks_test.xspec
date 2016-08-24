@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/convert-linebreaks.xsl">
+    <x:scenario label="Many Different Elements With Linebreaks">
+        <!-- This could be broken into many small tests, but it's not quite worth the time for this particular test. -->
+        <x:context>
+            <bodymatter>
+                <level>
+                    <hd>This Test <br/> is about <br/> Linebreaks</hd>
+                    <p>This Test <br/> is <em>really</em> about <br/> Linebreaks</p>
+                    <p>Filler</p>
+                </level> <level1>
+                    <h1>This Test <br/> is about <br/> Linebreaks</h1> <p>
+                        <span>This is a test for <br/> convert-linebreaks.xsl.</span>
+                        <span>When the test is successful, instead of being broken by
+                                &lt;br&gt;, each line will be wrapped by &gt;ln&lt; instead.</span>
+                    </p> <a href="http://example.org">Links <br/> may contain linebreaks</a>
+                    <author>An author <br/> can have a linebreak <br/> in their name</author>
+                    <p>
+                        <span>
+                            <bdo dir="ltr">BDO <br/> with <br/> Linebreak</bdo>
+                        </span>
+                    </p>
+                    <bridgehead>Bridge <br/> Heads <br/> Can have Linebreaks too</bridgehead>
+                        <byline>Byline1 <br/> Byline2</byline> <cite>Cite1 <br/> Cite2</cite>
+                        <dateline>Dateline1 <br/> dateline2</dateline> <dl>
+                        <dd>DD1 <br/> DD2</dd>
+                        <dt>DT1 <br/> DT2</dt>
+                    </dl> <p>
+                        <dfn>DFN1 <br/> DFN2</dfn>
+                    </p> <docauthor>Docauthor1 <br/> Docauthor2</docauthor>
+                    <doctitle>Doctitle1 <br/> Doctitle2</doctitle> <p>
+                        <em>EM1 <br/> EM2</em>
+                    </p> <p>P1 <br/> P2</p>
+                    <p>
+                        <sent>SENT1 <br/> SENT2</sent>
+                    </p> <p>
+                        <strong>STRONG1 <br/> STRONG2</strong>
+                    </p> <poem>
+                        <title>TITLE1 <br/> TITLE2</title> <line>LINE1 <br/> LINE2</line> </poem> <level2>
+                        <h2>H2-1 <br/> H2-2</h2>
+                        <p>Filler</p> <level3>
+                            <h3>H3-1 <br/> H3-2</h3>
+                            <p>Filler</p> <level4>
+                                <h4>H4-1 <br/> H4-2</h4>
+                                <p>Filler</p> <level5>
+                                    <h5>H5-1 <br/> H5-2</h5>
+                                    <p>Filler</p> <level6>
+                                        <h6>H6-1 <br/> H6-2</h6>
+                                        <p>Filler</p>
+                                    </level6> </level5> </level4> </level3> </level2> </level1>
+            </bodymatter>
+        </x:context>
+        <x:expect label="">
+            <bodymatter>
+                <level>
+                    <hd>
+                        <tmp:ln>This Test</tmp:ln>
+                        <tmp:ln>is about</tmp:ln>
+                        <tmp:ln>Linebreaks</tmp:ln>
+                    </hd>
+                    <p>
+                        <tmp:ln>This Test</tmp:ln>
+                        <tmp:ln>is <em>really</em> about</tmp:ln>
+                        <tmp:ln>Linebreaks</tmp:ln>
+                    </p>
+                    <p>Filler</p>
+                </level>
+                <level1>
+                    <h1>
+                        <tmp:ln>This Test</tmp:ln>
+                        <tmp:ln>is about</tmp:ln>
+                        <tmp:ln>Linebreaks</tmp:ln>
+                    </h1> <p>
+                        <span>
+                            <tmp:ln>This is a test for</tmp:ln>
+                            <tmp:ln>convert-linebreaks.xsl.</tmp:ln>
+                        </span>
+                        <span>When the test is successful, instead of being broken by
+                                &lt;br&gt;, each line will be wrapped by &gt;ln&lt; instead.</span>
+                    </p> <a href="http://example.org">
+                        <tmp:ln>Links</tmp:ln>
+                        <tmp:ln>may contain linebreaks</tmp:ln>
+                    </a>
+                    <author>
+                        <tmp:ln>An author</tmp:ln>
+                        <tmp:ln>can have a linebreak</tmp:ln>
+                        <tmp:ln>in their name</tmp:ln>
+                    </author>
+                    <p>
+                        <span>
+                            <bdo dir="ltr">
+                                <tmp:ln>BDO</tmp:ln>
+                                <tmp:ln>with</tmp:ln>
+                                <tmp:ln>Linebreak</tmp:ln>
+                            </bdo>
+                        </span>
+                    </p>
+                    <bridgehead>
+                        <tmp:ln>Bridge</tmp:ln>
+                        <tmp:ln>Heads</tmp:ln>
+                        <tmp:ln>Can have Linebreaks too</tmp:ln>
+                    </bridgehead> <byline>
+                        <tmp:ln>Byline1</tmp:ln>
+                        <tmp:ln>Byline2</tmp:ln>
+                    </byline> <cite>
+                        <tmp:ln>Cite1</tmp:ln>
+                        <tmp:ln>Cite2</tmp:ln>
+                    </cite> <dateline>
+                        <tmp:ln>Dateline1</tmp:ln>
+                        <tmp:ln>dateline2</tmp:ln>
+                    </dateline> <dl>
+                        <dd>
+                            <tmp:ln>DD1</tmp:ln>
+                            <tmp:ln>DD2</tmp:ln>
+                        </dd>
+                        <dt>
+                            <tmp:ln>DT1</tmp:ln>
+                            <tmp:ln>DT2</tmp:ln>
+                        </dt>
+                    </dl> <p>
+                        <dfn>
+                            <tmp:ln>DFN1</tmp:ln>
+                            <tmp:ln>DFN2</tmp:ln>
+                        </dfn>
+                    </p> <docauthor>
+                        <tmp:ln>Docauthor1</tmp:ln>
+                        <tmp:ln>Docauthor2</tmp:ln>
+                    </docauthor>
+                    <doctitle>
+                        <tmp:ln>Doctitle1</tmp:ln>
+                        <tmp:ln>Doctitle2</tmp:ln>
+                    </doctitle> <p>
+                        <em>
+                            <tmp:ln>EM1</tmp:ln>
+                            <tmp:ln>EM2</tmp:ln>
+                        </em>
+                    </p> <p>
+                        <tmp:ln>P1</tmp:ln>
+                        <tmp:ln>P2</tmp:ln>
+                    </p>
+                    <p>
+                        <sent>
+                            <tmp:ln>SENT1</tmp:ln>
+                            <tmp:ln>SENT2</tmp:ln>
+                        </sent>
+                    </p> <p>
+                        <strong>
+                            <tmp:ln>STRONG1</tmp:ln>
+                            <tmp:ln>STRONG2</tmp:ln>
+                        </strong>
+                    </p> <poem>
+                        <title>
+                            <tmp:ln>TITLE1</tmp:ln>
+                            <tmp:ln>TITLE2</tmp:ln>
+                        </title> <line>
+                            <tmp:ln>LINE1</tmp:ln>
+                            <tmp:ln>LINE2</tmp:ln>
+                        </line> </poem> <level2>
+                        <h2>
+                            <tmp:ln>H2-1</tmp:ln>
+                            <tmp:ln>H2-2</tmp:ln>
+                        </h2>
+                        <p>Filler</p> <level3>
+                            <h3>
+                                <tmp:ln>H3-1</tmp:ln>
+                                <tmp:ln>H3-2</tmp:ln>
+                            </h3>
+                            <p>Filler</p> <level4>
+                                <h4>
+                                    <tmp:ln>H4-1</tmp:ln>
+                                    <tmp:ln>H4-2</tmp:ln>
+                                </h4>
+                                <p>Filler</p> <level5>
+                                    <h5>
+                                        <tmp:ln>H5-1</tmp:ln>
+                                        <tmp:ln>H5-2</tmp:ln>
+                                    </h5>
+                                    <p>Filler</p> <level6>
+                                        <h6>
+                                            <tmp:ln>H6-1</tmp:ln>
+                                            <tmp:ln>H6-2</tmp:ln>
+                                        </h6>
+                                        <p>Filler</p>
+                                    </level6> </level5> </level4> </level3> </level2> </level1>
+            </bodymatter>
+        </x:expect>
+    </x:scenario>
+</x:description>

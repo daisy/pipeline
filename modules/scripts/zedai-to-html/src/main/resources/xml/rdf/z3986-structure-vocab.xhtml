@@ -1,0 +1,1730 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US"
+      prefix="      dcterms: http://purl.org/dc/terms/      owl: http://www.w3.org/2002/07/owl#      rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#      rdfs: http://www.w3.org/2000/01/rdf-schema#      xsd: http://www.w3.org/2001/XMLSchema       ">
+   <head>
+      <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+      <meta property="dcterms:modified" content="2011-03-28"/>
+      <meta property="dcterms:creator" content="mdemeglio"/>
+      <meta property="dcterms:creator" content="mgarrish"/>
+      <meta property="dcterms:creator" content="mgylling"/>
+      <meta property="dcterms:issued" content="2009-12-01"/>
+      <meta property="dcterms:publisher" content="DAISY Consortium"/>
+      <title>Z39.86-201x Structural Semantics Vocabulary</title>
+      <link rel="stylesheet" type="text/css" href="../../z3986-2011.css"/>
+   </head>
+   <body>
+      <h1 property="dcterms:title">Z39.86-201x Structural Semantics Vocabulary</h1>
+      <h2 id="toc">Table of Contents</h2>
+      <ul>
+         <li class="first">
+            <a href="#h_aboutthisvocabulary">About this vocabulary</a>
+         </li>
+         <li class="first">
+            <a href="#h_document-structure">Major document structures</a>
+            <ul>
+               <li>
+                  <a href="#h_document-types">Document types</a>
+               </li>
+               <li>
+                  <a href="#h_document-partitions">Document partitions</a>
+               </li>
+               <li>
+                  <a href="#h_document-divisions">Document divisions</a>
+               </li>
+               <li>
+                  <a href="#h_document-sections">Document sections</a>
+               </li>
+               <li>
+                  <a href="#h_document-reference">Document reference sections</a>
+               </li>
+               <li>
+                  <a href="#h_titles">Titles</a>
+               </li>
+               <li>
+                  <a href="#h_document-preliminaries">Preliminary sections and components</a>
+               </li>
+            </ul>
+         </li>
+         <li class="first">
+            <a href="#h_document-components">Document components</a>
+            <ul>
+               <li>
+                  <a href="#h_annotations">Annotations</a>
+               </li>
+               <li>
+                  <a href="#h_production-roles">Production roles</a>
+               </li>
+               <li>
+                  <a href="#h_descriptions">Description types</a>
+               </li>
+               <li>
+                  <a href="#h_asides">Asides</a>
+               </li>
+               <li>
+                  <a href="#h_dialogue-drama">Dialogue/Drama</a>
+               </li>
+               <li>
+                  <a href="#h_diaries">Diaries</a>
+               </li>
+               <li>
+                  <a href="#h_figures">Figures</a>
+               </li>
+               <li>
+                  <a href="#h_letters">Letters</a>
+                  <ul>
+                     <li>
+                        <a href="#h_emails">Emails</a>
+                     </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="#h_collections">Lists</a>
+               </li>
+               <li>
+                  <a href="#h_notes">Notes</a>
+               </li>
+               <li>
+                  <a href="#h_verses">Verse</a>
+               </li>
+            </ul>
+         </li>
+         <li class="first">
+            <a href="#h_document-text">Document text</a>
+            <ul>
+               <li>
+                  <a href="#h_abbrs">Abbreviations</a>
+               </li>
+               <li>
+                  <a href="#h_numerals">Numerals</a>
+               </li>
+               <li>
+                  <a href="#h_value-groups">Value Groups</a>
+               </li>
+               <li>
+                  <a href="#h_proper-nouns">Proper Nouns</a>
+                  <ul>
+                     <li>
+                        <a href="#h_names">Personal names</a>
+                     </li>
+                  </ul>
+               </li>
+               <li>
+                  <a href="#h_words">Words</a>
+               </li>
+               <li>
+                  <a href="#h_word-parts">Word Parts</a>
+               </li>
+            </ul>
+         </li>
+         <li class="first">
+            <a href="#h_artwork">Artwork</a>
+         </li>
+         <li class="first">
+            <a href="#h_references">References</a>
+         </li>
+         <li class="first">
+            <a href="#h_pagination">Pagination</a>
+         </li>
+         <li class="first">
+            <a href="#h_custom-content">Custom Content (Republishing)</a>
+         </li>
+         <li class="first">
+            <a href="#h_priority">Priority</a>
+         </li>
+      </ul>
+      <div>
+         <h2 id="h_aboutthisvocabulary">About this vocabulary</h2>
+         <div property="dcterms:description">
+            <p>This RDF vocabulary, a part of 
+ <a href="http://www.daisy.org/z3986/2011/Z3986-2011A.html">&lt;!--ANSI/--&gt;NISO Z39.86-201x Part A</a>, defines a set of terms relating to the description of structural semantics of documents in general, and written works in particular.</p>
+         </div>
+         <p id="vocab-forms">You are currently reading the normative <a href="http://www.w3.org/TR/rdfa-syntax/">W3C XHTML+RDFa</a> expression of this vocabulary. It is also available in informative <a href="z3986-structure-vocab.n3">Notation3</a> and <a href="z3986-structure-vocab.xml">RDF/XML</a> syntax versions.</p>
+         <p class="vocab-date">Document last modified: 2011-03-28. Refer to the <a href="history-z3986-structure-vocab.html">revision history</a> for details.</p>
+      </div>
+      <div id="vocab" class="vocabulary">
+   
+         <div id="document-structure" about="#document-structure" typeof="rdf:Bag">
+            <h2 id="h_document-structure" about="#document-structure" rev="dcterms:title">Major document structures</h2>
+            <p about="#document-structure" rev="dcterms:description">Standard terms used for the classification, partitioning and dividing of a document.</p>
+            <dl about="#document-structure" rev="rdfs:member">
+      
+      
+               <div id="document-types" about="#document-types" typeof="rdf:Bag">
+                  <h3 id="h_document-types" about="#document-types" rev="dcterms:title">Document types</h3>
+                  <dl about="#document-types" rev="rdfs:member">
+         
+                     <dt id="fiction" about="#fiction" typeof="rdf:Property">fiction</dt>
+                     <dd about="#fiction" property="rdfs:comment" datatype="xsd:string">
+                        <p>A work of fiction.</p>
+                     </dd>
+                     <dt id="non-fiction" about="#non-fiction" typeof="rdf:Property">non-fiction</dt>
+                     <dd about="#non-fiction" property="rdfs:comment" datatype="xsd:string">
+                        <p>A work of non-fiction.</p>
+                     </dd>
+                     <dt id="article" about="#article" typeof="rdf:Property">article</dt>
+                     <dd about="#article" property="rdfs:comment" datatype="xsd:string">
+                        <p>A major independent section in a piece of writing, typically appearing in journals, magazines or newspapers.</p>
+                     </dd>
+                     <dt id="essay" about="#essay" typeof="rdf:Property">essay</dt>
+                     <dd about="#essay" property="rdfs:comment" datatype="xsd:string">
+                        <p>An essay.</p>
+                     </dd>
+                     <dt id="textbook" about="#textbook" typeof="rdf:Property">textbook</dt>
+                     <dd about="#textbook" property="rdfs:comment" datatype="xsd:string">
+                        <p>A textbook.</p>
+                     </dd>
+                     <dt id="catalogue" about="#catalogue" typeof="rdf:Property">catalogue</dt>
+                     <dd about="#catalogue" property="rdfs:comment" datatype="xsd:string">
+                        <p>A catalogue.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="document-partitions" about="#document-partitions" typeof="rdf:Bag">
+                  <h3 id="h_document-partitions" about="#document-partitions" rev="dcterms:title">Document partitions</h3>
+                  <dl about="#document-partitions" rev="rdfs:member">
+         
+                     <dt id="frontmatter" about="#frontmatter" typeof="rdf:Property">frontmatter</dt>
+                     <dd about="#frontmatter" property="rdfs:comment" datatype="xsd:string">
+                        <p>Preliminary material to the content, such as tables of contents, dedications, etc.</p>
+                     </dd>
+                     <dt id="bodymatter" about="#bodymatter" typeof="rdf:Property">bodymatter</dt>
+                     <dd about="#bodymatter" property="rdfs:comment" datatype="xsd:string">
+                        <p>The body content of a document.</p>
+                     </dd>
+                     <dt id="backmatter" about="#backmatter" typeof="rdf:Property">backmatter</dt>
+                     <dd about="#backmatter" property="rdfs:comment" datatype="xsd:string">
+                        <p>Ancillary material occurring after the document body, such as indices, appendices, etc..</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="document-divisions" about="#document-divisions" typeof="rdf:Bag">
+                  <h3 id="h_document-divisions" about="#document-divisions" rev="dcterms:title">Document divisions</h3>
+                  <dl about="#document-divisions" rev="rdfs:member">
+         
+                     <dt id="volume" about="#volume" typeof="rdf:Property">volume</dt>
+                     <dd about="#volume" property="rdfs:comment" datatype="xsd:string">
+                        <p>A component of a collection.</p>
+                     </dd>
+                     <dt id="part" about="#part" typeof="rdf:Property">part</dt>
+                     <dd about="#part" property="rdfs:comment" datatype="xsd:string">
+                        <p>A major structural division of a piece of writing, typically encapsulating a set of related chapters.</p>
+                     </dd>
+                     <dt id="chapter" about="#chapter" typeof="rdf:Property">chapter</dt>
+                     <dd about="#chapter" property="rdfs:comment" datatype="xsd:string">
+                        <p>A major structural division of a piece of writing.</p>
+                     </dd>
+                     <dt id="subchapter" about="#subchapter" typeof="rdf:Property">subchapter</dt>
+                     <dd about="#subchapter" property="rdfs:comment" datatype="xsd:string">
+                        <p>A major sub-division of a chapter.</p>
+                     </dd>
+                     <dt id="division" about="#division" typeof="rdf:Property">division</dt>
+                     <dd about="#division" property="rdfs:comment" datatype="xsd:string">
+                        <p>A major structural division that may also appear as a substructure of a part (esp. in legislation).</p>
+                     </dd>
+                     <dt id="section" about="#section" typeof="rdf:Property">section</dt>
+                     <dd about="#section" property="rdfs:comment" datatype="xsd:string">
+                        <p>A structural division typically subordinate in importance to a part or division (esp. in textbooks and legislation).</p>
+                     </dd>
+                     <dt id="subsection" about="#subsection" typeof="rdf:Property">subsection</dt>
+                     <dd about="#subsection" property="rdfs:comment" datatype="xsd:string">
+                        <p>A major sub-division of a section.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="document-sections" about="#document-sections" typeof="rdf:Bag">
+                  <h3 id="h_document-sections" about="#document-sections" rev="dcterms:title">Document sections</h3>
+                  <dl about="#document-sections" rev="rdfs:member">
+         
+                     <dt id="foreword" about="#foreword" typeof="rdf:Property">foreword</dt>
+                     <dd about="#foreword" property="rdfs:comment" datatype="xsd:string">
+                        <p>An introductory section that precedes the work, typically not written by the work's author.</p>
+                     </dd>
+                     <dt id="preface" about="#preface" typeof="rdf:Property">preface</dt>
+                     <dd about="#preface" property="rdfs:comment" datatype="xsd:string">
+                        <p>An introductory section that precedes the work, typically written by the work's author.</p>
+                     </dd>
+                     <dt id="prologue" about="#prologue" typeof="rdf:Property">prologue</dt>
+                     <dd about="#prologue" property="rdfs:comment" datatype="xsd:string">
+                        <p>An introductory section that sets the background to a story, typically part of the narrative.</p>
+                     </dd>
+                     <dt id="introduction" about="#introduction" typeof="rdf:Property">introduction</dt>
+                     <dd about="#introduction" property="rdfs:comment" datatype="xsd:string">
+                        <p>A section in the beginning of the work, typically introducing the reader to the scope or nature of the work's content</p>
+                     </dd>
+                     <dt id="preamble" about="#preamble" typeof="rdf:Property">preamble</dt>
+                     <dd about="#preamble" property="rdfs:comment" datatype="xsd:string">
+                        <p>A section in the beginning of the work, typically containing introductory and/or explanatory prose regarding the scope or nature of the work's content</p>
+                     </dd>
+                     <dt id="conclusion" about="#conclusion" typeof="rdf:Property">conclusion</dt>
+                     <dd about="#conclusion" property="rdfs:comment" datatype="xsd:string">
+                        <p>An ending section that typically wraps up the work.</p>
+                     </dd>
+                     <dt id="epilogue" about="#epilogue" typeof="rdf:Property">epilogue</dt>
+                     <dd about="#epilogue" property="rdfs:comment" datatype="xsd:string">
+                        <p>A concluding section that is typically written from a later point in time than the main story, although still part of the narrative.</p>
+                     </dd>
+                     <dt id="afterword" about="#afterword" typeof="rdf:Property">afterword</dt>
+                     <dd about="#afterword" property="rdfs:comment" datatype="xsd:string">
+                        <p>An ending section that typically details the history of the story or its significance.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="document-reference" about="#document-reference" typeof="rdf:Bag">
+                  <h3 id="h_document-reference" about="#document-reference" rev="dcterms:title">Document reference sections</h3>
+                  <dl about="#document-reference" rev="rdfs:member">
+         
+                     <dt id="toc" about="#toc" typeof="rdf:Property">toc</dt>
+                     <dd about="#toc" property="rdfs:comment" datatype="xsd:string">
+                        <p>A table of contents, typically appearing in the work's frontmatter, or at the beginning of a section.</p>
+                     </dd>
+                     <dt id="appendix" about="#appendix" typeof="rdf:Property">appendix</dt>
+                     <dd about="#appendix" property="rdfs:comment" datatype="xsd:string">
+                        <p>Supplemental information.</p>
+                     </dd>
+                     <dt id="glossary" about="#glossary" typeof="rdf:Property">glossary</dt>
+                     <dd about="#glossary" property="rdfs:comment" datatype="xsd:string">
+                        <p>An alphabetical list of terms in a particular domain of knowledge with the definitions for those terms.</p>
+                     </dd>
+                     <dt id="bibliography" about="#bibliography" typeof="rdf:Property">bibliography</dt>
+                     <dd about="#bibliography" property="rdfs:comment" datatype="xsd:string">
+                        <p>A list of works cited.</p>
+                     </dd>
+                     <dt id="discography" about="#discography" typeof="rdf:Property">discography</dt>
+                     <dd about="#discography" property="rdfs:comment" datatype="xsd:string">
+                        <p>A list of albums and/or songs by a performer.</p>
+                     </dd>
+                     <dt id="filmography" about="#filmography" typeof="rdf:Property">filmography</dt>
+                     <dd about="#filmography" property="rdfs:comment" datatype="xsd:string">
+                        <p>A list of acting roles by a performer.</p>
+                     </dd>
+                     <dt id="index" about="#index" typeof="rdf:Property">index</dt>
+                     <dd about="#index" property="rdfs:comment" datatype="xsd:string">
+                        <p>A detailed list, usually arranged alphabetically, of the specific information in a publication.</p>
+                     </dd>
+                     <dt id="colophon" about="#colophon" typeof="rdf:Property">colophon</dt>
+                     <dd about="#colophon" property="rdfs:comment" datatype="xsd:string">
+                        <p>A brief description usually located at the end of a publication, describing production notes relevant to the edition.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="titles" about="#titles" typeof="rdf:Bag">
+                  <h3 id="h_titles" about="#titles" rev="dcterms:title">Titles</h3>
+                  <dl about="#titles" rev="rdfs:member">
+         
+                     <dt id="title" about="#title" typeof="rdf:Property">title</dt>
+                     <dd about="#title" property="rdfs:comment" datatype="xsd:string">
+                        <p>The title of the work, or, when used in the context of a 
+ <a href="#fulltitle">fulltitle</a>, the primary part of the full title.</p>
+                     </dd>
+                     <dt id="halftitle" about="#halftitle" typeof="rdf:Property">halftitle</dt>
+                     <dd about="#halftitle" property="rdfs:comment" datatype="xsd:string">
+                        <p>The title appearing that appears on the first page of a work or immediately before the text.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#halftitle" rel="rdfs:subPropertyOf" resource="#title">
+                              <a href="#title">title</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="fulltitle" about="#fulltitle" typeof="rdf:Property">fulltitle</dt>
+                     <dd about="#fulltitle" property="rdfs:comment" datatype="xsd:string">
+                        <p>The full title of the work, either simple, in which case it is identical to 
+ <a href="#title">title</a>, or compound, in which case it consists of a 
+ <a href="#title">title</a> and a 
+ <a href="#subtitle">subtitle</a>.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#fulltitle" rel="rdfs:subPropertyOf" resource="#title">
+                              <a href="#title">title</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Same as:</dt>
+                           <dd about="#fulltitle" rel="owl:sameAs" resource="http://purl.org/dc/terms/title">
+                              <a href="http://purl.org/dc/terms/title">http://purl.org/dc/terms/title</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="subtitle" about="#subtitle" typeof="rdf:Property">subtitle</dt>
+                     <dd about="#subtitle" property="rdfs:comment" datatype="xsd:string">
+                        <p>An explanatory or alternate title for the work.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#subtitle" rel="rdfs:subPropertyOf" resource="#title">
+                              <a href="#title">title</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="covertitle" about="#covertitle" typeof="rdf:Property">covertitle</dt>
+                     <dd about="#covertitle" property="rdfs:comment" datatype="xsd:string">
+                        <p>The title of the work as displayed on the work's cover.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#covertitle" rel="rdfs:subPropertyOf" resource="#title">
+                              <a href="#title">title</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="document-preliminaries" about="#document-preliminaries" typeof="rdf:Bag">
+                  <h3 id="h_document-preliminaries" about="#document-preliminaries"
+                      rev="dcterms:title">Preliminary sections and components</h3>
+                  <dl about="#document-preliminaries" rev="rdfs:member">
+         
+                     <dt id="published-works" about="#published-works" typeof="rdf:Property">published-works</dt>
+                     <dd about="#published-works" property="rdfs:comment" datatype="xsd:string">
+                        <p>A list of additional works by the author.</p>
+                     </dd>
+                     <dt id="title-page" about="#title-page" typeof="rdf:Property">title-page</dt>
+                     <dd about="#title-page" property="rdfs:comment" datatype="xsd:string">
+                        <p>The title page of the work.</p>
+                     </dd>
+                     <dt id="halftitle-page" about="#halftitle-page" typeof="rdf:Property">halftitle-page</dt>
+                     <dd about="#halftitle-page" property="rdfs:comment" datatype="xsd:string">
+                        <p>The half title page of the work.</p>
+                     </dd>
+                     <dt id="acknowledgments" about="#acknowledgments" typeof="rdf:Property">acknowledgments</dt>
+                     <dd about="#acknowledgments" property="rdfs:comment" datatype="xsd:string">
+                        <p>A passage containing acknowledgments to entities involved in the realization of the work.</p>
+                     </dd>
+                     <dt id="imprint" about="#imprint" typeof="rdf:Property">imprint</dt>
+                     <dd about="#imprint" property="rdfs:comment" datatype="xsd:string">
+                        <p>Information relating to the publication or distribution of the work.</p>
+                     </dd>
+                     <dt id="imprimatur" about="#imprimatur" typeof="rdf:Property">imprimatur</dt>
+                     <dd about="#imprimatur" property="rdfs:comment" datatype="xsd:string">
+                        <p>A formal statement authorizing the publication of the work.</p>
+                     </dd>
+                     <dt id="loi" about="#loi" typeof="rdf:Property">loi</dt>
+                     <dd about="#loi" property="rdfs:comment" datatype="xsd:string">
+                        <p>A listing of illustrations included in the work.</p>
+                     </dd>
+                     <dt id="lot" about="#lot" typeof="rdf:Property">lot</dt>
+                     <dd about="#lot" property="rdfs:comment" datatype="xsd:string">
+                        <p>A listing of tables included in the work.</p>
+                     </dd>
+                     <dt id="publisher-address" about="#publisher-address" typeof="rdf:Property">publisher-address</dt>
+                     <dd about="#publisher-address" property="rdfs:comment" datatype="xsd:string">
+                        <p>The publisher's address, which can be abbreviated to city and postal code only.</p>
+                     </dd>
+                     <dt id="publisher-note" about="#publisher-note" typeof="rdf:Property">publisher-address</dt>
+                     <dd about="#publisher-note" property="rdfs:comment" datatype="xsd:string">
+                        <p>A note from the publisher.</p>
+                     </dd>
+                     <dt id="editorial-note" about="#editorial-note" typeof="rdf:Property">editorial-note</dt>
+                     <dd about="#editorial-note" property="rdfs:comment" datatype="xsd:string">
+                        <p>An explanation of an editor’s method, or a discussion of variant texts.</p>
+                     </dd>
+                     <dt id="grant-acknowledgment" about="#grant-acknowledgment" typeof="rdf:Property">grant-acknowledgment</dt>
+                     <dd about="#grant-acknowledgment" property="rdfs:comment" datatype="xsd:string">
+                        <p>Describes financial assistance towards the work.</p>
+                     </dd>
+                     <dt id="contributors" about="#contributors" typeof="rdf:Property">contributors</dt>
+                     <dd about="#contributors" property="rdfs:comment" datatype="xsd:string">
+                        <p>A list of contributors to the work.</p>
+                     </dd>
+                     <dt id="other-credits" about="#other-credits" typeof="rdf:Property">other-credits</dt>
+                     <dd about="#other-credits" property="rdfs:comment" datatype="xsd:string">
+                        <p>Acknowledgments of previously published parts of the work, illustration credits, and permission to quote from copyrighted material.</p>
+                     </dd>
+                     <dt id="biographical-note" about="#biographical-note" typeof="rdf:Property">biographical-note</dt>
+                     <dd about="#biographical-note" property="rdfs:comment" datatype="xsd:string">
+                        <p>A biographical note about the author or authors, here including editors, compilers, and translators).</p>
+                     </dd>
+                     <dt id="translator-note" about="#translator-note" typeof="rdf:Property">translator-note</dt>
+                     <dd about="#translator-note" property="rdfs:comment" datatype="xsd:string">
+                        <p>An introductory note from the translator(s).</p>
+                     </dd>
+                     <dt id="errata" about="#errata" typeof="rdf:Property">errata</dt>
+                     <dd about="#errata" property="rdfs:comment" datatype="xsd:string">
+                        <p>Publication errata, in printed works typically a loose sheet inserted by hand; sometimes a bound page.</p>
+                     </dd>
+                     <dt id="promotional" about="#promotional" typeof="rdf:Property">promotional-copy</dt>
+                     <dd about="#promotional" property="rdfs:comment" datatype="xsd:string">
+                        <p>A promotional description of the book, often containing quotations from reviews.</p>
+                     </dd>
+                     <dt id="dedication" about="#dedication" typeof="rdf:Property">dedication</dt>
+                     <dd about="#dedication" property="rdfs:comment" datatype="xsd:string">
+                        <p>An inscription addressed to one or several particular person(s).</p>
+                     </dd>
+                  </dl>
+               </div>
+            </dl>
+         </div>
+         <div id="document-components" about="#document-components" typeof="rdf:Bag">
+            <h2 id="h_document-components" about="#document-components" rev="dcterms:title">Document components</h2>
+            <p about="#document-components" rev="dcterms:description">Non-structural components that occur within documents, such as letters, poems, quotations, etc.</p>
+            <dl about="#document-components" rev="rdfs:member">
+      
+      
+               <dt id="epigraph" about="#epigraph" typeof="rdf:Property">epigraph</dt>
+               <dd about="#epigraph" property="rdfs:comment" datatype="xsd:string">
+                  <p>A quotation at the start of a document or section that typically introduces or sets the theme for what follows.</p>
+               </dd>
+               <dt id="example" about="#example" typeof="rdf:Property">example</dt>
+               <dd about="#example" property="rdfs:comment" datatype="xsd:string">
+                  <p>A sample, model, illustration or template representative of some aspect of the narrative.</p>
+               </dd>
+               <dt id="pgroup" about="#pgroup" typeof="rdf:Property">pgroup</dt>
+               <dd about="#pgroup" property="rdfs:comment" datatype="xsd:string">
+                  <p>A group of interrelated paragraphs.</p>
+               </dd>
+               <div id="annotations" about="#annotations" typeof="rdf:Bag">
+                  <h3 id="h_annotations" about="#annotations" rev="dcterms:title">Annotations</h3>
+                  <dl about="#annotations" rev="rdfs:member">
+         
+                     <dt id="annotation" about="#annotation" typeof="rdf:Property">annotation</dt>
+                     <dd about="#annotation" property="rdfs:comment" datatype="xsd:string">
+                        <p>Explanatory information about passages in the work.</p>
+                     </dd>
+                     <dt id="introductory-note" about="#introductory-note" typeof="rdf:Property">introductory-note</dt>
+                     <dd about="#introductory-note" property="rdfs:comment" datatype="xsd:string">
+                        <p>An annotation whose purpose is to provide an introductory note.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#introductory-note" rel="rdfs:subPropertyOf" resource="#annotation">
+                              <a href="#annotation">annotation</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="commentary" about="#commentary" typeof="rdf:Property">commentary</dt>
+                     <dd about="#commentary" property="rdfs:comment" datatype="xsd:string">
+                        <p>An annotation whose purpose is to provide commentary.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#commentary" rel="rdfs:subPropertyOf" resource="#annotation">
+                              <a href="#annotation">annotation</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="clarification" about="#clarification" typeof="rdf:Property">clarification</dt>
+                     <dd about="#clarification" property="rdfs:comment" datatype="xsd:string">
+                        <p>An annotation whose purpose is to provide a clarification.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#clarification" rel="rdfs:subPropertyOf" resource="#annotation">
+                              <a href="#annotation">annotation</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="correction" about="#correction" typeof="rdf:Property">correction</dt>
+                     <dd about="#correction" property="rdfs:comment" datatype="xsd:string">
+                        <p>An annotation whose purpose is to provide a correction.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#correction" rel="rdfs:subPropertyOf" resource="#annotation">
+                              <a href="#annotation">annotation</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="alteration" about="#alteration" typeof="rdf:Property">alteration</dt>
+                     <dd about="#alteration" property="rdfs:comment" datatype="xsd:string">
+                        <p>An annotation whose purpose is to indicate an alteration made to the source document, such as the re-arrangement or removal of content.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#alteration" rel="rdfs:subPropertyOf" resource="#annotation">
+                              <a href="#annotation">annotation</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="presentation" about="#presentation" typeof="rdf:Property">presentation</dt>
+                     <dd about="#presentation" property="rdfs:comment" datatype="xsd:string">
+                        <p>An annotation whose purpose is to describe some aspect of the document layout, such as the formatting of a page or conventions used in rendering the content.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#presentation" rel="rdfs:subPropertyOf" resource="#annotation">
+                              <a href="#annotation">annotation</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="temporary" about="#temporary" typeof="rdf:Property">production</dt>
+                     <dd about="#temporary" property="rdfs:comment" datatype="xsd:string">
+                        <p>A temporary annotation not intended as part of the finished document, such as a production note</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#temporary" rel="rdfs:subPropertyOf" resource="#annotation">
+                              <a href="#annotation">annotation</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="attribution" about="#attribution" typeof="rdf:Property">attribution</dt>
+                     <dd about="#attribution" property="rdfs:comment" datatype="xsd:string">
+                        <p>An annotation whose purpose is to provide a source or attribution.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#attribution" rel="rdfs:subPropertyOf" resource="#annotation">
+                              <a href="#annotation">annotation</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="production-roles" about="#production-roles" typeof="rdf:Bag">
+                  <h3 id="h_production-roles" about="#production-roles" rev="dcterms:title">Production roles</h3>
+                  <dl about="#production-roles" rev="rdfs:member">
+         
+                     <dt id="author" about="#author" typeof="rdf:Property">author</dt>
+                     <dd about="#author" property="rdfs:comment" datatype="xsd:string">
+                        <p>An author of a work.</p>
+                     </dd>
+                     <dt id="editor" about="#editor" typeof="rdf:Property">editor</dt>
+                     <dd about="#editor" property="rdfs:comment" datatype="xsd:string">
+                        <p>An editor of a work.</p>
+                     </dd>
+                     <dt id="general-editor" about="#general-editor" typeof="rdf:Property">general-editor</dt>
+                     <dd about="#general-editor" property="rdfs:comment" datatype="xsd:string">
+                        <p>The general editor of a work.</p>
+                     </dd>
+                     <dt id="commentator" about="#commentator" typeof="rdf:Property">commentator</dt>
+                     <dd about="#commentator" property="rdfs:comment" datatype="xsd:string">
+                        <p>A commentator on a work.</p>
+                     </dd>
+                     <dt id="translator" about="#translator" typeof="rdf:Property">translator</dt>
+                     <dd about="#translator" property="rdfs:comment" datatype="xsd:string">
+                        <p>A translator of a work.</p>
+                     </dd>
+                     <dt id="republisher" about="#republisher" typeof="rdf:Property">republisher</dt>
+                     <dd about="#republisher" property="rdfs:comment" datatype="xsd:string">
+                        <p>A republisher of a work.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="descriptions" about="#descriptions" typeof="rdf:Bag">
+                  <h3 id="h_descriptions" about="#descriptions" rev="dcterms:title">Description types</h3>
+                  <dl about="#descriptions" rev="rdfs:member">
+         
+                     <dt id="structure" about="#structure" typeof="rdf:Property">structure</dt>
+                     <dd about="#structure" property="rdfs:comment" datatype="xsd:string">
+                        <p>A structural description for a piece of content (e.g., a table structure summary).</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="asides" about="#asides" typeof="rdf:Bag">
+                  <h3 id="h_asides" about="#asides" rev="dcterms:title">Asides</h3>
+                  <dl about="#asides" rev="rdfs:member">
+         
+                     <dt id="aside" about="#aside" typeof="rdf:Property">aside</dt>
+                     <dd about="#aside" property="rdfs:comment" datatype="xsd:string">
+                        <p>Secondary or supplementary content.</p>
+                     </dd>
+                     <dt id="sidebar" about="#sidebar" typeof="rdf:Property">sidebar</dt>
+                     <dd about="#sidebar" property="rdfs:comment" datatype="xsd:string">
+                        <p>Secondary or supplementary content, typically formatted as an inset or box.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#sidebar" rel="rdfs:subPropertyOf" resource="#aside">
+                              <a href="#aside">aside</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="practice" about="#practice" typeof="rdf:Property">practice</dt>
+                     <dd about="#practice" property="rdfs:comment" datatype="xsd:string">
+                        <p>A review exercise or sample.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#practice" rel="rdfs:subPropertyOf" resource="#aside">
+                              <a href="#aside">aside</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="notice" about="#notice" typeof="rdf:Property">notice</dt>
+                     <dd about="#notice" property="rdfs:comment" datatype="xsd:string">
+                        <p>A notification.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#notice" rel="rdfs:subPropertyOf" resource="#aside">
+                              <a href="#aside">aside</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="warning" about="#warning" typeof="rdf:Property">warning</dt>
+                     <dd about="#warning" property="rdfs:comment" datatype="xsd:string">
+                        <p>A warning.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#warning" rel="rdfs:subPropertyOf" resource="#aside">
+                              <a href="#aside">aside</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="marginalia" about="#marginalia" typeof="rdf:Property">marginalia</dt>
+                     <dd about="#marginalia" property="rdfs:comment" datatype="xsd:string">
+                        <p>Marginalia.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#marginalia" rel="rdfs:subPropertyOf" resource="#aside">
+                              <a href="#aside">aside</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="help" about="#help" typeof="rdf:Property">help</dt>
+                     <dd about="#help" property="rdfs:comment" datatype="xsd:string">
+                        <p>Instructions/advice to the reader on using the work.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#help" rel="rdfs:subPropertyOf" resource="#aside">
+                              <a href="#aside">aside</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="dialogue-drama" about="#dialogue-drama" typeof="rdf:Bag">
+                  <h3 id="h_dialogue-drama" about="#dialogue-drama" rev="dcterms:title">Dialogue/Drama</h3>
+                  <dl about="#dialogue-drama" rev="rdfs:member">
+         
+                     <dt id="drama" about="#drama" typeof="rdf:Property">drama</dt>
+                     <dd about="#drama" property="rdfs:comment" datatype="xsd:string">
+                        <p>A work of fiction intended for performance.</p>
+                     </dd>
+                     <dt id="scene" about="#scene" typeof="rdf:Property">scene</dt>
+                     <dd about="#scene" property="rdfs:comment" datatype="xsd:string">
+                        <p>A structurally significant segment of a drama.</p>
+                     </dd>
+                     <dt id="stage-direction" about="#stage-direction" typeof="rdf:Property">stage-direction</dt>
+                     <dd about="#stage-direction" property="rdfs:comment" datatype="xsd:string">
+                        <p>An instruction to an actor or director, included in the work.</p>
+                     </dd>
+                     <dt id="dramatis-personae" about="#dramatis-personae" typeof="rdf:Property">dramatis-personae</dt>
+                     <dd about="#dramatis-personae" property="rdfs:comment" datatype="xsd:string">
+                        <p>A listing of the roles or characters appearing in the work.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#dramatis-personae" rel="rdfs:subPropertyOf" resource="#collection">
+                              <a href="#collection">collection</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#dramatis-personae" rel="rdfs:seeAlso" resource="#persona">
+                              <a href="#persona">persona</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="persona" about="#persona" typeof="rdf:Property">persona</dt>
+                     <dd about="#persona" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name or identity of an individual role or character appearing in the work.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#persona" rel="rdfs:seeAlso" resource="#dramatis-personae">
+                              <a href="#dramatis-personae">dramatis-personae</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="actor" about="#actor" typeof="rdf:Property">actor</dt>
+                     <dd about="#actor" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name of the actor who plays a character in the work.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#actor" rel="rdfs:seeAlso" resource="#dramatis-personae">
+                              <a href="#dramatis-personae">dramatis-personae</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="role-description" about="#role-description" typeof="rdf:Property">role-description</dt>
+                     <dd about="#role-description" property="rdfs:comment" datatype="xsd:string">
+                        <p>A description of a character in the work.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#role-description" rel="rdfs:seeAlso" resource="#dramatis-personae">
+                              <a href="#dramatis-personae">dramatis-personae</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="speech" about="#speech" typeof="rdf:Property">speech</dt>
+                     <dd about="#speech" property="rdfs:comment" datatype="xsd:string">
+                        <p>An utterance by a 
+ <a href="#persona">persona</a>.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#speech" rel="rdfs:seeAlso" resource="#persona">
+                              <a href="#persona">persona</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="diaries" about="#diaries" typeof="rdf:Bag">
+                  <h3 id="h_diaries" about="#diaries" rev="dcterms:title">Diaries</h3>
+                  <dl about="#diaries" rev="rdfs:member">
+         
+                     <dt id="diary" about="#diary" typeof="rdf:Property">diary</dt>
+                     <dd about="#diary" property="rdfs:comment" datatype="xsd:string">
+                        <p>A diary.</p>
+                     </dd>
+                     <dt id="diary-entry" about="#diary-entry" typeof="rdf:Property">diary-entry</dt>
+                     <dd about="#diary-entry" property="rdfs:comment" datatype="xsd:string">
+                        <p>A diary entry.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="figures" about="#figures" typeof="rdf:Bag">
+                  <h3 id="h_figures" about="#figures" rev="dcterms:title">Figures</h3>
+                  <dl about="#figures" rev="rdfs:member">
+         
+                     <dt id="figure" about="#figure" typeof="rdf:Property">figure</dt>
+                     <dd about="#figure" property="rdfs:comment" datatype="xsd:string">
+                        <p>An instance of a figure, which may include a title, caption and credits in addition to an image or table.</p>
+                     </dd>
+                     <dt id="plate" about="#plate" typeof="rdf:Property">plate</dt>
+                     <dd about="#plate" property="rdfs:comment" datatype="xsd:string">
+                        <p>A figure or image typically printed on a coated unnumbered page.</p>
+                     </dd>
+                     <dt id="gallery" about="#gallery" typeof="rdf:Property">gallery</dt>
+                     <dd about="#gallery" property="rdfs:comment" datatype="xsd:string">
+                        <p>A section of a document containing more than one image, figure or plate. Gallery pages may be numbered or unnumbered, and on regular or special stock.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="letters" about="#letters" typeof="rdf:Bag">
+                  <h3 id="h_letters" about="#letters" rev="dcterms:title">Letters</h3>
+                  <dl about="#letters" rev="rdfs:member">
+         
+                     <dt id="letter" about="#letter" typeof="rdf:Property">letter</dt>
+                     <dd about="#letter" property="rdfs:comment" datatype="xsd:string">
+                        <p>An instance of a formal, informal or business letter.</p>
+                     </dd>
+                     <dt id="sender" about="#sender" typeof="rdf:Property">sender</dt>
+                     <dd about="#sender" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name and address of the sender of a letter.</p>
+                     </dd>
+                     <dt id="recipient" about="#recipient" typeof="rdf:Property">recipient</dt>
+                     <dd about="#recipient" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name and address of the recipient of a letter.</p>
+                     </dd>
+                     <dt id="salutation" about="#salutation" typeof="rdf:Property">salutation</dt>
+                     <dd about="#salutation" property="rdfs:comment" datatype="xsd:string">
+                        <p>An expression of greeting at the start of a letter.</p>
+                     </dd>
+                     <dt id="valediction" about="#valediction" typeof="rdf:Property">valediction</dt>
+                     <dd about="#valediction" property="rdfs:comment" datatype="xsd:string">
+                        <p>An expression of farewell at the end of a letter.</p>
+                     </dd>
+                     <dt id="postscript" about="#postscript" typeof="rdf:Property">postscript</dt>
+                     <dd about="#postscript" property="rdfs:comment" datatype="xsd:string">
+                        <p>An additional paragraph or note occurring after a signature in a letter.</p>
+                     </dd>
+                     <div id="emails" about="#emails" typeof="rdf:Bag">
+                        <h4 id="h_emails" about="#emails" rev="dcterms:title">Emails</h4>
+                        <dl about="#emails" rev="rdfs:member">
+            
+                           <dt id="email" about="#email" typeof="rdf:Property">email</dt>
+                           <dd about="#email" property="rdfs:comment" datatype="xsd:string">
+                              <p>An instance of a email message.</p>
+                           </dd>
+                           <dt id="to" about="#to" typeof="rdf:Property">to</dt>
+                           <dd about="#to" property="rdfs:comment" datatype="xsd:string">
+                              <p>The recipient(s) email address line.</p>
+                           </dd>
+                           <dt id="from" about="#from" typeof="rdf:Property">from</dt>
+                           <dd about="#from" property="rdfs:comment" datatype="xsd:string">
+                              <p>The sender's email address line.</p>
+                           </dd>
+                           <dt id="cc" about="#cc" typeof="rdf:Property">cc</dt>
+                           <dd about="#cc" property="rdfs:comment" datatype="xsd:string">
+                              <p>The carbon copy email address line.</p>
+                           </dd>
+                           <dt id="bcc" about="#bcc" typeof="rdf:Property">bcc</dt>
+                           <dd about="#bcc" property="rdfs:comment" datatype="xsd:string">
+                              <p>The blind carbon copy email address line.</p>
+                           </dd>
+                           <dt id="subject" about="#subject" typeof="rdf:Property">subject</dt>
+                           <dd about="#subject" property="rdfs:comment" datatype="xsd:string">
+                              <p>The email subject line.</p>
+                           </dd>
+                        </dl>
+                     </div>
+                  </dl>
+               </div>
+               <div id="collections" about="#collections" typeof="rdf:Bag">
+                  <h3 id="h_collections" about="#collections" rev="dcterms:title">Lists</h3>
+                  <dl about="#collections" rev="rdfs:member">
+         
+                     <dt id="collection" about="#collection" typeof="rdf:Property">collection</dt>
+                     <dd about="#collection" property="rdfs:comment" datatype="xsd:string">
+                        <p>A set of interrelated items.</p>
+                     </dd>
+                     <dt id="orderedlist" about="#orderedlist" typeof="rdf:Property">orderedlist</dt>
+                     <dd about="#orderedlist" property="rdfs:comment" datatype="xsd:string">
+                        <p>A list where the order of the list's items is significant.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#orderedlist" rel="rdfs:subPropertyOf" resource="#collection">
+                              <a href="#collection">collection</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="unorderedlist" about="#unorderedlist" typeof="rdf:Property">unorderedlist</dt>
+                     <dd about="#unorderedlist" property="rdfs:comment" datatype="xsd:string">
+                        <p>A list where the order of the list's items is not significant.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#unorderedlist" rel="rdfs:subPropertyOf" resource="#collection">
+                              <a href="#collection">collection</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="abbreviations" about="#abbreviations" typeof="rdf:Property">abbreviations</dt>
+                     <dd about="#abbreviations" property="rdfs:comment" datatype="xsd:string">
+                        <p>A list of abbreviations.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#abbreviations" rel="rdfs:subPropertyOf" resource="#unorderedlist">
+                              <a href="#unorderedlist">unorderedlist</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="timeline" about="#timeline" typeof="rdf:Property">timeline</dt>
+                     <dd about="#timeline" property="rdfs:comment" datatype="xsd:string">
+                        <p>A chronological list of events</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#timeline" rel="rdfs:subPropertyOf" resource="#orderedlist">
+                              <a href="#orderedlist">orderedlist</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="notes" about="#notes" typeof="rdf:Bag">
+                  <h3 id="h_notes" about="#notes" rev="dcterms:title">Notes</h3>
+                  <dl about="#notes" rev="rdfs:member">
+         
+                     <dt id="note" about="#note" typeof="rdf:Property">note</dt>
+                     <dd about="#note" property="rdfs:comment" datatype="xsd:string">
+                        <p>A footnote or a rearnote, linked from the main text via a note reference</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#note" rel="rdfs:seeAlso" resource="#noteref">
+                              <a href="#noteref">noteref</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="footnotes" about="#footnotes" typeof="rdf:Property">footnotes</dt>
+                     <dd about="#footnotes" property="rdfs:comment" datatype="xsd:string">
+                        <p>A collection of notes appearing at the bottom of a page.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#footnotes" rel="rdfs:subPropertyOf" resource="#collection">
+                              <a href="#collection">collection</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#footnotes" rel="rdfs:seeAlso" resource="#footnote">
+                              <a href="#footnote">footnote</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="footnote" about="#footnote" typeof="rdf:Property">footnote</dt>
+                     <dd about="#footnote" property="rdfs:comment" datatype="xsd:string">
+                        <p>A note appearing at the bottom of a page.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#footnote" rel="rdfs:subPropertyOf" resource="#note">
+                              <a href="#note">note</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#footnote" rel="rdfs:seeAlso" resource="#footnotes">
+                              <a href="#footnotes">footnotes</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="rearnote" about="#rearnote" typeof="rdf:Property">rearnote</dt>
+                     <dd about="#rearnote" property="rdfs:comment" datatype="xsd:string">
+                        <p>A note appearing in the rear (backmatter) of the work, or at the end of a section.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#rearnote" rel="rdfs:subPropertyOf" resource="#note">
+                              <a href="#note">note</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#rearnote" rel="rdfs:seeAlso" resource="#rearnotes">
+                              <a href="#rearnotes">rearnotes</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="rearnotes" about="#rearnotes" typeof="rdf:Property">rearnotes</dt>
+                     <dd about="#rearnotes" property="rdfs:comment" datatype="xsd:string">
+                        <p>A collection of notes appearing at the rear (backmatter) of the work, or at the end of a section.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#rearnotes" rel="rdfs:subPropertyOf" resource="#collection">
+                              <a href="#collection">collection</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#rearnotes" rel="rdfs:seeAlso" resource="#rearnote">
+                              <a href="#rearnote">rearnote</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="verses" about="#verses" typeof="rdf:Bag">
+                  <h3 id="h_verses" about="#verses" rev="dcterms:title">Verse</h3>
+                  <dl about="#verses" rev="rdfs:member">
+         
+                     <dt id="verse" about="#verse" typeof="rdf:Property">verse</dt>
+                     <dd about="#verse" property="rdfs:comment" datatype="xsd:string">
+                        <p>A work typically composed of metered or rhyming lines (as opposed to prose).</p>
+                     </dd>
+                     <dt id="poem" about="#poem" typeof="rdf:Property">poem</dt>
+                     <dd about="#poem" property="rdfs:comment" datatype="xsd:string">
+                        <p>A poem.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#poem" rel="rdfs:subPropertyOf" resource="#verse">
+                              <a href="#verse">verse</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="song" about="#song" typeof="rdf:Property">song</dt>
+                     <dd about="#song" property="rdfs:comment" datatype="xsd:string">
+                        <p>A song.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#song" rel="rdfs:subPropertyOf" resource="#verse">
+                              <a href="#verse">verse</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="hymn" about="#hymn" typeof="rdf:Property">hymn</dt>
+                     <dd about="#hymn" property="rdfs:comment" datatype="xsd:string">
+                        <p>A hymn.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#hymn" rel="rdfs:subPropertyOf" resource="#song">
+                              <a href="#song">song</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="lyrics" about="#lyrics" typeof="rdf:Property">lyrics</dt>
+                     <dd about="#lyrics" property="rdfs:comment" datatype="xsd:string">
+                        <p>The text of a song.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#lyrics" rel="rdfs:subPropertyOf" resource="#verse">
+                              <a href="#verse">verse</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>See also:</dt>
+                           <dd about="#lyrics" rel="rdfs:seeAlso" resource="#song">
+                              <a href="#song">song</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                  </dl>
+               </div>
+            </dl>
+         </div>
+         <div id="document-text" about="#document-text" typeof="rdf:Bag">
+            <h2 id="h_document-text" about="#document-text" rev="dcterms:title">Document text</h2>
+            <p about="#document-text" rev="dcterms:description">Terms for describing text elements.</p>
+            <dl about="#document-text" rev="rdfs:member">
+      
+      
+               <dt id="text" about="#text" typeof="rdf:Property">text</dt>
+               <dd about="#text" property="rdfs:comment" datatype="xsd:string">
+                  <p>A segment of text.</p>
+               </dd>
+               <dt id="phrase" about="#phrase" typeof="rdf:Property">phrase</dt>
+               <dd about="#phrase" property="rdfs:comment" datatype="xsd:string">
+                  <p>A group of lexical words, comprising a single unit within a sentence.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#phrase" rel="rdfs:subPropertyOf" resource="#collection">
+                        <a href="#collection">collection</a>
+                     </dd>
+                     <dd about="#phrase" rel="rdfs:subPropertyOf" resource="#text">
+                        <a href="#text">text</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="keyword" about="#keyword" typeof="rdf:Property">keyword</dt>
+               <dd about="#keyword" property="rdfs:comment" datatype="xsd:string">
+                  <p>A key word or phrase.</p>
+               </dd>
+               <dt id="sentence" about="#sentence" typeof="rdf:Property">sentence</dt>
+               <dd about="#sentence" property="rdfs:comment" datatype="xsd:string">
+                  <p>A group of lexical words comprising a lexical sentence.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#sentence" rel="rdfs:subPropertyOf" resource="#phrase">
+                        <a href="#phrase">phrase</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="topic-sentence" about="#topic-sentence" typeof="rdf:Property">topic-sentence</dt>
+               <dd about="#topic-sentence" property="rdfs:comment" datatype="xsd:string">
+                  <p>A phrase or sentence serving as an introductory summary of the containing paragraph.</p>
+               </dd>
+               <dt id="concluding-sentence" about="#concluding-sentence" typeof="rdf:Property">concluding-sentence</dt>
+               <dd about="#concluding-sentence" property="rdfs:comment" datatype="xsd:string">
+                  <p>A phrase or sentence serving as a concluding summary of the containing paragraph.</p>
+               </dd>
+               <dt id="t-form" about="#t-form" typeof="rdf:Property">t-form</dt>
+               <dd about="#t-form" property="rdfs:comment" datatype="xsd:string">
+                  <p>An informal second-person pronoun.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#t-form" rel="rdfs:subPropertyOf" resource="#phrase">
+                        <a href="#phrase">phrase</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="v-form" about="#v-form" typeof="rdf:Property">v-form</dt>
+               <dd about="#v-form" property="rdfs:comment" datatype="xsd:string">
+                  <p>A formal second-person pronoun.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#v-form" rel="rdfs:subPropertyOf" resource="#phrase">
+                        <a href="#phrase">phrase</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <div id="abbrs" about="#abbrs" typeof="rdf:Bag">
+                  <h3 id="h_abbrs" about="#abbrs" rev="dcterms:title">Abbreviations</h3>
+                  <dl about="#abbrs" rev="rdfs:member">
+         
+                     <dt id="acronym" about="#acronym" typeof="rdf:Property">acronym</dt>
+                     <dd about="#acronym" property="rdfs:comment" datatype="xsd:string">
+                        <p>An abbreviation formed from initial letters of a name or expression, pronounced as a word.</p>
+                     </dd>
+                     <dt id="initialism" about="#initialism" typeof="rdf:Property">initialism</dt>
+                     <dd about="#initialism" property="rdfs:comment" datatype="xsd:string">
+                        <p>An abbreviation formed from initial letters of a name or expression, with each letter pronunced separately.</p>
+                     </dd>
+                     <dt id="truncation" about="#truncation" typeof="rdf:Property">truncation</dt>
+                     <dd about="#truncation" property="rdfs:comment" datatype="xsd:string">
+                        <p>An abbreviation formed from the first part of a word.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="numerals" about="#numerals" typeof="rdf:Bag">
+                  <h3 id="h_numerals" about="#numerals" rev="dcterms:title">Numerals</h3>
+                  <dl about="#numerals" rev="rdfs:member">
+         
+                     <dt id="cardinal" about="#cardinal" typeof="rdf:Property">cardinal</dt>
+                     <dd about="#cardinal" property="rdfs:comment" datatype="xsd:string">
+                        <p>A value indicating quantity.</p>
+                     </dd>
+                     <dt id="ordinal" about="#ordinal" typeof="rdf:Property">ordinal</dt>
+                     <dd about="#ordinal" property="rdfs:comment" datatype="xsd:string">
+                        <p>A value indicating rank or position.</p>
+                     </dd>
+                     <dt id="ratio" about="#ratio" typeof="rdf:Property">ratio</dt>
+                     <dd about="#ratio" property="rdfs:comment" datatype="xsd:string">
+                        <p>An expression of the magnitude of two quantities relative to each other.</p>
+                     </dd>
+                     <dt id="percentage" about="#percentage" typeof="rdf:Property">percentage</dt>
+                     <dd about="#percentage" property="rdfs:comment" datatype="xsd:string">
+                        <p>A value that defines proportionality to a whole, including percent sign if present.</p>
+                     </dd>
+                     <dt id="phone" about="#phone" typeof="rdf:Property">phone</dt>
+                     <dd about="#phone" property="rdfs:comment" datatype="xsd:string">
+                        <p>A phone number, including area code and international dialing code.</p>
+                     </dd>
+                     <dt id="isbn" about="#isbn" typeof="rdf:Property">isbn</dt>
+                     <dd about="#isbn" property="rdfs:comment" datatype="xsd:string">
+                        <p>An International Standard Book Number.</p>
+                     </dd>
+                     <dt id="currency" about="#currency" typeof="rdf:Property">currency</dt>
+                     <dd about="#currency" property="rdfs:comment" datatype="xsd:string">
+                        <p>A currency value, including the denomination indicator.</p>
+                     </dd>
+                     <dt id="postal" about="#postal" typeof="rdf:Property">postal</dt>
+                     <dd about="#postal" property="rdfs:comment" datatype="xsd:string">
+                        <p>A postal or zip code.</p>
+                     </dd>
+                     <dt id="segmented" about="#segmented" typeof="rdf:Property">result</dt>
+                     <dd about="#segmented" property="rdfs:comment" datatype="xsd:string">
+                        <p>A single value that includes two or more sets of numbers separated by spaces.</p>
+                     </dd>
+                     <dt id="fraction" about="#fraction" typeof="rdf:Property">fraction</dt>
+                     <dd about="#fraction" property="rdfs:comment" datatype="xsd:string">
+                        <p>A single fraction with a numerator and denominator, and without a preceding whole number.</p>
+                     </dd>
+                     <dt id="mixed" about="#mixed" typeof="rdf:Property">mixed</dt>
+                     <dd about="#mixed" property="rdfs:comment" datatype="xsd:string">
+                        <p>A whole number followed by a fraction with a numerator and denominator.</p>
+                     </dd>
+                     <dt id="decimal" about="#decimal" typeof="rdf:Property">decimal</dt>
+                     <dd about="#decimal" property="rdfs:comment" datatype="xsd:string">
+                        <p>A single value where the integral number is separated from the fractional value by a decimal point or comma.</p>
+                     </dd>
+                     <dt id="roman" about="#roman" typeof="rdf:Property">roman</dt>
+                     <dd about="#roman" property="rdfs:comment" datatype="xsd:string">
+                        <p>A single value expressed using roman numerals.</p>
+                     </dd>
+                     <dt id="weight" about="#weight" typeof="rdf:Property">weight</dt>
+                     <dd about="#weight" property="rdfs:comment" datatype="xsd:string">
+                        <p>A single weight value, including units.</p>
+                     </dd>
+                     <dt id="measure" about="#measure" typeof="rdf:Property">measure</dt>
+                     <dd about="#measure" property="rdfs:comment" datatype="xsd:string">
+                        <p>A single value of measure, including units.</p>
+                     </dd>
+                     <dt id="coordinate" about="#coordinate" typeof="rdf:Property">coordinate</dt>
+                     <dd about="#coordinate" property="rdfs:comment" datatype="xsd:string">
+                        <p>A value expressing the location of a point in n-dimensional space, including degree, minute and other indicators if specified.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="value-groups" about="#value-groups" typeof="rdf:Bag">
+                  <h3 id="h_value-groups" about="#value-groups" rev="dcterms:title">Value Groups</h3>
+                  <dl about="#value-groups" rev="rdfs:member">
+         
+                     <dt id="range" about="#range" typeof="rdf:Property">range</dt>
+                     <dd about="#range" property="rdfs:comment" datatype="xsd:string">
+                        <p>A numeric, spatial or temporal range of values, as expressed by the start and end values.</p>
+                     </dd>
+                     <dt id="result" about="#result" typeof="rdf:Property">result</dt>
+                     <dd about="#result" property="rdfs:comment" datatype="xsd:string">
+                        <p>The outcome of an event, such as a sporting match or vote.</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="proper-nouns" about="#proper-nouns" typeof="rdf:Bag">
+                  <h3 id="h_proper-nouns" about="#proper-nouns" rev="dcterms:title">Proper Nouns</h3>
+                  <dl about="#proper-nouns" rev="rdfs:member">
+         
+                     <dt id="place" about="#place" typeof="rdf:Property">place</dt>
+                     <dd about="#place" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name of a city, state, province, country or other geographic or political entity. .</p>
+                     </dd>
+                     <dt id="nationality" about="#nationality" typeof="rdf:Property">nationality</dt>
+                     <dd about="#nationality" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name of a nationality, national group, or other designator of association. .</p>
+                     </dd>
+                     <dt id="organization" about="#organization" typeof="rdf:Property">organization</dt>
+                     <dd about="#organization" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name of an organization, corporation, or other business entity. .</p>
+                     </dd>
+                     <dt id="taxonomy" about="#taxonomy" typeof="rdf:Property">taxonomy</dt>
+                     <dd about="#taxonomy" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name of a species, genus or other taxonomic classification. .</p>
+                     </dd>
+                     <dt id="product" about="#product" typeof="rdf:Property">product</dt>
+                     <dd about="#product" property="rdfs:comment" datatype="xsd:string">
+                        <p>The brand name of a product, medication, etc. .</p>
+                     </dd>
+                     <dt id="event" about="#event" typeof="rdf:Property">event</dt>
+                     <dd about="#event" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name of a religious, sporting, or other event, holiday or festival. .</p>
+                     </dd>
+                     <dt id="award" about="#award" typeof="rdf:Property">award</dt>
+                     <dd about="#award" property="rdfs:comment" datatype="xsd:string">
+                        <p>The name of an award or prize. .</p>
+                     </dd>
+                     <div id="names" about="#names" typeof="rdf:Bag">
+                        <h4 id="h_names" about="#names" rev="dcterms:title">Personal names</h4>
+                        <dl about="#names" rev="rdfs:member">
+            
+                           <dt id="personal-name" about="#personal-name" typeof="rdf:Property">personal-name</dt>
+                           <dd about="#personal-name" property="rdfs:comment" datatype="xsd:string">
+                              <p>A proper name identifying a person, often composed of a given name and a family name.</p>
+                           </dd>
+                           <dd>
+                              <dl>
+                                 <dt>Inherits from:</dt>
+                                 <dd about="#personal-name" rel="rdfs:subPropertyOf"
+                                     resource="http://xmlns.com/foaf/spec/#term_name">
+                                    <a href="http://xmlns.com/foaf/spec/#term_name">http://xmlns.com/foaf/spec/#term_name</a>
+                                 </dd>
+                              </dl>
+                           </dd>
+                           <dt id="given-name" about="#given-name" typeof="rdf:Property">given-name</dt>
+                           <dd about="#given-name" property="rdfs:comment" datatype="xsd:string">
+                              <p>The part of a personal name that distinguishes the person from a group of persons sharing the same surname. Also known as 'forename' or 'first name'. .</p>
+                           </dd>
+                           <dd>
+                              <dl>
+                                 <dt>Equivalent to:</dt>
+                                 <dd about="#given-name" rel="owl:equivalentProperty"
+                                     resource="http://xmlns.com/foaf/spec/#term_givenName">
+                                    <a href="http://xmlns.com/foaf/spec/#term_givenName">http://xmlns.com/foaf/spec/#term_givenName</a>
+                                 </dd>
+                              </dl>
+                           </dd>
+                           <dt id="surname" about="#surname" typeof="rdf:Property">surname</dt>
+                           <dd about="#surname" property="rdfs:comment" datatype="xsd:string">
+                              <p>The part of a personal name that associates the person with a group of persons sharing the same surname. Also known as 'last name'.</p>
+                           </dd>
+                           <dd>
+                              <dl>
+                                 <dt>See also:</dt>
+                                 <dd about="#surname" rel="rdfs:seeAlso" resource="#family-name">
+                                    <a href="#family-name">family-name</a>
+                                 </dd>
+                              </dl>
+                           </dd>
+                           <dt id="family-name" about="#family-name" typeof="rdf:Property">family-name</dt>
+                           <dd about="#family-name" property="rdfs:comment" datatype="xsd:string">
+                              <p>The part of a personal name that indicates the family to which the person belongs. Often used in conjunction with a honorific.</p>
+                           </dd>
+                           <dd>
+                              <dl>
+                                 <dt>Inherits from:</dt>
+                                 <dd about="#family-name" rel="rdfs:subPropertyOf" resource="#surname">
+                                    <a href="#surname">surname</a>
+                                 </dd>
+                              </dl>
+                           </dd>
+                           <dd>
+                              <dl>
+                                 <dt>See also:</dt>
+                                 <dd about="#family-name" rel="rdfs:seeAlso" resource="#surname">
+                                    <a href="#surname">surname</a>
+                                 </dd>
+                              </dl>
+                           </dd>
+                           <dd>
+                              <dl>
+                                 <dt>Equivalent to:</dt>
+                                 <dd about="#family-name" rel="owl:equivalentProperty"
+                                     resource="http://xmlns.com/foaf/spec/#term_familyName">
+                                    <a href="http://xmlns.com/foaf/spec/#term_familyName">http://xmlns.com/foaf/spec/#term_familyName</a>
+                                 </dd>
+                              </dl>
+                           </dd>
+                           <dt id="name-title" about="#name-title" typeof="rdf:Property">name-title</dt>
+                           <dd about="#name-title" property="rdfs:comment" datatype="xsd:string">
+                              <p>The part of a personal name that signifies veneration, an official position or a professional or academic qualification. .</p>
+                           </dd>
+                           <dd>
+                              <dl>
+                                 <dt>Equivalent to:</dt>
+                                 <dd about="#name-title" rel="owl:equivalentProperty"
+                                     resource="http://xmlns.com/foaf/spec/#term_title">
+                                    <a href="http://xmlns.com/foaf/spec/#term_title">http://xmlns.com/foaf/spec/#term_title</a>
+                                 </dd>
+                              </dl>
+                           </dd>
+                           <dt id="signature" about="#signature" typeof="rdf:Property">signature</dt>
+                           <dd about="#signature" property="rdfs:comment" datatype="xsd:string">
+                              <p>The handwritten, digital or stamped representation of a person's name.</p>
+                           </dd>
+                        </dl>
+                     </div>
+                  </dl>
+               </div>
+               <div id="words" about="#words" typeof="rdf:Bag">
+                  <h3 id="h_words" about="#words" rev="dcterms:title">Words</h3>
+                  <dl about="#words" rev="rdfs:member">
+         
+                     <dt id="word" about="#word" typeof="rdf:Property">word</dt>
+                     <dd about="#word" property="rdfs:comment" datatype="xsd:string">
+                        <p>A lexical word.</p>
+                     </dd>
+                     <dd>
+                        <dl>
+                           <dt>Inherits from:</dt>
+                           <dd about="#word" rel="rdfs:subPropertyOf" resource="#text">
+                              <a href="#text">text</a>
+                           </dd>
+                        </dl>
+                     </dd>
+                     <dt id="compound" about="#compound" typeof="rdf:Property">compound</dt>
+                     <dd about="#compound" property="rdfs:comment" datatype="xsd:string">
+                        <p>A word created by the combination of two or more stems.</p>
+                     </dd>
+                     <dt id="homograph" about="#homograph" typeof="rdf:Property">homograph</dt>
+                     <dd about="#homograph" property="rdfs:comment" datatype="xsd:string">
+                        <p>An instance of a set of words with the same spelling but different etymologies and often pronunciations (e.g. bass the instrument and bass the fish).</p>
+                     </dd>
+                     <dt id="portmanteau" about="#portmanteau" typeof="rdf:Property">portmanteau</dt>
+                     <dd about="#portmanteau" property="rdfs:comment" datatype="xsd:string">
+                        <p>A word created from the merging of two other words (e.g. brunch from breakfast and lunch).</p>
+                     </dd>
+                  </dl>
+               </div>
+               <div id="word-parts" about="#word-parts" typeof="rdf:Bag">
+                  <h3 id="h_word-parts" about="#word-parts" rev="dcterms:title">Word Parts</h3>
+                  <dl about="#word-parts" rev="rdfs:member">
+         
+                     <dt id="root" about="#root" typeof="rdf:Property">root</dt>
+                     <dd about="#root" property="rdfs:comment" datatype="xsd:string">
+                        <p>The primary lexical unit of a word.</p>
+                     </dd>
+                     <dt id="stem" about="#stem" typeof="rdf:Property">stem</dt>
+                     <dd about="#stem" property="rdfs:comment" datatype="xsd:string">
+                        <p>The word form common to all its inflected variants.</p>
+                     </dd>
+                     <dt id="prefix" about="#prefix" typeof="rdf:Property">prefix</dt>
+                     <dd about="#prefix" property="rdfs:comment" datatype="xsd:string">
+                        <p>An affix attached to the front of a stem.</p>
+                     </dd>
+                     <dt id="suffix" about="#suffix" typeof="rdf:Property">suffix</dt>
+                     <dd about="#suffix" property="rdfs:comment" datatype="xsd:string">
+                        <p>An affix attached to the end of a stem.</p>
+                     </dd>
+                     <dt id="morpheme" about="#morpheme" typeof="rdf:Property">morpheme</dt>
+                     <dd about="#morpheme" property="rdfs:comment" datatype="xsd:string">
+                        <p>The smallest linguistic unit of a word with semantic meaning.</p>
+                     </dd>
+                     <dt id="phoneme" about="#phoneme" typeof="rdf:Property">phoneme</dt>
+                     <dd about="#phoneme" property="rdfs:comment" datatype="xsd:string">
+                        <p>The smallest linguistic unit of a word that forms a sound.</p>
+                     </dd>
+                     <dt id="grapheme" about="#grapheme" typeof="rdf:Property">grapheme</dt>
+                     <dd about="#grapheme" property="rdfs:comment" datatype="xsd:string">
+                        <p>The smallest linguistic unit of a written word.</p>
+                     </dd>
+                  </dl>
+               </div>
+            </dl>
+         </div>
+         <div id="artwork" about="#artwork" typeof="rdf:Bag">
+            <h2 id="h_artwork" about="#artwork" rev="dcterms:title">Artwork</h2>
+            <dl about="#artwork" rev="rdfs:member">
+      
+               <dt id="illustration" about="#illustration" typeof="rdf:Property">illustration</dt>
+               <dd about="#illustration" property="rdfs:comment" datatype="xsd:string">
+                  <p>An illustration.</p>
+               </dd>
+               <dt id="photograph" about="#photograph" typeof="rdf:Property">photograph</dt>
+               <dd about="#photograph" property="rdfs:comment" datatype="xsd:string">
+                  <p>A photograph.</p>
+               </dd>
+               <dt id="decorative" about="#decorative" typeof="rdf:Property">decorative</dt>
+               <dd about="#decorative" property="rdfs:comment" datatype="xsd:string">
+                  <p>Artwork serving only a decorative purpose, not contributing relevant information.</p>
+               </dd>
+               <dt id="publisher-logo" about="#publisher-logo" typeof="rdf:Property">publisher-logo</dt>
+               <dd about="#publisher-logo" property="rdfs:comment" datatype="xsd:string">
+                  <p>The publisher's logo.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#publisher-logo" rel="rdfs:subPropertyOf" resource="#decorative">
+                        <a href="#decorative">decorative</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="frontispiece" about="#frontispiece" typeof="rdf:Property">frontispiece</dt>
+               <dd about="#frontispiece" property="rdfs:comment" datatype="xsd:string">
+                  <p>A frontmatter illustration.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#frontispiece" rel="rdfs:subPropertyOf" resource="#illustration">
+                        <a href="#illustration">illustration</a>
+                     </dd>
+                  </dl>
+               </dd>
+            </dl>
+         </div>
+         <div id="references" about="#references" typeof="rdf:Bag">
+            <h2 id="h_references" about="#references" rev="dcterms:title">References</h2>
+            <dl about="#references" rev="rdfs:member">
+      
+               <dt id="reference" about="#reference" typeof="rdf:Property">reference</dt>
+               <dd about="#reference" property="rdfs:comment" datatype="xsd:string">
+                  <p>A reference to another information entity - a resource, fragment, concept, or notion.</p>
+               </dd>
+               <dt id="resolving-reference" about="#resolving-reference" typeof="rdf:Property">resolving-reference</dt>
+               <dd about="#resolving-reference" property="rdfs:comment" datatype="xsd:string">
+                  <p>A reference which contains data intended to allow resolving the target entity.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#resolving-reference" rel="rdfs:subPropertyOf" resource="#reference">
+                        <a href="#reference">reference</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="nonresolving-reference" about="#nonresolving-reference"
+                   typeof="rdf:Property">nonresolving-reference</dt>
+               <dd about="#nonresolving-reference" property="rdfs:comment" datatype="xsd:string">
+                  <p>A reference to a non-resolving target - a concept, notion or other imprecisely defined entity.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#nonresolving-reference" rel="rdfs:subPropertyOf" resource="#reference">
+                        <a href="#reference">reference</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="noteref" about="#noteref" typeof="rdf:Property">noteref</dt>
+               <dd about="#noteref" property="rdfs:comment" datatype="xsd:string">
+                  <p>A reference to a note, typically appearing a superscripted symbol in the main body of text</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#noteref" rel="rdfs:subPropertyOf" resource="#resolving-reference">
+                        <a href="#resolving-reference">resolving-reference</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>See also:</dt>
+                     <dd about="#noteref" rel="rdfs:seeAlso" resource="#note">
+                        <a href="#note">note</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="annoref" about="#annoref" typeof="rdf:Property">annoref</dt>
+               <dd about="#annoref" property="rdfs:comment" datatype="xsd:string">
+                  <p>A reference to an annotation</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#annoref" rel="rdfs:subPropertyOf" resource="#resolving-reference">
+                        <a href="#resolving-reference">resolving-reference</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>See also:</dt>
+                     <dd about="#annoref" rel="rdfs:seeAlso" resource="#annotation">
+                        <a href="#annotation">annotation</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="citation" about="#citation" typeof="rdf:Property">citation</dt>
+               <dd about="#citation" property="rdfs:comment" datatype="xsd:string">
+                  <p>A reference to bibliographic work, resolving to an entry in a directly or indirectly identified bibliography</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#citation" rel="rdfs:subPropertyOf" resource="#resolving-reference">
+                        <a href="#resolving-reference">resolving-reference</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>See also:</dt>
+                     <dd about="#citation" rel="rdfs:seeAlso" resource="#bibliography">
+                        <a href="#bibliography">bibliography</a>
+                     </dd>
+                     <dd about="#citation" rel="rdfs:seeAlso" resource="#nonresolving-citation">
+                        <a href="#nonresolving-citation">nonresolving-citation</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="nonresolving-citation" about="#nonresolving-citation" typeof="rdf:Property">nonresolving-citation</dt>
+               <dd about="#nonresolving-citation" property="rdfs:comment" datatype="xsd:string">
+                  <p>An imprecise reference to a bibliographic work.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#nonresolving-citation" rel="rdfs:subPropertyOf"
+                         resource="#nonresolving-reference">
+                        <a href="#nonresolving-reference">nonresolving-reference</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>See also:</dt>
+                     <dd about="#nonresolving-citation" rel="rdfs:seeAlso" resource="#citation">
+                        <a href="#citation">citation</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="continuation" about="#continuation" typeof="rdf:Property">continuation</dt>
+               <dd about="#continuation" property="rdfs:comment" datatype="xsd:string">
+                  <p>A reference to another segment of the current work that constitutes the logical continuation of the current segment.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#continuation" rel="rdfs:subPropertyOf" resource="#resolving-reference">
+                        <a href="#resolving-reference">resolving-reference</a>
+                     </dd>
+                  </dl>
+               </dd>
+               <dt id="continuation-of" about="#continuation-of" typeof="rdf:Property">continuation-of</dt>
+               <dd about="#continuation-of" property="rdfs:comment" datatype="xsd:string">
+                  <p>A reference to another segment of the current work that the current segment is a continuation of.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#continuation-of" rel="rdfs:subPropertyOf"
+                         resource="#resolving-reference">
+                        <a href="#resolving-reference">resolving-reference</a>
+                     </dd>
+                  </dl>
+               </dd>
+            </dl>
+         </div>
+         <div id="pagination" about="#pagination" typeof="rdf:Bag">
+            <h2 id="h_pagination" about="#pagination" rev="dcterms:title">Pagination</h2>
+            <dl about="#pagination" rev="rdfs:member">
+      
+               <dt id="pagebreak" about="#pagebreak" typeof="rdf:Property">pagebreak</dt>
+               <dd about="#pagebreak" property="rdfs:comment" datatype="xsd:string">
+                  <p>A (sometimes valued) separator denoting the position where a break between two contiguous pages occurs in a paginated media.</p>
+               </dd>
+               <dt id="page-header" about="#page-header" typeof="rdf:Property">page-header</dt>
+               <dd about="#page-header" property="rdfs:comment" datatype="xsd:string">
+                  <p>Material, separate from the main body of text, appearing at the top of a printed page.</p>
+               </dd>
+               <dt id="page-footer" about="#page-footer" typeof="rdf:Property">page-footer</dt>
+               <dd about="#page-footer" property="rdfs:comment" datatype="xsd:string">
+                  <p>Material, separate from the main body of text, appearing at the bottom of a printed page.</p>
+               </dd>
+               <dt id="recto" about="#recto" typeof="rdf:Property">recto</dt>
+               <dd about="#recto" property="rdfs:comment" datatype="xsd:string">
+                  <p>The front side of a page.</p>
+               </dd>
+               <dt id="verso" about="#verso" typeof="rdf:Property">verso</dt>
+               <dd about="#verso" property="rdfs:comment" datatype="xsd:string">
+                  <p>The back side of a page.</p>
+               </dd>
+            </dl>
+         </div>
+         <div id="custom-content" about="#custom-content" typeof="rdf:Bag">
+            <h2 id="h_custom-content" about="#custom-content" rev="dcterms:title">Custom Content (Republishing)</h2>
+            <dl about="#custom-content" rev="rdfs:member">
+      
+               <dt id="image-placeholder" about="#image-placeholder" typeof="rdf:Property">image-placeholder</dt>
+               <dd about="#image-placeholder" property="rdfs:comment" datatype="xsd:string">
+                  <p>A placeholder for a reference to a non-existing or deliberately removed image.</p>
+               </dd>
+               <dd>
+                  <dl>
+                     <dt>Inherits from:</dt>
+                     <dd about="#image-placeholder" rel="rdfs:subPropertyOf"
+                         resource="#nonresolving-reference">
+                        <a href="#nonresolving-reference">nonresolving-reference</a>
+                     </dd>
+                  </dl>
+               </dd>
+            </dl>
+         </div>
+         <div id="priority" about="#priority" typeof="rdf:Bag">
+            <h2 id="h_priority" about="#priority" rev="dcterms:title">Priority</h2>
+            <dl about="#priority" rev="rdfs:member">
+      
+               <dt id="primary" about="#primary" typeof="rdf:Property">primary</dt>
+               <dd about="#primary" property="rdfs:comment" datatype="xsd:string">
+                  <p>Indicates the current element has primary importance (for example, may identify the primary table of contents for a work or a primary source).</p>
+               </dd>
+               <dt id="secondary" about="#secondary" typeof="rdf:Property">secondary</dt>
+               <dd about="#secondary" property="rdfs:comment" datatype="xsd:string">
+                  <p>Indicates the current element has secondary importance.</p>
+               </dd>
+               <dt id="tertiary" about="#tertiary" typeof="rdf:Property">tertiary</dt>
+               <dd about="#tertiary" property="rdfs:comment" datatype="xsd:string">
+                  <p>Indicates the current element has tertiary importance.</p>
+               </dd>
+            </dl>
+         </div>
+      </div>
+   </body>
+</html>

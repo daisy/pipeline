@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the select element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element-variant">Block</span> variant of  the <span class="element">select</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d626e4">Usage Example</a></li>
+               <li class="h2"><a href="#d626e8">Allowed parents</a></li>
+               <li class="h2"><a href="#d626e104">Allowed children</a></li>
+               <li class="h2"><a href="#d626e122">Content model</a></li>
+               <li class="h2"><a href="#d626e141">Variants</a></li>
+               <li class="h2"><a href="#d626e150">Namespace</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">Container for content selection declarations in a Block context.</p>
+            </div>
+            <h2 id="d626e4">Usage Example</h2><pre>        
+&lt;sel:select&gt;
+    &lt;sel:when expr="…"&gt;
+        …
+    &lt;/sel:when&gt;    
+    &lt;sel:otherwise&gt;
+        …
+    &lt;/sel:otherwise&gt;
+&lt;/sel:select&gt;        
+    </pre><h2 id="d626e8">Allowed parents</h2>
+            <p><a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annotation01.html">annotation</a>, 
+               <a class="element" href="e-annotation-xml01.html">m:annotation-xml</a>, 
+               <a class="element" href="e-aside02.html">aside (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-aside03.html">aside (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-backcover01.html">backcover</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-entry03.html">entry (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-entry04.html">entry (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-flaps01.html">flaps</a>, 
+               <a class="element" href="e-frontcover01.html">frontcover</a>, 
+               <a class="element" href="e-item01.html">item</a>, 
+               <a class="element" href="e-longdesc01.html">d:longdesc</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-otherwise03.html">sel:otherwise</a>, 
+               <a class="element" href="e-quote01.html">quote</a>, 
+               <a class="element" href="e-section01.html">section</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-td01.html">td</a>, 
+               <a class="element" href="e-th01.html">th</a>, 
+               <a class="element" href="e-tour01.html">d:tour</a> and 
+               <a class="element" href="e-when02.html">sel:when</a>
+               
+            </p>
+            <h2 id="d626e104">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>must</em> contain the following children: <a class="element" href="e-otherwise03.html">sel:otherwise</a> and 
+               <a class="element" href="e-when02.html">sel:when</a>
+               
+            </p>
+            <h2 id="d626e122">Content model</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#base01">@xml:base</a> and 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a></div>
+               <div class="rng"><span class="rng-term">one or more of </span>
+                  <a class="element" href="e-when02.html">sel:when</a>
+                  
+               </div><a class="element" href="e-otherwise03.html">sel:otherwise</a></div>
+            <h2 id="d626e141">Variants</h2>
+            <p>This element exists in 2 variants. The other variant is the <a href="e-select01.html"><span class="element-variant">Phrase</span> variant.</a></p>
+            <h2 id="d626e150">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/features/select/</span></p>
+         </div>
+      </div>
+   </body>
+</html>

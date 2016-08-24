@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/features/description/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The DIAGRAM Description Feature </title>
+        <annotation annotates="/">
+            <para>The DIAGRAM Description feature supports traditional long descriptions and also includes markup for including summaries and simplified language descriptions. It also allows the embedding of simplified image versions of the source and also tactile printing-ready equivalents. </para>
+            <para>The age and/or education level of the intended audience can be set in the description metadata. </para>
+            <para>This feature makes available a single public element: the description element. Other components defined in this feature are intended for use augmenting this element. </para>
+            <para>This feature inherits elements, attributes and additional features from the Z39.98-2012 Core Modules . </para>
+        </annotation>
+        <author xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+              xmlns:xi="http://www.w3.org/2001/XInclude"
+              xmlns:x="http://www.w3.org/1999/xhtml">
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+                 xmlns:xi="http://www.w3.org/2001/XInclude"
+                 xmlns:x="http://www.w3.org/1999/xhtml">
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+                   xmlns:xi="http://www.w3.org/2001/XInclude"
+                   xmlns:x="http://www.w3.org/1999/xhtml">
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+                  xmlns:xi="http://www.w3.org/2001/XInclude"
+                  xmlns:x="http://www.w3.org/1999/xhtml">
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:x="http://www.w3.org/1999/xhtml">
+        <define name="z3998.feature.description">
+            <element name="description">
+                <a:documentation>The description element is the root container element for a description. It consists of an optional container element for metadata information (the head ) and a required container for the different description types and alternate image renditions (the body ). The language of the description can be specified by attaching an xml.lang attribute to the description element. If the description will be made available in a standalone context (i.e., in which its language cannot be inherited from a host content document), the language should always be specified. The DIAGRAM Description profile provides the ability to compile one or more description elements into a single document for distribution (e.g., to accompany an EPUB). When storing a description in a standalone context, the Description feature namespace http://www.daisy.org/ns/z3998/authoring/features/description/ should be declared on the description element using the xmlns namespace association mechanism defined in refXMLNamespaces . Although not required, the prefix d is recommended. </a:documentation>
+                <ref name="z3998.feature.description.attlist"/>
+                <ref name="z3998.feature.description.content"/>
+            </element>
+        </define>
+        <define name="z3998.feature.description.attlist">
+            <optional>
+                <ref name="xml.id.attrib"/>
+            </optional>
+            <optional>
+                <ref name="xml.lang.attrib"/>
+            </optional>
+            <optional>
+                <ref name="xml.base.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.feature.description.content">
+            <ref name="z3998.feature.description.document.model"/>
+        </define>
+        <define name="z3998.feature.description.document.model">
+            <a:documentation>The document-like model choice for description </a:documentation>
+            <optional>
+                <ref name="z3998.feature.description.head"/>
+            </optional>
+            <ref name="z3998.feature.description.body"/>
+        </define>
+    </div>
+    <div xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:x="http://www.w3.org/1999/xhtml">
+        <define name="z3998.feature.description.head">
+            <element name="head">
+                <a:documentation>The description head element contains meta information about the enclosing description element. The meta information in the description head element should not be treated as document content, but may be used for display and other purposes when rendering descriptions. Although all metadata is optional, descriptions should, at a minimum, include an identifier, the intended reader age and/or school grade level. See the DIAGRAM Descriptions Vocabulary for a set of predefined RDF properties. Properties from other RDF vocabularies can also be included, provided their prefix is declared. If age and grade-level metadata is omitted, the containing description should be assumed to be applicable to all readers. </a:documentation>
+                <ref name="z3998.feature.description.head.attlist"/>
+                <ref name="z3998.feature.description.head.content"/>
+            </element>
+        </define>
+        <define name="z3998.feature.description.head.attlist">
+            <ref name="z3998.Document.attrib"/>
+        </define>
+        <define name="z3998.feature.description.head.content">
+            <oneOrMore>
+                <choice>
+                    <ref name="z3998.feature.description.head.class"/>
+                </choice>
+            </oneOrMore>
+        </define>
+        <define name="z3998.feature.description.head.class" combine="choice">
+            <choice>
+                <ref name="z3998.meta"/>
+            </choice>
+        </define>
+    </div>
+    <div xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:x="http://www.w3.org/1999/xhtml">
+        <define name="z3998.feature.description.body">
+            <element name="body">
+                <a:documentation>The description body element contains the accessible description forms that readers can select from depending on their needs. The description body must minimally contain the primary description of the associated content in a child longdesc element. The description body may also optionally compliment the primary description with a briefer summary and a simplified language representation . The body of the description can also be used to carry alternative images for readers unable to adequately interact with the source image. The tactile element can be used to include a tactile image and accompanying tour , and the simplifiedImage element can be used to include images more accessible to various reader needs. </a:documentation>
+                <ref name="z3998.feature.description.body.attlist"/>
+                <ref name="z3998.feature.description.body.content"/>
+            </element>
+        </define>
+        <define name="z3998.feature.description.body.attlist">
+            <ref name="z3998.Document.attrib"/>
+        </define>
+        <define name="z3998.feature.description.body.content">
+            <optional>
+                <ref name="z3998.feature.description.body.summary"/>
+            </optional>
+            <ref name="z3998.feature.description.body.longdesc"/>
+            <optional>
+                <ref name="z3998.feature.description.body.simplifiedLanguageDescription"/>
+            </optional>
+            <optional>
+                <ref name="z3998.feature.description.body.tactile"/>
+            </optional>
+            <optional>
+                <ref name="z3998.feature.description.body.simplifiedImage"/>
+            </optional>
+        </define>
+        <define name="z3998.feature.description.body.content" combine="interleave">
+            <zeroOrMore>
+                <ref name="z3998.annotation"/>
+            </zeroOrMore>
+        </define>
+    </div>
+    <div xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:x="http://www.w3.org/1999/xhtml">
+        <define name="z3998.feature.description.body.summary">
+            <element name="summary">
+                <a:documentation>The summary element contains a shorter, more succinct version of the primary description in the longdesc element. </a:documentation>
+                <ref name="z3998.Block.attrib"/>
+                <ref name="z3998.feature.description.body.summary.content"/>
+                <sch:rule context="d:summary">
+                    <sch:assert test="normalize-space(.) or *">The summary element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.feature.description.body.summary.content">
+            <choice>
+                <ref name="z3998.Phrase.Text.mix.model"/>
+                <ref name="z3998.Block.core.class"/>
+            </choice>
+        </define>
+        <define name="z3998.feature.description.body.longdesc">
+            <element name="longdesc">
+                <a:documentation>The longdesc element contains the primary description of the associated image, graphic or visually-oriented structure. The longdesc should contain a comprehensive explanation of the referenced item. See the summary element for information on how to include a compact description. </a:documentation>
+                <ref name="z3998.Block.attrib"/>
+                <ref name="z3998.Flow.choice.model"/>
+                <sch:rule context="d:longdesc">
+                    <sch:assert test="normalize-space(.) or *">The longdesc element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.feature.description.body.simplifiedLanguageDescription">
+            <element name="simplifiedLanguageDescription">
+                <a:documentation>The simplifiedLanguageDescription element contains a simplified language version of the primary description in the longdesc element. </a:documentation>
+                <ref name="z3998.Block.attrib"/>
+                <ref name="z3998.Flow.choice.model"/>
+                <sch:rule context="d:simplifiedLanguageDescription">
+                    <sch:assert test="normalize-space(.) or *">The simplifiedLanguageDescription element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.feature.description.body.tactile">
+            <element name="tactile">
+                <a:documentation>The tactile element contains an alternative tactile image. The element may contain one or more identical images for different production methods (e.g., one for swell paper production and another for stereolithograph printing). The tactile image may also include an explanatory tour . This specification does not place any restrictions on the format used to represent the tactile image, but images should be final-form representations for output rendering by end users. The role attribute should be used to differentiate the production use for each image. </a:documentation>
+                <ref name="z3998.Block.attrib"/>
+                <ref name="z3998.feature.description.body.tactile.content"/>
+            </element>
+        </define>
+        <define name="z3998.feature.description.body.tactile.content">
+            <ref name="z3998.feature.description.tour.model"/>
+        </define>
+        <define name="z3998.feature.description.tour.model">
+            <group>
+                <oneOrMore>
+                    <ref name="z3998.object.block"/>
+                </oneOrMore>
+                <optional>
+                    <ref name="z3998.feature.description.tour"/>
+                </optional>
+            </group>
+        </define>
+        <define name="z3998.feature.description.tour">
+            <element name="tour">
+                <a:documentation>The tour element is associated with a tactile graphic or a simplified alternative image, and provides orientation. In addition, the tour can explain how to explore the tactile or simplified image. </a:documentation>
+                <ref name="z3998.Block.attrib"/>
+                <ref name="z3998.block.content"/>
+            </element>
+        </define>
+        <define name="z3998.feature.description.body.simplifiedImage">
+            <element name="simplifiedImage">
+                <a:documentation>The simplifiedImage element contains a simplified version of the source image. The element may contain one or more identical images in different formats. The simplified image may also include an explanatory tour . </a:documentation>
+                <ref name="z3998.Block.attrib"/>
+                <ref name="z3998.feature.description.body.simplifiedImage.content"/>
+            </element>
+        </define>
+        <define name="z3998.feature.description.body.simplifiedImage.content">
+            <ref name="z3998.feature.description.tour.model"/>
+        </define>
+    </div>
+    <div xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xmlns:x="http://www.w3.org/1999/xhtml">
+        <a:documentation>Z39.98 Content Selection feature - content model contribution </a:documentation>
+        <define name="z3998.Block.extern.class" combine="choice">
+            <ref name="z3998.feature.description"/>
+        </define>
+    </div>
+</grammar>

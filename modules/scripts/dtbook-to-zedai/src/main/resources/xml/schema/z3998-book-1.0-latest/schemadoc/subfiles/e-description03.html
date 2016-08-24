@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the description element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element-variant">text</span> variant of  the <span class="element">description</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d110e28">Allowed parents</a></li>
+               <li class="h2"><a href="#d110e34">Allowed children</a></li>
+               <li class="h2"><a href="#d110e90">Content model and additional requirements</a></li>
+               <li class="h2"><a href="#d110e350">Variants</a></li>
+               <li class="h2"><a href="#d110e374">Namespace</a></li>
+               <li class="h2"><a href="#schemadoc-longdesc">Usage Details</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The 
+                  <code>description</code> element represents an alternate accessible description of an image, video, table, etc.
+                  
+               </p>
+               <p class="description ">The 
+                  <code>description</code> element can either contain the text content of the description or reference an external file in which it can be found via
+                  the 
+                  <code>
+                     <a href="attributes.html#href01">xlink:href</a>
+                     </code> attribute. It is not permitted to mix both methods, however.
+                  
+               </p>
+               <p class="description ">To ensure the description can be rendered, the 
+                  <code>description</code> element must not include descendant elements and attributes that require a description.
+                  
+               </p>
+               <p class="longdesc-link">Usage details available in the <a href="#schemadoc-longdesc">Usage Details</a> section.
+               </p>
+            </div>
+            <h2 id="d110e28">Allowed parents</h2>
+            <p><a class="element" href="e-object03.html">object</a>
+               
+            </p>
+            <h2 id="d110e34">Allowed children</h2>
+            <p>This element <em>may</em> contain text.
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-break01.html">ssml:break</a>, 
+               <a class="element" href="e-char01.html">char</a>, 
+               <a class="element" href="e-emph02.html">emph</a>, 
+               <a class="element" href="e-object03.html">object</a>, 
+               <a class="element" href="e-pagebreak01.html">pagebreak</a>, 
+               <a class="element" href="e-phoneme02.html">ssml:phoneme</a>, 
+               <a class="element" href="e-prosody02.html">ssml:prosody</a>, 
+               <a class="element" href="e-ruby01.html">its:ruby</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as</a>, 
+               <a class="element" href="e-span02.html">span</a>, 
+               <a class="element" href="e-sub01.html">sub</a>, 
+               <a class="element" href="e-sub03.html">ssml:sub</a>, 
+               <a class="element" href="e-sup01.html">sup</a> and 
+               <a class="element" href="e-token02.html">ssml:token</a>
+               
+            </p>
+            <h2 id="d110e90">Content model and additional requirements</h2>
+            <div class="element-content-model">
+               <div class="rng-required-attributes">required attributes: <a class="attribute" href="attributes.html#ref01">@ref</a>
+                  
+               </div>
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role05">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  
+                  <div class="rng"><a class="attribute" href="attributes.html#href01">@xlink:href</a></div>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-term">optionally </span>
+                  
+                  
+                  <div class="rng"><a class="attribute" href="attributes.html#href01">@xlink:href</a></div>
+                  
+                  <div class="rng"><span class="rng-term">an optional </span>
+                     <a class="attribute" href="attributes.html#type03">@xlink:type</a>
+                     
+                  </div>
+                  
+                  <div class="rng"><span class="rng-term">an optional </span>
+                     <a class="attribute" href="attributes.html#title01">@xlink:title</a>
+                     
+                  </div>
+                  
+                  <div class="rng"><span class="rng-term">an optional </span>
+                     <a class="attribute" href="attributes.html#show01">@xlink:show</a>
+                     
+                  </div>
+                  
+                  <div class="rng"><span class="rng-term">an optional </span>
+                     <a class="attribute" href="attributes.html#actuate01">@xlink:actuate</a>
+                     
+                  </div>
+                  
+                  
+               </div>
+               <div class="rng-choice"><span class="rng-term">a choice of</span>
+                  
+                  <div class="rng">either no content</div>
+                  
+                  <div class="rng">or <span class="rng-term">one or more of </span>
+                     
+                     <div class="rng"><span class="tng-term">a choice of </span><div class="rng">either one of the 14 elements: <a class="element" href="e-char01.html">char</a>, <a class="element" href="e-emph02.html">emph</a>, <a class="element" href="e-ruby01.html">its:ruby</a>, <a class="element" href="e-object03.html">object</a>, <a class="element" href="e-pagebreak01.html">pagebreak</a>, <a class="element" href="e-span02.html">span</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-phoneme02.html">ssml:phoneme</a>, <a class="element" href="e-prosody02.html">ssml:prosody</a>, <a class="element" href="e-say-as02.html">ssml:say-as</a>, <a class="element" href="e-sub03.html">ssml:sub</a>, <a class="element" href="e-token02.html">ssml:token</a>, <a class="element" href="e-sub01.html">sub</a> or <a class="element" href="e-sup01.html">sup</a></div>
+                        <div class="rng">or text</div><span class="tng-term">end of choice</span></div>
+                     
+                  </div>
+                  <span class="rng-term">end of choice</span></div>
+               <div class="schematron-asserts-and-reports">Note that in addition to restrictions presented in the content model  above, 
+                  					use of this element must also respect the following requirements:
+                  <ul>
+                     <li>The 
+                        <code>description</code> element must either contain text data or point to an external resource using the 
+                        <code>xlink:href</code> attribute.
+                        
+                     </li>
+                     <li>The 
+                        <code>description</code> element must not contain text data and also point to an external resource using the 
+                        <code>xlink:href</code> attribute.
+                        
+                     </li>
+                     <li>The 
+                        <code>description</code> element must not contain descendant 
+                        <code>description</code> elements.
+                        
+                     </li>
+                     <li>The 
+                        <code>description</code> element must not contain descendant 
+                        <code>object</code> elements.
+                        
+                     </li>
+                     <li>The 
+                        <code>description</code> element must not contain descendant 
+                        <code>table</code> elements.
+                        
+                     </li>
+                     <li>The 
+                        <code>description</code> element must not contain descendant elements from the MathML feature grammar.
+                        
+                     </li>
+                     <li>Every 
+                        <code>description</code> element must be referenced by at least one element in the document.
+                        
+                     </li>
+                     <li>The 
+                        <code>object</code> element may contain only one child 
+                        <code>description</code>.
+                        
+                     </li>
+                     <li>
+                        <code>description</code> elements cannot be nested inside the children of an 
+                        <code>object</code> element.
+                        
+                     </li>
+                     <li>A single 
+                        <code>description</code> element must be the only child of an 
+                        <code>object</code> element when used.
+                        
+                     </li>
+                  </ul>
+                  <div>Such requirements take precedence over any conflicting statements in the
+                     						content model or in the lists above of allowed children and parents.
+                  </div>
+               </div>
+            </div>
+            <h2 id="d110e350">Variants</h2>
+            <p>This element exists in 3 variants. The other 2  variants are:</p>
+            <ul>
+               <li><a href="e-description01.html">The <span class="element-variant">block</span> variant of  the <span class="element">description</span> element</a></li>
+               <li><a href="e-description02.html">The <span class="element-variant">phrase</span> variant of  the <span class="element">description</span> element</a></li>
+            </ul>
+            <h2 id="d110e374">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+            <h2 id="schemadoc-longdesc">Usage Details</h2>
+            
+            <p>The 
+               <code>description</code> element can be used in one of two ways: 
+               
+            </p>
+            
+            <ol>
+               
+               <li>
+                  
+                  <p>as a direct container for the descriptive text:</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+&lt;description by="republisher" xml:id="mouse-desc"&gt;
+            &lt;p&gt;A picture of a small, grey mouse.&lt;/p&gt;
+&lt;/description&gt;
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>as a pointer to an external description:</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+&lt;description by="republisher" xml:id="mouse-desc2" xlink:href="mouse-desc.xml" /&gt;
+                </pre>
+                     </div>
+                  
+               </li>
+               
+            </ol>
+            
+            <p> An element may point to more than one 
+               <code>description</code> so long as each description has a unique 
+               <code>role</code> attribute value. 
+               
+            </p>
+            
+            <p> A single 
+               <code>description</code> element can be the child of an 
+               <code>object</code> to provide its accessible description. In this case, an implicit association is made between the two elements (i.e., the
+               
+               <code>desc</code> attribute does not need to be used: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+            &lt;object src="mouse.png"&gt;
+                &lt;description by="republisher" xlink:href="mouse-desc.xml" /&gt;
+            &lt;/object&gt;
+        </pre>
+               </div>
+            
+            <p> If an 
+               <code>object</code> element contains text or other elements as its children, an implicit 
+               <code>description</code> is assumed. In the absence of the container element, the 
+               <code>object</code>'s children represent an implied content description added by an author. The following examples are functionally identical,
+               but highlight the various implicit elements and attributes: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+            &lt;object src="mouse.png"&gt;
+                &lt;p&gt;A small mouse...&lt;/p&gt;
+            &lt;/object&gt;
+            
+            &lt;object src="mouse.png"&gt;
+                &lt;description&gt;
+                    &lt;p&gt;A small mouse...&lt;/p&gt;
+                &lt;/description&gt;
+            &lt;/object&gt;
+            
+            &lt;object src="mouse.png"&gt;
+                &lt;description by="author"&gt;
+                    &lt;p&gt;A small mouse...&lt;/p&gt;
+                &lt;/description&gt;
+            &lt;/object&gt;
+            
+            &lt;object src="mouse.png"&gt;
+                &lt;description by="author" role="content"&gt;
+                    &lt;p&gt;A small mouse...&lt;/p&gt;
+                &lt;/description&gt;
+            &lt;/object&gt;
+            
+            &lt;object src="mouse.png" desc="mouse-desc"&gt;
+                &lt;description xml:id="mouse-descrip" by="author" role="content"&gt;
+                    &lt;p&gt;A small mouse...&lt;/p&gt;
+                &lt;/description&gt;
+            &lt;/object&gt;
+        </pre>
+               </div>
+            
+            <p> The Content Selection feature can additionally be used to tailor the type of 
+               <code>description</code> to the output format being generated: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+            &lt;sel:select&gt;
+                &lt;sel:when expr="target:format('BRAILLE')"&gt;
+                    &lt;description sel:selid="mouse-desc" by="republisher" xlink:href="mouse-braille-desc.xml" /&gt;
+                &lt;/sel:when&gt;
+                &lt;sel:otherwise&gt;
+                    &lt;description sel:selid="mouse-desc" by="republisher" xlink:href="mouse-desc.xml" /&gt;
+                &lt;/sel:otherwise&gt;
+            &lt;/sel:select&gt;
+        </pre>
+               </div>
+            
+            <p> As each condition in the 
+               <code>sel:select</code> contains the same 
+               <code>description</code> element but corresponding to a different output, they cannot each have the same 
+               <code>xml:id</code>. The 
+               <code>sel:selid</code> attribute is instead attached to each 
+               <code>description</code>. After the select condition has been evaluated, the remaining 
+               <code>sel:selid</code> is converted back to an 
+               <code>xml:id</code>. 
+               
+            </p>
+            
+         </div>
+      </div>
+   </body>
+</html>

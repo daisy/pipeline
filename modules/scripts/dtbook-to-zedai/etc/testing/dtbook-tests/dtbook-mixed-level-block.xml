@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta content="pipeline2-dtbook-test-20110301-mixedlevelblock" name="dtb:uid"/>
+        <meta content="Pipeline 2 DTBook Test Content: Mixed Level and Block Elements" name="dc:Title"/>
+        <meta name="dc:Creator" content="Marisa D."/>
+        <meta content="2011-03-01" name="dc:Date"/>
+        <meta name="dc:Publisher" content="Marisa D."/>
+        <meta content="pipeline2-dtbook-test-20110301-mixedlevelblock" name="dc:Identifier"/>
+        <meta content="en-US" name="dc:Language"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Mixed Level and Block Elements</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Introduction</h1>
+                
+                <level2>
+                    <h2>i am h2</h2>
+                    <p>nothing to see here</p>
+                </level2>
+                
+                <p>I belong to level 1</p>
+                
+                <level2>
+                    <h2>i am h2</h2>
+                    <p>nothing to see here</p>
+                </level2>
+                
+                
+            </level1>
+            
+        </bodymatter>
+    </book>
+</dtbook>
+
+

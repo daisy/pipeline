@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/normalize-section-block.xsl">
+    <x:scenario label="Normalize Mixed Section/Block: nothing wrong">
+        <x:context>
+            <bodymatter>
+                <level1>
+                    <h1>Heading</h1>
+                    <p>Filler</p>
+                    <level2>
+                        <h2>heading2</h2>
+                        <p>Filler</p>
+                    </level2>
+                </level1>
+                <level1>
+                    <h1>Heading 3</h1>
+                    <p>Filler</p>
+                </level1>
+            </bodymatter>
+        </x:context>
+        <x:expect label="">
+            <bodymatter>
+                <level1>
+                    <h1>Heading</h1>
+                    <p>Filler</p>
+                    <level2>
+                        <h2>heading2</h2>
+                        <p>Filler</p>
+                    </level2>
+                </level1>
+                <level1>
+                    <h1>Heading 3</h1>
+                    <p>Filler</p>
+                </level1>
+            </bodymatter>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Section/Block: mixed 1">
+        <x:context>
+            <bodymatter>
+                <level1>
+                    <h1>H1</h1>
+                    <p>
+                        <sent>S-1</sent>
+                        <sent>S-2</sent>
+                    </p>
+                    <level2>
+                        <h2>H2</h2>
+                        <p>
+                            <sent>S-1</sent>
+                        </p>
+                    </level2>
+                    <p>ROGUE PARAGRAPH!</p>
+                    <level2>
+                        <h2>H2</h2>
+                        <p>P-1</p>
+                    </level2>
+                </level1>
+            </bodymatter>
+        </x:context>
+        <x:expect label="">
+            <bodymatter>
+                <level1>
+                    <h1>H1</h1>
+                    <p>
+                        <sent>S-1</sent>
+                        <sent>S-2</sent>
+                    </p>
+                    <level2>
+                        <h2>H2</h2>
+                        <p>
+                            <sent>S-1</sent>
+                        </p>
+                    </level2>
+                    <level2>
+                        <p>ROGUE PARAGRAPH!</p>
+                    </level2>
+                    <level2>
+                        <h2>H2</h2>
+                        <p>P-1</p>
+                    </level2>
+                </level1>
+            </bodymatter>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Section/Block: mixed 2">
+        <x:context>
+            <bodymatter>
+                <level1>
+                    <h1>H1</h1>
+                    <p>
+                        <sent>S-1</sent>
+                        <sent>S-2</sent>
+                    </p>
+                    <level2>
+                        <h2>H2</h2>
+                        <p>
+                            <sent>S-1</sent>
+                        </p>
+                    </level2>
+                    <p>ROGUE PARAGRAPH 1!</p>
+                    <p>ROGUE PARAGRAPH 2!</p>
+                    <level2>
+                        <h2>H2</h2>
+                        <p>P-1</p>
+                    </level2>
+                </level1>
+            </bodymatter>
+        </x:context>
+        <x:expect label="">
+            <bodymatter>
+                <level1>
+                    <h1>H1</h1>
+                    <p>
+                        <sent>S-1</sent>
+                        <sent>S-2</sent>
+                    </p>
+                    <level2>
+                        <h2>H2</h2>
+                        <p>
+                            <sent>S-1</sent>
+                        </p>
+                    </level2>
+                    <level2>
+                        <p>ROGUE PARAGRAPH 1!</p>
+                        <p>ROGUE PARAGRAPH 2!</p>
+                    </level2>
+                    <level2>
+                        <h2>H2</h2>
+                        <p>P-1</p>
+                    </level2>
+                </level1>
+            </bodymatter>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Section/Block: mixed 3">
+        <x:context>
+            <bodymatter>
+                <level1>
+                    <h1>h1</h1>
+                    <level2>
+                        <level3>
+                            <h3>h3</h3>
+                            <p>para.</p>
+                        </level3>
+                        <p>Some text.</p>
+                    </level2>
+                </level1>
+            </bodymatter>
+        </x:context>
+        <x:expect label="">
+            <bodymatter>
+                <level1>
+                    <h1>h1</h1>
+                    <level2>
+                        <level3>
+                            <h3>h3</h3>
+                            <p>para.</p>
+                        </level3>
+                        <level3>
+                            <p>Some text.</p>
+                        </level3>
+                    </level2>
+                </level1>
+            </bodymatter>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Section/Block: page breaks">
+        <x:context>
+            <level1>
+                <h1>Introduction</h1>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p1">1</pagenum>
+                <level2>
+                    <h2>Next Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <h1>Introduction</h1>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p1">1</pagenum>
+                <level2>
+                    <h2>Next Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+            </level1>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Section/Block: page breaks 2">
+        <x:context>
+            <level1>
+                <pagenum id="p1">1</pagenum>
+                <h1>Introduction</h1>
+                <p>This is a paragraph</p>
+                <pagenum id="p2">2</pagenum>
+                <p>This is a paragraph</p>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <pagenum id="p1">1</pagenum>
+                <h1>Introduction</h1>
+                <p>This is a paragraph</p>
+                <pagenum id="p2">2</pagenum>
+                <p>This is a paragraph</p>
+            </level1>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Section/Block: page breaks 3">
+        <x:context>
+            <level1>
+                <pagenum id="p1">1</pagenum>
+                <h1>Introduction</h1>
+                <p>This is a paragraph</p>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p3">3</pagenum>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <pagenum id="p1">1</pagenum>
+                <h1>Introduction</h1>
+                <p>This is a paragraph</p>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p3">3</pagenum>
+            </level1>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Section/Block: page breaks 3">
+        <x:context>
+            <level1>
+                <pagenum id="p1">1</pagenum>
+                <h1>Introduction</h1>
+                <p>This is a paragraph</p>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p3">3</pagenum>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p4">4</pagenum>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <pagenum id="p1">1</pagenum>
+                <h1>Introduction</h1>
+                <p>This is a paragraph</p>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p3">3</pagenum>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p4">4</pagenum>
+            </level1>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Section/Block: page breaks 4">
+        <x:context>
+            <level1>
+                <pagenum id="p1">1</pagenum>
+                <h1>Introduction</h1>
+                <p>This is a paragraph</p>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p3">3</pagenum>
+                <p>ROGUE PARAGRAPH!</p>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p4">4</pagenum>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <pagenum id="p1">1</pagenum>
+                <h1>Introduction</h1>
+                <p>This is a paragraph</p>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <level2>
+                    <pagenum id="p3">3</pagenum>
+                    <p>ROGUE PARAGRAPH!</p>
+                </level2>
+                <level2>
+                    <h2>A Chapter</h2>
+                    <p>This is a paragraph</p>
+                </level2>
+                <pagenum id="p4">4</pagenum>
+            </level1>
+        </x:expect>
+    </x:scenario>
+</x:description>

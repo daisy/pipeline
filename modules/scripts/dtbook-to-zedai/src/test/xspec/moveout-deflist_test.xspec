@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/moveout-deflist.xsl">
+    <!--<xsl:with-param name="valid-parents" select="tokenize('annotation,prodnote,sidebar,div,imggroup,caption,
+        li,note,img,blockquote,level,level1,level2,level3,level4,level5,level6,td,th'
+    -->
+    <x:scenario label="Move Out DL">
+        <x:context>
+            <dtbook>
+                <bodymatter>
+                    <level1>
+                        <p>
+                            <span>before</span>
+                            <dl/>
+                            <span>after</span>
+                        </p>
+                    </level1>
+                </bodymatter>
+            </dtbook>
+        </x:context>
+        <x:expect label="">
+            <dtbook>
+                <bodymatter>
+                    <level1>
+                        <p>
+                            <span>before</span>
+                        </p>
+                        <dl/>
+                        <p>
+                            <span>after</span>
+                        </p>
+                    </level1>
+                </bodymatter>
+            </dtbook>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Definition with DL">
+        <x:context>
+            <tmp:item>
+                <dd>DD <dl>
+                        <tmp:item>
+                            <dt>nested dl</dt>
+                        </tmp:item>
+                    </dl> Rest of DD</dd>
+            </tmp:item>
+        </x:context>
+        <x:expect label="">
+            <tmp:item>
+                <dd>DD </dd>
+                <dl>
+                    <tmp:item>
+                        <dt>nested dl</dt>
+                    </tmp:item>
+                </dl>
+                <dd> Rest of DD</dd>
+            </tmp:item>
+        </x:expect>
+    </x:scenario>
+</x:description>

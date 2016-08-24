@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta content="pipeline2-dtbook-test-20110301-multivol3" name="dtb:uid"/>
+        <meta content="Pipeline 2 DTBook Test Content: Multi Volume Books" name="dc:Title"/>
+        <meta name="dc:Creator" content="Marisa D."/>
+        <meta content="2011-03-01" name="dc:Date"/>
+        <meta name="dc:Publisher" content="Marisa D."/>
+        <meta content="pipeline2-dtbook-test-20110301-multivol3" name="dc:Identifier"/>
+        <meta content="en-US" name="dc:Language"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Multi Volume Books</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>Development</h1>
+
+                <p>The DAISY Pipeline 2 project is under active development and welcomes any kind of
+                    contributions. Depending on your skills or intents there are several ways to
+                    participate:</p>
+
+                <level2>
+                    <h2>Join the community </h2>
+                    <p>Feel free to join the ongoing discussions on the developers mailing list
+                        (hosted on Google Groups). </p>
+                </level2>
+                <level2>
+                    <h2>Develop </h2>
+                    <p>Results of the DAISY Pipeline 2 project will be released as open source
+                        software, under a business-friendly license such as the GNU Lesser General
+                        Public License (LGPL). </p>
+                </level2>
+
+            </level1>
+
+        </bodymatter>
+    </book>
+</dtbook>

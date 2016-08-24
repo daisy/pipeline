@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/moveout-imggroup.xsl">
+    <!--<xsl:with-param name="valid-parents" select="tokenize('annotation,prodnote,sidebar,div,imggroup,caption,
+        li,note,img,blockquote,level,level1,level2,level3,level4,level5,level6,td,th'
+    -->
+    <x:scenario label="Move Out Image Groups #0">
+        <x:context>
+            <div>
+                <p>Part A <imggroup id="d1e63">
+                        <img id="d1e65" src="abc.jpg" alt="abc"/>
+                        <caption id="d1e67">i am a caption</caption>
+                    </imggroup> Part B</p>
+            </div>
+        </x:context>
+        <x:expect label="">
+            <div>
+                <p>Part A </p>
+                <imggroup id="d1e63">
+                    <img id="d1e65" src="abc.jpg" alt="abc"/>
+                    <caption id="d1e67">i am a caption</caption>
+                </imggroup>
+                <p> Part B</p>
+            </div>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Move Out Image Groups #1">
+        <x:context>
+            <div>
+                <p>Part A <imggroup id="d1e63">
+                        <img id="d1e65" src="abc.jpg" alt="abc"/>
+                        <caption id="d1e67">i am a caption</caption>
+                    </imggroup> Part B</p>
+            </div>
+        </x:context>
+        <x:expect label="">
+            <div>
+                <p>Part A </p>
+                <imggroup id="d1e63">
+                    <img id="d1e65" src="abc.jpg" alt="abc"/>
+                    <caption id="d1e67">i am a caption</caption>
+                </imggroup>
+                <p> Part B</p>
+            </div>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Move Out Image Groups #2">
+        <x:context>
+            <level1>
+                <p>
+                    <span>before</span>
+                    <imggroup/>
+                    <span>after</span>
+                </p>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <p>
+                    <span>before</span>
+                </p>
+                <imggroup/>
+                <p>
+                    <span>after</span>
+                </p>
+            </level1>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Move Out Image Groups #3">
+        <x:context>
+            <level1>
+                <p id="p">
+                    <imggroup/>
+                    <span>before</span>
+                    <span>after</span>
+                </p>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <imggroup/>
+                <p id="p">
+                    <span>before</span>
+                    <span>after</span>
+                </p>
+            </level1>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Move Out Image Groups #4">
+        <x:context>
+            <level1>
+                <p id="p">before <imggroup/></p>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <p id="p">before </p>
+                <imggroup/>
+            </level1>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Move Out Image Groups #5">
+        <x:context>
+            <level1>
+                <p id="p">before <imggroup/> after</p>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <p id="p">before </p>
+                <imggroup/>
+                <p> after</p>
+            </level1>
+        </x:expect>
+    </x:scenario>
+</x:description>

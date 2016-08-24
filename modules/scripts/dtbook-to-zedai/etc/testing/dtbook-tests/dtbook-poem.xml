@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta content="pipeline2-dtbook-test-20110301-poem" name="dtb:uid"/>
+        <meta content="Pipeline 2 DTBook Test Content: Poem" name="dc:Title"/>
+        <meta name="dc:Creator" content="Marisa D."/>
+        <meta content="2011-03-01" name="dc:Date"/>
+        <meta name="dc:Publisher" content="Marisa D."/>
+        <meta content="pipeline2-dtbook-test-20110301-poem" name="dc:Identifier"/>
+        <meta content="en-US" name="dc:Language"/>
+
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Poem</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1>
+                <h1>A simple poem</h1>
+                
+                <p>Excerpt from Edwin Arlington Robinson's poem The House on the Hill:</p>
+                
+                <poem>
+                    <line>They are all gone away,</line>
+                    <line>The House is shut and still,</line>
+                    <line>There is nothing more to say.</line>
+
+                    <line>Through broken walls and gray</line>
+                    <line>The winds blow bleak and shrill.</line>
+                    <line>They are all gone away. </line>
+                </poem>
+
+            </level1>
+            <level1>
+                <h1>A complicated poem</h1>
+                <poem>
+
+                    <title>The Poem Has A Title</title>
+                    <author>By Marisa D.</author>
+
+                    <dateline>3 March 2011</dateline>
+
+                    <epigraph>Testing epigraphs</epigraph>
+
+                    <img src="image.jpg" alt="a picture says a thousand words"/>
+
+                    <imggroup>
+
+                        <img id="p1" src="image.jpg" alt="alt text"/>
+                        <img id="p2" src="image.jpg" alt="alt text"/>
+                        <caption imgref="p1 p2">so many pictures should say many thousands of words,
+                            right?</caption>
+
+                    </imggroup>
+
+                    <line>Ahem</line>
+
+                    <hd>(The actual poem itself)</hd>
+
+                    <linegroup>
+                        <line>They are all gone away,</line>
+                        <line>The House is shut and still,</line>
+                        <line>There is nothing more to say.</line>
+
+                        <line>Through broken walls and gray</line>
+                        <line>The winds blow bleak and shrill.</line>
+                        <line>They are all gone away. </line>
+                    </linegroup>
+
+                    <sidebar render="optional">
+                        <p>Now we're going to have a sidebar just for fun</p>                       
+                    </sidebar>
+
+                </poem>
+
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

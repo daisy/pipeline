@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The list module </title>
+        <annotation annotates="/">
+            <para>This module defines the list element for structuring ordered and unordered simple sets of items. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.list.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.list">
+            <element name="list">
+                <a:documentation>The list element represents a simple list of items, either ordered or unordered. The optional type attribute specifies the HTML-style ordered and unordered nature of the list. By default, an unordered list is prefixed by bullets and an ordered list by numeric values. To change this behavior, refer to the Content Rendition feature's prefix attributes. If the type attribute is omitted, then there is no default formatting. The list element is not intended to structure semantically meaningful sets of entries as found in indexes, bibliographies and glossaries. </a:documentation>
+                <ref name="z3998.list.block.attlist"/>
+                <ref name="z3998.list.block.content"/>
+            </element>
+        </define>
+        <define name="z3998.list.phrase">
+            <element name="list">
+                <a:documentation>The list element represents a simple list of items, either ordered or unordered. The Phrase variant is an adaptation for use embedding lists where the items flow together as part of the document narrative. The optional type attribute specifies the HTML-style ordered and unordered nature of the list. By default, an unordered list is prefixed by bullets and an ordered list by numeric values. To change this behavior, refer to the Content Rendition feature's prefix attributes. If the type attribute is omitted, then there is no default formatting. The list element is not intended to structure semantically meaningful sets of entries as found in indexes, bibliographies and glossaries. </a:documentation>
+                <ref name="z3998.list.phrase.attlist"/>
+                <ref name="z3998.list.phrase.content"/>
+            </element>
+        </define>
+        <define name="z3998.list.block.attlist" combine="interleave">
+            <ref name="z3998.Block.attrib"/>
+            <ref name="z3998.list.attrib"/>
+        </define>
+        <define name="z3998.list.phrase.attlist" combine="interleave">
+            <ref name="z3998.Phrase.attrib"/>
+            <ref name="z3998.list.attrib"/>
+        </define>
+        <define name="z3998.list.attrib">
+            <choice>
+                <ref name="z3998.list.attlist.ordered"/>
+                <ref name="z3998.list.attlist.unordered"/>
+                <ref name="z3998.list.attlist.unspecified"/>
+            </choice>
+        </define>
+        <define name="z3998.list.attlist.ordered" combine="interleave">
+            <ref name="z3998.list.type.ordered.attrib"/>
+            <optional>
+                <ref name="z3998.list.start.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.list.attlist.unordered" combine="interleave">
+            <ref name="z3998.list.type.unordered.attrib"/>
+        </define>
+        <define name="z3998.list.type.attrib" combine="interleave">
+            <attribute name="type">
+                <a:documentation>The type attribute specifies whether the items in the list are ordered or unordered. </a:documentation>
+                <choice>
+                    <value>unordered</value>
+                    <a:documentation>The order of the items in this list is significant. </a:documentation>
+                    <value>unordered</value>
+                    <a:documentation>The order of the items in this list is insignificant. </a:documentation>
+                </choice>
+            </attribute>
+        </define>
+        <define name="z3998.list.type.unordered.attrib" combine="interleave">
+            <attribute name="type">
+                <a:documentation>Specifies whether the items in the list are ordered or unordered. </a:documentation>
+                <value>unordered</value>
+                <a:documentation>The order of the items in this list is insignificant. </a:documentation>
+            </attribute>
+        </define>
+        <define name="z3998.list.type.ordered.attrib" combine="interleave">
+            <attribute name="type">
+                <a:documentation>Specifies whether the items in the list are ordered or unordered. </a:documentation>
+                <value>ordered</value>
+                <a:documentation>The order of the items in this list is significant. </a:documentation>
+            </attribute>
+        </define>
+        <define name="z3998.list.attlist.unspecified">
+            <empty/>
+        </define>
+        <define name="z3998.list.block.content">
+            <interleave>
+                <oneOrMore>
+                    <ref name="z3998.list.item.block"/>
+                </oneOrMore>
+                <zeroOrMore>
+                    <ref name="z3998.list.extra.class"/>
+                </zeroOrMore>
+            </interleave>
+        </define>
+        <define name="z3998.list.phrase.content">
+            <interleave>
+                <oneOrMore>
+                    <ref name="z3998.list.item.phrase"/>
+                </oneOrMore>
+                <zeroOrMore>
+                    <ref name="z3998.list.extra.class"/>
+                </zeroOrMore>
+            </interleave>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.list.start.attrib">
+            <attribute name="start">
+                <a:documentation>The start attribute specifies the ordinal value for the first list item's prefix. If omitted, the implicit value 1 is assumed. This attribute is only valid when used with ordered lists (as defined by the presence and value of the type attribute). </a:documentation>
+                <ref name="Integer.datatype"/>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.list.item.block">
+            <element name="item">
+                <a:documentation>The item element represents a single item in a list. The number or glyph that appears before the item is typically controlled by the attributes specified on the parent list element together with the number of preceding items. The Content Rendition feature's prefix attribute allows this default behaviour to be overridden for individual items, however. </a:documentation>
+                <ref name="z3998.list.item.block.attlist"/>
+                <ref name="z3998.list.item.block.content"/>
+                <sch:rule context="default:item">
+                    <sch:assert test="normalize-space(.) or *">The item element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.list.item.block.attlist" combine="interleave">
+            <ref name="z3998.Block.attrib"/>
+        </define>
+        <define name="z3998.list.item.block.content">
+            <ref name="z3998.Flow.choice.model"/>
+        </define>
+        <define name="z3998.list.item.phrase">
+            <element name="item">
+                <a:documentation>The item element represents a single item in a list. The number or glyph that appears before the item is typically controlled by the attributes specified on the parent list element together with the number of preceding items. The Content Rendition feature's prefix attribute allows this default behaviour to be overridden for individual items, however. </a:documentation>
+                <ref name="z3998.list.item.phrase.attlist"/>
+                <ref name="z3998.list.item.phrase.content"/>
+            </element>
+        </define>
+        <define name="z3998.list.item.phrase.attlist" combine="interleave">
+            <ref name="z3998.Phrase.attrib"/>
+        </define>
+        <define name="z3998.list.item.phrase.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>List module - content model specializations </a:documentation>
+        <define name="z3998.list.extra.class" combine="choice">
+            <a:documentation>class for contributing siblings to the list items </a:documentation>
+            <ref name="z3998.Global.extra.class"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>List module - default content model contribution </a:documentation>
+        <define name="z3998.Block.core.class" combine="choice">
+            <ref name="z3998.list"/>
+        </define>
+        <define name="z3998.toc.entry.elem.block.contrib" combine="choice">
+            <ref name="z3998.list"/>
+        </define>
+    </div>
+</grammar>

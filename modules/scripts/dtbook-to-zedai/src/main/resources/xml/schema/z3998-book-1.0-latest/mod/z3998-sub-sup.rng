@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The super- and subscript module </title>
+        <annotation annotates="/">
+            <para>This module defines the sub and sup elements for marking superscripts and subscripts. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.sub-sup.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.sub">
+            <element name="sub">
+                <a:documentation>The sub element represents instances of subscripted text. </a:documentation>
+                <ref name="z3998.sub.attlist"/>
+                <ref name="z3998.sub.content"/>
+                <sch:rule context="default:sub">
+                    <sch:assert test="normalize-space(.) or *">The sub element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.sub.attlist">
+            <ref name="z3998.Text.attrib"/>
+        </define>
+        <define name="z3998.sub.content">
+            <ref name="z3998.Text.model"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.sup">
+            <element name="sup">
+                <a:documentation>The sup element represents instances of superscripted text. </a:documentation>
+                <ref name="z3998.sup.attlist"/>
+                <ref name="z3998.sup.content"/>
+                <sch:rule context="default:sup">
+                    <sch:assert test="normalize-space(.) or *">The sup element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.sup.attlist">
+            <ref name="z3998.Text.attrib"/>
+        </define>
+        <define name="z3998.sup.content">
+            <ref name="z3998.Text.model"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>sup and sub - default content model contribution </a:documentation>
+        <define name="z3998.Text.core.class" combine="choice">
+            <ref name="z3998.sub"/>
+        </define>
+        <define name="z3998.Text.core.class" combine="choice">
+            <ref name="z3998.sup"/>
+        </define>
+    </div>
+</grammar>

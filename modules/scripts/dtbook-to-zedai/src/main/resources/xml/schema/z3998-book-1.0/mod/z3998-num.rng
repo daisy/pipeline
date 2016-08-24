@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The num module </title>
+        <annotation annotates="/">
+            <para>This module defines the num element for marking numbers that are not mathematical in nature. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.num.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.num">
+            <element name="num">
+                <a:documentation>The num element represents a set of Arabic or Roman numerals that taken together indicate a single value or represent a single number in a standardized format. Examples of numbers include: cardinal and ordinal values, weights, measures, currency values, postal codes, telephone numbers, ISBN numbers, scores and results, etc. Where these values include units of measure or other symbols integral to their understanding, the units and symbols must be included as a part of the num element. The role attribute optionally expresses the semantic nature of the number. If omitted, the implicit value cardinal is assumed. If the value of the num element is not in a machine-readable format, the num.value attribute optionally allows the inclusion of an alternate representation. The MathML feature is intended for marking proper mathematical statements within documents and should be used in preference over the num element whenever equations, formulae or other formal mathematic constructs or operators are being marked. The num element must not be used to mark instances of dates and times. Refer to the time element for more information. </a:documentation>
+                <ref name="z3998.num.attlist"/>
+                <ref name="z3998.num.content"/>
+                <sch:rule context="default:num">
+                    <sch:assert test="normalize-space(.) or *">The num element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.num.attlist">
+            <optional>
+                <ref name="z3998.num.value.attrib"/>
+            </optional>
+            <ref name="z3998.global.core.attrib"/>
+            <optional>
+                <ref name="z3998.num.role.attrib"/>
+            </optional>
+            <ref name="z3998.Phrase.extern.attrib"/>
+        </define>
+        <define name="z3998.num.value.attrib">
+            <attribute name="value">
+                <a:documentation>The value attribute provides the value of the num element in a machine-readable form. A processing agent's interpretation of the value depends on the specific type of numeral, as specified by the role attribute. </a:documentation>
+                <ref name="NonEmptyString.datatype"/>
+            </attribute>
+        </define>
+        <define name="z3998.num.role.attrib">
+            <attribute name="role">
+                <list>
+                    <oneOrMore>
+                        <ref name="z3998.num.role.attrib.content.enum"/>
+                    </oneOrMore>
+                </list>
+            </attribute>
+        </define>
+        <define name="z3998.num.role.attrib.content.enum" combine="choice">
+            <ref name="CURIE.datatype"/>
+        </define>
+        <define name="z3998.num.content">
+            <ref name="z3998.Text.model"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>num - default content model contribution </a:documentation>
+        <define name="z3998.Phrase.core.class" combine="choice">
+            <ref name="z3998.num"/>
+        </define>
+    </div>
+</grammar>

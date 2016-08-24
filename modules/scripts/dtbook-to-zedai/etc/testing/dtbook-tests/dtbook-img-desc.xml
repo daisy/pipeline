@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
+    <head>
+        <meta content="pipeline2-dtbook-test-20110301-imggroups" name="dtb:uid"/>
+        <meta content="Pipeline 2 DTBook Test Content: Image Groups" name="dc:Title"/>
+        <meta name="dc:Creator" content="Marisa D."/>
+        <meta content="2011-03-01" name="dc:Date"/>
+        <meta name="dc:Publisher" content="Marisa D."/>
+        <meta content="pipeline2-dtbook-test-20110301-imggroups" name="dc:Identifier"/>
+        <meta content="en-US" name="dc:Language"/>
+    </head>
+    <book>
+        <frontmatter>
+            <doctitle>Pipeline 2 DTBook Test Content: Images and descriptions</doctitle>
+            <docauthor>Marisa D.</docauthor>
+        </frontmatter>
+        <bodymatter>
+            <level1 id="d1e39">
+                <img src="image.jpg" alt="only has alt"/>
+                <img src="image.jpg" alt="has alt and longdesc" longdesc="#imgdesc"/>
+
+                <prodnote id="imgdesc" render="optional">
+                    <p>This is a description of the image</p>
+                </prodnote>
+
+                <imggroup id="imggrp1">
+                    <img id="img01" src="image.jpg"
+                        alt="Orion Nebula by visible and 
+                        ultraviolet light"/>
+                    <img id="img02" src="image.jpg" alt="Young stars in Orion Nebula"/>
+                    <caption imgref="img01 img02">Many young stars lie inside the mass of gas and
+                        dust that forms the Orion Nebula.</caption>
+                    <prodnote render="optional" imgref="img01 img02" showin="bxx" id="prodnote01">Producer's Note:
+                        Two images of the Orion Nebula are shown, revealing many small points of
+                        light within the swirling mass of gas and dust that forms the nebula.
+                    </prodnote>
+                </imggroup>
+
+                <imggroup id="imggrp2">
+                    <img id="img03" src="image.jpg" alt="test image alt text"/>
+                    <prodnote render="optional">
+                        imggroup description in prodnote with no ref links
+                    </prodnote>
+                </imggroup>
+
+                <prodnote id="random-prodnote" render="required">
+                    <p>This is a floating prodnote</p>
+                </prodnote>
+            </level1>
+
+        </bodymatter>
+    </book>
+</dtbook>

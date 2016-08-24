@@ -1,0 +1,94 @@
+<!-- d202smil.dtd m gylling version 2002-12-22 -->
+
+<!ENTITY % URI "CDATA"> <!-- [RFC2396] -->
+<!ENTITY % clock "CDATA"> <!-- [valid smil clock] -->
+
+<!ELEMENT smil (head, body)>
+<!ATTLIST smil
+         id     	ID      	#IMPLIED
+>
+
+<!-- =============== h e a d ================ -->
+
+
+<!ELEMENT head  (meta*,((layout), meta*))?>
+
+<!ATTLIST head 
+	id		ID      	#IMPLIED
+>
+
+<!ELEMENT meta EMPTY>
+<!ATTLIST meta
+        name    	NMTOKEN 	#REQUIRED
+        content 	CDATA   	#REQUIRED
+>
+<!--        scheme		CDATA		#IMPLIED -->
+
+<!ELEMENT layout (region)>
+<!ATTLIST layout
+        id		ID      	#IMPLIED
+        
+>
+
+<!ELEMENT region EMPTY>
+<!ATTLIST region
+        id		ID      	#REQUIRED
+>
+
+<!-- =============== b o d y ================ -->
+<!ELEMENT body (seq)>
+
+<!-- 
+mother seq: children are one or several pars OR audio(in mvb), !!in noteref mother seq has nested seq!!
+sub-par seq: children are only audio
+-->
+
+<!ELEMENT seq (par|audio|seq)*> 
+
+<!ATTLIST seq
+	id		ID      	#IMPLIED
+	dur     	%clock;	        #IMPLIED
+        region  	IDREF           #IMPLIED
+>
+
+<!--
+par: 
+only one text child OR one text child and one seq child
+-->
+
+<!-- 
+
+-->
+
+<!ELEMENT par ((text | audio | seq | img | ref | video | animation | textstream)*)>
+
+
+<!ATTLIST par
+	id		ID      	#IMPLIED
+	dur     	CDATA           #IMPLIED
+        region  	IDREF           #IMPLIED
+        endsync 	CDATA           "last"
+        system-required CDATA		"('sidebar-on' | 'prodnote-on' | 'footnote-on' | 'pagenumber-on')"
+>
+
+
+<!ELEMENT audio EMPTY>
+<!ATTLIST audio
+        id		ID      	#REQUIRED
+	src        	%URI;		#REQUIRED
+	clip-begin      %clock;   	#REQUIRED
+        clip-end        %clock;   	#REQUIRED
+>
+
+	
+<!ELEMENT text EMPTY>
+<!ATTLIST text
+        id		ID      	#REQUIRED
+        src        	%URI;		#REQUIRED
+>
+
+<!ELEMENT img EMPTY>
+<!ATTLIST img
+        id		ID      	#REQUIRED
+        src        	%URI;		#REQUIRED
+>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/rename-code-kbd.xsl">
+    <x:scenario label="Rename Phrase-Level Code">
+        <x:context>
+            <code>
+                <em/>
+                <strong/>
+                <abbr/>
+                <acronym/>
+                <br/>
+                <sub/>
+                <sup/>
+                <bdo/>
+                <pagenum/>plain text
+                </code>
+        </x:context>
+        <x:expect label="">
+            <tmp:code-phrase>
+                <em/>
+                <strong/>
+                <abbr/>
+                <acronym/>
+                <br/>
+                <sub/>
+                <sup/>
+                <bdo/>
+                <pagenum/>plain text
+                </tmp:code-phrase>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename Block-Level Code">
+        <x:context>
+            <code>
+                <dfn/>
+                <tmp:code-phrase/>
+                <samp/>
+                <code/>
+                <cite/>
+                <a/>
+                <img/>
+                <imggroup/>
+                <q/>
+                <sent/>
+                <w/>
+                <prodnote/>
+                <annoref/>
+                <noteref/>
+            </code>
+        </x:context>
+        <x:expect label="">
+            <tmp:code-block>
+                <dfn/>
+                <tmp:code-phrase/>
+                <samp/>
+                <tmp:code-phrase/>
+                <cite/>
+                <a/>
+                <img/>
+                <imggroup/>
+                <q/>
+                <sent/>
+                <w/>
+                <prodnote/>
+                <annoref/>
+                <noteref/>
+            </tmp:code-block>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename Phrase-Level Kbd">
+        <x:context>
+            <kbd>
+                <em/>
+                <strong/>
+                <abbr/>
+                <acronym/>
+                <br/>
+                <sub/>
+                <sup/>
+                <bdo/>
+                <pagenum/>plain text
+                </kbd>
+        </x:context>
+        <x:expect label="">
+            <tmp:code-phrase>
+                <em/>
+                <strong/>
+                <abbr/>
+                <acronym/>
+                <br/>
+                <sub/>
+                <sup/>
+                <bdo/>
+                <pagenum/>plain text
+                </tmp:code-phrase>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename Block-Level Kbd">
+        <x:context>
+            <kbd>
+                <dfn/>
+                <code/>
+                <samp/>
+                <kbd/>
+                <cite/>
+                <a/>
+                <img/>
+                <imggroup/>
+                <q/>
+                <sent/>
+                <w/>
+                <prodnote/>
+                <annoref/>
+                <noteref/>
+            </kbd>
+        </x:context>
+        <x:expect label="">
+            <tmp:code-block>
+                <dfn/>
+                <tmp:code-phrase/>
+                <samp/>
+                <tmp:code-phrase/>
+                <cite/>
+                <a/>
+                <img/>
+                <imggroup/>
+                <q/>
+                <sent/>
+                <w/>
+                <prodnote/>
+                <annoref/>
+                <noteref/>
+            </tmp:code-block>
+        </x:expect>
+    </x:scenario>
+</x:description>

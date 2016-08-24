@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
+    xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/xslt/zedai-to-html.xsl">
+
+    <x:scenario label="Annotation by 'republisher'  :: in figure">
+        <x:context>
+            <z:block role="figure">
+                <z:object src="image.png" xml:id="image" desc="desc"/>
+                <z:description xml:id="desc">description</z:description>
+                <z:annotation xml:id="anno" by="republisher" ref="image">prod note</z:annotation>
+            </z:block>
+        </x:context>
+        <x:expect label="converted to aside, pointed at by @aria-describedby">
+            <figure>
+                <img src="image.png" id="image" alt="description" aria-describedby="anno"/>
+                <aside id="anno" epub:type="annotation">prod note</aside>
+            </figure>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Annotation by 'republisher'  :: as sibling">
+        <x:context>
+            <z:object src="image.png" xml:id="image">
+                <z:description>description</z:description>
+            </z:object>
+            <z:annotation xml:id="anno" by="republisher" ref="image">prod note</z:annotation>
+        </x:context>
+        <x:expect label="converted to aside, pointed at by @aria-describedby">
+            <img src="image.png" id="image" alt="description" aria-describedby="anno"/>
+            <aside id="anno" epub:type="annotation">prod note</aside>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="as DIAGRAM content model">
+        <x:context>
+            <z:object xml:id="image" src="image.png" desc="desc">
+                <z:description>description</z:description>
+            </z:object>
+            <d:description xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/"
+                xml:id="desc">
+                <d:body>
+                    <d:summary>Summary text.</d:summary>
+                    <d:longdesc by="republisher">Lengthier description.</d:longdesc>
+                </d:body>
+            </d:description>
+        </x:context>
+        <x:expect label="...">
+            <img src="image.png" id="image" alt="description" aria-describedby="desc"/>
+            <aside id="desc">
+                <details>
+                    <summary>Summary text.</summary>
+                    <p>Lengthier description.</p>
+                </details>
+            </aside>
+        </x:expect>
+    </x:scenario>
+</x:description>

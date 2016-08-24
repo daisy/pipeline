@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The block module </title>
+        <annotation annotates="/">
+            <para>This module defines the block element for grouping content. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.block.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.block">
+            <element name="block">
+                <a:documentation>The block element establishes an association between a group of elements. The block element differs and is subordinate to the section element in that it is not used to represent the structural outline of a document. A block only establishes a general association, and is a semantically neutral element by default. Attributes attached to the block reflect a general commonality amongst the children: a role attribute can be attached to express the semantic nature of the grouping; a class attribute to establish common formatting; an xml.lang attribute to indicate the language of the elements; and so forth. If the children of the block have a strong association to a single element, the block.associate attribute can be used to make this relationship explicit (e.g., in a figure, that all children are connected to the image). </a:documentation>
+                <ref name="z3998.block.attlist"/>
+                <ref name="z3998.block.content"/>
+                <sch:rule context="default:block">
+                    <sch:assert test="normalize-space(.) or *">The block element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.block.attlist">
+            <ref name="z3998.Block.attrib"/>
+            <optional>
+                <ref name="z3998.block.associate.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.block.content">
+            <ref name="z3998.Flow.choice.model"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.block.associate.attrib">
+            <attribute name="associate">
+                <a:documentation>The associate attribute identifies the child element of a block to which all other children are bound. The associate attribute takes a single IDREF that must point to one of its children as a value. All the other children assume an implict reference to the element through this value, allowing the ref attribute to be omitted from them. </a:documentation>
+                <ref name="IDREF.datatype"/>
+                <sch:rule context="*[@associate]">
+                    <sch:assert test="child::*[@xml:id = current()/@associate]">The IDREF in the associate attribute must reference the ID of a child element. </sch:assert>
+                </sch:rule>
+            </attribute>
+        </define>
+    </div>
+    <div>
+        <a:documentation>block - default content model contribution </a:documentation>
+        <define name="z3998.Block.core.class" combine="choice">
+            <ref name="z3998.block"/>
+        </define>
+    </div>
+</grammar>

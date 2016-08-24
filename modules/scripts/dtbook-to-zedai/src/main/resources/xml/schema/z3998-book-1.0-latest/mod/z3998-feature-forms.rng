@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         ns="http://www.w3.org/2002/xforms/">
+    <x:h1 xmlns:x="http://www.w3.org/1999/xhtml">Z39.98 Print Forms Feature</x:h1>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>W3C XForms 1.1 Module</x:h2>
+        <include href="xforms-nons-11.rng">
+            <define name="xforms.hint">
+                <notAllowed/>
+            </define>
+            <define name="xforms.help">
+                <notAllowed/>
+            </define>
+            <define name="xforms.alert">
+                <notAllowed/>
+            </define>
+            <define name="xforms.upload">
+                <notAllowed/>
+            </define>
+            <define name="xforms.filename">
+                <notAllowed/>
+            </define>
+            <define name="xforms.trigger">
+                <notAllowed/>
+            </define>
+            <define name="xforms.output">
+                <notAllowed/>
+            </define>
+            <define name="xforms.submit">
+                <notAllowed/>
+            </define>
+            <define name="xforms.mediatype">
+                <notAllowed/>
+            </define>
+            <define name="xforms.switch">
+                <notAllowed/>
+            </define>
+            <define name="xforms.Actions">
+                <empty/>
+            </define>
+            <define name="xforms.instance.content">
+                <ref name="z3998.forms.instance.content.temp"/>
+            </define>
+            <define name="xforms.schema">
+                <notAllowed/>
+            </define>
+            <define name="xforms.repeat.content">
+                <zeroOrMore>
+                    <choice>
+                        <ref name="xforms.Container.Form.Controls"/>
+                        <ref name="xforms.UI.Inline.content"/>
+                    </choice>
+                </zeroOrMore>
+            </define>
+            <define name="xforms.group.content">
+                <optional>
+                    <ref name="xforms.label"/>
+                </optional>
+                <zeroOrMore>
+                    <choice>
+                        <ref name="xforms.Container.Form.Controls"/>
+                        <ref name="xforms.UI.Common.content"/>
+                        <ref name="xforms.UI.Inline.content"/>
+                    </choice>
+                </zeroOrMore>
+            </define>
+            <define name="xforms.UI.Inline.content">
+                <oneOrMore>
+                    <choice>
+                        <text/>
+                        <ref name="xforms.UI.Inline.class"/>
+                    </choice>
+                </oneOrMore>
+            </define>
+            <define name="xforms.instance.attrib" combine="interleave">
+                <ref name="xforms.Common.attrib"/>
+                <optional>
+                    <attribute name="src">
+                        <ref name="URI.datatype"/>
+                    </attribute>
+                </optional>
+                <optional>
+                    <attribute name="resource">
+                        <ref name="URI.datatype"/>
+                    </attribute>
+                </optional>
+            </define>
+        </include>
+        <define name="xforms.Common.attrib" combine="interleave">
+            <ref name="z3998.Core.attrib"/>
+            <ref name="z3998.I18n.attrib"/>
+            <optional>
+                <ref name="z3998.role.attrib"/>
+            </optional>
+        </define>
+        <define name="xforms.Linking.attrib" combine="interleave">
+            <attribute name="src">
+                <ref name="URI.datatype"/>
+            </attribute>
+        </define>
+        <define name="xforms.UI.Inline.class" combine="choice">
+            <ref name="z3998.Phrase.class"/>
+        </define>
+    </div>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>Z39.98 Print Forms Feature - content model contribution</x:h2>
+        <define name="z3998.Phrase.extern.class" combine="choice">
+            <ref name="xforms.Core.Form.Controls"/>
+        </define>
+        <define name="z3998.Block.extern.class" combine="choice">
+            <ref name="xforms.Container.Form.Controls"/>
+        </define>
+        <define name="z3998.head.class" combine="choice">
+            <ref name="xforms.model"/>
+        </define>
+    </div>
+    <define xmlns:x="http://www.w3.org/1999/xhtml" name="z3998.forms.instance.content.temp">
+        <element>
+            <nsName ns="http://www.daisy.org/ns/z3998/authoring/xforms/instance/"/>
+            <zeroOrMore>
+                <attribute>
+                    <nsName ns="http://www.daisy.org/ns/z3998/authoring/xforms/instance/"/>
+                </attribute>
+            </zeroOrMore>
+            <zeroOrMore>
+                <choice>
+                    <ref name="z3998.forms.instance.content.temp"/>
+                    <text/>
+                </choice>
+            </zeroOrMore>
+        </element>
+    </define>
+</grammar>

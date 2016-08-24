@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+    <!-- attlist-math is in the mathml spec. it defines the attributes allowed on the 'math' element. -->
+    <define name="attlist-math" ns="http://www.w3.org/1998/Math/MathML" combine="interleave">
+        <optional>
+            <ref name="dtb.smilref.attr.ns"/>
+        </optional>
+    </define>
+
+    <!-- define a namespaced version of @smilref for m:math -->
+    <define name="dtb.smilref.attr.ns" combine="interleave">
+        <attribute name="smilref" ns="http://www.daisy.org/z3986/2005/dtbook/"/>
+    </define>
+
+</grammar>

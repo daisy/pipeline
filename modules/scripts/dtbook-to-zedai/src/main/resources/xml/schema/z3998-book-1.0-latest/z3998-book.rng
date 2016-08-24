@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The book schema </title>
+        <annotation annotates="/">
+            <para>This driver file represents the RelaxNG implementation of the Z39.98-2012 Book Profile, and provides the schematic means of validating conformant documents. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.book.module</para>
+        </annotation>
+        <author xmlns:x="http://www.w3.org/1999/xhtml">
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <legalnotice xmlns:x="http://www.w3.org/1999/xhtml">
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <copyright xmlns:x="http://www.w3.org/1999/xhtml">
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <revhistory xmlns:x="http://www.w3.org/1999/xhtml">
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para> Initial version. </para>
+                    <para> This revision history only reflects changes to the driver file, not to any of the modules included in it. </para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <x:h1 xmlns:x="http://www.w3.org/1999/xhtml">RELAX NG driver for Z39.98-2012 Book Profile</x:h1>
+    <x:h2 xmlns:x="http://www.w3.org/1999/xhtml">Common Document Model Modules</x:h2>
+    <x:h3 xmlns:x="http://www.w3.org/1999/xhtml">Content Model Definitions</x:h3>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-global-classes.rng"/>
+    <x:h3 xmlns:x="http://www.w3.org/1999/xhtml">Common Elements</x:h3>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-document.rng">
+        <define name="z3998.body.content">
+            <ref name="z3998.partitions"/>
+        </define>
+        <sch:rule context="default:head[parent::default:document]">
+            <sch:assert test="descendant::default:meta[@rel='z3998:rdfa-context' and @resource='http://www.daisy.org/z3998/2012/vocab/context/default/']">The default RDFa context document URI http://www.daisy.org/z3998/2012/vocab/context/default/ must be defined in the resource attribute of a meta element with the rel value z3998:rdfa-context. </sch:assert>
+        </sch:rule>
+    </include>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-meta.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-linking.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-section.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-headings.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-block.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-p.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-transition.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-list.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-table.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-code.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-quote.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-citation.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-object.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-address.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-note.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-annotation.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-aside.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-caption.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-verse.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-description.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-span.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-line.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-pagebreak.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-s.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-w.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-abbr.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-emph.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-time.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-name.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-definition.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-term.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-d.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-sub-sup.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-num.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-char.rng"/>
+    <x:h3 xmlns:x="http://www.w3.org/1999/xhtml">Common Attributes</x:h3>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-core-attrib.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-i18n-attrib.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/xlink.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-depth-attrib.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/rdfa-attrib.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-role-attrib.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-by-attrib.rng"/>
+    <x:h2 xmlns:x="http://www.w3.org/1999/xhtml">Profile Specific Modules</x:h2>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-partitions.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-toc.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-cover.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-index.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-bibliography.rng"/>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-glossary.rng"/>
+    <x:h2 xmlns:x="http://www.w3.org/1999/xhtml">Optional Feature Modules</x:h2>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>SSML Integration Feature</x:h2>
+        <include href="./mod/z3998-feature-ssml.rng"/>
+    </div>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>ITS Ruby Feature</x:h2>
+        <include href="./mod/z3998-feature-its-ruby.rng"/>
+    </div>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>MathML Feature</x:h2>
+        <include href="./mod/z3998-feature-mathml.rng"/>
+    </div>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>Content Selection Feature</x:h2>
+        <include href="./mod/z3998-feature-select.rng"/>
+    </div>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>Print Forms Feature</x:h2>
+        <include href="./mod/z3998-feature-forms.rng"/>
+    </div>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>Source Rendition Feature</x:h2>
+        <include href="./mod/z3998-feature-rend.rng"/>
+    </div>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>SVG CDR Feature</x:h2>
+        <include href="./mod/z3998-feature-svg-cdr.rng"/>
+    </div>
+    <div xmlns:x="http://www.w3.org/1999/xhtml">
+        <x:h2>DIAGRAM Description Feature</x:h2>
+        <include href="./mod/z3998-feature-description.rng"/>
+    </div>
+    <x:h2 xmlns:x="http://www.w3.org/1999/xhtml">RDF Property Enumeration Modules</x:h2>
+    <include xmlns:x="http://www.w3.org/1999/xhtml"
+            href="./mod/z3998-vocab-contrib-structure.rng"/>
+    <x:h2 xmlns:x="http://www.w3.org/1999/xhtml">Support Modules</x:h2>
+    <include xmlns:x="http://www.w3.org/1999/xhtml" href="./mod/z3998-datatypes.rng"/>
+    <define xmlns:x="http://www.w3.org/1999/xhtml" name="z3998.Section.extern.class">
+        <notAllowed/>
+    </define>
+</grammar>

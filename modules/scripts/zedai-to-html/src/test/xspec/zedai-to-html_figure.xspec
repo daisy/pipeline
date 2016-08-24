@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+               xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               stylesheet="../../main/resources/xml/xslt/zedai-to-html.xsl">
+   <x:scenario label="Figure :: Image">
+      <x:context>
+                <z:block role="figure">
+                    <z:object src="image.png" xml:id="image"/>
+                    <z:caption ref="image">caption</z:caption>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <img src="image.png" id="image" alt=""/>
+                    <figcaption>caption</figcaption>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: Table">
+      <x:context>
+                <z:block role="figure">
+                    <z:table xml:id="table"/>
+                    <z:caption ref="table">caption</z:caption>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <table id="table"/>
+                    <figcaption>caption</figcaption>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: No Caption">
+      <x:context>
+                <z:block role="figure">
+                    <z:object src="image.png"/>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <img src="image.png" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: Non-captioning children">
+      <x:context>
+                <z:block role="figure">
+                    <z:hd>heading</z:hd>
+                    <z:object src="image.png"/>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <h1>heading</h1>
+                    <img src="image.png" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: Captioning and non-captioning children">
+      <x:context>
+                <z:block role="figure">
+                    <z:hd>heading</z:hd>
+                    <z:object src="image.png" xml:id="image"/>
+                    <z:caption ref="image">caption</z:caption>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <h1>heading</h1>
+                    <img id="image" src="image.png" alt=""/>
+                    <figcaption>caption</figcaption>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With Description">
+      <x:context>
+                <z:block role="figure">
+                    <z:object src="image.png" xml:id="image" desc="desc"/>
+                    <z:caption ref="image">caption</z:caption>
+                    <z:description xml:id="desc">description</z:description>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <img src="image.png" id="image" alt="description"/>
+                    <figcaption>caption</figcaption>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With Heading">
+      <x:context>
+                <z:block role="figure">
+                    <z:hd ref="image">heading</z:hd>
+                    <z:object src="image.png" xml:id="image"/>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>
+                        <h1>heading</h1>
+                    </figcaption>
+                    <img src="image.png" id="image" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With Cite">
+      <x:context>
+                <z:block role="figure">
+                    <z:citation ref="image">citation</z:citation>
+                    <z:object src="image.png" xml:id="image"/>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>
+                        <cite>citation</cite>
+                    </figcaption>
+                    <img src="image.png" id="image" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With Heading and Caption">
+      <x:context>
+                <z:block role="figure">
+                    <z:hd ref="image">heading</z:hd>
+                    <z:caption ref="image">caption</z:caption>
+                    <z:object src="image.png" xml:id="image"/>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>
+                        <h1>heading</h1>
+                        <p>caption</p>
+                    </figcaption>
+                    <img src="image.png" id="image" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With Heading and Caption Around">
+      <x:context>
+                <z:block role="figure">
+                    <z:hd ref="image">heading</z:hd>
+                    <z:object src="image.png" xml:id="image" alt=""/>
+                    <z:caption ref="image">caption</z:caption>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>
+                        <h1>heading</h1>
+                        <p>caption</p>
+                    </figcaption>
+                    <img src="image.png" id="image" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With heading and complex caption">
+      <x:context>
+                <z:block role="figure">
+                    <z:hd ref="image">heading</z:hd>
+                    <z:caption ref="image">
+                        <z:p>caption par1</z:p>
+                        <z:p>caption par2</z:p>
+                    </z:caption>
+                    <z:object src="image.png" xml:id="image" alt=""/>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>
+                        <h1>heading</h1>
+                        <p>caption par1</p>
+                        <p>caption par2</p>
+                    </figcaption>
+                    <img src="image.png" id="image" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With caption before">
+      <x:context>
+                <z:block role="figure">
+                    <z:caption ref="image">caption</z:caption>
+                    <z:object src="image.png" xml:id="image"/>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>caption</figcaption>
+                    <img src="image.png" id="image" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With caption after">
+      <x:context>
+                <z:block role="figure">
+                    <z:object src="image.png" xml:id="image"/>
+                    <z:caption ref="image">caption</z:caption>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <img src="image.png" id="image" alt=""/>
+                    <figcaption>caption</figcaption>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With associated caption">
+      <x:context>
+                <z:block role="figure" associate="image">
+                    <z:caption>caption</z:caption>
+                    <z:object src="image.png" xml:id="image"/>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>caption</figcaption>
+                    <img src="image.png" id="image" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: With complex associated caption">
+      <x:context>
+                <z:block role="figure" associate="image">
+                    <z:hd>heading</z:hd>
+                    <z:object src="image.png" xml:id="image"/>
+                    <z:caption>caption</z:caption>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>
+                        <h1>heading</h1>
+                        <p>caption</p>
+                    </figcaption>
+                    <img src="image.png" id="image" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: Mulitple objects with shared caption">
+      <x:context>
+                <z:block role="figure">
+                    <z:caption ref="image1 image2">caption</z:caption>
+                    <z:object src="image1.png" xml:id="image1"/>
+                    <z:object src="image2.png" xml:id="image2"/>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>caption</figcaption>
+                    <img src="image1.png" id="image1" alt=""/>
+                    <img src="image2.png" id="image2" alt=""/>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: Multiple objects with dedicated captions">
+      <x:context>
+                <z:block role="figure">
+                    <z:object src="image1.png" xml:id="image1"/>
+                    <z:caption ref="image1">caption1</z:caption>
+                    <z:object src="image2.png" xml:id="image2"/>
+                    <z:caption ref="image2">caption2</z:caption>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figure>
+                        <img src="image1.png" id="image1" alt=""/>
+                        <figcaption>caption1</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="image2.png" id="image2" alt=""/>
+                        <figcaption>caption2</figcaption>
+                    </figure>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: Multiple objects with dedicated captions and headings">
+      <x:context>
+                <z:block role="figure">
+                    <z:hd ref="image1">heading1</z:hd>
+                    <z:object src="image1.png" xml:id="image1"/>
+                    <z:caption ref="image1">caption1</z:caption>
+                    <z:hd ref="image2">heading2</z:hd>
+                    <z:object src="image2.png" xml:id="image2"/>
+                    <z:caption ref="image2">caption2</z:caption>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figure>
+                        <figcaption>
+                            <h1>heading1</h1>
+                            <p>caption1</p>
+                        </figcaption>
+                        <img src="image1.png" id="image1" alt=""/>
+                    </figure>
+                    <figure>
+                        <figcaption>
+                            <h1>heading2</h1>
+                            <p>caption2</p>
+                        </figcaption>
+                        <img src="image2.png" id="image2" alt=""/>
+                    </figure>
+                </figure>
+            </x:expect>
+   </x:scenario>
+   <x:scenario label="Figure :: Multiple objects with both shared and dedicated captions">
+      <x:context>
+                <z:block role="figure">
+                    <z:hd ref="image1 image2">heading</z:hd>
+                    <z:object src="image1.png" xml:id="image1"/>
+                    <z:caption ref="image1">caption1</z:caption>
+                    <z:object src="image2.png" xml:id="image2"/>
+                    <z:caption ref="image2">caption2</z:caption>
+                </z:block>
+            </x:context>
+      <x:expect label="">
+                <figure>
+                    <figcaption>
+               <h1>heading</h1>
+            </figcaption>
+                    <figure>
+                        <img src="image1.png" id="image1" alt=""/>
+                        <figcaption>caption1</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="image2.png" id="image2" alt=""/>
+                        <figcaption>caption2</figcaption>
+                    </figure>
+                </figure>
+            </x:expect>
+   </x:scenario>
+</x:description>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the aside element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element-variant">section</span> variant of  the <span class="element">aside</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d96e22">Usage Example</a></li>
+               <li class="h2"><a href="#d96e26">Allowed parents</a></li>
+               <li class="h2"><a href="#d96e32">Allowed children</a></li>
+               <li class="h2"><a href="#d96e58">Content model and additional requirements</a></li>
+               <li class="h2"><a href="#d96e164">Variants</a></li>
+               <li class="h2"><a href="#d96e187">Namespace</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description "> The 
+                  <code>aside</code> element represents information supplementary to the main text and/or narrative flow. 
+                  
+               </p>
+               <p class="description ">The 
+                  <code>Section</code> variant is an adaptation for use with asides that contain structured content.
+                  
+               </p>
+               <p class="description "> An aside typically floats separate from the main text, often in a boxed or shaded region. </p>
+               <p class="description "> The 
+                  <code>
+                     <a href="attributes.html#role11">role</a>
+                     </code> attribute optionally expresses the semantic nature of the aside. 
+                  
+               </p>
+            </div>
+            <h2 id="d96e22">Usage Example</h2><pre>
+&lt;section&gt;
+    &lt;p&gt;Refer to the sidebar &lt;ref ref="qisland"&gt;Quail Island&lt;/ref&gt; for more information.&lt;/p&gt;
+    &lt;aside xml:id="qisland" role="sidebar"&gt;
+        &lt;h&gt;Quail Island&lt;/h&gt;
+        &lt;section&gt;
+            &lt;h&gt;About&lt;/h&gt;
+            &lt;p&gt;Quail Island is located …&lt;/p&gt;
+        &lt;/section&gt;
+    &lt;/aside&gt;
+&lt;/section&gt;
+</pre><h2 id="d96e26">Allowed parents</h2>
+            <p><a class="element" href="e-section01.html">section</a>
+               
+            </p>
+            <h2 id="d96e32">Allowed children</h2>
+            <p>This element <em>must not</em> contain text.
+            </p>
+            <p>This element <em>must</em> contain the following children: <a class="element" href="e-section01.html">section</a>
+               
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-h01.html">h</a> and 
+               <a class="element" href="e-pagebreak01.html">pagebreak</a>
+               
+            </p>
+            <h2 id="d96e58">Content model and additional requirements</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role03">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-term">an optional </span>
+                  <a class="element" href="e-h01.html">h</a>
+                  
+               </div>
+               <div class="rng"><span class="rng-term">a mix of</span>
+                  
+                  <div class="rng">• <span class="rng-term">one or more of </span>
+                     <a class="element" href="e-section01.html">section</a>
+                     
+                  </div>
+                  
+                  <div class="rng">• <span class="rng-term">zero or more of </span>
+                     <a class="element" href="e-pagebreak01.html">pagebreak</a>
+                     
+                  </div>
+                  <span class="rng-term">end of mix</span></div>
+               <div class="schematron-asserts-and-reports">Note that in addition to restrictions presented in the content model  above, 
+                  					use of this element must also respect the following requirement:
+                  <ul>
+                     <li>The 
+                        <code>aside</code> element must neither be empty nor contain only whitespace.
+                        
+                     </li>
+                  </ul>
+                  <div>Such requirements take precedence over any conflicting statements in the
+                     						content model or in the lists above of allowed children and parents.
+                  </div>
+               </div>
+            </div>
+            <h2 id="d96e164">Variants</h2>
+            <p>This element exists in 3 variants. The other 2  variants are:</p>
+            <ul>
+               <li><a href="e-aside02.html">The <span class="element-variant">block</span> variant of  the <span class="element">aside</span> element</a></li>
+               <li><a href="e-aside03.html">The <span class="element-variant">toc</span> variant of  the <span class="element">aside</span> element</a></li>
+            </ul>
+            <h2 id="d96e187">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+         </div>
+      </div>
+   </body>
+</html>

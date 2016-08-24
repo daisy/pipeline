@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/features/rend/"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The Source Rendition Feature </title>
+        <annotation annotates="/">
+            <para>The Source Rendition Feature provides support for the representation of a limited set of typographic/stylistic properties of a source document. </para>
+        </annotation>
+        <author xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+        <define name="z3998.rend.symbol.attrib">
+            <attribute name="rend:symbol">
+                <a:documentation>The rend:symbol attribute specifies the textual symbol used to represent a context break in the source document. As an alternative to rend:symbol, the src attribute may be used to include an image symbol. Note that allowed media types in the src attribute are limited to the same set as the media types allowed on the object element. The rend:symbol and src attributes must not occur simultaneously on the same element. </a:documentation>
+                <ref name="z3998.rend.symbol.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="z3998.rend.symbol.attrib.content">
+            <text/>
+        </define>
+    </div>
+    <div xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+        <define name="z3998.rend.list.ordered.prefix.attrib">
+            <attribute name="rend:prefix">
+                <a:documentation>The rend:prefix attribute specifies the symbol used as prefixes to the item children of an ordered list in the source document. The semantics of the allowed values of this attribute are defined by the CSS list-style-type property . The value specified in rend:prefix is inherited by any descendant lists, unless such descendant lists specify a rend:prefix attribute themselves. In terms of the CSS cascade , values provided here must be considered as of author origin. For more specialized symbols than the ones supported by the rend:prefix attribute on list, the rend:prefix attribute on item can be used. </a:documentation>
+                <ref name="z3998.rend.list.ordered.prefix.attrib.values"/>
+            </attribute>
+        </define>
+        <define name="z3998.rend.list.ordered.prefix.attrib.values">
+            <choice>
+                <value>none</value>
+                <value>decimal</value>
+                <value>decimal-leading-zero</value>
+                <value>lower-alpha</value>
+                <value>lower-greek</value>
+                <value>lower-latin</value>
+                <value>lower-roman</value>
+                <value>upper-alpha</value>
+                <value>upper-greek</value>
+                <value>upper-latin</value>
+                <value>upper-roman </value>
+            </choice>
+        </define>
+        <define name="z3998.rend.list.unordered.prefix.attrib">
+            <attribute name="rend:prefix">
+                <a:documentation>The rend:prefix attribute specifies the symbol used as prefixes to the item children of an unordered list in the source document. The semantics of the allowed values of this attribute are defined by the CSS list-style-type property . The value specified in rend:prefix is inherited by any descendant lists, unless such descendant lists specify a rend:prefix attribute themselves. In terms of the CSS cascade , values provided here must be considered as of author origin. For more specialized symbols than the ones supported by the rend:prefix attribute on list, the rend:prefix attribute on item can be used. </a:documentation>
+                <ref name="z3998.rend.list.unordered.prefix.attrib.values"/>
+            </attribute>
+        </define>
+        <define name="z3998.rend.list.unordered.prefix.attrib.values">
+            <choice>
+                <value>none</value>
+                <value>box</value>
+                <value>check</value>
+                <value>circle</value>
+                <value>diamond</value>
+                <value>disc</value>
+                <value>hyphen</value>
+                <value>square</value>
+            </choice>
+        </define>
+    </div>
+    <div xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+        <define name="z3998.rend.list.item.prefix.attrib">
+            <attribute name="rend:prefix">
+                <a:documentation>The rend:prefix attribute specifies the symbol used as a prefix to the content of the list item element. The occurrence of this attribute results in the prefix inheritance, as set by the prefix attribute on a list ancestor, ceases to be active, for this item, any following item siblings, and any child lists. To specify prefix symbols common to multiple list items, see rend.list.unordered.prefix and rend.list.ordered.prefix . </a:documentation>
+                <ref name="NonEmptyString.datatype"/>
+            </attribute>
+        </define>
+    </div>
+    <div xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+        <define name="z3998.rend.prefix.attrib">
+            <attribute name="rend:prefix">
+                <a:documentation>The rend:prefix attribute specifies the characters or symbols that prefix an element. This variant is intended for use where the attribute and its value carry no special semantics or processing requirements, such as for values that prefix notes and annotations. </a:documentation>
+                <ref name="NonEmptyString.datatype"/>
+            </attribute>
+        </define>
+    </div>
+    <div xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+        <define name="z3998.rend.linebreak">
+            <element name="rend:linebreak">
+                <a:documentation>The linebreak element represents a forced line ending. The ln element should be used whenever the text content represents discrete lines. </a:documentation>
+                <ref name="z3998.rend.linebreak.attlist"/>
+                <ref name="z3998.rend.linebreak.content"/>
+            </element>
+        </define>
+        <define name="z3998.rend.linebreak.attlist" combine="interleave">
+            <ref name="z3998.Phrase.attrib"/>
+        </define>
+        <define name="z3998.rend.linebreak.content">
+            <empty/>
+        </define>
+    </div>
+    <div xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/">
+        <a:documentation>Z39.98 Source Rendition Feature - default content model contribution </a:documentation>
+        <define name="z3998.transition.attlist" combine="interleave">
+            <optional>
+                <choice>
+                    <ref name="z3998.rend.symbol.attrib"/>
+                    <ref name="z3998.Embed.attrib"/>
+                </choice>
+            </optional>
+        </define>
+        <define name="z3998.list.attlist.ordered" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.list.ordered.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.list.attlist.unordered" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.list.unordered.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.list.item.block.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.list.item.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.list.item.phrase.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.list.item.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.note.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.annotation.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.index.entry.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.toc.entry.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.biblio.entry.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.glossary.entry.attlist" combine="interleave">
+            <optional>
+                <ref name="z3998.rend.prefix.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.Phrase.core.class" combine="choice">
+            <ref name="z3998.rend.linebreak"/>
+        </define>
+    </div>
+</grammar>

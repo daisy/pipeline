@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/normalize-block-inline.xsl">
+    <x:scenario label="Normalize Mixed Block/Inline: only block-level">
+        <x:context>
+            <div>
+                <p>Test</p>
+            </div>
+        </x:context>
+        <x:expect label="">
+            <div>
+                <p>Test</p>
+            </div>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Block/Inline: only inline">
+        <x:context>
+            <div>
+                <span>Test</span>
+            </div>
+        </x:context>
+        <x:expect label="">
+            <div>
+                <span>Test</span>
+            </div>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Block/Inline: mixed block and inline">
+        <x:context>
+            <div>
+                <p>Para</p>
+                <span>Span</span>
+                <span>Span 2</span>
+                <p>Another Para</p>
+            </div>
+        </x:context>
+        <x:expect label="">
+            <div>
+                <p>Para</p>
+                <p>
+                    <span>Span</span>
+                    <span>Span 2</span>
+                </p>
+                <p>Another Para</p>
+            </div>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Block/Inline: mixed block and inline with plain text">
+        <x:context>
+            <prodnote>
+                <p>Para</p>
+                <span>Span</span>
+                <span>Span 2</span>
+                <p>Another Para</p> Plain Text <span>Span 3</span>
+            </prodnote>
+        </x:context>
+        <x:expect label="">
+            <prodnote>
+                <p>Para</p>
+                <p>
+                    <span>Span</span>
+                    <span>Span 2</span>
+                </p>
+                <p>Another Para</p>
+                <p> Plain Text <span>Span 3</span>
+                </p>
+            </prodnote>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Normalize Mixed Block/Inline: level elements with inline children">
+        <x:context>
+            <level1>
+                <span>Span</span>
+                <span>Span 2</span>
+            </level1>
+        </x:context>
+        <x:expect label="">
+            <level1>
+                <p>
+                    <span>Span</span>
+                    <span>Span 2</span>
+                </p>
+            </level1>
+        </x:expect>
+    </x:scenario>
+</x:description>

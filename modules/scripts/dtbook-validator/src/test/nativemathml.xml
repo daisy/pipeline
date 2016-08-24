@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd" [
+  <!ENTITY % MATHML.prefixed "INCLUDE" >
+  <!ENTITY % MATHML.prefix "m">
+  <!ENTITY % MATHML.Common.attrib
+          "xlink:href    CDATA       #IMPLIED
+          xlink:type     CDATA       #IMPLIED	
+          class          CDATA       #IMPLIED
+          style          CDATA       #IMPLIED
+          id             ID          #IMPLIED
+          xref           IDREF       #IMPLIED
+          other          CDATA       #IMPLIED
+          xmlns:dtbook   CDATA       #FIXED	'http://www.daisy.org/z3986/2005/dtbook/'
+          dtbook:smilref CDATA       #IMPLIED"
+  >    
+  <!ENTITY % mathML2 PUBLIC "-//W3C//DTD MathML 2.0//EN"
+             "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd"
+  >
+  %mathML2;        
+  <!ENTITY % externalFlow "| m:math">
+  <!ENTITY % externalNamespaces "xmlns:m CDATA #FIXED 'http://www.w3.org/1998/Math/MathML'">      
+ ]
+>
+
+<dtbook version="2005-2" xml:lang="en" 
+  xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+  xmlns:m="http://www.w3.org/1998/Math/MathML"
+>
+  <head>
+    <meta name="dtb:uid" content="DAISY-MathML-Example-1"/>
+    <meta name="dc:Title" content="nativemathml math example 1"/>
+    <meta name="dc:Date" content="2007-02-05"/>
+    <meta name="dc:Language" content="en"/>
+    <meta name="dc:Creator" content="mgylling"/>
+    <meta name="dtb:generator" content="bruno 0.9.72"/>
+  </head>
+  <book>
+    <frontmatter>
+      <doctitle id="cn0001" smilref="nativemathml.smil#tcp0001">
+       MathML Modular Extension Example 1
+      </doctitle>
+      <docauthor id="cn0002" smilref="nativemathml.smil#tcp0002">
+       MathML-in-DAISY Working Group
+      </docauthor>
+    </frontmatter>
+    <bodymatter>
+      <level1>
+        <h1 id="cn0003" smilref="nativemathml.smil#tcp0003">
+          A Simple Math Example
+        </h1>
+        <pagenum id="p1" page="normal" smilref="nativemathml.smil#tcp0004">1</pagenum>
+        <p>
+          <sent id="cn0004" smilref="nativemathml.smil#tcp0005">
+            Following this paragraph is a mathml island.</sent>
+          <sent id="cn0005" smilref="nativemathml.smil#tcp0006">
+            Presentational markup is used.
+          </sent>
+        </p>
+        <m:math xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/" 
+          id="math0001" dtbook:smilref="nativemathml.smil#math0001"
+          altimg="nativemathml0001.png" alttext="sigma-summation UnderScript i equals zero OverScript infinity EndScripts x Subscript i "> 
+          <m:mrow>
+            <m:mstyle displaystyle='true'>
+              <m:munderover>
+                <m:mo>&#x2211;</m:mo>
+                <m:mrow>
+                  <m:mi>i</m:mi><m:mo>=</m:mo><m:mn>0</m:mn>
+                </m:mrow>
+                <m:mi>&#x221E;</m:mi>
+              </m:munderover>
+              <m:mrow>
+                <m:msub>
+                  <m:mi>x</m:mi>
+                  <m:mi>i</m:mi>
+                </m:msub>  
+              </m:mrow>
+            </m:mstyle>
+          </m:mrow>
+        </m:math>
+        <pagenum id="p2" page="normal" smilref="nativemathml.smil#tcp0007">2</pagenum>
+        <p>
+          <span id="cn0008" smilref="nativemathml.smil#tcp0008">
+            This is a paragraph after the mathml island that
+            uses the in-line expression</span>
+          <m:math xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/" 
+            id="math0002" dtbook:smilref="nativemathml.smil#math0002"
+            altimg="nativemathml0002.png" alttext="cube root of x "> 
+            <m:mroot>
+              <m:mi>x</m:mi>
+              <m:mn>3</m:mn>
+            </m:mroot>   
+          </m:math>
+          <span id="cn0009" smilref="nativemathml.smil#tcp0009">.</span>
+        </p>
+      </level1>
+    </bodymatter>
+  </book>
+</dtbook>

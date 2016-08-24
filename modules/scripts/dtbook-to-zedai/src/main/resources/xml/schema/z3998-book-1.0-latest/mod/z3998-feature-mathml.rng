@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         ns="http://www.w3.org/1998/Math/MathML"
+         datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The MathML Feature </title>
+        <annotation annotates="/">
+            <para>Provides support for mathematical expressions as defined in W3C Mathematical Markup Language (MathML) Version 3.0 . </para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <legalnotice>
+            <para>Copyright 1998-2009 W3C (MIT, ERCIM, Keio). Use and distribution of this code are permitted under the terms of the W3C Software Notice and License. http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231</para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <include href="mathml3-content.rng">
+            <define name="MathExpression" combine="choice">
+                <notAllowed/>
+            </define>
+            <define name="DeprecatedContExp">
+                <empty/>
+            </define>
+        </include>
+        <include href="mathml3-presentation.rng">
+            <define name="mglyph.deprecatedattributes">
+                <empty/>
+            </define>
+            <define name="DeprecatedTokenAtt">
+                <empty/>
+            </define>
+            <define name="mstyle.deprecatedattributes">
+                <empty/>
+            </define>
+        </include>
+        <include href="mathml3-common.rng">
+            <start combine="choice">
+                <notAllowed/>
+            </start>
+            <define name="NonMathMLAtt">
+                <notAllowed/>
+            </define>
+            <define name="CommonAtt" combine="interleave">
+                <optional>
+                    <ref name="xml.base.attrib"/>
+                </optional>
+                <optional>
+                    <ref name="xml.space.attrib"/>
+                </optional>
+            </define>
+            <define name="anyElement">
+                <notAllowed/>
+            </define>
+            <define name="math">
+                <element name="math">
+                    <ref name="math.attributes"/>
+                    <oneOrMore>
+                        <ref name="MathExpression"/>
+                    </oneOrMore>
+                </element>
+            </define>
+            <define name="annotation-xml">
+                <element name="annotation-xml">
+                    <ref name="annotation-xml.specialized.attlist"/>
+                    <ref name="annotation-xml.specialized.choice"/>
+                </element>
+            </define>
+            <define name="CommonDeprecatedAtt">
+                <notAllowed/>
+            </define>
+        </include>
+        <define name="annotation-xml.specialized.attlist">
+            <ref name="CommonAtt"/>
+            <optional>
+                <ref name="cd"/>
+            </optional>
+            <optional>
+                <ref name="name"/>
+            </optional>
+            <optional>
+                <attribute name="definitionURL">
+                    <data type="anyURI"/>
+                </attribute>
+            </optional>
+        </define>
+        <define name="annotation-xml.specialized.choice" combine="choice">
+            <choice>
+                <group>
+                    <attribute name="encoding">
+                        <choice>
+                            <value>application/mathml-content+xml</value>
+                            <value>MathML-Content</value>
+                        </choice>
+                    </attribute>
+                    <choice>
+                        <ref name="src"/>
+                        <oneOrMore>
+                            <ref name="ContExp"/>
+                        </oneOrMore>
+                    </choice>
+                </group>
+                <group>
+                    <attribute name="encoding">
+                        <choice>
+                            <value>application/mathml-presentation+xml</value>
+                            <value>MathML-Presentation</value>
+                        </choice>
+                    </attribute>
+                    <choice>
+                        <ref name="src"/>
+                        <oneOrMore>
+                            <ref name="MathExpression"/>
+                        </oneOrMore>
+                    </choice>
+                </group>
+                <group>
+                    <attribute name="encoding">
+                        <value>Z39.98-AI</value>
+                    </attribute>
+                    <ref name="z3998.Flow.choice.model"/>
+                    <sch:rule context="m:annotation-xml[@encoding='Z39.98-AI']">
+                        <sch:assert test="not(descendant::m:*)">The annotation-xml element, when used with Z39.98-AI markup, must not contain any descendants in the MathML namespace. </sch:assert>
+                    </sch:rule>
+                </group>
+            </choice>
+            <sch:rule context="m:annotation-xml">
+                <sch:assert test="normalize-space(.) or *">The annotation-xml element must neither be empty nor contain only whitespace. </sch:assert>
+            </sch:rule>
+        </define>
+    </div>
+    <div>
+        <a:documentation>MathML Feature - default content model contribution </a:documentation>
+        <define name="z3998.Phrase.extern.class" combine="choice">
+            <ref name="math"/>
+        </define>
+        <define name="z3998.Block.extern.class" combine="choice">
+            <ref name="math"/>
+        </define>
+    </div>
+</grammar>

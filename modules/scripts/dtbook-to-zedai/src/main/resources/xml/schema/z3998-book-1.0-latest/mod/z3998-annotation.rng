@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:sch="http://purl.oclc.org/dsdl/schematron"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         ns="http://www.daisy.org/ns/z3998/authoring/">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The annotation module </title>
+        <annotation annotates="/">
+            <para>This module defines the annotation element for including annotations and comments about the document content. </para>
+            <para>Two variants of the annotation element are available: one for use in a Block context and a second for use in a Phrase context. </para>
+            <para>More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.annotation.module</para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.annotation">
+            <element name="annotation">
+                <a:documentation>The annotation element represents an annotation that an author, editor, publisher, or other individual or agency has added to a document. Unless an annotation element has a role value of temporary, it must reference at least one element in the document using the ref attribute or be referenced by at least one annoref . For annotations that apply to more than one element, use a space-separated list of xml:id values in the ref attribute. The ref attribute identifies the specific element(s) being annotated by referencing their xml:id values. The annotation element should not be used to add descriptions, footnotes or endnotes. Refer to the description and note elements for more information. </a:documentation>
+                <ref name="z3998.annotation.attlist"/>
+                <ref name="z3998.annotation.content"/>
+                <sch:rule context="default:annotation[not(@role='temporary')]">
+                    <sch:assert test="key('annorefs', @xml:id) or id(current()/@ref)">The annotation element must be referenced by an annoref or reference another element in the document unless it has the role value temporary. </sch:assert>
+                    <sch:assert test="normalize-space(.) or *">The annotation element must neither be empty nor contain only whitespace. </sch:assert>
+                </sch:rule>
+                <sch:rule context="default:annotation[@role='temporary']" role="warning">
+                    <sch:report test=".">Annotations with a {role} value of {temporary} must be removed prior to document finalization.</sch:report>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.annotation.phrase">
+            <element name="annotation">
+                <a:documentation>The annotation element represents an annotation that an author, editor, publisher, or other individual or agency has added to a document. The inline inclusion of annotation elements does not influence the rendering of the annotations or reflect their appearance in a print medium; inlining allows annotations to be included as close to their referenced element as is desired. It is equally valid for Block-layer annotations to reference inline elements. Unless an annotation element has a role value of temporary, it must reference at least one element in the document using the ref attribute or be referenced by at least one annoref . For annotations that apply to more than one element, use a space-separated list of xml:id values in the ref attribute. The ref attribute identifies the specific element(s) being annotated by referencing their xml:id values. The annotation element should not be used to add descriptions, footnotes or endnotes. Refer to the description and note elements for more information. </a:documentation>
+                <ref name="z3998.annotation.phrase.attlist"/>
+                <ref name="z3998.annotation.phrase.content"/>
+            </element>
+        </define>
+        <define name="z3998.annotation.attlist">
+            <ref name="z3998.global.core.attrib"/>
+            <optional>
+                <ref name="z3998.annotation.role.attrib"/>
+            </optional>
+            <ref name="z3998.Block.extern.attrib"/>
+            <optional>
+                <ref name="z3998.ref.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.annotation.phrase.attlist">
+            <ref name="z3998.global.core.attrib"/>
+            <optional>
+                <ref name="z3998.annotation.role.attrib"/>
+            </optional>
+            <ref name="z3998.Phrase.extern.attrib"/>
+            <optional>
+                <ref name="z3998.ref.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.annotation.content">
+            <ref name="z3998.Flow.choice.model"/>
+        </define>
+        <define name="z3998.annotation.phrase.content">
+            <ref name="z3998.Phrase.Text.mix.model"/>
+        </define>
+        <define name="z3998.annotation.role.attrib">
+            <attribute name="role">
+                <list>
+                    <oneOrMore>
+                        <ref name="z3998.annotation.role.attrib.content.enum"/>
+                    </oneOrMore>
+                </list>
+            </attribute>
+        </define>
+        <define name="z3998.annotation.role.attrib.content.enum" combine="choice">
+            <ref name="CURIE.datatype"/>
+        </define>
+    </div>
+    <div>
+        <define name="z3998.annoref">
+            <element name="annoref">
+                <a:documentation>The annoref element represents a textual reference to an annotation . Although not as common as with footnotes and endnotes, the content or location in the document being annotated may be noted by a text referent (e.g., a superscripted symbol). By default, the text content of the annoref represents the link reference and is treated as document content. When superscripted numbers or symbols are instead used to identify the corresponding annotation, the annoref.value attribute should be used. The annoref must be an empty element when attaching a value attribute; it it not permitted to include text content and a value attribute. The ref attribute is used to establish the link between the annoref and its associated annotation. </a:documentation>
+                <ref name="z3998.annoref.attlist"/>
+                <ref name="z3998.annoref.content"/>
+                <sch:rule context="default:annoref">
+                    <sch:report test="@value and (count(*|text()[normalize-space()]) &gt; 0)">The {value} attribute cannot be used on a non-empty {annoref}.</sch:report>
+                    <sch:report test="not(@value) and (count(*|text()[normalize-space()]) = 0)">An empty {annoref} element must include a {value} attribute.</sch:report>
+                    <sch:assert test="every $ref in tokenize(current()/@ref, ' +') satisfies key('annotations', $ref)">The IDREF(s) in the ref attribute must resolve to annotations. </sch:assert>
+                </sch:rule>
+                <sch:rule context="default:annoref" role="warning">
+                    <sch:report role="warning"
+                           test="(count(node()[normalize-space()]) = 1) and child::default:sup">Superscripted referents should be included in a {value} attribute, not as text content.</sch:report>
+                </sch:rule>
+            </element>
+        </define>
+        <define name="z3998.annoref.value.attrib">
+            <attribute name="value">
+                <a:documentation>The annoref value attribute provides the number or symbol that represents the current annotation reference. The value attribute allows any text string as an identifier. </a:documentation>
+                <ref name="NonEmptyString.datatype"/>
+            </attribute>
+        </define>
+        <define name="z3998.annoref.attlist">
+            <ref name="z3998.Phrase.attrib"/>
+            <ref name="z3998.ref.attrib"/>
+            <optional>
+                <ref name="z3998.annoref.value.attrib"/>
+            </optional>
+        </define>
+        <define name="z3998.annoref.content">
+            <choice>
+                <empty/>
+                <ref name="z3998.Phrase.core.Text.mix.model"/>
+            </choice>
+        </define>
+    </div>
+    <div>
+        <a:documentation>annotation - default content model contribution </a:documentation>
+        <define name="z3998.Phrase.core.class" combine="choice">
+            <ref name="z3998.annoref"/>
+        </define>
+        <define name="z3998.Block.core.class" combine="choice">
+            <ref name="z3998.annotation"/>
+        </define>
+        <define name="z3998.Phrase.variant.class" combine="choice">
+            <ref name="z3998.annotation.phrase"/>
+        </define>
+        <define name="z3998.verse.content.class" combine="choice">
+            <ref name="z3998.annotation.phrase"/>
+        </define>
+        <define name="z3998.lngroup.content" combine="interleave">
+            <zeroOrMore>
+                <ref name="z3998.annotation.phrase"/>
+            </zeroOrMore>
+        </define>
+    </div>
+</grammar>

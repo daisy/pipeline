@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the say-as element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element-variant">phrase</span> variant of  the <span class="element">say-as</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d214e9">Usage Example</a></li>
+               <li class="h2"><a href="#d214e13">Allowed parents</a></li>
+               <li class="h2"><a href="#d214e234">Allowed children</a></li>
+               <li class="h2"><a href="#d214e455">Content model and additional requirements</a></li>
+               <li class="h2"><a href="#d214e682">Variants</a></li>
+               <li class="h2"><a href="#d214e691">Namespace</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">Provides information on the type of text construct contained within the element to help specify the level of detail for rendering
+                  the contained text.
+               </p>
+               <p class="description ">Refer to 
+                  <a href="http://www.w3.org/TR/speech-synthesis11/#S3.1.9">SSML 1.1</a> for further information.
+                  
+               </p>
+            </div>
+            <h2 id="d214e9">Usage Example</h2><pre>
+&lt;h&gt;CHAPTER &lt;ssml:say-as interpret-as="ordinal"&gt;V&lt;/ssml:say-as&gt;. LAWS OF VARIATION.&lt;/h&gt;                   
+    </pre><h2 id="d214e13">Allowed parents</h2>
+            <p><a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annoref01.html">annoref</a>, 
+               <a class="element" href="e-annotation01.html">annotation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-annotation02.html">annotation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-annotation-xml01.html">m:annotation-xml</a>, 
+               <a class="element" href="e-aside02.html">aside (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-aside03.html">aside (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-citation01.html">citation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-citation02.html">citation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-d01.html">d</a>, 
+               <a class="element" href="e-definition01.html">definition</a>, 
+               <a class="element" href="e-emph01.html">emph</a>, 
+               <a class="element" href="e-entry01.html">entry (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-entry02.html">entry (<span class="element-variant">index</span> variant)</a>, 
+               <a class="element" href="e-entry03.html">entry (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-entry04.html">entry (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-expansion01.html">expansion</a>, 
+               <a class="element" href="e-group01.html">xforms:group</a>, 
+               <a class="element" href="e-h01.html">h</a>, 
+               <a class="element" href="e-hd01.html">hd</a>, 
+               <a class="element" href="e-hpart01.html">hpart</a>, 
+               <a class="element" href="e-item01.html">item</a>, 
+               <a class="element" href="e-label01.html">xforms:label</a>, 
+               <a class="element" href="e-ln02.html">ln</a>, 
+               <a class="element" href="e-longdesc01.html">d:longdesc</a>, 
+               <a class="element" href="e-meta01.html">meta</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-noteref01.html">noteref</a>, 
+               <a class="element" href="e-otherwise02.html">sel:otherwise</a>, 
+               <a class="element" href="e-p01.html">p</a>, 
+               <a class="element" href="e-phoneme01.html">ssml:phoneme</a>, 
+               <a class="element" href="e-prosody01.html">ssml:prosody</a>, 
+               <a class="element" href="e-quote01.html">quote (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-quote02.html">quote (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-rb01.html">its:rb</a>, 
+               <a class="element" href="e-ref01.html">ref</a>, 
+               <a class="element" href="e-repeat01.html">xforms:repeat</a>, 
+               <a class="element" href="e-rt01.html">its:rt</a>, 
+               <a class="element" href="e-s01.html">s</a>, 
+               <a class="element" href="e-say-as01.html">ssml:say-as (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-span01.html">span</a>, 
+               <a class="element" href="e-spine01.html">spine</a>, 
+               <a class="element" href="e-sub02.html">ssml:sub</a>, 
+               <a class="element" href="e-summary01.html">d:summary</a>, 
+               <a class="element" href="e-td01.html">td</a>, 
+               <a class="element" href="e-term01.html">term</a>, 
+               <a class="element" href="e-th01.html">th</a>, 
+               <a class="element" href="e-tour01.html">d:tour</a> and 
+               <a class="element" href="e-when01.html">sel:when</a>
+               
+            </p>
+            <h2 id="d214e234">Allowed children</h2>
+            <p>This element <em>may</em> contain text.
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-abbr01.html">abbr</a>, 
+               <a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annoref01.html">annoref</a>, 
+               <a class="element" href="e-annotation02.html">annotation</a>, 
+               <a class="element" href="e-break01.html">ssml:break</a>, 
+               <a class="element" href="e-char01.html">char</a>, 
+               <a class="element" href="e-citation02.html">citation</a>, 
+               <a class="element" href="e-code02.html">code</a>, 
+               <a class="element" href="e-d01.html">d</a>, 
+               <a class="element" href="e-definition01.html">definition</a>, 
+               <a class="element" href="e-emph02.html">emph (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-emph01.html">emph (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-expansion01.html">expansion</a>, 
+               <a class="element" href="e-input01.html">xforms:input</a>, 
+               <a class="element" href="e-linebreak01.html">rend:linebreak</a>, 
+               <a class="element" href="e-ln02.html">ln</a>, 
+               <a class="element" href="e-math01.html">m:math</a>, 
+               <a class="element" href="e-name01.html">name</a>, 
+               <a class="element" href="e-note02.html">note</a>, 
+               <a class="element" href="e-noteref01.html">noteref</a>, 
+               <a class="element" href="e-num01.html">num</a>, 
+               <a class="element" href="e-object03.html">object (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-object02.html">object (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-pagebreak01.html">pagebreak</a>, 
+               <a class="element" href="e-phoneme02.html">ssml:phoneme (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-phoneme01.html">ssml:phoneme (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-prosody02.html">ssml:prosody (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-prosody01.html">ssml:prosody (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-quote02.html">quote</a>, 
+               <a class="element" href="e-range01.html">xforms:range</a>, 
+               <a class="element" href="e-ref01.html">ref</a>, 
+               <a class="element" href="e-ruby01.html">its:ruby</a>, 
+               <a class="element" href="e-s01.html">s</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-say-as01.html">ssml:say-as (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-secret01.html">xforms:secret</a>, 
+               <a class="element" href="e-select01.html">sel:select</a>, 
+               <a class="element" href="e-select03.html">xforms:select</a>, 
+               <a class="element" href="e-select101.html">xforms:select1</a>, 
+               <a class="element" href="e-span02.html">span (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-span01.html">span (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-sub01.html">sub</a>, 
+               <a class="element" href="e-sub03.html">ssml:sub (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-sub02.html">ssml:sub (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-sup01.html">sup</a>, 
+               <a class="element" href="e-term01.html">term</a>, 
+               <a class="element" href="e-textarea01.html">xforms:textarea</a>, 
+               <a class="element" href="e-time01.html">time</a>, 
+               <a class="element" href="e-token02.html">ssml:token (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-token01.html">ssml:token (<span class="element-variant">phrase</span> variant)</a> and 
+               <a class="element" href="e-w01.html">w</a>
+               
+            </p>
+            <h2 id="d214e455">Content model and additional requirements</h2>
+            <div class="element-content-model">
+               <div class="rng-required-attributes">required attributes: <a class="attribute" href="attributes.html#interpret-as01">@interpret-as</a>
+                  
+               </div>
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#detail01">@detail</a>, 
+                  <a class="attribute" href="attributes.html#format01">@format</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-term">one or more of </span>
+                  
+                  <div class="rng"><span class="tng-term">a choice of </span><div class="rng">either one of the 53 elements: <a class="element" href="e-abbr01.html">abbr</a>, <a class="element" href="e-address02.html">address</a>, <a class="element" href="e-annoref01.html">annoref</a>, <a class="element" href="e-annotation02.html">annotation</a>, <a class="element" href="e-char01.html">char</a>, <a class="element" href="e-citation02.html">citation</a>, <a class="element" href="e-code02.html">code</a>, <a class="element" href="e-d01.html">d</a>, <a class="element" href="e-definition01.html">definition</a>, <a class="element" href="e-emph02.html">emph</a>, <a class="element" href="e-emph01.html">emph</a>, <a class="element" href="e-expansion01.html">expansion</a>, <a class="element" href="e-ruby01.html">its:ruby</a>, <a class="element" href="e-ln02.html">ln</a>, <a class="element" href="e-math01.html">m:math</a>, <a class="element" href="e-name01.html">name</a>, <a class="element" href="e-note02.html">note</a>, <a class="element" href="e-noteref01.html">noteref</a>, <a class="element" href="e-num01.html">num</a>, <a class="element" href="e-object03.html">object</a>, <a class="element" href="e-object02.html">object</a>, <a class="element" href="e-pagebreak01.html">pagebreak</a>, <a class="element" href="e-quote02.html">quote</a>, <a class="element" href="e-ref01.html">ref</a>, <a class="element" href="e-linebreak01.html">rend:linebreak</a>, <a class="element" href="e-s01.html">s</a>, <a class="element" href="e-select01.html">sel:select</a>, <a class="element" href="e-span02.html">span</a>, <a class="element" href="e-span01.html">span</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-phoneme02.html">ssml:phoneme</a>, <a class="element" href="e-phoneme01.html">ssml:phoneme</a>, <a class="element" href="e-prosody02.html">ssml:prosody</a>, <a class="element" href="e-prosody01.html">ssml:prosody</a>, <a class="element" href="e-say-as02.html">ssml:say-as</a>, <a class="element" href="e-say-as01.html">ssml:say-as</a>, <a class="element" href="e-sub03.html">ssml:sub</a>, <a class="element" href="e-sub02.html">ssml:sub</a>, <a class="element" href="e-token02.html">ssml:token</a>, <a class="element" href="e-token01.html">ssml:token</a>, <a class="element" href="e-sub01.html">sub</a>, <a class="element" href="e-sup01.html">sup</a>, <a class="element" href="e-term01.html">term</a>, <a class="element" href="e-time01.html">time</a>, <a class="element" href="e-w01.html">w</a>, <a class="element" href="e-w01.html">w</a>, <a class="element" href="e-input01.html">xforms:input</a>, <a class="element" href="e-range01.html">xforms:range</a>, <a class="element" href="e-secret01.html">xforms:secret</a>, <a class="element" href="e-select03.html">xforms:select</a>, <a class="element" href="e-select101.html">xforms:select1</a> or <a class="element" href="e-textarea01.html">xforms:textarea</a></div>
+                     <div class="rng">or text</div><span class="tng-term">end of choice</span></div>
+                  
+               </div>
+               <div class="schematron-asserts-and-reports">Note that in addition to restrictions presented in the content model  above, 
+                  					use of this element must also respect the following requirement:
+                  <ul>
+                     <li>The 
+                        <code>ssml:say-as</code> element must neither be empty nor contain only whitespace.
+                        
+                     </li>
+                  </ul>
+                  <div>Such requirements take precedence over any conflicting statements in the
+                     						content model or in the lists above of allowed children and parents.
+                  </div>
+               </div>
+            </div>
+            <h2 id="d214e682">Variants</h2>
+            <p>This element exists in 2 variants. The other variant is the <a href="e-say-as02.html"><span class="element-variant">text</span> variant.</a></p>
+            <h2 id="d214e691">Namespace</h2>
+            <p><span class="namespace">http://www.w3.org/2001/10/synthesis</span></p>
+         </div>
+      </div>
+   </body>
+</html>

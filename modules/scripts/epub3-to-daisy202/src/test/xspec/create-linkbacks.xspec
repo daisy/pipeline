@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/create-linkbacks.xsl" xmlns:html="http://www.w3.org/1999/xhtml" xslt-version="2.0"
+    xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions">
+
+    <x:scenario label="A basic smil/html mapping">
+        <x:context>
+            <html:html xml:base="http://example.org/content.html">
+                <smil xml:base="http://example.org/smil.smil" xmlns="">
+                    <head/>
+                    <body>
+                        <seq dur="28.901s">
+                            <par endsync="last" id="smil-par">
+                                <text id="smil-text" src="content.html#content-id"/>
+                                <audio src="audio.mp3" clip-begin="npt=0.000s" clip-end="npt=1.000s" id="smil-audio"/>
+                            </par>
+                        </seq>
+                    </body>
+                </smil>
+                <html:head/>
+                <html:body>
+                    <html:span id="content-id">TEXT</html:span>
+                </html:body>
+            </html:html>
+        </x:context>
+        <x:expect label="should be inserted as a linkback">
+            <html:html xml:base="http://example.org/content.html">
+                <html:head/>
+                <html:body>
+                    <html:span id="content-id"><html:a href="smil.smil#smil-par">TEXT</html:a></html:span>
+                </html:body>
+            </html:html>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

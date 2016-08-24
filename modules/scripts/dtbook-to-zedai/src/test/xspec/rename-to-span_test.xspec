@@ -1,0 +1,750 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:its="http://www.w3.org/2005/11/its" xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/rename-to-span.xsl">
+    <x:scenario label="Rename to Span: LIC">
+        <x:context>
+            <lic>ABC</lic>
+        </x:context>
+        <x:expect label="">
+            <span>ABC</span>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: DD/P and DD/ADDRESS">
+        <x:context>
+            <dd>
+                <p>ABC</p>
+                <address>ABC</address>
+            </dd>
+        </x:context>
+        <x:expect label="">
+            <dd>
+                <span>ABC</span>
+                <span>ABC</span>
+            </dd>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: DD/DATELINE">
+        <x:context>
+            <dd>
+                <dateline>ABC</dateline>
+            </dd>
+        </x:context>
+        <x:expect label="">
+            <dd>
+                <span role="time">ABC</span>
+            </dd>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: DD/AUTHOR">
+        <x:context>
+            <dd>
+                <author>ABC <sub>DEF</sub>
+                </author>
+            </dd>
+        </x:context>
+        <x:expect label="">
+            <dd>
+                <span role="author">ABC <sub>DEF</sub>
+                </span>
+            </dd>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: CODE">
+        <x:context>
+            <abbr>
+                <code/>
+            </abbr>
+            <acronym>
+                <code/>
+            </acronym>
+            <dt>
+                <code/>
+            </dt>
+            <sub>
+                <code/>
+            </sub>
+            <sup>
+                <code/>
+            </sup>
+            <w>
+                <code/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <abbr>
+                <span/>
+            </abbr>
+            <acronym>
+                <span/>
+            </acronym>
+            <dt>
+                <span/>
+            </dt>
+            <sub>
+                <span/>
+            </sub>
+            <sup>
+                <span/>
+            </sup>
+            <w>
+                <span/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: NOTEREF">
+        <x:context>
+            <abbr>
+                <noteref/>
+            </abbr>
+            <acronym>
+                <noteref/>
+            </acronym>
+            <dt>
+                <noteref/>
+            </dt>
+            <sub>
+                <noteref/>
+            </sub>
+            <sup>
+                <noteref/>
+            </sup>
+            <w>
+                <noteref/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <abbr>
+                <span/>
+            </abbr>
+            <acronym>
+                <span/>
+            </acronym>
+            <dt>
+                <span/>
+            </dt>
+            <sub>
+                <span/>
+            </sub>
+            <sup>
+                <span/>
+            </sup>
+            <w>
+                <span/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: ANNOREF">
+        <x:context>
+            <abbr>
+                <annoref/>
+            </abbr>
+            <acronym>
+                <annoref/>
+            </acronym>
+            <dt>
+                <annoref/>
+            </dt>
+            <sub>
+                <annoref/>
+            </sub>
+            <sup>
+                <annoref/>
+            </sup>
+            <w>
+                <annoref/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <abbr>
+                <span/>
+            </abbr>
+            <acronym>
+                <span/>
+            </acronym>
+            <dt>
+                <span/>
+            </dt>
+            <sub>
+                <span/>
+            </sub>
+            <sup>
+                <span/>
+            </sup>
+            <w>
+                <span/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: KBD">
+        <x:context>
+            <abbr>
+                <kbd/>
+            </abbr>
+            <acronym>
+                <kbd/>
+            </acronym>
+            <dt>
+                <kbd/>
+            </dt>
+            <sub>
+                <kbd/>
+            </sub>
+            <sup>
+                <kbd/>
+            </sup>
+            <w>
+                <kbd/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <abbr>
+                <span/>
+            </abbr>
+            <acronym>
+                <span/>
+            </acronym>
+            <dt>
+                <span/>
+            </dt>
+            <sub>
+                <span/>
+            </sub>
+            <sup>
+                <span/>
+            </sup>
+            <w>
+                <span/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: Q">
+        <x:context>
+            <abbr>
+                <q/>
+            </abbr>
+            <acronym>
+                <q/>
+            </acronym>
+            <dt>
+                <q/>
+            </dt>
+            <sub>
+                <q/>
+            </sub>
+            <sup>
+                <q/>
+            </sup>
+            <w>
+                <q/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <abbr>
+                <span/>
+            </abbr>
+            <acronym>
+                <span/>
+            </acronym>
+            <dt>
+                <span/>
+            </dt>
+            <sub>
+                <span/>
+            </sub>
+            <sup>
+                <span/>
+            </sup>
+            <w>
+                <span/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: SENT">
+        <x:context>
+            <abbr>
+                <sent/>
+            </abbr>
+            <acronym>
+                <sent/>
+            </acronym>
+            <dt>
+                <sent/>
+            </dt>
+            <sub>
+                <sent/>
+            </sub>
+            <sup>
+                <sent/>
+            </sup>
+        </x:context>
+        <x:expect label="">
+            <abbr>
+                <span role="sentence"/>
+            </abbr>
+            <acronym>
+                <span role="sentence"/>
+            </acronym>
+            <dt>
+                <span role="sentence"/>
+            </dt>
+            <sub>
+                <span role="sentence"/>
+            </sub>
+            <sup>
+                <span role="sentence"/>
+            </sup>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: ACRONYM">
+        <x:context>
+            <sub>
+                <acronym pronounce="yes"/>
+            </sub>
+            <sup>
+                <acronym pronounce="no"/>
+            </sup>
+            <w>
+                <acronym/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <sub>
+                <span role="acronym"/>
+            </sub>
+            <sup>
+                <span role="initialism"/>
+            </sup>
+            <w>
+                <span role="initialism"/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: ABBR">
+        <x:context>
+            <sub>
+                <abbr/>
+            </sub>
+            <sup>
+                <abbr/>
+            </sup>
+            <w>
+                <abbr/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <sub>
+                <span role="truncation"/>
+            </sub>
+            <sup>
+                <span role="truncation"/>
+            </sup>
+            <w>
+                <span role="truncation"/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: W">
+        <x:context>
+            <sub>
+                <w/>
+            </sub>
+            <sup>
+                <w/>
+            </sup>
+        </x:context>
+        <x:expect label="">
+            <sub>
+                <span role="word"/>
+            </sub>
+            <sup>
+                <span role="word"/>
+            </sup>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: SAMP">
+        <x:context>
+            <a>
+                <samp/>
+            </a>
+            <abbr>
+                <samp/>
+            </abbr>
+            <acronym>
+                <samp/>
+            </acronym>
+            <author>
+                <samp/>
+            </author>
+            <bdo dir="ltr">
+                <samp/>
+            </bdo>
+            <bridgehead>
+                <samp/>
+            </bridgehead>
+            <byline>
+                <samp/>
+            </byline>
+            <cite>
+                <samp/>
+            </cite>
+            <dateline>
+                <samp/>
+            </dateline>
+            <dd>
+                <samp/>
+            </dd>
+            <dfn>
+                <samp/>
+            </dfn>
+            <dt>
+                <samp/>
+            </dt>
+            <docauthor>
+                <samp/>
+            </docauthor>
+            <doctitle>
+                <samp/>
+            </doctitle>
+            <em>
+                <samp/>
+            </em>
+            <h1>
+                <samp/>
+            </h1>
+            <h2>
+                <samp/>
+            </h2>
+            <h3>
+                <samp/>
+            </h3>
+            <h4>
+                <samp/>
+            </h4>
+            <h5>
+                <samp/>
+            </h5>
+            <h6>
+                <samp/>
+            </h6>
+            <hd>
+                <samp/>
+            </hd>
+            <line>
+                <samp/>
+            </line>
+            <p>
+                <samp/>
+            </p>
+            <q>
+                <samp/>
+            </q>
+            <samp>
+                <samp/>
+            </samp>
+            <sent>
+                <samp/>
+            </sent>
+            <span>
+                <samp/>
+            </span>
+            <strong>
+                <samp/>
+            </strong>
+            <sub>
+                <samp/>
+            </sub>
+            <sup>
+                <samp/>
+            </sup>
+            <title>
+                <samp/>
+            </title>
+            <w>
+                <samp/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <a>
+                <span role="example"/>
+            </a>
+            <abbr>
+                <span role="example"/>
+            </abbr>
+            <acronym>
+                <span role="example"/>
+            </acronym>
+            <author>
+                <span role="example"/>
+            </author>
+            <span its:dir="ltr">
+                <span role="example"/>
+            </span>
+            <bridgehead>
+                <span role="example"/>
+            </bridgehead>
+            <byline>
+                <span role="example"/>
+            </byline>
+            <cite>
+                <span role="example"/>
+            </cite>
+            <dateline>
+                <span role="example"/>
+            </dateline>
+            <dd>
+                <span role="example"/>
+            </dd>
+            <dfn>
+                <span role="example"/>
+            </dfn>
+            <dt>
+                <span role="example"/>
+            </dt>
+            <docauthor>
+                <span role="example"/>
+            </docauthor>
+            <doctitle>
+                <span role="example"/>
+            </doctitle>
+            <em>
+                <span role="example"/>
+            </em>
+            <h1>
+                <span role="example"/>
+            </h1>
+            <h2>
+                <span role="example"/>
+            </h2>
+            <h3>
+                <span role="example"/>
+            </h3>
+            <h4>
+                <span role="example"/>
+            </h4>
+            <h5>
+                <span role="example"/>
+            </h5>
+            <h6>
+                <span role="example"/>
+            </h6>
+            <hd>
+                <span role="example"/>
+            </hd>
+            <line>
+                <span role="example"/>
+            </line>
+            <p>
+                <span role="example"/>
+            </p>
+            <q>
+                <span role="example"/>
+            </q>
+            <samp>
+                <span role="example"/>
+            </samp>
+            <sent>
+                <span role="example"/>
+            </sent>
+            <span>
+                <span role="example"/>
+            </span>
+            <strong>
+                <span role="example"/>
+            </strong>
+            <sub>
+                <span role="example"/>
+            </sub>
+            <sup>
+                <span role="example"/>
+            </sup>
+            <title>
+                <span role="example"/>
+            </title>
+            <w>
+                <span role="example"/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: DFN">
+        <x:context>
+            <abbr>
+                <dfn/>
+            </abbr>
+            <acronym>
+                <dfn/>
+            </acronym>
+            <dt>
+                <dfn/>
+            </dt>
+            <sub>
+                <dfn/>
+            </sub>
+            <sup>
+                <dfn/>
+            </sup>
+            <w>
+                <dfn/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <abbr>
+                <span/>
+            </abbr>
+            <acronym>
+                <span/>
+            </acronym>
+            <dt>
+                <span/>
+            </dt>
+            <sub>
+                <span/>
+            </sub>
+            <sup>
+                <span/>
+            </sup>
+            <w>
+                <span/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: A">
+        <x:context>
+            <abbr>
+                <a/>
+            </abbr>
+            <acronym>
+                <a/>
+            </acronym>
+            <dt>
+                <a/>
+            </dt>
+            <sub>
+                <a/>
+            </sub>
+            <sup>
+                <a/>
+            </sup>
+            <w>
+                <a/>
+            </w>
+        </x:context>
+        <x:expect label="">
+            <abbr>
+                <span/>
+            </abbr>
+            <acronym>
+                <span/>
+            </acronym>
+            <dt>
+                <span/>
+            </dt>
+            <sub>
+                <span/>
+            </sub>
+            <sup>
+                <span/>
+            </sup>
+            <w>
+                <span/>
+            </w>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: BDO">
+        <x:context>
+            <bdo dir="rtl">ABC</bdo>
+        </x:context>
+        <x:expect label="">
+            <span its:dir="rtl">ABC</span>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: CITE">
+        <!-- cannot test case where cite has no @id, because cannot predict generate-id() output -->
+        <x:context>
+            <abbr>
+                <cite id="testid1"/>
+            </abbr>
+            <acronym>
+                <cite id="testid2"/>
+            </acronym>
+            <dt>
+                <cite id="testid3"/>
+            </dt>
+            <sub>
+                <cite id="testid4"/>
+            </sub>
+            <sup>
+                <cite id="testid5"/>
+            </sup>
+            <w>
+                <cite id="testid6"/>
+            </w>
+            <strong>
+                <cite id="testid7"/>
+            </strong>
+            <abbr>
+                <cite id="testid8">
+                    <title>ABC</title>
+                    <author>ABC</author>
+                    <span>SPAN</span>
+                </cite>
+            </abbr>
+        </x:context>
+        <x:expect label="">
+            <abbr>
+                <span xml:id="testid1"/>
+            </abbr>
+            <acronym>
+                <span xml:id="testid2"/>
+            </acronym>
+            <dt>
+                <span xml:id="testid3"/>
+            </dt>
+            <sub>
+                <span xml:id="testid4"/>
+            </sub>
+            <sup>
+                <span xml:id="testid5"/>
+            </sup>
+            <w>
+                <span xml:id="testid6"/>
+            </w>
+            <strong>
+                <span xml:id="testid7"/>
+            </strong>
+            <abbr>
+                <span xml:id="testid8">
+                    <span property="title" about="testid8">ABC</span>
+                    <span property="author" about="testid8">ABC</span>
+                    <span>SPAN</span>
+                </span>
+            </abbr>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: nested SAMP">
+        <!-- cannot test case where cite has no @id, because cannot predict generate-id() output -->
+        <x:context>
+            <samp>
+                <samp/>
+                <samp/>
+                <notsamp/>
+            </samp>
+        </x:context>
+        <x:expect label="">
+            <samp>
+                <span role="example"/>
+                <span role="example"/>
+                <notsamp/>
+            </samp>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Rename to Span: copy attributes">
+        <!-- cannot test case where cite has no @id, because cannot predict generate-id() output -->
+        <x:context>
+            <lic id="testid" xml:lang="jp" dir="ltr"/>
+        </x:context>
+        <x:expect label="">
+            <span xml:id="testid" xml:lang="jp" its:dir="ltr"/>
+        </x:expect>
+    </x:scenario>
+</x:description>

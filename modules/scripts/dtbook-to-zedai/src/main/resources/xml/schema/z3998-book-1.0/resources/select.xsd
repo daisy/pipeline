@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.daisy.org/ns/z3998/authoring/features/select/" xmlns:select="http://www.daisy.org/ns/z3998/authoring/features/select/" xmlns:synthesis="http://www.w3.org/2001/10/synthesis" xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/" xmlns:its="http://www.w3.org/2005/11/its" xmlns:authoring="http://www.daisy.org/ns/z3998/authoring/" xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/" xmlns:xforms="http://www.w3.org/2002/xforms/" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/" schemaLocation="z3998-book.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/description/" schemaLocation="d.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/rend/" schemaLocation="rend.xsd"/>
+  <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
+  <xs:import namespace="http://www.w3.org/2001/10/synthesis" schemaLocation="synthesis.xsd"/>
+  <xs:import namespace="http://www.w3.org/2002/xforms/" schemaLocation="xforms.xsd"/>
+  <xs:import namespace="http://www.w3.org/2005/11/its" schemaLocation="its.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:attribute name="selid" type="xs:NCName"/>
+  <xs:element name="select">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="select:when"/>
+        <xs:element ref="select:otherwise"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:base"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="when">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="authoring:hd"/>
+        <xs:group ref="authoring:block"/>
+        <xs:element ref="authoring:p"/>
+        <xs:element ref="authoring:transition"/>
+        <xs:element ref="authoring:list"/>
+        <xs:element ref="authoring:table"/>
+        <xs:element ref="authoring:code"/>
+        <xs:element ref="authoring:quote"/>
+        <xs:element ref="authoring:citation"/>
+        <xs:group ref="authoring:object"/>
+        <xs:element ref="authoring:address"/>
+        <xs:group ref="authoring:note"/>
+        <xs:group ref="authoring:annotation"/>
+        <xs:group ref="authoring:aside"/>
+        <xs:element ref="authoring:caption"/>
+        <xs:element ref="authoring:verse"/>
+        <xs:element ref="authoring:description"/>
+        <xs:element ref="synthesis:break"/>
+        <xs:element ref="select:select"/>
+        <xs:element ref="xforms:group"/>
+        <xs:element ref="xforms:repeat"/>
+        <xs:element ref="d:description"/>
+        <xs:element ref="authoring:pagebreak"/>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute name="expr" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="otherwise">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element ref="authoring:hd"/>
+        <xs:group ref="authoring:block"/>
+        <xs:element ref="authoring:p"/>
+        <xs:element ref="authoring:transition"/>
+        <xs:element ref="authoring:list"/>
+        <xs:element ref="authoring:table"/>
+        <xs:element ref="authoring:code"/>
+        <xs:element ref="authoring:quote"/>
+        <xs:element ref="authoring:citation"/>
+        <xs:group ref="authoring:object"/>
+        <xs:element ref="authoring:address"/>
+        <xs:group ref="authoring:note"/>
+        <xs:group ref="authoring:annotation"/>
+        <xs:group ref="authoring:aside"/>
+        <xs:element ref="authoring:caption"/>
+        <xs:element ref="authoring:verse"/>
+        <xs:element ref="authoring:description"/>
+        <xs:element ref="synthesis:break"/>
+        <xs:element ref="select:select"/>
+        <xs:element ref="xforms:group"/>
+        <xs:element ref="xforms:repeat"/>
+        <xs:element ref="d:description"/>
+        <xs:element ref="authoring:pagebreak"/>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

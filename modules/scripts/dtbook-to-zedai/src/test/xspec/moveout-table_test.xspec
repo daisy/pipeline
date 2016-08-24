@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/moveout-table.xsl">
+    <x:scenario label="Definition with TABLE">
+        <x:context>
+            <book>
+                <tmp:item>
+                    <dt>data</dt>
+                    <dd>a term referring to numbers in tables: <table>
+                            <tbody>
+                                <tr>
+                                    <td>012345</td>
+                                </tr>
+                            </tbody>
+                        </table> Data is often sorted, compared, and accidentally deleted.</dd>
+                </tmp:item>
+            </book>
+        </x:context>
+        <x:expect label="">
+            <book>
+                <tmp:item>
+                    <dt>data</dt>
+                    <dd>a term referring to numbers in tables: </dd>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>012345</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <dd> Data is often sorted, compared, and accidentally deleted.</dd>
+                </tmp:item>
+            </book>
+        </x:expect>
+    </x:scenario>
+</x:description>

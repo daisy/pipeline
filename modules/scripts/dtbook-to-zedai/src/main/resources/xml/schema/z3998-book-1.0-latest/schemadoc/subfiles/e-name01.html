@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Schema Documentation: the name element</title>
+      <link href="../schemadoc.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+      <div class="top-banner">Schema Documentation - Book Profile<span class="titlesub"><br /> version 1.0</span></div>
+      <!--Used to have a nav box with link to toc, and prev/next element. Not
+						included yet-->
+      <h1>The <span class="element">name</span> element
+      </h1>
+      <div class="elementInformation">
+         <div class="element-toc-container"><strong>On this page:</strong><ul class="element-toc">
+               <li id="link-to-main-menu"><a href="../index.html">Back to<br /> main menu</a></li>
+               <li class="h2"><a href="#d140e23">Usage Example</a></li>
+               <li class="h2"><a href="#d140e27">Allowed parents</a></li>
+               <li class="h2"><a href="#d140e273">Allowed children</a></li>
+               <li class="h2"><a href="#d140e329">Content model and additional requirements</a></li>
+               <li class="h2"><a href="#d140e474">Namespace</a></li>
+               <li class="h2"><a href="#schemadoc-longdesc">Usage Details</a></li>
+            </ul>
+         </div>
+         <div class="element-coreinfo">
+            <div class="main-description">
+               <p class="description ">The 
+                  <code>name</code> element represents particular instances of names, places and things (proper nouns).
+                  
+               </p>
+               <p class="description ">The 
+                  <code>
+                     <a href="attributes.html#role11">role</a>
+                     </code> attribute optionally expresses the semantic nature of the proper noun. No implicit value is associated with the 
+                  <code>name</code> element.
+                  
+               </p>
+               <p class="longdesc-link">Usage details available in the <a href="#schemadoc-longdesc">Usage Details</a> section.
+               </p>
+            </div>
+            <h2 id="d140e23">Usage Example</h2><pre>    
+AFTER having been twice driven back by heavy south-western gales, Her Majesty's ship &lt;name&gt;Beagle&lt;/name&gt;, 
+a ten-gun brig, under the command of
+&lt;name role="personal-name"&gt;&lt;span role="name-title"&gt;Captain&lt;/span&gt; &lt;span role="family-name"&gt;Fitz Roy&lt;/span&gt;&lt;/name&gt; …
+    </pre><h2 id="d140e27">Allowed parents</h2>
+            <p><a class="element" href="e-address02.html">address</a>, 
+               <a class="element" href="e-annoref01.html">annoref</a>, 
+               <a class="element" href="e-annotation01.html">annotation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-annotation02.html">annotation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-annotation-xml01.html">m:annotation-xml</a>, 
+               <a class="element" href="e-aside02.html">aside (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-aside03.html">aside (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-block01.html">block</a>, 
+               <a class="element" href="e-caption01.html">caption</a>, 
+               <a class="element" href="e-citation01.html">citation (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-citation02.html">citation (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-d01.html">d</a>, 
+               <a class="element" href="e-definition01.html">definition</a>, 
+               <a class="element" href="e-description01.html">description (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-description02.html">description (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-emph01.html">emph</a>, 
+               <a class="element" href="e-entry01.html">entry (<span class="element-variant">toc</span> variant)</a>, 
+               <a class="element" href="e-entry02.html">entry (<span class="element-variant">index</span> variant)</a>, 
+               <a class="element" href="e-entry03.html">entry (<span class="element-variant">bibliography</span> variant)</a>, 
+               <a class="element" href="e-entry04.html">entry (<span class="element-variant">glossary</span> variant)</a>, 
+               <a class="element" href="e-expansion01.html">expansion</a>, 
+               <a class="element" href="e-group01.html">xforms:group</a>, 
+               <a class="element" href="e-h01.html">h</a>, 
+               <a class="element" href="e-hd01.html">hd</a>, 
+               <a class="element" href="e-hpart01.html">hpart</a>, 
+               <a class="element" href="e-item01.html">item</a>, 
+               <a class="element" href="e-label01.html">xforms:label</a>, 
+               <a class="element" href="e-ln02.html">ln</a>, 
+               <a class="element" href="e-longdesc01.html">d:longdesc</a>, 
+               <a class="element" href="e-meta01.html">meta</a>, 
+               <a class="element" href="e-note01.html">note (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-note02.html">note (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-noteref01.html">noteref</a>, 
+               <a class="element" href="e-object01.html">object (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-object02.html">object (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-otherwise02.html">sel:otherwise</a>, 
+               <a class="element" href="e-p01.html">p</a>, 
+               <a class="element" href="e-phoneme01.html">ssml:phoneme</a>, 
+               <a class="element" href="e-prosody01.html">ssml:prosody</a>, 
+               <a class="element" href="e-quote01.html">quote (<span class="element-variant">block</span> variant)</a>, 
+               <a class="element" href="e-quote02.html">quote (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-rb01.html">its:rb</a>, 
+               <a class="element" href="e-ref01.html">ref</a>, 
+               <a class="element" href="e-repeat01.html">xforms:repeat</a>, 
+               <a class="element" href="e-rt01.html">its:rt</a>, 
+               <a class="element" href="e-s01.html">s</a>, 
+               <a class="element" href="e-say-as01.html">ssml:say-as (<span class="element-variant">phrase</span> variant)</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as (<span class="element-variant">text</span> variant)</a>, 
+               <a class="element" href="e-simplifiedLanguageDescription01.html">d:simplifiedLanguageDescription</a>, 
+               <a class="element" href="e-span01.html">span</a>, 
+               <a class="element" href="e-spine01.html">spine</a>, 
+               <a class="element" href="e-sub02.html">ssml:sub</a>, 
+               <a class="element" href="e-summary01.html">d:summary</a>, 
+               <a class="element" href="e-td01.html">td</a>, 
+               <a class="element" href="e-term01.html">term</a>, 
+               <a class="element" href="e-th01.html">th</a>, 
+               <a class="element" href="e-tour01.html">d:tour</a> and 
+               <a class="element" href="e-when01.html">sel:when</a>
+               
+            </p>
+            <h2 id="d140e273">Allowed children</h2>
+            <p>This element <em>may</em> contain text.
+            </p>
+            <p>This element <em>may</em> contain the following children: <a class="element" href="e-abbr01.html">abbr</a>, 
+               <a class="element" href="e-break01.html">ssml:break</a>, 
+               <a class="element" href="e-char01.html">char</a>, 
+               <a class="element" href="e-emph02.html">emph</a>, 
+               <a class="element" href="e-object03.html">object</a>, 
+               <a class="element" href="e-phoneme02.html">ssml:phoneme</a>, 
+               <a class="element" href="e-prosody02.html">ssml:prosody</a>, 
+               <a class="element" href="e-ruby01.html">its:ruby</a>, 
+               <a class="element" href="e-say-as02.html">ssml:say-as</a>, 
+               <a class="element" href="e-span02.html">span</a>, 
+               <a class="element" href="e-sub01.html">sub</a>, 
+               <a class="element" href="e-sub03.html">ssml:sub</a>, 
+               <a class="element" href="e-sup01.html">sup</a> and 
+               <a class="element" href="e-token02.html">ssml:token</a>
+               
+            </p>
+            <h2 id="d140e329">Content model and additional requirements</h2>
+            <div class="element-content-model">
+               <div class="rng-optional-attributes">optional attributes: <a class="attribute" href="attributes.html#about01">@about</a>, 
+                  <a class="attribute" href="attributes.html#by01">@by</a>, 
+                  <a class="attribute" href="attributes.html#class01">@class</a>, 
+                  <a class="attribute" href="attributes.html#content01">@content</a>, 
+                  <a class="attribute" href="attributes.html#datatype01">@datatype</a>, 
+                  <a class="attribute" href="attributes.html#desc01">@desc</a>, 
+                  <a class="attribute" href="attributes.html#dir01">@its:dir</a>, 
+                  <a class="attribute" href="attributes.html#translate01">@its:translate</a>, 
+                  <a class="attribute" href="attributes.html#property01">@property</a>, 
+                  <a class="attribute" href="attributes.html#rel01">@rel</a>, 
+                  <a class="attribute" href="attributes.html#resource01">@resource</a>, 
+                  <a class="attribute" href="attributes.html#rev01">@rev</a>, 
+                  <a class="attribute" href="attributes.html#role09">@role</a>, 
+                  <a class="attribute" href="attributes.html#selid01">@sel:selid</a>, 
+                  <a class="attribute" href="attributes.html#onlangfailure01">@ssml:onlangfailure</a>, 
+                  <a class="attribute" href="attributes.html#typeof01">@typeof</a>, 
+                  <a class="attribute" href="attributes.html#base01">@xml:base</a>, 
+                  <a class="attribute" href="attributes.html#id01">@xml:id</a>, 
+                  <a class="attribute" href="attributes.html#lang01">@xml:lang</a> and 
+                  <a class="attribute" href="attributes.html#space01">@xml:space</a></div>
+               <div class="rng"><span class="rng-term">optionally the following 2 co-ocurring attributes: </span><a class="attribute" href="attributes.html#alphabet02">@ssml:alphabet</a> and <a class="attribute" href="attributes.html#ph02">@ssml:ph</a></div>
+               <div class="rng"><span class="rng-term">one or more of </span>
+                  
+                  <div class="rng"><span class="tng-term">a choice of </span><div class="rng">either one of the 15 elements: <a class="element" href="e-abbr01.html">abbr</a>, <a class="element" href="e-char01.html">char</a>, <a class="element" href="e-emph02.html">emph</a>, <a class="element" href="e-ruby01.html">its:ruby</a>, <a class="element" href="e-object03.html">object</a>, <a class="element" href="e-span02.html">span</a>, <a class="element" href="e-span02.html">span</a>, <a class="element" href="e-break01.html">ssml:break</a>, <a class="element" href="e-phoneme02.html">ssml:phoneme</a>, <a class="element" href="e-prosody02.html">ssml:prosody</a>, <a class="element" href="e-say-as02.html">ssml:say-as</a>, <a class="element" href="e-sub03.html">ssml:sub</a>, <a class="element" href="e-token02.html">ssml:token</a>, <a class="element" href="e-sub01.html">sub</a> or <a class="element" href="e-sup01.html">sup</a></div>
+                     <div class="rng">or text</div><span class="tng-term">end of choice</span></div>
+                  
+               </div>
+               <div class="schematron-asserts-and-reports">Note that in addition to restrictions presented in the content model  above, 
+                  					use of this element must also respect the following requirement:
+                  <ul>
+                     <li>The 
+                        <code>name</code> element must neither be empty nor contain only whitespace.
+                        
+                     </li>
+                  </ul>
+                  <div>Such requirements take precedence over any conflicting statements in the
+                     						content model or in the lists above of allowed children and parents.
+                  </div>
+               </div>
+            </div>
+            <h2 id="d140e474">Namespace</h2>
+            <p><span class="namespace">http://www.daisy.org/ns/z3998/authoring/</span></p>
+            <h2 id="schemadoc-longdesc">Usage Details</h2>
+            
+            <h4 id="d140e483">Personal name markup</h4>
+            
+            <p>In order to specify that a 
+               <code>name</code> represents a personal name, the 
+               <a href="http://www.daisy.org/z3998/2012/vocab/structure/#personal-name">personal-name</a> property from the Z39.98 Structural Semantics Vocabulary is used. 
+               
+            </p>
+            
+            <p>The Z39.98 Structural Semantics Vocabulary further contains a set of properties related to 
+               <a href="http://www.daisy.org/z3998/2012/vocab/structure/#names">name components</a>, supporting the representation of honorary titles, given and family names. The following example shows how to represent three
+               typical components of a personal name: 
+               
+            </p>
+            
+            <div>
+               <pre xml:space="preserve">
+            &lt;name role="personal-name"&gt;                
+                &lt;span role="given-name"&gt;CHARLES&lt;/span&gt;
+                &lt;span role="family-name"&gt;DARWIN&lt;/span&gt;,
+                &lt;span role="name-title"&gt;ESQ&lt;/span&gt;
+            &lt;/name&gt;
+        </pre>
+               </div>
+            
+            <p>(Note also that the name components in the Z39.98 Structural Semantics Vocabulary are explicitly equivalent to properties
+               in the 
+               <a href="http://www.foaf-project.org">FOAF</a> vocabulary.) 
+               
+            </p>
+            
+            <h4 id="d140e514">Proper noun markup</h4>
+            
+            <p>The 
+               <code>name</code> element can be used to represent any proper noun, for example for: 
+               
+            </p>
+            
+            <ul>
+               
+               <li>
+                  
+                  <p>Places</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+                    this tendency has been found incurable in dogs which have been brought home as 
+                    puppies from countries, such as &lt;name role="place"&gt;Tierra del Fuego&lt;/name&gt; …
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Nationalities</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+                    What &lt;name role="nationality"&gt;English&lt;/name&gt; breeders have actually effected is 
+                    proved by the enormous prices given for animals with a good pedigree …
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Organizations</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+                    I have associated with several eminent fanciers, and have been permitted to join two
+                    of the &lt;name role="organization"&gt;London Pigeon Clubs&lt;/name&gt;.
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Taxonomic Classifications</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+                    I am fully convinced that the common opinion of naturalists is correct, namely, 
+                    that all have descended from the rock-pigeon (&lt;name role="taxonomy"&gt;Columba livia&lt;/name&gt;) …
+                </pre>
+                     </div>
+                  
+               </li>
+               
+               <li>
+                  
+                  <p>Events</p>
+                  
+                  <div>
+                     <pre xml:space="preserve">
+                    so that the latter, by the regulations for the &lt;name role="event"&gt;Goodwood Races&lt;/name&gt;, 
+                    are favoured in the weights they carry …
+                </pre>
+                     </div>
+                  
+               </li>
+               
+            </ul>
+            
+            <p> The above example are not meant to present an exhaustive listing of proper nouns, or all available values for specifying.
+               Where a role value is not available and necessary for a document type, the inherent extensibility of the 
+               <code>role</code> attribute can be extended to accommodate. 
+               
+            </p>
+            
+         </div>
+      </div>
+   </body>
+</html>

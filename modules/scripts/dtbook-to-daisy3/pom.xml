@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.2</version>
+    <relativePath />
+  </parent>
+
+  <artifactId>dtbook-to-daisy3</artifactId>
+  <version>2.1.0-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: DTBook to DAISY 3</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-jdk14</artifactId>
+      <version>1.7.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>pax-exam-helper</artifactId>
+      <scope>test</scope>
+      <version>1.8-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xproc-api</artifactId>
+      <scope>test</scope>
+      <version>2.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>xmlunit</groupId>
+      <artifactId>xmlunit</artifactId>
+      <version>1.5</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.servicemix.bundles</groupId>
+      <artifactId>org.apache.servicemix.bundles.commons-io</artifactId>
+      <version>1.4_3</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- uncomment the following dependency to get the tests working with Eclipse -->
+    <!-- <dependency> -->
+    <!--   <groupId>org.daisy.libs</groupId> -->
+    <!--   <artifactId>zedval-osgi</artifactId> -->
+    <!--   <version>2.1</version> -->
+    <!--   <scope>test</scope> -->
+    <!-- </dependency> -->
+  </dependencies>
+
+  <properties>
+    <dependencies.dir>${project.build.directory}/deps</dependencies.dir>
+  </properties>
+
+  <!-- allow us to use .versionAsInProject() -->
+  <build>
+    <plugins>
+      <plugin>
+	<groupId>org.apache.servicemix.tooling</groupId>
+	<artifactId>depends-maven-plugin</artifactId>
+	<version>1.2</version>
+	<executions>
+	  <execution>
+	    <id>generate-depends-file</id>
+	    <goals>
+	      <goal>generate-depends-file</goal>
+	    </goals>
+	  </execution>
+	</executions>
+      </plugin>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-surefire-plugin</artifactId>
+	<version>2.17</version>
+	<configuration>
+	  <systemPropertyVariables>
+	    <dependencies.dir>${dependencies.dir}</dependencies.dir>
+	    <target.dir>${project.build.directory}</target.dir>
+	  </systemPropertyVariables>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <activation>
+	<activeByDefault>true</activeByDefault>
+      </activation>
+      <id>notester</id>
+      <properties>
+	<maven.test.skip>true</maven.test.skip>
+      </properties>
+    </profile>
+    <profile>
+      <id>tester</id>
+      <!-- The two following dependencies must be installed before running this profile -->
+      <dependencies>
+	<dependency>
+	  <groupId>org.daisy.libs</groupId>
+	  <artifactId>jaxp-standalone</artifactId>
+	  <version>1.4.2</version>
+	  <scope>test</scope>
+	</dependency>
+	<dependency>
+	  <groupId>org.daisy.libs</groupId>
+	  <artifactId>zedval-osgi</artifactId>
+	  <version>2.1</version>
+	  <scope>test</scope>
+	</dependency>
+      </dependencies>
+      <build>
+	<plugins>
+	  <!-- Copy the dependencies so we can put them in the classpath if necessary -->
+	  <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-dependency-plugin</artifactId>
+	    <version>2.9</version>
+	    <executions>
+	      <execution>
+		<id>copy-dependencies</id>
+		<phase>process-test-resources</phase>
+		<goals>
+		  <goal>copy-dependencies</goal>
+		</goals>
+		<configuration>
+		  <outputDirectory>${dependencies.dir}</outputDirectory>
+		  <excludeTransitive>true</excludeTransitive>
+		</configuration>
+	      </execution>
+	    </executions>
+	  </plugin>
+	</plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

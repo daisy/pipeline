@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+   <body id="mo1">
+      <par xmlns:epub="http://www.idpf.org/2007/ops"
+           epub:type="title"
+           id="mo1_par1">
+         <text src="content.xhtml#h1classtitle" id="mo1_par1_text"/>
+         <audio clipBegin="0s"
+                clipEnd="2.658s"
+                id="mo1_par1_audio"
+                src="speechgen0001.mp3"/>
+      </par>
+      <par id="mo1_par2">
+         <text src="content.xhtml#dtb1" id="mo1_par2_text"/>
+         <audio clipBegin="0s"
+                clipEnd="2.658s"
+                id="mo1_par2_audio"
+                src="speechgen0001.mp3"/>
+      </par>
+      <par id="mo1_par3">
+         <text src="content.xhtml#dtb2" id="mo1_par3_text"/>
+         <audio clipBegin="2.658s"
+                clipEnd="6.163s"
+                id="mo1_par3_audio"
+                src="speechgen0001.mp3"/>
+      </par>
+      <par id="mo1_par4">
+         <text src="content.xhtml#dtb3" id="mo1_par4_text"/>
+         <audio clipBegin="6.163s"
+                clipEnd="8.497s"
+                id="mo1_par4_audio"
+                src="speechgen0001.mp3"/>
+      </par>
+      <par id="mo1_par5">
+         <text src="content.xhtml#dtb4" id="mo1_par5_text"/>
+         <audio clipBegin="8.497s"
+                clipEnd="11.746s"
+                id="mo1_par5_audio"
+                src="speechgen0001.mp3"/>
+      </par>
+      <par id="mo1_par6">
+         <text src="content.xhtml#dtb5" id="mo1_par6_text"/>
+         <audio clipBegin="11.746s"
+                clipEnd="14.291s"
+                id="mo1_par6_audio"
+                src="speechgen0001.mp3"/>
+      </par>
+      <par id="mo1_par7">
+         <text src="content.xhtml#dtb6" id="mo1_par7_text"/>
+         <audio clipBegin="14.291s"
+                clipEnd="19.115s"
+                id="mo1_par7_audio"
+                src="speechgen0001.mp3"/>
+      </par>
+      <par id="mo1_par8">
+         <text src="content.xhtml#dtb7" id="mo1_par8_text"/>
+         <audio clipBegin="0s"
+                clipEnd="2.197s"
+                id="mo1_par8_audio"
+                src="speechgen0002.mp3"/>
+      </par>
+      <par id="mo1_par9">
+         <text src="content.xhtml#dtb8" id="mo1_par9_text"/>
+         <audio clipBegin="2.197s"
+                clipEnd="4.428s"
+                id="mo1_par9_audio"
+                src="speechgen0002.mp3"/>
+      </par>
+      <par id="mo1_par10">
+         <text src="content.xhtml#dtb9" id="mo1_par10_text"/>
+         <audio clipBegin="4.428s"
+                clipEnd="6.657s"
+                id="mo1_par10_audio"
+                src="speechgen0002.mp3"/>
+      </par>
+      <par xmlns:epub="http://www.idpf.org/2007/ops"
+           epub:type="noteref"
+           id="mo1_par11">
+         <text src="content.xhtml#dtb10" id="mo1_par11_text"/>
+         <audio clipBegin="6.657s"
+                clipEnd="7.592s"
+                id="mo1_par11_audio"
+                src="speechgen0002.mp3"/>
+      </par>
+      <par id="mo1_par12">
+         <text src="content.xhtml#dtb11" id="mo1_par12_text"/>
+         <audio clipBegin="7.592s"
+                clipEnd="8.795s"
+                id="mo1_par12_audio"
+                src="speechgen0002.mp3"/>
+      </par>
+      <par id="mo1_par13">
+         <text src="content.xhtml#dtb12" id="mo1_par13_text"/>
+         <audio clipBegin="8.795s"
+                clipEnd="10.526s"
+                id="mo1_par13_audio"
+                src="speechgen0002.mp3"/>
+      </par>
+      <par id="mo1_par14">
+         <text src="content.xhtml#dtb13" id="mo1_par14_text"/>
+         <audio clipBegin="10.526s"
+                clipEnd="13.08s"
+                id="mo1_par14_audio"
+                src="speechgen0002.mp3"/>
+      </par>
+      <par id="mo1_par15">
+         <text src="content.xhtml#dtb14" id="mo1_par15_text"/>
+         <audio clipBegin="13.08s"
+                clipEnd="15.235s"
+                id="mo1_par15_audio"
+                src="speechgen0002.mp3"/>
+      </par>
+      <par id="mo1_par16">
+         <text src="content.xhtml#dtb15" id="mo1_par16_text"/>
+         <audio clipBegin="15.235s"
+                clipEnd="19.293s"
+                id="mo1_par16_audio"
+                src="speechgen0002.mp3"/>
+      </par>
+      <par id="mo1_par17">
+         <text src="content.xhtml#dtb16" id="mo1_par17_text"/>
+         <audio clipBegin="0s"
+                clipEnd="3.191s"
+                id="mo1_par17_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par18">
+         <text src="content.xhtml#dtb17" id="mo1_par18_text"/>
+         <audio clipBegin="3.191s"
+                clipEnd="5.879s"
+                id="mo1_par18_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par19">
+         <text src="content.xhtml#dtb18" id="mo1_par19_text"/>
+         <audio clipBegin="5.879s"
+                clipEnd="8.381s"
+                id="mo1_par19_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par20">
+         <text src="content.xhtml#dtb19" id="mo1_par20_text"/>
+         <audio clipBegin="8.381s"
+                clipEnd="10.439s"
+                id="mo1_par20_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par21">
+         <text src="content.xhtml#dtb20" id="mo1_par21_text"/>
+         <audio clipBegin="10.439s"
+                clipEnd="12.967s"
+                id="mo1_par21_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par xmlns:epub="http://www.idpf.org/2007/ops"
+           epub:type="noteref"
+           id="mo1_par22">
+         <text src="content.xhtml#dtb21" id="mo1_par22_text"/>
+         <audio clipBegin="12.967s"
+                clipEnd="14.093s"
+                id="mo1_par22_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par23">
+         <text src="content.xhtml#dtb22" id="mo1_par23_text"/>
+         <audio clipBegin="14.093s"
+                clipEnd="16.172s"
+                id="mo1_par23_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par24">
+         <text src="content.xhtml#dtb23" id="mo1_par24_text"/>
+         <audio clipBegin="16.172s"
+                clipEnd="18.23s"
+                id="mo1_par24_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par25">
+         <text src="content.xhtml#dtb24" id="mo1_par25_text"/>
+         <audio clipBegin="18.23s"
+                clipEnd="20.192s"
+                id="mo1_par25_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par26">
+         <text src="content.xhtml#dtb25" id="mo1_par26_text"/>
+         <audio clipBegin="20.192s"
+                clipEnd="22.25s"
+                id="mo1_par26_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par27">
+         <text src="content.xhtml#dtb26" id="mo1_par27_text"/>
+         <audio clipBegin="22.25s"
+                clipEnd="24.582s"
+                id="mo1_par27_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par28">
+         <text src="content.xhtml#dtb27" id="mo1_par28_text"/>
+         <audio clipBegin="24.582s"
+                clipEnd="26.585s"
+                id="mo1_par28_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par29">
+         <text src="content.xhtml#dtb28" id="mo1_par29_text"/>
+         <audio clipBegin="26.585s"
+                clipEnd="28.144s"
+                id="mo1_par29_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par30">
+         <text src="content.xhtml#dtb29" id="mo1_par30_text"/>
+         <audio clipBegin="28.144s"
+                clipEnd="32.202s"
+                id="mo1_par30_audio"
+                src="speechgen0003.mp3"/>
+      </par>
+      <par id="mo1_par31">
+         <text src="content.xhtml#dtb30" id="mo1_par31_text"/>
+         <audio clipBegin="0s"
+                clipEnd="2.49s"
+                id="mo1_par31_audio"
+                src="speechgen0004.mp3"/>
+      </par>
+      <par id="mo1_par32">
+         <text src="content.xhtml#dtb31" id="mo1_par32_text"/>
+         <audio clipBegin="2.49s"
+                clipEnd="6.021s"
+                id="mo1_par32_audio"
+                src="speechgen0004.mp3"/>
+      </par>
+      <par id="mo1_par33">
+         <text src="content.xhtml#dtb32" id="mo1_par33_text"/>
+         <audio clipBegin="6.021s"
+                clipEnd="8.948s"
+                id="mo1_par33_audio"
+                src="speechgen0004.mp3"/>
+      </par>
+      <par id="mo1_par34">
+         <text src="content.xhtml#dtb33" id="mo1_par34_text"/>
+         <audio clipBegin="8.948s"
+                clipEnd="10.897s"
+                id="mo1_par34_audio"
+                src="speechgen0004.mp3"/>
+      </par>
+      <par id="mo1_par35">
+         <text src="content.xhtml#dtb34" id="mo1_par35_text"/>
+         <audio clipBegin="10.897s"
+                clipEnd="12.537s"
+                id="mo1_par35_audio"
+                src="speechgen0004.mp3"/>
+      </par>
+      <par id="mo1_par36">
+         <text src="content.xhtml#dtb35" id="mo1_par36_text"/>
+         <audio clipBegin="12.537s"
+                clipEnd="14.591s"
+                id="mo1_par36_audio"
+                src="speechgen0004.mp3"/>
+      </par>
+      <par id="mo1_par37">
+         <text src="content.xhtml#dtb36" id="mo1_par37_text"/>
+         <audio clipBegin="14.591s"
+                clipEnd="17.288s"
+                id="mo1_par37_audio"
+                src="speechgen0004.mp3"/>
+      </par>
+      <par id="mo1_par38">
+         <text src="content.xhtml#dtb37" id="mo1_par38_text"/>
+         <audio clipBegin="17.288s"
+                clipEnd="22.143s"
+                id="mo1_par38_audio"
+                src="speechgen0004.mp3"/>
+      </par>
+      <par id="mo1_par39">
+         <text src="content.xhtml#dtb38" id="mo1_par39_text"/>
+         <audio clipBegin="0s"
+                clipEnd="2.105s"
+                id="mo1_par39_audio"
+                src="speechgen0005.mp3"/>
+      </par>
+      <par id="mo1_par40">
+         <text src="content.xhtml#dtb39" id="mo1_par40_text"/>
+         <audio clipBegin="2.105s"
+                clipEnd="4.471s"
+                id="mo1_par40_audio"
+                src="speechgen0005.mp3"/>
+      </par>
+      <par id="mo1_par41">
+         <text src="content.xhtml#dtb40" id="mo1_par41_text"/>
+         <audio clipBegin="4.471s"
+                clipEnd="6.978s"
+                id="mo1_par41_audio"
+                src="speechgen0005.mp3"/>
+      </par>
+      <par id="mo1_par42">
+         <text src="content.xhtml#dtb41" id="mo1_par42_text"/>
+         <audio clipBegin="6.978s"
+                clipEnd="8.996s"
+                id="mo1_par42_audio"
+                src="speechgen0005.mp3"/>
+      </par>
+      <par id="mo1_par43">
+         <text src="content.xhtml#dtb42" id="mo1_par43_text"/>
+         <audio clipBegin="8.996s"
+                clipEnd="11.054s"
+                id="mo1_par43_audio"
+                src="speechgen0005.mp3"/>
+      </par>
+      <par id="mo1_par44">
+         <text src="content.xhtml#dtb43" id="mo1_par44_text"/>
+         <audio clipBegin="11.054s"
+                clipEnd="13.211s"
+                id="mo1_par44_audio"
+                src="speechgen0005.mp3"/>
+      </par>
+      <par id="mo1_par45">
+         <text src="content.xhtml#dtb44" id="mo1_par45_text"/>
+         <audio clipBegin="13.211s"
+                clipEnd="15.661s"
+                id="mo1_par45_audio"
+                src="speechgen0005.mp3"/>
+      </par>
+      <par id="mo1_par46">
+         <text src="content.xhtml#dtb45" id="mo1_par46_text"/>
+         <audio clipBegin="15.661s"
+                clipEnd="17.158s"
+                id="mo1_par46_audio"
+                src="speechgen0005.mp3"/>
+      </par>
+      <par id="mo1_par47">
+         <text src="content.xhtml#dtb46" id="mo1_par47_text"/>
+         <audio clipBegin="17.158s"
+                clipEnd="20.63s"
+                id="mo1_par47_audio"
+                src="speechgen0005.mp3"/>
+      </par>
+      <par id="mo1_par48">
+         <text src="content.xhtml#dtb47" id="mo1_par48_text"/>
+         <audio clipBegin="0s"
+                clipEnd="2.817s"
+                id="mo1_par48_audio"
+                src="speechgen0006.mp3"/>
+      </par>
+      <par id="mo1_par49">
+         <text src="content.xhtml#dtb48" id="mo1_par49_text"/>
+         <audio clipBegin="2.817s"
+                clipEnd="4.875s"
+                id="mo1_par49_audio"
+                src="speechgen0006.mp3"/>
+      </par>
+      <par id="mo1_par50">
+         <text src="content.xhtml#dtb49" id="mo1_par50_text"/>
+         <audio clipBegin="4.875s"
+                clipEnd="7.487s"
+                id="mo1_par50_audio"
+                src="speechgen0006.mp3"/>
+      </par>
+      <par id="mo1_par51">
+         <text src="content.xhtml#dtb50" id="mo1_par51_text"/>
+         <audio clipBegin="7.487s"
+                clipEnd="9.777s"
+                id="mo1_par51_audio"
+                src="speechgen0006.mp3"/>
+      </par>
+      <par id="mo1_par52">
+         <text src="content.xhtml#dtb51" id="mo1_par52_text"/>
+         <audio clipBegin="9.777s"
+                clipEnd="12.4s"
+                id="mo1_par52_audio"
+                src="speechgen0006.mp3"/>
+      </par>
+      <par id="mo1_par53">
+         <text src="content.xhtml#dtb52" id="mo1_par53_text"/>
+         <audio clipBegin="12.4s"
+                clipEnd="15.184s"
+                id="mo1_par53_audio"
+                src="speechgen0006.mp3"/>
+      </par>
+      <par id="mo1_par54">
+         <text src="content.xhtml#dtb53" id="mo1_par54_text"/>
+         <audio clipBegin="15.184s"
+                clipEnd="16.602s"
+                id="mo1_par54_audio"
+                src="speechgen0006.mp3"/>
+      </par>
+      <par id="mo1_par55">
+         <text src="content.xhtml#dtb54" id="mo1_par55_text"/>
+         <audio clipBegin="16.602s"
+                clipEnd="20.66s"
+                id="mo1_par55_audio"
+                src="speechgen0006.mp3"/>
+      </par>
+      <par id="mo1_par56">
+         <text src="content.xhtml#dtb55" id="mo1_par56_text"/>
+         <audio clipBegin="0s"
+                clipEnd="1.629s"
+                id="mo1_par56_audio"
+                src="speechgen0007.mp3"/>
+      </par>
+      <par id="mo1_par57">
+         <text src="content.xhtml#fn1" id="mo1_par57_text"/>
+         <audio clipBegin="1.629s"
+                clipEnd="11.237s"
+                id="mo1_par57_audio"
+                src="speechgen0007.mp3"/>
+      </par>
+      <par id="mo1_par58">
+         <text src="content.xhtml#fn2" id="mo1_par58_text"/>
+         <audio clipBegin="11.237s"
+                clipEnd="23.325s"
+                id="mo1_par58_audio"
+                src="speechgen0007.mp3"/>
+      </par>
+   </body>
+</smil>

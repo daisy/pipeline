@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- d202msmil.dtd m gylling version 2002-12-22
+NOT DONE
+catalog:: -//DAISY//RNG msmil v2.02//EN
+-->
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <a:documentation>
+    d202msmil.rng
+    This file is part of the RelaxNG/Schematron validation
+    suite for Daisy 2.02. All Schematron assertion strings
+    can be identifier by the intitial part of the string 
+    being: '[sch][dtb::d202][type::warning|error][msg::'.
+    Last edit by: mgylling 2006-09-02
+  </a:documentation>
+  
+  <define name="URI">
+    <data type="string" datatypeLibrary=""/>
+  </define>
+  <!-- [RFC2396] -->
+  <define name="smil">
+    <element name="smil">
+      <ref name="attlist.smil"/>
+      <ref name="head"/>
+      <ref name="body"/>
+    </element>
+  </define>
+  <define name="attlist.smil" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+  </define>
+  <!-- =============== h e a d ================ -->
+  <define name="head">
+    <element name="head">
+      <ref name="attlist.head"/>
+      <optional>
+        <zeroOrMore>
+          <ref name="meta"/>
+        </zeroOrMore>
+        <group>
+          <ref name="layout"/>
+          <zeroOrMore>
+            <ref name="meta"/>
+          </zeroOrMore>
+        </group>
+      </optional>
+    </element>
+  </define>
+  <define name="attlist.head" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="meta">
+    <element name="meta">
+      <ref name="attlist.meta"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="attlist.meta" combine="interleave">
+    <attribute name="name">
+      <data type="NMTOKEN"/>
+    </attribute>
+    <attribute name="content"/>
+  </define>
+  <define name="layout">
+    <element name="layout">
+      <ref name="attlist.layout"/>
+      <ref name="region"/>
+    </element>
+  </define>
+  <define name="attlist.layout" combine="interleave">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+  </define>
+  <define name="region">
+    <element name="region">
+      <ref name="attlist.region"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="attlist.region" combine="interleave">
+    <attribute name="id">
+      <data type="ID"/>
+    </attribute>
+  </define>
+  <!-- =============== b o d y ================ -->
+  <define name="body">
+    <element name="body">
+      <ref name="attlist.body"/>
+      <oneOrMore>
+        <ref name="ref"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="attlist.body" combine="interleave">
+    <empty/>
+  </define>
+  <define name="ref">
+    <element name="ref">
+      <ref name="attlist.ref"/>
+      <empty/>
+    </element>
+  </define>
+  <define name="attlist.ref" combine="interleave">
+    <attribute name="id">
+      <data type="ID"/>
+    </attribute>
+    <optional>
+      <attribute name="title"/>
+    </optional>
+    <attribute name="src">
+      <ref name="URI"/>
+    </attribute>
+  </define>
+  <start>
+    <choice>
+      <ref name="smil"/>
+    </choice>
+  </start>
+</grammar>

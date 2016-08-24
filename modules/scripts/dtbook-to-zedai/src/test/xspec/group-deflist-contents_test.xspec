@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/group-deflist-contents.xsl">
+    <x:scenario label="Simple definition list">
+        <x:context>
+            <dl>
+                <dt>DT-A</dt>
+                <dd>DD-A</dd>
+                <dt>DT-B</dt>
+                <dd>DD-B</dd>
+                <dt>DT-C</dt>
+                <dd>DD-C</dd>
+            </dl>
+        </x:context>
+        <x:expect label="term/definition pairs are grouped">
+            <dl>
+                <tmp:item>
+                    <dt>DT-A</dt>
+                    <dd>DD-A</dd>
+                </tmp:item>
+                <tmp:item>
+                    <dt>DT-B</dt>
+                    <dd>DD-B</dd>
+                </tmp:item>
+                <tmp:item>
+                    <dt>DT-C</dt>
+                    <dd>DD-C</dd>
+                </tmp:item>
+            </dl>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Minimal definition list with only a term">
+        <x:context>
+            <dl>
+                <dt>term</dt>
+            </dl>
+        </x:context>
+        <x:expect label="term/definition pairs are grouped">
+            <dl>
+                <tmp:item>
+                    <dt>term</dt>
+                </tmp:item>
+            </dl>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Minimal definition list with only a definition">
+        <x:context>
+            <dl>
+                <dd>definition</dd>
+            </dl>
+        </x:context>
+        <x:expect label="term/definition pairs are grouped">
+            <dl>
+                <tmp:item>
+                    <dd>definition</dd>
+                </tmp:item>
+            </dl>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Mixed definition list">
+        <x:context>
+            <dl>
+                <dd>DD-A</dd>
+                <dt>DT-B</dt>
+                <dt>DT-C</dt>
+                <dd>DD-C-1</dd>
+                <dd>DD-C-2</dd>
+                <dt>DT-D</dt>
+                <dt>DT-E</dt>
+                <dd>DD-E</dd>
+            </dl>
+        </x:context>
+        <x:expect label="term/definition pairs are grouped">
+            <dl>
+                <tmp:item>
+                    <dd>DD-A</dd>
+                </tmp:item>
+                <tmp:item>
+                    <dt>DT-B</dt>
+                </tmp:item>
+                <tmp:item>
+                    <dt>DT-C</dt>
+                    <dd>DD-C-1</dd>
+                    <dd>DD-C-2</dd>
+                </tmp:item>
+                <tmp:item>
+                    <dt>DT-D</dt>
+                </tmp:item>
+                <tmp:item>
+                    <dt>DT-E</dt>
+                    <dd>DD-E</dd>
+                </tmp:item>
+            </dl>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Nested definition lists">
+        <x:context>
+            <dl>
+                <dt>term</dt>
+                <dd>definition <dl>
+                        <dt>nested term</dt>
+                        <dd>nested definition</dd>
+                    </dl>
+                </dd>
+            </dl>
+        </x:context>
+        <x:expect label="term/definition pairs are grouped">
+            <dl>
+                <tmp:item>
+                    <dt>term</dt>
+                    <dd>definition <dl>
+                            <tmp:item>
+                                <dt>nested term</dt>
+                                <dd>nested definition</dd>
+                            </tmp:item>
+                        </dl>
+                    </dd>
+                </tmp:item>
+            </dl>
+        </x:expect>
+    </x:scenario>
+</x:description>

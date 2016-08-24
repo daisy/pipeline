@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:z="http://www.daisy.org/ns/z3998/annotations/#"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink">
+    <info xmlns="http://docbook.org/ns/docbook" xml:lang="en">
+        <title>The by module </title>
+        <annotation annotates="/">
+            <para>This module defines the by attribute for identifying the contributor of an element. </para>
+        </annotation>
+        <author>
+            <personname>Markus Gylling</personname>
+            <email>mgylling@daisy.org</email>
+        </author>
+        <copyright>
+            <year>2009</year>
+            <year>2010</year>
+            <year>2011</year>
+            <year>2012</year>
+            <holder>DAISY Consortium</holder>
+        </copyright>
+        <legalnotice>
+            <para>This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                <link xlink:href="http://creativecommons.org/licenses/by/3.0/">http://creativecommons.org/licenses/by/3.0/</link>
+            </para>
+            <para>For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                <link xlink:href="http://www.daisy.org">www.daisy.org</link>
+            </para>
+        </legalnotice>
+        <revhistory>
+            <revision>
+                <date>2012-12-19</date>
+                <authorinitials>MGy</authorinitials>
+                <revdescription>
+                    <para>Initial version</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </info>
+    <div>
+        <define name="z3998.by.attrib">
+            <attribute name="by">
+                <a:documentation>The by attribute expresses the contributor of an element to the document source, such as the author, editor, a republisher, etc. The by attribute allows a single CURIE as its value, which must be bound to an RDF property using the mechanism defined in CURIE . All descendants of an element that declares a by attribute value implicitly inherit that value. In the absence of an expressed relationship, the implicit value author is assumed. </a:documentation>
+                <ref name="z3998.by.attrib.content"/>
+            </attribute>
+        </define>
+        <define name="z3998.by.attrib.content" combine="choice">
+            <list>
+                <oneOrMore>
+                    <ref name="z3998.by.attrib.role.attrib.content.enum"/>
+                </oneOrMore>
+            </list>
+        </define>
+        <define name="z3998.by.attrib.role.attrib.content.enum" combine="choice">
+            <ref name="CURIE.datatype"/>
+        </define>
+    </div>
+    <div>
+        <a:documentation>Z39.98 by module - default content model contribution </a:documentation>
+        <define name="z3998.global.core.attrib" combine="interleave">
+            <optional>
+                <ref name="z3998.by.attrib"/>
+            </optional>
+        </define>
+    </div>
+</grammar>

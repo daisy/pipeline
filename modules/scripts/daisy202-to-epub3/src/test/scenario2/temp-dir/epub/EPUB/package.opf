@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+                <package xmlns="http://www.idpf.org/2007/opf"
+         version="3.0"
+         unique-identifier="pub-id">
+   <metadata>
+      <dc:identifier xmlns:dc="http://purl.org/dc/elements/1.1/" id="pub-id">F00000</dc:identifier>
+      <meta property="dcterms:modified">2013-06-02T17:44:01Z</meta>
+      <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/" id="title">Don't Worry, Be Happy Lyrics</dc:title>
+      <dc:language xmlns:dc="http://purl.org/dc/elements/1.1/">en-US</dc:language>
+      <dc:date xmlns:dc="http://purl.org/dc/elements/1.1/" id="date">2007-05-21</dc:date>
+      <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">EPUB3</dc:format>
+      <dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">Bobby McFerrin</dc:creator>
+      <dc:publisher xmlns:dc="http://purl.org/dc/elements/1.1/">Ferrin press</dc:publisher>
+      <dc:contributor xmlns:dc="http://purl.org/dc/elements/1.1/" id="d2267e56">Inläst med talsyntes.</dc:contributor>
+      <meta scheme="marc:relators" property="role" refines="#d2267e56">nrt</meta>
+   </metadata>
+   <manifest>
+      <item id="item_1"
+            media-type="application/xhtml+xml"
+            href="Content/content.xhtml"/>
+      <item properties="nav"
+            id="item_2"
+            media-type="application/xhtml+xml"
+            href="Content/ncc.xhtml"/>
+      <item id="item_3" media-type="text/css" href="Content/default.css"/>
+   </manifest>
+   <spine>
+      <itemref idref="item_1" id="itemref_1"/>
+   </spine>
+</package>
+            

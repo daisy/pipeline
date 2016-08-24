@@ -1,0 +1,96 @@
+/* ----------------------------- STYLESHEET DAISY 2.02 FULLTEXT ---------------------- */
+
+
+
+/* --- BODY - GENERAL STYLING --- */
+body {font-family: arial, helvetica, verdana, sans-serif; margin-left: 10%; margin-right: 10%;}
+
+* a {color: #000000; text-decoration: none;}
+a:hover, a:active, a:focus {text-decoration : none; color : #CC3333; background-color: #FFFFCC;}
+
+
+/* --- DIV FRONTMATTER --- */
+*.docauthor {font-size: 140%; display: block; font-family: arial, verdana, sans-serif; font-weight: normal; margin-top: 2em;}
+
+span.subTitle {font-size: 50%; display: block; margin-top: 1em;}
+
+span.author {font-size: 140%; display: block; font-family: arial, verdana, sans-serif; font-weight: normal; margin-top: 2em;}
+
+
+
+
+/* --- HEADINGS --- */
+h1.title {color: #000000; font-family: arial, verdana, sans-serif; font-size : 250%; font-style: normal; font-weight: bold; margin-top: 5em; margin-bottom: 2em;}
+h1 {color: #000000; font-size : 175%; font-weight: bold; margin-top: 3em; margin-bottom: 1em;}
+h2 {color: #000000; font-size : 150%; font-weight: normal; margin-top: 2.5em; margin-bottom: 0.5em;}
+h3 {color: #000000; font-size : 135%; font-weight: normal; margin-top: 2em; margin-bottom: 1em;}
+h4 {color: #000000; font-size : 115%; font-weight: normal; margin-top: 1em; margin-bottom: 0em;}
+h5 {color: #000000; font-size : 105%; font-weight: bold; margin-top: 1em; margin-bottom: 0em;}
+h6 {color: #000000; font-size : 100%; font-weight: bold; margin-top: 0.5em; }
+*.heading {color: #000000; font-size : 140%; font-weight: normal; margin-top: 2em; margin-bottom: 1em;}
+*.hd {color: #000000; font-size : 140%; font-weight: bold; margin-top: 2em; margin-bottom: 1em;}
+
+/* --- PAGE NUMBERS --- */
+span.page-normal, span.page-special, span.page-front {display: block; text-align: right; margin-right: 2em; font-weight: bold; border-top: solid 1px #E5E5E5; padding-top: 2em; margin-top: 3em;}
+li span.page-normal {list-style-type: none; }
+
+
+/* --- BLOCKS --- */
+
+div.sidebar {border: 1px solid gray; background-color: #E8FBFF; margin-top: 1em; margin-bottom: 1.5em; padding-left: 1em; padding-right: 1em; padding-top: 0.5em; padding-bottom: 0.5em;}
+div.optional-prodnote {border: 1px solid #A7A7A7; background-color: white; padding: 1em; margin-top:1em; margin-bottom:1em;}
+div.optional-prodnote a {color: gray;}
+
+div.prodnote {border: 1px solid #A7A7A7; background-color: white; padding: 1em; margin-top:1em; margin-bottom:1em;}
+div.prodnote a {color: gray;}
+
+
+div.notebody {font-size: 90%; border: 1px dotted gray; padding: 1em;}
+div.annotation {font-size: 90%; border: 1px dotted gray; padding: 1em;}
+
+
+/* --- INLINES --- */
+span.noteref, a.noteref {vertical-align: super; font-size : 80%; border : 1px solid rgb(255,0,0); }
+span.annoref, a.annoref {border-bottom : 1px dashed gray; }
+acronym, abbr {border-bottom : 1px dashed rgb(255,0,0); }
+
+
+/* --- LISTS --- */
+
+ul.plain li {list-style-type: none; margin-top: 1em; }
+ul li {list-style-type: disc; margin-top: 1em; }
+dt {margin-top: 1em; font-weight: bold;}
+span.pagenum {text-align: right; padding-left: 5em;}
+ol.lower-roman {list-style-type: lower-roman;}
+ol.upper-roman {list-style-type: upper-roman;}
+ol.lower-alpha {list-style-type: lower-alpha;}
+ol.upper-alpha {list-style-type: upper-alpha;}
+li.hd {list-style-type: none; font-weight: bold; margin-top: 0.5em;}
+
+
+/* --- TABLES --- */
+table {border: 2px solid gray; padding: 1em; font-size: 80%; margin-top: 1.5em; margin-bottom: 2em;}
+th {border: 1px solid gray; font-weight: bold; padding: 0.5em}
+td {border: 1px solid gray; padding: 0.5em}
+
+/* --- IMAGES --- */
+div.imggroup {display: block; margin-top: 1em; margin-bottom: 1em;}
+img {border: none;}
+span.image-caption {display:block; margin-bottom: 1.5em; font-size: 90%; font-style: italic;}
+div.caption {font-style: italic; font-size: 90%; }
+
+
+/* --- QUOTES --- */
+blockquote {margin-left: 10em; font-size: 90%; font-style: italic; margin-bottom: 4em;}
+
+
+/* --- POEM --- */
+div.poem {font-family:bookman, times, serif; font-weight:700; margin-bottom: 2em; margin-top: 2em; margin-left: 4em; }
+div.linegroup {margin-bottom: 1em; margin-top: 1em; margin-left: 4em; }
+.linenum {margin-right: 2em;}
+div.author {font-weight: 700; font-style:italic;}
+.dateline {font-size: 80%; font-style: italic; }
+.byline {margin-top: 1em; margin-bottom: 1em; }
+div.title {font-weight: 700; font-size: 125%; margin-top: 2em; }
+div.poem div.hd {font-size: 100%; font-weight: bold; margin-top: 1em; margin-bottom: 0.3em;}
+div.poem span.page-normal {font-family:arial, verdana,sans-serif; display: block; text-align: right; margin-right: 2em; font-weight: bold; border-top: solid 1px #E5E5E5; padding-top: 2em; margin-top: 3em;}

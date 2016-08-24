@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/moveout-list.xsl">
+    <!--<xsl:with-param name="valid-parents" select="tokenize('annotation,prodnote,sidebar,div,imggroup,caption,
+        li,note,img,blockquote,level,level1,level2,level3,level4,level5,level6,td,th'
+    -->
+    <x:scenario label="Move Out LIST 1">
+        <x:context>
+            <dtbook>
+                <book>
+                    <bodymatter>
+                        <level1>
+                            <p>
+                                <span>before</span>
+                                <list>
+                                    <item/>
+                                    <item/>
+                                </list>
+                                <span>after</span>
+                            </p>
+                        </level1>
+                    </bodymatter>
+                </book>
+            </dtbook>
+        </x:context>
+        <x:expect label="">
+            <dtbook>
+                <book>
+                    <bodymatter>
+                        <level1>
+                            <p>
+                                <span>before</span>
+                            </p>
+                            <list>
+                                <item/>
+                                <item/>
+                            </list>
+                            <p>
+                                <span>after</span>
+                            </p>
+                        </level1>
+                    </bodymatter>
+                </book>
+            </dtbook>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Move Out LIST 2">
+        <x:context>
+            <dtbook>
+                <book>
+                    <bodymatter>
+                        <level1>
+                            <h1>H ONE</h1>
+                            <p>
+                                <sent>SENTENCE</sent>
+                                <list type="ul">
+                                    <hd>The Heading For The List</hd>
+                                    <li>li1</li>
+                                    <li>li2</li>
+                                    <li>li3</li>
+                                    <li>li4</li>
+                                </list>
+                            </p>
+                        </level1>
+                    </bodymatter>
+                </book>
+            </dtbook>
+        </x:context>
+        <x:expect label="">
+            <dtbook>
+                <book>
+                    <bodymatter>
+                        <level1>
+                            <h1>H ONE</h1>
+                            <p>
+                                <sent>SENTENCE</sent>
+                            </p>
+                            <list type="ul">
+                                <hd>The Heading For The List</hd>
+                                <li>li1</li>
+                                <li>li2</li>
+                                <li>li3</li>
+                                <li>li4</li>
+                            </list>
+                        </level1>
+                    </bodymatter>
+                </book>
+            </dtbook>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Definition with LIST">
+        <x:context>
+            <book>
+                <p>
+                    <tmp:item>
+                        <dd>DD <list>
+                                <item>Nested List with One Item</item>
+                            </list> Rest of DD</dd>
+                    </tmp:item>
+                </p>
+            </book>
+        </x:context>
+        <x:expect label="">
+            <book>
+                <p>
+                    <tmp:item>
+                        <dd>DD </dd>
+                        <list>
+                            <item>Nested List with One Item</item>
+                        </list>
+                        <dd> Rest of DD</dd>
+                    </tmp:item>
+                </p>
+            </book>
+        </x:expect>
+    </x:scenario>
+</x:description>

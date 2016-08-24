@@ -1,0 +1,1178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/"
+    xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+    xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="../../main/resources/xml/translate-elems-attrs-to-zedai.xsl">
+    <x:scenario label="Translate-DTBook2ZedAI: DTBook">
+        <x:context>
+            <dtbook/>
+        </x:context>
+        <x:expect label="">
+            <z:document xml:lang="en"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Book">
+        <x:context>
+            <book/>
+        </x:context>
+        <x:expect label="">
+            <z:body>
+                <z:frontmatter>
+                    <z:section>
+                        <z:h role="title"/>
+                    </z:section>
+                </z:frontmatter>
+            </z:body>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Bodymatter">
+        <x:context>
+            <bodymatter/>
+        </x:context>
+        <x:expect label="">
+            <z:bodymatter/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Rearmatter">
+        <x:context>
+            <rearmatter/>
+        </x:context>
+        <x:expect label="">
+            <z:backmatter/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Docauthor">
+        <x:context>
+            <docauthor/>
+        </x:context>
+        <x:expect label="">
+            <z:p role="author"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Doctitle">
+        <x:context>
+            <doctitle/>
+        </x:context>
+        <x:expect label="">
+            <z:p role="title"/>
+        </x:expect>
+    </x:scenario>
+    <!--FIXME UTFX does not support generated IDs-->
+    <!--<utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Doctitle in frontmatter</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <frontmatter>
+                    <doctitle/>
+                </frontmatter>
+            </utfx:source>
+            <utfx:expected>
+                <frontmatter>
+                    <section>
+                        <h role="title"/>
+                    </section>
+                </frontmatter>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>-->
+    <x:scenario label="Translate-DTBook2ZedAI: Headings">
+        <x:context>
+            <h1/>
+            <h2/>
+            <h3/>
+            <h4/>
+            <h5/>
+            <h6/>
+        </x:context>
+        <x:expect label="">
+            <z:h/>
+            <z:h/>
+            <z:h/>
+            <z:h/>
+            <z:h/>
+            <z:h/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Text">
+        <x:context>Text</x:context>
+        <x:expect label="">Text</x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: bridgehead and hd">
+        <x:context>
+            <bridgehead/>
+            <hd/>
+        </x:context>
+        <x:expect label="">
+            <z:hd/>
+            <z:hd/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: emphasis">
+        <x:context>
+            <em>EMphasis</em>
+            <strong>STRONG</strong>
+        </x:context>
+        <x:expect label="">
+            <z:emph>EMphasis</z:emph>
+            <z:emph>STRONG</z:emph>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #1">
+        <x:context>
+            <list start="0" depth="2"/>
+        </x:context>
+        <x:expect label="">
+            <z:list start="0" depth="2"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #2">
+        <x:context>
+            <list enum="1"/>
+        </x:context>
+        <x:expect label="">
+            <z:list rend:prefix="decimal"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #3">
+        <x:context>
+            <list enum="a"/>
+            <list enum="a" start="b"/>
+        </x:context>
+        <x:expect label="">
+            <z:list rend:prefix="lower-alpha"/>
+            <z:list rend:prefix="lower-alpha" start="2"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #4">
+        <x:context>
+            <list enum="A"/>
+            <list enum="A" start="B"/>
+        </x:context>
+        <x:expect label="">
+            <z:list rend:prefix="upper-alpha"/>
+            <z:list rend:prefix="upper-alpha" start="2"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #5">
+        <x:context>
+            <list enum="i"/>
+            <list enum="i" start="ii"/>
+        </x:context>
+        <x:expect label="">
+            <z:list rend:prefix="lower-roman"/>
+            <z:list rend:prefix="lower-roman" start="2"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #6">
+        <x:context>
+            <list enum="I"/>
+            <list enum="I" start="II"/>
+        </x:context>
+        <x:expect label="">
+            <z:list rend:prefix="upper-roman"/>
+            <z:list rend:prefix="upper-roman" start="2"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #7">
+        <x:context>
+            <list type="pl"/>
+        </x:context>
+        <x:expect label="">
+            <z:list/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #8">
+        <x:context>
+            <list type="ul"/>
+        </x:context>
+        <x:expect label="">
+            <z:list type="unordered"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #9">
+        <x:context>
+            <list type="ul"/>
+        </x:context>
+        <x:expect label="">
+            <z:list type="unordered"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #10">
+        <x:context>
+            <list>
+                <li>Item 1</li>
+                <li>Item 2</li>
+                <pagenum page="normal">12</pagenum>
+            </list>
+        </x:context>
+        <x:expect label="">
+            <z:list>
+                <z:item>Item 1</z:item>
+                <z:item>Item 2</z:item>
+                <z:pagebreak value="12"/>
+            </z:list>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: List #11">
+        <x:context>
+            <list>
+                <hd>The List</hd>
+                <li>Item 1</li>
+                <li>Item 2</li>
+            </list>
+        </x:context>
+        <x:expect label="">
+            <z:list>
+                <z:item>
+                    <z:hd>The List</z:hd>
+                </z:item>
+                <z:item>Item 1</z:item>
+                <z:item>Item 2</z:item>
+            </z:list>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Image">
+        <x:context>
+            <img src="image.png" height="300" width="300" alt="test image" id="abcde"/>
+        </x:context>
+        <x:expect label="">
+            <z:object src="image.png" tmp:height="300" tmp:width="300" xml:id="abcde">
+                <z:description ref="abcde">test image</z:description>
+            </z:object>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Image Group">
+        <x:context>
+            <imggroup/>
+        </x:context>
+        <x:expect label="">
+            <z:block/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Caption 1">
+        <x:context>
+            <caption imgref="#img0001">CAPTION</caption>
+        </x:context>
+        <x:expect label="">
+            <z:caption ref="img0001">CAPTION</z:caption>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Caption 2">
+        <x:context>
+            <caption>Mixed <span>Text</span> Model</caption>
+        </x:context>
+        <x:expect label="">
+            <z:caption>Mixed <z:span>Text</z:span> Model</z:caption>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Image group with caption">
+        <x:context>
+            <imggroup>
+                <img src="image.png" alt="test image" id="img0001"/>
+                <caption>CAPTION</caption>
+            </imggroup>
+            <imggroup>
+                <img src="image.png" alt="test image" id="img0002"/>
+                <caption imgref="img0002">CAPTION</caption>
+            </imggroup>
+        </x:context>
+        <x:expect label="">
+            <z:block role="figure">
+                <z:object src="image.png" xml:id="img0001">
+                    <z:description ref="img0001">test image</z:description>
+                </z:object>
+                <z:caption ref="img0001">CAPTION</z:caption>
+            </z:block>
+            <z:block role="figure">
+                <z:object src="image.png" xml:id="img0002">
+                    <z:description ref="img0002">test image</z:description>
+                </z:object>
+                <z:caption ref="img0002">CAPTION</z:caption>
+            </z:block>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Annotation">
+        <x:context>
+            <tmp:annotation-block/>
+            <tmp:annotation-phrase/>
+        </x:context>
+        <x:expect label="">
+            <z:annotation/>
+            <z:annotation/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Prodnote">
+        <x:context>
+            <prodnote imgref="#img0001">PRODNOTE</prodnote>
+        </x:context>
+        <x:expect label="">
+            <z:annotation by="republisher" ref="img0001">PRODNOTE</z:annotation>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Prodnote #2">
+        <x:context>
+            <prodnote id="pn1">PRODNOTE</prodnote>
+        </x:context>
+        <x:expect label="">
+            <z:annotation xml:id="pn1" by="republisher">PRODNOTE</z:annotation>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Image group with prodnote">
+        <x:context>
+            <imggroup>
+                <img src="image.png" alt="test image" id="img0002"/>
+                <prodnote>PRODNOTE</prodnote>
+            </imggroup>
+        </x:context>
+        <x:expect label="">
+            <z:block>
+                <z:object src="image.png" xml:id="img0002">
+                    <z:description ref="img0002">test image</z:description>
+                </z:object>
+                <z:annotation by="republisher" ref="img0002">PRODNOTE</z:annotation>
+            </z:block>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Sidebar">
+        <x:context>
+            <sidebar/>
+        </x:context>
+        <x:expect label="">
+            <z:aside role="sidebar"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Note ">
+        <x:context>
+            <note class="footnote"/>
+            <note class="endnote"/>
+        </x:context>
+        <x:expect label="">
+            <z:note class="footnote" role="footnote"/>
+            <z:note class="endnote" role="endnote"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Div">
+        <x:context>
+            <div/>
+        </x:context>
+        <x:expect label="">
+            <z:block/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: pagenum ">
+        <x:context>
+            <pagenum>5</pagenum>
+            <pagenum page="front">ii</pagenum>
+        </x:context>
+        <x:expect label="">
+            <z:pagebreak value="5"/>
+            <z:pagebreak value="ii"/>
+        </x:expect>
+    </x:scenario>
+    <!--FIXME UTFX does not support XSLT keys-->
+    <!--<utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Noteref</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <note id="note"/>
+                <noteref idref="#note">32</noteref>
+            </utfx:source>
+            <utfx:expected>
+                <note xml:id="note"/>
+                <noteref ref="note">32</noteref>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>-->
+    <x:scenario label="Translate-DTBook2ZedAI: Noteref Invalid">
+        <x:context>
+            <noteref idref="#note">32</noteref>
+        </x:context>
+        <x:expect label="">
+            <!--FIXME Noteref '32' to missing ID '#note'-->
+        </x:expect>
+    </x:scenario>
+    <!--FIXME UTFX does not support XSLT keys-->
+    <!--<utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Annoref</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <tmp:annotation-block id="anno"/>
+                <annoref idref="#anno">33</annoref>
+            </utfx:source>
+            <utfx:expected>
+                <annotation xml:id="anno"/>
+                <annoref ref="anno">33</annoref>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>-->
+    <x:scenario label="Translate-DTBook2ZedAI: Annoref Invalid">
+        <x:context>
+            <annoref idref="#anno">33</annoref>
+        </x:context>
+        <x:expect label="">
+            <!--FIXME Annoref '33' to missing ID '#anno'-->
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Autho ">
+        <x:context>
+            <author id="author">name</author>
+        </x:context>
+        <x:expect label="">
+            <z:citation xml:id="author">
+                <z:name property="author" about="author">name</z:name>
+            </z:citation>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Quotes ">
+        <x:context>
+            <blockquote cite="#the-ref"/>
+            <q cite="http://example.org/page#ref"/>
+        </x:context>
+        <x:expect label="">
+            <z:quote ref="the-ref"/>
+            <z:quote xlink:href="http://example.org/page#ref"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Quotes 2">
+        <x:context>
+            <blockquote id="quote">
+                <p>text</p>
+                <author>author</author>
+            </blockquote>
+        </x:context>
+        <x:expect label="">
+            <z:quote xml:id="quote">
+                <z:p>text</z:p>
+                <z:citation about="#quote">
+                    <z:name property="author">author</z:name>
+                </z:citation>
+            </z:quote>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Quotes 3">
+        <x:context>
+            <blockquote id="quote">
+                <p>text</p>
+                <title>title</title>
+            </blockquote>
+        </x:context>
+        <x:expect label="">
+            <z:quote xml:id="quote">
+                <z:p>text</z:p>
+                <z:citation about="#quote">
+                    <z:span property="title">title</z:span>
+                </z:citation>
+            </z:quote>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Quotes 4">
+        <x:context>
+            <blockquote id="quote">
+                <p>text</p>
+                <title>title</title>
+                <author>author</author>
+            </blockquote>
+        </x:context>
+        <x:expect label="">
+            <z:quote xml:id="quote">
+                <z:p>text</z:p>
+                <z:citation about="#quote">
+                    <z:span property="title">title</z:span>
+                    <z:name property="author">author</z:name>
+                </z:citation>
+            </z:quote>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Quotes 5">
+        <x:context>
+            <q id="quote">text <cite>
+                    <author>author</author>
+                </cite>
+            </q>
+        </x:context>
+        <x:expect label="">
+            <z:quote xml:id="quote">text <z:citation>
+                    <z:name property="author" about="#quote">author</z:name>
+                </z:citation>
+            </z:quote>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Table 1">
+        <x:context>
+            <table id="table1" width="100" border="2" cellspacing="10" cellpadding="10"/>
+        </x:context>
+        <x:expect label="">
+            <z:table xml:id="table1" tmp:width="100" tmp:border="2" tmp:cellspacing="10"
+                tmp:cellpadding="10"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Table 2">
+        <x:context>
+            <table id="table2">
+                <caption>This is a lovely <span>Caption!</span>
+                </caption>
+            </table>
+        </x:context>
+        <x:expect label="">
+            <z:caption ref="table2">This is a lovely <z:span>Caption!</z:span>
+            </z:caption>
+            <z:table xml:id="table2"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Table 3">
+        <x:context>
+            <table id="table3">
+                <col id="col1"/>
+                <col id="col2"/>
+                <tbody id="tbody1"/>
+            </table>
+        </x:context>
+        <x:expect label="">
+            <z:table xml:id="table3">
+                <z:colgroup>
+                    <z:col xml:id="col1"/>
+                    <z:col xml:id="col2"/>
+                </z:colgroup>
+                <z:tbody xml:id="tbody1"/>
+            </z:table>
+        </x:expect>
+    </x:scenario>
+    <!-- FIXME UTFX does not support generared IDs -->
+    <!--<utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Table 4</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <table id="table4" summary="the summary"/>
+            </utfx:source>
+            <utfx:expected>
+                <description xml:id="generated">the summary</description>
+                <table xml:id="table4" desc="generated"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>-->
+    <!-- FIXME UTFX does not support generared IDs -->
+    <!--<utfx:test>
+        <utfx:name>Translate-DTBook2ZedAI: Table 5</utfx:name>
+        <utfx:assert-equal normalise-internal-whitespace="yes">
+            <utfx:source>
+                <table id="table5" summary="the summary">
+                    <caption>This is a lovely <span>Caption!</span></caption>
+                </table>
+            </utfx:source>
+            <utfx:expected>
+                <caption ref="table5">This is a lovely <span>Caption!</span></caption>
+                <description xml:id="generated">the summary</description>
+                <table xml:id="table5" desc="generated"/>
+            </utfx:expected>
+        </utfx:assert-equal>
+    </utfx:test>-->
+    <x:scenario label="Translate-DTBook2ZedAI: Table 6">
+        <!--tests that tbody is not created when not necessary-->
+        <x:context>
+            <table id="table6">
+                <tr id="tr1">
+                    <td id="td11">-</td>
+                    <td id="td12">-</td>
+                </tr>
+                <pagenum>1</pagenum>
+                <tr id="tr2">
+                    <td id="td21">-</td>
+                    <td id="td22">-</td>
+                </tr>
+            </table>
+        </x:context>
+        <x:expect label="">
+            <z:table xml:id="table6">
+                <z:tr xml:id="tr1">
+                    <z:td xml:id="td11">-</z:td>
+                    <z:td xml:id="td12">-</z:td>
+                </z:tr>
+                <z:pagebreak value="1"/>
+                <z:tr xml:id="tr2">
+                    <z:td xml:id="td21">-</z:td>
+                    <z:td xml:id="td22">-</z:td>
+                </z:tr>
+            </z:table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Table 7">
+        <!--tests that tbody is added when thead is present-->
+        <x:context>
+            <table id="table7">
+                <thead id="thead">
+                    <tr id="tr0">
+                        <th id="th1">Col 1</th>
+                        <th id="th2">Col 2</th>
+                    </tr>
+                </thead>
+                <tr id="tr1">
+                    <td id="td11">-</td>
+                    <td id="td12">-</td>
+                </tr>
+                <pagenum>1</pagenum>
+                <tr id="tr2">
+                    <td id="td21">-</td>
+                    <td id="td22">-</td>
+                </tr>
+            </table>
+        </x:context>
+        <x:expect label="">
+            <z:table xml:id="table7">
+                <z:thead xml:id="thead">
+                    <z:tr xml:id="tr0">
+                        <z:th xml:id="th1">Col 1</z:th>
+                        <z:th xml:id="th2">Col 2</z:th>
+                    </z:tr>
+                </z:thead>
+                <z:tbody>
+                    <z:tr xml:id="tr1">
+                        <z:td xml:id="td11">-</z:td>
+                        <z:td xml:id="td12">-</z:td>
+                    </z:tr>
+                    <z:pagebreak value="1"/>
+                    <z:tr xml:id="tr2">
+                        <z:td xml:id="td21">-</z:td>
+                        <z:td xml:id="td22">-</z:td>
+                    </z:tr>
+                </z:tbody>
+            </z:table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Table 8">
+        <!--tests that tbody is added when tfoot is present-->
+        <x:context>
+            <table id="table8">
+                <tfoot id="tfoot">
+                    <tr id="tr0">
+                        <th id="th1">Col 1</th>
+                        <th id="th2">Col 2</th>
+                    </tr>
+                </tfoot>
+                <tr id="tr1">
+                    <td id="td11">-</td>
+                    <td id="td12">-</td>
+                </tr>
+                <pagenum>1</pagenum>
+                <tr id="tr2">
+                    <td id="td21">-</td>
+                    <td id="td22">-</td>
+                </tr>
+            </table>
+        </x:context>
+        <x:expect label="">
+            <z:table xml:id="table8">
+                <z:tbody>
+                    <z:tr xml:id="tr1">
+                        <z:td xml:id="td11">-</z:td>
+                        <z:td xml:id="td12">-</z:td>
+                    </z:tr>
+                    <z:pagebreak value="1"/>
+                    <z:tr xml:id="tr2">
+                        <z:td xml:id="td21">-</z:td>
+                        <z:td xml:id="td22">-</z:td>
+                    </z:tr>
+                </z:tbody>
+                <z:tfoot xml:id="tfoot">
+                    <z:tr xml:id="tr0">
+                        <z:th xml:id="th1">Col 1</z:th>
+                        <z:th xml:id="th2">Col 2</z:th>
+                    </z:tr>
+                </z:tfoot>
+            </z:table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: Table 9">
+        <!--tests that tfoot,tbody are reordered as tbody,tfoot-->
+        <x:context>
+            <table id="table9">
+                <tfoot id="tfoot">
+                    <tr id="tr0">
+                        <th id="th1">Col 1</th>
+                        <th id="th2">Col 2</th>
+                    </tr>
+                </tfoot>
+                <tbody id="tbody">
+                    <tr id="tr1">
+                        <td id="td11">-</td>
+                        <td id="td12">-</td>
+                    </tr>
+                    <pagenum>1</pagenum>
+                    <tr id="tr2">
+                        <td id="td21">-</td>
+                        <td id="td22">-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </x:context>
+        <x:expect label="">
+            <z:table xml:id="table9">
+                <z:tbody xml:id="tbody">
+                    <z:tr xml:id="tr1">
+                        <z:td xml:id="td11">-</z:td>
+                        <z:td xml:id="td12">-</z:td>
+                    </z:tr>
+                    <z:pagebreak value="1"/>
+                    <z:tr xml:id="tr2">
+                        <z:td xml:id="td21">-</z:td>
+                        <z:td xml:id="td22">-</z:td>
+                    </z:tr>
+                </z:tbody>
+                <z:tfoot xml:id="tfoot">
+                    <z:tr xml:id="tr0">
+                        <z:th xml:id="th1">Col 1</z:th>
+                        <z:th xml:id="th2">Col 2</z:th>
+                    </z:tr>
+                </z:tfoot>
+            </z:table>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: col">
+        <x:context>
+            <col span="3" align="left" valign="center" width="300" id="col1"/>
+        </x:context>
+        <x:expect label="">
+            <z:col span="3" tmp:align="left" tmp:valign="center" tmp:width="300" xml:id="col1"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: colgroup">
+        <x:context>
+            <colgroup span="3" id="colgroup1" align="left" valign="center" width="300"/>
+            <colgroup span="4" id="colgroup2">
+                <col id="col1"/>
+                <col id="col2"/>
+            </colgroup>
+            <colgroup id="colgroup3">
+                <col id="col3"/>
+                <col id="col4"/>
+            </colgroup>
+        </x:context>
+        <x:expect label="">
+            <z:colgroup xml:id="colgroup1" span="3" tmp:align="left" tmp:valign="center"
+                tmp:width="300"/>
+            <z:colgroup xml:id="colgroup2">
+                <z:col xml:id="col1"/>
+                <z:col xml:id="col2"/>
+            </z:colgroup>
+            <z:colgroup xml:id="colgroup3">
+                <z:col xml:id="col3"/>
+                <z:col xml:id="col4"/>
+            </z:colgroup>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: thead ">
+        <x:context>
+            <thead id="thead1" align="left" valign="center"/>
+        </x:context>
+        <x:expect label="">
+            <z:thead xml:id="thead1" tmp:align="left" tmp:valign="center"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: tfoot">
+        <x:context>
+            <tfoot id="tfoot1" align="left" valign="center"/>
+        </x:context>
+        <x:expect label="">
+            <z:tfoot xml:id="tfoot1" tmp:align="left" tmp:valign="center"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: tbody">
+        <x:context>
+            <tbody id="tbody2" align="left" valign="center"/>
+        </x:context>
+        <x:expect label="">
+            <z:tbody xml:id="tbody2" tmp:align="left" tmp:valign="center"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: tr ">
+        <x:context>
+            <tr id="tr1" align="left" valign="center"/>
+        </x:context>
+        <x:expect label="">
+            <z:tr xml:id="tr1" tmp:align="left" tmp:valign="center"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: th">
+        <x:context>
+            <th id="th1" abbr="abc" headers="def" colspan="3" rowspan="3" scope="scope"
+                align="right" valign="center"/>
+        </x:context>
+        <x:expect label="">
+            <z:th xml:id="th1" abbr="abc" headers="def" colspan="3" rowspan="3" scope="scope"
+                tmp:align="right" tmp:valign="center"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: td">
+        <x:context>
+            <td id="td1" headers="abc" colspan="3" rowspan="4" scope="scope" align="center"
+                valign="center"/>
+        </x:context>
+        <x:expect label="">
+            <z:td xml:id="td1" headers="abc" colspan="3" rowspan="4" scope="scope"
+                tmp:align="center" tmp:valign="center"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: byline">
+        <x:context>
+            <byline/>
+        </x:context>
+        <x:expect label="">
+            <z:citation/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: sent">
+        <x:context>
+            <sent/>
+        </x:context>
+        <x:expect label="">
+            <z:s/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: address">
+        <x:context>
+            <address/>
+        </x:context>
+        <x:expect label="">
+            <z:address/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: epigraph">
+        <x:context>
+            <epigraph/>
+        </x:context>
+        <x:expect label="">
+            <z:block role="epigraph"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: dateline ">
+        <x:context>
+            <dateline/>
+        </x:context>
+        <x:expect label="">
+            <z:p role="time"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI:ln ">
+        <x:context>
+            <tmp:ln/>
+        </x:context>
+        <x:expect label="">
+            <z:ln/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: br ">
+        <x:context>
+            <br/>
+        </x:context>
+        <x:expect label=""/>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: cite ">
+        <x:context>
+            <cite id="cite1"> Text1 <title>Title</title>
+                <author>Author</author> Text2 </cite>
+        </x:context>
+        <x:expect label="">
+            <z:citation xml:id="cite1"> Text1 <z:span property="title" about="#cite1">Title</z:span>
+                <z:name property="author" about="#cite1">Author</z:name> Text2 </z:citation>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: covertitle ">
+        <x:context>
+            <covertitle/>
+        </x:context>
+        <x:expect label="">
+            <z:block role="covertitle"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: acronym">
+        <x:context>
+            <acronym pronounce="yes">FALAFL</acronym>
+            <acronym pronounce="no">ZPQA</acronym>
+            <acronym>DMFC</acronym>
+        </x:context>
+        <x:expect label="">
+            <z:abbr role="acronym">FALAFL</z:abbr>
+            <z:abbr role="initialism">ZPQA</z:abbr>
+            <z:abbr role="initialism">DMFC</z:abbr>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: link">
+        <x:context>
+            <link/>
+        </x:context>
+        <x:expect label=""/>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: p">
+        <x:context>
+            <p/>
+        </x:context>
+        <x:expect label="">
+            <z:p/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: abbr">
+        <x:context>
+            <abbr/>
+        </x:context>
+        <x:expect label="">
+            <z:abbr role="truncation"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: sup">
+        <x:context>
+            <sup/>
+        </x:context>
+        <x:expect label="">
+            <z:sup/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: sub">
+        <x:context>
+            <sub/>
+        </x:context>
+        <x:expect label="">
+            <z:sub/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: span">
+        <x:context>
+            <span/>
+            <span role="ROLE"/>
+        </x:context>
+        <x:expect label="">
+            <z:span/>
+            <z:span role="ROLE"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: w">
+        <x:context>
+            <w/>
+        </x:context>
+        <x:expect label="">
+            <z:w/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: line">
+        <x:context>
+            <line/>
+        </x:context>
+        <x:expect label="">
+            <z:ln/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: samp ">
+        <x:context>
+            <samp/>
+        </x:context>
+        <x:expect label="">
+            <z:block role="example"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: dfn ">
+        <x:context>
+            <dfn/>
+        </x:context>
+        <x:expect label="">
+            <z:term/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: a">
+        <x:context>
+            <a/>
+            <a href="#abc"/>
+            <a href="#abc" id="foo"/>
+            <a href="page.html" external="true"/>
+            <a href="#def" external="false"/>
+            <a href="#para3" rel="REL"/>
+            <a href="#chapter4" rev="REV"/>
+            <a smilref="test.smil#foo"/>
+        </x:context>
+        <x:expect label="">
+            <z:ref/>
+            <z:ref ref="abc"/>
+            <z:ref ref="abc" xml:id="foo"/>
+            <z:ref xlink:href="page.html"/>
+            <z:ref ref="def"/>
+            <z:ref ref="para3" rel="REL"/>
+            <z:ref ref="chapter4" rev="REV"/>
+            <z:span/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: definition list ">
+        <x:context>
+            <dl/>
+        </x:context>
+        <x:expect label="">
+            <z:list type="unordered"/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: item ">
+        <x:context>
+            <tmp:item/>
+        </x:context>
+        <x:expect label="">
+            <z:item/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: linenum">
+        <x:context>
+            <linenum/>
+        </x:context>
+        <x:expect label="">
+            <z:lnum/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: poem 1">
+        <x:context>
+            <poem id="poem">
+                <title>TITLE</title>
+                <author>AUTHOR</author>
+                <hd>HD</hd>
+                <line>LINE</line>
+            </poem>
+        </x:context>
+        <x:expect label="">
+            <z:block role="poem" xml:id="poem">
+                <z:p property="title" about="#poem">TITLE</z:p>
+                <z:p>
+                    <z:name property="author" about="#poem">AUTHOR</z:name>
+                </z:p>
+                <z:hd>HD</z:hd>
+                <z:p>
+                    <z:ln>LINE</z:ln>
+                </z:p>
+            </z:block>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: poem 2">
+        <x:context>
+            <poem id="poem">
+                <title>TITLE</title>
+                <author>AUTHOR</author>
+                <hd>HD A</hd>
+                <line>LINE 1</line>
+                <line>LINE 2</line>
+                <hd>HD B</hd>
+                <line>LINE 3</line>
+                <line>LINE 4</line>
+            </poem>
+        </x:context>
+        <x:expect label="">
+            <z:block role="poem" xml:id="poem">
+                <z:p property="title" about="#poem">TITLE</z:p>
+                <z:p>
+                    <z:name property="author" about="#poem">AUTHOR</z:name>
+                </z:p>
+                <z:hd>HD A</z:hd>
+                <z:p>
+                    <z:ln>LINE 1</z:ln>
+                    <z:ln>LINE 2</z:ln>
+                </z:p>
+                <z:hd>HD B</z:hd>
+                <z:p>
+                    <z:ln>LINE 3</z:ln>
+                    <z:ln>LINE 4</z:ln>
+                </z:p>
+            </z:block>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: code-blocks ">
+        <x:context>
+            <tmp:code-block/>
+            <tmp:code-block>
+                <em/>
+                <strong/>
+                <dfn/>
+                <cite id="cite1"/>
+                <abbr/>
+                <acronym/>
+                <a href="abc.html" external="true"/>
+                <sub/>
+                <sup/>
+                <span/>
+                <w/>
+                <sent/>
+            </tmp:code-block>
+            <tmp:code-block>
+                <prodnote/>
+                <q/>
+            </tmp:code-block>
+            <tmp:code-block>
+                <em/>
+                <pagenum>23</pagenum>
+            </tmp:code-block>
+            <tmp:code-block>
+                <line>LINE</line>
+                <q/>
+            </tmp:code-block>
+        </x:context>
+        <x:expect label="">
+            <z:code/>
+            <z:code>
+                <z:p>
+                    <z:emph/>
+                    <z:emph/>
+                    <z:term/>
+                    <z:citation xml:id="cite1"/>
+                    <z:abbr role="truncation"/>
+                    <z:abbr role="initialism"/>
+                    <z:ref xlink:href="abc.html"/>
+                    <z:sub/>
+                    <z:sup/>
+                    <z:span/>
+                    <z:w/>
+                    <z:s/>
+                </z:p>
+            </z:code>
+            <z:code>
+                <z:block>
+                    <z:annotation by="republisher"/>
+                </z:block>
+                <z:block>
+                    <z:quote/>
+                </z:block>
+            </z:code>
+            <z:code>
+                <z:p>
+                    <z:emph/>
+                </z:p>
+                <z:pagebreak value="23"/>
+            </z:code>
+            <z:code>
+                <z:ln>LINE</z:ln>
+                <z:block>
+                    <z:quote/>
+                </z:block>
+            </z:code>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Translate-DTBook2ZedAI: code-phrases ">
+        <x:context>
+            <tmp:code-phrase/>
+            <tmp:code-phrase>
+                <abbr/>
+                <acronym/>
+                <em/>
+                <strong/>
+            </tmp:code-phrase>
+            <tmp:code-phrase>
+                <span/>
+                <abbr/>
+            </tmp:code-phrase>
+        </x:context>
+        <x:expect label="">
+            <z:code/>
+            <z:code>
+                <z:span role="truncation"/>
+                <z:span role="initialism"/>
+                <z:emph/>
+                <z:emph/>
+            </z:code>
+            <z:code>
+                <z:span/>
+                <z:span role="truncation"/>
+            </z:code>
+        </x:expect>
+    </x:scenario>
+</x:description>

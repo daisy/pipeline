@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.w3.org/1999/xlink" xmlns:select="http://www.daisy.org/ns/z3998/authoring/features/select/" xmlns:synthesis="http://www.w3.org/2001/10/synthesis" xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/" xmlns:its="http://www.w3.org/2005/11/its" xmlns:authoring="http://www.daisy.org/ns/z3998/authoring/" xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/" xmlns:xforms="http://www.w3.org/2002/xforms/" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/" schemaLocation="z3998-book.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/description/" schemaLocation="d.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/rend/" schemaLocation="rend.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/select/" schemaLocation="select.xsd"/>
+  <xs:import namespace="http://www.w3.org/2001/10/synthesis" schemaLocation="synthesis.xsd"/>
+  <xs:import namespace="http://www.w3.org/2002/xforms/" schemaLocation="xforms.xsd"/>
+  <xs:import namespace="http://www.w3.org/2005/11/its" schemaLocation="its.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:attribute name="href" type="xs:anyURI"/>
+  <xs:attribute name="type">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="simple"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name="title"/>
+  <xs:attribute name="show">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="new"/>
+        <xs:enumeration value="replace"/>
+        <xs:enumeration value="embed"/>
+        <xs:enumeration value="other"/>
+        <xs:enumeration value="none"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name="actuate">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="onLoad"/>
+        <xs:enumeration value="onRequest"/>
+        <xs:enumeration value="other"/>
+        <xs:enumeration value="none"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+</xs:schema>

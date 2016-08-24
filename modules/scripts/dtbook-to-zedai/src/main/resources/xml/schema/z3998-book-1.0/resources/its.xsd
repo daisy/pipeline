@@ -1,0 +1,1122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2005/11/its" xmlns:select="http://www.daisy.org/ns/z3998/authoring/features/select/" xmlns:synthesis="http://www.w3.org/2001/10/synthesis" xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/" xmlns:its="http://www.w3.org/2005/11/its" xmlns:authoring="http://www.daisy.org/ns/z3998/authoring/" xmlns:d="http://www.daisy.org/ns/z3998/authoring/features/description/" xmlns:xforms="http://www.w3.org/2002/xforms/" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/" schemaLocation="z3998-book.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/description/" schemaLocation="d.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/rend/" schemaLocation="rend.xsd"/>
+  <xs:import namespace="http://www.daisy.org/ns/z3998/authoring/features/select/" schemaLocation="select.xsd"/>
+  <xs:import namespace="http://www.w3.org/1999/xlink" schemaLocation="xlink.xsd"/>
+  <xs:import namespace="http://www.w3.org/2001/10/synthesis" schemaLocation="synthesis.xsd"/>
+  <xs:import namespace="http://www.w3.org/2002/xforms/" schemaLocation="xforms.xsd"/>
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+  <xs:attribute name="dir">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="ltr"/>
+        <xs:enumeration value="rtl"/>
+        <xs:enumeration value="lro"/>
+        <xs:enumeration value="rlo"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+  <xs:attribute name="translate">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="yes"/>
+        <xs:enumeration value="no"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:attribute>
+  <xs:element name="ruby">
+    <xs:complexType>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element ref="its:rb"/>
+          <xs:choice>
+            <xs:element ref="its:rt"/>
+            <xs:sequence>
+              <xs:element ref="its:rp"/>
+              <xs:element ref="its:rt"/>
+              <xs:element ref="its:rp"/>
+            </xs:sequence>
+          </xs:choice>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element ref="its:rbc"/>
+          <xs:element ref="its:rtc"/>
+          <xs:element minOccurs="0" ref="its:rtc"/>
+        </xs:sequence>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="about" type="xs:anyURI"/>
+      <xs:attribute name="content"/>
+      <xs:attribute name="datatype">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="typeof">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="property">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rel">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resource" type="xs:anyURI"/>
+      <xs:attribute name="rev">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="desc">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:NCName"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="by">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:union>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="author"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="general-editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="translator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="commentator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="republisher"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:union>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="select:selid"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="continuation" type="xs:IDREFS"/>
+      <xs:attribute ref="synthesis:onlangfailure"/>
+      <xs:attribute ref="synthesis:ph"/>
+      <xs:attribute ref="synthesis:alphabet"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rb">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="authoring:sub"/>
+        <xs:element ref="authoring:sup"/>
+        <xs:element ref="authoring:char"/>
+        <xs:element ref="its:ruby"/>
+        <xs:group ref="authoring:span"/>
+        <xs:element ref="authoring:ref"/>
+        <xs:element ref="authoring:noteref"/>
+        <xs:group ref="authoring:ln"/>
+        <xs:element ref="authoring:s"/>
+        <xs:element ref="authoring:w"/>
+        <xs:element ref="authoring:abbr"/>
+        <xs:element ref="authoring:expansion"/>
+        <xs:element ref="authoring:emph"/>
+        <xs:element ref="authoring:time"/>
+        <xs:element ref="authoring:name"/>
+        <xs:element ref="authoring:definition"/>
+        <xs:element ref="authoring:term"/>
+        <xs:element ref="authoring:d"/>
+        <xs:element ref="authoring:num"/>
+        <xs:element ref="synthesis:phoneme"/>
+        <xs:element ref="synthesis:prosody"/>
+        <xs:element ref="synthesis:say-as"/>
+        <xs:element ref="synthesis:sub"/>
+        <xs:element ref="synthesis:token"/>
+        <xs:element ref="xforms:input"/>
+        <xs:element ref="xforms:textarea"/>
+        <xs:element ref="xforms:secret"/>
+        <xs:element ref="xforms:select1"/>
+        <xs:element ref="xforms:select"/>
+        <xs:element ref="xforms:range"/>
+        <xs:element ref="authoring:pagebreak"/>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="about" type="xs:anyURI"/>
+      <xs:attribute name="content"/>
+      <xs:attribute name="datatype">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="typeof">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="property">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rel">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resource" type="xs:anyURI"/>
+      <xs:attribute name="rev">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="desc">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:NCName"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="by">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:union>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="author"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="general-editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="translator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="commentator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="republisher"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:union>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="select:selid"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="continuation" type="xs:IDREFS"/>
+      <xs:attribute ref="synthesis:onlangfailure"/>
+      <xs:attribute ref="synthesis:ph"/>
+      <xs:attribute ref="synthesis:alphabet"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rt">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="authoring:sub"/>
+        <xs:element ref="authoring:sup"/>
+        <xs:element ref="authoring:char"/>
+        <xs:element ref="its:ruby"/>
+        <xs:group ref="authoring:span"/>
+        <xs:element ref="authoring:ref"/>
+        <xs:element ref="authoring:noteref"/>
+        <xs:group ref="authoring:ln"/>
+        <xs:element ref="authoring:s"/>
+        <xs:element ref="authoring:w"/>
+        <xs:element ref="authoring:abbr"/>
+        <xs:element ref="authoring:expansion"/>
+        <xs:element ref="authoring:emph"/>
+        <xs:element ref="authoring:time"/>
+        <xs:element ref="authoring:name"/>
+        <xs:element ref="authoring:definition"/>
+        <xs:element ref="authoring:term"/>
+        <xs:element ref="authoring:d"/>
+        <xs:element ref="authoring:num"/>
+        <xs:element ref="synthesis:phoneme"/>
+        <xs:element ref="synthesis:prosody"/>
+        <xs:element ref="synthesis:say-as"/>
+        <xs:element ref="synthesis:sub"/>
+        <xs:element ref="synthesis:token"/>
+        <xs:element ref="xforms:input"/>
+        <xs:element ref="xforms:textarea"/>
+        <xs:element ref="xforms:secret"/>
+        <xs:element ref="xforms:select1"/>
+        <xs:element ref="xforms:select"/>
+        <xs:element ref="xforms:range"/>
+        <xs:element ref="authoring:pagebreak"/>
+      </xs:choice>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="about" type="xs:anyURI"/>
+      <xs:attribute name="content"/>
+      <xs:attribute name="datatype">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="typeof">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="property">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rel">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resource" type="xs:anyURI"/>
+      <xs:attribute name="rev">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="desc">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:NCName"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="by">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:union>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="author"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="general-editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="translator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="commentator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="republisher"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:union>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="select:selid"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="continuation" type="xs:IDREFS"/>
+      <xs:attribute ref="synthesis:onlangfailure"/>
+      <xs:attribute ref="synthesis:ph"/>
+      <xs:attribute ref="synthesis:alphabet"/>
+      <xs:attribute name="rbspan">
+        <xs:simpleType>
+          <xs:restriction base="xs:nonNegativeInteger">
+            <xs:pattern value="[0-9]+"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rp">
+    <xs:complexType mixed="true">
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="about" type="xs:anyURI"/>
+      <xs:attribute name="content"/>
+      <xs:attribute name="datatype">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="typeof">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="property">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rel">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resource" type="xs:anyURI"/>
+      <xs:attribute name="rev">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="desc">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:NCName"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="by">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:union>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="author"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="general-editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="translator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="commentator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="republisher"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:union>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="select:selid"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="continuation" type="xs:IDREFS"/>
+      <xs:attribute ref="synthesis:onlangfailure"/>
+      <xs:attribute ref="synthesis:ph"/>
+      <xs:attribute ref="synthesis:alphabet"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rbc">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="its:rb"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="about" type="xs:anyURI"/>
+      <xs:attribute name="content"/>
+      <xs:attribute name="datatype">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="typeof">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="property">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rel">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resource" type="xs:anyURI"/>
+      <xs:attribute name="rev">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="desc">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:NCName"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="by">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:union>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="author"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="general-editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="translator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="commentator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="republisher"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:union>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="select:selid"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="continuation" type="xs:IDREFS"/>
+      <xs:attribute ref="synthesis:onlangfailure"/>
+      <xs:attribute ref="synthesis:ph"/>
+      <xs:attribute ref="synthesis:alphabet"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="rtc">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="its:rt"/>
+      </xs:sequence>
+      <xs:attribute ref="xml:id"/>
+      <xs:attribute ref="xml:space"/>
+      <xs:attribute ref="xml:base"/>
+      <xs:attribute name="class" type="xs:NMTOKENS"/>
+      <xs:attribute ref="xml:lang"/>
+      <xs:attribute ref="its:dir"/>
+      <xs:attribute ref="its:translate"/>
+      <xs:attribute name="about" type="xs:anyURI"/>
+      <xs:attribute name="content"/>
+      <xs:attribute name="datatype">
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="typeof">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="property">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="rel">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="resource" type="xs:anyURI"/>
+      <xs:attribute name="rev">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="desc">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list itemType="xs:NCName"/>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="by">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:union>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:string">
+                        <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="author"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="general-editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="translator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="commentator"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="editor"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                    <xs:simpleType>
+                      <xs:restriction base="xs:token">
+                        <xs:enumeration value="republisher"/>
+                      </xs:restriction>
+                    </xs:simpleType>
+                  </xs:union>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute ref="select:selid"/>
+      <xs:attribute name="role">
+        <xs:simpleType>
+          <xs:restriction>
+            <xs:simpleType>
+              <xs:list>
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:pattern value="(([\i-[:]][\c-[:]]*)?:)?[\i-[:]][\c-[:]]*"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:list>
+            </xs:simpleType>
+            <xs:minLength value="1"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="continuation" type="xs:IDREFS"/>
+      <xs:attribute ref="synthesis:onlangfailure"/>
+      <xs:attribute ref="synthesis:ph"/>
+      <xs:attribute ref="synthesis:alphabet"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
