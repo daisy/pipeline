@@ -5,12 +5,16 @@
 <th>Id</th>
 <th>Name</th>
 <th>Description</th>
+<th>Required</th>
+<th>Default value</th>
 </tr>
 {{#options.all}}
 <tr>
 <td>{{id}}</td>
 <td>{{name}}</td>
 <td>{{{desc}}}</td>
+<td>{{#required}}yes{{/required}}{{^required}}no{{/required}}</td>
+<td>{{default}}</td>
 </tr>
 {{/options.all}}
 </table>

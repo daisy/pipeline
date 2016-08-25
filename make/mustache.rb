@@ -62,6 +62,8 @@ OPTION = RDF::URI("http://www.daisy.org/ns/pipeline/option")
 ID = RDF::URI("http://www.daisy.org/ns/pipeline/id")
 NAME = RDF::URI("http://www.daisy.org/ns/pipeline/name")
 DESC = RDF::URI("http://www.daisy.org/ns/pipeline/desc")
+REQUIRED = RDF::URI("http://www.daisy.org/ns/pipeline/required")
+DEFAULT = RDF::URI("http://www.daisy.org/ns/pipeline/default")
 
 Dir.glob(ARGV[0]).each do |f|
   if File.file?(f)
@@ -96,6 +98,8 @@ Dir.glob(ARGV[0]).each do |f|
       pattern [ :script, RDF.type, SCRIPT ]
       pattern [ :script, OPTION, :option ]
       pattern [ :option, ID, :id ]
+      pattern [ :option, REQUIRED, :required ], optional: true
+      pattern [ :option, DEFAULT, :default ], optional: true
       pattern [ :option, NAME, :name ], optional: true
       pattern [ :option, DESC, :desc ], optional: true
     end
@@ -106,14 +110,18 @@ Dir.glob(ARGV[0]).each do |f|
       script_info.each do |solution|
         options[solution.id.to_s] = {
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil
+          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
+          'required' => solution.bound?('required') ? (solution.required.to_s =~ (/^(true|yes)$/i) ? true : false) : false,
+          'default' => solution.bound?('default') ? solution.default.to_s : nil
         }
       end
       options['all'] = script_info.map { |solution|
         {
           'id' => solution.id.to_s,
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil
+          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
+          'required' => solution.bound?('required') ? (solution.required.to_s =~ (/^(true|yes)$/i) ? true : false) : false,
+          'default' => solution.bound?('default') ? solution.default.to_s : nil
         }
       }
     end
