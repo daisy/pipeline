@@ -1,14 +1,39 @@
+{{#inputs}}
+
+### Inputs
+
+<table>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Description</th>
+<th>Sequence</th>
+</tr>
+{{#all}}
+<tr>
+<td>{{id}}</td>
+<td>{{name}}</td>
+<td>{{{desc}}}</td>
+<td>{{#sequence}}yes{{/sequence}}{{^sequence}}no{{/sequence}}</td>
+</tr>
+{{/all}}
+</table>
+
+{{/inputs}}
+
+{{#options}}
+
 ### Options
 
 <table>
 <tr>
-<th>Id</th>
+<th>ID</th>
 <th>Name</th>
 <th>Description</th>
 <th>Required</th>
 <th>Default value</th>
 </tr>
-{{#options.all}}
+{{#all}}
 <tr>
 <td>{{id}}</td>
 <td>{{name}}</td>
@@ -16,5 +41,7 @@
 <td>{{#required}}yes{{/required}}{{^required}}no{{/required}}</td>
 <td>{{default}}</td>
 </tr>
-{{/options.all}}
+{{/all}}
 </table>
+
+{{/options}}

@@ -58,12 +58,14 @@ end
 
 DOC = RDF::URI("http://www.daisy.org/ns/pipeline/doc")
 SCRIPT = RDF::URI("http://www.daisy.org/ns/pipeline/script")
+INPUT = RDF::URI("http://www.daisy.org/ns/pipeline/input")
 OPTION = RDF::URI("http://www.daisy.org/ns/pipeline/option")
 ID = RDF::URI("http://www.daisy.org/ns/pipeline/id")
 NAME = RDF::URI("http://www.daisy.org/ns/pipeline/name")
 DESC = RDF::URI("http://www.daisy.org/ns/pipeline/desc")
 REQUIRED = RDF::URI("http://www.daisy.org/ns/pipeline/required")
 DEFAULT = RDF::URI("http://www.daisy.org/ns/pipeline/default")
+SEQUENCE = RDF::URI("http://www.daisy.org/ns/pipeline/sequence")
 
 Dir.glob(ARGV[0]).each do |f|
   if File.file?(f)
@@ -93,7 +95,7 @@ Dir.glob(ARGV[0]).each do |f|
       end
       solutions_rendered
     }
-    script_info_q = RDF::Query.new do
+    options_query = RDF::Query.new do
       pattern [ :script, DOC, page_url ]
       pattern [ :script, RDF.type, SCRIPT ]
       pattern [ :script, OPTION, :option ]
@@ -103,11 +105,11 @@ Dir.glob(ARGV[0]).each do |f|
       pattern [ :option, NAME, :name ], optional: true
       pattern [ :option, DESC, :desc ], optional: true
     end
-    script_info = graph.query(script_info_q)
-    if not script_info.empty?
+    options_solutions = graph.query(options_query)
+    if not options_solutions.empty?
       options = Hash.new
       page_view['options'] = options
-      script_info.each do |solution|
+      options_solutions.each do |solution|
         options[solution.id.to_s] = {
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
           'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
@@ -115,13 +117,43 @@ Dir.glob(ARGV[0]).each do |f|
           'default' => solution.bound?('default') ? solution.default.to_s : nil
         }
       end
-      options['all'] = script_info.map { |solution|
+      options['all'] = options_solutions.map { |solution|
         {
           'id' => solution.id.to_s,
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
           'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
           'required' => solution.bound?('required') ? (solution.required.to_s =~ (/^(true|yes)$/i) ? true : false) : false,
           'default' => solution.bound?('default') ? solution.default.to_s : nil
+        }
+      }
+    end
+    inputs_query = RDF::Query.new do
+      pattern [ :script, DOC, page_url ]
+      pattern [ :script, RDF.type, SCRIPT ]
+      pattern [ :script, INPUT, :input ]
+      pattern [ :input, ID, :id ]
+      pattern [ :input, SEQUENCE, :sequence ], optional: true
+      pattern [ :input, DEFAULT, :default ], optional: true
+      pattern [ :input, NAME, :name ], optional: true
+      pattern [ :input, DESC, :desc ], optional: true
+    end
+    inputs_solutions = graph.query(inputs_query)
+    if not inputs_solutions.empty?
+      inputs = Hash.new
+      page_view['inputs'] = inputs
+      inputs_solutions.each do |solution|
+        inputs[solution.id.to_s] = {
+          'name' => solution.bound?('name') ? solution.name.to_s : nil,
+          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
+          'sequence' => solution.bound?('sequence') ? (solution.sequence.to_s =~ (/^(true|yes)$/i) ? true : false) : false
+        }
+      end
+      inputs['all'] = inputs_solutions.map { |solution|
+        {
+          'id' => solution.id.to_s,
+          'name' => solution.bound?('name') ? solution.name.to_s : nil,
+          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
+          'sequence' => solution.bound?('sequence') ? (solution.sequence.to_s =~ (/^(true|yes)$/i) ? true : false) : false
         }
       }
     end
