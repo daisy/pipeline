@@ -91,8 +91,8 @@ Dir.glob(ARGV[0]).each do |f|
       pattern [ :script, RDF.type, SCRIPT ]
       pattern [ :script, OPTION, :option ]
       pattern [ :option, ID, :id ]
-      pattern [ :option, NAME, :name ]
-      pattern [ :option, DESC, :desc ]
+      pattern [ :option, NAME, :name ], optional: true
+      pattern [ :option, DESC, :desc ], optional: true
     end
     script_info = graph.query(script_info_q)
     if not script_info.empty?
@@ -100,15 +100,15 @@ Dir.glob(ARGV[0]).each do |f|
       page_view['options'] = options
       script_info.each do |solution|
         options[solution.id.to_s] = {
-          'name' => solution.name.to_s,
-          'desc' => solution.desc.to_s
+          'name' => solution.bound?('name') ? solution.name.to_s : nil,
+          'desc' => solution.bound?('desc') ? solution.desc.to_s : nil
         }
       end
       options['all'] = script_info.map { |solution|
         {
           'id' => solution.id.to_s,
-          'name' => solution.name.to_s,
-          'desc' => solution.desc.to_s
+          'name' => solution.bound?('name') ? solution.name.to_s : nil,
+          'desc' => solution.bound?('desc') ? solution.desc.to_s : nil
         }
       }
     end
