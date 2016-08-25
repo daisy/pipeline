@@ -2,6 +2,11 @@ name: snækobbi
 gh: "https://github.com/snaekobbi"
 irc: "https://webchat.freenode.net/?url=irc://irc.freenode.net/snaekobbi"
 markdown: kramdown
+kramdown:
+  syntax_highlighter: coderay
+  syntax_highlighter_opts:
+    line_numbers: false
+    css: class
 site_base: "http://snaekobbi.github.io"
 meta_file: meta.ttl
 exclude:

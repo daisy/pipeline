@@ -15,7 +15,7 @@ meta_file := $(call yaml_get,$(JEKYLL_SRC_DIR)/_config.yml,meta_file)
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
-$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/doc $(JEKYLL_FILES)
+$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/doc $(JEKYLL_FILES) src/css/coderay.css
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build
 	make/process_links.rb $< $@ $(site_base)
@@ -37,6 +37,9 @@ $(JEKYLL_DIR)/doc : $(MUSTACHE_DIR)/doc
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
 	make/make_meta.rb "$</**/*.html" $< $(site_base) >$@
+
+src/css/coderay.css :
+	coderay stylesheet > $@
 
 $(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/doc $(META_JEKYLL_FILES)
 	cd $(dir $@) && jekyll build

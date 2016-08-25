@@ -12,6 +12,7 @@
     gem install nokogiri
     gem install mustache
     gem install github-markup
+    gem install coderay
 
 ## Usage
 
