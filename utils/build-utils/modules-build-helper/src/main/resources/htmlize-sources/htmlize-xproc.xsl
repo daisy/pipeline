@@ -46,8 +46,26 @@
 		</span>
 	</xsl:template>
 	
+	<xsl:template mode="serialize" match="/p:*/p:input">
+		<span rel="input">
+			<xsl:next-match/>
+		</span>
+	</xsl:template>
+	
 	<xsl:template mode="attribute-value" match="/p:*/p:option/@name">
 		<span property="id">
+			<xsl:value-of select="."/>
+		</span>
+	</xsl:template>
+	
+	<xsl:template mode="attribute-value" match="/p:*/p:input/@port">
+		<span property="id">
+			<xsl:value-of select="."/>
+		</span>
+	</xsl:template>
+	
+	<xsl:template mode="attribute-value" match="/p:*/p:input/@sequence">
+		<span property="sequence">
 			<xsl:value-of select="."/>
 		</span>
 	</xsl:template>
@@ -66,13 +84,17 @@
 		</span>
 	</xsl:template>
 	
-	<xsl:template mode="serialize" match="/p:*/p:option/p:documentation/*[@px:role='name']">
+	<xsl:template mode="serialize"
+	              match="/p:*/p:option/p:documentation/*[@px:role='name']|
+	                     /p:*/p:input/p:documentation/*[@px:role='name']">
 		<span property="name" content="{string(.)}">
 			<xsl:next-match/>
 		</span>
 	</xsl:template>
 	
-	<xsl:template mode="serialize" match="/p:*/p:option/p:documentation/*[@px:role='desc']">
+	<xsl:template mode="serialize"
+	              match="/p:*/p:option/p:documentation/*[@px:role='desc']|
+	                     /p:*/p:input/p:documentation/*[@px:role='desc']">
 		<xsl:variable name="content" as="node()*">
 			<xsl:apply-templates mode="serialize"/>
 		</xsl:variable>

@@ -8,7 +8,11 @@
         <p px:role="desc">Does stuff.</p>
     </p:documentation>
     
-    <p:input port="source"/>
+    <p:input port="source">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h1 px:role="name">Source document</h1>
+      </p:documentation>
+    </p:input>
     
     <p:option name="option-1" required="true">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
