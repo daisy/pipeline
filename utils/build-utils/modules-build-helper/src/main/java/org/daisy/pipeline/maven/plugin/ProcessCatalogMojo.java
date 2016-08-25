@@ -59,7 +59,7 @@ public class ProcessCatalogMojo extends AbstractMojo {
 	public void execute() throws MojoFailureException {
 		try {
 			XProcEngine engine = new Calabash();
-			engine.run(asURI(this.getClass().getResource("/org/daisy/pipeline/modules/build/process-catalog.xpl")).toASCIIString(),
+			engine.run(asURI(this.getClass().getResource("/process-catalog/process-catalog.xpl")).toASCIIString(),
 			           ImmutableMap.of("source", (List<String>)ImmutableList.of(asURI(catalogFile).toASCIIString())),
 			           null,
 			           ImmutableMap.of("outputDir", asURI(outputDirectory).toASCIIString(),
