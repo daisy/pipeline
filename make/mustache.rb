@@ -4,6 +4,7 @@ require 'sparql'
 require 'rdf/query'
 require 'rdf/turtle'
 require 'rdf/rdfa'
+require 'github/markup'
 require "#{File.expand_path(File.dirname(__FILE__))}/../src/_plugins/lib/relativize"
 
 meta_file = ARGV[1]
@@ -38,6 +39,10 @@ def parse(input)
       raise "Invalid query in #{f}:\n#{input}"
     end
   end
+end
+
+def render_markdown(md)
+  GitHub::Markup.render('irrelevant.md', md)
 end
 
 class MyMustache < Mustache
@@ -101,14 +106,14 @@ Dir.glob(ARGV[0]).each do |f|
       script_info.each do |solution|
         options[solution.id.to_s] = {
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? solution.desc.to_s : nil
+          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil
         }
       end
       options['all'] = script_info.map { |solution|
         {
           'id' => solution.id.to_s,
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? solution.desc.to_s : nil
+          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil
         }
       }
     end
