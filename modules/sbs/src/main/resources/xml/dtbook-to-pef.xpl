@@ -42,7 +42,7 @@
       </p:documentation>
     </p:option>
 
-    <p:option name="ascii-table" select="'(liblouis-table:&quot;http://www.sbs.ch/pipeline/liblouis/tables/sbs.dis&quot;)'"/>
+    <p:option name="ascii-file-format" select="'(table:&quot;http://www.sbs.ch/pipeline/liblouis/tables/sbs.dis&quot;)(file-extension:&quot;.brl&quot;)'"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
 
@@ -94,7 +94,7 @@
         </p:input>
     </px:merge-parameters>
     <px:delete-parameters parameter-names="stylesheet
-                                           ascii-table
+                                           ascii-file-format
                                            include-brf
                                            include-preview
                                            pef-output-dir
@@ -147,11 +147,10 @@
         </p:with-option>
         <p:with-option name="include-brf" select="$include-brf"/>
         <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="ascii-table" select="$ascii-table"/>
+        <p:with-option name="ascii-file-format" select="$ascii-file-format"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
     </px:xml-to-pef.store>
     
 </p:declare-step>
-
