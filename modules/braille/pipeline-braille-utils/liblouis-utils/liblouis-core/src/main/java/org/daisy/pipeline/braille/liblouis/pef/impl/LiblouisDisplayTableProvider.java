@@ -57,7 +57,7 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 		tableProvider = null;
 	}
 	
-	private static Set<String> supportedFeatures = ImmutableSet.of("liblouis-table", "locale");
+	private static Set<String> supportedFeatures = ImmutableSet.of("liblouis-table", "locale", "id");
 	
 	/**
 	 * Recognized features:
@@ -79,7 +79,13 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 				logger.debug("Unsupported feature: " + feature);
 				return empty; }
 		MutableQuery q = mutableQuery(query);
-		q.add("display");
+		if (q.containsKey("id")) {
+			String id = q.removeOnly("id").getValue().get();
+			if (!q.isEmpty())
+				return empty;
+			q.add("liblouis-table", id); }
+		else
+			q.add("display");
 		return filter(
 			transform(
 				tableProvider.get(q),

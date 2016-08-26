@@ -1,5 +1,6 @@
 package org.daisy.pipeline.braille.pef;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,12 +37,13 @@ public abstract class AbstractTableProvider implements TableProvider /*, org.dai
 		MutableQuery q = mutableQuery(query);
 		if (q.containsKey("id")) {
 			String id = q.removeOnly("id").getValue().get();
-			if (q.isEmpty())
-				return Optional.fromNullable(tablesFromId.get(id)).asSet();
+			if (q.isEmpty()) {
+				Table table = tablesFromId.get(id);
+				if (table != null)
+					return Collections.singleton(table); }
 			else
 				return empty; }
-		else
-			return cache(_get(query));
+		return cache(_get(query));
 	}
 	
 	private final static Iterable<Table> empty = Optional.<Table>absent().asSet();
