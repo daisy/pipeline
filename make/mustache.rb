@@ -5,11 +5,15 @@ require 'rdf/query'
 require 'rdf/turtle'
 require 'rdf/rdfa'
 require 'github/markup'
+require 'yaml'
 require "#{File.expand_path(File.dirname(__FILE__))}/../src/_plugins/lib/relativize"
 
 meta_file = ARGV[1]
 base_dir = ARGV[2]
-site_base = ARGV[3]
+config = YAML.load_file(ARGV[3])
+
+site_base = config['site_base']
+baseurl = config['baseurl'] || ''
 
 PREFIXES = %(
   PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -69,7 +73,7 @@ SEQUENCE = RDF::URI("http://www.daisy.org/ns/pipeline/sequence")
 
 Dir.glob(ARGV[0]).each do |f|
   if File.file?(f)
-    page_url = RDF::URI(f.dup.sub!(base_dir, site_base).gsub(/\.md$/, '.html'))
+    page_url = RDF::URI(f.dup.sub!(base_dir, site_base + baseurl).gsub(/\.md$/, '.html'))
     page_view = MyMustache.new
     page_view['sparql'] = lambda { |input|
       begin

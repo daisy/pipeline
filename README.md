@@ -1,5 +1,5 @@
-# [snaekobbi.github.io][]
-[Jekyll][] powered website: http://snaekobbi.github.io.
+# [daisy.github.io/pipeline][]
+[Jekyll][] powered website: http://daisy.github.io/pipeline.
 
 ## Prerequisites
 [Jekyll][]
@@ -19,5 +19,5 @@
     make serve
 
 
-[snaekobbi.github.io]: https://github.com/snaekobbi/snaekobbi.github.io
+[daisy.github.io/pipeline]: https://daisy.github.io/pipeline
 [jekyll]: http://jekyllrb.com

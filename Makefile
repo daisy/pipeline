@@ -6,11 +6,11 @@ META_JEKYLL_DIR := target/meta/jekyll
 META_JEKYLL_FILES := $(patsubst $(JEKYLL_SRC_DIR)/%,$(META_JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES))
 MAVEN_DIR := target/maven
 MUSTACHE_DIR := target/mustache
+CONFIG_FILE := $(JEKYLL_SRC_DIR)/_config.yml
 
 yaml_get = $(shell eval $$(cat $(1) | grep '^$(2)' | sed -e 's/^$(2) *:/echo /' ))
 
-site_base := $(call yaml_get,$(JEKYLL_SRC_DIR)/_config.yml,site_base)
-meta_file := $(call yaml_get,$(JEKYLL_SRC_DIR)/_config.yml,meta_file)
+meta_file := $(call yaml_get,$(CONFIG_FILE),meta_file)
 
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
@@ -18,7 +18,7 @@ all : $(JEKYLL_DIR)/_site
 $(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/doc $(JEKYLL_FILES) src/css/coderay.css
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build
-	make/process_links.rb $< $@ $(site_base)
+	make/process_links.rb $< $@ $(CONFIG_FILE)
 	touch $@
 
 $(JEKYLL_FILES) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
@@ -36,7 +36,7 @@ $(JEKYLL_DIR)/doc : $(MUSTACHE_DIR)/doc
 
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
-	make/make_meta.rb "$</**/*.html" $< $(site_base) >$@
+	make/make_meta.rb "$</**/*.html" $< $(CONFIG_FILE) >$@
 
 src/css/coderay.css :
 	coderay stylesheet > $@
@@ -66,7 +66,7 @@ $(MUSTACHE_DIR)/doc : $(MAVEN_DIR)/doc $(JEKYLL_DIR)/$(meta_file)
 	mkdir -p $(dir $@)
 	rm -rf $@
 	cp -r $< $@
-	make/mustache.rb "$@/**/*" $(word 2,$^) $@ $(site_base)/doc 2>/dev/null
+	make/mustache.rb "$@/**/*" $(word 2,$^) $(MUSTACHE_DIR) $(CONFIG_FILE)
 
 $(MAVEN_DIR)/doc : $(MAVEN_DIR)/pom.xml
 	rm -rf $@
@@ -78,13 +78,9 @@ $(MAVEN_DIR)/doc : $(MAVEN_DIR)/pom.xml
 	cd $(dir $<)/target/dependency && find . -type d -name '[0-9]*' -prune -exec bash -c \
 		'mkdir -p $(CURDIR)/$@/$$(dirname {}); cp -r {}/* $$_' \; || true
 
-$(MAVEN_DIR)/pom.xml : target/versions.yml $(JEKYLL_SRC_DIR)/_data/doc_modules.yml
+$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/doc_modules.yml
 	mkdir -p $(dir $@)
 	make/make_pom.rb $^ > $@
-
-target/versions.yml : $(JEKYLL_SRC_DIR)/_data/versions.yml
-	mkdir -p $(dir $@)
-	wget -L -O - "https://raw.githubusercontent.com/snaekobbi/system/$(call yaml_get,$<,system)/roles/test-server/vars/versions.yml" > $@
 
 .PHONY : serve
 serve : ws all

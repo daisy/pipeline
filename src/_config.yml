@@ -1,13 +1,12 @@
-name: snækobbi
-gh: "https://github.com/snaekobbi"
-irc: "https://webchat.freenode.net/?url=irc://irc.freenode.net/snaekobbi"
+name: DAISY Pipeline 2
 markdown: kramdown
 kramdown:
   syntax_highlighter: coderay
   syntax_highlighter_opts:
     line_numbers: false
     css: class
-site_base: "http://snaekobbi.github.io"
+baseurl: "/pipeline"
+site_base: "http://daisy.github.io"
 meta_file: meta.ttl
 exclude:
   - /meta.ttl

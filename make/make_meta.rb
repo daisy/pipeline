@@ -3,15 +3,19 @@ require 'rdf/query'
 require 'rdf/turtle'
 require 'rdf/rdfa'
 require 'nokogiri'
+require 'yaml'
 
 base_dir = ARGV[1]
-site_base = ARGV[2]
+config = YAML.load_file(ARGV[2])
+
+site_base = config['site_base']
+baseurl = config['baseurl'] || ''
 
 TITLE = RDF::URI("http://purl.org/dc/elements/1.1/title")
 
 graph = RDF::Graph.new
 Dir.glob(ARGV[0]).each do |f|
-  page_url = RDF::URI(f.dup.sub!(base_dir, site_base))
+  page_url = RDF::URI(f.dup.sub!(base_dir, site_base + baseurl))
   
   # get RDF already present in file
   graph.load(f, :format => :rdfa, :base_uri => page_url)

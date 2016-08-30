@@ -3,17 +3,20 @@ require 'nokogiri'
 require 'sparql'
 require 'rdf/turtle'
 require 'rdf/rdfa'
+require 'yaml'
 require "#{File.expand_path(File.dirname(__FILE__))}/../src/_plugins/lib/relativize"
 
 meta_file = ARGV[0]
 base_dir = ARGV[1]
-site_base = ARGV[2]
+config = YAML.load_file(ARGV[2])
 
+site_base = config['site_base']
+baseurl = config['baseurl'] || ''
 graph = RDF::Graph.load(meta_file)
 
 Dir.glob(base_dir + '/**/*.html').each do |f|
   doc = File.open(f) { |f| Nokogiri::HTML(f) }
-  page_url = RDF::URI(f.dup.sub!(base_dir, site_base))
+  page_url = RDF::URI(f.dup.sub!(base_dir, site_base + baseurl))
   doc.css('a').each do |a|
     
     # absolute links

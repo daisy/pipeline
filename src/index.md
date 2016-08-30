@@ -1,22 +1,7 @@
 ---
 layout: default
-title: "Braille in DP2"
+title: "DAISY Pipeline 2"
 ---
-# Braille in DP2 project
+# DAISY Pipeline 2
 
-Current version: [{{ site.data.versions.system }}](https://github.com/snaekobbi/system/releases/tag/{{ site.data.versions.system }})
-
-## [Requirements](http://snaekobbi.github.io/requirements/{{ site.data.versions.requirements }})
-
-## Code
-
-* [Installation script](https://github.com/snaekobbi/system/releases/tag/{{ site.data.versions.system }})
-
-## Documentation
-
-* [Braille CSS specification](http://braillespecs.github.io/braille-css/{{ site.data.versions.css-spec }})
-
-## Testing
-
-* [Nordic+ Test Server](http://158.39.20.55)
-* [Test reports](https://github.com/snaekobbi/testing/tree/master/Test%20reports)
+Welcome to the DAISY Pipeline 2 website! Nothing here yet but there soon will be.
