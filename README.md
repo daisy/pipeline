@@ -1,6 +1,8 @@
 # pipeline
 
-Convenience "super" Pipeline project that aggregates all sub-projects and 3rd-party libraries.
+## Code
+
+This is a convenience "super" Pipeline project that aggregates all sub-projects and 3rd-party libraries.
 
 This makes branching, building, and releasing of several sub-projects at once easier.
 
@@ -26,6 +28,11 @@ The tree below shows the structure of the project:
 - utils
   - [build-utils](https://github.com/daisy/pipeline-build-utils)
 - [webui](https://github.com/daisy/pipeline-webui)
+
+
+## Issues
+
+This is also a common issue tracker for the Pipeline. Use the individual issue trackers of the sub-projects listed above for issues that clearly belong to a specific sub-project. Before creating a new issue, please first check the [existing issues](https://github.com/search?utf8=%E2%9C%93&q=repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl&type=Issues&ref=searchresults).
 
 
 [git-subrepo]: https://github.com/ingydotnet/git-subrepo
