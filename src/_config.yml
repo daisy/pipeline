@@ -1,4 +1,14 @@
 name: DAISY Pipeline 2
+collections:
+  wiki:
+    output: true
+    permalink: /wiki/:path.html
+defaults:
+  - scope:
+      path: ""
+      type: wiki
+    values:
+      layout: wiki
 markdown: kramdown
 kramdown:
   syntax_highlighter: coderay

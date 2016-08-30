@@ -19,7 +19,12 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
   page_url = RDF::URI(f.dup.sub!(base_dir, site_base + baseurl))
   doc.css('a').each do |a|
     
-    # absolute links
+    # absolute links (assume external)
+    if a['href'] =~ /http.*/o
+      next
+    end
+    
+    # relative links to markdown
     if a['href'] =~ /(.+)\.md/o
       a['href'] = $1 + '.html'
     

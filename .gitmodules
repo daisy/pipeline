@@ -1,0 +1,4 @@
+[submodule "src/_wiki"]
+	path = src/_wiki
+	url = git@github.com:daisy/pipeline
+	branch = wiki

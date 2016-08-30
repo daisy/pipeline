@@ -1,9 +1,14 @@
 JEKYLL_SRC_DIR := src
-JEKYLL_SRC_FILES := $(shell find $(JEKYLL_SRC_DIR) -type f)
+JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/_wiki -type f)
+JEKYLL_SRC_FILES_OTHER := $(filter-out $(JEKYLL_SRC_FILES_CONTENT),$(shell find $(JEKYLL_SRC_DIR) -type f))
 JEKYLL_DIR := target/jekyll
-JEKYLL_FILES := $(patsubst $(JEKYLL_SRC_DIR)/%,$(JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES))
+JEKYLL_FILES_CONTENT := $(patsubst $(JEKYLL_SRC_DIR)/%,$(JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_CONTENT))
+JEKYLL_FILES_OTHER := $(patsubst $(JEKYLL_SRC_DIR)/%,$(JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_OTHER))
+JEKYLL_FILES := $(JEKYLL_FILES_CONTENT) $(JEKYLL_FILES_OTHER)
 META_JEKYLL_DIR := target/meta/jekyll
-META_JEKYLL_FILES := $(patsubst $(JEKYLL_SRC_DIR)/%,$(META_JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES))
+META_JEKYLL_FILES_CONTENT := $(patsubst $(JEKYLL_SRC_DIR)/%,$(META_JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_CONTENT))
+META_JEKYLL_FILES_OTHER := $(patsubst $(JEKYLL_SRC_DIR)/%,$(META_JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_OTHER))
+META_JEKYLL_FILES := $(META_JEKYLL_FILES_CONTENT) $(META_JEKYLL_FILES_OTHER)
 MAVEN_DIR := target/maven
 MUSTACHE_DIR := target/mustache
 CONFIG_FILE := $(JEKYLL_SRC_DIR)/_config.yml
@@ -15,17 +20,22 @@ meta_file := $(call yaml_get,$(CONFIG_FILE),meta_file)
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
-$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/doc $(JEKYLL_FILES) src/css/coderay.css
+$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(JEKYLL_FILES) src/css/coderay.css
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build
 	make/process_links.rb $< $@ $(CONFIG_FILE)
 	touch $@
 
-$(JEKYLL_FILES) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
+$(JEKYLL_FILES_CONTENT) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
+	mkdir -p $(dir $@)
+	eval "$$(echo 'newline="'; echo '"')"; \
+	echo "---$${newline}---" | cat - $< >$@
+
+$(JEKYLL_FILES_OTHER) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
 	cp $< $@
 
-$(JEKYLL_DIR)/doc : $(MUSTACHE_DIR)/doc
+$(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules
 	mkdir -p $(dir $@)
 	rm -rf $@
 	cp -r $< $@
@@ -41,15 +51,20 @@ $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 src/css/coderay.css :
 	coderay stylesheet > $@
 
-$(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/doc $(META_JEKYLL_FILES)
+$(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(META_JEKYLL_FILES)
 	cd $(dir $@) && jekyll build
 	touch $@
 
-$(META_JEKYLL_FILES) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
+$(META_JEKYLL_FILES_CONTENT) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
+	mkdir -p $(dir $@)
+	eval "$$(echo 'newline="'; echo '"')"; \
+	echo "---$${newline}---" | cat - $< >$@
+
+$(META_JEKYLL_FILES_OTHER) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
 	cp $< $@
 
-$(META_JEKYLL_DIR)/doc : $(MAVEN_DIR)/doc
+$(META_JEKYLL_DIR)/modules : $(MAVEN_DIR)/modules
 	mkdir -p $(dir $@)
 	rm -rf $@
 	cp -r $< $@
@@ -62,13 +77,13 @@ $(META_JEKYLL_DIR)/$(meta_file) :
 	mkdir -p $(dir $@)
 	touch $@
 
-$(MUSTACHE_DIR)/doc : $(MAVEN_DIR)/doc $(JEKYLL_DIR)/$(meta_file)
+$(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/modules $(JEKYLL_DIR)/$(meta_file)
 	mkdir -p $(dir $@)
 	rm -rf $@
 	cp -r $< $@
 	make/mustache.rb "$@/**/*" $(word 2,$^) $(MUSTACHE_DIR) $(CONFIG_FILE)
 
-$(MAVEN_DIR)/doc : $(MAVEN_DIR)/pom.xml
+$(MAVEN_DIR)/modules : $(MAVEN_DIR)/pom.xml
 	rm -rf $@
 	mkdir -p $@
 	cd $(dir $<) && mvn --quiet \
