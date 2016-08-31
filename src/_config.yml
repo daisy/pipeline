@@ -17,6 +17,4 @@ kramdown:
     css: class
 baseurl: "/pipeline"
 site_base: "http://daisy.github.io"
-meta_file: meta.ttl
-exclude:
-  - /meta.ttl
+meta_file: _meta.ttl
