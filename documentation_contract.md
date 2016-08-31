@@ -116,7 +116,7 @@
   ~~~
 
   `desc` may contain HTML (so you probably want to use the triple
-  mustache to render it: `{{{desc}}}`).
+  mustache to render it: <code>&#123;&#123;&#123;desc&#125;&#125;&#125;</code>).
 
 - `inputs`: The input ports of a script. This variable is only
   available in the context of script documentation. The data is built
@@ -153,8 +153,7 @@
   expression with the SPARQL variables bound to identically named
   Mustache variables. A call might look like this:
   
-  ~~~mustache
-  {{#sparql}}
+  <pre><code>&#123;&#123;#sparql&#125;&#125;
   SELECT ?href ?title WHERE {
     []    a        dp2:script ;
           dp2:doc  ?href .
@@ -162,9 +161,9 @@
           a        dp2:userdoc .
   }
   ORDER BY ?title
-  - [{{title}}]({{href}})
-  {{/sparql}}
-  ~~~
+  - [&#123;&#123;title&#125;&#125;](&#123;&#123;href&#125;&#125;)
+  &#123;&#123;/sparql&#125;
+  </code></pre>
 
 
 [Markdown]: http://daringfireball.net/projects/markdown/
