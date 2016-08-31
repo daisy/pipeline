@@ -1,5 +1,5 @@
 #!/bin/bash
-#version: 2016-05-27
+#version: 2016-08-31
 
 repo=dotify.api
 version=`grep 'version='  gradle.properties | grep -E -o '[0-9\.]+.+$'`
@@ -47,7 +47,7 @@ if [ "$TRAVIS_REPO_SLUG" == "brailleapps/$repo" ] && [ "$TRAVIS_PULL_REQUEST" ==
   fi
   git rm -rf ./$repo/latest
   
-  cp -Rf $HOME/$repo ./$repo
+  cp -Rf $HOME/$repo/. ./$repo
   
   git add -f .
   git commit -m "Lastest successful travis build of $repo ($TRAVIS_BUILD_NUMBER) auto-pushed to brailleapps.github.io"
