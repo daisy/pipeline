@@ -117,7 +117,7 @@ Dir.glob(ARGV[0]).each do |f|
         options[solution.id.to_s] = {
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
           'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
-          'required' => solution.bound?('required') ? (solution.required.to_s =~ (/^(true|yes)$/i) ? true : false) : false,
+          'required' => solution.bound?('required') ? solution.required.true? : false,
           'default' => solution.bound?('default') ? solution.default.to_s : nil
         }
       end
@@ -126,7 +126,7 @@ Dir.glob(ARGV[0]).each do |f|
           'id' => solution.id.to_s,
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
           'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
-          'required' => solution.bound?('required') ? (solution.required.to_s =~ (/^(true|yes)$/i) ? true : false) : false,
+          'required' => solution.bound?('required') ? solution.required.true? : false,
           'default' => solution.bound?('default') ? solution.default.to_s : nil
         }
       }
@@ -149,7 +149,7 @@ Dir.glob(ARGV[0]).each do |f|
         inputs[solution.id.to_s] = {
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
           'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
-          'sequence' => solution.bound?('sequence') ? (solution.sequence.to_s =~ (/^(true|yes)$/i) ? true : false) : false
+          'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false
         }
       end
       inputs['all'] = inputs_solutions.map { |solution|
@@ -157,7 +157,7 @@ Dir.glob(ARGV[0]).each do |f|
           'id' => solution.id.to_s,
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
           'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
-          'sequence' => solution.bound?('sequence') ? (solution.sequence.to_s =~ (/^(true|yes)$/i) ? true : false) : false
+          'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false
         }
       }
     end
