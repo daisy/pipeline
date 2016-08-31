@@ -1,0 +1,4 @@
+- group: org.daisy.pipeline.modules
+  artifact: dtbook-to-zedai
+  # depends on branch "doc"
+  version: 1.0.3-SNAPSHOT

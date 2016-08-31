@@ -9,3 +9,4 @@ Welcome to the DAISY Pipeline 2 website!
 Go to:
 
 * [wiki](wiki/Home.md)
+* [script documentation](scripts.md)
