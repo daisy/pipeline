@@ -65,13 +65,13 @@
 	</xsl:template>
 	
 	<xsl:template mode="attribute-value" match="/p:*/p:input/@sequence">
-		<span property="sequence">
+		<span property="sequence" datatype="xsd:boolean">
 			<xsl:value-of select="."/>
 		</span>
 	</xsl:template>
 	
 	<xsl:template mode="attribute-value" match="/p:*/p:option/@required">
-		<span property="required">
+		<span property="required" datatype="xsd:boolean">
 			<xsl:value-of select="."/>
 		</span>
 	</xsl:template>
