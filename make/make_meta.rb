@@ -36,9 +36,10 @@ Dir.glob(ARGV[0]).each do |f|
         title = node.content.to_s
       end
     end
-    if title
-      graph.data.insert(RDF::Statement.new(page_url, TITLE, title))
+    if not title
+      title = File.basename(f, '.*')
     end
+    graph.data.insert(RDF::Statement.new(page_url, TITLE, title))
   end
 end
 RDF::Turtle::Writer.new do |writer|
