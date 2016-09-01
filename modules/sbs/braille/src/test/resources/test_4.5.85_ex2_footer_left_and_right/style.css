@@ -12,6 +12,10 @@
 	}
 }
 
+bodymatter {
+	page: auto;
+}
+
 dtbook {
 	hyphens: none;
 }

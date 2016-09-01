@@ -92,11 +92,7 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="4.5.81_ex1_footer_complete" xfail="true">
-    <x:documentation>
-      Broken:
-      - h1 in footer not centered correctly
-    </x:documentation>
+  <x:scenario label="4.5.81_ex1_footer_complete">
     <x:call step="sbs:dtbook-to-pef">
       <x:input port="source">
         <x:document type="file" href="../resources/test_4.5.81_ex1_footer_complete/test_4.5.81.xml"/>
@@ -194,11 +190,7 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="4.5.82_ex2_parts_without_print_page_number" xfail="true">
-    <x:documentation>
-      Broken:
-      - h1 in footer not centered correctly
-    </x:documentation>
+  <x:scenario label="4.5.82_ex2_parts_without_print_page_number">
     <x:call step="sbs:dtbook-to-pef">
       <x:input port="source">
         <x:document type="file" href="../resources/test_4.5.82_ex2_parts_without_print_page_number/test_4.5.82.xml"/>
@@ -311,11 +303,7 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="4.5.85_ex1_footer_only_right" xfail="true">
-    <x:documentation>
-      Broken:
-      - h1 in footer not centered correctly
-    </x:documentation>
+  <x:scenario label="4.5.85_ex1_footer_only_right">
     <x:call step="sbs:dtbook-to-pef">
       <x:input port="source">
         <x:document type="file" href="../resources/test_4.5.85_ex1_footer_only_right/test_4.5.85.xml"/>
@@ -334,11 +322,7 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="4.5.85_ex2_footer_left_and_right" xfail="true">
-    <x:documentation>
-      Broken:
-      - h1 in footer not centered correctly
-    </x:documentation>
+  <x:scenario label="4.5.85_ex2_footer_left_and_right">
     <x:call step="sbs:dtbook-to-pef">
       <x:input port="source">
         <x:document type="file" href="../resources/test_4.5.85_ex2_footer_left_and_right/test_4.5.85.xml"/>

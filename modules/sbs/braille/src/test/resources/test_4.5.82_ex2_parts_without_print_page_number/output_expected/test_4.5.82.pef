@@ -2,13 +2,11 @@
 <pef version="2008-1" xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="de">
   <head>
     <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
-      <dc:title>Ohne Titel</dc:title>
-      <dc:creator>SBS</dc:creator>
-      <dc:date>0000-00-00</dc:date>
       <dc:format>application/x-pef+xml</dc:format>
-      <dc:identifier>org.pef-format.00002</dc:identifier>
-      <dc:description>Ohnee Beschreibung</dc:description>
+      <dc:title>PRODSERVER1</dc:title>
+      <dc:creator>HAFECHÄS</dc:creator>
       <dc:language>de</dc:language>
+      <dc:publisher>Swiss Library for the Blind, Visually Impaired and Print Disabled</dc:publisher>
     </meta>
   </head>
   <body>
@@ -134,7 +132,7 @@
           <row/>
           <row/>
           <row/>
-          <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠁⠝⠅⠎⠁⠛⠥⠝⠛⠀⠀⠀⠀⠀⠀⠀⠼⠑</row>
+          <row>⠀⠀⠀⠀⠀⠀⠀⠀⠙⠁⠝⠅⠎⠁⠛⠥⠝⠛⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑</row> <!-- centering of heading slightly changed -->
         </page>
       </section>
     </volume>
