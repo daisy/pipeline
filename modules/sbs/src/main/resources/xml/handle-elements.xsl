@@ -9,7 +9,7 @@
     xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
     exclude-result-prefixes="dtb pf my" extension-element-prefixes="my">
 
-  <xsl:param name="contraction">2</xsl:param>
+  <xsl:param name="contraction-grade">2</xsl:param>
   <xsl:param name="show_v_forms" select="true()"/>
   <xsl:param name="downshift_ordinals" select="true()"/>
   <xsl:param name="ascii-braille">no</xsl:param>
@@ -33,10 +33,15 @@
   -->
   
   <!--
-      Implement the template decode with the following signature (used in brl:literal)
+      Implement the templates decode and encode with the following signature (used in brl:literal)
   -->
   <!--
   <xsl:template name="decode" as="text()">
+    <xsl:param name="text" as="xs:string" required="no"/>
+    ...
+  </xsl:template>
+  
+  <xsl:template name="encode" as="text()">
     <xsl:param name="text" as="xs:string" required="no"/>
     ...
   </xsl:template>
@@ -806,15 +811,28 @@
   -->
   <xsl:template match="brl:literal">
     <xsl:choose>
-      <xsl:when test="@brl:grade[not(.=$contraction)]">
+      <xsl:when test="@brl:grade[not(.=$contraction-grade)]">
         <!-- ignore -->
       </xsl:when>
       <xsl:when test="$ascii-braille='yes'">
-        <!-- input is already ascii -->
-        <xsl:value-of select="."/>
+        <xsl:analyze-string select="string(.)" regex="[&#x2800;-&#x28FF;\s&#x00A0;&#x00AD;&#x200B;]+">
+          <xsl:matching-substring>
+            <xsl:call-template name="encode"/>
+          </xsl:matching-substring>
+          <xsl:non-matching-substring>
+            <xsl:value-of select="."/>
+          </xsl:non-matching-substring>
+        </xsl:analyze-string>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:call-template name="decode"/>
+        <xsl:analyze-string select="string(.)" regex="[&#x2800;-&#x28FF;\s&#x00A0;&#x00AD;&#x200B;]+">
+          <xsl:matching-substring>
+            <xsl:value-of select="."/>
+          </xsl:matching-substring>
+          <xsl:non-matching-substring>
+            <xsl:call-template name="decode"/>
+          </xsl:non-matching-substring>
+        </xsl:analyze-string>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>

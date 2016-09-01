@@ -40,17 +40,9 @@
 		                      css:serialize-declaration-list($inline-style))"/>
 		<xsl:choose>
 		  <xsl:when test="$ascii-braille = 'yes'">
-		    <xsl:variable name="ascii-braille" as="xs:string*">
-		      <xsl:analyze-string regex="[\s&#x00A0;&#x00AD;&#x200B;]+" select="$unicode-braille">
-			<xsl:matching-substring>
-			  <xsl:sequence select="translate(.,'&#x00AD;&#x200B;','tm')"/>
-			</xsl:matching-substring>
-			<xsl:non-matching-substring>
-			  <xsl:sequence select="pef:encode('(liblouis-table:&quot;sbs.dis&quot;)', .)"/>
-			</xsl:non-matching-substring>
-		      </xsl:analyze-string>
-		    </xsl:variable>
-		    <xsl:value-of select="string-join($ascii-braille,'')"/>
+			<xsl:call-template name="encode">
+			  <xsl:with-param name="text" select="$unicode-braille"/>
+			</xsl:call-template>
 		  </xsl:when>
 		  <xsl:otherwise>
 		    <xsl:value-of select="$unicode-braille"/>
@@ -58,9 +50,34 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template name="encode" as="text()">
+		<xsl:param name="text" as="xs:string" required="no" select="string()"/>
+		<xsl:variable name="ascii-braille" as="xs:string*">
+	      <xsl:analyze-string regex="[\s&#x00A0;&#x00AD;&#x200B;]+" select="$text">
+			<xsl:matching-substring>
+			  <xsl:sequence select="translate(.,'&#x00AD;&#x200B;','tm')"/>
+			</xsl:matching-substring>
+			<xsl:non-matching-substring>
+			  <xsl:value-of select="pef:encode('(liblouis-table:&quot;sbs.dis&quot;)', .)"/>
+			</xsl:non-matching-substring>
+		  </xsl:analyze-string>
+		</xsl:variable>
+		<xsl:value-of select="string-join($ascii-braille,'')"/>
+	</xsl:template>
+	
 	<xsl:template name="decode" as="text()">
 		<xsl:param name="text" as="xs:string" required="no" select="string()"/>
-		<xsl:value-of select="pef:decode('(liblouis-table:&quot;sbs.dis&quot;)', $text)"/>
+		<xsl:variable name="unicode-braille" as="xs:string*">
+	      <xsl:analyze-string regex="[\s&#x00A0;tm]+" select="$text">
+			<xsl:matching-substring>
+			  <xsl:sequence select="translate(.,'tm','&#x00AD;&#x200B;')"/>
+			</xsl:matching-substring>
+			<xsl:non-matching-substring>
+			  <xsl:value-of select="pef:decode('(liblouis-table:&quot;sbs.dis&quot;)', .)"/>
+			</xsl:non-matching-substring>
+		  </xsl:analyze-string>
+		</xsl:variable>
+		<xsl:value-of select="string-join($unicode-braille,'')"/>
 	</xsl:template>
 	
 	<!-- @Override -->

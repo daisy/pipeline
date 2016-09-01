@@ -9,7 +9,19 @@
   <x:param name="hyphenator">(locale:de)</x:param>
   <x:param name="ascii-braille">no</x:param>
 
-    <x:scenario label="Selection feature with ASCII in brl:literal but unicode braille in output">
+    <x:scenario label="Selection feature with Unicode braille in brl:literal and in output">
+      <x:context>
+        <brl:select xml:lang="de">
+	  <brl:when-braille>
+	    <brl:literal>⠋⠕⠕</brl:literal>
+	  </brl:when-braille>
+	  <brl:otherwise>Bar</brl:otherwise>
+	</brl:select>
+      </x:context>
+      <x:expect label="braille">⠋⠕⠕</x:expect>
+    </x:scenario>
+
+    <x:scenario label="Selection feature with ASCII in brl:literal but Unicode braille in output">
       <x:context>
         <brl:select xml:lang="de">
 	  <brl:when-braille>
