@@ -18,5 +18,8 @@ Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux)
 - Requires JDK 7
 - Compatible with SPI and OSGi
 
+## Javadoc ##
+Javadoc for the latest Task Runner is available [here](http://brailleapps.github.io/dotify.task-runner/latest/javadoc/).
+
 ## More information ##
 See the [common wiki](https://github.com/brailleapps/wiki/wiki) for more information.
