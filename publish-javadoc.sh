@@ -1,4 +1,5 @@
 #!/bin/bash
+#version: 2016-08-31
 
 repo=braille-utils.api
 version=`grep 'version='  gradle.properties | grep -E -o '[0-9\.]+.+$'`
@@ -7,8 +8,22 @@ if [[ $version == *SNAPSHOT ]]; then
 else
 	is_release=true
 fi
+if [ `git diff --name-only HEAD HEAD~ | grep gradle.properties -c` = 1 ]; then	
+	prop_change="true"
+else 
+	prop_change="false"
+fi
+
 echo "Version: $version"
 echo "Is release: $is_release"
+echo "Properties changed: $prop_change"
+
+if [ "$prop_change" = "false" ]; then
+	if [ "$is_release" = "true" ]; then
+		echo "No version change since last commit. Is this really a release?"
+		exit 1
+	fi
+fi
 
 if [ "$TRAVIS_REPO_SLUG" == "brailleapps/$repo" ] && [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_BRANCH" == "master" ]; then
 
@@ -32,7 +47,7 @@ if [ "$TRAVIS_REPO_SLUG" == "brailleapps/$repo" ] && [ "$TRAVIS_PULL_REQUEST" ==
   fi
   git rm -rf ./$repo/latest
   
-  cp -Rf $HOME/$repo ./$repo
+  cp -Rf $HOME/$repo/. ./$repo
   
   git add -f .
   git commit -m "Lastest successful travis build of $repo ($TRAVIS_BUILD_NUMBER) auto-pushed to brailleapps.github.io"
