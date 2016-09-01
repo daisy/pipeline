@@ -24,7 +24,7 @@ module Jekyll
     
     def render(context)
       config = context.registers[:site].config
-      page_url = RDF::URI(config['site_base'] + context.environments.first["page"]["url"])
+      site_base_url = RDF::URI(config['site_base'])
       graph = RDF::Graph.load(config['meta_file'])
       solutions = @query.execute(graph)
       result = ''
@@ -36,7 +36,7 @@ module Jekyll
                 k.to_s,
                 case v
                 when RDF::URI
-                  relativize(page_url, v).to_s
+                  relativize(site_base_url, v).to_s
                 else
                   v.to_s
                 end

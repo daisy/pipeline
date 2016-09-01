@@ -17,6 +17,7 @@ graph = RDF::Graph.load(meta_file)
 Dir.glob(base_dir + '/**/*.html').each do |f|
   doc = File.open(f) { |f| Nokogiri::HTML(f) }
   page_url = RDF::URI(f.dup.sub!(base_dir, site_base + baseurl))
+  site_base_url = RDF::URI(config['site_base'])
   doc.css('a').each do |a|
     
     # absolute links (assume external)
@@ -42,7 +43,7 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
       })
       result = query.execute(graph)
       if not result.empty?
-        a['href'] = relativize(page_url, result[0]['href']).to_s
+        a['href'] = relativize(site_base_url, result[0]['href']).to_s
       end
     end
   end

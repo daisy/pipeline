@@ -14,6 +14,7 @@ config = YAML.load_file(ARGV[3])
 
 site_base = config['site_base']
 baseurl = config['baseurl'] || ''
+site_base_url = RDF::URI(site_base)
 
 PREFIXES = %(
   PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -90,7 +91,7 @@ Dir.glob(ARGV[0]).each do |f|
           solution_view[k.to_s] =
             case v
             when RDF::URI
-              relativize(page_url, v).to_s
+              relativize(site_base_url, v).to_s
             else
               v.to_s
             end
