@@ -491,7 +491,9 @@
   <x:scenario label="4.8.107_ex1_skip_page_breaks" xfail="true">
     <x:documentation>
       Broken:
-      - string(..., last) does not behave as expected (print page numbers at end of page are moved to next)
+      - string(..., start-except-last) and string(..., last) do not behave as expected: print page
+        numbers at end of page are moved to next, and empty print pages at the beginning of the
+        document are not skipped. See issue https://github.com/sbsdev/pipeline-mod-sbs/issues/45.
     </x:documentation>
     <x:call step="sbs:dtbook-to-pef">
       <x:input port="source">
@@ -514,7 +516,8 @@
   <x:scenario label="4.8.107_ex2_skip_page_breaks" xfail="true">
     <x:documentation>
       Broken:
-      - string(..., last) does not behave as expected (print page numbers at end of page are moved to next)
+      - string(..., start-except-last) and string(..., last) do not behave as expected: print page
+        numbers at end of page are moved to next. See issue https://github.com/sbsdev/pipeline-mod-sbs/issues/45.
     </x:documentation>
     <x:call step="sbs:dtbook-to-pef">
       <x:input port="source">

@@ -19,5 +19,28 @@
       <x:document type="file" href="../resources/test_print_page_numbers/test_4.5.81_expected.pef"/>
     </x:expect>
   </x:scenario>
-
+  
+  <x:scenario label="don't ignore pagenum elements lying at the end of the spread" xfail="true">
+    <x:documentation>
+      See issue https://github.com/sbsdev/pipeline-mod-sbs/issues/45. See also related tests
+      4.8.107_ex1_skip_page_breaks and 4.8.107_ex2_skip_page_breaks.
+    </x:documentation>
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="file" href="../resources/test_print_page_numbers_end_of_spread/test_print_page_numbering.xml"/>
+      </x:input>
+      <x:option name="contraction-grade" select="0"/>
+      <x:option name="include-brf" select="true()"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_print_page_numbers_end_of_spread/')"/>
+      <x:option name="brf-output-dir" select="concat($temp-dir,'output-dir/test_print_page_numbers_end_of_spread/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/test_print_page_numbers_end_of_spread/test_print_page_numbering.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/test_print_page_numbers_end_of_spread/output_expected/test_print_page_numbering.pef"/>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

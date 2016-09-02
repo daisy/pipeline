@@ -1,0 +1,674 @@
+   #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+ #A #A #A #A #A #A #A #A #A
+   #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ _#A;                      #A
+p#B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B #B #B #B
+ #B #B #B #B #B #B
+   #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #C #C #C #C #C #C #C #C
+ #C #D #D #D #D #D #D #D #D
+ #D #D #D #D #D #D #D #D #D
+p#D #D #D #D #D #D #D #D #D
+ #D #D #D #D #D #D #D #D #D
+ #D #D #D #D #D #D #D #D #D
+ #D #D #D #D #D #D #D #D #D
+ #D #D #D #D #D #D #D #D #D
+ #D #D #D #D #D #D #D #D #D
+ #D #D #D #D #D #D #D #D #D
+ #D #D #D #D #D #D #D #D #D
+ #D #D #D #D #D #D #D #D #D
+ #D #D #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #E #E #E #E #E #E
+ #E #E #E #F #F #F #F #F #F
+ #F #F #F #F #F #F #F #F #F
+ #F #F #F #F #F #F #F #F #F
+ #F #F #F #F #F #F #F #F #F
+ #F #F #F #F #F #F #F #F #F
+ #F #F #F #F #F #F #F #F #F
+ #F #F #F #F #F #F #F #F #F
+ _#B+                      #C
+p#F #F #F #F #F #F #F #F #F
+ #F #F #F #F #F #F #F #F #F
+ #F #F #F #F #F #F #F #F #F
+ #F #F #F #F #F #F #F #F #F
+ #F #F #F #F #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #G #G #G #G
+ #G #G #G #G #G #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #H #H #H
+ #H #H #H #H #H #H #I #I #I
+ #I #I #I #I #I #I #I #I #I
+p#I #I #I #I #I #I #I #I #I
+ #I #I #I #I #I #I #I #I #I
+ #I #I #I #I #I #I #I #I #I
+ #I #I #I #I #I #I #I #I #I
+ #I #I #I #I #I #I #I #I #I
+ #I #I #I #I #I #I #I #I #I
+ #I #I #I #I #I #I #I #I #I
+ #I #I #I #I #I #I #I #I #I
+ #I #I #I #I #I #I #I #I #I
+ #I #I #I #I #I #I #I
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ _#F,)                     #E
+p  #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA #AA #AA
+p#AA #AA #AA #AA #AA #AA #AA
+ #AA #AA #AA #AA #AA
+   #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB #AB #AB #AB #AB #AB #AB
+ #AB
+ _#AA,;                    #G
+p  #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AC #AC #AC #AC
+ #AC #AC #AC #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+ #AD #AD #AD #AD #AD #AD #AD
+p#AD #AD #AD #AD #AD #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AE #AE #AE #AE #AE #AE #AE
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ _#AC,+                    #I
+p#AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AF #AF #AF #AF #AF
+ #AF #AF #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AG #AG #AG
+ #AG #AG #AG #AG #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+p#AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AH
+ #AH #AH #AH #AH #AH #AH #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI #AI #AI #AI #AI #AI #AI
+ #AI
+
+
+
+
+
+
+
+
+
+ _#AF;)                   #AA
+p  #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA #BA #BA
+p#BA #BA #BA #BA #BA #BA #BA
+ #BA #BA #BA #BA #BA
+   #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB #BB #BB #BB #BB #BB #BB
+ #BB
+ _#BA;;                   #AC
+p  #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BC #BC #BC #BC
+ #BC #BC #BC #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+ #BD #BD #BD #BD #BD #BD #BD
+p#BD #BD #BD #BD #BD #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BE #BE #BE #BE #BE #BE #BE
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ _#BC;+                   #AE
+p#BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BF #BF #BF #BF #BF
+ #BF #BF #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BG #BG #BG
+ #BG #BG #BG #BG #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+p#BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BH
+ #BH #BH #BH #BH #BH #BH #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI #BI #BI #BI #BI #BI #BI
+ #BI
+
+
+
+
+
+
+
+
+
+ _#BF:)                   #AG
+p  #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA #CA #CA
+p#CA #CA #CA #CA #CA #CA #CA
+ #CA #CA #CA #CA #CA
+   #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB #CB #CB #CB #CB #CB #CB
+ #CB
+ _#CA:;                   #AI
+p  #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CC #CC #CC #CC
+ #CC #CC #CC #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+ #CD #CD #CD #CD #CD #CD #CD
+p#CD #CD #CD #CD #CD #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CE #CE #CE #CE #CE #CE #CE
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ _#CC:+                   #BA
+p#CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CF #CF #CF #CF #CF
+ #CF #CF #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CG #CG #CG
+ #CG #CG #CG #CG #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+p#CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CH
+ #CH #CH #CH #CH #CH #CH #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI #CI #CI #CI #CI #CI #CI
+ #CI
+
+
+
+
+
+
+
+
+
+ _#CF/)                   #BC
+p
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+p
+p
