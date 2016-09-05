@@ -24,7 +24,7 @@ import org.junit.Test;
 public class VolumesTest {
 	
 	public VolumesTest() {
-		CSSFactory.registerSupportedCSS(SupportedBrailleCSS.getInstance());
+		CSSFactory.registerSupportedCSS(new SupportedBrailleCSS());
 		CSSFactory.registerDeclarationTransformer(new BrailleCSSDeclarationTransformer());
 	}
 	

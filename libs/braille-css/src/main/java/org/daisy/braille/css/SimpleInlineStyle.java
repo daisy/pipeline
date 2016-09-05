@@ -14,7 +14,7 @@ import cz.vutbr.web.domassign.SingleMapNodeData;
 
 public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cloneable, Iterable<PropertyValue> {
 	
-	private final static SupportedCSS cssInstance = SupportedBrailleCSS.getInstance();
+	private final static SupportedCSS cssInstance = new SupportedBrailleCSS();
 	private static BrailleCSSDeclarationTransformer transformerInstance; static {
 		// SupportedCSS injected via CSSFactory in DeclarationTransformer.<init>
 		CSSFactory.registerSupportedCSS(cssInstance);

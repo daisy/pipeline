@@ -40,7 +40,7 @@ public class PropertyValue implements Cloneable {
 		return clone;
 	}
 	
-	private final static SupportedCSS cssInstance = SupportedBrailleCSS.getInstance();
+	private final static SupportedCSS cssInstance = new SupportedBrailleCSS(true, false);
 	private static BrailleCSSDeclarationTransformer transformerInstance; static {
 		// SupportedCSS injected via CSSFactory in DeclarationTransformer.<init>
 		CSSFactory.registerSupportedCSS(cssInstance);

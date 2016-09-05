@@ -1,6 +1,7 @@
 package org.daisy.braille.css;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -61,28 +62,26 @@ public class SupportedBrailleCSS implements SupportedCSS {
 	private static final Term<?> DEFAULT_UA_TEXT_IDENT = tf.createInteger(0);
 	private static final Term<?> DEFAULT_UA_MARGIN = tf.createInteger(0);
 	private static final Term<?> DEFAULT_UA_PADDING = tf.createInteger(0);
+	private static final Term<?> DEFAULT_UA_BORDER_WIDTH = tf.createInteger(1);
 	private static final Term<?> DEFAULT_UA_ORPHANS = tf.createInteger(2);
 	private static final Term<?> DEFAULT_UA_WIDOWS = tf.createInteger(2);
 	private static final Term<?> DEFAULT_UA_LINE_HEIGHT = tf.createInteger(1);
 	private static final Term<?> DEFAULT_UA_LETTER_SPACING = tf.createInteger(1);
 	private static final Term<?> DEFAULT_UA_WORD_SPACING = tf.createInteger(1);
 	
+	private Set<String> supportedCSSproperties;
 	private Map<String, CSSProperty> defaultCSSproperties;
 	private Map<String, Term<?>> defaultCSSvalues;
 	
 	private Map<String, Integer> ordinals;
 	private Map<Integer, String> ordinalsRev;
 	
-	private static SupportedBrailleCSS instance;
-	
-	public final static SupportedBrailleCSS getInstance() {
-		if (instance == null)
-			instance = new SupportedBrailleCSS();
-		return instance;
+	public SupportedBrailleCSS() {
+		this(false, true);
 	}
 	
-	private SupportedBrailleCSS() {
-		this.setSupportedCSS();
+	public SupportedBrailleCSS(boolean allowComponentProperties, boolean allowShorthandProperties) {
+		this.setSupportedCSS(allowComponentProperties, allowShorthandProperties);
 		this.setOridinals();
 	}
 	
@@ -95,7 +94,12 @@ public class SupportedBrailleCSS implements SupportedCSS {
 	
 	@Override
 	public final boolean isSupportedCSSProperty(String property) {
-		return defaultCSSproperties.containsKey(property);
+		if (supportedCSSproperties.contains(property))
+			return true;
+		else {
+			if (defaultCSSproperties.containsKey(property))
+				log.info("Shorthand or component property not supported: {}");
+			return false; }
 	}
 	
 	@Override
@@ -138,96 +142,99 @@ public class SupportedBrailleCSS implements SupportedCSS {
 		return ordinalsRev.get(o);
 	}
 	
-	private void setSupportedCSS() {
+	private void setProperty(String name, CSSProperty defaultProperty) {
+		setProperty(name, true, defaultProperty, null);
+	}
+	
+	private void setProperty(String name, boolean allow, CSSProperty defaultProperty) {
+		setProperty(name, allow, defaultProperty, null);
+	}
+	
+	private void setProperty(String name, CSSProperty defaultProperty, Term<?> defaultValue) {
+		setProperty(name, true, defaultProperty, defaultValue);
+	}
+	
+	private void setProperty(String name, boolean allow, CSSProperty defaultProperty, Term<?> defaultValue) {
+		if (allow)
+			supportedCSSproperties.add(name);
+		if (defaultProperty != null)
+			defaultCSSproperties.put(name, defaultProperty);
+		if (defaultValue != null)
+			defaultCSSvalues.put(name, defaultValue);
+	}
+	
+	private void setSupportedCSS(boolean allowComponentProperties, boolean allowShorthandProperties) {
 		
-		Map<String, CSSProperty> props = new HashMap<String, CSSProperty>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);
-		Map<String, Term<?>> values = new HashMap<String, Term<?>>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);
+		supportedCSSproperties = new HashSet<String>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);
+		defaultCSSproperties = new HashMap<String, CSSProperty>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);
+		defaultCSSvalues = new HashMap<String, Term<?>>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);;
 		
 		// text spacing
-		props.put("text-align", DEFAULT_UA_TEXT_ALIGN);
-		props.put("text-indent", TextIndent.integer);
-		values.put("text-indent", DEFAULT_UA_TEXT_IDENT);
-		props.put("line-height", LineHeight.integer);
-		values.put("line-height", DEFAULT_UA_LINE_HEIGHT);
+		setProperty("text-align", DEFAULT_UA_TEXT_ALIGN);
+		setProperty("text-indent", TextIndent.integer, DEFAULT_UA_TEXT_IDENT);
+		setProperty("line-height", LineHeight.integer, DEFAULT_UA_LINE_HEIGHT);
 		
 		// layout box
-		props.put("left", AbsoluteMargin.integer);
-		values.put("left", DEFAULT_UA_MARGIN);
-		props.put("right", AbsoluteMargin.integer);
-		values.put("right", DEFAULT_UA_MARGIN);
+		setProperty("left", AbsoluteMargin.integer, DEFAULT_UA_MARGIN);
+		setProperty("right", AbsoluteMargin.integer, DEFAULT_UA_MARGIN);
 		
-		props.put("margin", Margin.component_values);
-		props.put("margin-top", Margin.integer);
-		values.put("margin-top", DEFAULT_UA_MARGIN);
-		props.put("margin-right", Margin.integer);
-		values.put("margin-right", DEFAULT_UA_MARGIN);
-		props.put("margin-bottom", Margin.integer);
-		values.put("margin-bottom", DEFAULT_UA_MARGIN);
-		props.put("margin-left", Margin.integer);
-		values.put("margin-left", DEFAULT_UA_MARGIN);
-
-		props.put("padding", Padding.component_values);
-		props.put("padding-top", Padding.integer);
-		values.put("padding-top", DEFAULT_UA_PADDING);
-		props.put("padding-right", Padding.integer);
-		values.put("padding-right", DEFAULT_UA_PADDING);
-		props.put("padding-bottom", Padding.integer);
-		values.put("padding-bottom", DEFAULT_UA_PADDING);
-		props.put("padding-left", Padding.integer);
-		values.put("padding-left", DEFAULT_UA_PADDING);
+		setProperty("margin-top", Margin.integer, DEFAULT_UA_MARGIN);
+		setProperty("margin-right", Margin.integer, DEFAULT_UA_MARGIN);
+		setProperty("margin-bottom", Margin.integer, DEFAULT_UA_MARGIN);
+		setProperty("margin-left", Margin.integer, DEFAULT_UA_MARGIN);
+		setProperty("margin", allowShorthandProperties, Margin.component_values);
 		
-		props.put("border", Border.component_values);
-		props.put("border-top", Border.NONE);
-		props.put("border-right", Border.NONE);
-		props.put("border-bottom", Border.NONE);
-		props.put("border-left", Border.NONE);
+		setProperty("padding-top", Padding.integer, DEFAULT_UA_PADDING);
+		setProperty("padding-right", Padding.integer, DEFAULT_UA_PADDING);
+		setProperty("padding-bottom", Padding.integer, DEFAULT_UA_PADDING);
+		setProperty("padding-left", Padding.integer, DEFAULT_UA_PADDING);
+		setProperty("padding", allowShorthandProperties, Padding.component_values);
+		
+		setProperty("border-top", allowShorthandProperties, Border.NONE);
+		setProperty("border-right", allowShorthandProperties, Border.NONE);
+		setProperty("border-bottom", allowShorthandProperties, Border.NONE);
+		setProperty("border-left", allowShorthandProperties, Border.NONE);
+		setProperty("border", allowShorthandProperties, Border.component_values);
 		
 		// positioning
-		props.put("display", Display.INLINE);
+		setProperty("display", Display.INLINE);
 		
 		// elements
-		props.put("list-style-type", ListStyleType.NONE);
+		setProperty("list-style-type", ListStyleType.NONE);
 		
 		// paged
-		props.put("page", Page.AUTO);
-		props.put("page-break-before", PageBreak.AUTO);
-		props.put("page-break-after", PageBreak.AUTO);
-		props.put("page-break-inside", PageBreakInside.AUTO);
-		props.put("orphans", Orphans.integer);
-		values.put("orphans", DEFAULT_UA_ORPHANS);
-		props.put("widows", Widows.integer);
-		values.put("widows", DEFAULT_UA_WIDOWS);
+		setProperty("page", Page.AUTO);
+		setProperty("page-break-before", PageBreak.AUTO);
+		setProperty("page-break-after", PageBreak.AUTO);
+		setProperty("page-break-inside", PageBreakInside.AUTO);
+		setProperty("orphans", Orphans.integer, DEFAULT_UA_ORPHANS);
+		setProperty("widows", Widows.integer, DEFAULT_UA_WIDOWS);
 		
 		// @volume rule
-		props.put("min-length", MinLength.AUTO);
-		props.put("max-length", MaxLength.AUTO);
+		setProperty("min-length", MinLength.AUTO);
+		setProperty("max-length", MaxLength.AUTO);
 		
 		// volume breaking
-		props.put("volume-break-before", VolumeBreak.AUTO);
-		props.put("volume-break-after", VolumeBreak.AUTO);
-		props.put("volume-break-inside", VolumeBreakInside.AUTO);
+		setProperty("volume-break-before", VolumeBreak.AUTO);
+		setProperty("volume-break-after", VolumeBreak.AUTO);
+		setProperty("volume-break-inside", VolumeBreakInside.AUTO);
 		
 		// tables
-		props.put("render-table-by", RenderTableBy.AUTO);
-		props.put("table-header-policy", TableHeaderPolicy.ONCE);
+		setProperty("render-table-by", RenderTableBy.AUTO);
+		setProperty("table-header-policy", TableHeaderPolicy.ONCE);
 		
 		// misc
-		props.put("counter-reset", CounterReset.NONE);
-		props.put("counter-set", CounterSet.NONE);
-		props.put("counter-increment", CounterIncrement.NONE);
-		props.put("string-set", StringSet.NONE);
-		props.put("content", Content.NONE);
-		props.put("text-transform", TextTransform.AUTO);
-		props.put("white-space", WhiteSpace.NORMAL);
-		props.put("hyphens", Hyphens.MANUAL);
-		props.put("letter-spacing", LetterSpacing.length);
-		values.put("letter-spacing", DEFAULT_UA_LETTER_SPACING);
-		props.put("word-spacing", WordSpacing.length);
-		values.put("word-spacing", DEFAULT_UA_WORD_SPACING);
-		props.put("flow", Flow.NORMAL);
-		
-		this.defaultCSSproperties = props;
-		this.defaultCSSvalues = values;
+		setProperty("counter-reset", CounterReset.NONE);
+		setProperty("counter-set", CounterSet.NONE);
+		setProperty("counter-increment", CounterIncrement.NONE);
+		setProperty("string-set", StringSet.NONE);
+		setProperty("content", Content.NONE);
+		setProperty("text-transform", TextTransform.AUTO);
+		setProperty("white-space", WhiteSpace.NORMAL);
+		setProperty("hyphens", Hyphens.MANUAL);
+		setProperty("letter-spacing", LetterSpacing.length, DEFAULT_UA_LETTER_SPACING);
+		setProperty("word-spacing", WordSpacing.length, DEFAULT_UA_WORD_SPACING);
+		setProperty("flow", Flow.NORMAL);
 		
 	}
 	

@@ -30,7 +30,7 @@ public class PseudoElementsTest {
 	private static final RuleFactory rf = new BrailleCSSRuleFactory();
 	
 	public PseudoElementsTest() {
-		CSSFactory.registerSupportedCSS(SupportedBrailleCSS.getInstance());
+		CSSFactory.registerSupportedCSS(new SupportedBrailleCSS());
 		CSSFactory.registerDeclarationTransformer(new BrailleCSSDeclarationTransformer());
 	}
 	
