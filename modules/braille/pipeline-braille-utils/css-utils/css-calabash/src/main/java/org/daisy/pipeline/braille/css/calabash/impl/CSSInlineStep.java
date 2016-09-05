@@ -100,6 +100,7 @@ import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
+import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
@@ -618,8 +619,7 @@ public class CSSInlineStep extends DefaultStep {
 	
 	private static void insertMarginStyle(StringBuilder builder, RuleMargin ruleMargin) {
 		builder.append("@").append(ruleMargin.getMarginArea()).append(" { ");
-		for (Declaration decl : ruleMargin)
-			insertDeclaration(builder, decl);
+		insertStyle(builder, new SimpleInlineStyle(ruleMargin));
 		builder.append("} ");
 	}
 	

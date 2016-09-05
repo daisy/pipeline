@@ -278,5 +278,30 @@
               equals="'@page:left { margin-top: 2; }'"/>
   </x:scenario>
   
+  <x:scenario label="test_07">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @page {
+                  @footnotes {
+                    border-top: ⠒
+                  }
+                }
+              </style>
+            </head>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//document"/>
+    </x:context>
+    <x:expect label="root-style" type="xpath" test="/*/@style"
+              equals="'@page { @footnotes { border-top: ⠒; } }'"/>
+  </x:scenario>
+  
 </x:description>
 
