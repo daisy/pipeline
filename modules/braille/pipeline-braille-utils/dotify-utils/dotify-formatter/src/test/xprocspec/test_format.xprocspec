@@ -9910,6 +9910,9 @@
             <h1 style="display: block; -obfl-underline:⠒">
               ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿
             </h1>
+            <h2 style="display: block; -obfl-underline:⠂">
+              ⠿⠿⠿⠿⠿⠿⠿⠿
+            </h2>
           </body>
         </x:document>
       </x:input>
@@ -9927,7 +9930,8 @@
             </default-template>
           </layout-master>
           <sequence master="master_1">
-            <block underline-style="solid" underline-align="center"> ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿ </block>
+            <block underline-pattern="⠒"> ⠿⠿⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿ </block>
+            <block underline-pattern="⠂"> ⠿⠿⠿⠿⠿⠿⠿⠿ </block>
           </sequence>
         </obfl>
       </x:document>
@@ -9950,6 +9954,8 @@
                   <row>⠿⠿⠿⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿</row>
                   <row>⠒⠒⠒⠒⠒⠒⠒⠒</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠂⠂⠂⠂⠂⠂⠂⠂</row>
                 </page>
               </section>
             </volume>

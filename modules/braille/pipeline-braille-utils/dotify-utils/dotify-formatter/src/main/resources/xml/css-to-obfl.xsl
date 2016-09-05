@@ -1340,9 +1340,6 @@
                          css:box[@type=('block','table','table-cell')]/@css:border-right-pattern">
         <xsl:variable name="name" select="replace(local-name(),'-pattern$','')"/>
         <xsl:choose>
-            <xsl:when test=".='none'">
-                <xsl:attribute name="{$name}-style" select="'none'"/>
-            </xsl:when>
             <xsl:when test=".=('⠇','⠿','⠸')">
                 <xsl:attribute name="{$name}-style" select="'solid'"/>
                 <xsl:choose>
@@ -1367,13 +1364,9 @@
     
     <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
                   match="css:box[@type=('block','table','table-cell')]/@css:border-top-pattern|
-                         css:box[@type=('block','table','table-cell')]/@css:border-bottom-pattern|
-                         css:box[@type='block']/@css:_obfl-underline">
-        <xsl:variable name="name" select="replace(replace(local-name(),'-pattern$',''),'^_obfl-','')"/>
+                         css:box[@type=('block','table','table-cell')]/@css:border-bottom-pattern">
+        <xsl:variable name="name" select="replace(local-name(),'-pattern$','')"/>
         <xsl:choose>
-            <xsl:when test=".='none'">
-                <xsl:attribute name="{$name}-style" select="'none'"/>
-            </xsl:when>
             <xsl:when test=".=('⠉','⠛','⠒','⠿','⠶','⠤')">
                 <xsl:attribute name="{$name}-style" select="'solid'"/>
                 <xsl:choose>
@@ -1403,6 +1396,11 @@
                 <xsl:message select="concat(replace(local-name(),'^_','-'),':',.,' not supported yet')"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+    
+    <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
+                  match="css:box[@type='block']/@css:_obfl-underline">
+        <xsl:attribute name="underline-pattern" select="."/>
     </xsl:template>
     
     <xsl:template mode="block-attr assert-nil-attr"
