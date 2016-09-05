@@ -255,23 +255,27 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	}
 	
 	@SuppressWarnings("unused")
+	private boolean processListStyle(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return processListStyleType(d, properties, values);
+	}
+	
 	private boolean processListStyleType(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		String propertyName = "list-style-type";
 		if (d.size() != 1)
 			return false;
 		Term<?> term = d.get(0);
-		if (genericTermIdent(ListStyleType.class, term, ALLOW_INH, d.getProperty(), properties))
+		if (genericTermIdent(ListStyleType.class, term, ALLOW_INH, propertyName, properties))
 			return true;
 		else
 			try {
 				if (TermString.class.isInstance(term)) {
-					String propertyName = d.getProperty();
 					properties.put(propertyName, ListStyleType.braille_string);
 					values.put(propertyName, term);
 					return true; }
 				else if (TermFunction.class.isInstance(term)
 				         && "symbols".equals(((TermFunction)term).getFunctionName().toLowerCase())) {
-					String propertyName = d.getProperty();
 					properties.put(propertyName, ListStyleType.symbols_fn);
 					values.put(propertyName, term);
 					return true; }}

@@ -54,7 +54,7 @@ public class SupportedBrailleCSS implements SupportedCSS {
 	
 	private static Logger log = LoggerFactory.getLogger(SupportedBrailleCSS.class);
 	
-	private static final int TOTAL_SUPPORTED_DECLARATIONS = 47;
+	private static final int TOTAL_SUPPORTED_DECLARATIONS = 48;
 	
 	private static final TermFactory tf = CSSFactory.getTermFactory();
 	
@@ -201,6 +201,7 @@ public class SupportedBrailleCSS implements SupportedCSS {
 		
 		// elements
 		setProperty("list-style-type", ListStyleType.NONE);
+		setProperty("list-style", allowShorthandProperties, ListStyleType.NONE);
 		
 		// paged
 		setProperty("page", Page.AUTO);
