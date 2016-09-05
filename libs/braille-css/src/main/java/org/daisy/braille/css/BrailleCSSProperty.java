@@ -31,12 +31,59 @@ public interface BrailleCSSProperty extends CSSProperty {
 		}
 	}
 	
-	public enum Border implements BrailleCSSProperty {
-		dot_pattern(""), component_values(""), NONE("none"), INHERIT("inherit");
+	public enum BorderAlign implements BrailleCSSProperty {
+		component_values(""), INNER("inner"), CENTER("center"), OUTER("outer"),
+		INHERIT("inherit");
 
 		private String text;
 
-		private Border(String text) {
+		private BorderAlign(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+	
+	public enum BorderPattern implements BrailleCSSProperty {
+		dot_pattern(""), NONE("none"), INHERIT("inherit");
+
+		private String text;
+
+		private BorderPattern(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+	
+	public enum BorderStyle implements BrailleCSSProperty {
+		component_values(""), NONE("none"), SOLID("solid"), INHERIT("inherit");
+
+		private String text;
+
+		private BorderStyle(String text) {
 			this.text = text;
 		}
 
@@ -54,6 +101,30 @@ public interface BrailleCSSProperty extends CSSProperty {
 		}
 	}
 
+	public enum BorderWidth implements BrailleCSSProperty {
+		integer(""), component_values(""), THIN("thin"), MEDIUM("medium"),
+		THICK("thick"), INHERIT("inherit");
+
+		private String text;
+
+		private BorderWidth(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+	
 	public enum Content implements BrailleCSSProperty {
 		content_list(""), NONE("none"), INHERIT("inherit");
 

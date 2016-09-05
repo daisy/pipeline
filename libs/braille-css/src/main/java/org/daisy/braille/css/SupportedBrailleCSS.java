@@ -8,6 +8,7 @@ import java.util.Set;
 
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
+import cz.vutbr.web.css.CSSProperty.Border;
 import cz.vutbr.web.css.CSSProperty.CounterIncrement;
 import cz.vutbr.web.css.CSSProperty.CounterReset;
 import cz.vutbr.web.css.CSSProperty.CounterSet;
@@ -21,7 +22,10 @@ import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFactory;
 
 import org.daisy.braille.css.BrailleCSSProperty.AbsoluteMargin;
-import org.daisy.braille.css.BrailleCSSProperty.Border;
+import org.daisy.braille.css.BrailleCSSProperty.BorderAlign;
+import org.daisy.braille.css.BrailleCSSProperty.BorderPattern;
+import org.daisy.braille.css.BrailleCSSProperty.BorderStyle;
+import org.daisy.braille.css.BrailleCSSProperty.BorderWidth;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.Display;
 import org.daisy.braille.css.BrailleCSSProperty.Flow;
@@ -54,7 +58,7 @@ public class SupportedBrailleCSS implements SupportedCSS {
 	
 	private static Logger log = LoggerFactory.getLogger(SupportedBrailleCSS.class);
 	
-	private static final int TOTAL_SUPPORTED_DECLARATIONS = 48;
+	private static final int TOTAL_SUPPORTED_DECLARATIONS = 67;
 	
 	private static final TermFactory tf = CSSFactory.getTermFactory();
 	
@@ -190,10 +194,33 @@ public class SupportedBrailleCSS implements SupportedCSS {
 		setProperty("padding-left", Padding.integer, DEFAULT_UA_PADDING);
 		setProperty("padding", allowShorthandProperties, Padding.component_values);
 		
-		setProperty("border-top", allowShorthandProperties, Border.NONE);
-		setProperty("border-right", allowShorthandProperties, Border.NONE);
-		setProperty("border-bottom", allowShorthandProperties, Border.NONE);
-		setProperty("border-left", allowShorthandProperties, Border.NONE);
+		setProperty("border-top-pattern", allowComponentProperties, BorderPattern.NONE);
+		setProperty("border-right-pattern", allowComponentProperties, BorderPattern.NONE);
+		setProperty("border-bottom-pattern", allowComponentProperties, BorderPattern.NONE);
+		setProperty("border-left-pattern", allowComponentProperties, BorderPattern.NONE);
+		
+		setProperty("border-top-style", allowComponentProperties, BorderStyle.NONE);
+		setProperty("border-right-style", allowComponentProperties, BorderStyle.NONE);
+		setProperty("border-bottom-style", allowComponentProperties, BorderStyle.NONE);
+		setProperty("border-left-style", allowComponentProperties, BorderStyle.NONE);
+		setProperty("border-style", allowShorthandProperties, BorderStyle.component_values);
+		
+		setProperty("border-top-width", allowComponentProperties, BorderWidth.integer, DEFAULT_UA_BORDER_WIDTH);
+		setProperty("border-right-width", allowComponentProperties, BorderWidth.integer, DEFAULT_UA_BORDER_WIDTH);
+		setProperty("border-bottom-width", allowComponentProperties, BorderWidth.integer, DEFAULT_UA_BORDER_WIDTH);
+		setProperty("border-left-width", allowComponentProperties, BorderWidth.integer, DEFAULT_UA_BORDER_WIDTH);
+		setProperty("border-width", allowShorthandProperties, BorderWidth.component_values);
+		
+		setProperty("border-top-align", allowComponentProperties, BorderAlign.CENTER);
+		setProperty("border-right-align", allowComponentProperties, BorderAlign.CENTER);
+		setProperty("border-bottom-align", allowComponentProperties, BorderAlign.CENTER);
+		setProperty("border-left-align", allowComponentProperties, BorderAlign.CENTER);
+		setProperty("border-align", allowShorthandProperties, BorderAlign.component_values);
+		
+		setProperty("border-top", allowShorthandProperties, Border.component_values);
+		setProperty("border-right", allowShorthandProperties, Border.component_values);
+		setProperty("border-bottom", allowShorthandProperties, Border.component_values);
+		setProperty("border-left", allowShorthandProperties, Border.component_values);
 		setProperty("border", allowShorthandProperties, Border.component_values);
 		
 		// positioning

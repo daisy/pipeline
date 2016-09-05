@@ -1138,7 +1138,7 @@
                 ⠿⠿⠿⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿⠿⠿⠿
-                <section style="display: block; border-top: ⠒; border-bottom: ⠒; orphans: 3">
+                <section style="display: block; border-top-pattern: ⠒; border-bottom-pattern: ⠒; orphans: 3">
                   ⠿⠿⠿⠿⠿⠿⠿⠿⠿
                   ⠿⠿⠿⠿⠿⠿⠿⠿⠿
                   ⠿⠿⠿⠿⠿⠿⠿⠿⠿
@@ -1149,7 +1149,7 @@
                 ⠿⠿⠿⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿⠿⠿⠿
                 ⠿⠿⠿⠿⠿⠿⠿⠿⠿
-                <section style="display: block; border-top: ⠒; border-bottom: ⠒; widows: 3">
+                <section style="display: block; border-top-pattern: ⠒; border-bottom-pattern: ⠒; widows: 3">
                   ⠿⠿⠿⠿⠿⠿⠿⠿⠿
                   ⠿⠿⠿⠿⠿⠿⠿⠿⠿
                   ⠿⠿⠿⠿⠿⠿⠿⠿⠿
@@ -1343,8 +1343,8 @@
               ⠿⠿⠿⠿
               <div style="display: block;
                           text-align: center;
-                          border-top: ⠤;
-                          border-bottom: ⠉">
+                          border-top-pattern: ⠤;
+                          border-bottom-pattern: ⠉">
                 <div style="display: block;
                             margin-top: 1;
                             margin-bottom: 1;
@@ -1442,10 +1442,10 @@
                           padding-right: 1;
                           padding-top: 1;
                           padding-bottom: 1;
-                          border-left: ⠇;
-                          border-right: ⠸;
-                          border-top: ⠤;
-                          border-bottom: ⠉;">
+                          border-left-pattern: ⠇;
+                          border-right-pattern: ⠸;
+                          border-top-pattern: ⠤;
+                          border-bottom-pattern: ⠉;">
                 <div style="display: block;
                             margin-left: 1;
                             margin-right: 1;
@@ -1453,10 +1453,10 @@
                             padding-right: 1;
                             padding-top: 1;
                             padding-bottom: 1;
-                            border-left: ⠇;
-                            border-right: ⠸;
-                            border-top: ⠤;
-                            border-bottom: ⠉">
+                            border-left-pattern: ⠇;
+                            border-right-pattern: ⠸;
+                            border-top-pattern: ⠤;
+                            border-bottom-pattern: ⠉">
                   ⠿⠿⠿⠿
                 </div>
               </div>
@@ -1561,10 +1561,10 @@
             <body style="@page { size: 20 15 }">
               <div style="display: block;
                           text-align: center;
-                          border-left: ⠇;
-                          border-right: ⠸;
-                          border-top: ⠒;
-                          border-bottom: ⠒">
+                          border-left-pattern: ⠇;
+                          border-right-pattern: ⠸;
+                          border-top-pattern: ⠒;
+                          border-bottom-pattern: ⠒">
                 ⠿⠿⠿⠿
               </div>
             </body>
@@ -3091,7 +3091,7 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform:none; display:block">
-            <p style="display:block; line-height:2; border-bottom:⠒">
+            <p style="display:block; line-height:2; border-bottom-pattern:⠒">
               ⠿⠿⠿⠿⠿⠿⠿⠿
             </p>
             ⠿⠿⠿⠿⠿⠿⠿⠿
@@ -3727,9 +3727,9 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform:none">
-            <p style="display:block; border-bottom:⠤"/>
-            <p style="display:block; border-bottom:⠤"> ⠀ </p>
-            <p style="display:block; border-bottom:⠤">   </p>
+            <p style="display:block; border-bottom-pattern:⠤"/>
+            <p style="display:block; border-bottom-pattern:⠤"> ⠀ </p>
+            <p style="display:block; border-bottom-pattern:⠤">   </p>
           </doc>
         </x:document>
       </x:input>
@@ -6092,15 +6092,15 @@
             </caption>
             <thead>
               <tr>
-                <th colspan="2" style="border-bottom:⠒">⠤⠤⠤</th>
-                <th style="border-bottom:⠒">⠤⠤⠤</th>
+                <th colspan="2" style="border-bottom-pattern:⠒">⠤⠤⠤</th>
+                <th style="border-bottom-pattern:⠒">⠤⠤⠤</th>
               </tr>
             </thead>
             <tfoot>
               <tr>
-                <td style="border-top:⠒">⠤⠤⠤</td>
-                <td style="border-top:⠒">⠤⠤⠤</td>
-                <td style="border-top:⠒">⠤⠤⠤</td>
+                <td style="border-top-pattern:⠒">⠤⠤⠤</td>
+                <td style="border-top-pattern:⠒">⠤⠤⠤</td>
+                <td style="border-top-pattern:⠒">⠤⠤⠤</td>
               </tr>
             </tfoot>
             <tbody>
@@ -8217,7 +8217,7 @@
                          @footnotes {
                            content: flow(footnotes);
                            max-height: 4;
-                           border-top: ⠒; }}">
+                           border-top-pattern: ⠒; }}">
             <p style="display:block">
               ⠤⠤⠤
               <note style="{flow:footnotes; display:block} ::footnote-call { content:'⠶' }">⠿⠿⠿</note>
@@ -8525,7 +8525,7 @@
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
               </p>
             </div>
-            <div style="display: block; border-top: ⠒; page-break-before: always">
+            <div style="display: block; border-top-pattern: ⠒; page-break-before: always">
               <p style="display: block; margin-top: 2">
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
               </p>
@@ -8642,7 +8642,7 @@
       <x:input port="source">
         <x:document type="inline">
           <body style="{ text-transform:none } @page { size: 15 7; }">
-            <p style="display: block; border-top: ⠒; margin-left: 2; text-indent: 2">
+            <p style="display: block; border-top-pattern: ⠒; margin-left: 2; text-indent: 2">
               ⠤⠤⠤
             </p>
           </body>

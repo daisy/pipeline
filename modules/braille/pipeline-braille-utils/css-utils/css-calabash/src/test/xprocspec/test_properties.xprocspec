@@ -5,7 +5,7 @@
                script="../resources/inline.xpl">
   
   <!--
-      border, margin, padding
+      margin, padding
   -->
   <x:scenario label="test_01">
     <x:call step="css:inline">
@@ -14,7 +14,7 @@
           <document>
             <head>
               <style media="embossed" type="text/css">
-                h { display: block; margin: 1 3; padding: 0 3; border: ⠒ none; }
+                h { display: block; margin: 1 3; padding: 0 3 }
                 p { display: block; margin: 1 2 3 4; }
               </style>
             </head>
@@ -32,8 +32,49 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h style="border-bottom: ⠒; border-left: none; border-right: none; border-top: ⠒; display: block; margin-bottom: 1; margin-left: 3; margin-right: 3; margin-top: 1; padding-bottom: 0; padding-left: 3; padding-right: 3; padding-top: 0;">foo</h>
+          <h style="display: block; margin-bottom: 1; margin-left: 3; margin-right: 3; margin-top: 1; padding-bottom: 0; padding-left: 3; padding-right: 3; padding-top: 0;">foo</h>
           <p style="display: block; margin-bottom: 3; margin-left: 4; margin-right: 2; margin-top: 1;">bar</p>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      border
+  -->
+  <x:scenario label="test_02">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                p#1 { border: none; }
+                p#2 { border-left: none }
+                p#3 { border-left: ⠸ }
+                p#4 { border-left: solid inner 1 }
+              </style>
+            </head>
+            <body>
+              <p id="1"/>
+              <p id="2"/>
+              <p id="3"/>
+              <p id="4"/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p id="1" style="border-bottom-align: center; border-bottom-style: none; border-bottom-width: 1; border-left-align: center; border-left-style: none; border-left-width: 1; border-right-align: center; border-right-style: none; border-right-width: 1; border-top-align: center; border-top-style: none; border-top-width: 1;"/>
+          <p id="2" style="border-left-align: center; border-left-pattern: none; border-left-style: none; border-left-width: 1;"/>
+          <p id="3" style="border-left-align: center; border-left-pattern: ⠸; border-left-style: none; border-left-width: 1;"/>
+          <p id="4" style="border-left-align: inner; border-left-pattern: none; border-left-style: solid; border-left-width: 1;"/>
         </body>
       </x:document>
     </x:expect>
@@ -42,7 +83,7 @@
   <!--
       left, right
   -->
-  <x:scenario label="test_02">
+  <x:scenario label="test_03">
     <x:call step="css:inline">
       <x:input port="source">
         <x:document type="inline">
@@ -74,7 +115,7 @@
   <!--
       string-set, counter-set
   -->
-  <x:scenario label="test_03">
+  <x:scenario label="test_04">
     <x:call step="css:inline">
       <x:input port="source">
         <x:document type="inline">

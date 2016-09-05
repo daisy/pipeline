@@ -33,7 +33,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="border-bottom: ⠒; display: block;"/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; display: block;"/>
         </body>
       </x:document>
     </x:expect>
@@ -72,7 +72,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="border-bottom: ⠒; display: block;"/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; display: block;"/>
         </body>
       </x:document>
     </x:expect>

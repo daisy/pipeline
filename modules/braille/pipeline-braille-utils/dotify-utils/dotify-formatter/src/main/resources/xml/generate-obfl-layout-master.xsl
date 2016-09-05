@@ -100,7 +100,7 @@
             </xsl:if>
             <xsl:for-each select="$footnotes-content[self::css:flow[@from]][1]">
                 <xsl:variable name="footnotes-border-top" as="xs:string"
-                              select="($footnotes-properties[@name='border-top'][1]/@value,css:initial-value('border-top'))[1]"/>
+                              select="($footnotes-properties[@name='border-top-pattern'][1]/@value,css:initial-value('border-top-pattern'))[1]"/>
                 <xsl:variable name="footnotes-max-height" as="xs:string"
                               select="($footnotes-properties[@name='max-height'][1]/@value,css:initial-value('max-height'))[1]"/>
                 <xsl:variable name="footnotes-max-height" as="xs:integer"

@@ -57,7 +57,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="border-bottom: ⠒; border-top: ⠒;"/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1;"/>
         </body>
       </x:document>
     </x:expect>

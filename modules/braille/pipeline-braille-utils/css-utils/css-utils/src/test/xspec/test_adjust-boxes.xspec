@@ -22,12 +22,12 @@
   
   <x:scenario label="test_02">
     <x:context>
-      <css:box type="block" css:margin-left="2" css:border-top="⠒">
+      <css:box type="block" css:margin-left="2" css:border-top-pattern="⠒">
         <css:box type="block" css:margin-left="-1" css:text-indent="2">xxx</css:box>
       </css:box>
     </x:context>
     <x:expect label="result">
-      <css:box type="block" css:margin-left="2" css:border-top="⠒">
+      <css:box type="block" css:margin-left="2" css:border-top-pattern="⠒">
         <css:box type="block" css:text-indent="1">xxx</css:box>
       </css:box>
     </x:expect>
@@ -49,10 +49,10 @@
   <x:scenario label="test_04">
     <x:context>
       <css:box type="block"
-               css:border-left="⠇"
-               css:border-right="⠸"
-               css:border-top="⠤"
-               css:border-bottom="⠉"
+               css:border-left-pattern="⠇"
+               css:border-right-pattern="⠸"
+               css:border-top-pattern="⠤"
+               css:border-bottom-pattern="⠉"
                css:margin-left="1"
                css:margin-right="1">
         <css:box type="block"
@@ -62,10 +62,10 @@
     </x:context>
     <x:expect label="result">
       <css:box type="block"
-               css:border-left="⠇"
-               css:border-right="⠸"
-               css:border-top="⠤"
-               css:border-bottom="⠉"
+               css:border-left-pattern="⠇"
+               css:border-right-pattern="⠸"
+               css:border-top-pattern="⠤"
+               css:border-bottom-pattern="⠉"
                css:margin-left="1"
                css:margin-right="1">
         <css:box type="block"

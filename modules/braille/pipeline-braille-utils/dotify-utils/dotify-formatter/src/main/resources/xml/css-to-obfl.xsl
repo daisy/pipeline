@@ -723,7 +723,7 @@
                   match="css:box[@type='block']
                                 [not(@css:line-height
                                      and (@css:margin-top or @css:margin-bottom or
-                                          @css:border-top or @css:border-bottom))]">
+                                          @css:border-top-pattern or @css:border-bottom-pattern))]">
         <xsl:apply-templates mode="block-attr"
                              select="@css:line-height|@css:text-align|@css:text-indent|@page-break-inside"/>
         <xsl:apply-templates mode="#current"
@@ -741,7 +741,7 @@
                   match="css:box[@type='block']
                                 [@css:line-height
                                  and (@css:margin-top or @css:margin-bottom or
-                                      @css:border-top or @css:border-bottom)]">
+                                      @css:border-top-pattern or @css:border-bottom-pattern)]">
         <xsl:apply-templates mode="#current" select="@css:string-set|@css:_obfl-marker"/>
         <xsl:next-match/>
     </xsl:template>
@@ -754,7 +754,7 @@
                   match="css:box[@type='block']
                                 [@css:line-height
                                  and (@css:margin-top or @css:margin-bottom or
-                                      @css:border-top or @css:border-bottom)]">
+                                      @css:border-top-pattern or @css:border-bottom-pattern)]">
         <block>
             <xsl:next-match/>
         </block>
@@ -764,7 +764,7 @@
                   match="css:box[@type='block']
                                 [@css:line-height
                                  and (@css:margin-top or @css:margin-bottom or
-                                      @css:border-top or @css:border-bottom)]">
+                                      @css:border-top-pattern or @css:border-bottom-pattern)]">
         <xsl:param name="toc-entry-ref-id" as="xs:string" tunnel="yes"/>
         <toc-entry ref-id="{$toc-entry-ref-id}">
             <xsl:next-match/>
@@ -779,7 +779,7 @@
                   match="css:box[@type='block']
                                 [@css:line-height
                                  and (@css:margin-top or @css:margin-bottom or
-                                      @css:border-top or @css:border-bottom)]">
+                                      @css:border-top-pattern or @css:border-bottom-pattern)]">
         <xsl:apply-templates mode="block-attr"
                              select="@css:line-height|@css:text-align|@css:text-indent|@page-break-inside"/>
         <!--
@@ -1163,7 +1163,7 @@
                   mode="block-attr table-attr td-attr toc-entry-attr"
                   match="css:box[@type=('block','table-cell')
                                  and not(child::css:box[@type='block'])
-                                 and not(@css:border-top|@css:border-bottom|@css:border-left)
+                                 and not(@css:border-top-pattern|@css:border-bottom-pattern|@css:border-left-pattern)
                                  and @css:text-indent]
                          /@css:margin-left"/>
     
@@ -1182,7 +1182,7 @@
         <xsl:variable name="text-indent" as="xs:integer" select="xs:integer(number(.))"/>
         <xsl:variable name="padding-left" as="xs:integer" select="(parent::*/@css:padding-left/xs:integer(number(.)),0)[1]"/>
         <xsl:choose>
-            <xsl:when test="parent::*/(@css:border-top|@css:border-bottom|@css:border-left)">
+            <xsl:when test="parent::*/(@css:border-top-pattern|@css:border-bottom-pattern|@css:border-left-pattern)">
                 <xsl:if test="parent::*[@name or not(preceding-sibling::css:box)]">
                     <xsl:attribute name="first-line-indent" select="format-number($padding-left + $text-indent, '0')"/>
                 </xsl:if>
@@ -1336,25 +1336,26 @@
     </xsl:template>
     
     <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
-                  match="css:box[@type=('block','table','table-cell')]/@css:border-left|
-                         css:box[@type=('block','table','table-cell')]/@css:border-right">
+                  match="css:box[@type=('block','table','table-cell')]/@css:border-left-pattern|
+                         css:box[@type=('block','table','table-cell')]/@css:border-right-pattern">
+        <xsl:variable name="name" select="replace(local-name(),'-pattern$','')"/>
         <xsl:choose>
             <xsl:when test=".='none'">
-                <xsl:attribute name="{local-name()}-style" select="'none'"/>
+                <xsl:attribute name="{$name}-style" select="'none'"/>
             </xsl:when>
             <xsl:when test=".=('⠇','⠿','⠸')">
-                <xsl:attribute name="{local-name()}-style" select="'solid'"/>
+                <xsl:attribute name="{$name}-style" select="'solid'"/>
                 <xsl:choose>
                     <xsl:when test=".='⠿'">
-                        <xsl:attribute name="{local-name()}-width" select="'2'"/>
+                        <xsl:attribute name="{$name}-width" select="'2'"/>
                     </xsl:when>
                     <xsl:when test=".='⠇'">
-                        <xsl:attribute name="{local-name()}-align"
-                                       select="if (local-name()='border-left') then 'outer' else 'inner'"/>
+                        <xsl:attribute name="{$name}-align"
+                                       select="if (local-name()='border-left-pattern') then 'outer' else 'inner'"/>
                     </xsl:when>
                     <xsl:when test=".='⠸'">
-                        <xsl:attribute name="{local-name()}-align"
-                                       select="if (local-name()='border-right') then 'outer' else 'inner'"/>
+                        <xsl:attribute name="{$name}-align"
+                                       select="if (local-name()='border-right-pattern') then 'outer' else 'inner'"/>
                     </xsl:when>
                 </xsl:choose>
             </xsl:when>
@@ -1365,10 +1366,10 @@
     </xsl:template>
     
     <xsl:template mode="block-attr table-attr td-attr toc-entry-attr"
-                  match="css:box[@type=('block','table','table-cell')]/@css:border-top|
-                         css:box[@type=('block','table','table-cell')]/@css:border-bottom|
+                  match="css:box[@type=('block','table','table-cell')]/@css:border-top-pattern|
+                         css:box[@type=('block','table','table-cell')]/@css:border-bottom-pattern|
                          css:box[@type='block']/@css:_obfl-underline">
-        <xsl:variable name="name" select="replace(local-name(),'^_obfl-','')"/>
+        <xsl:variable name="name" select="replace(replace(local-name(),'-pattern$',''),'^_obfl-','')"/>
         <xsl:choose>
             <xsl:when test=".='none'">
                 <xsl:attribute name="{$name}-style" select="'none'"/>
@@ -1386,11 +1387,11 @@
                 <xsl:choose>
                     <xsl:when test=".=('⠉','⠛')">
                         <xsl:attribute name="{$name}-align"
-                                       select="if ($name='border-top') then 'outer' else 'inner'"/>
+                                       select="if (local-name()='border-top-pattern') then 'outer' else 'inner'"/>
                     </xsl:when>
                     <xsl:when test=".=('⠶','⠤')">
                         <xsl:attribute name="{$name}-align"
-                                       select="if ($name='border-top') then 'inner' else 'outer'"/>
+                                       select="if (local-name()='border-top-pattern') then 'inner' else 'outer'"/>
                     </xsl:when>
                     <xsl:when test=".='⠒'">
                         <xsl:attribute name="{$name}-align"

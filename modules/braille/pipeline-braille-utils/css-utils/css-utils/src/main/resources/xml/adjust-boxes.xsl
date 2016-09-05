@@ -21,14 +21,17 @@
         <xsl:param name="computed-container-text-indent" as="xs:integer" select="0"/>
         <xsl:param name="actual-container-text-indent" as="xs:integer" select="0"/>
         <xsl:variable name="computed-margin-left" as="xs:integer" select="(@css:margin-left/xs:integer(number(.)),0)[1]"/>
-        <xsl:variable name="computed-border-left-width" as="xs:integer" select="if (@css:border-left[not(.='none')]) then 1 else 0"/>
+        <xsl:variable name="computed-border-left-width" as="xs:integer" select="if ((@css:border-left-pattern|@css:border-left-style)[not(.='none')])
+                                                                                then 1 else 0"/>
         <xsl:variable name="computed-padding-left" as="xs:integer" select="(@css:padding-left/xs:integer(number(.)),0)[1]"/>
         <xsl:variable name="used-left-margin-edge" as="xs:integer" select="$used-container-left-content-edge"/>
         <xsl:variable name="used-left-border-edge" as="xs:integer" select="$used-left-margin-edge + $computed-margin-left"/>
         <xsl:variable name="used-left-padding-edge" as="xs:integer" select="$used-left-border-edge + $computed-border-left-width"/>
         <xsl:variable name="used-left-content-edge" as="xs:integer" select="$used-left-padding-edge + $computed-padding-left"/>
         <xsl:variable name="actual-left-margin-edge" as="xs:integer" select="$actual-container-left-content-edge"/>
-        <xsl:variable name="actual-left-border-edge" as="xs:integer" select="if (not((@css:border-left|@css:border-top|@css:border-bottom)[not(.='none')]))
+        <xsl:variable name="actual-left-border-edge" as="xs:integer" select="if (not((@css:border-left-pattern|@css:border-left-style|
+                                                                                      @css:border-top-pattern|@css:border-top-style|
+                                                                                      @css:border-bottom-pattern|@css:border-bottom-style)[not(.='none')]))
                                                                              then $actual-left-margin-edge
                                                                              else max(($actual-left-margin-edge,$used-left-border-edge))"/>
         <xsl:variable name="actual-left-padding-edge" as="xs:integer" select="$actual-left-border-edge + $computed-border-left-width"/>
@@ -44,14 +47,17 @@
                                                                                  else max(($actual-left-padding-edge,$used-first-line-left-edge))"/>
         <xsl:variable name="actual-text-indent" as="xs:integer" select="$actual-first-line-left-edge - $actual-left-content-edge"/>
         <xsl:variable name="computed-margin-right" as="xs:integer" select="(@css:margin-right/xs:integer(number(.)),0)[1]"/>
-        <xsl:variable name="computed-border-right-width" as="xs:integer" select="if (@css:border-right[not(.='none')]) then 1 else 0"/>
+        <xsl:variable name="computed-border-right-width" as="xs:integer" select="if ((@css:border-right-pattern|@css:border-right-style)[not(.='none')])
+                                                                                 then 1 else 0"/>
         <xsl:variable name="computed-padding-right" as="xs:integer" select="(@css:padding-right/xs:integer(number(.)),0)[1]"/>
         <xsl:variable name="used-right-margin-edge" as="xs:integer" select="$used-container-right-content-edge"/>
         <xsl:variable name="used-right-border-edge" as="xs:integer" select="$used-right-margin-edge + $computed-margin-right"/>
         <xsl:variable name="used-right-padding-edge" as="xs:integer" select="$used-right-border-edge + $computed-border-right-width"/>
         <xsl:variable name="used-right-content-edge" as="xs:integer" select="$used-right-padding-edge + $computed-padding-right"/>
         <xsl:variable name="actual-right-margin-edge" as="xs:integer" select="$actual-container-right-content-edge"/>
-        <xsl:variable name="actual-right-border-edge" as="xs:integer" select="if (not((@css:border-right|css:border-top|@css:border-bottom)[not(.='none')]))
+        <xsl:variable name="actual-right-border-edge" as="xs:integer" select="if (not((@css:border-right-pattern|@css:border-right-style|
+                                                                                       @css:border-top-pattern|@css:border-top-style|
+                                                                                       @css:border-bottom-pattern|@css:border-bottom-style)[not(.='none')]))
                                                                               then $actual-right-margin-edge
                                                                               else max(($actual-right-margin-edge,$used-right-border-edge))"/>
         <xsl:variable name="actual-right-padding-edge" as="xs:integer" select="$actual-right-border-edge + $computed-border-right-width"/>

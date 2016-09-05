@@ -300,7 +300,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@page { @footnotes { border-top: ⠒; } }'"/>
+              equals="'@page { @footnotes { border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1; } }'"/>
   </x:scenario>
   
 </x:description>
