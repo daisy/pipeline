@@ -21,6 +21,8 @@
     <module>libs/braille-css</module>
     <module>framework</module>
     <module>modules/braille</module>
+    <module>modules/sbs/maven-parents/modules-parent</module>
+    <module>modules/sbs/braille-tables</module>
   </modules>
   
   <build>

@@ -21,7 +21,7 @@
 
   <properties>
     <sbs-hyphenation-tables.version>1.17</sbs-hyphenation-tables.version>
-    <sbs-braille-tables.version>2.2</sbs-braille-tables.version>
+    <sbs-braille-tables.version>2.3-SNAPSHOT</sbs-braille-tables.version>
   </properties>
   
   <dependencies>

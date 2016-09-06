@@ -62,5 +62,19 @@
 	</stub>
       </x:expect>
     </x:scenario>
-
+    
+    <x:scenario label="Don't fail when sbs-de-g2-place-white.mod and sbs-de-g2-name-white.mod not available
+                       (https://github.com/sbsdev/pipeline-mod-sbs/issues#25)">
+      <x:context>
+        <stub xml:lang="de">
+          <brl:name>Donald</brl:name>
+        </stub>
+      </x:context>
+      <x:expect label="braille">
+        <stub xml:lang="de">
+          <brl:name>DON:D</brl:name>
+        </stub>
+      </x:expect>
+    </x:scenario>
+    
 </x:description>
