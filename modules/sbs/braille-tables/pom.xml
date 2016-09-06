@@ -116,9 +116,9 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>target/generated-resources</outputDirectory>
+              <outputDirectory>${project.build.directory}/generated-resources</outputDirectory>
               <filters>
-                <filter>target/filters/detailed-version.properties</filter>
+                <filter>${project.build.directory}/filters/detailed-version.properties</filter>
               </filters>
               <resources>
                 <resource>
