@@ -453,9 +453,6 @@ public class LiblouisCoreTest {
 			translator.transform(styledText("foobar quux 123456", "letter-spacing:2; word-spacing:5")).getTranslatedRemainder());
 	}
 
-	// Tests with trailing spaces are not 100% correct according to spec, but spaces at the end of
-	// lines do not matter, because they are invisible.
-	// FIXME: actually, spaces do matter within tables!
 	@Test
 	public void testTranslateWithWordSpacingAndLineBreaking() {
 		LineBreakingFromStyledText translator = provider.withContext(messageBus)
@@ -463,13 +460,13 @@ public class LiblouisCoreTest {
 		                                                .lineBreakingFromStyledText();
 		assertEquals(
 			//                   |<- 20
-			"foobar⠀⠀foobar⠀⠀\n" +
+			"foobar⠀⠀foobar\n" +
 			"foobar",
 			fillLines(translator.transform(styledText("foobar foobar foobar", "word-spacing:2")), 20));
 		assertEquals(
 			//                   |<- 20
-			"f⠀o⠀o⠀b⠀a⠀r⠀⠀⠀\n" +
-			"f⠀o⠀o⠀b⠀a⠀r⠀⠀⠀\n" +
+			"f⠀o⠀o⠀b⠀a⠀r\n" +
+			"f⠀o⠀o⠀b⠀a⠀r\n" +
 			"f⠀o⠀o⠀b⠀a⠀r",
 			fillLines(translator.transform(styledText("foobar foobar foobar", "letter-spacing:1; word-spacing:3")), 20));
 		assertEquals(

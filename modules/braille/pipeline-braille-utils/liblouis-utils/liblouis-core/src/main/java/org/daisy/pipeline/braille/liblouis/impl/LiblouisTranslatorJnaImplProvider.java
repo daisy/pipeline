@@ -588,8 +588,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				
 				public String next(final int limit, final boolean force) {
 					String next = "";
-					if (limit < 1)
-						return next;
+					if (limit > 0) {
 					int available = limit;
 				  segments: while (true) {
 						if (curPos == joinedText.length())
@@ -741,6 +740,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 															updateBraille();
 														curPos += bestSolution.line.length();
 														curPosInBraille = positionInBraille(curPos); }
+													else if (force && next.isEmpty()) {
+														next = wordInBraille;
+														available = 0;
+														curPos = wordEnd;
+														curPosInBraille = wordEndInBraille; }
 													break segments; } }}}}}
 							if (foundSpace) {
 								int spaceEnd = segmentStart + m.end();
@@ -751,6 +755,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 									available -= spaceInBraille.length();
 									curPos = spaceEnd;
 									curPosInBraille = spaceEndInBraille; }}}}
+					}
+					if (lastPeek != null && !next.isEmpty() && next.charAt(0) != lastPeek)
+						throw new IllegalStateException();
+					lastPeek = null;
 					return next;
 				}
 				
@@ -762,13 +770,22 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				}
 				
 				public boolean hasNext() {
-					return curPos < joinedText.length();
+					if (joinedBraille == null)
+						updateBraille();
+					boolean hasNextOutput = curPosInBraille < joinedBraille.length();
+					boolean hasNextInput = curPos < joinedText.length();
+					if (hasNextInput != hasNextOutput)
+						throw new RuntimeException("coding error");
+					return hasNextOutput;
 				}
+				
+				Character lastPeek = null;
 				
 				public Character peek() {
 					if (joinedBraille == null)
 						updateBraille();
-					return joinedBraille.charAt(curPosInBraille);
+					lastPeek = joinedBraille.charAt(curPosInBraille);
+					return lastPeek;
 				}
 				
 				public String remainder() {
@@ -785,6 +802,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				int[] save_interCharacterIndicesInBraille;
 				int save_curPos;
 				int save_curPosInBraille;
+				Character save_lastPeek;
 			
 				{ mark(); }
 				
@@ -797,6 +815,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					save_interCharacterIndicesInBraille = interCharacterIndicesInBraille == null ? null : interCharacterIndicesInBraille.clone();
 					save_curPos = curPos;
 					save_curPosInBraille = curPosInBraille;
+					save_lastPeek = lastPeek;
 				}
 				
 				public void reset() {
@@ -808,6 +827,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					interCharacterIndicesInBraille = save_interCharacterIndicesInBraille == null ? null : save_interCharacterIndicesInBraille.clone();
 					curPos = save_curPos;
 					curPosInBraille = save_curPosInBraille;
+					lastPeek = save_lastPeek;
 				}
 				
 				private int positionInBraille(int pos) {

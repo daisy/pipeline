@@ -9899,9 +9899,6 @@
   <x:scenario label="test_91">
     <x:documentation>
       Tests -obfl-underline.
-      
-      Broken: translator puts empty spaces at the end of lines which causes underlining to be one
-      cell too long.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -9939,7 +9936,7 @@
     <x:context label="pef">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare" xfail="true">
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
       <x:document type="inline">
         <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
           <head>
