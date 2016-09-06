@@ -1,3 +1,4 @@
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,10 +28,12 @@ import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.Configuration;
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.ops4j.pax.exam.util.PathUtils;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -84,9 +87,25 @@ public class OSGiTest {
 			                  .transform(text("wochenende")));
 	}
 	
+	@Test
+	public void testWhitelist() {
+		assertEquals(
+			braille("WOOOH"),
+			translatorProvider.get(mutableQuery().add("liblouis-table", g1_table + ",sbs-de-g1-white.mod").add("output", "ascii"))
+			                  .iterator().next().fromStyledTextToBraille()
+			                  .transform(text("wochenende")));
+		assertEquals(
+			braille("WOOOHOOOOW!"),
+			translatorProvider.get(mutableQuery().add("liblouis-table", g1_table + ",sbs-de-g1-white-xyz.mod").add("output", "ascii"))
+			                  .iterator().next().fromStyledTextToBraille()
+			                  .transform(text("wochenende")));
+	}
+	
 	@Configuration
 	public Option[] config() {
 		return options(
+			systemProperty("ch.sbs.whitelist.base")
+				.value(new File(PathUtils.getBaseDir(), "target/test-classes/whitelist/").getAbsolutePath()),
 			logbackConfigFile(),
 			felixDeclarativeServices(),
 			domTraversalPackage(),

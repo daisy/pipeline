@@ -59,6 +59,15 @@
       <artifactId>liblouis-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
@@ -284,7 +293,7 @@
             <data>
               <type>directory</type>
               <src>target/generated-resources/tables</src>
-              <excludes>unicode.dis,sbs-de-g1-white.mod,sbs-de-g2-white.mod</excludes>
+              <excludes>unicode.dis,_empty</excludes>
               <mapper>
                 <type>perm</type>
                 <prefix>/usr/local/share/liblouis/tables</prefix>
