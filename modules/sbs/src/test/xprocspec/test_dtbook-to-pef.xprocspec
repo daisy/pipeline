@@ -686,4 +686,52 @@
     </x:scenario>
   </x:scenario>
   
+  <x:scenario label="underline-h3">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xml:lang="de" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <book>
+              <bodymatter>
+                <level1>
+                  <h3>Level 3</h3>
+                  <p>Bla bla bla</p>
+                </level1>
+              </bodymatter>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="show-braille-page-numbers" select="false()"/>
+      <x:option name="levels-in-footer" select="0"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/underline-h3/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/underline-h3/test_dtbook-to-pef.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="de" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="28" rows="28" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠇⠑⠧⠑⠇⠀⠼⠉</row>
+                  <row>⠂⠂⠂⠂⠂⠂⠂⠂</row>
+                  <row>⠀⠀⠃⠇⠁⠀⠃⠇⠁⠀⠃⠇⠁</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>
