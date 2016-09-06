@@ -6,7 +6,7 @@
   <parent>
     <groupId>ch.sbs.pipeline</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.5</version>
+    <version>1.6-SNAPSHOT</version>
     <relativePath />
   </parent>
   
@@ -54,6 +54,15 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.liblouis</groupId>
       <artifactId>louis</artifactId>
@@ -229,8 +238,9 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Import-Package>org.daisy.pipeline.braille.liblouis</Import-Package>
-            <Service-Component>OSGI-INF/sbs-braille-tables.xml</Service-Component>
+            <_dsannotations>
+              ch.sbs.pipeline.braille.impl.TablePath
+            </_dsannotations>
           </instructions>
         </configuration>
       </plugin>
