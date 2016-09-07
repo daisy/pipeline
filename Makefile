@@ -93,7 +93,7 @@ $(MAVEN_DIR)/modules : $(MAVEN_DIR)/pom.xml
 	cd $(dir $<)/target/dependency && find . -type d -name '[0-9]*' -prune -exec bash -c \
 		'mkdir -p $(CURDIR)/$@/$$(dirname {}); cp -r {}/* $$_' \; || true
 
-$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/doc_modules.yml
+$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml
 	mkdir -p $(dir $@)
 	make/make_pom.rb $^ > $@
 

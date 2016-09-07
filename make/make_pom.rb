@@ -2,7 +2,8 @@
 require 'yaml'
 require 'commaparty'
 
-doc_modules = YAML.load_file(ARGV[0])
+versions = YAML.load_file(ARGV[0])
+modules = YAML.load_file(ARGV[1])
 
 $stdout << CommaParty.markup(
   [:project, {xmlns: 'http://maven.apache.org/POM/4.0.0'},
@@ -16,12 +17,12 @@ $stdout << CommaParty.markup(
       [:dependency,
         [:groupId, 'org.daisy.pipeline'],
         [:artifactId, 'assembly'],
-        [:version, '1.9.15'],
+        [:version, versions['assembly']],
         [:type, 'pom'],
         [:scope, 'import']]]],
-   if doc_modules
+   if modules
      [:dependencies,
-      doc_modules.map {|mod|
+      modules.map {|mod|
         group = mod['group']
         artifact = mod['artifact']
         version = mod['version']
