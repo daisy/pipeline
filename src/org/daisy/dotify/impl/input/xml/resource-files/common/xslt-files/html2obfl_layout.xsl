@@ -10,12 +10,15 @@
 	<xsl:import href="book-formats.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string"/> <!-- empty-line or indent -->
+	
+	<xsl:key name="noterefs" match="html:a[epub:noteref(.)]" use="substring-after(@href, '#')"/>
 
-	<!-- FIXME: empty-sequence() below is temporary-->
-	<xsl:variable name="footnotesInFrontmatter" as="empty-sequence()"/> <!-- //dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]] -->
-															  <!-- //dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]] -->
-	<xsl:variable name="footnotesNotInFrontmatter" as="empty-sequence()"/> <!-- //dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]] -->
-															     <!-- //dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]] -->
+	<xsl:variable name="footnotesInFrontmatter" select="
+		//*[epub:note(.)][key('noterefs', @id)[epub:getMatterForElement(.)='frontmatter']]"/>
+	<!-- //dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]] -->
+	<xsl:variable name="footnotesNotInFrontmatter" select="
+		//*[epub:note(.)][key('noterefs', @id)[epub:getMatterForElement(.)!='frontmatter']]"/>
+	<!-- //dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]] -->
 	
 	<xsl:variable name="isEpub" select="count(//*[@epub:type])>0" as="xs:boolean"/>
 
@@ -83,6 +86,63 @@
 				<item id="note1" text-indent="4">1).</item>  -->
 			</collection>
 		</xsl:if>
+	</xsl:template>
+	
+	<!-- Noterefs -->
+	<xsl:template match="html:a[epub:noteref(.)]" priority="10">
+		<xsl:apply-templates select="." mode="inline-mode"/>
+		<xsl:variable name="afix">
+			<xsl:choose>
+				<xsl:when test="epub:getMatterForElement(.)='frontmatter'">.A</xsl:when>
+				<xsl:otherwise>.B</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:choose>
+			<xsl:when test="starts-with(@href, '#')"><anchor item="{concat(substring-after(@href, '#'), $afix)}"/></xsl:when>
+			<xsl:otherwise><xsl:message terminate="no">Only fragment identifier supported: <xsl:value-of select="@href"/></xsl:message></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<!-- Remove notes elements from the flow -->
+	<xsl:template match="html:*[epub:note(.)]" priority="10"/>
+
+	<!-- Remove emptied notes level -->
+	<xsl:template match="html:*[epub:notes(.)]"/>
+	
+	<xsl:template match="html:*[epub:note(.)]" mode="collectNotes">
+		<xsl:param name="afix"/>
+		<item id="{concat(@id, $afix)}">
+			<xsl:variable name="note">
+				<xsl:apply-templates/>
+			</xsl:variable>
+			<xsl:for-each select="$note/node()[self::* or self::text()[normalize-space()!='']]">
+				<xsl:choose>
+					<xsl:when test="self::text()"> <!-- and not whitespace only -->
+						<xsl:choose>
+							<xsl:when test="position()=1">
+								<block text-indent="3" block-indent="3"><xsl:copy-of select="."/></block>
+							</xsl:when>
+							<xsl:otherwise>
+								<block margin-left="3"><xsl:copy-of select="."/></block>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when> 
+					<xsl:when test="position()=1 and count(text())>0"> <!-- and an element -->
+						<xsl:copy>
+							<xsl:copy-of select="@*[not(local-name()='first-line-indent' or local-name()='text-indent' or local-name()='block-indent')]"/>
+							<xsl:attribute name="text-indent">3</xsl:attribute>
+							<xsl:attribute name="block-indent">3</xsl:attribute>
+							<xsl:copy-of select="node()"/>
+						</xsl:copy>
+					</xsl:when>
+					<xsl:otherwise>
+						<block margin-left="3">
+							<xsl:copy-of select="."/>
+						</block>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:for-each>
+		</item>
 	</xsl:template>
 	
 	<xsl:template match="html:body">

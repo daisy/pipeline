@@ -73,7 +73,7 @@
 	</xsl:template>
 	<xsl:template match="html:caption | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:li |
 		html:bridgehead | html:covertitle | html:docauthor | html:doctitle | html:prodnote | html:hd | html:author | html:line | 
-		html:epigraph | html:sidebar | html:byline | html:dateline | html:title">
+		html:epigraph | html:sidebar | html:byline | html:dateline | html:title | html:aside">
 		<xsl:apply-templates select="." mode="block-mode"/>
 	</xsl:template>
 
@@ -127,6 +127,26 @@
 	<xsl:function name="epub:types" as="xs:string*">
 		<xsl:param name="node" as="element()"/>
 		<xsl:sequence select="tokenize($node/@epub:type, '\s+')" />
+	</xsl:function>
+	
+	<xsl:function name="html:classes" as="xs:string*">
+		<xsl:param name="node" as="element()"/>
+		<xsl:sequence select="tokenize($node/@class, '\s+')" />
+	</xsl:function>
+
+	<xsl:function name="epub:noteref" as="xs:boolean">
+		<xsl:param name="node" as="element()"/>
+		<xsl:value-of select="epub:types($node)=('noteref') or html:classes($node)=('noteref')" />
+	</xsl:function>
+	
+	<xsl:function name="epub:note" as="xs:boolean">
+		<xsl:param name="node" as="element()"/>
+		<xsl:value-of select="epub:types($node)=('footnote', 'rearnote') or html:classes($node)=('notebody')" />
+	</xsl:function>
+	
+	<xsl:function name="epub:notes" as="xs:boolean">
+		<xsl:param name="node" as="element()"/>
+		<xsl:value-of select="epub:types($node)=('footnotes', 'rearnotes')" />
 	</xsl:function>
 	
 	<xsl:template match="html:table">
