@@ -154,7 +154,7 @@
 			<xsl:choose>
 				<xsl:when test="html:thead"> 
 					<thead>
-						<xsl:apply-templates select="html:thead"/>
+						<xsl:apply-templates select="html:thead/html:tr" mode="matrixRow"/>
 					</thead>
 					<tbody>
 						<xsl:apply-templates select="html:tbody/html:tr" mode="matrixRow"/>
