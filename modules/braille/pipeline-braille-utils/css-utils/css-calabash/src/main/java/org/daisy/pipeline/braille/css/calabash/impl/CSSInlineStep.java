@@ -31,7 +31,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.toArray;
-import static com.google.common.collect.Iterators.addAll;
 import com.google.common.io.ByteSource;
 
 import com.xmlcalabash.core.XProcException;
@@ -42,7 +41,6 @@ import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
-import com.xmlcalabash.util.TreeWriter;
 
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
@@ -80,15 +78,10 @@ import io.bit3.jsass.Output;
 import io.bit3.jsass.OutputStyle;
 
 import net.sf.saxon.dom.DocumentOverNodeInfo;
-import net.sf.saxon.dom.NodeOverNodeInfo;
-import net.sf.saxon.om.NameOfNode;
-import net.sf.saxon.om.NamespaceBinding;
-import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.tree.util.NamespaceIterator;
 
 import org.apache.commons.io.input.BOMInputStream;
 
@@ -103,6 +96,8 @@ import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.pipeline.braille.common.calabash.DomToStreamTransform;
+import org.daisy.pipeline.braille.common.TransformationException;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 import static org.daisy.pipeline.braille.common.util.Strings.normalizeSpace;
 import static org.daisy.pipeline.braille.common.util.URIs.asURI;
@@ -288,7 +283,7 @@ public class CSSInlineStep extends DefaultStep {
 			}
 			Set<String> media = ImmutableSet.copyOf(Splitter.on(' ').omitEmptyStrings().split(getOption(_media, DEFAULT_MEDIA)));
 			QName attributeName = getOption(_attribute_name, DEFAULT_ATTRIBUTE_NAME);
-			resultPipe.write((new InlineCSSWriter(doc, runtime, network, defaultSheets, media, attributeName)).getResult()); }
+			resultPipe.write(new CssInlineTransform(runtime, network, defaultSheets, media, attributeName).transform(source)); }
 		catch (Exception e) {
 			logger.error("css:inline failed", e);
 			throw new XProcException(step.getNode(), e); }
@@ -339,20 +334,34 @@ public class CSSInlineStep extends DefaultStep {
 	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 	
 	
-	private static class InlineCSSWriter extends TreeWriter {
+	private static class CssInlineTransform extends DomToStreamTransform {
 		
-		private final List<CascadedStyle> styles;
+		private final NetworkProcessor network;
+		private final URL[] defaultSheets;
+		private final Set<String> media;
 		private final QName attributeName;
+		private final List<CascadedStyle> styles;
 		
-		public InlineCSSWriter(Document document,
-		                       XProcRuntime xproc,
-		                       NetworkProcessor network,
-		                       URL[] defaultSheets,
-		                       Set<String> media,
-		                       QName attributeName) throws Exception {
+		public CssInlineTransform(XProcRuntime xproc,
+		                          NetworkProcessor network,
+		                          URL[] defaultSheets,
+		                          Set<String> media,
+		                          QName attributeName) {
 			super(xproc);
-			this.styles = new ArrayList<CascadedStyle>();
+			this.network = network;
+			this.defaultSheets = defaultSheets;
+			this.media = media;
 			this.attributeName = attributeName;
+			this.styles = new ArrayList<CascadedStyle>();
+		}
+		
+		private Writer writer;
+		
+		protected void _transform(Document document, Writer writer) throws TransformationException {
+			
+			this.writer = writer;
+			
+			try {
 			
 			URI baseURI = new URI(document.getBaseURI());
 			
@@ -426,9 +435,13 @@ public class CSSInlineStep extends DefaultStep {
 				}
 			}
 			
-			startDocument(baseURI);
+			writer.startDocument(baseURI);
 			traverse(document.getDocumentElement());
-			endDocument();
+			writer.endDocument();
+			
+			} catch (Exception e) {
+				throw new TransformationException(e);
+			}
 		}
 		
 		private static class CascadedStyle {
@@ -438,21 +451,18 @@ public class CSSInlineStep extends DefaultStep {
 			Iterable<RuleTextTransform> textTransformRules;
 		}
 		
+		private boolean isRoot = true;
+		
 		private void traverse(Node node) throws XPathException, URISyntaxException {
 			
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
-				boolean isRoot = !seenRoot;
 				Element elem = (Element)node;
-				addStartElement(elem);
+				writer.copyStartElement(elem);
 				NamedNodeMap attributes = node.getAttributes();
 				for (int i=0; i<attributes.getLength(); i++) {
 					Node attr = attributes.item(i);
-					if ("http://www.w3.org/2000/xmlns/".equals(attr.getNamespaceURI())) {}
-					else if (attr.getPrefix() != null)
-						addAttribute(new QName(attr.getPrefix(), attr.getNamespaceURI(), attr.getLocalName()), attr.getNodeValue());
-					else if ("style".equals(attr.getLocalName())) {}
-					else
-						addAttribute(new QName(attr.getNamespaceURI(), attr.getLocalName()), attr.getNodeValue()); }
+					if (!(attr.getPrefix() == null && "style".equals(attr.getLocalName())))
+						writer.copyAttribute(attr); }
 				StringBuilder style = new StringBuilder();
 				for (CascadedStyle cs : styles) {
 					NodeData nodeData = cs.styleMap.get(elem);
@@ -488,33 +498,20 @@ public class CSSInlineStep extends DefaultStep {
 								for (RuleTextTransform r : cs.textTransformRules)
 									insertTextTransformDefinition(style, r); }}}
 				if (normalizeSpace(style).length() > 0) {
-					addAttribute(attributeName, style.toString().trim()); }
-				receiver.startContent();
+					writer.addAttribute(attributeName, style.toString().trim()); }
+				isRoot = false;
+				writer.startContent();
 				for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling())
 					traverse(child);
-				addEndElement(); }
+				writer.endElement(); }
 			else if (node.getNodeType() == Node.COMMENT_NODE)
-				addComment(node.getNodeValue());
+				writer.copyComment(node);
 			else if (node.getNodeType() == Node.TEXT_NODE)
-				addText(node.getNodeValue());
+				writer.copyText(node);
 			else if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE)
-				addPI(node.getLocalName(), node.getNodeValue());
+				writer.copyPI(node);
 			else
 				throw new UnsupportedOperationException("Unexpected node type");
-		}
-		
-		public void addStartElement(Element element) {
-			NodeInfo inode = ((NodeOverNodeInfo)element).getUnderlyingNodeInfo();
-			NamespaceBinding[] inscopeNS = null;
-			if (seenRoot)
-				inscopeNS = inode.getDeclaredNamespaces(null);
-			else {
-				List<NamespaceBinding> namespaces = new ArrayList<NamespaceBinding>();
-				addAll(namespaces, NamespaceIterator.iterateNamespaces(inode));
-				inscopeNS = toArray(namespaces, NamespaceBinding.class);
-				seenRoot = true; }
-			receiver.setSystemId(element.getBaseURI());
-			addStartElement(new NameOfNode(inode), inode.getSchemaType(), inscopeNS);
 		}
 	}
 	

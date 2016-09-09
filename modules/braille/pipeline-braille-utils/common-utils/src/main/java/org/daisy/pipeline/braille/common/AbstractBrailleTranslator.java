@@ -85,7 +85,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 				public void reset();
 			}
 			
-			public LineIterator transform(final Iterable<CSSStyledText> text) {
+			public LineIterator transform(final Iterable<CSSStyledText> text) throws TransformationException {
 				
 				// FIXME: determine wordSpacing of individual segments
 				int wordSpacing; {
@@ -108,8 +108,8 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 						if (wordSpacing < 0)
 							wordSpacing = spacing;
 						else if (wordSpacing != spacing)
-							throw new RuntimeException("word-spacing must be constant, but both "
-							                           + wordSpacing + " and " + spacing + " specified"); }
+							throw new TransformationException("word-spacing must be constant, but both "
+							                                  + wordSpacing + " and " + spacing + " specified"); }
 					if (wordSpacing < 0) wordSpacing = 1; }
 				return new LineIterator(translateAndHyphenate(text), blankChar, hyphenChar, wordSpacing);
 			}

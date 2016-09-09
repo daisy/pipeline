@@ -14,7 +14,7 @@ public interface BrailleTranslator extends Transform {
 	
 	public interface FromStyledTextToBraille {
 		
-		public Iterable<String> transform(Iterable<CSSStyledText> styledText);
+		public Iterable<String> transform(Iterable<CSSStyledText> styledText) throws TransformationException;
 		
 	}
 	
@@ -24,7 +24,7 @@ public interface BrailleTranslator extends Transform {
 	
 	public interface LineBreakingFromStyledText {
 		
-		public LineIterator transform(Iterable<CSSStyledText> styledText);
+		public LineIterator transform(Iterable<CSSStyledText> styledText) throws TransformationException;
 		
 	}
 	
