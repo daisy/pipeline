@@ -15,6 +15,8 @@ public class BlockProperties implements Cloneable {
 	private final BlockSpacing margin;
 	private final BlockSpacing padding;
 	private final ListStyle listType;
+	private final NumeralStyle listNumberFormat;
+	private final String listItemLabel;
 	private int listIterator;
 	private final BreakBefore breakBefore;
 	private final Keep keep;
@@ -45,6 +47,8 @@ public class BlockProperties implements Cloneable {
 		private int topPadding = 0;
 		private int bottomPadding = 0;
 		private ListStyle listType = ListStyle.NONE;
+		private NumeralStyle listNumberFormat = NumeralStyle.DEFAULT;
+		private String listItemLabel = null;
 		private BreakBefore breakBefore = BreakBefore.AUTO;
 		private Keep keep = Keep.AUTO;
 		private int orphans = 1;
@@ -181,6 +185,30 @@ public class BlockProperties implements Cloneable {
 		 */
 		public Builder listType(FormattingTypes.ListStyle listType) {
 			this.listType = listType;
+			return this;
+		}
+		
+		/**
+		 * Sets the number format for the block. Note that the listType must
+		 * be of type 'ol'.
+		 * @param listFormat the numeral style
+		 * @return returns this object
+		 */
+		public Builder listNumberFormat(NumeralStyle listFormat) {
+			this.listNumberFormat = listFormat;
+			return this;
+		}
+		
+		/**
+		 * Sets the list item label for the block. Note that this block must be
+		 * a child of a block with a listType of 'ol' or 'ul'. If the list is
+		 * ordered, the label it must be an integer.
+		 * 
+		 * @param label the label
+		 * @return returns this object
+		 */
+		public Builder listItemLabel(String label) {
+			this.listItemLabel = label;
 			return this;
 		}
 		
@@ -353,6 +381,8 @@ public class BlockProperties implements Cloneable {
 				bottomSpacing(builder.bottomPadding).build();
 		textBlockProps = builder.textBlockPropsBuilder.build();
 		listType = builder.listType;
+		listNumberFormat = builder.listNumberFormat;
+		listItemLabel = builder.listItemLabel;
 		listIterator = 0;
 		breakBefore = builder.breakBefore;
 		keep = builder.keep;
@@ -432,6 +462,22 @@ public class BlockProperties implements Cloneable {
 	 */
 	public FormattingTypes.ListStyle getListType() {
 		return listType;
+	}
+	
+	/**
+	 * Gets the number format for this list
+	 * @return returns the number format
+	 */
+	public NumeralStyle getListNumberFormat() {
+		return listNumberFormat;
+	}
+	
+	/**
+	 * Gets the list item label
+	 * @return returns the list item label
+	 */
+	public String getListItemLabel() {
+		return listItemLabel;
 	}
 	
 	/**
