@@ -30,6 +30,7 @@ import org.ops4j.pax.exam.util.PathUtils;
 
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
@@ -41,6 +42,7 @@ public class ZedaiToPefTest {
 			logbackConfigFile(),
 			calabashConfigFile(),
 			domTraversalPackage(),
+			systemPackage("javax.xml.stream;version=\"1.0.1\""),
 			felixDeclarativeServices(),
 			thisBundle(),
 			junitBundles(),

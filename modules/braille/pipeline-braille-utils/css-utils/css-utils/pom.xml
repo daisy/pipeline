@@ -182,7 +182,11 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <_dsannotations>*</_dsannotations>
+            <_dsannotations>
+              org.daisy.pipeline.braille.css.calabash.impl.CssInlineStep$Provider,
+              org.daisy.pipeline.braille.css.calabash.impl.CssShiftStringSetStep$Provider,
+              org.daisy.pipeline.braille.css.saxon.impl.RenderTableByDefinition
+            </_dsannotations>
           </instructions>
         </configuration>
         <executions>

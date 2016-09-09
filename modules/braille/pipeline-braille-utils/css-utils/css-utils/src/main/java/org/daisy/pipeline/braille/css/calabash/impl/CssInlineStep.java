@@ -333,7 +333,6 @@ public class CssInlineStep extends DefaultStep {
 	private static final RuleFactory brailleRuleFactory = new BrailleCSSRuleFactory();
 	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 	
-	
 	private static class CssInlineTransform extends DomToStreamTransform {
 		
 		private final NetworkProcessor network;
@@ -538,22 +537,31 @@ public class CssInlineStep extends DefaultStep {
 		}
 	};
 	
-	private static Function<Object,String> termToString = new Function<Object,String>() {
-		public String apply(Object term) {
+	// TODO: fix in braille-css and jstyleparser
+	static Function<Term,String> termToString = new Function<Term,String>() {
+		public String apply(Term term) {
 			if (term instanceof TermInteger) {
 				TermInteger integer = (TermInteger)term;
 				return "" + integer.getIntValue(); }
+			else if (term instanceof TermList && !(term instanceof TermFunction)) {
+				TermList list = (TermList)term;
+				String s = "";
+				for (Term<?> t : list) {
+					if (!s.isEmpty()) {
+						Term.Operator o = t.getOperator();
+						if (o != null)
+							switch (o) {
+							case COMMA:
+								s += ","; }
+						s += " "; }
+					s += termToString.apply(t); }
+				return s; }
 			else if (term instanceof TermPair) {
 				TermPair<?,?> pair = (TermPair<?,?>)term;
-				Term.Operator op = pair.getOperator();
-				return (op != null ? op.value() : "") + pair.getKey() + " " + pair.getValue(); }
-			else if (term instanceof TermFunction)
-				return "" + term;
-			else if (term instanceof TermList) {
-				TermList list = (TermList)term;
-				return join(list, " ", termToString); }
+				Object val = pair.getValue();
+				return "" + pair.getKey() + " " + (val instanceof Term ? termToString.apply((Term)val) : val.toString()); }
 			else
-				return "" + term;
+				return term.toString().replaceAll("^[,/ ]+", "");
 		}
 	};
 	

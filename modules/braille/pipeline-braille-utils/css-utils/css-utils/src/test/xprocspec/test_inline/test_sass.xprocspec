@@ -224,7 +224,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="string-set: footer  'foo';"/>
+          <p style="string-set: footer 'foo';"/>
         </body>
       </x:document>
     </x:expect>

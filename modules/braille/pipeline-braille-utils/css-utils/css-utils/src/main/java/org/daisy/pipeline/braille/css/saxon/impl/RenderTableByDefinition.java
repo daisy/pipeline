@@ -33,12 +33,15 @@ import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermPair;
 
+import net.sf.saxon.Configuration;
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.om.Sequence;
 import net.sf.saxon.om.StructuredQName;
+import net.sf.saxon.s9api.Axis;
+import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
 
@@ -103,8 +106,10 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 					
 					// FIXME: why does this not work?
 					// URI base = new URI(tableElement.getBaseURI());
-					return new TableAsList(context, axes).transform(tableElement).getUnderlyingNode(); }
-				catch (Exception e) {
+					XdmNode result = new TableAsList(context.getConfiguration(), axes).transform(tableElement);
+					result = (XdmNode)result.axisIterator(Axis.CHILD).next(); // because result is document-node
+					return result.getUnderlyingNode(); }
+				catch (TransformationException e) {
 					logger.error("css:render-table-by failed", e);
 					e.printStackTrace();
 					throw new XPathException("css:render-table-by failed"); }
@@ -147,8 +152,8 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		
 		final List<String> axes;
 		
-		private TableAsList(XPathContext context, String axes) {
-			super(context);
+		private TableAsList(Configuration configuration, String axes) {
+			super(configuration);
 			this.axes = new ArrayList<String>(AXIS_SPLITTER.splitToList(axes));
 			if (this.axes.remove("auto"))
 				if (!this.axes.isEmpty())

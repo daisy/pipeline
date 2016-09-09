@@ -8,15 +8,14 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
+import net.sf.saxon.Configuration;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.StreamWriterToReceiver;
 import net.sf.saxon.evpull.Decomposer;
 import net.sf.saxon.evpull.EventIteratorOverSequence;
 import net.sf.saxon.evpull.EventToStaxBridge;
-import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
 
@@ -24,28 +23,28 @@ import org.daisy.pipeline.braille.common.TransformationException;
 
 public abstract class StreamToStreamTransform {
 	
-	private final XPathContext context;
+	private final Configuration configuration;
 	
-	public StreamToStreamTransform(XPathContext context) {
-		this.context = context;
+	public StreamToStreamTransform(Configuration configuration) {
+		this.configuration = configuration;
 	}
 	
 	protected abstract void _transform(XMLStreamReader reader, Writer writer) throws TransformationException;
 	
 	public final XdmNode transform(NodeInfo element) throws TransformationException {
 		try {
-			PipelineConfiguration pipeConfig = new PipelineConfiguration(context.getConfiguration());
+			PipelineConfiguration pipeConfig = new PipelineConfiguration(configuration);
 			XMLStreamReader reader
 				= new EventToStaxBridge(
 					new Decomposer(
 						new EventIteratorOverSequence(element.iterate()), pipeConfig), pipeConfig);
 			XdmDestination destination = new XdmDestination();
-			Receiver receiver = destination.getReceiver(context.getConfiguration());
+			Receiver receiver = destination.getReceiver(configuration);
 			receiver.open();
 			WriterImpl writer = new WriterImpl(receiver);
 			_transform(reader, writer);
 			receiver.close();
-			return (XdmNode)destination.getXdmNode().axisIterator(Axis.CHILD).next();
+			return destination.getXdmNode();
 		} catch (Exception e) {
 			throw new TransformationException(e);
 		}
@@ -54,6 +53,12 @@ public abstract class StreamToStreamTransform {
 	protected interface Writer extends XMLStreamWriter {
 		public void writeStartElement(QName name) throws XMLStreamException;
 		public void writeAttribute(QName name, String value) throws XMLStreamException;
+		public void copyStartElement(XMLStreamReader reader) throws XMLStreamException;
+		public void copyAttributes(XMLStreamReader reader) throws XMLStreamException;
+		public void copyText(XMLStreamReader reader) throws XMLStreamException;
+		public void copyComment(XMLStreamReader reader) throws XMLStreamException;
+		public void copyCData(XMLStreamReader reader) throws XMLStreamException;
+		public void copyPI(XMLStreamReader reader) throws XMLStreamException;
 	}
 	
 	private static class WriterImpl extends StreamWriterToReceiver implements Writer {
@@ -67,8 +72,45 @@ public abstract class StreamToStreamTransform {
 		}
 		
 		public void writeAttribute(QName name, String value) throws XMLStreamException {
-			writeAttribute(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart(), value);
+			String prefix = name.getPrefix();
+			String ns = name.getNamespaceURI();
+			String localPart = name.getLocalPart();
+			if (prefix == null || "".equals(prefix))
+				writeAttribute(ns, localPart, value);
+			else
+				writeAttribute(prefix, ns, localPart, value);
 		}
+		
+		public void copyStartElement(XMLStreamReader reader) throws XMLStreamException {
+			writeStartElement(reader.getName());
+		}
+		
+		public void copyAttributes(XMLStreamReader reader) throws XMLStreamException {
+			for (int i = 0; i < reader.getAttributeCount(); i++)
+				writeAttribute(reader.getAttributeName(i), reader.getAttributeValue(i));
+		}
+		
+		public void copyText(XMLStreamReader reader) throws XMLStreamException {
+			writeCharacters(reader.getText());
+		}
+		
+		public void copyComment(XMLStreamReader reader) throws XMLStreamException {
+			writeComment(reader.getText());
+		}
+		
+		public void copyCData(XMLStreamReader reader) throws XMLStreamException {
+			writeCData(reader.getText());
+		}
+		
+		public void copyPI(XMLStreamReader reader) throws XMLStreamException {
+			String target = reader.getPITarget();
+			String data = reader.getPIData();
+			if (data == null)
+				writeProcessingInstruction(target);
+			else
+				writeProcessingInstruction(target, data);
+		}
+		
 	}
 	
 	public static abstract class util {
@@ -178,6 +220,38 @@ public abstract class StreamToStreamTransform {
 				throw new UnsupportedOperationException(); }
 			public Object getProperty(String name) throws IllegalArgumentException {
 				throw new UnsupportedOperationException(); }
+			
+			// FIXME: how to remove duplication?
+			
+			public void copyStartElement(XMLStreamReader reader) throws XMLStreamException {
+				writeStartElement(reader.getName());
+			}
+			
+			public void copyAttributes(XMLStreamReader reader) throws XMLStreamException {
+				for (int i = 0; i < reader.getAttributeCount(); i++)
+					writeAttribute(reader.getAttributeName(i), reader.getAttributeValue(i));
+			}
+			
+			public void copyText(XMLStreamReader reader) throws XMLStreamException {
+				writeCharacters(reader.getText());
+			}
+			
+			public void copyComment(XMLStreamReader reader) throws XMLStreamException {
+				writeComment(reader.getText());
+			}
+			
+			public void copyCData(XMLStreamReader reader) throws XMLStreamException {
+				writeCData(reader.getText());
+			}
+			
+			public void copyPI(XMLStreamReader reader) throws XMLStreamException {
+				String target = reader.getPITarget();
+				String data = reader.getPIData();
+				if (data == null)
+					writeProcessingInstruction(target);
+				else
+					writeProcessingInstruction(target, data);
+			}
 		}
 	}
 }

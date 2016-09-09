@@ -112,7 +112,7 @@
       <x:document type="inline">
         <body>
           <toc>
-            <entry ref="h1" style="content: target-text(attr(ref))  leader('⠄')  target-string(attr(ref), print-page)  target-counter(attr(ref), braille-page); display: block;"/>
+            <entry ref="h1" style="content: target-text(attr(ref)) leader('⠄') target-string(attr(ref), print-page) target-counter(attr(ref), braille-page); display: block;"/>
           </toc>
           <h xml:id="h1">foo</h>
         </body>
@@ -183,7 +183,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h style="{ counter-increment: heading 1; } ::before { content: counter(heading)  '. '; }">foo</h>
+          <h style="{ counter-increment: heading 1; } ::before { content: counter(heading) '. '; }">foo</h>
         </body>
       </x:document>
     </x:expect>

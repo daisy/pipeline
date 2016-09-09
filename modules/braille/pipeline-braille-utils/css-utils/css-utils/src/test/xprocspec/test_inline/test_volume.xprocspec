@@ -65,7 +65,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals='"@volume { max-length: 100; @begin { content: flow(toc); } } @volume:first { max-length: 100; @begin { content: flow(cover)  flow(toc); } }"'/>
+              equals='"@volume { max-length: 100; @begin { content: flow(toc); } } @volume:first { max-length: 100; @begin { content: flow(cover) flow(toc); } }"'/>
   </x:scenario>
   
   <x:scenario label="test_03">
