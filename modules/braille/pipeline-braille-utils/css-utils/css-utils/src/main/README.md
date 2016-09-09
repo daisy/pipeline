@@ -30,6 +30,15 @@
   
 - <a href="resources/xml/transform/block-translator-template.xsl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-template.xsl`</a>
 
+## OSGi services
+
+### Calabash steps (`org.daisy.common.xproc.calabash.XProcStepProvider`)
+
+- [`{http://www.daisy.org/ns/pipeline/braille-css}inline`](java/org/daisy/pipeline/braille/css/calabash/impl/CSSInlineStep.java)
+
+
 
 <link rev="dp2:doc" href="./"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc"/>
+
+

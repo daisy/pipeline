@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../../main/resources/xml/inline.xpl">
+  
+  <!--
+      <string>, none
+  -->
+  <x:scenario label="test_01">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                td::after { content: ',' }
+                td:last-child::after { content: none; }
+              </style>
+            </head>
+            <body>
+              <table>
+                <tr>
+                  <td>foo</td>
+                  <td>bar</td>
+                </tr>
+              </table>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <table>
+            <tr>
+              <td style="::after { content: ','; }">foo</td>
+              <td style="::after { content: none; }">bar</td>
+            </tr>
+          </table>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      attr()
+  -->
+  <x:scenario label="test_02">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                pagenum { display: block; text-align: right; content: attr(value); }
+              </style>
+            </head>
+            <body>
+              <pagenum value="1"/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <pagenum value="1" style="content: attr(value); display: block; text-align: right;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      target-text(), target-string(), target-counter(), leader()
+  -->
+  <x:scenario label="test_03">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                toc entry { display: block; content: target-text(attr(ref))
+                                                     leader('⠄')
+                                                     target-string(attr(ref), print-page)
+                                                     target-counter(attr(ref), braille-page); }
+              </style>
+            </head>
+            <body>
+              <toc>
+                <entry ref="h1"/>
+              </toc>
+              <h xml:id="h1">foo</h>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <toc>
+            <entry ref="h1" style="content: target-text(attr(ref))  leader('⠄')  target-string(attr(ref), print-page)  target-counter(attr(ref), braille-page); display: block;"/>
+          </toc>
+          <h xml:id="h1">foo</h>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      newline character
+  -->
+  <x:scenario label="test_04">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                br::before { content: '\A'; white-space: pre-line; }
+              </style>
+            </head>
+            <body>
+              <br/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <br style="::before { content: '&#xA;'; white-space: pre-line; }"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      counter()
+  -->
+  <x:scenario label="test_05">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                h {
+                  counter-increment: heading
+                }
+                h::before {
+                  content: counter(heading) '. '
+                }
+              </style>
+            </head>
+            <body>
+              <h>foo</h>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h style="{ counter-increment: heading 1; } ::before { content: counter(heading)  '. '; }">foo</h>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

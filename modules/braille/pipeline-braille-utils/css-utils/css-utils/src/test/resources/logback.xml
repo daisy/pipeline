@@ -19,5 +19,6 @@
   </root>
   
   <logger name="org.daisy" level="DEBUG"/>
+  <logger name="cz.vutbr.web" level="WARN"/>
   
 </configuration>

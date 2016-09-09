@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../../main/resources/xml/inline.xpl">
+  
+  <x:scenario label="test_01">
+    <x:documentation>
+      Link SASS style sheet stored locally.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_1.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:documentation>
+      Link SASS style sheet stored in module.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="http://test/css-module/sass/sass_1.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1 style="display: block; margin-left: 4;"/>
+          <p/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:documentation>
+      From (embedded) CSS style sheet import SASS style sheet stored locally.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/css" media="embossed">
+                @import url("../../resources/sass/sass_1.scss");
+              </style>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_04">
+    <x:documentation>
+      From (linked) SASS style sheet stored locally import CSS style sheet stored locally.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_2_imports_css_1.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1 style="display: block;"/>
+          <p style="display: block;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_05">
+    <x:documentation>
+      From (linked) SASS style sheet stored locally import CSS style sheet stored in module.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_3_imports_module_css_1.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="orphans: 3;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_06">
+    <x:documentation>
+      From (linked) SASS style sheet stored locally import SASS style sheet stored locally.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_4_imports_sass_1.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_07">
+    <x:documentation>
+      From (linked) SASS style sheet stored locally import SASS style sheet stored in module.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_5_imports_module_sass_2.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="string-set: footer  'foo';"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_08">
+    <x:documentation>
+      From (linked) SASS style sheet stored in module import CSS style sheet that is private to that module.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="http://test/css-module/sass/sass_3_imports_css_3.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="hyphens: auto;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_09">
+    <x:documentation>
+      From (linked) SASS style sheet stored in module import SASS style sheet that is private to that module.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="http://test/css-module/sass/sass_4_imports_sass_5.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="hyphens: auto;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_10">
+    <x:documentation>
+      Inject SASS variables.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_1.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+      <x:param port="sass-variables" name="border" select="'⠿'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠿; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠿; border-top-style: none; border-top-width: 1;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_11">
+    <x:documentation>
+      Allow using SASS variables with special characters.
+    </x:documentation>
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <link type="text/css" rel="stylesheet" href="../../resources/sass/sass_6.scss" media="embossed"/>
+            </head>
+            <body>
+              <h1/>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+      <x:param port="sass-variables" name="padding-left" select="'A great lot'':!'"/>
+      <x:param port="sass-variables" name="margin-left" select="'a lot'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1/>
+          <p style="margin-left: 3; padding-left: 3;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>
