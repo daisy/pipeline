@@ -16,6 +16,7 @@ public class BlockProperties implements Cloneable {
 	private final BlockSpacing padding;
 	private final ListStyle listType;
 	private final NumeralStyle listNumberFormat;
+	private final String defaultListLabel;
 	private final String listItemLabel;
 	private int listIterator;
 	private final BreakBefore breakBefore;
@@ -48,6 +49,7 @@ public class BlockProperties implements Cloneable {
 		private int bottomPadding = 0;
 		private ListStyle listType = ListStyle.NONE;
 		private NumeralStyle listNumberFormat = NumeralStyle.DEFAULT;
+		private String defaultListLabel = null;
 		private String listItemLabel = null;
 		private BreakBefore breakBefore = BreakBefore.AUTO;
 		private Keep keep = Keep.AUTO;
@@ -196,6 +198,17 @@ public class BlockProperties implements Cloneable {
 		 */
 		public Builder listNumberFormat(NumeralStyle listFormat) {
 			this.listNumberFormat = listFormat;
+			return this;
+		}
+		
+		/**
+		 * Sets the default label for list items in the block. Note that listType must
+		 * be of type 'ul'.
+		 * @param label the default list label
+		 * @return returns this object
+		 */
+		public Builder defaultListLabel(String label) {
+			this.defaultListLabel = label;
 			return this;
 		}
 		
@@ -382,6 +395,7 @@ public class BlockProperties implements Cloneable {
 		textBlockProps = builder.textBlockPropsBuilder.build();
 		listType = builder.listType;
 		listNumberFormat = builder.listNumberFormat;
+		defaultListLabel = builder.defaultListLabel;
 		listItemLabel = builder.listItemLabel;
 		listIterator = 0;
 		breakBefore = builder.breakBefore;
@@ -470,6 +484,14 @@ public class BlockProperties implements Cloneable {
 	 */
 	public NumeralStyle getListNumberFormat() {
 		return listNumberFormat;
+	}
+	
+	/**
+	 * Gets the default list label for this list
+	 * @return returns the default list label, or null if not set.
+	 */
+	public String getDefaultListLabel() {
+		return defaultListLabel;
 	}
 	
 	/**
