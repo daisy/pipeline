@@ -4,5 +4,4 @@ after_success:
 - ./upload.sh
 - ./publish-javadoc.sh
 before_install:
-- openssl aes-256-cbc -K $encrypted_a806c5b8babc_key -iv $encrypted_a806c5b8babc_iv
-  -in secring.gpg.enc -out secring.gpg -d
+- '[ "$TRAVIS_PULL_REQUEST" == "false" ] && openssl aes-256-cbc -K $encrypted_a806c5b8babc_key -iv $encrypted_a806c5b8babc_iv -in secring.gpg.enc -out secring.gpg -d || echo "no decryption for pull requests"'
