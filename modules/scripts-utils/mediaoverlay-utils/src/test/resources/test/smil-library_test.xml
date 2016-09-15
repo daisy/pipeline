@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE utfx:tests PUBLIC "-//UTF-X//DTD utfx-tests 1.0//EN" "utfx_tests.dtd">
+<utfx:tests xmlns:utfx="http://utfx.org/test-definition" xmlns:epub="http://www.idpf.org/2011/epub"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <utfx:stylesheet src="../smil-library.xsl"/>
+</utfx:tests>

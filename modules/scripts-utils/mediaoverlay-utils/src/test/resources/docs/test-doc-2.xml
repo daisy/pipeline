@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc xml:base="http://example.org/test-doc-2.xml" id="doc2">
+    <body id="body">
+        <text id="dol_3_1_rgn_cnt_0001s"/>
+        <text id="dtb2"/>
+        <p id="paragraph"><text id="dtb3"/></p>
+    </body>
+</doc>

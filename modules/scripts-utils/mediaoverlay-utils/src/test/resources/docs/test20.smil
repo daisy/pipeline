@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE smil
+  PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+   <head>
+      <meta content="AUTO-UID-4767990567747899000" name="dtb:uid"/>
+      <meta content="TPB Narrator" name="dtb:generator"/>
+      <meta content="0:00:00" name="dtb:totalElapsedTime"/>
+   </head>
+   <body>
+      <seq id="s">
+         <seq id="s1">
+            <par id="p11">
+               <text id="t11" src="AreYouReadyV3.xml#dtb2"/>
+               <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+            </par>
+            <par id="p12">
+               <text id="t12" src="AreYouReadyV3.xml#dtb2"/>
+               <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+            </par>
+         </seq>
+         <seq id="s2">
+            <par id="p21">
+               <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+            </par>
+            <par id="p22">
+               <text id="t22" src="AreYouReadyV3.xml#dtb2"/>
+               <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+            </par>
+         </seq>
+         <seq id="s3">
+            <par id="p31">
+               <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+            </par>
+            <par id="p32">
+               <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+            </par>
+         </seq>
+      </seq>
+      <seq dur="0:00:04.878" fill="remove" id="mseq">
+         <par id="tcp1">
+            <text id="text1" src="AreYouReadyV3.xml#dtb1"/>
+            <audio clipBegin="0:00:00" clipEnd="0:00:02.029" src="speechgen0001.mp3"/>
+         </par>
+         <par id="tcp2">
+            <text id="text2" src="AreYouReadyV3.xml#dtb2"/>
+            <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+         </par>
+         <text id="text3" src="AreYouReadyV3.xml#dtb2"/>
+         <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+         <par id="tcp4">
+            <text id="text4" src="AreYouReadyV3.xml#dtb2"/>
+         </par>
+         <par id="tcp5">
+            <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+         </par>
+         <text id="text6" src="AreYouReadyV3.xml#dtb2"/>
+         <par id="tcp7">
+            <text id="text7" src="AreYouReadyV3.xml#dtb2"/>
+            <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+         </par>
+         <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+         <par id="tcp8">
+            <text id="text8" src="AreYouReadyV3.xml#dtb2"/>
+            <seq id="tcp81">
+               <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+               <audio clipBegin="4.878s" clipEnd="8.321s" src="speechgen0001.mp3"/>
+               <audio clipBegin="12.029" clipEnd="14.878" src="speechgen0001.mp3"/>
+            </seq>
+         </par>
+         <par id="tcp9">
+            <audio clipBegin="0:00:02.029" clipEnd="0:00:04.878" src="speechgen0001.mp3"/>
+         </par>
+      </seq>   </body>
+</smil>

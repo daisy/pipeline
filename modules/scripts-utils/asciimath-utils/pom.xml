@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.1</version>
+    <relativePath />
+  </parent>
+  <artifactId>asciimath-utils</artifactId>
+  <version>1.0.2-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  <name>DAISY Pipeline 2 module :: ASCIIMath Utils</name>
+
+  <properties>
+    <asciimathml.js.url>http://mathcs.chapman.edu/~jipsen/mathml/ASCIIMathML.js</asciimathml.js.url>
+    <asciimathml.js.sha1>3c31edd313d5f312a5aed3719b7dd6c022111b09</asciimathml.js.sha1>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>framework-bom</artifactId>
+        <version>1.9</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <targetPath>javascript</targetPath>
+        <directory>${basedir}/target/generated-resources/javascript</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>download-javascript</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <mkdir dir="target/generated-resources/javascript" />
+                <get src="${asciimathml.js.url}" dest="target/generated-resources/javascript" />
+                <delete file="target/optimization-files/patches-applied.txt" />
+                <local name="checksum.matches" />
+                <local name="checksum.matches.fail" />
+                <checksum file="target/generated-resources/javascript/ASCIIMathML.js" algorithm="sha1" property="${asciimathml.js.sha1}" verifyproperty="checksum.matches" />
+                <condition property="checksum.matches.fail">
+                  <equals arg1="${checksum.matches}" arg2="false" />
+                </condition>
+                <fail if="checksum.matches.fail">Checksum error</fail>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-patch-plugin</artifactId>
+        <version>1.1.1</version>
+        <configuration>
+          <patchDirectory>src/main/patches</patchDirectory>
+          <targetDirectory>target/generated-resources/javascript</targetDirectory>
+          <patches>
+            <patch>rhino.patch</patch>
+          </patches>
+        </configuration>
+        <executions>
+          <execution>
+            <id>patch-javascript</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>apply</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Service-Component>OSGI-INF/asciimathml.xml</Service-Component>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   <uri name="http://www.daisy.org/pipeline/modules/epub3-pub-utils/library.xpl"
+        uri="../xml/xproc/epub3-pub-library.xpl"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:epub3-nav-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:mediaoverlay-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
+</catalog>

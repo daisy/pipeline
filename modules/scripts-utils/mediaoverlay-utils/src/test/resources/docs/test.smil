@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+    <head>
+        <meta name="dc:format" content="Daisy 2.02"/>
+        <meta name="ncc:timeInThisSmil" content="00:00:05.694"/>
+        <meta name="ncc:totalElapsedTime" content="00:00:00.000"/>
+        <layout>
+            <region id="txt-view"/>
+        </layout>
+        <meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+        <meta name="title" content="Fire Safety, by Wendy Blaxland"/>
+        <meta name="dc:title" content="4980FSafe"/>
+        <meta name="dc:identifier" content="PID4980"/>
+    </head>
+    <body>
+        <seq dur="5.694s">
+            <par endsync="lasts" id="rgn_par_0001_0001">
+                <text src="fire_safety.html#dol_1_1_rgn_cnt_0001s" id="rgn_txt_0001_0001"/>
+                <seq>
+                    <!-- Complex sequence -->
+                    <!--audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=npt=0.000ss" clip-end="npt=npt=3.578ss" id="audio_0001"/>
+                        <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=npt=3.578ss" clip-end="npt=npt=5.694ss" id="audio_0002"/-->
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=0.000s" clip-end="npt=3.578s" id="audio_0001"/>
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=3.578s" clip-end="npt=5.694s" id="audio_0002"/>
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=5.694s" clip-end="npt=8.100s" id="audio_0003"/>
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=8.101s" id="audio_0004"/>
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=8.900s" clip-end="npt=9.000s" id="audio_0005"/>
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=9.000s" clip-end="npt=9.100s" id="audio_0006"/>
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=9.500s" clip-end="npt=9.600s" id="audio_0007"/>
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=9.600s" clip-end="npt=9.700s" id="audio_0008"/>
+                    <audio src="02_otherAudio.mp3" clip-begin="npt=3.578s" clip-end="npt=5.694s" id="audio_0009"/>
+                </seq>
+            </par>
+            <par endsync="lasts" id="rgn_par_0002_0001">
+                <text src="fire_safety.html#dol_2_1_rgn_cnt_0001s" id="rgn_txt_0002_0001"/>
+                <seq>
+                    <!-- Simple sequence -->
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=0.000s" clip-end="npt=3.578s" id="audio_0101"/>
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=3.578s" clip-end="npt=5.694s" id="audio_0102"/>
+                    <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=5.694s" clip-end="npt=8.100s" id="audio_0103"/>
+                </seq>
+            </par>
+            <par endsync="lasts" id="rgn_par_0003_0001">
+                <text src="fire_safety.html#dol_3_1_rgn_cnt_0001s" id="rgn_txt_0003_0001"/>
+                <!-- One audio clip -->
+                <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=0.000s" clip-end="npt=3.578s" id="audio_0201"/>
+            </par>
+            <par endsync="lasts" id="rgn_par_0004_0001">
+                <text src="fire_safety.html#dol_4_1_rgn_cnt_0001s" id="rgn_txt_0004_0001"/>
+                <!-- No audio clip -->
+            </par>
+            <par endsync="lasts" id="rgn_par_0005_0001">
+                <!-- One audio clip -->
+                <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" clip-begin="npt=0.000s" clip-end="npt=3.578s" id="audio_0501"/>
+            </par>
+            
+        </seq>
+    </body>
+</smil>

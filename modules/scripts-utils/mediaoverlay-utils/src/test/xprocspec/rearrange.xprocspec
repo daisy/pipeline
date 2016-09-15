@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/rearrange.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <x:scenario label="px:mediaoverlay-rearrange - small test">
+        <x:call step="px:mediaoverlay-rearrange">
+            <x:input port="mediaoverlay">
+                <x:document type="file" method="xml" href="resources/mediaoverlay-joined.small_1.smil"/>
+            </x:input>
+            <x:input port="content">
+                <x:document type="file" method="xml" href="resources/content_1.xhtml"/>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the resulting SMIL">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
+        <x:expect type="compare" label="The result should be as expected">
+            <x:document type="file" method="xml" href="resources/expected_1.xml"/>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="px:mediaoverlay-rearrange - medium test">
+        <x:call step="px:mediaoverlay-rearrange">
+            <x:input port="mediaoverlay">
+                <x:document type="file" method="xml" href="resources/mediaoverlay-joined.medium_1.smil"/>
+            </x:input>
+            <x:input port="content">
+                <x:document type="file" method="xml" href="resources/content_1.xhtml"/>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the resulting SMIL">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
+        <x:expect type="compare" label="The result should be as expected">
+            <x:document type="file" method="xml" href="resources/expected_1.xml"/>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="px:mediaoverlay-rearrange - big test">
+        <x:call step="px:mediaoverlay-rearrange">
+            <x:input port="mediaoverlay">
+                <x:document type="file" method="xml" href="resources/mediaoverlay-joined.smil"/>
+            </x:input>
+            <x:input port="content">
+                <x:document type="file" method="xml" href="resources/content_1.xhtml"/>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the resulting SMIL">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
+        <x:expect type="compare" label="The result should be as expected">
+            <x:document type="file" method="xml" href="resources/expected_1.xml"/>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="px:mediaoverlay-rearrange - really big test">
+        <x:call step="px:mediaoverlay-rearrange">
+            <x:input port="mediaoverlay">
+                <x:document type="file" method="xml" href="resources/mediaoverlay-joined.smil"/>
+            </x:input>
+            <x:input port="content">
+                <x:document type="file" method="xml" href="resources/content_5.xhtml"/>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the resulting SMIL">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
+        <x:expect type="compare" label="The result should be as expected">
+            <x:document type="file" method="xml" href="resources/expected_5.xml"/>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="px:mediaoverlay-rearrange - test that took forever to run in v1.7">
+        <x:call step="px:mediaoverlay-rearrange">
+            <x:input port="mediaoverlay">
+                <x:document type="file" method="xml" href="resources/mediaoverlay-joined.smil"/>
+            </x:input>
+            <x:input port="content">
+                <x:document type="file" method="xml" href="resources/content_6.xhtml"/>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the resulting SMIL">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
+        <x:expect type="compare" label="The result should be as expected">
+            <!--            <x:document type="file" method="xml" href="resources/expected_6.xml"/>-->
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="px:mediaoverlay-rearrange - another test that took forever to run in v1.7">
+        <x:call step="px:mediaoverlay-rearrange">
+            <x:input port="mediaoverlay">
+                <x:document type="file" method="xml" href="resources/mediaoverlay-joined.smil"/>
+            </x:input>
+            <x:input port="content">
+                <x:document type="file" method="xml" href="resources/content_47.xhtml"/>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the resulting SMIL">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="There should be exactly one output document" min="1" max="1"/>
+        <x:expect type="compare" label="The result should be as expected">
+            <!--            <x:document type="file" method="xml" href="resources/expected_47.xml"/>-->
+        </x:expect>
+    </x:scenario>
+
+</x:description>

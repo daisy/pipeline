@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil xml:base="http://example.org/subdir/test-mo2.smil" xmlns="http://www.w3.org/ns/SMIL" profile="http://www.idpf.org/epub/30/profile/content/"
+    version="3.0" id="smil2" xmlns:epub="http://www.idpf.org/2007/ops">
+    <body id="body2" epub:textref="../test-doc-1.xml#asdf">
+        <par id="rgn_par_0001_0001">
+            <text src="../test-doc-1.xml#dol_1_1_rgn_cnt_0001s" id="rgn_txt_0001_0001"/>
+            <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" id="audio_0001" clipEnd="9.7s"/>
+        </par>
+        <par id="rgn_par_0002_0001">
+            <text src="../test-doc-1.xml#dol_2_1_rgn_cnt_0001s" id="rgn_txt_0002_0001"/>
+            <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" id="audio_0101" clipEnd="8.1s"/>
+        </par>
+        <par id="rgn_par_0003_0001">
+            <text src="../test-doc-2.xml#dol_3_1_rgn_cnt_0001s" id="rgn_txt_0003_0001"/>
+            <audio src="01_Fire_Safety__by_Wendy_Blaxland.mp3" id="audio_0201" clipEnd="3.578s"/>
+        </par>
+    </body>
+
+</smil>

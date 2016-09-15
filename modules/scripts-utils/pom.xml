@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.pipeline.modules</groupId>
+  <artifactId>script-utils-aggregator</artifactId>
+  <version>1.9.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>DAISY Pipeline 2 :: Aggregator POM for the Script Utility Modules</name>
+  <description>Aggregator POM for the script utility modules of the DAISY Pipeline 2.</description>
+
+  <!-- List of the modules to build all-at-once -->
+  <modules>
+    <!-- <module>asciimath-utils</module> -->
+    <!-- <module>common-entities</module> -->
+    <!-- <module>css-utils</module> -->
+    <!-- <module>daisy202-utils</module> -->
+    <module>daisy3-utils</module>
+    <!-- <module>dtbook-utils</module> -->
+    <!-- <module>epub3-nav-utils</module> -->
+    <!-- <module>epub3-ocf-utils</module> -->
+    <!-- <module>epub3-pub-utils</module> -->
+    <!-- <module>epubcheck-adapter</module> -->
+    <!-- <module>html-utils</module> -->
+    <!-- <module>mediaoverlay-utils</module> -->
+    <!-- <module>odt-utils</module> -->
+    <!-- <module>zedai-utils</module> -->
+  </modules>
+
+  <!-- BoM of the default script modules (for use in assemblies) -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>asciimath-utils</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>common-entities</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>css-utils</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>daisy202-utils</artifactId>
+        <version>1.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>daisy3-utils</artifactId>
+        <version>1.2.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>dtbook-utils</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>epub3-nav-utils</artifactId>
+        <version>1.0.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>epub3-ocf-utils</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>epub3-pub-utils</artifactId>
+        <version>1.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>epubcheck-adapter</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>html-utils</artifactId>
+        <version>2.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>mediaoverlay-utils</artifactId>
+        <version>1.1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>odt-utils</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>zedai-utils</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>

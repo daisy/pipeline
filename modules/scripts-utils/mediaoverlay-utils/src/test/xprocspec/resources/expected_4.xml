@@ -1,0 +1,2307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0" xml:base="file:/tmp/jobContext8364290816736411028/">
+    <body id="mo1">
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq1" epub:textref="content_3.html#d1e545">
+            <seq id="mo1_seq1-1" epub:textref="content_3.html#ai2d_d1e13902">
+                <par id="mo1_seq1-1_par1">
+                    <text id="mo1_seq1-1_par1_text" src="content_3.html#ai2d_d1e13904"/>
+                    <audio clipBegin="0.465s" clipEnd="1.085s" id="mo1_seq1-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq1-1_par2">
+                    <text id="mo1_seq1-1_par2_text" src="content_3.html#ai2d_d1e13907"/>
+                    <audio clipBegin="1.085s" clipEnd="2.085s" id="mo1_seq1-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq1-1_par3">
+                    <text id="mo1_seq1-1_par3_text" src="content_3.html#ai2d_d1e13910"/>
+                    <audio clipBegin="2.085s" clipEnd="2.915s" id="mo1_seq1-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq1-1_par4">
+                    <text id="mo1_seq1-1_par4_text" src="content_3.html#ai2d_d1e13913"/>
+                    <audio clipBegin="2.915s" clipEnd="5.345s" id="mo1_seq1-1_par4_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq2" epub:textref="content_3.html#d1e547">
+            <seq id="mo1_seq2-1" epub:textref="content_3.html#ai2d_d1e13919">
+                <par id="mo1_seq2-1_par1">
+                    <text id="mo1_seq2-1_par1_text" src="content_3.html#ai2d_d1e13921"/>
+                    <audio clipBegin="5.345s" clipEnd="5.425s" id="mo1_seq2-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-1_par2">
+                    <text id="mo1_seq2-1_par2_text" src="content_3.html#ai2d_d1e13924"/>
+                    <audio clipBegin="5.425s" clipEnd="5.765s" id="mo1_seq2-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-1_par3">
+                    <text id="mo1_seq2-1_par3_text" src="content_3.html#ai2d_d1e13927"/>
+                    <audio clipBegin="5.765s" clipEnd="6.015s" id="mo1_seq2-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-1_par4">
+                    <text id="mo1_seq2-1_par4_text" src="content_3.html#ai2d_d1e13930"/>
+                    <audio clipBegin="6.015s" clipEnd="6.265s" id="mo1_seq2-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-1_par5">
+                    <text id="mo1_seq2-1_par5_text" src="content_3.html#ai2d_d1e13933"/>
+                    <audio clipBegin="6.265s" clipEnd="6.675s" id="mo1_seq2-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-1_par6">
+                    <text id="mo1_seq2-1_par6_text" src="content_3.html#ai2d_d1e13937"/>
+                    <audio clipBegin="6.675s" clipEnd="6.775s" id="mo1_seq2-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-1_par7">
+                    <text id="mo1_seq2-1_par7_text" src="content_3.html#ai2d_d1e13940"/>
+                    <audio clipBegin="6.775s" clipEnd="7.115s" id="mo1_seq2-1_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-1_par8">
+                    <text id="mo1_seq2-1_par8_text" src="content_3.html#ai2d_d1e13943"/>
+                    <audio clipBegin="7.115s" clipEnd="7.195s" id="mo1_seq2-1_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-1_par9">
+                    <text id="mo1_seq2-1_par9_text" src="content_3.html#ai2d_d1e13946"/>
+                    <audio clipBegin="7.195s" clipEnd="7.865s" id="mo1_seq2-1_par9_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq2-2" epub:textref="content_3.html#ai2d_d1e13950">
+                <par id="mo1_seq2-2_par1">
+                    <text id="mo1_seq2-2_par1_text" src="content_3.html#ai2d_d1e13952"/>
+                    <audio clipBegin="7.865s" clipEnd="8.285s" id="mo1_seq2-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-2_par2">
+                    <text id="mo1_seq2-2_par2_text" src="content_3.html#ai2d_d1e13955"/>
+                    <audio clipBegin="8.285s" clipEnd="8.825s" id="mo1_seq2-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-2_par3">
+                    <text id="mo1_seq2-2_par3_text" src="content_3.html#ai2d_d1e13958"/>
+                    <audio clipBegin="8.825s" clipEnd="8.945s" id="mo1_seq2-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-2_par4">
+                    <text id="mo1_seq2-2_par4_text" src="content_3.html#ai2d_d1e13961"/>
+                    <audio clipBegin="8.945s" clipEnd="9.105s" id="mo1_seq2-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-2_par5">
+                    <text id="mo1_seq2-2_par5_text" src="content_3.html#ai2d_d1e13964"/>
+                    <audio clipBegin="9.105s" clipEnd="9.505s" id="mo1_seq2-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-2_par6">
+                    <text id="mo1_seq2-2_par6_text" src="content_3.html#ai2d_d1e13968"/>
+                    <audio clipBegin="9.505s" clipEnd="9.595s" id="mo1_seq2-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-2_par7">
+                    <text id="mo1_seq2-2_par7_text" src="content_3.html#ai2d_d1e13971"/>
+                    <audio clipBegin="9.595s" clipEnd="9.665s" id="mo1_seq2-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq2-2_par8">
+                    <text id="mo1_seq2-2_par8_text" src="content_3.html#ai2d_d1e13974"/>
+                    <audio clipBegin="9.665s" clipEnd="11.295s" id="mo1_seq2-2_par8_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq3" epub:textref="content_3.html#d1e549">
+            <seq id="mo1_seq3-1" epub:textref="content_3.html#ai2d_d1e13980">
+                <par id="mo1_seq3-1_par1">
+                    <text id="mo1_seq3-1_par1_text" src="content_3.html#ai2d_d1e13982"/>
+                    <audio clipBegin="11.295s" clipEnd="11.385s" id="mo1_seq3-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq3-1_par2">
+                    <text id="mo1_seq3-1_par2_text" src="content_3.html#ai2d_d1e13985"/>
+                    <audio clipBegin="11.385s" clipEnd="11.675s" id="mo1_seq3-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq3-1_par3">
+                    <text id="mo1_seq3-1_par3_text" src="content_3.html#ai2d_d1e13988"/>
+                    <audio clipBegin="11.675s" clipEnd="12.805s" id="mo1_seq3-1_par3_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq3-2" epub:textref="content_3.html#ai2d_d1e13992">
+                <par id="mo1_seq3-2_par1">
+                    <text id="mo1_seq3-2_par1_text" src="content_3.html#ai2d_d1e13994"/>
+                    <audio clipBegin="12.805s" clipEnd="13.565s" id="mo1_seq3-2_par1_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq3-3" epub:textref="content_3.html#ai2d_d1e13998">
+                <par id="mo1_seq3-3_par1">
+                    <text id="mo1_seq3-3_par1_text" src="content_3.html#ai2d_d1e14000"/>
+                    <audio clipBegin="13.565s" clipEnd="13.745s" id="mo1_seq3-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq3-3_par2">
+                    <text id="mo1_seq3-3_par2_text" src="content_3.html#ai2d_d1e14003"/>
+                    <audio clipBegin="13.745s" clipEnd="13.845s" id="mo1_seq3-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq3-3_par3">
+                    <text id="mo1_seq3-3_par3_text" src="content_3.html#ai2d_d1e14006"/>
+                    <audio clipBegin="13.845s" clipEnd="13.915s" id="mo1_seq3-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq3-3_par4">
+                    <text id="mo1_seq3-3_par4_text" src="content_3.html#ai2d_d1e14009"/>
+                    <audio clipBegin="13.915s" clipEnd="14.515s" id="mo1_seq3-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq3-3_par5">
+                    <text id="mo1_seq3-3_par5_text" src="content_3.html#ai2d_d1e14012"/>
+                    <audio clipBegin="14.515s" clipEnd="14.605s" id="mo1_seq3-3_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq3-3_par6">
+                    <text id="mo1_seq3-3_par6_text" src="content_3.html#ai2d_d1e14016"/>
+                    <audio clipBegin="14.605s" clipEnd="14.685s" id="mo1_seq3-3_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq3-3_par7">
+                    <text id="mo1_seq3-3_par7_text" src="content_3.html#ai2d_d1e14019"/>
+                    <audio clipBegin="14.685s" clipEnd="14.975s" id="mo1_seq3-3_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq3-3_par8">
+                    <text id="mo1_seq3-3_par8_text" src="content_3.html#ai2d_d1e14022"/>
+                    <audio clipBegin="14.975s" clipEnd="16.505s" id="mo1_seq3-3_par8_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq4" epub:textref="content_3.html#d1e551">
+            <seq id="mo1_seq4-1" epub:textref="content_3.html#ai2d_d1e14028">
+                <par id="mo1_seq4-1_par1">
+                    <text id="mo1_seq4-1_par1_text" src="content_3.html#ai2d_d1e14030"/>
+                    <audio clipBegin="16.505s" clipEnd="17.125s" id="mo1_seq4-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par2">
+                    <text id="mo1_seq4-1_par2_text" src="content_3.html#ai2d_d1e14033"/>
+                    <audio clipBegin="17.125s" clipEnd="17.415s" id="mo1_seq4-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par3">
+                    <text id="mo1_seq4-1_par3_text" src="content_3.html#ai2d_d1e14036"/>
+                    <audio clipBegin="17.415s" clipEnd="17.955s" id="mo1_seq4-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par4">
+                    <text id="mo1_seq4-1_par4_text" src="content_3.html#ai2d_d1e14039"/>
+                    <audio clipBegin="17.955s" clipEnd="18.115s" id="mo1_seq4-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par5">
+                    <text id="mo1_seq4-1_par5_text" src="content_3.html#ai2d_d1e14042"/>
+                    <audio clipBegin="18.115s" clipEnd="18.225s" id="mo1_seq4-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par6">
+                    <text id="mo1_seq4-1_par6_text" src="content_3.html#ai2d_d1e14046"/>
+                    <audio clipBegin="18.225s" clipEnd="18.465s" id="mo1_seq4-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par7">
+                    <text id="mo1_seq4-1_par7_text" src="content_3.html#ai2d_d1e14049"/>
+                    <audio clipBegin="18.465s" clipEnd="19.445s" id="mo1_seq4-1_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par8">
+                    <text id="mo1_seq4-1_par8_text" src="content_3.html#ai2d_d1e14052"/>
+                    <audio clipBegin="19.445s" clipEnd="19.735s" id="mo1_seq4-1_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par9">
+                    <text id="mo1_seq4-1_par9_text" src="content_3.html#ai2d_d1e14055"/>
+                    <audio clipBegin="19.735s" clipEnd="19.955s" id="mo1_seq4-1_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par10">
+                    <text id="mo1_seq4-1_par10_text" src="content_3.html#ai2d_d1e14058"/>
+                    <audio clipBegin="19.955s" clipEnd="20.025s" id="mo1_seq4-1_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par11">
+                    <text id="mo1_seq4-1_par11_text" src="content_3.html#ai2d_d1e14061"/>
+                    <audio clipBegin="20.025s" clipEnd="20.535s" id="mo1_seq4-1_par11_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par12">
+                    <text id="mo1_seq4-1_par12_text" src="content_3.html#ai2d_d1e14065"/>
+                    <audio clipBegin="20.535s" clipEnd="20.945s" id="mo1_seq4-1_par12_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par13">
+                    <text id="mo1_seq4-1_par13_text" src="content_3.html#ai2d_d1e14068"/>
+                    <audio clipBegin="20.945s" clipEnd="21.035s" id="mo1_seq4-1_par13_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-1_par14">
+                    <text id="mo1_seq4-1_par14_text" src="content_3.html#ai2d_d1e14071"/>
+                    <audio clipBegin="21.035s" clipEnd="22.415s" id="mo1_seq4-1_par14_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq4-2" epub:textref="content_3.html#ai2d_d1e14075">
+                <par id="mo1_seq4-2_par1">
+                    <text id="mo1_seq4-2_par1_text" src="content_3.html#ai2d_d1e14077"/>
+                    <audio clipBegin="22.415s" clipEnd="22.975s" id="mo1_seq4-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par2">
+                    <text id="mo1_seq4-2_par2_text" src="content_3.html#ai2d_d1e14080"/>
+                    <audio clipBegin="22.975s" clipEnd="23.145s" id="mo1_seq4-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par3">
+                    <text id="mo1_seq4-2_par3_text" src="content_3.html#ai2d_d1e14083"/>
+                    <audio clipBegin="23.145s" clipEnd="23.175s" id="mo1_seq4-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par4">
+                    <text id="mo1_seq4-2_par4_text" src="content_3.html#ai2d_d1e14086"/>
+                    <audio clipBegin="23.175s" clipEnd="23.685s" id="mo1_seq4-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par5">
+                    <text id="mo1_seq4-2_par5_text" src="content_3.html#ai2d_d1e14089"/>
+                    <audio clipBegin="23.685s" clipEnd="23.795s" id="mo1_seq4-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par6">
+                    <text id="mo1_seq4-2_par6_text" src="content_3.html#ai2d_d1e14093"/>
+                    <audio clipBegin="23.795s" clipEnd="24.265s" id="mo1_seq4-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par7">
+                    <text id="mo1_seq4-2_par7_text" src="content_3.html#ai2d_d1e14096"/>
+                    <audio clipBegin="24.265s" clipEnd="25.435s" id="mo1_seq4-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par8">
+                    <text id="mo1_seq4-2_par8_text" src="content_3.html#ai2d_d1e14099"/>
+                    <audio clipBegin="25.435s" clipEnd="25.755s" id="mo1_seq4-2_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par9">
+                    <text id="mo1_seq4-2_par9_text" src="content_3.html#ai2d_d1e14102"/>
+                    <audio clipBegin="25.755s" clipEnd="26.625s" id="mo1_seq4-2_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par10">
+                    <text id="mo1_seq4-2_par10_text" src="content_3.html#ai2d_d1e14105"/>
+                    <audio clipBegin="26.625s" clipEnd="27.075s" id="mo1_seq4-2_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par11">
+                    <text id="mo1_seq4-2_par11_text" src="content_3.html#ai2d_d1e14108"/>
+                    <audio clipBegin="27.075s" clipEnd="27.245s" id="mo1_seq4-2_par11_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par12">
+                    <text id="mo1_seq4-2_par12_text" src="content_3.html#ai2d_d1e14112"/>
+                    <audio clipBegin="27.245s" clipEnd="28.155s" id="mo1_seq4-2_par12_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par13">
+                    <text id="mo1_seq4-2_par13_text" src="content_3.html#ai2d_d1e14115"/>
+                    <audio clipBegin="28.155s" clipEnd="28.545s" id="mo1_seq4-2_par13_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par14">
+                    <text id="mo1_seq4-2_par14_text" src="content_3.html#ai2d_d1e14118"/>
+                    <audio clipBegin="28.545s" clipEnd="28.955s" id="mo1_seq4-2_par14_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par15">
+                    <text id="mo1_seq4-2_par15_text" src="content_3.html#ai2d_d1e14121"/>
+                    <audio clipBegin="28.955s" clipEnd="29.895s" id="mo1_seq4-2_par15_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par16">
+                    <text id="mo1_seq4-2_par16_text" src="content_3.html#ai2d_d1e14124"/>
+                    <audio clipBegin="29.895s" clipEnd="30.315s" id="mo1_seq4-2_par16_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par17">
+                    <text id="mo1_seq4-2_par17_text" src="content_3.html#ai2d_d1e14127"/>
+                    <audio clipBegin="30.315s" clipEnd="31.295s" id="mo1_seq4-2_par17_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par18">
+                    <text id="mo1_seq4-2_par18_text" src="content_3.html#ai2d_d1e14131"/>
+                    <audio clipBegin="31.295s" clipEnd="31.455s" id="mo1_seq4-2_par18_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par19">
+                    <text id="mo1_seq4-2_par19_text" src="content_3.html#ai2d_d1e14134"/>
+                    <audio clipBegin="31.455s" clipEnd="32.705s" id="mo1_seq4-2_par19_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par20">
+                    <text id="mo1_seq4-2_par20_text" src="content_3.html#ai2d_d1e14137"/>
+                    <audio clipBegin="32.705s" clipEnd="32.865s" id="mo1_seq4-2_par20_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par21">
+                    <text id="mo1_seq4-2_par21_text" src="content_3.html#ai2d_d1e14140"/>
+                    <audio clipBegin="32.865s" clipEnd="32.935s" id="mo1_seq4-2_par21_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par22">
+                    <text id="mo1_seq4-2_par22_text" src="content_3.html#ai2d_d1e14143"/>
+                    <audio clipBegin="32.935s" clipEnd="33.455s" id="mo1_seq4-2_par22_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par23">
+                    <text id="mo1_seq4-2_par23_text" src="content_3.html#ai2d_d1e14146"/>
+                    <audio clipBegin="33.455s" clipEnd="34.255s" id="mo1_seq4-2_par23_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par24">
+                    <text id="mo1_seq4-2_par24_text" src="content_3.html#ai2d_d1e14150"/>
+                    <audio clipBegin="34.255s" clipEnd="34.645s" id="mo1_seq4-2_par24_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par25">
+                    <text id="mo1_seq4-2_par25_text" src="content_3.html#ai2d_d1e14153"/>
+                    <audio clipBegin="34.645s" clipEnd="34.875s" id="mo1_seq4-2_par25_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par26">
+                    <text id="mo1_seq4-2_par26_text" src="content_3.html#ai2d_d1e14156"/>
+                    <audio clipBegin="34.875s" clipEnd="35.415s" id="mo1_seq4-2_par26_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par27">
+                    <text id="mo1_seq4-2_par27_text" src="content_3.html#ai2d_d1e14159"/>
+                    <audio clipBegin="35.415s" clipEnd="35.745s" id="mo1_seq4-2_par27_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par28">
+                    <text id="mo1_seq4-2_par28_text" src="content_3.html#ai2d_d1e14162"/>
+                    <audio clipBegin="35.745s" clipEnd="37.175s" id="mo1_seq4-2_par28_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par29">
+                    <text id="mo1_seq4-2_par29_text" src="content_3.html#ai2d_d1e14165"/>
+                    <audio clipBegin="37.175s" clipEnd="37.295s" id="mo1_seq4-2_par29_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par30">
+                    <text id="mo1_seq4-2_par30_text" src="content_3.html#ai2d_d1e14169"/>
+                    <audio clipBegin="37.295s" clipEnd="37.425s" id="mo1_seq4-2_par30_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par31">
+                    <text id="mo1_seq4-2_par31_text" src="content_3.html#ai2d_d1e14172"/>
+                    <audio clipBegin="37.425s" clipEnd="37.645s" id="mo1_seq4-2_par31_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par32">
+                    <text id="mo1_seq4-2_par32_text" src="content_3.html#ai2d_d1e14175"/>
+                    <audio clipBegin="37.645s" clipEnd="37.765s" id="mo1_seq4-2_par32_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par33">
+                    <text id="mo1_seq4-2_par33_text" src="content_3.html#ai2d_d1e14178"/>
+                    <audio clipBegin="37.765s" clipEnd="38.305s" id="mo1_seq4-2_par33_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq4-2_par34">
+                    <text id="mo1_seq4-2_par34_text" src="content_3.html#ai2d_d1e14181"/>
+                    <audio clipBegin="38.305s" clipEnd="39.985s" id="mo1_seq4-2_par34_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq5" epub:textref="content_3.html#d1e553">
+            <seq id="mo1_seq5-1" epub:textref="content_3.html#ai2d_d1e14187">
+                <par id="mo1_seq5-1_par1">
+                    <text id="mo1_seq5-1_par1_text" src="content_3.html#ai2d_d1e14189"/>
+                    <audio clipBegin="39.985s" clipEnd="40.155s" id="mo1_seq5-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq5-1_par2">
+                    <text id="mo1_seq5-1_par2_text" src="content_3.html#ai2d_d1e14192"/>
+                    <audio clipBegin="40.155s" clipEnd="40.605s" id="mo1_seq5-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq5-1_par3">
+                    <text id="mo1_seq5-1_par3_text" src="content_3.html#ai2d_d1e14195"/>
+                    <audio clipBegin="40.605s" clipEnd="40.765s" id="mo1_seq5-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq5-1_par4">
+                    <text id="mo1_seq5-1_par4_text" src="content_3.html#ai2d_d1e14198"/>
+                    <audio clipBegin="40.765s" clipEnd="40.945s" id="mo1_seq5-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq5-1_par5">
+                    <text id="mo1_seq5-1_par5_text" src="content_3.html#ai2d_d1e14201"/>
+                    <audio clipBegin="40.945s" clipEnd="41.155s" id="mo1_seq5-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq5-1_par6">
+                    <text id="mo1_seq5-1_par6_text" src="content_3.html#ai2d_d1e14205"/>
+                    <audio clipBegin="41.155s" clipEnd="42.025s" id="mo1_seq5-1_par6_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq5-2" epub:textref="content_3.html#ai2d_d1e14209">
+                <par id="mo1_seq5-2_par1">
+                    <text id="mo1_seq5-2_par1_text" src="content_3.html#ai2d_d1e14211"/>
+                    <audio clipBegin="42.025s" clipEnd="42.385s" id="mo1_seq5-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq5-2_par2">
+                    <text id="mo1_seq5-2_par2_text" src="content_3.html#ai2d_d1e14214"/>
+                    <audio clipBegin="42.385s" clipEnd="44.125s" id="mo1_seq5-2_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq6" epub:textref="content_3.html#d1e555">
+            <seq id="mo1_seq6-1" epub:textref="content_3.html#ai2d_d1e14220">
+                <par id="mo1_seq6-1_par1">
+                    <text id="mo1_seq6-1_par1_text" src="content_3.html#ai2d_d1e14222"/>
+                    <audio clipBegin="44.125s" clipEnd="44.535s" id="mo1_seq6-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-1_par2">
+                    <text id="mo1_seq6-1_par2_text" src="content_3.html#ai2d_d1e14225"/>
+                    <audio clipBegin="44.535s" clipEnd="44.855s" id="mo1_seq6-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-1_par3">
+                    <text id="mo1_seq6-1_par3_text" src="content_3.html#ai2d_d1e14228"/>
+                    <audio clipBegin="44.855s" clipEnd="44.945s" id="mo1_seq6-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-1_par4">
+                    <text id="mo1_seq6-1_par4_text" src="content_3.html#ai2d_d1e14231"/>
+                    <audio clipBegin="44.945s" clipEnd="45.165s" id="mo1_seq6-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-1_par5">
+                    <text id="mo1_seq6-1_par5_text" src="content_3.html#ai2d_d1e14234"/>
+                    <audio clipBegin="45.165s" clipEnd="45.495s" id="mo1_seq6-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-1_par6">
+                    <text id="mo1_seq6-1_par6_text" src="content_3.html#ai2d_d1e14238"/>
+                    <audio clipBegin="45.495s" clipEnd="45.575s" id="mo1_seq6-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-1_par7">
+                    <text id="mo1_seq6-1_par7_text" src="content_3.html#ai2d_d1e14241"/>
+                    <audio clipBegin="45.575s" clipEnd="46.725s" id="mo1_seq6-1_par7_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq6-2" epub:textref="content_3.html#ai2d_d1e14245">
+                <par id="mo1_seq6-2_par1">
+                    <text id="mo1_seq6-2_par1_text" src="content_3.html#ai2d_d1e14247"/>
+                    <audio clipBegin="46.725s" clipEnd="47.425s" id="mo1_seq6-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-2_par2">
+                    <text id="mo1_seq6-2_par2_text" src="content_3.html#ai2d_d1e14250"/>
+                    <audio clipBegin="47.425s" clipEnd="48.055s" id="mo1_seq6-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-2_par3">
+                    <text id="mo1_seq6-2_par3_text" src="content_3.html#ai2d_d1e14253"/>
+                    <audio clipBegin="48.055s" clipEnd="49.155s" id="mo1_seq6-2_par3_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq6-3" epub:textref="content_3.html#ai2d_d1e14257">
+                <par id="mo1_seq6-3_par1">
+                    <text id="mo1_seq6-3_par1_text" src="content_3.html#ai2d_d1e14259"/>
+                    <audio clipBegin="49.155s" clipEnd="49.265s" id="mo1_seq6-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par2">
+                    <text id="mo1_seq6-3_par2_text" src="content_3.html#ai2d_d1e14262"/>
+                    <audio clipBegin="49.265s" clipEnd="50.055s" id="mo1_seq6-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par3">
+                    <text id="mo1_seq6-3_par3_text" src="content_3.html#ai2d_d1e14265"/>
+                    <audio clipBegin="50.055s" clipEnd="50.305s" id="mo1_seq6-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par4">
+                    <text id="mo1_seq6-3_par4_text" src="content_3.html#ai2d_d1e14268"/>
+                    <audio clipBegin="50.305s" clipEnd="50.515s" id="mo1_seq6-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par5">
+                    <text id="mo1_seq6-3_par5_text" src="content_3.html#ai2d_d1e14271"/>
+                    <audio clipBegin="50.515s" clipEnd="50.565s" id="mo1_seq6-3_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par6">
+                    <text id="mo1_seq6-3_par6_text" src="content_3.html#ai2d_d1e14275"/>
+                    <audio clipBegin="50.565s" clipEnd="51.405s" id="mo1_seq6-3_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par7">
+                    <text id="mo1_seq6-3_par7_text" src="content_3.html#ai2d_d1e14278"/>
+                    <audio clipBegin="51.405s" clipEnd="51.605s" id="mo1_seq6-3_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par8">
+                    <text id="mo1_seq6-3_par8_text" src="content_3.html#ai2d_d1e14281"/>
+                    <audio clipBegin="51.605s" clipEnd="51.785s" id="mo1_seq6-3_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par9">
+                    <text id="mo1_seq6-3_par9_text" src="content_3.html#ai2d_d1e14284"/>
+                    <audio clipBegin="51.785s" clipEnd="52.195s" id="mo1_seq6-3_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par10">
+                    <text id="mo1_seq6-3_par10_text" src="content_3.html#ai2d_d1e14287"/>
+                    <audio clipBegin="52.195s" clipEnd="52.345s" id="mo1_seq6-3_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq6-3_par11">
+                    <text id="mo1_seq6-3_par11_text" src="content_3.html#ai2d_d1e14290"/>
+                    <audio clipBegin="52.345s" clipEnd="54.195s" id="mo1_seq6-3_par11_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq7" epub:textref="content_3.html#d1e557">
+            <seq id="mo1_seq7-1" epub:textref="content_3.html#ai2d_d1e14296">
+                <par id="mo1_seq7-1_par1">
+                    <text id="mo1_seq7-1_par1_text" src="content_3.html#ai2d_d1e14298"/>
+                    <audio clipBegin="54.195s" clipEnd="54.385s" id="mo1_seq7-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-1_par2">
+                    <text id="mo1_seq7-1_par2_text" src="content_3.html#ai2d_d1e14301"/>
+                    <audio clipBegin="54.385s" clipEnd="54.995s" id="mo1_seq7-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-1_par3">
+                    <text id="mo1_seq7-1_par3_text" src="content_3.html#ai2d_d1e14304"/>
+                    <audio clipBegin="54.995s" clipEnd="55.725s" id="mo1_seq7-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-1_par4">
+                    <text id="mo1_seq7-1_par4_text" src="content_3.html#ai2d_d1e14307"/>
+                    <audio clipBegin="55.725s" clipEnd="55.895s" id="mo1_seq7-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-1_par5">
+                    <text id="mo1_seq7-1_par5_text" src="content_3.html#ai2d_d1e14310"/>
+                    <audio clipBegin="55.895s" clipEnd="56.675s" id="mo1_seq7-1_par5_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq7-2" epub:textref="content_3.html#ai2d_d1e14314">
+                <par id="mo1_seq7-2_par1">
+                    <text id="mo1_seq7-2_par1_text" src="content_3.html#ai2d_d1e14316"/>
+                    <audio clipBegin="56.675s" clipEnd="57.015s" id="mo1_seq7-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-2_par2">
+                    <text id="mo1_seq7-2_par2_text" src="content_3.html#ai2d_d1e14319"/>
+                    <audio clipBegin="57.015s" clipEnd="57.485s" id="mo1_seq7-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-2_par3">
+                    <text id="mo1_seq7-2_par3_text" src="content_3.html#ai2d_d1e14322"/>
+                    <audio clipBegin="57.485s" clipEnd="57.675s" id="mo1_seq7-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-2_par4">
+                    <text id="mo1_seq7-2_par4_text" src="content_3.html#ai2d_d1e14325"/>
+                    <audio clipBegin="57.675s" clipEnd="57.735s" id="mo1_seq7-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-2_par5">
+                    <text id="mo1_seq7-2_par5_text" src="content_3.html#ai2d_d1e14328"/>
+                    <audio clipBegin="57.735s" clipEnd="58.135s" id="mo1_seq7-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-2_par6">
+                    <text id="mo1_seq7-2_par6_text" src="content_3.html#ai2d_d1e14332"/>
+                    <audio clipBegin="58.135s" clipEnd="58.795s" id="mo1_seq7-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-2_par7">
+                    <text id="mo1_seq7-2_par7_text" src="content_3.html#ai2d_d1e14335"/>
+                    <audio clipBegin="58.795s" clipEnd="58.925s" id="mo1_seq7-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-2_par8">
+                    <text id="mo1_seq7-2_par8_text" src="content_3.html#ai2d_d1e14338"/>
+                    <audio clipBegin="58.925s" clipEnd="58.975s" id="mo1_seq7-2_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-2_par9">
+                    <text id="mo1_seq7-2_par9_text" src="content_3.html#ai2d_d1e14341"/>
+                    <audio clipBegin="58.975s" clipEnd="59.255s" id="mo1_seq7-2_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-2_par10">
+                    <text id="mo1_seq7-2_par10_text" src="content_3.html#ai2d_d1e14344"/>
+                    <audio clipBegin="59.255s" clipEnd="01:00.525" id="mo1_seq7-2_par10_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq7-3" epub:textref="content_3.html#ai2d_d1e14348">
+                <par id="mo1_seq7-3_par1">
+                    <text id="mo1_seq7-3_par1_text" src="content_3.html#ai2d_d1e14350"/>
+                    <audio clipBegin="01:00.525" clipEnd="01:00.835" id="mo1_seq7-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-3_par2">
+                    <text id="mo1_seq7-3_par2_text" src="content_3.html#ai2d_d1e14353"/>
+                    <audio clipBegin="01:00.835" clipEnd="01:01.325" id="mo1_seq7-3_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq7-4" epub:textref="content_3.html#ai2d_d1e14357">
+                <par id="mo1_seq7-4_par1">
+                    <text id="mo1_seq7-4_par1_text" src="content_3.html#ai2d_d1e14359"/>
+                    <audio clipBegin="01:01.325" clipEnd="01:01.515" id="mo1_seq7-4_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq7-4_par2">
+                    <text id="mo1_seq7-4_par2_text" src="content_3.html#ai2d_d1e14362"/>
+                    <audio clipBegin="01:01.515" clipEnd="01:03.055" id="mo1_seq7-4_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq8" epub:textref="content_3.html#d1e559">
+            <seq id="mo1_seq8-1" epub:textref="content_3.html#ai2d_d1e14368">
+                <par id="mo1_seq8-1_par1">
+                    <text id="mo1_seq8-1_par1_text" src="content_3.html#ai2d_d1e14370"/>
+                    <audio clipBegin="01:03.055" clipEnd="01:03.515" id="mo1_seq8-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par2">
+                    <text id="mo1_seq8-1_par2_text" src="content_3.html#ai2d_d1e14373"/>
+                    <audio clipBegin="01:03.515" clipEnd="01:04.565" id="mo1_seq8-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par3">
+                    <text id="mo1_seq8-1_par3_text" src="content_3.html#ai2d_d1e14376"/>
+                    <audio clipBegin="01:04.565" clipEnd="01:04.945" id="mo1_seq8-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par4">
+                    <text id="mo1_seq8-1_par4_text" src="content_3.html#ai2d_d1e14379"/>
+                    <audio clipBegin="01:04.945" clipEnd="01:05.795" id="mo1_seq8-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par5">
+                    <text id="mo1_seq8-1_par5_text" src="content_3.html#ai2d_d1e14382"/>
+                    <audio clipBegin="01:05.795" clipEnd="01:06.425" id="mo1_seq8-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par6">
+                    <text id="mo1_seq8-1_par6_text" src="content_3.html#ai2d_d1e14386"/>
+                    <audio clipBegin="01:06.425" clipEnd="01:06.525" id="mo1_seq8-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par7">
+                    <text id="mo1_seq8-1_par7_text" src="content_3.html#ai2d_d1e14389"/>
+                    <audio clipBegin="01:06.525" clipEnd="01:07.005" id="mo1_seq8-1_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par8">
+                    <text id="mo1_seq8-1_par8_text" src="content_3.html#ai2d_d1e14392"/>
+                    <audio clipBegin="01:07.005" clipEnd="01:07.965" id="mo1_seq8-1_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par9">
+                    <text id="mo1_seq8-1_par9_text" src="content_3.html#ai2d_d1e14395"/>
+                    <audio clipBegin="01:07.965" clipEnd="01:08.095" id="mo1_seq8-1_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par10">
+                    <text id="mo1_seq8-1_par10_text" src="content_3.html#ai2d_d1e14398"/>
+                    <audio clipBegin="01:08.095" clipEnd="01:08.205" id="mo1_seq8-1_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq8-1_par11">
+                    <text id="mo1_seq8-1_par11_text" src="content_3.html#ai2d_d1e14401"/>
+                    <audio clipBegin="01:08.205" clipEnd="01:09.675" id="mo1_seq8-1_par11_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <par xmlns:epub="http://www.idpf.org/2007/ops" epub:type="pagebreak" id="mo1_par9">
+            <text id="mo1_par9_text" src="content_3.html#page-21"/>
+            <audio clipBegin="01:09.675" clipEnd="01:10.455" id="mo1_par9_audio" src="File_005.mp3"/>
+        </par>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq10" epub:textref="content_3.html#d1e563">
+            <seq id="mo1_seq10-1" epub:textref="content_3.html#ai2d_d1e14409">
+                <par id="mo1_seq10-1_par1">
+                    <text id="mo1_seq10-1_par1_text" src="content_3.html#ai2d_d1e14411"/>
+                    <audio clipBegin="01:10.455" clipEnd="01:10.745" id="mo1_seq10-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq10-1_par2">
+                    <text id="mo1_seq10-1_par2_text" src="content_3.html#ai2d_d1e14414"/>
+                    <audio clipBegin="01:10.745" clipEnd="01:11.315" id="mo1_seq10-1_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq10-2" epub:textref="content_3.html#ai2d_d1e14418">
+                <par id="mo1_seq10-2_par1">
+                    <text id="mo1_seq10-2_par1_text" src="content_3.html#ai2d_d1e14420"/>
+                    <audio clipBegin="01:11.315" clipEnd="01:11.495" id="mo1_seq10-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq10-2_par2">
+                    <text id="mo1_seq10-2_par2_text" src="content_3.html#ai2d_d1e14423"/>
+                    <audio clipBegin="01:11.495" clipEnd="01:12.765" id="mo1_seq10-2_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq11" epub:textref="content_3.html#d1e566">
+            <seq id="mo1_seq11-1" epub:textref="content_3.html#ai2d_d1e14430">
+                <par id="mo1_seq11-1_par1">
+                    <text id="mo1_seq11-1_par1_text" src="content_3.html#ai2d_d1e14432"/>
+                    <audio clipBegin="01:12.765" clipEnd="01:14.315" id="mo1_seq11-1_par1_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq12" epub:textref="content_3.html#d1e568">
+            <seq id="mo1_seq12-1" epub:textref="content_3.html#ai2d_d1e14438">
+                <par id="mo1_seq12-1_par1">
+                    <text id="mo1_seq12-1_par1_text" src="content_3.html#ai2d_d1e14440"/>
+                    <audio clipBegin="01:14.315" clipEnd="01:14.465" id="mo1_seq12-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq12-1_par2">
+                    <text id="mo1_seq12-1_par2_text" src="content_3.html#ai2d_d1e14443"/>
+                    <audio clipBegin="01:14.465" clipEnd="01:14.685" id="mo1_seq12-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq12-1_par3">
+                    <text id="mo1_seq12-1_par3_text" src="content_3.html#ai2d_d1e14446"/>
+                    <audio clipBegin="01:14.685" clipEnd="01:14.915" id="mo1_seq12-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq12-1_par4">
+                    <text id="mo1_seq12-1_par4_text" src="content_3.html#ai2d_d1e14449"/>
+                    <audio clipBegin="01:14.915" clipEnd="01:16.685" id="mo1_seq12-1_par4_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq13" epub:textref="content_3.html#d1e570">
+            <seq id="mo1_seq13-1" epub:textref="content_3.html#ai2d_d1e14455">
+                <par id="mo1_seq13-1_par1">
+                    <text id="mo1_seq13-1_par1_text" src="content_3.html#ai2d_d1e14457"/>
+                    <audio clipBegin="01:16.685" clipEnd="01:17.045" id="mo1_seq13-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-1_par2">
+                    <text id="mo1_seq13-1_par2_text" src="content_3.html#ai2d_d1e14460"/>
+                    <audio clipBegin="01:17.045" clipEnd="01:18.085" id="mo1_seq13-1_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq13-2" epub:textref="content_3.html#ai2d_d1e14464">
+                <par id="mo1_seq13-2_par1">
+                    <text id="mo1_seq13-2_par1_text" src="content_3.html#ai2d_d1e14466"/>
+                    <audio clipBegin="01:18.085" clipEnd="01:18.435" id="mo1_seq13-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-2_par2">
+                    <text id="mo1_seq13-2_par2_text" src="content_3.html#ai2d_d1e14469"/>
+                    <audio clipBegin="01:18.435" clipEnd="01:18.595" id="mo1_seq13-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-2_par3">
+                    <text id="mo1_seq13-2_par3_text" src="content_3.html#ai2d_d1e14472"/>
+                    <audio clipBegin="01:18.595" clipEnd="01:18.725" id="mo1_seq13-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-2_par4">
+                    <text id="mo1_seq13-2_par4_text" src="content_3.html#ai2d_d1e14475"/>
+                    <audio clipBegin="01:18.725" clipEnd="01:18.905" id="mo1_seq13-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-2_par5">
+                    <text id="mo1_seq13-2_par5_text" src="content_3.html#ai2d_d1e14478"/>
+                    <audio clipBegin="01:18.905" clipEnd="01:18.945" id="mo1_seq13-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-2_par6">
+                    <text id="mo1_seq13-2_par6_text" src="content_3.html#ai2d_d1e14482"/>
+                    <audio clipBegin="01:18.945" clipEnd="01:19.835" id="mo1_seq13-2_par6_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq13-3" epub:textref="content_3.html#ai2d_d1e14486">
+                <par id="mo1_seq13-3_par1">
+                    <text id="mo1_seq13-3_par1_text" src="content_3.html#ai2d_d1e14488"/>
+                    <audio clipBegin="01:19.835" clipEnd="01:19.935" id="mo1_seq13-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-3_par2">
+                    <text id="mo1_seq13-3_par2_text" src="content_3.html#ai2d_d1e14491"/>
+                    <audio clipBegin="01:19.935" clipEnd="01:20.435" id="mo1_seq13-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-3_par3">
+                    <text id="mo1_seq13-3_par3_text" src="content_3.html#ai2d_d1e14494"/>
+                    <audio clipBegin="01:20.435" clipEnd="01:20.745" id="mo1_seq13-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-3_par4">
+                    <text id="mo1_seq13-3_par4_text" src="content_3.html#ai2d_d1e14497"/>
+                    <audio clipBegin="01:20.745" clipEnd="01:21.455" id="mo1_seq13-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-3_par5">
+                    <text id="mo1_seq13-3_par5_text" src="content_3.html#ai2d_d1e14500"/>
+                    <audio clipBegin="01:21.455" clipEnd="01:21.765" id="mo1_seq13-3_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq13-3_par6">
+                    <text id="mo1_seq13-3_par6_text" src="content_3.html#ai2d_d1e14504"/>
+                    <audio clipBegin="01:21.765" clipEnd="01:23.145" id="mo1_seq13-3_par6_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq14" epub:textref="content_3.html#d1e572">
+            <seq id="mo1_seq14-1" epub:textref="content_3.html#ai2d_d1e14510">
+                <par id="mo1_seq14-1_par1">
+                    <text id="mo1_seq14-1_par1_text" src="content_3.html#ai2d_d1e14512"/>
+                    <audio clipBegin="01:23.145" clipEnd="01:23.525" id="mo1_seq14-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq14-1_par2">
+                    <text id="mo1_seq14-1_par2_text" src="content_3.html#ai2d_d1e14515"/>
+                    <audio clipBegin="01:23.525" clipEnd="01:24.075" id="mo1_seq14-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq14-1_par3">
+                    <text id="mo1_seq14-1_par3_text" src="content_3.html#ai2d_d1e14518"/>
+                    <audio clipBegin="01:24.075" clipEnd="01:24.195" id="mo1_seq14-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq14-1_par4">
+                    <text id="mo1_seq14-1_par4_text" src="content_3.html#ai2d_d1e14521"/>
+                    <audio clipBegin="01:24.195" clipEnd="01:25.285" id="mo1_seq14-1_par4_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq14-2" epub:textref="content_3.html#ai2d_d1e14525">
+                <par id="mo1_seq14-2_par1">
+                    <text id="mo1_seq14-2_par1_text" src="content_3.html#ai2d_d1e14527"/>
+                    <audio clipBegin="01:25.285" clipEnd="01:25.635" id="mo1_seq14-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq14-2_par2">
+                    <text id="mo1_seq14-2_par2_text" src="content_3.html#ai2d_d1e14530"/>
+                    <audio clipBegin="01:25.635" clipEnd="01:27.185" id="mo1_seq14-2_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq15" epub:textref="content_3.html#d1e574">
+            <seq id="mo1_seq15-1" epub:textref="content_3.html#ai2d_d1e14536">
+                <par id="mo1_seq15-1_par1">
+                    <text id="mo1_seq15-1_par1_text" src="content_3.html#ai2d_d1e14538"/>
+                    <audio clipBegin="01:27.185" clipEnd="01:27.325" id="mo1_seq15-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq15-1_par2">
+                    <text id="mo1_seq15-1_par2_text" src="content_3.html#ai2d_d1e14541"/>
+                    <audio clipBegin="01:27.325" clipEnd="01:28.475" id="mo1_seq15-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq15-1_par3">
+                    <text id="mo1_seq15-1_par3_text" src="content_3.html#ai2d_d1e14544"/>
+                    <audio clipBegin="01:28.475" clipEnd="01:28.805" id="mo1_seq15-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq15-1_par4">
+                    <text id="mo1_seq15-1_par4_text" src="content_3.html#ai2d_d1e14547"/>
+                    <audio clipBegin="01:28.805" clipEnd="01:30.105" id="mo1_seq15-1_par4_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq16" epub:textref="content_3.html#d1e576">
+            <seq id="mo1_seq16-1" epub:textref="content_3.html#ai2d_d1e14553">
+                <par id="mo1_seq16-1_par1">
+                    <text id="mo1_seq16-1_par1_text" src="content_3.html#ai2d_d1e14555"/>
+                    <audio clipBegin="01:30.105" clipEnd="01:30.545" id="mo1_seq16-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq16-1_par2">
+                    <text id="mo1_seq16-1_par2_text" src="content_3.html#ai2d_d1e14558"/>
+                    <audio clipBegin="01:30.545" clipEnd="01:31.125" id="mo1_seq16-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq16-1_par3">
+                    <text id="mo1_seq16-1_par3_text" src="content_3.html#ai2d_d1e14561"/>
+                    <audio clipBegin="01:31.125" clipEnd="01:31.255" id="mo1_seq16-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq16-1_par4">
+                    <text id="mo1_seq16-1_par4_text" src="content_3.html#ai2d_d1e14564"/>
+                    <audio clipBegin="01:31.255" clipEnd="01:31.825" id="mo1_seq16-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq16-1_par5">
+                    <text id="mo1_seq16-1_par5_text" src="content_3.html#ai2d_d1e14567"/>
+                    <audio clipBegin="01:31.825" clipEnd="01:33.175" id="mo1_seq16-1_par5_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq16-2" epub:textref="content_3.html#ai2d_d1e14571">
+                <par id="mo1_seq16-2_par1">
+                    <text id="mo1_seq16-2_par1_text" src="content_3.html#ai2d_d1e14573"/>
+                    <audio clipBegin="01:33.175" clipEnd="01:33.425" id="mo1_seq16-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq16-2_par2">
+                    <text id="mo1_seq16-2_par2_text" src="content_3.html#ai2d_d1e14576"/>
+                    <audio clipBegin="01:33.425" clipEnd="01:33.735" id="mo1_seq16-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq16-2_par3">
+                    <text id="mo1_seq16-2_par3_text" src="content_3.html#ai2d_d1e14579"/>
+                    <audio clipBegin="01:33.735" clipEnd="01:34.315" id="mo1_seq16-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq16-2_par4">
+                    <text id="mo1_seq16-2_par4_text" src="content_3.html#ai2d_d1e14582"/>
+                    <audio clipBegin="01:34.315" clipEnd="01:34.455" id="mo1_seq16-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq16-2_par5">
+                    <text id="mo1_seq16-2_par5_text" src="content_3.html#ai2d_d1e14585"/>
+                    <audio clipBegin="01:34.455" clipEnd="01:35.125" id="mo1_seq16-2_par5_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq16-3" epub:textref="content_3.html#ai2d_d1e14589">
+                <par id="mo1_seq16-3_par1">
+                    <text id="mo1_seq16-3_par1_text" src="content_3.html#ai2d_d1e14591"/>
+                    <audio clipBegin="01:35.125" clipEnd="01:35.275" id="mo1_seq16-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq16-3_par2">
+                    <text id="mo1_seq16-3_par2_text" src="content_3.html#ai2d_d1e14594"/>
+                    <audio clipBegin="01:35.275" clipEnd="01:37.115" id="mo1_seq16-3_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq17" epub:textref="content_3.html#d1e578">
+            <seq id="mo1_seq17-1" epub:textref="content_3.html#ai2d_d1e14600">
+                <par id="mo1_seq17-1_par1">
+                    <text id="mo1_seq17-1_par1_text" src="content_3.html#ai2d_d1e14602"/>
+                    <audio clipBegin="01:37.115" clipEnd="01:37.385" id="mo1_seq17-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-1_par2">
+                    <text id="mo1_seq17-1_par2_text" src="content_3.html#ai2d_d1e14605"/>
+                    <audio clipBegin="01:37.385" clipEnd="01:38.415" id="mo1_seq17-1_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq17-2" epub:textref="content_3.html#ai2d_d1e14609">
+                <par id="mo1_seq17-2_par1">
+                    <text id="mo1_seq17-2_par1_text" src="content_3.html#ai2d_d1e14611"/>
+                    <audio clipBegin="01:38.415" clipEnd="01:38.735" id="mo1_seq17-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-2_par2">
+                    <text id="mo1_seq17-2_par2_text" src="content_3.html#ai2d_d1e14614"/>
+                    <audio clipBegin="01:38.735" clipEnd="01:39.235" id="mo1_seq17-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-2_par3">
+                    <text id="mo1_seq17-2_par3_text" src="content_3.html#ai2d_d1e14617"/>
+                    <audio clipBegin="01:39.235" clipEnd="01:39.325" id="mo1_seq17-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-2_par4">
+                    <text id="mo1_seq17-2_par4_text" src="content_3.html#ai2d_d1e14620"/>
+                    <audio clipBegin="01:39.325" clipEnd="01:39.885" id="mo1_seq17-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-2_par5">
+                    <text id="mo1_seq17-2_par5_text" src="content_3.html#ai2d_d1e14623"/>
+                    <audio clipBegin="01:39.885" clipEnd="01:40.005" id="mo1_seq17-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-2_par6">
+                    <text id="mo1_seq17-2_par6_text" src="content_3.html#ai2d_d1e14627"/>
+                    <audio clipBegin="01:40.005" clipEnd="01:40.065" id="mo1_seq17-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-2_par7">
+                    <text id="mo1_seq17-2_par7_text" src="content_3.html#ai2d_d1e14630"/>
+                    <audio clipBegin="01:40.065" clipEnd="01:41.205" id="mo1_seq17-2_par7_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq17-3" epub:textref="content_3.html#ai2d_d1e14634">
+                <par id="mo1_seq17-3_par1">
+                    <text id="mo1_seq17-3_par1_text" src="content_3.html#ai2d_d1e14636"/>
+                    <audio clipBegin="01:41.205" clipEnd="01:41.325" id="mo1_seq17-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par2">
+                    <text id="mo1_seq17-3_par2_text" src="content_3.html#ai2d_d1e14639"/>
+                    <audio clipBegin="01:41.325" clipEnd="01:41.525" id="mo1_seq17-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par3">
+                    <text id="mo1_seq17-3_par3_text" src="content_3.html#ai2d_d1e14642"/>
+                    <audio clipBegin="01:41.525" clipEnd="01:41.905" id="mo1_seq17-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par4">
+                    <text id="mo1_seq17-3_par4_text" src="content_3.html#ai2d_d1e14645"/>
+                    <audio clipBegin="01:41.905" clipEnd="01:42.095" id="mo1_seq17-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par5">
+                    <text id="mo1_seq17-3_par5_text" src="content_3.html#ai2d_d1e14648"/>
+                    <audio clipBegin="01:42.095" clipEnd="01:42.365" id="mo1_seq17-3_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par6">
+                    <text id="mo1_seq17-3_par6_text" src="content_3.html#ai2d_d1e14652"/>
+                    <audio clipBegin="01:42.365" clipEnd="01:42.515" id="mo1_seq17-3_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par7">
+                    <text id="mo1_seq17-3_par7_text" src="content_3.html#ai2d_d1e14655"/>
+                    <audio clipBegin="01:42.515" clipEnd="01:42.715" id="mo1_seq17-3_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par8">
+                    <text id="mo1_seq17-3_par8_text" src="content_3.html#ai2d_d1e14658"/>
+                    <audio clipBegin="01:42.715" clipEnd="01:43.015" id="mo1_seq17-3_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par9">
+                    <text id="mo1_seq17-3_par9_text" src="content_3.html#ai2d_d1e14661"/>
+                    <audio clipBegin="01:43.015" clipEnd="01:43.395" id="mo1_seq17-3_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par10">
+                    <text id="mo1_seq17-3_par10_text" src="content_3.html#ai2d_d1e14664"/>
+                    <audio clipBegin="01:43.395" clipEnd="01:43.555" id="mo1_seq17-3_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-3_par11">
+                    <text id="mo1_seq17-3_par11_text" src="content_3.html#ai2d_d1e14667"/>
+                    <audio clipBegin="01:43.555" clipEnd="01:44.855" id="mo1_seq17-3_par11_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq17-4" epub:textref="content_3.html#ai2d_d1e14671">
+                <par id="mo1_seq17-4_par1">
+                    <text id="mo1_seq17-4_par1_text" src="content_3.html#ai2d_d1e14673"/>
+                    <audio clipBegin="01:44.855" clipEnd="01:44.945" id="mo1_seq17-4_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-4_par2">
+                    <text id="mo1_seq17-4_par2_text" src="content_3.html#ai2d_d1e14676"/>
+                    <audio clipBegin="01:44.945" clipEnd="01:45.245" id="mo1_seq17-4_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-4_par3">
+                    <text id="mo1_seq17-4_par3_text" src="content_3.html#ai2d_d1e14679"/>
+                    <audio clipBegin="01:45.245" clipEnd="01:45.505" id="mo1_seq17-4_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-4_par4">
+                    <text id="mo1_seq17-4_par4_text" src="content_3.html#ai2d_d1e14682"/>
+                    <audio clipBegin="01:45.505" clipEnd="01:45.775" id="mo1_seq17-4_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-4_par5">
+                    <text id="mo1_seq17-4_par5_text" src="content_3.html#ai2d_d1e14685"/>
+                    <audio clipBegin="01:45.775" clipEnd="01:46.345" id="mo1_seq17-4_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-4_par6">
+                    <text id="mo1_seq17-4_par6_text" src="content_3.html#ai2d_d1e14689"/>
+                    <audio clipBegin="01:46.345" clipEnd="01:46.685" id="mo1_seq17-4_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-4_par7">
+                    <text id="mo1_seq17-4_par7_text" src="content_3.html#ai2d_d1e14692"/>
+                    <audio clipBegin="01:46.685" clipEnd="01:47.475" id="mo1_seq17-4_par7_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq17-5" epub:textref="content_3.html#ai2d_d1e14696">
+                <par id="mo1_seq17-5_par1">
+                    <text id="mo1_seq17-5_par1_text" src="content_3.html#ai2d_d1e14698"/>
+                    <audio clipBegin="01:47.475" clipEnd="01:47.655" id="mo1_seq17-5_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-5_par2">
+                    <text id="mo1_seq17-5_par2_text" src="content_3.html#ai2d_d1e14701"/>
+                    <audio clipBegin="01:47.655" clipEnd="01:47.995" id="mo1_seq17-5_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-5_par3">
+                    <text id="mo1_seq17-5_par3_text" src="content_3.html#ai2d_d1e14704"/>
+                    <audio clipBegin="01:47.995" clipEnd="01:48.395" id="mo1_seq17-5_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-5_par4">
+                    <text id="mo1_seq17-5_par4_text" src="content_3.html#ai2d_d1e14707"/>
+                    <audio clipBegin="01:48.395" clipEnd="01:48.825" id="mo1_seq17-5_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq17-5_par5">
+                    <text id="mo1_seq17-5_par5_text" src="content_3.html#ai2d_d1e14710"/>
+                    <audio clipBegin="01:48.825" clipEnd="01:50.425" id="mo1_seq17-5_par5_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq18" epub:textref="content_3.html#d1e580">
+            <seq id="mo1_seq18-1" epub:textref="content_3.html#ai2d_d1e14716">
+                <par id="mo1_seq18-1_par1">
+                    <text id="mo1_seq18-1_par1_text" src="content_3.html#ai2d_d1e14718"/>
+                    <audio clipBegin="01:50.425" clipEnd="01:50.595" id="mo1_seq18-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq18-1_par2">
+                    <text id="mo1_seq18-1_par2_text" src="content_3.html#ai2d_d1e14721"/>
+                    <audio clipBegin="01:50.595" clipEnd="01:50.905" id="mo1_seq18-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq18-1_par3">
+                    <text id="mo1_seq18-1_par3_text" src="content_3.html#ai2d_d1e14724"/>
+                    <audio clipBegin="01:50.905" clipEnd="01:51.075" id="mo1_seq18-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq18-1_par4">
+                    <text id="mo1_seq18-1_par4_text" src="content_3.html#ai2d_d1e14727"/>
+                    <audio clipBegin="01:51.075" clipEnd="01:51.205" id="mo1_seq18-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq18-1_par5">
+                    <text id="mo1_seq18-1_par5_text" src="content_3.html#ai2d_d1e14730"/>
+                    <audio clipBegin="01:51.205" clipEnd="01:51.475" id="mo1_seq18-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq18-1_par6">
+                    <text id="mo1_seq18-1_par6_text" src="content_3.html#ai2d_d1e14734"/>
+                    <audio clipBegin="01:51.475" clipEnd="01:51.785" id="mo1_seq18-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq18-1_par7">
+                    <text id="mo1_seq18-1_par7_text" src="content_3.html#ai2d_d1e14737"/>
+                    <audio clipBegin="01:51.785" clipEnd="01:52.105" id="mo1_seq18-1_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq18-1_par8">
+                    <text id="mo1_seq18-1_par8_text" src="content_3.html#ai2d_d1e14740"/>
+                    <audio clipBegin="01:52.105" clipEnd="01:52.555" id="mo1_seq18-1_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq18-1_par9">
+                    <text id="mo1_seq18-1_par9_text" src="content_3.html#ai2d_d1e14743"/>
+                    <audio clipBegin="01:52.555" clipEnd="01:52.685" id="mo1_seq18-1_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq18-1_par10">
+                    <text id="mo1_seq18-1_par10_text" src="content_3.html#ai2d_d1e14746"/>
+                    <audio clipBegin="01:52.685" clipEnd="01:53.235" id="mo1_seq18-1_par10_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq18-2" epub:textref="content_3.html#ai2d_d1e14750">
+                <par id="mo1_seq18-2_par1">
+                    <text id="mo1_seq18-2_par1_text" src="content_3.html#ai2d_d1e14752"/>
+                    <audio clipBegin="01:53.235" clipEnd="01:54.685" id="mo1_seq18-2_par1_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq19" epub:textref="content_3.html#d1e582">
+            <seq id="mo1_seq19-1" epub:textref="content_3.html#ai2d_d1e14758">
+                <par id="mo1_seq19-1_par1">
+                    <text id="mo1_seq19-1_par1_text" src="content_3.html#ai2d_d1e14760"/>
+                    <audio clipBegin="01:54.685" clipEnd="01:55.035" id="mo1_seq19-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq19-1_par2">
+                    <text id="mo1_seq19-1_par2_text" src="content_3.html#ai2d_d1e14763"/>
+                    <audio clipBegin="01:55.035" clipEnd="01:56.285" id="mo1_seq19-1_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq19-2" epub:textref="content_3.html#ai2d_d1e14767">
+                <par id="mo1_seq19-2_par1">
+                    <text id="mo1_seq19-2_par1_text" src="content_3.html#ai2d_d1e14769"/>
+                    <audio clipBegin="01:56.285" clipEnd="01:56.555" id="mo1_seq19-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq19-2_par2">
+                    <text id="mo1_seq19-2_par2_text" src="content_3.html#ai2d_d1e14772"/>
+                    <audio clipBegin="01:56.555" clipEnd="01:56.705" id="mo1_seq19-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq19-2_par3">
+                    <text id="mo1_seq19-2_par3_text" src="content_3.html#ai2d_d1e14775"/>
+                    <audio clipBegin="01:56.705" clipEnd="01:57.405" id="mo1_seq19-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq19-2_par4">
+                    <text id="mo1_seq19-2_par4_text" src="content_3.html#ai2d_d1e14778"/>
+                    <audio clipBegin="01:57.405" clipEnd="01:57.635" id="mo1_seq19-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq19-2_par5">
+                    <text id="mo1_seq19-2_par5_text" src="content_3.html#ai2d_d1e14781"/>
+                    <audio clipBegin="01:57.635" clipEnd="01:57.815" id="mo1_seq19-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq19-2_par6">
+                    <text id="mo1_seq19-2_par6_text" src="content_3.html#ai2d_d1e14785"/>
+                    <audio clipBegin="01:57.815" clipEnd="01:58.405" id="mo1_seq19-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq19-2_par7">
+                    <text id="mo1_seq19-2_par7_text" src="content_3.html#ai2d_d1e14788"/>
+                    <audio clipBegin="01:58.405" clipEnd="01:58.655" id="mo1_seq19-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq19-2_par8">
+                    <text id="mo1_seq19-2_par8_text" src="content_3.html#ai2d_d1e14791"/>
+                    <audio clipBegin="01:58.655" clipEnd="01:59.885" id="mo1_seq19-2_par8_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq20" epub:textref="content_3.html#d1e584">
+            <seq id="mo1_seq20-1" epub:textref="content_3.html#ai2d_d1e14797">
+                <par id="mo1_seq20-1_par1">
+                    <text id="mo1_seq20-1_par1_text" src="content_3.html#ai2d_d1e14799"/>
+                    <audio clipBegin="01:59.885" clipEnd="02:00.125" id="mo1_seq20-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq20-1_par2">
+                    <text id="mo1_seq20-1_par2_text" src="content_3.html#ai2d_d1e14802"/>
+                    <audio clipBegin="02:00.125" clipEnd="02:01.645" id="mo1_seq20-1_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq21" epub:textref="content_3.html#d1e586">
+            <seq id="mo1_seq21-1" epub:textref="content_3.html#ai2d_d1e14808">
+                <par id="mo1_seq21-1_par1">
+                    <text id="mo1_seq21-1_par1_text" src="content_3.html#ai2d_d1e14810"/>
+                    <audio clipBegin="02:01.645" clipEnd="02:02.415" id="mo1_seq21-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-1_par2">
+                    <text id="mo1_seq21-1_par2_text" src="content_3.html#ai2d_d1e14813"/>
+                    <audio clipBegin="02:02.415" clipEnd="02:02.815" id="mo1_seq21-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-1_par3">
+                    <text id="mo1_seq21-1_par3_text" src="content_3.html#ai2d_d1e14816"/>
+                    <audio clipBegin="02:02.815" clipEnd="02:04.335" id="mo1_seq21-1_par3_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq21-2" epub:textref="content_3.html#ai2d_d1e14820">
+                <par id="mo1_seq21-2_par1">
+                    <text id="mo1_seq21-2_par1_text" src="content_3.html#ai2d_d1e14822"/>
+                    <audio clipBegin="02:04.335" clipEnd="02:04.605" id="mo1_seq21-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par2">
+                    <text id="mo1_seq21-2_par2_text" src="content_3.html#ai2d_d1e14825"/>
+                    <audio clipBegin="02:04.605" clipEnd="02:04.945" id="mo1_seq21-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par3">
+                    <text id="mo1_seq21-2_par3_text" src="content_3.html#ai2d_d1e14828"/>
+                    <audio clipBegin="02:04.945" clipEnd="02:05.085" id="mo1_seq21-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par4">
+                    <text id="mo1_seq21-2_par4_text" src="content_3.html#ai2d_d1e14831"/>
+                    <audio clipBegin="02:05.085" clipEnd="02:05.345" id="mo1_seq21-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par5">
+                    <text id="mo1_seq21-2_par5_text" src="content_3.html#ai2d_d1e14834"/>
+                    <audio clipBegin="02:05.345" clipEnd="02:05.665" id="mo1_seq21-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par6">
+                    <text id="mo1_seq21-2_par6_text" src="content_3.html#ai2d_d1e14838"/>
+                    <audio clipBegin="02:05.665" clipEnd="02:05.935" id="mo1_seq21-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par7">
+                    <text id="mo1_seq21-2_par7_text" src="content_3.html#ai2d_d1e14841"/>
+                    <audio clipBegin="02:05.935" clipEnd="02:06.265" id="mo1_seq21-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par8">
+                    <text id="mo1_seq21-2_par8_text" src="content_3.html#ai2d_d1e14844"/>
+                    <audio clipBegin="02:06.265" clipEnd="02:06.515" id="mo1_seq21-2_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par9">
+                    <text id="mo1_seq21-2_par9_text" src="content_3.html#ai2d_d1e14847"/>
+                    <audio clipBegin="02:06.515" clipEnd="02:06.835" id="mo1_seq21-2_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par10">
+                    <text id="mo1_seq21-2_par10_text" src="content_3.html#ai2d_d1e14850"/>
+                    <audio clipBegin="02:06.835" clipEnd="02:06.935" id="mo1_seq21-2_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par11">
+                    <text id="mo1_seq21-2_par11_text" src="content_3.html#ai2d_d1e14853"/>
+                    <audio clipBegin="02:06.935" clipEnd="02:06.995" id="mo1_seq21-2_par11_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par12">
+                    <text id="mo1_seq21-2_par12_text" src="content_3.html#ai2d_d1e14857"/>
+                    <audio clipBegin="02:06.995" clipEnd="02:07.925" id="mo1_seq21-2_par12_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par13">
+                    <text id="mo1_seq21-2_par13_text" src="content_3.html#ai2d_d1e14860"/>
+                    <audio clipBegin="02:07.925" clipEnd="02:08.295" id="mo1_seq21-2_par13_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par14">
+                    <text id="mo1_seq21-2_par14_text" src="content_3.html#ai2d_d1e14863"/>
+                    <audio clipBegin="02:08.295" clipEnd="02:08.885" id="mo1_seq21-2_par14_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par15">
+                    <text id="mo1_seq21-2_par15_text" src="content_3.html#ai2d_d1e14866"/>
+                    <audio clipBegin="02:08.885" clipEnd="02:09.005" id="mo1_seq21-2_par15_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-2_par16">
+                    <text id="mo1_seq21-2_par16_text" src="content_3.html#ai2d_d1e14869"/>
+                    <audio clipBegin="02:09.005" clipEnd="02:10.275" id="mo1_seq21-2_par16_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq21-3" epub:textref="content_3.html#ai2d_d1e14873">
+                <par id="mo1_seq21-3_par1">
+                    <text id="mo1_seq21-3_par1_text" src="content_3.html#ai2d_d1e14875"/>
+                    <audio clipBegin="02:10.275" clipEnd="02:10.425" id="mo1_seq21-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-3_par2">
+                    <text id="mo1_seq21-3_par2_text" src="content_3.html#ai2d_d1e14878"/>
+                    <audio clipBegin="02:10.425" clipEnd="02:10.855" id="mo1_seq21-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-3_par3">
+                    <text id="mo1_seq21-3_par3_text" src="content_3.html#ai2d_d1e14881"/>
+                    <audio clipBegin="02:10.855" clipEnd="02:10.995" id="mo1_seq21-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-3_par4">
+                    <text id="mo1_seq21-3_par4_text" src="content_3.html#ai2d_d1e14884"/>
+                    <audio clipBegin="02:10.995" clipEnd="02:11.085" id="mo1_seq21-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-3_par5">
+                    <text id="mo1_seq21-3_par5_text" src="content_3.html#ai2d_d1e14887"/>
+                    <audio clipBegin="02:11.085" clipEnd="02:11.445" id="mo1_seq21-3_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-3_par6">
+                    <text id="mo1_seq21-3_par6_text" src="content_3.html#ai2d_d1e14891"/>
+                    <audio clipBegin="02:11.445" clipEnd="02:11.565" id="mo1_seq21-3_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-3_par7">
+                    <text id="mo1_seq21-3_par7_text" src="content_3.html#ai2d_d1e14894"/>
+                    <audio clipBegin="02:11.565" clipEnd="02:11.625" id="mo1_seq21-3_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-3_par8">
+                    <text id="mo1_seq21-3_par8_text" src="content_3.html#ai2d_d1e14897"/>
+                    <audio clipBegin="02:11.625" clipEnd="02:13.025" id="mo1_seq21-3_par8_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq21-4" epub:textref="content_3.html#ai2d_d1e14901">
+                <par id="mo1_seq21-4_par1">
+                    <text id="mo1_seq21-4_par1_text" src="content_3.html#ai2d_d1e14903"/>
+                    <audio clipBegin="02:13.025" clipEnd="02:13.905" id="mo1_seq21-4_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-4_par2">
+                    <text id="mo1_seq21-4_par2_text" src="content_3.html#ai2d_d1e14906"/>
+                    <audio clipBegin="02:13.905" clipEnd="02:13.995" id="mo1_seq21-4_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-4_par3">
+                    <text id="mo1_seq21-4_par3_text" src="content_3.html#ai2d_d1e14909"/>
+                    <audio clipBegin="02:13.995" clipEnd="02:14.215" id="mo1_seq21-4_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-4_par4">
+                    <text id="mo1_seq21-4_par4_text" src="content_3.html#ai2d_d1e14912"/>
+                    <audio clipBegin="02:14.215" clipEnd="02:14.895" id="mo1_seq21-4_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-4_par5">
+                    <text id="mo1_seq21-4_par5_text" src="content_3.html#ai2d_d1e14915"/>
+                    <audio clipBegin="02:14.895" clipEnd="02:15.265" id="mo1_seq21-4_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq21-4_par6">
+                    <text id="mo1_seq21-4_par6_text" src="content_3.html#ai2d_d1e14919"/>
+                    <audio clipBegin="02:15.265" clipEnd="02:17.185" id="mo1_seq21-4_par6_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq22" epub:textref="content_3.html#d1e589">
+            <seq id="mo1_seq22-1" epub:textref="content_3.html#ai2d_d1e14926">
+                <par id="mo1_seq22-1_par1">
+                    <text id="mo1_seq22-1_par1_text" src="content_3.html#ai2d_d1e14928"/>
+                    <audio clipBegin="02:17.185" clipEnd="02:17.445" id="mo1_seq22-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq22-1_par2">
+                    <text id="mo1_seq22-1_par2_text" src="content_3.html#ai2d_d1e14931"/>
+                    <audio clipBegin="02:17.445" clipEnd="02:17.605" id="mo1_seq22-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq22-1_par3">
+                    <text id="mo1_seq22-1_par3_text" src="content_3.html#ai2d_d1e14934"/>
+                    <audio clipBegin="02:17.605" clipEnd="02:18.545" id="mo1_seq22-1_par3_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq22-2" epub:textref="content_3.html#ai2d_d1e14938">
+                <par id="mo1_seq22-2_par1">
+                    <text id="mo1_seq22-2_par1_text" src="content_3.html#ai2d_d1e14940"/>
+                    <audio clipBegin="02:18.545" clipEnd="02:18.915" id="mo1_seq22-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq22-2_par2">
+                    <text id="mo1_seq22-2_par2_text" src="content_3.html#ai2d_d1e14943"/>
+                    <audio clipBegin="02:18.915" clipEnd="02:20.455" id="mo1_seq22-2_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq23" epub:textref="content_3.html#d1e591">
+            <seq id="mo1_seq23-1" epub:textref="content_3.html#ai2d_d1e14949">
+                <par id="mo1_seq23-1_par1">
+                    <text id="mo1_seq23-1_par1_text" src="content_3.html#ai2d_d1e14951"/>
+                    <audio clipBegin="02:20.455" clipEnd="02:21.115" id="mo1_seq23-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq23-1_par2">
+                    <text id="mo1_seq23-1_par2_text" src="content_3.html#ai2d_d1e14954"/>
+                    <audio clipBegin="02:21.115" clipEnd="02:23.095" id="mo1_seq23-1_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq24" epub:textref="content_3.html#d1e593">
+            <seq id="mo1_seq24-1" epub:textref="content_3.html#ai2d_d1e14960">
+                <par id="mo1_seq24-1_par1">
+                    <text id="mo1_seq24-1_par1_text" src="content_3.html#ai2d_d1e14962"/>
+                    <audio clipBegin="02:23.095" clipEnd="02:23.295" id="mo1_seq24-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq24-1_par2">
+                    <text id="mo1_seq24-1_par2_text" src="content_3.html#ai2d_d1e14965"/>
+                    <audio clipBegin="02:23.295" clipEnd="02:23.675" id="mo1_seq24-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq24-1_par3">
+                    <text id="mo1_seq24-1_par3_text" src="content_3.html#ai2d_d1e14968"/>
+                    <audio clipBegin="02:23.675" clipEnd="02:23.825" id="mo1_seq24-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq24-1_par4">
+                    <text id="mo1_seq24-1_par4_text" src="content_3.html#ai2d_d1e14971"/>
+                    <audio clipBegin="02:23.825" clipEnd="02:24.335" id="mo1_seq24-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq24-1_par5">
+                    <text id="mo1_seq24-1_par5_text" src="content_3.html#ai2d_d1e14974"/>
+                    <audio clipBegin="02:24.335" clipEnd="02:25.735" id="mo1_seq24-1_par5_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq25" epub:textref="content_3.html#d1e595">
+            <seq id="mo1_seq25-1" epub:textref="content_3.html#ai2d_d1e14980">
+                <par id="mo1_seq25-1_par1">
+                    <text id="mo1_seq25-1_par1_text" src="content_3.html#ai2d_d1e14982"/>
+                    <audio clipBegin="02:25.735" clipEnd="02:27.425" id="mo1_seq25-1_par1_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq26" epub:textref="content_3.html#d1e597">
+            <seq id="mo1_seq26-1" epub:textref="content_3.html#ai2d_d1e14988">
+                <par id="mo1_seq26-1_par1">
+                    <text id="mo1_seq26-1_par1_text" src="content_3.html#ai2d_d1e14990"/>
+                    <audio clipBegin="02:27.425" clipEnd="02:27.905" id="mo1_seq26-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-1_par2">
+                    <text id="mo1_seq26-1_par2_text" src="content_3.html#ai2d_d1e14993"/>
+                    <audio clipBegin="02:27.905" clipEnd="02:28.315" id="mo1_seq26-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-1_par3">
+                    <text id="mo1_seq26-1_par3_text" src="content_3.html#ai2d_d1e14996"/>
+                    <audio clipBegin="02:28.315" clipEnd="02:28.665" id="mo1_seq26-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-1_par4">
+                    <text id="mo1_seq26-1_par4_text" src="content_3.html#ai2d_d1e14999"/>
+                    <audio clipBegin="02:28.665" clipEnd="02:28.825" id="mo1_seq26-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-1_par5">
+                    <text id="mo1_seq26-1_par5_text" src="content_3.html#ai2d_d1e15002"/>
+                    <audio clipBegin="02:28.825" clipEnd="02:29.165" id="mo1_seq26-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-1_par6">
+                    <text id="mo1_seq26-1_par6_text" src="content_3.html#ai2d_d1e15006"/>
+                    <audio clipBegin="02:29.165" clipEnd="02:29.585" id="mo1_seq26-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-1_par7">
+                    <text id="mo1_seq26-1_par7_text" src="content_3.html#ai2d_d1e15009"/>
+                    <audio clipBegin="02:29.585" clipEnd="02:30.695" id="mo1_seq26-1_par7_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq26-2" epub:textref="content_3.html#ai2d_d1e15013">
+                <par id="mo1_seq26-2_par1">
+                    <text id="mo1_seq26-2_par1_text" src="content_3.html#ai2d_d1e15015"/>
+                    <audio clipBegin="02:30.695" clipEnd="02:31.135" id="mo1_seq26-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-2_par2">
+                    <text id="mo1_seq26-2_par2_text" src="content_3.html#ai2d_d1e15018"/>
+                    <audio clipBegin="02:31.135" clipEnd="02:31.635" id="mo1_seq26-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-2_par3">
+                    <text id="mo1_seq26-2_par3_text" src="content_3.html#ai2d_d1e15021"/>
+                    <audio clipBegin="02:31.635" clipEnd="02:31.775" id="mo1_seq26-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-2_par4">
+                    <text id="mo1_seq26-2_par4_text" src="content_3.html#ai2d_d1e15024"/>
+                    <audio clipBegin="02:31.775" clipEnd="02:32.055" id="mo1_seq26-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-2_par5">
+                    <text id="mo1_seq26-2_par5_text" src="content_3.html#ai2d_d1e15027"/>
+                    <audio clipBegin="02:32.055" clipEnd="02:32.915" id="mo1_seq26-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-2_par6">
+                    <text id="mo1_seq26-2_par6_text" src="content_3.html#ai2d_d1e15031"/>
+                    <audio clipBegin="02:32.915" clipEnd="02:33.045" id="mo1_seq26-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-2_par7">
+                    <text id="mo1_seq26-2_par7_text" src="content_3.html#ai2d_d1e15034"/>
+                    <audio clipBegin="02:33.045" clipEnd="02:33.635" id="mo1_seq26-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-2_par8">
+                    <text id="mo1_seq26-2_par8_text" src="content_3.html#ai2d_d1e15037"/>
+                    <audio clipBegin="02:33.635" clipEnd="02:33.755" id="mo1_seq26-2_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-2_par9">
+                    <text id="mo1_seq26-2_par9_text" src="content_3.html#ai2d_d1e15040"/>
+                    <audio clipBegin="02:33.755" clipEnd="02:33.875" id="mo1_seq26-2_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-2_par10">
+                    <text id="mo1_seq26-2_par10_text" src="content_3.html#ai2d_d1e15043"/>
+                    <audio clipBegin="02:33.875" clipEnd="02:35.235" id="mo1_seq26-2_par10_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq26-3" epub:textref="content_3.html#ai2d_d1e15047">
+                <par id="mo1_seq26-3_par1">
+                    <text id="mo1_seq26-3_par1_text" src="content_3.html#ai2d_d1e15049"/>
+                    <audio clipBegin="02:35.235" clipEnd="02:35.405" id="mo1_seq26-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-3_par2">
+                    <text id="mo1_seq26-3_par2_text" src="content_3.html#ai2d_d1e15052"/>
+                    <audio clipBegin="02:35.405" clipEnd="02:35.505" id="mo1_seq26-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-3_par3">
+                    <text id="mo1_seq26-3_par3_text" src="content_3.html#ai2d_d1e15055"/>
+                    <audio clipBegin="02:35.505" clipEnd="02:35.575" id="mo1_seq26-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-3_par4">
+                    <text id="mo1_seq26-3_par4_text" src="content_3.html#ai2d_d1e15058"/>
+                    <audio clipBegin="02:35.575" clipEnd="02:35.855" id="mo1_seq26-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-3_par5">
+                    <text id="mo1_seq26-3_par5_text" src="content_3.html#ai2d_d1e15061"/>
+                    <audio clipBegin="02:35.855" clipEnd="02:36.025" id="mo1_seq26-3_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq26-3_par6">
+                    <text id="mo1_seq26-3_par6_text" src="content_3.html#ai2d_d1e15065"/>
+                    <audio clipBegin="02:36.025" clipEnd="02:37.595" id="mo1_seq26-3_par6_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq27" epub:textref="content_3.html#d1e599">
+            <seq id="mo1_seq27-1" epub:textref="content_3.html#ai2d_d1e15071">
+                <par id="mo1_seq27-1_par1">
+                    <text id="mo1_seq27-1_par1_text" src="content_3.html#ai2d_d1e15073"/>
+                    <audio clipBegin="02:37.595" clipEnd="02:37.855" id="mo1_seq27-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq27-1_par2">
+                    <text id="mo1_seq27-1_par2_text" src="content_3.html#ai2d_d1e15076"/>
+                    <audio clipBegin="02:37.855" clipEnd="02:39.035" id="mo1_seq27-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq27-1_par3">
+                    <text id="mo1_seq27-1_par3_text" src="content_3.html#ai2d_d1e15079"/>
+                    <audio clipBegin="02:39.035" clipEnd="02:39.405" id="mo1_seq27-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq27-1_par4">
+                    <text id="mo1_seq27-1_par4_text" src="content_3.html#ai2d_d1e15082"/>
+                    <audio clipBegin="02:39.405" clipEnd="02:40.875" id="mo1_seq27-1_par4_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq28" epub:textref="content_3.html#d1e601">
+            <seq id="mo1_seq28-1" epub:textref="content_3.html#ai2d_d1e15088">
+                <par id="mo1_seq28-1_par1">
+                    <text id="mo1_seq28-1_par1_text" src="content_3.html#ai2d_d1e15090"/>
+                    <audio clipBegin="02:40.875" clipEnd="02:41.125" id="mo1_seq28-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq28-1_par2">
+                    <text id="mo1_seq28-1_par2_text" src="content_3.html#ai2d_d1e15093"/>
+                    <audio clipBegin="02:41.125" clipEnd="02:41.255" id="mo1_seq28-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq28-1_par3">
+                    <text id="mo1_seq28-1_par3_text" src="content_3.html#ai2d_d1e15096"/>
+                    <audio clipBegin="02:41.255" clipEnd="02:41.615" id="mo1_seq28-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq28-1_par4">
+                    <text id="mo1_seq28-1_par4_text" src="content_3.html#ai2d_d1e15099"/>
+                    <audio clipBegin="02:41.615" clipEnd="02:41.805" id="mo1_seq28-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq28-1_par5">
+                    <text id="mo1_seq28-1_par5_text" src="content_3.html#ai2d_d1e15102"/>
+                    <audio clipBegin="02:41.805" clipEnd="02:42.095" id="mo1_seq28-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq28-1_par6">
+                    <text id="mo1_seq28-1_par6_text" src="content_3.html#ai2d_d1e15106"/>
+                    <audio clipBegin="02:42.095" clipEnd="02:42.585" id="mo1_seq28-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq28-1_par7">
+                    <text id="mo1_seq28-1_par7_text" src="content_3.html#ai2d_d1e15109"/>
+                    <audio clipBegin="02:42.585" clipEnd="02:42.675" id="mo1_seq28-1_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq28-1_par8">
+                    <text id="mo1_seq28-1_par8_text" src="content_3.html#ai2d_d1e15112"/>
+                    <audio clipBegin="02:42.675" clipEnd="02:42.845" id="mo1_seq28-1_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq28-1_par9">
+                    <text id="mo1_seq28-1_par9_text" src="content_3.html#ai2d_d1e15115"/>
+                    <audio clipBegin="02:42.845" clipEnd="02:43.215" id="mo1_seq28-1_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq28-1_par10">
+                    <text id="mo1_seq28-1_par10_text" src="content_3.html#ai2d_d1e15118"/>
+                    <audio clipBegin="02:43.215" clipEnd="02:44.875" id="mo1_seq28-1_par10_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <par xmlns:epub="http://www.idpf.org/2007/ops" epub:type="pagebreak" id="mo1_par29">
+            <text id="mo1_par29_text" src="content_3.html#page-22"/>
+            <audio clipBegin="02:44.875" clipEnd="02:45.565" id="mo1_par29_audio" src="File_005.mp3"/>
+        </par>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq30" epub:textref="content_3.html#d1e605">
+            <seq id="mo1_seq30-1" epub:textref="content_3.html#ai2d_d1e15126">
+                <par id="mo1_seq30-1_par1">
+                    <text id="mo1_seq30-1_par1_text" src="content_3.html#ai2d_d1e15128"/>
+                    <audio clipBegin="02:45.565" clipEnd="02:46.765" id="mo1_seq30-1_par1_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq30-2" epub:textref="content_3.html#ai2d_d1e15132">
+                <par id="mo1_seq30-2_par1">
+                    <text id="mo1_seq30-2_par1_text" src="content_3.html#ai2d_d1e15134"/>
+                    <audio clipBegin="02:46.765" clipEnd="02:47.055" id="mo1_seq30-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par2">
+                    <text id="mo1_seq30-2_par2_text" src="content_3.html#ai2d_d1e15137"/>
+                    <audio clipBegin="02:47.055" clipEnd="02:47.385" id="mo1_seq30-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par3">
+                    <text id="mo1_seq30-2_par3_text" src="content_3.html#ai2d_d1e15140"/>
+                    <audio clipBegin="02:47.385" clipEnd="02:47.605" id="mo1_seq30-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par4">
+                    <text id="mo1_seq30-2_par4_text" src="content_3.html#ai2d_d1e15143"/>
+                    <audio clipBegin="02:47.605" clipEnd="02:47.775" id="mo1_seq30-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par5">
+                    <text id="mo1_seq30-2_par5_text" src="content_3.html#ai2d_d1e15146"/>
+                    <audio clipBegin="02:47.775" clipEnd="02:48.525" id="mo1_seq30-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par6">
+                    <text id="mo1_seq30-2_par6_text" src="content_3.html#ai2d_d1e15150"/>
+                    <audio clipBegin="02:48.525" clipEnd="02:48.725" id="mo1_seq30-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par7">
+                    <text id="mo1_seq30-2_par7_text" src="content_3.html#ai2d_d1e15153"/>
+                    <audio clipBegin="02:48.725" clipEnd="02:48.925" id="mo1_seq30-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par8">
+                    <text id="mo1_seq30-2_par8_text" src="content_3.html#ai2d_d1e15156"/>
+                    <audio clipBegin="02:48.925" clipEnd="02:49.145" id="mo1_seq30-2_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par9">
+                    <text id="mo1_seq30-2_par9_text" src="content_3.html#ai2d_d1e15159"/>
+                    <audio clipBegin="02:49.145" clipEnd="02:49.265" id="mo1_seq30-2_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par10">
+                    <text id="mo1_seq30-2_par10_text" src="content_3.html#ai2d_d1e15162"/>
+                    <audio clipBegin="02:49.265" clipEnd="02:49.595" id="mo1_seq30-2_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq30-2_par11">
+                    <text id="mo1_seq30-2_par11_text" src="content_3.html#ai2d_d1e15165"/>
+                    <audio clipBegin="02:49.595" clipEnd="02:50.955" id="mo1_seq30-2_par11_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq31" epub:textref="content_3.html#d1e607">
+            <seq id="mo1_seq31-1" epub:textref="content_3.html#ai2d_d1e15171">
+                <par id="mo1_seq31-1_par1">
+                    <text id="mo1_seq31-1_par1_text" src="content_3.html#ai2d_d1e15173"/>
+                    <audio clipBegin="02:50.955" clipEnd="02:51.825" id="mo1_seq31-1_par1_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq31-2" epub:textref="content_3.html#ai2d_d1e15177">
+                <par id="mo1_seq31-2_par1">
+                    <text id="mo1_seq31-2_par1_text" src="content_3.html#ai2d_d1e15179"/>
+                    <audio clipBegin="02:51.825" clipEnd="02:52.205" id="mo1_seq31-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-2_par2">
+                    <text id="mo1_seq31-2_par2_text" src="content_3.html#ai2d_d1e15182"/>
+                    <audio clipBegin="02:52.205" clipEnd="02:52.385" id="mo1_seq31-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-2_par3">
+                    <text id="mo1_seq31-2_par3_text" src="content_3.html#ai2d_d1e15185"/>
+                    <audio clipBegin="02:52.385" clipEnd="02:52.475" id="mo1_seq31-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-2_par4">
+                    <text id="mo1_seq31-2_par4_text" src="content_3.html#ai2d_d1e15188"/>
+                    <audio clipBegin="02:52.475" clipEnd="02:52.585" id="mo1_seq31-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-2_par5">
+                    <text id="mo1_seq31-2_par5_text" src="content_3.html#ai2d_d1e15191"/>
+                    <audio clipBegin="02:52.585" clipEnd="02:52.925" id="mo1_seq31-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-2_par6">
+                    <text id="mo1_seq31-2_par6_text" src="content_3.html#ai2d_d1e15195"/>
+                    <audio clipBegin="02:52.925" clipEnd="02:53.795" id="mo1_seq31-2_par6_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq31-3" epub:textref="content_3.html#ai2d_d1e15199">
+                <par id="mo1_seq31-3_par1">
+                    <text id="mo1_seq31-3_par1_text" src="content_3.html#ai2d_d1e15201"/>
+                    <audio clipBegin="02:53.795" clipEnd="02:54.125" id="mo1_seq31-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-3_par2">
+                    <text id="mo1_seq31-3_par2_text" src="content_3.html#ai2d_d1e15204"/>
+                    <audio clipBegin="02:54.125" clipEnd="02:54.465" id="mo1_seq31-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-3_par3">
+                    <text id="mo1_seq31-3_par3_text" src="content_3.html#ai2d_d1e15207"/>
+                    <audio clipBegin="02:54.465" clipEnd="02:54.685" id="mo1_seq31-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-3_par4">
+                    <text id="mo1_seq31-3_par4_text" src="content_3.html#ai2d_d1e15210"/>
+                    <audio clipBegin="02:54.685" clipEnd="02:54.785" id="mo1_seq31-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-3_par5">
+                    <text id="mo1_seq31-3_par5_text" src="content_3.html#ai2d_d1e15213"/>
+                    <audio clipBegin="02:54.785" clipEnd="02:55.205" id="mo1_seq31-3_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-3_par6">
+                    <text id="mo1_seq31-3_par6_text" src="content_3.html#ai2d_d1e15217"/>
+                    <audio clipBegin="02:55.205" clipEnd="02:56.065" id="mo1_seq31-3_par6_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq31-4" epub:textref="content_3.html#ai2d_d1e15221">
+                <par id="mo1_seq31-4_par1">
+                    <text id="mo1_seq31-4_par1_text" src="content_3.html#ai2d_d1e15223"/>
+                    <audio clipBegin="02:56.065" clipEnd="02:56.365" id="mo1_seq31-4_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-4_par2">
+                    <text id="mo1_seq31-4_par2_text" src="content_3.html#ai2d_d1e15226"/>
+                    <audio clipBegin="02:56.365" clipEnd="02:56.605" id="mo1_seq31-4_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-4_par3">
+                    <text id="mo1_seq31-4_par3_text" src="content_3.html#ai2d_d1e15229"/>
+                    <audio clipBegin="02:56.605" clipEnd="02:56.685" id="mo1_seq31-4_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq31-4_par4">
+                    <text id="mo1_seq31-4_par4_text" src="content_3.html#ai2d_d1e15232"/>
+                    <audio clipBegin="02:56.685" clipEnd="02:58.105" id="mo1_seq31-4_par4_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq32" epub:textref="content_3.html#d1e609">
+            <seq id="mo1_seq32-1" epub:textref="content_3.html#ai2d_d1e15238">
+                <par id="mo1_seq32-1_par1">
+                    <text id="mo1_seq32-1_par1_text" src="content_3.html#ai2d_d1e15240"/>
+                    <audio clipBegin="02:58.105" clipEnd="02:59.305" id="mo1_seq32-1_par1_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq32-2" epub:textref="content_3.html#ai2d_d1e15244">
+                <par id="mo1_seq32-2_par1">
+                    <text id="mo1_seq32-2_par1_text" src="content_3.html#ai2d_d1e15246"/>
+                    <audio clipBegin="02:59.305" clipEnd="02:59.625" id="mo1_seq32-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par2">
+                    <text id="mo1_seq32-2_par2_text" src="content_3.html#ai2d_d1e15249"/>
+                    <audio clipBegin="02:59.625" clipEnd="02:59.895" id="mo1_seq32-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par3">
+                    <text id="mo1_seq32-2_par3_text" src="content_3.html#ai2d_d1e15252"/>
+                    <audio clipBegin="02:59.895" clipEnd="03:00.205" id="mo1_seq32-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par4">
+                    <text id="mo1_seq32-2_par4_text" src="content_3.html#ai2d_d1e15255"/>
+                    <audio clipBegin="03:00.205" clipEnd="03:00.685" id="mo1_seq32-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par5">
+                    <text id="mo1_seq32-2_par5_text" src="content_3.html#ai2d_d1e15258"/>
+                    <audio clipBegin="03:00.685" clipEnd="03:00.935" id="mo1_seq32-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par6">
+                    <text id="mo1_seq32-2_par6_text" src="content_3.html#ai2d_d1e15262"/>
+                    <audio clipBegin="03:00.935" clipEnd="03:01.045" id="mo1_seq32-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par7">
+                    <text id="mo1_seq32-2_par7_text" src="content_3.html#ai2d_d1e15265"/>
+                    <audio clipBegin="03:01.045" clipEnd="03:01.235" id="mo1_seq32-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par8">
+                    <text id="mo1_seq32-2_par8_text" src="content_3.html#ai2d_d1e15268"/>
+                    <audio clipBegin="03:01.235" clipEnd="03:02.195" id="mo1_seq32-2_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par9">
+                    <text id="mo1_seq32-2_par9_text" src="content_3.html#ai2d_d1e15271"/>
+                    <audio clipBegin="03:02.195" clipEnd="03:02.465" id="mo1_seq32-2_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par10">
+                    <text id="mo1_seq32-2_par10_text" src="content_3.html#ai2d_d1e15274"/>
+                    <audio clipBegin="03:02.465" clipEnd="03:02.945" id="mo1_seq32-2_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par11">
+                    <text id="mo1_seq32-2_par11_text" src="content_3.html#ai2d_d1e15277"/>
+                    <audio clipBegin="03:02.945" clipEnd="03:03.055" id="mo1_seq32-2_par11_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par12">
+                    <text id="mo1_seq32-2_par12_text" src="content_3.html#ai2d_d1e15281"/>
+                    <audio clipBegin="03:03.055" clipEnd="03:03.825" id="mo1_seq32-2_par12_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par13">
+                    <text id="mo1_seq32-2_par13_text" src="content_3.html#ai2d_d1e15284"/>
+                    <audio clipBegin="03:03.825" clipEnd="03:03.975" id="mo1_seq32-2_par13_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par14">
+                    <text id="mo1_seq32-2_par14_text" src="content_3.html#ai2d_d1e15287"/>
+                    <audio clipBegin="03:03.975" clipEnd="03:04.475" id="mo1_seq32-2_par14_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par15">
+                    <text id="mo1_seq32-2_par15_text" src="content_3.html#ai2d_d1e15290"/>
+                    <audio clipBegin="03:04.475" clipEnd="03:04.745" id="mo1_seq32-2_par15_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par16">
+                    <text id="mo1_seq32-2_par16_text" src="content_3.html#ai2d_d1e15293"/>
+                    <audio clipBegin="03:04.745" clipEnd="03:05.265" id="mo1_seq32-2_par16_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par17">
+                    <text id="mo1_seq32-2_par17_text" src="content_3.html#ai2d_d1e15296"/>
+                    <audio clipBegin="03:05.265" clipEnd="03:05.385" id="mo1_seq32-2_par17_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq32-2_par18">
+                    <text id="mo1_seq32-2_par18_text" src="content_3.html#ai2d_d1e15300"/>
+                    <audio clipBegin="03:05.385" clipEnd="03:07.115" id="mo1_seq32-2_par18_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq33" epub:textref="content_3.html#d1e612">
+            <seq id="mo1_seq33-1" epub:textref="content_3.html#ai2d_d1e15307">
+                <par id="mo1_seq33-1_par1">
+                    <text id="mo1_seq33-1_par1_text" src="content_3.html#ai2d_d1e15309"/>
+                    <audio clipBegin="03:07.115" clipEnd="03:07.485" id="mo1_seq33-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par2">
+                    <text id="mo1_seq33-1_par2_text" src="content_3.html#ai2d_d1e15312"/>
+                    <audio clipBegin="03:07.485" clipEnd="03:07.525" id="mo1_seq33-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par3">
+                    <text id="mo1_seq33-1_par3_text" src="content_3.html#ai2d_d1e15315"/>
+                    <audio clipBegin="03:07.525" clipEnd="03:07.895" id="mo1_seq33-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par4">
+                    <text id="mo1_seq33-1_par4_text" src="content_3.html#ai2d_d1e15318"/>
+                    <audio clipBegin="03:07.895" clipEnd="03:08.315" id="mo1_seq33-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par5">
+                    <text id="mo1_seq33-1_par5_text" src="content_3.html#ai2d_d1e15321"/>
+                    <audio clipBegin="03:08.315" clipEnd="03:08.385" id="mo1_seq33-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par6">
+                    <text id="mo1_seq33-1_par6_text" src="content_3.html#ai2d_d1e15325"/>
+                    <audio clipBegin="03:08.385" clipEnd="03:09.315" id="mo1_seq33-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par7">
+                    <text id="mo1_seq33-1_par7_text" src="content_3.html#ai2d_d1e15328"/>
+                    <audio clipBegin="03:09.315" clipEnd="03:09.475" id="mo1_seq33-1_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par8">
+                    <text id="mo1_seq33-1_par8_text" src="content_3.html#ai2d_d1e15331"/>
+                    <audio clipBegin="03:09.475" clipEnd="03:09.805" id="mo1_seq33-1_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par9">
+                    <text id="mo1_seq33-1_par9_text" src="content_3.html#ai2d_d1e15334"/>
+                    <audio clipBegin="03:09.805" clipEnd="03:10.275" id="mo1_seq33-1_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par10">
+                    <text id="mo1_seq33-1_par10_text" src="content_3.html#ai2d_d1e15337"/>
+                    <audio clipBegin="03:10.275" clipEnd="03:11.145" id="mo1_seq33-1_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par11">
+                    <text id="mo1_seq33-1_par11_text" src="content_3.html#ai2d_d1e15340"/>
+                    <audio clipBegin="03:11.145" clipEnd="03:11.275" id="mo1_seq33-1_par11_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par12">
+                    <text id="mo1_seq33-1_par12_text" src="content_3.html#ai2d_d1e15344"/>
+                    <audio clipBegin="03:11.275" clipEnd="03:11.365" id="mo1_seq33-1_par12_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par13">
+                    <text id="mo1_seq33-1_par13_text" src="content_3.html#ai2d_d1e15347"/>
+                    <audio clipBegin="03:11.365" clipEnd="03:11.795" id="mo1_seq33-1_par13_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par14">
+                    <text id="mo1_seq33-1_par14_text" src="content_3.html#ai2d_d1e15350"/>
+                    <audio clipBegin="03:11.795" clipEnd="03:11.895" id="mo1_seq33-1_par14_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par15">
+                    <text id="mo1_seq33-1_par15_text" src="content_3.html#ai2d_d1e15353"/>
+                    <audio clipBegin="03:11.895" clipEnd="03:12.645" id="mo1_seq33-1_par15_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par16">
+                    <text id="mo1_seq33-1_par16_text" src="content_3.html#ai2d_d1e15356"/>
+                    <audio clipBegin="03:12.645" clipEnd="03:12.755" id="mo1_seq33-1_par16_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par17">
+                    <text id="mo1_seq33-1_par17_text" src="content_3.html#ai2d_d1e15359"/>
+                    <audio clipBegin="03:12.755" clipEnd="03:12.835" id="mo1_seq33-1_par17_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par18">
+                    <text id="mo1_seq33-1_par18_text" src="content_3.html#ai2d_d1e15363"/>
+                    <audio clipBegin="03:12.835" clipEnd="03:13.285" id="mo1_seq33-1_par18_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-1_par19">
+                    <text id="mo1_seq33-1_par19_text" src="content_3.html#ai2d_d1e15366"/>
+                    <audio clipBegin="03:13.285" clipEnd="03:14.395" id="mo1_seq33-1_par19_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq33-2" epub:textref="content_3.html#ai2d_d1e15370">
+                <par id="mo1_seq33-2_par1">
+                    <text id="mo1_seq33-2_par1_text" src="content_3.html#ai2d_d1e15372"/>
+                    <audio clipBegin="03:14.395" clipEnd="03:14.525" id="mo1_seq33-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-2_par2">
+                    <text id="mo1_seq33-2_par2_text" src="content_3.html#ai2d_d1e15375"/>
+                    <audio clipBegin="03:14.525" clipEnd="03:14.645" id="mo1_seq33-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-2_par3">
+                    <text id="mo1_seq33-2_par3_text" src="content_3.html#ai2d_d1e15378"/>
+                    <audio clipBegin="03:14.645" clipEnd="03:14.705" id="mo1_seq33-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-2_par4">
+                    <text id="mo1_seq33-2_par4_text" src="content_3.html#ai2d_d1e15381"/>
+                    <audio clipBegin="03:14.705" clipEnd="03:15.065" id="mo1_seq33-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-2_par5">
+                    <text id="mo1_seq33-2_par5_text" src="content_3.html#ai2d_d1e15384"/>
+                    <audio clipBegin="03:15.065" clipEnd="03:15.425" id="mo1_seq33-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-2_par6">
+                    <text id="mo1_seq33-2_par6_text" src="content_3.html#ai2d_d1e15388"/>
+                    <audio clipBegin="03:15.425" clipEnd="03:15.905" id="mo1_seq33-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-2_par7">
+                    <text id="mo1_seq33-2_par7_text" src="content_3.html#ai2d_d1e15391"/>
+                    <audio clipBegin="03:15.905" clipEnd="03:16.315" id="mo1_seq33-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-2_par8">
+                    <text id="mo1_seq33-2_par8_text" src="content_3.html#ai2d_d1e15394"/>
+                    <audio clipBegin="03:16.315" clipEnd="03:16.515" id="mo1_seq33-2_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-2_par9">
+                    <text id="mo1_seq33-2_par9_text" src="content_3.html#ai2d_d1e15397"/>
+                    <audio clipBegin="03:16.515" clipEnd="03:17.815" id="mo1_seq33-2_par9_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq33-3" epub:textref="content_3.html#ai2d_d1e15401">
+                <par id="mo1_seq33-3_par1">
+                    <text id="mo1_seq33-3_par1_text" src="content_3.html#ai2d_d1e15403"/>
+                    <audio clipBegin="03:17.815" clipEnd="03:18.165" id="mo1_seq33-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-3_par2">
+                    <text id="mo1_seq33-3_par2_text" src="content_3.html#ai2d_d1e15406"/>
+                    <audio clipBegin="03:18.165" clipEnd="03:18.775" id="mo1_seq33-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-3_par3">
+                    <text id="mo1_seq33-3_par3_text" src="content_3.html#ai2d_d1e15409"/>
+                    <audio clipBegin="03:18.775" clipEnd="03:19.355" id="mo1_seq33-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-3_par4">
+                    <text id="mo1_seq33-3_par4_text" src="content_3.html#ai2d_d1e15412"/>
+                    <audio clipBegin="03:19.355" clipEnd="03:19.795" id="mo1_seq33-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-3_par5">
+                    <text id="mo1_seq33-3_par5_text" src="content_3.html#ai2d_d1e15415"/>
+                    <audio clipBegin="03:19.795" clipEnd="03:20.645" id="mo1_seq33-3_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-3_par6">
+                    <text id="mo1_seq33-3_par6_text" src="content_3.html#ai2d_d1e15419"/>
+                    <audio clipBegin="03:20.645" clipEnd="03:21.205" id="mo1_seq33-3_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-3_par7">
+                    <text id="mo1_seq33-3_par7_text" src="content_3.html#ai2d_d1e15422"/>
+                    <audio clipBegin="03:21.205" clipEnd="03:21.295" id="mo1_seq33-3_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq33-3_par8">
+                    <text id="mo1_seq33-3_par8_text" src="content_3.html#ai2d_d1e15425"/>
+                    <audio clipBegin="03:21.295" clipEnd="03:22.915" id="mo1_seq33-3_par8_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq34" epub:textref="content_3.html#d1e614">
+            <seq id="mo1_seq34-1" epub:textref="content_3.html#ai2d_d1e15431">
+                <par id="mo1_seq34-1_par1">
+                    <text id="mo1_seq34-1_par1_text" src="content_3.html#ai2d_d1e15433"/>
+                    <audio clipBegin="03:22.915" clipEnd="03:23.995" id="mo1_seq34-1_par1_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq34-2" epub:textref="content_3.html#ai2d_d1e15437">
+                <par id="mo1_seq34-2_par1">
+                    <text id="mo1_seq34-2_par1_text" src="content_3.html#ai2d_d1e15439"/>
+                    <audio clipBegin="03:23.995" clipEnd="03:24.155" id="mo1_seq34-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-2_par2">
+                    <text id="mo1_seq34-2_par2_text" src="content_3.html#ai2d_d1e15442"/>
+                    <audio clipBegin="03:24.155" clipEnd="03:24.295" id="mo1_seq34-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-2_par3">
+                    <text id="mo1_seq34-2_par3_text" src="content_3.html#ai2d_d1e15445"/>
+                    <audio clipBegin="03:24.295" clipEnd="03:24.435" id="mo1_seq34-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-2_par4">
+                    <text id="mo1_seq34-2_par4_text" src="content_3.html#ai2d_d1e15448"/>
+                    <audio clipBegin="03:24.435" clipEnd="03:24.785" id="mo1_seq34-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-2_par5">
+                    <text id="mo1_seq34-2_par5_text" src="content_3.html#ai2d_d1e15451"/>
+                    <audio clipBegin="03:24.785" clipEnd="03:24.985" id="mo1_seq34-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-2_par6">
+                    <text id="mo1_seq34-2_par6_text" src="content_3.html#ai2d_d1e15455"/>
+                    <audio clipBegin="03:24.985" clipEnd="03:25.385" id="mo1_seq34-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-2_par7">
+                    <text id="mo1_seq34-2_par7_text" src="content_3.html#ai2d_d1e15458"/>
+                    <audio clipBegin="03:25.385" clipEnd="03:26.535" id="mo1_seq34-2_par7_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq34-3" epub:textref="content_3.html#ai2d_d1e15462">
+                <par id="mo1_seq34-3_par1">
+                    <text id="mo1_seq34-3_par1_text" src="content_3.html#ai2d_d1e15464"/>
+                    <audio clipBegin="03:26.535" clipEnd="03:26.715" id="mo1_seq34-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-3_par2">
+                    <text id="mo1_seq34-3_par2_text" src="content_3.html#ai2d_d1e15467"/>
+                    <audio clipBegin="03:26.715" clipEnd="03:27.095" id="mo1_seq34-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-3_par3">
+                    <text id="mo1_seq34-3_par3_text" src="content_3.html#ai2d_d1e15470"/>
+                    <audio clipBegin="03:27.095" clipEnd="03:27.215" id="mo1_seq34-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-3_par4">
+                    <text id="mo1_seq34-3_par4_text" src="content_3.html#ai2d_d1e15473"/>
+                    <audio clipBegin="03:27.215" clipEnd="03:27.395" id="mo1_seq34-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq34-3_par5">
+                    <text id="mo1_seq34-3_par5_text" src="content_3.html#ai2d_d1e15476"/>
+                    <audio clipBegin="03:27.395" clipEnd="03:28.915" id="mo1_seq34-3_par5_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq35" epub:textref="content_3.html#d1e616">
+            <seq id="mo1_seq35-1" epub:textref="content_3.html#ai2d_d1e15482">
+                <par id="mo1_seq35-1_par1">
+                    <text id="mo1_seq35-1_par1_text" src="content_3.html#ai2d_d1e15484"/>
+                    <audio clipBegin="03:28.915" clipEnd="03:29.555" id="mo1_seq35-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq35-1_par2">
+                    <text id="mo1_seq35-1_par2_text" src="content_3.html#ai2d_d1e15487"/>
+                    <audio clipBegin="03:29.555" clipEnd="03:30.525" id="mo1_seq35-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq35-1_par3">
+                    <text id="mo1_seq35-1_par3_text" src="content_3.html#ai2d_d1e15490"/>
+                    <audio clipBegin="03:30.525" clipEnd="03:30.855" id="mo1_seq35-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq35-1_par4">
+                    <text id="mo1_seq35-1_par4_text" src="content_3.html#ai2d_d1e15493"/>
+                    <audio clipBegin="03:30.855" clipEnd="03:32.095" id="mo1_seq35-1_par4_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq36" epub:textref="content_3.html#d1e618">
+            <seq id="mo1_seq36-1" epub:textref="content_3.html#ai2d_d1e15499">
+                <par id="mo1_seq36-1_par1">
+                    <text id="mo1_seq36-1_par1_text" src="content_3.html#ai2d_d1e15501"/>
+                    <audio clipBegin="03:32.095" clipEnd="03:32.275" id="mo1_seq36-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-1_par2">
+                    <text id="mo1_seq36-1_par2_text" src="content_3.html#ai2d_d1e15504"/>
+                    <audio clipBegin="03:32.275" clipEnd="03:32.625" id="mo1_seq36-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-1_par3">
+                    <text id="mo1_seq36-1_par3_text" src="content_3.html#ai2d_d1e15507"/>
+                    <audio clipBegin="03:32.625" clipEnd="03:33.565" id="mo1_seq36-1_par3_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq36-2" epub:textref="content_3.html#ai2d_d1e15511">
+                <par id="mo1_seq36-2_par1">
+                    <text id="mo1_seq36-2_par1_text" src="content_3.html#ai2d_d1e15513"/>
+                    <audio clipBegin="03:33.565" clipEnd="03:33.915" id="mo1_seq36-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par2">
+                    <text id="mo1_seq36-2_par2_text" src="content_3.html#ai2d_d1e15516"/>
+                    <audio clipBegin="03:33.915" clipEnd="03:34.335" id="mo1_seq36-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par3">
+                    <text id="mo1_seq36-2_par3_text" src="content_3.html#ai2d_d1e15519"/>
+                    <audio clipBegin="03:34.335" clipEnd="03:34.885" id="mo1_seq36-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par4">
+                    <text id="mo1_seq36-2_par4_text" src="content_3.html#ai2d_d1e15522"/>
+                    <audio clipBegin="03:34.885" clipEnd="03:35.005" id="mo1_seq36-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par5">
+                    <text id="mo1_seq36-2_par5_text" src="content_3.html#ai2d_d1e15525"/>
+                    <audio clipBegin="03:35.005" clipEnd="03:35.595" id="mo1_seq36-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par6">
+                    <text id="mo1_seq36-2_par6_text" src="content_3.html#ai2d_d1e15529"/>
+                    <audio clipBegin="03:35.595" clipEnd="03:35.725" id="mo1_seq36-2_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par7">
+                    <text id="mo1_seq36-2_par7_text" src="content_3.html#ai2d_d1e15532"/>
+                    <audio clipBegin="03:35.725" clipEnd="03:35.825" id="mo1_seq36-2_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par8">
+                    <text id="mo1_seq36-2_par8_text" src="content_3.html#ai2d_d1e15535"/>
+                    <audio clipBegin="03:35.825" clipEnd="03:36.665" id="mo1_seq36-2_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par9">
+                    <text id="mo1_seq36-2_par9_text" src="content_3.html#ai2d_d1e15538"/>
+                    <audio clipBegin="03:36.665" clipEnd="03:37.155" id="mo1_seq36-2_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par10">
+                    <text id="mo1_seq36-2_par10_text" src="content_3.html#ai2d_d1e15541"/>
+                    <audio clipBegin="03:37.155" clipEnd="03:37.275" id="mo1_seq36-2_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par11">
+                    <text id="mo1_seq36-2_par11_text" src="content_3.html#ai2d_d1e15544"/>
+                    <audio clipBegin="03:37.275" clipEnd="03:37.375" id="mo1_seq36-2_par11_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par12">
+                    <text id="mo1_seq36-2_par12_text" src="content_3.html#ai2d_d1e15548"/>
+                    <audio clipBegin="03:37.375" clipEnd="03:37.785" id="mo1_seq36-2_par12_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par13">
+                    <text id="mo1_seq36-2_par13_text" src="content_3.html#ai2d_d1e15551"/>
+                    <audio clipBegin="03:37.785" clipEnd="03:38.525" id="mo1_seq36-2_par13_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par14">
+                    <text id="mo1_seq36-2_par14_text" src="content_3.html#ai2d_d1e15554"/>
+                    <audio clipBegin="03:38.525" clipEnd="03:38.685" id="mo1_seq36-2_par14_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-2_par15">
+                    <text id="mo1_seq36-2_par15_text" src="content_3.html#ai2d_d1e15557"/>
+                    <audio clipBegin="03:38.685" clipEnd="03:40.025" id="mo1_seq36-2_par15_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq36-3" epub:textref="content_3.html#ai2d_d1e15561">
+                <par id="mo1_seq36-3_par1">
+                    <text id="mo1_seq36-3_par1_text" src="content_3.html#ai2d_d1e15563"/>
+                    <audio clipBegin="03:40.025" clipEnd="03:40.175" id="mo1_seq36-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-3_par2">
+                    <text id="mo1_seq36-3_par2_text" src="content_3.html#ai2d_d1e15566"/>
+                    <audio clipBegin="03:40.175" clipEnd="03:40.825" id="mo1_seq36-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-3_par3">
+                    <text id="mo1_seq36-3_par3_text" src="content_3.html#ai2d_d1e15569"/>
+                    <audio clipBegin="03:40.825" clipEnd="03:41.015" id="mo1_seq36-3_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-3_par4">
+                    <text id="mo1_seq36-3_par4_text" src="content_3.html#ai2d_d1e15572"/>
+                    <audio clipBegin="03:41.015" clipEnd="03:41.425" id="mo1_seq36-3_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-3_par5">
+                    <text id="mo1_seq36-3_par5_text" src="content_3.html#ai2d_d1e15575"/>
+                    <audio clipBegin="03:41.425" clipEnd="03:41.545" id="mo1_seq36-3_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-3_par6">
+                    <text id="mo1_seq36-3_par6_text" src="content_3.html#ai2d_d1e15579"/>
+                    <audio clipBegin="03:41.545" clipEnd="03:42.105" id="mo1_seq36-3_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-3_par7">
+                    <text id="mo1_seq36-3_par7_text" src="content_3.html#ai2d_d1e15582"/>
+                    <audio clipBegin="03:42.105" clipEnd="03:42.435" id="mo1_seq36-3_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq36-3_par8">
+                    <text id="mo1_seq36-3_par8_text" src="content_3.html#ai2d_d1e15585"/>
+                    <audio clipBegin="03:42.435" clipEnd="03:43.625" id="mo1_seq36-3_par8_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq37" epub:textref="content_3.html#d1e620">
+            <seq id="mo1_seq37-1" epub:textref="content_3.html#ai2d_d1e15591">
+                <par id="mo1_seq37-1_par1">
+                    <text id="mo1_seq37-1_par1_text" src="content_3.html#ai2d_d1e15593"/>
+                    <audio clipBegin="03:43.625" clipEnd="03:43.815" id="mo1_seq37-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq37-1_par2">
+                    <text id="mo1_seq37-1_par2_text" src="content_3.html#ai2d_d1e15596"/>
+                    <audio clipBegin="03:43.815" clipEnd="03:44.155" id="mo1_seq37-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq37-1_par3">
+                    <text id="mo1_seq37-1_par3_text" src="content_3.html#ai2d_d1e15599"/>
+                    <audio clipBegin="03:44.155" clipEnd="03:44.955" id="mo1_seq37-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq37-1_par4">
+                    <text id="mo1_seq37-1_par4_text" src="content_3.html#ai2d_d1e15602"/>
+                    <audio clipBegin="03:44.955" clipEnd="03:45.545" id="mo1_seq37-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq37-1_par5">
+                    <text id="mo1_seq37-1_par5_text" src="content_3.html#ai2d_d1e15605"/>
+                    <audio clipBegin="03:45.545" clipEnd="03:47.025" id="mo1_seq37-1_par5_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq38" epub:textref="content_3.html#d1e622">
+            <seq id="mo1_seq38-1" epub:textref="content_3.html#ai2d_d1e15611">
+                <par id="mo1_seq38-1_par1">
+                    <text id="mo1_seq38-1_par1_text" src="content_3.html#ai2d_d1e15613"/>
+                    <audio clipBegin="03:47.025" clipEnd="03:47.405" id="mo1_seq38-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-1_par2">
+                    <text id="mo1_seq38-1_par2_text" src="content_3.html#ai2d_d1e15616"/>
+                    <audio clipBegin="03:47.405" clipEnd="03:47.745" id="mo1_seq38-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-1_par3">
+                    <text id="mo1_seq38-1_par3_text" src="content_3.html#ai2d_d1e15619"/>
+                    <audio clipBegin="03:47.745" clipEnd="03:47.995" id="mo1_seq38-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-1_par4">
+                    <text id="mo1_seq38-1_par4_text" src="content_3.html#ai2d_d1e15622"/>
+                    <audio clipBegin="03:47.995" clipEnd="03:48.435" id="mo1_seq38-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-1_par5">
+                    <text id="mo1_seq38-1_par5_text" src="content_3.html#ai2d_d1e15625"/>
+                    <audio clipBegin="03:48.435" clipEnd="03:48.625" id="mo1_seq38-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-1_par6">
+                    <text id="mo1_seq38-1_par6_text" src="content_3.html#ai2d_d1e15629"/>
+                    <audio clipBegin="03:48.625" clipEnd="03:49.255" id="mo1_seq38-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-1_par7">
+                    <text id="mo1_seq38-1_par7_text" src="content_3.html#ai2d_d1e15632"/>
+                    <audio clipBegin="03:49.255" clipEnd="03:49.375" id="mo1_seq38-1_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-1_par8">
+                    <text id="mo1_seq38-1_par8_text" src="content_3.html#ai2d_d1e15635"/>
+                    <audio clipBegin="03:49.375" clipEnd="03:49.465" id="mo1_seq38-1_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-1_par9">
+                    <text id="mo1_seq38-1_par9_text" src="content_3.html#ai2d_d1e15638"/>
+                    <audio clipBegin="03:49.465" clipEnd="03:50.525" id="mo1_seq38-1_par9_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq38-2" epub:textref="content_3.html#ai2d_d1e15642">
+                <par id="mo1_seq38-2_par1">
+                    <text id="mo1_seq38-2_par1_text" src="content_3.html#ai2d_d1e15644"/>
+                    <audio clipBegin="03:50.525" clipEnd="03:50.705" id="mo1_seq38-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-2_par2">
+                    <text id="mo1_seq38-2_par2_text" src="content_3.html#ai2d_d1e15647"/>
+                    <audio clipBegin="03:50.705" clipEnd="03:51.045" id="mo1_seq38-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq38-2_par3">
+                    <text id="mo1_seq38-2_par3_text" src="content_3.html#ai2d_d1e15650"/>
+                    <audio clipBegin="03:51.045" clipEnd="03:52.225" id="mo1_seq38-2_par3_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq39" epub:textref="content_3.html#d1e624">
+            <seq id="mo1_seq39-1" epub:textref="content_3.html#ai2d_d1e15656">
+                <par id="mo1_seq39-1_par1">
+                    <text id="mo1_seq39-1_par1_text" src="content_3.html#ai2d_d1e15658"/>
+                    <audio clipBegin="03:52.225" clipEnd="03:53.225" id="mo1_seq39-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq39-1_par2">
+                    <text id="mo1_seq39-1_par2_text" src="content_3.html#ai2d_d1e15661"/>
+                    <audio clipBegin="03:53.225" clipEnd="03:53.575" id="mo1_seq39-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq39-1_par3">
+                    <text id="mo1_seq39-1_par3_text" src="content_3.html#ai2d_d1e15664"/>
+                    <audio clipBegin="03:53.575" clipEnd="03:54.455" id="mo1_seq39-1_par3_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq39-2" epub:textref="content_3.html#ai2d_d1e15668">
+                <par id="mo1_seq39-2_par1">
+                    <text id="mo1_seq39-2_par1_text" src="content_3.html#ai2d_d1e15670"/>
+                    <audio clipBegin="03:54.455" clipEnd="03:54.725" id="mo1_seq39-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq39-2_par2">
+                    <text id="mo1_seq39-2_par2_text" src="content_3.html#ai2d_d1e15673"/>
+                    <audio clipBegin="03:54.725" clipEnd="03:55.255" id="mo1_seq39-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq39-2_par3">
+                    <text id="mo1_seq39-2_par3_text" src="content_3.html#ai2d_d1e15676"/>
+                    <audio clipBegin="03:55.255" clipEnd="03:55.405" id="mo1_seq39-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq39-2_par4">
+                    <text id="mo1_seq39-2_par4_text" src="content_3.html#ai2d_d1e15679"/>
+                    <audio clipBegin="03:55.405" clipEnd="03:55.495" id="mo1_seq39-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq39-2_par5">
+                    <text id="mo1_seq39-2_par5_text" src="content_3.html#ai2d_d1e15682"/>
+                    <audio clipBegin="03:55.495" clipEnd="03:55.725" id="mo1_seq39-2_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq39-2_par6">
+                    <text id="mo1_seq39-2_par6_text" src="content_3.html#ai2d_d1e15686"/>
+                    <audio clipBegin="03:55.725" clipEnd="03:57.395" id="mo1_seq39-2_par6_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq40" epub:textref="content_3.html#d1e626">
+            <seq id="mo1_seq40-1" epub:textref="content_3.html#ai2d_d1e15692">
+                <par id="mo1_seq40-1_par1">
+                    <text id="mo1_seq40-1_par1_text" src="content_3.html#ai2d_d1e15694"/>
+                    <audio clipBegin="03:57.395" clipEnd="03:57.855" id="mo1_seq40-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par2">
+                    <text id="mo1_seq40-1_par2_text" src="content_3.html#ai2d_d1e15697"/>
+                    <audio clipBegin="03:57.855" clipEnd="03:58.225" id="mo1_seq40-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par3">
+                    <text id="mo1_seq40-1_par3_text" src="content_3.html#ai2d_d1e15700"/>
+                    <audio clipBegin="03:58.225" clipEnd="03:58.285" id="mo1_seq40-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par4">
+                    <text id="mo1_seq40-1_par4_text" src="content_3.html#ai2d_d1e15703"/>
+                    <audio clipBegin="03:58.285" clipEnd="03:58.655" id="mo1_seq40-1_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par5">
+                    <text id="mo1_seq40-1_par5_text" src="content_3.html#ai2d_d1e15706"/>
+                    <audio clipBegin="03:58.655" clipEnd="03:59.045" id="mo1_seq40-1_par5_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par6">
+                    <text id="mo1_seq40-1_par6_text" src="content_3.html#ai2d_d1e15710"/>
+                    <audio clipBegin="03:59.045" clipEnd="03:59.165" id="mo1_seq40-1_par6_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par7">
+                    <text id="mo1_seq40-1_par7_text" src="content_3.html#ai2d_d1e15713"/>
+                    <audio clipBegin="03:59.165" clipEnd="03:59.545" id="mo1_seq40-1_par7_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par8">
+                    <text id="mo1_seq40-1_par8_text" src="content_3.html#ai2d_d1e15716"/>
+                    <audio clipBegin="03:59.545" clipEnd="04:00.065" id="mo1_seq40-1_par8_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par9">
+                    <text id="mo1_seq40-1_par9_text" src="content_3.html#ai2d_d1e15719"/>
+                    <audio clipBegin="04:00.065" clipEnd="04:00.195" id="mo1_seq40-1_par9_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par10">
+                    <text id="mo1_seq40-1_par10_text" src="content_3.html#ai2d_d1e15722"/>
+                    <audio clipBegin="04:00.195" clipEnd="04:00.525" id="mo1_seq40-1_par10_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq40-1_par11">
+                    <text id="mo1_seq40-1_par11_text" src="content_3.html#ai2d_d1e15725"/>
+                    <audio clipBegin="04:00.525" clipEnd="04:01.895" id="mo1_seq40-1_par11_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq41" epub:textref="content_3.html#d1e628">
+            <seq id="mo1_seq41-1" epub:textref="content_3.html#ai2d_d1e15731">
+                <par id="mo1_seq41-1_par1">
+                    <text id="mo1_seq41-1_par1_text" src="content_3.html#ai2d_d1e15733"/>
+                    <audio clipBegin="04:01.895" clipEnd="04:02.175" id="mo1_seq41-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq41-1_par2">
+                    <text id="mo1_seq41-1_par2_text" src="content_3.html#ai2d_d1e15736"/>
+                    <audio clipBegin="04:02.175" clipEnd="04:03.035" id="mo1_seq41-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq41-1_par3">
+                    <text id="mo1_seq41-1_par3_text" src="content_3.html#ai2d_d1e15739"/>
+                    <audio clipBegin="04:03.035" clipEnd="04:03.385" id="mo1_seq41-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq41-1_par4">
+                    <text id="mo1_seq41-1_par4_text" src="content_3.html#ai2d_d1e15742"/>
+                    <audio clipBegin="04:03.385" clipEnd="04:04.705" id="mo1_seq41-1_par4_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq42" epub:textref="content_3.html#d1e630">
+            <seq id="mo1_seq42-1" epub:textref="content_3.html#ai2d_d1e15748">
+                <par id="mo1_seq42-1_par1">
+                    <text id="mo1_seq42-1_par1_text" src="content_3.html#ai2d_d1e15750"/>
+                    <audio clipBegin="04:04.705" clipEnd="04:05.115" id="mo1_seq42-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq42-1_par2">
+                    <text id="mo1_seq42-1_par2_text" src="content_3.html#ai2d_d1e15756"/>
+                    <audio clipBegin="04:05.435" clipEnd="04:06.875" id="mo1_seq42-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq42-1_par3">
+                    <text id="mo1_seq42-1_par3_text" src="content_3.html#ai2d_d1e15759"/>
+                    <audio clipBegin="04:06.875" clipEnd="04:07.235" id="mo1_seq42-1_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq42-1_par4">
+                    <text id="mo1_seq42-1_par4_text" src="content_3.html#ai2d_d1e15762"/>
+                    <audio clipBegin="04:07.235" clipEnd="04:07.855" id="mo1_seq42-1_par4_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq42-2" epub:textref="content_3.html#ai2d_d1e15766">
+                <par id="mo1_seq42-2_par1">
+                    <text id="mo1_seq42-2_par1_text" src="content_3.html#ai2d_d1e15768"/>
+                    <audio clipBegin="04:07.855" clipEnd="04:08.025" id="mo1_seq42-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq42-2_par2">
+                    <text id="mo1_seq42-2_par2_text" src="content_3.html#ai2d_d1e15771"/>
+                    <audio clipBegin="04:08.025" clipEnd="04:08.155" id="mo1_seq42-2_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq42-2_par3">
+                    <text id="mo1_seq42-2_par3_text" src="content_3.html#ai2d_d1e15774"/>
+                    <audio clipBegin="04:08.155" clipEnd="04:08.515" id="mo1_seq42-2_par3_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq42-2_par4">
+                    <text id="mo1_seq42-2_par4_text" src="content_3.html#ai2d_d1e15777"/>
+                    <audio clipBegin="04:08.515" clipEnd="04:08.645" id="mo1_seq42-2_par4_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq42-2_par5">
+                    <text id="mo1_seq42-2_par5_text" src="content_3.html#ai2d_d1e15780"/>
+                    <audio clipBegin="04:08.645" clipEnd="04:09.505" id="mo1_seq42-2_par5_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq42-3" epub:textref="content_3.html#ai2d_d1e15784">
+                <par id="mo1_seq42-3_par1">
+                    <text id="mo1_seq42-3_par1_text" src="content_3.html#ai2d_d1e15786"/>
+                    <audio clipBegin="04:09.505" clipEnd="04:09.695" id="mo1_seq42-3_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq42-3_par2">
+                    <text id="mo1_seq42-3_par2_text" src="content_3.html#ai2d_d1e15789"/>
+                    <audio clipBegin="04:09.695" clipEnd="04:09.785" id="mo1_seq42-3_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq42-3_par3">
+                    <text id="mo1_seq42-3_par3_text" src="content_3.html#ai2d_d1e15792"/>
+                    <audio clipBegin="04:09.785" clipEnd="04:10.555" id="mo1_seq42-3_par3_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq42-4" epub:textref="content_3.html#ai2d_d1e15796">
+                <par id="mo1_seq42-4_par1">
+                    <text id="mo1_seq42-4_par1_text" src="content_3.html#ai2d_d1e15798"/>
+                    <audio clipBegin="04:10.555" clipEnd="04:12.105" id="mo1_seq42-4_par1_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <seq xmlns:epub="http://www.idpf.org/2007/ops" id="mo1_seq43" epub:textref="content_3.html#d1e632">
+            <seq id="mo1_seq43-1" epub:textref="content_3.html#ai2d_d1e15804">
+                <par id="mo1_seq43-1_par1">
+                    <text id="mo1_seq43-1_par1_text" src="content_3.html#ai2d_d1e15806"/>
+                    <audio clipBegin="04:12.105" clipEnd="04:12.945" id="mo1_seq43-1_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq43-1_par2">
+                    <text id="mo1_seq43-1_par2_text" src="content_3.html#ai2d_d1e15809"/>
+                    <audio clipBegin="04:12.945" clipEnd="04:13.245" id="mo1_seq43-1_par2_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq43-1_par3">
+                    <text id="mo1_seq43-1_par3_text" src="content_3.html#ai2d_d1e15812"/>
+                    <audio clipBegin="04:13.245" clipEnd="04:14.085" id="mo1_seq43-1_par3_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+            <seq id="mo1_seq43-2" epub:textref="content_3.html#ai2d_d1e15816">
+                <par id="mo1_seq43-2_par1">
+                    <text id="mo1_seq43-2_par1_text" src="content_3.html#ai2d_d1e15818"/>
+                    <audio clipBegin="04:14.085" clipEnd="04:14.525" id="mo1_seq43-2_par1_audio" src="File_005.mp3"/>
+                </par>
+                <par id="mo1_seq43-2_par2">
+                    <text id="mo1_seq43-2_par2_text" src="content_3.html#ai2d_d1e15821"/>
+                    <audio clipBegin="04:14.525" clipEnd="04:16.105" id="mo1_seq43-2_par2_audio" src="File_005.mp3"/>
+                </par>
+            </seq>
+        </seq>
+        <par xmlns:epub="http://www.idpf.org/2007/ops" epub:type="pagebreak" id="mo1_par44">
+            <text id="mo1_par44_text" src="content_3.html#page-23"/>
+            <audio clipBegin="04:16.105" clipEnd="04:17.155" id="mo1_par44_audio" src="File_005.mp3"/>
+        </par>
+    </body>
+</smil>

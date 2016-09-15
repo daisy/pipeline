@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc xml:base="http://example.org/test-doc-3.xml" id="doc3" xmlns:epub="http://www.idpf.org/2007/ops">
+    <deep id="deep">
+        <nesting id="nesting">
+            <deep>
+                <text id="dtb4"/>
+                <text id="dtb5"/>
+                <text id="dtb1"/>
+            </deep>
+        </nesting>
+        <text id="dtb2"/>
+        <section id="id1" epub:type="chapter">
+            <div id="id2">
+                <text id="dtb6"/>
+            </div>
+        </section>
+    </deep>
+    <section id="id3">
+        <text without-id=""/>
+    </section>
+    <section epub:type="footnote">
+        <text without-id=""/>
+    </section>
+</doc>

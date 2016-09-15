@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc>
+    <doc id="doc1">
+        <text id="dol_1_1_rgn_cnt_0001s"/>
+        <text id="dtb3"/>
+        <text id="dol_2_1_rgn_cnt_0001s"/>
+    </doc>
+    <doc id="doc2">
+        <text id="dol_3_1_rgn_cnt_0001s"/>
+        <text id="dtb2"/>
+        <text id="dtb3"/>
+    </doc>
+    <doc id="doc3">
+        <text id="dtb4"/>
+        <text id="dtb5"/>
+        <text id="dtb1"/>
+        <text id="dtb2"/>
+        <text id="dtb6"/>
+    </doc>
+</doc>

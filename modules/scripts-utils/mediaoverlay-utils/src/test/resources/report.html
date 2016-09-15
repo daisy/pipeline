@@ -1,0 +1,281 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <title>UTF-X Test Results</title><style type="text/css">
+/* styles used in test summary */
+.suite-name {
+  color: #d71be8;
+  font-family: Courier;
+}
+.test-name {
+  color: cyan;
+  font-family: Courier;
+}
+.failure {
+  font-family: Courier;
+  color: red;
+}
+.error {
+  font-family: Courier;
+  color: yellow;
+}
+.ok {
+  font-family:Courier;
+  color:#44f733;
+}
+/* these are the styles used when displaying complete test run */
+.tr-suite-name {
+  color: #d71be8;
+  font-family: Courier;
+  font-size: 8pt;
+}
+.tr-test-name {
+  color: cyan;
+  font-family: Courier;
+  font-size: 8pt;
+}
+.tr-failure {
+  font-family: Courier;
+  color: red;
+  font-size: 8pt;  
+}
+.tr-error {
+  font-family: Courier;
+  color: yellow;
+  font-size: 8pt;  
+}
+.tr-ok {
+  font-family:Courier;
+  color:#44f733;
+  font-size: 8pt;  
+}
+
+.same-actual {
+    color: #44f733;
+    font-family: Courier;
+}
+.same-expected {
+    color: yellow;
+    font-family: Courier;
+}
+.diff {
+    color: red;
+    font-family: Courier;
+}
+.test-failure {
+    padding:2mm;
+    border-style:solid;
+    border-color:red;
+    border-width:1pt;
+}
+.test-error {
+    padding:2mm;
+    border-style:solid;
+    border-color:yellow;
+    border-width:1pt;
+}
+body {
+    font-family: Courier;
+    background-color:black;
+    color:white;
+}
+
+</style></head>
+   <body>
+      <div style="font-size:14pt; text-align:center;">UTF-X Test Run
+         Results
+      </div>
+      <div style="font-size:12pt; text-align:center;">Fri Sep 02 14:42:26 CEST 2011</div>
+      <div style="font-size:12pt; text-align:center;">Test
+         dir: <span style="font-family:Courier;">/home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests</span></div>
+      <div>
+         <div><span style="color:cyan;">Time: </span><span>22 ms</span></div>
+         <div><span>Test run: 2</span>, <span class="error">Errors: 2</span></div>
+         <p></p>
+         <div class="error"> There were 2
+            errors.
+         </div>
+         <div class="test-error">
+            <table>
+               <tbody>
+                  <tr>
+                     <td class="error">[1]</td>
+                     <td class="test-name">error(utfx.framework.BadTDFTestCase)</td>
+                     <td class="error">[/home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-join-adjacent_test.xml : javax.xml.transform.TransformerConfigurationException:
+                        Failed to compile stylesheet. 1 error detected.]
+                     </td>
+                  </tr>
+               </tbody>
+            </table><code><pre>
+utfx.framework.MalformedTestException: /home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-join-adjacent_test.xml : javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.BadTDFTestCase.error(BadTDFTestCase.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at junit.framework.TestCase.runTest(TestCase.java:154)
+	at junit.framework.TestCase.runBare(TestCase.java:127)
+	at junit.framework.TestResult$1.protect(TestResult.java:106)
+	at junit.framework.TestResult.runProtected(TestResult.java:124)
+	at junit.framework.TestResult.run(TestResult.java:109)
+	at junit.framework.TestCase.run(TestCase.java:118)
+	at utfx.runner.TestRunner.runTestCase(TestRunner.java:236)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:246)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.doRun(TestRunner.java:154)
+	at utfx.runner.TestRunner.start(TestRunner.java:308)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+</pre></code></div>
+         <div class="test-error">
+            <table>
+               <tbody>
+                  <tr>
+                     <td class="error">[2]</td>
+                     <td class="test-name">error(utfx.framework.BadTDFTestCase)</td>
+                     <td class="error">[/home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-to-smil30_test.xml : javax.xml.transform.TransformerConfigurationException:
+                        Failed to compile stylesheet. 1 error detected.]
+                     </td>
+                  </tr>
+               </tbody>
+            </table><code><pre>
+utfx.framework.MalformedTestException: /home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-to-smil30_test.xml : javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.BadTDFTestCase.error(BadTDFTestCase.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at junit.framework.TestCase.runTest(TestCase.java:154)
+	at junit.framework.TestCase.runBare(TestCase.java:127)
+	at junit.framework.TestResult$1.protect(TestResult.java:106)
+	at junit.framework.TestResult.runProtected(TestResult.java:124)
+	at junit.framework.TestResult.run(TestResult.java:109)
+	at junit.framework.TestCase.run(TestCase.java:118)
+	at utfx.runner.TestRunner.runTestCase(TestRunner.java:236)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:246)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.doRun(TestRunner.java:154)
+	at utfx.runner.TestRunner.start(TestRunner.java:308)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+</pre></code></div>
+         <p></p>
+         <p>Test run details:</p>
+         <div class="test-run-details">
+            <table border="0" width="100%" cellspacing="0" cellpadding="0">
+               <tbody>
+                  <tr>
+                     <td>&nbsp;</td>
+                     <td><span class="tr-suite-name">Suite 'UTF-X test suite: null' has 1 tests/suites</span></td>
+                  </tr>
+                  <tr>
+                     <td>&nbsp;</td>
+                     <td>
+                        <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                           <tbody>
+                              <tr>
+                                 <td>&nbsp;</td>
+                                 <td><span class="tr-suite-name">Suite 'tests' has 1 tests/suites</span></td>
+                              </tr>
+                              <tr>
+                                 <td>&nbsp;</td>
+                                 <td>
+                                    <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                       <tbody>
+                                          <tr>
+                                             <td>&nbsp;</td>
+                                             <td><span class="tr-suite-name">Suite 'test' has 3 tests/suites</span></td>
+                                          </tr>
+                                          <tr>
+                                             <td>&nbsp;</td>
+                                             <td>
+                                                <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                                   <tbody>
+                                                      <tr>
+                                                         <td>&nbsp;</td>
+                                                         <td><span class="tr-suite-name">Suite 'smil-library_test.xml' has 0 tests/suites</span></td>
+                                                      </tr>
+                                                      <tr>
+                                                         <td>&nbsp;</td>
+                                                         <td></td>
+                                                      </tr>
+                                                   </tbody>
+                                                </table>
+                                                <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                                   <tbody>
+                                                      <tr>
+                                                         <td>&nbsp;</td>
+                                                         <td><span class="tr-suite-name">Suite 'null' has 1 tests/suites</span></td>
+                                                      </tr>
+                                                      <tr>
+                                                         <td>&nbsp;</td>
+                                                         <td>
+                                                            <table border="0" cellpadding="0" cellspacing="0">
+                                                               <tbody>
+                                                                  <tr>
+                                                                     <td>&nbsp;</td>
+                                                                     <td>[<span class="test-name">1</span>]
+                                                                     </td>
+                                                                     <td><span class="tr-suite-name">null.</span><span class="tr-test-name">error(utfx.framework.BadTDFTestCase)</span></td>
+                                                                     <td><span class="tr-error">[/home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-join-adjacent_test.xml : javax.xml.transform.TransformerConfigurationException:
+                                                                           Failed to compile stylesheet. 1 error detected.]</span></td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </td>
+                                                      </tr>
+                                                   </tbody>
+                                                </table>
+                                                <table border="0" width="100%" cellspacing="0" cellpadding="0">
+                                                   <tbody>
+                                                      <tr>
+                                                         <td>&nbsp;</td>
+                                                         <td><span class="tr-suite-name">Suite 'null' has 1 tests/suites</span></td>
+                                                      </tr>
+                                                      <tr>
+                                                         <td>&nbsp;</td>
+                                                         <td>
+                                                            <table border="0" cellpadding="0" cellspacing="0">
+                                                               <tbody>
+                                                                  <tr>
+                                                                     <td>&nbsp;</td>
+                                                                     <td>[<span class="test-name">2</span>]
+                                                                     </td>
+                                                                     <td><span class="tr-suite-name">null.</span><span class="tr-test-name">error(utfx.framework.BadTDFTestCase)</span></td>
+                                                                     <td><span class="tr-error">[/home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-to-smil30_test.xml : javax.xml.transform.TransformerConfigurationException:
+                                                                           Failed to compile stylesheet. 1 error detected.]</span></td>
+                                                                  </tr>
+                                                               </tbody>
+                                                            </table>
+                                                         </td>
+                                                      </tr>
+                                                   </tbody>
+                                                </table>
+                                             </td>
+                                          </tr>
+                                       </tbody>
+                                    </table>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </body>
+</html>

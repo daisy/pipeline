@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ $Id$
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ $Source: /cvs/utf-x/framework/src/dtd/utfx_tests.dtd,v $
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ $Name:  $
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ Copyright (C) 2004-2006 UTF-X Development team.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ UTF-X test definition file (TDF) Document Type Definition
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-->
+
+<!ELEMENT utfx:tests (utfx:stylesheet, utfx:css?, utfx:source-validation?,
+                      utfx:expected-validation?,
+                      utfx:source-builder?, utfx:test*)>
+
+<!ATTLIST utfx:tests xmlns:utfx CDATA #REQUIRED>
+
+<!ELEMENT utfx:stylesheet EMPTY>
+
+<!ATTLIST utfx:stylesheet src CDATA #REQUIRED
+                          output (xhtml | fo) #IMPLIED>
+
+<!ELEMENT utfx:css EMPTY>
+
+<!ATTLIST utfx:css uri CDATA #REQUIRED>
+
+<!ELEMENT utfx:source-validation (utfx:dtd) >
+
+<!ELEMENT utfx:expected-validation (utfx:dtd) >
+
+<!ELEMENT utfx:dtd EMPTY>
+
+<!ATTLIST utfx:dtd public CDATA #IMPLIED
+		           system CDATA #REQUIRED>
+
+<!ELEMENT utfx:source-builder (utfx:class-name, utfx:constructor-params)>
+
+<!ELEMENT utfx:class-name (#PCDATA)>
+
+<!ELEMENT utfx:constructor-params (utfx:param*)>
+
+<!ELEMENT utfx:param (#PCDATA)>
+
+<!ATTLIST utfx:param type (String | Integer | Boolean | Double) "String">
+
+<!ELEMENT utfx:test (utfx:name, utfx:stylesheet-params?, utfx:source-builder?, 
+                     utfx:call-template?, utfx:assert-equal)>
+
+<!ELEMENT utfx:stylesheet-params (utfx:with-param*)>
+
+<!ELEMENT utfx:call-template (utfx:with-param*)>
+
+<!ATTLIST utfx:call-template name CDATA #REQUIRED>
+
+<!ELEMENT utfx:with-param ANY>
+
+<!ATTLIST utfx:with-param name CDATA #REQUIRED>
+
+<!ATTLIST utfx:with-param select CDATA #IMPLIED>
+
+<!ELEMENT utfx:name (#PCDATA)>
+
+<!ELEMENT utfx:assert-equal (utfx:source, utfx:expected, utfx:message?)>
+
+<!ATTLIST utfx:assert-equal normalise-internal-whitespace (yes | no) "no" >
+
+<!ELEMENT utfx:source ANY>
+
+<!ATTLIST utfx:source validate (yes | no) "yes"
+                      use-source-parser (yes | no) "no"
+                      xml:space (preserve | default) "preserve"
+                      context-node CDATA #IMPLIED
+                      href CDATA #IMPLIED>
+
+<!ELEMENT utfx:expected ANY>
+
+<!ATTLIST utfx:expected validate (yes | no) "yes"
+                        xml:space (preserve | default) "preserve"
+                        href CDATA #IMPLIED>
+
+<!ELEMENT utfx:message (#PCDATA)>
+
+

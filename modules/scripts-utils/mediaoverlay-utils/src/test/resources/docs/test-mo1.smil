@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil xml:base="http://example.org/test-mo1.smil" xmlns="http://www.w3.org/ns/SMIL"
+    profile="http://www.idpf.org/epub/30/profile/content/" version="3.0"
+    xmlns:epub="http://www.idpf.org/2007/ops">
+    <body id="body1">
+        <seq id="s" epub:textref="test-doc-1.xml#seq1">
+            <seq id="s1" epub:textref="test-doc-1.xml#seq2">
+                <par id="p11" epub:type="paragraph">
+                    <text id="t11" src="test-doc-1.xml#dtb3"/>
+                    <audio src="speechgen0001.mp3" clipBegin="2.029s" clipEnd="4.878s"/>
+                </par>
+                <par id="p12">
+                    <text id="t12" src="test-doc-2.xml#dtb2"/>
+                    <audio src="speechgen0001.mp3" clipBegin="2.029s" clipEnd="4.878s"/>
+                </par>
+            </seq>
+            <par id="p22">
+                <text id="t22" src="test-doc-2.xml#dtb3"/>
+                <audio src="speechgen0001.mp3" clipBegin="2.029s" clipEnd="4.878s"/>
+            </par>
+        </seq>
+        <seq id="mseq" epub:textref="teset-doc-3.xml#seq3">
+            <par id="tcp1">
+                <text id="text1" src="test-doc-3.xml#dtb4"/>
+                <audio src="speechgen0001.mp3" clipBegin="0s" clipEnd="2.029s"/>
+            </par>
+            <par id="tcp2">
+                <text id="text2" src="test-doc-3.xml.xml#dtb5"/>
+                <audio src="speechgen0001.mp3" clipBegin="2.029s" clipEnd="4.878s"/>
+            </par>
+            <par id="text3">
+                <text id="text3" src="test-doc-3.xml#dtb6"/>
+                <audio src="speechgen0001.mp3" clipBegin="2.029s" clipEnd="4.878s"/>
+            </par>
+            <par id="tcp7">
+                <text id="text7" src="test-doc-3.xml#dtb2"/>
+                <audio src="speechgen0001.mp3" clipBegin="2.029s" clipEnd="4.878s"/>
+            </par>
+            <par id="tcp8">
+                <text id="text8" src="test-doc-3.xml#dtb1"/>
+                <audio src="speechgen0001.mp3" clipBegin="2.029s" clipEnd="14.878s"/>
+            </par>
+        </seq>
+    </body>
+</smil>

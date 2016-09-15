@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doc xml:base="http://example.org/test-doc-1.xml" id="doc1">
+    <text id="dol_1_1_rgn_cnt_0001s"/>
+    <section id="section">
+        <text id="dtb3"/>
+    </section>
+    <text id="dol_2_1_rgn_cnt_0001s"/>
+</doc>

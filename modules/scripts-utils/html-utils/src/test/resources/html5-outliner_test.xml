@@ -1,0 +1,1198 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-model href="utfx_tests.rnc" type="application/relax-ng-compact-syntax"?>
+<utfx:tests xmlns="http://www.w3.org/1999/xhtml" xmlns:utfx="http://utfx.org/test-definition">
+	<utfx:stylesheet src="../main/resources/xml/xslt/html5-outliner.xsl"/>
+
+	<!-- ========================================================================== -->
+	<!-- the first heading element in sectioning content is the section heading     -->
+	<!-- ========================================================================== -->
+	<utfx:test>
+		<utfx:name>section heading: basic</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">heading</h1>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">heading</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>section heading: 'a' in heading content is translated to 'span'</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">heading <a href="#dummy" class="foo">with a link</a> and <span><a href="#dummy" class="bar">another link</a></span></h1>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">heading <span class="foo">with a link</span> and <span><span class="bar">another link</span></span></a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>section heading: not h1</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h3 id="h1">heading</h3>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">heading</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>section heading: hgroup</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<hgroup id="hg">
+							<h1>heading</h1>
+							<h2>other</h2>
+						</hgroup>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">heading</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>section heading: hgroup with highest rank not first child</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<hgroup id="hg">
+							<h3>other</h3>
+							<h1>heading</h1>
+						</hgroup>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">heading</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>section heading: not first child</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<p>paragraph</p>
+						<h1 id="h1">heading</h1>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">heading</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>section heading: after subsection</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<section id="section">
+							<h1 id="h11">h11</h1>
+						</section>
+						<h1 id="h12">h12</h1>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h12</a>
+						<ol>
+							<li><a href="#section">h11</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>section heading: between subsections</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<section id="section1">
+							<h1 id="h11">h11</h1>
+						</section>
+						<h1 id="h12">h12</h1>
+						<section id="section2">
+							<h1 id="h13">h13</h1>
+						</section>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h12</a>
+						<ol>
+							<li><a href="#section1">h11</a></li>
+							<li><a href="#section2">h13</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+
+	<!-- ========================================================================== -->
+	<!-- sectioning content elements are always considered subsections -->
+	<!-- ========================================================================== -->
+	<utfx:test>
+		<utfx:name>'section' subsection: basic</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<section id="section">
+							<h1 id="h12">h12</h1>
+						</section>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#section">h12</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>'section' subsection: nested</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<section id="section1">
+							<h1 id="h12">h12</h1>
+							<section id="section2">
+								<h1 id="h13">h13</h1>
+							</section>
+						</section>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#section1">h12</a>
+								<ol>
+									<li><a href="#section2">h13</a></li>
+								</ol>
+							</li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>'section' subsection: siblings</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<section id="section1">
+							<h1 id="h12">h12</h1>
+						</section>
+						<section id="section2">
+							<h1 id="h13">h13</h1>
+						</section>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#section1">h12</a></li>
+							<li><a href="#section2">h13</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>'article' subsection: basic</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<article id="article">
+							<h1 id="h12">h12</h1>
+						</article>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#article">h12</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>'aside' subsection: basic</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<aside id="aside">
+							<h1 id="h12">h12</h1>
+						</aside>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#aside">h12</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>'nav' subsection: basic</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<nav id="nav">
+							<h1 id="h12">h12</h1>
+						</nav>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#nav">h12</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>mixed subsections: basic</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<section id="section">
+							<h1 id="h12">h12</h1>
+							<aside id="aside">
+								<h1 id="h13">h13</h1>
+							</aside>
+						</section>
+						<article id="article">
+							<h1 id="h14">h14</h1>
+							<nav id="nav">
+								<h1 id="h15">h15</h1>
+							</nav>
+						</article>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#section">h12</a>
+								<ol>
+									<li><a href="#aside">h13</a></li>
+								</ol>
+							</li>
+							<li><a href="#article">h14</a>
+								<ol>
+									<li><a href="#nav">h15</a></li>
+								</ol>
+							</li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+
+	<!-- ========================================================================== -->
+	<!-- headings of lower rank start implied subsections -->
+	<!-- ========================================================================== -->
+	<utfx:test>
+		<utfx:name>lower rank heading: basic</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<h2 id="h2">h2</h2>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li><a href="#h2">h2</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>lower rank heading: skip rank</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<h3 id="h3">h3</h3>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li><a href="#h3">h3</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>lower rank heading: hgroup</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<hgroup id="hg">
+							<h2 id="h2">h2</h2>
+							<h3 id="h3">h3</h3>
+						</hgroup>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li><a href="#hg">h2</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>lower rank heading: hgroup with highest rank not first child</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<hgroup id="hg">
+							<h3 id="h3">h3</h3>
+							<h2 id="h2">h2</h2>
+						</hgroup>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li><a href="#hg">h2</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>lower rank heading: successively</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<h2 id="h2">h2</h2>
+						<h3 id="h3">h3</h3>
+						<h4 id="h4">h4</h4>
+						<h5 id="h5">h5</h5>
+						<h6 id="h6">h6</h6>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li><a href="#h2">h2</a>
+								<ol>
+									<li><a href="#h3">h3</a>
+										<ol>
+											<li><a href="#h4">h4</a>
+												<ol>
+												<li><a href="#h5">h5</a>
+												<ol>
+												<li><a href="#h6">h6</a></li>
+												</ol>
+												</li>
+												</ol>
+											</li>
+										</ol>
+									</li>
+								</ol>
+							</li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+
+	<utfx:test>
+		<utfx:name>lower rank heading: after subsection</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<section id="section">
+							<h1 id="h12">h12</h1>
+						</section>
+						<h2 id="h2">h2</h2>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#section">h12</a></li>
+							<li><a href="#h2">h2</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+
+	<!-- ========================================================================== -->
+	<!-- subsequent headings of equal rank start new (implied) sections             -->
+	<!-- ========================================================================== -->
+	<utfx:test>
+		<utfx:name>same rank heading: basic</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<h1 id="h12">h12</h1>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a></li>
+					<li><a href="#h12">h12</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>same rank heading: within nested divs</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<div id="div">
+							<div>
+								<h1 id="h12">h12</h1>
+							</div>
+						</div>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a></li>
+					<li><a href="#h12">h12</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>same rank heading: within an hgroup</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<hgroup id="hg">
+							<h2 id="h2">h2</h2>
+							<h1 id="h12">h12</h1>
+						</hgroup>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a></li>
+					<li><a href="#hg">h12</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>same rank heading: within a section</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<section id="section">
+							<h1 id="h12">h12</h1>
+							<h1 id="h13">h13</h1>
+						</section>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#section">h12</a></li>
+							<li><a href="#h13">h13</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<!-- ========================================================================== -->
+	<!-- subsequent headings of higher rank start new (implied) sections -->
+	<!-- ========================================================================== -->
+	<utfx:test>
+		<utfx:name>higher rank heading: basic</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h2 id="h2">h2</h2>
+						<h1 id="h1">h1</h1>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h2</a></li>
+					<li><a href="#h1">h1</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>higher rank heading: within nested divs</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h2 id="h2">h2</h2>
+						<div id="div">
+							<div>
+								<h1 id="h1">h1</h1>
+							</div>
+						</div>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h2</a></li>
+					<li><a href="#h1">h1</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>higher rank heading: within an hgroup</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h2 id="h2">h2</h2>
+						<hgroup id="hg">
+							<h3 id="h3">h3</h3>
+							<h1 id="h1">h1</h1>
+						</hgroup>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h2</a></li>
+					<li><a href="#hg">h1</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>higher rank heading: within a section</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<section id="section">
+							<h2 id="h2">h2</h2>
+							<h1 id="h12">h12</h1>
+						</section>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a>
+						<ol>
+							<li><a href="#section">h2</a></li>
+							<li><a href="#h12">h12</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+
+	<!-- ========================================================================== -->
+	<!-- user agents should provide default headings -->
+	<!-- ========================================================================== -->
+	<utfx:test>
+		<utfx:name>default heading: body</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body"/>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li data-generated="true"><a href="#body">Untitled document</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>default heading: section</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<section id="section"/>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li data-generated="true"><a href="#section">Untitled section</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>default heading: article</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<article id="article"/>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li data-generated="true"><a href="#article">Article</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>default heading: aside</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<aside id="aside"/>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li data-generated="true"><a href="#aside">Sidebar</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>default heading: nav</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<nav id="nav"/>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li data-generated="true"><a href="#nav">Navigation</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+
+	<!-- ========================================================================== -->
+	<!-- sectioning root should not contribute to the ancestor outline              -->
+	<!-- ========================================================================== -->
+	<utfx:test>
+		<utfx:name>sectioning root: blockquote</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<blockquote id="root">
+							<h1 id="h12">h12</h1>
+						</blockquote>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>sectioning root: details</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<details id="root">
+							<h1 id="h12">h12</h1>
+						</details>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>sectioning root: fieldset</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<fieldset id="root">
+							<h1 id="h12">h12</h1>
+						</fieldset>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>sectioning root: figure</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<figure id="root">
+							<h1 id="h12">h12</h1>
+						</figure>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>sectioning root: td</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h11</h1>
+						<table>
+							<tr>
+								<td id="td">
+									<h1 id="h12">h12</h1>
+								</td>
+							</tr>
+						</table>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h11</a></li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+
+
+	<!-- ========================================================================== -->
+	<!-- complex documents                                                          -->
+	<!-- ========================================================================== -->
+	<utfx:test>
+		<utfx:name>complex 1</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="foo">Foo</h1>
+						<h2 id="bar">Bar</h2>
+						<blockquote id="blockquote">
+							<h3 id="bla">Bla</h3>
+						</blockquote>
+						<p>Baz</p>
+						<h2 id="quux">Quux</h2>
+						<section id="section">
+							<h3 id="thud">Thud</h3>
+						</section>
+						<p>Grunt</p>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">Foo</a>
+						<ol>
+							<li><a href="#bar">Bar</a></li>
+							<li><a href="#quux">Quux</a></li>
+							<li><a href="#section">Thud</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>complex 2</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<section id="section1">
+							<h3>Thud</h3>
+						</section>
+						<h1 id="foo">Foo</h1>
+						<h1 id="bar">Bar</h1>
+						<h2 id="quux">Quux</h2>
+						<section id="section2">
+							<h3>Thud</h3>
+						</section>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">Foo</a>
+						<ol>
+							<li><a href="#section1">Thud</a></li>
+						</ol>
+					</li>
+					<li><a href="#bar">Bar</a>
+						<ol>
+							<li><a href="#quux">Quux</a></li>
+							<li><a href="#section2">Thud</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>complex 3</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<section id="section1">
+							<h3>Thud</h3>
+						</section>
+						<h3 id="foo">Foo</h3>
+						<h2 id="bar1">Bar</h2>
+						<section id="section2">
+							<h3>Thud</h3>
+						</section>
+						<h2 id="bar2">Bar</h2>
+						<h3 id="quux">Quux</h3>
+						<section id="section3">
+							<h3>Thud</h3>
+						</section>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">Foo</a>
+						<ol>
+							<li><a href="#section1">Thud</a></li>
+						</ol>
+					</li>
+					<li><a href="#bar1">Bar</a>
+						<ol>
+							<li><a href="#section2">Thud</a></li>
+						</ol>
+					</li>
+					<li><a href="#bar2">Bar</a>
+						<ol>
+							<li><a href="#quux">Quux</a></li>
+							<li><a href="#section3">Thud</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>complex 4</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h1</h1>
+						<h1 id="h12">h1</h1>
+						<h2 id="h21">h2</h2>
+						<h3 id="h31">h3</h3>
+						<section id="section">
+							<h1>h1</h1>
+						</section>
+						<h3 id="h32">h3</h3>
+						<h2 id="h22">h2</h2>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a></li>
+					<li><a href="#h12">h1</a>
+						<ol>
+							<li><a href="#h21">h2</a>
+								<ol>
+									<li><a href="#h31">h3</a></li>
+								</ol>
+							</li>
+							<li><a href="#section">h1</a></li>
+							<li><a href="#h32">h3</a></li>
+							<li><a href="#h22">h2</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>complex 5</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h11">h1</h1>
+						<h1 id="h12">h1</h1>
+						<section id="section">
+							<h1>h1</h1>
+						</section>
+						<h3 id="h31">h3</h3>
+						<h2 id="h21">h2</h2>
+						<h3 id="h32">h3</h3>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a></li>
+					<li><a href="#h12">h1</a>
+						<ol>
+							<li><a href="#section">h1</a></li>
+							<li><a href="#h31">h3</a></li>
+							<li><a href="#h21">h2</a>
+								<ol>
+									<li><a href="#h32">h3</a></li>
+								</ol>
+							</li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>complex 6</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<section id="section">
+							<h1>h1</h1>
+						</section>
+						<h2 id="h21">h2</h2>
+						<h3 id="h31">h3</h3>
+						<h2 id="h22">h2</h2>
+						<h3 id="h32">h3</h3>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h2</a>
+						<ol>
+							<li><a href="#section">h1</a></li>
+							<li><a href="#h31">h3</a></li>
+						</ol>
+					</li>
+					<li><a href="#h22">h2</a>
+						<ol>
+							<li><a href="#h32">h3</a></li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+	<utfx:test>
+		<utfx:name>complex 7</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						<h1 id="h1">h1</h1>
+						<h2 id="h2">h2</h2>
+						<h3 id="h31">h3</h3>
+						<h3 id="h32">h3</h3>
+						<h4 id="h41">h4</h4>
+						<h4 id="h42">h4</h4>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<ol>
+					<li><a href="#body">h1</a>
+						<ol>
+							<li><a href="#h2">h2</a>
+								<ol>
+									<li><a href="#h31">h3</a></li>
+									<li><a href="#h32">h3</a>
+										<ol>
+											<li><a href="#h41">h4</a></li>
+											<li><a href="#h42">h4</a></li>
+										</ol>
+									</li>
+								</ol>
+							</li>
+						</ol>
+					</li>
+				</ol>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+</utfx:tests>

@@ -1,0 +1,164 @@
+Index: ASCIIMathML.js
+===================================================================
+--- ASCIIMathML.js
++++ ASCIIMathML.js
+@@ -91,7 +91,7 @@
+ 	}
+ }
+ 
+-setStylesheet("#AMMLcloseDiv \{font-size:0.8em; padding-top:1em; color:#014\}\n#AMMLwarningBox \{position:absolute; width:100%; top:0; left:0; z-index:200; text-align:center; font-size:1em; font-weight:bold; padding:0.5em 0 0.5em 0; color:#ffc; background:#c30\}");
++//setStylesheet("#AMMLcloseDiv \{font-size:0.8em; padding-top:1em; color:#014\}\n#AMMLwarningBox \{position:absolute; width:100%; top:0; left:0; z-index:200; text-align:center; font-size:1em; font-weight:bold; padding:0.5em 0 0.5em 0; color:#ffc; background:#c30\}");
+ 
+ function init(){
+ 	var msg, warnings = new Array();
+@@ -158,7 +158,7 @@
+   an.appendChild(document.createTextNode('(click anywhere to close this warning)'));
+   nd.appendChild(an);
+   var body = document.getElementsByTagName("body")[0];
+-  body.insertBefore(nd,body.childNodes[0]);
++  body.insertBefore(nd,body.childNodes.item(0));
+ }
+ 
+ function translate(spanclassAM) {
+@@ -645,9 +645,9 @@
+       } else {                        // font change command
+         if (!isIE && typeof symbol.codes != "undefined") {
+           for (i=0; i<result[0].childNodes.length; i++)
+-            if (result[0].childNodes[i].nodeName=="mi" || result[0].nodeName=="mi") {
++            if (result[0].childNodes.item(i).nodeName=="mi" || result[0].nodeName=="mi") {
+               st = (result[0].nodeName=="mi"?result[0].firstChild.nodeValue:
+-                              result[0].childNodes[i].firstChild.nodeValue);
++                              result[0].childNodes.item(i).firstChild.nodeValue);
+               var newst = [];
+               for (var j=0; j<st.length; j++)
+                 if (st.charCodeAt(j)>64 && st.charCodeAt(j)<91) newst = newst +
+@@ -658,7 +658,7 @@
+                           appendChild(document.createTextNode(newst));
+               else result[0].replaceChild(createMmlNode("mo").
+                                appendChild(document.createTextNode(newst)),
+-                                           result[0].childNodes[i]);
++                                           result[0].childNodes.item(i));
+             }
+         }
+         node = createMmlNode(symbol.tag,result[0]);
+@@ -791,12 +791,12 @@
+   if (symbol.ttype == RIGHTBRACKET || symbol.ttype == LEFTRIGHT) {
+ //    if (AMnestingDepth > 0) AMnestingDepth--;
+     var len = newFrag.childNodes.length;
+-    if (len>0 && newFrag.childNodes[len-1].nodeName == "mrow" && len>1 &&
+-      newFrag.childNodes[len-2].nodeName == "mo" &&
+-      newFrag.childNodes[len-2].firstChild.nodeValue == ",") { //matrix
+-      var right = newFrag.childNodes[len-1].lastChild.firstChild.nodeValue;
++    if (len>0 && newFrag.childNodes.item(len-1).nodeName == "mrow" && len>1 &&
++      newFrag.childNodes.item(len-2).nodeName == "mo" &&
++      newFrag.childNodes.item(len-2).firstChild.nodeValue == ",") { //matrix
++      var right = newFrag.childNodes.item(len-1).lastChild.firstChild.nodeValue;
+       if (right==")" || right=="]") {
+-        var left = newFrag.childNodes[len-1].firstChild.firstChild.nodeValue;
++        var left = newFrag.childNodes.item(len-1).firstChild.firstChild.nodeValue;
+         if (left=="(" && right==")" && symbol.output != "}" || 
+             left=="[" && right=="]") {
+         var pos = []; // positions of commas
+@@ -804,7 +804,7 @@
+         var m = newFrag.childNodes.length;
+         for (i=0; matrix && i<m; i=i+2) {
+           pos[i] = [];
+-          node = newFrag.childNodes[i];
++          node = newFrag.childNodes.item(i);
+           if (matrix) matrix = node.nodeName=="mrow" && 
+             (i==m-1 || node.nextSibling.nodeName=="mo" && 
+             node.nextSibling.firstChild.nodeValue==",")&&
+@@ -812,7 +812,7 @@
+             node.lastChild.firstChild.nodeValue==right;
+           if (matrix) 
+             for (var j=0; j<node.childNodes.length; j++)
+-              if (node.childNodes[j].firstChild.nodeValue==",")
++              if (node.childNodes.item(j).firstChild.nodeValue==",")
+                 pos[i][pos[i].length]=j;
+           if (matrix && i>1) matrix = pos[i].length == pos[i-2].length;
+         }
+@@ -970,7 +970,7 @@
+    } else return 0;
+   } else if (n.nodeName!="math") {
+     for (i=0; i<n.childNodes.length; i++)
+-      i += processNodeR(n.childNodes[i], linebreaks,latex);
++      i += processNodeR(n.childNodes.item(i), linebreaks,latex);
+   }
+   return 0;
+ }
+@@ -1762,9 +1762,9 @@
+       } else {			      // font change or displaystyle command
+         if (!isIE && typeof symbol.codes != "undefined") {
+           for (i=0; i<result[0].childNodes.length; i++)
+-            if (result[0].childNodes[i].nodeName=="mi" || result[0].nodeName=="mi") {
++            if (result[0].childNodes.item(i).nodeName=="mi" || result[0].nodeName=="mi") {
+               st = (result[0].nodeName=="mi"?result[0].firstChild.nodeValue:
+-                              result[0].childNodes[i].firstChild.nodeValue);
++                              result[0].childNodes.item(i).firstChild.nodeValue);
+               var newst = [];
+               for (var j=0; j<st.length; j++)
+                 if (st.charCodeAt(j)>64 && st.charCodeAt(j)<91) newst = newst +
+@@ -1774,7 +1774,7 @@
+                 result[0]=createMmlNode("mo").
+                           appendChild(document.createTextNode(newst));
+               else result[0].replaceChild(createMmlNode("mo").
+-          appendChild(document.createTextNode(newst)),result[0].childNodes[i]);
++          appendChild(document.createTextNode(newst)),result[0].childNodes.item(i));
+             }
+         }
+         node = createMmlNode(symbol.tag,result[0]);
+@@ -1893,16 +1893,16 @@
+       str = LMremoveCharsAndBlanks(str,symbol.input.length); // ready to return
+     var len = newFrag.childNodes.length;
+     if (matrix &&
+-      len>0 && newFrag.childNodes[len-1].nodeName == "mrow" && len>1 &&
+-      newFrag.childNodes[len-2].nodeName == "mo" &&
+-      newFrag.childNodes[len-2].firstChild.nodeValue == "&") { //matrix
++      len>0 && newFrag.childNodes.item(len-1).nodeName == "mrow" && len>1 &&
++      newFrag.childNodes.item(len-2).nodeName == "mo" &&
++      newFrag.childNodes.item(len-2).firstChild.nodeValue == "&") { //matrix
+ 	var pos = []; // positions of ampersands
+         var m = newFrag.childNodes.length;
+         for (i=0; matrix && i<m; i=i+2) {
+           pos[i] = [];
+-          node = newFrag.childNodes[i];
++          node = newFrag.childNodes.item(i);
+ 	  for (var j=0; j<node.childNodes.length; j++)
+-	    if (node.childNodes[j].firstChild.nodeValue=="&")
++	    if (node.childNodes.item(j).firstChild.nodeValue=="&")
+ 	      pos[i][pos[i].length]=j;
+         }
+ 	var row, frag, n, k, table = document.createDocumentFragment();
+@@ -2206,7 +2206,7 @@
+ function setText(st,id) { // add text to an existing node with given id
+   var node = document.getElementById(id);
+   if (node!=null)
+-    if (node.childNodes.length!=0) node.childNodes[0].nodeValue = st;
++    if (node.childNodes.length!=0) node.childNodes.item(0).nodeValue = st;
+     else node.appendChild(document.createTextNode(st));
+ }
+ 
+@@ -2230,7 +2230,7 @@
+   src = src.replace(/plot\(\x20*([^\"f\[][^\n\r;]+)\)/g,"plot(\"$1\")");
+ 
+   // replace (expr,expr) by [expr,expr] where expr has no (,) in it
+-  src = src.replace(/([=[(,]\x20*)\(([-a-z0-9./+*]+?),([-a-z0-9./+*]+?)\)/g,"$1[$2,$3]");
++  src = src.replace(/([=[(,]\x20*)\(([-a-z0-9.\/+*]+?),([-a-z0-9.\/+*]+?)\)/g,"$1[$2,$3]");
+ //alert(src)
+   // insert * between digit and letter e.g. 2x --> 2*x
+   src = src.replace(/([0-9])([a-df-zA-Z]|e^)/g,"$1*$2");
+@@ -3323,6 +3323,9 @@
+     if (!noMathML && li.length>0) initASCIIMathCalculators(li);
+   }
+ };
++
++/* 'window' object is not available outside of the browser context!
++
+ //setup onload function
+ if(typeof window.addEventListener != 'undefined')
+ {
+@@ -3363,3 +3366,4 @@
+     window.onload = generic;
+   }
+ }
++*/

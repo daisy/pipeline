@@ -1,0 +1,218 @@
+<x:description script="../../main/resources/xml/internal/dtbook/isolate-daisy3-skippable.xpl"
+	       xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns:p="http://www.w3.org/ns/xproc"
+	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
+	       xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
+  <x:scenario label="General scenario">
+    <x:call step="px:isolate-daisy3-skippable">
+      <x:input port="sentence-ids">
+	<x:document>
+	  <d:sentences>
+	    <d:sentence id="sent1"/>
+	    <d:sentence id="sent2"/>
+	  </d:sentences>
+	</x:document>
+      </x:input>
+      <x:option name="id-prefix" select="'prefix'"/>
+    </x:call>
+
+    <x:scenario label="2 levels">
+      <x:call step="px:isolate-daisy3-skippable">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <book>
+	      <sent id="sent1">
+		<span id="span1" attr="attr-val">
+		  text1
+		  <noteref/>
+		  text2
+		</span>
+		text3
+	      </sent>
+	    </book>
+	  </x:document>
+      </x:input>
+      </x:call>
+      <x:context label="context">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <!-- TODO: write the expected result here -->
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="No skippable">
+      <x:call step="px:isolate-daisy3-skippable">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <book>
+	      <sent id="sent1">
+		<span id="span1">
+		  text1
+		</span>
+		text2
+	      </sent>
+	    </book>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="context">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <!-- TODO: write the expected result here -->
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Simple">
+      <x:call step="px:isolate-daisy3-skippable">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <book>
+	      <sent id="sent1">
+		text1
+		<noteref/>
+		text2
+	      </sent>
+	    </book>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="context">
+	<x:document type="port" port="result"/>
+	<x:document type="port" port="skippable-ids"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <!-- TODO: write the expected result here -->
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Preexisting id">
+      <x:call step="px:isolate-daisy3-skippable">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <book>
+	      <sent id="sent1">
+		text1
+		<noteref id="noteref-id"/>
+		text2
+	      </sent>
+	    </book>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="context">
+	<x:document type="port" port="result"/>
+	<x:document type="port" port="skippable-ids"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <!-- TODO: write the expected result here -->
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+
+    <x:scenario label="Pagenum">
+      <x:call step="px:isolate-daisy3-skippable">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <book>
+	      <sent id="sent1">
+		text1
+		<pagenum>42</pagenum>
+		text2
+	      </sent>
+	    </book>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="context">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <!-- TODO: write the expected result here -->
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Pagenum with words">
+      <x:call step="px:isolate-daisy3-skippable">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <book>
+	      <sent id="sent1">
+		<w>w1</w> <w>w2</w>
+		<pagenum>42</pagenum>
+		<w>w3</w> <w>w4</w>
+	      </sent>
+	    </book>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="context">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <!-- TODO: write the expected result here -->
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Skippable sentence">
+      <x:call step="px:isolate-daisy3-skippable">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <book>
+	      <pagenum id="sent1">1</pagenum>
+	    </book>
+	</x:document>
+	</x:input>
+      </x:call>
+      <x:context label="context">
+	<x:document type="port" port="result"/>
+	<x:document type="port" port="skippable-ids"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <!-- TODO: write the expected result here -->
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Adjacent skippable elements">
+      <x:call step="px:isolate-daisy3-skippable">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <sent id="sent1">
+	      text1
+	      <pagenum>42</pagenum>
+	      <pagenum>43</pagenum>
+	      text2
+	    </sent>
+	</x:document>
+	</x:input>
+      </x:call>
+      <x:context label="context">
+	<x:document type="port" port="result"/>
+	<x:document type="port" port="skippable-ids"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <!-- TODO: write the expected result here -->
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+  </x:scenario>
+</x:description>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0" xml:base="file:/tmp/jobContext8364290816736411028/">
+    <body>
+        <metadata>
+            <meta name="dc:format" content="EPUB3"/>
+            <meta name="ncc:generator" content=""/>
+            <meta name="dc:title" content=""/>
+            <layout xmlns="" type="text/smil-basic-layout">
+                <region id="txtView" left="0" top="0" z-index="0" fit="hidden" skip-content="true"/>
+            </layout>
+        </metadata>
+
+        <par id="mo1_tcp1">
+            <text id="mo1_text1" src="content_0.html#d1e15"/>
+            <audio src="Front_000.mp3" id="mo1_audd1e12" clipBegin="0s" clipEnd="56.14s"/>
+        </par>
+        <par id="mo1_stockRepeatedTitlePar">
+            <text id="mo1_stockRepeatedTitleText" src="content_0.html#d1e15"/>
+            <audio src="Front_000.mp3" id="mo1_stockRepeatedTitleAudio" clipBegin="0s" clipEnd="56.14s"/>
+        </par>
+
+    </body>
+</smil>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   <uri name="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/library.xpl"
+        uri="../xml/library.xpl"/>
+   <uri name="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/smil-to-text-fileset.xsl"
+        uri="../xml/smil-to-text-fileset.xsl"/>
+   <uri name="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/smil-to-audio-fileset.xsl"
+        uri="../xml/smil-to-audio-fileset.xsl"/>
+   <uri name="http://www.daisy.org/pipeline/modules/mediaoverlay-utils/clock-functions.xsl"
+        uri="../xml/clock-functions.xsl"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
+</catalog>

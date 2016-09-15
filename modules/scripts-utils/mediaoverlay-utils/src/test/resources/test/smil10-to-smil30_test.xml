@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE utfx:tests PUBLIC "-//UTF-X//DTD utfx-tests 1.0//EN" "utfx_tests.dtd">
+<utfx:tests xmlns:utfx="http://utfx.org/test-definition"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+   <utfx:stylesheet src="../smil10-to-smil30.xsl"/>
+   <!--utfx:source-validation>
+      <utfx:dtd public="-//W3C//DTD SMIL 1.0//EN" system="SMIL10.dtd"/>
+   </utfx:source-validation>
+   <utfx:expected-validation>
+      <utfx:dtd public="-//W3C//DTD SMIL 3.0 Daisy//EN"
+         system="http://www.w3.org/2008/SMIL30/SMIL30Daisy.dtd"/>
+   </utfx:expected-validation-->
+   <utfx:test>
+      <utfx:name>Minimal SMIL 1.0</utfx:name>
+      <utfx:stylesheet-params>
+         <utfx:with-param name="language" select="'EN'"/>
+      </utfx:stylesheet-params>
+      <utfx:assert-equal>
+         <utfx:source>
+            <smil>
+               <head>
+                  <meta name="dc:format" content="Daisy 2.02"/>
+                  <layout>
+                     <region id="txt-view"/>
+                  </layout>
+               </head>
+               <body>
+                  <seq>
+                     <par>
+                        <text src="content.html#fragment" id="content1"/>
+                     </par>
+                  </seq>
+               </body>
+            </smil>
+         </utfx:source>
+         <utfx:expected>
+            <smil xmlns="http://www.w3.org/ns/SMIL" version="3.0" profile="http://www.idpf.org/epub/30/profile/content/" xml:lang="EN">
+               <head>
+                  <meta property="dc:format">Daisy 2.02</meta>
+               </head>
+               <body>
+                  <seq>
+                     <par>
+                        <text src="content.html#fragment" id="content1"/>
+                     </par>
+                  </seq>
+               </body>
+            </smil>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   <utfx:test>
+      <utfx:name>Discard &lt;layout/&gt;s</utfx:name>
+      <utfx:stylesheet-params>
+         <utfx:with-param name="language" select="'EN'"/>
+      </utfx:stylesheet-params>
+      <utfx:assert-equal>
+         <utfx:source>
+            <smil>
+               <head>
+                  <meta name="dc:format" content="Daisy 2.02"/>
+                  <layout>
+                     <region id="txt-view"/>
+                  </layout>
+               </head>
+               <body>
+                  <seq>
+                     <par>
+                        <text src="content.html#fragment" id="content1"/>
+                     </par>
+                  </seq>
+               </body>
+            </smil>
+         </utfx:source>
+         <utfx:expected>
+            <smil xmlns="http://www.w3.org/ns/SMIL" version="3.0" profile="http://www.idpf.org/epub/30/profile/content/" xml:lang="EN">
+               <head>
+                  <meta property="dc:format">Daisy 2.02</meta>
+               </head>
+               <body>
+                  <seq>
+                     <par>
+                        <text src="content.html#fragment" id="content1"/>
+                     </par>
+                  </seq>
+               </body>
+            </smil>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+</utfx:tests>

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-model href="utfx_tests.rnc" type="application/relax-ng-compact-syntax"?>
+<utfx:tests xmlns="http://www.w3.org/1999/xhtml" xmlns:utfx="http://utfx.org/test-definition">
+	<utfx:stylesheet src="html-utils/remove-non-xhtml-namespaces.xsl"/>
+
+	<utfx:test>
+		<utfx:name>remove non-xhtml namespaces</utfx:name>
+		<utfx:assert-equal normalise-internal-whitespace="yes">
+			<utfx:source>
+				<html>
+					<body id="body">
+						text
+						<!-- comment -->
+						<![CDATA[CDATA]]>
+						<non-xhtml xmlns="http://example.net/non-xhtml" xmlns:other="http://example.net/non-xhtml/other-namespace">
+							<p>xmlns --&gt; inside non-xhtml</p>
+							<other:p>xmlns:other --&gt; inside non-xhtml</other:p>
+						</non-xhtml>
+					</body>
+				</html>
+			</utfx:source>
+			<utfx:expected>
+				<html>
+					<body id="body">
+						text
+						<!-- comment -->
+						<![CDATA[CDATA]]>
+						<non-xhtml>
+							<p>xmlns --&gt; inside non-xhtml</p>
+							<p>xmlns:other --&gt; inside non-xhtml</p>
+						</non-xhtml>
+					</body>
+				</html>
+			</utfx:expected>
+		</utfx:assert-equal>
+	</utfx:test>
+</utfx:tests>

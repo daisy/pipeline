@@ -1,0 +1,309 @@
+<log4j:event logger="utfx.framework" timestamp="1302685930034" level="ERROR" thread="main">
+<log4j:message><![CDATA[Could not create a file suite from /home/jostein/daisy-pipeline-modules/utilities/smil/tests/test/smil10-to-smil30_test.xml]]></log4j:message>
+<log4j:throwable><![CDATA[utfx.framework.MalformedStylesheetException: javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.TestFileSuiteAssembler.assemble(TestFileSuiteAssembler.java:155)
+	at utfx.framework.XSLTTestFileSuite.suite(XSLTTestFileSuite.java:163)
+	at utfx.framework.XSLTTestDirectorySuite.suite(XSLTTestDirectorySuite.java:90)
+	at utfx.framework.XSLTTestDirectorySuite.suite(XSLTTestDirectorySuite.java:102)
+	at utfx.framework.XSLTRegressionTest.suite(XSLTRegressionTest.java:71)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at junit.runner.BaseTestRunner.getTest(BaseTestRunner.java:111)
+	at utfx.runner.TestRunner.start(TestRunner.java:307)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+Caused by: javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at net.sf.saxon.PreparedStylesheet.prepare(PreparedStylesheet.java:212)
+	at net.sf.saxon.TransformerFactoryImpl.newTemplates(TransformerFactoryImpl.java:131)
+	at net.sf.saxon.TransformerFactoryImpl.newTransformer(TransformerFactoryImpl.java:86)
+	at utfx.framework.TestFileSuiteAssembler.assemble(TestFileSuiteAssembler.java:153)
+	... 11 more
+]]></log4j:throwable>
+<log4j:locationInfo class="utfx.framework.XSLTTestFileSuite" method="suite" file="XSLTTestFileSuite.java" line="168"/>
+</log4j:event>
+
+<log4j:event logger="utfx.framework" timestamp="1302685930070" level="ERROR" thread="main">
+<log4j:message><![CDATA[Could not create a file suite from /home/jostein/daisy-pipeline-modules/utilities/smil/tests/test/smil10-join-adjacent_test.xml]]></log4j:message>
+<log4j:throwable><![CDATA[utfx.framework.MalformedStylesheetException: javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.TestFileSuiteAssembler.assemble(TestFileSuiteAssembler.java:155)
+	at utfx.framework.XSLTTestFileSuite.suite(XSLTTestFileSuite.java:163)
+	at utfx.framework.XSLTTestDirectorySuite.suite(XSLTTestDirectorySuite.java:90)
+	at utfx.framework.XSLTTestDirectorySuite.suite(XSLTTestDirectorySuite.java:102)
+	at utfx.framework.XSLTRegressionTest.suite(XSLTRegressionTest.java:71)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at junit.runner.BaseTestRunner.getTest(BaseTestRunner.java:111)
+	at utfx.runner.TestRunner.start(TestRunner.java:307)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+Caused by: javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at net.sf.saxon.PreparedStylesheet.prepare(PreparedStylesheet.java:212)
+	at net.sf.saxon.TransformerFactoryImpl.newTemplates(TransformerFactoryImpl.java:131)
+	at net.sf.saxon.TransformerFactoryImpl.newTransformer(TransformerFactoryImpl.java:86)
+	at utfx.framework.TestFileSuiteAssembler.assemble(TestFileSuiteAssembler.java:153)
+	... 11 more
+]]></log4j:throwable>
+<log4j:locationInfo class="utfx.framework.XSLTTestFileSuite" method="suite" file="XSLTTestFileSuite.java" line="168"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302685930078" level="INFO" thread="main">
+<log4j:message><![CDATA[logger created]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="&lt;init&gt;" file="ResultLogger.java" line="44"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302685930105" level="INFO" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) started]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="startTest" file="ResultLogger.java" line="84"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302685930106" level="ERROR" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) ERROR]]></log4j:message>
+<log4j:throwable><![CDATA[utfx.framework.MalformedTestException: /home/jostein/daisy-pipeline-modules/utilities/smil/tests/test/smil10-to-smil30_test.xml : javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.BadTDFTestCase.error(BadTDFTestCase.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at junit.framework.TestCase.runTest(TestCase.java:154)
+	at junit.framework.TestCase.runBare(TestCase.java:127)
+	at junit.framework.TestResult$1.protect(TestResult.java:106)
+	at junit.framework.TestResult.runProtected(TestResult.java:124)
+	at junit.framework.TestResult.run(TestResult.java:109)
+	at junit.framework.TestCase.run(TestCase.java:118)
+	at utfx.runner.TestRunner.runTestCase(TestRunner.java:236)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:246)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.doRun(TestRunner.java:154)
+	at utfx.runner.TestRunner.start(TestRunner.java:308)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+]]></log4j:throwable>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="addError" file="ResultLogger.java" line="54"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302685930107" level="INFO" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) completed]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="endTest" file="ResultLogger.java" line="74"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302685930107" level="INFO" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) started]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="startTest" file="ResultLogger.java" line="84"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302685930107" level="ERROR" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) ERROR]]></log4j:message>
+<log4j:throwable><![CDATA[utfx.framework.MalformedTestException: /home/jostein/daisy-pipeline-modules/utilities/smil/tests/test/smil10-join-adjacent_test.xml : javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.BadTDFTestCase.error(BadTDFTestCase.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:616)
+	at junit.framework.TestCase.runTest(TestCase.java:154)
+	at junit.framework.TestCase.runBare(TestCase.java:127)
+	at junit.framework.TestResult$1.protect(TestResult.java:106)
+	at junit.framework.TestResult.runProtected(TestResult.java:124)
+	at junit.framework.TestResult.run(TestResult.java:109)
+	at junit.framework.TestCase.run(TestCase.java:118)
+	at utfx.runner.TestRunner.runTestCase(TestRunner.java:236)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:246)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.doRun(TestRunner.java:154)
+	at utfx.runner.TestRunner.start(TestRunner.java:308)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+]]></log4j:throwable>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="addError" file="ResultLogger.java" line="54"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302685930108" level="INFO" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) completed]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="endTest" file="ResultLogger.java" line="74"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302686025473" level="INFO" thread="main">
+<log4j:message><![CDATA[logger created]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="&lt;init&gt;" file="ResultLogger.java" line="44"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302686025482" level="INFO" thread="main">
+<log4j:message><![CDATA[Minimal SMIL 1.0 started]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="startTest" file="ResultLogger.java" line="84"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302686025505" level="INFO" thread="main">
+<log4j:message><![CDATA[Minimal SMIL 1.0 completed]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="endTest" file="ResultLogger.java" line="74"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302686025506" level="INFO" thread="main">
+<log4j:message><![CDATA[Discard <layout/>s started]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="startTest" file="ResultLogger.java" line="84"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302686025517" level="INFO" thread="main">
+<log4j:message><![CDATA[Discard <layout/>s completed]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="endTest" file="ResultLogger.java" line="74"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302686025518" level="INFO" thread="main">
+<log4j:message><![CDATA[Some metadata started]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="startTest" file="ResultLogger.java" line="84"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1302686025549" level="INFO" thread="main">
+<log4j:message><![CDATA[Some metadata completed]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="endTest" file="ResultLogger.java" line="74"/>
+</log4j:event>
+
+<log4j:event logger="utfx.framework" timestamp="1314967346182" level="ERROR" thread="main">
+<log4j:message><![CDATA[Could not create a file suite from /home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-join-adjacent_test.xml]]></log4j:message>
+<log4j:throwable><![CDATA[utfx.framework.MalformedStylesheetException: javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.TestFileSuiteAssembler.assemble(TestFileSuiteAssembler.java:155)
+	at utfx.framework.XSLTTestFileSuite.suite(XSLTTestFileSuite.java:163)
+	at utfx.framework.XSLTTestDirectorySuite.suite(XSLTTestDirectorySuite.java:90)
+	at utfx.framework.XSLTTestDirectorySuite.suite(XSLTTestDirectorySuite.java:102)
+	at utfx.framework.XSLTRegressionTest.suite(XSLTRegressionTest.java:71)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at junit.runner.BaseTestRunner.getTest(BaseTestRunner.java:111)
+	at utfx.runner.TestRunner.start(TestRunner.java:307)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+Caused by: javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at net.sf.saxon.PreparedStylesheet.prepare(PreparedStylesheet.java:212)
+	at net.sf.saxon.TransformerFactoryImpl.newTemplates(TransformerFactoryImpl.java:131)
+	at net.sf.saxon.TransformerFactoryImpl.newTransformer(TransformerFactoryImpl.java:86)
+	at utfx.framework.TestFileSuiteAssembler.assemble(TestFileSuiteAssembler.java:153)
+	... 11 more
+]]></log4j:throwable>
+<log4j:locationInfo class="utfx.framework.XSLTTestFileSuite" method="suite" file="XSLTTestFileSuite.java" line="168"/>
+</log4j:event>
+
+<log4j:event logger="utfx.framework" timestamp="1314967346248" level="ERROR" thread="main">
+<log4j:message><![CDATA[Could not create a file suite from /home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-to-smil30_test.xml]]></log4j:message>
+<log4j:throwable><![CDATA[utfx.framework.MalformedStylesheetException: javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.TestFileSuiteAssembler.assemble(TestFileSuiteAssembler.java:155)
+	at utfx.framework.XSLTTestFileSuite.suite(XSLTTestFileSuite.java:163)
+	at utfx.framework.XSLTTestDirectorySuite.suite(XSLTTestDirectorySuite.java:90)
+	at utfx.framework.XSLTTestDirectorySuite.suite(XSLTTestDirectorySuite.java:102)
+	at utfx.framework.XSLTRegressionTest.suite(XSLTRegressionTest.java:71)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at junit.runner.BaseTestRunner.getTest(BaseTestRunner.java:111)
+	at utfx.runner.TestRunner.start(TestRunner.java:307)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+Caused by: javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at net.sf.saxon.PreparedStylesheet.prepare(PreparedStylesheet.java:212)
+	at net.sf.saxon.TransformerFactoryImpl.newTemplates(TransformerFactoryImpl.java:131)
+	at net.sf.saxon.TransformerFactoryImpl.newTransformer(TransformerFactoryImpl.java:86)
+	at utfx.framework.TestFileSuiteAssembler.assemble(TestFileSuiteAssembler.java:153)
+	... 11 more
+]]></log4j:throwable>
+<log4j:locationInfo class="utfx.framework.XSLTTestFileSuite" method="suite" file="XSLTTestFileSuite.java" line="168"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1314967346250" level="INFO" thread="main">
+<log4j:message><![CDATA[logger created]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="&lt;init&gt;" file="ResultLogger.java" line="44"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1314967346270" level="INFO" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) started]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="startTest" file="ResultLogger.java" line="84"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1314967346271" level="ERROR" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) ERROR]]></log4j:message>
+<log4j:throwable><![CDATA[utfx.framework.MalformedTestException: /home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-join-adjacent_test.xml : javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.BadTDFTestCase.error(BadTDFTestCase.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at junit.framework.TestCase.runTest(TestCase.java:154)
+	at junit.framework.TestCase.runBare(TestCase.java:127)
+	at junit.framework.TestResult$1.protect(TestResult.java:106)
+	at junit.framework.TestResult.runProtected(TestResult.java:124)
+	at junit.framework.TestResult.run(TestResult.java:109)
+	at junit.framework.TestCase.run(TestCase.java:118)
+	at utfx.runner.TestRunner.runTestCase(TestRunner.java:236)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:246)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.doRun(TestRunner.java:154)
+	at utfx.runner.TestRunner.start(TestRunner.java:308)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+]]></log4j:throwable>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="addError" file="ResultLogger.java" line="54"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1314967346271" level="INFO" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) completed]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="endTest" file="ResultLogger.java" line="74"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1314967346272" level="INFO" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) started]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="startTest" file="ResultLogger.java" line="84"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1314967346272" level="ERROR" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) ERROR]]></log4j:message>
+<log4j:throwable><![CDATA[utfx.framework.MalformedTestException: /home/jostein/daisy-pipeline-modules/utilities/mediaoverlay-utils/tests/test/smil10-to-smil30_test.xml : javax.xml.transform.TransformerConfigurationException: Failed to compile stylesheet. 1 error detected.
+	at utfx.framework.BadTDFTestCase.error(BadTDFTestCase.java:42)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at junit.framework.TestCase.runTest(TestCase.java:154)
+	at junit.framework.TestCase.runBare(TestCase.java:127)
+	at junit.framework.TestResult$1.protect(TestResult.java:106)
+	at junit.framework.TestResult.runProtected(TestResult.java:124)
+	at junit.framework.TestResult.run(TestResult.java:109)
+	at junit.framework.TestCase.run(TestCase.java:118)
+	at utfx.runner.TestRunner.runTestCase(TestRunner.java:236)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:246)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.runSuite(TestRunner.java:261)
+	at utfx.runner.TestRunner.runTest(TestRunner.java:244)
+	at utfx.runner.TestRunner.doRun(TestRunner.java:154)
+	at utfx.runner.TestRunner.start(TestRunner.java:308)
+	at utfx.runner.TestRunner.main(TestRunner.java:328)
+]]></log4j:throwable>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="addError" file="ResultLogger.java" line="54"/>
+</log4j:event>
+
+<log4j:event logger="utfx.test_results" timestamp="1314967346272" level="INFO" thread="main">
+<log4j:message><![CDATA[error(utfx.framework.BadTDFTestCase) completed]]></log4j:message>
+<log4j:locationInfo class="utfx.printers.ResultLogger" method="endTest" file="ResultLogger.java" line="74"/>
+</log4j:event>
+

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0" xml:base="file:/tmp/jobContext8364290816736411028/">
+    <body id="mo1">
+        <par xmlns:epub="http://www.idpf.org/2007/ops" epub:type="title" id="mo1_par1">
+            <text id="mo1_par1_text" src="content_0.html#d1e15"/>
+            <audio clipBegin="0s" clipEnd="56.14s" id="mo1_par1_audio" src="Front_000.mp3"/>
+        </par>
+    </body>
+</smil>

@@ -1,0 +1,181 @@
+<!--SMIL 2.0 DTB-specific DTD Version 2005-2 2006-09-07
+file: dtbsmil-2005-2.dtd 
+
+Authors: Michael Moodie, Tom McLaughlin, Lloyd Rasmussen, Thomas Kjellberg Christensen, 
+Laust Skat Nielsen
+Change list:
+2002-02-12  M. Moodie. Dropped version attribute on smil element, as this attribute 
+is not present in SMIL specification.
+2004-02-19  L.S. Nielsen. made clipBegin and clipEnd REQUIRED on audio element
+2004-03-02  L.S. Nielsen. Dropped second statement in comment that preceeds declaration 
+of ELEMENT body, was previously: The dur attribute on the first seq is used by the player 
+to determine the length of the SMIL presentation. 
+2004-03-02  L.S. Nielsen. Changed file name and identifiers to match new version number (1.1.1)
+2004-03-31  T.K. Christensen Type is deleted as attribute in text, audio and img
+2004-04-02  T.K. Christensen attribute xmlns added to root element.  Added comment re 
+defaultState to customTest.
+2004-04-02  M. Moodie changed system identifier path to ".../z3986/2004"
+2004-06-24  L.S. Nielsen. Changed order of allowed elements in element head to match SMIL spec.
+2004-06-24  L.S. Nielsen. Allowed elements <par> and <seq> in element <a>
+2004-06-24  L.S. Nielsen. Added attribute 'external' to element <a>
+2004-06-24  L.S. Nielsen. Changed the order the attributes are mentioned in element <a> 
+to match the order they appear in the standard
+2004-07-06  M. Moodie.  Changed default for 'external' attribute on element <a> to 'false'.
+2004-07-07  M. Moodie.  Added end attribute on seq. Changed version number to 1.1.4.
+2004-07-27  M. Moodie.  Changed %uri; to %URI; in ATTLIST for smil. Added parens around content 
+model for meta.  Changed version number to 1.1.5
+2004-07-28  M. Moodie.  Changed content model of 'end' attribute on element <seq> to CDATA.  
+Changed version number to 1.1.6
+2004-09-15 T. McLaughlin. Added fill attribute to seq. Removed comment about nested pars. Changed version to 1.1.6a.
+2004-09-16 M. Moodie. Changed version to 1.2.0
+2005-06-26 M. Gylling. Changed pid, sid, ns uri, and filename for Z3986-2005
+2006-09-07 M. Gylling. Created version 2005-2. Added the type attribute to text, audio and img elements. 
+The type attribute was last seen in dtbsmil110.dtd, and is now reintroduced again after temporary absence 
+during the dtbsmil-2005-1 era.
+
+
+Description:  
+This DTD is intended for use only with DTB applications.  Documents valid to this DTD will 
+also be valid to the DTB SMIL Profile, but not necessarily vice versa, as this DTD contains 
+only a subset of the elements and attributes present in the DTB SMIL Profile.  This DTD 
+is in some areas more restrictive than the Profile (e.g., requiring IDs on some elements), 
+to enforce structure critical to the DTB application.
+
+The following identifiers apply to this DTD: 
+"-//NISO//DTD dtbsmil 2005-2//EN"
+"http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"
+-->
+
+
+<!ENTITY  % Core.attrib
+  "id  ID  #IMPLIED
+  class    CDATA    #IMPLIED
+  title    CDATA    #IMPLIED"
+>
+
+<!ENTITY % URI "CDATA">
+    <!-- a Uniform Resource Identifier, see [RFC2396] -->
+
+<!ELEMENT  smil  (head, body) >
+<!ATTLIST  smil
+  %Core.attrib;
+  xml:lang  NMTOKEN    #IMPLIED
+  xmlns         %URI;       #FIXED "http://www.w3.org/2001/SMIL20/"
+>
+
+<!ELEMENT  head  (meta*, (layout, meta*)?, (customAttributes,meta*)?) >
+<!ATTLIST  head
+  %Core.attrib;
+  xml:lang  NMTOKEN    #IMPLIED
+>
+
+
+<!ELEMENT  meta  EMPTY >
+<!ATTLIST  meta
+  name    CDATA    #REQUIRED
+  content    CDATA    #IMPLIED
+>
+
+<!-- only smil basic layout allowed; not CSS2. 
+     root-layout not included, is implementation dependent.
+-->
+<!ELEMENT  layout  (region)+ >
+<!ATTLIST  layout
+  %Core.attrib;
+  xml:lang  NMTOKEN    #IMPLIED
+>
+
+<!ELEMENT  region  EMPTY >
+<!ATTLIST  region
+  id        ID    #REQUIRED
+  height      CDATA    'auto'
+  width      CDATA    'auto'
+  bottom      CDATA    'auto'
+  top        CDATA    'auto'
+  left      CDATA    'auto'
+  right      CDATA    'auto'
+  fit        (hidden|fill|meet|scroll|slice)  'hidden'
+  z-index      CDATA    #IMPLIED
+  backgroundColor  CDATA    #IMPLIED
+  showBackground  (always|whenActive)  'always'
+>
+
+<!ELEMENT  customAttributes  (customTest)+ >
+<!ATTLIST  customAttributes
+  %Core.attrib;
+  xml:lang  NMTOKEN    #IMPLIED
+>
+
+<!-- The value of defaultState for a given customTest element must be the same in 
+all SMIL files of a DTB. -->
+  
+<!ELEMENT  customTest  EMPTY >
+<!ATTLIST  customTest
+  id        ID      #REQUIRED
+  class      CDATA    #IMPLIED
+  defaultState  (true|false)   'false'
+  title      CDATA    #IMPLIED
+  xml:lang    NMTOKEN    #IMPLIED
+  override    (visible|hidden) 'hidden'
+>
+
+<!-- Even though body functions as a seq, and you don't need a base set of seqs 
+wrapping the whole presentation, for DTB applications a base set of seqs should be used.  -->
+<!ELEMENT  body  (par|seq|text|audio|img|a)+ >
+<!ATTLIST  body
+  %Core.attrib;
+  xml:lang  NMTOKEN    #IMPLIED
+>
+
+<!ELEMENT  seq  (par|seq|text|audio|img|a)+ >
+<!ATTLIST  seq  
+  id    ID    #REQUIRED 
+  class    CDATA    #IMPLIED
+  customTest   IDREF    #IMPLIED
+  dur    CDATA    #IMPLIED
+  end    CDATA  #IMPLIED
+  fill	   (freeze|remove) 'remove'
+
+>
+
+<!ELEMENT  par  (seq|text|audio|img|a)+ >
+<!ATTLIST  par
+  id    ID    #REQUIRED
+  class    CDATA    #IMPLIED
+  customTest   IDREF    #IMPLIED
+>
+
+<!ELEMENT  text  EMPTY >
+<!ATTLIST  text
+  id		ID		#IMPLIED
+  region	CDATA	#IMPLIED
+  src		CDATA	#REQUIRED
+  type		CDATA	#IMPLIED
+>
+  
+<!ELEMENT  audio  EMPTY >
+<!ATTLIST  audio
+  id    ID    #IMPLIED
+  src    CDATA    #REQUIRED
+  clipBegin  CDATA    #REQUIRED
+  clipEnd    CDATA    #REQUIRED
+  region    CDATA    #IMPLIED
+  type		CDATA	#IMPLIED
+>
+
+<!ELEMENT  img  EMPTY >
+<!ATTLIST  img
+  id    	ID		#IMPLIED
+  region	CDATA	#IMPLIED
+  src		CDATA	#REQUIRED
+  type		CDATA	#IMPLIED
+>
+
+<!ELEMENT  a  (par|seq|text|audio|img)* >
+<!ATTLIST  a
+  %Core.attrib;
+  xml:lang  NMTOKEN    #IMPLIED
+  href    %URI;    #REQUIRED
+  external  (true|false)  'false'
+>
+
