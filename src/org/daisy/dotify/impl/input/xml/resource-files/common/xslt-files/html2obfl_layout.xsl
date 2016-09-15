@@ -213,4 +213,47 @@
 		</block>
 	</xsl:template>
 	
+	<!-- Lists -->
+	<xsl:template match="html:ul|html:ol" mode="apply-block-attributes">
+		<xsl:if test="not(ancestor::html:ul or ancestor::html:ol)">
+			<xsl:attribute name="margin-top">1</xsl:attribute>
+		</xsl:if>
+		<xsl:attribute name="margin-bottom">1</xsl:attribute>
+		<xsl:attribute name="margin-left">2</xsl:attribute>
+		<xsl:attribute name="list-type">
+			<xsl:choose>
+				<xsl:when test="ancestor::*[epub:types(.)=('index')]">pl</xsl:when>
+				<xsl:otherwise><xsl:value-of select="local-name()"/></xsl:otherwise>
+			</xsl:choose>
+		</xsl:attribute>
+		<xsl:if test="self::html:ol[@type]">
+			<xsl:attribute name="list-style"><xsl:value-of select="@type"/></xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="html:li" mode="apply-block-attributes">
+		<xsl:choose>
+			<xsl:when test="ancestor::*[epub:types(.)=('index')]"> <!-- parent::dtb:list/@type='pl' -->
+				<xsl:variable name="indent_max" select="max((parent::*/html:li)/string-length(substring-before(descendant::text()[1], ' '))) + 1"/>
+				<xsl:variable name="indent_min" select="min((parent::*/html:li)/string-length(substring-before(descendant::text()[1], ' '))) + 1"/>
+				<xsl:variable name="indent" select="if ($indent_min=$indent_max and $indent_min &lt; 5) then $indent_min else 3"/>
+				<xsl:attribute name="text-indent"><xsl:value-of select="$indent"/></xsl:attribute>
+				<xsl:attribute name="block-indent"><xsl:value-of select="$indent"/></xsl:attribute>
+			</xsl:when>
+			<xsl:when test="parent::html:ul">
+				<xsl:attribute name="first-line-indent">2</xsl:attribute>
+				<xsl:attribute name="text-indent">2</xsl:attribute>
+				<xsl:attribute name="block-indent">2</xsl:attribute>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:if test="parent::html:ol and @value">
+					<xsl:attribute name="list-item-label"><xsl:value-of select="@value"/></xsl:attribute>
+				</xsl:if>
+				<xsl:attribute name="first-line-indent">3</xsl:attribute>
+				<xsl:attribute name="text-indent">3</xsl:attribute>
+				<xsl:attribute name="block-indent">3</xsl:attribute>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
 </xsl:stylesheet>
