@@ -26,13 +26,13 @@ gradle_BEFORE :
 
 .PHONY : maven-install-all
 maven-install-all :
-	@mvn clean install -DskipTests
+	@mvn clean install -DskipTests -Dinvoker.skip=true
 
 .PHONY : maven-incremental
 maven-install-incremental : .maven-modules-with-changes
 	@if [ -s $< ]; then \
 		modules=$$(cat $< |paste -sd , -) && \
-		mvn --projects $$modules clean install -DskipTests; \
+		mvn --projects $$modules clean install -DskipTests -Dinvoker.skip=true; \
 	else \
 		echo "All modules are up to date" >&2; \
 	fi
