@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Dotify Hyhenation Tables" activate="activate">
+    <scr:implementation class="org.daisy.pipeline.braille.tex.TexHyphenatorTablePath"/>
+    <scr:service>
+        <scr:provide interface="org.daisy.pipeline.braille.tex.TexHyphenatorTablePath"/>
+    </scr:service>
+    <scr:property name="identifier" type="String" value="http://code.google.com/p/dotify/latex/rules/"/>
+    <scr:property name="path" type="String" value="/org/daisy/dotify/hyphenator/latex/rules/"/>
+    <scr:property name="manifest" type="String" value="/org/daisy/dotify/hyphenator/latex/rules/hyphenation_tables.xml"/>
+</scr:component>

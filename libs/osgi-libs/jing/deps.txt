@@ -1,0 +1,325 @@
+Public API:
+  org.relaxng.datatype 
+  org.relaxng.datatype.helpers
+
+  com.thaiopensource.util 
+  com.thaiopensource.validate 
+  com.thaiopensource.validate.auto 
+  com.thaiopensource.validate.nrl 
+  com.thaiopensource.validate.rng 
+  com.thaiopensource.validate.schematron 
+  com.thaiopensource.validate.xerces 
+  com.thaiopensource.xml.sax
+
+  com.thaiopensource.relaxng.jarv
+
+
+
+Import-Package
+  com.icl.saxon                         => only needed optionally for Schematron (OldSaxonSchemaReaderFactory)
+  javax.xml.parsers                     
+  javax.xml.transform                   
+  javax.xml.transform.dom               
+  javax.xml.transform.sax               
+  javax.xml.transform.stream            
+  javax.xml.validation                  
+  net.sf.saxon                          => only needed optionally for Schematron (NewSaxonSchemaReaderFactory)
+  org.apache.tools.ant                  => only needed for JingTask
+  org.apache.tools.ant.types            => only needed for JingTask
+  org.apache.xalan.processor            => needed for optionally Schematron (XalanSchemaReaderFactory)
+  org.apache.xerces.impl                => only needed for XML Schema validation (com.thaiopensource.validate.xerces)
+  org.apache.xerces.impl.validation     |
+  org.apache.xerces.impl.xpath.regex    | => also used for RegexImpl (declared as a Service)
+  org.apache.xerces.impl.xs             |
+  org.apache.xerces.parsers             |
+  org.apache.xerces.util                |
+  org.apache.xerces.xni                 |
+  org.apache.xerces.xni.grammars        |
+  org.apache.xerces.xni.parser          |
+  org.apache.xml.resolver               => only needed for OASIS XML Catalog support
+  org.apache.xml.resolver.helpers       |
+  org.apache.xml.resolver.readers       |
+  org.iso_relax.verifier                => only needed for JARV
+  org.w3c.dom.ls                        
+  org.xml.sax                           
+  org.xml.sax.ext                       
+  org.xml.sax.helpers                   
+
+
+
+[USES]
+com.thaiopensource.datatype             com.thaiopensource.util
+                                        org.relaxng.datatype
+com.thaiopensource.datatype.xsd         com.thaiopensource.datatype
+                                        com.thaiopensource.datatype.xsd.regex
+                                        com.thaiopensource.util
+                                        com.thaiopensource.xml.util
+                                        org.relaxng.datatype
+                                        org.relaxng.datatype.helpers
+com.thaiopensource.datatype.xsd.regex   
+com.thaiopensource.datatype.xsd.regex.java
+                                        com.thaiopensource.datatype.xsd.regex
+                                        com.thaiopensource.util
+com.thaiopensource.datatype.xsd.regex.xerces2
+                                        com.thaiopensource.datatype.xsd.regex
+                                        org.apache.xerces.impl.xpath.regex
+com.thaiopensource.relaxng              com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.auto
+                                        com.thaiopensource.validate.prop.rng
+                                        com.thaiopensource.validate.rng
+                                        com.thaiopensource.xml.sax
+                                        org.relaxng.datatype
+                                        org.xml.sax
+com.thaiopensource.relaxng.jaxp         com.thaiopensource.datatype.xsd
+                                        com.thaiopensource.datatype.xsd.regex
+                                        com.thaiopensource.datatype.xsd.regex.java
+                                        com.thaiopensource.relaxng.match
+                                        com.thaiopensource.relaxng.parse
+                                        com.thaiopensource.relaxng.parse.compact
+                                        com.thaiopensource.relaxng.parse.sax
+                                        com.thaiopensource.relaxng.pattern
+                                        com.thaiopensource.relaxng.sax
+                                        com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml.ls
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.util
+                                        com.thaiopensource.validation
+                                        com.thaiopensource.xml.sax
+                                        com.thaiopensource.xml.util
+                                        javax.xml.transform.sax
+                                        javax.xml.validation
+                                        org.relaxng.datatype
+                                        org.w3c.dom.ls
+                                        org.xml.sax
+com.thaiopensource.relaxng.match        com.thaiopensource.datatype
+                                        com.thaiopensource.relaxng.parse
+                                        com.thaiopensource.relaxng.parse.compact
+                                        com.thaiopensource.relaxng.parse.sax
+                                        com.thaiopensource.relaxng.pattern
+                                        com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.xml.util
+                                        javax.xml.transform.sax
+                                        org.relaxng.datatype
+                                        org.xml.sax
+com.thaiopensource.relaxng.parse        com.thaiopensource.resolver
+                                        org.relaxng.datatype
+                                        org.xml.sax
+com.thaiopensource.relaxng.parse.compactcom.thaiopensource.relaxng.parse
+                                        com.thaiopensource.resolver
+                                        com.thaiopensource.util
+                                        com.thaiopensource.xml.util
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.relaxng.parse.sax    com.thaiopensource.relaxng.parse
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.util
+                                        com.thaiopensource.xml.sax
+                                        com.thaiopensource.xml.util
+                                        javax.xml.transform.sax
+                                        org.relaxng.datatype
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.relaxng.pattern      com.thaiopensource.datatype
+                                        com.thaiopensource.relaxng.match
+                                        com.thaiopensource.relaxng.parse
+                                        com.thaiopensource.util
+                                        com.thaiopensource.xml.util
+                                        org.relaxng.datatype
+                                        org.relaxng.datatype.helpers
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.relaxng.sax          com.thaiopensource.relaxng.match
+                                        com.thaiopensource.relaxng.parse.sax
+                                        com.thaiopensource.relaxng.pattern
+                                        com.thaiopensource.xml.util
+                                        org.xml.sax
+com.thaiopensource.relaxng.util         com.thaiopensource.datatype
+                                        com.thaiopensource.resolver.catalog
+                                        com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.auto
+                                        com.thaiopensource.validate.prop.rng
+                                        com.thaiopensource.validate.prop.schematron
+                                        com.thaiopensource.validate.rng
+                                        com.thaiopensource.xml.sax
+                                        org.apache.tools.ant
+                                        org.apache.tools.ant.types
+                                        org.xml.sax
+com.thaiopensource.resolver             
+com.thaiopensource.resolver.catalog     com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.xml.sax
+                                        javax.xml.transform.sax
+                                        org.apache.xml.resolver
+                                        org.apache.xml.resolver.helpers
+                                        org.apache.xml.resolver.readers
+                                        org.xml.sax
+com.thaiopensource.resolver.load        com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.resolver.xml.transform
+                                        javax.xml.transform
+                                        org.xml.sax
+com.thaiopensource.resolver.xml         com.thaiopensource.resolver
+com.thaiopensource.resolver.xml.ls      com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml
+                                        org.w3c.dom.ls
+com.thaiopensource.resolver.xml.sax     com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml
+                                        javax.xml.parsers
+                                        javax.xml.transform.sax
+                                        org.xml.sax
+                                        org.xml.sax.ext
+com.thaiopensource.resolver.xml.transformcom.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml.sax
+                                        javax.xml.transform
+                                        javax.xml.transform.sax
+                                        org.xml.sax
+com.thaiopensource.util                 
+com.thaiopensource.validate             com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.resolver.xml.transform
+                                        com.thaiopensource.util
+                                        com.thaiopensource.validate.auto
+                                        com.thaiopensource.xml.sax
+                                        javax.xml.transform
+                                        javax.xml.transform.sax
+                                        org.xml.sax
+com.thaiopensource.validate.auto        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        javax.xml.transform.sax
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.validate.jarv        com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        javax.xml.transform.sax
+                                        org.iso_relax.verifier
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.validate.mns         com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.auto
+                                        com.thaiopensource.validate.prop.wrap
+                                        com.thaiopensource.validate.rng
+                                        com.thaiopensource.xml.sax
+                                        com.thaiopensource.xml.util
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.validate.nrl         com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.auto
+                                        com.thaiopensource.validate.prop.wrap
+                                        com.thaiopensource.validate.rng
+                                        com.thaiopensource.xml.sax
+                                        com.thaiopensource.xml.util
+                                        javax.xml.transform.sax
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.validate.nvdl        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.auto
+                                        com.thaiopensource.validate.prop.wrap
+                                        com.thaiopensource.validate.rng
+                                        com.thaiopensource.xml.sax
+                                        com.thaiopensource.xml.util
+                                        javax.xml.transform.sax
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.validate.picl        com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.auto
+                                        com.thaiopensource.validate.rng
+                                        com.thaiopensource.xml.sax
+                                        com.thaiopensource.xml.util
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.validate.prop.rng    com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        org.relaxng.datatype
+com.thaiopensource.validate.prop.schematroncom.thaiopensource.validate
+                                        com.thaiopensource.xml.util
+com.thaiopensource.validate.prop.wrap   com.thaiopensource.util
+                                        com.thaiopensource.xml.util
+com.thaiopensource.validate.rng         com.thaiopensource.relaxng.parse
+                                        com.thaiopensource.relaxng.parse.compact
+                                        com.thaiopensource.relaxng.parse.sax
+                                        com.thaiopensource.relaxng.pattern
+                                        com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.auto
+                                        com.thaiopensource.validate.prop.rng
+                                        com.thaiopensource.validate.rng.impl
+                                        javax.xml.transform.sax
+                                        org.xml.sax
+com.thaiopensource.validate.rng.impl    com.thaiopensource.datatype
+                                        com.thaiopensource.relaxng.parse
+                                        com.thaiopensource.relaxng.pattern
+                                        com.thaiopensource.relaxng.sax
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.auto
+                                        com.thaiopensource.validate.prop.rng
+                                        com.thaiopensource.validate.prop.wrap
+                                        javax.xml.transform.sax
+                                        org.relaxng.datatype
+                                        org.xml.sax
+com.thaiopensource.validate.schematron  com.icl.saxon
+                                        com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.resolver.xml.transform
+                                        com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.prop.rng
+                                        com.thaiopensource.validate.prop.schematron
+                                        com.thaiopensource.validate.rng
+                                        com.thaiopensource.xml.sax
+                                        javax.xml.transform
+                                        javax.xml.transform.sax
+                                        javax.xml.transform.stream
+                                        net.sf.saxon
+                                        org.apache.xalan.processor
+                                        org.xml.sax
+                                        org.xml.sax.helpers
+com.thaiopensource.validate.xerces      com.thaiopensource.util
+                                        com.thaiopensource.validate
+                                        com.thaiopensource.validate.prop.wrap
+                                        com.thaiopensource.xml.util
+                                        javax.xml.transform.sax
+                                        org.apache.xerces.impl
+                                        org.apache.xerces.impl.validation
+                                        org.apache.xerces.impl.xs
+                                        org.apache.xerces.parsers
+                                        org.apache.xerces.util
+                                        org.apache.xerces.xni
+                                        org.apache.xerces.xni.grammars
+                                        org.apache.xerces.xni.parser
+                                        org.xml.sax
+com.thaiopensource.validation           com.thaiopensource.resolver
+                                        com.thaiopensource.resolver.xml.ls
+                                        com.thaiopensource.resolver.xml.sax
+                                        com.thaiopensource.xml.sax
+                                        javax.xml.transform
+                                        javax.xml.transform.dom
+                                        javax.xml.transform.sax
+                                        javax.xml.transform.stream
+                                        javax.xml.validation
+                                        org.w3c.dom.ls
+                                        org.xml.sax
+                                        org.xml.sax.ext
+com.thaiopensource.xml.out              com.thaiopensource.util
+com.thaiopensource.xml.sax              com.thaiopensource.util
+                                        javax.xml.parsers
+                                        org.xml.sax
+                                        org.xml.sax.ext
+                                        org.xml.sax.helpers
+com.thaiopensource.xml.util             
+org.relaxng.datatype                    
+org.relaxng.datatype.helpers            org.relaxng.datatype

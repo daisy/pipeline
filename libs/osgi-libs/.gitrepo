@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/daisy/osgi-libs
+	branch = master
+	commit = 7c3d90cc20b75a35e5474263e59485ec591adf9c
+	parent = 61438555f5633967722c0a5e4de7e1524c78fb4f
+	cmdver = 0.3.0

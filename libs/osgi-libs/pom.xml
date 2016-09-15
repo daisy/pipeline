@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>2</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>org.daisy.libs</groupId>
+  <artifactId>libs-aggregator</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>DAISY Pipeline 2 :: Libraries Aggregator POM</name>
+  <description>Aggregator POM to build all the DAISY Pipeline 2</description>
+
+  <modules>
+    <!-- <module>brailleutils/core</module> -->
+    <!-- <module>brailleutils/catalog</module> -->
+    <!-- <module>calabash</module> -->
+    <!-- <module>dotify/dotify-translator</module> -->
+    <!-- <module>jing</module> -->
+    <!-- <module>jnaerator</module> -->
+    <!-- <module>jsslutils</module> -->
+    <module>logback-osgi-adapter</module>
+    <!-- <module>mysql</module> -->
+    <!-- <module>saxon</module> -->
+    <!-- <module>servlet-api</module> -->
+  </modules>
+
+</project>

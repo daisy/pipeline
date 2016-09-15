@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>2</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.libs</groupId>
+  <artifactId>dotify-translator</artifactId>
+  <version>1.0-alpha2-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DotifyTranslator</name>
+  <description>Dotify Braille Translation System is an open source Braille translator written in Java. DotifyTranslator contains the braille translator and hyphenation components that are used in Dotify.</description>
+  <url>http://code.google.com/p/dotify/</url>
+
+  <licenses>
+    <license>
+      <name>GNU Lesser General Public License</name>
+      <url>http://www.gnu.org/licenses/lgpl.html</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Joel Håkansson</name>
+      <organization>TPB - Talboks- och punktskriftsbiblioteket</organization>
+      <organizationUrl>http://www.tpb.se/</organizationUrl>
+    </developer>
+    <developer>
+      <name>Magnus Karlströms</name>
+      <organization>TPB - Talboks- och punktskriftsbiblioteket</organization>
+      <organizationUrl>http://www.tpb.se/</organizationUrl>
+    </developer>
+  </developers>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.googlecode.texhyphj</groupId>
+      <artifactId>texhyphj</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>3.8</version>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.8.0</version>
+    </dependency>
+  </dependencies>
+
+  <scm>
+    <connection>scm:svn:http://dotify.googlecode.com/svn/trunk/DotifyTranslator/src</connection>
+    <tag>HEAD</tag>
+  </scm>
+
+  <build>
+    <sourceDirectory>target/sources</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>target/sources</directory>
+        <filtering>false</filtering>
+        <includes>
+          <include>META-INF/services/*</include>
+          <include>**/*.xml</include>
+          <include>**/*.tex</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-scm-plugin</artifactId>
+        <version>1.7</version><!-- TODO remove when daisy-parent declares it in pluginManagement -->
+        <executions>
+          <execution>
+            <id>checkout</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>checkout</goal>
+            </goals>
+            <configuration>
+              <connectionType>connection</connectionType>
+              <scmVersion>151</scmVersion>
+              <scmVersionType>revision</scmVersionType>
+              <checkoutDirectory>${basedir}/target/sources</checkoutDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <!-- Include 2 classes from Pipeline 1 -->
+            <id>checkout-org-daisy-util</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>checkout</goal>
+            </goals>
+            <configuration>
+              <connectionUrl>scm:svn:http://svn.code.sf.net/p/daisymfc/code/tags/v20100125/src/org/daisy/util/i18n</connectionUrl>
+              <checkoutDirectory>${basedir}/target/sources/org/daisy/util/i18n</checkoutDirectory>
+              <includes>
+                CharUtils.java,
+                UCharReplacer.java
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Export-Package>org.daisy.dotify.text,org.daisy.dotify.translator,org.daisy.dotify.hyphenator</Export-Package>
+            <Import-Package>!org.apache.xerces.util,*,org.daisy.pipeline.braille.tex</Import-Package>
+            <SPI-Provider>javax.imageio.spi.ServiceRegistry</SPI-Provider>
+            <SPI-Consumer>javax.imageio.spi.ServiceRegistry#lookupProviders(java.lang.Class)</SPI-Consumer>
+            <Service-Component>OSGI-INF/hyphenation-tables.xml</Service-Component>
+            <_removeheaders>Private-Package,Include-Resource</_removeheaders>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+</project>

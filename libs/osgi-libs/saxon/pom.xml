@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.libs</groupId>
+  <artifactId>saxon-he</artifactId>
+  <version>9.5.1.5-p1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>Saxon HE (OSGi Bundle)</name>
+  <description>An OSGi bundle for Saxon-HE</description>
+  <url>http://www.saxonica.com/</url>
+  <organization>
+    <name>Saxonica</name>
+    <url>http://www.saxonica.com</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Mozilla Public License Version 1.0</name>
+      <url>http://www.mozilla.org/MPL/1.0/</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <issueManagement>
+    <system>Saxon Community</system>
+    <url>http://dev.saxonica.com/community/projects/saxon</url>
+  </issueManagement>
+  <inceptionYear>1999</inceptionYear>
+  <mailingLists>
+    <mailingList>
+      <name>User List</name>
+      <post>saxon-help@lists.sourceforge.net</post>
+      <archive>http://sourceforge.net/mailarchive/forum.php?forum_name=saxon-help</archive>
+    </mailingList>
+  </mailingLists>
+  <developers>
+    <developer>
+      <id>mike</id>
+      <name>Michael Kay</name>
+      <email>mike@saxonica.com</email>
+    </developer>
+    <developer>
+      <id>ond1</id>
+      <name>O'Neil Delpratt</name>
+      <email>onei@saxonica.com</email>
+    </developer>
+  </developers>
+
+  <properties>
+    <lib.groupId>net.sf.saxon</lib.groupId>
+    <lib.artifactId>Saxon-HE</lib.artifactId>
+    <lib.version>9.5.1-5</lib.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${lib.groupId}</groupId>
+      <artifactId>${lib.artifactId}</artifactId>
+      <version>${lib.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Bundle-Name>${project.name}</Bundle-Name>
+            <Project-Name>${project.name}</Project-Name>
+            <Bundle-SymbolicName>net.sf.saxon.saxon-he</Bundle-SymbolicName>
+            <Bundle-Version>${project.version}</Bundle-Version>
+            <Bundle-RequiredExecutionEnvironment>J2SE-1.5</Bundle-RequiredExecutionEnvironment>
+            <Main-Class>net.sf.saxon.Transform</Main-Class>
+            <Export-Package>
+              javax.xml.xquery.*,
+              net.sf.saxon.*;version=${project.version}
+            </Export-Package>
+            <Import-Package>
+              javax.xml.stream;version="1.0.1";resolution:=optional,
+              javax.xml.stream.events;version="1.0.1";resolution:=optional,
+              javax.xml.xquery;resolution:=optional,
+              org.apache.xml.resolver.*;resolution:=optional,
+              com.saxonica.*;resolution:=optional,
+              *
+            </Import-Package>
+            <Embed-Dependency>*;inline=META-INF/services/**|*w3c/**|javax/**|net/**|*.xml|*.xsl|*.properties</Embed-Dependency>
+            <_removeheaders>Built-By,Bnd-LastModified,Embed-Dependency,Include-Resource</_removeheaders>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>sonatype-oss-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>fetch-sources-and-javadocs</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>${lib.groupId}</groupId>
+                      <artifactId>${lib.artifactId}</artifactId>
+                      <version>${lib.version}</version>
+                      <classifier>javadoc</classifier>
+                      <outputDirectory>${project.build.directory}/javadoc</outputDirectory>
+                    </artifactItem>
+                    <artifactItem>
+                      <groupId>${lib.groupId}</groupId>
+                      <artifactId>${lib.artifactId}</artifactId>
+                      <version>${lib.version}</version>
+                      <classifier>sources</classifier>
+                      <outputDirectory>${project.build.directory}/sources</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources-and-javadocs</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <descriptors>
+                    <descriptor>sources.xml</descriptor>
+                    <descriptor>javadoc.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

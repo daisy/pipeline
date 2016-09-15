@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.libs</groupId>
+  <artifactId>jnaerator</artifactId>
+  <version>0.11-p1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>JNAerator (OSGi Bundle)</name>
+  <description>OSGi bundle for JNAerator</description>
+  <url>http://jnaerator.googlecode.com</url>
+
+  <organization>
+    <name>JNAerator</name>
+    <url>http://jnaerator.googlecode.com</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>LGPL</name>
+      <url>https://code.google.com/p/jnaerator/wiki/CreditsAndLicense</url>
+    </license>
+  </licenses>
+
+  <properties>
+    <lib1.version>0.11</lib1.version>
+    <lib1.groupId>com.nativelibs4java</lib1.groupId>
+    <lib1.artifactId>jnaerator-runtime</lib1.artifactId>
+    <lib2.version>0.11</lib2.version>
+    <lib2.groupId>com.nativelibs4java</lib2.groupId>
+    <lib2.artifactId>ochafik-util</lib2.artifactId>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${lib1.groupId}</groupId>
+      <artifactId>${lib1.artifactId}</artifactId>
+      <version>${lib1.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>${lib2.groupId}</groupId>
+      <artifactId>${lib2.artifactId}</artifactId>
+      <version>${lib2.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>4.0.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+	<groupId>org.apache.felix</groupId>
+	<artifactId>maven-bundle-plugin</artifactId>
+	<configuration>
+	  <instructions>
+	    <Embed-Dependency>jnaerator-runtime,ochafik-util</Embed-Dependency>
+	    <!-- The best practice is to use Import-Package instead of
+	         Require-Bundle, but the latter usually fails to load
+	         JNA's classes on time, probably because JNAerator
+	         satisfies itself the Import-Package dependencies by
+	         adding some classes in the com.sun.jna package. -->
+	    <Require-Bundle>com.sun.jna</Require-Bundle>
+	    <_exportcontents>*</_exportcontents>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>sonatype-oss-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>fetch-sources</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>${lib1.groupId}</groupId>
+                      <artifactId>${lib1.artifactId}</artifactId>
+                      <version>${lib1.version}</version>
+                      <classifier>sources</classifier>
+                      <outputDirectory>${project.build.directory}/sources</outputDirectory>
+                    </artifactItem>
+		    <artifactItem>
+		      <groupId>${lib2.groupId}</groupId>
+                      <artifactId>${lib2.artifactId}</artifactId>
+                      <version>${lib2.version}</version>
+                      <classifier>sources</classifier>
+                      <outputDirectory>${project.build.directory}/sources</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <descriptors>
+                    <descriptor>sources.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <includeDependencySources>true</includeDependencySources>
+                  <dependencySourceIncludes>
+                    <dependencySourceInclude>${lib1.groupId}:${lib1.artifactId}</dependencySourceInclude>
+		    <dependencySourceInclude>${lib2.groupId}:${lib2.artifactId}</dependencySourceInclude>
+                  </dependencySourceIncludes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

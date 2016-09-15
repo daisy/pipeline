@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>2</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.libs</groupId>
+  <artifactId>servlet-api</artifactId>
+  <version>2.5.0-2-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>JavaServlet(TM) Specification (OSGi Bundle)</name>
+  <description>An OSGi bundle for the JavaServlet(TM) Specification API</description>
+  <url>http://jcp.org/aboutJava/communityprocess/mrel/jsr154/index.html</url>
+  <organization>
+    <name>Java Community ProcessSM Program</name>
+    <url>http://jcp.org/en/home/index</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>SUN LIMITED EVALUATION LICENSE</name>
+      <url>http://download.oracle.com/otndocs/jcp/servlet-2.5-mrel-eval-oth-JSpec/servlet-2.5-mrel-eval-oth-JSpec-license.html</url>
+    </license>
+  </licenses>
+
+  <properties>
+    <lib.groupId>javax.servlet</lib.groupId>
+    <lib.artifactId>servlet-api</lib.artifactId>
+    <lib.version>2.5</lib.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>${lib.groupId}</groupId>
+      <artifactId>${lib.artifactId}</artifactId>
+      <version>${lib.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>javax.servlet</Bundle-SymbolicName>
+            <Export-Package>javax.*</Export-Package>
+            <Embed-Dependency>*;inline=true</Embed-Dependency>
+            <_removeheaders>Built-By,Bnd-LastModified,Embed-Dependency,Include-Resource,Private-Package</_removeheaders>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>sonatype-oss-release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>fetch-sources</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>${lib.groupId}</groupId>
+                      <artifactId>${lib.artifactId}</artifactId>
+                      <version>${lib.version}</version>
+                      <classifier>sources</classifier>
+                      <outputDirectory>${project.build.directory}/sources</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <descriptors>
+                    <descriptor>sources.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <includeDependencySources>true</includeDependencySources>
+                  <dependencySourceIncludes>
+                    <dependencySourceInclude>${lib.groupId}:${lib.artifactId}</dependencySourceInclude>
+                  </dependencySourceIncludes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
