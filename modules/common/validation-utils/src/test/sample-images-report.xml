@@ -1,0 +1,25 @@
+<d:errors xmlns:d="http://www.daisy.org/ns/pipeline/data">
+    <d:error type="file-not-found">
+        <d:desc>File not found</d:desc>
+        <d:file>file:/Users/marisa/Projects/pipeline2/pipeline-scripts/dtbook-validator/src/test/images/check.png</d:file>
+        <d:location href="file:/abcd"/>
+    </d:error>
+
+    <d:error type="file-not-found">
+        <d:desc>File not found</d:desc>
+        <d:file>file:/Users/marisa/Projects/pipeline2/pipeline-scripts/dtbook-validator/src/test/images/p278-001.png</d:file>
+        <d:location href="file:/Users/marisa/Projects/pipeline2/pipeline-scripts/dtbook-validator/src/test/MathML_Sample2.xml#ghGen21"/>
+    </d:error>
+
+    <d:error type="file-not-found">
+        <d:desc>File not found</d:desc>
+        <d:file>file:/Users/marisa/Projects/pipeline2/pipeline-scripts/dtbook-validator/src/test/images/p278-002.png</d:file>
+        <d:location href="file:/Users/marisa/Projects/pipeline2/pipeline-scripts/dtbook-validator/src/test/MathML_Sample2.xml#ghGen29"/>
+    </d:error>
+
+    <d:error type="file-not-found">
+        <d:desc>File not found</d:desc>
+        <d:file>file:/Users/marisa/Projects/pipeline2/pipeline-scripts/dtbook-validator/src/test/images/p278-003.png</d:file>
+        <d:location href="file:/Users/marisa/Projects/pipeline2/pipeline-scripts/dtbook-validator/src/test/MathML_Sample2.xml#ghGen37"/>
+    </d:error>
+</d:errors>

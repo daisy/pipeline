@@ -1,0 +1,41 @@
+# Magic data for MimeUtil (originally for UNIX file(1) command)
+#
+# This is an extension or override file for the Unic magic.mime
+# It is read in by MimeUtil class BEFORE the unix or included magic.mime
+# It has exactly the same format as the unix magic.mime
+#
+# The format is 4-5 columns:
+#    Column #1: byte number to begin checking from, ">" indicates continuation
+#    Column #2: type of data to match
+#    Column #3: contents of data to match
+#    Column #4: MIME type of result
+#    Column #5: MIME encoding of result (optional)
+#
+#	NOTE: 	This parser has extended functionality beyond the normal magic.mime
+#			field descriptions.
+#
+# This file shows the extension to the format used by magic.mime it works as follows
+#	The string type can be followed by the sequence '>#<' where the '#' represents a
+#	number of bytes to read.
+#	The '>' and '<' characters around the number mean BETWEEN.
+#		As an example of this feature see the #SVG file format description below....
+#------------------------------------------------------------------------------
+# Add any locally observed files here.
+
+0	byte	0x5A
+>3	byte	0xD3	application/vnd.ibm.modcap
+
+0	string	Z
+>2	beshort&0x00FF	0xD3	application/vnd.ibm.modcap
+
+#PNG Image Format
+0		string		\211PNG\r\n\032\n		image/png
+
+#SVG Image Format
+#	As the XML declaration in an XML file can be short or extended we cannot know
+#	exactly where the declaration ends i.e. how long it is,
+#	also it could be terminated with by new line(s) or a space(s).
+#	So the next line states that somewhere within the first 1K block of characters we
+#	should find the DOCTYPE declaration for the SVG.
+#	This DOCTYPE declaration should be within 1024 characters from the beginning of the file.
+0	string>1024<	\<!DOCTYPE\ svg\ PUBLIC\ "-//W3C//DTD\ SVG 	image/svg+xml

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+    <entry key="http://www.w3.org/1999/xhtml"                          value="application/xhtml+xml"/>
+    <entry key="http://www.idpf.org/2007/opf"                          value="application/oebps-package+xml"/>
+    <entry key="http://www.daisy.org/z3986/2005/dtbook/"               value="application/x-dtbook+xml"/>
+    <!-- SMIL 1.0 -->
+    <entry key="http://www.w3.org/TR/REC-smil"                         value="application/smil+xml"/>
+    <!-- SMIL 2.0 -->
+    <entry key="http://www.w3.org/2001/SMIL20/"                        value="application/smil+xml"/>
+    <!-- SMIL 2.0 -->
+    <entry key="http://www.w3.org/2001/SMIL20/Language"                value="application/smil+xml"/>
+    <!-- SMIL 2.1 -->
+    <entry key="http://www.w3.org/2005/SMIL21/"                        value="application/smil+xml"/>
+    <!-- SMIL 2.1 -->
+    <entry key="http://www.w3.org/2005/SMIL21/Language"                value="application/smil+xml"/>
+    <!-- SMIL 2.1 -->
+    <entry key="http://www.w3.org/2005/SMIL21/Mobile"                  value="application/smil+xml"/>
+    <!-- SMIL 2.1 -->
+    <entry key="http://www.w3.org/2005/SMIL21/ExtendedMobile"          value="application/smil+xml"/>
+    <!-- SMIL 2.1 -->
+    <entry key="http://www.w3.org/2005/SMIL21/MobileProfile"           value="application/smil+xml"/>
+    <!-- SMIL 2.1 -->
+    <entry key="http://www.w3.org/2005/SMIL21/BasicExclTimeContainers" value="application/smil+xml"/>
+    <!-- SMIL 3.0 -->
+    <entry key="http://www.w3.org/ns/SMIL"                             value="application/smil+xml"/>
+    <entry key="http://www.daisy.org/z3986/2005/ncx/"                  value="application/x-dtbncx+xml"/>
+    <entry key="http://www.w3.org/2000/svg"                            value="image/svg+xml"/>
+    <entry key="http://www.w3.org/ns/xproc"                            value="application/xproc+xml"/>
+    <entry key="http://www.w3.org/ns/xproc-step"                       value="application/xproc+xml"/>
+    <entry key="http://www.w3.org/ns/xproc-error"                      value="application/xproc+xml"/>
+    <entry key="http://www.w3.org/1999/XSL/Transform"                  value="application/xslt+xml"/>
+    <entry key="http://www.w3.org/1999/XSL/Format"                     value="application/xml"/>
+    <entry key="http://www.daisy.org/ns/z3986/authoring/"              value="application/z3998-auth+xml"/>
+    <entry key="http://www.daisy.org/ns/z3998/authoring/"              value="application/z3998-auth+xml"/>
+    <entry key="http://www.w3.org/XML/1998/namespace"                  value="application/xml"/>
+    <entry key="http://openebook.org/namespaces/oeb-package/1.0/"      value="application/oebps-package+xml"/>
+    <entry key="http://www.w3.org/2001/XML"                            value="application/xml"/>
+    <entry key="http://www.w3.org/ns/xproc-step"                       value="application/xproc+xml"/>
+    <entry key="urn:oasis:names:tc:entity:xmlns:xml:catalog"           value="application/xml"/>
+</map>

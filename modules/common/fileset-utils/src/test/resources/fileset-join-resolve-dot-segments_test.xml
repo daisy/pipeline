@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="utfx_tests.rnc" type="application/relax-ng-compact-syntax"?>
+<utfx:tests xmlns="http://www.w3.org/1999/xhtml" xmlns:utfx="http://utfx.org/test-definition" xmlns:d="http://www.daisy.org/ns/pipeline/data">
+   <utfx:stylesheet src="fileset-utils/xproc/fileset-join-resolve-dot-segments.xsl"/>
+   
+   <utfx:test>
+      <utfx:name>Test #1</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home"/>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home"/>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #2</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file:/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #3</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file://home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file://home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #4</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file:///home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:///home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #5</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #6</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file:///home/jostein/tmp/../file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:///home/jostein/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #7</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file:///home/jostein/tmp/../../file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:///home/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #8</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file:///home/jostein/tmp/../../sub/./folder/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:///home/sub/folder/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #9</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file:///home3/jostein/.tmp/../../sub/././../.././../.././.folder/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:///../../.folder/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #10</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file:///home3/jostein/a/b/c/d/e/f/.tmp/../../sub/././../.././../.././.folder/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:///home3/jostein/a/b/.folder/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #11</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file:/C/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/C/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #12</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file:///C/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:///C/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #13</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="\home\jostein\tmp\file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #14</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="http://www.example.net/dir/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="http://www.example.net/dir/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #15</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="http://www.example.net/dir/file.xml#position=5s"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="http://www.example.net/dir/file.xml#position=5s"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #16</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="C:\home\jostein\tmp\file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/C:/home/jostein/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #17</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/home/jostein/daisy-pipeline-modules/utilities/fileset-utils/tests/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #18</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="tmp/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/home/jostein/daisy-pipeline-modules/utilities/fileset-utils/tests/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #19</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="../tmp/file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/home/jostein/daisy-pipeline-modules/utilities/fileset-utils/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #20</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="tmp\file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/home/jostein/daisy-pipeline-modules/utilities/fileset-utils/tests/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Test #21</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="/home">
+               <d:file href="..\tmp\file.xml"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/home">
+               <d:file href="file:/home/jostein/daisy-pipeline-modules/utilities/fileset-utils/tmp/file.xml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+</utfx:tests>

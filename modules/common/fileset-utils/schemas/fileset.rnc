@@ -1,0 +1,29 @@
+namespace d = "http://www.daisy.org/ns/pipeline/data"
+namespace local = ""
+
+xmlid.attr = attribute xml:id { xsd:ID }
+xmlbase.attr = attribute xml:base { xsd:anyURI }
+common.attributes = xmlid.attr?, xmlbase.attr?, extension.attr*
+
+# ============================================================
+
+start = FileSet
+
+FileSet = 
+    element d:fileset {
+        common.attributes,
+        File*
+    }
+
+File =
+    element d:file {
+        common.attributes,
+        attribute href { xsd:anyURI },
+        attribute media-type { text }?
+    }
+    
+# ============================================================
+
+_any.attr = attribute * { text }
+extension.attr = attribute * - (local:* | xml:*) { text }
+Any = element * { (_any.attr | text | Any)* }

@@ -1,0 +1,21 @@
+<c:errors xmlns:c="http://www.w3.org/ns/xproc-step">
+    <c:error line="9" column="109">ro.sync.exml.o.c.i - key: invalid_element_value, args ["pagenum",
+        ; must be an integer]</c:error>
+    <c:error line="460" column="29">ro.sync.exml.o.c.i - key: out_of_context_element, args
+        ["level2", ; expected the element end-tag or element "a", "address", "annotation", "author",
+        "blockquote", "bridgehead", "byline", "cite", "covertitle", "dateline", "div", "dl",
+        "docauthor", "doctitle", "epigraph", "img", "imggroup", "kbd", "level3", "line",
+        "linegroup", "list", "m:math", "note", "p", "pagenum", "poem", "prodnote", "samp", "sidebar"
+        or "table"]</c:error>
+    <c:error line="461" column="82">ro.sync.exml.o.c.i - key: out_of_context_element, args ["h3", ;
+        expected element "a", "address", "annotation", "author", "blockquote", "bridgehead",
+        "byline", "cite", "covertitle", "dateline", "div", "dl", "docauthor", "doctitle",
+        "epigraph", "h2", "img", "imggroup", "kbd", "level3", "line", "linegroup", "list", "m:math",
+        "note", "p", "pagenum", "poem", "prodnote", "samp", "sidebar" or "table"]</c:error>
+    <c:error line="647" column="33">ro.sync.exml.o.c.i - key: out_of_context_element, args
+        ["level4", ; expected the element end-tag or element "a", "address", "annotation", "author",
+        "blockquote", "bridgehead", "byline", "cite", "covertitle", "dateline", "div", "dl",
+        "docauthor", "doctitle", "epigraph", "h2", "img", "imggroup", "kbd", "level3", "line",
+        "linegroup", "list", "m:math", "note", "p", "pagenum", "poem", "prodnote", "samp", "sidebar"
+        or "table"]</c:error>
+</c:errors>

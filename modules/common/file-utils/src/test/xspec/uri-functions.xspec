@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+    stylesheet="../../main/resources/xml/xslt/uri-functions.xsl">
+
+    <x:scenario pending="Not yet implemented" label="function tokenize-uri">
+        <x:call function="pf:tokenize-uri">
+            <x:param name="uri" select="''"/>
+        </x:call>
+        <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+    </x:scenario>
+
+    <x:scenario pending="Not yet implemented" label="function recompose-uri">
+        <x:call function="pf:recompose-uri">
+            <x:param name="tokens" select="''"/>
+        </x:call>
+        <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+    </x:scenario>
+
+    <x:scenario label="function is-absolute">
+        <x:call function="pf:is-absolute">
+            <x:param name="uri" select="''"/>
+        </x:call>
+        <x:scenario label="on an hierchical absolute (http) URI">
+            <x:call>
+                <x:param name="uri" select="'http://www.example.com/'"/>
+            </x:call>
+            <x:expect label="returns true" select="true()"/>
+        </x:scenario>
+        <x:scenario label="on an hierchical absolute (file) URI">
+            <x:call>
+                <x:param name="uri" select="'file:/a/path'"/>
+            </x:call>
+            <x:expect label="returns true" select="true()"/>
+        </x:scenario>
+        <x:scenario label="on an absolute scheme-less path">
+            <x:call>
+                <x:param name="uri" select="'/a/path'"/>
+            </x:call>
+            <x:expect label="returns true" select="true()"/>
+        </x:scenario>
+        <x:scenario label="on a relative path URI">
+            <x:call>
+                <x:param name="uri" select="'a/path'"/>
+            </x:call>
+            <x:expect label="returns false" select="false()"/>
+        </x:scenario>
+        <x:scenario label="on a data URI">
+            <x:call>
+                <x:param name="uri" select="'data:image/png;base64,ABCDEFG'"/>
+            </x:call>
+            <x:expect label="returns false" select="false()"/>
+        </x:scenario>
+        <x:scenario label="on an empty URI">
+            <x:call>
+                <x:param name="uri" select="''"/>
+            </x:call>
+            <x:expect label="returns false" select="false()"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="function is-relative">
+        <x:call function="pf:is-relative">
+            <x:param name="uri" select="''"/>
+        </x:call>
+        <x:scenario label="on a relative path URI">
+            <x:call>
+                <x:param name="uri" select="'a/path'"/>
+            </x:call>
+            <x:expect label="returns true" select="true()"/>
+        </x:scenario>
+        <x:scenario label="on an hierchical absolute (http) URI">
+            <x:call>
+                <x:param name="uri" select="'http://www.example.com/'"/>
+            </x:call>
+            <x:expect label="returns false" select="false()"/>
+        </x:scenario>
+        <x:scenario label="on an 'opaque' (file) URI">
+            <x:call>
+                <x:param name="uri" select="'file:a/path'"/>
+            </x:call>
+            <x:expect label="returns false" select="false()"/>
+        </x:scenario>
+        <x:scenario label="on an absolute scheme-less path">
+            <x:call>
+                <x:param name="uri" select="'/a/path'"/>
+            </x:call>
+            <x:expect label="returns false" select="false()"/>
+        </x:scenario>
+        <x:scenario label="on a data URI">
+            <x:call>
+                <x:param name="uri" select="'data:image/png;base64,ABCDEFG'"/>
+            </x:call>
+            <x:expect label="returns false" select="false()"/>
+        </x:scenario>
+        <x:scenario label="on an empty URI">
+            <x:call>
+                <x:param name="uri" select="''"/>
+            </x:call>
+            <x:expect label="returns true" select="true()"/>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="function get-scheme">
+        <x:call function="pf:get-scheme">
+            <x:param name="uri" select="''"/>
+        </x:call>
+        <x:scenario label="on an hierchical absolute (http) URI">
+            <x:call>
+                <x:param name="uri" select="'http://www.example.com/'"/>
+            </x:call>
+            <x:expect label="returns 'http'" select="'http'"/>
+        </x:scenario>
+        <x:scenario label="on an hierchical absolute (file) URI">
+            <x:call>
+                <x:param name="uri" select="'file:/a/path'"/>
+            </x:call>
+            <x:expect label="returns 'file'" select="'file'"/>
+        </x:scenario>
+        <x:scenario label="on an absolute scheme-less path">
+            <x:call>
+                <x:param name="uri" select="'/a/path'"/>
+            </x:call>
+            <x:expect label="returns an empty string" select="''"/>
+        </x:scenario>
+        <x:scenario label="on a relative path URI">
+            <x:call>
+                <x:param name="uri" select="'a/path'"/>
+            </x:call>
+            <x:expect label="returns an empty string" select="''"/>
+        </x:scenario>
+        <x:scenario label="on a data URI">
+            <x:call>
+                <x:param name="uri" select="'data:image/png;base64,ABCDEFG'"/>
+            </x:call>
+            <x:expect label="returns 'data'" select="'data'"/>
+        </x:scenario>
+        <x:scenario label="on an empty URI">
+            <x:call>
+                <x:param name="uri" select="''"/>
+            </x:call>
+            <x:expect label="returns an empty string" select="''"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario pending="Not yet implemented" label="function get-path">
+        <x:call function="pf:get-path">
+            <x:param name="uri" select="''"/>
+        </x:call>
+        <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+    </x:scenario>
+
+    <x:scenario pending="Not yet implemented" label="function get-extension">
+        <x:call function="pf:get-extension">
+            <x:param name="uri" select="''"/>
+        </x:call>
+        <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+    </x:scenario>
+
+    <x:scenario pending="Not yet implemented" label="function replace-path">
+        <x:call function="pf:replace-path">
+            <x:param name="uri" select="''"/>
+            <x:param name="path" select="''"/>
+        </x:call>
+        <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+    </x:scenario>
+
+    <x:scenario label="function normalize-uri">
+        <x:call function="pf:normalize-uri">
+            <x:param name="uri" select="''"/>
+        </x:call>
+        <x:scenario label="The scheme and host components of the URL are case-insensitive">
+            <x:call>
+                <x:param name="uri" select="'HTTP://www.Example.com/'"/>
+            </x:call>
+            <x:expect label="Converting the scheme and host to lower case" select="'http://www.example.com/'"/>
+        </x:scenario>
+        <x:scenario label="All letters within a percent-encoding triplet (e.g., &quot;%3A&quot;) are case-insensitive, and should be capitalized">
+            <x:call>
+                <x:param name="uri" select="'http://www.example.com/a%c2%b1b'"/>
+            </x:call>
+            <x:expect label="Capitalizing letters in escape sequences" select="'http://www.example.com/a%C2%B1b'"/>
+        </x:scenario>
+        <x:scenario label="For consistency, percent-encoded octets in the ranges of ALPHA (%41–%5A and %61–%7A), DIGIT (%30–%39), hyphen (%2D), period (%2E), underscore (%5F), or tilde (%7E) should not be created by URI producers and, when found in a URI, should be decoded to their corresponding unreserved characters by URI normalizers">
+            <x:call>
+                <x:param name="uri" select="'http://www.example.com/%7Eusername/'"/>
+            </x:call>
+            <x:expect label="Decoding percent-encoded octets of unreserved characters" select="'http://www.example.com/~username/'"/>
+        </x:scenario>
+        <x:scenario label="The default port (port 80 for the “http” scheme) may be removed from (or added to) a URL">
+            <x:call>
+                <x:param name="uri" select="'http://www.example.com:80/bar.html'"/>
+            </x:call>
+            <x:expect label="Removing the default port" select="'http://www.example.com/bar.html'"/>
+        </x:scenario>
+        <x:scenario label="The segments “..” and “.” can be removed from a URL according to the algorithm described in RFC 3986 (or a similar algorithm)">
+            <x:call>
+                <x:param name="uri" select="'http://www.example.com/../a/b/../c/./d.html'"/>
+            </x:call>
+            <x:expect label="Removing dot-segments" select="'http://www.example.com/a/c/d.html'"/>
+        </x:scenario>
+        
+        <!-- from UTF-X test document -->
+        <x:scenario label="Space and invalid characters">
+            <x:call><x:param name="uri" select="''"/></x:call>
+            <x:expect label="empty" select="''"/>
+        </x:scenario>
+        <!-- Space and invalid characters-->
+        <x:scenario label="Space and invalid characters">
+            <x:call><x:param name="uri" select="'  '"/></x:call>
+            <x:expect label="only spaces" select="''"/>
+        </x:scenario>
+        <x:scenario label="Space and invalid characters">
+            <x:call><x:param name="uri" select="'  http://www.google.com  '"/></x:call>
+            <x:expect label="space padded" select="'http://www.google.com'"/>
+        </x:scenario>
+        <x:scenario label="Space and invalid characters">
+            <x:call><x:param name="uri" select="'  http://www.ex ample.com  '"/></x:call>
+            <x:expect label="inlined space" select="'http://www.ex%20ample.com'"/>
+        </x:scenario>
+        <x:scenario label="Space and invalid characters">
+            <x:call><x:param name="uri" select="'http://www.ex%20ample.com'"/></x:call>
+            <x:expect label="percent encoded space" select="'http://www.ex%20ample.com'"/>
+        </x:scenario>
+        <!-- URI components are kept -->
+        <x:scenario label="URI components are kept">
+            <x:call><x:param name="uri" select="'file.xml?q=a#id'"/></x:call>
+            <x:expect label="query" select="'file.xml?q=a#id'"/>
+        </x:scenario>
+        <x:scenario label="URI components are kept">
+            <x:call><x:param name="uri" select="'mailto:johndoe@example.org'"/></x:call>
+            <x:expect label="mailto" select="'mailto:johndoe@example.org'"/>
+        </x:scenario>
+        <x:scenario label="URI components are kept">
+            <x:call><x:param name="uri" select="'http://www.google.com'"/></x:call>
+            <x:expect label="no trailing slash" select="'http://www.google.com'"/>
+        </x:scenario>
+        <x:scenario label="URI components are kept">
+            <x:call><x:param name="uri" select="'http://www.google.com/'"/></x:call>
+            <x:expect label="single trailing slash" select="'http://www.google.com/'"/>
+        </x:scenario>
+        <!-- empty authority is removed -->
+        <x:scenario label="empty authority is removed">
+            <x:call><x:param name="uri" select="'file:///'"/></x:call>
+            <x:expect label="file uri with no path" select="'file:/'"/>
+        </x:scenario>
+        <x:scenario label="empty authority is removed">
+            <x:call><x:param name="uri" select="'file:///dir/'"/></x:call>
+            <x:expect label="file uri with directory" select="'file:/dir/'"/>
+        </x:scenario>
+        <!-- '/' normalization -->
+        <x:scenario label="'/' normalization">
+            <x:call><x:param name="uri" select="'////dir////sub///'"/></x:call>
+            <x:expect label="multiple slashes" select="'/dir/sub/'"/>
+        </x:scenario>
+        <!-- dot segment normalization -->
+        <x:scenario label="dot segment normalization - single dot">
+            <x:call><x:param name="uri" select="'.'"/></x:call>
+            <x:expect label="single dot" select="''"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - single dot">
+            <x:call><x:param name="uri" select="'./dir'"/></x:call>
+            <x:expect label="in current dir" select="'dir'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - single dot">
+            <x:call><x:param name="uri" select="'././dir'"/></x:call>
+            <x:expect label="two single dots" select="'dir'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - single dot">
+            <x:call><x:param name="uri" select="'/.'"/></x:call>
+            <x:expect label="trailing dot in absolute path" select="'/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - single dot">
+            <x:call><x:param name="uri" select="'dir/.'"/></x:call>
+            <x:expect label="trailing dot in relative path" select="'dir/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - single dot">
+            <x:call><x:param name="uri" select="'dir/./.'"/></x:call>
+            <x:expect label="two trailing single dots" select="'dir/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - single dot">
+            <x:call><x:param name="uri" select="'dir/./././sub/'"/></x:call>
+            <x:expect label="multiple inline single dots" select="'dir/sub/'"/>
+        </x:scenario>
+        <!-- '..' normalization -->
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/.../sub'"/></x:call>
+            <x:expect label="three inline dots" select="'dir/.../sub'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'...'"/></x:call>
+            <x:expect label="three dots only" select="'...'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'..'"/></x:call>
+            <x:expect label="two dots only" select="'../'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'./..'"/></x:call>
+            <x:expect label="parent directory of current directory" select="'../'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'../.'"/></x:call>
+            <x:expect label="dot in parent directory" select="'../'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'.../..'"/></x:call>
+            <x:expect label="parent directory of '...'-directory" select="''"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/..'"/></x:call>
+            <x:expect label="parent directory" select="''"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/sub/..'"/></x:call>
+            <x:expect label="parent directory of subdirectory" select="'dir/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/../other/'"/></x:call>
+            <x:expect label="sibling directory" select="'other/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/dir/../../other/'"/></x:call>
+            <x:expect label="sibling directory of grandparent directory" select="'other/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/sub/sub/../..'"/></x:call>
+            <x:expect label="grandparent directory of grandchild directory" select="'dir/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/sub/../'"/></x:call>
+            <x:expect label="parent directory of child directory with trailing slash" select="'dir/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/sub/./../'"/></x:call>
+            <x:expect label="parent directory of the current directory relative to child directory with trailing slash" select="'dir/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/sub/.././../'"/></x:call>
+            <x:expect label="parent directory of dot relative to parent directory of child directory with trailing slash" select="''"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'dir/../..'"/></x:call>
+            <x:expect label="grandparent directory of directory" select="'../'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'/..'"/></x:call>
+            <x:expect label="parent directory of absolute top level directory" select="'/'"/>
+        </x:scenario>
+        <x:scenario label="dot segment normalization - multiple dots">
+            <x:call><x:param name="uri" select="'/dir/../..'"/></x:call>
+            <x:expect label="grandparent directory of child directory of absolute top level directory" select="'/'"/>
+        </x:scenario>
+        <!-- normalization combined -->
+        <x:scenario label="multiple dots and slashes">
+            <x:call><x:param name="uri" select="'///././//dir////sub///'"/></x:call>
+            <x:expect label="grandchild directory with multipls dots and slashes" select="'/dir/sub/'"/>
+        </x:scenario>
+    </x:scenario>
+    
+    
+    <x:scenario label="function normalize-uri – two args">
+        <x:call function="pf:normalize-uri">
+            <x:param name="uri" select="''"/>
+            <x:param name="fragment" select="true()"/>
+        </x:call>
+        <x:scenario label="when the URI has a fragment and the second arg is true">
+            <x:call>
+                <x:param name="uri" select="'file.xml?q=a#id'"/>
+                <x:param name="fragment" select="true()"/>
+            </x:call>
+            <x:expect label="the fragment is kept" select="'file.xml?q=a#id'"/>
+        </x:scenario>
+        <x:scenario label="when the URI has a fragment and the second arg is false">
+            <x:call>
+                <x:param name="uri" select="'file.xml?q=a#id'"/>
+                <x:param name="fragment" select="false()"/>
+            </x:call>
+            <x:expect label="the fragment is discarded" select="'file.xml?q=a'"/>
+        </x:scenario>
+        <x:scenario label="when the URI is just a fragment ID and the second arg is false">
+            <x:call>
+                <x:param name="uri" select="'#id'"/>
+                <x:param name="fragment" select="false()"/>
+            </x:call>
+            <x:expect label="the fragment is discarded" select="''"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="function relativize-uri">
+        <x:call function="pf:relativize-uri">
+            <x:param name="uri" select="''"/>
+            <x:param name="base" select="''"/>
+        </x:call>
+        
+        <!-- from UTF-X test document -->
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'file:/dir/'"/>
+            </x:call>
+            <x:expect label="test #1" select="'file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'file:/dir/otherfile.xml'"/>
+            </x:call>
+            <x:expect label="test #2" select="'file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'file:/dir/otherfile.xml#fragment'"/>
+            </x:call>
+            <x:expect label="test #3" select="'file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'file:/dir/file.xml'"/>
+            </x:call>
+            <x:expect label="test #4" select="'file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml#fragment'"/>
+                <x:param name="base" select="'file:/dir/'"/>
+            </x:call>
+            <x:expect label="test #5" select="'file.xml#fragment'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'file:/dir'"/>
+            </x:call>
+            <x:expect label="test #6" select="'dir/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'file:/'"/>
+            </x:call>
+            <x:expect label="test #7" select="'dir/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/file.xml'"/>
+                <x:param name="base" select="'file:/'"/>
+            </x:call>
+            <x:expect label="test #8" select="'file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'file:/dir/sub/'"/>
+            </x:call>
+            <x:expect label="test #9" select="'../file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/sub/file.xml'"/>
+                <x:param name="base" select="'file:/dir/other/other/'"/>
+            </x:call>
+            <x:expect label="test #10" select="'../../sub/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/sub/file.xml'"/>
+                <x:param name="base" select="'file:/dir/other/other/file.xml'"/>
+            </x:call>
+            <x:expect label="test #11" select="'../../sub/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/sub/file.xml'"/>
+                <x:param name="base" select="'file:/dir/'"/>
+            </x:call>
+            <x:expect label="test #12" select="'sub/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/anydir/../anyother/sub/../../thedir/file.xml'"/>
+                <x:param name="base" select="'file:/dir/sub/sub/'"/>
+            </x:call>
+            <x:expect label="test #13" select="'../../thedir/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'http://example.org/file.xml'"/>
+                <x:param name="base" select="'file:/dir/'"/>
+            </x:call>
+            <x:expect label="test #14" select="'http://example.org/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'http://example.org/file.xml'"/>
+                <x:param name="base" select="'http://example.net/'"/>
+            </x:call>
+            <x:expect label="test #15" select="'http://example.org/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'relative/'"/>
+            </x:call>
+            <x:expect label="test #16" select="'file:/dir/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'relative/file.xml'"/>
+                <x:param name="base" select="'file:/home/user/dir/'"/>
+            </x:call>
+            <x:expect label="test #17" select="'relative/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'../relative/file.xml'"/>
+                <x:param name="base" select="'file:/home/user/dir/'"/>
+            </x:call>
+            <x:expect label="test #18" select="'../relative/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="''"/>
+                <x:param name="base" select="'file:/dir/'"/>
+            </x:call>
+            <x:expect label="test #19" select="''"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="''"/>
+                <x:param name="base" select="''"/>
+            </x:call>
+            <x:expect label="test #20" select="''"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="function normalize-path">
+        <x:call function="pf:normalize-path">
+            <x:param name="path" select="''"/>
+        </x:call>
+        
+        <x:scenario label="The segments “..” and “.” can be removed from a path according to the algorithm described in RFC 3986 (or a similar algorithm)">
+            <x:call>
+                <x:param name="path" select="'/../a/b/../c/./d.html'"/>
+            </x:call>
+            <x:expect label="Removing dot-segments" select="'/a/c/d.html'"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario pending="Not yet implemented" label="function relativize-path">
+        <x:call function="pf:relativize-path">
+            <x:param name="path" select="''"/>
+            <x:param name="base" select="''"/>
+        </x:call>
+        <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+    </x:scenario>
+
+    <x:scenario label="function longest-common-uri">
+        <x:call function="pf:longest-common-uri">
+            <x:param name="uris" select="''"/>
+        </x:call>
+        
+        <!-- from UTF-X test document -->
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('file:/tmp/home/user/dir1/dir2/file.xml', 'file:/tmp/home/user/dir3/dir4')"/></x:call>
+            <x:expect label="two absolute uris" select="'file:/tmp/home/user/'"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('file:/tmp/home/user/dir1/dir2/file.xml', 'file:/tmp/home/user/dir1/dir2/file.xml')"/></x:call>
+            <x:expect label="two absolute uris #2" select="'file:/tmp/home/user/dir1/dir2/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('dir1/dir2/file.xml', 'dir1/dir4')"/></x:call>
+            <x:expect label="two relative uris" select="'dir1/'"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('dir1/dir2/file.xml', 'dir3/dir4')"/></x:call>
+            <x:expect label="two relative uris #2" select="''"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('dir1/dir2/file.xml', 'dir1/dir2/file.xml')"/></x:call>
+            <x:expect label="two relative uris #3" select="'dir1/dir2/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('http://www.example.com/', 'file:/tmp/home/user/')"/></x:call>
+            <x:expect label="two absolute uris with different schemes" select="''"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('http://www.example.com/', 'http://www.example.com/')"/></x:call>
+            <x:expect label="two identical absolute uris" select="'http://www.example.com/'"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('http:///www.example.com/', 'http://///www.example.com//')"/></x:call>
+            <x:expect label="two absolute uris that normalize to the same uri" select="'http://www.example.com/'"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('file:/tmp/home/user/dir1', 'file://tmp/home/user/dir2')"/></x:call>
+            <x:expect label="two absolute uris #3" select="'file:/tmp/home/user/'"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('file:/tmp/home/user/dir1/dir2/file.xml', 'file:/tmp/home/user/dir2/dir3', 'file:/tmp/home/user/dir4/dir5')"/></x:call>
+            <x:expect label="three absolute uris" select="'file:/tmp/home/user/'"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="function unescape-uri">
+        <x:call function="pf:unescape-uri"/>
+        <x:scenario label="empty">
+            <x:call>
+                <x:param name="in" select="''"/>
+            </x:call>
+            <x:expect label="empty" select="''"/>
+        </x:scenario>
+        <x:scenario label="lone percent">
+            <x:call>
+                <x:param name="in" select="'%25'"/>
+            </x:call>
+            <x:expect label="lone percent" select="'%'"/>
+        </x:scenario>
+        <x:scenario label="double percent">
+            <x:call>
+                <x:param name="in" select="'%25%25'"/>
+            </x:call>
+            <x:expect label="double percent" select="'%%'"/>
+        </x:scenario>
+        <x:scenario label="whitespace">
+            <x:call>
+                <x:param name="in" select="'%20%0d%0a%09'"/>
+            </x:call>
+            <x:expect label="whitespace" select="' &#x0d;&#x0a;&#x09;'"/>
+        </x:scenario>
+        <x:scenario label="unreserved">
+            <x:call>
+                <x:param name="in" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~'"/>
+            </x:call>
+            <x:expect label="unreserved" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.~'"/>
+        </x:scenario>
+        <x:scenario label="long">
+            <x:call>
+                <x:param name="in" select="string-join(for $i in (1 to 1000) return '%20xyz%20','')"/>
+            </x:call>
+            <x:expect label="long" select="string-join(for $i in (1 to 1000) return ' xyz ','')"/>
+        </x:scenario>
+        <x:scenario label="ampersand">
+            <x:call>
+                <x:param name="in" select="'%26'"/>
+            </x:call>
+            <x:expect label="ampersand" select="'&amp;'"/>
+        </x:scenario>
+        <x:scenario label="symbols">
+            <x:call>
+                <x:param name="in" select="'%21%22%23%24%25%26%27%28%29%2a%2b%2c-.%2f%3a%3b%3c%3d%3e%3f%40%5b%5c%5d%5e_%60%7b%7c%7d~'"/>
+            </x:call>
+            <x:expect label="symbols" select="concat('!&quot;#$%&amp;',&quot;&apos;&quot;,'()*+,-./:;&lt;=&gt;?@[\]^_`{|}~')"/>
+        </x:scenario>
+        <x:scenario label="unicode decode">
+            <x:call>
+                <x:param name="in" select="'%e2%80%9cAha%e2%80%9d'"/>
+            </x:call>
+            <x:expect label="unicode decode" select="'“Aha”'"/>
+        </x:scenario>
+        <x:scenario label="upper hex">
+            <x:call>
+                <x:param name="in" select="'%2A%2B%2C%3D%3E%2F'"/>
+            </x:call>
+            <x:expect label="upper hex" select="'*+,=&gt;/'"/>
+        </x:scenario>
+        <x:scenario label="lower hex">
+            <x:call>
+                <x:param name="in" select="'%2a%2b%2c%3d%3e%2f'"/>
+            </x:call>
+            <x:expect label="lower hex" select="'*+,=&gt;/'"/>
+        </x:scenario>
+        <!-- TODO: what to do with characters not allowed in XML? don't decode? remove? -->
+    </x:scenario>
+
+    <x:scenario pending="Not yet implemented" label="function utf8-decode">
+        <x:call function="pf:utf8-decode">
+            <x:param name="bytes" select="''"/>
+        </x:call>
+        <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+    </x:scenario>
+
+</x:description>

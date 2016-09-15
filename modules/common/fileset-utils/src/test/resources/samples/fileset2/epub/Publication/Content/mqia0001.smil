@@ -1,0 +1,18 @@
+<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
+   <body id="mo1">
+      <par id="mo1_par1">
+         <text src="mqia0001.xhtml#dol_1_1_uafu_0001" id="mo1_par1_text"/>
+         <audio clipBegin="0s" clipEnd="4.109s" id="mo1_par1_audio" src="1_Jamen__Benny.mp3"/>
+      </par>
+      <par id="mo1_par2">
+         <text src="mqia0001.xhtml#dol_1_1_pkrg_0002" id="mo1_par2_text"/>
+         <audio clipBegin="4.109s" clipEnd="9.256s" id="mo1_par2_audio"
+                src="1_Jamen__Benny.mp3"/>
+      </par>
+      <par id="mo1_par3">
+         <text src="mqia0001.xhtml#dol_1_1_pkrg_0003" id="mo1_par3_text"/>
+         <audio clipBegin="9.256s" clipEnd="15.416s" id="mo1_par3_audio"
+                src="1_Jamen__Benny.mp3"/>
+      </par>
+   </body>
+</smil>

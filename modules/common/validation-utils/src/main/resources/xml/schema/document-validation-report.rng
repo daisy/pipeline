@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar ns="http://www.daisy.org/ns/pipeline/data" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <ref name="document-validation-report"/>
+  </start>
+  <define name="document-validation-report">
+    <element name="document-validation-report">
+      <ref name="document-info"/>
+      <ref name="reports"/>
+    </element>
+  </define>
+  <define name="document-info">
+    <element name="document-info">
+      <interleave>
+        <optional>
+          <!-- anything special to say about the document that needs to be used later in the validation chain? 
+               e.g. dtbook-validator uses this for @internal='mathml' to indicate the presence of mathml
+          -->
+          <attribute name="internal">
+            <data type="string"/>
+          </attribute>
+        </optional>
+        <element name="document-name">
+          <text/>
+        </element>
+        <element name="document-type">
+          <text/>
+        </element>
+        <element name="document-path">
+          <data type="anyURI"/>
+        </element>
+        <element name="error-count">
+          <data type="nonNegativeInteger"/>
+        </element>
+        <optional>
+          <element name="report-path">
+            <data type="anyURI"/>
+          </element>
+        </optional>
+        <optional>
+          <ref name="properties"/>
+        </optional>
+      </interleave>  
+    </element>
+  </define>
+  <define name="properties">
+    <element name="properties">
+      <zeroOrMore>
+        <ref name="property"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="property">
+    <element name="property">
+      <attribute name="name">
+        <data type="string"/>
+      </attribute>
+      <choice>
+        <attribute name="content">
+          <data type="string"/>
+        </attribute>
+        <oneOrMore>
+          <ref name="property"/>
+        </oneOrMore>
+      </choice>
+    </element>
+  </define>
+  <define name="reports">
+    <element name="reports">
+      <zeroOrMore>
+        <ref name="report"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="report">
+    <element name="report">
+      <interleave>
+        <attribute name="type">
+          <!-- for instance: relaxng, schematron, filecheck -->
+        </attribute>
+        <oneOrMore>
+          <choice>
+            <ref name="report-content"/>
+            <ref name="svrl-report"/>
+          </choice>
+        </oneOrMore>
+      </interleave>
+    </element>
+  </define>
+  <define name="report-content">
+    <choice>
+      <element name="errors">
+        <zeroOrMore>
+          <ref name="error"/>
+        </zeroOrMore>
+      </element>
+      <group>
+        <zeroOrMore>
+          <ref name="message"/>
+        </zeroOrMore>
+      </group>
+    </choice>
+  </define>
+  <define name="message">
+    <element name="message">
+      <attribute name="severity">
+        <choice>
+          <value>debug</value>
+          <value>info</value>
+          <value>warn</value>
+          <value>error</value>
+        </choice>
+      </attribute>
+      <ref name="message.content"/>
+    </element>
+  </define>
+  <define name="message.content">
+    <interleave>
+      <attribute name="type">
+        <!-- for instance: relaxng, file-not-found, file-not-wellformed -->
+      </attribute>
+      <element name="desc">
+        <text/>
+      </element>
+      <optional>
+        <element name="file">
+          <data type="anyURI"/>
+        </element>
+      </optional>
+      <element name="location">
+        <choice>
+          <interleave>
+            <attribute name="line">
+              <data type="integer"/>
+            </attribute>
+            <attribute name="column">
+              <data type="integer"/>
+            </attribute>
+          </interleave>
+          <attribute name="href">
+            <data type="anyURI"/>
+          </attribute>
+        </choice>
+      </element>
+      <optional>
+        <element name="was">
+          <choice>
+            <text/>
+            <ref name="anyElement"/>
+          </choice>
+        </element>
+      </optional>
+      <optional>
+        <element name="expected">
+          <choice>
+            <text/>
+            <ref name="anyElement"/>
+          </choice>
+        </element>
+      </optional>
+    </interleave>
+  </define>
+  <define name="anyElement">
+    <element>
+      <anyName/>
+      <zeroOrMore>
+        <choice>
+          <attribute>
+            <anyName/>
+          </attribute>
+          <text/>
+          <ref name="anyElement"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  
+  <!-- non-standard report stuff -->
+  <define name="error">
+    <element name="error">
+      <ref name="message.content"/>
+    </element>
+  </define>
+  <define name="svrl-report">
+    <ref name="anyElement"/>
+  </define>
+</grammar>

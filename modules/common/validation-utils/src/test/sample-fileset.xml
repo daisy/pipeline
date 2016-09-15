@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data" 
+    xml:base="file:/Users/marisa/Projects/pipeline2/pipeline-modules-common/validation-utils/src/test/">
+    <!-- an existing file -->
+    <d:file href="sample-images-report.xml"/>
+    
+    <!-- a non-existant file -->
+    <d:file href="does-not-exist.xml">
+        <d:ref href="file://Some/other/file.html#footnotes1"/>
+        <d:ref href="file://Some/other/file.html#footnotes2"/>
+    </d:file>
+    
+    <!-- malformed XML -->
+    <d:file href="badxml.xml"/>
+</d:fileset>

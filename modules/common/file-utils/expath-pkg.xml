@@ -1,0 +1,13 @@
+<package name="org.daisy.pipeline.modules.file-utils" xmlns="http://expath.org/ns/pkg">
+	<module version="1.0.0" name="file-utils">
+		<title>File Utilities</title>
+		<xproc>
+			<import-uri>http://www.daisy.org/pipeline/modules/file-utils/library.xpl</import-uri>
+			<file>xproc/file-library.xpl</file>
+		</xproc>
+		<xslt>
+			<import-uri>http://www.daisy.org/pipeline/modules/file-utils/xslt/relative-uri.xsl</import-uri>
+			<file>xslt/relative-uri.xsl</file>
+		</xslt>
+	</module>
+</package>

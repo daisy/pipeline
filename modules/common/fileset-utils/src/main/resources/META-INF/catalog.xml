@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"
+        uri="../xml/xproc/fileset-library.xpl"/>
+   <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/fileset-to-odf-manifest.xsl"
+        uri="../xml/xslt/fileset-to-odf-manifest.xsl"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
+</catalog>

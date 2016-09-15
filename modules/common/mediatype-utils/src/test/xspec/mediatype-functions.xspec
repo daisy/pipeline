@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+    stylesheet="../../main/resources/xml/xslt/mediatype-functions.xsl">
+    
+    <x:scenario label="Calling pf:is-xml">
+        <x:call function="pf:is-xml"/>
+        <x:scenario label="on 'text/plain'">
+            <x:call>
+                <x:param name="media-type" select="'text/plain'"/>
+            </x:call>
+            <x:expect label="should return false" select="false()"/>
+        </x:scenario>
+        <x:scenario label="on 'text/xml'">
+            <x:call>
+                <x:param name="media-type" select="'text/xml'"/>
+            </x:call>
+            <x:expect label="should return true" select="true()"/>
+        </x:scenario>
+        <x:scenario label="on 'application/anything+xml'">
+            <x:call>
+                <x:param name="media-type" select="'application/anything+xml'"/>
+            </x:call>
+            <x:expect label="should return true" select="true()"/>
+        </x:scenario>
+        <x:scenario label="on 'application/smil'">
+            <x:call>
+                <x:param name="media-type" select="'application/smil'"/>
+            </x:call>
+            <x:expect label="should return true" select="true()"/>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="Calling pf:is-html">
+        <x:call function="pf:is-html"/>
+        <x:scenario label="on 'text/plain'">
+            <x:call>
+                <x:param name="media-type" select="'text/plain'"/>
+            </x:call>
+            <x:expect label="should return false" select="false()"/>
+        </x:scenario>
+        <x:scenario label="on 'text/html'">
+            <x:call>
+                <x:param name="media-type" select="'text/html'"/>
+            </x:call>
+            <x:expect label="should return true" select="true()"/>
+        </x:scenario>
+        <x:scenario label="on 'application/xhtml+xml'">
+            <x:call>
+                <x:param name="media-type" select="'application/xhtml+xml'"/>
+            </x:call>
+            <x:expect label="should return true" select="true()"/>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="Calling pf:is-text">
+        <x:call function="pf:is-text"/>
+        <x:scenario label="on 'text/xml'">
+            <x:call>
+                <x:param name="media-type" select="'text/xml'"/>
+            </x:call>
+            <x:expect label="should return false" select="false()"/>
+        </x:scenario>
+        <x:scenario label="on 'text/plain'">
+            <x:call>
+                <x:param name="media-type" select="'text/plain'"/>
+            </x:call>
+            <x:expect label="should return true" select="true()"/>
+        </x:scenario>
+        <x:scenario label="on 'text/anything'">
+            <x:call>
+                <x:param name="media-type" select="'text/anything'"/>
+            </x:call>
+            <x:expect label="should return true" select="true()"/>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="Calling pf:mediatype-from-extension">
+        <x:call function="pf:mediatype-from-extension"/>
+        <x:scenario label="on 'xml'">
+            <x:call>
+                <x:param name="extension" select="'xml'"/>
+            </x:call>
+            <x:expect label="should return 'application/xml'" select="'application/xml'"/>
+        </x:scenario>
+        <x:scenario label="on 'jpg'">
+            <x:call>
+                <x:param name="extension" select="'jpg'"/>
+            </x:call>
+            <x:expect label="should return 'image/jpeg'" select="'image/jpeg'"/>
+        </x:scenario>
+        <x:scenario label="on 'unknown'">
+            <x:call>
+                <x:param name="extension" select="'unknown'"/>
+            </x:call>
+            <x:expect label="should return 'application/octet-stream'" select="'application/octet-stream'"/>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="Calling pf:mediatype-from-namespace">
+        <x:call function="pf:mediatype-from-namespace"/>
+        <x:scenario label="on 'http://www.w3.org/1999/xhtml'">
+            <x:call>
+                <x:param name="extension" select="'http://www.w3.org/1999/xhtml'"/>
+            </x:call>
+            <x:expect label="should return 'application/xhtml+xml'" select="'application/xhtml+xml'"/>
+        </x:scenario>
+        <x:scenario label="on 'http://www.w3.org/2000/svg'">
+            <x:call>
+                <x:param name="extension" select="'http://www.w3.org/2000/svg'"/>
+            </x:call>
+            <x:expect label="should return 'image/svg+xml'" select="'image/svg+xml'"/>
+        </x:scenario>
+        <x:scenario label="on 'unknown'">
+            <x:call>
+                <x:param name="extension" select="'unknown'"/>
+            </x:call>
+            <x:expect label="should return 'application/xml'" select="'application/xml'"/>
+        </x:scenario>
+    </x:scenario>
+    
+</x:description>

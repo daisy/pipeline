@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="utfx_tests.rnc" type="application/relax-ng-compact-syntax"?>
+<utfx:tests xmlns="http://www.w3.org/1999/xhtml" xmlns:utfx="http://utfx.org/test-definition" xmlns:d="http://www.daisy.org/ns/pipeline/data">
+   <utfx:stylesheet src="fileset-utils/xproc/fileset-join.xsl"/>
+
+   <utfx:test>
+      <utfx:name>Single-in, single-out - not wrapped</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset xml:base="file:/Users/me/dir/"/>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/Users/me/dir/"/>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+
+   <utfx:test>
+      <utfx:name>Single-in, single-out - wrapped</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset>
+               <d:fileset xml:base="file:/Users/me/dir/"/>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/Users/me/dir/"/>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+
+   <utfx:test>
+      <utfx:name>Append subfolder</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset>
+               <d:fileset xml:base="file:/Users/me/dir/">
+                  <d:file href="doc1.html"/>
+               </d:fileset>
+               <d:fileset xml:base="file:/Users/me/dir/subdir/">
+                  <d:file href="doc2.html"/>
+               </d:fileset>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/Users/me/dir/">
+               <d:file href="doc1.html"/>
+               <d:file href="subdir/doc2.html"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Append parent folder</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset>
+               <d:fileset xml:base="file:/Users/me/dir/">
+                  <d:file href="doc1.html"/>
+               </d:fileset>
+               <d:fileset xml:base="file:/Users/me/">
+                  <d:file href="doc2.html"/>
+               </d:fileset>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/Users/me/">
+               <d:file href="dir/doc1.html"/>
+               <d:file href="doc2.html"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Append sibling folder</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset>
+               <d:fileset xml:base="file:/Users/me/dir/">
+                  <d:file href="doc1.html"/>
+               </d:fileset>
+               <d:fileset xml:base="file:/Users/me/other/">
+                  <d:file href="doc2.html"/>
+               </d:fileset>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/Users/me/">
+               <d:file href="dir/doc1.html"/>
+               <d:file href="other/doc2.html"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Multiple slashes (file://, file:/// etc)</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset>
+               <d:fileset xml:base="file:///Users/me/dir/">
+                  <d:file href="doc1.html"/>
+               </d:fileset>
+               <d:fileset xml:base="file:///Users/me/dir/subdir/">
+                  <d:file href="doc2.html"/>
+               </d:fileset>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:///Users/me/dir/">
+               <d:file href="doc1.html"/>
+               <d:file href="subdir/doc2.html"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>First fileset defines base protocol/domain/number of slashes</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset>
+               <d:fileset xml:base="http:///example.net/dir/">
+                  <d:file href="image.png"/>
+               </d:fileset>
+               <d:fileset xml:base="http://example.net/">
+                  <d:file href="favicon.ico"/>
+               </d:fileset>
+               <d:fileset xml:base="file:///Users/me/dir/">
+                  <d:file href="document.xhtml"/>
+               </d:fileset>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="http:///example.net/">
+               <d:file href="dir/image.png"/>
+               <d:file href="favicon.ico"/>
+               <d:file href="file:/Users/me/dir/document.xhtml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Absolute URIs are made relative when possible</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset>
+               <d:fileset xml:base="file:/Users/me/dir/">
+                  <d:file href="file:/Users/me/dir/document.xhtml"/>
+               </d:fileset>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:/Users/me/dir/">
+               <d:file href="document.xhtml"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+   
+   <utfx:test>
+      <utfx:name>Complete</utfx:name>
+      <utfx:assert-equal>
+         <utfx:source>
+            <d:fileset>
+               <d:fileset xml:base="file:///Users/me/dir/">
+                  <d:file href="doc1.html"/>
+                  <d:file href="folder/doc2.html"/>
+               </d:fileset>
+               <d:fileset xml:base="http://example.net/">
+                  <d:file href="favicon.ico"/>
+               </d:fileset>
+               <d:fileset xml:base="file:/Users/me/dir/">
+                  <d:file href="img.png"/>
+               </d:fileset>
+               <d:fileset xml:base="file:///Users/other/">
+                  <d:file href="other.txt"/>
+               </d:fileset>
+            </d:fileset>
+         </utfx:source>
+         <utfx:expected>
+            <d:fileset xml:base="file:///Users/">
+               <d:file href="me/dir/doc1.html"/>
+               <d:file href="me/dir/folder/doc2.html"/>
+               <d:file href="http://example.net/favicon.ico"/>
+               <d:file href="me/dir/img.png"/>
+               <d:file href="other/other.txt"/>
+            </d:fileset>
+         </utfx:expected>
+      </utfx:assert-equal>
+   </utfx:test>
+
+</utfx:tests>

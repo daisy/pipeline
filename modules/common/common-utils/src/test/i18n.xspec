@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../main/resources/xml/xslt/i18n.xsl" xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+    xmlns:d="http://www.daisy.org/ns/pipeline/data">
+
+    <x:scenario label="Scenario for testing pf:i18n-translate">
+        <x:scenario label="when specifying en-GB">
+            <x:call function="pf:i18n-translate">
+                <x:param name="string" select="'Guide'"/>
+                <x:param name="language" select="'en-GB'"/>
+                <x:param name="maps">
+                    <i18n xmlns="http://www.daisy.org/ns/pipeline/data">
+                        <translation string="Guide">
+                            <text xml:lang="id">Panduan</text>
+                            <text xml:lang="en">Guide</text>
+                            <text xml:lang="sv">Guide</text>
+                            <text xml:lang="sl">Vodnik</text>
+                        </translation>
+                    </i18n>
+                    <i18n xmlns="http://www.daisy.org/ns/pipeline/data">
+                        <translation string="Guide">
+                            <text xml:lang="en-US">Guide (US)</text>
+                            <text xml:lang="en-GB">Guide (GB)</text>
+                        </translation>
+                    </i18n>
+                </x:param>
+            </x:call>
+            <x:expect label="The result should be 'Guide (GB)'" select="'Guide (GB)'"/>
+        </x:scenario>
+
+        <x:scenario label="when specifying en">
+            <x:call function="pf:i18n-translate">
+                <x:param name="string" select="'Guide'"/>
+                <x:param name="language" select="'en'"/>
+                <x:param name="maps">
+                    <i18n xmlns="http://www.daisy.org/ns/pipeline/data">
+                        <translation string="Guide">
+                            <text xml:lang="id">Panduan</text>
+                            <text xml:lang="en">Guide</text>
+                            <text xml:lang="sv">Guide</text>
+                            <text xml:lang="sl">Vodnik</text>
+                        </translation>
+                    </i18n>
+                    <i18n xmlns="http://www.daisy.org/ns/pipeline/data">
+                        <translation string="Guide">
+                            <text xml:lang="en-US">Guide (US)</text>
+                            <text xml:lang="en-GB">Guide (GB)</text>
+                        </translation>
+                    </i18n>
+                </x:param>
+            </x:call>
+            <x:expect label="The result should be 'Guide'" select="'Guide'"/>
+        </x:scenario>
+
+        <x:scenario label="when specifying a non-existing language">
+            <x:call function="pf:i18n-translate">
+                <x:param name="string" select="'Guide'"/>
+                <x:param name="language" select="'nonexisting'"/>
+                <x:param name="maps">
+                    <i18n xmlns="http://www.daisy.org/ns/pipeline/data">
+                        <translation string="Guide">
+                            <text xml:lang="id">Panduan</text>
+                            <text xml:lang="en">Guide</text>
+                            <text xml:lang="sv">Guide</text>
+                            <text xml:lang="sl">Vodnik</text>
+                        </translation>
+                    </i18n>
+                    <i18n xmlns="http://www.daisy.org/ns/pipeline/data">
+                        <translation string="Guide">
+                            <text xml:lang="en-US">Guide (US)</text>
+                            <text xml:lang="en-GB">Guide (GB)</text>
+                        </translation>
+                    </i18n>
+                </x:param>
+            </x:call>
+            <x:expect label="The result should be the first translation available, in this case 'Panduan'" select="'Panduan'"/>
+        </x:scenario>
+        
+        <x:scenario label="when specifying a non-existing id">
+            <x:call function="pf:i18n-translate">
+                <x:param name="id" select="'NonExisting'"/>
+                <x:param name="language" select="'en'"/>
+                <x:param name="maps">
+                    <i18n xmlns="http://www.daisy.org/ns/pipeline/data">
+                        <translation string="Guide">
+                            <text xml:lang="id">Panduan</text>
+                            <text xml:lang="en">Guide</text>
+                            <text xml:lang="sv">Guide</text>
+                            <text xml:lang="sl">Vodnik</text>
+                        </translation>
+                    </i18n>
+                    <i18n xmlns="http://www.daisy.org/ns/pipeline/data">
+                        <translation string="Guide">
+                            <text xml:lang="en-US">Guide (US)</text>
+                            <text xml:lang="en-GB">Guide (GB)</text>
+                        </translation>
+                    </i18n>
+                </x:param>
+            </x:call>
+            <x:expect label="The result should be an empty string" select="''"/>
+        </x:scenario>
+    </x:scenario>
+
+</x:description>
