@@ -15,7 +15,9 @@ Committers are of course also free to make pull requests to the individual repos
 The tree below shows the structure of the project:
 
 - [assembly](https://github.com/daisy/pipeline-assembly)
+- [cli](https://github.com/daisy/pipeline-cli-go)
 - [framework](https://github.com/daisy/pipeline-framework)
+- [gui](https://github.com/daisy/pipeline-gui)
 - libs
   - [braille-css](https://github.com/snaekobbi/braille-css)
   - dotify
@@ -30,6 +32,9 @@ The tree below shows the structure of the project:
   - [scripts](https://github.com/daisy/pipeline-scripts)
   - [scripts-utils](https://github.com/daisy/pipeline-scripts-utils)
   - [tts](https://github.com/daisy/pipeline-mod-tts)
+- updater
+  - [cli](https://github.com/daisy/pipeline-updater)
+  - [gui](https://github.com/daisy/pipeline-updater-gui)
 - utils
   - [build-utils](https://github.com/daisy/pipeline-build-utils)
 - [webui](https://github.com/daisy/pipeline-webui)

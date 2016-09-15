@@ -27,6 +27,10 @@
     <module>modules/scripts</module>
     <module>modules/tts</module>
     <module>modules/audio</module>
+    <module>cli</module>
+    <module>gui</module>
+    <module>updater/cli</module>
+    <module>updater/gui</module>
   </modules>
   
   <build>

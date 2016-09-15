@@ -127,7 +127,8 @@ gradle-install : .gradle-install
 		dest="$(MVN_WORKSPACE)/$$(echo $$g |tr . /)/$$a/$$v" && \
 		if [[ ! -e "$$dest/$$a-$$v.pom" ]] || \
 		   [[ ! -e "$$dest/maven-metadata-local.xml" ]] || \
-		   [[ -n $$(find $$module/{pom.xml,src} -newer "$$dest/maven-metadata-local.xml" 2>/dev/null) ]]; then \
+		   [[ -n $$(find $$module/{pom.xml,src} -newer "$$dest/maven-metadata-local.xml" 2>/dev/null) ]] || \
+		   [[ -n $$(find $$module -name '*.go' -newer "$$dest/maven-metadata-local.xml" 2>/dev/null) ]]; then \
 			touch $$module/.maven-{install,test}; \
 		fi \
 	done

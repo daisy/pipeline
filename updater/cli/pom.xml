@@ -25,18 +25,17 @@
         <version>1.5.0</version>
         <executions>
           <execution>
+            <id>make-binaries</id>
             <phase>compile</phase>
             <goals>
               <goal>exec</goal>
             </goals>
+            <configuration>
+              <executable>make</executable>
+              <commandlineArgs>dist</commandlineArgs>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <executable>make</executable>
-          <arguments>
-            <argument>dist</argument>
-          </arguments>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>com.soebes.maven.plugins</groupId>
