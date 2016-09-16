@@ -632,10 +632,13 @@ public class BlockProperties implements Cloneable {
 		int result = 1;
 		result = prime * result + blockIndent;
 		result = prime * result + ((breakBefore == null) ? 0 : breakBefore.hashCode());
+		result = prime * result + ((defaultListLabel == null) ? 0 : defaultListLabel.hashCode());
 		result = prime * result + ((keep == null) ? 0 : keep.hashCode());
 		result = prime * result + keepWithNext;
 		result = prime * result + keepWithNextSheets;
 		result = prime * result + keepWithPreviousSheets;
+		result = prime * result + ((listItemLabel == null) ? 0 : listItemLabel.hashCode());
+		result = prime * result + ((listNumberFormat == null) ? 0 : listNumberFormat.hashCode());
 		result = prime * result + ((listType == null) ? 0 : listType.hashCode());
 		result = prime * result + ((margin == null) ? 0 : margin.hashCode());
 		result = prime * result + orphans;
@@ -667,6 +670,13 @@ public class BlockProperties implements Cloneable {
 		if (breakBefore != other.breakBefore) {
 			return false;
 		}
+		if (defaultListLabel == null) {
+			if (other.defaultListLabel != null) {
+				return false;
+			}
+		} else if (!defaultListLabel.equals(other.defaultListLabel)) {
+			return false;
+		}
 		if (keep != other.keep) {
 			return false;
 		}
@@ -677,6 +687,16 @@ public class BlockProperties implements Cloneable {
 			return false;
 		}
 		if (keepWithPreviousSheets != other.keepWithPreviousSheets) {
+			return false;
+		}
+		if (listItemLabel == null) {
+			if (other.listItemLabel != null) {
+				return false;
+			}
+		} else if (!listItemLabel.equals(other.listItemLabel)) {
+			return false;
+		}
+		if (listNumberFormat != other.listNumberFormat) {
 			return false;
 		}
 		if (listType != other.listType) {
