@@ -14,7 +14,6 @@
 	xmlns:axsl="http://www.w3.org/1999/XSL/TransformAlias">
 
 	<xsl:import href="dtbook2obfl_layout.xsl" />
-	<xsl:import href="book-formats.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:namespace-alias stylesheet-prefix="axsl" result-prefix="xsl"/>
 	<xsl:param name="toc-indent-multiplier" select="1"/>

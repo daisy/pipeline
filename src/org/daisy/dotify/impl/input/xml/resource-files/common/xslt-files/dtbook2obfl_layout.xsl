@@ -29,6 +29,7 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" xmlns:obfl="http://www.daisy.org/ns/2011/obfl" exclude-result-prefixes="dtb xs obfl" xmlns="http://www.daisy.org/ns/2011/obfl">
 
 	<xsl:import href="dtbook2obfl_base.xsl"/>
+	<xsl:import href="book-formats.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:param name="page-width" select="10" as="xs:integer"/>
 	<xsl:param name="page-height" select="10" as="xs:integer"/>
@@ -36,13 +37,10 @@
 	<xsl:param name="outer-margin" select="0" as="xs:integer"/>
 	<xsl:param name="row-spacing" select="1" as="xs:decimal"/>
 	<xsl:param name="duplex" select="true()" as="xs:boolean"/>
-	<xsl:param name="colophon-metadata-placement" select="'end'"/>
-	<xsl:param name="rear-cover-placement" select="'end'"/>
 	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string"/> <!-- empty-line or indent -->
 	
-	<xsl:param name="l10nrearjacketcopy" select="'Rear jacket copy'"/>
+	
 	<xsl:param name="l10nimagedescription" select="'Image description'"/>
-	<xsl:param name="l10ncolophon" select="'Colophon'"/>
 	<xsl:param name="l10ncaption" select="'Caption'"/>
 	
 	<xsl:template name="insertMetadata">
@@ -344,27 +342,11 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 	</xsl:template>
 	
 	<xsl:template name="insertColophon">
-		<xsl:for-each select="//dtb:level1[@class='colophon']">
-			<sequence master="plain" initial-page-number="1">
-				<block padding-bottom="1"><xsl:value-of select="concat(':: ', $l10ncolophon, ' ')"/><leader position="100%" pattern=":"/></block>
-				<block>
-					<xsl:apply-templates select="node()"/>
-				</block>
-				<block><leader position="100%" pattern=":"/></block>
-			</sequence>
-		</xsl:for-each>
+		<xsl:copy-of select="obfl:insertColophon(//dtb:level1[@class='colophon'])"></xsl:copy-of>
 	</xsl:template>
 	
 	<xsl:template name="insertBackCoverTextAndRearJacketCopy">
-		<xsl:for-each select="//dtb:level1[@class='backCoverText' or @class='rearjacketcopy']">
-			<sequence master="plain" initial-page-number="1">
-				<block padding-bottom="1"><xsl:value-of select="concat(':: ', $l10nrearjacketcopy, ' ')"/><leader position="100%" pattern=":"/></block>
-				<block>
-					<xsl:apply-templates select="node()"/>
-				</block>
-				<block><leader position="100%" pattern=":"/></block>
-			</sequence>
-		</xsl:for-each>
+		<xsl:copy-of select="obfl:insertBackCoverTextAndRearJacketCopy(//dtb:level1[@class='backCoverText' or @class='rearjacketcopy'])"/>
 	</xsl:template>
 	
 	<!-- Override default processing -->

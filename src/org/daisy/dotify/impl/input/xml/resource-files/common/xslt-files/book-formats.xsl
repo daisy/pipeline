@@ -20,6 +20,8 @@
 	<xsl:param name="show-print-page-breaks" as="xs:boolean" select="false()"/>
 	<xsl:param name="matrix-table-columns-max" select="10"/>
 	<xsl:param name="staircase-table-columns-max" select="10"/>
+	<xsl:param name="colophon-metadata-placement" select="'end'"/>
+	<xsl:param name="rear-cover-placement" select="'end'"/>
 
 	<xsl:param name="l10nLang" select="'en'"/>
 	<xsl:param name="l10nTocHeadline" select="'Table Of Contents'"/>
@@ -32,7 +34,9 @@
 	<xsl:param name="l10nEndnotesPageStart" select="'Page {0}'"/>
 	<xsl:param name="l10nEndnotesPageHeader" select="'Footnotes'"/>
 	<xsl:param name="l10ntablepart" select="'Table part'"/>
-		
+	<xsl:param name="l10nrearjacketcopy" select="'Rear jacket copy'"/>
+	<xsl:param name="l10ncolophon" select="'Colophon'"/>
+
 	<xsl:function name="obfl:insertLayoutMaster">
 		<xsl:param name="footnotesInFrontMatter" as="xs:integer"/> 
 		<!-- count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]) -->
@@ -389,6 +393,32 @@
 				<parameter name="l10ntablepart" value="{$l10ntablepart}"/>
 			</rendering-scenario>
 		</renderer>
+	</xsl:function>
+	
+	<xsl:function name="obfl:insertColophon">
+		<xsl:param name="node" required="yes"/>
+		<xsl:for-each select="$node">
+			<sequence master="plain" initial-page-number="1">
+				<block padding-bottom="1"><xsl:value-of select="concat(':: ', $l10ncolophon, ' ')"/><leader position="100%" pattern=":"/></block>
+				<block>
+					<xsl:apply-templates select="node()"/>
+				</block>
+				<block><leader position="100%" pattern=":"/></block>
+			</sequence>
+		</xsl:for-each>
+	</xsl:function>
+	
+	<xsl:function name="obfl:insertBackCoverTextAndRearJacketCopy">
+		<xsl:param name="node" required="yes"/>
+		<xsl:for-each select="$node">
+			<sequence master="plain" initial-page-number="1">
+				<block padding-bottom="1"><xsl:value-of select="concat(':: ', $l10nrearjacketcopy, ' ')"/><leader position="100%" pattern=":"/></block>
+				<block>
+					<xsl:apply-templates select="node()"/>
+				</block>
+				<block><leader position="100%" pattern=":"/></block>
+			</sequence>
+		</xsl:for-each>
 	</xsl:function>
 
 </xsl:stylesheet>

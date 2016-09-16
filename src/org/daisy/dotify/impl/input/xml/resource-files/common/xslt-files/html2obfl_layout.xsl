@@ -146,20 +146,40 @@
 	</xsl:template>
 	
 	<xsl:template match="html:body">
-		<xsl:if test="*[epub:types(.)=('cover','frontmatter')]">
+		<xsl:if test="$colophon-metadata-placement='begin'">
+			<xsl:call-template name="insertColophon"/>
+		</xsl:if>
+		<xsl:if test="$rear-cover-placement='begin'">
+			<xsl:call-template name="insertCoverCopy"/>
+		</xsl:if>
+		<xsl:if test="*[epub:types(.)=('frontmatter') and not(epub:types(.)=('cover', 'colophon'))]">
 			<sequence master="front" initial-page-number="1">
-				<xsl:apply-templates select="*[epub:types(.)=('cover','frontmatter')]"/>
+				<xsl:apply-templates select="*[epub:types(.)=('frontmatter') and not(epub:types(.)=('cover', 'colophon'))]"/>
 			</sequence>
 		</xsl:if>
 		<sequence master="main" initial-page-number="1">
 			<!-- Put everything that isn't specifically front- or backmatter here. -->
-			<xsl:apply-templates select="text()[normalize-space(.)!='']|processing-instruction()|comment()|*[not(epub:types(.)=('cover', 'frontmatter', 'backmatter'))]"/>
+			<xsl:apply-templates select="text()[normalize-space(.)!='']|processing-instruction()|comment()|*[not(epub:types(.)=('frontmatter', 'cover', 'colophon', 'backmatter'))]"/>
 		</sequence>
 		<xsl:if test="*[epub:types(.)=('backmatter')]">
 			<sequence master="main">
 				<xsl:apply-templates select="*[epub:types(.)=('backmatter')]"/>
 			</sequence>
 		</xsl:if>
+		<xsl:if test="not($colophon-metadata-placement='begin')">
+			<xsl:call-template name="insertColophon"/>
+		</xsl:if>
+		<xsl:if test="not($rear-cover-placement='begin')">
+			<xsl:call-template name="insertCoverCopy"/>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template name="insertColophon">
+		<xsl:copy-of select="obfl:insertColophon(//html:*[epub:types(.)=('colophon')])"/>
+	</xsl:template>
+	
+	<xsl:template name="insertCoverCopy">
+		<xsl:copy-of select="obfl:insertBackCoverTextAndRearJacketCopy(//html:*[epub:types(.)=('cover')])"/>
 	</xsl:template>
 	
 	<xsl:template match="html:h1" mode="apply-block-attributes">
