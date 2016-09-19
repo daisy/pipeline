@@ -26,7 +26,7 @@
 
   <modules>
     <module>bom</module>
-    <!-- <module>parent</module> -->
+    <module>parent</module>
     <!-- <module>xmlcatalog</module> -->
     <!-- <module>calabash-adapter</module> -->
     <!-- <module>calabash-custom-steps</module> -->
