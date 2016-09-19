@@ -194,6 +194,7 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
 #generated-volume-toc::-obfl-on-toc-start::after {
     display: block;
     content: ' Band';
+    text-align: center;
     margin-top:1;
     margin-bottom:1;
     &::before {
