@@ -27,7 +27,7 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>pax-exam-helper</artifactId>
       <scope>test</scope>
-      <version>1.8-SNAPSHOT</version>
+      <version>1.9</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
