@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:daisy/pipeline-mod-audio.git
+	branch = master
+	commit = 41bdda282501004dfd79ccad69bee7a335f0df29
+	parent = 9afc364ea186148b9fa9c89797f8be56f2069276
+	cmdver = 0.3.0

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="audio-services">
+   <implementation class="org.daisy.pipeline.audio.AudioServices"/>
+   <service>
+      <provide interface="org.daisy.pipeline.audio.AudioServices"/>
+   </service>
+   <reference bind="addEncoder"
+      unbind="addEncoder"
+      cardinality="0..n"
+      interface="org.daisy.pipeline.audio.AudioEncoder"
+      name="audio-encoder"
+      policy="dynamic"/>
+</scr:component>
