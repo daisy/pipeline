@@ -1,0 +1,588 @@
+<d:rules xmlns:d="http://www.daisy.org/ns/pipeline/data"
+	 xmlns="http://www.w3.org/1998/Math/MathML"
+	 xmlns:ssml="http://www.w3.org/2001/10/synthesis">
+
+  <!-- ============================== WARNING 1 ================================== -->
+  <!-- Some pieces of MathML cannot be deconstructed using rules. For
+       instance: -->
+  <!-- <mrow> <mn>1</mn> <mo>+</mo> <mn>2</mn> <mo>+</mo> 3 </mrow> -->
+  <!-- The following rule won't do: -->
+  <!--
+      <d:rule>
+        <mrow> <d:group/> <mo>+</mo> <d:group/> <mo>+</mo> <d:group/> </mrow>
+      </d:rule>
+  -->
+  <!-- This is because the two <mo> are equivalent and are at the same
+       depth, thus it can't be converted to a working regexp. On the
+       other hand, the following pieces can be deconstructed: -->
+  <!-- <mrow> <mn>1</mn> <mo>+</mo> <mn>2</mn> <mo>×</mo> 3 </mrow> -->
+  <!-- and, -->
+  <!-- <mrow> <mrow> <mn>1</mn> <mo>+</mo> <mn>2</mn> </mrow> <mo>+</mo> 3 </mrow> -->
+  <!-- =========================================================================== -->
+
+  <!-- ============================== WARNING 2 ================================== -->
+  <!-- The @regex attribute of d:text must not contain any
+       parentheses, $, ^ and some reserved symbols (i.e. ':' and '@')
+       -->
+  <!-- =========================================================================== -->
+
+  <!-- To write a language-independent rule, just don't specify the
+       @xml:lang attribute -->
+
+
+  <!--=================================================================== -->
+  <!--==================== SEMANTIC INTERPRETATION ====================== -->
+  <!--=================================================================== -->
+
+  <d:rule>
+    <mrow>
+      <mo>{</mo>
+      <mtable>
+  	<mtr><mtd><d:group/></mtd></mtr>
+  	<d:group/>
+      </mtable>
+      <mo>}</mo>
+    </mrow>
+    <d:trans xml:lang="en">column vector with element <d:group n="1"/>, <d:group n="2"/></d:trans>
+    <d:trans xml:lang="fr">vecteur colonne avec les éléments <d:group n="1"/>, <d:group n="2"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mrow>
+      <mo>(</mo>
+      <mtable>
+  	<mtr><mtd><d:group/></mtd></mtr>
+  	<d:group/>
+      </mtable>
+      <mo>)</mo>
+    </mrow>
+    <d:trans xml:lang="en">column vector with element <d:group n="1"/>, <d:group n="2"/></d:trans>
+    <d:trans xml:lang="fr">vecteur colonne avec les éléments <d:group n="1"/>, <d:group n="2"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mtr><mtd><d:group/></mtd></mtr>
+    <d:trans xml:lang="en">element <d:group n="1" emph-children="true"/></d:trans>
+    <d:trans xml:lang="fr">élément <d:group n="1" emph-children="true"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mrow>
+      <mo>(</mo>
+      <mtable>
+  	<mtr><d:group/></mtr>
+      </mtable>
+      <mo>)</mo>
+    </mrow>
+    <d:trans xml:lang="en">row vector with <d:group n="1" sep=","/></d:trans>
+    <d:trans xml:lang="fr">vecteur ligne avec <d:group n="1" sep=","/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mrow>
+      <mo>(</mo>
+      <mtable>
+  	<d:group/>
+      </mtable>
+      <mo>)</mo>
+    </mrow>
+    <d:trans xml:lang="en">matrix <d:group n="1"/></d:trans>
+    <d:trans xml:lang="fr">matrice <d:group n="1"/></d:trans>
+  </d:rule>
+
+  <!--=================================================================== -->
+  <!--=================== PRONOUNCIATION SHORTCUTS ====================== -->
+  <!--=================================================================== -->
+
+  <d:rule>
+    <mrow>
+      <mo>(</mo>
+      <mtable>
+  	<mtr>
+  	  <mtd><d:group/></mtd>
+  	  <mtd><d:group/></mtd>
+  	</mtr>
+  	<mtr>
+  	  <mtd><d:group/></mtd>
+  	  <mtd><d:group/></mtd>
+  	</mtr>
+      </mtable>
+      <mo>)</mo>
+    </mrow>
+    <d:trans xml:lang="en">2 times 2 matrix <d:group n="1"/></d:trans>
+    <d:trans xml:lang="fr">matrice 2 2 <d:group n="1"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <msup>
+      <d:group/>
+      <mn>2</mn>
+    </msup>
+    <d:trans xml:lang="en"><d:group n="1"/> squared</d:trans>
+    <d:trans xml:lang="fr"><d:group n="1"/> au carré</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <msup>
+      <d:group/>
+      <mn>3</mn>
+    </msup>
+    <d:trans xml:lang="en"><d:group n="1"/> cubed</d:trans>
+    <d:trans xml:lang="fr"><d:group n="1"/> au cube</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mfrac>
+      <mn>1</mn>
+      <mn>2</mn>
+    </mfrac>
+    <d:trans xml:lang="en">one half</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mfrac>
+      <mn>1</mn>
+      <mn>3</mn>
+    </mfrac>
+    <d:trans xml:lang="en">one third</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mfrac>
+      <mn><d:text regex="[0-9]+"/></mn>
+      <mn>2</mn>
+    </mfrac>
+    <d:trans xml:lang="en"><d:group n="1"/> halves</d:trans>
+    <d:trans xml:lang="fr"><d:group n="1"/> demis</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mfrac>
+      <mn>1</mn>
+      <mn>3</mn>
+    </mfrac>
+    <d:trans xml:lang="en"><d:group n="1"/> thirds</d:trans>
+    <d:trans xml:lang="fr"><d:group n="1"/> tiers</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mroot>
+      <d:group/>
+      <mn>3</mn>
+    </mroot>
+    <d:trans xml:lang="en">cube root of <d:group n="1"/></d:trans>
+    <d:trans xml:lang="fr">racine cubique de <d:group n="1"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mroot>
+      <d:group/>
+      <mn><d:text regex="[0-9]+"/></mn>
+    </mroot>
+    <d:trans xml:lang="en">
+      <ssml:say-as interpret-as="ordinal">
+  	<d:group n="2"/>
+      </ssml:say-as>
+      root of <d:group n="1"/>
+    </d:trans>
+    <d:trans xml:lang="fr">
+      racine
+      <ssml:say-as interpret-as="ordinal">
+  	<d:group n="2"/>
+      </ssml:say-as>
+      de <d:group n="1"/>
+    </d:trans>
+  </d:rule>
+
+
+  <!--=================================================================== -->
+  <!--========================== BASIC NODES ============================ -->
+  <!--=================================================================== -->
+
+  <d:rule>
+    <mfrac>
+      <d:group/>
+      <d:group/>
+    </mfrac>
+    <d:trans xml:lang="en"><d:group n="1" emph="true"/> over <d:group n="2" emph="true"/></d:trans>
+    <d:trans xml:lang="fr"><d:group n="1" emph="true"/> sur <d:group n="2" emph="true"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <msqrt>
+      <d:group/>
+    </msqrt>
+    <d:trans xml:lang="en">square root of <d:group n="1"/></d:trans>
+    <d:trans xml:lang="fr">racine carrée de <d:group n="1"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mroot>
+      <d:group/>
+      <d:group/>
+    </mroot>
+    <d:trans xml:lang="en">root of degree <d:group n="2"/> of <d:group n="1" emph="true"/></d:trans>
+    <d:trans xml:lang="fr">racine degré <d:group n="2"/> de <d:group n="1" emph="true"/></d:trans>
+  </d:rule>
+
+
+  <d:rule>
+    <over>
+      <d:group/>
+      <d:group/>
+    </over>
+    <d:trans xml:lang="en"><d:group n="2"/> on top of <d:group n="1"/></d:trans>
+    <d:trans xml:lang="fr"><d:group n="2"/> au dessus de <d:group n="1"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <under>
+      <d:group/>
+      <d:group/>
+    </under>
+    <d:trans xml:lang="en"><d:group n="2"/> under <d:group n="1"/></d:trans>
+    <d:trans xml:lang="fr"><d:group n="2"/> en dessous de <d:group n="1"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <underover>
+      <d:group/>
+      <d:group/>
+      <d:group/>
+    </underover>
+    <d:trans xml:lang="en"><d:group n="1"/> with <d:group n="2"/> under and <d:group n="3"/> on top</d:trans>
+    <d:trans xml:lang="fr"><d:group n="1"/> avec au dessous <d:group n="2"/> et au dessus <d:group n="3"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <msub>
+      <d:group/>
+      <d:group/>
+    </msub>
+    <d:trans xml:lang="en"><d:group n="1"/> with sub index <d:group n="2"/></d:trans>
+    <d:trans xml:lang="fr"><d:group n="1"/> indice <d:group n="2"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <msup>
+      <d:group/>
+      <d:group/>
+    </msup>
+    <d:trans xml:lang="en"><d:group n="1"/> with expononent <d:group n="2"/></d:trans>
+    <d:trans xml:lang="fr"><d:group n="1"/> exposant <d:group n="2"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <msubsup>
+      <d:group/>
+      <d:group/>
+    </msubsup>
+    <d:trans xml:lang="en"><d:group n="1"/> with sub index <d:group n="2"/> and expononent <d:group n="3"/></d:trans>
+    <d:trans xml:lang="fr"><d:group n="1"/> indice <d:group n="2"/> et exposant <d:group n="3"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mtable>
+      <d:group/>
+    </mtable>
+    <d:trans xml:lang="en">tableau <d:group n="1"/></d:trans>
+    <d:trans xml:lang="fr">tableau <d:group n="1"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mtd>
+      <d:group/>
+    </mtd>
+    <d:trans xml:lang="en">cell <d:group n="1" emph-children="true"/></d:trans>
+    <d:trans xml:lang="fr">cellule <d:group n="1" emph-children="true"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mtr>
+      <d:group/>
+    </mtr>
+    <d:trans xml:lang="en">row <d:group n="1"/></d:trans>
+    <d:trans xml:lang="fr">ligne <d:group n="1"/></d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mmultiscripts>
+      <d:group/>
+      <d:group/>
+      <d:group/>
+      <mprescripts/>
+      <d:group/>
+      <d:group/>
+    </mmultiscripts>
+    <d:trans xml:lang="en">
+      <d:group n="1"/> surrounded by
+      <d:group n="2"/> at lower right,
+      <d:group n="3"/> at upper right,
+      <d:group n="4"/> at lower left and
+      <d:group n="5"/> at upper left
+    </d:trans>
+    <d:trans xml:lang="fr">
+      <d:group n="1"/> entourré de
+      <d:group n="2"/> en bas à droite,
+      <d:group n="3"/> en haut à droite,
+      <d:group n="4"/> en bas à gauche et
+      <d:group n="5"/> en haut à gauche
+    </d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mmultiscripts>
+      <d:group/>
+      <mprescripts/>
+      <d:group/>
+      <d:group/>
+    </mmultiscripts>
+    <d:trans xml:lang="en">
+      <d:group n="1"/> prefixed by
+      <d:group n="3"/> on top and
+      <d:group n="2"/> underneath
+    </d:trans>
+    <d:trans xml:lang="fr">
+      <d:group n="1"/> prefixé par
+      <d:group n="3"/> en haut et
+      <d:group n="2"/> en bas
+    </d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mmultiscripts>
+      <d:group/>
+      <d:group/>
+      <d:group/>
+    </mmultiscripts>
+    <d:trans xml:lang="en">
+      <d:group n="1"/> with as indices
+      <d:group n="2"/> at lower right and
+      <d:group n="3"/> at upper right
+    </d:trans>
+    <d:trans xml:lang="en">
+      <d:group n="1"/> avec pour indices
+      <d:group n="2"/> en bas à droite et
+      <d:group n="3"/> en haut à droite
+    </d:trans>
+  </d:rule>
+
+
+  <!--=================================================================== -->
+  <!--=========================== OPERATORS ============================= -->
+  <!--=================================================================== -->
+
+  <!-- It is the responsability of TTS processors to properly
+       pronounce UTF8 operators. -->
+
+  <d:rule>
+    <mo>&#8289;</mo>
+    <d:trans xml:lang="en">applied on</d:trans>
+    <d:trans xml:lang="fr">appliqué à</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>+</mo>
+    <d:trans xml:lang="en">plus</d:trans>
+    <d:trans xml:lang="fr">plus</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>-</mo>
+    <d:trans xml:lang="en">minus</d:trans>
+    <d:trans xml:lang="fr">moins</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>*</mo>
+    <d:trans xml:lang="en">star</d:trans>
+    <d:trans xml:lang="fr">étoile</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>=</mo>
+    <d:trans xml:lang="en">equals</d:trans>
+    <d:trans xml:lang="fr">égal</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>%</mo>
+    <d:trans xml:lang="en">mod</d:trans>
+    <d:trans xml:lang="fr">modulo</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>!</mo>
+    <d:trans xml:lang="en">factorial</d:trans>
+    <d:trans xml:lang="fr">factorielle</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>/</mo>
+    <d:trans xml:lang="en">div</d:trans>
+    <d:trans xml:lang="fr">sur</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>|</mo>
+    <d:trans xml:lang="en">such that</d:trans>
+    <d:trans xml:lang="fr">tel que</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>~</mo>
+    <d:trans xml:lang="en">tilde</d:trans>
+    <d:trans xml:lang="fr">tilde</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>&amp;</mo>
+    <d:trans xml:lang="en">and</d:trans>
+    <d:trans xml:lang="fr">et</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>||</mo>
+    <d:trans xml:lang="en">or</d:trans>
+    <d:trans xml:lang="fr">ou</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>@</mo>
+    <d:trans xml:lang="en">at sign</d:trans>
+    <d:trans xml:lang="fr">arobase</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>^</mo>
+    <d:trans xml:lang="en">and</d:trans>
+    <d:trans xml:lang="fr">et</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>?</mo>
+    <d:trans xml:lang="en">question mark</d:trans>
+    <d:trans xml:lang="fr">point interrogation</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>:</mo>
+    <d:trans xml:lang="en">colon</d:trans>
+    <d:trans xml:lang="fr">deux points</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>;</mo>
+    <d:trans xml:lang="en">semi-colon</d:trans>
+    <d:trans xml:lang="fr">point virgule</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>,</mo>
+    <d:trans xml:lang="en">comma</d:trans>
+    <d:trans xml:lang="fr">virgule</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>$</mo>
+    <d:trans xml:lang="en">dollar sign</d:trans>
+    <d:trans xml:lang="fr">dollar</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>.</mo>
+    <d:trans xml:lang="en">dot</d:trans>
+    <d:trans xml:lang="fr">point</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>'</mo>
+    <d:trans xml:lang="en">apostrophe</d:trans>
+    <d:trans xml:lang="fr">apostrophe</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>&lt;</mo>
+    <d:trans xml:lang="en">strictly lower than</d:trans>
+    <d:trans xml:lang="fr">strictement inférieur à</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>&gt;</mo>
+    <d:trans xml:lang="en">strictly greater than</d:trans>
+    <d:trans xml:lang="fr">strictement supérieur à</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>&lt;=</mo>
+    <d:trans xml:lang="en">equals or lower than</d:trans>
+    <d:trans xml:lang="fr">inférieur ou égal à</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>&gt;=</mo>
+    <d:trans xml:lang="en">equals or greater than</d:trans>
+    <d:trans xml:lang="fr">supérieur ou égal à</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>(</mo>
+    <d:trans xml:lang="en">open round bracket</d:trans>
+    <d:trans xml:lang="fr">parenthèse ouvrante</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>(</mo>
+    <d:trans xml:lang="en">left round bracket</d:trans>
+    <d:trans xml:lang="fr">parenthèse ouvrante</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>)</mo>
+    <d:trans xml:lang="en">right round bracket</d:trans>
+    <d:trans xml:lang="fr">parenthèse fermante</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>[</mo>
+    <d:trans xml:lang="en">left square bracket</d:trans>
+    <d:trans xml:lang="fr">crochet ouvrant</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>]</mo>
+    <d:trans xml:lang="en">right square bracket</d:trans>
+    <d:trans xml:lang="fr">crochet fermant</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>{</mo>
+    <d:trans xml:lang="en">left curly bracket</d:trans>
+    <d:trans xml:lang="fr">accolade ouvrante</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>}</mo>
+    <d:trans xml:lang="en">right curly bracket</d:trans>
+    <d:trans xml:lang="fr">accolade fermante</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>~=</mo>
+    <d:trans xml:lang="en">approximately equals</d:trans>
+    <d:trans xml:lang="fr">approximativement égal à</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <mo>×</mo>
+    <d:trans xml:lang="en">times</d:trans>
+    <d:trans xml:lang="fr">fois</d:trans>
+  </d:rule>
+
+  <d:rule>
+    <none/> <!-- inside <mmultiscripts> -->
+    <d:trans xml:lang="en">nothing</d:trans>
+    <d:trans xml:lang="fr">rien</d:trans>
+  </d:rule>
+
+</d:rules>

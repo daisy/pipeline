@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+	       xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	       xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
+	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+               script="../../main/resources/xml/xproc/annotate.xpl">
+
+  <x:scenario label="Empty stylesheet">
+    <x:call step="px:annotate">
+      <x:input port="annotations"/>
+      <x:input port="source">
+  	<x:document type="inline">
+  	  <dt:book/>
+  	</x:document>
+      </x:input>
+      <x:input port="sentence-ids">
+  	<x:document type="inline">
+	  <tts:sentence-ids/>
+  	</x:document>
+      </x:input>
+      <x:context label="result">
+  	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="annotated" type="compare">
+  	<x:document type="inline">
+  	  <dt:book/>
+  	</x:document>
+      </x:expect>
+    </x:call>
+  </x:scenario>
+
+  <x:scenario label="Annotation Test">
+    <x:call step="px:annotate">
+      <x:input port="annotations">
+	<x:document type="inline">
+	  <xsl:stylesheet xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
+	    <xsl:template match="dt:case1">
+	      <tts:lang xml:lang="en">
+		<tts:before><ssml:token>before</ssml:token></tts:before>
+		<tts:after>after</tts:after>
+	      </tts:lang>
+	      <tts:lang xml:lang="fr">
+		<tts:before><ssml:token>avant</ssml:token></tts:before>
+		<tts:after>apres</tts:after>
+	      </tts:lang>
+	    </xsl:template>
+	  </xsl:stylesheet>
+	</x:document>
+	<x:document type="inline">
+	  <xsl:stylesheet xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
+	    <xsl:template match="dt:case2">
+	      <tts:lang xml:lang="en">
+		<tts:before>case2</tts:before>
+	      </tts:lang>
+	    </xsl:template>
+	  </xsl:stylesheet>
+	</x:document>
+      </x:input>
+      <x:input port="sentence-ids">
+	<x:document type="inline">
+	  <tts:sentence-ids>
+	    <tts:sentence id="s1"/>
+	    <tts:sentence id="s2"/>
+	    <tts:sentence id="s3"/>
+	  </tts:sentence-ids>
+	</x:document>
+      </x:input>
+    </x:call>
+
+    <x:scenario label="Simple English annotation">
+      <x:call>
+    	<x:input port="source">
+    	  <x:document type="inline">
+    	    <dt:book xml:lang="en">
+    	      <dt:case1>
+    		<ssml:s id="s1">sentence</ssml:s>
+    	      </dt:case1>
+    	    </dt:book>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result">
+    	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="annotated" type="compare">
+    	<x:document type="inline">
+    	  <dt:book xml:lang="en">
+    	    <dt:case1>
+    	      <ssml:s id="s1"><ssml:token>before</ssml:token> sentence after</ssml:s>
+    	    </dt:case1>
+    	  </dt:book>
+    	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Second annotating stylesheet">
+      <x:call>
+    	<x:input port="source">
+    	  <x:document type="inline">
+    	    <dt:book xml:lang="en">
+    	      <dt:case2>
+    		<ssml:s id="s1">sentence</ssml:s>
+    	      </dt:case2>
+    	    </dt:book>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result">
+    	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="annotated" type="compare">
+    	<x:document type="inline">
+    	  <dt:book xml:lang="en">
+    	    <dt:case2>
+    	      <ssml:s id="s1">case2 sentence</ssml:s>
+    	    </dt:case2>
+    	  </dt:book>
+    	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Simple French annotation">
+      <x:call>
+    	<x:input port="source">
+    	  <x:document type="inline">
+    	    <dt:book xml:lang="fr-fr">
+    	      <dt:case1>
+    		<ssml:s id="s1">sentence</ssml:s>
+    	      </dt:case1>
+    	    </dt:book>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result">
+    	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="annotated" type="compare">
+    	<x:document type="inline">
+    	  <dt:book xml:lang="fr-fr">
+    	    <dt:case1>
+    	      <ssml:s id="s1"><ssml:token>avant</ssml:token> sentence apres</ssml:s>
+    	    </dt:case1>
+    	  </dt:book>
+    	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Inside sentence 1">
+      <x:call>
+    	<x:input port="source">
+    	  <x:document type="inline">
+    	    <dt:book xml:lang="en">
+    	      <ssml:s id="s1"><dt:case1>sentence</dt:case1></ssml:s>
+    	    </dt:book>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result">
+    	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="annotated" type="compare">
+    	<x:document type="inline">
+    	  <dt:book xml:lang="en">
+    	    <ssml:s id="s1"><dt:case1><ssml:token>before</ssml:token> sentence after</dt:case1></ssml:s>
+    	  </dt:book>
+    	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Inside sentence 2">
+      <x:call>
+    	<x:input port="source">
+    	  <x:document type="inline">
+    	    <dt:book xml:lang="en">
+    	      <ssml:s id="s1"><dt:span><dt:case1>sentence</dt:case1></dt:span></ssml:s>
+    	    </dt:book>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result">
+    	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="annotated" type="compare">
+    	<x:document type="inline">
+    	  <dt:book xml:lang="en">
+    	    <ssml:s id="s1">
+	      <dt:span><dt:case1><ssml:token>before</ssml:token> sentence after</dt:case1></dt:span>
+	    </ssml:s>
+    	  </dt:book>
+    	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Surrounded annotation">
+      <x:call>
+    	<x:input port="source">
+    	  <x:document type="inline">
+    	    <dt:book xml:lang="en">
+    	      <ssml:s id="s1">text1 <dt:case1>sentence</dt:case1> text2</ssml:s>g
+    	    </dt:book>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result">
+    	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="annotated" type="compare">
+    	<x:document type="inline">
+    	  <dt:book xml:lang="en">
+    	    <ssml:s id="s1">text1 <dt:case1>
+	    <ssml:token>before</ssml:token>sentence after</dt:case1> text2</ssml:s>g
+    	  </dt:book>
+    	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Dispatch">
+      <x:call>
+    	<x:input port="source">
+    	  <x:document type="inline">
+    	    <dt:book xml:lang="en">
+    	      <dt:case1>
+		<dt:span><ssml:s id="s1">sentence1</ssml:s></dt:span>
+		<ssml:s id="s2">sentence2</ssml:s>
+	      </dt:case1>
+    	    </dt:book>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result">
+    	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="annotated" type="compare">
+    	<x:document type="inline">
+    	  <dt:book xml:lang="en">
+    	    <dt:case1>
+	      <dt:span><ssml:s id="s1"><ssml:token>before</ssml:token> sentence1</ssml:s></dt:span>
+	      <ssml:s id="s2">sentence2 after</ssml:s>
+	    </dt:case1>
+    	  </dt:book>
+    	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Annotation transfer">
+      <x:call>
+    	<x:input port="source">
+    	  <x:document type="inline">
+    	    <dt:book xml:lang="en">
+	      <ssml:s id="s1">
+		text1
+	      </ssml:s>
+	      <dt:case1>
+		<span id="not-sent">lost</span>
+	      </dt:case1>
+	      <ssml:s id="s2">
+		<dt:span id="b">text2</dt:span>
+	      </ssml:s>
+    	    </dt:book>
+    	  </x:document>
+    	</x:input>
+      </x:call>
+      <x:context label="result">
+    	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="annotated" type="compare">
+    	<x:document type="inline">
+    	  <dt:book xml:lang="en">
+	    <ssml:s id="s1">
+	      text1 <ssml:token>before</ssml:token>
+	    </ssml:s>
+	    <dt:case1>
+	      <span id="not-sent">lost</span>
+	    </dt:case1>
+	    <ssml:s id="s2">
+	       after <dt:span id="b">text2</dt:span>
+	    </ssml:s>
+    	  </dt:book>
+    	</x:document>
+      </x:expect>
+    </x:scenario>
+
+  </x:scenario>
+</x:description>

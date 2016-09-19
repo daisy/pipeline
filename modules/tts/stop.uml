@@ -1,0 +1,38 @@
+@startuml
+
+JavaStep->thread1: new
+JavaStep->TTSRegistry: openContext()
+TTSRegistry->eSpeak: onBeforeOneExecution()
+
+JavaStep->TTSRegistry: request eSpeak resource
+TTSRegistry->eSpeak: request eSpeak resource
+eSpeak->TTSRegistry: eSpeak resource
+TTSRegistry->JavaStep: eSpeak resource
+
+JavaStep->thread1: eSpeak resource
+
+JavaStep->thread1: run
+
+thread1->JavaStep: request one SSML unit
+JavaStep->thread1: one SSML unit
+thread1->thread1: test resource(OK)
+
+thread1->eSpeak: resource + audio buffer 0%
+eSpeak->thread1: audio buffer 14%
+
+OSGi->TTSRegistry: unregister eSpeak
+TTSRegistry->TTSRegistry: invalidate eSpeak resource
+TTSRegistry->eSpeak: release eSpeak resource
+
+thread1->JavaStep: request one SSML unit
+JavaStep->thread1: one SSML unit
+thread1->thread1: test resource(fail)
+
+thread1->JavaStep: request one SSML unit
+JavaStep->thread1: one SSML unit
+thread1->thread1: test resource(fail)
+
+JavaStep->TTSRegistry: closeContext
+TTSRegistry->eSpeak: onAfterOneExecution()
+
+@enduml

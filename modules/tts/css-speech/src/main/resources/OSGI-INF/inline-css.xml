@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="css-speech-inliner">
+
+  <implementation class="org.daisy.pipeline.cssinlining.InlineCSSProvider"/>
+
+  <service>
+    <provide interface="org.daisy.common.xproc.calabash.XProcStepProvider"/>
+  </service>
+  <property name="type" type="String" value="{http://www.daisy.org/ns/pipeline/xproc}inline-css"/>
+  
+  <scr:reference bind="setUriResolver"
+      cardinality="1..1"
+      interface="javax.xml.transform.URIResolver"
+      name="URIResolver"
+      policy="dynamic"/>
+
+</scr:component>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>tts-modules-parent</artifactId>
+    <version>1.9.1-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
+  </parent>
+
+  <version>2.0.1-SNAPSHOT</version>
+  <artifactId>tts-adapter-acapela</artifactId>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: TTS Adapter for Acapela</name>
+  <description>Implementation of the TTS API for Acapela Linux V7.300 and V8.0</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>4.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jnaerator</artifactId>
+      <version>0.11</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
+	    <Export-Package />
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <id>notester</id>
+      <build>
+	<plugins>
+	  <plugin>
+	    <artifactId>maven-surefire-plugin</artifactId>
+	    <configuration>
+	      <excludes>
+		<exclude>**/AcapelaTest.java</exclude>
+	      </excludes>
+	    </configuration>
+	  </plugin>
+	</plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>tester</id>
+    </profile>
+  </profiles>
+
+
+</project>

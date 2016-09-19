@@ -1,0 +1,162 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <!-- If you cross-compile for 32bit from a 64bit-machine, you need
+       to install the following packets: -->
+  <!-- libc6-dev-i386 -->
+  <!-- g++-multilib  -->
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>org.daisy.pipeline</groupId>
+  <version>1.0.0-SNAPSHOT</version>
+  <artifactId>att-nar</artifactId>
+  <packaging>nar</packaging>
+
+  <name>AT&#038;T's JNI libraries</name>
+  <description>Build of platform-dependent JNI libraries using the AT&#038;T's SDK >=4.0</description>
+
+  <properties>
+    <sdk.location>${basedir}/src/sdk/</sdk.location>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.github.maven-nar</groupId>
+        <artifactId>nar-maven-plugin</artifactId>
+        <version>3.2.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <cpp>
+            <name>g++</name>
+            <includes>
+              <include>**/*.cpp</include>
+            </includes>
+            <options>
+              <option>-I${sdk.location}/include/</option>
+              <option>-I${JAVA_HOME}/include</option>
+              <option>${java.os.include}</option>
+              <option>${stack.protector.option}</option>
+              <option>${compile.option}</option>
+              <option>${architecture.option}</option>
+              <option>${subsystem.option}</option>
+              <option>${debug.option}</option>
+            </options>
+	  </cpp>
+          <linker>
+            <name>g++</name>
+            <options>
+              <option>${architecture.option}</option>
+              <option>${subsystem.option}</option>
+              <option>${link.option}</option>
+            </options>
+          </linker>
+          <libraries>
+            <library>
+              <type>jni</type>
+            </library>
+          </libraries>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>i386-Linux</id>
+      <activation>
+        <os>
+          <name>Linux</name>
+          <arch>i386</arch>
+        </os>
+      </activation>
+      <properties>
+        <java.os.include>-I${JAVA_HOME}/include/linux</java.os.include>
+        <compile.option>-DUNIX -O3 -W -Wall -pthread</compile.option>
+        <stack.protector.option>-fno-stack-protector</stack.protector.option>
+        <architecture.option>-m32</architecture.option>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+	    <groupId>com.github.maven-nar</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <configuration>
+	      <architecture>i386</architecture>
+              <linker>
+                <sysLibs>
+                  <sysLib>
+                    <name>dl</name>
+                  </sysLib>
+                  <sysLib>
+                    <name>pthread</name>
+                  </sysLib>
+                </sysLibs>
+		<libs>
+		  <lib>
+		    <name>TTSAPICS</name>
+		    <type>static</type>
+		    <directory>${sdk.location}/lib/</directory>
+		  </lib>
+		</libs>
+              </linker>
+            </configuration>
+          </plugin>
+	</plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>x64-Linux</id>
+      <activation>
+        <os>
+          <name>Linux</name>
+          <arch>x64</arch>
+        </os>
+      </activation>
+      <properties>
+        <java.os.include>-I${JAVA_HOME}/include/linux</java.os.include>
+        <compile.option>-DUNIX -O3 -W -Wall -pthread</compile.option>
+        <stack.protector.option>-fno-stack-protector</stack.protector.option>
+        <architecture.option>-m64</architecture.option>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+	    <groupId>com.github.maven-nar</groupId>
+            <artifactId>nar-maven-plugin</artifactId>
+            <configuration>
+	      <architecture>amd64</architecture>
+              <linker>
+                <sysLibs>
+                  <sysLib>
+                    <name>dl</name>
+                  </sysLib>
+                  <sysLib>
+                    <name>pthread</name>
+                  </sysLib>
+                </sysLibs>
+		<libs>
+		  <lib>
+		    <name>TTSAPICS</name>
+		    <type>static</type>
+		    <directory>${sdk.location}/lib64/</directory>
+		  </lib>
+		</libs>
+              </linker>
+            </configuration>
+          </plugin>
+	</plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

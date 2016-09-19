@@ -1,0 +1,188 @@
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+	       xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+	       xmlns:m="http://www.w3.org/1998/Math/MathML"
+	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+               script="../../main/resources/xml/xproc/extract-mathml.xpl">
+
+
+  <x:scenario label="MathML separation">
+    <x:call step="pxi:extract-mathml">
+      <x:input port="math-ids">
+	<x:document type="inline">
+	  <tmp:foo>
+	    <tmp:bar>
+	      <m:math id="m1"/>
+	    </tmp:bar>
+	    <m:math id="m2"/>
+	    <m:math id="m3"/>
+	  </tmp:foo>
+	</x:document>
+      </x:input>
+    </x:call>
+
+    <x:scenario label="Simple MathML separation">
+      <x:call step="pxi:extract-mathml">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <ssml:speak version="1.1">
+	      <ssml:s id="m1" tmp:css="something">
+		<m:mi>x</m:mi>
+	      </ssml:s>
+	      <ssml:s id="s2" tmp:css="something">
+		other things
+	      </ssml:s>
+	      <ssml:s id="holder-of-m2" tmp:css="something">
+		<m:math id="m2">
+		  <m:mi>y</m:mi>
+		</m:math>
+	      </ssml:s>
+	    </ssml:speak>
+	  </x:document>
+	</x:input>
+      </x:call>
+     <x:context label="result">
+       <x:document type="port" port="mathml-free"/>
+       <x:document type="port" port="mathml-only"/>
+     </x:context>
+     <x:expect label="skippable-separated" type="compare">
+       <x:document type="inline">
+	 <ssml:speak version="1.1">
+	   <ssml:s id="s2" tmp:css="something"> other things </ssml:s>
+	 </ssml:speak>
+	 <ssml:speak version="1.1">
+	   <m:math  id="m1" version="1.1" tmp:css="something">
+	     <m:mi>x</m:mi>
+	   </m:math>
+	   <m:math id="m2" version="1.1" tmp:css="something">
+	     <m:mi>y</m:mi>
+	   </m:math>
+	 </ssml:speak>
+       </x:document>
+     </x:expect>
+   </x:scenario>
+
+   <x:scenario label="Attribute inheritance">
+     <x:call step="pxi:extract-mathml">
+       <x:input port="source">
+	 <x:document type="inline">
+	   <ssml:speak version="1.1">
+	     <ssml:s id="s1" tmp:css1="foo">
+	       <tmp:intermediate id="i1" tmp:css1="bar">
+		 <m:math id="m1">
+		   <m:mi>x</m:mi>
+		 </m:math>
+	       </tmp:intermediate>
+	     </ssml:s>
+	   </ssml:speak>
+	 </x:document>
+       </x:input>
+     </x:call>
+     <x:context label="result">
+       <x:document type="port" port="mathml-only"/>
+     </x:context>
+     <x:expect label="skippable-separated" type="compare">
+       <x:document type="inline">
+	 <ssml:speak version="1.1">
+	   <m:math id="m1" version="1.1" tmp:css1="bar">
+	     <m:mi>x</m:mi>
+	   </m:math>
+	 </ssml:speak>
+       </x:document>
+     </x:expect>
+   </x:scenario>
+
+   <!-- <x:scenario label="Outer MathML annotations"> -->
+   <!--   <x:call step="pxi:extract-mathml"> -->
+   <!--     <x:input port="source"> -->
+   <!-- 	 <x:document type="inline"> -->
+   <!-- 	   <ssml:speak version="1.1"> -->
+   <!-- 	     <ssml:s id="s1"> -->
+   <!-- 	       other things -->
+   <!-- 	     </ssml:s> -->
+   <!-- 	     <ssml:s id="s2"> -->
+   <!-- 	       before0 -->
+   <!-- 	       <tmp:inter1> -->
+   <!-- 		 before1 -->
+   <!-- 		 <tmp:inter2>before2</tmp:inter2> -->
+   <!-- 	       </tmp:inter1> -->
+   <!-- 	       before3 -->
+   <!-- 	       <m:math id="m1"> -->
+   <!-- 		 <m:mi>x</m:mi> -->
+   <!-- 	       </m:math> -->
+   <!-- 	       after0 -->
+   <!-- 	       <tmp:inter1> -->
+   <!-- 		 after1 -->
+   <!-- 		 <tmp:inter2>after2</tmp:inter2> -->
+   <!-- 	       </tmp:inter1> -->
+   <!-- 	       after3 -->
+   <!-- 	     </ssml:s> -->
+   <!-- 	     <ssml:s id="s3"> -->
+   <!-- 	       other things -->
+   <!-- 	     </ssml:s> -->
+   <!-- 	   </ssml:speak> -->
+   <!-- 	 </x:document> -->
+   <!--     </x:input> -->
+   <!--   </x:call> -->
+   <!--   <x:context label="result"> -->
+   <!--     <x:document type="port" port="mathml-only"/> -->
+   <!--   </x:context> -->
+   <!--   <x:expect label="skippable-separated" type="compare"> -->
+   <!--     <x:document type="inline"> -->
+   <!-- 	 <ssml:speak version="1.1"> -->
+   <!-- 	   <m:math id="m1" version="1.1"> -->
+   <!-- 	     <m:text> before0 before1 before2 before3 </m:text> -->
+   <!-- 	     <m:mi>x</m:mi> -->
+   <!-- 	     <m:text> after0 after1 after2 after3 </m:text> -->
+   <!-- 	   </m:math> -->
+   <!-- 	 </ssml:speak> -->
+   <!--     </x:document> -->
+   <!--   </x:expect> -->
+   <!-- </x:scenario> -->
+
+   <!-- <x:scenario label="Annotated MathML without surrounding sentences"> -->
+   <!--   <x:call step="pxi:extract-mathml"> -->
+   <!--     <x:input port="source"> -->
+   <!-- 	 <x:document type="inline"> -->
+   <!-- 	   <ssml:speak version="1.1"> -->
+   <!-- 	     <ssml:s id="s2"> -->
+   <!-- 	       before0 -->
+   <!-- 	       <tmp:inter1> -->
+   <!-- 		 before1 -->
+   <!-- 		 <tmp:inter2>before2</tmp:inter2> -->
+   <!-- 	       </tmp:inter1> -->
+   <!-- 	       before3 -->
+   <!-- 	       <m:math id="m1"> -->
+   <!-- 		 <m:mi>x</m:mi> -->
+   <!-- 	       </m:math> -->
+   <!-- 	       after0 -->
+   <!-- 	       <tmp:inter1> -->
+   <!-- 		 after1 -->
+   <!-- 		 <tmp:inter2>after2</tmp:inter2> -->
+   <!-- 	       </tmp:inter1> -->
+   <!-- 	       after3 -->
+   <!-- 	     </ssml:s> -->
+   <!-- 	   </ssml:speak> -->
+   <!-- 	 </x:document> -->
+   <!--     </x:input> -->
+   <!--   </x:call> -->
+   <!--   <x:context label="result"> -->
+   <!--     <x:document type="port" port="mathml-only"/> -->
+   <!--   </x:context> -->
+   <!--   <x:expect label="skippable-separated" type="compare"> -->
+   <!--     <x:document type="inline"> -->
+   <!-- 	 <ssml:speak version="1.1"> -->
+   <!-- 	   <m:math id="m1" version="1.1"> -->
+   <!-- 	     <m:text> before0 before1 before2 before3 </m:text> -->
+   <!-- 	     <m:mi>x</m:mi> -->
+   <!-- 	     <m:text> after0 after1 after2 after3 </m:text> -->
+   <!-- 	   </m:math> -->
+   <!-- 	 </ssml:speak> -->
+   <!--     </x:document> -->
+   <!--   </x:expect> -->
+   <!-- </x:scenario> -->
+
+ </x:scenario>
+
+</x:description>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+	       xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../../../src/main/resources/xml/xproc/get-config-annotations.xpl">
+
+
+  <x:scenario label="Two embedded annotation">
+    <x:call step="px:get-config-annotations">
+      <x:option name="content-type" select="'some-type'"/>
+      <x:input port="config">
+	<x:document type="inline">
+	  <d:config>
+	    <d:annotations type="some-type">
+	      <xsl:stylesheet version="2.0" xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
+		<xsl:template match="dt:*" name="t1"/>
+	      </xsl:stylesheet>
+	    </d:annotations>
+	    <d:annotations type="some-type">
+	      <xsl:stylesheet version="2.0" xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
+		<xsl:template match="dt:*" name="t2"/>
+	      </xsl:stylesheet>
+	    </d:annotations>
+	  </d:config>
+	</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="annotated" type="compare">
+      <x:document type="inline">
+	<xsl:stylesheet version="2.0" xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
+	  <xsl:template match="dt:*" name="t1"/>
+	</xsl:stylesheet>
+      </x:document>
+      <x:document type="inline">
+	<xsl:stylesheet version="2.0" xmlns:dt="http://www.daisy.org/z3986/2005/dtbook/">
+	  <xsl:template match="dt:*" name="t2"/>
+	</xsl:stylesheet>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

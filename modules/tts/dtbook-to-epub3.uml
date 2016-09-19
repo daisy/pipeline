@@ -1,0 +1,10 @@
+@startuml
+dtbookToEpub3->NLP: original dtbook
+NLP->dtbookToEpub3: dtbook with words and sentences + sentence ids list
+dtbookToEpub3->TTS: enriched dtbook + sentence ids list
+TTS->dtbookToEpub3: map id to audio files (AudioMap)
+dtbookToEpub3->dtbookToHTML: enriched dtbook
+dtbookToHTML->dtbookToEpub3: HTML files
+dtbookToEpub3->CreateMediaOverlays: HTML files + AudioMap
+CreateMediaOverlays->dtbookToEpub3: SMIL files
+@enduml

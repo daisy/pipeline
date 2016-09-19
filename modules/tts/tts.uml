@@ -1,0 +1,30 @@
+@startuml
+
+(*) -->[enriched dtbook + sentence ids] "dtbook-to-ssml (XPL)"
+-->[enriched dtbook + sentence ids] "make dtbook-specific transformations (XPL)"
+
+partition "Generic text-to-ssml" {
+
+-->[enriched dtbook + sentence ids + dtbook parameters] "inline CSS (Java)"
+-->[dtbook with tmp CSS properties] "separate pagenums/noterefs from the\nrest and add SSML marks, extract MathML (XPL)"
+-->[pagenum-free document + pagenum document + MathML document] ===B1===
+
+===B1=== -->[pagenum document] "group pagenums with similar CSS properties\n(for future thread dispatch)(XPL)"
+-->[pagenum document with groups] "[A]convert CSS to SSML (XPL)"
+-->[SSML files] ==B2==
+
+===B1=== -->[pagenum-free document] "group sentences of the same\nsection (for future thread dispatch)(XPL)"
+-->[pagenum-free document with groups] "[B]convert CSS to SSML (XPL)"
+-->[SSML files] "Make substitutions with PLS lexicons (XPL)"
+-->[SSML files] ===B2===
+
+===B1=== ..>[MathML] "[C]convert CSS to SSML (XPL)"
+..>[MathML] "Convert MathML to SSML (XPL)"
+..>[SSML file] ===B2===
+}
+
+==B2==-->[SSML files] "ssml-to-audio (Java)"
+
+-->[Map of @id to audio files] "dtbook-to-epub3"
+
+@enduml

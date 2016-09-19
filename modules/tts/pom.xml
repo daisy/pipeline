@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.pipeline.modules</groupId>
+  <artifactId>tts-modules-aggregator</artifactId>
+  <version>1.9.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>DAISY Pipeline 2 :: TTS Modules Aggregator POM</name>
+  <description>Aggregator POM for modules related to TTS-based production</description>
+
+  <modules>
+    <module>bom</module>
+    <module>parent</module>
+    <!-- The modules att-nar and sapi-nar are excluded from the main built -->
+    <!-- because they are platform-specific. The module tts-adapter-attnative -->
+    <!-- too, because it depends on att-nar which cannot be publicly deployed -->
+    <!-- according to the AT&T's license. -->
+    <module>css-speech</module>
+    <module>dtbook-to-ssml</module>
+    <module>dtbook-tts</module>
+    <module>epub3-tts</module>
+    <module>epub3-to-ssml</module>
+    <module>ssml-to-audio</module>
+    <module>text-to-ssml</module>
+    <module>tts-utils/tts-common</module>
+    <module>tts-utils/tts-adapter-espeak</module>
+    <module>tts-utils/tts-adapter-acapela</module>
+    <module>tts-utils/tts-adapter-osx</module>
+    <module>tts-utils/tts-adapter-sapinative</module>
+    <module>tts-utils/tts-helpers</module>
+    <module>zedai-to-ssml</module>
+    <module>mathml-to-ssml</module>
+  </modules>
+</project>

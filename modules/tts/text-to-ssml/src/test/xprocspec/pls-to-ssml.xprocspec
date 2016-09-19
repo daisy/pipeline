@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns="http://www.w3.org/2001/10/synthesis"
+	       xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/apply-lexicons.xpl">
+
+  <x:scenario label="PLS Lexicon Tests">
+    <x:call step="pxi:apply-lexicons">
+      <x:input port="fileset">
+	<x:document type="inline">
+	  <d:fileset>
+	    <d:file href="../resources/lexicon-test-en.pls" media-type='application/pls+xml'/>
+	    <d:file href="../resources/lexicon-test-fr.pls" media-type='application/pls+xml'/>
+	    <d:file href="../resources/something-else.xxx"/>
+	    <d:file href="foo/bar/non-existing.xxx" media-type='application/foo'/>
+	  </d:fileset>
+	</x:document>
+      </x:input>
+      <x:input port="user-lexicons">
+	<x:empty/>
+      </x:input>
+      <x:option name="lang" select="'en'"/>
+    </x:call>
+
+    <x:scenario label="User's Lexicons">
+      <x:call step="pxi:apply-lexicons">
+	<x:input port="user-lexicons">
+	  <x:document type="inline">
+	    <lexicon version="1.0"
+		     xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+		     alphabet="ipa" xml:lang="en">
+
+	      <lexeme>
+		<grapheme>usergraph1</grapheme>
+		<phoneme>userphoneme1</phoneme>
+	      </lexeme>
+	    </lexicon>
+          </x:document>
+	  <x:document type="inline">
+	    <lexicon version="1.0"
+		     xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+		     alphabet="ipa" xml:lang="en">
+	      <lexeme>
+		<grapheme>usergraph2</grapheme>
+		<phoneme>userphoneme2</phoneme>
+	      </lexeme>
+	    </lexicon>
+          </x:document>
+	</x:input>
+	<x:input port="source">
+	  <x:document type="inline">
+	    <speak version="1.1">
+	      <s xml:lang="en" id="s1"><token>usergraph1</token></s>
+	      <s xml:lang="en" id="s2"><token>usergraph2</token></s>
+	    </speak>
+          </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s xml:lang="en" id="s1"><token><phoneme alphabet="ipa" ph="userphoneme1">usergraph1</phoneme></token></s>
+	    <s xml:lang="en" id="s2"><token><phoneme alphabet="ipa" ph="userphoneme2">usergraph2</phoneme></token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="English substitutions">
+      <x:call step="pxi:apply-lexicons">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <speak version="1.1">
+	      <s id="s1" xml:lang="en"><token>grapheme1en</token></s>
+	      <s id="s2" xml:lang="en"><token>grapheme3en</token></s>
+	    </speak>
+          </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>
+	      <phoneme alphabet="ipa" ph="phoneme1en">grapheme1en</phoneme>
+	    </token></s>
+	      <s id="s2" xml:lang="en"><token>aliask3en</token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="French substitution">
+      <x:call step="pxi:apply-lexicons">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <speak version="1.1">
+	      <s id="s1"  xml:lang="fr"><token>grapheme1fr</token></s>
+	    </speak>
+          </x:document>
+	</x:input>
+	<x:option name="lang" select="'fr'"/>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="fr"><token>
+	      <phoneme alphabet="ipa" ph="phoneme1fr">grapheme1fr</phoneme>
+	    </token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Look-aheads">
+      <x:call step="pxi:apply-lexicons">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <speak version="1.1">
+	      <s id="s1" xml:lang="en"><token>before1</token>, </s>
+	      <s id="s2" xml:lang="en"><token>before1</token> <token>test</token></s>
+	      <s id="s3" xml:lang="en"><token>before2</token>, </s>
+	      <s id="s4" xml:lang="en"><token>before2</token> <token>test</token></s>
+	    </speak>
+          </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>beforek1</token>, </s>
+	    <s id="s2" xml:lang="en"><token>
+	      <phoneme alphabet="ipa" ph="before1phoneme">before1</phoneme>
+	    </token><token>test</token></s>
+	    <s id="s3" xml:lang="en"><token>beforek2</token>, </s>
+	    <s id="s4" xml:lang="en"><token>beforek2alias</token><token>test</token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Basic regex alias">
+      <x:call step="pxi:apply-lexicons">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <speak version="1.1">
+	      <s id="s1" xml:lang="en"><token>a47</token></s>
+	    </speak>
+          </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>ak47</token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Basic regex phoneme">
+      <x:call step="pxi:apply-lexicons">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>ABCD</token></s>
+	    </speak>
+          </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	  <s id="s1" xml:lang="en"><token><phoneme ph="regphoneme">ABCD</phoneme></token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Look ahead">
+      <x:call step="pxi:apply-lexicons">
+	<x:input port="source">
+	  <x:document type="inline">
+	    <speak version="1.1">
+	      <s id="s1" xml:lang="en"><token>baaab</token> <token>test</token></s>
+	      <s id="s2" xml:lang="en"><token>baaab</token> <token>wronglookahead</token></s>
+	    </speak>
+          </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>bbbbb</token><token>test</token></s>
+	    <s id="s2" xml:lang="en"><token>baaab</token><token>wronglookahead</token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+  </x:scenario>
+
+</x:description>

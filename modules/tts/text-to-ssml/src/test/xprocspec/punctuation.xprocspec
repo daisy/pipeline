@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+	       xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/text-to-ssml.xpl">
+
+
+  <x:scenario label="Punctuation tests">
+    <x:call step="px:text-to-ssml">
+      <x:input port="fileset.in">
+	<x:document type="inline">
+	  <d:nothing/>
+	</x:document>
+      </x:input>
+      <x:input port="user-lexicons">
+	<x:document type="inline">
+	  <d:nothing/>
+	</x:document>
+      </x:input>
+      <x:input port="sentence-ids">
+	<x:document type="inline">
+	  <d:sentences>
+	    <d:s id="s1"/>
+	    <d:s id="s2"/>
+	    <d:s id="s3"/>
+	    <d:s id="s4"/>
+	    <d:s id="s5"/>
+	  </d:sentences>
+	</x:document>
+      </x:input>
+      <x:option name="word-element" select="'w'"/>
+    </x:call>
+
+    <x:scenario label="Capture the punctuation marks">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline">
+	    <dtbook xml:lang="en">
+	      <sent xml:lang="en" id="s1"><w>First</w> <w>test</w></sent>?
+	      <sent xml:lang="en" id="s2"><w>Second</w> <w>test</w></sent> ?
+	      <sent xml:lang="en" id="s3"><w>Third</w> <w>test</w></sent><span/> ?
+	      <sent xml:lang="en" id="s4"><w>Fourth</w> <w>test</w></sent>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="skippable-free" type="compare">
+	<x:document type="inline">
+	  <ssml:speak version="1.1">
+	    <ssml:s xml:lang="en" id="s1"><ssml:token>First</ssml:token> <ssml:token>test</ssml:token>?</ssml:s>
+	    <ssml:s xml:lang="en" id="s2"><ssml:token>Second</ssml:token> <ssml:token>test</ssml:token>?</ssml:s>
+	    <ssml:s xml:lang="en" id="s3"><ssml:token>Third</ssml:token> <ssml:token>test</ssml:token>?</ssml:s>
+	    <ssml:s xml:lang="en" id="s4"><ssml:token>Fourth</ssml:token> <ssml:token>test</ssml:token></ssml:s>
+	  </ssml:speak>
+	  <ssml:speak version="1.1">
+	    <!-- SSML for skippable elements -->
+	  </ssml:speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Existing punctuation marks">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline">
+	    <dtbook xml:lang="en">
+	      <sent xml:lang="en" id="s1"><w>first</w> <w>sentence</w>.</sent>
+	      <sent xml:lang="en" id="s2"><w>second</w> <w>sentence</w> !</sent>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="skippable-free" type="compare">
+	<x:document type="inline">
+	  <ssml:speak version="1.1">
+	    <ssml:s xml:lang="en" id="s1"><ssml:token>first</ssml:token> <ssml:token>sentence</ssml:token>.</ssml:s>
+	    <ssml:s xml:lang="en" id="s2"><ssml:token>second</ssml:token> <ssml:token>sentence</ssml:token> !</ssml:s>
+	  </ssml:speak>
+	  <ssml:speak version="1.1">
+	    <!-- SSML for skippable elements -->
+	  </ssml:speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Filter characters">
+      <x:call step="px:text-to-ssml">
+	<x:input port="fileset.in">
+	  <x:empty/>
+	</x:input>
+	<x:input port="content.in">
+	  <x:document type="inline">
+	    <dtbook xml:lang="en">
+	      <ssml:s id="s1">⁇！,(“;ຯ:'"</ssml:s>.
+	      <ssml:s id="s2"><ssml:token>to remove:</ssml:token>+•†※*¤§¶¦‡/</ssml:s>.
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="skippable-free" type="compare">
+	<x:document type="inline">
+	  <ssml:speak version="1.1">
+	    <ssml:s id="s1" xml:lang="en">??!,(“;ຯ:'".</ssml:s>
+	    <ssml:s id="s2" xml:lang="en"><ssml:token>to remove:</ssml:token> .</ssml:s>
+	  </ssml:speak>
+	  <ssml:speak version="1.1">
+	  <!-- SSML for skippable elements -->
+	  </ssml:speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+  </x:scenario>
+
+</x:description>

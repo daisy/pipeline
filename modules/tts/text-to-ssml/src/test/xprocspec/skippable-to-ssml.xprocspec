@@ -1,0 +1,242 @@
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+	       xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+	       xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
+               script="../../main/resources/xml/xproc/text-to-ssml.xpl">
+
+
+  <x:script>
+    <p:declare-step version="1.0"
+		    xmlns:p="http://www.w3.org/ns/xproc"
+		    xmlns:d="http://www.daisy.org/ns/pipeline/data"
+		    type="pxi:skippable-to-ssml-wrapper">
+
+      <p:import href="clean-text.xpl"/>
+
+      <p:input port="source" primary="true"/>
+      <p:output port="result" primary="true"/>
+
+      <p:xslt>
+	<p:with-param name="style-ns" select="'http://www.daisy.org/ns/pipeline/tmp'"/>
+	<p:with-param name="lang" select="'en'"/>
+	<p:input port="stylesheet">
+	  <p:document href="../../main/resources/xml/xslt/skippable-to-ssml.xsl"/>
+	 </p:input>
+      </p:xslt>
+      <pxi:clean-text/>
+    </p:declare-step>
+  </x:script>
+
+  <x:scenario label="One skippable">
+    <x:call step="pxi:skippable-to-ssml-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <ssml:speak version="1.1">
+	    <ssml:s xml:lang="xx">
+	      <p>
+		<span>
+		  <pagenum id="p1">1</pagenum>
+		</span>
+	      </p>
+	    </ssml:s>
+	  </ssml:speak>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="skippable" type="compare">
+      <x:document type="inline">
+	<ssml:speak version="1.1">
+	  <ssml:s id="p1" xml:lang="xx">
+	    <p>
+	      <span>
+		<pagenum id="p1">1</pagenum>
+	      </span>
+	    </p>
+	  </ssml:s>
+	</ssml:speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Two skippables with different languages">
+    <x:call step="pxi:skippable-to-ssml-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <ssml:speak version="1.1">
+	    <ssml:s xml:lang="xx">
+	      <pagenum id="p1">1</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="yy">
+	      <pagenum id="p2">2</pagenum>
+	    </ssml:s>
+	  </ssml:speak>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="skippable" type="compare">
+      <x:document type="inline">
+	<ssml:speak version="1.1">
+	  <ssml:s id="p1" xml:lang="xx">
+	    <pagenum id="p1">1</pagenum>
+	  </ssml:s>
+	  <ssml:s id="p2" xml:lang="yy">
+	    <pagenum id="p2">2</pagenum>
+	  </ssml:s>
+	</ssml:speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Grouping using CSS">
+    <x:call step="pxi:skippable-to-ssml-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <ssml:speak version="1.1">
+	    <ssml:s tmp:speech-rate="10" xml:lang="xx">
+	      <pagenum id="p1">1</pagenum>
+	    </ssml:s>
+	    <ssml:s tmp:speech-rate="10" xml:lang="xx">
+	      <pagenum id="p2">2</pagenum>
+	    </ssml:s>
+	    <ssml:s tmp:volume="30" tmp:speech-rate="10" xml:lang="xx">
+	      <pagenum id="p3">3</pagenum>
+	    </ssml:s>
+	  </ssml:speak>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="skippable" type="compare">
+      <x:document type="inline">
+	<ssml:speak version="1.1">
+	  <ssml:s id="internal-holder-of-p1" tmp:speech-rate="10" xml:lang="xx">
+	                               <pagenum id="p1">1</pagenum>
+	    <ssml:mark name="p1___p2"/><pagenum id="p2">2</pagenum>
+	  </ssml:s>
+	  <ssml:s tmp:volume="30" tmp:speech-rate="10" id="p3" xml:lang="xx">
+	    <pagenum id="p3">3</pagenum>
+	  </ssml:s>
+	</ssml:speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Grouping using language">
+    <x:call step="pxi:skippable-to-ssml-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <ssml:speak version="1.1">
+	    <ssml:s tmp:volume="30" xml:lang="xx">
+	      <pagenum id="p1">1</pagenum>
+	    </ssml:s>
+	    <ssml:s tmp:volume="30" xml:lang="yy">
+	      <pagenum id="p2">2</pagenum>
+	    </ssml:s>
+	    <ssml:s tmp:volume="30" xml:lang="xx">
+	      <pagenum id="p3">3</pagenum>
+	    </ssml:s>
+	  </ssml:speak>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="skippable" type="compare">
+      <x:document type="inline">
+	<ssml:speak version="1.1">
+	  <ssml:s id="internal-holder-of-p1" xml:lang="xx" tmp:volume="30">
+	    <pagenum id="p1">1</pagenum><ssml:mark name="p1___p3"/>
+	    <pagenum id="p3">3</pagenum>
+	  </ssml:s>
+	  <ssml:s id="p2" xml:lang="yy" tmp:volume="30">
+	    <pagenum id="p2">2</pagenum>
+	  </ssml:s>
+	</ssml:speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Packets of skippable elements">
+    <x:call step="pxi:skippable-to-ssml-wrapper">
+      <x:input port="source">
+	<x:document type="inline">
+	  <ssml:speak version="1.1">
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p1">1</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p2">2</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p3">3</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p4">4</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p5">5</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p6">6</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p7">7</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p8">8</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p9">9</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p10">10</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p11">11</pagenum>
+	    </ssml:s>
+	    <ssml:s xml:lang="zzz">
+	      <pagenum id="p12">12</pagenum>
+	    </ssml:s>
+	  </ssml:speak>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="skippable" type="compare">
+      <x:document type="inline">
+	<ssml:speak version="1.1">
+	  <ssml:s id="internal-holder-of-p1" xml:lang="zzz">
+	                               <pagenum id="p1">1</pagenum>
+	    <ssml:mark name="p1___p2"/><pagenum id="p2">2</pagenum>
+	    <ssml:mark name="p2___p3"/><pagenum id="p3">3</pagenum>
+	    <ssml:mark name="p3___p4"/><pagenum id="p4">4</pagenum>
+	    <ssml:mark name="p4___p5"/><pagenum id="p5">5</pagenum>
+	    <ssml:mark name="p5___p6"/><pagenum id="p6">6</pagenum>
+	    <ssml:mark name="p6___p7"/><pagenum id="p7">7</pagenum>
+	    <ssml:mark name="p7___p8"/><pagenum id="p8">8</pagenum>
+	    <ssml:mark name="p8___p9"/><pagenum id="p9">9</pagenum>
+	    <ssml:mark name="p9___p10"/><pagenum id="p10">10</pagenum>
+	  </ssml:s>
+	  <ssml:s id="internal-holder-of-p11" xml:lang="zzz">
+	                                 <pagenum id="p11">11</pagenum>
+	    <ssml:mark name="p11___p12"/><pagenum id="p12">12</pagenum>
+	  </ssml:s>
+	</ssml:speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

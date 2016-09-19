@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="ssml-to-audio">
+  <implementation class="org.daisy.pipeline.tts.synthesize.SynthesizeProvider"/>
+  <service>
+    <provide interface="org.daisy.common.xproc.calabash.XProcStepProvider"/>
+  </service>
+  <property name="type" type="String" value="{http://www.daisy.org/ns/pipeline/xproc}synthesize"/>
+
+  <reference bind="setTTSRegistry"
+	     unbind="unsetTTSRegistry"
+	     cardinality="1..1"
+	     interface="org.daisy.pipeline.tts.TTSRegistry"
+	     name="TTSRegistry"
+	     policy="static"/>
+
+  <reference bind="setAudioServices"
+	     unbind="unsetAudioServices"
+	     cardinality="0..1"
+	     interface="org.daisy.pipeline.audio.AudioServices"
+	     name="AudioServices"
+	     policy="dynamic"/>
+
+   <reference name="uri-resolver" interface="javax.xml.transform.URIResolver"
+              bind="setURIResolver" cardinality="1..1" policy="static"/>
+
+</scr:component>

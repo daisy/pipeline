@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:daisy/pipeline-mod-tts.git
+	branch = master
+	commit = af7bd6e096d7b626ab8f0097ad833abc96d8cc35
+	parent = 4e5f664dc882887241ed87aa22fd17120cdbca3e
+	cmdver = 0.3.0

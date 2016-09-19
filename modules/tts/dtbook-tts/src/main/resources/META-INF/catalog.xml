@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+
+  <uri name="http://www.daisy.org/pipeline/modules/dtbook-tts/library.xpl" uri="../xml/library.xpl"/>
+
+  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-break-detection"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-to-ssml"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:ssml-to-audio"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:css-speech"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:daisy3-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:tts-helpers"/>
+
+</catalog>

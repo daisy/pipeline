@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="tts-registry">
+   <implementation class="org.daisy.pipeline.tts.TTSRegistry"/>
+   <service>
+      <provide interface="org.daisy.pipeline.tts.TTSRegistry"/>
+   </service>
+
+   <reference bind="addTTS"
+      unbind="removeTTS"
+      cardinality="0..n"
+      interface="org.daisy.pipeline.tts.TTSService"
+      name="TTSService"
+      policy="dynamic"/>
+
+   <reference name="uri-resolver" interface="javax.xml.transform.URIResolver"
+	      bind="setURIResolver" cardinality="1..1" policy="static"/>
+
+</scr:component>
