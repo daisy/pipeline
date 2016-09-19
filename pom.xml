@@ -25,6 +25,8 @@
     <module>modules/common</module>
     <module>modules/scripts-utils</module>
     <module>modules/scripts</module>
+    <module>modules/tts</module>
+    <module>modules/audio</module>
   </modules>
   
   <build>
