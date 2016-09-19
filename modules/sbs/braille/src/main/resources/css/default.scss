@@ -739,12 +739,20 @@ list list[type=ul] {
     list-style-type: '⠐⠤';
 }
 
-list[type=ol] > li {
+
+list[type=ol] > li { 
     display: block;
     counter-increment: list-item;
     &::before {
         display: inline;
         content: "⠼" counter(list-item, symbols(numeric "⠴" "⠂" "⠆" "⠒" "⠲" "⠢" "⠖" "⠶" "⠦" "⠔")) " ";
+    }
+}
+
+/* TOCs are ordered lists too but need no numbering*/
+#generated-document-toc li, #generated-volume-toc li {
+    &::before {
+        content: none;
     }
 }
 
