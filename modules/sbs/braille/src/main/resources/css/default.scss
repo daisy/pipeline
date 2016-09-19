@@ -372,9 +372,9 @@ sidebar > hd {
 
 /* Divisions */
 
-frontmatter > level1 {
+frontmatter > level1:not(#cover-recto, #cover-verso) {
     display: block;
-    page-break-before:right;
+    page-break-before: right;
 }
 
 frontmatter > level1:has(> level2){
@@ -442,6 +442,7 @@ frontmatter level2:first-child h2 {
     flow: cover;
     text-align: center;
     page-break-inside:avoid;
+    page-break-before: always;
 }
 
 #cover-author {
@@ -512,6 +513,7 @@ frontmatter > #cover-recto > .publisher {
 #cover-verso {
     display: block;
     flow: cover;
+    page-break-before: always;
 }
 
 #copyright-blurb {
