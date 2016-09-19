@@ -1,3 +1,9 @@
 /bom.xml
 /.maven-modules
+/.maven-workspace/
+/.maven-cache/
+/maven.log
 /.gradle/
+/.gradle-modules
+/.gradle-settings/
+.DS_Store
