@@ -7,6 +7,7 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>3</version>
+    <relativePath />
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
