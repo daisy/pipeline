@@ -363,7 +363,7 @@
       <x:option name="toc-depth" select="2"/>
       <x:param port="parameters" name="generate-titlepage" select="false()"/>
     </x:call>
-    <x:scenario label="document-toc">
+    <x:scenario label="single-volume">
       <x:call>
         <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/document-toc/')"/>
         <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
@@ -394,14 +394,14 @@
                     <row>⠀⠀⠀⠀⠀⠊⠝⠓⠁⠇⠞⠎⠧⠑⠗⠵⠑⠊⠉⠓⠝⠊⠎</row>
                     <row>⠀⠀⠀⠀⠀⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
                     <row/>
-                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠑⠗⠎⠞⠑⠗⠀⠃⠁⠝⠙</row>
-                    <row/>
                     <row>⠇⠑⠧⠑⠇⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠂⠁</row>
                     <row>⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠆⠁</row>
                     <row>⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠒⠃</row>
                     <row>⠀⠀⠇⠑⠧⠑⠇⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠲⠉</row>
                     <row/>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒</row>
+                    <row/>
+                    <row/>
                     <row/>
                     <row/>
                     <row/>
@@ -515,7 +515,7 @@
         </x:document>
       </x:expect>
     </x:scenario>
-    <x:scenario label="volume-toc">
+    <x:scenario label="multiple-volumes">
       <x:call>
         <x:option name="maximum-number-of-sheets" select="3"/>
         <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/volume-toc/')"/>

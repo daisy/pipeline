@@ -180,25 +180,25 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
 
 #generated-document-toc::-obfl-on-volume-start {
     display: block;
-    content: ' Band';
+    content: -obfl-evaluate('(if (> $volumes 1) " Band" "")');
     text-align: center;
     text-indent:0;
     margin-top:1;
     margin-bottom:1;
     &::before {
-	content: -obfl-evaluate('(round $started-volume-number)');
+	content: -obfl-evaluate('(if (> $volumes 1) (round $started-volume-number) "")');
 	text-transform: volume;
     }
 }
 
 #generated-volume-toc::-obfl-on-toc-start::after {
     display: block;
-    content: ' Band';
+    content: -obfl-evaluate('(if (> $volumes 1) " Band" "")');
     text-align: center;
     margin-top:1;
     margin-bottom:1;
     &::before {
-        content: -obfl-evaluate('(round $volume)');
+        content: -obfl-evaluate('(if (> $volumes 1) (round $volume) "")');
         text-transform: volume;
     }
 }
