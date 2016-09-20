@@ -130,13 +130,15 @@ class BlockContentManager extends AbstractBlockContentManager {
 					isVolatile = true;
 					Evaluate e = (Evaluate)s;
 					String txt = e.getExpression().render(context);
-					layoutAfterLeader(
-							Translatable.text(fcontext.getConfiguration().isMarkingCapitalLetters()?txt:txt.toLowerCase()).
-							locale(e.getTextProperties().getLocale()).
-							hyphenate(e.getTextProperties().isHyphenating()).
-							attributes(e.getTextAttribute(txt.length())).
-							build(), 
-							null);
+					if (!txt.isEmpty()) // Don't create a new row if the evaluated expression is empty
+					                    // Note: this could be handled more generally (also for regular text) in layout().
+						layoutAfterLeader(
+								Translatable.text(fcontext.getConfiguration().isMarkingCapitalLetters()?txt:txt.toLowerCase()).
+								locale(e.getTextProperties().getLocale()).
+								hyphenate(e.getTextProperties().isHyphenating()).
+								attributes(e.getTextAttribute(txt.length())).
+								build(), 
+								null);
 					break;
 				}
 				case Marker:
