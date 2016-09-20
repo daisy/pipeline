@@ -276,6 +276,11 @@
         <x:document type="inline">
           <dtbook xml:lang="de" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
             <book>
+              <frontmatter>
+                <level1>
+                  <h1>Title</h1>
+                </level1>
+              </frontmatter>
               <bodymatter>
                 <level1>
                   <pagenum id="page-1" page="normal">1</pagenum>
@@ -356,6 +361,7 @@
       </x:input>
       <x:option name="contraction-grade" select="0"/>
       <x:option name="toc-depth" select="2"/>
+      <x:param port="parameters" name="generate-titlepage" select="false()"/>
     </x:call>
     <x:scenario label="document-toc">
       <x:call>
@@ -375,6 +381,13 @@
             </head>
             <body>
               <volume cols="28" rows="28" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠞⠊⠞⠇⠑</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠤</row>
+                  </page>
+                </section>
                 <section>
                   <page>
                     <row/>
@@ -404,7 +417,7 @@
                     <row/>
                     <row/>
                     <row/>
-                    <row>⠀⠀⠀⠀⠊⠝⠓⠁⠇⠞⠎⠧⠑⠗⠵⠑⠊⠉⠓⠝⠊⠎⠀⠀⠀⠀⠼⠁</row>
+                    <row>⠀⠀⠀⠀⠊⠝⠓⠁⠇⠞⠎⠧⠑⠗⠵⠑⠊⠉⠓⠝⠊⠎⠀⠀⠀⠀⠘⠊</row>
                   </page>
                 </section>
                 <section>
@@ -504,7 +517,7 @@
     </x:scenario>
     <x:scenario label="volume-toc">
       <x:call>
-        <x:option name="maximum-number-of-sheets" select="2"/>
+        <x:option name="maximum-number-of-sheets" select="3"/>
         <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/volume-toc/')"/>
         <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
       </x:call>
@@ -521,6 +534,13 @@
             </head>
             <body>
               <volume cols="28" rows="28" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row/>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠞⠊⠞⠇⠑</row>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤⠤</row>
+                  </page>
+                </section>
                 <section>
                   <page>
                     <row/>
@@ -550,7 +570,7 @@
                     <row/>
                     <row/>
                     <row/>
-                    <row>⠀⠀⠀⠀⠊⠝⠓⠁⠇⠞⠎⠧⠑⠗⠵⠑⠊⠉⠓⠝⠊⠎⠀⠀⠀⠀⠼⠁</row>
+                    <row>⠀⠀⠀⠀⠊⠝⠓⠁⠇⠞⠎⠧⠑⠗⠵⠑⠊⠉⠓⠝⠊⠎⠀⠀⠀⠀⠘⠊</row>
                   </page>
                 </section>
                 <section>
@@ -643,7 +663,7 @@
                     <row/>
                     <row/>
                     <row/>
-                    <row>⠀⠀⠀⠀⠊⠝⠓⠁⠇⠞⠎⠧⠑⠗⠵⠑⠊⠉⠓⠝⠊⠎⠀⠀⠀⠀⠼⠁</row>
+                    <row>⠀⠀⠀⠀⠊⠝⠓⠁⠇⠞⠎⠧⠑⠗⠵⠑⠊⠉⠓⠝⠊⠎⠀⠀⠀⠀⠘⠊</row>
                   </page>
                 </section>
                 <section>
