@@ -242,8 +242,6 @@ brl|volume[brl|grade='#{$contraction-grade}'] {
 }
 
 dtbook {
-    hyphens: auto; /* FIXME: don't hard-code, depends on param
-                      $hyphenation (see default.scss in dtbook-to-pef) */
     counter-reset: footnote 0;
 }
 

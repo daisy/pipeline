@@ -754,4 +754,22 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="disable-hyphenation">
+    <x:call step="sbs:dtbook-to-pef">
+      <x:input port="source">
+        <x:document type="file" href="../resources/test_downgrade_contracted_braille/test_downgrade_contracted_braille.xml"/>
+      </x:input>
+      <x:option name="contraction-grade" select="2"/>
+      <x:option name="hyphenation" select="false()"/>
+      <x:option name="pef-output-dir" select="concat($temp-dir,'output-dir/test_downgrade_contracted_braille/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="output-dir/test_downgrade_contracted_braille/test_downgrade_contracted_braille.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/test_downgrade_contracted_braille/output_expected/test_downgrade_contracted_braille.pef"/>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>
