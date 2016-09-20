@@ -2795,7 +2795,8 @@
   
   <x:scenario label="test_27">
     <x:documentation>
-      Tests collapsing of margins of three adjacent sibling blocks, the middle one being empty.
+      Tests collapsing of margins of three adjacent sibling blocks, the middle one being empty. The
+      middle one is said to "collapse through".
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -10571,6 +10572,112 @@
                   <row/>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_97">
+    <x:documentation>
+      Tests collapsing of margins of nested blocks, with and without the presence of an empty block
+      that "collapses through". An block with only an OBFL expression that evaluates to an empty
+      string is also tested.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="text-transform:none">
+            <section style="display:block">
+              <p style="display:block">
+                ⠿
+              </p>
+            </section>
+            <section style="display:block; margin-top:1">
+              <p style="display:block; margin-top:1">
+                ⠿
+              </p>
+            </section>
+            <section style="display:block; margin-top:1">
+              <p style="display:block; margin-top:1; margin-bottom: 1"/>
+              <p style="display:block; margin-top:1">
+                ⠿
+              </p>
+            </section>
+            <section style="display:block; margin-top:1">
+              <p style="display:block; margin-top:1; margin-bottom: 1"><span style="::after { content: -obfl-evaluate('&quot;&quot;')}"/></p>
+              <p style="display:block; margin-top:1">
+                ⠿
+              </p>
+            </section>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="a" page-width="40" page-height="25" duplex="true" page-number-variable="page">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="a">
+            <block>
+              <block>
+                ⠿
+              </block>
+            </block>
+            <block margin-top="1">
+              <block margin-top="1">
+                ⠿
+              </block>
+            </block>
+            <block margin-top="1">
+              <block margin-top="1" margin-bottom="1"/>
+              <block margin-top="1">
+                ⠿
+              </block>
+            </block>
+            <block margin-top="1">
+              <block margin-top="1" margin-bottom="1"><evaluate expression="&quot;&quot;"/></block>
+              <block margin-top="1">
+                ⠿
+              </block>
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="25" cols="40" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿</row>
+                  <row/>
+                  <row>⠿</row>
+                  <row/>
+                  <row>⠿</row>
+                  <row/>
+                  <row>⠿</row>
                 </page>
               </section>
             </volume>
