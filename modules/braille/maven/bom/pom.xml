@@ -221,7 +221,7 @@
                 <version>3.3.3-SNAPSHOT</version>
             </dependency>
             <!--
-                Dependencies
+                Third-Party Libraries
             -->
             <dependency>
                 <groupId>org.daisy.braille</groupId>
@@ -242,22 +242,6 @@
                 <groupId>org.daisy.braille</groupId>
                 <artifactId>braille-css</artifactId>
                 <version>1.13.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.daisy.libs</groupId>
-                <artifactId>jstyleparser</artifactId>
-                <version>1.20-p10</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>xerces</groupId>
-                        <artifactId>xercesImpl</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.unbescape</groupId>
-                <artifactId>unbescape</artifactId>
-                <version>1.1.0.RELEASE</version>
             </dependency>
             <dependency>
                 <groupId>org.liblouis</groupId>
@@ -324,25 +308,16 @@
                 <artifactId>io.bit3.jsass</artifactId>
                 <version>4.1.0-p1</version>
             </dependency>
-            <!--
-                for liblouis-java and jhyphen
-            -->
             <dependency>
-                <groupId>net.java.dev.jna</groupId>
-                <artifactId>jna</artifactId>
-                <version>4.0.0</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.4</version>
             </dependency>
-            <!--
-                Runtime dependency for jstyleparser
-            -->
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
                 <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
                 <version>3.5.2_1</version>
             </dependency>
-            <!--
-                for liblouis-native (build time only)
-            -->
             <dependency>
                 <groupId>org.liblouis</groupId>
                 <artifactId>louis</artifactId>
@@ -361,9 +336,6 @@
                 <version>2.7.3</version>
                 <type>nar</type>
             </dependency>
-            <!--
-                for libhyphen-native (build time only)
-            -->
             <dependency>
                 <groupId>org.daisy.libs</groupId>
                 <artifactId>hyphen</artifactId>

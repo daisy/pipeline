@@ -49,15 +49,6 @@
       <version>${pax-exam-helper.version}</version>
       <scope>test</scope>
     </dependency>
-    <!--
-        force Maven to use the latest common-utils
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>common-utils</artifactId>
-      <version>2.1.1</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   
   <build>

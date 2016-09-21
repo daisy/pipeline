@@ -90,6 +90,14 @@
         <artifactId>zedai-utils</artifactId>
         <version>1.0.1</version>
       </dependency>
+      <!--
+          Third-Party Libraries
+      -->
+      <dependency>
+        <groupId>org.idpf</groupId>
+        <artifactId>epubcheck</artifactId>
+        <version>4.0.1</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 </project>
