@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:daisy/xspec-maven-plugin
+	branch = master
+	commit = 20ec78add7499b32c11bc2b5456ec05af5bff79a
+	parent = 01e7674dac71910a6cd45f7440ab029b41d0e71a
+	cmdver = 0.3.0

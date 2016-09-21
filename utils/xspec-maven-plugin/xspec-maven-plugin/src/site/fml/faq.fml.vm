@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faqs xmlns="http://maven.apache.org/FML/1.0.1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/FML/1.0.1 http://maven.apache.org/xsd/fml-1.0.1.xsd"
+  title="Frequently Asked Questions" toplink="false">
+
+  <part id="general">
+    <title>General</title>
+
+    <faq id="whats-xspec">
+      <question>What is XSpec?</question>
+      <answer>XSpec is a Behavior Driven Development (BDD) framework for XSLT and XQuery. For more
+        information, please refer to the <a href="http://code.google.com/p/xspec/">XSpec
+        site</a>.</answer>
+    </faq>
+
+    <faq id="what-goal">
+      <question>What goal does the XSpec Maven Plugin offer?</question>
+      <answer>The plugin provides the gal <a href="test-mojo.html">xspec:test</a> to run XSpec XSLT
+        tests.</answer>
+    </faq>
+
+    <faq id="what-version">
+      <question>What version of XSpec is used by the plugin?</question>
+      <answer><p>Version ${xspecVersion} of XSpec is used by version ${project.version} of the XSpec
+        Maven Plugin, with only the following patch(es) applied</p>
+        <ul>
+          <li>Fix for tests using a combination of <code>x:call[@template]</code> and <code>x:context</code> (see pull <a href="https://github.com/daisy/xspec-maven-plugin/pull/3">request #3</a>)</li>
+        </ul>
+      </answer>
+    </faq>
+
+  </part>
+
+</faqs>

@@ -1,0 +1,18 @@
+body {
+  background-image:url(../img/bg.png);
+}
+
+#banner {
+  padding-bottom: 20px;
+}
+#banner h2 {
+  font-size: 2.5em;
+  color: #555;
+}
+
+#banner h2 b {
+  color: #225E9B;
+  font-style: italic;
+  font-size: 1.2em
+}
+

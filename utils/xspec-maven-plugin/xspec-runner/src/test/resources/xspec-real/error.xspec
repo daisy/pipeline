@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description 
+    xmlns:x="http://www.example.com/xslt/xspec"
+    stylesheet="transform.xsl">
+    <x:scenario label="When this,">
+        <x:context>
+            <foo/>
+        </x:context>
+        <x:expect label="do that!">
+            <bar/>
+        </x:expect>
+    </x:scenario>
+</x:description>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description 
+    xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    stylesheet="transform.xsl">
+    <x:scenario label="When this,">
+        <x:context>
+            <foo/>
+        </x:context>
+        <x:expect label="do that!">
+            <foo/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Test without expect label">
+        <x:context>
+            <foo/>
+        </x:context>
+        <x:expect label="">
+            <foo/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Skipped" pending="true">
+        <x:context>
+            <foo/>
+        </x:context>
+        <x:expect label="">
+            <foo/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Failure">
+        <x:context>
+            <foo/>
+        </x:context>
+        <x:expect label="With expect">
+            <bar/>
+        </x:expect>
+    </x:scenario>
+    <x:scenario label="Failure">
+        <x:context>
+            <foo/>
+        </x:context>
+        <x:expect label="With test" test="1 = 2"/>
+    </x:scenario>
+    <x:scenario>
+        <x:label>Parent scenario</x:label>
+        <x:scenario label="child scenario">
+            <x:context>
+                <foo/>
+            </x:context>
+            <x:expect label="">
+                <foo/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="multiple expects">
+        <x:scenario label="child scenario">
+            <x:context>
+                <foo/>
+            </x:context>
+            <x:expect label="">
+                <foo/>
+            </x:expect>
+            <x:expect label="" test="true()"/>
+            <x:expect label="invalid" test="1 = 2"/>
+        </x:scenario>
+    </x:scenario>
+</x:description>

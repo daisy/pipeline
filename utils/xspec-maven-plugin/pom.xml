@@ -1,0 +1,23 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>3</version>
+  </parent>
+
+  <groupId>org.daisy.maven</groupId>
+  <artifactId>xspec-modules-aggregator</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>XSpec Projects Aggregator</name>
+  <description>Aggregator POM for the XSpec-related projects of the DAISY Consortium.</description>
+
+  <!-- List of the modules to build all-at-once -->
+  <modules>
+    <module>xspec-runner</module>
+    <module>xspec-maven-plugin</module>
+  </modules>
+</project>

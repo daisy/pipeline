@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project xmlns="http://maven.apache.org/DECORATION/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Maven" xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd">
+
+  <poweredBy>
+    <logo name="Maven" href="http://maven.apache.org/" img="./img/maven-mavenfactured.png"/>
+  </poweredBy>
+
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>1.3.1</version>
+  </skin>
+
+  <bannerLeft>
+    <name><![CDATA[<b>XSpec</b> Maven Plugin]]></name>
+  </bannerLeft>
+  <version/>
+  <publishDate format="yyyy-MM-dd"/>
+
+  <custom>
+    <fluidoSkin>
+      <sideBarEnabled>true</sideBarEnabled>
+      <navBarStyle>navbar-inverse</navBarStyle>
+      <gitHub>
+        <projectId>daisy-consortium/xspec-maven-plugin</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
+        <ribbonColor>gray</ribbonColor>
+      </gitHub>
+    </fluidoSkin>
+  </custom>
+
+  <body>
+    <head>
+    </head>
+    <menu name="Overview">
+      <item name="Introduction" href="index.html"/>
+      <item name="Goals" href="plugin-info.html"/>
+      <item name="Usage" href="usage.html"/>
+      <item name="FAQ" href="faq.html"/>
+    </menu>
+    <menu name="Examples">
+      <item name="Running XSpec Tests" href="examples/basic.html"/>
+      <item name="Mocking external dependencies" href="examples/mocks.html"/>
+    </menu>
+    <menu name="Maven documentation" ref="reports" inherit="bottom"/>
+  </body>
+
+</project>
