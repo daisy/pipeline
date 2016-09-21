@@ -36,7 +36,7 @@ javadoc {
 
 repositories {
     mavenCentral()
-    //mavenLocal()
+    mavenLocal()
     //maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
