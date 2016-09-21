@@ -50,31 +50,28 @@
       <artifactId>xproc-api</artifactId>
     </dependency>
     <!--
-        OSGi runtime dependencies
+        runtime dependencies (for javax.xml.transform.URIResolver)
     -->
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>saxon-he</artifactId>
-      <scope>runtime</scope>
-    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>modules-registry</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--
-        OSGi runtime dependencies for com.xmlcalabash
+        runtime dependencies (OSGi) (FIXME: use for compilation)
+    -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        runtime dependencies for com.xmlcalabash (OSGi) (FIXME: move to org.daisy.libs:com.xmlcalabash)
     -->
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient-osgi</artifactId>
       <scope>runtime</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -87,7 +84,6 @@
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>
-    
   </dependencies>
 
   <build>

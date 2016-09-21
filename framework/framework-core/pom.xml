@@ -47,11 +47,19 @@
       <scope>test</scope>
     </dependency>
     <!--
-        OSGi runtime dependencies
+        runtime dependencies (for javax.xml.stream.XMLInputFactory)
     -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>woodstox-osgi-adapter</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        FIXME: use for compilation and runtime
+    -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jing</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

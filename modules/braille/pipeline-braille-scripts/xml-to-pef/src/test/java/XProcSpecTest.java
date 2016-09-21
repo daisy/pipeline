@@ -50,9 +50,6 @@ public class XProcSpecTest {
 				pipelineModule("common-utils"),
 				pipelineModule("file-utils"),
 				pipelineModule("fileset-utils"),
-				pipelineModule("html-utils"),
-				pipelineModule("zip-utils"),
-				pipelineModule("mediatype-utils"),
 				// logging
 				logbackClassic(),
 				// xprocspec

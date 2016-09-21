@@ -20,7 +20,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.2</version>
+        <version>1.10.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -49,11 +49,6 @@
       <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>calabash-adapter</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
       <scope>provided</scope>
@@ -64,11 +59,11 @@
       <scope>provided</scope>
     </dependency>
     <!--
-        runtime dependency for framework-core
+        runtime dependencies (for org.daisy.common.xproc.XProcEngine)
     -->
     <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>jing</artifactId>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

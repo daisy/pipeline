@@ -54,7 +54,7 @@
       <artifactId>jstyleparser</artifactId>
     </dependency>
     <!--
-        OSGi runtime dependencies
+        runtime dependencies
     -->
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>

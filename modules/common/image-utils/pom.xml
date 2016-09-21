@@ -27,10 +27,7 @@
       <scope>provided</scope>
     </dependency>
     <!--
-        runtime dependencies
-    -->
-    <!--
-        for saxon (FIXME: use for compilation?)
+        runtime dependencies (OSGi) (FIXME: use for compilation)
     -->
     <dependency>
       <groupId>org.daisy.libs</groupId>

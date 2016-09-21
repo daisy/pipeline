@@ -18,7 +18,7 @@
 
   <dependencies>
     <!--
-        OSGi runtime dependencies
+        runtime dependencies
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
@@ -43,21 +43,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>fileset-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>html-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>zip-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mediatype-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--

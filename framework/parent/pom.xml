@@ -134,6 +134,7 @@
     <!--
         common runtime dependencies
     -->
+    <!--
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
@@ -149,6 +150,7 @@
       <artifactId>jcl-over-slf4j</artifactId>
       <scope>runtime</scope>
     </dependency>
+    -->
   </dependencies>
 
   <build>

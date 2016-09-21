@@ -57,9 +57,8 @@ public class XProcSpecTest {
 				brailleModule("liblouis-native").forThisPlatform(),
 				brailleModule("dotify-formatter"),
 				pipelineModule("file-utils"),
-				pipelineModule("fileset-utils"),
+				pipelineModule("html-utils"),
 				pipelineModule("common-utils"),
-				pipelineModule("mediatype-utils"),
 				// logging
 				logbackClassic(),
 				// xprocspec

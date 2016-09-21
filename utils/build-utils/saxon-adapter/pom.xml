@@ -39,34 +39,20 @@
       <artifactId>slf4j-api</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>saxon-he</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>woodstox-osgi-adapter</artifactId>
-      <scope>runtime</scope>
-    </dependency>
+    <!--
+        runtime dependencies (for javax.xml.transform.URIResolver)
+    -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>modules-registry</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!--
+        runtime dependencies (OSGi) (FIXME: use for compilation)
+    -->
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient-osgi</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore-osgi</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>javax.persistence</artifactId>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

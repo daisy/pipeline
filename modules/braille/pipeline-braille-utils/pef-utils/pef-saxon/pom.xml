@@ -39,7 +39,7 @@
       <scope>provided</scope>
     </dependency>
     <!--
-        OSGI runtime dependency
+        runtime dependencies (OSGi) (FIXME: use for compilation)
     -->
     <dependency>
       <groupId>org.daisy.libs</groupId>

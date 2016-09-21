@@ -59,12 +59,8 @@ public class XProcSpecTest {
 				brailleModule("dotify-formatter"),
 				pipelineModule("file-utils"),
 				pipelineModule("fileset-utils"),
-				pipelineModule("common-utils"),
-				pipelineModule("zip-utils"),
-				pipelineModule("mediatype-utils"),
+				pipelineModule("metadata-utils"),
 				pipelineModule("dtbook-utils"),
-				pipelineModule("dtbook-validator"),
-				pipelineModule("validation-utils"),
 				// logging
 				logbackClassic(),
 				// xprocspec

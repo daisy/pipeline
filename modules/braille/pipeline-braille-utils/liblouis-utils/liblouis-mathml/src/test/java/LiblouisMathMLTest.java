@@ -52,11 +52,7 @@ public class LiblouisMathMLTest {
 				brailleModule("liblouis-utils"),
 				brailleModule("liblouis-native").forThisPlatform(),
 				pipelineModule("file-utils"),
-				pipelineModule("common-utils"),
 				pipelineModule("fileset-utils"),
-				pipelineModule("html-utils"),
-				pipelineModule("zip-utils"),
-				pipelineModule("mediatype-utils"),
 				// logging
 				logbackClassic(),
 				// xprocspec

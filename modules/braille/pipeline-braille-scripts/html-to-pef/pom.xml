@@ -41,12 +41,12 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>fileset-utils</artifactId>
+      <artifactId>file-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mediatype-utils</artifactId>
+      <artifactId>html-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--

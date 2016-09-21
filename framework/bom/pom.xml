@@ -23,7 +23,7 @@
     <daisy.calabash-adapter.version>2.0.3</daisy.calabash-adapter.version>
     <daisy.calabash-custom-steps.version>2.0.0</daisy.calabash-custom-steps.version>
     <daisy.common-utils.version>2.1.2</daisy.common-utils.version>
-    <daisy.framework-core.version>3.1.0</daisy.framework-core.version>
+    <daisy.framework-core.version>3.1.1-SNAPSHOT</daisy.framework-core.version>
     <daisy.framework-persistence.version>2.0.3</daisy.framework-persistence.version>
     <daisy.framework-volatile.version>2.0.1</daisy.framework-volatile.version>
     <daisy.launcher.version>1.0.0</daisy.launcher.version>
@@ -38,7 +38,7 @@
     <daisy.webservice-utils.version>2.2.1</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.0</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.1</daisy.xmlcatalog.version>
-    <daisy.xpath-registry.version>1.0.1</daisy.xpath-registry.version>
+    <daisy.xpath-registry.version>1.0.2-SNAPSHOT</daisy.xpath-registry.version>
     <daisy.xproc-api.version>2.0.0</daisy.xproc-api.version>
 
     <!-- Dependencies Versions -->
@@ -235,6 +235,12 @@
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient-osgi</artifactId>
         <version>4.2.5</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>

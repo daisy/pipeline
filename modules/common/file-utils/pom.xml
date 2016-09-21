@@ -53,39 +53,11 @@
       <scope>runtime</scope>
     </dependency>
     <!--
-        for saxon (FIXME: use for compilation?)
+        runtime dependencies (OSGi) (FIXME: use for compilation)
     -->
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
-        for com.xmlcalabash & calabash-adapter (FIXME: verify + move elsewhere)
-    -->
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient-osgi</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore-osgi</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>woodstox-osgi-adapter</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>javax.persistence</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--

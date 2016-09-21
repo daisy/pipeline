@@ -49,14 +49,14 @@
       <groupId>org.powermock</groupId>
       <artifactId>powermock-module-junit4</artifactId>
       <scope>test</scope>
-   </dependency>
-   <dependency>
+    </dependency>
+    <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-api-mockito</artifactId>
       <scope>test</scope>
-   </dependency>
+    </dependency>
     <!--
-        OSGi runtime dependencies
+        runtime dependencies (OSGi) (FIXME: use for compilation)
     -->
     <dependency>
       <groupId>org.daisy.libs</groupId>

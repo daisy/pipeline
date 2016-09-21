@@ -41,7 +41,7 @@
       <scope>provided</scope>
     </dependency>
     <!--
-        runtime dependencies
+        runtime dependencies (OSGi) (FIXME: use for compilation)
     -->
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -54,11 +54,6 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xspec-runner</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.xmlresolver</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

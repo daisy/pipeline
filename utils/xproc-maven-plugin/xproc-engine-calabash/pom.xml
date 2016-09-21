@@ -68,6 +68,15 @@
       <version>4.3.0</version>
       <scope>provided</scope>
     </dependency>
+    <!--
+        runtime dependencies (OSGi) (FIXME: use for compilation)
+    -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <version>9.5.1.5</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
