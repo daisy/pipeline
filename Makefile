@@ -97,6 +97,12 @@ dp2 : $(dp2)
 run : $(dev_launcher)
 	$(call with-java-11,$< shell)
 
+.PHONY : run-osgi-less
+run-osgi-less : compile
+	cd assembly && \
+	$(MVN) clean package -Posgi-less && \
+	target/osgi-less/start.sh
+
 .PHONY : run-gui
 run-gui : $(dev_launcher)
 	$(call with-java-11,$< gui shell)
