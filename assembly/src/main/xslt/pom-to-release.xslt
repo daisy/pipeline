@@ -6,10 +6,11 @@
                 version="2.0"
                 exclude-result-prefixes="#all"
                 >
+        <xsl:param name="time"/>
 
         <xsl:template match="/">
                 <xsl:variable name="version" select="/pom:project/pom:version/text()"></xsl:variable> 
-                <releaseDescriptor href="http://daisy.github.io/pipeline-assembly/releases/{$version}" version="{$version}">
+                <releaseDescriptor href="http://daisy.github.io/pipeline-assembly/releases/{$version}" version="{$version}" time="{$time}">
                         <xsl:apply-templates select="/pom:project/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='copy-felix-launcher']/pom:configuration/pom:artifactItems">
                                 <xsl:with-param name="deployPath">/system/bootstrap</xsl:with-param>
                         </xsl:apply-templates>
@@ -26,7 +27,7 @@
                                 <xsl:with-param name="deployPath">/system/frontend</xsl:with-param>
                         </xsl:apply-templates>                        
                         <xsl:apply-templates select="/pom:project/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='copy-pipeline-modules']/pom:configuration/pom:artifactItems">
-                                <xsl:with-param name="deployPath">/system/modules</xsl:with-param>
+                                <xsl:with-param name="deployPath">/modules</xsl:with-param>
                         </xsl:apply-templates>
                         <xsl:apply-templates mode="zip" select="/pom:project/pom:profiles/pom:profile/pom:build/pom:plugins/pom:plugin/pom:executions/pom:execution[./pom:id/text()='unpack-cli-win']/pom:configuration/pom:artifactItems/pom:artifactItem">
                                 <xsl:with-param name="deployPath">/cli</xsl:with-param>
@@ -67,7 +68,9 @@
                         '/',$artifactId,'/',$version,'/',$artifactId,'-',$version,'.jar')"></xsl:variable>
                  
                 <xsl:variable name="id" select="string-join(($groupId,$artifactId),'/')"/>
-                <artifact href="{$href}" id="{$id}" extract="false" deployPath="{$deployPath}" version="{$version}"/>
+
+                <xsl:variable name="finalPath" select="concat($deployPath,'/',$groupId,'.',$artifactId,'-',$version,'.jar')"></xsl:variable>
+                <artifact href="{$href}" id="{$id}" extract="false" deployPath="{$finalPath}" version="{$version}"/>
         </xsl:template>
         <xsl:template match="pom:artifactItem" mode="zip">
                 <xsl:param name="deployPath" />
@@ -79,8 +82,9 @@
                 <xsl:variable name="href" select="concat('http://search.maven.org/remotecontent?filepath=', replace($groupId,'\.','/'),
                         '/',$artifactId,'/',$version,'/',$artifactId,'-',$version,'-',$classifier,'.zip')"></xsl:variable>
                 
+                <xsl:variable name="finalPath" select="concat($deployPath,'/',$groupId,'.',$artifactId,'-',$version,'-',$classifier,'.zip')"></xsl:variable>
                 <xsl:variable name="id" select="string-join(($groupId,$artifactId),'/')"/>
-                <artifact href="{$href}" id="{$id}" extract="true" deployPath="{$deployPath}" version="{$version}"/>
+                <artifact href="{$href}" id="{$id}" extract="true" deployPath="{$finalPath}" version="{$version}"/>
         </xsl:template>
 </xsl:stylesheet>
 

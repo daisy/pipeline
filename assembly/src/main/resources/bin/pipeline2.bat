@@ -223,11 +223,13 @@ if "%PIPELINE2_PROFILER%" == "" goto :RUN
     SET OPTS=%PIPELINE2_LOCAL% %PIPELINE2_AUTH%
     SET MAIN=org.apache.felix.main.Main
     SET SHIFT=false
+    SET MODE=-Dorg.daisy.pipeline.main.mode=webservice
 
 :RUN_LOOP
     if "%1" == "remote" goto :EXECUTE_REMOTE
     if "%1" == "local" goto :EXECUTE_LOCAL
     if "%1" == "clean" goto :EXECUTE_CLEAN
+    if "%1" == "gui" goto :EXECUTE_GUI
     if "%1" == "debug" goto :EXECUTE_DEBUG
     goto :EXECUTE
 
@@ -246,6 +248,11 @@ if "%PIPELINE2_PROFILER%" == "" goto :RUN
     shift
     goto :RUN_LOOP
 
+:EXECUTE_GUI
+    SET MODE=-Dorg.daisy.pipeline.main.mode=gui
+    shift
+    goto :RUN_LOOP
+
 :EXECUTE_DEBUG
     if "%JAVA_DEBUG_OPTS%" == "" set JAVA_DEBUG_OPTS=%DEFAULT_JAVA_DEBUG_OPTS%
     set "JAVA_OPTS=%JAVA_DEBUG_OPTS% %JAVA_OPTS%"
@@ -256,7 +263,7 @@ if "%PIPELINE2_PROFILER%" == "" goto :RUN
     SET ARGS=%1 %2 %3 %4 %5 %6 %7 %8
     rem Execute the Java Virtual Machine
     cd "%PIPELINE2_BASE%"
-    "%JAVA%" %JAVA_OPTS% %OPTS% -classpath "%CLASSPATH%" -Djava.endorsed.dirs="%JAVA_HOME%\jre\lib\endorsed;%JAVA_HOME%\lib\endorsed;%PIPELINE2_HOME%\lib\endorsed" -Djava.ext.dirs="%JAVA_HOME%\jre\lib\ext;%JAVA_HOME%\lib\ext;%PIPELINE2_HOME%\lib\ext" -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" -Dorg.daisy.pipeline.base="%PIPELINE2_BASE%" -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" %PIPELINE2_OPTS% %MAIN% %ARGS%
+    "%JAVA%" %JAVA_OPTS% %OPTS% -classpath "%CLASSPATH%" -Djava.endorsed.dirs="%JAVA_HOME%\jre\lib\endorsed;%JAVA_HOME%\lib\endorsed;%PIPELINE2_HOME%\lib\endorsed" -Djava.ext.dirs="%JAVA_HOME%\jre\lib\ext;%JAVA_HOME%\lib\ext;%PIPELINE2_HOME%\lib\ext" -Dorg.daisy.pipeline.home="%PIPELINE2_HOME%" -Dorg.daisy.pipeline.base="%PIPELINE2_BASE%" -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%" -Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/config.properties" -Dfelix.system.properties="file:%PIPELINE2_HOME:\=/%/etc/system.properties" %MODE% %PIPELINE2_OPTS% %MAIN% %ARGS%
 
 rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 

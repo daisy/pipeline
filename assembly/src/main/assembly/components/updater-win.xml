@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<component>
+        <files>
+                <file>
+                        <source>target/updater/win32/pipeline-updater.exe</source>
+                        <outputDirectory>updater</outputDirectory>
+                        <destName>pipeline-updater.exe</destName>
+                        <fileMode>0755</fileMode>
+                </file>
+                <file>
+                        <source>target/updater/win32/pipeline-updater-gui.exe</source>
+                        <outputDirectory>bin</outputDirectory>
+                        <destName>pipeline-updater-gui.exe</destName>
+                        <fileMode>0755</fileMode>
+                </file>
+                <file>
+                        <source>target/release-descriptor/releaseDescriptor.xml</source>
+                        <outputDirectory>etc</outputDirectory>
+                        <destName>releaseDescriptor.xml</destName>
+                </file>
+        </files>
+</component>

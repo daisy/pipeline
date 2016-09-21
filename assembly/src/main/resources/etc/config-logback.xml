@@ -23,9 +23,9 @@
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <filter class="org.daisy.pipeline.logging.OSGIFilter"/>   
-    <file>${org.daisy.pipeline.logdir}/daisy-pipeline.log</file>
+    <file>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.main.mode}.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>${org.daisy.pipeline.logdir}/daisy-pipeline.%i.log.zip</fileNamePattern>
+      <fileNamePattern>${org.daisy.pipeline.logdir}/daisy-pipeline-${org.daisy.pipeline.main.mode}.%i.log.zip</fileNamePattern>
       <minIndex>1</minIndex>
       <maxIndex>4</maxIndex>
     </rollingPolicy>

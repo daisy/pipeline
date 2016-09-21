@@ -275,7 +275,8 @@ setupDebugOptions() {
 }
 
 setupDefaults() {
-    DEFAULT_JAVA_OPTS="-Xms$JAVA_MIN_MEM -Xmx$JAVA_MAX_MEM "
+    # add startOnFirstThread for the GUI
+    DEFAULT_JAVA_OPTS="-Xms$JAVA_MIN_MEM -Xmx$JAVA_MAX_MEM"
 
     #Set the JVM_VENDOR specific JVM flags
     if [ "$JVM_VENDOR" = "SUN" ]; then
@@ -371,6 +372,7 @@ run() {
     fi
     MAIN=org.apache.felix.main.Main
     OPTS="$PIPELINE2_LOCAL $PIPELINE2_AUTH"
+    MODE=" -Dorg.daisy.pipeline.main.mode=webservice"
 
     case "$1" in
         # 'stop')
@@ -408,6 +410,10 @@ run() {
             fi
             shift
             ;;
+        'gui')
+            MODE=" -Dorg.daisy.pipeline.main.mode=gui"
+            shift
+            ;;
     esac
 
     JAVA_ENDORSED_DIRS="${JAVA_HOME}/jre/lib/endorsed:${JAVA_HOME}/lib/endorsed:${PIPELINE2_HOME}/lib/endorsed"
@@ -424,7 +430,7 @@ run() {
     fi
     cd "$PIPELINE2_BASE"
 
-    eval exec "\"$JAVA"\" "$JAVA_OPTS" -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\"  -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" -Dorg.daisy.pipeline.base="\"$PIPELINE2_BASE"\" -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" $FELIX_OPTS $PIPELINE2_OPTS $OPTS -classpath "\"$CLASSPATH"\" $MAIN "\"$@"\"
+    eval exec "\"$JAVA"\" "$JAVA_OPTS" -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\"  -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" -Dorg.daisy.pipeline.base="\"$PIPELINE2_BASE"\" -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" $FELIX_OPTS $PIPELINE2_OPTS $OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@"\"
 }
 
 main() {

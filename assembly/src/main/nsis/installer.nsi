@@ -164,7 +164,12 @@ InstType /COMPONENTSONLYONCUSTOM
 
 
 function .onInit
+        Var /GLOBAL CHECK_JRE
 	setShellVarContext all
+        ${GetParameters} $R0
+        ${GetOptions} $R0 "--check-jre=" $R1
+        StrCpy $CHECK_JRE $R1
+
 	!insertmacro VerifyUserIsAdmin
 	; check the user priviledges
 	!insertmacro MULTIUSER_INIT
@@ -180,6 +185,7 @@ Section -JRECheck SEC00-1
   var /GLOBAL JAVA_SEM_VER
   var /GLOBAL JAVA_HOME
 
+  StrCmp $CHECK_JRE "false" End
   DetailPrint "Checking JRE version..."
   Call GetJavaVersion 
   pop $0 ; major version
@@ -190,10 +196,11 @@ Section -JRECheck SEC00-1
   StrCpy $JAVA_SEM_VER "$0.$1.$2.$3" ;use . instead of _ for the build so the comparison works
   StrCpy $JAVA_VER "$0.$1"
   
-  StrCmp "no" "$0" InstallJava CheckJavaVersion
+  Goto CheckJavaVersion
 
   CheckJavaVersion:
     ;First check version number
+    StrCmp "no" "$0" InstallJava
     ${VersionConvert} $JAVA_SEM_VER "" $R1
     ${VersionCompare} $R1 ${REQUIRED_JAVA_VER} $R2
     IntCmp 2 $R2 InstallJava
@@ -220,8 +227,8 @@ Section -JRECheck SEC00-1
         ClearErrors
         messageBox mb_yesno "Java JRE not found or too old. Daisy Pipeline 2 needs at least Java ${REQUIRED_JAVA_VER}, would you like to install it now?" IDNO Exit
 	setOutPath $TEMP
-        File "jre-8u45-windows-i586-iftw.exe"
-        ExecWait '"$TEMP\jre-8u45-windows-i586-iftw.exe" WEB_JAVA=0 SPONSORS=0'
+        File "jre-8u102-windows-i586-iftw.exe"
+        ExecWait '"$TEMP\jre-8u102-windows-i586-iftw.exe" WEB_JAVA=0 SPONSORS=0'
 
         IfErrors 0 End 
         messageBox mb_iconstop "Java installation returned an error. Please contact the Daisy Pipeline 2 developing team."
@@ -246,17 +253,20 @@ section -Main SEC01
 	#Remove from previous versions 
         DetailPrint "Removing old data..."
 	ReadEnvStr $0 APPDATA
-        IfFileExists "$0\DAISY Pipeline 2" +1 +2 #Because relative jumping instructions is a way of writing really mantainable code
+        IfFileExists "$0\DAISY Pipeline 2" +1 +2 #Because relative jumping instructions is a way of writing really maintainable code
 	rmDir /r "$0\DAISY Pipeline 2"
 
 	setOutPath $INSTDIR
 	SetOverwrite on
-	file ./logo.ico
+	file ./logo.ico 
+        
 	writeUninstaller "$INSTDIR\uninstall.exe"
 	#setOutPath "$INSTDIR\${PROJECT_ARTIFACT_ID}"
 
 	#Copy the whole daisy-pipeline dir
-	file /r "${PROJECT_BUILD_DIR}\pipeline2-${VERSION}-webui_windows\daisy-pipeline"
+	file /r "${PROJECT_BUILD_DIR}\pipeline2-${VERSION}_win\daisy-pipeline"
+	file ./pipeline2-gui.vbs
+        file ./pipeline2-webservice.vbs
 
 	###############
 	# Registry information for add/remove programs
@@ -291,7 +301,9 @@ Section -StartMenu
 	SetOutPath $INSTDIR
 	!insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 	createDirectory "$SMPROGRAMS\${APPNAME}"
-	createShortCut "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\daisy-pipeline\webui\start.bat" "" "$INSTDIR\logo.ico"
+	createShortCut "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk" "$INSTDIR\pipeline2-gui.vbs" "" "$INSTDIR\logo.ico"
+	createShortCut "$SMPROGRAMS\${APPNAME}\Pipeline Updater.lnk" "$INSTDIR\daisy-pipeline\bin\pipeline-updater-gui.exe" "" "$INSTDIR\logo.ico"
+	#createShortCut "$SMPROGRAMS\${APPNAME}\${APPNAME}-webservice.lnk" "$INSTDIR\pipeline2-webservice.vbs" "" "$INSTDIR\logo.ico"
 	CreateShortCut "$SMPROGRAMS\${APPNAME}\uninstall.lnk" "$INSTDIR\uninstall.exe"
 	!insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
@@ -310,6 +322,7 @@ section "uninstall"
 
 	# Remove Start Menu launcher
 	delete "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk"
+	delete "$SMPROGRAMS\${APPNAME}\Pipeline Updater.lnk"
 	# Try to remove the Start Menu folder - this will only happen if it is empty
 	rmDir "$SMPROGRAMS\${APPNAME}\uninstall.lnk"
 

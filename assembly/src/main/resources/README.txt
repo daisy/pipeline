@@ -1,4 +1,4 @@
-              DAISY Pipeline 2 - 1.9 - January 22, 2014
+              DAISY Pipeline 2 - 1.10.0-beta1 - September 19, 2016
 ==============================================================================
 
 
@@ -34,90 +34,95 @@ For more information see:
 The package includes:
 
  - a modular runtime framework for the Pipeline 2 modules
- - a command line interface to execute pipeline scripts, in the "cli"
-   directory
+ - a graphical user interface (GUI) to execute pipeline scripts
+ - a command line interface (CLI) to execute pipeline scripts
  - dedicated launchers for the Pipeline 2 Web Service, in the "bin" directory
  - a set of processing modules providing the following conversions:
-   * daisy202-to-epub3 - Convert a DAISY 2.02 fileset to EPUB3
-   * daisy202-validator - Schema-validation of a DAISY 2.02 fileset
-   * daisy3-to-epub3 - Convert a DAISY 3 fileset to EPUB 3 
-   * dtbook-to-daisy3 - Convert a DTBook XML document to DAISY 3 (with TTS audio)
-   * dtbook-to-epub3 - Convert a DTBook XML document to EPUB 3
-   * dtbook-to-html - Convert a DTBook XML document to XHTML5
-   * dtbook-to-pef - Convert a DTBook XML document to PEF Braille
-   * dtbook-to-zedai - Convert a DTBook XML document to ZedAI XML
-   * dtbook-validator - Validate a DTBook 2005-3 XML document
-   * epub3-to-daisy202 - Convert an EPUB 3 publication to DAISY 2.02
-   * html-to-epub3 - Convert (an) HTML document(s) to EPUB 3
-   * nimas-fileset-validator - Validate a NIMAS Fileset
-   * zedai-to-epub3 - Convert a ZedAI document to EPUB 3
-   * zedai-to-html - Convert a ZedAI document to XHTML5
-   * zedai-to-pef - Convert a ZedAI document to PEF Braille
+   * daisy202-to-epub3       Transforms a DAISY 2.02 publication into an EPUB 3
+                             publication.
+   * daisy202-validator      Validates a DAISY 2.02 fileset.
+   * daisy3-to-epub3         Transforms a DAISY 3 publication into an EPUB 3
+                             publication.
+   * dtbook-to-daisy3        Converts multiple dtbooks to daisy 3 format
+   * dtbook-to-epub3         Converts multiple dtbooks to epub3 format
+   * dtbook-to-html          Transforms DTBook XML into HTML.
+   * dtbook-to-pef           Transforms a DTBook (DAISY 3 XML) document into
+                             a PEF.
+   * dtbook-to-zedai         Transforms DTBook XML into ZedAI XML.
+   * dtbook-validator        Validates DTBook documents. Supports inclusion of
+                             MathML.
+   * epub3-to-daisy202       Transforms an EPUB3 publication into DAISY 2.02.
+   * epub3-to-pef            Transforms a EPUB 3 publication into a PEF.
+   * html-to-epub3           Transforms (X)HTML documents into an EPUB 3
+                             publication.
+   * html-to-pef             Transforms a HTML document into a PEF.
+   * nimas-fileset-validator Validate a NIMAS Fileset. Supports inclusion of
+                             MathML.
+   * zedai-to-epub3          Transforms a ZedAI (DAISY 4 XML) document into an
+                             EPUB 3 publication.
+   * zedai-to-html           Transforms ZedAI XML (ANSI/NISO Z39.98-2012
+                             Authoring and Interchange) into HTML.
+   * zedai-to-pef            Transforms a ZedAI (DAISY 4 XML) document into a
+                             PEF.
  - a set of sample documents to test the provided conversions, in the
    "samples" directory
 
 3. Release Notes
 ------------------------------------------------------------------------------
 
-The package includes the 1.9 version of the project.
+The package includes the 1.10.0-beta1 version of the project.
+This is a beta release.
 
-### Changes in v1.9
+### Changes in v1.10.0-beta1
 
 * Distribution
-  * [NEW] new CLI implementation (in Go – https://golang.org/)
-  * [NEW] per-platform distribution, with native CLI executables
-  * improve Java detection on Mac OS X
-  * notify users of unsupported Java version
-  * improve build of Debian packages
+  * [NEW] new graphical user interface (GUI)
+  * [NEW] installers for the GUI on Windows
+  * [NEW] packaged application on Mac OS X
+  * online Java installer bundled in the Windows installer
+  * Java Runtime Environment bundled in the Mac OS X app
+
+* Command Line Interface
+  * [NEW] `clean` command to remove jobs with an `ERROR` status
+  * inputs and options arguments are no longer prefixed with `--i` and `--x`
+  * the `version` command now works as expected
+  * Properly detect Java under OpenJDK and Ubuntu 15.04
 
 * Framework and API
-  * [NEW] Primary outputs are returned in the jobs list from the web API
-  * [NEW] Script version is returned in the web API
-  * Update Calabash (XProc engine) to v1.0.23
-  * Configurable number of concurrent threads  
-  * Fix support for UNC paths on Windows
+  * [NEW] Add datatypes to options and list them through the api
+  * [NEW] Expose the default value for options
+  * [NEW] Add support for job batches
+  * Get rid of the folder in zipped ports and options
+  * Catch out of memory errors
+  * Return a more meaningful error when inputs are not corect
+  * Improved control of script removal
+  * Improved logging filters
+  * Normalize whitespace in script documentation parsing
+  * Do not strip out spaces if xml:space="preserve"
+  * Allow posting job requests using a namespace prefix   
 
 * Modules
   * [NEW] DAISY 2.02 validator
-  * [NEW] DTBook to ODT script
-  * [NEW] DTBook to EPUB 3 with TTS-narrated Media Overlays
-  * [NEW] EPUB 3 to DAISY 2.02 script (experimental)
-  * [audio] new API for audio encoders
-  * [audio] make sure we have logs when Lame is failing
-  * [epub3] Set the title metadata in EPUB 3 HTML Content Docs
-  * [epub3] Fix improper tagging of spine items as "non-linear"
-  * [daisy202-to-epub3] Align audio-only conversion to the TIES guidelines
-  * [dtbook] Fix loss of MathML IDs when converting to ZedAI or EPUB 3
-  * [dtbook] Fix support for validation of DTBook 2005-1 and 1.1.0
-  * [nlp] Proper detection of sentences and words in multiple HTML documents
-  * [tts] Fix a bug with voice listing on Mac OS X
-  * [tts] Possibility to use XSLT in TTS SSML adapters
-  * [tts] Improve multithreading
-  * [tts] Gender-based voice selection
-  * [tts] New modules to process EPUB 3 documents
-  * [tts] Fine selection of TTS voice with aural CSS
-  * [tts] improve support for SAPI5
-  * [tts] Delete the generated audio directory when the JVM exits gracefully
+  * [NEW] DAISY 3 (audio-only) to DAISY 2.02
+  * [NEW] EPUB 3 validator (EpubCheck)
+  * [NEW] EPUB 3 to PEF script
+  * [NEW] HTML to PEF script
+  * Experimental audio-only DAISY 3 production
+  * Improved MathML production in DAISY 3
+  * Improved NIMAS validation
+  * Optimized fileset lading
+  * ... and various other bug fixes
 
 See also the full release notes on the release page:
-  https://github.com/daisy/pipeline-assembly/releases/tag/v1.9
+  https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0-beta1
 
 4. Prerequisites                   
 ------------------------------------------------------------------------------
 
 Modules already include their dependent libraries and only require a recent
-Java environment (Java SE 7 or later).
+Java environment (Java SE 8 update 45 or later).
 
 To get the latest version of Java, go to http://www.java.com/
-
-The "bin" directory of the Java Runtime Environment installation must be on 
-the system PATH. Refer to the documentation for more details on how to 
-configure this on your operating system.
-
-On Mac and Linux, the command line tool requires a Ruby runtime environment
-(version 1.8 or above). A Ruby runtime is already bundled in the executable on
-Windows.
-
 
 5. Getting Started
 ------------------------------------------------------------------------------
@@ -132,8 +137,8 @@ Windows.
 
 For instance:
 
-	> cli\dp2.exe dtbook-to-zedai --i-source samples\dtbook\hauy_valid.xml
-	--x-output-dir "C:\Users\John Doe\Desktop\out"
+	> cli\dp2.exe dtbook-to-zedai --source samples\dtbook\hauy_valid.xml
+	--output "C:\Users\John Doe\Desktop\out"
 
 
 will run the DTBook to ZedAI converter on Windows and will output the result 
@@ -153,51 +158,61 @@ in the "out" directory on the desktop of the user named "John Doe".
 
 6. Documentation
 ------------------------------------------------------------------------------
+  
+  Usage dp2 [GLOBAL_OPTIONS] command [COMMAND_OPTIONS] [PARAMS]
+  
+  
+  Script commands:
+  
+     daisy202-to-epub3        Transforms a DAISY 2.02 publication into an EPUB3
+                              publication.
+     daisy202-validator       Validates a DAISY 2.02 fileset.
+     daisy3-to-epub3          Transforms a DAISY 3 publication into an EPUB 3
+                              publication.
+     dtbook-to-daisy3         Converts multiple dtbooks to daisy 3 format
+     dtbook-to-epub3          Converts multiple dtbooks to epub3 format
+     dtbook-to-html           Transforms DTBook XML into HTML.
+     dtbook-to-pef            Transforms a DTBook (DAISY 3 XML) document into a
+                              PEF.
+     dtbook-to-zedai          Transforms DTBook XML into ZedAI XML.
+     dtbook-validator         Validates DTBook documents. Supports inclusion of
+                              MathML.
+     epub3-to-daisy202        Transforms an EPUB3 publication into DAISY 2.02.
+     epub3-to-pef             Transforms a EPUB 3 publication into a PEF.
+     html-to-epub3            Transforms (X)HTML documents into an EPUB 3
+                              publication.
+     html-to-pef              Transforms a HTML document into a PEF.
+     nimas-fileset-validator  Validate a NIMAS Fileset. Supports inclusion of
+                              MathML.
+     zedai-to-epub3           Transforms a ZedAI (DAISY 4 XML) document into an 
+                              EPUB 3 publication.
+     zedai-to-html            Transforms ZedAI XML (ANSI/NISO Z39.98-2012 Authoring
+                              and Interchange) into HTML.
+     zedai-to-pef             Transforms a ZedAI (DAISY 4 XML) document into a PEF.
+  
+          
+  
+  General commands:
+  
+     status        Returns the status of the job with id JOB_ID
+     delete        Removes a job from the pipeline
+     results       Stores the results from a job
+     jobs          Returns the list of jobs present in the server
+     log           Stores the results from a job
+     queue         Shows the execution queue and the job's priorities. 
+     moveup        Moves the job up the execution queue
+     movedown      Moves the job down the execution queue
+     clean         Removes the jobs with an ERROR status
+     halt          Stops the webservice
+     version       Prints the version and authentication information
+          
+  
+  
+  List of global options:                 dp2 help -g
+  List of admin commands:                 dp2 help -a
+  Detailed help for a single command:     dp2 help COMMAND  
 
-	Usage: dp2 command [options]
-	
-	
-	Script commands:
-	
-	daisy202-to-epub3       Transforms a DAISY 2.02 publication into an EPUB3
-                            publication.
-	daisy3-to-epub3         Transforms a DAISY 3 publication into an EPUB 3
-                            publication.
-	dtbook-to-epub3         Converts multiple dtbooks to epub3 format
-	dtbook-to-html          Transforms DTBook XML into HTML.
-	dtbook-to-zedai         Transforms DTBook XML into ZedAI XML.
-	dtbook-validator        Validates DTBook documents. Supports inclusion of
-                            MathML.
-	html-to-epub3           Transforms an (X)HTML document into an EPUB 3
-                            publication.
-	nimas-fileset-validator Validate a NIMAS Fileset. Supports inclusion of
-                            MathML.
-	zedai-to-epub3          Transforms a ZedAI (DAISY 4 XML) document into an
-                            EPUB 3 publication.
-	zedai-to-html           Transforms ZedAI XML (ANSI/NISO Z39.98-2012
-                            Authoring and Interchange) into HTML.
-	
-	General commands:
-	
-	delete              Deletes a job
-	halt                Stops the WS
-	jobs                Shows the status for every job
-	log                 Gets the job's log file
-    result              Gets the zip file containing the job results
-	status              Shows the detailed status for a single job
-	help                Shows this message or the command help 
-	version             Shows version and exits
-	
-	To list the global options type:    dp2 help -g
-	To get help for a command type:     dp2 help COMMAND
-
-
-The Web service API is documented on the Pipeline 2 development wiki:
- http://code.google.com/p/daisy-pipeline/wiki/WebServiceAPI
-
-A complete user guide is available on the Pipeline 2 development wiki:
- http://code.google.com/p/daisy-pipeline/wiki/UserGuideIntro
-
+A complete user guide is in the works and will be available soon.
 
 
 7. Known limitations

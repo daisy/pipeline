@@ -5,11 +5,11 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>2</version>
-    <relativePath />
+    <relativePath/>
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.9.13-SNAPSHOT</version>
+  <version>1.10-beta1</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,76 +17,90 @@
     <connection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</developerConnection>
-    <tag>v1.9</tag>
+    <tag>v1.10-beta1</tag>
   </scm>
   <dependencies>
     <dependency>
       <groupId>org.apache.felix</groupId>
       <artifactId>org.apache.felix.main</artifactId>
       <version>4.4.1</version>
-      <!-- <version>4.2.1</version> -->
     </dependency>
   </dependencies>
   <dependencyManagement>
-    <dependencies>      
+    <dependencies>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>cli</artifactId>
-        <version>2.0.0</version>
+        <version>2.1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>gui</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>updater</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>updater-gui</artifactId>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
+        <version>1.10.1</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>scripts-bom</artifactId>
         <version>1.10.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>scripts-aggregator</artifactId>
-        <version>1.9</version>
+        <artifactId>common-utils-bom</artifactId>
+        <version>1.10.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>common-utils-aggregator</artifactId>
-        <version>1.9</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>script-utils-aggregator</artifactId>
-        <version>1.9</version>
+        <artifactId>scripts-utils-bom</artifactId>
+        <version>1.10.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.9.12</version>
+        <version>1.9.15</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-modules-bom</artifactId>
-        <version>1.9</version>
+        <version>1.10.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.9</version>
+        <version>1.10.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-modules-bom</artifactId>
-        <version>1.9</version>
+        <version>1.10.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -132,6 +146,12 @@
                   <artifactId>org.apache.felix.main</artifactId>
                   <destFileName>felix.jar</destFileName>
                 </artifactItem>
+                <!--<artifactItem>-->
+                <!--<groupId>org.daisy.pipeline</groupId>-->
+                <!--<artifactId>launcher</artifactId>-->
+                <!--<version>1.0.0</version>-->
+                <!--<destFileName>custom-launcher.jar</destFileName>-->
+                <!--</artifactItem>-->
               </artifactItems>
             </configuration>
           </execution>
@@ -226,52 +246,19 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-libs-bundles</id>
+            <id>copy-persistence-libs-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/libs</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/libs/persistence</outputDirectory>
               <artifactItems>
-                      <dependency>
-                              <groupId>javax.xml.crypto</groupId>
-                              <artifactId>jsr105-api</artifactId>
-                              <version>1.0.1</version>
-                      </dependency>
-                      <dependency>
-                              <groupId>javax.xml.parsers</groupId>
-                              <artifactId>jaxp-api</artifactId>
-                              <version>1.4.5</version>
-                      </dependency>
-
-
-                <!-- Runtime dependencies -->
-                <artifactItem>
-                  <groupId>org.apache.httpcomponents</groupId>
-                  <artifactId>httpclient-osgi</artifactId>
-                  <version>4.2.5</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.apache.httpcomponents</groupId>
-                  <artifactId>httpcore-osgi</artifactId>
-                  <version>4.2.4</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>jing</artifactId>
-                  <version>20120724.0.0</version>
-                </artifactItem>
+                <!-- Note: 1.1.0 requires EclipseLink org.eclipse.persistence.asm:3.3.1.v201206041142
+                                    which doesn't seem to be accepted by Felix (JarInputStream) -->
                 <artifactItem>
                   <groupId>org.eclipse</groupId>
                   <artifactId>org.eclipse.gemini.jpa</artifactId>
                   <version>1.0.0.RELEASE</version>
-                  <!-- Note: 1.1.0 requires EclipseLink org.eclipse.persistence.asm:3.3.1.v201206041142
-                                    which doesn't seem to be accepted by Felix (JarInputStream) -->
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.gemini</groupId>
-                  <artifactId>org.apache.derby</artifactId>
-                  <version>10.8.2.2</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.gemini</groupId>
@@ -306,6 +293,57 @@
                   <version>2.3.2</version>
                 </artifactItem>
                 <artifactItem>
+                  <groupId>org.eclipse.persistence</groupId>
+                  <artifactId>javax.persistence</artifactId>
+                  <version>2.0.3</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.gemini</groupId>
+                  <artifactId>org.apache.derby</artifactId>
+                  <version>10.8.2.2</version>
+                </artifactItem>
+                <!--<artifactItem>-->
+                <!--<groupId>org.daisy.pipeline</groupId>-->
+                <!--<artifactId>persistence-derby</artifactId>-->
+                <!--</artifactItem>-->
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-libs-bundles</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/libs</outputDirectory>
+              <artifactItems>
+                <dependency>
+                  <groupId>javax.xml.crypto</groupId>
+                  <artifactId>jsr105-api</artifactId>
+                  <version>1.0.1</version>
+                </dependency>
+                <dependency>
+                  <groupId>javax.xml.parsers</groupId>
+                  <artifactId>jaxp-api</artifactId>
+                  <version>1.4.5</version>
+                </dependency>
+                <!-- Runtime dependencies -->
+                <artifactItem>
+                  <groupId>org.apache.httpcomponents</groupId>
+                  <artifactId>httpclient-osgi</artifactId>
+                  <version>4.2.5</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.httpcomponents</groupId>
+                  <artifactId>httpcore-osgi</artifactId>
+                  <version>4.2.4</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>jing</artifactId>
+                  <version>20120724.0.0</version>
+                </artifactItem>
+                <artifactItem>
                   <groupId>nu.validator.htmlparser</groupId>
                   <artifactId>htmlparser</artifactId>
                   <version>1.4</version>
@@ -329,11 +367,6 @@
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>servlet-api</artifactId>
                   <version>2.5.0</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.persistence</groupId>
-                  <artifactId>javax.persistence</artifactId>
-                  <version>2.0.3</version>
                 </artifactItem>
                 <!-- From dependencies used at compile time in the Framework parent POM -->
                 <artifactItem>
@@ -517,6 +550,40 @@
             </configuration>
           </execution>
           <execution>
+            <id>copy-persistence-pipeline-bundles</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/pipeline/persistence</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>persistence-derby</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>framework-persistence</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-volatile-pipeline-bundles</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/pipeline/volatile</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>framework-volatile</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
             <id>copy-pipeline-bundles</id>
             <goals>
               <goal>copy</goal>
@@ -542,10 +609,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>framework-persistence</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
                   <artifactId>logging-activator</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -558,11 +621,11 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>persistence-derby</artifactId>
+                  <artifactId>push-notifier</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>push-notifier</artifactId>
+                  <artifactId>updater-wrapper</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
@@ -598,6 +661,66 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>webservice</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-gui</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/gui</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>de.codecentric.centerdevice</groupId>
+                  <artifactId>centerdevice-nsmenufx</artifactId>
+                  <version>2.1.0</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>gui</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>pegdown</artifactId>
+                  <version>1.0.0</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>parboiled</artifactId>
+                  <version>1.0.0</version>
+                </artifactItem>
+                <!--<artifactItem>-->
+                <!--<groupId>org.daisy.libs</groupId>-->
+                <!--<artifactId>parboiled-core</artifactId>-->
+                <!--<version>1.0.0-SNAPSHOT</version>-->
+                <!--</artifactItem>-->
+                <artifactItem>
+                  <groupId>org.ow2.asm</groupId>
+                  <artifactId>asm</artifactId>
+                  <version>5.0.3</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.asm</groupId>
+                  <artifactId>asm-analysis</artifactId>
+                  <version>5.0.3</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.asm</groupId>
+                  <artifactId>asm-tree</artifactId>
+                  <version>5.0.3</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.asm</groupId>
+                  <artifactId>asm-util</artifactId>
+                  <version>5.0.3</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.parboiled</groupId>
+                  <artifactId>parboiled-core</artifactId>
+                  <version>1.1.7</version>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -652,6 +775,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>daisy3-to-daisy202</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>daisy3-to-epub3</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -686,7 +813,7 @@
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>dtbook-tts</artifactId>
                 </artifactItem>
-            		<artifactItem>
+                <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub3-tts</artifactId>
                 </artifactItem>
@@ -714,6 +841,42 @@
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub3-to-ssml</artifactId>
                 </artifactItem>
+                
+                <!-- epub3-validator + dependencies -->
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>epub3-validator</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>epubcheck-adapter</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.idpf</groupId>
+                  <artifactId>epubcheck</artifactId>
+                  <version>4.0.1</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.google.guava</groupId>
+                  <artifactId>guava</artifactId>
+                  <version>14.0.1</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.commons</groupId>
+                  <artifactId>commons-compress</artifactId>
+                  <version>1.5</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.codehaus.jackson</groupId>
+                  <artifactId>jackson-core-asl</artifactId>
+                  <version>1.9.12</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.codehaus.jackson</groupId>
+                  <artifactId>jackson-mapper-asl</artifactId>
+                  <version>1.9.12</version>
+                </artifactItem>
+                
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub3-to-daisy202</artifactId>
@@ -741,6 +904,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>image-utils</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>mathml-to-ssml</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -794,12 +961,6 @@
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-attbin</artifactId>
                 </artifactItem>
-                <!-- Uncomment what follows if you have the ATT's sdk to build the artifact: -->
-                <!-- <artifactItem> -->
-                <!--   <groupId>org.daisy.pipeline.modules</groupId> -->
-                <!--   <artifactId>tts-adapter-attnative</artifactId> -->
-                <!--   <classifier>linux</classifier> -->
-                <!-- </artifactItem> -->
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-espeak</artifactId>
@@ -809,12 +970,16 @@
                   <artifactId>tts-adapter-osx</artifactId>
                 </artifactItem>
                 <artifactItem>
-                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-sapinative</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-common</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>tts-helpers</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -1030,6 +1195,11 @@
                   <artifactId>liblouis-native</artifactId>
                   <classifier>windows</classifier>
                 </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules.braille</groupId>
+                  <artifactId>libhyphen-native</artifactId>
+                  <classifier>windows</classifier>
+                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
@@ -1050,6 +1220,51 @@
           <tagNameFormat>v@{project.version}</tagNameFormat>
         </configuration>
       </plugin>
+          <plugin>
+            <artifactId>maven-help-plugin</artifactId>
+            <version>2.1.1</version>
+            <executions>
+              <execution>
+                <id>generate-effective-pom</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>effective-pom</goal>
+                </goals>
+                <configuration>
+                  <output>target/tmp/effective-pom.xml</output>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-release-descriptor</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target>
+                    <java classname="net.sf.saxon.Transform">
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-release.xslt"/>
+                      <arg value="time=${maven.build.timestamp}"/>
+                      <arg line="-o:./target/release-descriptor/releaseDescriptor.xml"/>
+                    </java>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+            <dependencies>
+              <dependency>
+                <groupId>net.sf.saxon</groupId>
+                <artifactId>Saxon-HE</artifactId>
+                <version>9.5.1-5</version>
+              </dependency>
+            </dependencies>
+          </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
@@ -1078,7 +1293,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -1091,7 +1306,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -1132,6 +1347,23 @@
                   </artifactItems>
                 </configuration>
               </execution>
+              <execution>
+                <id>unpack-updater-mac</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater</artifactId>
+                      <type>zip</type>
+                      <classifier>linux_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/mac32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
           <plugin>
@@ -1156,7 +1388,7 @@
                 </configuration>
               </execution>
             </executions>
-          </plugin>          
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -1190,6 +1422,23 @@
                   </artifactItems>
                 </configuration>
               </execution>
+              <execution>
+                <id>unpack-updater-linux</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater</artifactId>
+                      <type>zip</type>
+                      <classifier>darwin_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/linux</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
           <plugin>
@@ -1214,7 +1463,7 @@
                 </configuration>
               </execution>
             </executions>
-          </plugin>          
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -1249,6 +1498,40 @@
                   </artifactItems>
                 </configuration>
               </execution>
+              <execution>
+                <id>unpack-updater-win</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater</artifactId>
+                      <type>zip</type>
+                      <classifier>windows_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+              <execution>
+                <id>unpack-updater-gui-win</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater-gui</artifactId>
+                      <type>zip</type>
+                      <classifier>windows_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
             </executions>
           </plugin>
           <plugin>
@@ -1273,7 +1556,7 @@
                 </configuration>
               </execution>
             </executions>
-          </plugin>          
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -1282,22 +1565,22 @@
       <id>dev-launcher</id>
       <build>
         <plugins>
-          <plugin>
-            <artifactId>maven-help-plugin</artifactId>
-            <version>2.1.1</version>
-            <executions>
-              <execution>
-                <id>generate-effective-pom</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>effective-pom</goal>
-                </goals>
-                <configuration>
-                  <output>target/tmp/effective-pom.xml</output>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
+          <!--<plugin>-->
+            <!--<artifactId>maven-help-plugin</artifactId>-->
+            <!--<version>2.1.1</version>-->
+            <!--<executions>-->
+              <!--<execution>-->
+                <!--<id>generate-effective-pom</id>-->
+                <!--<phase>generate-resources</phase>-->
+                <!--<goals>-->
+                  <!--<goal>effective-pom</goal>-->
+                <!--</goals>-->
+                <!--<configuration>-->
+                  <!--<output>target/tmp/effective-pom.xml</output>-->
+                <!--</configuration>-->
+              <!--</execution>-->
+            <!--</executions>-->
+          <!--</plugin>-->
           <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
             <executions>
@@ -1310,145 +1593,85 @@
                 <configuration>
                   <target>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-bundles" />
-                      <arg value="startLevel=30" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=pipeline" />
-                      <arg value="home=${user.home}" />
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
+                      <arg value="id=copy-pipeline-bundles"/>
+                      <arg value="startLevel=30"/>
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
+                      <arg value="prefix=pipeline"/>
+                      <arg value="home=${user.home}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-modules" />
-                      <arg value="startLevel=50" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=modules" />
-                      <arg value="home=${user.home}" />
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
+                      <arg value="id=copy-pipeline-modules"/>
+                      <arg value="startLevel=50"/>
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
+                      <arg value="prefix=modules"/>
+                      <arg value="home=${user.home}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-modules-linux" />
-                      <arg value="startLevel=50" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=modules" />
-                      <arg value="home=${user.home}" />
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
+                      <arg value="id=copy-pipeline-modules-linux"/>
+                      <arg value="startLevel=50"/>
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
+                      <arg value="prefix=modules"/>
+                      <arg value="home=${user.home}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-modules-mac" />
-                      <arg value="startLevel=50" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=modules" />
-                      <arg value="home=${user.home}" />
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
+                      <arg value="id=copy-frontend"/>
+                      <arg value="startLevel=100"/>
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice"/>
+                      <arg value="prefix=frontend"/>
+                      <arg value="home=${user.home}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-modules-win" />
-                      <arg value="startLevel=50" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=modules" />
-                      <arg value="home=${user.home}" />
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
+                      <arg value="id=copy-pipeline-modules-mac"/>
+                      <arg value="startLevel=50"/>
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
+                      <arg value="prefix=modules"/>
+                      <arg value="home=${user.home}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-frontend" />
-                      <arg value="startLevel=100" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=frontend" />
-                      <arg value="home=${user.home}" />
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
+                      <arg value="id=copy-pipeline-modules-win"/>
+                      <arg value="startLevel=50"/>
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
+                      <arg value="prefix=modules"/>
+                      <arg value="home=${user.home}"/>
                     </java>
-                  </target>
-                </configuration>
-              </execution>
-            </executions>
-            <dependencies>
-              <dependency>
-                <groupId>net.sf.saxon</groupId>
-                <artifactId>Saxon-HE</artifactId>
-                <version>9.5.1-5</version>
-              </dependency>
-            </dependencies>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>dist-mac</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-linux</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dist-win</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>dev-launcher-assembly</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dev.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dev.properties</filter>
-                  </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>dev-launcher</finalName>
-                  <attach>false</attach>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>releaseDescriptor</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-help-plugin</artifactId>
-            <version>2.1.1</version>
-            <executions>
-              <execution>
-                <id>generate-effective-pom</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>effective-pom</goal>
-                </goals>
-                <configuration>
-                  <output>target/tmp/effective-pom.xml</output>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>generate-release-descriptor</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-                <configuration>
-                  <target>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-release.xslt" />
-                      <arg line="-o:./target/release-descriptor/releaseDescriptor.xml" />
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
+                      <arg value="id=copy-gui"/>
+                      <arg value="startLevel=100"/>
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui"/>
+                      <arg value="prefix=frontend"/>
+                      <arg value="home=${user.home}"/>
+                    </java>
+                    <java classname="net.sf.saxon.Transform">
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
+                      <arg value="id=copy-volatile-pipeline-bundles"/>
+                      <arg value="startLevel=100"/>
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui"/>
+                      <arg value="prefix=frontend"/>
+                      <arg value="home=${user.home}"/>
+                    </java>
+                    <java classname="net.sf.saxon.Transform">
+                      <arg value="target/tmp/effective-pom.xml"/>
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
+                      <arg value="id=copy-persistence-pipeline-bundles"/>
+                      <arg value="startLevel=100"/>
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice"/>
+                      <arg value="prefix=frontend"/>
+                      <arg value="home=${user.home}"/>
                     </java>
                   </target>
                 </configuration>
@@ -1545,6 +1768,23 @@
                       <type>zip</type>
                       <classifier>linux_386</classifier>
                       <outputDirectory>${project.build.directory}/cli/linux32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+              <execution>
+                <id>unpack-updater-linux</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater</artifactId>
+                      <type>zip</type>
+                      <classifier>linux_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/linux32</outputDirectory>
                     </artifactItem>
                   </artifactItems>
                 </configuration>
@@ -2274,38 +2514,13 @@ rm -rf /opt/daisy-pipeline2/cli
         </plugins>
       </build>
     </profile>
-    <profile>
-      <id>releaseDesciptor</id>
-      <properties>
-      </properties>
-      <build>
-        <plugins>
-          <!-- copy nsis file for windows installer generation -->
-          <plugin>
-            <artifactId>maven-help-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>copy-resources</id>
-                <phase>process-resources</phase>
-                <goals>
-                  <goal>effective-pom</goal>
-                </goals>
-                <!--<configuration>-->
-                  <!--<output>${basedir}/target/effective-pom.xml</output>-->
-                <!--</configuration>-->
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
 
     <!-- NSIS Profile for installer generation invoke with -P installer -->
     <profile>
       <id>installer</id>
       <properties>
         <nsis.scriptfile>target/nsis/installer.nsi</nsis.scriptfile>
-        <nsis.output.file>pipeline2-webui-${project.version}.exe</nsis.output.file>
+        <nsis.output.file>pipeline2-${project.version}.exe</nsis.output.file>
       </properties>
       <build>
         <plugins>

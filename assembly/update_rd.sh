@@ -8,7 +8,7 @@ git checkout gh-pages
 git checkout -b rd-$version                                                                                                                                                         
 if [ "x$(echo $version | grep SNAPSHOT)" == "x"  ]; then                                                                                                                            
         echo "Creating release descriptor"                                                                                                                                          
-        cp  $descriptor ./releases/latest                                                                                                                                           
+        cp  $descriptor ./releases/current
 else                                                                                                                                                                                
         echo "Creating snapshot descriptor"                                                                                                                                         
         cp  $descriptor ./releases/snapshot                                                                                                                                         

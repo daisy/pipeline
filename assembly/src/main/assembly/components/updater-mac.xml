@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>target/updater/mac32</directory>
+      <outputDirectory>updater</outputDirectory>
+      <includes>
+        <include>pipeline-updater*</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+  </fileSets>
+  <files>
+          <file>
+                  <source>target/release-descriptor/releaseDescriptor.xml</source>
+                  <outputDirectory>etc</outputDirectory>
+                  <destName>releaseDescriptor.xml</destName>
+          </file>
+  </files>
+</component>

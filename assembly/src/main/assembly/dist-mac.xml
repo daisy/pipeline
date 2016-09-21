@@ -10,5 +10,6 @@
       <componentDescriptor>src/main/assembly/components/framework.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/cli-mac.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/modules-mac.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/updater-mac.xml</componentDescriptor>
   </componentDescriptors>
 </assembly>
