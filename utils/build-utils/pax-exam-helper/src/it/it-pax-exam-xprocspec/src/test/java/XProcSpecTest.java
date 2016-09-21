@@ -5,9 +5,11 @@ import javax.inject.Inject;
 import org.daisy.maven.xproc.xprocspec.XProcSpecRunner;
 
 import static org.daisy.pipeline.pax.exam.Options.felixDeclarativeServices;
-import static org.daisy.pipeline.pax.exam.Options.logbackBundles;
+import static org.daisy.pipeline.pax.exam.Options.logbackClassic;
 import static org.daisy.pipeline.pax.exam.Options.logbackConfigFile;
-import static org.daisy.pipeline.pax.exam.Options.xprocspecBundles;
+import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
+import static org.daisy.pipeline.pax.exam.Options.mavenBundlesWithDependencies;
+import static org.daisy.pipeline.pax.exam.Options.xprocspec;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,9 +36,12 @@ public class XProcSpecTest {
 		return options(
 			systemProperty("com.xmlcalabash.config.user").value(""),
 			logbackConfigFile(),
-			logbackBundles(),
 			felixDeclarativeServices(),
-			xprocspecBundles(),
+			mavenBundlesWithDependencies(
+				logbackClassic(),
+				// xprocspec
+				xprocspec(),
+				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?")),
 			junitBundles()
 		);
 	}

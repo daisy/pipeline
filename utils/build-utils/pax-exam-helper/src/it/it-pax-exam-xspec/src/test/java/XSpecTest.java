@@ -6,9 +6,11 @@ import org.daisy.maven.xspec.TestResults;
 import org.daisy.maven.xspec.XSpecRunner;
 
 import static org.daisy.pipeline.pax.exam.Options.felixDeclarativeServices;
-import static org.daisy.pipeline.pax.exam.Options.logbackBundles;
+import static org.daisy.pipeline.pax.exam.Options.logbackClassic;
 import static org.daisy.pipeline.pax.exam.Options.logbackConfigFile;
-import static org.daisy.pipeline.pax.exam.Options.xspecBundles;
+import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
+import static org.daisy.pipeline.pax.exam.Options.mavenBundlesWithDependencies;
+import static org.daisy.pipeline.pax.exam.Options.xspec;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +25,6 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.ops4j.pax.exam.util.PathUtils;
 
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
 import static org.ops4j.pax.exam.CoreOptions.options;
 
 @RunWith(PaxExam.class)
@@ -34,9 +35,13 @@ public class XSpecTest {
 	public Option[] config() {
 		return options(
 			logbackConfigFile(),
-			logbackBundles(),
 			felixDeclarativeServices(),
-			xspecBundles(),
+			mavenBundlesWithDependencies(
+				logbackClassic(),
+				// xspec
+				xspec(),
+				mavenBundle("org.apache.servicemix.bundles:org.apache.servicemix.bundles.xmlresolver:?"),
+				mavenBundle("org.daisy.pipeline:saxon-adapter:?")),
 			junitBundles()
 		);
 	}
