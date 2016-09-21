@@ -19,16 +19,28 @@ The tree below shows the structure of the project:
 - [framework](https://github.com/daisy/pipeline-framework)
 - [gui](https://github.com/daisy/pipeline-gui)
 - libs
-  - [braille-css](https://github.com/snaekobbi/braille-css)
+  - [braille-css](https://github.com/daisy/braille-css)
+  - braille-utils
+    - [braille-utils.api](https://github.com/brailleapps/braille-utils.api)
+    - [braille-utils.impl](https://github.com/brailleapps/braille-utils.impl)
+    - [braille-utils.pef-tools](https://github.com/brailleapps/braille-utils.pef-tools)
   - dotify
     - [dotify.api](https://github.com/brailleapps/dotify.api)
+    - [dotify.common](https://github.com/brailleapps/dotify.common)
     - [dotify.formatter.impl](https://github.com/brailleapps/dotify.formatter.impl)
-  - [jstyleparser](https://github.com/snaekobbi/jStyleParser)
+    - [dotify.hyphenator.impl](https://github.com/brailleapps/dotify.hyphenator.impl)
+    - [dotify.text.impl](https://github.com/brailleapps/dotify.text.impl)
+    - [dotify.task-api](https://github.com/brailleapps/dotify.task-api)
+    - [dotify.task.impl](https://github.com/brailleapps/dotify.task.impl)
+    - [dotify.task-runner](https://github.com/brailleapps/dotify.task-runner)
+    - [dotify.translator.impl](https://github.com/brailleapps/dotify.translator.impl)
+  - [jstyleparser](https://github.com/daisy/jStyleParser)
   - [osgi-libs](https://github.com/daisy/osgi-libs)
 - modules
   - [audio](https://github.com/daisy/pipeline-mod-audio)
   - [braille](https://github.com/daisy/pipeline-mod-braille)
   - [common](https://github.com/daisy/pipeline-modules-common)
+  - [nlp](https://github.com/daisy/pipeline-mod-nlp)
   - [scripts](https://github.com/daisy/pipeline-scripts)
   - [scripts-utils](https://github.com/daisy/pipeline-scripts-utils)
   - [tts](https://github.com/daisy/pipeline-mod-tts)
@@ -37,6 +49,8 @@ The tree below shows the structure of the project:
   - [gui](https://github.com/daisy/pipeline-updater-gui)
 - utils
   - [build-utils](https://github.com/daisy/pipeline-build-utils)
+  - [xproc-maven-plugin](https://github.com/daisy/xproc-maven-plugin)
+  - [xspec-maven-plugin](https://github.com/daisy/xspec-maven-plugin)
 - [webui](https://github.com/daisy/pipeline-webui)
 
 

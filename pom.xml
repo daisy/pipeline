@@ -17,6 +17,8 @@
   
   <modules>
     <module>utils/build-utils</module>
+    <module>utils/xspec-maven-plugin</module>
+    <module>utils/xproc-maven-plugin</module>
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
     <module>libs/osgi-libs</module>
@@ -27,6 +29,7 @@
     <module>modules/scripts</module>
     <module>modules/tts</module>
     <module>modules/audio</module>
+    <module>modules/nlp</module>
     <module>cli</module>
     <module>gui</module>
     <module>updater/cli</module>
