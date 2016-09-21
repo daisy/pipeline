@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:ex="http://example.net/ns" script="identity_broken.xpl">
+    <x:scenario label="Identity">
+        <x:call step="ex:identity">
+            <x:option name="option" select="'option-value'"/>
+            <x:option name="option.required" select="'option.required-value'"/>
+        </x:call>
+        <x:context label="the results">
+            <x:document type="port" port="options"/>
+        </x:context>
+        <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+        <x:expect type="xpath" label="the option 'option.required' should have the value 'option.required-value'" test="/*/*[@name='option.required']/@value='option-required.value'"/>
+    </x:scenario>
+</x:description>

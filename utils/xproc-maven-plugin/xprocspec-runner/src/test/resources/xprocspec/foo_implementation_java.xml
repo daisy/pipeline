@@ -1,0 +1,3 @@
+<xproc-config xmlns="http://xmlcalabash.com/ns/configuration" xmlns:ex="http://example.net/ns">
+  <implementation type="ex:foo" class-name="org.daisy.maven.xproc.xprocspec.Foo"/>
+</xproc-config>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:ex="http://example.net/ns" script="throw_error.xpl">
+  <x:scenario label="Throw error">
+    <x:call step="ex:throw-error">
+      <x:input port="source">
+        <x:document type="inline">
+          <irrevelant/>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="the error document">
+      <x:document type="errors"/>
+    </x:context>
+    <x:expect label="should contain the error 'foo'" type="xpath" test="count(/c:errors/c:error[@code='foo']) &gt; 0"/>
+  </x:scenario>
+</x:description>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+  <uri name="http://unexisting_domain/foo.xpl" uri="foo_implementation.xpl"/>
+</catalog>
