@@ -13,6 +13,8 @@ element job {
 
 	& attribute priority { priority}
 
+	& attribute queue-position { xsd:int }?
+
     &element nicename{ text }?
     &element batchId{ text }?
 

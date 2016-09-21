@@ -23,6 +23,7 @@ public class PipelineWebServiceConfiguration {
         private String clientKey=null;
         private String clientSecret=null;
         private static Logger logger = LoggerFactory.getLogger(PipelineWebServiceConfiguration.class);
+        private boolean cleanUpOnStartUp = false;
 
         /**
          * Constructs a new instance.
@@ -86,6 +87,7 @@ public class PipelineWebServiceConfiguration {
                 clientKey=System.getProperty(Properties.CLIENT_KEY);
                 clientSecret=System.getProperty(Properties.CLIENT_SECRET);
 
+                cleanUpOnStartUp = Boolean.valueOf(System.getProperty(Properties. CLEAN_UP_ON_START_UP,"false"));
         }
 
         public void publishConfiguration(PropertyPublisher propPublisher){
@@ -109,6 +111,8 @@ public class PipelineWebServiceConfiguration {
                 propPublisher.publish(Properties.PATH,routes.getPath()+"",this.getClass());     
                 propPublisher.publish(Properties.PORT,routes.getPort()+"",this.getClass());     
 
+                propPublisher.publish(Properties.CLEAN_UP_ON_START_UP,this.getCleanUpOnStartUp()+"",this.getClass());     
+
         }
 
         public void unpublishConfiguration(PropertyPublisher propPublisher){
@@ -127,6 +131,7 @@ public class PipelineWebServiceConfiguration {
                 //tmp dir
                 propPublisher.unpublish(Properties.TMPDIR               , this.getClass());
                 propPublisher.unpublish(Properties.AUTHENTICATION       , this.getClass());
+                propPublisher.unpublish(Properties.CLEAN_UP_ON_START_UP , this.getClass());     
 
         }
         public String getTmpDir() {
@@ -199,6 +204,10 @@ public class PipelineWebServiceConfiguration {
         // the length of time in ms that a request is valid for, counting from its timestamp value
         public long getMaxRequestTime() {
                 return maxRequestTime;
+        }
+
+        public boolean getCleanUpOnStartUp() {
+                return this.cleanUpOnStartUp;
         }
 
 }

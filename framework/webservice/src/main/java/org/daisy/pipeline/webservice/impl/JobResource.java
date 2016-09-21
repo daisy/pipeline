@@ -1,5 +1,9 @@
 package org.daisy.pipeline.webservice.impl;
 
+import java.util.Collection;
+
+import org.daisy.common.priority.Prioritizable;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -86,10 +90,33 @@ public class JobResource extends AuthenticatedResource {
                 else {
                         writer = writer.withNewMessages(msgSeq);
                 }
+                if(job.get().getStatus() == Job.Status.IDLE){
+                        int pos = getPositionInQueue(job.get());
+                        writer.withQueuePosition(pos);
+                }
+
                 Document doc = writer.withScriptDetails().getXmlDocument();
                 
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, doc);
                 return dom;
+        }
+
+        int getPositionInQueue(Job job){
+
+                Client client = webservice().getStorage().
+                        getClientStorage().defaultClient();
+                Collection<? extends Prioritizable<Job>> queue = webservice().getJobManager(client).getExecutionQueue().asCollection();
+                int pos = 0;
+
+                //As this is targeted for end-usures the position starts at 1
+                for (Prioritizable<Job> pJob: queue){
+                        pos++;
+                        if (pJob.prioritySource().getId().equals(job.getId())){
+                                return pos;
+                        }
+                }
+                return -1;
+
         }
 
         /**

@@ -3,6 +3,8 @@ package org.daisy.pipeline.webservice.impl;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -12,6 +14,7 @@ import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.common.properties.PropertyTracker;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
+import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobManager;
@@ -34,6 +37,11 @@ import org.restlet.routing.TemplateRoute;
 import org.restlet.routing.Variable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 /**
  * The Class PipelineWebService.
@@ -124,6 +132,8 @@ public class PipelineWebService extends Application {
                         }
                         return;
                 }
+                //get rid of stale jobs
+                this.cleanUp();
                 Routes routes = new Routes();
                 
                 logger.info(String.format("Starting webservice on port %d",
@@ -157,6 +167,25 @@ public class PipelineWebService extends Application {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
 
+                }
+        }
+
+        private void cleanUp() {
+                if(this.conf.getCleanUpOnStartUp()){
+                        final JobManager manager = this.getJobManager(webserviceStorage.getClientStorage().defaultClient());
+                        Iterable<Job> toClean = Iterables.filter(manager.getJobs(), new Predicate<Job>() {
+                                @Override
+                                public boolean apply(Job j) {
+                                        return j.getStatus().equals(Job.Status.RUNNING) || 
+                                j.getStatus().equals(Job.Status.IDLE);
+                                }
+
+                        });
+                        for (Job j:toClean){
+                                logger.info("Cleaning unfinished job "+j);
+                                manager.deleteJob(j.getId());
+
+                        }
                 }
         }
 

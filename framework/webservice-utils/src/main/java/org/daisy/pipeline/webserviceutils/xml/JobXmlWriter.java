@@ -26,7 +26,8 @@ public class JobXmlWriter {
         private boolean localPaths=false; 
         private boolean onlyPrimaries=false; 
 
-        private Job.Status statusOverWrite=null;
+        private Job.Status statusOverWrite = null;
+        private int queuePosition = -1;
         private static Logger logger = LoggerFactory.getLogger(JobXmlWriter.class
                         .getName());
 
@@ -130,6 +131,9 @@ public class JobXmlWriter {
                 element.setAttribute("href", jobHref);
                 element.setAttribute("status", status.toString());
                 element.setAttribute("priority", job.getPriority().toString().toLowerCase());
+                if (this.queuePosition != -1){
+                        element.setAttribute("queue-position",String.format("%d",this.queuePosition));
+                }
 
                 if(!job.getContext().getName().isEmpty()){
                         Element nicenameElem= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "nicename");
@@ -244,4 +248,9 @@ public class JobXmlWriter {
                         }
                 }
         }
+
+                public void withQueuePosition(int pos) {
+                        this.queuePosition = pos;
+                        
+                }
 }

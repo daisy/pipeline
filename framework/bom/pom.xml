@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>3</version>
+    <version>4</version>
     <relativePath />
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.10.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -23,7 +23,7 @@
     <daisy.calabash-adapter.version>2.0.3</daisy.calabash-adapter.version>
     <daisy.calabash-custom-steps.version>2.0.0</daisy.calabash-custom-steps.version>
     <daisy.common-utils.version>2.1.2</daisy.common-utils.version>
-    <daisy.framework-core.version>3.0.1-SNAPSHOT</daisy.framework-core.version>
+    <daisy.framework-core.version>3.0.2-SNAPSHOT</daisy.framework-core.version>
     <daisy.framework-persistence.version>2.0.3</daisy.framework-persistence.version>
     <daisy.framework-volatile.version>2.0.1</daisy.framework-volatile.version>
     <daisy.launcher.version>1.0.0</daisy.launcher.version>
@@ -33,9 +33,9 @@
     <daisy.persistence-derby.version>2.0.0</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>2.0.0</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>2.0.0</daisy.push-notifier.version>
-    <daisy.updater-wrapper.version>1.0.1-SNAPSHOT</daisy.updater-wrapper.version>
-    <daisy.webservice.version>2.1.0</daisy.webservice.version>
-    <daisy.webservice-utils.version>2.2.0</daisy.webservice-utils.version>
+    <daisy.updater-wrapper.version>1.0.2-SNAPSHOT</daisy.updater-wrapper.version>
+    <daisy.webservice.version>2.1.2-SNAPSHOT</daisy.webservice.version>
+    <daisy.webservice-utils.version>2.2.2-SNAPSHOT</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.0</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.1</daisy.xmlcatalog.version>
     <daisy.xpath-registry.version>1.0.1</daisy.xpath-registry.version>

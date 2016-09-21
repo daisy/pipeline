@@ -13,6 +13,8 @@ public interface Properties {
 	public static final String SSL= "org.daisy.pipeline.ws.ssl";
 	public static final String SSL_KEYSTORE= "org.daisy.pipeline.ws.ssl.keystore";
 	public static final String SSL_KEYSTOREPASSWORD= "org.daisy.pipeline.ws.ssl.keystorepassword";
+	public static final String CLEAN_UP_ON_START_UP = "org.daisy.pipeline.ws.cleanuponstartup";
+
 	public static final String SSL_KEYPASSWORD= "org.daisy.pipeline.ws.ssl.keypassword";
 	public static final String CLIENT_KEY= "org.daisy.pipeline.ws.authentication.key";
 	public static final String CLIENT_SECRET= "org.daisy.pipeline.ws.authentication.secret";
