@@ -35,6 +35,9 @@
                  'page-break-before',
                  'page-break-after',
                  'page-break-inside',
+                 'volume-break-before',
+                 'volume-break-after',
+                 'volume-break-inside',
                  'orphans',
                  'widows',
                  'page',
@@ -83,6 +86,9 @@
                  re:exact(re:or(('always','auto','avoid','left','right'))),
                  re:exact(re:or(('always','auto','avoid','left','right'))),
                  re:exact(re:or(('auto','avoid'))),
+                 re:exact(re:or(('always','auto','avoid','prefer'))),
+                 re:exact(re:or(('always','auto','avoid','prefer'))),
+                 re:exact(re:or(('auto','avoid',$css:VENDOR_PRF_FN_RE))),
                  re:exact($css:INTEGER_RE),
                  re:exact($css:INTEGER_RE),
                  re:exact(re:or(($css:IDENT_RE,'auto'))),
@@ -128,6 +134,9 @@
                  '^(block|table|table-cell|list-item)$',
                  '^(list-item)$',
                  '^(block|table|table-cell|list-item)$',
+                 '^(block|table|list-item)$',
+                 '^(block|table|list-item)$',
+                 '^(block|table|list-item)$',
                  '^(block|table|list-item)$',
                  '^(block|table|list-item)$',
                  '^(block|table|list-item)$',
@@ -179,6 +188,9 @@
                  'auto',
                  'auto',
                  'auto',
+                 'auto',
+                 'auto',
+                 'auto',
                  '0',
                  '0',
                  'auto',
@@ -206,6 +218,9 @@
     
     <xsl:variable name="css:media" as="xs:string*"
         select="('embossed',
+                 'embossed',
+                 'embossed',
+                 'embossed',
                  'embossed',
                  'embossed',
                  'embossed',
@@ -293,7 +308,7 @@
     
     <xsl:function name="css:is-inherited" as="xs:boolean">
         <xsl:param name="property" as="xs:string"/>
-        <xsl:sequence select="boolean(index-of($css:inherited-properties, $property))"/>
+        <xsl:sequence select="$property=$css:inherited-properties"/>
     </xsl:function>
     
     <xsl:function name="css:applies-to" as="xs:boolean">

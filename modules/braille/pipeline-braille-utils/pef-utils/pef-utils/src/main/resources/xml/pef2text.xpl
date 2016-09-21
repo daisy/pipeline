@@ -12,6 +12,7 @@
     <p:option name="line-breaks" required="false"/>
     <p:option name="page-breaks" required="false"/>
     <p:option name="pad" required="false"/>
+    <p:option name="charset" required="false"/>
     <!-- the name for a single volume -->
     <p:option name="single-volume-name" required="false"/>
     <!--

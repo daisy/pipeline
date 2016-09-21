@@ -5,6 +5,7 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
+                xmlns:html="http://www.w3.org/1999/xhtml"
                 exclude-inline-prefixes="#all"
                 type="pef:store" name="store" version="1.0">
     
@@ -122,8 +123,12 @@
             <px:message severity="DEBUG">
                 <p:with-option name="message" select="concat('Storing HTML preview as ''', $preview-href, '''')"/>
             </px:message>
-            <p:store indent="false" encoding="utf-8" method="xhtml" omit-xml-declaration="false"
-                     doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+            <p:store indent="false"
+                     encoding="utf-8"
+                     method="xhtml"
+                     omit-xml-declaration="false"
+                     doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+                     doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
                 <p:with-option name="href" select="$preview-href"/>
             </p:store>
             <!--
@@ -143,6 +148,14 @@
             <px:copy-resource fail-on-error="true" cx:depends-on="mkdir">
                 <p:with-option name="href" select="resolve-uri('../odt2braille8.ttf')"/>
                 <p:with-option name="target" select="resolve-uri('odt2braille8.ttf', $preview-href)"/>
+            </px:copy-resource>
+            <px:copy-resource fail-on-error="true" cx:depends-on="mkdir">
+                <p:with-option name="href" select="resolve-uri('pef-preview.css')"/>
+                <p:with-option name="target" select="resolve-uri('pef-preview.css', $preview-href)"/>
+            </px:copy-resource>
+            <px:copy-resource fail-on-error="true" cx:depends-on="mkdir">
+                <p:with-option name="href" select="resolve-uri('pef-preview.js')"/>
+                <p:with-option name="target" select="resolve-uri('pef-preview.js', $preview-href)"/>
             </px:copy-resource>
             <p:sink/>
         </p:when>

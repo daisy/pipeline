@@ -69,6 +69,7 @@ public class PEF2TextStep extends DefaultStep {
 	private static final QName _line_breaks = new QName("line-breaks");
 	private static final QName _page_breaks = new QName("page-breaks");
 	private static final QName _pad = new QName("pad");
+	private static final QName _charset = new QName("charset");
 	private static final QName _name_pattern = new QName("name-pattern");
 	private static final QName _number_width = new QName("number-width");
 	private static final QName _single_volume_name = new QName("single-volume-name");
@@ -109,6 +110,7 @@ public class PEF2TextStep extends DefaultStep {
 		addOption(_line_breaks, q);
 		addOption(_page_breaks, q);
 		addOption(_pad, q);
+		addOption(_charset, q);
 		RuntimeValue tableQuery = getOption(_table);
 		if (tableQuery != null) {
 			Table table;

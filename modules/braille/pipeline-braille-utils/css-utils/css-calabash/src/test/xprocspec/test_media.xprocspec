@@ -4,12 +4,6 @@
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                script="../resources/inline.xpl">
   
-  <!-- ======= -->
-  <!-- test_01 -->
-  <!-- ======= -->
-  <!--
-      
-  -->
   <x:scenario label="test_01">
     <x:call step="css:inline">
       <x:input port="source">
@@ -28,6 +22,16 @@
                   font-weight: bold;
                 }
               </style>
+              <style media="all" type="text/css">
+                em {
+                  font-style: italic;
+                }
+              </style>
+              <style media="screen" type="text/css">
+                p {
+                  text-align: center;
+                }
+              </style>
             </head>
             <body>
               <p>
@@ -38,27 +42,60 @@
         </x:document>
       </x:input>
     </x:call>
-    <x:context label="result">
-      <x:document type="port" port="result" select="//body"/>
-    </x:context>
-    <x:expect label="result" type="compare">
-      <x:document type="inline">
-        <body>
-          <p style="display: block;">
-            foo<em style="font-weight: bold;">bar</em>
-          </p>
-        </body>
-      </x:document>
-    </x:expect>
+    <x:scenario label="media-embossed">
+      <x:call>
+        <x:option name="media" select="'embossed'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result" select="//body"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <body>
+            <p style="display: block;">
+              foo<em>bar</em>
+            </p>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="media-print">
+      <x:call>
+        <x:option name="media" select="'print'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result" select="//body"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <body>
+            <p>
+              foo<em style="font-style: italic; font-weight: bold;">bar</em>
+            </p>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="media-embossed-and-print">
+      <x:call>
+        <x:option name="media" select="'embossed print'"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="port" port="result" select="//body"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document type="inline">
+          <body>
+            <p style="display: block;">
+              foo<em style="font-style: italic; font-weight: bold;">bar</em>
+            </p>
+          </body>
+        </x:document>
+      </x:expect>
+    </x:scenario>
   </x:scenario>
   
-  <!-- ======= -->
-  <!-- test_02 -->
-  <!-- ======= -->
-  <!--
-      FAILS: is this a bug?
-  -->
-  <x:scenario label="test_02" pending="failure">
+  <x:scenario label="test_02">
     <x:call step="css:inline">
       <x:input port="source">
         <x:document type="inline">
@@ -87,6 +124,7 @@
           </document>
         </x:document>
       </x:input>
+      <x:option name="media" select="'embossed print'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result" select="//body"/>
@@ -94,7 +132,6 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h>foobar</h>
           <p style="display: block;">
             foo<em style="font-weight: bold;">bar</em>
           </p>
@@ -103,13 +140,10 @@
     </x:expect>
   </x:scenario>
   
-  <!-- ======= -->
-  <!-- test_03 -->
-  <!-- ======= -->
-  <!--
-      FAILS: bug: @page inside @media
-  -->
-  <x:scenario label="test_03" pending="failure">
+  <x:scenario label="test_03" xfail="true">
+    <x:documentation>
+      Broken: @page inside @media does not work.
+    </x:documentation>
     <x:call step="css:inline">
       <x:input port="source">
         <x:document type="inline">

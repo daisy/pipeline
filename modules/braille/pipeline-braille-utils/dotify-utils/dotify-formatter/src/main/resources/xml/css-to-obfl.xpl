@@ -183,10 +183,10 @@
     </css:eval-target-content>
     
     <p:for-each>
-        <css:parse-properties properties="white-space display list-style-type page-break-before page-break-after">
+        <css:parse-properties properties="white-space display list-style-type page-break-before page-break-after volume-break-before">
             <p:documentation>
-                Make css:white-space, css:display, css:list-style-type, css:page-break-before and
-                css:page-break-after attributes.
+                Make css:white-space, css:display, css:list-style-type, css:page-break-before,
+                css:page-break-after and css:volume-break-before attributes.
             </p:documentation>
         </css:parse-properties>
         <css:preserve-white-space>
@@ -305,6 +305,7 @@
             </p:delete>
             <css:split split-before="*[@css:page or @css:volume or @css:counter-set-page]|
                                      css:box[@type='block' and @css:page-break-before='right']|
+                                     css:box[@type='block' and @css:volume-break-before='always']|
                                      css:box[@type='table']"
                        split-after="*[@css:page or @css:volume]|
                                     css:box[@type='block' and @css:page-break-after='right']|
@@ -312,9 +313,10 @@
                 <p:documentation>
                     Split before and after css:page attributes, before css:counter-set-page
                     attributes, before and after css:volume attributes, before and after tables,
-                    before css:page-break-before attributes with value 'right', and after
-                    css:page-break-after attributes with value 'right'. <!-- depends on make-boxes
-                    -->
+                    before css:page-break-before attributes with value 'right', after
+                    css:page-break-after attributes with value 'right', and before
+                    css:volume-break-before attributes with value 'always'. <!-- depends on
+                    make-boxes -->
                 </p:documentation>
             </css:split>
         </p:for-each>
@@ -419,94 +421,7 @@
         </css:adjust-boxes>
         <css:new-definition>
             <p:input port="definition">
-                <p:inline>
-                    <xsl:stylesheet version="2.0" xmlns:new="css:new-definition"
-                                                  xmlns:re="regex-utils">
-                        <xsl:variable name="new:properties" as="xs:string*"
-                                      select="('margin-left',   'page-break-before', 'text-indent', 'text-transform', '-obfl-vertical-align',
-                                               'margin-right',  'page-break-after',  'text-align',  'hyphens',        '-obfl-vertical-position',
-                                               'margin-top',    'page-break-inside', 'line-height', 'white-space',    '-obfl-toc-range',
-                                               'margin-bottom', 'orphans',                          'word-spacing',   '-obfl-table-col-spacing',
-                                               'padding-left',  'widows',                           'letter-spacing', '-obfl-table-row-spacing',
-                                               'padding-right',                                                       '-obfl-preferred-empty-space',
-                                               'padding-top',                                                         '-obfl-use-when-collection-not-empty',
-                                               'padding-bottom',                                                      '-obfl-underline',
-                                               'border-left',
-                                               'border-right',
-                                               'border-top',
-                                               'border-bottom')"/>
-                        <xsl:function name="new:is-valid" as="xs:boolean">
-                            <xsl:param name="css:property" as="element()"/>
-                            <xsl:param name="context" as="element()"/>
-                            <xsl:sequence select="new:applies-to($css:property/@name, $context)
-                                                  and (
-                                                    if ($css:property/@name='-obfl-vertical-align')
-                                                    then $css:property/@value=('before','center','after')
-                                                    else if ($css:property/@name=('-obfl-vertical-position',
-                                                                                  '-obfl-table-col-spacing',
-                                                                                  '-obfl-table-row-spacing',
-                                                                                  '-obfl-preferred-empty-space'))
-                                                    then matches($css:property/@value,'^auto|0|[1-9][0-9]*$')
-                                                    else if ($css:property/@name='-obfl-toc-range')
-                                                    then ($context/@css:_obfl-toc and $css:property/@value=('document','volume'))
-                                                    else if ($css:property/@name='-obfl-use-when-collection-not-empty')
-                                                    then matches($css:property/@value,re:exact($css:IDENT_RE))
-                                                    else if ($css:property/@name='-obfl-underline')
-                                                    then matches($css:property/@value,re:exact(re:or(($css:BRAILLE_CHAR_RE,'none'))))
-                                                    else (
-                                                      css:is-valid($css:property)
-                                                      and not($css:property/@value=('inherit','initial'))
-                                                    )
-                                                  )"/>
-                        </xsl:function>
-                        <xsl:function name="new:initial-value" as="xs:string">
-                            <xsl:param name="property" as="xs:string"/>
-                            <xsl:param name="context" as="element()"/>
-                            <xsl:sequence select="if ($property='-obfl-vertical-align')
-                                                  then 'after'
-                                                  else if ($property='-obfl-vertical-position')
-                                                  then 'auto'
-                                                  else if ($property='-obfl-toc-range')
-                                                  then 'document'
-                                                  else if ($property=('-obfl-table-col-spacing','-obfl-table-row-spacing'))
-                                                  then '0'
-                                                  else if ($property='-obfl-preferred-empty-space')
-                                                  then '2'
-                                                  else if ($property='-obfl-use-when-collection-not-empty')
-                                                  then 'normal'
-                                                  else if ($property='-obfl-underline')
-                                                  then 'none'
-                                                  else if ($property='text-transform')
-                                                  then 'none'
-                                                  else css:initial-value($property)"/>
-                        </xsl:function>
-                        <xsl:function name="new:is-inherited" as="xs:boolean">
-                            <xsl:param name="property" as="xs:string"/>
-                            <xsl:param name="context" as="element()"/>
-                            <xsl:sequence select="$property=('text-transform','hyphens','word-spacing')"/>
-                        </xsl:function>
-                        <xsl:function name="new:applies-to" as="xs:boolean">
-                            <xsl:param name="property" as="xs:string"/>
-                            <xsl:param name="context" as="element()"/>
-                            <xsl:sequence select="$property=('text-transform','hyphens','word-spacing')
-                                                  or (
-                                                    if (matches($property,'^(border|margin|padding)-'))
-                                                    then $context/@type=('block','table','table-cell')
-                                                    else if ($property='line-height')
-                                                    then $context/@type=('block','table')
-                                                    else if ($property=('text-indent','text-align'))
-                                                    then $context/@type=('block','table-cell')
-                                                    else if ($property=('-obfl-table-col-spacing',
-                                                                        '-obfl-table-row-spacing',
-                                                                        '-obfl-preferred-empty-space'))
-                                                    then $context/@type='table'
-                                                    else if ($property='-obfl-use-when-collection-not-empty')
-                                                    then exists($context/parent::css:_[@css:flow])
-                                                    else $context/@type='block'
-                                                  )"/>
-                        </xsl:function>
-                    </xsl:stylesheet>
-                </p:inline>
+                <p:document href="obfl-css-definition.xsl"/>
             </p:input>
         </css:new-definition>
         <p:delete match="css:box[@type='block']
@@ -529,23 +444,34 @@
                 <!-- depends on make-anonymous-block-boxes -->
             </p:documentation>
         </pxi:propagate-page-break>
-        <!--
-            Move css:page-break-after="avoid" to last descendant block (TODO: move to
-            pxi:propagate-page-break?)
-        -->
-        <p:add-attribute match="css:box[@type='block'
-                                        and not(child::css:box[@type='block'])
-                                        and (some $self in . satisfies
-                                          some $ancestor in $self/ancestor::*[@css:page-break-after='avoid'] satisfies
-                                            not($self/following::css:box intersect $ancestor//*))]"
-                         attribute-name="css:page-break-after"
-                         attribute-value="avoid"/>
-        <p:delete match="css:box[@type='block' and child::css:box[@type='block']]/@css:page-break-after[.='avoid']"/>
-        <!--
-            Delete css:margin-top from first block and move css:margin-top of other blocks to
-            css:margin-bottom of their preceding block
-        -->
+        <p:group>
+            <p:documentation>
+                Move css:page-break-after="avoid" to last descendant block. (TODO: move to
+                pxi:propagate-page-break?)
+            </p:documentation>
+            <p:add-attribute match="css:box[@type='block'
+                                            and not(child::css:box[@type='block'])
+                                            and (some $self in . satisfies
+                                              some $ancestor in $self/ancestor::*[@css:page-break-after='avoid'] satisfies
+                                                not($self/following::css:box intersect $ancestor//*))]"
+                             attribute-name="css:page-break-after"
+                             attribute-value="avoid"/>
+            <p:delete match="css:box[@type='block' and child::css:box[@type='block']]/@css:page-break-after[.='avoid']"/>
+        </p:group>
+        <p:group>
+            <p:documentation>
+                Move volume-break-before="always" to the outermost ancestor-or-self block box.
+            </p:documentation>
+            <p:add-attribute match="/css:_/css:box[@type='block'][descendant::css:box[@type='block'][@css:volume-break-before='always']]"
+                             attribute-name="css:volume-break-before"
+                             attribute-value="always"/>
+            <p:delete match="/css:_/css:box//css:box/@css:volume-break-before"/>
+        </p:group>
         <p:choose>
+            <p:documentation>
+                Delete css:margin-top from first block and move css:margin-top of other blocks to
+                css:margin-bottom of their preceding block.
+            </p:documentation>
             <p:when test="$skip-margin-top-of-page='true'">
                 <p:delete match="css:box
                                    [@type='block']

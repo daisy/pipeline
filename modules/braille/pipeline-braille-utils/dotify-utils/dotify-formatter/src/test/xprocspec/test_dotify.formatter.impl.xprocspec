@@ -6174,12 +6174,9 @@
   </x:expect>
 </x:scenario>
 
-<x:scenario label="volume-template-various-sheets-in-volume-max" xfail="true">
+<x:scenario label="volume-template-various-sheets-in-volume-max">
   <x:documentation>
     Tests two volume-templates (first and rest) with different sheets-in-volume-max.
-    
-    Broken: "Implementation does not support different target volume size. All volumes must have the
-    same target size." (see https://github.com/joeha480/dotify/issues/102).
   </x:documentation>
   <x:call>
     <x:input port="source">
@@ -6192,10 +6189,9 @@
             </default-template>
           </layout-master>
           <volume-template use-when="(! (= $volume 1))" sheets-in-volume-max="3"/>
-          <volume-template use-when="(= $volume 1)" sheets-in-volume-max="2"/>
+          <volume-template use-when="(= $volume 1)" sheets-in-volume-max="1"/>
           <sequence master="main">
             <block>
-              ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -6223,20 +6219,6 @@
         <body>
           <volume rows="5" cols="10" rowgap="0" duplex="true">
             <section>
-              <page>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-              </page>
-              <page>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-                <row>⠤⠤⠤⠤⠤</row>
-              </page>
               <page>
                 <row>⠤⠤⠤⠤⠤</row>
                 <row>⠤⠤⠤⠤⠤</row>

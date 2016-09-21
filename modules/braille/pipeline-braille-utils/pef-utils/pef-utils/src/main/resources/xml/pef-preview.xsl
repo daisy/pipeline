@@ -13,12 +13,8 @@
         <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                <style type="text/css">
-                    <xsl:value-of select="unparsed-text('pef-preview.css', 'utf-8')"/>
-                </style>
-                <script type="text/javascript">
-                    <xsl:value-of select="unparsed-text('pef-preview.js', 'utf-8')"/>
-                </script>
+                <link rel="stylesheet" type="text/css" href="pef-preview.css"/>
+                <script type="text/javascript" href="pef-preview.js"/>
             </head>
             <body>
                 <div id="header">
@@ -44,47 +40,75 @@
                         </xsl:for-each>
                     </ul>
                 </div>
-                <ul id="nav">
-                    <xsl:for-each select="/pef:pef//pef:page">
-                        <xsl:variable name="i" select="format-number(position(), '0')"/>
-                        <li class="nav-page">
-                            <a href="{concat('#page', $i)}">
-                                <div class="page-number">
-                                    <xsl:value-of select="$i"/>
-                                </div>
-                                <div class="page">
-                                    <xsl:for-each select="pef:row">
-                                        <div class="row">
-                                            <xsl:sequence select="@rowgap"/>
-                                            <xsl:sequence select="string(.)"/>
-                                        </div>
-                                    </xsl:for-each>
-                                </div>
-                            </a>
+                <ul id="nav" class="nav-volumes">
+                    <xsl:variable name="volumes" select="count(//pef:volume)"/>
+                    <xsl:for-each select="//pef:volume">
+                        <xsl:variable name="volume" select="position()"/>
+                        <li class="nav-volume" id="volume{$volume}">
+                            <div class="volume-label">
+                                <xsl:if test="$volume &gt; 1">
+                                    <a class="volume-previous" href="#volume{$volume - 1}">
+                                        <xsl:value-of select="$volume - 1"/>
+                                    </a>
+                                </xsl:if>
+                                <a class="volume-current" href="#volume{$volume}">
+                                    <xsl:value-of select="$volume"/>
+                                </a>
+                                <xsl:if test="$volume &lt; $volumes">
+                                    <a class="volume-next" href="#volume{$volume + 1}">
+                                        <xsl:value-of select="$volume + 1"/>
+                                    </a>
+                                </xsl:if>
+                            </div>
+                            <ul class="nav-pages">
+                                <xsl:for-each select=".//pef:page">
+                                    <xsl:variable name="page" select="format-number(position(), '0')"/>
+                                    <li class="nav-page">
+                                        <a href="#page{$volume}.{$page}">
+                                            <div class="page-number">
+                                                <xsl:value-of select="$page"/>
+                                            </div>
+                                            <div class="page">
+                                                <xsl:for-each select="pef:row">
+                                                    <div class="row">
+                                                        <xsl:sequence select="@rowgap"/>
+                                                        <xsl:sequence select="string(.)"/>
+                                                    </div>
+                                                </xsl:for-each>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </xsl:for-each>
+                            </ul>
                         </li>
                     </xsl:for-each>
                 </ul>
                 <div id="main">
-                    <xsl:for-each select="/pef:pef//pef:page">
-                        <xsl:variable name="i" select="format-number(position(), '0')"/>
-                        <span class="bookmark" id="{concat('page', $i)}"> </span>
-                        <div class="page">
-                            <div class="braille-page">
-                                <xsl:for-each select="pef:row">
-                                    <div class="row">
-                                        <xsl:sequence select="@rowgap"/>
-                                        <xsl:sequence select="string(.)"/>
+                    <xsl:for-each select="//pef:volume">
+                        <xsl:variable name="volume" select="position()"/>
+                        <div class="volume">
+                            <xsl:for-each select=".//pef:page">
+                                <xsl:variable name="page" select="position()"/>
+                                <span class="bookmark" id="page{$volume}.{$page}"> </span>
+                                <div class="page">
+                                    <div class="braille-page">
+                                        <xsl:for-each select="pef:row">
+                                            <div class="row">
+                                                <xsl:sequence select="@rowgap"/>
+                                                <xsl:sequence select="string(.)"/>
+                                            </div>
+                                        </xsl:for-each>
                                     </div>
-                                </xsl:for-each>
-                            </div>
-                            <div class="text-page">
-                                <xsl:for-each select="pef:row">
-                                    <div class="row">
-                                        <xsl:sequence select="@rowgap"/>
-                                        <xsl:sequence select="pef:encode($table, string(.))"/>
+                                    <div class="text-page">
+                                        <xsl:for-each select="pef:row">
+                                            <div class="row">
+                                                <xsl:sequence select="@rowgap"/>
+                                                <xsl:sequence select="pef:encode($table, string(.))"/>
+                                            </div>
+                                        </xsl:for-each>
                                     </div>
-                                </xsl:for-each>
-                            </div>
+                                </div>
+                            </xsl:for-each>
                         </div>
                     </xsl:for-each>
                 </div>
