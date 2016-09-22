@@ -10,6 +10,8 @@ GRADLE := M2_HOME=$(CURDIR)/.gradle-settings libs/dotify/dotify.api/gradlew -Dwo
 MVN_LOG := tee -a $(CURDIR)/maven.log | cut -c1-1000 | pcregrep -M "^\[INFO\] -+\n\[INFO\] Building .*\n\[INFO\] -+$$|^\[(ERROR|WARNING)\]"; \
            test $${PIPESTATUS[0]} -eq 0
 
+SHELL := /bin/bash
+
 .PHONY : all
 all : compile check dist
 
