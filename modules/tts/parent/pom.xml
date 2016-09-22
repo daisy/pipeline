@@ -4,38 +4,67 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.2</version>
+    <version>1.4</version>
     <relativePath />
   </parent>
 
   <artifactId>tts-modules-parent</artifactId>
-  <version>1.9.1-SNAPSHOT</version>
+  <version>1.10.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: TTS Modules Parent POM</name>
   <description>Parent POM for modules related to TTS-based production</description>
 
-
   <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>framework-bom</artifactId>
-        <version>1.9</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+      <!--
+            TTS Modules BoM
+      -->
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.9.1-SNAPSHOT</version>
+        <version>1.10.1-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!--
+            Engine BoM
+      -->
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>framework-bom</artifactId>
+        <version>1.10.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <!--
+            Other modules BoM
+      -->
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>audio-modules-bom</artifactId>
+        <version>1.10.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>audio-modules-bom</artifactId>
-        <version>1.9.1-SNAPSHOT</version>
+        <artifactId>nlp-modules-bom</artifactId>
+        <version>1.10.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>scripts-utils-bom</artifactId>
+        <version>1.10.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>common-utils-bom</artifactId>
+        <version>1.10.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

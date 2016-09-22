@@ -1,9 +1,18 @@
 package org.daisy.pipeline.cssinlining;
 
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.URIResolver;
 
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.QName;
@@ -25,6 +34,9 @@ import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.TreeWriter;
 
+import cz.vutbr.web.css.NetworkProcessor;
+import cz.vutbr.web.csskit.DefaultNetworkProcessor;
+
 public class InlineCSSStep extends DefaultStep implements TreeWriterFactory {
 
 	private Logger Logger = LoggerFactory.getLogger(InlineCSSStep.class);
@@ -34,10 +46,30 @@ public class InlineCSSStep extends DefaultStep implements TreeWriterFactory {
 	private ReadablePipe mSource = null;
 	private WritablePipe mResult = null;
 	private XProcRuntime mRuntime;
-
-	public InlineCSSStep(XProcRuntime runtime, XAtomicStep step) {
+	private NetworkProcessor mNetwork;
+	
+	public InlineCSSStep(XProcRuntime runtime, XAtomicStep step, final URIResolver resolver) {
 		super(runtime, step);
 		mRuntime = runtime;
+		mNetwork = new DefaultNetworkProcessor() {
+			@Override
+			public InputStream fetch(URL url) throws IOException {
+				try {
+					if (url != null) {
+						Source resolved = resolver.resolve(url.toString(), "");
+						if (resolved != null) {
+							if (resolved instanceof StreamSource)
+								return ((StreamSource)resolved).getInputStream();
+							else
+								url = new URL(resolved.getSystemId());
+						}
+					}
+				} catch (TransformerException e) {
+				} catch (MalformedURLException e) {
+				}
+				return super.fetch(url);
+			}
+		};
 	}
 
 	public void setInput(String port, ReadablePipe pipe) {
@@ -150,7 +182,7 @@ public class InlineCSSStep extends DefaultStep implements TreeWriterFactory {
 		CSSInliner inliner = new CSSInliner();
 		SpeechSheetAnalyser analyzer = new SpeechSheetAnalyser();
 		try {
-			analyzer.analyse(alluris, cssExt.getEmbeddedCSS(), config.getDocumentURI());
+			analyzer.analyse(alluris, cssExt.getEmbeddedCSS(), config.getDocumentURI(), mNetwork);
 		} catch (Throwable t) {
 			Logger.debug("error while analyzing CSS speech: " + t.getMessage());
 			mResult.write(doc);

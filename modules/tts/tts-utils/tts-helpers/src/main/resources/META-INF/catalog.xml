@@ -6,5 +6,4 @@
 
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
 </catalog>

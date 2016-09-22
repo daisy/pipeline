@@ -69,6 +69,7 @@
   <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/tts-helpers/library.xpl"/>
+  <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl"/>
 
   <!-- Find the sentences and the words, even if the Text-To-Speech is off. -->
   <p:for-each name="lexing">

@@ -12,12 +12,14 @@ import cz.vutbr.web.css.CSSFactory;
 
 public class InlineCSSProvider implements XProcStepProvider {
 
+	private URIResolver resolver;
+
 	@Override
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-		return new InlineCSSStep(runtime, step);
+		return new InlineCSSStep(runtime, step, resolver);
 	}
 
 	public void setUriResolver(URIResolver resolver) {
-		CSSFactory.registerURIResolver(resolver);
+		this.resolver = resolver;
 	}
 }

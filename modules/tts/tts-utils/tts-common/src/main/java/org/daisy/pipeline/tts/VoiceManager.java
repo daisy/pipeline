@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -206,7 +207,7 @@ public class VoiceManager {
 	public VoiceManager(Collection<TTSEngine> engines, Collection<VoiceInfo> extraVoices) {
 		//build the list of voices ordered by priority
 		final float priorityVariantPenalty = 0.1f;
-		Set<VoiceInfo> priorities = new HashSet<VoiceInfo>(BuiltinVoices);
+		Set<VoiceInfo> priorities = new LinkedHashSet<VoiceInfo>(BuiltinVoices);
 		priorities.addAll(extraVoices);
 		mVoicePriorities = new ArrayList<VoiceInfo>(priorities);
 		for (VoiceInfo vinfo : priorities) {

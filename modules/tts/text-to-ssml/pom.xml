@@ -6,15 +6,39 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>tts-modules-parent</artifactId>
-    <version>1.9.1-SNAPSHOT</version>
+    <version>1.10.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.1-SNAPSHOT</version>
   <artifactId>text-to-ssml</artifactId>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Production of SSML chunks from text</name>
   <description>Generic production of list of SSML chunks from content documents of any format.</description>
+  
+  <dependencies>
+    <!-- runtime dependencies -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>mathml-to-ssml</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-helpers</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
 
 </project>

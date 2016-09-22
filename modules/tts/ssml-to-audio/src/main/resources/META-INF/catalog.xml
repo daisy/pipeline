@@ -4,8 +4,7 @@
   <uri name="http://www.daisy.org/pipeline/modules/ssml-to-audio/library.xpl"
        uri="../xml/library.xpl"/>
 
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:tts-helpers" />
+  <nextCatalog catalog="org:daisy:pipeline:modules:tts-common" />
 
 </catalog>

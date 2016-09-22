@@ -1,30 +1,68 @@
 @startuml
 
-(*) -->[enriched dtbook + sentence ids] "dtbook-to-ssml (XPL)"
--->[enriched dtbook + sentence ids] "make dtbook-specific transformations (XPL)"
+(*) --> "[A] dtbook-to-daisy3"
 
-partition "Generic text-to-ssml" {
+partition "dtbook-tts module" {
 
--->[enriched dtbook + sentence ids + dtbook parameters] "inline CSS (Java)"
--->[dtbook with tmp CSS properties] "separate pagenums/noterefs from the\nrest and add SSML marks, extract MathML (XPL)"
--->[pagenum-free document + pagenum document + MathML document] ===B1===
-
-===B1=== -->[pagenum document] "group pagenums with similar CSS properties\n(for future thread dispatch)(XPL)"
--->[pagenum document with groups] "[A]convert CSS to SSML (XPL)"
--->[SSML files] ==B2==
-
-===B1=== -->[pagenum-free document] "group sentences of the same\nsection (for future thread dispatch)(XPL)"
--->[pagenum-free document with groups] "[B]convert CSS to SSML (XPL)"
--->[SSML files] "Make substitutions with PLS lexicons (XPL)"
--->[SSML files] ===B2===
-
-===B1=== ..>[MathML] "[C]convert CSS to SSML (XPL)"
-..>[MathML] "Convert MathML to SSML (XPL)"
-..>[SSML file] ===B2===
+partition "not in pipelind-mod-tts (XProc&Java)" {
+-->[dtbook] "dtbook-break-detection [pipeline-mod-nlp]"
+-->[dtbook + sentence ids] "isolate skippable elements [daisy3-utils]"
 }
 
-==B2==-->[SSML files] "ssml-to-audio (Java)"
+-->[dtbook] "make dtbook-specific transformations (XProc&XSLT)"
 
--->[Map of @id to audio files] "dtbook-to-epub3"
+partition "text-to-ssml module with dtbook parameters (full XProc&XSLT)" {
+
+-->[dtbook] "add user's annotations (i.e. text around elts)"
+"dtbook-break-detection [pipeline-mod-nlp]"-->[sentence ids] "add user's annotations (i.e. text around elts)"
+
+-->[dtbook + sentence ids] "insert SSML sentences and tokens"
+
+-->[.] "save document order"
+
+"insert SSML sentences and tokens"-->[dtbook mixed with SSML] "project CSS onto sentences"
+
+-->[list of dtbook-SSML sentences] "extract skippable elts and insert SSML marks"
+"isolate skippable elements [daisy3-utils]"-->[skippable ids] "extract skippable elts and insert SSML marks"
+
+-->[.] ===B1===
+
+===B1=== -->[skippable-only sentences] "[A] extract MathML"
+--> ===B3===
+
+partition "Skippable Elts Branch" {
+===B3=== -->[.] "group skippable elts\n using SSML marks"
+-->[.] "[B]convert CSS to SSML"
+}
+-->[SSML file] ==B2==
+
+===B1=== -->[skippable-free sentences] "[B] extract MathML"
+--> ===B4===
+
+partition "Main Branch" {
+===B4=== -->[.] "[A]convert CSS to SSML"
+-->[.] "Make substitutions with lexicons"
+-->[.] "Remove anything outside tokens"
+}
+-->[SSML file] ===B2===
+
+partition "Math Branch" {
+===B4=== -->[.] "MathML to SSML"
+===B3=== -->[.] "MathML to SSML"
+-->[.] "[C] convert CSS to SSML"
+}
+-->[SSML file] ===B2===
+
+===B2=== -->[SSML files] "Reorder in document order"
+"save document order" -->[order] "Reorder in document order"
+
+}
+
+-->[SSML file(s)] "ssml-to-audio (Java)"
+
+}
+
+
+-->[map of @id to audio files + enriched dtbook] "[B] dtbook-to-daisy3"
 
 @enduml

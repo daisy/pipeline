@@ -16,6 +16,7 @@ import org.w3c.dom.Document;
 
 import cz.vutbr.web.css.CSSException;
 import cz.vutbr.web.css.CSSFactory;
+import cz.vutbr.web.css.NetworkProcessor;
 import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
@@ -33,6 +34,7 @@ public class SpeechSheetAnalyser {
 	        .compile("([a-zA-Z][-.+a-zA-Z0-9]*://)|/");
 
 	private Analyzer mAnalyzer;
+	private static final CSSParserFactory parserFactory = CSSParserFactory.getInstance();
 
 	static {
 		SupportedCSS = SupportedCSS21.getInstance();
@@ -41,7 +43,7 @@ public class SpeechSheetAnalyser {
 	}
 
 	public void analyse(Collection<URI> sheetURIs, Collection<String> embeddedCSS,
-	        URI embedContainerURI) throws IOException, URISyntaxException, CSSException {
+	        URI embedContainerURI, NetworkProcessor network) throws IOException, URISyntaxException, CSSException {
 		if (!SupportedCSS.isSupportedMedia(Medium)) {
 			throw new IllegalStateException("medium '" + Medium + "' is not supported");
 		}
@@ -62,7 +64,7 @@ public class SpeechSheetAnalyser {
 		for (int k = 0; k < csscode.size(); ++k) {
 			String basePath = alluris.get(k).resolve(".").toString();
 			String withAbsURL = makeURLabsolute(csscode.get(k), basePath);
-			styleSheets.add(CSSParserFactory.parse(withAbsURL, null, SourceType.EMBEDDED,
+			styleSheets.add(parserFactory.parse(withAbsURL, network, null, SourceType.EMBEDDED,
 			        new URL("http://base")));
 			/*
 			 * we cannot use CSSFactory.parse(withAbsURL) because it tries to

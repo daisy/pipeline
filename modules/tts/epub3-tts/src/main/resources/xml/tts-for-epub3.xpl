@@ -107,6 +107,7 @@
   <p:import href="http://www.daisy.org/pipeline/modules/epub3-to-ssml/library.xpl" />
   <p:import href="http://www.daisy.org/pipeline/modules/html-break-detection/library.xpl"/>
   <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+  <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl"/>
 
   <p:variable name="fileset-base" select="base-uri(/*)">
     <p:pipe port="fileset.in" step="main"/>
@@ -127,7 +128,7 @@
       <p:xpath-context>
 	<p:pipe port="fileset.in" step="main"/>
       </p:xpath-context>
-      <p:when test="//*[@media-type='application/xhtml+xml' and resolve-uri(@href, $fileset-base)=$doc-uri]">
+      <p:when test="//*[@media-type='application/xhtml+xml']/resolve-uri(@href, $fileset-base)=$doc-uri">
 	<p:output port="html">
 	  <p:pipe port="result" step="id"/>
 	</p:output>

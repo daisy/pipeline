@@ -98,7 +98,7 @@ public class CSSInliningTest implements TreeWriterFactory {
 		        + Paths.get(System.getProperty("user.dir"), "src/test/resources/", cssFile)
 		                .toString());
 
-		SheetAnalyzer.analyse(Arrays.asList(cssFileURI), Collections.EMPTY_LIST, null);
+		SheetAnalyzer.analyse(Arrays.asList(cssFileURI), Collections.EMPTY_LIST, null, null);
 		XdmNode tree = CSSInliner.inline(this, new URI("http://doc"), document, SheetAnalyzer,
 		        "tmp");
 
