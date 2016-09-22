@@ -112,6 +112,7 @@
                 <p:with-option name="input-dtbook" select="$dtbook-href"/>
                 <p:with-option name="check-images" select="$check-images"/>
                 <p:with-option name="mathml-version" select="$mathml-version"/>
+                <p:with-option name="nimas" select="'true'"/>
             </px:dtbook-validator>
 
             <!-- add the report path -->

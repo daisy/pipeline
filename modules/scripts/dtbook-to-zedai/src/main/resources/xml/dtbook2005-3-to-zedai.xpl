@@ -16,8 +16,6 @@
         <p:pipe port="result" step="anchor-floating-annotations"/>
     </p:output>
 
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
-
     <p:documentation>Preprocess certain inline elements by making them into spans. This streamlines
         the number of transformation cases that need to be dealt with later.</p:documentation>
     <p:xslt name="rename-to-span">

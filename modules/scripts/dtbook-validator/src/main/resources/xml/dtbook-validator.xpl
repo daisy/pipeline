@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step version="1.0" name="dtbook-validator" type="px:dtbook-validator"
+    px:input-filesets="dtbook"
     xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
@@ -91,6 +92,13 @@
         </p:documentation>
     </p:option>
 
+    <p:option name="nimas" required="false" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Validate against NIMAS 1.1</h2>
+            <p px:role="desc">Validate using NIMAS 1.1 rules for DTBook.</p>
+        </p:documentation>
+    </p:option>
+    
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     <p:import
@@ -102,8 +110,6 @@
         <p:documentation>Utilities for representing a fileset.</p:documentation>
     </p:import>
 
-    <p:import href="dtbook-validator.select-schema.xpl"/>
-    <p:import href="dtbook-validator.check-images.xpl"/>
     <p:import href="dtbook-validator.validate.xpl"/>
     <p:import href="dtbook-validator.store.xpl"/>
     <p:variable name="dtbook-filename" select="tokenize($input-dtbook, '/')[last()]"/>
@@ -115,32 +121,33 @@
         </p:input>
     </px:message>
     <p:sink/>
-
-    <px:fileset-add-entry name="create-fileset-for-dtbook-doc">
+    
+    <px:fileset-create>
+        <p:with-option name="base" select="replace($input-dtbook,'[^/]+$','')"/>
+    </px:fileset-create>
+    <px:fileset-add-entry>
         <p:with-option name="href" select="$input-dtbook"/>
-        <p:input port="source">
-            <p:inline>
-                <d:fileset/>
-            </p:inline>
-        </p:input>
     </px:fileset-add-entry>
-
-
-    <px:message message="DTBook validator: Checking that DTBook document exists and is well-formed"/>
+    <p:identity name="create-fileset-for-dtbook-doc"/>
     <p:sink/>
-
+    
     <!--check that the package document is well-formed XML -->
-    <px:check-files-wellformed name="check-dtbook-wellformed">
+    <p:identity>
         <p:input port="source">
             <p:pipe port="result" step="create-fileset-for-dtbook-doc"/>
         </p:input>
-    </px:check-files-wellformed>
+    </p:identity>
+    <px:message message="DTBook validator: Checking that DTBook document exists and is well-formed"/>
+    <px:check-files-wellformed name="check-dtbook-wellformed"/>
+    <p:identity>
+        <p:input port="source">
+            <p:pipe port="validation-status" step="check-dtbook-wellformed"/>
+        </p:input>
+    </p:identity>
+    <px:message message="DTBook validator: Done checking that DTBook document exists and is well-formed"/>
 
     <p:choose name="if-dtbook-wellformed">
-        <p:xpath-context>
-            <p:pipe port="validation-status" step="check-dtbook-wellformed"/>
-        </p:xpath-context>
-
+        
         <!-- if the dtbook file was well-formed -->
         <p:when test="d:validation-status/@result = 'ok'">
 
@@ -169,6 +176,7 @@
                 <p:with-option name="mathml-version" select="$mathml-version"/>
                 <p:with-option name="check-images" select="$check-images"/>
                 <p:with-option name="base-uri" select="$input-dtbook"/>
+                <p:with-option name="nimas" select="$nimas"/>
             </pxi:dtbook-validator.validate>
 
             <pxi:dtbook-validator.store name="store-dtbook-validation-results">

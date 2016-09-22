@@ -16,7 +16,6 @@
     </p:output>
 
 
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
 
     <!--TODO add support for audio transcoding-->

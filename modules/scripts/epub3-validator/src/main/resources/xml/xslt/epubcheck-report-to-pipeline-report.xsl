@@ -44,7 +44,6 @@
             </xsl:if>
 
             <d:document-info>
-                <!-- TODO -->
                 <d:document-name>
                     <xsl:value-of select="repInfo/@uri"/>
                 </d:document-name>
@@ -56,8 +55,7 @@
                         <xsl:value-of select="$document-path"/>
                     </d:document-path>
                 </xsl:if>
-                <!--<d:report-path/>-->
-                <xsl:variable name="error-count-regex" select="if ($report-warning-as-error='true') then '^(WARN|ERROR|EXCEPTION): ' else '^(ERROR|EXCEPTION): '"/>
+                <xsl:variable name="error-count-regex" select="if ($report-warning-as-error='true') then ', (WARN|ERROR|FATAL), ' else ', (ERROR|FATAL), '"/>
                 <d:error-count>
                     <xsl:value-of select="count(repInfo/messages/message[matches(.,$error-count-regex)])"/>
                 </d:error-count>
@@ -105,27 +103,27 @@
             <d:reports>
                 <d:report>
                     <xsl:for-each select="repInfo/messages/message">
-                        <xsl:variable name="severity" select="lower-case(replace(.,'^([^:]*):\s*.*?$','$1'))"/>
-                        <xsl:variable name="message" select="replace(.,'^[^:]*:\s*(.*?)$','$1')"/>
-                        <xsl:variable name="message-regex" select="'^(|/[^:]*?)(()|\(([^\)]*)\)): (.*)$'"/>
-                        <xsl:variable name="file" select="if ($severity='exception') then '' else replace($message,$message-regex,'$1')"/>
-                        <xsl:variable name="location" select="if ($severity='exception') then '' else replace($message,$message-regex,'$4')"/>
-                        <xsl:variable name="message-text" select="if ($severity='exception') then $message else replace($message,$message-regex,'$5')"/>
-                        <xsl:element name="{if ($severity='warn' and $report-warning-as-error='true' or $severity='exception') then 'd:error' else concat('d:',$severity)}">
+                        <xsl:variable name="id" select="substring-before(.,',')"/>
+                        <xsl:variable name="severity" select="substring-after(substring-before(.,', ['),', ')">
+                            <!-- FATAL, ERROR, WARN, HINT -->
+                        </xsl:variable>
+                        <xsl:variable name="message" select="substring-after(substring-before(.,']'),'[')"/>
+                        <xsl:variable name="file" select="replace(substring-after(tokenize(.,'\]')[last()],', '),' \(.*?\)$','')"/>
+                        <xsl:variable name="line" select="if (ends-with(.,')')) then replace(.,'.*\((\d+)-\d+\)$','$1') else ()"/>
+                        <xsl:variable name="column" select="if (ends-with(.,')')) then replace(.,'.*\(\d+-(\d+)\)$','$1') else ()"/>
+
+                        <xsl:element
+                            name="{if ($severity='FATAL' or $severity='WARN' and $report-warning-as-error='true') then 'd:error' else if ($severity='FATAL') then 'd:exception' else if ($severity=('ERROR','WARN','HINT')) then concat('d:',lower-case($severity)) else 'd:warn'}">
                             <d:desc>
-                                <xsl:value-of select="$message-text"/>
+                                <xsl:value-of select="concat($id,': ',$message)"/>
                             </d:desc>
                             <xsl:if test="$file">
                                 <d:file>
                                     <xsl:value-of select="$file"/>
                                 </d:file>
                             </xsl:if>
-                            <xsl:if test="$location">
-                                <d:location line="{tokenize($location,',')[1]}">
-                                    <xsl:if test="contains($location,',')">
-                                        <xsl:attribute name="column" select="tokenize($location,',')[last()]"/>
-                                    </xsl:if>
-                                </d:location>
+                            <xsl:if test="$line or $column">
+                                <d:location line="{$line}" column="{$column}"/>
                             </xsl:if>
                         </xsl:element>
                     </xsl:for-each>

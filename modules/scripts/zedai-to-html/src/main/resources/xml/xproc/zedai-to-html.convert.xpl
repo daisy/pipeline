@@ -22,7 +22,6 @@
 
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 
     <!--=========================================================================-->
     <!-- GET ZEDAI FROM FILESET                                                  -->

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step version="1.0" name="dtbook-to-daisy3" type="px:dtbook-to-daisy3"
+    px:input-filesets="dtbook"
+    px:output-filesets="daisy3 mp3"
 		xmlns:p="http://www.w3.org/ns/xproc"
 		xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 		xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"

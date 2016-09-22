@@ -7,6 +7,8 @@
     xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
     xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
     exclude-inline-prefixes="#all"
+    px:input-filesets="dtbook"
+    px:output-filesets="odt"
     type="px:dtbook-to-odt" name="dtbook-to-odt" version="1.0">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">

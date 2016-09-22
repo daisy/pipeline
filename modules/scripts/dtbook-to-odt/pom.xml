@@ -5,178 +5,41 @@
   
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>modules-parent</artifactId>
-    <version>1.2</version>
-    <relativePath />
+    <artifactId>scripts-parent</artifactId>
+    <version>1.10.1-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
   </parent>
   
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>dtbook-to-odt</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 module :: DTBook to ODT</name>
   
-  <!--
-      TODO: this should be in parent
-  -->
-  <!--<dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>framework-bom</artifactId>
-        <version>1.8</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>common-utils-aggregator</artifactId>
-        <version>1.8</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>scripts-aggregator</artifactId>
-        <version>1.8</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>script-utils-aggregator</artifactId>
-        <version>1.8</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.xprocspec</groupId>
-        <artifactId>xprocspec</artifactId>
-        <version>1.1.0</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xprocspec-runner</artifactId>
-        <version>1.0.0</version>
-        <scope>test</scope>
-        <exclusions>
-          <exclusion>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xproc-engine-daisy-pipeline</artifactId>
-        <version>1.8.1-SNAPSHOT</version>
-        <scope>test</scope>
-        <exclusions>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>pax-exam-helper</artifactId>
-        <version>1.8-SNAPSHOT</version>
-        <scope>test</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-  
   <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>odt-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>image-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
+    <!-- runtime dependencies -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>asciimath-utils</artifactId>
-      <scope>test</scope>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>fileset-utils</artifactId>
-      <scope>test</scope>
+      <artifactId>dtbook-utils</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>file-utils</artifactId>
-      <scope>test</scope>
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-utils</artifactId>
-      <scope>test</scope>
+      <artifactId>odt-utils</artifactId>
+      <scope>runtime</scope>
     </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>html-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>zip-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mediatype-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>validation-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-validator</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xproc-engine-daisy-pipeline</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.xprocspec</groupId>
-      <artifactId>xprocspec</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xprocspec-runner</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>pax-exam-helper</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>-->
+  </dependencies>
   
   <build>
     <resources>

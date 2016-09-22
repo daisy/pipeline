@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:html="http://www.w3.org/1999/xhtml" type="px:epub3-validator" version="1.0" xmlns:d="http://www.daisy.org/ns/pipeline/data">
+<p:declare-step type="px:epub3-validator" version="1.0"
+    px:input-filesets="epub3"
+    xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:d="http://www.daisy.org/ns/pipeline/data">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">EPUB3 Validator</h1>
+        <h1 px:role="name">EPUB 3 Validator</h1>
         <p px:role="desc">Validates a EPUB.</p>
         <address px:role="author maintainer">
             <p>Script wrapper for epubcheck maintained by <span px:role="name">Jostein Austvik Jacobsen</span>
                 (organization: <span px:role="organization">NLB</span>,
                 e-mail: <a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>).</p>
         </address>
-        <p><a px:role="homepage" href="http://code.google.com/p/daisy-pipeline/wiki/EpubCheckDoc">Online Documentation</a></p>
+        <p><a px:role="homepage" href="https://github.com/IDPF/epubcheck/wiki">Online Documentation</a></p>
     </p:documentation>
 
     <p:option name="epub" required="true" px:type="anyFileURI" px:media-type="application/epub+zip application/oebps-package+xml">
@@ -19,29 +21,6 @@
             <p px:role="desc">EPUB to be validated.</p>
         </p:documentation>
     </p:option>
-
-    <p:option name="mode" required="false" px:type="string" select="'epub'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">What to validate</h2>
-            <p px:role="desc">One of: "epub" (the entire epub), "opf" (the package file), "xhtml" (the content files), "svg" (vector graphics), "mo" (media overlays), "nav" (the navigation
-                document) or "expanded" (like "epub" but unzipped).</p>
-        </p:documentation>
-    </p:option>
-
-    <p:option name="version" required="false" px:type="string" select="'3'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">EPUB version</h2>
-            <p px:role="desc">The EPUB version to validate against. Default is "3". Values allowed are: "2" and "3".</p>
-        </p:documentation>
-    </p:option>
-
-    <!--<p:output port="report" sequence="true">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">XML Report</h1>
-            <p px:role="desc">Raw output from the validation.</p>
-        </p:documentation>
-        <p:pipe port="result" step="xml-report"/>
-    </p:output>-->
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -64,10 +43,10 @@
 
     <px:epubcheck>
         <p:with-option name="epub" select="$epub"/>
-        <p:with-option name="mode" select="if ($mode='') then (if (matches(lower-case($epub),'\.(opf|xml)$')) then 'expanded' else 'epub') else $mode"/>
-        <p:with-option name="version" select="if ($version='') then '3' else $version"/>
+        <p:with-option name="mode" select="'epub'"/>
+        <p:with-option name="version" select="'3'"/>
     </px:epubcheck>
-
+    
     <p:xslt name="xml-report.not-wrapped">
         <p:input port="parameters">
             <p:empty/>

@@ -2,7 +2,16 @@
 	<let name="uniqueid" value="//pkg:package/@unique-identifier"/> 
 	
     <rule context="//pkg:package/pkg:metadata/pkg:dc-metadata">
-        <assert test="dc:Identifier[@id=$uniqueid]">Value of unique-identifier attribute on package element does not match id value of any dc:Identifier.</assert>   					
+        <assert test="dc:Identifier[@id=$uniqueid]">Value of unique-identifier attribute on package element does not match id value of any dc:Identifier.</assert>
+    	
+    	<!-- NIMAS requirements -->
+    	<assert test="count(dc:Format) >= 1">dc:Format metadata is required by NIMAS.</assert>
+    	<assert test="count(dc:Rights) >= 1">dc:Rights metadata is required by NIMAS.</assert>
+    	<assert test="count(dc:Source) >= 1">dc:Source metadata is required by NIMAS.</assert>
+    	<!-- not actually required -->
+    	<!--<assert test="count(dc:Creator) >=1">dc:Creator metadata is required by NIMAS.</assert>-->
+    	<assert test="dc:Format[text() = 'NIMAS 1.1']">dc:Format metadata must equal NIMAS 1.1</assert>
+    	<assert test="count(dc:Subject) >=1">dc:Subject is required by NIMAS.</assert>	
     </rule>
     
     <rule context="//pkg:package/pkg:metadata/pkg:x-metadata">
@@ -26,6 +35,34 @@
         <assert test="count(pkg:meta[@name='dtb:revisionDescription'])&lt;2">x-metadata element dtb:revisionDescription occured more than one time.</assert>
     	<!-- DAISY requires this, not NIMAS. We follow NIMAS here. -->
         <!--<assert test="count(pkg:meta[@name='dtb:totalTime'])=1">dtb:totalTime is missing or duplicated in x-metadata.</assert>-->
+
+
+		<!-- NIMAS requirements -->
+    	<!-- not actually required -->
+    	<!--<assert test="count(pkg:meta[@name = 'nimas-SourceEdition']) >= 1">nimas-SourceEdition metadata is required by NIMAS.</assert>-->
+    	<assert test="count(pkg:meta[@name = 'nimas-SourceDate']) >= 1">nimas-SourceDate metadata is required by NIMAS.</assert>
+    	
+    	<!-- these NIMAS metadata requirements came from a NIMAC PDF sent by APH -->
+    	<assert test="count(pkg:meta[@name='DCTERMS.description.note']) >= 1">DCTERMS.description.note metadata is required by NIMAS.</assert>
+    	<assert test="count(pkg:meta[@name='DCTERMS.date.dateCopyrighted']) >= 1">DCTERMS.date.dateCopyrighted metadata is required by NIMAS.</assert>
+    	<assert test="count(pkg:meta[@name='DCTERMS.description.version']) >= 1">DCTERMS.description.version metadata is required by NIMAS.</assert>
+    	<assert test="count(pkg:meta[@name='DCTERMS.audience.educationLevel']) >= 1">DCTERMS.audience.educationLevel metadata is required by NIMAS.</assert>
+    	<assert test="count(pkg:meta[@name='DCTERMS.created']) >= 1">DCTERMS.created metadata is required by NIMAS.</assert>
+    	<assert test="count(pkg:meta[@name='DCTERMS.publisher.place']) >= 1">DCTERMS.publisher.place metadata is required by NIMAS.</assert>
+    	<assert test="count(pkg:meta[@name='DCTERMS.date.issued']) >= 1">DCTERMS.date.issued metadata is required by NIMAS.</assert>
+    	<!--
+    		
+    FUTURE ENHANCEMENTS (NIMAS; from aforementioned PDF):
+    
+        DCTERMS.date.dateCopyrighted // restrict @content to 4 digit year
+        DCTERMS.audience.educationLevel // see controlled vocabulary
+        DCTERMS.created // YYYY-MM-DD
+        DCTERMS.date.issued  // 4 digit year
+        dc:Subject // see controlled vocabulary
+        
+        
+-->
+    	
     </rule>
     
     <rule context="//pkg:package/pkg:manifest">
@@ -56,6 +93,9 @@
     	<assert test="count(pkg:item[@media-type='application/x-dtbresource+xml'])&lt;2"> 
     		Several resource files are listed in manifest.
     	</assert>  
+    	<report test="count(pkg:item[@media-type = 'application/pdf']) = 0"> 
+    		NIMAS requires at least one document with media-type equal to 'application/pdf' in the manifest.
+    	</report>
     </rule>
     
 	<rule context="//pkg:package/pkg:manifest/pkg:item[@media-type='application/x-dtbresource+xml']">
@@ -95,23 +135,7 @@
 		</assert>   					
 	</rule>
 	
-	<!-- NIMAS additions -->
-	<rule context="//pkg:package/pkg:metadata/pkg:dc-metadata">
-		<assert test="count(dc:Format) >= 1">dc:Format metadata is required by NIMAS.</assert>
-		<assert test="count(dc:Rights) >= 1">dc:Rights metadata is required by NIMAS.</assert>
-		<assert test="count(dc:Source) >= 1">dc:Source metadata is required by NIMAS.</assert>
-	</rule>
 	
-	<rule context="//pkg:package/pkg:metadata/pkg:x-metadata">
-		<assert test="count(pkg:meta[@name = 'nimas-SourceEdition']) >= 1">nimas-SourceEdition metadata is required by NIMAS.</assert>
-		<assert test="count(pkg:meta[@name = 'nimas-SourceDate']) >= 1">nimas-SourceDate metadata is required by NIMAS.</assert>
-	</rule>
-	
-	<rule context="//pkg:package/pkg:manifest">
-		<report test="count(pkg:item[@media-type = 'application/pdf']) = 0"> 
-			NIMAS requires at least one document with media-type equal to 'application/pdf' in the manifest.
-		</report>
-	</rule>
 	
 	<rule context="//pkg:package/pkg:spine/pkg:itemref">
 		<assert test="//pkg:item[@id=current()/@idref and @media-type='application/x-dtbook+xml']"> 

@@ -9,6 +9,5 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:odt-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:image-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:asciimath-utils"/>
 </catalog>

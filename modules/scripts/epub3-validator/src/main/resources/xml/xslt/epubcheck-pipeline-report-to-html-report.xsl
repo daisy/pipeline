@@ -87,47 +87,29 @@
     </xsl:template>
 
     <xsl:template match="d:exceptions | d:errors | d:warnings | d:hints">
-        <ul class="document-{local-name()}">
-            <xsl:apply-templates select="*"/>
-        </ul>
+        <h3><xsl:value-of select="concat(upper-case(substring(local-name(),1,1)),lower-case(substring(local-name(),2)))"/></h3>
+        <table class="document-{local-name()} table table-bordered">
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Line</th>
+                    <th>Position</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <xsl:apply-templates select="*"/>
+            </tbody>
+        </table>
     </xsl:template>
 
     <xsl:template match="d:exception | d:error | d:warn | d:hint">
-        <li class="{local-name()}">
-            <p>
-                <xsl:value-of select="./d:desc"/>
-            </p>
-            <xsl:if test="./d:file">
-                <pre><xsl:value-of select="./d:file"/></pre>
-            </xsl:if>
-            <xsl:if test="string-length(./d:location/@href) > 0">
-                <div>
-                    <h3>Location:</h3>
-                    <pre class="box">
-                    <xsl:choose>
-                        <xsl:when test="./d:location/@href">
-                            <xsl:value-of select="./d:location/@href"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <em>Line <xsl:value-of select="./d:location/@line"/>, Column <xsl:value-of select="./d:location/@column"/></em>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    </pre>
-                </div>
-            </xsl:if>
-            <xsl:if test="./d:expected">
-                <div>
-                    <h3 style="display:inline;">Expected:</h3>
-                    <pre class="prettyprint"><xsl:value-of select="./d:expected"/></pre>
-                </div>
-            </xsl:if>
-            <xsl:if test="./d:was">
-                <div>
-                    <h3 style="display:inline;">Was:</h3>
-                    <pre class="prettyprint"><xsl:value-of select="./d:was"/></pre>
-                </div>
-            </xsl:if>
-        </li>
+        <tr class="{if (local-name()=('exception','error')) then 'error' else if (local-name()='warn') then 'warning' else ''}">
+            <td><xsl:value-of select="(d:file,d:location/@href,'-')[1]"/></td>
+            <td><xsl:value-of select="(d:location/@line,'-')[1]"/></td>
+            <td><xsl:value-of select="(d:location/@column,'-')[1]"/></td>
+            <td><xsl:value-of select="d:desc"/></td>
+        </tr>
     </xsl:template>
 
 </xsl:stylesheet>

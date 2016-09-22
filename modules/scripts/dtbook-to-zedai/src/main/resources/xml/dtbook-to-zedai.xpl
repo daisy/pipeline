@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="dtbook-to-zedai" type="px:dtbook-to-zedai" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+<p:declare-step version="1.0" name="dtbook-to-zedai" type="px:dtbook-to-zedai"
+    px:input-filesets="dtbook"
+    px:output-filesets="zedai"
+    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     exclude-inline-prefixes="#all">
 

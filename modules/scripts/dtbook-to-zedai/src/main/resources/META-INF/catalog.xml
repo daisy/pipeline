@@ -10,4 +10,5 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-validator"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
+  <nextCatalog catalog="org:daisy:pipeline:modules:css-speech" />
 </catalog>

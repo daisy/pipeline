@@ -5,15 +5,39 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>modules-parent</artifactId>
-    <version>1.2</version>
-    <relativePath/>
+    <artifactId>scripts-parent</artifactId>
+    <version>1.10.1-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>html-to-dtbook</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: HTML to DTBook</name>
+  
+  <dependencies>
+    <!-- runtime dependencies -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
 
 </project>

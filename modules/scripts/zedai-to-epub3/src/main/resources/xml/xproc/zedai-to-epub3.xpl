@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    px:input-filesets="zedai"
+    px:output-filesets="epub3 mp3"
     type="px:zedai-to-epub3" name="zedai-to-epub3" version="1.0">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -51,7 +53,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl"/>
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 
     <p:variable name="input-uri" select="base-uri(/)"/>
 

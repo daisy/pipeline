@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step version="1.0" name="main" type="px:dtbook-to-html"
+    px:input-filesets="dtbook"
+    px:output-filesets="html"
     xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
@@ -47,7 +49,6 @@
         href="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zedai-to-html/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
 
     

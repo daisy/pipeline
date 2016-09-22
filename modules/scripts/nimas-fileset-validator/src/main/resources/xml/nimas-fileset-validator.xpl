@@ -9,6 +9,7 @@
     xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:p="http://www.w3.org/ns/xproc" xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
     version="1.0" name="nimas-fileset-validator" type="px:nimas-fileset-validator"
+    px:input-filesets="nimas dtbook daisy3"
     exclude-inline-prefixes="#all">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">

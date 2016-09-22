@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="dtbook-to-epub3" type="px:dtbook-to-epub3" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+<p:declare-step version="1.0" name="dtbook-to-epub3" type="px:dtbook-to-epub3"
+    px:input-filesets="dtbook"
+    px:output-filesets="epub3"
+    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
     xmlns:z="http://www.daisy.org/ns/z3986/authoring/" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:d="http://www.daisy.org/ns/pipeline/data" exclude-inline-prefixes="#all">
 

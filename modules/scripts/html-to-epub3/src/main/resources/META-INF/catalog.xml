@@ -9,4 +9,5 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
+  <nextCatalog catalog="org:daisy:pipeline:modules:zedai-to-html" />
 </catalog>

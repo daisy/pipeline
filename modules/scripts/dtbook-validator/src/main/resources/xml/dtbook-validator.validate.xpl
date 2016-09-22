@@ -63,6 +63,7 @@
     <p:option name="mathml-version"/>
     <p:option name="check-images"/>
     <p:option name="base-uri"/>
+    <p:option name="nimas"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     
@@ -71,12 +72,8 @@
         <p:documentation>Collection of utilities for validation and reporting. </p:documentation>
     </p:import>
     
-    <p:import href="dtbook-validator.select-schema.xpl">
-        <p:documentation>Helper step: select schema for given document type.</p:documentation>
-    </p:import>
-    
-    <p:import href="dtbook-validator.check-images.xpl">
-        <p:documentation>Helper step: check that referenced images exist on disk.</p:documentation>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+        <p:documentation>Helper steps: select schema for given document type and check that referenced images exist on disk.</p:documentation>
     </p:import>
     
     <p:variable name="dtbook-version" select="*/@version">
@@ -153,10 +150,29 @@
         </p:choose>
     </p:group>
     
-    <!-- validate with schematron -->
+    
+    <p:choose name="choose-schematron">
+        <p:when test="$nimas = 'true'">
+            <p:output port="result"/>
+            <p:identity name="use-nimas-schematron">
+                <p:input port="source">
+                    <p:document href="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.nimas.sch"/>
+                </p:input>
+            </p:identity>
+        </p:when>
+        <p:otherwise>
+            <p:output port="result"/>
+            <p:identity name="use-default-schematron">
+                <p:input port="source">
+                    <p:document href="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.sch"/>
+                </p:input>
+            </p:identity>
+        </p:otherwise>
+    </p:choose>
+    <!-- validate with schematron --> 
     <p:validate-with-schematron assert-valid="false" name="validate-against-schematron">
         <p:input port="schema">
-            <p:document href="./schema/sch/dtbook.mathml.sch"/>
+            <p:pipe port="result" step="choose-schematron"/>
         </p:input>
         <p:input port="source">
             <p:pipe port="source" step="dtbook-validator.validate"/>

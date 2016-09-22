@@ -4,10 +4,10 @@
   <uri name="http://www.daisy.org/pipeline/modules/epub3-to-daisy202/xproc/epub3-to-daisy202.xpl" uri="../xml/xproc/epub3-to-daisy202.xpl" px:script="true"/>
   <uri name="http://www.daisy.org/pipeline/modules/epub3-to-daisy202/xproc/library.xpl" uri="../xml/xproc/library.xpl"/>
 
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-nav-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-ocf-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-pub-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
 
 </catalog>
