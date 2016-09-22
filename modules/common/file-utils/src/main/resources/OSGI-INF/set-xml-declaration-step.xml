@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="SetXmlDeclaration step">
+    <scr:implementation class="org.daisy.common.xproc.calabash.steps.SetXmlDeclarationProvider"/>
+    <scr:service>
+        <scr:provide interface="org.daisy.common.xproc.calabash.XProcStepProvider"/>
+    </scr:service>
+    <property name="type" type="String" value="{http://www.daisy.org/ns/pipeline/xproc/internal}set-xml-declaration"/>
+</scr:component>

@@ -1,4 +1,4 @@
-<p:library version="1.0" xmlns:p="http://www.w3.org/ns/xproc">
+<p:library version="1.0" xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
 
     <p:import href="fileset-add-entry.xpl"/>
     <p:import href="fileset-copy.xpl"/>
@@ -14,5 +14,21 @@
     <p:import href="fileset-add-ref.xpl"/>
     <p:import href="fileset-rebase.xpl"/>
     <p:import href="fileset-move.xpl"/>
+    <p:import href="fileset-unzip.xpl"/>
+    <p:import href="unzip-fileset.xpl"/>
+    <p:import href="html-to-fileset.xpl"/>
+
+    <p:declare-step type="px:zip-manifest-from-fileset">
+        <p:input port="source"/>
+        <p:output port="result"/>
+        <p:xslt>
+            <p:input port="stylesheet">
+                <p:document href="../xslt/fileset-to-zip-manifest.xsl"/>
+            </p:input>
+            <p:input port="parameters">
+                <p:empty/>
+            </p:input>
+        </p:xslt>
+    </p:declare-step>
 
 </p:library>

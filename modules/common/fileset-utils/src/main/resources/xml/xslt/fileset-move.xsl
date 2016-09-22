@@ -13,10 +13,19 @@
             <xsl:for-each select="d:file">
                 <xsl:copy>
                     <xsl:copy-of select="@*[not(name()='xml:base')]"/>
+
                     <xsl:if test="@xml:base">
+                        <!-- make sure that href is relative to the fileset base -->
                         <xsl:attribute name="href" select="pf:relativize-uri(resolve-uri(@href,base-uri(.)),base-uri(/*))"/>
                     </xsl:if>
+
+                    <xsl:if test="@original-href">
+                        <!-- make sure that original-href is absolute -->
+                        <xsl:attribute name="original-href" select="resolve-uri(@original-href, base-uri(.))"/>
+                    </xsl:if>
+
                     <xsl:copy-of select="node()"/>
+
                 </xsl:copy>
             </xsl:for-each>
         </xsl:copy>

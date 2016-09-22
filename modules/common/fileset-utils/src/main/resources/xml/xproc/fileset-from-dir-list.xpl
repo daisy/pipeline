@@ -8,7 +8,7 @@
   
   <p:xslt>
     <p:input port="stylesheet">
-      <p:document href="fileset-from-dir-list.xsl"/>
+      <p:document href="../xslt/fileset-from-dir-list.xsl"/>
     </p:input>
     <p:input port="parameters">
       <p:empty/>

@@ -1,0 +1,2360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"
+    stylesheet="../../main/resources/xml/xslt/html5-upgrade.xsl">
+
+    <x:scenario label="Attributes :: Globals">
+        <x:scenario label="Global attributes">
+            <x:context>
+                <span accesskey="p" class="class" contenteditable="" dir="ltr" draggable="false"
+                    dropzone="copy" hidden="hidden" id="foo" lang="en" spellcheck="false"
+                    style="color: black" tabindex="1" title="foo" translate="yes"/>
+            </x:context>
+            <x:expect label="are kept">
+                <span accesskey="p" class="class" contenteditable="" dir="ltr" draggable="false"
+                    dropzone="copy" hidden="hidden" id="foo" lang="en" spellcheck="false"
+                    style="color: black" tabindex="1" title="foo" translate="yes"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="data-* attributes">
+            <x:context>
+                <span data-foo="foo" data-bar="bar"/>
+            </x:context>
+            <x:expect label="are kept">
+                <span data-foo="foo" data-bar="bar"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="event handler">
+            <x:context>
+                <span onabort="alert(this)" onblur="alert(this)" oncancel="alert(this)"
+                    oncanplay="alert(this)" oncanplaythrough="alert(this)" onchange="alert(this)"
+                    onclick="alert(this)" onclose="alert(this)" oncuechange="alert(this)"
+                    ondblclick="alert(this)" ondrag="alert(this)" ondragend="alert(this)"
+                    ondragenter="alert(this)" ondragexit="alert(this)" ondragleave="alert(this)"
+                    ondragover="alert(this)" ondragstart="alert(this)" ondrop="alert(this)"
+                    ondurationchange="alert(this)" onemptied="alert(this)" onended="alert(this)"
+                    onerror="alert(this)" onfocus="alert(this)" oninput="alert(this)"
+                    oninvalid="alert(this)" onkeydown="alert(this)" onkeypress="alert(this)"
+                    onkeyup="alert(this)" onload="alert(this)" onloadeddata="alert(this)"
+                    onloadedmetadata="alert(this)" onloadstart="alert(this)"
+                    onmousedown="alert(this)" onmouseenter="alert(this)" onmouseleave="alert(this)"
+                    onmousemove="alert(this)" onmouseout="alert(this)" onmouseover="alert(this)"
+                    onmouseup="alert(this)" onmousewheel="alert(this)" onpause="alert(this)"
+                    onplay="alert(this)" onplaying="alert(this)" onprogress="alert(this)"
+                    onratechange="alert(this)" onreset="alert(this)" onresize="alert(this)"
+                    onscroll="alert(this)" onseeked="alert(this)" onseeking="alert(this)"
+                    onselect="alert(this)" onshow="alert(this)" onstalled="alert(this)"
+                    onsubmit="alert(this)" onsuspend="alert(this)" ontimeupdate="alert(this)"
+                    ontoggle="alert(this)" onvolumechange="alert(this)" onwaiting="alert(this)"/>
+            </x:context>
+            <x:expect label="are kept">
+                <span onabort="alert(this)" onblur="alert(this)" oncancel="alert(this)"
+                    oncanplay="alert(this)" oncanplaythrough="alert(this)" onchange="alert(this)"
+                    onclick="alert(this)" onclose="alert(this)" oncuechange="alert(this)"
+                    ondblclick="alert(this)" ondrag="alert(this)" ondragend="alert(this)"
+                    ondragenter="alert(this)" ondragexit="alert(this)" ondragleave="alert(this)"
+                    ondragover="alert(this)" ondragstart="alert(this)" ondrop="alert(this)"
+                    ondurationchange="alert(this)" onemptied="alert(this)" onended="alert(this)"
+                    onerror="alert(this)" onfocus="alert(this)" oninput="alert(this)"
+                    oninvalid="alert(this)" onkeydown="alert(this)" onkeypress="alert(this)"
+                    onkeyup="alert(this)" onload="alert(this)" onloadeddata="alert(this)"
+                    onloadedmetadata="alert(this)" onloadstart="alert(this)"
+                    onmousedown="alert(this)" onmouseenter="alert(this)" onmouseleave="alert(this)"
+                    onmousemove="alert(this)" onmouseout="alert(this)" onmouseover="alert(this)"
+                    onmouseup="alert(this)" onmousewheel="alert(this)" onpause="alert(this)"
+                    onplay="alert(this)" onplaying="alert(this)" onprogress="alert(this)"
+                    onratechange="alert(this)" onreset="alert(this)" onresize="alert(this)"
+                    onscroll="alert(this)" onseeked="alert(this)" onseeking="alert(this)"
+                    onselect="alert(this)" onshow="alert(this)" onstalled="alert(this)"
+                    onsubmit="alert(this)" onsuspend="alert(this)" ontimeupdate="alert(this)"
+                    ontoggle="alert(this)" onvolumechange="alert(this)" onwaiting="alert(this)"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="ARIA attributes">
+            <x:context>
+                <span role="button" aria-label="foo" aria-describedby="#foo"/>
+            </x:context>
+            <x:expect label="are kept">
+                <span role="button" aria-label="foo" aria-describedby="#foo"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="namespaced attributes">
+            <x:context>
+                <span epub:type="foo"/>
+            </x:context>
+            <x:expect label="are kept">
+                <span epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="unkown attributes">
+            <x:context>
+                <span foo="bar" onfoo="bar"/>
+            </x:context>
+            <x:expect label="are discarded">
+                <span/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Attributes :: Obsolete">
+        <x:scenario label="align">
+            <x:context>
+                <caption align="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <caption/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="alink">
+            <x:context>
+                <body alink="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="allowtransparency">
+            <x:context>
+                <iframe allowtransparency="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <iframe/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="background">
+            <x:context>
+                <body background="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="bgcolor">
+            <x:context>
+                <body bgcolor="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="border">
+            <x:context>
+                <div border="foo"/>
+                <img border="foo"/>
+            </x:context>
+            <x:expect label="is discarded or converted to inline CSS">
+                <div/>
+                <img style="border-width: foo;"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="bordercolor">
+            <x:context>
+                <table bordercolor="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <table/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="cellpadding">
+            <x:context>
+                <table cellpadding="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <table/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="cellspacing">
+            <x:context>
+                <table cellspacing="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <table/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="char">
+            <x:context>
+                <col char="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <col/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="charoff">
+            <x:context>
+                <col charoff="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <col/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="clear">
+            <x:context>
+                <br clear="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <br/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="color">
+            <x:context>
+                <hr color="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <hr/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="compact">
+            <x:context>
+                <dl compact="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <dl/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="frame">
+            <x:context>
+                <table frame="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <table/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="frameborder">
+            <x:context>
+                <iframe frameborder="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <iframe/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="height">
+            <x:context>
+                <td height="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <td/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="hspace">
+            <x:context>
+                <embed hspace="foo"/>
+                <img hspace="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <embed/>
+                <img/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="link">
+            <x:context>
+                <body link="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="marginbottom">
+            <x:context>
+                <body marginbottom="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="marginheight">
+            <x:context>
+                <body marginheight="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="marginleft">
+            <x:context>
+                <body marginleft="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="marginright">
+            <x:context>
+                <body marginright="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="margintop">
+            <x:context>
+                <body margintop="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="marginwidth">
+            <x:context>
+                <body marginwidth="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="noshade">
+            <x:context>
+                <hr noshade="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <hr/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="nowrap">
+            <x:context>
+                <td nowrap="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <td/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="rules">
+            <x:context>
+                <table rules="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <table/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="scrolling">
+            <x:context>
+                <iframe scrolling="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <iframe/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="size">
+            <x:context>
+                <hr size="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <hr/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="text">
+            <x:context>
+                <body text="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="type">
+            <x:context>
+                <li type="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <li/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="valign">
+            <x:context>
+                <col valign="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <col/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="vlink">
+            <x:context>
+                <body vlink="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <body/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="vspace">
+            <x:context>
+                <embed vspace="foo"/>
+                <img hspace="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <embed/>
+                <img/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="width">
+            <x:context>
+                <col width="foo"/>
+            </x:context>
+            <x:expect label="is discarded">
+                <col/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: a">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <a id="foo" foo="bar" epub:type="foo" href="#foo" target="_self" download=""
+                    rel="alternate" hreflang="en" type="text/html"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <a id="foo" epub:type="foo" href="#foo" target="_self" download="" rel="alternate"
+                    hreflang="en" type="text/html"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="name attribute">
+            <x:scenario label="when no id is already present">
+                <x:context>
+                    <a name="foo"/>
+                </x:context>
+                <x:expect label="is translated as id">
+                    <a id="foo"/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="with an empty value">
+                <x:context>
+                    <a name=""/>
+                </x:context>
+                <x:expect label="is discarded">
+                    <a/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when an id is already present">
+                <x:context>
+                    <a name="foo" id="bar"/>
+                </x:context>
+                <x:expect label="is discarded" test="h:a">
+                    <a id="bar"/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="with a value of an existing ID">
+                <x:context>
+                    <a name="foo"/>
+                    <span id="foo"/>
+                </x:context>
+                <x:expect label="is discarded" test="h:a">
+                    <a/>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+        <x:scenario label="with a coords or attribute and an area content model">
+            <x:context>
+                <map>
+                    <a id="foo" foo="bar" epub:type="foo" href="#foo" target="_self" download=""
+                        rel="alternate" hreflang="en" type="text/html" coords="1 2" shape="circle"/>
+                </map>
+            </x:context>
+            <x:expect label="is converted to area">
+                <map>
+                    <area id="foo" epub:type="foo" href="#foo" target="_self" download=""
+                        rel="alternate" hreflang="en" type="text/html" coords="1 2" shape="circle"/>
+                </map>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a shape or coords attribute and non-empty">
+            <x:context>
+                <a id="foo" foo="bar" epub:type="foo" href="#foo" target="_self" download=""
+                    rel="alternate" hreflang="en" type="text/html" coords="1 2" shape="circle"
+                    >test</a>
+            </x:context>
+            <x:expect label="is kept as an a, and attributes are removed">
+                <a id="foo" epub:type="foo" href="#foo" target="_self" download="" rel="alternate"
+                    hreflang="en" type="text/html">test</a>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: abbr">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <abbr id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <abbr id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: address">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <address id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <address id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: acronym">
+        <x:scenario label="element acronym">
+            <x:context>
+                <acronym title="World Wide Web Consortium">W3C</acronym>
+            </x:context>
+            <x:expect label="is converted to abbr">
+                <abbr title="World Wide Web Consortium">W3C</abbr>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: applet">
+        <x:scenario label="element applet">
+            <x:context>
+                <applet id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="is discarded"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: area">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <area id="foo" foo="bar" epub:type="foo" alt="alt" coords="1 2 3" shape="default"
+                    href="#foo" target="_self" download="download" rel="alternate" hreflang="en"
+                    type="text/html"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <area id="foo" epub:type="foo" alt="alt" coords="1 2 3" shape="default" href="#foo"
+                    target="_self" download="download" rel="alternate" hreflang="en"
+                    type="text/html"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: article">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <article id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <article id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: aside">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <aside id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <aside id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: audio">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <audio id="foo" foo="bar" epub:type="foo" src="audio.mp3" crossorigin="anonymous"
+                    preload="auto" autoplay="" mediagroup="group1" loop="" muted="" controls=""/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <audio id="foo" epub:type="foo" src="audio.mp3" crossorigin="anonymous"
+                    preload="auto" autoplay="" mediagroup="group1" loop="" muted="" controls=""/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: b">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <b id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <b id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: base">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <base id="foo" foo="bar" epub:type="foo" href="#foo" target="_self"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <base id="foo" epub:type="foo" href="#foo" target="_self"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: basefont">
+        <x:scenario label="basefont">
+            <x:context>
+                <basefont color="#555" face="Helvetica" size="4"/>
+            </x:context>
+            <x:expect label="is converted to inline style"
+                test="normalize-space(h:style) = normalize-space('
+                    body {
+                      color: #555;
+                      font-family: Helvetica;
+                      font-size: medium;
+                    }
+                ')"
+            />
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: bdi">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <bdi id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <bdi id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: bdo">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <bdo id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <bdo id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: bgsound">
+        <x:scenario label="element bgsound">
+            <x:context>
+                <bgsound src="sound.wav" loop="infinite"/>
+            </x:context>
+            <x:expect label="is converted to adudio">
+                <audio src="sound.wav" loop=""/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: big">
+        <x:scenario label="element big">
+            <x:context>
+                <big id="foo" foo="bar" epub:type="foo">big</big>
+            </x:context>
+            <x:expect label="is converted to strong">
+                <strong id="foo" epub:type="foo">big</strong>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: blink">
+        <x:scenario label="element blink">
+            <x:context>
+                <blink id="foo" foo="bar" epub:type="foo">text</blink>
+            </x:context>
+            <x:expect label="is converted to span">
+                <span id="foo" epub:type="foo">text</span>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: blockquote">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <blockquote id="foo" foo="bar" epub:type="foo" cite="http://example.com"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <blockquote id="foo" epub:type="foo" cite="http://example.com"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: body">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <body id="foo" epub:type="foo" onafterprint="alert(this)"
+                    onbeforeprint="alert(this)" onbeforeunload="alert(this)"
+                    onhashchange="alert(this)" onmessage="alert(this)" onoffline="alert(this)"
+                    ononline="alert(this)" onpagehide="alert(this)" onpageshow="alert(this)"
+                    onpopstate="alert(this)" onstorage="alert(this)" onunload="alert(this)"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <body id="foo" epub:type="foo" onafterprint="alert(this)"
+                    onbeforeprint="alert(this)" onbeforeunload="alert(this)"
+                    onhashchange="alert(this)" onmessage="alert(this)" onoffline="alert(this)"
+                    ononline="alert(this)" onpagehide="alert(this)" onpageshow="alert(this)"
+                    onpopstate="alert(this)" onstorage="alert(this)" onunload="alert(this)"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: br">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <br id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <br id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: button">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <button id="foo" foo="bar" epub:type="foo" autofocus="" disabled="" form="foo"
+                    formaction="#foo" formenctype="text/plain" formmethod="get" formnovalidate=""
+                    formtarget="_self" name="name" type="button" value="val"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <button id="foo" epub:type="foo" autofocus="" disabled="" form="foo"
+                    formaction="#foo" formenctype="text/plain" formmethod="get" formnovalidate=""
+                    formtarget="_self" name="name" type="button" value="val"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: canvas">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <canvas id="foo" foo="bar" epub:type="foo" width="100" height="100"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <canvas id="foo" epub:type="foo" width="100" height="100"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: caption">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <caption id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <caption id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: center">
+        <x:scenario label="center">
+            <x:context>
+                <center id="foo" foo="bar" epub:type="foo">text</center>
+            </x:context>
+            <x:expect label="is converted to CSS-centered span">
+                <span id="foo" epub:type="foo" style="text-align: center; ">text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="styled center">
+            <x:context>
+                <center style="color: red;">text</center>
+            </x:context>
+            <x:expect label="isn't lost when converted to span">
+                <span style="text-align: center; color: red;">text</span>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: cite">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <cite id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <cite id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: code">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <code id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <code id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: col">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <col id="foo" foo="bar" epub:type="foo" span="2"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <col id="foo" epub:type="foo" span="2"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: colgroup">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <colgroup id="foo" foo="bar" epub:type="foo" span="2"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <colgroup id="foo" epub:type="foo" span="2"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: data">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <data id="foo" foo="bar" epub:type="foo" value="val"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <data id="foo" epub:type="foo" value="val"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: datalist">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <datalist id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <datalist id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: dd">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <dd id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <dd id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: del">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <del id="foo" foo="bar" epub:type="foo" cite="http://example.com"
+                    datetime="2008-02-12T15:20Z"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <del id="foo" epub:type="foo" cite="http://example.com" datetime="2008-02-12T15:20Z"
+                />
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: details">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <details id="foo" foo="bar" epub:type="foo" open=""/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <details id="foo" epub:type="foo" open=""/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: dfn">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <dfn id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <dfn id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: dir">
+        <x:scenario label="dir element">
+            <x:context>
+                <dir id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="is converted to ul">
+                <ul id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: div">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <div id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <div id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: dl">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <dl id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <dl id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: dt">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <dt id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <dt id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: em">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <em id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <em id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: embed">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <embed id="foo" foo="bar" epub:type="foo" src="http://example.com"
+                    type="application/vnd.foo" width="100" height="100"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <embed id="foo" foo="bar" epub:type="foo" src="http://example.com"
+                    type="application/vnd.foo" width="100" height="100"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="embed with a noembed alternative">
+            <x:context>
+                <embed id="foo" foo="bar" epub:type="foo" src="http://example.com"
+                    type="application/vnd.foo" width="100" height="100">
+                    <noembed>
+                        <!--alt-->
+                        <p>alt</p>
+                    </noembed>
+                </embed>
+            </x:context>
+            <x:expect label="is converted to object">
+                <object id="foo" epub:type="foo" data="http://example.com"
+                    type="application/vnd.foo" width="100" height="100">
+                    <param name="foo" value="bar"/>
+                    <!--alt-->
+                    <p>alt</p>
+                </object>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a name attribute">
+            <x:scenario label="when no id is already present">
+                <x:context>
+                    <embed name="foo"/>
+                </x:context>
+                <x:expect label="is translated as id">
+                    <embed id="foo"/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="with an empty value">
+                <x:context>
+                    <embed name=""/>
+                </x:context>
+                <x:expect label="is discarded">
+                    <embed/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when an id is already present">
+                <x:context>
+                    <embed name="foo" id="bar"/>
+                </x:context>
+                <x:expect label="is discarded">
+                    <embed id="bar"/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="with a value of an existing ID">
+                <x:context>
+                    <embed name="foo"/>
+                    <span id="foo"/>
+                </x:context>
+                <x:expect label="is discarded" test="h:embed">
+                    <embed/>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: fieldset">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <fieldset id="foo" foo="bar" epub:type="foo" disabled="" form="foo" name="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <fieldset id="foo" epub:type="foo" disabled="" form="foo" name="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: figcaption">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <figcaption id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <figcaption id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: figure">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <figure id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <figure id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: font">
+        <x:scenario label="font">
+            <x:context>
+                <font id="foo" color="#555" face="Helvetica" size="4">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span">
+                <span id="foo" style="color: #555; font-family: Helvetica; font-size: medium; "
+                    >text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="font with +size">
+            <x:context>
+                <font size="+2">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span with font-size 'larger'">
+                <span style="font-size: larger; ">text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="font with -size">
+            <x:context>
+                <font size="-2">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span with font-size 'larger'">
+                <span style="font-size: smaller; ">text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="font with size 1">
+            <x:context>
+                <font size="1">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span with font-size 'xx-small'">
+                <span style="font-size: xx-small; ">text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="font with size 2">
+            <x:context>
+                <font size="1">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span with font-size 'x-small'">
+                <span style="font-size: xx-small; ">text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="font with size 3">
+            <x:context>
+                <font size="1">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span with font-size 'small'">
+                <span style="font-size: xx-small; ">text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="font with size 4">
+            <x:context>
+                <font size="1">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span with font-size 'medium'">
+                <span style="font-size: xx-small; ">text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="font with size 5">
+            <x:context>
+                <font size="1">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span with font-size 'large'">
+                <span style="font-size: xx-small; ">text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="font with size 6">
+            <x:context>
+                <font size="1">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span with font-size 'x-large'">
+                <span style="font-size: xx-small; ">text</span>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="font with size 7">
+            <x:context>
+                <font size="1">text</font>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span with font-size 'xx-large'">
+                <span style="font-size: xx-small; ">text</span>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: frame | frameset | noframes">
+        <x:scenario label="frame elements">
+            <x:context>
+                <frame id="foo" foo="bar" epub:type="foo" src="frame.html"/>
+            </x:context>
+            <x:expect label="are converted to iframes">
+                <iframe id="foo" epub:type="foo" src="frame.html"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="frameset elements">
+            <x:context>
+                <frameset id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are converted to divs">
+                <div id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="noframes elements">
+            <x:context>
+                <noframes id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are converted to hidden divs">
+                <div id="foo" epub:type="foo" hidden=""/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: footer">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <footer id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <footer id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: form">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <form id="foo" foo="bar" epub:type="foo" accept-charset="utf8" action="#action"
+                    autocomplete="on" enctype="text/plain" method="post" name="foo" novalidate=""
+                    target="_self"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <form id="foo" epub:type="foo" accept-charset="utf8" action="#action"
+                    autocomplete="on" enctype="text/plain" method="post" name="foo" novalidate=""
+                    target="_self"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="an accept attribute">
+            <x:context>
+                <form accept="image/*">
+                    <div>
+                        <input id="foo"/>
+                    </div>
+                    <input id="bar" accept="video/*"/>
+                </form>
+            </x:context>
+            <x:expect label="is moved to input descendants">
+                <form>
+                    <div>
+                        <input id="foo" accept="image/*"/>
+                    </div>
+                    <input id="bar" accept="image/*,video/*"/>
+                </form>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: h1">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <h1 id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <h1 id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="Element :: h2">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <h2 id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <h2 id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="Element :: h3">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <h3 id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <h3 id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="Element :: h4">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <h4 id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <h4 id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="Element :: h5">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <h5 id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <h5 id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="Element :: h6">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <h6 id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <h6 id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: head">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <head id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <head id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: header">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <header id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <header id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: hgroup">
+        <x:scenario label="hgroup">
+            <x:context>
+                <hgroup id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="is converted to header">
+                <header id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="when a hgroup has several heading children">
+            <x:context>
+                <hgroup id="foo" foo="bar" epub:type="foo">
+                    <h1>Main heading</h1>
+                    <h2>Sub heading</h2>
+                    <h2>Other heading</h2>
+                </hgroup>
+            </x:context>
+            <x:expect label="the first is kept, others become paragraphs">
+                <header id="foo" epub:type="foo">
+                    <h1>Main heading</h1>
+                    <p>Sub heading</p>
+                    <p>Other heading</p>
+                </header>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: hr">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <hr id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <hr id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: html">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <html id="foo" foo="bar" epub:type="foo" manifest="http://example.com/manifest"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <html id="foo" epub:type="foo" manifest="http://example.com/manifest"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: i">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <i id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <i id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: iframe">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <iframe id="foo" foo="bar" epub:type="foo" src="http://example.com"
+                    srcdoc="$lt;html/&gt;" name="foo" sandbox="allow-same-origin" width="100"
+                    height="100"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <iframe id="foo" epub:type="foo" src="http://example.com" srcdoc="$lt;html/&gt;"
+                    name="foo" sandbox="allow-same-origin" width="100" height="100"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: img">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <img id="foo" foo="bar" epub:type="foo" alt="foo" src="foo.jpg"
+                    crossorigin="anonymous" usemap="#foo" ismap="" width="100" height="100"
+                    longdesc="desc.xml"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <img id="foo" epub:type="foo" alt="foo" src="foo.jpg" crossorigin="anonymous"
+                    usemap="#foo" ismap="" width="100" height="100" longdesc="desc.xml"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="border attribute">
+            <x:context>
+                <img border="3"/>
+            </x:context>
+            <x:expect label="is converted to css">
+                <img style="border-width: 3;"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="border attribute is added to style if needed">
+            <x:context>
+                <img border="3" style="color: red;"/>
+            </x:context>
+            <x:expect label="is converted to css">
+                <img style="border-width: 3; color: red;"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a name attribute">
+            <x:scenario label="when no id is already present">
+                <x:context>
+                    <img name="foo"/>
+                </x:context>
+                <x:expect label="is translated as id">
+                    <img id="foo"/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="with an empty value">
+                <x:context>
+                    <img name=""/>
+                </x:context>
+                <x:expect label="is discarded">
+                    <img/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when an id is already present">
+                <x:context>
+                    <img name="foo" id="bar"/>
+                </x:context>
+                <x:expect label="is discarded">
+                    <img id="bar"/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="with a value of an existing ID">
+                <x:context>
+                    <img name="foo"/>
+                    <span id="foo"/>
+                </x:context>
+                <x:expect label="is discarded" test="h:img">
+                    <img/>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: input">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <input id="foo" foo="bar" epub:type="foo" accept="image/*" alt="foo"
+                    autocomplete="off" autofocus="" checked="" dirname="comment.dir" disabled=""
+                    form="foo" formaction="/action" formenctype="text/plain" formmethod="get"
+                    formnovalidate="" formtarget="_self" height="100" list="foo" max="100"
+                    maxlength="100" min="10" minlength="10" multiple="" name="foo" pattern=".*"
+                    placeholder="foo" readonly="" required="" size="20" src="image.jpg" step="any"
+                    type="image" value="image.jpg" width="100"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <input id="foo" epub:type="foo" accept="image/*" alt="foo" autocomplete="off"
+                    autofocus="" checked="" dirname="comment.dir" disabled="" form="foo"
+                    formaction="/action" formenctype="text/plain" formmethod="get" formnovalidate=""
+                    formtarget="_self" height="100" list="foo" max="100" maxlength="100" min="10"
+                    minlength="10" multiple="" name="foo" pattern=".*" placeholder="foo" readonly=""
+                    required="" size="20" src="image.jpg" step="any" type="image" value="image.jpg"
+                    width="100"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with image map">
+            <x:context>
+                <input type="image" src="submit.jpg" alt="Submit your details" usemap="#sections"
+                    disabled=""/>
+            </x:context>
+            <x:expect label="is converted to img">
+                <img src="submit.jpg" alt="Submit your details" usemap="#sections"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: ins">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <ins id="foo" foo="bar" epub:type="foo" cite="http://example.com"
+                    datetime="2008-02-12T15:20Z"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <ins id="foo" epub:type="foo" cite="http://example.com" datetime="2008-02-12T15:20Z"
+                />
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: isindex">
+        <x:scenario label="isindex">
+            <x:context>
+                <isindex prompt="Enter your search phrase: "/>
+            </x:context>
+            <x:expect label="is converted into form with text input">
+                <form method="post">
+                    <p>Enter your search phrase: <input type="text"/></p>
+                </form>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: kbd">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <kbd id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <kbd id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: keygen">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <keygen id="foo" foo="bar" epub:type="foo" autofocus="" challenge="foo" disabled=""
+                    form="foo" keytype="rsa" name="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <keygen id="foo" epub:type="foo" autofocus="" challenge="foo" disabled="" form="foo"
+                    keytype="rsa" name="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: label">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <label id="foo" foo="bar" epub:type="foo" form="foo" for="bar"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <label id="foo" epub:type="foo" form="foo" for="bar"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: legend">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <legend id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <legend id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: li">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <li id="foo" foo="bar" epub:type="foo" value="1"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <li id="foo" epub:type="foo" value="1"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: link">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <link id="foo" foo="bar" epub:type="foo" href="style.css" crossorigin="anonymous"
+                    rel="stylesheet" media="print" hreflang="en" type="text/css" sizes="16x16"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <link id="foo" epub:type="foo" href="style.css" crossorigin="anonymous"
+                    rel="stylesheet" media="print" hreflang="en" type="text/css" sizes="16x16"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+
+    <x:scenario label="Element :: listing">
+        <x:scenario label="listing element">
+            <x:context>
+                <listing id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="is converted to pre and code">
+                <pre id="foo" epub:type="foo"><code/></pre>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="listing content">
+            <x:context xml:space="preserve"><listing>
+                    <!--test-->
+                    <p>hello</p>
+                </listing></x:context>
+            <x:expect label="is escaped">
+                <pre><code>
+                    &lt;!--test--&gt;
+                    &lt;p&gt;hello&lt;/p&gt;
+                </code></pre>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: main">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <main id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <main id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: map">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <map id="foo" foo="bar" epub:type="foo" name="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <map id="foo" epub:type="foo" name="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: mark">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <mark id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <mark id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: marquee">
+        <x:scenario label="marquee">
+            <x:context>
+                <marquee id="foo" direction="up" epub:type="foo"/>
+            </x:context>
+            <x:expect label="is converted to div">
+                <div id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: meta">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <meta id="foo" foo="bar" epub:type="foo" name="author" content="johndoe"/>
+                <meta id="foo" http-equiv="default-style" content="style.css"/>
+                <meta charset="utf-8"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <meta id="foo" epub:type="foo" name="author" content="johndoe"/>
+                <meta id="foo" http-equiv="default-style" content="style.css"/>
+                <meta charset="utf-8"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: meter">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <meter id="foo" foo="bar" epub:type="foo" value="2" min="1" max="3" low="1" high="3"
+                    optimum="2"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <meter id="foo" epub:type="foo" value="2" min="1" max="3" low="1" high="3"
+                    optimum="2"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: multicol">
+        <x:scenario label="multicol">
+            <x:context>
+                <multicol id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <span id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: nav">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <nav id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <nav id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: nextid">
+        <x:scenario label="nextid">
+            <x:context>
+                <nextid/>
+            </x:context>
+            <x:expect label="is discarded"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: nobr">
+        <x:scenario label="nobr">
+            <x:context>
+                <nobr id="foo" foo="bar" epub:type="foo">text</nobr>
+            </x:context>
+            <x:expect label="is converted to CSS-styled span">
+                <span id="foo" epub:type="foo" style="white-space: nowrap; ">text</span>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: noscript">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <noscript id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <noscript id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: object">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <object id="foo" foo="bar" epub:type="foo" data="http://example.com/object"
+                    type="text/plain" typemustmatch="" name="_self" usemap="#foo" form="foo"
+                    width="100" height="100"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <object id="foo" epub:type="foo" data="http://example.com/object" type="text/plain"
+                    typemustmatch="" name="_self" usemap="#foo" form="foo" width="100" height="100"
+                />
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="obsolete attributes">
+            <x:context>
+                <object id="foo" archive="foo" classid="foo" code="foo" codebase="foo"
+                    codetype="foo">text</object>
+            </x:context>
+            <x:expect label="are converted to param">
+                <object id="foo">
+                    <param name="archive" value="foo"/>
+                    <param name="classid" value="foo"/>
+                    <param name="code" value="foo"/>
+                    <param name="codebase" value="foo"/>
+                    <param name="codetype" value="foo"/>text</object>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: ol">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <ol id="foo" foo="bar" epub:type="foo" reversed="" start="1" type="a"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <ol id="foo" epub:type="foo" reversed="" start="1" type="a"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: optgroup">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <optgroup id="foo" foo="bar" epub:type="foo" disabled="" label="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <optgroup id="foo" epub:type="foo" disabled="" label="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: option">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <option id="foo" foo="bar" epub:type="foo" disabled="" label="foo" selected=""
+                    value="val"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <option id="foo" epub:type="foo" disabled="" label="foo" selected="" value="val"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a name attribute">
+            <x:scenario label="when no id is already present">
+                <x:context>
+                    <option name="foo"/>
+                </x:context>
+                <x:expect label="is translated as id">
+                    <option id="foo"/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="with an empty value">
+                <x:context>
+                    <option name=""/>
+                </x:context>
+                <x:expect label="is discarded">
+                    <option/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when an id is already present">
+                <x:context>
+                    <option name="foo" id="bar"/>
+                </x:context>
+                <x:expect label="is discarded">
+                    <option id="bar"/>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="with a value of an existing ID">
+                <x:context>
+                    <option name="foo"/>
+                    <span id="foo"/>
+                </x:context>
+                <x:expect label="is discarded" test="h:option">
+                    <option/>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: output">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <output id="foo" foo="bar" epub:type="foo" for="a b" form="foo" name="bar"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <output id="foo" epub:type="foo" for="a b" form="foo" name="bar"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: p">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <p id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <p id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: param">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <param id="foo" foo="bar" epub:type="foo" name="foo" value="bar"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <param id="foo" epub:type="foo" name="foo" value="bar"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: plaintext">
+        <x:scenario label="plaintext element">
+            <x:context>
+                <plaintext id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="is converted to pre">
+                <pre id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="plaintext content">
+            <x:context xml:space="preserve"><plaintext>
+                    <!--test-->
+                    <p>hello</p>
+                </plaintext></x:context>
+            <x:expect label="is escaped">
+                <pre>
+                    &lt;!--test--&gt;
+                    &lt;p&gt;hello&lt;/p&gt;
+                </pre>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: pre">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <pre id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <pre id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: progress">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <progress id="foo" foo="bar" epub:type="foo" value="50" max="100"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <progress id="foo" epub:type="foo" value="50" max="100"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: q">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <q id="foo" foo="bar" epub:type="foo" cite="http://example.com"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <q id="foo" epub:type="foo" cite="http://example.com"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: rb">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <rb id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <rb id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="Element :: rp">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <rp id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <rp id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="Element :: rt">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <rt id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <rt id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="Element :: rtc">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <rtc id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <rtc id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    <x:scenario label="Element :: ruby">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <ruby id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <ruby id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: s">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <s id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <s id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: samp">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <samp id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <samp id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: script">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <script id="foo" foo="bar" epub:type="foo" src="test.js" type="text/javascript"
+                    charset="utf-8" async="" defer="" crossorigin="anonymous"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <script id="foo" epub:type="foo" src="test.js" type="text/javascript"
+                    charset="utf-8" async="" defer="" crossorigin="anonymous"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a language attribute equal to 'Javascript'">
+            <x:context>
+                <script language="jAvAscript"/>
+            </x:context>
+            <x:expect label="is kept, with a type attribute instead">
+                <script type="text/javascript"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a language attribute other than 'Javascript'">
+            <x:context>
+                <script language="unknown"/>
+            </x:context>
+            <x:expect label="is discarded"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: section">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <section id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <section id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: select">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <select id="foo" foo="bar" epub:type="foo" autofocus="" disabled="" form="foo"
+                    multiple="" name="bar" required="" size="100"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <select id="foo" epub:type="foo" autofocus="" disabled="" form="foo" multiple=""
+                    name="bar" required="" size="100"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: small">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <small id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <small id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: source">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <source id="foo" foo="bar" epub:type="foo" src="audio.oga"
+                    type="audio/ogg;
+                    codecs=flac" media="all"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <source id="foo" epub:type="foo" src="audio.oga"
+                    type="audio/ogg;
+                    codecs=flac" media="all"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: spacer">
+        <x:scenario label="spacer">
+            <x:context>
+                <spacer id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="is discarded"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: span">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <span id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <span id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: strike">
+        <x:scenario label="strike">
+            <x:context>
+                <strike id="foo" foo="bar" epub:type="foo">string</strike>
+            </x:context>
+            <x:expect label="is converted to s">
+                <s id="foo" epub:type="foo">string</s>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: strong">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <strong id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <strong id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: style">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <style id="foo" foo="bar" epub:type="foo" media="all" type="text/css"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <style id="foo" epub:type="foo" media="all" type="text/css"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: sub">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <sub id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <sub id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: summary">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <summary id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <summary id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: sup">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <sup id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <sup id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: table">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <table id="foo" foo="bar" epub:type="foo" border="1"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <table id="foo" epub:type="foo" border="1"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a summary attribute with no existing caption">
+            <x:context>
+                <table id="foo" summary="text"/>
+            </x:context>
+            <x:expect label="is converted to a caption">
+                <table id="foo">
+                    <caption>text</caption>
+                </table>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="a summary attribute with no existing caption">
+            <x:context>
+                <table id="foo" summary="text">
+                    <caption>other</caption>
+                </table>
+            </x:context>
+            <x:expect label="is discarded">
+                <table id="foo">
+                    <caption>other</caption>
+                </table>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: tbody">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <tbody id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <tbody id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: td">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <td id="foo" foo="bar" epub:type="foo" colspan="1" rowspan="1" headers="a b"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <td id="foo" epub:type="foo" colspan="1" rowspan="1" headers="a b"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with a scope attribute">
+            <x:context>
+                <td id="foo" foo="bar" epub:type="foo" colspan="1" rowspan="1" headers="a b"
+                    scope="row"/>
+            </x:context>
+            <x:expect label="is converted to th">
+                <th id="foo" epub:type="foo" colspan="1" rowspan="1" headers="a b" scope="row"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: template">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <template id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <template id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: textarea">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <textarea id="foo" foo="bar" epub:type="foo" autofocus="" cols="20"
+                    dirname="comment.dir" disabled="" form="foo" maxlength="100" minlength="10"
+                    name="bar" placeholder="text" readonly="" required="" rows="5" wrap="soft"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <textarea id="foo" epub:type="foo" autofocus="" cols="20" dirname="comment.dir"
+                    disabled="" form="foo" maxlength="100" minlength="10" name="bar"
+                    placeholder="text" readonly="" required="" rows="5" wrap="soft"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: tfoot">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <tfoot id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <tfoot id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: th">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <th id="foo" foo="bar" epub:type="foo" colspan="1" rowspan="1" headers="a b"
+                    scope="row" abbr="hd"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <th id="foo" epub:type="foo" colspan="1" rowspan="1" headers="a b" scope="row"
+                    abbr="hd"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: thead">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <thead id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <thead id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: time">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <time id="foo" foo="bar" epub:type="foo" datetime="2008-02-12T15:20Z"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <time id="foo" epub:type="foo" datetime="2008-02-12T15:20Z"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: title">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <title id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <title id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: tr">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <tr id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <tr id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: track">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <track id="foo" foo="bar" epub:type="foo" default="" kind="subtitles" label="subs"
+                    src="subs.txt" srclang="en"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <track id="foo" epub:type="foo" default="" kind="subtitles" label="subs"
+                    src="subs.txt" srclang="en"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: tt">
+        <x:scenario label="tt">
+            <x:context>
+                <tt id="foo" foo="bar" epub:type="foo">text</tt>
+            </x:context>
+            <x:expect label="is converted to code">
+                <code id="foo" epub:type="foo">text</code>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: u">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <u id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <u id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: ul">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <ul id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <ul id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: var">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <var id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <var id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: video">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <video id="foo" foo="bar" epub:type="foo" src="video.mp4" crossorigin="anonymous"
+                    poster="vid.png" preload="auto" autoplay="" mediagroup="movie" loop="" muted=""
+                    controls="" width="100" height="100"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <video id="foo" epub:type="foo" src="video.mp4" crossorigin="anonymous"
+                    poster="vid.png" preload="auto" autoplay="" mediagroup="movie" loop="" muted=""
+                    controls="" width="100" height="100"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: xmp">
+        <x:scenario label="xmp element">
+            <x:context>
+                <xmp id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="is converted to pre and code">
+                <pre id="foo" epub:type="foo"><code/></pre>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="xmp content">
+            <x:context xml:space="preserve"><xmp>
+                    <!--test-->
+                    <p>hello</p>
+                </xmp></x:context>
+            <x:expect label="is escaped">
+                <pre><code>
+                    &lt;!--test--&gt;
+                    &lt;p&gt;hello&lt;/p&gt;
+                </code></pre>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="Element :: wbr">
+        <x:scenario label="element and allowed attributes">
+            <x:context>
+                <wbr id="foo" foo="bar" epub:type="foo"/>
+            </x:context>
+            <x:expect label="are translated as-is">
+                <wbr id="foo" epub:type="foo"/>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+</x:description>

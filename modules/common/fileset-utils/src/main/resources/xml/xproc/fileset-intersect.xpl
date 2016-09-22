@@ -8,7 +8,7 @@
 
   <p:xslt>
     <p:input port="stylesheet">
-      <p:document href="fileset-intersect.xsl"/>
+      <p:document href="../xslt/fileset-intersect.xsl"/>
     </p:input>
     <p:input port="parameters">
       <p:empty/>

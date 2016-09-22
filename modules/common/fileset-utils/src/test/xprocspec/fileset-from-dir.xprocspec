@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/fileset-from-dir.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf">
+
+    <x:scenario label="test" pending="">
+        <x:call step="px:fileset-from-dir">
+            <x:option name="path" select="resolve-uri('samples/fileset/',base-uri())"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result" select="/*/*"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve" select="/*/*">
+<d:fileset xml:base="samples/fileset/">
+    <d:file href="dir/file.txt"/>
+    <d:file href="test.txt"/>
+    <d:file href="test.xml"/>
+</d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-non-rec">
+        <x:call step="px:fileset-from-dir">
+            <x:option name="recursive" select="'false'"/>
+            <x:option name="path" select="resolve-uri('samples/fileset/',base-uri())"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result" select="/*/*"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve" select="/*/*">
+<d:fileset xml:base="samples/fileset/">
+    <d:file href="test.txt"/>
+    <d:file href="test.xml"/>
+</d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-include-filter">
+        <x:call step="px:fileset-from-dir">
+            <x:option name="include-filter" select="'test.*'"/>
+            <x:option name="path" select="resolve-uri('samples/fileset/',base-uri())"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result" select="/*/*"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve" select="/*/*">
+<d:fileset xml:base="samples/fileset/">
+    <d:file href="test.txt"/>
+    <d:file href="test.xml"/>
+</d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-exclude-filter" pending="">
+        <x:call step="px:fileset-from-dir">
+            <x:option name="exclude-filter" select="'test.*'"/>
+            <x:option name="path" select="resolve-uri('samples/fileset/',base-uri())"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result" select="/*/*"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve" select="/*/*">
+<d:fileset xml:base="samples/fileset/">
+    <d:file href="dir/file.txt"/>
+</d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

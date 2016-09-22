@@ -5,14 +5,23 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>modules-parent</artifactId>
-    <version>1.2</version>
-    <relativePath />
+    <artifactId>common-utils-parent</artifactId>
+    <version>1.10.1-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>mediatype-utils</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: mediatype-utils</name>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+  
 </project>

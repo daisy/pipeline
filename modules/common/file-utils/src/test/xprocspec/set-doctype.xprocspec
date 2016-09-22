@@ -5,29 +5,70 @@
 
     <x:script>
         <p:declare-step type="test:test" version="1.0">
-            <p:option name="href" required="true"/>
+            <!-- either href or input-as-text must be specified -->
+            <p:option name="href"/>
+            <p:option name="input-as-text"/>
             <p:option name="target" required="true"/>
             <p:option name="doctype" required="true"/>
-            <p:output port="result"/>
+            <p:option name="use-java-implementation" select="'true'"/>
+            <p:output port="result">
+                <p:pipe port="result" step="set-doctype"/>
+            </p:output>
+            <p:output port="result-as-text" sequence="true" primary="false">
+                <p:pipe step="result-as-text" port="result"/>
+            </p:output>
+            
             <p:import href="../../../src/main/resources/xml/xproc/set-doctype.xpl"/>
+            
+            <p:choose>
+                <p:when test="p:value-available('href')">
+                    <p:add-attribute match="/*" attribute-name="href">
+                        <p:with-option name="attribute-value" select="$href"/>
+                        <p:input port="source">
+                            <p:inline exclude-inline-prefixes="#all">
+                                <c:request method="GET" override-content-type="text/plain"/>
+                            </p:inline>
+                        </p:input>
+                    </p:add-attribute>
+                    <p:http-request/>
+                    
+                </p:when>
+                <p:otherwise>
+                    <p:in-scope-names name="vars"/>
+                    <p:template>
+                        <p:input port="template">
+                            <p:inline xml:space="preserve"><c:body content-type="text/plain">{$input-as-text}</c:body></p:inline>
+                        </p:input>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                        <p:input port="parameters">
+                            <p:pipe step="vars" port="result"/>
+                        </p:input>
+                    </p:template>
+                    
+                </p:otherwise>
+            </p:choose>
+            <p:store method="text" name="store">
+                <p:with-option name="href" select="$target"/>
+            </p:store>
+            
+            <px:set-doctype name="set-doctype">
+                <p:with-option name="href" select="/*/text()">
+                    <p:pipe port="result" step="store"/>
+                </p:with-option>
+                <p:with-option name="doctype" select="$doctype"/>
+                <p:with-option name="use-java-implementation" select="$use-java-implementation"/>
+            </px:set-doctype>
             <p:add-attribute match="/*" attribute-name="href">
-                <p:with-option name="attribute-value" select="$href"/>
+                <p:with-option name="attribute-value" select="/*/text()"/>
                 <p:input port="source">
                     <p:inline exclude-inline-prefixes="#all">
                         <c:request method="GET" override-content-type="text/plain"/>
                     </p:inline>
                 </p:input>
             </p:add-attribute>
-            <p:http-request/>
-            <p:store method="text" name="store">
-                <p:with-option name="href" select="$target"/>
-            </p:store>
-            <px:set-doctype>
-                <p:with-option name="href" select="/*/text()">
-                    <p:pipe port="result" step="store"/>
-                </p:with-option>
-                <p:with-option name="doctype" select="$doctype"/>
-            </px:set-doctype>
+            <p:http-request name="result-as-text"/>
         </p:declare-step>
     </x:script>
 
@@ -37,19 +78,55 @@
             <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
             <x:option name="href" select="resolve-uri('samples/set-doctype.without-doctype.xml',base-uri(.))"/>
         </x:call>
-
+        
         <x:context label="the result port">
             <x:document type="port" port="result"/>
         </x:context>
         <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
         <x:expect label="The value of the result must be the URI to the document" type="xpath" test="/*/text()" equals="resolve-uri('set-doctype.without-doctype.xml',$temp-dir)"/>
-
+        
         <x:context label="the stored document">
             <x:document type="file" base-uri="temp-dir" href="set-doctype.without-doctype.xml" method="text"/>
         </x:context>
         <x:expect label="the document should be stored" type="count" min="1" max="1"/>
-        <x:expect label="the document should start with a xml declaration" type="xpath" test="starts-with(/*/text(),'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;')"/>
-        <x:expect label="the document should contain the correct DOCTYPE declaration" type="xpath" test="matches(/*/text(),'.*&lt;!DOCTYPE html&gt;.*&lt;html.*','s')"/>
+        <x:expect label="the document should start with a xml declaration" type="xpath" test="substring(/*/text(),1,38)" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
+        <x:expect label="the document should contain the correct DOCTYPE declaration" type="xpath" test="replace(/*/text(),'^.*?(&lt;!DOCTYPE[^&gt;]*&gt;).*','$1','s')" equals="'&lt;!DOCTYPE html&gt;'"/>
+        <x:expect label="the document should otherwise be exactly as the input document" type="compare">
+            <x:document type="inline" xml:space="preserve"><body xmlns="http://www.w3.org/ns/xproc-step">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+    &lt;head&gt;
+        &lt;title&gt;XHTML5&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;XHTML5&lt;/h1&gt;
+        &lt;!--&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;--&gt;
+        &lt;![CDATA[&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;]]&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</body></x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Scenario for testing px:set-doctype - without a pre-existing doctype - using the XProc/XSLT implementation">
+        <x:call step="test:test">
+            <x:option name="target" select="resolve-uri('set-doctype.without-doctype.java.xml',$temp-dir)"/>
+            <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
+            <x:option name="href" select="resolve-uri('samples/set-doctype.without-doctype.xml',base-uri(.))"/>
+            <x:option name="use-java-implementation" select="'false'"/>
+        </x:call>
+
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
+        <x:expect label="The value of the result must be the URI to the document" type="xpath" test="/*/text()" equals="resolve-uri('set-doctype.without-doctype.java.xml',$temp-dir)"/>
+        
+        <x:context label="the stored document">
+            <x:document type="file" base-uri="temp-dir" href="set-doctype.without-doctype.java.xml" method="text"/>
+        </x:context>
+        <x:expect label="the document should be stored" type="count" min="1" max="1"/>
+        <x:expect label="the document should start with a xml declaration" type="xpath" test="substring(/*/text(),1,38)" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
+        <x:expect label="the document should contain the correct DOCTYPE declaration" type="xpath" test="replace(/*/text(),'^.*?(&lt;!DOCTYPE[^&gt;]*&gt;).*','$1','s')" equals="'&lt;!DOCTYPE html&gt;'"/>
         <x:expect label="the document should otherwise be exactly as the input document" type="compare">
             <x:document type="inline" xml:space="preserve"><body xmlns="http://www.w3.org/ns/xproc-step">&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;!DOCTYPE html&gt;
@@ -76,8 +153,8 @@
         <x:context label="the stored document">
             <x:document type="file" base-uri="temp-dir" href="set-doctype.with-doctype.xml" method="text"/>
         </x:context>
-        <x:expect label="the document should start with a xml declaration" type="xpath" test="starts-with(/*/text(),'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;')"/>
-        <x:expect label="the document should contain the correct DOCTYPE declaration" type="xpath" test="matches(/*/text(),'.*&lt;!DOCTYPE html&gt;.*&lt;html.*','s')"/>
+        <x:expect label="the document should start with a xml declaration" type="xpath" test="substring(/*/text(),1,38)" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
+        <x:expect label="the document should contain the correct DOCTYPE declaration" type="xpath" test="replace(/*/text(),'.*(&lt;!DOCTYPE[^&gt;]*&gt;).*','$1','s')" equals="'&lt;!DOCTYPE html&gt;'"/>
     </x:scenario>
 
     <x:scenario label="Scenario for testing px:set-doctype - without a xml declaration">
@@ -107,30 +184,142 @@
         <x:expect label="the document should not start with a xml declaration" type="xpath" test="not(starts-with(/*/text(),'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'))"/>
         <x:expect label="the document should not contain a DOCTYPE declaration" type="xpath" test="not(matches(/*/text(),'.*&lt;!DOCTYPE[^&gt;]*&gt;.*&lt;html.*','s'))"/>
     </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-doctype - test">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#x0a;&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;'"/>
+            <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
+            <x:option name="target" select="resolve-uri('test.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#x0a;&lt;!DOCTYPE html&gt;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-doctype - testRemoveDoctype">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#x0a;&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;'"/>
+            <x:option name="doctype" select="''"/>
+            <x:option name="target" select="resolve-uri('testRemoveDoctype.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#x0a;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-doctype - testNoDoctypeInInputNoXmlDeclaration">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;&#x0a;    &lt;head&gt;&lt;/head&gt;&#x0a;    &lt;body&gt;&lt;/body&gt;&#x0a;&lt;/html&gt;&#x0a;'"/>
+            <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
+            <x:option name="target" select="resolve-uri('testNoDoctypeInInputNoXmlDeclaration.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;!DOCTYPE html&gt;&#x0a;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;&#x0a;    &lt;head&gt;&lt;/head&gt;&#x0a;    &lt;body&gt;&lt;/body&gt;&#x0a;&lt;/html&gt;&#x0a;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-doctype - testNoDoctypeInInput">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#x0a;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;/&gt;'"/>
+            <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
+            <x:option name="target" select="resolve-uri('testNoDoctypeInInput.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#x0a;&lt;!DOCTYPE html&gt;&#x0a;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;/&gt;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-doctype - testComplexProlog">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0a;&lt;?xml-model href=&quot;http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng&quot;?&gt;&#x0a;&lt;?xml-model href=&quot;http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch&quot;?&gt;&#x0a;&lt;!-- comment with &lt;tag/&gt; and &lt;!DOCTYPE not-a-doctype&gt; in it --&gt;&#x0a;&lt;?xml-stylesheet href=&quot;dtbook.2005.basic.css&quot; type=&quot;text/css&quot;?&gt;&#x0a;&lt;!DOCTYPE test [&#x0a; &lt;!ELEMENT test (type*)&gt;&#x0a;  &lt;!ATTLIST test&#x0a;  id ID #REQUIRED&#x0a;  name CDATA #FIXED &quot;--&gt; '' &gt; ?&gt; &amp;gt;&quot;&#x0a;  &gt;&#x0a;]&gt;&#x0a;&lt;!-- comment --&gt;&#x0a;&lt;p:declare-step xmlns:p=&quot;http://www.w3.org/ns/xproc&quot; problematic-attribute-1 = ''contains &quot; &gt;'' xmlns:c=&quot;http://www.w3.org/ns/xproc-step&quot; xmlns:px=&quot;http://www.daisy.org/ns/pipeline/xproc&quot; xmlns:d=&quot;http://www.daisy.org/ns/pipeline/data&quot;&#x0a;    type=&quot;px:file-utils-test&quot; name=&quot;main&quot; version=&quot;1.0&quot; xmlns:epub=&quot;http://www.idpf.org/2007/ops&quot; xmlns:l=&quot;http://xproc.org/library&quot; xmlns:dtbook=&quot;http://www.daisy.org/z3986/2005/dtbook/&quot;&#x0a;    xmlns:html=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:cx=&quot;http://xmlcalabash.com/ns/extensions&quot; xmlns:pxi=&quot;http://www.daisy.org/ns/pipeline/xproc/internal&quot;/&gt;&#x0a;'"/>
+            <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
+            <x:option name="target" select="resolve-uri('testComplexProlog.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0a;&lt;?xml-model href=&quot;http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng&quot;?&gt;&#x0a;&lt;?xml-model href=&quot;http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch&quot;?&gt;&#x0a;&lt;!-- comment with &lt;tag/&gt; and &lt;!DOCTYPE not-a-doctype&gt; in it --&gt;&#x0a;&lt;?xml-stylesheet href=&quot;dtbook.2005.basic.css&quot; type=&quot;text/css&quot;?&gt;&#x0a;&lt;!DOCTYPE html&gt;&#x0a;&lt;!-- comment --&gt;&#x0a;&lt;p:declare-step xmlns:p=&quot;http://www.w3.org/ns/xproc&quot; problematic-attribute-1 = ''contains &quot; &gt;'' xmlns:c=&quot;http://www.w3.org/ns/xproc-step&quot; xmlns:px=&quot;http://www.daisy.org/ns/pipeline/xproc&quot; xmlns:d=&quot;http://www.daisy.org/ns/pipeline/data&quot;&#x0a;    type=&quot;px:file-utils-test&quot; name=&quot;main&quot; version=&quot;1.0&quot; xmlns:epub=&quot;http://www.idpf.org/2007/ops&quot; xmlns:l=&quot;http://xproc.org/library&quot; xmlns:dtbook=&quot;http://www.daisy.org/z3986/2005/dtbook/&quot;&#x0a;    xmlns:html=&quot;http://www.w3.org/1999/xhtml&quot; xmlns:cx=&quot;http://xmlcalabash.com/ns/extensions&quot; xmlns:pxi=&quot;http://www.daisy.org/ns/pipeline/xproc/internal&quot;/&gt;&#x0a;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-doctype - testShortDoc">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;x/&gt;'"/>
+            <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
+            <x:option name="target" select="resolve-uri('testShortDoc.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;!DOCTYPE html&gt;&#x0a;&lt;x/&gt;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-doctype - testEmptyDoc">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="''"/>
+            <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
+            <x:option name="target" select="resolve-uri('testEmptyDoc.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;!DOCTYPE html&gt;&#x0a;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-doctype - testNonXmlDoc">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'123'"/>
+            <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
+            <x:option name="target" select="resolve-uri('testNonXmlDoc.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;!DOCTYPE html&gt;&#x0a;123'"/>
+    </x:scenario>
 
     <x:scenario label="Scenario for testing px:set-doctype - with a MathML doctype extension">
         <x:call step="test:test">
             <x:option name="target" select="resolve-uri('set-doctype.add-extension.xml',$temp-dir)"/>
             <x:option name="doctype"
-		      select="'&lt;!DOCTYPE dtbook PUBLIC &quot;-//NISO//DTD dtbook 2005-2//EN&quot;
-	      &quot;http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd&quot;[
-	      &lt;!ENTITY % MATHML.prefixed &quot;INCLUDE&quot; &gt;
-	      &lt;!ENTITY % MATHML.prefix &quot;m&quot;&gt;
-	      &lt;!ENTITY % MATHML.Common.attrib
-	      &quot;xlink:href    CDATA       #IMPLIED
-	      xlink:type     CDATA       #IMPLIED
-	      class          CDATA       #IMPLIED
-	      style          CDATA       #IMPLIED
-	      id             ID          #IMPLIED
-	      xref           IDREF       #IMPLIED
-	      other          CDATA       #IMPLIED
-	      xmlns:dtbook   CDATA       #FIXED ''http://www.daisy.org/z3986/2005/dtbook/''
-	      dtbook:smilref CDATA       #IMPLIED&quot;&gt;
-	      &lt;!ENTITY % mathML2 PUBLIC &quot;-//W3C//DTD MathML 2.0//EN&quot;
-	      &quot;http://www.w3.org/Math/DTD/mathml2/mathml2.dtd&quot;&gt;
-	      %mathML2;
-	      &lt;!ENTITY % externalFlow &quot;| m:math&quot;&gt;
-	      &lt;!ENTITY % externalNamespaces &quot;xmlns:m CDATA #FIXED
+		      select="'&lt;!DOCTYPE dtbook PUBLIC &quot;-//NISO//DTD dtbook 2005-2//EN&quot;&#x0a;
+	      &quot;http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd&quot;[&#x0a;
+	      &lt;!ENTITY % MATHML.prefixed &quot;INCLUDE&quot; &gt;&#x0a;
+	      &lt;!ENTITY % MATHML.prefix &quot;m&quot;&gt;&#x0a;
+	      &lt;!ENTITY % MATHML.Common.attrib&#x0a;
+	      &quot;xlink:href    CDATA       #IMPLIED&#x0a;
+	      xlink:type     CDATA       #IMPLIED&#x0a;
+	      class          CDATA       #IMPLIED&#x0a;
+	      style          CDATA       #IMPLIED&#x0a;
+	      id             ID          #IMPLIED&#x0a;
+	      xref           IDREF       #IMPLIED&#x0a;
+	      other          CDATA       #IMPLIED&#x0a;
+	      xmlns:dtbook   CDATA       #FIXED ''http://www.daisy.org/z3986/2005/dtbook/''&#x0a;
+	      dtbook:smilref CDATA       #IMPLIED&quot;&gt;&#x0a;
+	      &lt;!ENTITY % mathML2 PUBLIC &quot;-//W3C//DTD MathML 2.0//EN&quot;&#x0a;
+	      &quot;http://www.w3.org/Math/DTD/mathml2/mathml2.dtd&quot;&gt;&#x0a;
+	      %mathML2;&#x0a;
+	      &lt;!ENTITY % externalFlow &quot;| m:math&quot;&gt;&#x0a;
+	      &lt;!ENTITY % externalNamespaces &quot;xmlns:m CDATA #FIXED&#x0a;
 	      ''http://www.w3.org/1998/Math/MathML''&quot;&gt;]&gt;'"/>
             <x:option name="href" select="resolve-uri('samples/set-doctype.add-extension.xml',base-uri(.))"/>
         </x:call>

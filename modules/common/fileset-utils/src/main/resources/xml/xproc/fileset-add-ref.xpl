@@ -47,7 +47,7 @@
                     <p:pipe port="source" step="main"/>
                 </p:input>
             </p:identity>
-            <px:message>
+            <px:message severity="WARN">
                 <p:with-option name="message" select="concat('The file ',$niceHref,' referenced from ',$niceRef,' is not in the fileset.')"/>
             </px:message>
         </p:when>

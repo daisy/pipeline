@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+    stylesheet="../../main/resources/xml/xslt/xml-peek.strip-content.xsl">
+
+    <x:scenario label="strip content">
+        <x:context href="samples/xml-peek.strip-content.in.xml"/>
+        <x:expect label="all content after the document element open tag should be removed, and the document element should be self-closing" href="samples/xml-peek.strip-content.out.xml"
+            select="/*/text()" test="/*/text()"/>
+    </x:scenario>
+
+</x:description>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/fileset-copy.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf" xmlns:cx="http://xmlcalabash.com/ns/extensions">
+
+    <x:scenario label="test-fileset-copy">
+        <x:call step="px:fileset-copy">
+            <x:option name="target" select="$temp-dir"/>
+            <x:input port="source">
+                <x:document type="inline" xml:base="samples/fileset/">
+                    <d:fileset>
+                        <d:file href="dir/file.txt"/>
+                        <d:file href="test.txt"/>
+                        <d:file href="test.xml"/>
+                        <d:file href="http://www.example.org/style.css"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port d:file elements">
+            <x:document type="port" port="result" select="/*/*"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" base-uri="temp-dir" select="/*/*">
+                <d:fileset>
+                    <d:file href="dir/file.txt"/>
+                    <d:file href="test.txt"/>
+                    <d:file href="test.xml"/>
+                    <d:file href="http://www.example.org/style.css"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

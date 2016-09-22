@@ -6,6 +6,9 @@
     <p:option name="href" required="true"/>
     <p:option name="target" required="true"/>
     <p:option name="fail-on-error" select="'true'"/>
+    <p:option name="use-java-implementation" select="'true'">
+        <p:documentation>If the Java implementation of this step is available but you don't want to use it; set this to false (default 'true').</p:documentation>
+    </p:option>
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Copies the resource pointed by the option "href" to the target file. The 
@@ -22,10 +25,10 @@
         <p:option name="fail-on-error" select="'true'"/>
     </p:declare-step>
     
-    <p:import href="file-library.xpl"/>
+    <p:import href="java-library.xpl"/>
     
     <p:choose>
-        <p:when test="p:step-available('pxi:copy-resource')">
+        <p:when test="p:step-available('pxi:copy-resource') and $use-java-implementation = 'true'">
             <pxi:copy-resource>
                 <p:with-option name="href" select="$href"/>
                 <p:with-option name="target" select="$target"/>

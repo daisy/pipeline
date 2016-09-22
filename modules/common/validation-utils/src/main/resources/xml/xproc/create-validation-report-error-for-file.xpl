@@ -45,10 +45,6 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl">
-        <p:documentation>Calabash extension steps.</p:documentation>
-    </p:import>
-
     <p:import href="create-validation-report-error.xpl"/>
 
     <p:variable name="filepath" select="resolve-uri(*/@href, $base)"/>

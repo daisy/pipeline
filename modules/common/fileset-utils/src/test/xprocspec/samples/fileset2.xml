@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data">
+    <d:file media-type="application/octet-stream" href="fileset2/a/MimeDetector.class"/>
+    <d:file media-type="application/octet-stream" href="fileset2/a/MimeDetector.java"/>
+    <d:file media-type="application/x-gzip" href="fileset2/a/f.tar.gz"/>
+    <d:file media-type="application/octet-stream" href="fileset2/a/resources/mime.cache"/>
+    <d:file media-type="application/octet-stream" href="fileset2/a/resources/eu/medsea/mimeutil/magic.mime"/>
+    <d:file media-type="application/octet-stream" href="fileset2/a/resources/eu/medsea/mimeutil/mime-types.properties"/>
+    <d:file media-type="application/octet-stream" href="fileset2/a/c-gif.img"/>
+    <d:file media-type="application/octet-stream" href="fileset2/a/e%5Bxml%5D"/>
+    <d:file media-type="image/svg+xml" href="fileset2/a/e.svg"/>
+    <d:file media-type="text/html" href="fileset2/a/a.html"/>
+    <d:file media-type="image/jpeg" href="fileset2/b.jpg"/>
+    <d:file media-type="application/octet-stream" href="fileset2/d-png.img"/>
+    <d:file media-type="application/octet-stream" href="fileset2/test.bin"/>
+    <d:file media-type="image/png" href="fileset2/d.png"/>
+    <d:file media-type="application/octet-stream" href="fileset2/eu/medsea/mimeutil/MimeUtilTest.java"/>
+    <d:file media-type="application/octet-stream" href="fileset2/eu/medsea/mimeutil/util/EncodingGuesserTest.java"/>
+    <d:file media-type="application/octet-stream" href="fileset2/eu/medsea/mimeutil/MimeTypeTest.java"/>
+    <d:file media-type="application/octet-stream" href="fileset2/eu/medsea/mimeutil/detector/WindowsRegistryMimeDetectorTest.java"/>
+    <d:file media-type="application/octet-stream" href="fileset2/eu/medsea/mimeutil/detector/OpendesktopMimeDetectorTest.java"/>
+    <d:file media-type="application/octet-stream" href="fileset2/eu/medsea/mimeutil/detector/TextMimeDetectorTest.java"/>
+    <d:file media-type="application/octet-stream" href="fileset2/eu/medsea/mimeutil/detector/MagicMimeMimeDetectorTest.java"/>
+    <d:file media-type="application/octet-stream" href="fileset2/eu/medsea/mimeutil/MimeTypeHashSetTest.java"/>
+    <d:file media-type="application/octet-stream" href="fileset2/eu/medsea/mimeutil/MimeUtil2Test.java"/>
+    <d:file media-type="text/plain" href="fileset2/plaintext.txt"/>
+    <d:file media-type="application/x-gzip" href="fileset2/f.tar.gz"/>
+    <d:file media-type="application/x-gzip" href="fileset2/porrasturvat-1.0.3.tar.gz"/>
+    <d:file media-type="application/zip" href="fileset2/a.zip"/>
+    <d:file media-type="application/octet-stream" href="fileset2/b-jpg.img"/>
+    <d:file media-type="application/octet-stream" href="fileset2/c-gif.img"/>
+    <d:file media-type="application/octet-stream" href="fileset2/e-svg.img"/>
+    <d:file media-type="application/octet-stream" href="fileset2/e%5Bxml%5D"/>
+    <d:file media-type="application/xml" href="fileset2/e.xml"/>
+    <d:file media-type="application/octet-stream" href="fileset2/META-INF/MANIFEST.MF"/>
+    <d:file media-type="application/octet-stream" href="fileset2/textfiles/western"/>
+    <d:file media-type="application/octet-stream" href="fileset2/textfiles/unicode"/>
+    <d:file href="fileset2/wrong-extensions/html.bin"/>
+    <d:file href="fileset2/wrong-extensions/opf.txt"/>
+    <d:file href="fileset2/wrong-extensions/png.xml"/>
+    <d:file href="fileset2/wrong-extensions/txt.xml"/>
+    <d:file media-type="application/octet-stream" href="fileset2/magic.mime"/>
+    <d:file media-type="application/octet-stream" href="fileset2/plaintext"/>
+    <d:file media-type="application/octet-stream" href="fileset2/afpfile.afp"/>
+    <d:file media-type="image/svg+xml" href="fileset2/e.svg"/>
+    <d:file media-type="text/html" href="fileset2/a.html"/>
+    <d:file media-type="application/xml" href="fileset2/epub/META-INF/container.xml"/>
+    <d:file media-type="audio/mpeg" href="fileset2/epub/Publication/Content/1_Jamen__Benny.mp3"/>
+    <d:file media-type="application/xhtml+xml" href="fileset2/epub/Publication/Content/mqia0001.xhtml"/>
+    <d:file media-type="application/smil+xml" href="fileset2/epub/Publication/Content/mqia0001.smil"/>
+    <d:file media-type="image/jpeg" href="fileset2/epub/Publication/Content/tjcs0000.jpg"/>
+    <d:file media-type="image/jpeg" href="fileset2/epub/Publication/Content/41077stor.jpg"/>
+    <d:file media-type="application/xhtml+xml" href="fileset2/epub/Publication/navigation.xhtml"/>
+    <d:file media-type="application/x-dtbncx+xml" href="fileset2/epub/Publication/ncx.xml"/>
+    <d:file media-type="application/oebps-package+xml" href="fileset2/epub/Publication/package.opf"/>
+    <d:file media-type="application/octet-stream" href="fileset2/epub/mimetype"/>
+    <d:file media-type="image/gif" href="fileset2/c.gif"/>
+    <d:file media-type="application/octet-stream" href="fileset2/log4j.properties"/>
+    <d:file media-type="application/octet-stream" href="fileset2/mime-types.properties"/>
+    <d:file media-type="application/epub+zip" href="fileset2/epub.epub"/>
+    <d:file media-type="application/oebps-package+xml" href="fileset2/xml/package.xml"/>
+    <d:file media-type="application/x-dtbncx+xml" href="fileset2/xml/ncx.xml"/>
+    <d:file media-type="application/xml" href="fileset2/xml/container.xml"/>
+    <d:file media-type="application/smil+xml" href="fileset2/xml/mqia0001.xml"/>
+    <d:file media-type="application/xproc+xml" href="fileset2/xml/XProc.xml"/>
+    <d:file media-type="application/xhtml+xml" href="fileset2/xml/navigation.xml"/>
+    <d:file media-type="application/oebps-package+xml" href="fileset2/xml/package.xml~"/>
+    <d:file media-type="application/xslt+xml" href="fileset2/xml/XSLT.xml"/>
+    <d:file media-type="application/xml" href="fileset2/xml/noFileExtension"/>
+</d:fileset>

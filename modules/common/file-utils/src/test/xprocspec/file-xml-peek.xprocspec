@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../src/main/resources/xml/xproc/xml-peek.xpl" xmlns:test="http://www.daisy.org/ns/xprocspec/inline-script"
+    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <x:scenario label="Scenario for testing px:file-xml-peek">
+        <x:call step="px:file-xml-peek"/>
+
+        <x:scenario label="reading this xprocspec test document">
+            <x:call>
+                <x:option name="href" select="base-uri()"/>
+            </x:call>
+
+            <x:context label="the result port">
+                <x:document type="port" port="result"/>
+            </x:context>
+            <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
+            <x:expect label="The result must be x:description" type="compare">
+                <x:document type="inline">
+                    <x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../src/main/resources/xml/xproc/xml-peek.xpl" xmlns:test="http://www.daisy.org/ns/xprocspec/inline-script"
+                        xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema"/>
+                </x:document>
+            </x:expect>
+            <x:expect label="the xmlns:x namespace must be defined" type="xpath" test="namespace-uri-for-prefix('x',/*)" equals="'http://www.daisy.org/ns/xprocspec'"/>
+            <x:expect label="the xmlns:test namespace must be defined" type="xpath" test="namespace-uri-for-prefix('test',/*)" equals="'http://www.daisy.org/ns/xprocspec/inline-script'"/>
+            <x:expect label="the xmlns:p namespace must be defined" type="xpath" test="namespace-uri-for-prefix('p',/*)" equals="'http://www.w3.org/ns/xproc'"/>
+            <x:expect label="the xmlns:c namespace must be defined" type="xpath" test="namespace-uri-for-prefix('c',/*)" equals="'http://www.w3.org/ns/xproc-step'"/>
+            <x:expect label="the xmlns:px namespace must be defined" type="xpath" test="namespace-uri-for-prefix('px',/*)" equals="'http://www.daisy.org/ns/pipeline/xproc'"/>
+            <x:expect label="the xmlns:d namespace must be defined" type="xpath" test="namespace-uri-for-prefix('d',/*)" equals="'http://www.daisy.org/ns/pipeline/data'"/>
+            <x:expect label="the xmlns:xs namespace must be defined" type="xpath" test="namespace-uri-for-prefix('xs',/*)" equals="'http://www.w3.org/2001/XMLSchema'"/>
+            <x:expect label="no other namespaces should be defined" type="xpath"
+                test="string-join(/*/namespace::*[not(name()=('c','d','p','px','test','x','xs','xml','cx'))]/concat('xmlns:',name(),'=&quot;',string(.),'&quot;'),' ')" equals="''"/>
+
+            <x:context label="the escaped port">
+                <x:document type="port" port="escaped"/>
+            </x:context>
+            <x:expect label="There must be exactly one document on the escaped port" type="count" min="1" max="1"/>
+            <x:expect label="The content should be as expected" type="compare">
+                <x:document type="inline">
+                    <c:result content-type="text/plain; charset=utf-8"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../src/main/resources/xml/xproc/xml-peek.xpl" xmlns:test="http://www.daisy.org/ns/xprocspec/inline-script"
+    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"/>]]></c:result>
+                </x:document>
+            </x:expect>
+
+            <x:context label="the prolog port">
+                <x:document type="port" port="prolog"/>
+            </x:context>
+            <x:expect label="There must be exactly one document on the prolog port" type="count" min="1" max="1"/>
+            <x:expect label="The content should be as expected" type="compare">
+                <x:document type="inline">
+                    <c:result>
+                        <c:xml version="1.0" encoding="UTF-8"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>]]></c:xml>
+                        <c:xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"
+                            ><![CDATA[<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>]]></c:xml-model>
+                    </c:result>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+
+        <x:scenario label="reading HTML document with xml declaration and DOCTYPE">
+            <x:call>
+                <x:option name="href" select="resolve-uri('samples/set-doctype.with-doctype.xml', base-uri())"/>
+            </x:call>
+
+            <x:context label="the result port">
+                <x:document type="port" port="result"/>
+            </x:context>
+            <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
+            <x:expect label="the default namespace should be the xhtml namespace" type="xpath" test="/*/namespace-uri()" equals="'http://www.w3.org/1999/xhtml'"/>
+            <x:expect label="The result must be x:description" type="compare">
+                <x:document type="inline">
+                    <html xmlns="http://www.w3.org/1999/xhtml"/>
+                </x:document>
+            </x:expect>
+
+            <x:context label="the escaped port">
+                <x:document type="port" port="escaped"/>
+            </x:context>
+            <x:expect label="There must be exactly one document on the escaped port" type="count" min="1" max="1"/>
+            <x:expect label="The content should be as expected" type="compare">
+                <x:document type="inline">
+                    <c:result content-type="text/plain; charset=utf-8"><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"/>]]></c:result>
+                </x:document>
+            </x:expect>
+
+            <x:context label="the prolog port">
+                <x:document type="port" port="prolog"/>
+            </x:context>
+            <x:expect label="There must be exactly one document on the prolog port" type="count" min="1" max="1"/>
+            <x:expect label="The content should be as expected" type="compare">
+                <x:document type="inline">
+                    <c:result>
+                        <c:xml version="1.0" encoding="utf-8"><![CDATA[<?xml version="1.0" encoding="utf-8"?>]]></c:xml>
+                        <c:doctype name="HTML" public="-//W3C//DTD HTML 4.01//EN" system="http://www.w3.org/TR/html4/strict.dtd"
+                            ><![CDATA[<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">]]></c:doctype>
+                    </c:result>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+</x:description>

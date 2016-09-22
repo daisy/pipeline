@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+    stylesheet="../../main/resources/xml/xslt/sort-directory-list.xsl" xmlns:c="http://www.w3.org/ns/xproc-step">
+
+    <x:scenario label="sort elements recursively by name">
+        <x:context>
+            <c:directory name="a">
+                <c:file name="file3"/>
+                <c:other name="other3"/>
+                <c:directory name="dir3">
+                    <c:file name="file3"/>
+                    <c:other name="other3"/>
+                    <c:directory name="dir3">
+                        <c:file name="file3"/>
+                        <c:other name="other3"/>
+                        <c:directory name="dir3"/>
+                        <c:file name="file1"/>
+                        <c:other name="other1"/>
+                        <c:directory name="dir1"/>
+                        <c:file name="file2"/>
+                        <c:other name="other2"/>
+                        <c:directory name="dir2"/>
+                    </c:directory>
+                    <c:file name="file1"/>
+                    <c:other name="other1"/>
+                    <c:directory name="dir1">
+                        <c:file name="file3"/>
+                        <c:other name="other3"/>
+                        <c:directory name="dir3"/>
+                        <c:file name="file1"/>
+                        <c:other name="other1"/>
+                        <c:directory name="dir1"/>
+                        <c:file name="file2"/>
+                        <c:other name="other2"/>
+                        <c:directory name="dir2"/>
+                    </c:directory>
+                    <c:file name="file2"/>
+                    <c:other name="other2"/>
+                    <c:directory name="dir2"/>
+                </c:directory>
+                <c:file name="file1"/>
+                <c:other name="other1"/>
+                <c:directory name="dir1">
+                    <c:file name="file3"/>
+                    <c:other name="other3"/>
+                    <c:directory name="dir3"/>
+                    <c:file name="file1"/>
+                    <c:other name="other1"/>
+                    <c:directory name="dir1"/>
+                    <c:file name="file2"/>
+                    <c:other name="other2"/>
+                    <c:directory name="dir2"/>
+                </c:directory>
+                <c:file name="file2"/>
+                <c:other name="other2"/>
+                <c:directory name="dir2">
+                    <c:file name="file3"/>
+                    <c:other name="other3"/>
+                    <c:directory name="dir3"/>
+                    <c:file name="file1"/>
+                    <c:other name="other1"/>
+                    <c:directory name="dir1"/>
+                    <c:file name="file2"/>
+                    <c:other name="other2"/>
+                    <c:directory name="dir2"/>
+                </c:directory>
+            </c:directory>
+        </x:context>
+        <x:expect label="the result should be sorted">
+            <c:directory name="a">
+                <c:directory name="dir1">
+                    <c:directory name="dir1"/>
+                    <c:directory name="dir2"/>
+                    <c:directory name="dir3"/>
+                    <c:file name="file1"/>
+                    <c:file name="file2"/>
+                    <c:file name="file3"/>
+                    <c:other name="other1"/>
+                    <c:other name="other2"/>
+                    <c:other name="other3"/>
+                </c:directory>
+                <c:directory name="dir2">
+                    <c:directory name="dir1"/>
+                    <c:directory name="dir2"/>
+                    <c:directory name="dir3"/>
+                    <c:file name="file1"/>
+                    <c:file name="file2"/>
+                    <c:file name="file3"/>
+                    <c:other name="other1"/>
+                    <c:other name="other2"/>
+                    <c:other name="other3"/>
+                </c:directory>
+                <c:directory name="dir3">
+                    <c:directory name="dir1">
+                        <c:directory name="dir1"/>
+                        <c:directory name="dir2"/>
+                        <c:directory name="dir3"/>
+                        <c:file name="file1"/>
+                        <c:file name="file2"/>
+                        <c:file name="file3"/>
+                        <c:other name="other1"/>
+                        <c:other name="other2"/>
+                        <c:other name="other3"/>
+                    </c:directory>
+                    <c:directory name="dir2"/>
+                    <c:directory name="dir3">
+                        <c:directory name="dir1"/>
+                        <c:directory name="dir2"/>
+                        <c:directory name="dir3"/>
+                        <c:file name="file1"/>
+                        <c:file name="file2"/>
+                        <c:file name="file3"/>
+                        <c:other name="other1"/>
+                        <c:other name="other2"/>
+                        <c:other name="other3"/>
+                    </c:directory>
+                    <c:file name="file1"/>
+                    <c:file name="file2"/>
+                    <c:file name="file3"/>
+                    <c:other name="other1"/>
+                    <c:other name="other2"/>
+                    <c:other name="other3"/>
+                </c:directory>
+                <c:file name="file1"/>
+                <c:file name="file2"/>
+                <c:file name="file3"/>
+                <c:other name="other1"/>
+                <c:other name="other2"/>
+                <c:other name="other3"/>
+            </c:directory>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

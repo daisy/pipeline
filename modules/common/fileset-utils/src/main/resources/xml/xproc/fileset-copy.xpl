@@ -7,7 +7,6 @@
     <p:option name="fail-on-error" select="'false'"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
 
     <p:try>
         <p:group>

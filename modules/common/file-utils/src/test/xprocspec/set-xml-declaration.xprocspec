@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:test="http://www.daisy.org/ns/xprocspec/inline-script" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+    <x:script>
+        <p:declare-step type="test:test" version="1.0">
+            <!-- either href or input-as-text must be specified -->
+            <p:option name="href"/>
+            <p:option name="input-as-text"/>
+            <p:option name="target" required="true"/>
+            <p:option name="xml-declaration" required="true"/>
+            <p:output port="result">
+                <p:pipe port="result" step="set-xml-declaration"/>
+            </p:output>
+            <p:output port="result-as-text" sequence="true" primary="false">
+                <p:pipe step="result-as-text" port="result"/>
+            </p:output>
+            
+            <p:import href="../../../src/main/resources/xml/xproc/set-xml-declaration.xpl"/>
+            
+            <p:choose name="choose">
+                <p:when test="p:value-available('href')">
+                    <p:add-attribute match="/*" attribute-name="href">
+                        <p:with-option name="attribute-value" select="$href"/>
+                        <p:input port="source">
+                            <p:inline exclude-inline-prefixes="#all">
+                                <c:request method="GET" override-content-type="text/plain"/>
+                            </p:inline>
+                        </p:input>
+                    </p:add-attribute>
+                    <p:http-request/>
+                    
+                </p:when>
+                <p:otherwise>
+                    <p:in-scope-names name="vars"/>
+                    <p:template>
+                        <p:input port="template">
+                            <p:inline xml:space="preserve"><c:body content-type="text/plain">{$input-as-text}</c:body></p:inline>
+                        </p:input>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                        <p:input port="parameters">
+                            <p:pipe step="vars" port="result"/>
+                        </p:input>
+                    </p:template>
+                    
+                </p:otherwise>
+            </p:choose>
+            <p:store method="text" name="store">
+                <p:with-option name="href" select="$target"/>
+            </p:store>
+            
+            <px:set-xml-declaration name="set-xml-declaration">
+                <p:with-option name="href" select="/*/text()">
+                    <p:pipe port="result" step="store"/>
+                </p:with-option>
+                <p:with-option name="xml-declaration" select="$xml-declaration"/>
+            </px:set-xml-declaration>
+            
+            <p:add-attribute match="/*" attribute-name="href">
+                <p:with-option name="attribute-value" select="/*/text()"/>
+                <p:input port="source">
+                    <p:inline exclude-inline-prefixes="#all">
+                        <c:request method="GET" override-content-type="text/plain"/>
+                    </p:inline>
+                </p:input>
+            </p:add-attribute>
+            <p:http-request name="result-as-text"/>
+            
+        </p:declare-step>
+    </x:script>
+    
+    <x:scenario label="Scenario for testing px:set-xml-declaration - testReplaceXmlDeclaration">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#x0a;&lt;!DOCTYPE html&gt;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;/&gt;'"/>
+            <x:option name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;'"/>
+            <x:option name="target" select="resolve-uri('testReplaceXmlDeclaration.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;&#x0a;&lt;!DOCTYPE html&gt;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;/&gt;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-xml-declaration - testAddXmlDeclaration">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;!DOCTYPE html&gt;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;/&gt;'"/>
+            <x:option name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;'"/>
+            <x:option name="target" select="resolve-uri('testAddXmlDeclaration.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;&#x0a;&lt;!DOCTYPE html&gt;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;/&gt;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-xml-declaration - testRemoveXmlDeclaration">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;&#x0a;&lt;!DOCTYPE html&gt;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;/&gt;'"/>
+            <x:option name="xml-declaration" select="''"/>
+            <x:option name="target" select="resolve-uri('testRemoveXmlDeclaration.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;!DOCTYPE html&gt;&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;/&gt;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-xml-declaration - testShortDoc">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'&lt;x/&gt;'"/>
+            <x:option name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;'"/>
+            <x:option name="target" select="resolve-uri('testShortDoc.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;&#x0a;&lt;x/&gt;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-xml-declaration - testEmptyDoc">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="''"/>
+            <x:option name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;'"/>
+            <x:option name="target" select="resolve-uri('testEmptyDoc.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;&#x0a;'"/>
+    </x:scenario>
+    
+    <x:scenario label="Scenario for testing px:set-xml-declaration - testNonXmlDoc">
+        <x:call step="test:test">
+            <x:option name="input-as-text" select="'123'"/>
+            <x:option name="xml-declaration" select="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;'"/>
+            <x:option name="target" select="resolve-uri('testNonXmlDoc.xml',$temp-dir)"/>
+        </x:call>
+        
+        <x:context label="the result as text">
+            <x:document type="port" port="result-as-text"/>
+        </x:context>
+        
+        <x:expect label="the result should be as expected" type="xpath" test="/*/text()" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;us-ascii&quot;?&gt;&#x0a;123'"/>
+    </x:scenario>
+    
+</x:description>

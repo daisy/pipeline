@@ -192,6 +192,12 @@
             </x:call>
             <x:expect label="Removing the default port" select="'http://www.example.com/bar.html'"/>
         </x:scenario>
+        <x:scenario label="Ports other than the default port (port 80 for the “http” scheme) should not be removed from a URL">
+            <x:call>
+                <x:param name="uri" select="'http://www.example.com:1234/bar.html'"/>
+            </x:call>
+            <x:expect label="Removing the default port" select="'http://www.example.com:1234/bar.html'"/>
+        </x:scenario>
         <x:scenario label="The segments “..” and “.” can be removed from a URL according to the algorithm described in RFC 3986 (or a similar algorithm)">
             <x:call>
                 <x:param name="uri" select="'http://www.example.com/../a/b/../c/./d.html'"/>
@@ -354,6 +360,24 @@
         <x:scenario label="multiple dots and slashes">
             <x:call><x:param name="uri" select="'///././//dir////sub///'"/></x:call>
             <x:expect label="grandchild directory with multipls dots and slashes" select="'/dir/sub/'"/>
+        </x:scenario>
+        
+        <!-- from fileset-utils UTF-X -->
+        <x:scenario label="uri with '..'">
+            <x:call><x:param name="uri" select="'file:/home/user/tmp/../file.xml'"/></x:call>
+            <x:expect label="'tmp/../' should be removed" select="'file:/home/user/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="uri with '../..'">
+            <x:call><x:param name="uri" select="'file:/home/user/tmp/../../file.xml'"/></x:call>
+            <x:expect label="'user/tmp/../../' should be removed" select="'file:/home/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="uri with both '..' and '.'">
+            <x:call><x:param name="uri" select="'file:/home/user/tmp/../../sub/./folder/file.xml'"/></x:call>
+            <x:expect label="'user/tmp/../../' and './' should be removed" select="'file:/home/sub/folder/file.xml'"/>
+        </x:scenario>
+        <x:scenario label="uri with a bunch of '..' and '.'">
+            <x:call><x:param name="uri" select="'file:/home3/user/a/b/c/d/e/f/.tmp/../../sub/././../.././../.././.folder/file.xml'"/></x:call>
+            <x:expect label="'.' should be removed, '..' should be resolved" select="'file:/home3/user/a/b/.folder/file.xml'"/>
         </x:scenario>
     </x:scenario>
     
@@ -568,7 +592,7 @@
         </x:scenario>
         <x:scenario label="longest common uri">
             <x:call><x:param name="uris" select="('file:/tmp/home/user/dir1/dir2/file.xml', 'file:/tmp/home/user/dir1/dir2/file.xml')"/></x:call>
-            <x:expect label="two absolute uris #2" select="'file:/tmp/home/user/dir1/dir2/file.xml'"/>
+            <x:expect label="two absolute uris #2" select="'file:/tmp/home/user/dir1/dir2/'"/>
         </x:scenario>
         <x:scenario label="longest common uri">
             <x:call><x:param name="uris" select="('dir1/dir2/file.xml', 'dir1/dir4')"/></x:call>
@@ -580,11 +604,11 @@
         </x:scenario>
         <x:scenario label="longest common uri">
             <x:call><x:param name="uris" select="('dir1/dir2/file.xml', 'dir1/dir2/file.xml')"/></x:call>
-            <x:expect label="two relative uris #3" select="'dir1/dir2/file.xml'"/>
+            <x:expect label="two relative uris #3" select="'dir1/dir2/'"/>
         </x:scenario>
         <x:scenario label="longest common uri">
             <x:call><x:param name="uris" select="('http://www.example.com/', 'file:/tmp/home/user/')"/></x:call>
-            <x:expect label="two absolute uris with different schemes" select="''"/>
+            <x:expect label="two absolute uris with different schemes" select="'http://www.example.com/'"/>
         </x:scenario>
         <x:scenario label="longest common uri">
             <x:call><x:param name="uris" select="('http://www.example.com/', 'http://www.example.com/')"/></x:call>
@@ -601,6 +625,10 @@
         <x:scenario label="longest common uri">
             <x:call><x:param name="uris" select="('file:/tmp/home/user/dir1/dir2/file.xml', 'file:/tmp/home/user/dir2/dir3', 'file:/tmp/home/user/dir4/dir5')"/></x:call>
             <x:expect label="three absolute uris" select="'file:/tmp/home/user/'"/>
+        </x:scenario>
+        <x:scenario label="longest common uri">
+            <x:call><x:param name="uris" select="('file:///home/user/A/file.txt', 'http://www.example.com/user/B/file.txt', 'file:/home/user/C/file.txt', 'file://SHARE/D/file.txt')"/></x:call>
+            <x:expect label="two file uris and a http uri; the first uri (file uri) defines the protocol and authority; only uris with that protocol and authority are used when calculating longest common uri" select="'file:/home/user/'"/>
         </x:scenario>
     </x:scenario>
 

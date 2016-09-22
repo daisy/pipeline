@@ -1,0 +1,43 @@
+<result xmlns="http://www.w3.org/ns/xproc-step" xml:space="preserve">
+    <xml version="1.0" encoding="UTF-8">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</xml>
+    <doctype name="html" public="-//W3C//DTD XHTML 1.0 Transitional//EN" system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">&lt;!DOCTYPE html
+            PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</doctype>
+    <xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0">&lt;?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?&gt;</xml-model>
+    <xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng">&lt;?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng"?&gt;</xml-model>
+    <xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch">&lt;?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch"?&gt;</xml-model>
+    <doctype name="html">&lt;!DOCTYPE html&gt;</doctype>
+    <doctype name="author" internal="&lt;!ELEMENT author (#PCDATA)&gt;&#xA;  &lt;!ENTITY js &#34;Jo Smith&#34;&gt;">&lt;!DOCTYPE author [
+  &lt;!ELEMENT author (#PCDATA)&gt;
+  &lt;!ENTITY js "Jo Smith"&gt;
+]&gt;</doctype>
+    <doctype name="copyright" internal="&lt;!ELEMENT copyright (#PCDATA)&gt;&#xA;  &lt;!ENTITY c PUBLIC &#34;-//W3C//TEXT copyright//EN&#34;&#xA;    &#34;http://www.w3.org/xmlspec/copyright.xml&#34;&gt;">&lt;!DOCTYPE copyright [
+  &lt;!ELEMENT copyright (#PCDATA)&gt;
+  &lt;!ENTITY c PUBLIC "-//W3C//TEXT copyright//EN"
+    "http://www.w3.org/xmlspec/copyright.xml"&gt;
+]&gt;</doctype>
+    <comment text=" comment ">&lt;!-- comment --&gt;</comment>
+    <comment text=" comment with &lt;tag/&gt; in it ">&lt;!-- comment with &lt;tag/&gt; in it --&gt;</comment>
+    <xml version="1.0" encoding="utf-8">&lt;?xml version='1.0' encoding='utf-8'?&gt;</xml>
+    <xml-stylesheet href="dtbook.2005.basic.css" type="text/css">&lt;?xml-stylesheet href="dtbook.2005.basic.css" type="text/css"?&gt;</xml-stylesheet>
+    <doctype name="dtbook" public="-//NISO//DTD dtbook 2005-2//EN" system="http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd" internal="">&lt;!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd" []&gt;</doctype>
+    <doctype name="mimeRegistry" internal="&lt;!ELEMENT mimeRegistry (directory+)&gt;&#xA;  &lt;!ELEMENT directory (type*)&gt;&#xA;  &lt;!ATTLIST directory&#xA;  name CDATA #REQUIRED&#xA;  &gt;&#xA;  &lt;!ELEMENT type EMPTY&gt;&#xA;  &lt;!ATTLIST type&#xA;  id ID #REQUIRED&#xA;  name CDATA #REQUIRED&#xA;  parentTypes IDREFS #IMPLIED&#xA;  aliasTypes IDREFS #IMPLIED&#xA;  namePatterns CDATA #IMPLIED&#xA;  definition CDATA #IMPLIED&#xA;  &gt;">&lt;!DOCTYPE mimeRegistry [
+  &lt;!ELEMENT mimeRegistry (directory+)&gt;
+  &lt;!ELEMENT directory (type*)&gt;
+  &lt;!ATTLIST directory
+  name CDATA #REQUIRED
+  &gt;
+  &lt;!ELEMENT type EMPTY&gt;
+  &lt;!ATTLIST type
+  id ID #REQUIRED
+  name CDATA #REQUIRED
+  parentTypes IDREFS #IMPLIED
+  aliasTypes IDREFS #IMPLIED
+  namePatterns CDATA #IMPLIED
+  definition CDATA #IMPLIED
+  &gt;
+]&gt;</doctype>
+    <root-element>&lt;p:declare-step xmlns:p="http://www.w3.org/ns/xproc" problematic-attribute = 'contains &gt;' xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    type="px:file-utils-test" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"/&gt;</root-element>
+</result>

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/fileset-load.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf">
+
+    <x:scenario label="test-empty">
+        <x:call step="px:fileset-load">
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset/>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected"/>
+    </x:scenario>
+
+    <x:scenario label="test-href-absolute">
+        <x:call step="px:fileset-load">
+            <x:option name="href" select="resolve-uri('samples/fileset2/xml/container.xml')"/>
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="file" method="xml" href="samples/fileset2/xml/container.xml"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-href-relative">
+        <x:call step="px:fileset-load">
+            <x:option name="href" select="'fileset2/xml/container.xml'"/>
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="file" method="xml" href="samples/fileset2/xml/container.xml"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-href-zip">
+        <x:call step="px:fileset-load">
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="samples/fileset2/a.zip!/e.svg" media-type="image/svg+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory"/>
+            <x:option name="href" select="resolve-uri('samples/fileset2/a.zip!/e.svg')"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="file" method="xml" href="samples/fileset2/e.svg"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-method-xml">
+        <x:call step="px:fileset-load">
+            <x:option name="href" select="'fileset2/wrong-extensions/opf.txt'"/>
+            <x:option name="method" select="'xml'"/>
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="file" method="xml" href="samples/fileset2/wrong-extensions/opf.txt"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-method-html" pending="validator.nu not in classpath (might work with pax-exam?)">
+        <x:call step="px:fileset-load">
+            <x:option name="href" select="'fileset2/wrong-extensions/html.bin'"/>
+            <x:option name="method" select="'html'"/>
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="file" method="html" href="samples/fileset2/wrong-extensions/html.bin"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-method-text">
+        <x:call step="px:fileset-load">
+            <x:option name="href" select="'fileset2/wrong-extensions/html.bin'"/>
+            <x:option name="method" select="'text'"/>
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve">
+<c:body content-type="text/plain; charset=utf-8">&lt;html&gt;&#xD;
+&lt;head&gt;&#xD;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"&gt;&#xD;
+&lt;title&gt;This is a test basic html file&lt;/title&gt;&#xD;
+&lt;/head&gt;&#xD;
+&lt;body&gt;&#xD;
+&#xD;
+&lt;/body&gt;&#xD;
+&lt;/html&gt;</c:body>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-method-binary">
+        <x:call step="px:fileset-load">
+            <x:option name="href" select="'fileset2/wrong-extensions/txt.xml'"/>
+            <x:option name="method" select="'binary'"/>
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve">
+<c:body content-type="binary/octet-stream" encoding="base64">VGhpcyBpcyBqdXN0IGEgcGxhaW4gdGV4dCBmaWxlDQo=</c:body>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-media-types-filtering">
+        <x:call step="px:fileset-load">
+            <x:option name="media-types" select="'application/smil+xml application/xml'"/>
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="file" method="xml" href="samples/fileset2/e.xml"/>
+            <x:document type="file" method="xml" href="samples/fileset2/epub/META-INF/container.xml"/>
+            <x:document type="file" method="xml" href="samples/fileset2/epub/Publication/Content/mqia0001.smil"/>
+            <x:document type="file" method="xml" href="samples/fileset2/xml/container.xml"/>
+            <x:document type="file" method="xml" href="samples/fileset2/xml/mqia0001.xml"/>
+            <x:document type="file" method="xml" href="samples/fileset2/xml/noFileExtension"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-not-media-types-filtering">
+        <x:call step="px:fileset-load">
+            <x:option name="media-types" select="'application/smil+xml application/xml'"/>
+            <x:option name="not-media-types" select="'application/smil+xml'"/>
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="file" method="xml" href="samples/fileset2/e.xml"/>
+            <x:document type="file" method="xml" href="samples/fileset2/epub/META-INF/container.xml"/>
+            <x:document type="file" method="xml" href="samples/fileset2/xml/container.xml"/>
+            <x:document type="file" method="xml" href="samples/fileset2/xml/noFileExtension"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-fail-on-not-found-false">
+        <x:call step="px:fileset-load">
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+            <x:option name="fail-on-not-found" select="'false'"/>
+            <x:option name="href" select="'fileset2/xml/container.xml'"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="file" href="samples/fileset2/xml/container.xml"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-fail-on-not-found-true-href-not-on-disk">
+        <x:call step="px:fileset-load">
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="not-on-disk.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory"/>
+            <x:option name="fail-on-not-found" select="'true'"/>
+            <x:option name="href" select="'not-on-disk.xml'"/>
+        </x:call>
+        <x:context label="the errors">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect type="count" label="there should be errors" min="1"/>
+        <x:expect type="xpath" label="the error PEZE00 should be thrown" test="/*/*/@code" equals="'PEZE00'"/>
+    </x:scenario>
+
+    <x:scenario label="test-fail-on-not-found-true-href-not-part-of-fileset">
+        <x:call step="px:fileset-load">
+            <x:input port="fileset">
+                <x:document type="inline" xml:base="samples/fileset2/xml/">
+                    <d:fileset>
+                        <d:file href="container.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory">
+                <x:document type="inline">
+                    <doc xml:base="samples/fileset2/xml/container.xml"/>
+                </x:document>
+                <x:document type="inline">
+                    <doc xml:base="samples/fileset2/xml/not-part-of-fileset.xml"/>
+                </x:document>
+            </x:input>
+            <x:option name="fail-on-not-found" select="'true'"/>
+            <x:option name="href" select="'not-part-of-fileset.xml'"/>
+        </x:call>
+        <x:context label="the errors">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect type="count" label="there should be errors" min="1"/>
+        <x:expect type="xpath" label="the error PEZE00 should be thrown" test="/*/*/@code" equals="'PEZE00'"/>
+    </x:scenario>
+
+    <x:scenario label="test-load-if-not-in-memory-false">
+        <x:call step="px:fileset-load">
+            <x:option name="load-if-not-in-memory" select="'false'"/>
+            <x:option name="href" select="resolve-uri('samples/fileset2/xml/container.xml',/*/@xml:base)"/>
+            <x:input port="fileset">
+                <x:document type="file" href="samples/fileset2.xml"/>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="no document should be loaded" max="0"/>
+    </x:scenario>
+
+    <x:scenario label="test-load-from-memory">
+        <x:call step="px:fileset-load">
+            <x:input port="fileset">
+                <x:document type="inline" xml:base="samples/fileset2/xml/">
+                    <d:fileset>
+                        <d:file href="container.xml"/>
+                        <d:file href="not-on-disk-only-in-memory.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory">
+                <x:document type="inline">
+                    <doc xml:base="samples/fileset2/xml/container.xml"/>
+                </x:document>
+                <x:document type="inline">
+                    <doc xml:base="samples/fileset2/xml/not-on-disk-only-in-memory.xml"/>
+                </x:document>
+            </x:input>
+            <x:option name="fail-on-not-found" select="'true'"/>
+            <x:option name="href" select="'not-on-disk-only-in-memory.xml'"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="count" label="a file should be read from memory" min="1"/>
+    </x:scenario>
+
+</x:description>

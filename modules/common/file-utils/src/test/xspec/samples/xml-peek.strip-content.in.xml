@@ -1,0 +1,121 @@
+<c:result content-type="text/plain; charset=utf-8" xmlns:c="http://www.w3.org/ns/xproc-step" xml:space="preserve">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html
+            PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?&gt;
+&lt;?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng"?&gt;
+&lt;?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch"?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;!DOCTYPE author [
+  &lt;!ELEMENT author (#PCDATA)&gt;
+  &lt;!ENTITY js "Jo Smith"&gt;
+]&gt;
+&lt;!-- comment --&gt;
+&lt;!DOCTYPE copyright [
+  &lt;!ELEMENT copyright (#PCDATA)&gt;
+  &lt;!ENTITY c PUBLIC "-//W3C//TEXT copyright//EN"
+    "http://www.w3.org/xmlspec/copyright.xml"&gt;
+]&gt;
+&lt;!-- comment with &lt;tag/&gt; in it --&gt;
+&lt;?xml version='1.0' encoding='utf-8'?&gt;
+&lt;?xml-stylesheet href="dtbook.2005.basic.css" type="text/css"?&gt;
+&lt;!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd" []&gt;
+&lt;!DOCTYPE mimeRegistry [
+  &lt;!ELEMENT mimeRegistry (directory+)&gt;
+  &lt;!ELEMENT directory (type*)&gt;
+  &lt;!ATTLIST directory 
+	name CDATA #REQUIRED
+  &gt;	  
+  &lt;!ELEMENT type EMPTY&gt;
+  &lt;!ATTLIST type
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+	parentTypes IDREFS #IMPLIED
+	aliasTypes IDREFS #IMPLIED	  
+	namePatterns CDATA #IMPLIED
+	definition CDATA #IMPLIED 
+  &gt;
+]&gt;
+
+&lt;p:declare-step xmlns:p="http://www.w3.org/ns/xproc" problematic-attribute = 'contains &gt;' xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    type="px:file-utils-test" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"&gt;
+
+    &lt;p:option name="href" required="true"/&gt;
+
+    &lt;p:output port="result" primary="true"&gt;
+        &lt;p:pipe port="result" step="unescaped"/&gt;
+    &lt;/p:output&gt;
+    &lt;p:output port="escaped"&gt;
+        &lt;p:pipe port="result" step="escaped"/&gt;
+    &lt;/p:output&gt;
+    &lt;p:output port="prolog"&gt;
+        &lt;p:pipe port="result" step="prolog"/&gt;
+    &lt;/p:output&gt;
+
+    &lt;p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/&gt;
+
+    &lt;p:declare-step type="pxi:file-xml-peek"&gt;
+        &lt;p:option name="href" required="true"/&gt;
+        &lt;p:output port="result"/&gt;
+    &lt;/p:declare-step&gt;
+
+    &lt;p:choose name="choose"&gt;
+        &lt;p:when test="p:step-available('pxi:file-xml-peek')"&gt;
+            &lt;pxi:file-xml-peek&gt;
+                &lt;p:with-option name="href" select="$href"/&gt;
+            &lt;/pxi:file-xml-peek&gt;
+
+        &lt;/p:when&gt;
+        &lt;p:otherwise&gt;
+            &lt;px:message name="message" severity="WARN"
+                message="pxi:file-xml-peek is not available; will read and parse entire file using XProc which might cause issues for large files: $1"&gt;
+                &lt;p:with-option name="param1" select="$href"/&gt;
+            &lt;/px:message&gt;
+            &lt;p:add-attribute match="/*" attribute-name="href"&gt;
+                &lt;p:with-option name="attribute-value" select="$href"/&gt;
+                &lt;p:input port="source"&gt;
+                    &lt;p:inline exclude-inline-prefixes="#all"&gt;
+                        &lt;c:request method="GET" override-content-type="text/plain; charset=utf-8"/&gt;
+                    &lt;/p:inline&gt;
+                &lt;/p:input&gt;
+            &lt;/p:add-attribute&gt;
+            &lt;p:http-request/&gt;
+            &lt;p:xslt&gt;
+                &lt;p:input port="parameters"&gt;
+                    &lt;p:empty/&gt;
+                &lt;/p:input&gt;
+                &lt;p:input port="stylesheet"&gt;
+                    &lt;p:document href="../xslt/xml-peek.strip-content.xsl"/&gt;
+                &lt;/p:input&gt;
+            &lt;/p:xslt&gt;
+        &lt;/p:otherwise&gt;
+    &lt;/p:choose&gt;
+    &lt;p:identity name="escaped"/&gt;
+
+    &lt;p:xslt&gt;
+        &lt;p:input port="parameters"&gt;
+            &lt;p:empty/&gt;
+        &lt;/p:input&gt;
+        &lt;p:input port="stylesheet"&gt;
+            &lt;p:document href="../xslt/xml-peek.parse.xsl"/&gt;
+        &lt;/p:input&gt;
+    &lt;/p:xslt&gt;
+    &lt;p:identity name="parse"/&gt;
+
+    &lt;p:identity&gt;
+        &lt;p:input port="source" select="/*/c:result[@type='root-element']"&gt;
+            &lt;p:pipe port="result" step="parse"/&gt;
+        &lt;/p:input&gt;
+    &lt;/p:identity&gt;
+    &lt;!--&lt;p:unescape-markup/&gt;--&gt;
+    &lt;p:identity name="unescaped"/&gt;
+
+    &lt;p:identity name="prolog"&gt;
+        &lt;p:input port="source" select="/*/c:result[@type='prolog']"&gt;
+            &lt;p:pipe port="result" step="parse"/&gt;
+        &lt;/p:input&gt;
+    &lt;/p:identity&gt;
+
+&lt;/p:declare-step&gt;
+</c:result>

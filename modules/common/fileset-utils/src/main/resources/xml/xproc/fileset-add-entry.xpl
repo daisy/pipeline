@@ -14,91 +14,86 @@
   <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
   <p:import href="fileset-add-ref.xpl"/>
 
-  <!--TODO awkward, add the entry with XProc, then perform URI cleanup-->
-  <p:xslt name="href-uri">
-    <p:with-param name="href" select="$href"/>
-    <p:with-param name="original-href" select="$original-href"/>
-    <p:with-param name="base" select="base-uri(/*)"/>
-    <p:input port="stylesheet">
+  <p:variable name="fileset-base" select="/*/@xml:base"/>
+
+  <p:choose name="check-base">
+    <!-- TODO: replace by uri-utils 'is-relative' function (depending on how that impacts performance) -->
+    <p:when test="not(/*/@xml:base) and not(matches($href,'^[^/]+:')) and not(starts-with($href,'/'))">
+      <px:message severity="WARN" message="Adding a relative resource to a file set with no base URI"/>
+    </p:when>
+    <p:otherwise>
+      <p:identity/>
+    </p:otherwise>
+  </p:choose>
+
+  <!--Create the new d:file entry-->
+  <p:add-attribute match="/*" attribute-name="xml:base">
+    <p:input port="source">
       <p:inline>
-        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" version="2.0" exclude-result-prefixes="#all">
-          <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-          <xsl:param name="href" required="yes"/>
-          <xsl:param name="original-href" required="yes"/>
-          <xsl:param name="base" required="yes"/>
-          <xsl:template match="/*">
-            <d:file>
-              <xsl:attribute name="href" select="if (/*[@xml:base] or not(matches($href,'^\w+:'))) then pf:relativize-uri(resolve-uri($href,$base),$base) else pf:normalize-uri($href)"/>
-              <xsl:if test="not($original-href='')">
-                <xsl:attribute name="original-href" select="if (/*[@xml:base]) then pf:normalize-uri(resolve-uri($original-href,$base)) else pf:normalize-uri($original-href)"/>
-              </xsl:if>
-            </d:file>
-          </xsl:template>
-        </xsl:stylesheet>
+        <d:file/>
       </p:inline>
     </p:input>
-  </p:xslt>
-  <p:sink/>
-
-  <p:group>
-    <p:variable name="href-uri-ified" select="/*/@href">
-      <p:pipe port="result" step="href-uri"/>
-    </p:variable>
-    
-    <p:identity>
-      <p:input port="source">
-        <p:pipe port="source" step="main"/>
-      </p:input>
-    </p:identity>
-
-    <p:choose name="check-base">
-      <!--TODO replace by uri-utils 'is-relative' function-->
-      <p:when test="not(/*/@xml:base) and not(matches($href-uri-ified,'^[^/]+:'))">
-        <px:message message="Adding a relative resource to a file set with no base URI"/>
-      </p:when>
-      <p:otherwise>
-        <p:identity/>
-      </p:otherwise>
-    </p:choose>
-
-    <p:group name="new-entry">
-      <p:output port="result"/>
-      <!--Create the new d:file entry-->
-      <p:add-attribute match="/*" attribute-name="media-type">
-        <p:input port="source">
-          <p:inline>
-            <d:file/>
-          </p:inline>
+    <p:with-option name="attribute-value" select="base-uri(/*)"/>
+  </p:add-attribute>
+  <p:choose>
+    <p:when test="$fileset-base">
+      <p:identity/>
+    </p:when>
+    <p:otherwise>
+      <p:delete match="/*/@xml:base"/>
+    </p:otherwise>
+  </p:choose>
+  <p:add-attribute match="/*" attribute-name="media-type">
+    <p:with-option name="attribute-value" select="$media-type"/>
+  </p:add-attribute>
+  <p:add-attribute match="/*" attribute-name="href">
+    <p:with-option name="attribute-value" select="if (starts-with($href, $fileset-base) and ends-with($fileset-base,'/')) then substring-after($href, $fileset-base) else $href"/>
+  </p:add-attribute>
+  <p:add-attribute match="/*" attribute-name="original-href">
+    <p:with-option name="attribute-value" select="if ($original-href and $fileset-base) then resolve-uri($original-href, $fileset-base) else ''"/>
+  </p:add-attribute>
+  <p:delete match="@media-type[not(normalize-space())]"/>
+  <p:delete match="@original-href[not(normalize-space())]"/>
+  <p:choose>
+    <p:when
+      test="starts-with(/*/@href,'/') or contains(substring-before(/*/@href,'/'),':') or contains(/*/@href,'/.') or contains(/*/@href,'//') or string-length(translate(/*/@href,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./%():','')) &gt; 0 or contains(/*/@href,'%') and count(tokenize(/*/@href,'%')[not(starts-with(.,'20'))]) = 0
+      or starts-with(/*/@original-href,'/') or contains(substring-before(/*/@original-href,'/'),':') or contains(/*/@original-href,'/.') or contains(/*/@original-href,'//') or string-length(translate(/*/@original-href,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./%():','')) &gt; 0 or contains(/*/@original-href,'%') and count(tokenize(/*/@original-href,'%')[not(starts-with(.,'20'))]) = 0">
+      <!-- URI probably needs normalization -->
+      <px:message severity="DEBUG" message="URI normalization: $1">
+        <p:with-option name="param1"
+          select="string-join((concat('href=&quot;',/*/@href,'&quot;'),if (/*/@original-href) then concat('original-href=&quot;',/*/@original-href,'&quot;') else (),if (/*/@original-href!=$original-href or /*/@href!=$href) then concat('xml:base=&quot;',$fileset-base,'&quot;') else ()),' ')"
+        />
+      </px:message>
+      <p:xslt>
+        <p:input port="parameters">
+          <p:empty/>
         </p:input>
-        <p:with-option name="attribute-value" select="$media-type"/>
-      </p:add-attribute>
-      <p:add-attribute match="/*" attribute-name="href">
-        <p:with-option name="attribute-value" select="$href-uri-ified"/>
-      </p:add-attribute>
-      <p:add-attribute match="/*" attribute-name="original-href">
-        <p:with-option name="attribute-value" select="/*/@original-href">
-          <p:pipe port="result" step="href-uri"/>
-        </p:with-option>
-      </p:add-attribute>
-      <p:add-attribute match="/*" attribute-name="xml:base">
-        <p:with-option name="attribute-value" select="base-uri(/*)">
-          <p:pipe port="source" step="main"/>
-        </p:with-option>
-      </p:add-attribute>
-      <p:delete match="@xml:base"/>
-      <!--Clean-up the optional attributes-->
-      <p:delete match="@media-type[not(normalize-space())]"/>
-      <p:delete match="@original-href[not(normalize-space())]"/>
-    </p:group>
-    
-    <!--Insert the entry as the last or first child of the file set - unless it already exists-->
+        <p:input port="stylesheet">
+          <p:document href="../xslt/file-normalize.xsl"/>
+        </p:input>
+      </p:xslt>
+    </p:when>
+    <p:otherwise>
+      <!-- skip URI normalization, it seems not to be necessary -->
+      <p:identity/>
+    </p:otherwise>
+  </p:choose>
+  <p:delete match="/*/@xml:base"/>
+  <p:identity name="new-entry"/>
+
+  <!-- Insert the entry as the last or first child of the file set - unless it already exists -->
+  <p:group>
+    <p:variable name="href-normalized" select="/*/@href">
+      <p:pipe port="result" step="new-entry"/>
+    </p:variable>
+
     <p:identity>
       <p:input port="source">
         <p:pipe port="source" step="main"/>
       </p:input>
     </p:identity>
     <p:choose>
-      <p:when test="/*/d:file[@href=$href-uri-ified]">
+      <p:when test="/*/d:file[@href=$href-normalized]">
         <p:identity/>
       </p:when>
       <p:otherwise>
@@ -117,12 +112,11 @@
       </p:when>
       <p:otherwise>
         <px:fileset-add-ref>
-          <p:with-option name="href" select="$href-uri-ified"/>
+          <p:with-option name="href" select="$href-normalized"/>
           <p:with-option name="ref" select="$ref"/>
         </px:fileset-add-ref>
       </p:otherwise>
     </p:choose>
-
   </p:group>
 
 </p:declare-step>

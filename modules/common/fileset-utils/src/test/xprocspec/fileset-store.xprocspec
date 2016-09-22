@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step">
+  
+  <x:script>
+    <p:declare-step type="pxi:fileset-store" name="main" version="1.0">
+      <p:input port="fileset" primary="true"/>
+      <p:input port="in-memory" sequence="true"/>
+      <p:option name="target-base" required="true"/>
+      <p:import href="../../main/resources/xml/xproc/fileset-library.xpl"/>
+      <px:fileset-create name="target-base">
+        <p:with-option name="base" select="$target-base"/>
+      </px:fileset-create>
+      <p:sink/>
+      <p:for-each>
+        <p:iteration-source select="/*/d:file">
+          <p:pipe step="main" port="fileset"/>
+        </p:iteration-source>
+        <px:fileset-add-entry>
+          <p:input port="source">
+            <p:pipe step="target-base" port="result"/>
+          </p:input>
+          <p:with-option name="href" select="/*/@href"/>
+          <p:with-option name="original-href" select="/*/resolve-uri(@original-href,base-uri(.))"/>
+          <p:with-option name="media-type" select="/*/@media-type"/>
+        </px:fileset-add-entry>
+      </p:for-each>
+      <px:fileset-join/>
+      <px:fileset-store>
+        <p:input port="in-memory.in">
+          <p:pipe step="main" port="in-memory"/>
+        </p:input>
+      </px:fileset-store>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="store">
+    <x:call step="pxi:fileset-store">
+      <x:input port="fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="c.gif" original-href="samples/fileset2/c.gif" media-type="image/gif"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="in-memory"/>
+      <x:option name="target-base" select="resolve-uri('1/',$temp-dir)"/>
+    </x:call>
+    <x:context label="result fileset">
+      <x:document type="directory" base-uri="temp-dir" href="1/" recursive="true"/>
+    </x:context>
+    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
+    <x:expect type="xpath" label="The number of files stored should be 1" test="count(//c:file)=1"/>
+    <x:expect type="xpath" label="The file c.gif should be stored" test="/*/c:file[@name='c.gif']"/>
+  </x:scenario>
+  
+  <x:scenario label="store from zip">
+    <x:call step="pxi:fileset-store">
+      <x:input port="fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="c.gif" original-href="samples/fileset2/c.gif" media-type="image/gif"/>
+            <d:file href="a/a.html" original-href="samples/fileset2/a.zip!/a.html" media-type="text/html"/>
+            <d:file href="a/MimeDetector.java" original-href="samples/fileset2/a.zip!/MimeDetector.java" media-type="application/octet-stream"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="in-memory"/>
+      <x:option name="target-base" select="resolve-uri('2/', $temp-dir)"/>
+    </x:call>
+    <x:context label="result fileset">
+      <x:document type="directory" base-uri="temp-dir" href="2/" recursive="true"/>
+    </x:context>
+    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
+    <x:expect type="xpath" label="The number of files stored should be 3" test="count(//c:file)=3"/>
+    <x:expect type="xpath" label="The file c.gif should be stored" test="/*/c:file[@name='c.gif']"/>
+    <x:expect type="xpath" label="The file a.html should be stored" test="/*/c:directory[@name='a']/c:file[@name='a.html']"/>
+    <x:expect type="xpath" label="The file MimeDetector.java should be stored" test="/*/c:directory[@name='a']/c:file[@name='MimeDetector.java']"/>
+  </x:scenario>
+  
+  <x:scenario label="store to zip">
+    <x:call step="pxi:fileset-store">
+      <x:input port="fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="c.zip!/c.gif" original-href="samples/fileset2/c.gif" media-type="image/gif"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="in-memory"/>
+      <x:option name="target-base" select="resolve-uri('3/', $temp-dir)"/>
+    </x:call>
+    <x:context label="result fileset">
+      <x:document type="directory" base-uri="temp-dir" href="3/" recursive="true"/>
+    </x:context>
+    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
+    <x:expect type="xpath" label="The number of files stored should be 1" test="count(//c:file)=1"/>
+    <x:expect type="xpath" label="The file c.zip should be stored" test="/*/c:file[@name='c.zip']"/>
+  </x:scenario>
+  
+  <x:scenario label="store from zip to zip">
+    <x:call step="pxi:fileset-store">
+      <x:input port="fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="c.zip!/c.gif" original-href="samples/fileset2/c.gif" media-type="image/gif"/>
+            <d:file href="c.zip!/a.html" original-href="samples/fileset2/a.zip!/a.html" media-type="text/html"/>
+            <d:file href="a/MimeDetector.java" original-href="samples/fileset2/a.zip!/MimeDetector.java" media-type="application/octet-stream"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="in-memory"/>
+      <x:option name="target-base" select="resolve-uri('4/', $temp-dir)"/>
+    </x:call>
+    <x:context label="result fileset">
+      <x:document type="directory" base-uri="temp-dir" href="4/" recursive="true"/>
+    </x:context>
+    <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
+    <x:expect type="xpath" label="The number of files stored should be 2" test="count(//c:file)=2"/>
+    <x:expect type="xpath" label="The file c.zip should be stored" test="/*/c:file[@name='c.zip']"/>
+    <x:expect type="xpath" label="The file MimeDetector.java should be stored" test="/*/c:directory[@name='a']/c:file[@name='MimeDetector.java']"/>
+  </x:scenario>
+  
+</x:description>

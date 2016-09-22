@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/fileset-rebase.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf">
+
+    <x:scenario label="rebase-fileset">
+        <x:call step="px:fileset-rebase">
+            <x:input port="source">
+                <x:document type="inline" xml:space="preserve">
+<d:fileset xml:base="file:/home/user/">
+    <d:file href="Desktop/output-dir/OEBPS/Content/content.xhtml"/>
+    <d:file href="Desktop/output-dir/OEBPS/META-INF/container.xml" original-href="file:/home/user/Desktop/output-dir/OEBPS/META-INF/container.xml"/>
+    <d:file href="user-file" original-href="file:/home/user/Desktop/output-dir/OEBPS/user-file"/>
+</d:fileset>
+                </x:document>
+            </x:input>
+            <x:option name="new-base" select="'file:/home/user/Desktop/output-dir/OEBPS/'"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve">
+<d:fileset xml:base="file:/home/user/Desktop/output-dir/OEBPS/">
+    <d:file href="Content/content.xhtml"/>
+    <d:file href="META-INF/container.xml" original-href="file:/home/user/Desktop/output-dir/OEBPS/META-INF/container.xml"/>
+    <d:file href="../../../user-file" original-href="file:/home/user/Desktop/output-dir/OEBPS/user-file"/>
+</d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

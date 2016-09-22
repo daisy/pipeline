@@ -1,0 +1,42 @@
+<c:result content-type="text/plain; ch  arset=utf-8" xmlns:c="http://www.w3.org/ns/xproc-step" xml:space="preserve">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html
+            PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+                   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?&gt;
+&lt;?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng"?&gt;
+&lt;?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch"?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;!DOCTYPE author [
+  &lt;!ELEMENT author (#PCDATA)&gt;
+  &lt;!ENTITY js "Jo Smith"&gt;
+]&gt;
+&lt;!-- comment --&gt;
+&lt;!DOCTYPE copyright [
+  &lt;!ELEMENT copyright (#PCDATA)&gt;
+  &lt;!ENTITY c PUBLIC "-//W3C//TEXT copyright//EN"
+    "http://www.w3.org/xmlspec/copyright.xml"&gt;
+]&gt;
+&lt;!-- comment with &lt;tag/&gt; in it --&gt;
+&lt;?xml version='1.0' encoding='utf-8'?&gt;
+&lt;?xml-stylesheet href="dtbook.2005.basic.css" type="text/css"?&gt;
+&lt;!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd" []&gt;
+&lt;!DOCTYPE mimeRegistry [
+  &lt;!ELEMENT mimeRegistry (directory+)&gt;
+  &lt;!ELEMENT directory (type*)&gt;
+  &lt;!ATTLIST directory 
+	name CDATA #REQUIRED
+  &gt;	  
+  &lt;!ELEMENT type EMPTY&gt;
+  &lt;!ATTLIST type
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+	parentTypes IDREFS #IMPLIED
+	aliasTypes IDREFS #IMPLIED	  
+	namePatterns CDATA #IMPLIED
+	definition CDATA #IMPLIED 
+  &gt;
+]&gt;
+
+&lt;p:declare-step xmlns:p="http://www.w3.org/ns/xproc" problematic-attribute = 'contains &gt;' xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    type="px:file-utils-test" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"/&gt;</c:result>

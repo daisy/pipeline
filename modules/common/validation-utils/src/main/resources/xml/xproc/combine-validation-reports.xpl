@@ -1,4 +1,5 @@
 <p:declare-step version="1.0" name="combine-validation-reports" type="px:combine-validation-reports"
+    xmlns:cx="http://xmlcalabash.com/ns/extensions"
     xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
@@ -201,7 +202,6 @@
 
     <p:choose>
         <p:when test="//c:errors">
-
             <!-- replace RelaxNG's c:error elements with our own d:error elements. This reduces the number of types of error descriptions we have to deal with. -->
             <p:group name="replace-cerror-with-derror">
                 <!-- convert c:errors to d:errors -->
@@ -214,7 +214,6 @@
                     </p:input>
                     <p:input port="source" select="//c:errors"/>
                 </p:xslt>
-
                 <!-- replace c:errors with the results of the conversion -->
                 <p:replace match="//c:errors">
                     <p:input port="replacement">
@@ -230,7 +229,6 @@
             <p:identity/>
         </p:otherwise>
     </p:choose>
-
 
     <p:group name="add-error-count">
         <p:variable name="error-count"

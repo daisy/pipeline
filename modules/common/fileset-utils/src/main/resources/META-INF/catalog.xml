@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-   <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"
-        uri="../xml/xproc/fileset-library.xpl"/>
-   <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/fileset-to-odf-manifest.xsl"
-        uri="../xml/xslt/fileset-to-odf-manifest.xsl"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
+    
+    <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" uri="../xml/xproc/fileset-library.xpl"/>
+    
+    <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/fileset-to-odf-manifest.xsl" uri="../xml/xslt/fileset-to-odf-manifest.xsl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/fileset-to-zip-manifests.xsl" uri="../xml/xslt/fileset-to-zip-manifests.xsl"/>
+    <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/html-to-fileset.xsl" uri="../xml/xslt/html-to-fileset.xsl"/>
+    
+    <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/fileset.rnc" uri="../xml/schemas/fileset.rnc"/>
+    
+    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+    <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
+    
 </catalog>

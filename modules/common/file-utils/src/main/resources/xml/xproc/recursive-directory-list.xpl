@@ -88,5 +88,14 @@
             </p:otherwise>
         </p:choose>
     </p:viewport>
+    
+    <p:xslt>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../xslt/sort-directory-list.xsl"/>
+        </p:input>
+    </p:xslt>
 
 </p:declare-step>

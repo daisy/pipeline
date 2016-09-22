@@ -22,9 +22,6 @@
         <p:variable name="script-uri" select="/*/@script-uri"/>
         <p:variable name="test-group-name" select="/*/@name"/>
         <p:delete match="/*/c:result[@result='true']"/>
-        <p:identity>
-            <p:log port="result"/>
-        </p:identity>
         <p:viewport match="/*/c:result" name="test.viewport">
             <p:in-scope-names name="test.viewport.vars"/>
             <p:template>

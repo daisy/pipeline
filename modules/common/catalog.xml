@@ -4,8 +4,8 @@
   <nextCatalog catalog="./common-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./file-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./fileset-utils/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./html-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./mediatype-utils/src/main/resources/META-INF/catalog.xml"/>
-  <nextCatalog catalog="./metadata-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./validation-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./zip-utils/src/main/resources/META-INF/catalog.xml"/>
 </catalog>

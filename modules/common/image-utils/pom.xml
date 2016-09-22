@@ -5,28 +5,16 @@
 
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
-    <artifactId>modules-parent</artifactId>
-    <version>1.2</version>
-    <relativePath />
+    <artifactId>common-utils-parent</artifactId>
+    <version>1.10.1-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>image-utils</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Image Utilities</name>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>framework-bom</artifactId>
-        <version>1.9</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <dependencies>
     <dependency>
@@ -36,6 +24,18 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!--
+        runtime dependencies
+    -->
+    <!--
+        for saxon (FIXME: use for compilation?)
+    -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 

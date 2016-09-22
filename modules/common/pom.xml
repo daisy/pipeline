@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>3</version>
+    <version>4</version>
     <relativePath />
   </parent>
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>common-utils-aggregator</artifactId>
-  <version>1.9.1-SNAPSHOT</version>
+  <version>1.10.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for the Common Utility Modules</name>
@@ -20,59 +20,35 @@
 
   <!-- List of the modules to build all-at-once -->
   <modules>
+    <module>bom</module>
+    <module>parent</module>
     <module>common-utils</module>
     <module>file-utils</module>
-    <!-- <module>fileset-utils</module> -->
-    <!-- <module>image-utils</module> -->
-    <!-- <module>mediatype-utils</module> -->
-    <!-- <module>metadata-utils</module> -->
-    <!-- <module>validation-utils</module> -->
-    <!-- <module>zip-utils</module> -->
+    <module>fileset-utils</module>
+    <module>html-utils</module>
+    <module>image-utils</module>
+    <module>mediatype-utils</module>
+    <module>validation-utils</module>
+    <module>zip-utils</module>
   </modules>
-
-  <!-- BoM of the default script modules (for use in assemblies) -->
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>common-utils</artifactId>
-        <version>1.1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>file-utils</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>fileset-utils</artifactId>
-        <version>1.1.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>image-utils</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>mediatype-utils</artifactId>
-        <version>1.0.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>metadata-utils</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>validation-utils</artifactId>
-        <version>1.0.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>zip-utils</artifactId>
-        <version>1.1.0</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
+  
+  <!-- don't publish aggregator -->
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

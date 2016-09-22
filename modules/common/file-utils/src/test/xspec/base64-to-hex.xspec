@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+    stylesheet="../../main/resources/xml/xslt/base64-to-hex.xsl" xmlns:c="http://www.w3.org/ns/xproc-step">
+
+    <x:param name="offset" select="4"/>
+    <x:param name="length" select="3"/>
+
+    <x:scenario label="parse prolog and root element">
+        <x:context>
+            <c:result content-type="binary/octet-stream" encoding="base64" offset="3" length="6">bWwgdmVy</c:result>
+        </x:context>
+        <x:expect label="the content should be converted to hex and be cut to offset=4 and length=3">
+            <c:result content-type="text/plain" encoding="utf-8" offset="4" length="3">6C2076</c:result>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

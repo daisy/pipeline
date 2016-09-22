@@ -163,7 +163,6 @@
         </px:mediatype-detect>
 
         <px:compare>
-            <p:log port="result"/>
             <p:input port="alternate">
                 <p:inline>
                     <d:fileset/>
@@ -208,7 +207,6 @@
         </px:mediatype-detect>
 
         <px:compare>
-            <p:log port="result"/>
             <p:input port="alternate">
                 <p:pipe port="result" step="load-if-not-in-memory-true-xml.alternate"/>
             </p:input>
@@ -245,7 +243,6 @@
         </px:mediatype-detect>
 
         <px:compare>
-            <p:log port="result"/>
             <p:input port="alternate">
                 <p:pipe port="result" step="use-in-memory-representation-dont-load-from-disk.alternate"/>
             </p:input>
@@ -281,7 +278,6 @@
         </px:mediatype-detect>
 
         <px:compare>
-            <p:log port="result"/>
             <p:input port="alternate">
                 <p:pipe port="result" step="use-in-memory-representation-dont-load-from-disk.alternate"/>
             </p:input>

@@ -1,0 +1,11 @@
+<c:result content-type="text/plain; charset=utf-8" xmlns:c="http://www.w3.org/ns/xproc-step" xml:space="preserve"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic-html5.rng"?>
+<?xml-model href="http://www.daisy.org/pipeline/modules/nordic/nordic2015-1.sch"?>
+<!-- comment -->
+<!-- comment with <tag/> in it -->
+<?xml-stylesheet href="dtbook.2005.basic.css" type="text/css"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd" []>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" problematic-attribute-1 = 'contains " >' xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data"
+    type="px:file-utils-test" name="main" version="1.0" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:l="http://xproc.org/library" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
+    xmlns:html="http://www.w3.org/1999/xhtml" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"/>]]></c:result>

@@ -120,7 +120,7 @@
                     <p:pipe port="result" step="empty-fileset"/>
                 </p:output>
                 
-                <px:message>
+                <px:message severity="WARN">
                     <p:with-option name="message"
                         select="concat('File not well-formed XML: ', $filepath)"/>
                 </px:message>

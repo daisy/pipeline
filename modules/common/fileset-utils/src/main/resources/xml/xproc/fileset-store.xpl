@@ -13,9 +13,10 @@
 
     <p:option name="fail-on-error" required="false" select="'false'"/>
 
+    <p:import href="fileset-library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
 
     <p:variable name="fileset-base" select="base-uri(/*)">
         <p:pipe port="fileset.in" step="main"/>
@@ -61,9 +62,45 @@
     </px:fileset-join>
     <p:sink/>
 
+    <p:documentation>Zip files.</p:documentation>
+    <p:delete match="//d:file[not(contains(resolve-uri(@href, base-uri(.)),'!/'))]" name="fileset.zip">
+        <p:input port="source">
+            <p:pipe step="main" port="fileset.in"/>
+        </p:input>
+    </p:delete>
+    <p:xslt name="zip-manifests">
+        <p:input port="source">
+            <p:pipe step="fileset.zip" port="result"/>
+            <p:pipe step="fileset.in-memory" port="result"/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:document href="../xslt/fileset-to-zip-manifests.xsl"/>
+        </p:input>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+    </p:xslt>
+    <p:sink/>
+    <p:for-each name="zip">
+        <p:iteration-source>
+            <p:pipe step="zip-manifests" port="secondary"/>
+        </p:iteration-source>
+        <px:zip>
+            <p:input port="source">
+                <p:pipe port="in-memory.in" step="main"/>
+                <p:pipe step="in-memory.unzip" port="result"/>
+            </p:input>
+            <p:input port="manifest">
+                <p:pipe step="zip" port="current"/>
+            </p:input>
+            <p:with-option name="href" select="/*/@href"/>
+        </px:zip>
+    </p:for-each>
+    <p:sink/>
+
     <p:documentation>Stores files and filters out missing files in the result
         fileset.</p:documentation>
-    <p:viewport match="d:file" name="store">
+    <p:viewport match="d:file" name="store" cx:depends-on="zip">
         <p:output port="result"/>
         <p:viewport-source>
             <p:pipe port="fileset.in" step="main"/>
@@ -93,9 +130,13 @@
             <p:xpath-context>
                 <p:pipe port="result" step="fileset.in-memory"/>
             </p:xpath-context>
+            <p:when test="contains($target, '!/')">
+                <p:documentation>File already zipped.</p:documentation>
+                <p:identity/>
+            </p:when>
             <p:when test="//d:file[resolve-uri(@href,base-uri(.))=$target]">
                 <p:documentation>File is in memory.</p:documentation>
-                <px:message>
+                <px:message severity="DEBUG">
                     <p:with-option name="message"
                         select="concat('Writing in-memory document to ',$href)"/>
                 </px:message>
@@ -187,7 +228,7 @@
                 </p:identity>
             </p:when>
             <p:when test="not($on-disk) and $fail-on-error = 'false'">
-                <px:message message="Resource not found: $1">
+                <px:message message="Resource not found: $1" severity="WARN">
                     <p:with-option name="param1" select="$href"/>
                 </px:message>
             </p:when>
@@ -240,7 +281,7 @@
                 <p:wrap-sequence wrapper="info"/>
                 <p:choose name="mkdir">
                     <p:when test="empty(/info/*)">
-                        <px:message>
+                        <px:message severity="DEBUG">
                             <p:with-option name="message"
                                 select="concat('Making directory: ',substring-after($target-dir, $fileset-base))"
                             />
@@ -252,7 +293,7 @@
                                 </px:mkdir>
                             </p:group>
                             <p:catch>
-                                <px:message>
+                                <px:message severity="WARN">
                                     <p:with-option name="message"
                                         select="concat('Could not create directory: ',substring-after($target-dir, $fileset-base))"
                                     />
@@ -263,7 +304,7 @@
                     </p:when>
                     <p:when test="not(/info/c:directory)">
                         <!--TODO rename the error-->
-                        <px:message>
+                        <px:message severity="WARN">
                             <p:with-option name="message"
                                 select="concat('The target is not a directory: ',$href)"/>
                         </px:message>
@@ -294,7 +335,7 @@
                                 <p:pipe port="current" step="store"/>
                             </p:input>
                         </p:identity>
-                        <px:message>
+                        <px:message severity="DEBUG">
                             <p:with-option name="message"
                                 select="concat('Copied ',replace($on-disk,'^.*/([^/]*)$','$1'),' to ',$href)"
                             />
@@ -309,7 +350,7 @@
                                 <p:pipe port="error" step="store.copy.catch"/>
                             </p:input>
                         </p:identity>
-                        <px:message>
+                        <px:message severity="WARN">
                             <p:with-option name="message" select="concat('Copy error: ',/*/*)"/>
                         </px:message>
                         <p:sink/>

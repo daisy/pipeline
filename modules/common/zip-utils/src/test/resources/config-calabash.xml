@@ -1,0 +1,11 @@
+<!--*- nxml -*-->
+<xproc-config xmlns="http://xmlcalabash.com/ns/configuration"
+              xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+              xmlns:letex="http://www.le-tex.de/namespace">
+
+    <implementation type="px:info" class-name="com.xmlcalabash.extensions.fileutils.Info"/>
+    <implementation type="px:unzip" class-name="com.xmlcalabash.extensions.Unzip"/>
+    <implementation type="px:zip" class-name="com.xmlcalabash.extensions.Zip"/>
+    <implementation type="letex:unzip" class-name="org.daisy.common.xproc.calabash.steps.UnZipProvider.UnZip"/>
+
+</xproc-config>

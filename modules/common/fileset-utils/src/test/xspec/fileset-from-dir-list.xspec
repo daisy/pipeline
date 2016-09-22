@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+    stylesheet="../../main/resources/xml/xslt/fileset-from-dir-list.xsl" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:d="http://www.daisy.org/ns/pipeline/data">
+
+    <x:scenario label="create a sorted fileset from a c:directory document">
+        <x:context>
+            <c:directory name="a" xml:base="file:/tmp/a/">
+                <c:file name="file3"/>
+                <c:other name="other3"/>
+                <c:directory name="xyz">
+                    <c:file name="fileXYZ"/>
+                </c:directory>
+                <c:directory name="dir3">
+                    <c:file name="file3"/>
+                    <c:other name="other3"/>
+                    <c:directory name="dir3">
+                        <c:file name="file3"/>
+                        <c:other name="other3"/>
+                        <c:directory name="dir3"/>
+                        <c:file name="file1"/>
+                        <c:other name="other1"/>
+                        <c:directory name="dir1"/>
+                        <c:file name="file2"/>
+                        <c:other name="other2"/>
+                        <c:directory name="dir2"/>
+                    </c:directory>
+                    <c:file name="file1"/>
+                    <c:other name="other1"/>
+                    <c:directory name="dir1">
+                        <c:file name="file3"/>
+                        <c:other name="other3"/>
+                        <c:directory name="dir3"/>
+                        <c:file name="file1"/>
+                        <c:other name="other1"/>
+                        <c:directory name="dir1"/>
+                        <c:file name="file2"/>
+                        <c:other name="other2"/>
+                        <c:directory name="dir2"/>
+                    </c:directory>
+                    <c:file name="file2"/>
+                    <c:other name="other2"/>
+                    <c:directory name="dir2"/>
+                </c:directory>
+                <c:file name="file1"/>
+                <c:other name="other1"/>
+                <c:directory name="dir1">
+                    <c:file name="file3"/>
+                    <c:other name="other3"/>
+                    <c:directory name="dir3"/>
+                    <c:file name="file1"/>
+                    <c:other name="other1"/>
+                    <c:directory name="dir1"/>
+                    <c:file name="file2"/>
+                    <c:other name="other2"/>
+                    <c:directory name="dir2"/>
+                </c:directory>
+                <c:file name="file2"/>
+                <c:other name="other2"/>
+                <c:directory name="dir2">
+                    <c:file name="file3"/>
+                    <c:other name="other3"/>
+                    <c:directory name="dir3"/>
+                    <c:file name="file1"/>
+                    <c:other name="other1"/>
+                    <c:directory name="dir1"/>
+                    <c:file name="file2"/>
+                    <c:other name="other2"/>
+                    <c:directory name="dir2"/>
+                </c:directory>
+            </c:directory>
+        </x:context>
+        <x:expect label="the result should contain only files, be sorted, and have a flat structure">
+            <d:fileset xml:base="file:/tmp/a/">
+                <d:file href="dir1/file1"/>
+                <d:file href="dir1/file2"/>
+                <d:file href="dir1/file3"/>
+                <d:file href="dir2/file1"/>
+                <d:file href="dir2/file2"/>
+                <d:file href="dir2/file3"/>
+                <d:file href="dir3/dir1/file1"/>
+                <d:file href="dir3/dir1/file2"/>
+                <d:file href="dir3/dir1/file3"/>
+                <d:file href="dir3/dir3/file1"/>
+                <d:file href="dir3/dir3/file2"/>
+                <d:file href="dir3/dir3/file3"/>
+                <d:file href="dir3/file1"/>
+                <d:file href="dir3/file2"/>
+                <d:file href="dir3/file3"/>
+                <d:file href="file1"/>
+                <d:file href="file2"/>
+                <d:file href="file3"/>
+                <d:file href="xyz/fileXYZ"/>
+            </d:fileset>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

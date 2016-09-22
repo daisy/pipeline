@@ -12,7 +12,7 @@
     <p:xslt>
         <p:with-param name="new-base" select="$new-base"/>
         <p:input port="stylesheet">
-            <p:document href="fileset-rebase.xsl"/>
+            <p:document href="../xslt/fileset-rebase.xsl"/>
         </p:input>
     </p:xslt>
     

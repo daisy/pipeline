@@ -7,7 +7,7 @@
 
   <p:xslt template-name="join">
     <p:input port="stylesheet">
-      <p:document href="fileset-join.xsl"/>
+      <p:document href="../xslt/fileset-join.xsl"/>
     </p:input>
     <p:input port="parameters">
       <p:empty/>

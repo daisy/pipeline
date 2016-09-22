@@ -64,9 +64,7 @@
         <p:when test="$test">
             <p:choose>
                 <p:when test="$test-count-min or $test-count-max">
-                    <px:message message="the 'test' option and the 'test-count-*' options cannot be specified at the same time; only 'test' will be evaluated">
-                        <p:with-option name="severity" select="'WARN'"/>
-                    </px:message>
+                    <px:message severity="WARN" message="the 'test' option and the 'test-count-*' options cannot be specified at the same time; only 'test' will be evaluated"/>
                 </p:when>
                 <p:otherwise>
                     <p:identity/>
@@ -115,9 +113,7 @@
         </p:when>
         
         <p:otherwise>
-            <px:message message="either the 'test' option or at least one of the 'test-count-*' options must be specified; assertion failed">
-                <p:with-option name="severity" select="'WARN'"/>
-            </px:message>
+            <px:message severity="WARN" message="either the 'test' option or at least one of the 'test-count-*' options must be specified; assertion failed"/>
             <p:add-attribute match="/*" attribute-name="result" attribute-value="false"/>
         </p:otherwise>
     </p:choose>
@@ -144,9 +140,8 @@
         
         <p:otherwise>
             <!-- assertion failed; display warning -->
-            <px:message>
+            <px:message severity="WARN">
                 <p:with-option name="message" select="/*/@message"/>
-                <p:with-option name="severity" select="'WARN'"/>
                 <p:input port="source">
                     <p:pipe port="source" step="main"/>
                 </p:input>

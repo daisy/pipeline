@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../main/resources/xml/xproc/fileset-filter.xpl" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
+    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:epub="http://www.idpf.org/2007/ops" xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:opf="http://www.idpf.org/2007/opf">
+
+    <x:scenario label="test-empty">
+        <x:call step="px:fileset-filter">
+            <x:input port="source">
+                <x:document type="inline">
+                    <d:fileset/>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline">
+                <d:fileset/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-href">
+        <x:call step="px:fileset-filter">
+            <x:option name="href" select="'file:/tmp/application/xhtml+xml'"/>
+            <x:input port="source">
+                <x:document type="file" href="samples/fileset-filter.fileset.xml"/>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve">
+<d:fileset xml:base="file:/tmp/">
+    <d:file media-type="application/xhtml+xml" href="application/xhtml+xml"/>
+</d:fileset>
+</x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-href-that-does-not-exist">
+        <x:call step="px:fileset-filter">
+            <x:option name="href" select="'file:/file/that/does/not/exist'"/>
+            <x:input port="source">
+                <x:document type="file" href="samples/fileset-filter.fileset.xml"/>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve"><d:fileset xml:base="file:/tmp/"/></x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-href-that-does-not-exist-relative">
+        <x:call step="px:fileset-filter">
+            <x:option name="href" select="'file/that/does/not/exist'"/>
+            <x:input port="source">
+                <x:document type="file" href="samples/fileset-filter.fileset.xml"/>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve"><d:fileset xml:base="file:/tmp/"/></x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-media-types-single">
+        <x:call step="px:fileset-filter">
+            <x:option name="media-types" select="'*+xml'"/>
+            <x:input port="source">
+                <x:document type="file" href="samples/fileset-filter.fileset.xml"/>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve">
+<d:fileset xml:base="file:/tmp/">
+    <d:file media-type="application/xhtml+xml" href="application/xhtml+xml"/>
+    <d:file media-type="application/smil+xml" href="application/smil+xml"/>
+    <d:file media-type="application/xproc+xml" href="application/xproc+xml"/>
+    <d:file media-type="application/xslt+xml" href="application/xslt+xml"/>
+    <d:file media-type="application/xquery+xml" href="application/xquery+xml"/>
+    <d:file media-type="application/oebps-package+xml" href="application/oebps-package+xml"/>
+    <d:file media-type="application/x-dtbncx+xml" href="application/x-dtbncx+xml"/>
+    <d:file media-type="image/svg+xml" href="image/svg+xml"/>
+    <d:file media-type="application/x-dtbresource+xml" href="application/x-dtbresource+xml"/>
+    <d:file media-type="application/x-dtbook+xml" href="application/x-dtbook+xml"/>
+    <d:file media-type="application/z3998-auth+xml" href="application/z3998-auth+xml"/>
+</d:fileset>
+</x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-media-types-multiple">
+        <x:call step="px:fileset-filter">
+            <x:option name="media-types" select="'*+xml text/html'"/>
+            <x:input port="source">
+                <x:document type="file" href="samples/fileset-filter.fileset.xml"/>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve">
+<d:fileset xml:base="file:/tmp/">
+    <d:file media-type="application/xhtml+xml" href="application/xhtml+xml"/>
+    <d:file media-type="application/smil+xml" href="application/smil+xml"/>
+    <d:file media-type="application/xproc+xml" href="application/xproc+xml"/>
+    <d:file media-type="application/xslt+xml" href="application/xslt+xml"/>
+    <d:file media-type="application/xquery+xml" href="application/xquery+xml"/>
+    <d:file media-type="application/oebps-package+xml" href="application/oebps-package+xml"/>
+    <d:file media-type="application/x-dtbncx+xml" href="application/x-dtbncx+xml"/>
+    <d:file media-type="image/svg+xml" href="image/svg+xml"/>
+    <d:file media-type="application/x-dtbresource+xml" href="application/x-dtbresource+xml"/>
+    <d:file media-type="text/html" href="text/html"/>
+    <d:file media-type="application/x-dtbook+xml" href="application/x-dtbook+xml"/>
+    <d:file media-type="application/z3998-auth+xml" href="application/z3998-auth+xml"/>
+</d:fileset>
+</x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-not-media-types-single">
+        <x:call step="px:fileset-filter">
+            <x:option name="not-media-types" select="'application/*'"/>
+            <x:input port="source">
+                <x:document type="file" href="samples/fileset-filter.fileset.xml"/>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve">
+<d:fileset xml:base="file:/tmp/">
+    <d:file media-type="audio/mpeg" href="audio/mpeg"/>
+    <d:file media-type="audio/x-wav" href="audio/x-wav"/>
+    <d:file media-type="audio/mpeg4-generic" href="audio/mpeg4-generic"/>
+    <d:file media-type="image/jpeg" href="image/jpeg"/>
+    <d:file media-type="image/png" href="image/png"/>
+    <d:file media-type="image/svg+xml" href="image/svg+xml"/>
+    <d:file media-type="text/css" href="text/css"/>
+    <d:file media-type="audio/ogg" href="audio/ogg"/>
+    <d:file media-type="audio/basic" href="audio/basic"/>
+    <d:file media-type="audio/mid" href="audio/mid"/>
+    <d:file media-type="audio/x-aiff" href="audio/x-aiff"/>
+    <d:file media-type="audio/x-mpegurl" href="audio/x-mpegurl"/>
+    <d:file media-type="audio/x-pn-realaudio" href="audio/x-pn-realaudio"/>
+    <d:file media-type="image/bmp" href="image/bmp"/>
+    <d:file media-type="image/cis-cod" href="image/cis-cod"/>
+    <d:file media-type="image/gif" href="image/gif"/>
+    <d:file media-type="image/ief" href="image/ief"/>
+    <d:file media-type="image/pipeg" href="image/pipeg"/>
+    <d:file media-type="image/tiff" href="image/tiff"/>
+    <d:file media-type="image/x-cmu-raster" href="image/x-cmu-raster"/>
+    <d:file media-type="image/x-cmx" href="image/x-cmx"/>
+    <d:file media-type="image/x-icon" href="image/x-icon"/>
+    <d:file media-type="image/x-portable-anymap" href="image/x-portable-anymap"/>
+    <d:file media-type="image/x-portable-bitmap" href="image/x-portable-bitmap"/>
+    <d:file media-type="image/x-portable-graymap" href="image/x-portable-graymap"/>
+    <d:file media-type="image/x-portable-pixmap" href="image/x-portable-pixmap"/>
+    <d:file media-type="image/x-rgb" href="image/x-rgb"/>
+    <d:file media-type="image/x-xbitmap" href="image/x-xbitmap"/>
+    <d:file media-type="image/x-xpixmap" href="image/x-xpixmap"/>
+    <d:file media-type="image/x-xwindowdump" href="image/x-xwindowdump"/>
+    <d:file media-type="video/mpeg" href="video/mpeg"/>
+    <d:file media-type="video/quicktime" href="video/quicktime"/>
+    <d:file media-type="video/x-la-asf" href="video/x-la-asf"/>
+    <d:file media-type="video/x-ms-asf" href="video/x-ms-asf"/>
+    <d:file media-type="video/x-msvideo" href="video/x-msvideo"/>
+    <d:file media-type="video/x-sgi-movie" href="video/x-sgi-movie"/>
+    <d:file media-type="text/h323" href="text/h323"/>
+    <d:file media-type="text/html" href="text/html"/>
+    <d:file media-type="text/iuls" href="text/iuls"/>
+    <d:file media-type="text/plain" href="text/plain"/>
+    <d:file media-type="text/richtext" href="text/richtext"/>
+    <d:file media-type="text/scriptlet" href="text/scriptlet"/>
+    <d:file media-type="text/tab-separated-values" href="text/tab-separated-values"/>
+    <d:file media-type="text/webviewhtml" href="text/webviewhtml"/>
+    <d:file media-type="text/x-component" href="text/x-component"/>
+    <d:file media-type="text/x-setext" href="text/x-setext"/>
+    <d:file media-type="text/x-vcard" href="text/x-vcard"/>
+    <d:file media-type="message/rfc822" href="message/rfc822"/>
+    <d:file media-type="x-world/x-vrml" href="x-world/x-vrml"/>
+</d:fileset>
+</x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-not-media-types-multiple">
+        <x:call step="px:fileset-filter">
+            <x:option name="not-media-types" select="'application/* text/*'"/>
+            <x:input port="source">
+                <x:document type="file" href="samples/fileset-filter.fileset.xml"/>
+            </x:input>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="inline" xml:space="preserve">
+<d:fileset xml:base="file:/tmp/">
+    <d:file media-type="audio/mpeg" href="audio/mpeg"/>
+    <d:file media-type="audio/x-wav" href="audio/x-wav"/>
+    <d:file media-type="audio/mpeg4-generic" href="audio/mpeg4-generic"/>
+    <d:file media-type="image/jpeg" href="image/jpeg"/>
+    <d:file media-type="image/png" href="image/png"/>
+    <d:file media-type="image/svg+xml" href="image/svg+xml"/>
+    <d:file media-type="audio/ogg" href="audio/ogg"/>
+    <d:file media-type="audio/basic" href="audio/basic"/>
+    <d:file media-type="audio/mid" href="audio/mid"/>
+    <d:file media-type="audio/x-aiff" href="audio/x-aiff"/>
+    <d:file media-type="audio/x-mpegurl" href="audio/x-mpegurl"/>
+    <d:file media-type="audio/x-pn-realaudio" href="audio/x-pn-realaudio"/>
+    <d:file media-type="image/bmp" href="image/bmp"/>
+    <d:file media-type="image/cis-cod" href="image/cis-cod"/>
+    <d:file media-type="image/gif" href="image/gif"/>
+    <d:file media-type="image/ief" href="image/ief"/>
+    <d:file media-type="image/pipeg" href="image/pipeg"/>
+    <d:file media-type="image/tiff" href="image/tiff"/>
+    <d:file media-type="image/x-cmu-raster" href="image/x-cmu-raster"/>
+    <d:file media-type="image/x-cmx" href="image/x-cmx"/>
+    <d:file media-type="image/x-icon" href="image/x-icon"/>
+    <d:file media-type="image/x-portable-anymap" href="image/x-portable-anymap"/>
+    <d:file media-type="image/x-portable-bitmap" href="image/x-portable-bitmap"/>
+    <d:file media-type="image/x-portable-graymap" href="image/x-portable-graymap"/>
+    <d:file media-type="image/x-portable-pixmap" href="image/x-portable-pixmap"/>
+    <d:file media-type="image/x-rgb" href="image/x-rgb"/>
+    <d:file media-type="image/x-xbitmap" href="image/x-xbitmap"/>
+    <d:file media-type="image/x-xpixmap" href="image/x-xpixmap"/>
+    <d:file media-type="image/x-xwindowdump" href="image/x-xwindowdump"/>
+    <d:file media-type="video/mpeg" href="video/mpeg"/>
+    <d:file media-type="video/quicktime" href="video/quicktime"/>
+    <d:file media-type="video/x-la-asf" href="video/x-la-asf"/>
+    <d:file media-type="video/x-ms-asf" href="video/x-ms-asf"/>
+    <d:file media-type="video/x-msvideo" href="video/x-msvideo"/>
+    <d:file media-type="video/x-sgi-movie" href="video/x-sgi-movie"/>
+    <d:file media-type="message/rfc822" href="message/rfc822"/>
+    <d:file media-type="x-world/x-vrml" href="x-world/x-vrml"/>
+</d:fileset>
+</x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>
