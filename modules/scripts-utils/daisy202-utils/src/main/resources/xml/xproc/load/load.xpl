@@ -62,7 +62,7 @@
             <p:pipe port="result" step="in-memory"/>
         </p:output>
         <p:variable name="href" select="/*/@href"/>
-        <px:message>
+        <px:message severity="DEBUG">
             <p:with-option name="message" select="concat('loading NCC: ',$href)"/>
         </px:message>
 
@@ -70,7 +70,7 @@
             <p:with-option name="href" select="$href"/>
         </px:html-load>
 
-        <px:message
+        <px:message severity="DEBUG"
             message="Making an ordered list of SMIL-files referenced from the NCC according to the flow (reading order)"/>
         <p:xslt name="fileset.smil">
             <p:input port="parameters">
@@ -81,10 +81,10 @@
             </p:input>
         </p:xslt>
 
-        <px:message message="Loading all SMIL files"/>
+        <px:message severity="DEBUG" message="Loading all SMIL files"/>
         <p:for-each>
             <p:iteration-source select="//d:file"/>
-            <px:message>
+            <px:message severity="DEBUG">
                 <p:with-option name="message" select="concat('loading ',/*/@href,'...')"/>
             </px:message>
             <p:load>
@@ -93,7 +93,7 @@
         </p:for-each>
         <p:identity name="in-memory.smil"/>
 
-        <px:message message="Listing all resources referenced from the SMIL files"/>
+        <px:message severity="DEBUG" message="Listing all resources referenced from the SMIL files"/>
         <p:for-each>
             <p:identity name="fileset.html-and-resources.in-memory.smil"/>
 
@@ -131,7 +131,7 @@
         </p:for-each>
         <px:fileset-join name="fileset.html-and-audio"/>
 
-        <px:message message="Loading all HTML-files"/>
+        <px:message severity="DEBUG" message="Loading all HTML-files"/>
         <p:for-each>
             <p:iteration-source
                 select="//d:file[
@@ -139,7 +139,7 @@
             or @media-type='application/xhtml+xml' 
             or matches(lower-case(@href),'\.x?html$'))
             and not(resolve-uri(@href,base-uri())=$href)]"/>
-            <px:message>
+            <px:message severity="DEBUG">
                 <p:with-option name="message" select="concat('loading ',/*/@href,'...')"/>
             </px:message>
             <px:html-load>
@@ -148,10 +148,10 @@
         </p:for-each>
         <p:identity name="in-memory.html"/>
 
-        <px:message message="Listing all resources referenced from the HTML files"/>
+        <px:message severity="DEBUG" message="Listing all resources referenced from the HTML files"/>
         <p:for-each name="fileset.html-resources.for-each">
             <px:html-to-fileset/>
-            <px:message>
+            <px:message severity="DEBUG">
                 <p:with-option name="message"
                     select="concat('extracted list of resources from ',replace(base-uri(/*),'^.*/',''))">
                     <p:pipe port="current" step="fileset.html-resources.for-each"/>

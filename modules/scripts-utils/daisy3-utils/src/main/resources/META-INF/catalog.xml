@@ -2,6 +2,7 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
     <uri name="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"
         uri="../xml/daisy3-library.xpl"/>
+       <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
        <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
        <nextCatalog catalog="org:daisy:pipeline:modules:mediaoverlay-utils"/>
        <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />

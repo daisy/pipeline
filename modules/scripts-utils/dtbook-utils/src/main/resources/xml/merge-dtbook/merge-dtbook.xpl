@@ -42,7 +42,7 @@
     </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     
     <!--Loads the DTBook schema-->
@@ -54,7 +54,7 @@
             <p:pipe port="source" step="merge-dtbook"/>
         </p:input>
     </p:split-sequence>
-    <px:message message="Merging DTBook documents"/>
+    <px:message severity="DEBUG" message="Merging DTBook documents"/>
     <p:sink/>
 
     <p:for-each name="validate-input">

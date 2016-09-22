@@ -14,5 +14,6 @@
     <p:import href="dtbook-load.xpl"/>
     <p:import href="upgrade-dtbook/upgrade-dtbook.xpl"/>
     <p:import href="merge-dtbook/merge-dtbook.xpl"/>
-
+    <p:import href="validate-dtbook/dtbook-validator.check-images.xpl"/>
+    <p:import href="validate-dtbook/dtbook-validator.select-schema.xpl"/>
 </p:library>

@@ -126,6 +126,4 @@
 		<system systemId="http://www.w3.org/TR/xhtml-modularization/DTD/xhtml-struct-1.mod" uri="./xhtml11/xhtml-struct-1.mod" />
 	</group>
 	
-	<nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
-    
 </catalog>

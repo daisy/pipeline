@@ -99,7 +99,7 @@
       <p:with-param name="no-smilref" select="$no-smilref"/>
       <p:with-param name="stop-recursion" select="' math '"/>
     </p:xslt>
-    <px:message message="Smil-needed IDs generated"/>
+    <px:message severity="DEBUG" message="Smil-needed IDs generated"/>
 
     <p:xslt name="audio-order">
       <p:input port="stylesheet">
@@ -109,7 +109,7 @@
     	<p:empty/>
       </p:input>
     </p:xslt>
-    <px:message message="SMIL audio order generated"/>
+    <px:message severity="DEBUG" message="SMIL audio order generated"/>
     <p:sink/>
 
     <p:load name="add-smilrefs-xsl">
@@ -129,7 +129,7 @@
       <p:with-param name="mo-dir" select="$smil-dir"/>
       <p:with-param name="output-dir" select="$root-dir"/>
     </p:xslt>
-    <px:message message="Smilref generated"/>
+    <px:message severity="DEBUG" message="Smilref generated"/>
     <p:sink/>
 
     <p:xslt name="copy-smilrefs">
@@ -144,7 +144,7 @@
 	<p:empty/>
       </p:input>
     </p:xslt>
-    <px:message message="Smilrefs copied to the original document"/>
+    <px:message severity="DEBUG" message="Smilrefs copied to the original document"/>
     <p:sink/>
 
     <p:xslt name="create-smils">
@@ -162,7 +162,7 @@
       <p:with-param name="content-dir" select="$root-dir"/>
       <p:with-param name="audio-only" select="$audio-only"/>
     </p:xslt>
-    <px:message message="SMIL files generated."/><p:sink/>
+    <px:message severity="DEBUG" message="SMIL files generated."/><p:sink/>
     <p:for-each name="all-smils">
       <p:iteration-source>
 	<p:pipe port="secondary" step="create-smils"/>
@@ -190,7 +190,7 @@
       </p:input>
     </p:xslt>
     <p:delete match="d:duration" name="total-duration"/>
-    <px:message message="Durations computed."/><p:sink/>
+    <px:message severity="DEBUG" message="Durations computed."/><p:sink/>
 
     <p:for-each name="smil-with-durations">
       <p:output port="result"/>
@@ -230,6 +230,6 @@
     </p:for-each>
     <px:fileset-join name="smil-in-fileset"/>
 
-    <px:message message="SMIL fileset created."/><p:sink/>
+    <px:message severity="DEBUG" message="SMIL fileset created."/><p:sink/>
 
 </p:declare-step>

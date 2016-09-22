@@ -32,14 +32,14 @@
 				<p:pipe step="update-files" port="fileset.in"/>
 			</p:xpath-context>
 			<p:when test="/*/d:file[resolve-uri(@href, base-uri())=$base]">
-				<px:message>
+				<px:message severity="DEBUG">
 					<p:with-option name="message" select="concat('[odt-utils] updating file: ', $base)"/>
 				</px:message>
 				<p:identity/>
 			</p:when>
 			<p:otherwise>
-				<px:message>
-					<p:with-option name="message" select="concat('[odt-utils] WARNING: unknown file: ', $base, ', will not be updated')"/>
+				<px:message severity="WARN">
+					<p:with-option name="message" select="concat('[odt-utils] unknown file: ', $base, ', will not be updated')"/>
 				</px:message>
 				<p:identity>
 					<p:input port="source">

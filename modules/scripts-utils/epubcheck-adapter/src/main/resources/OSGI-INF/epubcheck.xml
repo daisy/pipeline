@@ -4,5 +4,5 @@
    <service>
       <provide interface="org.daisy.common.xproc.calabash.XProcStepProvider"/>
    </service>
-   <property name="type" type="String" value="{http://www.daisy.org/ns/pipeline/xproc/internal/epubcheck-adapter}epubcheck"/>
+   <property name="type" type="String" value="{http://www.daisy.org/ns/pipeline/xproc/internal}epubcheck"/>
 </scr:component>

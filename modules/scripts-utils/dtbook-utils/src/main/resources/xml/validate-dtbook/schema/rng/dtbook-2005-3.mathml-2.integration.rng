@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar 
+    xmlns="http://relaxng.org/ns/structure/1.0"
+    xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+    datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+    
+    <include href="mod/smilref-attr.rng"/>
+    
+    <include href="mathml/mathml2/mathml2.rng" ns="http://www.w3.org/1998/Math/MathML">
+        <!-- Refine the datatypes used for IDs and IDREFs  -->
+        <define name="math.id.type">
+            <data type="NCName"></data>
+        </define>
+        
+        <define name="math.idref.type">
+            <data type="NCName"></data>
+        </define>
+        
+    </include>
+    
+    <include href="dtbook/dtbook-2005-3.rng" ns="http://www.daisy.org/z3986/2005/dtbook/">
+        <!-- Refine the datatypes used for IDs and IDREFs  -->
+        <define name="dtb.id.type">
+            <data type="NCName"></data>
+        </define>
+        
+        <define name="dtb.idrefs.type">
+            <list>
+                <oneOrMore>
+                    <data type="NCName"/>
+                </oneOrMore>
+            </list>
+        </define>
+        
+        <!-- include the 'math' element in dtb.externalFlow --> 
+        <define name="dtb.externalFlow" combine="choice" ns="http://www.daisy.org/z3986/2005/dtbook/">
+            <ref name="math" ns="http://www.w3.org/1998/Math/MathML"/>
+        </define>
+        
+    </include>
+    
+</grammar>

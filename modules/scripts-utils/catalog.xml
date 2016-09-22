@@ -9,7 +9,7 @@
   <nextCatalog catalog="./epub3-ocf-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./epub3-pub-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./epubcheck-adapter/src/main/resources/META-INF/catalog.xml"/>
-  <nextCatalog catalog="./html-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./mediaoverlay-utils/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./metadata-utils/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./zedai-utils/src/main/resources/META-INF/catalog.xml"/>
 </catalog>

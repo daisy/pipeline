@@ -57,7 +57,7 @@
                 <p:document href="rearrange.prepare.xsl"/>
             </p:input>
         </p:xslt>
-        <px:message message="created annotated mediaoverlay"/>
+        <px:message severity="DEBUG" message="created annotated mediaoverlay"/>
     </p:group>
     <p:sink/>
 
@@ -115,7 +115,7 @@
             </p:input>
         </p:xslt>
 
-        <px:message>
+        <px:message severity="DEBUG">
             <p:with-option name="message" select="concat('created media overlay for ',$content-base)"/>
         </px:message>
     </p:for-each>

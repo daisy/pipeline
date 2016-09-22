@@ -13,8 +13,6 @@
         <p:pipe port="result" step="media-overlays"/>
     </p:output>
 
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl"/>
-
     <p:variable name="audio-dir" select="concat($content-dir,'audio/')">
         <p:empty/>
     </p:variable>

@@ -41,12 +41,12 @@
     </p:option>
     
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-validator/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     
     <p:variable name="version" select="dtb:dtbook/@version"/>
     
-    <px:message>
+    <px:message severity="DEBUG">
         <p:with-option name="message" select="concat('Input document version: ', $version)"/>    
     </px:message>
     
@@ -92,14 +92,14 @@
         </p:when>
         <p:when test="$version = '2005-3'">
             <p:output port="result"/>
-            <px:message>
+            <px:message severity="DEBUG">
                 <p:with-option name="message" select="concat('File is already the most recent version: ', $version)"/>
             </px:message>
             <p:identity/>
         </p:when>
         <p:otherwise>
             <p:output port="result"/>
-            <px:message>
+            <px:message severity="DEBUG">
                 <p:with-option name="message" select="concat('Version not identified: ', $version)"/>
             </px:message>
             <p:identity/>

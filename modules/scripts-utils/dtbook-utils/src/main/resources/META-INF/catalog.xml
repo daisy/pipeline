@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.nimas.sch" 
+        uri="../xml/validate-dtbook/schema/sch/dtbook.mathml.nimas.sch"/>
+   <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.sch" 
+        uri="../xml/validate-dtbook/schema/sch/dtbook.mathml.sch"/>
    <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"
         uri="../xml/dtbook-utils-library.xpl"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-validator"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>

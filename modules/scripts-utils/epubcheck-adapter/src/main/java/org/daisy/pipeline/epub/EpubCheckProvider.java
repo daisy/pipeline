@@ -1,14 +1,13 @@
 package org.daisy.pipeline.epub;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
-
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
 import com.xmlcalabash.core.XProcException;
@@ -21,9 +20,13 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import com.adobe.epubcheck.api.EpubCheck;
 import com.adobe.epubcheck.api.EpubCheckFactory;
 import com.adobe.epubcheck.api.Report;
+import com.adobe.epubcheck.api.EPUBLocation;
+import com.adobe.epubcheck.messages.Message;
+import com.adobe.epubcheck.messages.Severity;
 import com.adobe.epubcheck.nav.NavCheckerFactory;
 import com.adobe.epubcheck.opf.DocumentValidator;
 import com.adobe.epubcheck.opf.DocumentValidatorFactory;
+import com.adobe.epubcheck.opf.ValidationContext;
 import com.adobe.epubcheck.opf.OPFCheckerFactory;
 import com.adobe.epubcheck.ops.OPSCheckerFactory;
 import com.adobe.epubcheck.overlay.OverlayCheckerFactory;
@@ -69,7 +72,7 @@ public class EpubCheckProvider implements XProcStepProvider {
 
 		documentValidatorFactoryMap = map;
 	}
-
+	
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
 		return new EpubCheckStep(runtime, step);
 	}
@@ -120,20 +123,20 @@ public class EpubCheckProvider implements XProcStepProvider {
 					mode = null;
 
 				File fileOut = File.createTempFile("epubcheck", null);
-				Report xmlReport = new XmlReportImpl(fileOut, epubFile.getName(), EpubCheck.version());
+				Report xmlReport = new XmlReportImpl(new PrintWriter(fileOut, "UTF-8"), epubFile.getName(), EpubCheck.version());
 
 				String toolDate = EpubCheck.buildDate();
 				if (toolDate != null && !toolDate.startsWith("$"))
 					xmlReport.info(null, FeatureEnum.TOOL_DATE, toolDate);
 
 				if (mode != null) {
-					xmlReport.info(null, FeatureEnum.EXEC_MODE, String.format(Messages.SINGLE_FILE, mode, epubVersion.toString()));
+					xmlReport.info(null, FeatureEnum.EXEC_MODE, String.format(Messages.get("single_file"), mode, epubVersion.toString()));
 
 					if ("expanded".equals(mode) || "exp".equals(mode)) {
 						epub = new Archive(path, false);
 						epub.createArchive();
 
-						EpubCheck check = new EpubCheck(epub.getEpubFile(), xmlReport, epubVersion);
+						EpubCheck check = new EpubCheck(epub.getEpubFile(), xmlReport);
 						check.validate();
 					}
 
@@ -152,22 +155,23 @@ public class EpubCheckProvider implements XProcStepProvider {
 					DocumentValidatorFactory factory = (DocumentValidatorFactory) documentValidatorFactoryMap.get(opsType);
 
 					if (factory == null) {
-						xmlReport.exception(
-								path,
-								new RuntimeException(String.format(Messages.MODE_VERSION_NOT_SUPPORTED, mode, epubVersion))
-								);
+						xmlReport.message(new Message(null, Severity.FATAL, Messages.get("mode_version_not_supported", mode, epubVersion), null), EPUBLocation.create(PathUtil.removeWorkingDirectory(path), 0, 0), mode, epubVersion);
 
-						throw new RuntimeException(String.format(
-								Messages.MODE_VERSION_NOT_SUPPORTED, mode, epubVersion));
+						throw new RuntimeException(Messages.get("mode_version_not_supported", mode, epubVersion));
 					}
-
-					DocumentValidator check = factory.newInstance(xmlReport, path,
-							resourceProvider, (String) modeMimeTypeMap.get(opsType),
-							epubVersion);
+					
+					ValidationContext validationContext = new ValidationContext.ValidationContextBuilder()
+															.report(xmlReport)
+															.path(path)
+															.resourceProvider(resourceProvider)
+															.mimetype((String) modeMimeTypeMap.get(opsType))
+															.version(epubVersion)
+															.build();
+					DocumentValidator check = factory.newInstance(validationContext);
 					check.validate();
 				}
-
-				if (((XmlReportImpl) xmlReport).generate()) {
+				
+				if (xmlReport.generate() == 0) {
 					XdmNode reportXml = runtime.getProcessor().newDocumentBuilder().build(fileOut);
 					fileOut.delete();
 					report.write(reportXml);

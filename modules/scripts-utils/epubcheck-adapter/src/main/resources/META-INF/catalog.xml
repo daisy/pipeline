@@ -3,5 +3,4 @@
 
    <uri name="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl" uri="../xml/xproc/library.xpl"/>
    
-   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
 </catalog>
