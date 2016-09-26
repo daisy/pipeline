@@ -73,7 +73,7 @@
 	</xsl:template>
 	<xsl:template match="html:caption | html:h1 | html:h2 | html:h3 | html:h4 | html:h5 | html:h6 | html:li | html:ol | html:ul |
 		html:bridgehead | html:covertitle | html:docauthor | html:doctitle | html:prodnote | html:hd | html:author | html:line | 
-		html:epigraph | html:sidebar | html:byline | html:dateline | html:title | html:aside">
+		html:epigraph | html:sidebar | html:byline | html:dateline | html:title | html:aside | html:section">
 		<xsl:apply-templates select="." mode="block-mode"/>
 	</xsl:template>
 

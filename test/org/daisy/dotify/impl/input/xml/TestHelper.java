@@ -7,7 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,8 +19,14 @@ import javax.xml.namespace.NamespaceContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.dom.DOMResult;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -37,6 +45,7 @@ import org.xml.sax.SAXException;
 
 public class TestHelper {
 	private static DocumentBuilder db = null;
+	private static TransformerFactory tf = null;
 	
 	private static DocumentBuilder getDefaultDocumentBuilder() {
 		if (db==null) {
@@ -49,7 +58,18 @@ public class TestHelper {
 		return db;
 	}
 	
-	private final static NamespaceContext obflContext = new NamespaceContext(){
+	private static TransformerFactory getTransformerFactory() {
+		if (tf==null) {
+			try {
+				tf = TransformerFactory.newInstance();
+			} catch (TransformerFactoryConfigurationError e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return tf;
+	}
+	
+	private static final NamespaceContext obflNsContext = new NamespaceContext(){
 		private static final String OBFL_NS = "http://www.daisy.org/ns/2011/obfl";
 		private static final String OBFL_PREFIX = "obfl";
 
@@ -82,7 +102,7 @@ public class TestHelper {
 	}
 	
 	public static File toObfl(String inputPath, boolean keep) throws IOException, TaskSystemException, URISyntaxException {
-		File f = File.createTempFile(TestHelper.class.getClass().getCanonicalName(), ".tmp");
+		File f = File.createTempFile(TestHelper.class.getCanonicalName(), ".tmp");
 		if (keep) {
 			System.err.println(f);
 		} else {
@@ -123,12 +143,21 @@ public class TestHelper {
 		}
 	}
 	
-	public static void assertEqualPath(InputStream expected, InputStream actual, String path, NamespaceContext nc) throws ParserConfigurationException, XPathExpressionException, SAXException, IOException {
-		assertEqualPath(getDefaultDocumentBuilder().parse(expected), getDefaultDocumentBuilder().parse(actual), path, nc);
+	public static void assertEqualPath(InputStream expected, InputStream actual, XMLTestContext context) throws ParserConfigurationException, XPathExpressionException, SAXException, IOException, TransformerFactoryConfigurationError, TransformerException {
+		assertEqualPath(getDefaultDocumentBuilder().parse(expected), getDefaultDocumentBuilder().parse(actual), context);
 	}
 	
-	public static void assertEqualPath(Document expected, Document actual, String path, NamespaceContext nc) throws XPathExpressionException {
-		assertTrue(getNode(normalize(actual), path, nc).isEqualNode(getNode(normalize(expected), path, nc)));
+	public static void assertEqualPath(Document expected, Document actual, XMLTestContext context) throws XPathExpressionException, TransformerFactoryConfigurationError, TransformerException, IOException {
+		Document dActual = normalize(actual, context);
+		Document dExpected = normalize(expected, context);
+		boolean equal = dActual.isEqualNode(dExpected);
+		if (!equal) {
+			System.err.println("--Actual--");
+			System.err.println(writeToString(dActual));
+			System.err.println("--Expected--");
+			System.err.println(writeToString(dExpected));
+		}
+		assertTrue(equal);
 	}
 	
 	private static Node getNode(Node d, String xpath, NamespaceContext nc) throws XPathExpressionException {
@@ -138,17 +167,43 @@ public class TestHelper {
 		return (Node)xp.evaluate(xpath, d, XPathConstants.NODE);
 	}
 	
-	private static Document normalize(Document d) {
-		d.normalizeDocument();
-		return d;
+	private static Document normalize(Document d, XMLTestContext context) throws TransformerFactoryConfigurationError, TransformerException, IOException {
+		StreamSource xslt = new StreamSource(context.getNormalizationResource().openStream());
+		xslt.setSystemId(context.getNormalizationResource().toString());
+		
+		Transformer tr = getTransformerFactory().newTransformer(xslt);
+		Document res = getDefaultDocumentBuilder().newDocument();
+		DOMResult dr = new DOMResult(res);
+		tr.transform(new DOMSource(d), dr);
+		return res;
+	}
+	
+	private static String writeToString(Document d) throws TransformerException {
+		Transformer tr = getTransformerFactory().newTransformer();
+		StringWriter sw = new StringWriter();
+		tr.transform(new DOMSource(d), new StreamResult(sw));
+		return sw.toString();
 	}
 	
 	/**
-	 * Gets a Namespace context with the prefix obfl and corresponding namespace URI.
-	 * @return returns a namespace context
+	 * Gets a test context with for obfl.
+	 * @return returns a test context
 	 */
-	public static NamespaceContext getObflNamespaceContext() {
-		return obflContext;
+	public static XMLTestContext getObflTestContext(final String filter) {
+		return new XMLTestContext() {
+			
+
+			@Override
+			public NamespaceContext getNamespaceContext() {
+				return obflNsContext;
+			}
+
+			@Override
+			public URL getNormalizationResource() {
+				return this.getClass().getResource(filter);
+			}
+			
+		};
 	}
 
 }

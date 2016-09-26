@@ -24,8 +24,16 @@ public class XMLInputManagerTest {
 		TestHelper.assertEqualPath(
 				this.getClass().getResourceAsStream("resource-files/ordered-lists-expected.xml"),
 				new FileInputStream(f),
-				"/obfl:obfl/obfl:sequence",
-				TestHelper.getObflNamespaceContext());
+				TestHelper.getObflTestContext("resource-files/obfl-filter-sequence.xsl"));
+	}
+	
+	@Test
+	public void testColophon_01() throws IOException, TaskSystemException, URISyntaxException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError, XPathExpressionException {
+		File f = TestHelper.toObfl("resource-files/colophon-input.xhtml", false);
+		TestHelper.assertEqualPath(
+				this.getClass().getResourceAsStream("resource-files/colophon-expected.xml"),
+				new FileInputStream(f),
+				TestHelper.getObflTestContext("resource-files/obfl-filter-sequence.xsl"));
 	}
 
 }
