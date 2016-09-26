@@ -1,5 +1,6 @@
 package org.daisy.dotify.impl.system.common;
 
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -77,5 +78,11 @@ class RunParameters {
 	@Override
 	public String toString() {
 		return p.toString();
+	}
+	
+	public static RunParameters fromMap(Map<String, Object> map) {
+		Properties p1 = new Properties();
+		p1.putAll(map);
+		return new RunParameters(p1);
 	}
 }
