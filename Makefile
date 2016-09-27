@@ -1,4 +1,4 @@
-POMS := $(shell find * -name pom.xml)
+POMS := $(shell find * -name pom.xml ! -path '*/target/*')
 GRADLE_FILES := $(shell find * -name build.gradle -o -name settings.gradle -o -name gradle.properties)
 
 MVN_WORKSPACE := $(CURDIR)/.maven-workspace
