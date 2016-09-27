@@ -57,7 +57,7 @@ public abstract class Options {
 	
 	private static final Logger logger = LoggerFactory.getLogger(Options.class);
 	
-	private static final File LOCAL_REPOSITORY = new File(System.getProperty("user.home"), ".m2/repository");
+	private static final File DEFAULT_LOCAL_REPOSITORY = new File(System.getProperty("user.home"), ".m2/repository");
 	
 	public static SystemPropertyOption logbackConfigFile() {
 		return systemProperty("logback.configurationFile").value("file:" + PathUtils.getBaseDir() + "/src/test/resources/logback.xml");
@@ -361,11 +361,20 @@ public abstract class Options {
 		}
 		
 		private static Set<MavenBundle> resolveBundles(List<MavenBundle> fromBundles) {
+			File localRepository; {
+				String prop = System.getProperty("org.ops4j.pax.url.mvn.localRepository");
+				if (prop != null)
+					localRepository = new File(prop);
+				else
+					localRepository = DEFAULT_LOCAL_REPOSITORY; }
 			CollectRequest request = new CollectRequest();
 			for (MavenBundle bundle : fromBundles) {
 				request.addDependency(new Dependency(bundle.asArtifact(), "runtime")); }
+			List<RemoteRepository> repositories = new Vector<RemoteRepository>();
 			RemoteRepository central = new RemoteRepository("central", "default", "http://repo1.maven.org/maven2/");
-			request.addRepository(central);
+			repositories.add(central);
+			for (RemoteRepository r : repositories)
+				request.addRepository(r);
 			request.setRequestContext("runtime");
 			DefaultServiceLocator locator = new DefaultServiceLocator();
 			locator.addService(WagonProvider.class, HttpWagonProvider.class);
@@ -374,10 +383,8 @@ public abstract class Options {
 			DefaultRepositorySystemSession session = new MavenRepositorySystemSession()
 				.setLocalRepositoryManager(
 					system.newLocalRepositoryManager(
-						new LocalRepository(LOCAL_REPOSITORY.getAbsolutePath())))
+						new LocalRepository(localRepository.getAbsolutePath())))
 				.setOffline(false);
-			List<RemoteRepository> repositories = new Vector<RemoteRepository>();
-			repositories.add(central);
 			Set<MavenBundle> bundles = new HashSet<MavenBundle>();
 			try {
 				if (dependenciesAsBundles(

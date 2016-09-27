@@ -4,7 +4,8 @@ GRADLE_FILES := $(shell find * -name build.gradle -o -name settings.gradle -o -n
 MVN_WORKSPACE := $(CURDIR)/.maven-workspace
 MVN_CACHE := $(CURDIR)/.maven-cache
 
-MVN := mvn --settings "$(CURDIR)/settings.xml" -Dworkspace="$(MVN_WORKSPACE)" -Dcache="$(MVN_CACHE)"
+MVN := mvn --settings "$(CURDIR)/settings.xml" -Dworkspace="$(MVN_WORKSPACE)" -Dcache="$(MVN_CACHE)" \
+           -Dorg.ops4j.pax.url.mvn.localRepository="$(MVN_WORKSPACE)"
 GRADLE := M2_HOME=$(CURDIR)/.gradle-settings libs/dotify/dotify.api/gradlew -Dworkspace="$(MVN_WORKSPACE)" -Dcache="$(MVN_CACHE)"
 
 MVN_LOG := tee -a $(CURDIR)/maven.log | cut -c1-1000 | pcregrep -M "^\[INFO\] -+\n\[INFO\] Building .*\n\[INFO\] -+$$|^\[(ERROR|WARNING)\]"; \
