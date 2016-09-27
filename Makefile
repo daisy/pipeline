@@ -21,6 +21,18 @@ dist : compile
 	cd assembly && \
 	$(MVN) clean package -Pdeb | $(MVN_LOG)
 
+.PHONY : run
+run : compile
+	cd assembly && \
+	$(MVN) clean package -Pdev-launcher | $(MVN_LOG)
+	rm assembly/target/dev-launcher/etc/*windows*
+	if [ "$$(uname)" == Darwin ]; then \
+		rm assembly/target/dev-launcher/etc/*linux*; \
+	else \
+		rm assembly/target/dev-launcher/etc/*mac*; \
+	fi
+	assembly/target/dev-launcher/bin/pipeline2
+
 .PHONY : check
 check : gradle-test maven-test
 

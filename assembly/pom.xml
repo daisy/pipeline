@@ -1599,7 +1599,7 @@
                       <arg value="startLevel=30"/>
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
                       <arg value="prefix=pipeline"/>
-                      <arg value="home=${user.home}"/>
+                      <arg value="localRepository=${settings.localRepository}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
                       <arg value="target/tmp/effective-pom.xml"/>
@@ -1608,7 +1608,7 @@
                       <arg value="startLevel=50"/>
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
                       <arg value="prefix=modules"/>
-                      <arg value="home=${user.home}"/>
+                      <arg value="localRepository=${settings.localRepository}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
                       <arg value="target/tmp/effective-pom.xml"/>
@@ -1617,7 +1617,7 @@
                       <arg value="startLevel=50"/>
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
                       <arg value="prefix=modules"/>
-                      <arg value="home=${user.home}"/>
+                      <arg value="localRepository=${settings.localRepository}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
                       <arg value="target/tmp/effective-pom.xml"/>
@@ -1626,7 +1626,7 @@
                       <arg value="startLevel=100"/>
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice"/>
                       <arg value="prefix=frontend"/>
-                      <arg value="home=${user.home}"/>
+                      <arg value="localRepository=${settings.localRepository}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
                       <arg value="target/tmp/effective-pom.xml"/>
@@ -1635,7 +1635,7 @@
                       <arg value="startLevel=50"/>
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
                       <arg value="prefix=modules"/>
-                      <arg value="home=${user.home}"/>
+                      <arg value="localRepository=${settings.localRepository}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
                       <arg value="target/tmp/effective-pom.xml"/>
@@ -1644,7 +1644,7 @@
                       <arg value="startLevel=50"/>
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
                       <arg value="prefix=modules"/>
-                      <arg value="home=${user.home}"/>
+                      <arg value="localRepository=${settings.localRepository}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
                       <arg value="target/tmp/effective-pom.xml"/>
@@ -1653,7 +1653,7 @@
                       <arg value="startLevel=100"/>
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui"/>
                       <arg value="prefix=frontend"/>
-                      <arg value="home=${user.home}"/>
+                      <arg value="localRepository=${settings.localRepository}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
                       <arg value="target/tmp/effective-pom.xml"/>
@@ -1662,7 +1662,7 @@
                       <arg value="startLevel=100"/>
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui"/>
                       <arg value="prefix=frontend"/>
-                      <arg value="home=${user.home}"/>
+                      <arg value="localRepository=${settings.localRepository}"/>
                     </java>
                     <java classname="net.sf.saxon.Transform">
                       <arg value="target/tmp/effective-pom.xml"/>
@@ -1671,7 +1671,7 @@
                       <arg value="startLevel=100"/>
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice"/>
                       <arg value="prefix=frontend"/>
-                      <arg value="home=${user.home}"/>
+                      <arg value="localRepository=${settings.localRepository}"/>
                     </java>
                   </target>
                 </configuration>

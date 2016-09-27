@@ -3,7 +3,7 @@
 	<xsl:param name="id"/>
 	<xsl:param name="startLevel"/>
 	<xsl:param name="dest"/>
-	<xsl:param name="home"/>
+	<xsl:param name="localRepository"/>
 	<xsl:param name="prefix"/>
 	<xsl:output method="text" encoding="UTF-8" name="text"/>
 	<xsl:template match="/*">
@@ -24,7 +24,7 @@
 				<xsl:value-of select="$startLevel"/>
 				<xsl:text>&#xA;</xsl:text>
 				<xsl:text>felix.fileinstall.dir=</xsl:text>
-				<xsl:value-of select="concat(replace($home,'\\','/'),'/.m2/repository/', replace($groupId, '\.', '/'), '/', $artifactId, '/', $version)"/>
+				<xsl:value-of select="concat(replace($localRepository,'\\','/'), '/', replace($groupId, '\.', '/'), '/', $artifactId, '/', $version)"/>
 				<xsl:text>&#xA;</xsl:text>
 				<xsl:text>felix.fileinstall.filter=</xsl:text>
 				<xsl:value-of select="replace(concat($artifactId, '-', $version,  $classifierSuffix, '.jar'), '\.', '\\\\.')"/>
