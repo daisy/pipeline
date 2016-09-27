@@ -277,6 +277,19 @@ clean : cache
 	find * -name .maven-test -exec rm -r "{}" \;
 	find * -name .maven-test-dependents -exec rm -r "{}" \;
 
+.PHONY : help
+help :
+	echo "make all:" >&2
+	echo "	Incrementally compile and test code and package into a DEB" >&2
+	echo "make compile:" >&2
+	echo "	Incrementally compile code" >&2
+	echo "make check:" >&2
+	echo "	Incrementally compile and test code" >&2
+	echo "make dist:" >&2
+	echo "	Incrementally compile code and package into a DEB" >&2
+	echo "make run:" >&2
+	echo "	Incrementally compile code and run locally" >&2
+
 ifndef VERBOSE
 .SILENT:
 endif
