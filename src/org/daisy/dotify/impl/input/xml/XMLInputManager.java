@@ -2,7 +2,6 @@ package org.daisy.dotify.impl.input.xml;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -190,46 +189,25 @@ public class XMLInputManager implements TaskGroup {
 		
 		private List<InternalTask> readConfiguration(ResourceLocator locator, String path) throws InternalTaskException, ResourceLocatorException {
 			URL t = locator.getResource(path);
-			List<InternalTask> setup = new ArrayList<>();
-
-			try (InputStream propsStream = t.openStream()) {
-				logger.fine("Opening stream: " + t.getFile());
+			List<InternalTask> setup = new ArrayList<>();				
+			try {
+				Properties pa = new Properties();
 				try {
-					//if (propsStream != null) {
-						Properties p = new Properties();
-						p.loadFromXML(propsStream);
-						propsStream.close();
-	
-						for (Object key : p.keySet()) {
-							String[] schemas = p.get(key).toString().split("\\s*,\\s*");
-							if ("validation".equals(key.toString())) {
-								for (String s : schemas) {
-									if (s!=null && s!="") {
-										setup.add(new ValidatorTask("Conformance checker: " + s, locator.getResource(s)));
-									}
-								}
-							} else if ("transformation".equals(key.toString())) {
-								for (String s : schemas) {
-									if (s!=null && s!="") {
-										setup.add(new XsltTask("XML to OBFL converter: " + s, locator.getResource(s), xsltParams));
-									}
-								}
-							} else {
-								logger.info("Unrecognized key: " + key);
-							}
-						}
-					/*} else {
-						throw new InternalTaskException("Unable to open a configuration stream for the format.");
-					}*/
-				} catch (InvalidPropertiesFormatException e) {
-					throw new InternalTaskException("Unable to read settings file.", e);
+					logger.fine("Opening stream: " + t.getFile());					
+					pa.loadFromXML(t.openStream());
 				} catch (IOException e) {
-					throw new InternalTaskException("Unable to open settings file.", e);
+					logger.log(Level.FINE, "Cannot open stream: " + t.getFile(), e);
+					throw new ResourceLocatorException("Cannot open stream");
+				}
+				addValidationTask(removeSchemas(pa, "validation"), setup, locator);
+				addXsltTask(removeSchemas(pa, "transformation"), setup, locator); 
+				for (Object key : pa.keySet()) {
+					logger.info("Unrecognized key: " + key);							
 				}
 			} catch (IOException e) {
-				logger.log(Level.FINE, "Cannot open stream: " + t.getFile(), e);
-				throw new ResourceLocatorException("Cannot open stream");
+				throw new InternalTaskException("Unable to open settings file.", e);
 			}
+			
 			return setup;
 		}
 
@@ -238,11 +216,38 @@ public class XMLInputManager implements TaskGroup {
 			return resolve(new DefaultAnnotatedFile.Builder(input).build());
 		}
 		
+		private void addValidationTask(String[] schemas, List<InternalTask> setup, ResourceLocator locator) throws ResourceLocatorException {
+			if (schemas!=null) {
+				for (String s : schemas) {
+					if (s!=null && s!="") {
+						setup.add(new ValidatorTask("Conformance checker: " + s, locator.getResource(s)));
+					}
+				}
+			} 
+		}
+		
+		private void addXsltTask(String[] schemas, List<InternalTask> setup, ResourceLocator locator) throws ResourceLocatorException {
+			if (schemas!=null) {
+				for (String s : schemas) {
+					if (s!=null && s!="") {
+						setup.add(new XsltTask("XML to OBFL converter: " + s, locator.getResource(s), xsltParams));
+					}
+				}
+			}
+		}
+		private String[] removeSchemas(Properties p, String key) {
+			Object o = p.remove(key);
+			String value = (o instanceof String) ? (String)o : null;
+			if (value==null) {
+				return null;
+			} else {
+				return value.split("\\s*,\\s*");
+			}
+		}
 	}
 
 	@Override
 	public List<TaskOption> getOptions() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
