@@ -8,7 +8,8 @@
 <xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	exclude-result-prefixes="dtb xs obfl"
+	exclude-result-prefixes="dtb xs obfl dotify"
+	xmlns:dotify="http://brailleapps.github.io/ns/dotify"
 	xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
 	xmlns="http://www.daisy.org/ns/2011/obfl"
 	xmlns:axsl="http://www.w3.org/1999/XSL/TransformAlias">
@@ -16,9 +17,9 @@
 	<xsl:import href="dtbook2obfl_layout.xsl" />
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:namespace-alias stylesheet-prefix="axsl" result-prefix="xsl"/>
-	<xsl:param name="toc-indent-multiplier" select="1"/>
-	<xsl:param name="splitterMax" select="10"/>
-	<xsl:param name="toc-depth" select="6"/>
+	<xsl:param name="toc-indent-multiplier" select="1" dotify:desc="Indentation for each toc level"/>
+	<xsl:param name="splitterMax" select="10" />
+	<xsl:param name="toc-depth" select="6" dotify:desc="The maximum depth of generated toc (A positive integer)"/>
 	<xsl:param name="volume-toc" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>

@@ -26,7 +26,14 @@
 		- komplexa sub, sup
 		- länkar, e-postadresser
 -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" xmlns:obfl="http://www.daisy.org/ns/2011/obfl" exclude-result-prefixes="dtb xs obfl" xmlns="http://www.daisy.org/ns/2011/obfl">
+<xsl:stylesheet version="2.0"
+		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+		xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+		xmlns:dotify="http://brailleapps.github.io/ns/dotify"
+		exclude-result-prefixes="dtb xs obfl dotify"
+		xmlns="http://www.daisy.org/ns/2011/obfl">
 
 	<xsl:import href="dtbook2obfl_base.xsl"/>
 	<xsl:import href="book-formats.xsl"/>
@@ -37,7 +44,7 @@
 	<xsl:param name="outer-margin" select="0" as="xs:integer"/>
 	<xsl:param name="row-spacing" select="1" as="xs:decimal"/>
 	<xsl:param name="duplex" select="true()" as="xs:boolean"/>
-	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string"/> <!-- empty-line or indent -->
+	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string" dotify:desc="Default paragraph separator (empty-line/indent)"/> <!-- empty-line or indent -->
 	
 	
 	<xsl:param name="l10nimagedescription" select="'Image description'"/>
