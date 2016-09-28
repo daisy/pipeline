@@ -7,3 +7,5 @@
 /.gradle-modules
 /.gradle-settings/
 .DS_Store
+/*.zip
+/*.deb

@@ -17,9 +17,19 @@ SHELL := /bin/bash
 all : compile check dist
 
 .PHONY : dist
-dist : compile
+dist: dist-zip dist-deb
+
+.PHONY : dist-zip
+dist-zip : compile
+	cd assembly && \
+	$(MVN) clean package -Plinux,mac,win | $(MVN_LOG)
+	mv assembly/target/*.zip .
+
+.PHONY : dist-deb
+dist-deb : compile
 	cd assembly && \
 	$(MVN) clean package -Pdeb | $(MVN_LOG)
+	mv assembly/target/*.deb .
 
 .PHONY : run
 run : compile
@@ -274,22 +284,27 @@ clean : cache
 	rm -rf $(MVN_WORKSPACE)
 	rm -f .maven-modules .maven-modules-install .maven-modules-test .maven-modules-test-dependents maven.log bom.xml
 	rm -f .gradle-install .gradle-test
+	rm -f *.zip *.deb
 	find * -name .maven-install -exec rm -r "{}" \;
 	find * -name .maven-test -exec rm -r "{}" \;
 	find * -name .maven-test-dependents -exec rm -r "{}" \;
 
 .PHONY : help
 help :
-	echo "make all:" >&2
-	echo "	Incrementally compile and test code and package into a DEB" >&2
-	echo "make compile:" >&2
-	echo "	Incrementally compile code" >&2
-	echo "make check:" >&2
-	echo "	Incrementally compile and test code" >&2
-	echo "make dist:" >&2
-	echo "	Incrementally compile code and package into a DEB" >&2
-	echo "make run:" >&2
-	echo "	Incrementally compile code and run locally" >&2
+	echo "make all:"                                                                                >&2
+	echo "	Incrementally compile and test code and package into a ZIP for each platform and a DEB" >&2
+	echo "make compile:"                                                                            >&2
+	echo "	Incrementally compile code"                                                             >&2
+	echo "make check:"                                                                              >&2
+	echo "	Incrementally compile and test code"                                                    >&2
+	echo "make dist:"                                                                               >&2
+	echo "	Incrementally compile code and package into a ZIP for each platform and a DEB"          >&2
+	echo "make dist-zip:"                                                                           >&2
+	echo "	Incrementally compile code and package into a ZIP for each platform"                    >&2
+	echo "make dist-deb:"                                                                           >&2
+	echo "	Incrementally compile code and package into a DEB"                                      >&2
+	echo "make run:"                                                                                >&2
+	echo "	Incrementally compile code and run locally"                                             >&2
 
 ifndef VERBOSE
 .SILENT:
