@@ -1,0 +1,16 @@
+#test builds
+*.test
+
+#coverage files
+coverage.*
+#vim files
+*.sw?
+
+#ctags files
+tags
+#bins
+
+#build directories
+build
+target
+
