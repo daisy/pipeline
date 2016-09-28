@@ -1,0 +1,18 @@
+#WS CONFIGURATION
+host: http://localhost
+port: 8181
+ws_path: ws
+ws_timeup: 25
+#DP2 launch config 
+exec_line: ../../../../../../../daisy/pipeline-assembly/target/dev-launcher/bin/pipeline2
+
+local: true
+# ROBOT CONF
+client_key: clientid
+client_secret: supersecret
+#connection settings
+timeout: 10
+#debug
+debug: false
+starting: true
+

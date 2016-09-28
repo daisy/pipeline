@@ -1,0 +1,4 @@
+ * Better error reporting, now too techie
+ * FIXME in scripts.go
+ * Make sure that all the config items are correctly propagated (timeout is now ignored)
+ * Just one execution path and set it at distribution time

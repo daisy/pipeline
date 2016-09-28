@@ -1,0 +1,17 @@
+language: go
+
+go:
+  - 1.5 
+
+after_success:
+  - .build/after_success.sh
+
+# whitelist; only deploy master branch
+branches:
+  only:
+  - master
+
+env:
+  global:
+  - secure: "fh6uYTjqFq6J9sT2XeAIjSMNRaycbcD4hgqBhOm3GbZsrUP90G24RwkI+lglccC27h/TwgdMvS8uljFgPkZW8gSX08wIvuEBRhZnvf95Z4Bm6DOBH7MpYH46UKTqYe0MswwU0dwEJz98yAPd9+Ohte+lL5tkJnEUFVLDjUQYkUo="
+  - secure: "DadC/IxfZk1dOCB3aXuxajJtFMnb1c0dgPWeJOLxySQdER23pxIQYI5OjCJIr/bSmMV39K9aaYK/fc237wr3nveR7jkID+WAz4xJSTK13igeVAr5OSca5lrxAqSJWJkrVz8+qiJnw8restG3uwQ4QJm0OagaHCBjKr5314Rn5ZY="

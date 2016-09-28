@@ -1,0 +1,23 @@
+#test builds
+*.test
+
+#coverage files
+coverage.*
+#vim files
+*.sw?
+
+#ctags files
+tags
+#bins
+dp2/dp2
+dp2admin/dp2admin
+
+#build directories
+build
+target
+
+#lastid files
+.lastid
+
+#samples dir
+samples

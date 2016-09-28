@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy</groupId>
+    <artifactId>daisy</artifactId>
+    <version>4</version>
+    <relativePath />
+  </parent>
+
+  <groupId>org.daisy.pipeline</groupId>
+  <artifactId>cli</artifactId>
+  <version>2.1.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>DAISY Pipeline 2 :: Command Line Interface</name>
+  <description>Command Line Interface for the DAISY Pipeline 2.</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>make</executable>
+          <arguments>
+            <argument>dist</argument>
+          </arguments>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.soebes.maven.plugins</groupId>
+        <artifactId>iterator-maven-plugin</artifactId>
+        <version>0.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>iterator</goal>
+            </goals>
+            <configuration>
+              <folder>build/bin/</folder>
+              <pluginExecutors>
+                <pluginExecutor>
+                  <goal>single</goal>
+                  <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                  </plugin>
+                  <configuration>
+                    <descriptors>
+                      <descriptor>.build/assembly.xml</descriptor>
+                    </descriptors>
+                  </configuration>
+                </pluginExecutor>
+              </pluginExecutors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
