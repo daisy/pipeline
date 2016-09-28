@@ -112,4 +112,38 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>2.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.daisy.maven</groupId>
+          <artifactId>xspec-maven-plugin</artifactId>
+          <version>1.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.ops4j.pax.exam</groupId>
+          <artifactId>maven-paxexam-plugin</artifactId>
+          <version>1.2.4</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <!--
+      for javax.persistence
+  -->
+  <repositories>
+    <repository>
+      <id>eclipselink</id>
+      <name>EclipseLink Releases</name>
+      <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
+    </repository>
+  </repositories>
+
 </project>
