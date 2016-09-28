@@ -19,16 +19,16 @@
   <description>Aggregator POM to build all the DAISY Pipeline 2</description>
 
   <modules>
-    <!-- <module>calabash</module> -->
-    <!-- <module>jing</module> -->
-    <!-- <module>jnaerator</module> -->
-    <!-- <module>jsslutils</module> -->
-    <!-- <module>logback-osgi-adapter</module> -->
-    <!-- <module>mysql</module> -->
+    <module>calabash</module>
+    <!-- <module>jing</module> --> <!-- FIXME: "The svn command failed" -->
+    <module>jnaerator</module>
+    <module>jsslutils</module>
+    <module>logback-osgi-adapter</module>
+    <module>mysql</module>
     <module>parboiled</module>
     <module>pegdown</module>
-    <!-- <module>saxon</module> -->
-    <!-- <module>servlet-api</module> -->
+    <module>saxon</module>
+    <module>servlet-api</module>
   </modules>
 
 </project>

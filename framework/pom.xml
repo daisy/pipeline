@@ -29,7 +29,7 @@
     <module>parent</module>
     <module>xmlcatalog</module>
     <module>calabash-adapter</module>
-    <module>calabash-custom-steps</module>
+    <!-- <module>calabash-custom-steps</module> --> <!-- FIXME: not included in assembly; delete -->
     <module>common-utils</module>
     <module>framework-core</module>
     <module>framework-persistence</module>
