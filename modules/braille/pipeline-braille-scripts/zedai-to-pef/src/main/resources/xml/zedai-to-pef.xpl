@@ -132,6 +132,7 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
     </p:option>
     
     <p:import href="zedai-to-pef.convert.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     
@@ -162,24 +163,19 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
     <!-- ========= -->
     <!-- STORE PEF -->
     <!-- ========= -->
-    
-    <p:group>
-        <p:variable name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
+    <px:xml-to-pef.store>
+        <p:input port="obfl">
+            <p:empty/>
+        </p:input>
+        <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
             <p:pipe step="main" port="source"/>
-        </p:variable>
-        <pef:store>
-            <p:with-option name="href" select="concat($pef-output-dir,'/',$name,'.pef')"/>
-            <p:with-option name="preview-href" select="if ($include-preview='true' and $preview-output-dir!='')
-                                                       then concat($preview-output-dir,'/',$name,'.pef.html')
-                                                       else ''"/>
-            <p:with-option name="brf-href" select="if ($include-brf='true' and $brf-output-dir!='')
-                                                   then concat($brf-output-dir,'/',$name,'.brf')
-                                                   else ''"/>
-            <p:with-option name="brf-table" select="if ($ascii-table!='') then $ascii-table
-                                                    else concat('(locale:',(/*/@xml:lang,'und')[1],')')">
-                <p:pipe step="main" port="source"/>
-            </p:with-option>
-        </pef:store>
-    </p:group>
+        </p:with-option>
+        <p:with-option name="include-brf" select="$include-brf"/>
+        <p:with-option name="include-preview" select="$include-preview"/>
+        <p:with-option name="ascii-table" select="$ascii-table"/>
+        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
+        <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
+        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+    </px:xml-to-pef.store>
     
 </p:declare-step>

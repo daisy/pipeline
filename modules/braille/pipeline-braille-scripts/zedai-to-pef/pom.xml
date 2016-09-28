@@ -23,6 +23,11 @@
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>xml-to-pef</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>common-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
