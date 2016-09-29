@@ -11,7 +11,7 @@ package-assembly : install-all
 
 .PHONY : package-mod-sbs
 package-mod-sbs : install-all
-	cd modules/sbs && mvn clean package -DskipTests
+	cd modules/sbs/braille && mvn clean package -DskipTests
 
 .PHONY : install-all
 install-all : gradle-install maven-install-all
