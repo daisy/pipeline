@@ -850,10 +850,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
-                  <artifactId>css-calabash</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>css-core</artifactId>
                 </artifactItem>
                 <artifactItem>
