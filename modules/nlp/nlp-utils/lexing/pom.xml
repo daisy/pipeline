@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>nlp-modules-parent</artifactId>
+    <version>1.10.0-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
+  </parent>
+
+  <artifactId>nlp-lexing</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: Lexing API</name>
+  <description>Common API for Lexing functionality</description>
+
+  <dependencies>
+    <!-- for its language definition -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nlp-common</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Service-Component>OSGI-INF/lexer-registry.xml</Service-Component>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

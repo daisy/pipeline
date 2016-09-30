@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>nlp-modules-parent</artifactId>
+    <version>1.10.1-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
+  </parent>
+
+  <artifactId>nlp-break-detection</artifactId>
+  <version>2.0.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: Break Detection</name>
+  <description>Break Detection Xproc Step based on any Lexer implementation</description>
+
+ <dependencies>
+
+   <dependency>
+     <groupId>junit</groupId>
+     <artifactId>junit</artifactId>
+     <scope>test</scope>
+   </dependency>
+
+   <dependency>
+     <groupId>net.sf.saxon</groupId>
+     <artifactId>Saxon-HE</artifactId>
+   </dependency>
+
+   <!--  Possible future language detection: -->
+   <!--  <dependency>
+     <groupId>org.daisy.libs</groupId>
+     <artifactId>langdetect-osgi</artifactId>
+     <version>1.1-SNAPSHOT</version>
+   </dependency> -->
+
+   <!-- needed to use com.xmlcalabash.library.DefaultStep ... -->
+   <dependency>
+     <groupId>org.daisy.libs</groupId>
+     <artifactId>com.xmlcalabash</artifactId>
+   </dependency>
+
+   <!-- needed to use org.daisy.common.xproc.calabash.XProcStepProvider -->
+   <dependency>
+     <groupId>org.daisy.pipeline</groupId>
+     <artifactId>calabash-adapter</artifactId>
+   </dependency>
+
+   <dependency>
+     <groupId>org.daisy.pipeline.modules</groupId>
+     <artifactId>nlp-common</artifactId>
+   </dependency>
+
+   <!-- Lexing Services interface -->
+   <dependency>
+     <groupId>org.daisy.pipeline.modules</groupId>
+     <artifactId>nlp-lexing</artifactId>
+   </dependency>
+
+    <!--
+        runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+       <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
+
+   <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Export-Package />
+            <Service-Component>OSGI-INF/break-detect.xml</Service-Component>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+
+</project>

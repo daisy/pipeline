@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="light-lex-service">
+   <implementation class="org.daisy.pipeline.nlp.lexing.light.LightLexer"/>
+   <service>
+      <provide interface="org.daisy.pipeline.nlp.lexing.LexService"/>
+   </service>
+</scr:component>
