@@ -1,0 +1,10 @@
+org.daisy.braille.impl.table.DefaultTableProvider
+com_braillo.BrailloTableProvider
+com_indexbraille.IndexTableProvider
+com_yourdolphin.SupernovaTableProvider
+es_once_cidat.CidatTableProvider
+org_daisy.EmbosserTableProvider
+org_daisy.BrailleEditorsTableProvider
+se_tpb.CXTableProvider
+com_viewplus.ViewPlusTableProvider
+be_interpoint.InterpointTableProvider
