@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/brailleapps/dotify.translator.impl
+	branch = master
+	commit = 38292bf174f05646366e16614cab0c69cdeffc91
+	parent = 3569cab78ffc92d3185bd2a9dd8e3e0cabeb1454
+	cmdver = 0.3.0
