@@ -34,6 +34,10 @@ public class MarkerReferenceField implements Field {
 		 */
 		PAGE, 
 		/**
+		 * Defines spread content search scope
+		 */
+		SPREAD_CONTENT,
+		/**
 		 * Defines spread search scope
 		 */
 		SPREAD,
