@@ -1,0 +1,13 @@
+-buildpath: biz.aQute.bnd.annotation,\
+	javax.xml.stream
+Import-Package:  \
+	org.daisy.dotify.api.tasks; provide:=true, *
+Private-Package: \
+	org.daisy.dotify.impl.input,\
+	org.daisy.dotify.impl.input.epub,\
+	org.daisy.dotify.impl.input.text,\
+	org.daisy.dotify.impl.input.xml,\
+	org.daisy.dotify.impl.system.common
+Include-Resource: / = src/
+-sources: false
+Service-Component: *

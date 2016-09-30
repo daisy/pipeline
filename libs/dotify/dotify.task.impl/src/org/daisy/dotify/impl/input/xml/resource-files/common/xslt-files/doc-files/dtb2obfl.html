@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>DTBook to OBFL</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<style type="text/css">
+			body {
+				margin: 1em 4em 1em 4em;
+				font-family: sans-serif; 
+			}
+			td, th {
+				vertical-align: top;
+				padding-right: 0.5em;
+			}
+			ul {
+				list-style-type: none;
+				padding: 0;
+				margin: 0;
+			}
+			table, th, td {
+				border: 0px;
+			}
+		</style>
+	</head>
+	<body>
+<pre>
+	DTBook to OBFL
+
+	Description
+	Provides a base stylesheet for DTBook. The stylesheet must be extended. 
+	The minimum requirement is to implement a template with the name 
+	insertLayoutMaster. This template should add layout definition elements,
+	see http://code.google.com/p/obfl/. The extending stylesheet can also benefit from the 
+	processing modes to refine layout. See below.
+	
+	Parameters
+		None
+
+	Format (input -> output)
+		DTBook -> OBFL
+    
+	Author: Joel Håkansson
+</pre>
+
+<h2>Processing modes</h2>
+<h3>Sequence modes</h3>
+<p>Use "sequence-mode" to override default sequence element processing and "apply-sequence-attributes" to override default sequence attributes</p>
+
+<h3>Block modes</h3>
+<p>Use "block-mode" to override default block element processing and "apply-block-attributes" to override default element attributes</p>
+
+<h3>Inline modes</h3>
+<p>Use "inline-mode" to override default inline processing</p>
+
+<h2>Element groups</h2>
+<p>This stylesheet categorizes DTBook elements into five groups: sequence, block, inline, special and no-op. The first three (sequence, block and
+inline) can easily be customized using the processing modes.</p>
+
+<h3>sequence</h3> 
+<p>bodymatter, frontmatter, rearmatter</p>
+
+<h3>block</h3>
+<dl>
+	<dt>no text</dt>
+		<dd>level, level1, level2, level3, level4, level5, level6</dd>
+	<dt>can be surrounded by text, does not contain text</dt>
+		<dd>list, blockquote, linegroup, poem, div, annotation, dl, imggroup, note, table</dd>
+	<dt>can contain text, but cannot be surrounded by text</dt>
+		<dd>bridgehead, caption, covertitle, docauthor, doctitle, li, h1, h2, h3, h4, h5, h6</dd>
+	<dt>can be surrounded by text and contain text</dt>
+		<dd>author, address, hd, line, p, sidebar, byline, dateline, epigraph, prodnote, title</dd>
+</dl>
+<h3>inline/block</h3>
+<p>The following elemnts may be treated as inline or block depending on context:</p>
+<p>a, cite, kbd, samp</p>
+<p>Treat as block element if parent is level1, level2, level3, level4, level5, level6, level, div or annotation. Treat as inline otherwise.</p>
+
+<h3>inline</h3>
+<p>code, bdo, em, strong, span, sub, sup, abbr, acronym, 
+dfn, q, noteref, annoref, sent, w, linenum, lic, dd, dt</p>
+
+<h3>special</h3>
+<p>br, pagenum</p>
+
+<h3>no-op</h3>
+<p>book, dtbook, head, meta, link, img, col, colgroup</p>
+
+<h2>Unhandled elements</h2>
+<p>table, tbody, td, tfoot, th, thead, tr</p>
+<h2>Summary</h2>
+<table>
+  <tbody>
+    <tr>
+      <th>Sequence</th>
+      <th>Block (type 1)</th>
+      <th>Block (type 2)</th>
+      <th>Block (type 3)</th>
+      <th>Block (type 4)</th>
+      <th>Block or Inline</th>
+      <th>Inline</th>
+      <th>Special</th>
+      <th>No-op</th>
+      <th>Not supported</th>
+    </tr>
+    <tr>
+      <td><ul>
+          <li>bodymatter </li>
+          <li>frontmatter</li>
+          <li>rearmatter</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>level </li>
+          <li>level1</li>
+          <li>level2</li>
+          <li>level3</li>
+          <li>level4</li>
+          <li>level5</li>
+          <li>level6</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>annotation </li>
+          <li>blockquote</li>
+          <li>div</li>
+          <li>dl</li>
+          <li>imggroup</li>
+          <li>linegroup</li>
+          <li>list</li>
+          <li>poem</li>
+          <li>note</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>bridgehead </li>
+          <li>caption</li>
+          <li>covertitle</li>
+          <li>docauthor</li>
+          <li>doctitle</li>
+          <li>h1</li>
+          <li>h2</li>
+          <li>h3</li>
+          <li>h4</li>
+          <li>h5</li>
+          <li>h6</li>
+          <li>li</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>address </li>
+          <li>author</li>
+          <li>byline</li>
+          <li>dateline</li>
+          <li>epigraph</li>
+          <li>hd</li>
+          <li>line</li>
+          <li>p</li>
+          <li>prodnote</li>
+          <li>sidebar</li>
+          <li>title</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>a </li>
+          <li>cite</li>
+          <li>kbd</li>
+          <li>samp</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>abbr </li>
+          <li>acronym</li>
+          <li>annoref</li>
+          <li>bdo</li>
+          <li>code</li>
+          <li>dd</li>
+          <li>dfn</li>
+          <li>dt</li>
+          <li>em</li>
+          <li>lic</li>
+          <li>linenum</li>
+          <li>noteref</li>
+          <li>q</li>
+          <li>sent</li>
+          <li>span</li>
+          <li>strong</li>
+          <li>sub</li>
+          <li>sup</li>
+          <li>w</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>br </li>
+          <li>pagenum</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>book </li>
+          <li>col</li>
+          <li>colgroup</li>
+          <li>dtbook</li>
+          <li>head</li>
+          <li>img</li>
+          <li>link</li>
+          <li>meta</li>
+        </ul>
+      </td>
+      <td><ul>
+          <li>table</li>
+          <li>tbody</li>
+          <li>td</li>
+          <li>tfoot</li>
+          <li>th</li>
+          <li>thead</li>
+          <li>title</li>
+          <li>tr</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+	</body>
+</html>

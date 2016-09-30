@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>DTBook to OBFL for braille</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<style type="text/css">
+		body {
+			margin: 5em;
+			font-family: sans-serif;
+		}
+		table {
+			border-spacing: 0;
+		}
+		th, td {
+			padding: 5px;
+			border-bottom-style: solid;
+			border-width: 1px;
+			text-align: left;
+		}
+		</style>
+	</head>
+	<body>
+<pre>
+	DTBook to OBFL for braille (sv_SE)
+
+	Description
+	DTBook to Flow stylesheet for Swedish braille.
+
+	Parameters
+		page-width (inherited)
+		page-height (inherited)
+		inner-margin (inherited)
+		outer-margin (inherited)
+		row-spacing (inherited)
+		duplex (inherited)
+
+	Format (input -> output)
+		DTBook -> OBFL
+
+	Author: Joel Håkansson
+</pre>
+<h2>Summary</h2>
+		<table>
+			<tr>
+				<th>Element</th>
+				<th>Category</th>
+				<th>Category description</th>
+				<th>Action summary</th>
+				<th>Default action</th>
+			</tr>
+			<tr>
+				<td>bodymatter</td>
+				<td>Sequence</td>
+				<td/>
+				<td>New sequence, restart pagination</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>frontmatter</td>
+				<td>Sequence</td>
+				<td/>
+				<td>New sequence, restart pagination</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>rearmatter</td>
+				<td>Sequence</td>
+				<td/>
+				<td>New sequence, continue pagination</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>level</td>
+				<td>Block (type 1)</td>
+				<td>no text</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>level1</td>
+				<td>Block (type 1)</td>
+				<td>no text</td>
+				<td>New block, break page before, margin top = 3 unless h1</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>level2</td>
+				<td>Block (type 1)</td>
+				<td>no text</td>
+				<td>New block, margin top = 2 unless h2</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>level3</td>
+				<td>Block (type 1)</td>
+				<td>no text</td>
+				<td>New block, margin top = 1 unless h3</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>level4</td>
+				<td>Block (type 1)</td>
+				<td>no text</td>
+				<td>New block, margin top = 1 unless h4</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>level5</td>
+				<td>Block (type 1)</td>
+				<td>no text</td>
+				<td>New block, margin top = 1 unless h5</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>level6</td>
+				<td>Block (type 1)</td>
+				<td>no text</td>
+				<td>New block, margin top = 1 unless h6</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>list</td>
+				<td>Block (type 2)</td>
+				<td>text sibling</td>
+				<td>[complex]</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>blockquote</td>
+				<td>Block (type 2)</td>
+				<td>text sibling</td>
+				<td>New block, margin left = 2, margin top = 1, margin bottom = 1</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>linegroup</td>
+				<td>Block (type 2)</td>
+				<td>text sibling</td>
+				<td>New block, if preceeded by linegroup margin top = 1</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>poem</td>
+				<td>Block (type 2)</td>
+				<td>text sibling</td>
+				<td>New block, margin top = 1, margin bottom = 1</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>div</td>
+				<td>Block (type 2)</td>
+				<td>text sibling</td>
+				<td>New block, margin bottom = 1</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>annotation</td>
+				<td>Block (type 2)</td>
+				<td>text sibling</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>dl</td>
+				<td>Block (type 2)</td>
+				<td>text sibling</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>imggroup</td>
+				<td>Block (type 2)</td>
+				<td>text sibling</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>note</td>
+				<td>Block (type 2)</td>
+				<td>text sibling</td>
+				<td>Create "collection"</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>bridgehead</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>caption</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>Surround block with delimiters</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>covertitle</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>docauthor</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>Ignore (generated on title page instead)</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>doctitle</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>Ignore (generated on title page instead)</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>li</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>Processing depends on type-attribute</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>h1</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>New block, margin top = 3 (margin bottom = 1 unless directly followed by level2)</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>h2</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>New block, margin top = 2 (margin bottom = 1 unless directly followed by level3)</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>h3</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>New block, margin top = 1 (margin bottom = 1 unless directly followed by level4)</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>h4</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>New block, margin top = 1 (margin bottom = 1 unless directly followed by level5)</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>h5</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>New block, margin top = 1 (margin bottom = 1 unless directly followed by level6)</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>h6</td>
+				<td>Block (type 3)</td>
+				<td>text child</td>
+				<td>New block, margin top = 1, margin bottom = 1</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>author</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>address</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>hd</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>line</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td>New block, text indent = 2</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>p</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td>New block, layout depends on class-attribute</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>sidebar</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>byline</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>dateline</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>epigraph</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>prodnote</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td>Surround block with delimiters</td>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>title</td>
+				<td>Block (type 4)</td>
+				<td>text sibling and/or text child</td>
+				<td/>
+				<td>New block</td>
+			</tr>
+			<tr>
+				<td>a</td>
+				<td>Inline/Block</td>
+				<td/>
+				<td/>
+				<td>New block, if block context</td>
+			</tr>
+			<tr>
+				<td>cite</td>
+				<td>Inline/Block</td>
+				<td/>
+				<td/>
+				<td>New block, if block context</td>
+			</tr>
+			<tr>
+				<td>kbd</td>
+				<td>Inline/Block</td>
+				<td/>
+				<td/>
+				<td>New block, if block context</td>
+			</tr>
+			<tr>
+				<td>samp</td>
+				<td>Inline/Block</td>
+				<td/>
+				<td/>
+				<td>New block, if block context</td>
+			</tr>
+			<tr>
+				<td>code</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>bdo</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>em</td>
+				<td>Inline</td>
+				<td/>
+				<td>Add braille markers for emphasis</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>strong</td>
+				<td>Inline</td>
+				<td/>
+				<td>Add braille markers for strong</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>span</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>sub</td>
+				<td>Inline</td>
+				<td/>
+				<td>Add braille markers for subscript</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>sup</td>
+				<td>Inline</td>
+				<td/>
+				<td>Add braille markers for superscript</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>abbr</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>acronym</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>dfn</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>q</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>noteref</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>annoref</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>sent</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>w</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>linenum</td>
+				<td>Inline</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>lic</td>
+				<td>Inline</td>
+				<td/>
+				<td>If inline and in toc, align right, fill space with ...</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>dd</td>
+				<td>Inline</td>
+				<td/>
+				<td>New block, text indent = 2, prefix with braille markers</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>dt</td>
+				<td>Inline</td>
+				<td/>
+				<td>New block</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>br</td>
+				<td>Special</td>
+				<td/>
+				<td/>
+				<td>Break line</td>
+			</tr>
+			<tr>
+				<td>pagenum</td>
+				<td>Special</td>
+				<td/>
+				<td/>
+				<td>Add pagenum marker</td>
+			</tr>
+			<tr>
+				<td>book</td>
+				<td>No-op</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>col</td>
+				<td>No-op</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>colgroup</td>
+				<td>No-op</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>dtbook</td>
+				<td>No-op</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>head</td>
+				<td>No-op</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>meta</td>
+				<td>No-op</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>link</td>
+				<td>No-op</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>img</td>
+				<td>No-op</td>
+				<td/>
+				<td/>
+				<td>Continue</td>
+			</tr>
+			<tr>
+				<td>table</td>
+				<td>Table</td>
+				<td/>
+				<td>As matrix table</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>tbody</td>
+				<td>Table</td>
+				<td/>
+				<td>As table body (with tfoot)</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>td</td>
+				<td>Table</td>
+				<td/>
+				<td>New table cell</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>tfoot</td>
+				<td>Table</td>
+				<td/>
+				<td>As table body</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>th</td>
+				<td>Table</td>
+				<td/>
+				<td>New table cell</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>thead</td>
+				<td>Table</td>
+				<td/>
+				<td>As table header</td>
+				<td/>
+			</tr>
+			<tr>
+				<td>tr</td>
+				<td>Table</td>
+				<td/>
+				<td>New table row</td>
+				<td/>
+			</tr>
+		</table>
+<h2>Table rendering</h2>
+<p>Tables can be rendered either as a normal table ("matrix") or as a stair case, depending on which is more effective
+in a particular case. Efficiency is calculated by evaluating:</p>
+<pre>
+ (100 * $forced-break-count) + 
+ $total-height + 
+ (($page-width - $min-block-width) / $page-width)
+ </pre>
+ <p>This expression says that forced breaks are very expensive (= inefficient). If they occur in one
+ solution, but not the other, the latter will be chosen.
+ If the number of forced breaks are equal, then
+ the solution with the smallest total height will win. Finally, if the total
+ height is equal for both solutions, the solution with biggest minimum block width
+ is selected.</p>
+ <h3>Additional requirements</h3>
+<ul>
+<li>Table column spacing should be at least 2.</li>
+<li>Matrix tables can have at most 5 columns before breaking table into parts.</li>
+<li>Stair case tables can have at most 8 columns before breaking table into parts.</li>
+</ul>
+
+<h3>Special case: Matrix table with a legend</h3>
+<p>When a table has th elements and more than two columns, a legend is used with the matrix table solution.
+The elements in the legend are listed in the order of the th elements in the table (ordered by row, then column), for example:</p>
+<pre>
+Legend
+n1 [value of th]
+n2 [value of th]
+...
+</pre>
+<p>In addition, hyphenations are not allowed in this solution. Consequently, the cost expression above is replaced by the following in these cases:</p>
+<pre>
+ (100 * $forced-break-count) +
+ (10 * $hyphenation-count) + 
+ $total-height + 
+ (($page-width - $min-block-width) / $page-width)
+ </pre>
+	</body>
+</html>
