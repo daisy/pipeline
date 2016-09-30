@@ -1,0 +1,15 @@
+Import-Package:  \
+	org.daisy.dotify.api.hyphenator; provide:=true, *
+Private-Package:  \
+	org.daisy.dotify.impl.hyphenator.latex,\
+	org.daisy.dotify.hyphenator
+Service-Component: *
+Include-Resource: / = src/
+-sources: false
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	biz.aQute.bnd.annotation,\
+	junit.osgi,\
+	com.googlecode.texhyphj,\
+	dotify.common;version=latest,\
+	dotify.api;version=latest

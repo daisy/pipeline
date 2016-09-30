@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/brailleapps/dotify.hyphenator.impl
+	branch = master
+	commit = f79de5061704745aabf6fe762ecb27ab33ef58fd
+	parent = d3726eb2fe9bfce90d6b8e8ccc9cd65a6fb3fbc3
+	cmdver = 0.3.0
