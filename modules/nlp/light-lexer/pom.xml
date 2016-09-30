@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>nlp-modules-parent</artifactId>
-    <version>1.10.0-SNAPSHOT</version>
+    <version>1.10.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
