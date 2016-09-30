@@ -1,0 +1,15 @@
+-buildpath: biz.aQute.bnd.annotation
+Export-Package: \
+	org.daisy.braille.api.embosser,\
+	org.daisy.braille.api.factory,\
+	org.daisy.braille.api.paper,\
+	org.daisy.braille.api.table,\
+	org.daisy.braille.api.validator
+Private-Package:  \
+	org.daisy.braille.consumer.embosser,\
+	org.daisy.braille.consumer.paper,\
+	org.daisy.braille.consumer.table,\
+	org.daisy.braille.consumer.validator
+Include-Resource: / = src/
+-sources: false
+Service-Component: *

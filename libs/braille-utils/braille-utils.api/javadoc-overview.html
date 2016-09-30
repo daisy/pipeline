@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Overview</title>
+</head>
+<body>
+	<p>Provides interfaces for embossing, creating and manipulating
+		PEF-files. The API supports both SPI and OSGi runtime contexts.</p>
+	<h2>Providing implementations</h2>
+	<p>The following interfaces have been constructed so that they can
+		be discovered as SPI and OSGi services:</p>
+	<ul>
+		<li>org.daisy.braille.api.embosser.EmbosserProvider</li>
+		<li>org.daisy.braille.api.embosser.EmbosserCatalogService</li>
+		<li>org.daisy.braille.api.table.TableProvider</li>
+		<li>org.daisy.braille.api.table.TableCatalogService</li>
+		<li>org.daisy.paper.api.PaperProvider</li>
+		<li>org.daisy.paper.api.PaperCatalogService</li>
+		<li>org.daisy.validator.api.ValidatorProvider</li>
+		<li>org.daisy.validator.api.ValidatorFactoryService</li>
+	</ul>
+	<p>
+		While all of the above <em>may</em> be discovered by SPI or OSGi, the
+		following interfaces provide a starting point for a developer who
+		wishes to add support for additional embossers:
+	</p>
+
+	<ul>
+		<li>org.daisy.braille.api.embosser.EmbosserProvider</li>
+		<li>org.daisy.braille.api.table.TableProvider</li>
+		<li>org.daisy.paper.api.PaperProvider</li>
+	</ul>
+
+	<h2>Implementations bundled with the API</h2>
+	<p>Default implementations of the following interfaces are
+		included:</p>
+	<ul>
+		<li>org.daisy.braille.api.embosser.EmbosserCatalogService</li>
+		<li>org.daisy.paper.api.PaperCatalogService</li>
+		<li>org.daisy.braille.api.table.TableCatalogService</li>
+		<li>org.daisy.validator.api.ValidatorFactoryService</li>
+	</ul>
+	<p>In an OSGi context, an implementation is retrieved from the service
+		registry using these interfaces.</p>
+	<p>In an SPI context, the implementations can be accessed
+		directly:</p>
+	<ul>
+		<li>org.daisy.braille.consumer.EmbosserCatalog</li>
+		<li>org.daisy.braille.consumer.PaperCatalog</li>
+		<li>org.daisy.braille.consumer.TableCatalog</li>
+		<li>org.daisy.braille.consumer.ValidatorFactory</li>
+	</ul>
+
+</body>
+</html>
