@@ -1,0 +1,3 @@
+org.daisy.dotify.impl.text.SwedishInteger2TextFactoryService
+org.daisy.dotify.impl.text.EnglishInteger2TextFactoryService
+org.daisy.dotify.impl.text.Integer2TextFactoryServiceImpl

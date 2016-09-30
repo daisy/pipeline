@@ -1,0 +1,11 @@
+Import-Package:  \
+	org.daisy.dotify.api.text; provide:=true, *
+Private-Package: org.daisy.dotify.impl.text
+Service-Component: *
+-buildpath: osgi.core,\
+	osgi.cmpn,\
+	biz.aQute.bnd.annotation,\
+	junit.osgi,\
+	dotify.api;version=latest
+Include-Resource: / = src/
+-sources: false
