@@ -275,6 +275,41 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+
+	<!-- Override default processing -->
+	<xsl:template match="html:dt">
+		<xsl:apply-templates select="." mode="block-mode"/>
+	</xsl:template>
+	
+	<!-- Override default processing -->
+	<xsl:template match="html:dd">
+		<xsl:apply-templates select="." mode="block-mode"/>
+	</xsl:template>
+	
+	<xsl:template match="html:dd" mode="apply-block-attributes">
+		<xsl:attribute name="text-indent">3</xsl:attribute>
+	</xsl:template>
+	
+	<xsl:template match="html:dd" mode="block-mode">
+		<xsl:variable name="contents"><xsl:apply-templates/></xsl:variable>
+		<xsl:choose>
+			<!-- The following is done to guard against block inside style, but it will only catch the simplest cases -->
+			<xsl:when test="count($contents/obfl:block)=count($contents/node()[not(self::text() and normalize-space()='')])">
+				<xsl:for-each select="$contents/obfl:block">
+					<block>
+						<xsl:apply-templates select="." mode="apply-block-attributes"/>
+						<style name="dd"><xsl:copy-of select="node()"/></style>
+					</block>					
+				</xsl:for-each>
+			</xsl:when>
+			<xsl:otherwise>
+				<block>
+					<xsl:apply-templates select="." mode="apply-block-attributes"/>
+					<style name="dd"><xsl:copy-of select="$contents"/></style>
+				</block>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
 	
 	<xsl:template match="text()">
 		<xsl:choose>
