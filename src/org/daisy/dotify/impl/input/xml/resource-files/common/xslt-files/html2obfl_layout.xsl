@@ -24,7 +24,7 @@
 
 	<xsl:template match="/">
 		<obfl version="2011-1" hyphenate="{$hyphenate}">
-			<xsl:attribute name="xml:lang" select="/html:html/@xml:lang"/>
+			<xsl:attribute name="xml:lang" select="html:lang(/html:html)"/>
 			<xsl:call-template name="insertMetadata"/>
 			<xsl:call-template name="insertLayoutMaster"/>
 			<xsl:call-template name="insertProcessorRenderer"/>
@@ -272,6 +272,75 @@
 				<xsl:attribute name="first-line-indent">3</xsl:attribute>
 				<xsl:attribute name="text-indent">3</xsl:attribute>
 				<xsl:attribute name="block-indent">3</xsl:attribute>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="text()">
+		<xsl:choose>
+			<!-- cases NOT handled by applyStyle/applyFlatStyle -->
+			<xsl:when test="
+				ancestor::*[@xml:lang or @lang][1][not(.=/*)]
+				and not(ancestor::html:em or ancestor::html:strong or ancestor::html:i or ancestor::html:b)
+				and not(count(parent::node())=1 and (parent::html:sub or parent::html:sup))">
+					<span><xsl:attribute name="xml:lang"><xsl:value-of select="ancestor::*[@xml:lang or @lang][1]/(@xml:lang, @lang)[1]"/></xsl:attribute><xsl:value-of select="."/></span>
+			</xsl:when>
+			<xsl:otherwise><xsl:value-of select="."/></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template match="html:em | html:strong" mode="inline-mode">
+		<xsl:call-template name="applyStyle"/>
+	</xsl:template>
+	
+	<xsl:template match="html:i" mode="inline-mode">
+		<xsl:call-template name="applyStyle">
+			<xsl:with-param name="name" select="'em'"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template match="html:b" mode="inline-mode">
+		<xsl:call-template name="applyStyle">
+			<xsl:with-param name="name" select="'strong'"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template match="html:sub | html:sup" mode="inline-mode">
+		<xsl:call-template name="applyFlatStyle"/>
+	</xsl:template>
+	
+	<xsl:template name="applyStyle">
+		<xsl:param name="name" select="name()" as="xs:string"/>
+		<xsl:choose>
+			<xsl:when test="count(node())=0">
+				<xsl:text> </xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:choose>
+					<xsl:when test="ancestor-or-self::*[html:has-lang(.)][1][not(.=/*)] and not(ancestor::html:em or ancestor::html:strong or ancestor::html:i or ancestor::html:b)">
+						<span><xsl:attribute name="xml:lang"><xsl:value-of select="html:lang(.)"/></xsl:attribute><style name="{$name}"><xsl:apply-templates/></style></span>
+					</xsl:when>
+					<xsl:otherwise><style name="{$name}"><xsl:apply-templates/></style></xsl:otherwise>
+				</xsl:choose>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="applyFlatStyle">
+		<xsl:choose>
+			<!-- text contains a single string -->
+			<xsl:when test="count(node())=1 and text()">
+				<xsl:choose>
+					<xsl:when test="ancestor-or-self::*[html:has-lang(.)][1][not(.=/*)] and not(ancestor::html:em or ancestor::html:strong or ancestor::html:i or ancestor::html:b)">
+						<span><xsl:attribute name="xml:lang"><xsl:value-of select="html:lang(.)"/></xsl:attribute><style name="{name()}"><xsl:apply-templates/></style></span>
+					</xsl:when>
+					<xsl:otherwise><style name="{name()}"><xsl:apply-templates/></style></xsl:otherwise>
+				</xsl:choose>
+			</xsl:when>
+			<!-- Otherwise -->
+			<xsl:otherwise>
+				<xsl:message terminate="no">Error: sub/sub contains a complex expression for which there is no specified formatting.</xsl:message>
+				<xsl:apply-templates/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

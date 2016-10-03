@@ -35,5 +35,23 @@ public class XMLInputManagerTest {
 				new FileInputStream(f),
 				TestHelper.getObflTestContext("resource-files/obfl-filter-sequence.xsl"));
 	}
+	
+	@Test
+	public void testEm_01() throws IOException, TaskSystemException, URISyntaxException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError, XPathExpressionException {
+		File f = TestHelper.toObfl("resource-files/em-input.xhtml", false);
+		TestHelper.assertEqualPath(
+				this.getClass().getResourceAsStream("resource-files/em-expected.xml"),
+				new FileInputStream(f),
+				TestHelper.getObflTestContext("resource-files/obfl-filter-sequence.xsl"));
+	}
+	
+	@Test
+	public void testSub_01() throws IOException, TaskSystemException, URISyntaxException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException, TransformerFactoryConfigurationError, XPathExpressionException {
+		File f = TestHelper.toObfl("resource-files/sub-input.xhtml", false);
+		TestHelper.assertEqualPath(
+				this.getClass().getResourceAsStream("resource-files/sub-expected.xml"),
+				new FileInputStream(f),
+				TestHelper.getObflTestContext("resource-files/obfl-filter-sequence.xsl"));
+	}
 
 }

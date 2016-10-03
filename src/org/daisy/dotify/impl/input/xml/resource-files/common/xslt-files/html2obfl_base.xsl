@@ -133,6 +133,16 @@
 		<xsl:param name="node" as="element()"/>
 		<xsl:sequence select="tokenize($node/@class, '\s+')" />
 	</xsl:function>
+	
+	<xsl:function name="html:has-lang" as="xs:boolean">
+		<xsl:param name="node" as="element()"/>
+		<xsl:value-of select="not(empty($node[@xml:lang or @lang]))"/>
+	</xsl:function>
+
+	<xsl:function name="html:lang" as="xs:string">
+		<xsl:param name="node" as="element()"/>
+		<xsl:value-of select="$node/ancestor-or-self::*[@xml:lang or @lang][1]/(@xml:lang, @lang)[1]"/>
+	</xsl:function>
 
 	<xsl:function name="epub:noteref" as="xs:boolean">
 		<xsl:param name="node" as="element()"/>
