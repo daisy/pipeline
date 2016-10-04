@@ -13,6 +13,8 @@
 	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string"/> <!-- empty-line or indent -->
 	<xsl:param name="toc-depth" select="6" dotify:desc="The maximum depth of generated toc (A positive integer)"/>
 	<xsl:param name="toc-indent-multiplier" select="1" dotify:desc="Indentation for each toc level"/>
+	<!-- TODO: should also support value 'keep' to keep the original toc -->
+	<xsl:param name="toc-policy" select="'replace'" dotify:desc="The toc generation policy (replace/always)"/>
 	
 	<xsl:key name="noterefs" match="html:a[epub:noteref(.)]" use="substring-after(@href, '#')"/>
 
@@ -48,7 +50,7 @@
 	</xsl:template>
 	
 	<xsl:template name="insertTOCVolumeTemplate">
-		<xsl:variable name="insertToc" select="$toc-depth > 0 and (//*[epub:types(.)=('toc')])" as="xs:boolean"/>
+		<xsl:variable name="insertToc" select="$toc-depth > 0 and (//*[epub:types(.)=('toc')] or $toc-policy='always')" as="xs:boolean"/>
 		<xsl:if test="$insertToc">
 			<xsl:call-template name="insertToc"/>
 		</xsl:if>
