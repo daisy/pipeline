@@ -361,7 +361,7 @@
 		<xsl:choose>
 			<!-- cases NOT handled by applyStyle/applyFlatStyle -->
 			<xsl:when test="
-				ancestor::*[@xml:lang or @lang][1][not(.=/*)]
+				ancestor::*[@xml:lang or @lang][1][not(self::html:html)]
 				and not(ancestor::html:em or ancestor::html:strong or ancestor::html:i or ancestor::html:b)
 				and not(count(parent::node())=1 and (parent::html:sub or parent::html:sup))">
 					<span><xsl:attribute name="xml:lang"><xsl:value-of select="ancestor::*[@xml:lang or @lang][1]/(@xml:lang, @lang)[1]"/></xsl:attribute><xsl:value-of select="."/></span>
@@ -398,7 +398,7 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:choose>
-					<xsl:when test="ancestor-or-self::*[html:has-lang(.)][1][not(.=/*)] and not(ancestor::html:em or ancestor::html:strong or ancestor::html:i or ancestor::html:b)">
+					<xsl:when test="ancestor-or-self::*[html:has-lang(.)][1][not(self::html:html)] and not(ancestor::html:em or ancestor::html:strong or ancestor::html:i or ancestor::html:b)">
 						<span><xsl:attribute name="xml:lang"><xsl:value-of select="html:lang(.)"/></xsl:attribute><style name="{$name}"><xsl:apply-templates/></style></span>
 					</xsl:when>
 					<xsl:otherwise><style name="{$name}"><xsl:apply-templates/></style></xsl:otherwise>
@@ -412,7 +412,7 @@
 			<!-- text contains a single string -->
 			<xsl:when test="count(node())=1 and text()">
 				<xsl:choose>
-					<xsl:when test="ancestor-or-self::*[html:has-lang(.)][1][not(.=/*)] and not(ancestor::html:em or ancestor::html:strong or ancestor::html:i or ancestor::html:b)">
+					<xsl:when test="ancestor-or-self::*[html:has-lang(.)][1][not(self::html:html)] and not(ancestor::html:em or ancestor::html:strong or ancestor::html:i or ancestor::html:b)">
 						<span><xsl:attribute name="xml:lang"><xsl:value-of select="html:lang(.)"/></xsl:attribute><style name="{name()}"><xsl:apply-templates/></style></span>
 					</xsl:when>
 					<xsl:otherwise><style name="{name()}"><xsl:apply-templates/></style></xsl:otherwise>
