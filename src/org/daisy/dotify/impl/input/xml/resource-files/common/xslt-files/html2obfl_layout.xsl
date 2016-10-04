@@ -4,12 +4,15 @@
 	xmlns:html="http://www.w3.org/1999/xhtml"
 	xmlns:epub="http://www.idpf.org/2007/ops"
 	xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
-	exclude-result-prefixes="html epub xs obfl"
+	xmlns:dotify="http://brailleapps.github.io/ns/dotify"
+	exclude-result-prefixes="html epub xs obfl dotify"
 	xmlns="http://www.daisy.org/ns/2011/obfl">
 	<xsl:import href="html2obfl_base.xsl"/>
 	<xsl:import href="book-formats.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string"/> <!-- empty-line or indent -->
+	<xsl:param name="toc-depth" select="6" dotify:desc="The maximum depth of generated toc (A positive integer)"/>
+	<xsl:param name="toc-indent-multiplier" select="1" dotify:desc="Indentation for each toc level"/>
 	
 	<xsl:key name="noterefs" match="html:a[epub:noteref(.)]" use="substring-after(@href, '#')"/>
 
@@ -45,15 +48,10 @@
 	</xsl:template>
 	
 	<xsl:template name="insertTOCVolumeTemplate">
-		<!-- FIXME: Enable toc
-		<xsl:variable name="insertToc" select="$toc-depth > 0 and (//dtb:level1[@class='toc'] or //dtb:level1[dtb:list[@class='toc']])" as="xs:boolean"/>
+		<xsl:variable name="insertToc" select="$toc-depth > 0 and (//*[epub:types(.)=('toc')])" as="xs:boolean"/>
 		<xsl:if test="$insertToc">
-			<table-of-contents name="full-toc">
-				<xsl:apply-templates select="//dtb:level1" mode="toc"/>
-			</table-of-contents>
+			<xsl:call-template name="insertToc"/>
 		</xsl:if>
-		<xsl:variable name="additionalPreContent"><xsl:if test="$insertToc"><xsl:apply-templates select="//dtb:frontmatter" mode="pre-volume-mode"/></xsl:if></xsl:variable>-->
-		<xsl:variable name="insertToc" select="false()" as="xs:boolean"/>
 		<xsl:variable name="additionalPreContent" as="empty-sequence()"/>
 		<!-- /dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle  -->
 		<!-- /dtb:dtbook/dtb:book/dtb:frontmatter/dtb:docauthor -->
@@ -152,18 +150,18 @@
 		<xsl:if test="$rear-cover-placement='begin'">
 			<xsl:call-template name="insertCoverCopy"/>
 		</xsl:if>
-		<xsl:if test="*[epub:types(.)=('frontmatter') and not(epub:types(.)=('cover', 'colophon'))]">
+		<xsl:if test="*[epub:types(.)=('frontmatter') and not(epub:types(.)=('cover', 'colophon', 'toc'))]">
 			<sequence master="front" initial-page-number="1">
-				<xsl:apply-templates select="*[epub:types(.)=('frontmatter') and not(epub:types(.)=('cover', 'colophon'))]"/>
+				<xsl:apply-templates select="*[epub:types(.)=('frontmatter') and not(epub:types(.)=('cover', 'colophon', 'toc'))]"/>
 			</sequence>
 		</xsl:if>
 		<sequence master="main" initial-page-number="1">
 			<!-- Put everything that isn't specifically front- or backmatter here. -->
-			<xsl:apply-templates select="text()[normalize-space(.)!='']|processing-instruction()|comment()|*[not(epub:types(.)=('frontmatter', 'cover', 'colophon', 'backmatter'))]"/>
+			<xsl:apply-templates select="text()[normalize-space(.)!='']|processing-instruction()|comment()|*[not(epub:types(.)=('frontmatter', 'cover', 'toc', 'colophon', 'backmatter'))]"/>
 		</sequence>
-		<xsl:if test="*[epub:types(.)=('backmatter')]">
+		<xsl:if test="*[epub:types(.)=('backmatter') and not(epub:types(.)=('toc'))]">
 			<sequence master="main">
-				<xsl:apply-templates select="*[epub:types(.)=('backmatter')]"/>
+				<xsl:apply-templates select="*[epub:types(.)=('backmatter') and not(epub:types(.)=('toc'))]"/>
 			</sequence>
 		</xsl:if>
 		<xsl:if test="not($colophon-metadata-placement='begin')">
@@ -426,4 +424,104 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<!-- TOC is auto-generated (in epub) -->
+	<xsl:template match="*[epub:types(.)=('toc')]"/>
+
+	<xsl:template match="*" mode="toc-entry-attributes">
+		<xsl:attribute name="ref-id" select="generate-id(.)"/>
+		<xsl:attribute name="block-indent" select="$toc-indent-multiplier"/>
+		<xsl:attribute name="text-indent" select="2*$toc-indent-multiplier"/>
+		<xsl:attribute name="keep">page</xsl:attribute>
+		<xsl:apply-templates select="." mode="toc-hd"/>
+	</xsl:template>
+	
+	<xsl:template name="insertToc">
+		<table-of-contents name="full-toc">
+			<xsl:choose>
+				<xsl:when test="//html:*[epub:types(.)=('part')]">
+					<xsl:for-each-group select="//*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][not(ancestor::*[epub:types(.)=('toc', 'titlepage')])]" 
+						group-starting-with="html:h1[ancestor::*[epub:types(.)=('part')]]">
+						<xsl:choose>
+							<xsl:when test="current-group()[1][self::html:h1 and ancestor::*[epub:types(.)=('part')]]">
+								<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/>
+									<xsl:for-each-group select="current-group()[not(self::html:h1 and ancestor::*[epub:types(.)=('part')]) and $toc-depth > 1]" group-starting-with="html:h1[not(ancestor::*[epub:types(.)=('part')])]">
+										<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/>
+											<xsl:call-template name="insertTocLevels">
+												<xsl:with-param name="seq" select="current-group()[not(self::html:h1)]"/>
+												<xsl:with-param name="level-offset" select="1"/>
+											</xsl:call-template>
+										</toc-entry>
+									</xsl:for-each-group>
+								</toc-entry>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:for-each-group select="current-group()" group-starting-with="html:h1">
+									<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/>
+										<xsl:call-template name="insertTocLevels">
+											<xsl:with-param name="seq" select="current-group()[not(self::html:h1)]"></xsl:with-param>
+										</xsl:call-template>
+									</toc-entry>
+								</xsl:for-each-group>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:for-each-group>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:for-each-group select="//*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][not(ancestor::*[epub:types(.)=('cover', 'colophon', 'toc', 'titlepage')])]" group-starting-with="html:h1">
+						<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/>
+								<xsl:call-template name="insertTocLevels">
+									<xsl:with-param name="seq" select="current-group()[not(self::html:h1)]"></xsl:with-param>
+								</xsl:call-template>
+						</toc-entry>
+					</xsl:for-each-group>
+				</xsl:otherwise>
+			</xsl:choose>
+		</table-of-contents>
+	</xsl:template>
+	
+	<xsl:template name="insertTocLevels">
+		<xsl:param name="seq" as="element()*" required="yes"/>
+		<xsl:param name="level-offset" as="xs:integer" select="0"/>
+		<xsl:for-each-group select="$seq[$toc-depth > 1 + $level-offset]" group-starting-with="html:h2">
+			<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/>
+				<xsl:for-each-group select="current-group()[not(self::html:h2) and $toc-depth > 2 + $level-offset]" group-starting-with="html:h3">
+					<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/>
+						<xsl:for-each-group select="current-group()[not(self::html:h3) and $toc-depth > 3 + $level-offset]" group-starting-with="html:h4">
+							<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/>
+								<xsl:for-each-group select="current-group()[not(self::html:h4) and $toc-depth > 4 + $level-offset]" group-starting-with="html:h5">
+									<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/>
+										<xsl:for-each-group select="current-group()[not(self::html:h5) and $toc-depth > 5 + $level-offset]" group-starting-with="html:h6">
+											<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/></toc-entry>
+										</xsl:for-each-group>
+									</toc-entry>
+								</xsl:for-each-group>
+							</toc-entry>
+						</xsl:for-each-group>
+					</toc-entry>
+				</xsl:for-each-group>
+			</toc-entry>
+		</xsl:for-each-group>
+	</xsl:template>
+	
+	<xsl:template match="*" mode="toc-hd">
+		<xsl:apply-templates mode="toc-text"/>
+		<xsl:if test="$show-print-page-numbers">
+			<xsl:text> (</xsl:text><xsl:value-of select="preceding::html:*[@epub:type='pagebreak'][1]/@title"/><xsl:text>)</xsl:text>
+		</xsl:if>
+		<xsl:if test="$show-braille-page-numbers">
+			<xsl:text> </xsl:text><leader position="100%" align="right" pattern="."/><page-number ref-id="{generate-id(.)}">
+				<!-- FIXME: roman numerals <xsl:if test="ancestor::dtb:frontmatter"><xsl:attribute name="number-format">roman</xsl:attribute></xsl:if>--></page-number>
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="*" mode="toc-text">
+		<xsl:apply-templates mode="toc-text"/>
+	</xsl:template>
+	<xsl:template match="text()" mode="toc-text">
+		<xsl:value-of select="."/>
+	</xsl:template>
+	<xsl:template match="html:br" mode="toc-text">
+		<xsl:text> </xsl:text>
+	</xsl:template>
+
 </xsl:stylesheet>
