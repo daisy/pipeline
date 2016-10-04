@@ -181,9 +181,18 @@
 	<xsl:template name="insertCoverCopy">
 		<xsl:copy-of select="obfl:insertBackCoverTextAndRearJacketCopy(//html:*[epub:types(.)=('cover')])"/>
 	</xsl:template>
-	
+
+	<xsl:template match="html:h1[epub:types(parent::*)=('part')]" mode="block-mode">
+		<block>
+			<xsl:apply-templates select="." mode="apply-block-attributes"/>
+			<block><leader position="100%" align="right" pattern=":"/></block>
+			<block margin-left="2" margin-right="2" text-indent="2"><xsl:apply-templates/></block>
+			<block><leader position="100%" align="right" pattern=":"/></block>
+		</block>
+	</xsl:template>
+
 	<xsl:template match="html:h1" mode="apply-block-attributes">
-		<xsl:attribute name="margin-top"><xsl:choose><xsl:when test="$row-spacing=2">2</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:attribute>
+		<xsl:attribute name="margin-top" select="if ($row-spacing=2) then 2 else 3"/>
 		<xsl:attribute name="margin-bottom">1</xsl:attribute>		
 		<xsl:if test="$row-spacing=2">
 			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
@@ -192,19 +201,56 @@
 		<xsl:attribute name="keep">page</xsl:attribute>
 		<xsl:attribute name="keep-with-next">1</xsl:attribute>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
-		<xsl:if test="not($isEpub)">
-			<xsl:attribute name="break-before">page</xsl:attribute>
-			<xsl:attribute name="keep-with-previous-sheets">1</xsl:attribute>
-		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="not($isEpub)">
+				<xsl:attribute name="break-before">page</xsl:attribute>
+			</xsl:when>
+			<xsl:when test="epub:types(parent::*)=('part')">
+				<xsl:attribute name="keep-with-next-sheets">1</xsl:attribute>
+			</xsl:when>
+		</xsl:choose>
 	</xsl:template>
 	
 	<!-- epub only -->
-	<xsl:template match="html:*[parent::html:body and epub:types(.)=('chapter')]" mode="apply-block-attributes">
+	<xsl:template match="html:*[parent::html:body and epub:types(.)=('chapter', 'part')]" mode="apply-block-attributes">
 		<xsl:if test="not(html:h1)">
-			<xsl:attribute name="margin-top"><xsl:choose><xsl:when test="$row-spacing=2">2</xsl:when><xsl:otherwise>3</xsl:otherwise></xsl:choose></xsl:attribute>
+			<xsl:attribute name="margin-top" select="if ($row-spacing=2) then 2 else 3"/>
 		</xsl:if>
 		<xsl:attribute name="break-before">page</xsl:attribute>
 		<xsl:attribute name="keep-with-previous-sheets">1</xsl:attribute>
+		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
+	</xsl:template>
+		
+	<xsl:template match="html:h2" mode="apply-block-attributes">
+		<xsl:attribute name="margin-top" select="if ($row-spacing=2) then 1 else 2"/>
+		<xsl:attribute name="margin-bottom">1</xsl:attribute>
+		<xsl:if test="$row-spacing=2">
+			<xsl:attribute name="border-bottom-style">solid</xsl:attribute>
+			<xsl:attribute name="border-align">inner</xsl:attribute>
+		</xsl:if>
+		<xsl:attribute name="keep">page</xsl:attribute>
+		<xsl:attribute name="keep-with-next">1</xsl:attribute>
+		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
+	</xsl:template>
+	
+	<xsl:template match="html:h3 | html:h4 | html:h5 | html:h6" mode="apply-block-attributes">
+		<xsl:attribute name="margin-top">1</xsl:attribute>
+		<xsl:attribute name="margin-bottom">1</xsl:attribute>		
+		<xsl:attribute name="keep">page</xsl:attribute>
+		<xsl:attribute name="keep-with-next">1</xsl:attribute>
+		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
+	</xsl:template>
+
+	<xsl:template match="html:section" mode="apply-block-attributes">
+		<xsl:variable name="level" select="count(ancestor-or-self::html:section)+1"/>
+		<xsl:choose>
+			<xsl:when test="$level=2 and not(html:h2)">
+				<xsl:attribute name="margin-top" select="if ($row-spacing=2) then 1 else 2"/>
+			</xsl:when>
+			<xsl:when test="not(html:h3 or html:h4 or html:h5 or html:h6)">
+				<xsl:attribute name="margin-top">1</xsl:attribute>
+			</xsl:when>
+		</xsl:choose>
 		<xsl:attribute name="id"><xsl:value-of select="generate-id(.)"/></xsl:attribute>
 	</xsl:template>
 	

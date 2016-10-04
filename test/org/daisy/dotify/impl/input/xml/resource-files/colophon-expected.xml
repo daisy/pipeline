@@ -5,7 +5,7 @@
         </block></sequence><sequence master="plain" initial-page-number="1"><block padding-bottom="1">:: Tryckuppgifter <leader position="100%" pattern=":"/></block><block>
 			<block>Colophon text</block>
 		</block><block><leader position="100%" pattern=":"/></block></sequence><sequence master="plain" initial-page-number="1"><block padding-bottom="1">:: Baksidestext <leader position="100%" pattern=":"/></block><block>
-			<block>
+			<block margin-top="2">
 				<block>Cover text</block>
 			</block>
 		</block><block><leader position="100%" pattern=":"/></block></sequence>
