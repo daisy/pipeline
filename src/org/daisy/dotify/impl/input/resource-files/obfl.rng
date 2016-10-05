@@ -74,6 +74,25 @@
     border-right-style, border right style
     border-width, border width (thin or wide)
   -->
+  <define name="border-style-enum">
+    <choice>
+      <value>none</value>
+      <value>solid</value>
+    </choice>
+  </define>
+  <define name="border-width-enum">
+    <choice>
+      <value>1</value>
+      <value>2</value>
+      <value>3</value>
+      <value>4</value>
+      <value>5</value>
+      <value>6</value>
+      <value>7</value>
+      <value>8</value>
+      <value>9</value>
+    </choice>
+  </define>
   <define name="border-align-enum">
     <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0">
       inner, align border to the inner edge of the character cell
@@ -89,117 +108,52 @@
   <define name="border-atts">
     <optional>
       <attribute name="border-style">
-        <choice>
-          <value>none</value>
-          <value>solid</value>
-        </choice>
+        <ref name="border-style-enum"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="border-bottom-style">
-        <choice>
-          <value>none</value>
-          <value>solid</value>
-        </choice>
+        <ref name="border-style-enum"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="border-left-style">
-        <choice>
-          <value>none</value>
-          <value>solid</value>
-        </choice>
+        <ref name="border-style-enum"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="border-top-style">
-        <choice>
-          <value>none</value>
-          <value>solid</value>
-        </choice>
+        <ref name="border-style-enum"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="border-right-style">
-        <choice>
-          <value>none</value>
-          <value>solid</value>
-        </choice>
+        <ref name="border-style-enum"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="border-width">
-        <choice>
-          <value>1</value>
-          <value>2</value>
-          <value>3</value>
-          <value>4</value>
-          <value>5</value>
-          <value>6</value>
-          <value>7</value>
-          <value>8</value>
-          <value>9</value>
-        </choice>
+        <ref name="border-width-enum"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="border-bottom-width">
-        <choice>
-          <value>1</value>
-          <value>2</value>
-          <value>3</value>
-          <value>4</value>
-          <value>5</value>
-          <value>6</value>
-          <value>7</value>
-          <value>8</value>
-          <value>9</value>
-        </choice>
+        <ref name="border-width-enum"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="border-left-width">
-        <choice>
-          <value>1</value>
-          <value>2</value>
-          <value>3</value>
-          <value>4</value>
-          <value>5</value>
-          <value>6</value>
-          <value>7</value>
-          <value>8</value>
-          <value>9</value>
-        </choice>
+        <ref name="border-width-enum"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="border-top-width">
-        <choice>
-          <value>1</value>
-          <value>2</value>
-          <value>3</value>
-          <value>4</value>
-          <value>5</value>
-          <value>6</value>
-          <value>7</value>
-          <value>8</value>
-          <value>9</value>
-        </choice>
+        <ref name="border-width-enum"/>
       </attribute>
     </optional>
     <optional>
       <attribute name="border-right-width">
-        <choice>
-          <value>1</value>
-          <value>2</value>
-          <value>3</value>
-          <value>4</value>
-          <value>5</value>
-          <value>6</value>
-          <value>7</value>
-          <value>8</value>
-          <value>9</value>
-        </choice>
+        <ref name="border-width-enum"/>
       </attribute>
     </optional>
     <optional>
@@ -272,7 +226,7 @@
     text-indent, indent (in chars) of every line in the block except the first one
     block-indent, indent (in chars) of this block's block children
   -->
-  <define name="block-atts-except-list-type-and-row-spacing">
+  <define name="block-atts-except-list-type-row-spacing-id">
     <optional>
       <attribute name="first-line-indent"/>
     </optional>
@@ -292,16 +246,33 @@
       </attribute>
     </optional>
     <optional>
-      <attribute name="id">
-        <data type="ID"/>
+      <attribute name="underline-style">
+        <ref name="border-style-enum"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="underline-width">
+        <ref name="border-width-enum"/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="underline-align">
+        <ref name="border-align-enum"/>
       </attribute>
     </optional>
     <ref name="textAtts"/>
   </define>
+  <define name="block-id">
+    <optional>
+      <attribute name="id">
+        <data type="ID"/>
+      </attribute>
+    </optional>
+  </define>
   <!--
     list-type, the list type of this block
   -->
-  <define name="block-atts">
+  <define name="list-atts">
     <optional>
       <attribute name="list-type">
         <choice>
@@ -312,8 +283,22 @@
         </choice>
       </attribute>
     </optional>
+  	<optional>
+  		<attribute name="list-style">
+  			<data type="string"/>
+  		</attribute>
+  	</optional>
+  	<optional>
+  		<attribute name="list-item-label">
+  			<data type="string"/>
+  		</attribute>
+  	</optional>
+  </define>
+  <define name="block-atts">
+    <ref name="list-atts"/>
     <ref name="row-spacing"/>
-    <ref name="block-atts-except-list-type-and-row-spacing"/>
+    <ref name="block-atts-except-list-type-row-spacing-id"/>
+    <ref name="block-id"/>
   </define>
   <!--
     break-before, if present, break before block begins
@@ -1172,9 +1157,6 @@
       </attribute>
     </optional>
     <optional>
-      <attribute name="first-line-indent"/>
-    </optional>
-    <optional>
       <attribute name="keep">
         <choice>
           <value>auto</value>
@@ -1231,55 +1213,6 @@
       </attribute>
     </optional>
     <optional>
-      <attribute name="list-type">
-        <choice>
-          <value>none</value>
-          <value>ol</value>
-          <value>ul</value>
-          <value>pl</value>
-        </choice>
-      </attribute>
-    </optional>
-    <optional>
-      <attribute name="margin-bottom"/>
-    </optional>
-    <optional>
-      <attribute name="margin-left"/>
-    </optional>
-    <optional>
-      <attribute name="margin-top"/>
-    </optional>
-    <optional>
-      <attribute name="margin-right"/>
-    </optional>
-    <optional>
-      <attribute name="padding-bottom"/>
-    </optional>
-    <optional>
-      <attribute name="padding-left"/>
-    </optional>
-    <optional>
-      <attribute name="padding-top"/>
-    </optional>
-    <optional>
-      <attribute name="padding-right"/>
-    </optional>
-    <optional>
-      <attribute name="text-indent"/>
-    </optional>
-    <optional>
-      <attribute name="block-indent"/>
-    </optional>
-    <optional>
-      <attribute name="align">
-        <choice>
-          <value>left</value>
-          <value>center</value>
-          <value>right</value>
-        </choice>
-      </attribute>
-    </optional>
-    <optional>
       <attribute name="vertical-align">
         <choice>
           <value>before</value>
@@ -1292,8 +1225,11 @@
       <attribute name="vertical-position"/>
     </optional>
     <ref name="row-spacing"/>
+    <ref name="list-atts"/>
+    <ref name="block-atts-except-list-type-row-spacing-id"/>
+    <ref name="margin-atts"/>
+    <ref name="padding-atts"/>
     <ref name="border-atts"/>
-    <ref name="textAtts"/>
   </define>
   <define name="span">
     <element name="span">
@@ -1497,7 +1433,8 @@
     </optional>
     <ref name="border-atts"/>
     <ref name="padding-atts"/>
-    <ref name="block-atts-except-list-type-and-row-spacing"/>
+    <ref name="block-atts-except-list-type-row-spacing-id"/>
+    <ref name="block-id"/>
   </define>
   <!-- XML Data -->
   <define name="xml-data">
