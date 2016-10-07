@@ -27,7 +27,6 @@ public class Epub3InputManager implements TaskGroup {
 	public List<InternalTask> compile(Map<String, Object> parameters) throws TaskSystemException {
 		List<InternalTask> ret = new ArrayList<>();
 		ret.add(new Epub3Task("Epub to HTML converter", (String)parameters.get("opf-path")));
-		ret.addAll(xml.compile(parameters));
 		return ret;
 	}
 

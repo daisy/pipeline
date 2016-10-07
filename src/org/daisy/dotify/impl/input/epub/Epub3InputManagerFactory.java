@@ -21,7 +21,7 @@ public class Epub3InputManagerFactory implements TaskGroupFactory {
 		this.locator = XMLL10nResourceLocator.getInstance();
 		this.supportedSpecifications = new HashSet<>();
 		for (String locale : locator.listSupportedLocales()) {
-			supportedSpecifications.add(new TaskGroupSpecification("epub", "obfl", locale));
+			supportedSpecifications.add(new TaskGroupSpecification("epub", "html", locale));
 		}
 	}
 

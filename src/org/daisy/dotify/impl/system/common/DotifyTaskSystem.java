@@ -1,23 +1,27 @@
 package org.daisy.dotify.impl.system.common;
 
-import java.io.File;
+import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.logging.Logger;
 
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
-import org.daisy.dotify.api.tasks.InternalTask;
+import org.daisy.dotify.api.tasks.CompiledTaskSystem;
+import org.daisy.dotify.api.tasks.DefaultCompiledTaskSystem;
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
 import org.daisy.dotify.api.tasks.TaskGroupSpecification;
+import org.daisy.dotify.api.tasks.TaskGroupSpecification.Type;
 import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.api.tasks.TaskSystem;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
-import org.daisy.dotify.impl.input.DuplicatorTask;
 import org.daisy.dotify.impl.input.Keys;
-import org.daisy.dotify.impl.input.LayoutEngine;
 
 
 /**
@@ -34,16 +38,11 @@ import org.daisy.dotify.impl.input.LayoutEngine;
  * @author Joel Håkansson
  */
 public class DotifyTaskSystem implements TaskSystem {
-	/**
-	 * Specifies a location where the intermediary obfl output should be stored
-	 */
-	final static String OBFL_OUTPUT_LOCATION = "obfl-output-location";
+	private static final Logger logger = Logger.getLogger(DotifyTaskSystem.class.getCanonicalName());
 	private final String outputFormat;
 	private final String context;
 	private final String name;
 	private final TaskGroupFactoryMakerService imf;
-	private final PagedMediaWriterFactoryMakerService pmw;
-	private final FormatterEngineFactoryService fe;
 	
 	public DotifyTaskSystem(String name, String outputFormat, String context,
 			TaskGroupFactoryMakerService imf, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe) {
@@ -51,17 +50,15 @@ public class DotifyTaskSystem implements TaskSystem {
 		this.outputFormat = outputFormat;
 		this.name = name;
 		this.imf = imf;
-		this.pmw = pmw;
-		this.fe = fe;
 	}
 	
 	@Override
 	public String getName() {
 		return name;
 	}
-
+	
 	@Override
-	public List<InternalTask> compile(Map<String, Object> pa) throws TaskSystemException {
+	public CompiledTaskSystem compile(Map<String, Object> pa) throws TaskSystemException {
 		RunParameters p = RunParameters.fromMap(pa);
 		HashMap<String, Object> h = new HashMap<>();
 		for (Object key : p.getKeys()) {
@@ -70,27 +67,116 @@ public class DotifyTaskSystem implements TaskSystem {
 			}
 		}
 		
-		List<InternalTask> setup = new ArrayList<>();
+		DefaultCompiledTaskSystem setup = new DefaultCompiledTaskSystem(name, getOptions());
+		String inputFormat = h.get(Keys.INPUT_FORMAT).toString();
 
-		TaskGroup idts = imf.newTaskGroup(new TaskGroupSpecification(h.get(Keys.INPUT_FORMAT).toString(), "obfl", context));
-		setup.addAll(idts.compile(h));
-
-		String keep = (String)h.get(OBFL_OUTPUT_LOCATION);
-		if (keep!=null && !"".equals(keep)) {
-			setup.add(new DuplicatorTask("OBFL archiver", new File(keep)));
-		}
-
-		if (!Keys.OBFL_FORMAT.equals(outputFormat)) {
-			setup.addAll(new LayoutEngine(new TaskGroupSpecification("obfl", outputFormat, context), pmw, fe).compile(h));
+		logger.info("Finding path...");
+		for (TaskGroupSpecification spec : getPath(imf, new TaskGroupSpecification(inputFormat, outputFormat, context), pa)) {
+			TaskGroup g = imf.newTaskGroup(spec);
+			if (spec.getType()==Type.ENHANCE) {
+				// For enhance, only include the options required to enable the task group. Once enabled,
+				// additional options may be presented
+				for (TaskOption o : spec.getRequiredOptions()) {
+					setup.addOption(o);
+				}
+			}
+			if (spec.getType()==Type.CONVERT || matchesRequiredOptions(spec, pa, false)) {
+				//TODO: these options should be on the group level instead of on the system level
+				List<TaskOption> opts = g.getOptions();
+				if (opts!=null) {
+					for (TaskOption o : opts) {
+						setup.addOption(o);
+					}
+				}
+				setup.addAll(g.compile(h));				
+			}
 		}
 		return setup;
 	}
 
 	@Override
 	public List<TaskOption> getOptions() {
-		List<TaskOption> ret = new ArrayList<>();
-		ret.add(new TaskOption.Builder(OBFL_OUTPUT_LOCATION).description("Path to store intermediary OBFL-file.").build());
+		return Collections.emptyList();
+	}
+	
+	/**
+	 * Finds a path for the given specifications
+	 * @param input the input format
+	 * @param output the output format
+	 * @param locale the target locale
+	 * @param parameters the parameters
+	 * @return returns a list of task groups
+	 */
+	static List<TaskGroupSpecification> getPath(TaskGroupFactoryMakerService imf, TaskGroupSpecification def, Map<String, Object> parameters) {
+		Set<TaskGroupSpecification> specs = imf.listSupportedSpecifications();
+		Map<String, List<TaskGroupSpecification>> byInput = byInput(specs);
+
+		return getPathSpecifications(def.getInputFormat(), def.getOutputFormat(), def.getLocale(), parameters, byInput, 0);
+	}
+	
+	static List<TaskGroupSpecification> getPathSpecifications(String input, String output, String locale, Map<String, Object> parameters, Map<String, List<TaskGroupSpecification>> inputs, int i) {
+		Map<String, List<TaskGroupSpecification>> byInput = new HashMap<>(inputs);
+		TaskGroupSpecificationFilter candidates = TaskGroupSpecificationFilter.filterLocaleGroupByType(byInput.remove(input), locale);
+		
+		for (TaskGroupSpecification candidate : candidates.getConvert()) {
+			if (candidate.getOutputFormat().equals(output)) {
+				logger.info("Evaluating " + input + " -> " + candidate.getOutputFormat() + " (D:"+i+")");
+				List<TaskGroupSpecification> path = new ArrayList<>();
+				path.addAll(candidates.getEnhance());
+				path.add(candidate);
+				return path;
+			} else {
+				logger.info("Evaluating " + input + " -> " + candidate.getOutputFormat() + " (D:"+i+")");
+				List<TaskGroupSpecification> path2 = getPathSpecifications(candidate.getOutputFormat(), output, locale, parameters, byInput, i+1);
+				if (!path2.isEmpty()) {
+					List<TaskGroupSpecification> path = new ArrayList<>();
+					path.addAll(candidates.getEnhance());
+					path.add(candidate);
+					path.addAll(path2);
+					return path;
+				}
+			}
+		}
+		return Collections.emptyList();
+	}
+	
+	static boolean matchesRequiredOptions(TaskGroupSpecification candidate, Map<String, Object> parameters, boolean emptyReturn) {
+		if (candidate.getRequiredOptions().isEmpty()) {
+			return emptyReturn;
+		}
+		for (TaskOption option : candidate.getRequiredOptions()) {
+			String key = option.getKey();
+			if (!parameters.containsKey(key)) {
+				return false;
+			} else {
+				Object value = parameters.get(key);
+				if (!option.acceptsValue(value.toString())) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	static Map<String, List<TaskGroupSpecification>> byInput(Set<TaskGroupSpecification> specs) {
+		Map<String, List<TaskGroupSpecification>> ret = new HashMap<>();
+		for (TaskGroupSpecification spec : specs) {
+			List<TaskGroupSpecification> group = ret.get(spec.getInputFormat());
+			if (group==null) {
+				group = new ArrayList<>();
+				ret.put(spec.getInputFormat(), group);
+			}
+			group.add(spec);
+		}
 		return ret;
 	}
-
+	
+	static void listSpecs(PrintStream out, Map<String, List<TaskGroupSpecification>> specs) {
+		for (Entry<String, List<TaskGroupSpecification>> entry : specs.entrySet()) {
+			out.println(entry.getKey());
+			for (TaskGroupSpecification spec : entry.getValue()) {
+				out.println("  " + spec.getInputFormat() + " -> " + spec.getOutputFormat() + " (" + spec.getLocale() + ")");
+			}
+		}
+	}
 }

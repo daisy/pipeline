@@ -26,6 +26,7 @@ import org.daisy.dotify.common.io.ResourceLocatorException;
 import org.daisy.dotify.common.xml.XMLInfo;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
+import org.daisy.dotify.impl.input.DuplicatorTask;
 import org.daisy.dotify.impl.input.Keys;
 import org.daisy.dotify.impl.input.ValidatorTask;
 import org.daisy.dotify.impl.input.XsltTask;
@@ -59,6 +60,10 @@ import org.daisy.dotify.impl.input.XsltTask;
  *
  */
 public class XMLInputManager implements TaskGroup {
+	/**
+	 * Specifies a location where the intermediary obfl output should be stored
+	 */
+	static final String OBFL_OUTPUT_LOCATION = "obfl-output-location";
 	private final static String TEMPLATES_PATH = "templates/";
 	private final static String LOCALIZATION_PROPS = "localization.xml";
 	private final ResourceLocator localLocator;
@@ -100,7 +105,11 @@ public class XMLInputManager implements TaskGroup {
 		
 		List<InternalTask> ret = new ArrayList<>();
 		ret.add(new XMLExpandingTask(template, makeXSLTParams(parameters)));
-		
+
+		String keep = (String)parameters.get(OBFL_OUTPUT_LOCATION);
+		if (keep!=null && !"".equals(keep)) {
+			ret.add(new DuplicatorTask("OBFL archiver", new File(keep)));
+		}
 		return ret;
 	}
 	
@@ -249,7 +258,9 @@ public class XMLInputManager implements TaskGroup {
 
 	@Override
 	public List<TaskOption> getOptions() {
-		return null;
+		List<TaskOption> ret = new ArrayList<>();
+		ret.add(new TaskOption.Builder(OBFL_OUTPUT_LOCATION).description("Path to store intermediary OBFL-file.").build());
+		return ret;
 	}
 
 }
