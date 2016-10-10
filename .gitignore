@@ -2,6 +2,7 @@
 /.maven-modules
 /.maven-workspace/
 /.maven-cache/
+.maven-test*
 /maven.log
 /.gradle/
 /.gradle-modules
@@ -13,3 +14,4 @@
 .settings/
 .DS_Store
 target/
+
