@@ -1,6 +1,13 @@
 /bom.xml
 /.maven-modules
+/.maven-workspace/
+/.maven-cache/
+/maven.log
 /.gradle/
+/.gradle-modules
+/.gradle-settings/
+/*.zip
+/*.deb
 .classpath
 .project
 .settings/
