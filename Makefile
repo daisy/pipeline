@@ -269,6 +269,7 @@ gradle-test gradle-install maven-test maven-install bom.xml : workspace
 workspace : $(MVN_WORKSPACE)
 
 $(MVN_WORKSPACE) :
+	mkdir -p $(MVN_CACHE)
 	cp -r $(MVN_CACHE) $@
 
 .PHONY : cache
