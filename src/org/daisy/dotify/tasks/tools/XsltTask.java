@@ -1,4 +1,4 @@
-package org.daisy.dotify.impl.input;
+package org.daisy.dotify.tasks.tools;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

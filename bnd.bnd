@@ -2,6 +2,8 @@
 	javax.xml.stream
 Import-Package:  \
 	org.daisy.dotify.api.tasks; provide:=true, *
+Export-Package:  \
+	org.daisy.dotify.tasks.tools
 Private-Package: \
 	org.daisy.dotify.impl.input,\
 	org.daisy.dotify.impl.input.epub,\

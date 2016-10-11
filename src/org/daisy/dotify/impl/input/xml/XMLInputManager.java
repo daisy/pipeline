@@ -29,7 +29,7 @@ import org.daisy.dotify.common.xml.XMLToolsException;
 import org.daisy.dotify.impl.input.DuplicatorTask;
 import org.daisy.dotify.impl.input.Keys;
 import org.daisy.dotify.impl.input.ValidatorTask;
-import org.daisy.dotify.impl.input.XsltTask;
+import org.daisy.dotify.tasks.tools.XsltTask;
 
 /**
  * <p>Provides a method to determine the input format and load the 

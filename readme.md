@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.org/brailleapps/dotify.task.impl.svg?branch=master)](https://travis-ci.org/brailleapps/dotify.task.impl)
 [![Type](https://img.shields.io/badge/type-provider_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
+Note: This is a provider bundle, but it currently exports some classes that can be used by other bundles to extend the functionality
+provided. These classes may be moved to a separate library bundle in the future.
+
 # dotify.task.impl #
 Provides implementations for converting:
 - DTBook, epub, html, xml and text to OBFL
