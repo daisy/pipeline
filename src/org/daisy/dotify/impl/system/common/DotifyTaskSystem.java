@@ -111,29 +111,37 @@ public class DotifyTaskSystem implements TaskSystem {
 		Set<TaskGroupSpecification> specs = imf.listSupportedSpecifications();
 		Map<String, List<TaskGroupSpecification>> byInput = byInput(specs);
 
-		return getPathSpecifications(def.getInputFormat(), def.getOutputFormat(), def.getLocale(), parameters, byInput, 0);
+		return getPathSpecifications(def.getInputFormat(), def.getOutputFormat(), def.getLocale(), byInput);
 	}
 	
-	static List<TaskGroupSpecification> getPathSpecifications(String input, String output, String locale, Map<String, Object> parameters, Map<String, List<TaskGroupSpecification>> inputs, int i) {
-		Map<String, List<TaskGroupSpecification>> byInput = new HashMap<>(inputs);
-		TaskGroupSpecificationFilter candidates = TaskGroupSpecificationFilter.filterLocaleGroupByType(byInput.remove(input), locale);
+	/**
+	 * Gets the shortest path that matches the specification (breadth-first search)
+	 * @param input the input format
+	 * @param output the output format
+	 * @param locale the locale
+	 * @param inputs a list of specifications ordered by input format
+	 * @return returns the shortest path
+	 */
+	static List<TaskGroupSpecification> getPathSpecifications(String input, String output, String locale, Map<String, List<TaskGroupSpecification>> inputs) {
+		// queue root
+		List<QueueInfo> queue = new ArrayList<>();
+		queue.add(new QueueInfo(locale, new HashMap<>(inputs).remove(input), new ArrayList<TaskGroupSpecification>()));
 		
-		for (TaskGroupSpecification candidate : candidates.getConvert()) {
-			if (candidate.getOutputFormat().equals(output)) {
-				logger.info("Evaluating " + input + " -> " + candidate.getOutputFormat() + " (D:"+i+")");
-				List<TaskGroupSpecification> path = new ArrayList<>();
-				path.addAll(candidates.getEnhance());
-				path.add(candidate);
-				return path;
-			} else {
-				logger.info("Evaluating " + input + " -> " + candidate.getOutputFormat() + " (D:"+i+")");
-				List<TaskGroupSpecification> path2 = getPathSpecifications(candidate.getOutputFormat(), output, locale, parameters, byInput, i+1);
-				if (!path2.isEmpty()) {
-					List<TaskGroupSpecification> path = new ArrayList<>();
-					path.addAll(candidates.getEnhance());
-					path.add(candidate);
-					path.addAll(path2);
-					return path;
+		while (!queue.isEmpty()) {
+			QueueInfo current = queue.remove(0);
+			for (TaskGroupSpecification candidate : current.getCandidates().getConvert()) {
+				logger.info("Evaluating " + candidate.getInputFormat() + " -> " + candidate.getOutputFormat());
+				if (candidate.getOutputFormat().equals(output)) {
+					List<TaskGroupSpecification> ret = new ArrayList<>(current.getSpecs());
+					ret.addAll(current.getCandidates().getEnhance());
+					ret.add(candidate);
+					return ret;
+				} else {
+					// add for later evaluation
+					QueueInfo info = new QueueInfo(locale, new HashMap<>(inputs).remove(candidate.getOutputFormat()), current.getSpecs());
+					info.getSpecs().addAll(current.getCandidates().getEnhance());
+					info.getSpecs().add(candidate);
+					queue.add(info);
 				}
 			}
 		}
