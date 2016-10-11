@@ -16,6 +16,8 @@ import CSSParser;
     }
 }
 
+// @Override
+// Added volume
 unknown_atrule
     : volume
     | ATKEYWORD S* LCURLY any* RCURLY -> INVALID_ATSTATEMENT
@@ -35,6 +37,8 @@ volume_area
       -> ^(VOLUME_AREA declarations)
     ;
 
+// @Override
+// Added :not() and :has()
 pseudo
     : pseudocolon^ (
         MINUS? IDENT
@@ -47,17 +51,25 @@ pseudo
      retval.tree = gCSSParser.tnr.invalidFallback(INVALID_SELPART, "INVALID_SELPART", re);
   }
 
+/*
+ * Relative selector
+ * (https://drafts.csswg.org/selectors-4/#relative-selector), used in
+ * relational pseudo-class
+ * (https://drafts.csswg.org/selectors-4/#relational)
+ */
 relative_selector
     : combinator_selector (combinator selector)* -> ASTERISK combinator_selector (combinator selector)*
     ;
 
 combinator_selector
     : selector -> DESCENDANT selector
-	| GREATER S* selector -> CHILD selector
-	| PLUS S* selector -> ADJACENT selector
-	| TILDE S* selector -> PRECEDING selector
+    | GREATER S* selector -> CHILD selector
+    | PLUS S* selector -> ADJACENT selector
+    | TILDE S* selector -> PRECEDING selector
     ;
 
+// @Override
+// Allow only single pseudo instead of comma-separated
 inlineset
     : (pseudo+ S*)?
       LCURLY S*
@@ -66,6 +78,7 @@ inlineset
       -> ^(RULE pseudo* declarations)
     ;
 
+// @Override
 /*
  * The COLON recognized as the start of an invalid property (which is
  * used in some nasty CSS hacks) conflicts with the COLON in the
@@ -96,6 +109,9 @@ noprop
     ) !S*
     ;
 
+/*
+ * Simple list of declarations.
+ */
 simple_inlinestyle
     : S* (declarations -> ^(INLINESTYLE declarations))
     ;
