@@ -20,7 +20,7 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>jstyleparser</artifactId>
-      <version>1.20-p9</version>
+      <version>1.20-p10-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>

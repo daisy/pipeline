@@ -22,6 +22,10 @@
       <artifactId>css-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.braille</groupId>
+      <artifactId>braille-css</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>common-utils</artifactId>
     </dependency>
@@ -64,6 +68,10 @@
         test dependencies
     -->
     <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>io.bit3.jsass</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-daisy-pipeline</artifactId>
       <scope>test</scope>
@@ -96,7 +104,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -140,6 +147,41 @@
         </executions>
       </plugin>
     </plugins>
+    <pluginManagement>
+    	<plugins>
+    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+    		<plugin>
+    			<groupId>org.eclipse.m2e</groupId>
+    			<artifactId>lifecycle-mapping</artifactId>
+    			<version>1.0.0</version>
+    			<configuration>
+    				<lifecycleMappingMetadata>
+    					<pluginExecutions>
+    						<pluginExecution>
+    							<pluginExecutionFilter>
+    								<groupId>
+    									org.daisy.pipeline.modules.braille
+    								</groupId>
+    								<artifactId>
+    									build-helper
+    								</artifactId>
+    								<versionRange>
+    									[1.1.1,)
+    								</versionRange>
+    								<goals>
+    									<goal>process-catalog</goal>
+    								</goals>
+    							</pluginExecutionFilter>
+    							<action>
+    								<ignore></ignore>
+    							</action>
+    						</pluginExecution>
+    					</pluginExecutions>
+    				</lifecycleMappingMetadata>
+    			</configuration>
+    		</plugin>
+    	</plugins>
+    </pluginManagement>
   </build>
   
 </project>
