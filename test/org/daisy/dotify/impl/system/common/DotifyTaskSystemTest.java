@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskGroupSpecification;
@@ -15,18 +14,6 @@ import org.daisy.dotify.consumer.tasks.TaskGroupFactoryMaker;
 import org.junit.Test;
 public class DotifyTaskSystemTest {
 
-	public DotifyTaskSystemTest() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	@Test
-	public void notAnActualTest() {
-		Set<TaskGroupSpecification> specs = TaskGroupFactoryMaker.newInstance().listSupportedSpecifications();
-		Map<String, List<TaskGroupSpecification>> byInput = DotifyTaskSystem.byInput(specs);
-		//DotifyTaskSystem.getPathSpecifications("dtbook", "pef", "sv-SE", new HashMap<String, Object>(), specs);
-		DotifyTaskSystem.listSpecs(System.out, byInput);
-	}
-	
 	@Test
 	public void testPath_01() {
 		TaskGroupSpecification spec = new TaskGroupSpecification("dtbook", "pef", "sv-SE");

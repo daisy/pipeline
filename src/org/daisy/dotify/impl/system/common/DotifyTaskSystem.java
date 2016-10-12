@@ -1,12 +1,10 @@
 package org.daisy.dotify.impl.system.common;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -178,13 +176,5 @@ public class DotifyTaskSystem implements TaskSystem {
 		}
 		return ret;
 	}
-	
-	static void listSpecs(PrintStream out, Map<String, List<TaskGroupSpecification>> specs) {
-		for (Entry<String, List<TaskGroupSpecification>> entry : specs.entrySet()) {
-			out.println(entry.getKey());
-			for (TaskGroupSpecification spec : entry.getValue()) {
-				out.println("  " + spec.getInputFormat() + " -> " + spec.getOutputFormat() + " (" + spec.getLocale() + ")");
-			}
-		}
-	}
+
 }
