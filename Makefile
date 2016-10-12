@@ -87,6 +87,7 @@ $(MAVEN_DIR)/modules : $(MAVEN_DIR)/pom.xml
 	rm -rf $@
 	mkdir -p $@
 	cd $(dir $<) && mvn --quiet \
+	                    $(MVN_OPTS) \
 	                    "dependency:unpack-dependencies" \
 	                    -Dclassifier=doc -DexcludeTransitive -Dmdep.unpack.excludes='META-INF,META-INF/**/*' \
 	                    -Dmdep.useRepositoryLayout
