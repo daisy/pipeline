@@ -1,12 +1,11 @@
 ---
-layout: default
-title: "DAISY Pipeline 2"
+layout: home
+title: Home
 ---
 # DAISY Pipeline 2
 
 Welcome to the DAISY Pipeline 2 website!
 
-Go to:
-
-* [wiki](wiki/Home.md)
-* [script documentation](scripts.md)
+* [Get Help](Get_Help)
+* [Contribute](Contribute)
+* [Download](Download)

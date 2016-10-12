@@ -1,0 +1,8 @@
+- /index.html
+- group: /Get_Help/index.html
+  pages: 
+    - /Get_Help/User_Guide.html
+- group: /Contribute/index.html
+  pages:
+    - /Contribute/Developer_Guide.html
+- /Download.html
