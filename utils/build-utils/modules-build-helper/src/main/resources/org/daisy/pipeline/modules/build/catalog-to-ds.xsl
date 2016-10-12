@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:cat="urn:oasis:names:tc:entity:xmlns:xml:catalog"
     xmlns:px="http://www.daisy.org/ns/pipeline" xmlns:pxd="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://www.daisy.org/ns/pipeline/doc"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:c="http://www.w3.org/ns/xproc-step"
     exclude-result-prefixes="#all" version="2.0">
 
     <xsl:param name="outputDir" required="no" select="''" as="xs:string"/>
@@ -12,7 +12,7 @@
     <xsl:template match="/">
         
 
-        <xsl:result-document href="{$outputDir}/bnd.bnd" method="text" xml:space="preserve">
+        <xsl:result-document href="{$outputDir}/bnd.bnd" method="text" xml:space="preserve"><c:data>
 <xsl:if test="//cat:nextCatalog">Require-Bundle: <xsl:value-of select="string-join(//cat:nextCatalog/translate(@catalog,':','.'),',')"/></xsl:if>
 <xsl:if test="string(//cat:uri[@px:script]) or //cat:uri[@px:data-type]">
         Service-Component: <xsl:value-of select="string-join((//cat:uri[@px:script]/concat('OSGI-INF/',replace(document(@uri,..)/*/@type,'.*:',''),'.xml'),//cat:uri[@px:data-type]/concat('OSGI-INF/',replace(document(@uri,..)/*/@id,'.*:',''),'.xml')),',')"/></xsl:if>
@@ -23,7 +23,7 @@
         Import-Package: org.daisy.pipeline.script,*</xsl:if>
 <xsl:if test="//cat:uri[@px:script] and //cat:uri[@px:data-type]">
         Import-Package: org.daisy.pipeline.script,org.daisy.pipeline.datatypes,*</xsl:if>
-        </xsl:result-document>
+        </c:data></xsl:result-document>
         <xsl:apply-templates mode="ds"/>
     </xsl:template>
     <xsl:template match="cat:uri[@px:script]" mode="ds">
