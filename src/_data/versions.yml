@@ -1,2 +1,3 @@
-assembly: 1.9.15
+# depends on branch "doc"
+assembly: 1.10-beta2-SNAPSHOT
 css-spec: 20160801
