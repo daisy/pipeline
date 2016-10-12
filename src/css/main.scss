@@ -7,6 +7,20 @@ h1 {
 	border-bottom: 1px solid grey;
 }
 
-nav#spine {
+nav {
 	border-bottom: 1px solid grey;
+}
+
+ul.spine {
+	display: none;
+	&.spine-has-current {
+		display: block;
+	}
+	> li.spine-item {
+		&.spine-item-current {
+			> ul.spine {
+				display: block;
+			}
+		}
+	}
 }
