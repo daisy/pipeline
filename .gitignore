@@ -10,3 +10,11 @@
 .DS_Store
 /*.zip
 /*.deb
+.gradle-install
+.gradle-test
+
+eclipse/
+eclipse/*
+.project
+.settings/
+.classpath

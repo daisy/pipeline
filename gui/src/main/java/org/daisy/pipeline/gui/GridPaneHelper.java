@@ -309,8 +309,10 @@ public class GridPaneHelper extends GridPane {
 
                 MarkdownToJavafx mdToFx = new MarkdownToJavafx(this.getJavaFxParent(flow));
                 PegDownProcessor mdProcessor = new PegDownProcessor();
-                 RootNode node = mdProcessor.parseMarkdown(answer.getField().getDescription().toCharArray());
-                node.accept(mdToFx);
+                if (answer.getField().getDescription() != null) {
+                	RootNode node = mdProcessor.parseMarkdown(answer.getField().getDescription().toCharArray());
+                	node.accept(mdToFx);
+                }
                 parent.getChildren().add(flow);
                 flow.setMaxWidth(200);
                 //helpText = helpText.trim();
