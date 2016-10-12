@@ -37,7 +37,10 @@ Dir.glob(ARGV[0]).each do |f|
       end
     end
     if not title
-      title = File.basename(f, '.*')
+      title = File.basename(f, '.*').sub('_', ' ')
+      if title == 'index'
+        title = File.basename(File.expand_path('..', f)).sub('_', ' ')
+      end
     end
     graph.data.insert(RDF::Statement.new(page_url, TITLE, title))
   end
