@@ -1,14 +1,18 @@
 JEKYLL_SRC_DIR := src
 JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/_wiki -type f)
-JEKYLL_SRC_FILES_OTHER := $(filter-out $(JEKYLL_SRC_FILES_CONTENT),$(shell find $(JEKYLL_SRC_DIR) -type f))
+JEKYLL_SRC_FILES_MUSTACHE := $(shell find $(JEKYLL_SRC_DIR)/_data/_spines/ -type f -name '*.yml')
+JEKYLL_SRC_FILES_OTHER := $(filter-out $(JEKYLL_SRC_FILES_CONTENT) $(JEKYLL_SRC_FILES_MUSTACHE),\
+                                       $(shell find $(JEKYLL_SRC_DIR) -type f))
 JEKYLL_DIR := target/jekyll
 JEKYLL_FILES_CONTENT := $(patsubst $(JEKYLL_SRC_DIR)/%,$(JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_CONTENT))
+JEKYLL_FILES_MUSTACHE := $(patsubst $(JEKYLL_SRC_DIR)/%,$(JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_MUSTACHE))
 JEKYLL_FILES_OTHER := $(patsubst $(JEKYLL_SRC_DIR)/%,$(JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_OTHER))
-JEKYLL_FILES := $(JEKYLL_FILES_CONTENT) $(JEKYLL_FILES_OTHER)
+JEKYLL_FILES := $(JEKYLL_FILES_CONTENT) $(JEKYLL_FILES_MUSTACHE) $(JEKYLL_FILES_OTHER)
 META_JEKYLL_DIR := target/meta/jekyll
 META_JEKYLL_FILES_CONTENT := $(patsubst $(JEKYLL_SRC_DIR)/%,$(META_JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_CONTENT))
+META_JEKYLL_FILES_MUSTACHE := $(patsubst $(JEKYLL_SRC_DIR)/%,$(META_JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_MUSTACHE))
 META_JEKYLL_FILES_OTHER := $(patsubst $(JEKYLL_SRC_DIR)/%,$(META_JEKYLL_DIR)/%,$(JEKYLL_SRC_FILES_OTHER))
-META_JEKYLL_FILES := $(META_JEKYLL_FILES_CONTENT) $(META_JEKYLL_FILES_OTHER)
+META_JEKYLL_FILES := $(META_JEKYLL_FILES_CONTENT) $(META_JEKYLL_FILES_MUSTACHE) $(META_JEKYLL_FILES_OTHER)
 MAVEN_DIR := target/maven
 MUSTACHE_DIR := target/mustache
 CONFIG_FILE := $(JEKYLL_SRC_DIR)/_config.yml
@@ -30,6 +34,11 @@ $(JEKYLL_FILES_CONTENT) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
 	eval "$$(echo 'newline="'; echo '"')"; \
 	echo "---$${newline}---" | cat - $< >$@
+
+$(JEKYLL_FILES_MUSTACHE) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(JEKYLL_DIR)/$(meta_file)
+	mkdir -p $(dir $@)
+	cp $< $@
+	make/mustache.rb $@ $(word 2,$^) $(JEKYLL_DIR) $(CONFIG_FILE)
 
 $(JEKYLL_FILES_OTHER) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
@@ -59,6 +68,11 @@ $(META_JEKYLL_FILES_CONTENT) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
 	eval "$$(echo 'newline="'; echo '"')"; \
 	echo "---$${newline}---" | cat - $< >$@
+
+$(META_JEKYLL_FILES_MUSTACHE) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(META_JEKYLL_DIR)/$(meta_file)
+	mkdir -p $(dir $@)
+	cp $< $@
+	make/mustache.rb $@ $(word 2,$^) $(META_JEKYLL_DIR) $(CONFIG_FILE)
 
 $(META_JEKYLL_FILES_OTHER) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
