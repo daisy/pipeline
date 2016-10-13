@@ -255,7 +255,6 @@ default:
 caption {
   display: if($include-captions, block, none);
 }
-
 ```</p>
         </p:documentation>
     </p:option>
@@ -427,19 +426,17 @@ IDs of the heading elements from which the list was constructed, and the content
 exact copies of the content of the heading elements. By default the list is not rendered. The list
 should be styled and positioned with CSS. The following rules are included by default:
 
-```
-#generated-document-toc {
-  flow: document-toc;
-  display: -obfl-toc;
-  -obfl-toc-range: document;
-}
-
-#generated-volume-toc {
-  flow: volume-toc;
-  display: -obfl-toc;
-  -obfl-toc-range: volume;
-}
-```
+    #generated-document-toc {
+      flow: document-toc;
+      display: -obfl-toc;
+      -obfl-toc-range: document;
+    }
+    
+    #generated-volume-toc {
+      flow: volume-toc;
+      display: -obfl-toc;
+      -obfl-toc-range: volume;
+    }
 
 This means that a document range table of contents is added to the named flow called "document-toc",
 and a volume range table of contents is added to the named flow called "volume-toc". In order to
@@ -447,19 +444,17 @@ consume these named flows use the function `flow()`. For example, to position th
 table of contents at the beginning of the first volume, and to repeat the volume range table of
 content at the beginning of every other volume, include the following additional rules:
 
-```
-@volume {
-  @begin {
-    content: flow(volume-toc);
-  }
-}
-
-@volume:first {
-  @begin {
-    content: flow(document-toc);
-  }
-}
-```
+    @volume {
+      @begin {
+        content: flow(volume-toc);
+      }
+    }
+    
+    @volume:first {
+      @begin {
+        content: flow(document-toc);
+      }
+    }
 </p>
         </p:documentation>
     </p:option>

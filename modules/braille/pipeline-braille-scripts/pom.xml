@@ -18,7 +18,7 @@
   <name>DP2 Braille Scripts :: Aggregator POM</name>
 
   <modules>
-    <!-- <module>xml-to-pef</module> -->
+    <module>xml-to-pef</module>
     <module>epub3-to-pef</module>
     <module>html-to-pef</module>
     <module>dtbook-to-pef</module>
