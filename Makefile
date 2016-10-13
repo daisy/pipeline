@@ -32,7 +32,20 @@ dist-deb : compile
 	mv assembly/target/*.deb .
 
 .PHONY : run
-run : compile
+run : assembly/target/dev-launcher/bin/pipeline2
+	$<
+
+.PHONY : run-gui
+run-gui : assembly/target/dev-launcher/bin/pipeline2
+	$< gui
+
+.PHONY : check
+check : gradle-test maven-test
+
+.PHONY : compile
+compile : gradle-install maven-install
+
+assembly/target/dev-launcher/bin/pipeline2 : compile
 	cd assembly && \
 	$(MVN) clean package -Pdev-launcher | $(MVN_LOG)
 	rm assembly/target/dev-launcher/etc/*windows*
@@ -41,13 +54,6 @@ run : compile
 	else \
 		rm assembly/target/dev-launcher/etc/*mac*; \
 	fi
-	assembly/target/dev-launcher/bin/pipeline2
-
-.PHONY : check
-check : gradle-test maven-test
-
-.PHONY : compile
-compile : gradle-install maven-install
 
 .PHONY: maven-test
 maven-test : .maven-modules-test
@@ -306,6 +312,8 @@ help :
 	echo "	Incrementally compile code and package into a DEB"                                      >&2
 	echo "make run:"                                                                                >&2
 	echo "	Incrementally compile code and run locally"                                             >&2
+	echo "make run-gui:"                                                                            >&2
+	echo "	Incrementally compile code and run GUI locally"                                         >&2
 
 ifndef VERBOSE
 .SILENT:
