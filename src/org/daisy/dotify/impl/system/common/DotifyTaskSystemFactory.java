@@ -2,12 +2,11 @@ package org.daisy.dotify.impl.system.common;
 
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
+import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 import org.daisy.dotify.api.tasks.TaskSystem;
 import org.daisy.dotify.api.tasks.TaskSystemFactory;
 import org.daisy.dotify.api.tasks.TaskSystemFactoryException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
-import org.daisy.dotify.common.text.FilterLocale;
-import org.daisy.dotify.impl.input.Keys;
 import org.daisy.dotify.impl.input.SPIHelper;
 
 import aQute.bnd.annotation.component.Component;
@@ -26,10 +25,12 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 
 	@Override
 	public boolean supportsSpecification(String locale, String outputFormat) {
-		//TODO: remove conditions guard once possible 
-		return FilterLocale.parse(locale).equals(FilterLocale.parse("sv-SE")) && 
-				(Keys.PEF_FORMAT.equals(outputFormat) || Keys.OBFL_FORMAT.equals(outputFormat))
-				|| Keys.TEXT_FORMAT.equals(outputFormat);
+		for (TaskGroupSpecification spec : imf.listSupportedSpecifications()) {
+			if (spec.getOutputFormat().equals(outputFormat) && locale.equalsIgnoreCase(spec.getLocale())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
