@@ -4,7 +4,7 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = https://github.com/daisy/pipeline-scripts-utils
+	remote = git@github.com:daisy/pipeline-scripts-utils.git
 	branch = master
 	commit = 9bf6403d035d1d89bb16b11d1e255b4c206fb5f9
 	parent = e1035b90b2d3c6c9df5910a6b97a624f73539d26

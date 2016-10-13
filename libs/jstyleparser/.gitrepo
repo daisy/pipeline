@@ -4,7 +4,7 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = https://github.com/snaekobbi/jStyleParser
+	remote = git@github.com:daisy/jStyleParser.git
 	branch = org.daisy.libs
 	commit = b7f4ee102f2a09022d5adce418914fc53425b9d7
 	parent = 766d2a6ae912c0e60f4a593094c92aa13784fc68

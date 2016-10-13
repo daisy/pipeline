@@ -4,7 +4,7 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = https://github.com/daisy/pipeline-mod-nlp
+	remote = git@github.com:daisy/pipeline-mod-nlp.git
 	branch = master
 	commit = 46e7fd81c13532d18b2620700db5b0abcaed3705
 	parent = a3ffbc250f9d76de06f72eb3438ff7230764bd62
