@@ -25,16 +25,11 @@ Dir.glob(ARGV[0]).each do |f|
     pattern [ page_url, TITLE, :title ]
   end
   if graph.query(has_title).empty?
+    title = nil
     doc = File.open(f) { |f| Nokogiri::HTML(f) }
-    node = doc.css('html:root > head > title')[0]
+    node = doc.css('h1, h2, h3, h4, h5, h6')[0]
     if node and not node.content.to_s.empty?
       title = node.content.to_s
-    end
-    if not title
-      node = doc.css('h1, h2, h3, h4, h5, h6')[0]
-      if node and not node.content.to_s.empty?
-        title = node.content.to_s
-      end
     end
     if not title
       title = File.basename(f, '.*').sub('_', ' ')

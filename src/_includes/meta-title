@@ -1,0 +1,3 @@
+{% if include.title %}
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="{{ include.title }}"/>
+{% endif %}
