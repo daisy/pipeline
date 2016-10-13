@@ -202,6 +202,8 @@ public class MarkdownToJavafx implements Visitor {
         @Override
         public void visit(ParaNode p) {
                 visitChildren(p);
+                Text newline = new Text("\n");
+                this.parent.addChild(newline);
 
         }
 
