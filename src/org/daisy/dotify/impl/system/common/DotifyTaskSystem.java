@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.tasks.CompiledTaskSystem;
 import org.daisy.dotify.api.tasks.DefaultCompiledTaskSystem;
 import org.daisy.dotify.api.tasks.TaskGroup;
@@ -18,7 +17,6 @@ import org.daisy.dotify.api.tasks.TaskGroupSpecification.Type;
 import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.api.tasks.TaskSystem;
 import org.daisy.dotify.api.tasks.TaskSystemException;
-import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 import org.daisy.dotify.impl.input.Keys;
 
 
@@ -42,8 +40,7 @@ public class DotifyTaskSystem implements TaskSystem {
 	private final String name;
 	private final TaskGroupFactoryMakerService imf;
 	
-	public DotifyTaskSystem(String name, String outputFormat, String context,
-			TaskGroupFactoryMakerService imf, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe) {
+	public DotifyTaskSystem(String name, String outputFormat, String context, TaskGroupFactoryMakerService imf) {
 		this.context = context;
 		this.outputFormat = outputFormat;
 		this.name = name;
