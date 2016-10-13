@@ -130,6 +130,8 @@ public class DotifyTaskSystem implements TaskSystem {
 					List<TaskGroupSpecification> ret = new ArrayList<>(current.getSpecs());
 					ret.addAll(current.getCandidates().getEnhance());
 					ret.add(candidate);
+					QueueInfo next = new QueueInfo(locale, new HashMap<>(inputs).remove(candidate.getOutputFormat()), current.getSpecs());
+					ret.addAll(next.getCandidates().getEnhance());
 					return ret;
 				} else {
 					// add for later evaluation
