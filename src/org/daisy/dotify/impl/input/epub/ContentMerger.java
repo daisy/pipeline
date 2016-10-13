@@ -98,7 +98,7 @@ public class ContentMerger {
 		}
 		Map<String, Object> params = new HashMap<String, Object>();
 		try {
-			XMLTools.transform(opfFile, resultFile, this.getClass().getResource("resource-files/opf-merge-content-docs.xslt"), params);
+			XMLTools.transform(opfFile, resultFile, this.getClass().getResource("resource-files/opf-merge-content-docs.xslt"), params,  new net.sf.saxon.TransformerFactoryImpl());
 		} catch (XMLToolsException e) {
 			throw new EPUB3ReaderException(e);
 		}
