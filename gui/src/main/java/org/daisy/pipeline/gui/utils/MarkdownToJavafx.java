@@ -119,9 +119,10 @@ public class MarkdownToJavafx implements Visitor {
         }
 
         @Override
-        public void visit(CodeNode arg0) {
-                // TODO Auto-generated method stub
-
+        public void visit(CodeNode code) {
+                Text elem =new Text(code.getText());
+                elem.getStyleClass().add("code");
+                this.parent.addChild(elem);
         }
 
         @Override
@@ -169,7 +170,7 @@ public class MarkdownToJavafx implements Visitor {
         }
 
         @Override
-        public void visit(HtmlBlockNode arg0) {
+        public void visit(HtmlBlockNode block) {
                 // TODO Auto-generated method stub
 
         }
@@ -313,8 +314,10 @@ public class MarkdownToJavafx implements Visitor {
         }
 
         @Override
-        public void visit(VerbatimNode arg0) {
-                // TODO Auto-generated method stub
+        public void visit(VerbatimNode verbatim) {
+                Text elem =new Text(verbatim.getText());
+                elem.getStyleClass().add("code");
+                this.parent.addChild(elem);
 
         }
 
