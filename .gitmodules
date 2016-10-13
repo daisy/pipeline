@@ -1,4 +1,10 @@
 [submodule "src/_wiki"]
-	path = src/_wiki
+	path = src/_wiki/main
 	url = git@github.com:daisy/pipeline
 	branch = wiki
+[submodule "src/_wiki/gui"]
+	path = src/_wiki/gui
+	url = git@github.com:daisy/pipeline-gui.wiki
+[submodule "src/_wiki/webui"]
+	path = src/_wiki/webui
+	url = git@github.com:daisy/pipeline-webui.wiki

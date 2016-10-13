@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+    {% include meta-title title=page.title %}
+    <link rel="stylesheet" href="{{site.baseurl}}/css/main.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/css/coderay.css">
+  </head>
+  <body>
+	<nav id="nav-sitemap">
+	  {% include spine pages=site.data.spines.sitemap %}
+	</nav>
+	<div class="edit-button">
+	  <a href="https://github.com/daisy/pipeline-webui/wiki/{{page.relative_path | remove:'_wiki/webui/' | remove:'.md' }}/_edit">
+		Edit this page on Github
+	  </a>
+	</div>
+    {{ content }}
+  </body>
+</html>
