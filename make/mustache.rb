@@ -38,6 +38,9 @@ def parse(input)
       if idx == 0
         raise "Invalid query in #{f}:\n#{input}"
       end
+      if query[0, idx] =~ /(\s+)$/o
+        idx -= $1.length
+      end
       text = query[idx, query.length] + text
       query = query[0, idx]
     rescue => e

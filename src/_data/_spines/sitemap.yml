@@ -1,7 +1,18 @@
 - {{site.baseurl}}/index.html
 - group: {{site.baseurl}}/Get_Help/index.html
   pages: 
-    - {{site.baseurl}}/Get_Help/User_Guide.html
+    - group: {{site.baseurl}}/Get_Help/User_Guide.html
+      pages:
+        {{#sparql}}
+        SELECT ?href WHERE {
+          []    a        dp2:script ;
+                dp2:doc  ?href .
+          ?href dc:title ?title ;
+                a        dp2:userdoc . }
+        ORDER BY ?title
+        - {{href}}
+        {{/sparql}}
+
 - group: {{site.baseurl}}/Contribute/index.html
   pages:
     - {{site.baseurl}}/Contribute/Developer_Guide.html
