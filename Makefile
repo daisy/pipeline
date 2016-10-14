@@ -115,7 +115,14 @@ $(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_d
 
 .PHONY : serve
 serve : ws all
-	cd $(JEKYLL_DIR) && jekyll serve
+	ws -d $(CURDIR)/$(JEKYLL_DIR)/_site
+
+.PHONY : ws
+ws :
+	@if ! which $@ 2>/dev/null; then \
+		echo "ws is not installed, install with 'npm install -g local-web-server'" 2>&1; \
+		exit 1; \
+	fi
 
 .PHONY : publish
 publish : all
