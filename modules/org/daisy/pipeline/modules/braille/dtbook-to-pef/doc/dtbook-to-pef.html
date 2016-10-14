@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <title>DTBook to PEF</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DTBook to PEF">
+
+
+    <link rel="stylesheet" href="/pipeline/css/main.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+  </head>
+  <body>
+	<nav id="nav-sitemap">
+	  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline">
+      
+      Home
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Get_Help">
+      
+      Get Help
+      
+        </a>
+      
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Get_Help/User_Guide.html">
+      
+      User Guide
+      
+        </a>
+      
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide">
+      
+      DAISY Pipeline 2
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/webui/User-Guide">
+      
+      Web User Interface Guide
+      
+        </a>
+      
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/webui/Templating">
+      
+      Templating
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/webui/Administrator-settings">
+      
+      Administrator Settings
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/daisy202-to-epub3/doc/daisy202-to-epub3.html">
+      
+      DAISY 2.02 to EPUB 3
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      DTBook to PEF
+      
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/dtbook-to-zedai/doc/dtbook-to-zedai.html">
+      
+      DTBook to ZedAI
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/epub3-to-pef/doc/epub3-to-pef.html">
+      
+      EPUB 3 to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/html-to-pef/doc/html-to-pef.html">
+      
+      HTML to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/zedai-to-pef/doc/zedai-to-pef.html">
+      
+      ZedAI to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Contribute">
+      
+      Contribute
+      
+        </a>
+      
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Contribute/Developer_Guide.html">
+      
+      Developer Guide
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Download.html">
+      
+      Download
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+	</nav>
+    <link rev="dp2:doc" href="../resources/xml/xproc/dtbook-to-pef.xpl">
+
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+
+<meta property="dc:title" content="DTBook to PEF">
+
+<h1 id="dtbook-to-pef">DTBook to PEF</h1>
+
+<h2 id="synopsis">Synopsis</h2>
+
+<h3 id="inputs">Inputs</h3>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Description</th>
+<th>Sequence</th>
+</tr>
+<tr>
+<td>source</td>
+<td>Input DTBook</td>
+<td></td>
+<td>no</td>
+</tr>
+</table>
+
+<h3 id="options">Options</h3>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Description</th>
+<th>Required</th>
+<th>Default value</th>
+</tr>
+<tr>
+<td>stylesheet</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>transform</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>include-preview</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>include-brf</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>include-obfl</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>ascii-file-format</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>ascii-table</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>page-width</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>page-height</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>left-margin</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>duplex</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>levels-in-footer</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>main-document-language</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>hyphenation</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>line-spacing</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>tab-width</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>capital-letters</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>accented-letters</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>polite-forms</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>downshift-ordinal-numbers</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>include-captions</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>include-images</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>include-image-groups</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>include-line-groups</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>text-level-formatting</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>include-note-references</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>include-production-notes</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>show-braille-page-numbers</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>show-print-page-numbers</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>force-braille-page-break</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>toc-depth</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>footnotes-placement</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>colophon-metadata-placement</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>rear-cover-placement</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>number-of-sheets</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>maximum-number-of-sheets</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>minimum-number-of-sheets</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>pef-output-dir</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>brf-output-dir</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>preview-output-dir</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+<tr>
+<td>temp-dir</td>
+<td></td>
+<td></td>
+<td>no</td>
+<td></td>
+</tr>
+</table>
+
+
+  </body>
+</html>

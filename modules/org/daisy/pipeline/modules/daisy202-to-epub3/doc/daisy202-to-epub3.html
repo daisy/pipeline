@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <title>DAISY 2.02 to EPUB 3</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DAISY 2.02 to EPUB 3">
+
+
+    <link rel="stylesheet" href="/pipeline/css/main.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+  </head>
+  <body>
+	<nav id="nav-sitemap">
+	  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline">
+      
+      Home
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Get_Help">
+      
+      Get Help
+      
+        </a>
+      
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Get_Help/User_Guide.html">
+      
+      User Guide
+      
+        </a>
+      
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide">
+      
+      DAISY Pipeline 2
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/webui/User-Guide">
+      
+      Web User Interface Guide
+      
+        </a>
+      
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/webui/Templating">
+      
+      Templating
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/webui/Administrator-settings">
+      
+      Administrator Settings
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      DAISY 2.02 to EPUB 3
+      
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/dtbook-to-pef/doc/dtbook-to-pef.html">
+      
+      DTBook to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/dtbook-to-zedai/doc/dtbook-to-zedai.html">
+      
+      DTBook to ZedAI
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/epub3-to-pef/doc/epub3-to-pef.html">
+      
+      EPUB 3 to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/html-to-pef/doc/html-to-pef.html">
+      
+      HTML to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/zedai-to-pef/doc/zedai-to-pef.html">
+      
+      ZedAI to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Contribute">
+      
+      Contribute
+      
+        </a>
+      
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Contribute/Developer_Guide.html">
+      
+      Developer Guide
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Download.html">
+      
+      Download
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+	</nav>
+    <link rev="dp2:doc" href="../resources/xml/daisy202-to-epub3.xpl">
+
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+
+<meta property="dc:title" content="DAISY 2.02 to EPUB 3">
+
+<!--
+labels: [Type-Doc,Compoment-UserGuide,Component-Module,Component-Script]
+sidebar: UserGuideToc
+-->
+
+<h1 id="daisy-202-to-epub-3">DAISY 2.02 To EPUB 3</h1>
+
+<p>The “DAISY 2.02 to EPUB3” script will convert a DAISY 2.02 DTB (Digital Talking Book) into an EPUB3 publication.
+This page describes the steps, comments and issues related to this transformation.</p>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul id="markdown-toc">
+  <li>
+<a href="#daisy-202-to-epub-3" id="markdown-toc-daisy-202-to-epub-3">DAISY 2.02 To EPUB 3</a>    <ul>
+      <li><a href="#table-of-contents" id="markdown-toc-table-of-contents">Table of contents</a></li>
+      <li>
+<a href="#synopsis" id="markdown-toc-synopsis">Synopsis</a>        <ul>
+          <li><a href="#options" id="markdown-toc-options">Options</a></li>
+        </ul>
+      </li>
+      <li><a href="#example-running-from-command-line" id="markdown-toc-example-running-from-command-line">Example running from command line</a></li>
+      <li><a href="#outline" id="markdown-toc-outline">Outline</a></li>
+      <li><a href="#errors" id="markdown-toc-errors">Errors</a></li>
+      <li>
+<a href="#see-also" id="markdown-toc-see-also">See Also</a>        <ul>
+          <li><a href="#main-specifications" id="markdown-toc-main-specifications">Main Specifications</a></li>
+          <li><a href="#related-specifications" id="markdown-toc-related-specifications">Related Specifications</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="synopsis">Synopsis</h2>
+
+<h3 id="options">Options</h3>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Description</th>
+<th>Required</th>
+<th>Default value</th>
+</tr>
+<tr>
+<td>href</td>
+<td>NCC</td>
+<td>
+<p>Input NCC.</p>
+</td>
+<td>yes</td>
+<td></td>
+</tr>
+<tr>
+<td>output</td>
+<td>Output</td>
+<td>
+<p>Output directory for the EPUB.</p>
+</td>
+<td>yes</td>
+<td></td>
+</tr>
+<tr>
+<td>temp-dir</td>
+<td>Temporary directory</td>
+<td>
+<p>Temporary directory for the EPUB files.</p>
+</td>
+<td>yes</td>
+<td></td>
+</tr>
+<tr>
+<td>mediaoverlay</td>
+<td>Include Media Overlay</td>
+<td>
+<p>Whether or not to include media overlays and associated audio files (true or false).</p>
+</td>
+<td>no</td>
+<td>true</td>
+</tr>
+<tr>
+<td>compatibility-mode</td>
+<td>Backwards compatible</td>
+<td>
+<p>Whether or not to include NCX-file, OPF guide element and ASCII filenames (true or false).</p>
+</td>
+<td>no</td>
+<td>true</td>
+</tr>
+<tr>
+<td>epub-filename</td>
+<td>EPUB3 Filename</td>
+<td>
+<p>By default, the filename is the dc:identifier with a "epub" file extension. This option can be used to set a custom filename.</p>
+</td>
+<td>no</td>
+<td></td>
+</tr>
+</table>
+
+<h2 id="example-running-from-command-line">Example running from command line</h2>
+
+<p>On Linux and Mac OS X:</p>
+
+<pre><code>$ cli/dp2 daisy202-to-epub3 --x-href samples/daisy202/dontworrybehappy/ncc.html --x-output ~/Desktop/out --x-mediaoverlay false --x-compatibility-mode false
+</code></pre>
+
+<p>On Windows:</p>
+
+<pre><code>$ cli\dp2.exe daisy202-to-epub3 --x-href samples\daisy202\dontworrybehappy\ncc.html --x-output C:\Pipeline2-Output --x-mediaoverlay false --x-compatibility-mode false
+</code></pre>
+
+<p>This command will create two entries in the output directory. One is a folder called “epub”, which is a temporary directory created by the converter. The second is the resulting EPUB3 file. The EPUB3 file is given a name based on the dc:identifier and dc:title metadata elements from the original NCC; “dc:identifier - dc:title.epub”.</p>
+
+<h2 id="outline">Outline</h2>
+
+<p>The high-level conversion workflow is as follows:</p>
+
+<ul>
+  <li>Get the SMIL-based reading order from the NCC</li>
+  <li>Load all the SMILs and upgrade them to EPUB3 Media Overlays</li>
+  <li>Extract content document references from each SMIL</li>
+  <li>Make a content-based reading order</li>
+  <li>Load all the content documents, upgrade them to EPUB3 Content Documents</li>
+  <li>If mediaoverlay = ‘true’
+    <ul>
+      <li>Rearrange the Media Overlays to match the Content Documents</li>
+      <li>Get all referenced audio, images, etc.</li>
+    </ul>
+  </li>
+  <li>Make the EPUB3 Navigation Document based on the NCC</li>
+  <li>Make the EPUB3 Package Document</li>
+  <li>Store the EPUB3 Publication in a OCF ZIP Container</li>
+</ul>
+
+<h2 id="errors">Errors</h2>
+
+<p>This is a list of defined errors for this script. Each error has a unique error code for easy identification.</p>
+
+<ul>
+  <li>
+<em><code>PDE01</code></em>: href must be a valid URI. In practice this simply means that the path must be prefixed with “file://”, and in Windows, all directory separators () must be replaced with forward slashes (/).</li>
+  <li>
+<em><code>PDE02</code></em>: output must be a valid URI. In practice this simply means that the path must be prefixed with “file://”, and in Windows, all directory separators () must be replaced with forward slashes (/).</li>
+  <li>
+<em><code>PDE03</code></em>: When given, mediaoverlay must be either “true” (default) or “false”.</li>
+  <li>
+<em><code>PDE04</code></em>: When given, compatibility-mode must be either “true” (default) or “false”.</li>
+</ul>
+
+<h2 id="see-also">See Also</h2>
+
+<h3 id="main-specifications">Main Specifications</h3>
+
+<p><a href="http://www.daisy.org/z3986/specifications/daisy_202.html" class="external-link" target="_blank">DAISY 2.02 Specification</a></p>
+
+<ul>
+  <li><a href="http://www.daisy.org/z3986/specifications/daisy_202.html#ncc" class="external-link" target="_blank">The Navigation Control Center (NCC) document</a></li>
+  <li><a href="http://www.daisy.org/z3986/specifications/daisy_202.html#textdoc" class="external-link" target="_blank">The text content document (XHTML)</a></li>
+  <li><a href="http://www.daisy.org/z3986/specifications/daisy_202.html#smil" class="external-link" target="_blank">The SMIL document</a></li>
+</ul>
+
+<p><a href="http://idpf.org/epub/30/spec/epub30-overview.html" class="external-link" target="_blank">EPUB3 Overview</a></p>
+
+<ul>
+  <li><a href="http://idpf.org/epub/30/spec/epub30-publications.html" class="external-link" target="_blank">EPUB Publications 3.0</a></li>
+  <li>
+<a href="http://idpf.org/epub/30/spec/epub30-contentdocs.html%20EPUB%20Content%20Documents" class="external-link" target="_blank">3.0</a>
+    <ul>
+      <li><a href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml-nav%20EPUB%20Navigation" class="external-link" target="_blank">Documents</a></li>
+      <li><a href="http://idpf.org/epub/30/spec/epub30-contentdocs.html#sec-xhtml" class="external-link" target="_blank">XHTML Content Documents</a></li>
+    </ul>
+  </li>
+  <li><a href="http://idpf.org/epub/30/spec/epub30-ocf.html" class="external-link" target="_blank">EPUB Open Container Format (OCF) 3.0</a></li>
+  <li><a href="http://idpf.org/epub/30/spec/epub30-mediaoverlays.html" class="external-link" target="_blank">EPUB Media Overlays 3.0</a></li>
+</ul>
+
+<h3 id="related-specifications">Related Specifications</h3>
+
+<ul>
+  <li><a href="http://www.w3.org/TR/xhtml1/" class="external-link" target="_blank">XHTML 1.0</a></li>
+  <li><a href="http://www.w3.org/TR/html5/" class="external-link" target="_blank">HTML5</a></li>
+  <li><a href="http://www.w3.org/TR/REC-smil/" class="external-link" target="_blank">SMIL 1.0</a></li>
+  <li><a href="http://www.w3.org/TR/SMIL/smil30.html" class="external-link" target="_blank">SMIL 3.0</a></li>
+</ul>
+
+  </body>
+</html>

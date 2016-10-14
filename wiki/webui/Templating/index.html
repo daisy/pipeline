@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <title>Templating</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Templating">
+
+
+    <link rel="stylesheet" href="/pipeline/css/main.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+  </head>
+  <body>
+	<nav id="nav-sitemap">
+	  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline">
+      
+      Home
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Get_Help">
+      
+      Get Help
+      
+        </a>
+      
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Get_Help/User_Guide.html">
+      
+      User Guide
+      
+        </a>
+      
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide">
+      
+      DAISY Pipeline 2
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/webui/User-Guide">
+      
+      Web User Interface Guide
+      
+        </a>
+      
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      Templating
+      
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/webui/Administrator-settings">
+      
+      Administrator Settings
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/daisy202-to-epub3/doc/daisy202-to-epub3.html">
+      
+      DAISY 2.02 to EPUB 3
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/dtbook-to-pef/doc/dtbook-to-pef.html">
+      
+      DTBook to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/dtbook-to-zedai/doc/dtbook-to-zedai.html">
+      
+      DTBook to ZedAI
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/epub3-to-pef/doc/epub3-to-pef.html">
+      
+      EPUB 3 to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/html-to-pef/doc/html-to-pef.html">
+      
+      HTML to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/zedai-to-pef/doc/zedai-to-pef.html">
+      
+      ZedAI to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Contribute">
+      
+      Contribute
+      
+        </a>
+      
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Contribute/Developer_Guide.html">
+      
+      Developer Guide
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/Download.html">
+      
+      Download
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+	</nav>
+	<div class="edit-button">
+	  <a href="https://github.com/daisy/pipeline-webui/wiki/Templating/_edit" class="external-link" target="_blank">
+		Edit this page on Github
+	  </a>
+	</div>
+    <h1 id="templating">Templating</h1>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#listing-templates">Listing templates</a></li>
+  <li><a href="#create-a-new-job-based-on-a-template">Create a new job based on a template</a></li>
+  <li><a href="#the-job-view">The job view</a></li>
+  <li><a href="#creating-a-template-from-scratch">Creating a template from scratch</a></li>
+  <li><a href="#sharing-a-template-with-other-users">Sharing a template with other users</a></li>
+</ul>
+
+<h2 id="listing-templates">Listing templates</h2>
+
+<p>To list templates, click the “Templates” tab in the navigation bar at the top of the page.</p>
+
+<p>By default, all templates available to you will be displayed.</p>
+
+<h2 id="screenshot-of-listing-all-templateshttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images120-20listing20all20templatespng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/1%20-%20listing%20all%20templates.png" alt="screenshot of listing all templates"></h2>
+<p><br><br><br><br></p>
+
+<p>If you only want to display the templates that you have created yourself, click “Your templates”.</p>
+
+<h2 id="screenshot-of-listing-your-templateshttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images220-20listing20your20templatespng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/2%20-%20listing%20your%20templates.png" alt="screenshot of listing your templates"></h2>
+<p><br><br><br><br></p>
+
+<h2 id="create-a-new-job-based-on-a-template">Create a new job based on a template</h2>
+
+<p>Clicking “New job” on a template in the list of templates will create a new job.</p>
+
+<p>The job will be given a name to reflect what template it is based on.</p>
+
+<p>First, you will be asked if you want to upload any additional files.
+Some files may already be present here if the template contains files.</p>
+
+<p>The script to use is already defined by the template.</p>
+
+<h2 id="screenshot-of-file-upload-buttonhttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images320-20new20job20from20template20-20filespng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/3%20-%20new%20job%20from%20template%20-%20files.png" alt="screenshot of file upload button"></h2>
+<p><br><br><br><br></p>
+
+<p>Since the script to use is already defined by the template, the next thing you need
+to do is to complete the mandatory options.</p>
+
+<h2 id="screenshot-of-mandatory-jobs-form-for-the-dtbook-to-pef-mtm-scripthttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images420-20new20job20from20template20-20optionspng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/4%20-%20new%20job%20from%20template%20-%20options.png" alt="screenshot of mandatory jobs form for the DTBook to PEF (MTM) script"></h2>
+<p><br><br><br><br></p>
+
+<p>In this example, some of the optional parameters has been pre-filled by the template.
+Different templates can have different values.</p>
+
+<p>When you’re done; click “Start job”. You will be redirected to the job view.</p>
+
+<h2 id="screenshot-of-optional-parameters-form-for-the-dtbook-to-pef-mtm-scripthttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images520-20new20job20from20template20-20optional20parameterspng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/5%20-%20new%20job%20from%20template%20-%20optional%20parameters.png" alt="screenshot of optional parameters form for the DTBook to PEF (MTM) script"></h2>
+<p><br><br><br><br></p>
+
+<h2 id="the-job-view">The job view</h2>
+
+<p>The job view contains some details about the job such as its status, when it was started,
+which script was used, what the inputs and option values were, an execution log,
+and some scripts also contain a report.</p>
+
+<p>When the job has finished running, you can download the results, and also the input files if needed.</p>
+
+<p>At the bottom of the page you have three buttons, letting you either:
+- restart the job
+- create a similar job with slightly different option values
+- save the job inputs and option values as a template for use later</p>
+
+<h2 id="screenshot-of-job-viewhttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images620-20job20viewpng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/6%20-%20job%20view.png" alt="screenshot of job view"></h2>
+<p><br><br><br><br></p>
+
+<h2 id="creating-a-template-from-scratch">Creating a template from scratch</h2>
+
+<p>To create a new template from scratch, click “New job”.
+Upload the files you want to include in the template, if any.</p>
+
+<h2 id="screenshot-of-the-view-after-clicking-new-jobhttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images920-20creating20a20template20-20new20jobpng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/9%20-%20creating%20a%20template%20-%20new%20job.png" alt="screenshot of the view after clicking new job"></h2>
+<p><br><br><br><br></p>
+
+<p>In this example, a CSS-file has been added. All jobs that are created based on this template later
+will include this CSS-file, so that the CSS-file doesn’t have to be re-uploaded for every future job.</p>
+
+<h2 id="screenshot-of-file-upload-widget-after-having-uploaded-a-css-filehttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images1020-20creating20a20template20-20adding20a20css20filepng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/10%20-%20creating%20a%20template%20-%20adding%20a%20css%20file.png" alt="screenshot of file upload widget after having uploaded a css file"></h2>
+<p><br><br><br><br></p>
+
+<p>Next, choose a script. You cannot create a template without choosing a script.</p>
+
+<h2 id="screenshot-of-the-script-listing-when-creating-a-jobhttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images1120-20creating20a20template20-20choosing20a20scriptpng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/11%20-%20creating%20a%20template%20-%20choosing%20a%20script.png" alt="screenshot of the script listing when creating a job"></h2>
+<p><br><br><br><br></p>
+
+<p>Finally, you can fill out the options as you want them to be stored in the template, and instead of clicking
+“Start job”, click instead “Save as template”.</p>
+
+<h2 id="screenshot-of-the-script-options-form-with-both-a-button-for-creating-a-job-as-well-as-a-button-for-saving-as-a-templatehttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images1220-20creating20a20template20-20saving20new20job20as20a20templatepng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/12%20-%20creating%20a%20template%20-%20saving%20new%20job%20as%20a%20template.png" alt="screenshot of the script options form with both a button for creating a job as well as a button for saving as a template"></h2>
+<p><br><br><br><br></p>
+
+<p>You will be redirected to the template listing, and the new template will be highlighted.</p>
+
+<h2 id="screenshot-of-template-listing-after-having-created-a-job-as-a-template-where-the-new-template-is-highlightedhttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images1320-20creating20a20template20-20saved20new20job20as20a20templatepng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/13%20-%20creating%20a%20template%20-%20saved%20new%20job%20as%20a%20template.png" alt="screenshot of template listing after having created a job as a template, where the new template is highlighted"></h2>
+<p><br><br><br><br></p>
+
+<p>You will probably want to rename your template to something more descriptive. Click “Rename” next to the template, fill out a new name, and click “Save”.</p>
+
+<h2 id="screenshot-showing-how-to-rename-a-templatehttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images1420-20creating20a20template20-20renaming20a20templatepng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/14%20-%20creating%20a%20template%20-%20renaming%20a%20template.png" alt="screenshot showing how to rename a template"></h2>
+<p><br><br><br><br></p>
+
+<h2 id="sharing-a-template-with-other-users">Sharing a template with other users</h2>
+
+<p>When you create templates, they are by default only visible to yourself (and administrators). Other users cannot use your private templates.</p>
+
+<p>In this screenshot, we see the template listing for another user, who cannot see the template we just created.</p>
+
+<h2 id="screenshot-showing-the-template-listing-for-the-other-user-that-cannot-see-the-first-users-private-templatehttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images1620-20sharing20a20template20-20not20visible20to20other20userspng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/16%20-%20sharing%20a%20template%20-%20not%20visible%20to%20other%20users.png" alt="screenshot showing the template listing for the other user that cannot see the first users private template"></h2>
+<p><br><br><br><br></p>
+
+<p>Back in the template listing for the first user, click “Share with others” to share the template.</p>
+
+<h2 id="screenshot-showing-the-template-listing-for-the-first-user-with-a-button-that-toggles-the-template-between-being-shared-and-being-privatehttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images1520-20sharing20a20template20-20not20sharedpng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/15%20-%20sharing%20a%20template%20-%20not%20shared.png" alt="screenshot showing the template listing for the first user with a button that toggles the template between being shared and being private"></h2>
+<p><br><br><br><br></p>
+
+<p>The template will now be listed as “shared” in the template list. You can change it back to private at a later point if you want to.</p>
+
+<h2 id="screenshot-showing-the-first-users-template-listing-after-having-toggled-the-template-from-private-to-sharedhttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images1720-20sharing20a20template20-20sharedpng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/17%20-%20sharing%20a%20template%20-%20shared.png" alt="screenshot showing the first users template listing after having toggled the template from private to shared"></h2>
+<p><br><br><br><br></p>
+
+<p>In this screenshot we see the template listing for the other user who could not see the template earlier. The template is now available for them to use.</p>
+
+<h2 id="screenshot-showing-the-template-listing-for-the-other-user-that-can-now-see-the-first-users-shared-templatehttpsrawgithubusercontentcomdaisypipeline-webuiwiki-images1820-20sharing20a20template20-20visible20to20other20userspng"><img src="https://raw.githubusercontent.com/daisy/pipeline-webui/wiki-images/18%20-%20sharing%20a%20template%20-%20visible%20to%20other%20users.png" alt="screenshot showing the template listing for the other user that can now see the first users shared template"></h2>
+<p><br><br><br><br></p>
+
+  </body>
+</html>

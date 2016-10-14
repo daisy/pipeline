@@ -4,6 +4,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
     <title>Documentation contract</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Documentation contract">
+
+
     <link rel="stylesheet" href="/pipeline/css/main.css">
     <link rel="stylesheet" href="/pipeline/css/coderay.css">
   </head>
@@ -14,7 +18,7 @@
     
       
         <li class="spine-item">
-          <a href="/pipeline/wiki/Home.html">
+          <a href="/pipeline/wiki/main/Home">
       
       Home
       
@@ -37,13 +41,15 @@
 
 	</nav>
 	<div class="edit-button">
-	  <a href="https://github.com/daisy/pipeline/edit/wiki/documentation_contract.md">Edit this page on Github</a>
+	  <a href="https://github.com/daisy/pipeline/edit/wiki/documentation_contract.md" class="external-link" target="_blank">
+		Edit this page on Github
+	  </a>
 	</div>
     <h1 id="documentation-contract">Documentation contract</h1>
 
 <ul>
   <li>Documentation must be written in HTML (with file extension <code>.html</code>)
-or <a href="http://daringfireball.net/projects/markdown/">Markdown</a> (file extension <code>.md</code>). Other files are allowed but
+or <a href="http://daringfireball.net/projects/markdown/" class="external-link" target="_blank">Markdown</a> (file extension <code>.md</code>). Other files are allowed but
 are considered static and get no special treatment.</li>
   <li>Layout/styling of HTML files is the responsibility of the
 author/generator. The final rendering of the HTML file is determined
@@ -53,10 +59,10 @@ viewport. No additional CSS is applied.</li>
 processor. This means that the Markdown should ideally not include
 any CSS. The rendering may be influenced by using standardised
 classes (defined below). Because
-<a href="http://daringfireball.net/projects/markdown/syntax#html">Markdown may contain HTML fragments</a>,
+<a href="http://daringfireball.net/projects/markdown/syntax#html" class="external-link" target="_blank">Markdown may contain HTML fragments</a>,
 HTML that needs the same treatment should be given the extension
 <code>.md</code>.</li>
-  <li>Documentation may contain metadata defined using <a href="https://www.w3.org/TR/2015/REC-rdfa-core-20150317/">RDFa</a>. A list of
+  <li>Documentation may contain metadata defined using <a href="https://www.w3.org/TR/2015/REC-rdfa-core-20150317/" class="external-link" target="_blank">RDFa</a>. A list of
 recognised types and properties is defined below.</li>
   <li>Some metadata is automatically inferred if not present as RDFa.
     <ul>
@@ -84,7 +90,7 @@ attributes on the anchor element are removed in order to not
 produce incorrect RDFa metadata.</li>
     </ul>
   </li>
-  <li>Documentation files may contain <a href="http://mustache.github.io/mustache.5.html">Mustache</a> tags. A list of
+  <li>Documentation files may contain <a href="http://mustache.github.io/mustache.5.html" class="external-link" target="_blank">Mustache</a> tags. A list of
 available variables, partials and lambdas is defined below.</li>
 </ul>
 
@@ -94,16 +100,16 @@ available variables, partials and lambdas is defined below.</li>
 
 <ul>
   <li>
-<code>rdf</code>: <a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#">http://www.w3.org/1999/02/22-rdf-syntax-ns#</a>
+<code>rdf</code>: <a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#" class="external-link" target="_blank">http://www.w3.org/1999/02/22-rdf-syntax-ns#</a>
 </li>
   <li>
-<code>dc</code>: <a href="http://purl.org/dc/elements/1.1/">http://purl.org/dc/elements/1.1/</a>
+<code>dc</code>: <a href="http://purl.org/dc/elements/1.1/" class="external-link" target="_blank">http://purl.org/dc/elements/1.1/</a>
 </li>
   <li>
-<code>xsd</code>: <a href="http://www.w3.org/2001/XMLSchema#">http://www.w3.org/2001/XMLSchema#</a>
+<code>xsd</code>: <a href="http://www.w3.org/2001/XMLSchema#" class="external-link" target="_blank">http://www.w3.org/2001/XMLSchema#</a>
 </li>
   <li>
-<code>dp2</code>: <a href="http://www.daisy.org/ns/pipeline/">http://www.daisy.org/ns/pipeline/</a>
+<code>dp2</code>: <a href="http://www.daisy.org/ns/pipeline/" class="external-link" target="_blank">http://www.daisy.org/ns/pipeline/</a>
 </li>
 </ul>
 
@@ -244,7 +250,7 @@ processor.</li>
 
 <ul>
   <li>
-    <p><code>sparql</code>: Evaluates a <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/">SPARQL</a> expression against existing RDF
+    <p><code>sparql</code>: Evaluates a <a href="https://www.w3.org/TR/2013/REC-sparql11-query-20130321/" class="external-link" target="_blank">SPARQL</a> expression against existing RDF
 metadata and for each solution of the query, evaluates a Mustache
 expression with the SPARQL variables bound to identically named
 Mustache variables. A call might look like this:</p>

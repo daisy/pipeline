@@ -2,17 +2,18 @@
 <html>
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta charset="utf-8">
-	<title>DAISY Pipeline 2 | Developer Guide</title>
-	
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Developer Guide">
+    <meta charset="utf-8">
+    <title>First Use</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="First Use">
 
 
-	<link rel="stylesheet" href="/pipeline/css/main.css">
+    <link rel="stylesheet" href="/pipeline/css/main.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
   </head>
   <body>
 	<nav id="nav-sitemap">
-	  <ul class="spine spine-has-current">
+	  <ul class="spine">
   
     
       
@@ -195,14 +196,16 @@
         </a>
       
       
-      <ul class="spine spine-has-current">
+      <ul class="spine">
   
     
       
-        <li class="spine-item spine-item-current">
+        <li class="spine-item">
+          <a href="/pipeline/Contribute/Developer_Guide.html">
       
       Developer Guide
       
+        </a>
       
     
     </li>
@@ -227,15 +230,24 @@
 </ul>
 
 	</nav>
-    <h1 id="developer-guide">Developer Guide</h1>
+	<div class="edit-button">
+	  <a href="https://github.com/daisy/pipeline-webui/wiki/Installation-and-configuation/_edit" class="external-link" target="_blank">
+		Edit this page on Github
+	  </a>
+	</div>
+    <p><strong>TODO:</strong> Add instructions on how to install debian package here. And also Windows instructions when a working Windows version is available.</p>
 
-<h2 id="getting-started">Getting started</h2>
+<h2 id="first-use">First Use</h2>
 
-<h3 id="checking-out-the-sources">Checking out the sources</h3>
+<p><strong>NOTE:</strong> These instructions were originally written for version 1.6 of the Pipeline 2 Web UI, and might need some adjustments in some places.</p>
 
-<h3 id="building">Building</h3>
+<p>The first time that you use the Web UI, you will be asked to create an administrative account. You are able to create additional administrators later. This administrator will be named “Administrator”, but you can change the name later as well.</p>
 
-<h3 id="setting-up-eclipse">Setting up Eclipse</h3>
+<p>For the Web UI to be able to communicate with the Pipeline 2 Engine, you must tell it where to find the Web API endpoint of the Pipeline 2 Engine. A common configuration is to run the Web API endpoint on the same computer as the Web UI, on port 8181 or 8182. If this is the case, a message will appear saying that a Pipeline 2 Engine is running at one of those addresses, and a button to choose that address.</p>
+
+<p>If the Pipeline 2 Engine at the given Web API endpoint requires authentication, you will be required to provide the authentication ID and the secret text.</p>
+
+<p>When the administrator account and the Web API is configured, a welcome message will appear, and you are ready to start using the Pipeline 2 Web UI.</p>
 
   </body>
 </html>
