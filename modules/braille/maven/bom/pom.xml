@@ -223,7 +223,7 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>zedai-to-pef</artifactId>
-                <version>3.3.0</version>
+                <version>3.3.1-SNAPSHOT</version>
             </dependency>
             <!--
                 Dependencies
