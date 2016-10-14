@@ -2,3 +2,11 @@
   artifact: dtbook-to-zedai
 - group: org.daisy.pipeline.modules
   artifact: daisy202-to-epub3
+- group: org.daisy.pipeline.modules.braille
+  artifact: zedai-to-pef
+- group: org.daisy.pipeline.modules.braille
+  artifact: dtbook-to-pef
+- group: org.daisy.pipeline.modules.braille
+  artifact: html-to-pef
+- group: org.daisy.pipeline.modules.braille
+  artifact: epub3-to-pef
