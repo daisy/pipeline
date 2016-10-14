@@ -13,7 +13,7 @@ module Jekyll
       baseurl = site.config['baseurl'] || ''
       pages = site.pages | site.collections.values.map(&:docs).reduce(:|)
       pages.each do | page |
-        page_url = RDF::URI(site_base + baseurl + page.url)
+        page_url = RDF::URI(site_base + baseurl + page.url + (page.url.end_with?('/') ? 'index.html' : ''))
         title_query = RDF::Query.new do
           pattern [ page_url, TITLE, :title ]
         end

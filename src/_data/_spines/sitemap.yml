@@ -1,8 +1,8 @@
-- /index.html
-- group: /Get_Help/index.html
+- {{site.baseurl}}/index.html
+- group: {{site.baseurl}}/Get_Help/index.html
   pages: 
-    - /Get_Help/User_Guide.html
-- group: /Contribute/index.html
+    - {{site.baseurl}}/Get_Help/User_Guide.html
+- group: {{site.baseurl}}/Contribute/index.html
   pages:
-    - /Contribute/Developer_Guide.html
-- /Download.html
+    - {{site.baseurl}}/Contribute/Developer_Guide.html
+- {{site.baseurl}}/Download.html

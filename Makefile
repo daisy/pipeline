@@ -20,14 +20,15 @@ CONFIG_FILE := $(JEKYLL_SRC_DIR)/_config.yml
 yaml_get = $(shell eval $$(cat $(1) | grep '^$(2)' | sed -e 's/^$(2) *:/echo /' ))
 
 meta_file := $(call yaml_get,$(CONFIG_FILE),meta_file)
+baseurl := $(call yaml_get,$(CONFIG_FILE),baseurl)
 
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
 $(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(JEKYLL_FILES) src/css/coderay.css
 	mkdir -p $(dir $@)
-	cd $(dir $@) && jekyll build
-	make/post_process.rb $< $@ $(CONFIG_FILE)
+	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)/
+	make/post_process.rb $< $@$(baseurl) $(CONFIG_FILE)
 	touch $@
 
 $(JEKYLL_FILES_CONTENT) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
@@ -55,13 +56,13 @@ $(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules
 
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
-	make/make_meta.rb "$</**/*.html" $< $(CONFIG_FILE) >$@
+	make/make_meta.rb "$<$(baseurl)/**/*.html" $<$(baseurl) $(CONFIG_FILE) >$@
 
 src/css/coderay.css :
 	coderay stylesheet > $@
 
 $(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(META_JEKYLL_FILES)
-	cd $(dir $@) && jekyll build
+	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)
 	touch $@
 
 $(META_JEKYLL_FILES_CONTENT) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
@@ -118,7 +119,7 @@ serve : ws all
 
 .PHONY : publish
 publish : all
-	make/publish.sh $(JEKYLL_DIR)/_site
+	make/publish.sh $(JEKYLL_DIR)/_site$(baseurl)
 
 .PHONY : clean
 clean :

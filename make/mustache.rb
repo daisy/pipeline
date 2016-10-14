@@ -76,6 +76,9 @@ Dir.glob(ARGV[0]).each do |f|
   if File.file?(f)
     page_url = RDF::URI(f.dup.sub!(base_dir, site_base + baseurl).gsub(/\.md$/, '.html'))
     page_view = MyMustache.new
+    page_view['site'] = {
+      'baseurl' => baseurl
+    }
     page_view['sparql'] = lambda { |input|
       begin
         (query, text) = parse(input)
