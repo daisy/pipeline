@@ -19,6 +19,7 @@ end
 
 def link_warning(link, source_file)
   puts "WARNING: link can not be processed: #{link['href']} (source: #{source_file})"
+  link['class'] = ((link['class']||'').split(' ') << 'broken-link').join(' ')
 end
 
 Dir.glob(base_dir + '/**/*.html').each do |f|
@@ -34,6 +35,8 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
 
     # external link
     if a['href'] =~ /http.*/o
+      a['class'] = ((a['class']||'').split(' ') << 'external-link').join(' ')
+      a['target'] = '_blank'
       next
     end
     
@@ -107,7 +110,7 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
       abs_path = $1
     elsif abs_path =~ /^(.+)\.html$/o
       abs_path = $1
-    end    
+    end
     if abs_path.end_with?('/')
       abs_path = abs_path[0..-2]
     end
