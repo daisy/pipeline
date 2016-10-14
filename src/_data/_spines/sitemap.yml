@@ -4,7 +4,10 @@
     - group: {{site.baseurl}}/Get_Help/User_Guide.html
       pages:
         - {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
-        - {{site.baseurl}}/wiki/webui/User-Guide/
+        - group: {{site.baseurl}}/wiki/webui/User-Guide/
+          pages:
+            - {{site.baseurl}}/wiki/webui/Templating/
+            - {{site.baseurl}}/wiki/webui/Administrator-settings/
         {{#sparql}}
         SELECT ?href WHERE {
           []    a        dp2:script ;
