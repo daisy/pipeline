@@ -49,7 +49,7 @@
     <p:option name="asciimath" required="false" px:type="string" select="''">
         <p:documentation>
             <h2 px:role="name">asciimath</h2>
-            <p px:role="desc">How to render ASCIIMath-encoded formulas? `ASCIIMATH' or `MATHML'. Default is `ASCIIMATH'.</p>
+            <p px:role="desc">How to render ASCIIMath-encoded formulas? `ASCIIMATH` or `MATHML`. Default is `ASCIIMATH`.</p>
             <pre><code class="example">MATHML</code></pre>
         </p:documentation>
     </p:option>
@@ -57,7 +57,7 @@
     <p:option name="images" required="false" px:type="string" select="''">
         <p:documentation>
             <h2 px:role="name">images</h2>
-            <p px:role="desc">How to render images? `EMBED' or `LINK'. Default is `EMBED'.</p>
+            <p px:role="desc">How to render images? `EMBED` or `LINK`. Default is `EMBED`.</p>
             <pre><code class="example">LINK</code></pre>
         </p:documentation>
     </p:option>
