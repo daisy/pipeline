@@ -7,7 +7,6 @@ import java.util.Set;
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskGroupFactory;
 import org.daisy.dotify.api.tasks.TaskGroupSpecification;
-import org.daisy.dotify.impl.input.xml.CommonResourceLocator;
 import org.daisy.dotify.impl.input.xml.XMLL10nResourceLocator;
 
 import aQute.bnd.annotation.component.Component;
@@ -37,7 +36,7 @@ public class Epub3InputManagerFactory implements TaskGroupFactory {
 
 	@Override
 	public TaskGroup newTaskGroup(TaskGroupSpecification spec) {
-		return new Epub3InputManager(locator.getResourceLocator(spec.getLocale()), new CommonResourceLocator("resource-files/common"));
+		return new Epub3InputManager();
 	}
 
 	@Override

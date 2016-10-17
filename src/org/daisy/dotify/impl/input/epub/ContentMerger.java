@@ -9,6 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.daisy.dotify.common.io.FileIO;
+import org.daisy.dotify.common.io.ResourceLocator;
+import org.daisy.dotify.common.io.ResourceLocatorException;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
 
@@ -16,10 +18,12 @@ public class ContentMerger {
 	private final static String CONTENT_NAME = "package.opf.html";
 	private final ContainerReader container;
 	private final Logger logger;
+	private final ResourceLocator locator;
 
 	public ContentMerger(ContainerReader container) throws EPUB3ReaderException {
 		this.logger = Logger.getLogger(this.getClass().getCanonicalName());
-		this.container = container;		
+		this.container = container;
+		this.locator = new EpubResourceLocator("resource-files");
 	}
 
 	public ContentMerger(File epub) throws EPUB3ReaderException {
@@ -76,8 +80,8 @@ public class ContentMerger {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("content", contentName);
 		try {
-			XMLTools.transform(sourceOpf, targetOpf, this.getClass().getResource("resource-files/opf-merge-spine.xslt"), params);
-		} catch (XMLToolsException e) {
+			XMLTools.transform(sourceOpf, targetOpf, locator.getResource("opf-merge-spine.xslt"), params);
+		} catch (XMLToolsException | ResourceLocatorException e) {
 			throw new EPUB3ReaderException(e);
 		}
 	}
@@ -98,8 +102,8 @@ public class ContentMerger {
 		}
 		Map<String, Object> params = new HashMap<String, Object>();
 		try {
-			XMLTools.transform(opfFile, resultFile, this.getClass().getResource("resource-files/opf-merge-content-docs.xslt"), params,  new net.sf.saxon.TransformerFactoryImpl());
-		} catch (XMLToolsException e) {
+			XMLTools.transform(opfFile, resultFile, locator.getResource("opf-merge-content-docs.xslt"), params,  new net.sf.saxon.TransformerFactoryImpl());
+		} catch (XMLToolsException | ResourceLocatorException e) {
 			throw new EPUB3ReaderException(e);
 		}
 	}
