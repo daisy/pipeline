@@ -31,11 +31,11 @@ public final class BrailleConstants {
 	/**
 	 * String containing the 64 braille patterns in 6 dot braille in Unicode order 						
 	 */
-	public final static String BRAILLE_PATTERNS_64;
+	public static final String BRAILLE_PATTERNS_64;
 	/**
 	 * String containing all 256 braille patterns in Unicode order
 	 */
-	public final static String BRAILLE_PATTERNS_256;
+	public static final String BRAILLE_PATTERNS_256;
 	
 	static {
 		StringBuilder tmp = new StringBuilder();
