@@ -15,7 +15,7 @@ import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
 
 public class ContentMerger {
-	private final static String CONTENT_NAME = "package.opf.html";
+	private static final String CONTENT_NAME = "package.opf.html";
 	private final ContainerReader container;
 	private final Logger logger;
 	private final ResourceLocator locator;

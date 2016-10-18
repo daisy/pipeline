@@ -41,7 +41,7 @@ import javax.xml.transform.stream.StreamSource;
  * @author Joel Håkansson
  */
 class FileCompare {
-	//private final static String TRANSFORMER_FACTORY_KEY = "javax.xml.transform.TransformerFactory";
+	//private static final String TRANSFORMER_FACTORY_KEY = "javax.xml.transform.TransformerFactory";
 	private final boolean keepTempFiles;
 	private File t1;
 	private File t2;

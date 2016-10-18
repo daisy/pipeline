@@ -21,7 +21,7 @@ public class SPIHelper {
 	private static TaskGroupFactoryMakerService inputManagerFactory;
 	private static PagedMediaWriterFactoryMakerService pagedMediaWriterFactory;
 	private static FormatterEngineFactoryService formatterEngingeFactory;
-	private final static Logger logger = Logger.getLogger(SPIHelper.class.getCanonicalName());
+	private static final Logger logger = Logger.getLogger(SPIHelper.class.getCanonicalName());
 	
 	/**
 	 * <p>Gets a table catalog instance, or null if not found.</p> 

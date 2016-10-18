@@ -64,8 +64,8 @@ public class XMLInputManager implements TaskGroup {
 	 * Specifies a location where the intermediary obfl output should be stored
 	 */
 	static final String OBFL_OUTPUT_LOCATION = "obfl-output-location";
-	private final static String TEMPLATES_PATH = "templates/";
-	private final static String LOCALIZATION_PROPS = "localization.xml";
+	private static final String TEMPLATES_PATH = "templates/";
+	private static final String LOCALIZATION_PROPS = "localization.xml";
 	private final ResourceLocator localLocator;
 	private final ResourceLocator commonLocator;
 	private final String name;
