@@ -40,37 +40,49 @@
 		</a>
 	</xsl:template>
 	
-	<xsl:template mode="serialize" match="/p:*/p:option">
+	<xsl:template mode="serialize" match="/p:*/p:option[not(@px:output=('result','temp') or @px:type='anyFileURI')]">
 		<span rel="option">
 			<xsl:next-match/>
 		</span>
 	</xsl:template>
 	
-	<xsl:template mode="serialize" match="/p:*/p:input">
+	<xsl:template mode="serialize" match="/p:*/p:input|
+	                                      /p:*/p:option[not(@px:output=('result','temp')) and @px:type='anyFileURI']">
 		<span rel="input">
 			<xsl:next-match/>
 		</span>
 	</xsl:template>
 	
-	<xsl:template mode="attribute-value" match="/p:*/p:option/@name">
+	<xsl:template mode="serialize" match="/p:*/p:output|
+	                                      /p:*/p:option[@px:output='result']">
+		<span rel="output">
+			<xsl:next-match/>
+		</span>
+	</xsl:template>
+	
+	<xsl:template mode="serialize" match="/p:*/p:option[@px:output='temp']">
+		<!--
+		    ignore
+		-->
+	</xsl:template>
+	
+	<xsl:template mode="attribute-value" match="/p:*/p:input/@port|
+	                                            /p:*/p:output/@port|
+	                                            /p:*/p:option/@name">
 		<span property="id">
 			<xsl:value-of select="."/>
 		</span>
 	</xsl:template>
 	
-	<xsl:template mode="attribute-value" match="/p:*/p:input/@port">
-		<span property="id">
-			<xsl:value-of select="."/>
-		</span>
-	</xsl:template>
-	
-	<xsl:template mode="attribute-value" match="/p:*/p:input/@sequence">
+	<xsl:template mode="attribute-value" match="/p:*/p:input/@sequence|
+	                                            /p:*/p:output/@sequence|
+	                                            /p:*/p:option[@px:type='anyFileURI']/@px:sequence">
 		<span property="sequence" datatype="xsd:boolean">
 			<xsl:value-of select="."/>
 		</span>
 	</xsl:template>
 	
-	<xsl:template mode="attribute-value" match="/p:*/p:option/@required">
+	<xsl:template mode="attribute-value" match="/p:*/p:option[not(@px:output='result' or @px:type='anyFileURI')]/@required">
 		<span property="required" datatype="xsd:boolean">
 			<xsl:value-of select="."/>
 		</span>
@@ -78,15 +90,31 @@
 	
 	<xsl:variable name="STRING_RE">^\s*('([^']*)'|"([^"]*)")\s*$</xsl:variable>
 	
-	<xsl:template mode="attribute-value" match="/p:*/p:option/@select">
+	<xsl:template mode="attribute-value" match="/p:*/p:option[not(@px:output='result' or @px:type='anyFileURI')]/@select">
 		<span property="default">
 			<xsl:value-of select="replace(.,$STRING_RE,'$2$3')"/>
 		</span>
 	</xsl:template>
 	
+	<xsl:template mode="attribute-value" match="/p:*/p:option[not(@px:output='result' or @px:type='anyFileURI')]/@px:data-type|
+	                                            /p:*/p:option[not(@px:output='result' or @px:type='anyFileURI' or @px:data-type)]/@px:type">
+		<span property="data-type">
+			<xsl:value-of select="."/>
+		</span>
+	</xsl:template>
+	
+	<xsl:template mode="attribute-value" match="/p:*/p:input/@px:media-type|
+	                                            /p:*/p:output/@px:media-type|
+	                                            /p:*/p:option[@px:output='result' or @px:type='anyFileURI']/@px:media-type">
+		<span property="media-type">
+			<xsl:value-of select="."/>
+		</span>
+	</xsl:template>
+	
 	<xsl:template mode="serialize"
 	              match="/p:*/p:option/p:documentation/*[@px:role='name']|
-	                     /p:*/p:input/p:documentation/*[@px:role='name']">
+	                     /p:*/p:input/p:documentation/*[@px:role='name']|
+	                     /p:*/p:output/p:documentation/*[@px:role='name']">
 		<span property="name" content="{string(.)}">
 			<xsl:next-match/>
 		</span>
@@ -94,7 +122,8 @@
 	
 	<xsl:template mode="serialize"
 	              match="/p:*/p:option/p:documentation/*[@px:role='desc']|
-	                     /p:*/p:input/p:documentation/*[@px:role='desc']">
+	                     /p:*/p:input/p:documentation/*[@px:role='desc']|
+	                     /p:*/p:output/p:documentation/*[@px:role='desc']">
 		<xsl:variable name="content" as="node()*">
 			<xsl:apply-templates mode="serialize"/>
 		</xsl:variable>
