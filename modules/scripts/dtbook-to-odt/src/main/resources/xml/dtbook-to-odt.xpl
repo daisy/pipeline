@@ -14,6 +14,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to ODT</h1>
         <p px:role="desc">Transforms a DTBook (DAISY 3 XML) document into an ODT (Open Document Text).</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/dtbook-to-odt/doc/dtbook-to-odt.html">
+            Online documentation
+        </a>
         <dl px:role="author">
             <dt>Name:</dt>
             <dd px:role="name">Bert Frees</dd>

@@ -15,6 +15,9 @@
         <h1 px:role="name">EPUB 3 to PEF</h1>
         <p px:role="desc" xml:space="preserve">Transforms a EPUB 3 publication into a PEF.</p>
         <p>Extends <a href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl">XML to PEF</a>.</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/braille/epub3-to-pef/doc/epub3-to-pef.html">
+            Online documentation
+        </a>
     </p:documentation>
 
     <p:option name="epub" required="true" px:type="anyFileURI" px:sequence="false" px:media-type="application/epub+zip application/oebps-package+xml">

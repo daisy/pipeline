@@ -9,8 +9,8 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to ZedAI</h1>
         <p px:role="desc">Transforms DTBook XML into ZedAI XML.</p>
-        <a px:role="homepage" href="http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI">
-            http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/dtbook-to-zedai/doc/dtbook-to-zedai.html">
+            Online documentation
         </a>
         <div px:role="author maintainer">
             <p px:role="name">Marisa DeMeglio</p>

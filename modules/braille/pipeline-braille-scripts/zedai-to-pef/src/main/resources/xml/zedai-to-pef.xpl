@@ -11,8 +11,8 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">ZedAI to PEF</h1>
         <p px:role="desc">Transforms a ZedAI (DAISY 4 XML) document into a PEF.</p>
-        <a px:role="homepage" href="http://code.google.com/p/daisy-pipeline/wiki/ZedAIToPEFDoc">
-            http://code.google.com/p/daisy-pipeline/wiki/ZedAIToPEFDoc
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/braille/zedai-to-pef/doc/zedai-to-pef.html">
+            Online documentation
         </a>
         <dl px:role="author">
             <dt>Name:</dt>

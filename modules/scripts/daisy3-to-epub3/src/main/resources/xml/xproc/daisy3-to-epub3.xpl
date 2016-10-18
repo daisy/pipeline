@@ -17,8 +17,8 @@
             <dt>Organization:</dt>
             <dd px:role="organization">DAISY</dd>
         </dl>
-        <p>Homepage: <a px:role="homepage"
-                >http://code.google.com/p/daisy-pipeline/wiki/DAISY3ToEPUB3</a>.</p>
+        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/daisy3-to-epub3/doc/daisy3-to-epub3.html"
+                >Online documentation</a></p>
     </p:documentation>
 
 

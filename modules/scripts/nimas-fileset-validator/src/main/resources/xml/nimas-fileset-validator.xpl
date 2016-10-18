@@ -15,9 +15,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">NIMAS Fileset Validator</h1>
         <p px:role="desc">Validate a NIMAS Fileset. Supports inclusion of MathML.</p>
-        <a px:role="homepage"
-            href="http://code.google.com/p/daisy-pipeline/wiki/NimasFilesetValidator">
-            http://code.google.com/p/daisy-pipeline/wiki/NimasFilesetValidator </a>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/nimas-fileset-validator/doc/nimas-fileset-validator.html">
+            Online documentation
+        </a>
         <div px:role="author maintainer">
             <p px:role="name">Marisa DeMeglio</p>
             <a px:role="contact" href="mailto:marisa.demeglio@gmail.com"

@@ -11,6 +11,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">HTML to PEF</h1>
         <p px:role="desc">Transforms a HTML document into a PEF.</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/braille/html-to-pef/doc/html-to-pef.html">
+            Online documentation
+        </a>
         <dl px:role="author">
             <dt>Name:</dt>
             <dd px:role="name">Jostein Austvik Jacobsen</dd>
