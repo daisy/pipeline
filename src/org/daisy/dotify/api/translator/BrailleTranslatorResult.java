@@ -12,13 +12,13 @@ public interface BrailleTranslatorResult {
 	 * on the instance up to this point. Note that this only counts actually forced
 	 * breaks, not breaks where forced was <i>allowed but not used</i> .
 	 */
-	public final static String METRIC_FORCED_BREAK = "forced-break-count";
+	public static final String METRIC_FORCED_BREAK = "forced-break-count";
 
 	/**
 	 * Metric identifier representing the total number of breaks applied at break
 	 * points <i>inside words</i> on the instance up to this point.
 	 */
-	public final static String METRIC_HYPHEN_COUNT = "word-break-count";
+	public static final String METRIC_HYPHEN_COUNT = "word-break-count";
 
 	/**
 	 * Gets the translated string preceding the row break, including a translated 

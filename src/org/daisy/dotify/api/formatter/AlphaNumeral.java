@@ -1,7 +1,7 @@
 package org.daisy.dotify.api.formatter;
 
 class AlphaNumeral {
-	private final static int size = 26;
+	private static final int size = 26;
 
 	public static String int2alpha(int n) {
 		if (n < 1) {

@@ -6,7 +6,7 @@ public final class BlockSpacing {
 	private final int top;
 	private final int bottom;
 	
-	public final static class Builder {
+	public static final class Builder {
 		int left = 0;
 		int right = 0;
 		int top = 0;

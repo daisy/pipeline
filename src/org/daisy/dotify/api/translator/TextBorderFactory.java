@@ -11,7 +11,7 @@ public interface TextBorderFactory {
 	 * Mode feature. The corresponding value should be
 	 * a string.
 	 */
-	public final static String FEATURE_MODE = "mode";
+	public static final String FEATURE_MODE = "mode";
 
 	/**
 	 * Sets a feature.

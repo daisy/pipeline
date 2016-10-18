@@ -20,7 +20,7 @@ public class BorderSpecification {
 		}
 	}
 
-	final static int DEFAULT_WIDTH = 1;
+	static final int DEFAULT_WIDTH = 1;
 	
 	public static class Builder {
 		private Style style;

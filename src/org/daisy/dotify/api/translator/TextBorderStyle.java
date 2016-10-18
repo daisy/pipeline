@@ -13,7 +13,7 @@ public class TextBorderStyle {
 	/**
 	 * Loaded on first access
 	 */
-	public final static TextBorderStyle NONE = new Builder().build();
+	public static final TextBorderStyle NONE = new Builder().build();
 
 	/*
 	 * enum StylePreset {

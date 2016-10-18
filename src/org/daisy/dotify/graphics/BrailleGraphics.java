@@ -10,7 +10,7 @@ import java.util.List;
  *
  */
 public class BrailleGraphics {
-	private final static int dx = 2;
+	private static final int dx = 2;
 	
 	private final boolean eightDot;
 	private final int t = 0;
