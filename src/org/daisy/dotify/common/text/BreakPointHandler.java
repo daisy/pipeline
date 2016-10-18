@@ -19,12 +19,12 @@ import java.util.regex.Pattern;
  *
  */
 public class BreakPointHandler {
-	private final static char SOFT_HYPHEN = '\u00ad';
-	private final static char ZERO_WIDTH_SPACE = '\u200b';
-	private final static char DASH = '-';
-	private final static char SPACE = ' ';
-	private final static Pattern LEADING_WHITESPACE = Pattern.compile("\\A[\\s\u200b]+");
-	private final static Pattern TRAILING_WHITESPACE = Pattern.compile("[\\s\u200b]+\\z");
+	private static final char SOFT_HYPHEN = '\u00ad';
+	private static final char ZERO_WIDTH_SPACE = '\u200b';
+	private static final char DASH = '-';
+	private static final char SPACE = ' ';
+	private static final Pattern LEADING_WHITESPACE = Pattern.compile("\\A[\\s\u200b]+");
+	private static final Pattern TRAILING_WHITESPACE = Pattern.compile("[\\s\u200b]+\\z");
 	private String charsStr;
 	private int offset;
 	private TreeMap<Integer, NonStandardHyphenationInfo> meta;

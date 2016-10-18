@@ -16,9 +16,9 @@ import java.util.regex.PatternSyntaxException;
  *
  */
 public class TextFileReader implements Closeable {
-	private final static Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
-	private final static String DEFAULT_EXPRESSION = ",\\s*";
-	private final static int DEFAULT_LIMIT = 0;
+	private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+	private static final String DEFAULT_EXPRESSION = ",\\s*";
+	private static final int DEFAULT_LIMIT = 0;
 	private LineNumberReader lnr;
 	private Pattern pattern;
 	private int limit;

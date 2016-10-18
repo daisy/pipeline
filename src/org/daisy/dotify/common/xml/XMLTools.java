@@ -131,7 +131,7 @@ public class XMLTools {
 	 * @return returns true if the file is well formed XML, false otherwise
 	 * @throws XMLToolsException
 	 */
-	public final static boolean isWellformedXML(File f) throws XMLToolsException {
+	public static final boolean isWellformedXML(File f) throws XMLToolsException {
 		return parseXML(f)!=null;
 	}
 	
@@ -141,11 +141,11 @@ public class XMLTools {
 	 * @return returns the root node, or null if file is not well formed
 	 * @throws XMLToolsException
 	 */
-	public final static XMLInfo parseXML(File f) throws XMLToolsException {
+	public static final XMLInfo parseXML(File f) throws XMLToolsException {
 		return parseXML(f, false);
 	}
 	
-	public final static XMLInfo parseXML(File f, boolean peek) throws XMLToolsException {
+	public static final XMLInfo parseXML(File f, boolean peek) throws XMLToolsException {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setNamespaceAware(true);
 		SAXParser saxParser = null;
