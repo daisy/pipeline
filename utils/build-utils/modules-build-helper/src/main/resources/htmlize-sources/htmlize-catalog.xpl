@@ -6,6 +6,7 @@
             exclude-inline-prefixes="#all">
     
     <p:input port="sources" sequence="true"/>
+    <p:input port="parameters" kind="parameter"/>
     <p:option name="input-base-uri" required="true"/>
     <p:option name="output-base-uri" required="true"/>
     
@@ -19,6 +20,9 @@
             </p:input>
             <p:with-param name="input-base-uri" select="$input-base-uri"/>
             <p:with-param name="output-base-uri" select="$output-base-uri"/>
+            <p:input port="parameters">
+                <p:pipe step="main" port="parameters"/>
+            </p:input>
         </p:xslt>
         <p:sink/>
     </p:for-each>

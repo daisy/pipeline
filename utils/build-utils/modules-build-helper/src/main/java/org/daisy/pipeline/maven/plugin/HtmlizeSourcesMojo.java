@@ -36,13 +36,19 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 	private File sourceDirectory;
 	
 	/**
+	 * @parameter expression="${project.basedir}/src/main/resources/META-INF/catalog.xml"
+	 * @required
+	 */
+	private File catalogXmlFile;
+	
+	/**
 	 * @parameter
 	 */
 	private String includes;
 	private final String defaultIncludes = "**/*.xpl";
 	
 	/**
-	 * @parameter expression="${project.build.directory}/generated-resources/doc"
+	 * @parameter expression="${project.build.directory}/generated-resources/htmlize-sources"
 	 * @required
 	 */
 	private File outputDirectory;
@@ -60,6 +66,9 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 			for (String f : scanner.getIncludedFiles())
 				sources.add(new File(sourceDirectory, f));
 			final Map<FilenameFilter,Htmlizer> htmlizers = new HashMap<FilenameFilter,Htmlizer>(); {
+				final Map<String,Map<String,String>> params
+					= ImmutableMap.of("parameters",
+					                  (Map<String,String>)ImmutableMap.of("catalog-xml-uri", asURI(catalogXmlFile).toASCIIString()));
 				htmlizers.put(
 					new FilenameFilter() {
 						public boolean accept(File dir, String name) {
@@ -74,7 +83,7 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 								           null,
 								           ImmutableMap.of("input-base-uri", asURI(sourceDirectory).toASCIIString(),
 								                           "output-base-uri", asURI(outputDirectory).toASCIIString()),
-								           null);
+								           params);
 						}
 					}
 				);
@@ -92,7 +101,7 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 								           null,
 								           ImmutableMap.of("input-base-uri", asURI(sourceDirectory).toASCIIString(),
 								                           "output-base-uri", asURI(outputDirectory).toASCIIString()),
-								           null);
+								           params);
 						}
 					}
 				);
