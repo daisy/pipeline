@@ -38,7 +38,7 @@
 	<xsl:template mode="attribute-value"
 	              match="p:import/@href|
 	                     p:xslt/p:input[@port='stylesheet']/p:document/@href">
-		<a href="{pf:relativize-uri(resolve-uri(.,base-uri(/*)),$output-uri)}" class="source">
+		<a href="{pf:relativize-uri(resolve-uri(.,$input-uri),$output-uri)}" class="source">
 			<xsl:value-of select="."/>
 		</a>
 	</xsl:template>

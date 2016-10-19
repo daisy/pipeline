@@ -2,8 +2,6 @@ package org.daisy.pipeline.maven.plugin;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,15 +15,18 @@ import com.google.common.collect.Multimaps;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 
 import org.codehaus.plexus.util.DirectoryScanner;
 
 import org.daisy.maven.xproc.api.XProcEngine;
 import org.daisy.maven.xproc.api.XProcExecutionException;
-import org.daisy.maven.xproc.calabash.Calabash;
-		
+
+import static org.daisy.pipeline.maven.plugin.utils.asURI;
+
 /**
  * @goal htmlize-sources
+ * @requiresDependencyResolution compile
  */
 public class HtmlizeSourcesMojo extends AbstractMojo {
 	
@@ -53,9 +54,15 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 	 */
 	private File outputDirectory;
 	
+	/**
+	 * @parameter expression="${project}"
+	 */
+	private MavenProject mavenProject;
+	
 	public void execute() throws MojoFailureException {
 		try {
-			final XProcEngine engine = new Calabash();
+			@SuppressWarnings("unchecked")
+			final XProcEngine engine = new CalabashWithPipelineModules(mavenProject.getCompileClasspathElements());
 			List<File> sources = new ArrayList<File>();
 			if (includes == null)
 				includes = defaultIncludes;
@@ -124,23 +131,5 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 	
 	private static interface Htmlizer {
 		public void run(Iterable<File> files, File sourceDirectory, File outputDirectory);
-	}
-	
-	private static URI asURI(Object o) {
-		try {
-			if (o instanceof URI)
-				return (URI)o;
-			if (o instanceof File)
-				return asURI(((File)o).toURI());
-			if (o instanceof URL) {
-				URL url = (URL)o;
-				if (url.getProtocol().equals("jar"))
-					return new URI("jar:" + new URI(null, url.getAuthority(), url.getPath(), url.getQuery(), url.getRef()).toASCIIString());
-				String authority = (url.getPort() != -1) ?
-					url.getHost() + ":" + url.getPort() :
-					url.getHost();
-				return new URI(url.getProtocol(), authority, url.getPath(), url.getQuery(), url.getRef()); }}
-		catch (Exception e) {}
-		throw new RuntimeException("Object can not be converted to URI: " + o);
 	}
 }

@@ -14,6 +14,8 @@
     <xsl:param name="outputDir" required="no" select="''" as="xs:string"/>
     <xsl:param name="version" required="yes"  as="xs:string"/>
     
+    <xsl:include href="../lib/extend-script.xsl"/>
+    
     <xsl:template match="/*">
         <!-- extract data types -->
         <xsl:variable name="data-types" as="element()*">
@@ -21,7 +23,7 @@
                 <xsl:variable name="uri" select="resolve-uri(@uri, base-uri(.))"/>
                 <xsl:if test="doc-available($uri)">
                     <xsl:apply-templates select="document(@uri)/p:*/p:option/p:pipeinfo/pxd:data-type/*" mode="data-type-xml">
-                        <xsl:with-param name="script-uri" tunnel="yes" select="@name"/>
+                        <xsl:with-param name="script-name" tunnel="yes" select="@name"/>
                     </xsl:apply-templates>
                 </xsl:if>
             </xsl:for-each>
@@ -93,10 +95,24 @@
     <xsl:template match="cat:uri[@px:extends]" mode="ds">
         <xsl:variable name="generated-href" select="concat($outputDir,f:generated-href(@uri))"/>
         <xsl:result-document href="{$generated-href}" method="xml">
-            <xsl:call-template name="extend-script">
-                <xsl:with-param name="script-uri-element" select="."/>
-                <xsl:with-param name="extends-uri-element" select="(//cat:uri[current()/@px:extends=@name])[1]"/>
-            </xsl:call-template>
+            <xsl:variable name="doc">
+                <xsl:call-template name="extend-script">
+                    <xsl:with-param name="script-name" tunnel="yes" select="@name"/>
+                    <xsl:with-param name="script-uri" select="resolve-uri(@uri,base-uri(.))"/>
+                    <xsl:with-param name="extends-uri" select="resolve-uri(@px:extends,base-uri(.))"/>
+                    <xsl:with-param name="catalog-xml" select="/*"/>
+                </xsl:call-template>
+            </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$doc/p:*/p:option/p:pipeinfo/pxd:data-type">
+                    <xsl:apply-templates select="$doc" mode="finalize-script">
+                        <xsl:with-param name="script-name" tunnel="yes" select="@name"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$doc"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:result-document>
         <xsl:copy>
             <xsl:apply-templates select="@* except @uri" mode="#current"/>
@@ -114,8 +130,8 @@
                     <xsl:when test="$doc/p:*/p:option/p:pipeinfo/pxd:data-type">
                         <xsl:variable name="generated-href" select="concat($outputDir,f:generated-href(@uri))"/>
                         <xsl:result-document href="{$generated-href}" method="xml">
-                            <xsl:apply-templates select="$doc" mode="script">
-                                <xsl:with-param name="script-uri" tunnel="yes" select="@name"/>
+                            <xsl:apply-templates select="$doc" mode="finalize-script">
+                                <xsl:with-param name="script-name" tunnel="yes" select="@name"/>
                             </xsl:apply-templates>
                         </xsl:result-document>
                         <xsl:copy>
@@ -140,50 +156,6 @@
         <xsl:value-of select="concat('/generated-scripts/',replace($uri,'^.*/([^/]+)$','$1'))"/>
     </xsl:function>
     
-    <!-- recursive template allowing scripts to inherit from scripts that inherit from scripts -->
-    <xsl:template name="extend-script">
-        <xsl:param name="script-uri-element" as="element()"/>
-        <xsl:param name="extends-uri-element" as="element()?"/>
-        
-        <xsl:variable name="extends-doc">
-            <xsl:choose>
-                <xsl:when test="$extends-uri-element">
-                    <xsl:call-template name="extend-script">
-                        <xsl:with-param name="script-uri-element" select="$extends-uri-element"/>
-                        <xsl:with-param name="extends-uri-element" select="(//cat:uri[$extends-uri-element/@px:extends=@name])[1]"/>
-                    </xsl:call-template>
-                    
-                </xsl:when>
-                <xsl:when test="$script-uri-element/@px:extends">
-                    <xsl:variable name="_extends-doc" select="$script-uri-element/document(@px:extends)"/>
-                    <xsl:if test="not($_extends-doc)">
-                        <xsl:message terminate="yes" select="concat('Unable to resolve script extension: ', $script-uri-element/@px:extends)"/>
-                    </xsl:if>
-                    <xsl:sequence select="$_extends-doc"/>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:variable>
-        
-        <xsl:variable name="script-doc" select="$script-uri-element/document(@uri)"/>
-        <xsl:if test="not($script-doc)">
-            <xsl:message terminate="yes" select="concat('Unable to resolve script: ', $script-uri-element/@uri,' (',base-uri($script-uri-element/@uri),')')"/>
-        </xsl:if>
-        
-        <xsl:choose>
-            <xsl:when test="$extends-doc">
-                <xsl:apply-templates select="$script-doc" mode="extend-script">
-                    <xsl:with-param name="original-script" select="$extends-doc" tunnel="yes"/>
-                    <xsl:with-param name="script-uri" tunnel="yes" select="$script-uri-element/@name"/>
-                </xsl:apply-templates>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:apply-templates select="$script-doc" mode="script">
-                    <xsl:with-param name="script-uri" tunnel="yes" select="$script-uri-element/@name"/>
-                </xsl:apply-templates>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    
     <xsl:template match="cat:uri[@px:data-type]" mode="ds">
         <xsl:variable name="id" select="string(document(@uri,.)/*/@id)"/>
         <xsl:result-document href="{$outputDir}/OSGI-INF/{replace($id,'.*:','')}.xml" method="xml">
@@ -205,86 +177,21 @@
                          cat:uri/@px:data-type"
                   mode="ds"/>
     
-    <xsl:template match="/*/p:input[@port] | /*/p:option[@name]" mode="extend-script">
-        <xsl:param name="original-script" as="document-node()" tunnel="yes"/>
-        <xsl:variable name="name" as="xs:string" select="(@port, @name)[1]"/>
-        <xsl:variable name="original-input-or-option" as="element()?" select="$original-script/*/(p:input|p:option)[(@port,@name)=$name]"/>
-        <xsl:variable name="new-attributes" as="xs:string*" select="@*/concat('{',namespace-uri(.),'}',name(.))"/>
-        <xsl:copy>
-            <xsl:apply-templates select="@*" mode="#current"/>
-            <xsl:sequence select="$original-input-or-option/@*[not(concat('{',namespace-uri(.),'}',name(.))=$new-attributes or name()='select' and current()/@required = 'true')]"/>
-            <xsl:apply-templates select="self::p:option/p:pipeinfo/pxd:data-type" mode="data-type-attribute"/>
-            <xsl:if test="not(p:documentation)">
-                <xsl:sequence select="$original-input-or-option/p:documentation"/>
-            </xsl:if>
-            <xsl:apply-templates select="node()" mode="#current">
-                <xsl:with-param name="original-input-or-option" select="$original-input-or-option" tunnel="yes"/>
-            </xsl:apply-templates>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="/*/p:input/p:documentation | /*/p:option/p:documentation" mode="extend-script">
-        <xsl:param name="original-input-or-option" as="element()?" tunnel="yes"/>
-        <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:if test="not(descendant::*[tokenize(@pxd:role,'\s+')='name'])">
-                <xsl:sequence select="$original-input-or-option/p:documentation/*[tokenize(@pxd:role,'\s+')='name']"/>
-            </xsl:if>
-            <xsl:apply-templates select="node()" mode="#current">
-                <xsl:with-param name="original-input-or-option" select="$original-input-or-option" tunnel="yes"/>
-            </xsl:apply-templates>
-            <xsl:if test="not(descendant::*[tokenize(@pxd:role,'\s+')='desc'])">
-                <xsl:sequence select="$original-input-or-option/p:documentation/*[tokenize(@pxd:role,'\s+')='desc']"/>
-            </xsl:if>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="*[tokenize(@pxd:role,'\s+')=('name','desc')]" mode="extend-script">
-        <xsl:param name="original-input-or-option" as="element()?" tunnel="yes"/>
-        <xsl:copy>
-            <xsl:apply-templates select="@* except @pxd:inherit" mode="#current"/>
-            <xsl:if test="@pxd:inherit = 'prepend'">
-                <xsl:copy-of select="$original-input-or-option//*[tokenize(@pxd:role,'\s+')=current()/tokenize(@pxd:role,'\s+')]/node()"/>
-                <xsl:text><![CDATA[
-
-]]></xsl:text>
-            </xsl:if>
-            <xsl:copy-of select="node()"/>
-            <xsl:if test="@pxd:inherit = 'append'">
-                <xsl:text><![CDATA[
-
-]]></xsl:text>
-                <xsl:copy-of select="$original-input-or-option//*[tokenize(@pxd:role,'\s+')=current()/tokenize(@pxd:role,'\s+')]/node()"/>
-            </xsl:if>
-        </xsl:copy>
-    </xsl:template>
-    
-    <xsl:template match="/p:*" mode="script" priority="2">
-        <xsl:choose>
-            <xsl:when test="p:option/p:pipeinfo/pxd:data-type">
-                <xsl:next-match/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="."/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    
-    <xsl:template match="/*/p:option[p:pipeinfo/pxd:data-type]" mode="script">
+    <xsl:template match="/*/p:option[p:pipeinfo/pxd:data-type]" mode="finalize-script">
         <xsl:copy>
             <xsl:apply-templates select="@*" mode="#current"/>
             <xsl:apply-templates select="p:pipeinfo/pxd:data-type" mode="data-type-attribute"/>
-            <xsl:apply-templates mode="#current"/>
+            <xsl:apply-templates select="node()" mode="#current"/>
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="/*/p:option/p:pipeinfo" mode="script extend-script">
+    <xsl:template match="/*/p:option/p:pipeinfo" mode="finalize-script">
         <xsl:if test="* except pxd:data-type">
             <xsl:next-match/>
         </xsl:if>
     </xsl:template>
     
-    <xsl:template match="/*/p:option/p:pipeinfo/pxd:data-type" mode="script extend-script"/>
+    <xsl:template match="/*/p:option/p:pipeinfo/pxd:data-type" mode="finalize-script"/>
     
     <xsl:template match="/*/p:option/p:pipeinfo/pxd:data-type" mode="data-type-attribute">
         <xsl:variable name="id" as="xs:string">
@@ -306,11 +213,11 @@
     </xsl:template>
     
     <xsl:template match="/*/p:option/p:pipeinfo/pxd:data-type" mode="data-type-id" as="xs:string">
-        <xsl:param name="script-uri" tunnel="yes"/>
-        <xsl:sequence select="(@id,child::*/@id,concat('{',$script-uri,'}',parent::*/parent::*/@name))[1]"/>
+        <xsl:param name="script-name" tunnel="yes"/>
+        <xsl:sequence select="(@id,child::*/@id,concat('{',$script-name,'}',parent::*/parent::*/@name))[1]"/>
     </xsl:template>
     
-    <xsl:template match="@*|node()" mode="ds script extend-script data-type-xml">
+    <xsl:template match="@*|node()" mode="ds data-type-xml">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()" mode="#current"/>
         </xsl:copy>
