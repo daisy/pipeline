@@ -33,9 +33,23 @@
 	
 	<xsl:template mode="serialize" match="cat:uri">
 		<span about="{pf:relativize-uri(resolve-uri(@uri,base-uri(/*)),$output-uri)}">
-			<xsl:if test="@px:script='true'">
-				<xsl:attribute name="typeof" select="'script'"/>
-			</xsl:if>
+			<xsl:choose>
+				<xsl:when test="@px:script='true'">
+					<xsl:attribute name="typeof" select="'script'"/>
+				</xsl:when>
+				<xsl:when test="@px:data-type='true'">
+					<xsl:attribute name="typeof" select="'data-type'"/>
+					<xsl:variable name="data-type-doc" select="document(@uri,.)"/>
+					<meta property="id" content="{string($data-type-doc/*/@id)}"/>
+					<xsl:variable name="data-type-xml" as="node()*">
+						<xsl:apply-templates mode="serialize" select="$data-type-doc/*"/>
+					</xsl:variable>
+					<!--
+					    Note: backslashes must be escaped (not sure if this is a bug in the ruby RDF library)
+					-->
+					<meta property="definition" content="{replace(string-join($data-type-xml/string(),''),'\\','\\\\')}"/>
+				</xsl:when>
+			</xsl:choose>
 			<xsl:next-match/>
 		</span>
 	</xsl:template>

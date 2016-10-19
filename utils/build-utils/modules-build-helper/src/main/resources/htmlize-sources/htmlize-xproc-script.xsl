@@ -7,24 +7,22 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
 	
-	<xsl:param name="catalog-xml-uri"/>
-	
 	<xsl:include href="htmlize-xproc.xsl"/>
 	<xsl:include href="../lib/extend-script.xsl"/>
 	
-	<xsl:variable name="catalog-xml" select="doc($catalog-xml-uri)"/>
-	<xsl:variable name="script-entry-in-catalog" select="$catalog-xml//cat:uri[@px:script='true' and resolve-uri(@uri,base-uri(.))=$input-uri]"/>
-		
 	<xsl:template mode="serialize" match="/*">
 		<xsl:param name="parent-in-original-script" tunnel="yes" as="element()?" select="()"/>
+		<xsl:if test="not($entry-in-catalog/@px:script='true')">
+			<xsl:message terminate="yes">Error</xsl:message>
+		</xsl:if>
 		<xsl:choose>
 			<xsl:when test="not($parent-in-original-script)
-			                and $script-entry-in-catalog/@px:extends">
+			                and $entry-in-catalog/@px:extends">
 				<xsl:variable name="inherited-script">
 					<xsl:call-template name="extend-script">
-						<xsl:with-param name="script-name" tunnel="yes" select="$script-entry-in-catalog/@name"/>
-						<xsl:with-param name="script-uri" select="$script-entry-in-catalog/resolve-uri(@uri,base-uri(.))"/>
-						<xsl:with-param name="extends-uri" select="$script-entry-in-catalog/resolve-uri(@px:extends,base-uri(.))"/>
+						<xsl:with-param name="script-name" tunnel="yes" select="$entry-in-catalog/@name"/>
+						<xsl:with-param name="script-uri" select="$entry-in-catalog/resolve-uri(@uri,base-uri(.))"/>
+						<xsl:with-param name="extends-uri" select="$entry-in-catalog/resolve-uri(@px:extends,base-uri(.))"/>
 						<xsl:with-param name="catalog-xml" select="$catalog-xml/*"/>
 					</xsl:call-template>
 				</xsl:variable>
@@ -58,6 +56,12 @@
 	</xsl:template>
 	
 	<xsl:template match="/*/p:option/p:pipeinfo/pxd:data-type" mode="finalize-script"/>
+	
+	<xsl:template match="/*/p:option/@pxd:data" mode="serialize" priority="1.1">
+		<xsl:if test="not(parent::*/p:pipeinfo/pxd:data-type)">
+			<xsl:next-match/>
+		</xsl:if>
+	</xsl:template>
 	
 	<xsl:template priority="1"
 	              mode="serialize"
@@ -162,10 +166,18 @@
 	</xsl:template>
 	
 	<xsl:template mode="attribute-value" match="/*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI')]/@pxd:data-type|
-	                                            /*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI' or @pxd:data-type)]/@pxd:type">
+	                                            /*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI' or @pxd:data-type or p:pipeinfo/pxd:data-type)]/@pxd:type">
 		<xsl:call-template name="set-property">
 			<xsl:with-param name="property" select="'data-type'"/>
 		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template priority="0.6"
+	              mode="serialize"
+	              match="/*/p:option/p:pipeinfo/pxd:data-type">
+		<span rel="data-type">
+			<xsl:next-match/>
+		</span>
 	</xsl:template>
 	
 	<xsl:template mode="attribute-value" match="/*/p:input/@pxd:media-type|
@@ -196,28 +208,6 @@
 			<xsl:with-param name="property" select="'desc'"/>
 			<xsl:with-param name="content" select="string-join($content/string(),'')"/>
 		</xsl:call-template>
-	</xsl:template>
-	
-	<xsl:template name="set-rel">
-		<xsl:param name="rel" required="yes"/>
-		<span rel="{$rel}">
-			<xsl:next-match/>
-		</span>
-	</xsl:template>
-	
-	<xsl:template name="set-property">
-		<xsl:param name="property" required="yes"/>
-		<xsl:param name="content" select="string(.)"/>
-		<xsl:param name="datatype" select="()"/>
-		<span property="{$property}">
-			<xsl:if test="exists($datatype)">
-				<xsl:attribute name="datatype" select="$datatype"/>
-			</xsl:if>
-			<xsl:if test="self::* or not($content=string(.))">
-				<xsl:attribute name="content" select="$content"/>
-			</xsl:if>
-			<xsl:next-match/>
-		</span>
 	</xsl:template>
 	
 </xsl:stylesheet>
