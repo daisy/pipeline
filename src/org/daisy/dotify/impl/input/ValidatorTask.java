@@ -29,6 +29,7 @@ import com.thaiopensource.util.PropertyMap;
 import com.thaiopensource.util.PropertyMapBuilder;
 import com.thaiopensource.validate.ValidateProperty;
 import com.thaiopensource.validate.ValidationDriver;
+import com.thaiopensource.validate.prop.rng.RngProperty;
 
 /**
  * <p>This task validates the input file against the given schema. The 
@@ -96,6 +97,7 @@ public class ValidatorTask extends ReadOnlyTask {
 		PropertyMapBuilder propertyBuilder = new PropertyMapBuilder();
 
         try {
+        	RngProperty.CHECK_ID_IDREF.add(propertyBuilder);
     		propertyBuilder.put(ValidateProperty.ERROR_HANDLER, errorHandler);
     		propertyBuilder.put(ValidateProperty.ENTITY_RESOLVER, new EntityResolverCache());
     		PropertyMap map = propertyBuilder.toPropertyMap();
