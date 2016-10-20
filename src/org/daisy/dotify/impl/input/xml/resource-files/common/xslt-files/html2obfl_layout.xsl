@@ -441,7 +441,7 @@
 		<table-of-contents name="full-toc">
 			<xsl:choose>
 				<xsl:when test="//html:*[epub:types(.)=('part')]">
-					<xsl:for-each-group select="//*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][not(ancestor::*[epub:types(.)=('toc', 'titlepage')])]" 
+					<xsl:for-each-group select="//*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][not(ancestor::*[epub:types(.)=('toc', 'titlepage') or epub:notes(.)])]" 
 						group-starting-with="html:h1[ancestor::*[epub:types(.)=('part')]]">
 						<xsl:choose>
 							<xsl:when test="current-group()[1][self::html:h1 and ancestor::*[epub:types(.)=('part')]]">
@@ -469,7 +469,7 @@
 					</xsl:for-each-group>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:for-each-group select="//*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][not(ancestor::*[epub:types(.)=('cover', 'colophon', 'toc', 'titlepage')])]" group-starting-with="html:h1">
+					<xsl:for-each-group select="//*[self::html:h1 or self::html:h2 or self::html:h3 or self::html:h4 or self::html:h5 or self::html:h6][not(ancestor::*[epub:types(.)=('cover', 'colophon', 'toc', 'titlepage') or epub:notes(.)])]" group-starting-with="html:h1">
 						<toc-entry><xsl:apply-templates select="." mode="toc-entry-attributes"/>
 								<xsl:call-template name="insertTocLevels">
 									<xsl:with-param name="seq" select="current-group()[not(self::html:h1)]"></xsl:with-param>
