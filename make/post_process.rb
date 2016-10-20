@@ -33,35 +33,39 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
   ## process links
   doc.css('a').each do |a|
 
-    # external link
-    if a['href'] =~ /http.*/o
-      a['class'] = ((a['class']||'').split(' ') << 'external-link').join(' ')
-      a['target'] = '_blank'
-      next
-    end
-    
-    # absolute link
-    if a['href'] =~ /^\//o
-      abs_path = a['href']
-
     # link to source files with special class attribute
-    elsif ['userdoc','apidoc','source'].include?(a['class'])
+    if ['userdoc','apidoc','source'].include?(a['class'])
       query = SPARQL.parse(%Q{
         BASE <#{page_url}>
         PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
         SELECT ?href WHERE {
           { <#{a['href']}> dp2:doc ?href }
           UNION
-          { [] dp2:doc ?href ; dp2:id '#{a['href']}' } .
+          { [] dp2:doc ?href ; dp2:alias '#{a['href']}' } .
           ?href a dp2:#{a['class']} .
         }
       })
       result = query.execute(graph)
       if not result.empty?
         abs_url = result[0]['href']
+      elsif a['href'] =~ /http.*/o
+        link_warning(a, f)
+        next
+      end
+    else
+      
+      # external link
+      if a['href'] =~ /http.*/o
+        a['class'] = ((a['class']||'').split(' ') << 'external-link').join(' ')
+        a['target'] = '_blank'
+        next
+      end
+      
+      # absolute link
+      if a['href'] =~ /^\//o
+        abs_path = a['href']
       end
     end
-    
     if not abs_path
       if not abs_url
         
