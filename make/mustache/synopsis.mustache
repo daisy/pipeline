@@ -5,44 +5,77 @@
 
 ### Inputs
 
-<table>
+<table class="synopsis-inputs">
 <tr>
-<th>ID</th>
 <th>Name</th>
 <th>Description</th>
+<th>Media Type</th>
 <th>Sequence</th>
 </tr>
 {{#all}}
-<tr>
-<td>{{id}}</td>
-<td>{{name}}</td>
-<td>{{{desc}}}</td>
-<td>{{#sequence}}yes{{/sequence}}{{^sequence}}no{{/sequence}}</td>
+<tr class="synopsis-input">
+<td class="synopsis-input-name">{{name}}</td>
+<td class="synopsis-input-desc">{{{desc.long}}}</td>
+<td class="synopsis-input-media-type">
+<ul class="media-types">
+{{#media-type}}
+<li>{{.}}</li>
+{{/media-type}}
+</ul>
+</td>
+<td class="synopsis-input-sequence">{{#sequence}}yes{{/sequence}}{{^sequence}}no{{/sequence}}</td>
 </tr>
 {{/all}}
 </table>
 
 {{/inputs}}
 
+{{#outputs}}
+
+### Outputs
+
+<table class="synopsis-outputs">
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>Media type</th>
+</tr>
+{{#all}}
+<tr class="synopsis-output">
+<td class="synopsis-output-name">{{name}}</td>
+<td class="synopsis-output-desc">{{{desc.long}}}</td>
+<td class="synopsis-output-media-type">
+<ul class="media-types">
+{{#media-type}}
+<li>{{.}}</li>
+{{/media-type}}
+</ul>
+</td>
+</tr>
+{{/all}}
+</table>
+
+{{/outputs}}
+
 {{#options}}
 
 ### Options
 
-<table>
+<table class="synopsis-options">
 <tr>
-<th>ID</th>
 <th>Name</th>
 <th>Description</th>
-<th>Required</th>
+<th>Type</th>
 <th>Default value</th>
+<th>Required</th>
 </tr>
 {{#all}}
-<tr>
-<td>{{id}}</td>
-<td>{{name}}</td>
-<td>{{{desc}}}</td>
-<td>{{#required}}yes{{/required}}{{^required}}no{{/required}}</td>
-<td>{{default}}</td>
+<tr class="synopsis-option">
+<td class="synopsis-option-name">{{name}}</td>
+<td class="synopsis-option-desc">{{{desc.long}}}</td>
+<td class="synopsis-option-data-type">{{{data-type}}}</td>
+<td class="synopsis-option-value"><code>{{default}}</code></td>
+<td class="synopsis-option-required">{{#required}}yes{{/required}}{{^required}}no{{/required}}</td>
 </tr>
 {{/all}}
 </table>

@@ -6,6 +6,7 @@ require 'rdf/turtle'
 require 'rdf/rdfa'
 require 'github/markup'
 require 'yaml'
+require 'nokogiri'
 require "#{File.expand_path(File.dirname(__FILE__))}/../src/_plugins/lib/relativize"
 
 meta_file = ARGV[1]
@@ -53,6 +54,99 @@ def render_markdown(md)
   GitHub::Markup.render('irrelevant.md', md)
 end
 
+def render_description(desc)
+  lines = desc.lines
+  if lines.count > 1
+    [lines[0],render_markdown(lines[1..-1].join)]
+  else
+    lines
+  end
+end
+
+$data_type_rng = File.open("#{File.dirname(__FILE__)}/data-type.rng", 'r') { |f| Nokogiri::XML::RelaxNG(f) }
+
+def render_data_type(definition, sequence)
+  xml = Nokogiri::XML(definition)
+  $data_type_rng.validate(xml).each do |error|
+    puts error.message
+    raise 'Cannot parse data type XML: ' + definition
+  end
+  render = ''
+  node = xml.elements[0]
+  case node.name
+  when 'data'
+    data = node
+    type = data.attributes['type']
+    case type.value
+    when 'string'
+      node = data.elements[0]
+      case node.name
+      when 'documentation'
+        documentation = node
+        render << render_description(documentation.text).join
+        return render
+      when 'param'
+        param = node
+        name = param.attributes['name']
+        case name.value
+        when 'pattern'
+          render << "A string that matches the pattern:<br/><code class='pattern'>#{pattern.text}</code>"
+          return render
+        end
+      end
+    end
+  when 'choice'
+    if sequence
+      render << 'Zero or more of the following:'
+    else
+      render << 'One of the following:'
+    end
+    render << '<dl class="choice">'
+    choice = node
+    choice.elements.each do |node|
+      case node.name
+      when 'value'
+        value = node
+        render << '<dt><code>'
+        render << value.text
+        render << '</code></dt>'
+      when 'data'
+        data = node
+        type = data.attributes['type']
+        documentation = data.elements[0]
+        case type.value
+        when 'anyFileURI'
+          render << '<dt><var>&lt;anyFileURI&gt;</var></dt>'
+          render << '<dd>'
+          if documentation
+            render << render_description(documentation.text).join
+          else
+            render << "A relative file path"
+          end
+          render << '</dd>'
+        else
+          render << '<dt><var>&lt;anyURI&gt;</var></dt>'
+          render << '<dd>'
+          if documentation
+            render << render_description(documentation.text).join
+          else
+            render << "An absolute URI"
+          end
+          render << '</dd>'
+        end
+      when 'documentation'
+        documentation = node
+        render << '<dd>'
+        render << render_description(documentation.text).join
+        render << '</dd>'
+      end
+    end
+    render << '</dl>'
+    return render
+  end
+  raise 'coding error while parsing ' + definition
+end
+
 class MyMustache < Mustache
   def partial(name)
     path = "#{File.expand_path(File.dirname(__FILE__))}/mustache/#{name}.mustache"
@@ -64,16 +158,21 @@ class MyMustache < Mustache
   end
 end
 
-DOC = RDF::URI("http://www.daisy.org/ns/pipeline/doc")
-SCRIPT = RDF::URI("http://www.daisy.org/ns/pipeline/script")
-INPUT = RDF::URI("http://www.daisy.org/ns/pipeline/input")
-OPTION = RDF::URI("http://www.daisy.org/ns/pipeline/option")
-ID = RDF::URI("http://www.daisy.org/ns/pipeline/id")
-NAME = RDF::URI("http://www.daisy.org/ns/pipeline/name")
-DESC = RDF::URI("http://www.daisy.org/ns/pipeline/desc")
-REQUIRED = RDF::URI("http://www.daisy.org/ns/pipeline/required")
-DEFAULT = RDF::URI("http://www.daisy.org/ns/pipeline/default")
-SEQUENCE = RDF::URI("http://www.daisy.org/ns/pipeline/sequence")
+DP2 = "http://www.daisy.org/ns/pipeline/"
+DOC = RDF::URI("#{DP2}doc")
+SCRIPT = RDF::URI("#{DP2}script")
+INPUT = RDF::URI("#{DP2}input")
+OUTPUT = RDF::URI("#{DP2}output")
+OPTION = RDF::URI("#{DP2}option")
+ID = RDF::URI("#{DP2}id")
+NAME = RDF::URI("#{DP2}name")
+DESC = RDF::URI("#{DP2}desc")
+REQUIRED = RDF::URI("#{DP2}required")
+DEFAULT = RDF::URI("#{DP2}default")
+SEQUENCE = RDF::URI("#{DP2}sequence")
+MEDIA_TYPE = RDF::URI("#{DP2}media-type")
+DATA_TYPE = RDF::URI("#{DP2}data-type")
+DEFINITION = RDF::URI("#{DP2}definition")
 
 Dir.glob(ARGV[0]).each do |f|
   if File.file?(f)
@@ -106,6 +205,25 @@ Dir.glob(ARGV[0]).each do |f|
       end
       solutions_rendered
     }
+    script_info_solutions = RDF::Query.execute(graph) do
+      pattern [ :script, DOC, page_url ]
+      pattern [ :script, ID, :id ]
+      pattern [ :script, NAME, :name ], optional: true
+      pattern [ :script, DESC, :desc ], optional: true
+    end
+    if not script_info_solutions.empty?
+      solution = script_info_solutions[0]
+      page_view['id'] = solution.id
+      if solution.bound?('name')
+        page_view['name'] =  solution.name.to_s
+      end
+      if solution.bound?('desc')
+        page_view['desc'] = {
+          'short' => render_description(solution.desc.to_s)[0],
+          'long' => render_description(solution.desc.to_s).join
+        }
+      end
+    end
     options_query = RDF::Query.new do
       pattern [ :script, DOC, page_url ]
       pattern [ :script, RDF.type, SCRIPT ]
@@ -113,6 +231,8 @@ Dir.glob(ARGV[0]).each do |f|
       pattern [ :option, ID, :id ]
       pattern [ :option, REQUIRED, :required ], optional: true
       pattern [ :option, DEFAULT, :default ], optional: true
+      pattern [ :option, SEQUENCE, :sequence ], optional: true
+      pattern [ :option, DATA_TYPE, :data_type ], optional: true
       pattern [ :option, NAME, :name ], optional: true
       pattern [ :option, DESC, :desc ], optional: true
     end
@@ -120,23 +240,56 @@ Dir.glob(ARGV[0]).each do |f|
     if not options_solutions.empty?
       options = Hash.new
       page_view['options'] = options
-      options_solutions.each do |solution|
-        options[solution.id.to_s] = {
-          'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
-          'required' => solution.bound?('required') ? solution.required.true? : false,
-          'default' => solution.bound?('default') ? solution.default.to_s : nil
-        }
-      end
       options['all'] = options_solutions.map { |solution|
+        id = solution.id.to_s
+        sequence = solution.bound?('sequence') ? solution.sequence.true? : false
+        if solution.bound?('data_type')
+          case solution.data_type
+          when RDF::Literal
+            data_type_id = solution.data_type.to_s
+            data_type_solutions = RDF::Query.execute(graph) do
+              pattern [ :type, RDF.type, DATA_TYPE ]
+              pattern [ :type, ID, data_type_id ]
+              pattern [ :type, DEFINITION, :def ]
+            end
+          else
+            data_type_solutions = RDF::Query.execute(graph) do
+              pattern [ :script, DOC, page_url ]
+              pattern [ :script, OPTION, :option ]
+              pattern [ :option, ID, id ]
+              pattern [ :option, DATA_TYPE, :data_type ]
+              pattern [ :data_type, RDF.type, DATA_TYPE ]
+              pattern [ :data_type, ID, :id ]
+              pattern [ :data_type, DEFINITION, :def ]
+            end
+          end
+          if not data_type_solutions.empty?
+            data_type = render_data_type(data_type_solutions[0].def.to_s, sequence)
+          else
+            case solution.data_type
+            when RDF::Literal
+              data_type = '<var>&lt;' + data_type_id + '&gt;</var>'
+            else
+              data_type = nil
+            end
+          end
+        else
+          data_type = '<var>&lt;string&gt;</var>'
+        end
         {
-          'id' => solution.id.to_s,
+          'id' => id,
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
+          'desc' => solution.bound?('desc') ? {'short' => render_description(solution.desc.to_s)[0],
+                                               'long' => render_description(solution.desc.to_s).join } : nil,
           'required' => solution.bound?('required') ? solution.required.true? : false,
-          'default' => solution.bound?('default') ? solution.default.to_s : nil
+          'sequence' => sequence,
+          'default' => solution.bound?('default') ? solution.default.to_s : nil,
+          'data-type' => data_type
         }
       }
+      options['all'].each do |option|
+        options[option['id']] = option
+      end
     end
     inputs_query = RDF::Query.new do
       pattern [ :script, DOC, page_url ]
@@ -144,29 +297,55 @@ Dir.glob(ARGV[0]).each do |f|
       pattern [ :script, INPUT, :input ]
       pattern [ :input, ID, :id ]
       pattern [ :input, SEQUENCE, :sequence ], optional: true
-      pattern [ :input, DEFAULT, :default ], optional: true
       pattern [ :input, NAME, :name ], optional: true
       pattern [ :input, DESC, :desc ], optional: true
+      pattern [ :input, MEDIA_TYPE, :type ], optional: true
     end
     inputs_solutions = graph.query(inputs_query)
     if not inputs_solutions.empty?
       inputs = Hash.new
       page_view['inputs'] = inputs
-      inputs_solutions.each do |solution|
-        inputs[solution.id.to_s] = {
-          'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
-          'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false
-        }
-      end
       inputs['all'] = inputs_solutions.map { |solution|
         {
           'id' => solution.id.to_s,
           'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? render_markdown(solution.desc.to_s) : nil,
-          'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false
+          'desc' => solution.bound?('desc') ? {'short' => render_description(solution.desc.to_s)[0],
+                                               'long' => render_description(solution.desc.to_s).join } : nil,
+          'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false,
+          'media-type' => solution.bound?('type') ? solution.type.to_s.split(' ') : nil
         }
       }
+      inputs['all'].each do |input|
+        inputs[input['id']] = input
+      end
+    end
+    outputs_query = RDF::Query.new do
+      pattern [ :script, DOC, page_url ]
+      pattern [ :script, RDF.type, SCRIPT ]
+      pattern [ :script, OUTPUT, :output ]
+      pattern [ :output, ID, :id ]
+      pattern [ :output, SEQUENCE, :sequence ], optional: true
+      pattern [ :output, NAME, :name ], optional: true
+      pattern [ :output, DESC, :desc ], optional: true
+      pattern [ :output, MEDIA_TYPE, :type ], optional: true
+    end
+    outputs_solutions = graph.query(outputs_query)
+    if not outputs_solutions.empty?
+      outputs = Hash.new
+      page_view['outputs'] = outputs
+      outputs['all'] = outputs_solutions.map { |solution|
+        {
+          'id' => solution.id.to_s,
+          'name' => solution.bound?('name') ? solution.name.to_s : nil,
+          'desc' => solution.bound?('desc') ? {'short' => render_description(solution.desc.to_s)[0],
+                                               'long' => render_description(solution.desc.to_s).join } : nil,
+          'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false,
+          'media-type' => solution.bound?('type') ? solution.type.to_s.split(' ') : nil
+        }
+      }
+      outputs['all'].each do |output|
+        outputs[output['id']] = output
+      end
     end
     page_view.template_file = f
     file_rendered = page_view.render

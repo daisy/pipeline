@@ -1,0 +1,37 @@
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+
+start =
+  element choice {
+    attribute id { xsd:QName }?,
+    ((element value { text },
+      documentation?)
+     | element data {
+         attribute type { "anyURI" },
+         documentation?
+       }
+     | element data {
+         attribute type { "anyFileURI" },
+         attribute datatypeLibrary {
+           "http://www.daisy.org/ns/pipeline/xproc"
+         },
+         documentation?
+       })+
+  }
+  | element data {
+      attribute id { xsd:QName }?,
+      attribute type { "string" },
+      documentation?,
+      element param {
+        attribute name { "pattern" },
+        text
+      }
+    }
+documentation =
+  element documentation {
+    attribute xml:lang { text }?,
+    text
+  }
+  | element a:documentation {
+      attribute xml:lang { text }?,
+      text
+    }
