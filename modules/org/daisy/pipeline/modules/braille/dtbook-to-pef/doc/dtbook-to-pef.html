@@ -108,9 +108,105 @@
     
       
         <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/daisy202-validator/doc/daisy202-validator.html">
+      
+      DAISY 2.02 Validator
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
           <a href="/pipeline/modules/org/daisy/pipeline/modules/daisy202-to-epub3/doc/daisy202-to-epub3.html">
       
       DAISY 2.02 to EPUB 3
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/daisy3-to-daisy202/doc/daisy3-to-daisy202.html">
+      
+      DAISY 3 to DAISY 2.02
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/daisy3-to-epub3/doc/daisy3-to-epub3.html">
+      
+      DAISY 3 to EPUB 3
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/dtbook-validator/doc/dtbook-validator.html">
+      
+      DTBook Validator
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/dtbook-to-daisy3/doc/dtbook-to-daisy3.html">
+      
+      DTBook to DAISY 3
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/dtbook-to-epub3/doc/dtbook-to-epub3.html">
+      
+      DTBook to EPUB3
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/dtbook-to-html/doc/dtbook-to-html.html">
+      
+      DTBook to HTML
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/dtbook-to-odt/doc/dtbook-to-odt.html">
+      
+      DTBook to ODT
       
         </a>
       
@@ -142,6 +238,18 @@
     
       
         <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/epub3-validator/doc/epub3-validator.html">
+      
+      EPUB 3 Validator
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
           <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/epub3-to-pef/doc/epub3-to-pef.html">
       
       EPUB 3 to PEF
@@ -154,9 +262,69 @@
     
       
         <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/epub3-to-daisy202/doc/epub3-to-daisy202.html">
+      
+      EPUB3 to DAISY 2.02
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/html-to-epub3/doc/html-to-epub3.html">
+      
+      HTML to EPUB3
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
           <a href="/pipeline/modules/org/daisy/pipeline/modules/braille/html-to-pef/doc/html-to-pef.html">
       
       HTML to PEF
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/nimas-fileset-validator/doc/nimas-fileset-validator.html">
+      
+      NIMAS Fileset Validator
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/zedai-to-epub3/doc/zedai-to-epub3.html">
+      
+      ZedAI to EPUB3
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/modules/org/daisy/pipeline/modules/zedai-to-html/doc/zedai-to-html.html">
+      
+      ZedAI to HTML
       
         </a>
       
@@ -237,323 +405,321 @@
 
 <h1 id="dtbook-to-pef">DTBook to PEF</h1>
 
+<p>Transforms a DTBook (DAISY 3 XML) document into a PEF.</p>
+
 <h2 id="synopsis">Synopsis</h2>
 
 <h3 id="inputs">Inputs</h3>
 
-<table>
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Description</th>
-<th>Sequence</th>
-</tr>
-<tr>
-<td>source</td>
-<td>Input DTBook</td>
-<td></td>
-<td>no</td>
-</tr>
-</table>
+<ul class="synopsis-inputs">
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">Input DTBook</div>
+<div class="synopsis-input-desc">
+
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>application/x-dtbook+xml</li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+</ul>
 
 <h3 id="options">Options</h3>
 
-<table>
-<tr>
-<th>ID</th>
-<th>Name</th>
-<th>Description</th>
-<th>Required</th>
-<th>Default value</th>
-</tr>
-<tr>
-<td>stylesheet</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>transform</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>include-preview</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>include-brf</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>include-obfl</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>ascii-file-format</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>ascii-table</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>page-width</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>page-height</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>left-margin</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>duplex</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>levels-in-footer</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>main-document-language</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>hyphenation</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>line-spacing</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>tab-width</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>capital-letters</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>accented-letters</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>polite-forms</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>downshift-ordinal-numbers</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>include-captions</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>include-images</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>include-image-groups</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>include-line-groups</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>text-level-formatting</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>include-note-references</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>include-production-notes</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>show-braille-page-numbers</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>show-print-page-numbers</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>force-braille-page-break</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>toc-depth</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>footnotes-placement</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>colophon-metadata-placement</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>rear-cover-placement</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>number-of-sheets</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>maximum-number-of-sheets</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>minimum-number-of-sheets</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>pef-output-dir</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>brf-output-dir</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>preview-output-dir</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-<tr>
-<td>temp-dir</td>
-<td></td>
-<td></td>
-<td>no</td>
-<td></td>
-</tr>
-</table>
+<ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of XSLT or CSS/SASS style sheets to apply.
+</div>
+<div class="longdesc">A list of XSLT or CSS/SASS style sheets to apply.
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+
+<p>Style sheets can also be associated with the source in other ways: linked (using an
+<a href="https://www.w3.org/TR/xml-stylesheet/#the-xml-stylesheet-processing-instruction" class="external-link" target="_blank">'xml-stylesheet' processing
+instruction</a> or a
+<a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">'link' element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">'style'
+element</a>) and/or inlined (using
+'<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style</a>' attributes).</p>
+
+<p>Style sheets are applied to the document in the following way: XSLT style sheets are applied before
+CSS/SASS style sheets. XSLT style sheets are applied one by one, first the ones specified through
+this option, then the ones associated with the source document, in the order in which they are
+specified.</p>
+
+<p>All CSS/SASS style sheets are applied at once, but the order in which they are specified (first the
+ones specified through this option, then the ones associated with the source document) has an
+influence on the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading order</a>.</p>
+
+<p>CSS/SASS style sheets are interpreted according to <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
+CSS</a> rules.</p>
+
+<p>For info on how to use SASS (Syntactically Awesome StyleSheets) see the <a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" class="external-link" target="_blank">SASS
+manual</a>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: Zero or more of the following:<dl class="choice">
+<dt><var>&lt;anyFileURI&gt;</var></dt>
+<dd>File path relative to input DTBook.</dd>
+<dt><var>&lt;anyURI&gt;</var></dt>
+<dd>Any other absolute URI</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Transformer query</div>
+<div class="synopsis-option-desc">
+The transformer query.
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: A query
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>(translator:liblouis)(formatter:dotify)</code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include preview</div>
+<div class="synopsis-option-desc">
+Whether or not to include a preview of the PEF in HTML.
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include plain text file (BRF)</div>
+<div class="synopsis-option-desc">
+Whether or not to include a plain text ASCII version of the PEF.
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include OBFL</div>
+<div class="synopsis-option-desc">
+Keeps the intermediary OBFL-file for debugging.
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Plain text (BRF) file format</div>
+<div class="synopsis-option-desc">
+The file format to store the plain text version.
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">ASCII braille table</div>
+<div class="synopsis-option-desc">
+The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Page width</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The number of columns available for printing.
+</div>
+<div class="longdesc">The number of columns available for printing.
+<p>Makes the variable <code>$page-width</code> available in style sheets and includes the following rule by default:</p>
+
+<p><code>
+@page {
+  size: $page-width $page-height;
+}
+</code></p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>40</code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Page height</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The number of rows available for printing.
+</div>
+<div class="longdesc">The number of rows available for printing.
+<p>Makes the variable <code>$page-height</code> available in style sheets and includes the following rule by default:</p>
+
+<p><code>
+@page {
+  size: $page-width $page-height;
+}
+</code></p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>25</code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Left margin</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>0</code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Duplex</div>
+<div class="synopsis-option-desc">
+When enabled, will print on both sides of the paper.
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Levels in footer</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Makes the variable `$levels-in-footer` available in style sheets and
+</div>
+<div class="longdesc">Makes the variable `$levels-in-footer` available in style sheets and
+<p>includes the following rule by default:</p>
+
+<p><code>
+@for $level from 1 through 6 {
+  @if $levels-in-footer &gt;= $level {
+    h#{$level} {
+      string-set: footer content();
+    }
+  }
+}
+</code></p>
+
+<p>In other words, the <code>footer</code> string is updated each time a heading with a level smaller than or
+equal to <code>levels-in-footer</code> is encountered. In order to use the <code>footer</code> string include a rule like
+the following in your custom style sheet:</p>
+
+<p>```
+@page {
+  @bottom-center {
+    content: string(footer);</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Data-type</b>: <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>6</code>
+</div>
+<div class="synopsis-option-required">
+<b>Required</b>: no</div>
+</li>
+</ul>
+
+<script type="text/javascript">
+function toggleDetails() {
+  if (this.parentElement.classList.contains('details-on')) {
+  	this.parentElement.classList.remove('details-on');
+	this.parentElement.classList.add('details-off');
+  } else {
+  	this.parentElement.classList.remove('details-off');
+	this.parentElement.classList.add('details-on');
+  }
+}
+window.onload = function() {
+  var buttons = document.getElementsByClassName('toggle-details');
+  var i;
+  for (i = 0; i < buttons.length; i++) {
+    buttons[i].parentElement.classList.remove('details-on');
+	buttons[i].parentElement.classList.add('details-off');
+    buttons[i].addEventListener('click', toggleDetails);
+  }
+}
+</script>
 
 
   </body>

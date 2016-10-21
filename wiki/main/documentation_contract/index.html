@@ -141,11 +141,14 @@ defined in the catalog XML.</li>
 <code>dp2:option</code>: The object (anonymous node) is an option of the
 subject (script).</li>
   <li>
-<code>dp2:input</code>: The object (anonymous node) is an input port of the
-subject (script).</li>
+<code>dp2:input</code>: The object (anonymous node) is an input port/option of
+the subject (script).</li>
   <li>
-<code>dp2:id</code>: The object (string) is the name/ID of the subject (option
-or input port).</li>
+<code>dp2:output</code>: The object (anonymous node) is an output port/option
+of the subject (script).</li>
+  <li>
+<code>dp2:id</code>: The object (string) is the name/ID of the subject
+(input/output port or option).</li>
   <li>
 <code>dp2:name</code>: The object (string) is the nice name of the subject
 (option or input port).</li>
@@ -160,8 +163,14 @@ or input port).</li>
 subject (option).</li>
   <li>
 <code>dp2:sequence</code>: The object (boolean) determines whether the subject
-(input port) accepts a sequence of documents or not. Defaults to
-false.</li>
+(input/output/option) accepts a sequence of documents/values or
+not. Defaults to false.</li>
+  <li>
+<code>dp2:data-type</code>: The object (string) is the data type ID of the
+subject (option).</li>
+  <li>
+<code>dp2:media-type</code>: The object (string) is the media type of the
+subject (input port/option or output port/option).</li>
 </ul>
 
 <h2 id="special-classes">Special classes</h2>
@@ -178,6 +187,17 @@ processing of anchor elements (see above).</li>
 
 <ul>
   <li>
+<code>id</code>: The ID of a script (only available in the context of script
+documentation).</li>
+  <li>
+<code>name</code>: The name of a script (only available in the context of
+script documentation).</li>
+  <li>
+<code>desc</code>: The description of a script (only available in the context
+of script documentation). May contain HTML (so you probably want to
+use the triple mustache to render it:
+<code>{{{desc}}}</code>).</li>
+  <li>
     <p><code>options</code>: The options of a script. This variable is only available
 in the context of script documentation. The data is built from
 existing RDF metadata and is structured as follows:</p>
@@ -191,7 +211,8 @@ existing RDF metadata and is structured as follows:</p>
 - <span class="string"><span class="content">option2:</span><span class="content">
     name: 'Option 2'
     required: false
-    default: 'foo'</span></span>
+    default: 'foo'
+    data-type: '&amp;lt;dl&amp;gt;&amp;lt;dt&amp;gt;foo&amp;lt;/dt&amp;gt;&amp;lt;dt&amp;gt;bar&amp;lt;/dt&amp;gt;&amp;lt;/dl&amp;gt;'</span></span>
 - <span class="string"><span class="content">all:</span></span>
   - <span class="string"><span class="content">id: option1</span></span>
     <span class="key">name</span>: <span class="string"><span class="content">'Option 1'</span></span>
@@ -201,15 +222,15 @@ existing RDF metadata and is structured as follows:</p>
     <span class="key">name</span>: <span class="string"><span class="content">'Option 2'</span></span>
     <span class="key">required</span>: <span class="string"><span class="content">false</span></span>
     <span class="key">default</span>: <span class="string"><span class="content">'foo'</span></span>
+    <span class="key">data-type</span>: <span class="string"><span class="content">'&amp;lt;dl&amp;gt;&amp;lt;dt&amp;gt;foo&amp;lt;/dt&amp;gt;&amp;lt;dt&amp;gt;bar&amp;lt;/dt&amp;gt;&amp;lt;/dl&amp;gt;'</span></span>
 </pre></div>
 </div>
     </div>
 
-    <p><code>desc</code> may contain HTML (so you probably want to use the triple
-mustache to render it: <code>{{{desc}}}</code>).</p>
+    <p>Here also <code>desc</code> may contain HTML.</p>
   </li>
   <li>
-    <p><code>inputs</code>: The input ports of a script. This variable is only
+    <p><code>inputs</code>: The input ports/options of a script. This variable is only
 available in the context of script documentation. The data is built
 from existing RDF metadata and is structured as follows:</p>
 
@@ -218,12 +239,36 @@ from existing RDF metadata and is structured as follows:</p>
   <div class="code"><pre>- <span class="string"><span class="content">source:</span><span class="content">
     name: 'Source'
     desc: '...'
-    sequence: true</span></span>
+    sequence: true
+    media-type: 'application/xhtml+xml'</span></span>
 - <span class="string"><span class="content">all:</span></span>
   - <span class="string"><span class="content">id: source</span></span>
     <span class="key">name</span>: <span class="string"><span class="content">'Source'</span></span>
     <span class="key">desc</span>: <span class="string"><span class="content">'...'</span></span>
     <span class="key">sequence</span>: <span class="string"><span class="content">true</span></span>
+    <span class="key">media-type</span>: <span class="string"><span class="content">'application/xhtml+xml'</span></span>
+</pre></div>
+</div>
+    </div>
+
+    <p>Here also <code>desc</code> may contain HTML.</p>
+  </li>
+  <li>
+    <p><code>outputs</code>: The ouput ports of a script. This variable is only
+available in the context of script documentation. The data is built
+from existing RDF metadata and is structured as follows:</p>
+
+    <div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>- <span class="string"><span class="content">output-dir:</span><span class="content">
+    name: 'Output'
+    desc: '...'
+    media-type: 'application/epub+zip'</span></span>
+- <span class="string"><span class="content">all:</span></span>
+  - <span class="string"><span class="content">id: output-dir</span></span>
+    <span class="key">name</span>: <span class="string"><span class="content">'Output'</span></span>
+    <span class="key">desc</span>: <span class="string"><span class="content">'...'</span></span>
+    <span class="key">media-type</span>: <span class="string"><span class="content">'application/epub+zip'</span></span>
 </pre></div>
 </div>
     </div>

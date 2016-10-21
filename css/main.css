@@ -16,3 +16,86 @@ a.external-link::after {
 
 a.broken-link {
   text-decoration: line-through; }
+
+.synopsis-input,
+.synopsis-output,
+.synopsis-option {
+  position: relative;
+  border-bottom: 1px solid grey; }
+  .synopsis-input .toggle-details,
+  .synopsis-output .toggle-details,
+  .synopsis-option .toggle-details {
+    position: absolute;
+    right: 0;
+    top: 0; }
+    .synopsis-input .toggle-details::after,
+    .synopsis-output .toggle-details::after,
+    .synopsis-option .toggle-details::after {
+      text-decoration: underline; }
+  .synopsis-input.details-off .toggle-details::after,
+  .synopsis-output.details-off .toggle-details::after,
+  .synopsis-option.details-off .toggle-details::after {
+    content: '(Show more)'; }
+  .synopsis-input.details-off .synopsis-input-desc .longdesc,
+  .synopsis-input.details-off .synopsis-input-media-type,
+  .synopsis-input.details-off .synopsis-input-sequence,
+  .synopsis-input.details-off .synopsis-output-desc .longdesc,
+  .synopsis-input.details-off .synopsis-output-media-type,
+  .synopsis-input.details-off .synopsis-option-desc .longdesc,
+  .synopsis-input.details-off .synopsis-option-data-type,
+  .synopsis-input.details-off .synopsis-option-default,
+  .synopsis-input.details-off .synopsis-option-required,
+  .synopsis-output.details-off .synopsis-input-desc .longdesc,
+  .synopsis-output.details-off .synopsis-input-media-type,
+  .synopsis-output.details-off .synopsis-input-sequence,
+  .synopsis-output.details-off .synopsis-output-desc .longdesc,
+  .synopsis-output.details-off .synopsis-output-media-type,
+  .synopsis-output.details-off .synopsis-option-desc .longdesc,
+  .synopsis-output.details-off .synopsis-option-data-type,
+  .synopsis-output.details-off .synopsis-option-default,
+  .synopsis-output.details-off .synopsis-option-required,
+  .synopsis-option.details-off .synopsis-input-desc .longdesc,
+  .synopsis-option.details-off .synopsis-input-media-type,
+  .synopsis-option.details-off .synopsis-input-sequence,
+  .synopsis-option.details-off .synopsis-output-desc .longdesc,
+  .synopsis-option.details-off .synopsis-output-media-type,
+  .synopsis-option.details-off .synopsis-option-desc .longdesc,
+  .synopsis-option.details-off .synopsis-option-data-type,
+  .synopsis-option.details-off .synopsis-option-default,
+  .synopsis-option.details-off .synopsis-option-required {
+    display: none; }
+  .synopsis-input.details-on .toggle-details::after,
+  .synopsis-output.details-on .toggle-details::after,
+  .synopsis-option.details-on .toggle-details::after {
+    content: '(Show less)'; }
+  .synopsis-input.details-on .synopsis-input-desc .shortdesc,
+  .synopsis-input.details-on .synopsis-output-desc .shortdesc,
+  .synopsis-input.details-on .synopsis-option-desc .shortdesc,
+  .synopsis-output.details-on .synopsis-input-desc .shortdesc,
+  .synopsis-output.details-on .synopsis-output-desc .shortdesc,
+  .synopsis-output.details-on .synopsis-option-desc .shortdesc,
+  .synopsis-option.details-on .synopsis-input-desc .shortdesc,
+  .synopsis-option.details-on .synopsis-output-desc .shortdesc,
+  .synopsis-option.details-on .synopsis-option-desc .shortdesc {
+    display: none; }
+  .synopsis-input p > code:only-child,
+  .synopsis-output p > code:only-child,
+  .synopsis-option p > code:only-child {
+    white-space: pre; }
+  .synopsis-input ul.media-types,
+  .synopsis-output ul.media-types,
+  .synopsis-option ul.media-types {
+    display: inline;
+    padding-left: 0; }
+    .synopsis-input ul.media-types li,
+    .synopsis-output ul.media-types li,
+    .synopsis-option ul.media-types li {
+      display: inline; }
+      .synopsis-input ul.media-types li::after,
+      .synopsis-output ul.media-types li::after,
+      .synopsis-option ul.media-types li::after {
+        content: ", "; }
+      .synopsis-input ul.media-types li:last-child::after,
+      .synopsis-output ul.media-types li:last-child::after,
+      .synopsis-option ul.media-types li:last-child::after {
+        content: ""; }
