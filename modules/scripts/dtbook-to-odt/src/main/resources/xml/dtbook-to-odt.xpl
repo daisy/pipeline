@@ -49,19 +49,33 @@
         </p:documentation>
     </p:option>
     
-    <p:option name="asciimath" required="false" px:type="string" select="''">
+    <p:option name="asciimath" required="false" px:type="string" select="'ASCIIMATH'">
+        <p:pipeinfo>
+            <px:data-type>
+                <choice>
+                    <value>ASCIIMATH</value>
+                    <value>MATHML</value>
+                </choice>
+            </px:data-type>
+        </p:pipeinfo>
         <p:documentation>
             <h2 px:role="name">asciimath</h2>
-            <p px:role="desc">How to render ASCIIMath-encoded formulas? `ASCIIMATH` or `MATHML`. Default is `ASCIIMATH`.</p>
-            <pre><code class="example">MATHML</code></pre>
+            <p px:role="desc">How to render ASCIIMath-encoded formulas?</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="images" required="false" px:type="string" select="''">
+    <p:option name="images" required="false" px:type="string" select="'EMBED'">
+        <p:pipeinfo>
+            <px:data-type>
+                <choice>
+                    <value>EMBED</value>
+                    <value>LINK</value>
+                </choice>
+            </px:data-type>
+        </p:pipeinfo>
         <p:documentation>
             <h2 px:role="name">images</h2>
-            <p px:role="desc">How to render images? `EMBED` or `LINK`. Default is `EMBED`.</p>
-            <pre><code class="example">LINK</code></pre>
+            <p px:role="desc">How to render images?</p>
         </p:documentation>
     </p:option>
     
@@ -79,11 +93,10 @@
         </p:documentation>
     </p:option>
     
-    <p:option name="image-dpi" required="false" px:type="string" select="''">
+    <p:option name="image-dpi" required="false" px:type="integer" select="'600'">
         <p:documentation>
             <h2 px:role="name">image-dpi</h2>
-            <p px:role="desc">Resolution of images. Default is 600 DPI.</p>
-            <pre><code class="example">600</code></pre>
+            <p px:role="desc">Resolution of images in DPI.</p>
         </p:documentation>
     </p:option>
     
@@ -140,9 +153,9 @@
                     <irrelevant/>
                 </p:inline>
             </p:with-option>
-            <p:with-option name="asciimath" select="if ($asciimath=('MATHML')) then $asciimath else 'ASCIIMATH'"/>
-            <p:with-option name="images" select="if ($images=('LINK')) then $images else 'EMBED'"/>
-            <p:with-param port="parameters" name="image_dpi" select="if ($image-dpi='') then '600' else $image-dpi"/>
+            <p:with-option name="asciimath" select="$asciimath"/>
+            <p:with-option name="images" select="$images"/>
+            <p:with-param port="parameters" name="image_dpi" select="$image-dpi"/>
             <p:with-param port="parameters" name="page_numbers" select="$page-numbers"/>
             <p:with-param port="parameters" name="page_numbers_float" select="$page-numbers-float"/>
         </px:dtbook-to-odt.convert>

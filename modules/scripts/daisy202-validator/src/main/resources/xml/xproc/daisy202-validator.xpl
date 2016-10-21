@@ -40,7 +40,9 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
-            <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+            <p px:role="desc" xml:space="preserve">Validation status
+
+See [http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML](http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe port="result" step="validation-status"/>
     </p:output>
