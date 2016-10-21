@@ -140,7 +140,7 @@
 	
 	<xsl:template mode="attribute-value" match="/*/p:input/@sequence|
 	                                            /*/p:output/@sequence|
-	                                            /*/p:option[@pxd:type='anyFileURI']/@pxd:sequence">
+	                                            /*/p:option/@pxd:sequence">
 		<xsl:call-template name="set-property">
 			<xsl:with-param name="property" select="'sequence'"/>
 			<xsl:with-param name="datatype" select="'xsd:boolean'"/>
