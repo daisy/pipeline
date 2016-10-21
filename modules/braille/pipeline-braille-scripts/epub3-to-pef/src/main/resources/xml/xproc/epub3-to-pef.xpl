@@ -23,11 +23,26 @@
     <p:option name="epub" required="true" px:type="anyFileURI" px:sequence="false" px:media-type="application/epub+zip application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Input EPUB 3</h2>
-            <p px:role="desc" xml:space="preserve">The EPUB you want to convert to braille. You may alternatively use the EPUB package document (the OPF-file) if your input is a unzipped/"exploded" version of an EPUB.</p>
+            <p px:role="desc" xml:space="preserve">The EPUB you want to convert to braille.
+
+You may alternatively use the EPUB package document (the OPF-file) if your input is a unzipped/"exploded" version of an EPUB.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="stylesheet"/>
+    <p:option name="stylesheet" px:sequence="true">
+        <p:pipeinfo>
+            <px:data-type>
+                <choice>
+                    <data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc">
+                        <documentation xml:lang="en">File path relative to input EPUB 3.</documentation>
+                    </data>
+                    <data type="anyURI">
+                        <documentation xml:lang="en">Any other absolute URI</documentation>
+                    </data>
+                </choice>
+            </px:data-type>
+        </p:pipeinfo>
+    </p:option>
     
     <p:option name="apply-document-specific-stylesheets" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">

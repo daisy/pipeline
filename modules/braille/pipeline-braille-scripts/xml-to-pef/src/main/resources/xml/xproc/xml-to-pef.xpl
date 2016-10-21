@@ -11,14 +11,18 @@
     <!-- ============ -->
     <!-- Main options -->
     <!-- ============ -->
-    <p:option name="stylesheet" required="false" px:type="string" select="''">
+    <p:option name="stylesheet" required="false" px:type="string" select="''" px:sequence="true" px:media-type="text/css application/xslt+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Style sheets</h2>
-            <p px:role="desc" xml:space="preserve">XSLT or CSS/SASS style sheets to apply. A space separated list of URIs, absolute or relative to source.
+            <p px:role="desc" xml:space="preserve">A list of XSLT or CSS/SASS style sheets to apply.
 
-Style sheets can also be associated with the source in other ways: linked (using an 'xml-stylesheet'
-processing instruction or a 'link' element), embedded (using a 'style' element) and/or inlined
-(using 'style' attributes).
+Must be a space separated list of URIs, absolute or relative to the input.
+
+Style sheets can also be associated with the source in other ways: linked (using an
+['xml-stylesheet' processing instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+element](https://www.w3.org/Style/styling-XML#External)), embedded (using a ['style'
+element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using '[style'
+attributes](https://www.w3.org/TR/css-style-attr/)).
 
 Style sheets are applied to the document in the following way: XSLT style sheets are applied before
 CSS/SASS style sheets. XSLT style sheets are applied one by one, first the ones specified through
@@ -27,12 +31,19 @@ specified.
 
 All CSS/SASS style sheets are applied at once, but the order in which they are specified (first the
 ones specified through this option, then the ones associated with the source document) has an
-influence on the cascading order.</p>
+influence on the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order).
+
+CSS/SASS style sheets are interpreted according to [braille
+CSS](http://braillespecs.github.io/braille-css) rules.
+
+For info on how to use SASS (Syntactically Awesome StyleSheets) see the [SASS
+manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         </p:documentation>
     </p:option>
     <p:option name="transform" required="false" px:data-type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Transformer query</h2>
+            <p px:role="desc">The transformer query.</p>
         </p:documentation>
     </p:option>
     <p:option name="include-preview" required="false" px:type="boolean" select="'false'">
@@ -116,8 +127,10 @@ Makes the variable `$page-height` available in style sheets and includes the fol
     <p:option name="levels-in-footer" required="false" px:type="integer" select="'6'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Headers/footers: Levels in footer</h2>
-            <p px:role="desc" xml:space="preserve">Makes the variable `$levels-in-footer` available in style sheets and
-includes the following rule by default:
+            <p px:role="desc" xml:space="preserve">Specify which headings are rendered in the footer.
+              
+Makes the variable `$levels-in-footer` available in style sheets and includes the following rule by
+default:
 
 ```
 @for $level from 1 through 6 {
@@ -173,18 +186,16 @@ default:
         <p:pipeinfo>
             <px:data-type>
                 <choice>
-                    <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0" xml:lang="en">
-                        <value>Single</value>
-                        <value>Double</value>
-                    </documentation>
                     <value>single</value>
+                    <documentation xml:lang="en">Single</documentation>
                     <value>double</value>
+                    <documentation xml:lang="en">Double</documentation>
                 </choice>
             </px:data-type>
         </p:pipeinfo>
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Translation/formatting of text: Line spacing</h2>
-            <p px:role="desc" xml:space="preserve">'single' or 'double' line spacing.
+            <p px:role="desc" xml:space="preserve">Single or double line spacing.
 
 Makes the variable `$line-spacing` available in style sheets and includes the following rule by
 default:
@@ -376,8 +387,10 @@ sheet:
     <p:option name="force-braille-page-break" required="false" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Page numbers: Force braille page break</h2>
-            <p px:role="desc" xml:space="preserve">Makes the variable `$force-braille-page-break` available in style
-sheets and includes the following rule by default:
+            <p px:role="desc" xml:space="preserve">Force braille page breaks at print page breaks.
+
+Makes the variable `$force-braille-page-break` available in style sheets and includes the following
+rule by default:
 
 ```
 @if $force-braille-page-break {
@@ -514,19 +527,19 @@ rule by default:
     <!-- ======= -->
     <!-- Outputs -->
     <!-- ======= -->
-    <p:option name="pef-output-dir" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="pef-output-dir" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/x-pef+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">PEF</h2>
             <p px:role="desc" xml:space="preserve">Output directory for the PEF</p>
         </p:documentation>
     </p:option>
-    <p:option name="brf-output-dir" required="false" px:output="result" px:type="anyDirURI" select="''">
+    <p:option name="brf-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="text" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">BRF</h2>
             <p px:role="desc" xml:space="preserve">Output directory for the BRF</p>
         </p:documentation>
     </p:option>
-    <p:option name="preview-output-dir" required="false" px:output="result" px:type="anyDirURI" select="''">
+    <p:option name="preview-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Preview</h2>
             <p px:role="desc" xml:space="preserve">Output directory for the HTML preview</p>

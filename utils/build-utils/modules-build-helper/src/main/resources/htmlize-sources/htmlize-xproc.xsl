@@ -54,7 +54,9 @@
 		<xsl:variable name="data-type-xml" as="node()*">
 			<xsl:apply-templates mode="serialize"/>
 		</xsl:variable>
-		<span typeof="data-type" id="data-type-{parent::*/parent::*/@name}">
+		<xsl:variable name="id" select="concat('data-type-',parent::*/parent::*/@name)"/>
+		<span typeof="data-type" id="{$id}" resource="{pf:relativize-uri(concat($input-uri,'#',$id),$output-uri)}">
+			<link rel="doc" href="#{$id}"/>
 			<xsl:if test="not(@id|child::*/@id)">
 				<xsl:if test="not($entry-in-catalog)">
 					<xsl:message terminate="yes">Error</xsl:message>
