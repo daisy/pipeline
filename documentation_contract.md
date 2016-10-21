@@ -66,10 +66,12 @@
   defined in the catalog XML.
 - `dp2:option`: The object (anonymous node) is an option of the
   subject (script).
-- `dp2:input`: The object (anonymous node) is an input port of the
-  subject (script).
-- `dp2:id`: The object (string) is the name/ID of the subject (option
-  or input port).
+- `dp2:input`: The object (anonymous node) is an input port/option of
+  the subject (script).
+- `dp2:output`: The object (anonymous node) is an output port/option
+  of the subject (script).
+- `dp2:id`: The object (string) is the name/ID of the subject
+  (input/output port or option).
 - `dp2:name`: The object (string) is the nice name of the subject
   (option or input port).
 - `dp2:desc`: The object (string) is the description of the subject
@@ -79,8 +81,12 @@
 - `dp2:default`: The object (string) is the default value of the
   subject (option).
 - `dp2:sequence`: The object (boolean) determines whether the subject
-  (input port) accepts a sequence of documents or not. Defaults to
-  false.
+  (input/output/option) accepts a sequence of documents/values or
+  not. Defaults to false.
+- `dp2:data-type`: The object (string) is the data type ID of the
+  subject (option).
+- `dp2:media-type`: The object (string) is the media type of the
+  subject (input port/option or output port/option).
 
 ## Special classes
 
@@ -91,6 +97,14 @@
 
 ### Variables
 
+- `id`: The ID of a script (only available in the context of script
+  documentation).
+- `name`: The name of a script (only available in the context of
+  script documentation).
+- `desc`: The description of a script (only available in the context
+  of script documentation). May contain HTML (so you probably want to
+  use the triple mustache to render it:
+  <code>&#123;&#123;&#123;desc&#125;&#125;&#125;</code>).
 - `options`: The options of a script. This variable is only available
   in the context of script documentation. The data is built from
   existing RDF metadata and is structured as follows:
@@ -104,6 +118,7 @@
       name: 'Option 2'
       required: false
       default: 'foo'
+      data-type: '&lt;dl&gt;&lt;dt&gt;foo&lt;/dt&gt;&lt;dt&gt;bar&lt;/dt&gt;&lt;/dl&gt;'
   - all:
     - id: option1
       name: 'Option 1'
@@ -113,12 +128,12 @@
       name: 'Option 2'
       required: false
       default: 'foo'
+      data-type: '&lt;dl&gt;&lt;dt&gt;foo&lt;/dt&gt;&lt;dt&gt;bar&lt;/dt&gt;&lt;/dl&gt;'
   ~~~
 
-  `desc` may contain HTML (so you probably want to use the triple
-  mustache to render it: <code>&#123;&#123;&#123;desc&#125;&#125;&#125;</code>).
+   Here also `desc` may contain HTML.
 
-- `inputs`: The input ports of a script. This variable is only
+- `inputs`: The input ports/options of a script. This variable is only
   available in the context of script documentation. The data is built
   from existing RDF metadata and is structured as follows:
 
@@ -127,15 +142,35 @@
       name: 'Source'
       desc: '...'
       sequence: true
+      media-type: 'application/xhtml+xml'
   - all:
     - id: source
       name: 'Source'
       desc: '...'
       sequence: true
+      media-type: 'application/xhtml+xml'
   ~~~
 
   Here also `desc` may contain HTML.
-  
+
+- `outputs`: The ouput ports of a script. This variable is only
+  available in the context of script documentation. The data is built
+  from existing RDF metadata and is structured as follows:
+
+  ~~~yml
+  - output-dir:
+      name: 'Output'
+      desc: '...'
+      media-type: 'application/epub+zip'
+  - all:
+    - id: output-dir
+      name: 'Output'
+      desc: '...'
+      media-type: 'application/epub+zip'
+  ~~~
+
+  Here also `desc` may contain HTML.
+
 ### Partials
 
 - `toc`: Inserts a table of contents from the existing headings in the
