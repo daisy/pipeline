@@ -57,9 +57,10 @@
 		<xsl:variable name="content" as="node()*">
 			<xsl:apply-templates mode="serialize"/>
 		</xsl:variable>
+		<xsl:variable name="content" select="string-join($content/string(),'')"/>
 		<xsl:call-template name="set-property">
 			<xsl:with-param name="property" select="'desc'"/>
-			<xsl:with-param name="content" select="string-join($content/string(),'')"/>
+			<xsl:with-param name="content" select="if (@xml:space='preserve') then $content else normalize-space($content)"/>
 		</xsl:call-template>
 	</xsl:template>
 	
@@ -230,9 +231,10 @@
 		<xsl:variable name="content" as="node()*">
 			<xsl:apply-templates mode="serialize"/>
 		</xsl:variable>
+		<xsl:variable name="content" select="string-join($content/string(),'')"/>
 		<xsl:call-template name="set-property">
 			<xsl:with-param name="property" select="'desc'"/>
-			<xsl:with-param name="content" select="string-join($content/string(),'')"/>
+			<xsl:with-param name="content" select="if (@xml:space='preserve') then $content else normalize-space($content)"/>
 		</xsl:call-template>
 	</xsl:template>
 	
