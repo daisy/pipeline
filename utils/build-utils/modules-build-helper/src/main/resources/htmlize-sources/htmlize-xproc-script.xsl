@@ -196,6 +196,7 @@
 	                                            /*/p:option[not(@pxd:output='result' or @pxd:type='anyFileURI' or @pxd:data-type or p:pipeinfo/pxd:data-type)]/@pxd:type">
 		<xsl:call-template name="set-property">
 			<xsl:with-param name="property" select="'data-type'"/>
+			<xsl:with-param name="content" select="replace(.,'^xsd?:','')"/>
 		</xsl:call-template>
 	</xsl:template>
 	
