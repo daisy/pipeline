@@ -35,6 +35,34 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template mode="serialize" match="/*/@type">
+		<xsl:call-template name="set-property">
+			<xsl:with-param name="property" select="'id'"/>
+			<xsl:with-param name="content"
+			                select="if (namespace-uri-for-prefix(substring-before(.,':'),/*)='http://www.daisy.org/ns/pipeline/xproc')
+			                        then substring-after(.,':')
+			                        else ."/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template mode="serialize"
+	              match="/*/p:documentation[not(preceding-sibling::p:*)]/*[@pxd:role='name']">
+		<xsl:call-template name="set-property">
+			<xsl:with-param name="property" select="'name'"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template mode="serialize"
+	              match="/*/p:documentation[not(preceding-sibling::p:*)]/*[@pxd:role='desc']">
+		<xsl:variable name="content" as="node()*">
+			<xsl:apply-templates mode="serialize"/>
+		</xsl:variable>
+		<xsl:call-template name="set-property">
+			<xsl:with-param name="property" select="'desc'"/>
+			<xsl:with-param name="content" select="string-join($content/string(),'')"/>
+		</xsl:call-template>
+	</xsl:template>
+	
 	<xsl:template match="/*/p:option[p:pipeinfo/pxd:data-type]" mode="finalize-script">
 		<xsl:copy>
 			<xsl:apply-templates select="@*" mode="#current"/>
