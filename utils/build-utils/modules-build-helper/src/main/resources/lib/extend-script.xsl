@@ -9,7 +9,6 @@
     
     <!-- recursive template allowing scripts to inherit from scripts that inherit from scripts -->
     <xsl:template name="extend-script">
-        <xsl:param name="script-name" tunnel="yes"/>
         <xsl:param name="script-uri"/>
         <xsl:param name="extends-uri"/>
         <xsl:param name="catalog-xml" as="element()"/>
@@ -23,15 +22,12 @@
                 <xsl:when test="$extends-uri-element/@px:extends">
                     <xsl:variable name="doc">
                         <xsl:call-template name="extend-script">
-                            <xsl:with-param name="script-name" tunnel="yes" select="$extends-uri-element/@name"/>
                             <xsl:with-param name="script-uri" select="$extends-uri"/>
                             <xsl:with-param name="extends-uri" select="$extends-uri-element/resolve-uri(@px:extends,base-uri(.))"/>
                             <xsl:with-param name="catalog-xml" select="$catalog-xml"/>
                         </xsl:call-template>
                     </xsl:variable>
-                    <xsl:apply-templates select="$doc" mode="finalize-script">
-                        <xsl:with-param name="script-name" tunnel="yes" select="$extends-uri-element/@name"/>
-                    </xsl:apply-templates>
+                    <xsl:apply-templates select="$doc" mode="finalize-script"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:if test="not(doc-available($extends-uri))">

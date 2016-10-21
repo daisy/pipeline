@@ -20,7 +20,6 @@
 			                and $entry-in-catalog/@px:extends">
 				<xsl:variable name="inherited-script">
 					<xsl:call-template name="extend-script">
-						<xsl:with-param name="script-name" tunnel="yes" select="$entry-in-catalog/@name"/>
 						<xsl:with-param name="script-uri" select="$entry-in-catalog/resolve-uri(@uri,base-uri(.))"/>
 						<xsl:with-param name="extends-uri" select="$entry-in-catalog/resolve-uri(@px:extends,base-uri(.))"/>
 						<xsl:with-param name="catalog-xml" select="$catalog-xml/*"/>
@@ -37,13 +36,12 @@
 	</xsl:template>
 	
 	<xsl:template match="/*/p:option[p:pipeinfo/pxd:data-type]" mode="finalize-script">
-		<xsl:param name="script-name" tunnel="yes"/>
 		<xsl:copy>
 			<xsl:apply-templates select="@*" mode="#current"/>
 			<xsl:attribute name="pxd:data-type"
 			               select="(p:pipeinfo/pxd:data-type/@id,
 			                        p:pipeinfo/pxd:data-type/child::*/@id,
-			                        replace(concat($script-name,@name),'^http://|/',''))[1]"/>
+			                        concat(/*/@type,'-',@name))[1]"/>
 			<xsl:apply-templates select="p:pipeinfo/pxd:data-type" mode="data-type-attribute"/>
 			<xsl:apply-templates select="node()" mode="#current"/>
 		</xsl:copy>

@@ -61,7 +61,7 @@
 				</xsl:if>
 				<xsl:call-template name="set-property">
 					<xsl:with-param name="property" select="'id'"/>
-					<xsl:with-param name="content" select="replace(concat($entry-in-catalog/@name,parent::*/parent::*/@name),'^http://|/','')"/>
+					<xsl:with-param name="content" select="concat(/*/@type,'-',parent::*/parent::*/@name)"/>
 				</xsl:call-template>
 			</xsl:if>
 			<xsl:call-template name="set-property">
