@@ -218,9 +218,10 @@ Dir.glob(ARGV[0]).each do |f|
         page_view['name'] =  solution.name.to_s
       end
       if solution.bound?('desc')
+        desc = render_description(solution.desc.to_s)
         page_view['desc'] = {
-          'short' => render_description(solution.desc.to_s)[0],
-          'long' => render_description(solution.desc.to_s).join
+          'short' => desc[0],
+          'long' => desc[1] ? desc.join : nil
         }
       end
     end
@@ -276,11 +277,27 @@ Dir.glob(ARGV[0]).each do |f|
         else
           data_type = '<var>&lt;string&gt;</var>'
         end
+        if solution.bound?('name')
+          name = solution.name.to_s
+          if name =~ /^[^:]+: *(.*)$/o
+            name = $1
+          end
+        else
+          name = nil
+        end
+        if solution.bound?('desc')
+          desc = render_description(solution.desc.to_s)
+          desc = {
+            'short' => desc[0],
+            'long' => desc[1] ? desc.join : nil
+          }
+        else
+          desc = nil
+        end
         {
           'id' => id,
-          'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? {'short' => render_description(solution.desc.to_s)[0],
-                                               'long' => render_description(solution.desc.to_s).join } : nil,
+          'name' => name,
+          'desc' => desc,
           'required' => solution.bound?('required') ? solution.required.true? : false,
           'sequence' => sequence,
           'default' => solution.bound?('default') ? solution.default.to_s : nil,
@@ -306,11 +323,27 @@ Dir.glob(ARGV[0]).each do |f|
       inputs = Hash.new
       page_view['inputs'] = inputs
       inputs['all'] = inputs_solutions.map { |solution|
+        if solution.bound?('name')
+          name = solution.name.to_s
+          if name =~ /^[^:]+: *(.*)$/o
+            name = $1
+          end
+        else
+          name = nil
+        end
+        if solution.bound?('desc')
+          desc = render_description(solution.desc.to_s)
+          desc = {
+            'short' => desc[0],
+            'long' => desc[1] ? desc.join : nil
+          }
+        else
+          desc = nil
+        end
         {
           'id' => solution.id.to_s,
-          'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? {'short' => render_description(solution.desc.to_s)[0],
-                                               'long' => render_description(solution.desc.to_s).join } : nil,
+          'name' => name,
+          'desc' => desc,
           'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false,
           'media-type' => solution.bound?('type') ? solution.type.to_s.split(' ') : nil
         }
@@ -334,11 +367,27 @@ Dir.glob(ARGV[0]).each do |f|
       outputs = Hash.new
       page_view['outputs'] = outputs
       outputs['all'] = outputs_solutions.map { |solution|
+        if solution.bound?('name')
+          name = solution.name.to_s
+          if name =~ /^[^:]+: *(.*)$/o
+            name = $1
+          end
+        else
+          name = nil
+        end
+        if solution.bound?('desc')
+          desc = render_description(solution.desc.to_s)
+          desc = {
+            'short' => desc[0],
+            'long' => desc[1] ? desc.join : nil
+          }
+        else
+          desc = nil
+        end
         {
           'id' => solution.id.to_s,
-          'name' => solution.bound?('name') ? solution.name.to_s : nil,
-          'desc' => solution.bound?('desc') ? {'short' => render_description(solution.desc.to_s)[0],
-                                               'long' => render_description(solution.desc.to_s).join } : nil,
+          'name' => name,
+          'desc' => desc,
           'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false,
           'media-type' => solution.bound?('type') ? solution.type.to_s.split(' ') : nil
         }

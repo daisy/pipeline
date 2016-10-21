@@ -5,28 +5,32 @@
 
 ### Inputs
 
-<table class="synopsis-inputs">
-<tr>
-<th>Name</th>
-<th>Description</th>
-<th>Media Type</th>
-<th>Sequence</th>
-</tr>
+<ul class="synopsis-inputs">
 {{#all}}
-<tr class="synopsis-input">
-<td class="synopsis-input-name">{{name}}</td>
-<td class="synopsis-input-desc">{{{desc.long}}}</td>
-<td class="synopsis-input-media-type">
+<li class="synopsis-input details-on">
+<div class="toggle-details"/>
+<div class="synopsis-input-name">{{name}}</div>
+<div class="synopsis-input-desc">
+{{#desc.long}}
+<div class="shortdesc">{{desc.short}}</div>
+<div class="longdesc">{{{.}}}</div>
+{{/desc.long}}
+{{^desc.long}}
+{{desc.short}}
+{{/desc.long}}
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
 <ul class="media-types">
 {{#media-type}}
 <li>{{.}}</li>
 {{/media-type}}
 </ul>
-</td>
-<td class="synopsis-input-sequence">{{#sequence}}yes{{/sequence}}{{^sequence}}no{{/sequence}}</td>
-</tr>
+</div>
+<div class="synopsis-input-sequence"><b>Sequence</b>: {{#sequence}}yes{{/sequence}}{{^sequence}}no{{/sequence}}</div>
+</li>
 {{/all}}
-</table>
+</ul>
 
 {{/inputs}}
 
@@ -34,26 +38,31 @@
 
 ### Outputs
 
-<table class="synopsis-outputs">
-<tr>
-<th>Name</th>
-<th>Description</th>
-<th>Media type</th>
-</tr>
+<ul class="synopsis-outputs">
 {{#all}}
-<tr class="synopsis-output">
-<td class="synopsis-output-name">{{name}}</td>
-<td class="synopsis-output-desc">{{{desc.long}}}</td>
-<td class="synopsis-output-media-type">
+<li class="synopsis-output details-on">
+<div class="toggle-details"/>
+<div class="synopsis-output-name">{{name}}</div>
+<div class="synopsis-output-desc">
+{{#desc.long}}
+<div class="shortdesc">{{desc.short}}</div>
+<div class="longdesc">{{{.}}}</div>
+{{/desc.long}}
+{{^desc.long}}
+{{desc.short}}
+{{/desc.long}}
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
 <ul class="media-types">
 {{#media-type}}
 <li>{{.}}</li>
 {{/media-type}}
 </ul>
-</td>
-</tr>
+</div>
+</li>
 {{/all}}
-</table>
+</ul>
 
 {{/outputs}}
 
@@ -61,23 +70,47 @@
 
 ### Options
 
-<table class="synopsis-options">
-<tr>
-<th>Name</th>
-<th>Description</th>
-<th>Type</th>
-<th>Default value</th>
-<th>Required</th>
-</tr>
+<ul class="synopsis-options">
 {{#all}}
-<tr class="synopsis-option">
-<td class="synopsis-option-name">{{name}}</td>
-<td class="synopsis-option-desc">{{{desc.long}}}</td>
-<td class="synopsis-option-data-type">{{{data-type}}}</td>
-<td class="synopsis-option-value"><code>{{default}}</code></td>
-<td class="synopsis-option-required">{{#required}}yes{{/required}}{{^required}}no{{/required}}</td>
-</tr>
+<li class="synopsis-option details-on">
+<div class="toggle-details"/>
+<div class="synopsis-option-name">{{name}}</div>
+<div class="synopsis-option-desc">
+{{#desc.long}}
+<div class="shortdesc">{{desc.short}}</div>
+<div class="longdesc">{{{.}}}</div>
+{{/desc.long}}
+{{^desc.long}}
+{{desc.short}}
+{{/desc.long}}
+</div>
+<div class="synopsis-option-data-type"><b>Data-type</b>: {{{data-type}}}</div>
+<div class="synopsis-option-default"><b>Default value</b>: <code>{{default}}</code></div>
+<div class="synopsis-option-required"><b>Required</b>: {{#required}}yes{{/required}}{{^required}}no{{/required}}</div>
+</li>
 {{/all}}
-</table>
+</ul>
 
 {{/options}}
+
+<script type="text/javascript">
+function toggleDetails() {
+  if (this.parentElement.classList.contains('details-on')) {
+  	this.parentElement.classList.remove('details-on');
+	this.parentElement.classList.add('details-off');
+  } else {
+  	this.parentElement.classList.remove('details-off');
+	this.parentElement.classList.add('details-on');
+  }
+}
+window.onload = function() {
+  var buttons = document.getElementsByClassName('toggle-details');
+  var i;
+  for (i = 0; i < buttons.length; i++) {
+    buttons[i].parentElement.classList.remove('details-on');
+	buttons[i].parentElement.classList.add('details-off');
+    buttons[i].addEventListener('click', toggleDetails);
+  }
+}
+</script>
+
