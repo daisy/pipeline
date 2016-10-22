@@ -53,23 +53,20 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
         next
       end
     else
-      
-      # external link
-      if a['href'] =~ /http.*/o
-        a['class'] = ((a['class']||'').split(' ') << 'external-link').join(' ')
-        a['target'] = '_blank'
-        next
-      end
-      
-      # absolute link
+
+      # absolute path
       if a['href'] =~ /^\//o
         abs_path = a['href']
+        
+      # absolute url
+      elsif a['href'] =~ /http.*/o
+        abs_url = a['href']
       end
     end
     if not abs_path
       if not abs_url
         
-        # relative link
+        # relative path
         rel_path = a['href']
         if rel_path =~ /^([^#]*)(#.*)$/o
           rel_path = $1
@@ -88,8 +85,12 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
         end
         abs_url = page_url.join(rel_path)
       end
-      if not abs_url.to_s.start_with?(site_base)
-        link_error(a, f)
+
+      # external link
+      if not abs_url.to_s.start_with?("#{site_base}#{baseurl}")
+        a['class'] = ((a['class']||'').split(' ') << 'external-link').join(' ')
+        a['target'] = '_blank'
+        next
       end
       abs_path = abs_url.to_s[site_base.length..-1]
     end
