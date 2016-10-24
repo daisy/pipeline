@@ -403,9 +403,22 @@
 
 <meta property="dc:title" content="DTBook Validator">
 
+<!--
+summary: DTBook validator module summary
+-->
+
 <h1 id="dtbook-validator">DTBook Validator</h1>
 
-<p>Validates DTBook documents. Supports inclusion of MathML.</p>
+<p>This module validates a single DTBook document. It supports the following:</p>
+
+<ul>
+  <li>DTBook 2005-3 (with or without MathML 2/3)</li>
+  <li>DTBook 2005-2 (with or without MathML 2/3)</li>
+  <li>DTBook 2005-1</li>
+  <li>1.1.0</li>
+</ul>
+
+<p>The input document is validated against RelaxNG schema and additional schematron rules. If the <code>check-images</code> option is <code>true</code>, then the validator ensures that any referenced images exist on disk.</p>
 
 <h2 id="synopsis">Synopsis</h2>
 
@@ -436,7 +449,11 @@ Path to the input DTBook document.
 <div class="toggle-details"></div>
 <div class="synopsis-output-name">XML Reports</div>
 <div class="synopsis-output-desc">
-Raw output from all types of validation used (RelaxNG, Schematron, custom).
+<div class="shortdesc">Raw XML-formatted reports from all types of validation used (RelaxNG, Schematron, custom).
+</div>
+<div class="longdesc">Raw XML-formatted reports from all types of validation used (RelaxNG, Schematron, custom).
+<p><a href="/pipeline/wiki/main/ValidationReportXML">More details on the file format</a>).</p>
+</div>
 </div>
 <div class="synopsis-output-media-type">
 <b>Media-type</b>:
@@ -461,10 +478,10 @@ An HTML-formatted version of the validation report.
 <div class="toggle-details"></div>
 <div class="synopsis-output-name">Validation status</div>
 <div class="synopsis-output-desc">
-<div class="shortdesc">Validation status.
+<div class="shortdesc">An XML document describing, briefly, whether the validation was successful.
 </div>
-<div class="longdesc">Validation status.
-<p>See <a href="http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML" class="external-link" target="_blank">http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML</a>.</p>
+<div class="longdesc">An XML document describing, briefly, whether the validation was successful.
+<p><a href="/pipeline/wiki/main/ValidationStatusXML">More details on the file format</a>.</p>
 </div>
 </div>
 <div class="synopsis-output-media-type">
@@ -559,6 +576,50 @@ window.onload = function() {
 }
 </script>
 
+<h2 id="sample-usage">Sample usage</h2>
+
+<p>This section shows how to use the DTBook Validator via the Pipeline 2 command line interface.</p>
+
+<p>Run the script like this:</p>
+
+<pre><code>$ ./dp2 dtbook-validator --x-input-dtbook file:/path/to/book/dtbook.xml --o-result /tmp/t1 --o-report /tmp/t2 --o-html-report /tmp/t3 --o-validation-status /tmp/t4 --x-output-dir /tmp/dpout 
+</code></pre>
+
+<p>Make sure the directory <code>/tmp/dpout</code> already exists.</p>
+
+<p>Also note the special syntax for the input file option, which has changed in this update (July 2013):</p>
+
+<pre><code>--x-input-dtbook file:/path/to/book/dtbook.xml
+</code></pre>
+
+<p>When execution is complete, you will see these files in the output directory that you specified:</p>
+
+<pre><code>dtbook-validation-report.xml
+dtbook-validation-report.xhtml
+</code></pre>
+
+<p>Note: If instead of using the <code>--x-output-dir</code> option to put all output in one directory, you would rather specify a file path for each file, then just use the output parameters (prefixed by <code>--o</code>). Above they are shown as temp files (e.g. <code>/tmp/t1</code>) but they could just as easily store their output anywhere (e.g. <code>/path/to/output/my-report.xml</code>).</p>
+
+<p>They are as follows:</p>
+
+<h3 id="dtbook-validation-reportxml"><code>dtbook-validation-report.xml</code></h3>
+
+<p>Raw validation output from DTBook validation. See <a href="/pipeline/wiki/main/ValidationReportXML">http://daisy.github.io/pipeline/wiki/main/ValidationReportXML</a> for details on the file format.</p>
+
+<h3 id="dtbook-validation-reportxhtml"><code>dtbook-validation-report.xhtml</code></h3>
+
+<p>XHTML file containing a summary of all validation errors for the DTBook file.</p>
+
+<h2 id="development-notes">Development notes</h2>
+
+<p>MathML 3 element set can follow the same rules as MathML 2. Here is an analysis: <a href="http://code.google.com/p/daisy-pipeline/wiki/ComparisonOfMathMLContentElements" class="external-link" target="_blank">http://code.google.com/p/daisy-pipeline/wiki/ComparisonOfMathMLContentElements</a>.</p>
+
+<h3 id="challenges">Challenges</h3>
+
+<ul>
+  <li>Detecting the MathML version. At the start, this will be set by the user as a parameter.</li>
+  <li>Can we support integration of MathML in DTBook 2005-1? The modularization mechanisms don’t seem to be as well developed (e.g. no <code>externalFlow</code>).</li>
+</ul>
 
   </body>
 </html>

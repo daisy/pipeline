@@ -14,11 +14,10 @@
 Must be a space separated list of URIs, absolute or relative to the input.
 
 Style sheets can also be associated with the source in other ways: linked (using an
-['xml-stylesheet' processing
-instruction](https://www.w3.org/TR/xml-stylesheet/#the-xml-stylesheet-processing-instruction) or a
-['link' element](https://www.w3.org/Style/styling-XML#External)), embedded (using a ['style'
-element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using
-'[style](https://www.w3.org/TR/css-style-attr/)' attributes).
+['xml-stylesheet' processing instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+element](https://www.w3.org/Style/styling-XML#External)), embedded (using a ['style'
+element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using '[style'
+attributes](https://www.w3.org/TR/css-style-attr/)).
 
 Style sheets are applied to the document in the following way: XSLT style sheets are applied before
 CSS/SASS style sheets. XSLT style sheets are applied one by one, first the ones specified through
@@ -123,8 +122,10 @@ Makes the variable `$page-height` available in style sheets and includes the fol
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"levels-in-footer"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"integer"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'6'"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             &lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Headers/footers: Levels in footer&lt;/<span class="code-xml-element-local-name">h2</span>&gt;
-            &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Makes the variable `$levels-in-footer` available in style sheets and
-includes the following rule by default:
+            &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Specify which headings are rendered in the footer.
+              
+Makes the variable `$levels-in-footer` available in style sheets and includes the following rule by
+default:
 
 ```
 @for $level from 1 through 6 {
@@ -204,7 +205,7 @@ default:
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             &lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Translation/formatting of text: Line spacing&lt;/<span class="code-xml-element-local-name">h2</span>&gt;
-            &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;'single' or 'double' line spacing.
+            &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Single or double line spacing.
 
 Makes the variable `$line-spacing` available in style sheets and includes the following rule by
 default:
@@ -396,8 +397,10 @@ sheet:
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"force-braille-page-break"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"boolean"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'false'"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             &lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Page numbers: Force braille page break&lt;/<span class="code-xml-element-local-name">h2</span>&gt;
-            &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Makes the variable `$force-braille-page-break` available in style
-sheets and includes the following rule by default:
+            &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Force braille page breaks at print page breaks.
+
+Makes the variable `$force-braille-page-break` available in style sheets and includes the following
+rule by default:
 
 ```
 @if $force-braille-page-break {

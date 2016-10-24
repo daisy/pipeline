@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <title>Validation Status XML</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Validation Status XML">
+
+
+    <link rel="stylesheet" href="/pipeline/css/main.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+  </head>
+  <body>
+	<nav id="nav-wiki">
+	  <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/main/Home">
+      
+      Home
+      
+        </a>
+      
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+          <a href="/pipeline/wiki/main/documentation_contract">
+      
+      Documentation contract
+      
+        </a>
+      
+    
+    </li>
+  
+</ul>
+
+	</nav>
+	<div class="edit-button">
+	  <a href="https://github.com/daisy/pipeline/edit/wiki/ValidationStatusXML.md" class="external-link" target="_blank">
+		Edit this page on Github
+	  </a>
+	</div>
+    <!--
+summary validation status XML format description
+-->
+
+<h1 id="validation-status-xml">Validation Status XML</h1>
+
+<p>Every validator has a port named <code>validation-status</code> which provides a succinct summary of the validation results.</p>
+
+<p>There are two use cases that come to mind.</p>
+
+<ol>
+  <li>
+    <p>A validation job may be “successful” even when the document is invalid. It would be helpful for the UI to be able to give more details about the job results. By using the <code>validation-status</code> port, the UI can quickly determine that a. this was a validation script and b. validation passed/failed.</p>
+  </li>
+  <li>
+    <p>Other scripts that incorporate a validator may want to know if the validation was successful or not.</p>
+  </li>
+</ol>
+
+<h2 id="details">Details</h2>
+
+<h3 id="example">Example</h3>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;d:validation-status</span> <span class="attribute-name">xmlns:d</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">"</span></span> <span class="attribute-name">result</span>=<span class="string"><span class="delimiter">"</span><span class="content">error</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<h3 id="dvalidation-status"><code>d:validation-status</code></h3>
+<p>The document root element</p>
+
+<h4 id="result-attribute">
+<code>result</code> attribute</h4>
+
+<ul>
+  <li>
+<code>ok</code>: if there were no errors</li>
+  <li>
+<code>error</code> if there were any errors</li>
+</ul>
+
+<h3 id="schema">Schema</h3>
+
+<p>TBD</p>
+
+<h2 id="notes">Notes</h2>
+
+<p>At this moment, the validators have only errors to report, not warnings. Therefore there is no mention of warnings here. However, this format will evolve if required to accommodate future developments.</p>
+
+<p>One thing to consider is whether it would be useful to report the number of errors.</p>
+
+  </body>
+</html>
