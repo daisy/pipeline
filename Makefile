@@ -31,6 +31,12 @@ dist-deb : compile
 	$(MVN) clean package -Pdeb | $(MVN_LOG)
 	mv assembly/target/*.deb .
 
+.PHONY : dist-rpm
+dist-rpm : compile
+	cd assembly && \
+	$(MVN) clean package -Prpm | $(MVN_LOG)
+	mv assembly/target/rpm/pipeline2/RPMS/**/*.rpm .
+
 .PHONY : run
 run : assembly/target/dev-launcher/bin/pipeline2
 	$<
@@ -310,6 +316,8 @@ help :
 	echo "	Incrementally compile code and package into a ZIP for each platform"                    >&2
 	echo "make dist-deb:"                                                                           >&2
 	echo "	Incrementally compile code and package into a DEB"                                      >&2
+	echo "make dist-rpm:"                                                                           >&2
+	echo "	Incrementally compile code and package into an RPM"                                     >&2
 	echo "make run:"                                                                                >&2
 	echo "	Incrementally compile code and run locally"                                             >&2
 	echo "make run-gui:"                                                                            >&2

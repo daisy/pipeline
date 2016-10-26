@@ -53,6 +53,19 @@ The tree below shows the structure of the project:
   - [xspec-maven-plugin](https://github.com/daisy/xspec-maven-plugin)
 - [webui](https://github.com/daisy/pipeline-webui)
 
+## Building
+### Building on CentOS/Redhat
+Install pcregrep (if not already installed):`sudo yum install pcre`
+
+Install libxml (libxml needs to be at least version 20900, if already installed check version with `xmllint --version`):
+
+`wget ftp://xmlsoft.org/libxml2/libxml2-2.9.0-1.src.prm`
+
+`rpmbuild --rebuild libxml2-2.9.0-1.src.rpm`
+
+`rpm -i --force /path/to/rpm/libxml2-2.9.0-1.rpm`
+
+Run make: `make dist-rpm`
 
 ## Issues
 
