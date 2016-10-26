@@ -115,9 +115,6 @@ public class XMLInputManager implements TaskGroup {
 	
 	private Map<String, Object> makeXSLTParams(Map<String, Object> parameters) {
 		Map<String, Object> xsltParams = new HashMap<>();
-		for (String key2 : parameters.keySet()) {
-			xsltParams.put(key2, parameters.get(key2));
-		}
 		{
 			Properties p2 = new Properties();
 			try {
@@ -134,6 +131,10 @@ public class XMLInputManager implements TaskGroup {
 				xsltParams.put(key3.toString(), p2.get(key3).toString());
 			}
 		}
+		for (String key2 : parameters.keySet()) {
+			xsltParams.put(key2, parameters.get(key2));
+		}
+
 		return Collections.unmodifiableMap(xsltParams);
 	}
 	
