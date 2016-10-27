@@ -39,6 +39,12 @@ run : assembly/target/dev-launcher/bin/pipeline2
 run-gui : assembly/target/dev-launcher/bin/pipeline2
 	$< gui
 
+.PHONY : run-webui
+run-webui :
+#	rm -r webui/dp2webui && cp -r webui/dp2webui-cleandb webui/dp2webui
+	cd webui && \
+	./activator run
+
 .PHONY : check
 check : gradle-test maven-test
 
@@ -314,6 +320,8 @@ help :
 	echo "	Incrementally compile code and run locally"                                             >&2
 	echo "make run-gui:"                                                                            >&2
 	echo "	Incrementally compile code and run GUI locally"                                         >&2
+	echo "make run-webui:"                                                                          >&2
+	echo "	Compile and run web UI locally"                                                         >&2
 
 ifndef VERBOSE
 .SILENT:
