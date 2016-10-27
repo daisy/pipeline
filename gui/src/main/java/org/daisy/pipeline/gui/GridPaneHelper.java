@@ -7,6 +7,7 @@ import org.daisy.pipeline.gui.databridge.ScriptField.DataType;
 import org.daisy.pipeline.gui.databridge.ScriptFieldAnswer;
 import org.daisy.pipeline.gui.utils.MarkdownToJavafx;
 import org.daisy.pipeline.gui.utils.PlatformUtils;
+import org.pegdown.Extensions;
 import org.pegdown.PegDownProcessor;
 import org.pegdown.ast.RootNode;
 
@@ -308,7 +309,7 @@ public class GridPaneHelper extends GridPane {
                 TextFlow flow = new TextFlow();
 
                 MarkdownToJavafx mdToFx = new MarkdownToJavafx(this.getJavaFxParent(flow));
-                PegDownProcessor mdProcessor = new PegDownProcessor();
+                PegDownProcessor mdProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
                 if (answer.getField().getDescription() != null) {
                 	RootNode node = mdProcessor.parseMarkdown(answer.getField().getDescription().toCharArray());
                 	node.accept(mdToFx);
