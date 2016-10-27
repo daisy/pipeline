@@ -135,6 +135,11 @@
     </plugins>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.daisy.pipeline.build</groupId>
+          <artifactId>modules-build-helper</artifactId>
+          <version>2.0.0-SNAPSHOT</version>
+        </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
@@ -227,51 +232,67 @@
         </file>
       </activation>
       <build>
+        <resources>
+          <resource>
+            <directory>src/main/resources</directory>
+            <excludes>
+              <exclude>META-INF/catalog.xml</exclude>
+            </excludes>
+          </resource>
+        </resources>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>xml-maven-plugin</artifactId>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
             <executions>
               <execution>
+                <id>copy-sources-to-doc</id>
+                <phase>prepare-package</phase>
                 <goals>
-                  <goal>transform</goal>
+                  <goal>copy-resources</goal>
                 </goals>
+                <configuration>
+                  <resources>
+                    <resource>
+                      <directory>src/main</directory>
+                      <excludes>
+                        <exclude>resources/**/*.html</exclude>
+                      </excludes>
+                    </resource>
+                  </resources>
+                  <outputDirectory>${project.build.directory}/doc/</outputDirectory>
+                </configuration>
               </execution>
             </executions>
-            <configuration>
-              <transformationSets>
-                <transformationSet>
-                  <dir>src</dir>
+          </plugin>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>modules-build-helper</artifactId>
+            <executions>
+              <execution>
+                <id>process-catalog</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>process-catalog</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>htmlize-sources</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>htmlize-sources</goal>
+                </goals>
+                <configuration>
+                  <sourceDirectory>${project.build.directory}/doc</sourceDirectory>
+                  <outputDirectory>${project.build.directory}/doc</outputDirectory>
+                  <catalogXmlFile>${project.build.directory}/doc/resources/META-INF/catalog.xml</catalogXmlFile>
                   <includes>
-                    <include>**/META-INF/catalog.xml</include>
+                    resources/META-INF/catalog.xml,
+                    resources/**/*.xpl
                   </includes>
-                  <stylesheet>org/daisy/pipeline/modules/build/catalog-to-ds.xsl</stylesheet>
-                  <parameters>
-                    <parameter>
-                      <name>outputDir</name>
-                      <value>${project.baseUri}/target/generated-resources</value>
-                    </parameter>
-                    <parameter>
-                      <name>version</name>
-                      <value>${project.version}</value>
-                    </parameter>
-                  </parameters>
-                  <outputDir>${project.build.directory}/generated-resources</outputDir>
-                </transformationSet>
-              </transformationSets>
-            </configuration>
-            <dependencies>
-              <dependency>
-                <groupId>net.sf.saxon</groupId>
-                <artifactId>Saxon-HE</artifactId>
-                <version>${saxon.version}</version>
-              </dependency>
-              <dependency>
-                <groupId>org.daisy.pipeline.build</groupId>
-                <artifactId>modules-build-helper</artifactId>
-                <version>1.3</version>
-              </dependency>
-            </dependencies>
+                </configuration>
+              </execution>
+            </executions>
           </plugin>
           <plugin>
             <groupId>org.apache.felix</groupId>
@@ -284,9 +305,9 @@
                      https://github.com/bndtools/bnd/issues/168
                  -->
                 <Include-Resource>
-     {maven-resources}$(if;$(replace;$(isdir;${project.build.directory}/generated-resources/OSGI-INF);false(.*);$1);,OSGI-INF=${project.build.directory}/generated-resources/OSGI-INF)
+     {maven-resources}$(if;$(replace;$(isdir;${project.build.directory}/generated-resources/process-catalog/OSGI-INF);false(.*);$1);,OSGI-INF=${project.build.directory}/generated-resources/process-catalog/OSGI-INF)
                 </Include-Resource>
-                <_include>${project.build.directory}/generated-resources/bnd.bnd</_include>
+                <_include>${project.build.directory}/generated-resources/process-catalog/bnd.bnd</_include>
               </instructions>
             </configuration>
           </plugin>
@@ -301,6 +322,25 @@
                 <goals>
                   <goal>test</goal>
                 </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-jar-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <classifier>doc</classifier>
+                  <classesDirectory>${project.build.directory}/doc</classesDirectory>
+                  <includes>
+                    <include>**/*.md</include>
+                    <include>**/*.html</include>
+                  </includes>
+                </configuration>
               </execution>
             </executions>
           </plugin>

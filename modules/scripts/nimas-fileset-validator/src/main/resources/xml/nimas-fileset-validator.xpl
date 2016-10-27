@@ -15,9 +15,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">NIMAS Fileset Validator</h1>
         <p px:role="desc">Validate a NIMAS Fileset. Supports inclusion of MathML.</p>
-        <a px:role="homepage"
-            href="http://code.google.com/p/daisy-pipeline/wiki/NimasFilesetValidator">
-            http://code.google.com/p/daisy-pipeline/wiki/NimasFilesetValidator </a>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/nimas-fileset-validator">
+            Online documentation
+        </a>
         <div px:role="author maintainer">
             <p px:role="name">Marisa DeMeglio</p>
             <a px:role="contact" href="mailto:marisa.demeglio@gmail.com"
@@ -60,8 +60,9 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation Status</h1>
-            <p px:role="desc">Validation status
-                (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+            <p px:role="desc" xml:space="preserve">Validation status
+
+See [http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML](http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe step="if-package-wellformed" port="validation-status"/>
     </p:output>

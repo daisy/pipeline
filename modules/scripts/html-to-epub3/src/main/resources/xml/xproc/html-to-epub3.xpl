@@ -9,6 +9,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">HTML to EPUB3</h1>
         <p px:role="desc">Transforms (X)HTML documents into an EPUB 3 publication.</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/html-to-epub3">
+            Online documentation
+        </a>
     </p:documentation>
     
     <p:input port="metadata" primary="false" sequence="true" px:media-type="application/xhtml+xml">

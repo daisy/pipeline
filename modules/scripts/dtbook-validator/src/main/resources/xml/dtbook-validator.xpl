@@ -12,8 +12,8 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook Validator</h1>
         <p px:role="desc">Validates DTBook documents. Supports inclusion of MathML.</p>
-        <a px:role="homepage" href="http://code.google.com/p/daisy-pipeline/wiki/DTBookValidator">
-            http://code.google.com/p/daisy-pipeline/wiki/DTBookValidator
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-validator">
+            Online documentation
         </a>
         <div px:role="author maintainer">
             <p px:role="name">Marisa DeMeglio</p>
@@ -40,7 +40,9 @@
     <p:output port="report" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">XML Reports</h1>
-            <p px:role="desc">Raw output from all types of validation used (RelaxNG, Schematron, custom).</p>
+            <p px:role="desc" xml:space="preserve">Raw XML-formatted reports from all types of validation used (RelaxNG, Schematron, custom).
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationReportXML)).</p>
         </p:documentation>
         <p:pipe port="xml-report" step="if-dtbook-wellformed"/>
     </p:output>
@@ -56,7 +58,9 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
-            <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe port="validation-status" step="if-dtbook-wellformed"/>
     </p:output>

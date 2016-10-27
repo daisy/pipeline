@@ -12,6 +12,9 @@
   <p:documentation xmlns="http://www.w3.org/1999/xhtml">
     <h1 px:role="name">DTBook to DAISY 3</h1>
     <p px:role="desc">Converts multiple dtbooks to daisy 3 format</p>
+    <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-to-daisy3">
+      Online documentation
+    </a>
   </p:documentation>
 
   <p:input port="source" primary="true" sequence="true" px:media-type="application/x-dtbook+xml">

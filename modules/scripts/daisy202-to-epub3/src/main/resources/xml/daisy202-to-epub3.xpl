@@ -16,7 +16,7 @@
             <dt>Organization:</dt>
             <dd px:role="organization">NLB</dd>
         </dl>
-        <p><a px:role="homepage" href="http://code.google.com/p/daisy-pipeline/wiki/DAISY202ToEPUB3Doc">Online Documentation</a></p>
+        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/modules/daisy202-to-epub3">Online Documentation</a></p>
     </p:documentation>
 
     <p:option name="href" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">

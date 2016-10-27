@@ -6,6 +6,7 @@
   <uri name="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/reset.css" uri="../css/reset.css"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/bana.css" uri="../css/bana.css"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/ueb.css" uri="../css/ueb.css"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:xml-to-pef"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>

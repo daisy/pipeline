@@ -9,6 +9,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to PEF</h1>
         <p px:role="desc" xml:space="preserve">Transforms a DTBook (DAISY 3 XML) document into a PEF.</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef">
+            Online documentation
+        </a>
         <dl px:role="author">
             <dt>Name:</dt>
             <dd px:role="name">Bert Frees</dd>
@@ -33,7 +36,21 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="stylesheet"/>
+    <p:option name="stylesheet" px:sequence="true">
+        <p:pipeinfo>
+            <px:data-type>
+                <choice>
+                    <data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc">
+                        <documentation xml:lang="en">File path relative to input DTBook.</documentation>
+                    </data>
+                    <data type="anyURI">
+                        <documentation xml:lang="en">Any other absolute URI</documentation>
+                    </data>
+                </choice>
+            </px:data-type>
+        </p:pipeinfo>
+    </p:option>
+    
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-brf"/>
