@@ -255,10 +255,6 @@
                   <resources>
                     <resource>
                       <directory>src/main</directory>
-                      <includes>
-                        <include>doc/**/*</include>
-                        <include>resources/**/*</include>
-                      </includes>
                       <excludes>
                         <exclude>resources/**/*.html</exclude>
                       </excludes>
@@ -341,9 +337,8 @@
                   <classifier>doc</classifier>
                   <classesDirectory>${project.build.directory}/doc</classesDirectory>
                   <includes>
+                    <include>**/*.md</include>
                     <include>**/*.html</include>
-                    <include>doc</include>
-                    <include>doc/**/*</include>
                   </includes>
                 </configuration>
               </execution>

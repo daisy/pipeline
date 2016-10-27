@@ -1,4 +1,4 @@
-<link rev="dp2:doc" href="../resources/xml/daisy3-to-daisy202.xpl"/>
+<link rev="dp2:doc" href="resources/xml/daisy3-to-daisy202.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 <meta property="dc:title" content="DAISY 3 to DAISY 2.02"/>
 
