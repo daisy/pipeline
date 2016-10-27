@@ -315,7 +315,7 @@ public class GridPaneHelper extends GridPane {
                 	node.accept(mdToFx);
                 }
                 parent.getChildren().add(flow);
-                flow.setMaxWidth(200);
+                flow.setMaxWidth(350);
                 //helpText = helpText.trim();
                 //helpText.replace('\n', ' ');
                 //helpText.replace('\t', ' ');
