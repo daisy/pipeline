@@ -4,7 +4,8 @@ require 'sparql'
 require 'rdf/query'
 require 'rdf/turtle'
 require 'rdf/rdfa'
-require 'github/markup'
+# require 'github/markup'
+require 'kramdown'
 require 'yaml'
 require 'nokogiri'
 require "#{File.expand_path(File.dirname(__FILE__))}/../src/_plugins/lib/relativize"
@@ -16,6 +17,8 @@ config = YAML.load_file(ARGV[3])
 site_base = config['site_base']
 baseurl = config['baseurl'] || ''
 site_base_url = RDF::URI(site_base)
+
+$kramdown_config = config['kramdown']
 
 PREFIXES = %(
   PREFIX dc: <http://purl.org/dc/elements/1.1/>
@@ -51,7 +54,8 @@ def parse(input)
 end
 
 def render_markdown(md)
-  GitHub::Markup.render('irrelevant.md', md)
+  # GitHub::Markup.render('irrelevant.md', md)
+  Kramdown::Document.new(md, $kramdown_config).to_html
 end
 
 def render_description(desc)
