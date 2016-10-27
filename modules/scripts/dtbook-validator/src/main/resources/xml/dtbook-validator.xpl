@@ -12,7 +12,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook Validator</h1>
         <p px:role="desc">Validates DTBook documents. Supports inclusion of MathML.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/dtbook-validator/doc/dtbook-validator.html">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-validator">
             Online documentation
         </a>
         <div px:role="author maintainer">
@@ -42,7 +42,7 @@
             <h1 px:role="name">XML Reports</h1>
             <p px:role="desc" xml:space="preserve">Raw XML-formatted reports from all types of validation used (RelaxNG, Schematron, custom).
 
-[More details on the file format](http://daisy.github.io/pipeline/wiki/main/ValidationReportXML)).</p>
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationReportXML)).</p>
         </p:documentation>
         <p:pipe port="xml-report" step="if-dtbook-wellformed"/>
     </p:output>
@@ -60,7 +60,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
 
-[More details on the file format](http://daisy.github.io/pipeline/wiki/main/ValidationStatusXML).</p>
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe port="validation-status" step="if-dtbook-wellformed"/>
     </p:output>

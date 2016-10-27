@@ -11,7 +11,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">ZedAI to PEF</h1>
         <p px:role="desc">Transforms a ZedAI (DAISY 4 XML) document into a PEF.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/braille/zedai-to-pef/doc/zedai-to-pef.html">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/braille/zedai-to-pef">
             Online documentation
         </a>
         <dl px:role="author">
@@ -41,11 +41,11 @@
                     <value>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/bana.css</value>
                     <documentation xml:lang="en">A CSS stylesheet for BANA formatting
 
-See [bana.css](http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/braille/zedai-to-pef/resources/css/bana.css.html)</documentation>
+See [bana.css](http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/bana.css.html)</documentation>
                     <value>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/ueb.css</value>
                     <documentation xml:lang="en">A CSS stylesheet for UEB formatting
 
-See [ueb.css](http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/braille/zedai-to-pef/resources/css/ueb.css.html)</documentation>
+See [ueb.css](http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/ueb.css.html)</documentation>
                     <data type="anyURI">
                         <documentation xml:lang="en">Any other absolute URI</documentation>
                     </data>

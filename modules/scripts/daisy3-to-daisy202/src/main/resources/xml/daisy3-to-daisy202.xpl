@@ -8,7 +8,7 @@
         <h1 px:role="name">DAISY 3 to DAISY 2.02</h1>
         <p px:role="desc">Transforms an audio-only DAISY 3 DTB into an audio-only DAISY 2.02
             DTB.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/daisy3-to-daisy202/doc/daisy3-to-daisy202.html">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/daisy3-to-daisy202">
             Online documentation
         </a>
     </p:documentation>

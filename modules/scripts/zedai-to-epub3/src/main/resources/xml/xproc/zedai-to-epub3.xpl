@@ -7,7 +7,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">ZedAI to EPUB3</h1>
         <p px:role="desc">Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3 publication.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/zedai-to-epub3/doc/zedai-to-epub3.html">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/zedai-to-epub3">
             Online documentation
         </a>
     </p:documentation>

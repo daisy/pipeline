@@ -9,7 +9,7 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to PEF</h1>
         <p px:role="desc" xml:space="preserve">Transforms a DTBook (DAISY 3 XML) document into a PEF.</p>
-        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/braille/dtbook-to-pef/doc/dtbook-to-pef.html">
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef">
             Online documentation
         </a>
         <dl px:role="author">

@@ -12,7 +12,7 @@
                 (organization: <span px:role="organization">NLB</span>,
                 e-mail: <a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>).</p>
         </address>
-        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/modules/org/daisy/pipeline/modules/daisy202-validator/doc/daisy202-validator.html">Online Documentation</a></p>
+        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/modules/daisy202-validator">Online Documentation</a></p>
     </p:documentation>
 
     <p:option name="ncc" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
