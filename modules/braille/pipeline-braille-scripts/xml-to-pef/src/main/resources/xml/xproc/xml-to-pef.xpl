@@ -87,11 +87,11 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 
 Makes the variable `$page-width` available in style sheets and includes the following rule by default:
 
-```
+~~~css
 @page {
   size: $page-width $page-height;
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     <p:option name="page-height" required="false" px:type="integer" select="'25'">
@@ -101,11 +101,11 @@ Makes the variable `$page-width` available in style sheets and includes the foll
 
 Makes the variable `$page-height` available in style sheets and includes the following rule by default:
 
-```
+~~~css
 @page {
   size: $page-width $page-height;
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     <p:option name="left-margin" required="false" px:type="integer" select="'0'">
@@ -132,7 +132,7 @@ Makes the variable `$page-height` available in style sheets and includes the fol
 Makes the variable `$levels-in-footer` available in style sheets and includes the following rule by
 default:
 
-```
+~~~css
 @for $level from 1 through 6 {
   @if $levels-in-footer >= $level {
     h#{$level} {
@@ -140,19 +140,19 @@ default:
     }
   }
 }
-```
+~~~
 
 In other words, the `footer` string is updated each time a heading with a level smaller than or
 equal to `levels-in-footer` is encountered. In order to use the `footer` string include a rule like
 the following in your custom style sheet:
 
-```
+~~~css
 @page {
   @bottom-center {
     content: string(footer);
   }
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     
@@ -173,13 +173,13 @@ the following in your custom style sheet:
 Makes the variable `$hyphenation` available in style sheets and includes the following rule by
 default:
 
-```
+~~~css
 @if $hyphenation {
   :root {
     hyphens: auto;
   }
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     <p:option name="line-spacing" required="false" select="'single'">
@@ -200,13 +200,13 @@ default:
 Makes the variable `$line-spacing` available in style sheets and includes the following rule by
 default:
 
-```
+~~~css
 @if $line-spacing == double {
   :root {
     line-height: 2;
   }
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     <p:option name="tab-width" required="false" px:type="integer" select="'4'">
@@ -223,13 +223,13 @@ default:
 Makes the variable `$capital-letters` available in style sheets and includes the following rule by
 default:
 
-```
+~~~css
 @if $capital-letters != true {
   :root {
     text-transform: lowercase;
   }
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     <p:option name="accented-letters" required="false" px:type="boolean" select="'true'">
@@ -262,11 +262,11 @@ default:
 Makes the variable `$include-captions` available in style sheets and includes the following rule by
 default:
 
-```
+~~~css
 caption {
   display: if($include-captions, block, none);
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     <p:option name="include-images" required="false" px:type="boolean" select="'true'">
@@ -277,13 +277,13 @@ caption {
 Makes the variable `$include-images` available in style sheets and includes the following rule by
 default:
 
-```
+~~~css
 @if $include-images {
   img::after {
     content: attr(alt);
   }
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     <p:option name="include-image-groups" required="false" px:type="boolean" select="'true'">
@@ -298,11 +298,11 @@ default:
             <p px:role="desc" xml:space="preserve">Makes the variable `$include-line-groups` available in style sheets
 and includes the following rule by default:
 
-```
+~~~css
 linegroup line {
   display: if($include-line-groups, block, inline);
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     
@@ -329,11 +329,11 @@ linegroup line {
 Makes the variable `$include-production-notes` available in style sheets and includes the following
 rule by default:
 
-```
+~~~css
 prodnote {
   display: if($include-production-notes, block, none);
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     
@@ -347,7 +347,7 @@ prodnote {
 sheets. In order to use the variable include a rule like the following in your custom
 style sheet:
 
-```
+~~~css
 @if $show-braille-page-numbers {
   @page {
     @top-right {
@@ -355,7 +355,7 @@ style sheet:
     }
   }
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     <p:option name="show-print-page-numbers" required="false" px:type="boolean" select="'true'">
@@ -364,24 +364,24 @@ style sheet:
             <p px:role="desc" xml:space="preserve">Makes the variable `$show-print-page-numbers` available in style
 sheets and includes the following rule by default:
 
-```
+~~~css
 @if $show-print-page-numbers {
   pagenum {
     string-set: print-page content();
   }
 }
-```
+~~~
 
 In order to use the `print-page` string include a rule like the following in your custom style
 sheet:
 
-```
+~~~css
 @page {
   @bottom-right {
     content: string(print-page);
   }
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     <p:option name="force-braille-page-break" required="false" px:type="boolean" select="'false'">
@@ -392,13 +392,13 @@ sheet:
 Makes the variable `$force-braille-page-break` available in style sheets and includes the following
 rule by default:
 
-```
+~~~css
 @if $force-braille-page-break {
   pagenum {
     page-break-before: always;
   }
 }
-```</p>
+~~~</p>
         </p:documentation>
     </p:option>
     
@@ -414,7 +414,7 @@ A table of contents will be generated from the heading elements present in the d
 elements if the specified value for "depth" is 1, from `h1` and `h2` elements if the specified value
 is 2, etc. The resulting table of contents has the following nested structure:
 
-```
+~~~xml
 &lt;list id="generated-document-toc"&gt;
   &lt;li&gt;
       &lt;a href="#ch_1"&gt;Chapter 1&lt;/a&gt;
@@ -432,24 +432,26 @@ is 2, etc. The resulting table of contents has the following nested structure:
   &lt;/li&gt;
   ...
 &lt;/list&gt;
-```
+~~~
 
 Another one of these is generated but with ID `generated-volume-toc`. `ch_1`, `ch_1_2` etc. are the
 IDs of the heading elements from which the list was constructed, and the content of the links are
 exact copies of the content of the heading elements. By default the list is not rendered. The list
 should be styled and positioned with CSS. The following rules are included by default:
 
-    #generated-document-toc {
-      flow: document-toc;
-      display: -obfl-toc;
-      -obfl-toc-range: document;
-    }
-    
-    #generated-volume-toc {
-      flow: volume-toc;
-      display: -obfl-toc;
-      -obfl-toc-range: volume;
-    }
+~~~css
+#generated-document-toc {
+  flow: document-toc;
+  display: -obfl-toc;
+  -obfl-toc-range: document;
+}
+
+#generated-volume-toc {
+  flow: volume-toc;
+  display: -obfl-toc;
+  -obfl-toc-range: volume;
+}
+~~~
 
 This means that a document range table of contents is added to the named flow called "document-toc",
 and a volume range table of contents is added to the named flow called "volume-toc". In order to
@@ -457,18 +459,19 @@ consume these named flows use the function `flow()`. For example, to position th
 table of contents at the beginning of the first volume, and to repeat the volume range table of
 content at the beginning of every other volume, include the following additional rules:
 
-    @volume {
-      @begin {
-        content: flow(volume-toc);
-      }
-    }
-    
-    @volume:first {
-      @begin {
-        content: flow(document-toc);
-      }
-    }
-</p>
+~~~css
+@volume {
+  @begin {
+    content: flow(volume-toc);
+  }
+}
+
+@volume:first {
+  @begin {
+    content: flow(document-toc);
+  }
+}
+~~~</p>
         </p:documentation>
     </p:option>
     <!-- ==================== -->
@@ -510,11 +513,11 @@ content at the beginning of every other volume, include the following additional
 Makes the variable `$maximum-number-of-sheets` available in style sheets and includes the following
 rule by default:
 
-```
+~~~css
 @volume {
   max-length: $maximum-number-of-sheets;
 }
-```</p>
+~~~
         </p:documentation>
     </p:option>
     <p:option name="minimum-number-of-sheets" required="false" px:type="integer" select="'30'">
