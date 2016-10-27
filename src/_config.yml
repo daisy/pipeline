@@ -3,12 +3,18 @@ collections:
   wiki:
     output: true
     permalink: /wiki/:path/
+  wiki_gui:
+    output: true
+    permalink: /wiki/gui/:path/
+  wiki_webui:
+    output: true
+    permalink: /wiki/webui/:path/
 defaults:
-  - scope: {path: wiki/main}
-    values: {layout: wiki-main}
-  - scope: {path: wiki/gui}
+  - scope: {path: "", type: wiki}
+    values: {layout: wiki}
+  - scope: {path: "", type: wiki_gui}
     values: {layout: wiki-gui}
-  - scope: {path: wiki/webui}
+  - scope: {path: "", type: wiki_webui}
     values: {layout: wiki-webui}
 markdown: kramdown
 kramdown:
