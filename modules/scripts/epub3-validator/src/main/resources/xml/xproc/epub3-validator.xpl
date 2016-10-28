@@ -24,7 +24,7 @@
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML Report</h1>
+            <h1 px:role="name">Validation report</h1>
         </p:documentation>
         <p:pipe port="result" step="html-report"/>
     </p:output>
@@ -32,6 +32,9 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
+            <p px:role="desc" xml:space="preserve">The validation status
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe port="result" step="status"/>
     </p:output>

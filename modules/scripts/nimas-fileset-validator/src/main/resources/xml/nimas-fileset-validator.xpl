@@ -34,9 +34,8 @@
 
     <p:output port="result" primary="true" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML report</h1>
-            <p px:role="desc">An HTML-formatted validation report comprising all documents'
-                reports.</p>
+            <h1 px:role="name">Validation report</h1>
+            <p px:role="desc">Validation report comprising all documents' reports.</p>
         </p:documentation>
         <p:pipe step="if-package-wellformed" port="result"/>
     </p:output>
@@ -60,9 +59,9 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation Status</h1>
-            <p px:role="desc" xml:space="preserve">Validation status
+            <p px:role="desc" xml:space="preserve">The validation status
 
-See [http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML](http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe step="if-package-wellformed" port="validation-status"/>
     </p:output>
