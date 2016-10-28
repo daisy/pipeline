@@ -91,7 +91,13 @@ Makes the variable `$page-width` available in style sheets and includes the foll
 @page {
   size: $page-width $page-height;
 }
-~~~</p>
+~~~
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
+</p>
         </p:documentation>
     </p:option>
     <p:option name="page-height" required="false" px:type="integer" select="'25'">
@@ -105,7 +111,13 @@ Makes the variable `$page-height` available in style sheets and includes the fol
 @page {
   size: $page-width $page-height;
 }
-~~~</p>
+~~~
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
+</p>
         </p:documentation>
     </p:option>
     <p:option name="left-margin" required="false" px:type="integer" select="'0'">
@@ -152,7 +164,14 @@ the following in your custom style sheet:
     content: string(footer);
   }
 }
-~~~</p>
+~~~
+
+See the CSS specification for more info:
+
+- the [`string-set`](http://braillespecs.github.io/braille-css/#h4_the-string-set-property) property
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`string()`](http://braillespecs.github.io/braille-css/#h4_the-string-function) function
+</p>
         </p:documentation>
     </p:option>
     
@@ -179,7 +198,12 @@ default:
     hyphens: auto;
   }
 }
-~~~</p>
+~~~
+
+See the CSS specification for more info:
+
+- the [`hyphens`](http://braillespecs.github.io/braille-css/#the-hyphens-property) property
+</p>
         </p:documentation>
     </p:option>
     <p:option name="line-spacing" required="false" select="'single'">
@@ -206,7 +230,13 @@ default:
     line-height: 2;
   }
 }
-~~~</p>
+~~~
+
+See the CSS specification for more info:
+
+- the [`line-height`](http://braillespecs.github.io/braille-css/#h3_the-line-height-property)
+  property
+</p>
         </p:documentation>
     </p:option>
     <p:option name="tab-width" required="false" px:type="integer" select="'4'">
@@ -295,8 +325,10 @@ default:
     <p:option name="include-line-groups" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Block elements: Include line groups</h2>
-            <p px:role="desc" xml:space="preserve">Makes the variable `$include-line-groups` available in style sheets
-and includes the following rule by default:
+            <p px:role="desc" xml:space="preserve">When disabled, lines in a linegroup are joined together to form one block.
+
+Makes the variable `$include-line-groups` available in style sheets and includes the following rule
+by default:
 
 ~~~css
 linegroup line {
@@ -343,9 +375,10 @@ prodnote {
     <p:option name="show-braille-page-numbers" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Page numbers: Show braille page numbers</h2>
-            <p px:role="desc" xml:space="preserve">Makes the variable `$show-braille-page-numbers` available in style
-sheets. In order to use the variable include a rule like the following in your custom
-style sheet:
+            <p px:role="desc" xml:space="preserve">When enabled, will number braille pages.
+
+Makes the variable `$show-braille-page-numbers` available in style sheets. In order to use the
+variable include a rule like the following in your custom style sheet:
 
 ~~~css
 @if $show-braille-page-numbers {
@@ -355,14 +388,26 @@ style sheet:
     }
   }
 }
-~~~</p>
+~~~
+
+This will create a page number in the top right corner of every braille page.
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the
+  [`counter()`](http://braillespecs.github.io/braille-css/#printing-counters-the-counter-function)
+  function
+</p>
         </p:documentation>
     </p:option>
     <p:option name="show-print-page-numbers" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Page numbers: Show print page numbers</h2>
-            <p px:role="desc" xml:space="preserve">Makes the variable `$show-print-page-numbers` available in style
-sheets and includes the following rule by default:
+            <p px:role="desc" xml:space="preserve">When enabled, will indicate original page numbers.
+
+Makes the variable `$show-print-page-numbers` available in style sheets and includes the following
+rule by default:
 
 ~~~css
 @if $show-print-page-numbers {
@@ -381,7 +426,14 @@ sheet:
     content: string(print-page);
   }
 }
-~~~</p>
+~~~
+
+See the CSS specification for more info:
+
+- the [`string-set`](http://braillespecs.github.io/braille-css/#h4_the-string-set-property) property
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`string()`](http://braillespecs.github.io/braille-css/#h4_the-string-function) function
+</p>
         </p:documentation>
     </p:option>
     <p:option name="force-braille-page-break" required="false" px:type="boolean" select="'false'">
@@ -398,7 +450,13 @@ rule by default:
     page-break-before: always;
   }
 }
-~~~</p>
+~~~
+
+See the CSS specification for more info:
+
+- the [`page-break-before`](http://braillespecs.github.io/braille-css/#h4_controlling-page-breaks)
+  property
+</p>
         </p:documentation>
     </p:option>
     
@@ -471,7 +529,18 @@ content at the beginning of every other volume, include the following additional
     content: flow(document-toc);
   }
 }
-~~~</p>
+~~~
+
+See the CSS specification for more info:
+
+- the [`display:
+  obfl-toc`](http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-toc)
+  value
+- the [`flow`](http://braillespecs.github.io/braille-css/#the-flow-property) property
+- the [`flow()`](http://braillespecs.github.io/braille-css/#h4_the-flow-function) function
+- the [`@volume`](http://braillespecs.github.io/braille-css/#h3_the-volume-rule) rule
+- the [`@begin`](http://braillespecs.github.io/braille-css/#h3_the-begin-and-end-rules) rule
+</p>
         </p:documentation>
     </p:option>
     <!-- ==================== -->
@@ -509,7 +578,7 @@ content at the beginning of every other volume, include the following additional
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Volumes: Maximum number of sheets</h2>
             <p px:role="desc" xml:space="preserve">The maximum number of sheets in a volume.
-            
+
 Makes the variable `$maximum-number-of-sheets` available in style sheets and includes the following
 rule by default:
 
@@ -518,6 +587,12 @@ rule by default:
   max-length: $maximum-number-of-sheets;
 }
 ~~~
+
+See the CSS specification for more info:
+
+- the [`@volume`](http://braillespecs.github.io/braille-css/#h3_the-volume-rule) rule
+- the [`max-length`](http://braillespecs.github.io/braille-css/#h3_the-length-properties) property
+</p>
         </p:documentation>
     </p:option>
     <p:option name="minimum-number-of-sheets" required="false" px:type="integer" select="'30'">
