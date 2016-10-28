@@ -1,17 +1,10 @@
 /bom.xml
-/.maven-modules
-/.maven-workspace/
-/.maven-cache/
-.maven-test*
+.maven-*
 /maven.log
-/.gradle/
-/.gradle-modules
-/.gradle-settings/
+/.gradle*
 .DS_Store
 /*.zip
 /*.deb
-.gradle-install
-.gradle-test
 target/
 
 eclipse/
