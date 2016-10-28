@@ -6,8 +6,8 @@
     type="px:daisy202-to-epub3" version="1.0">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">DAISY 2.02 to EPUB3</h1>
-        <p px:role="desc">Transforms a DAISY 2.02 publication into an EPUB3 publication.</p>
+        <h1 px:role="name">DAISY 2.02 to EPUB 3</h1>
+        <p px:role="desc">Transforms a DAISY 2.02 publication into an EPUB 3 publication.</p>
         <dl px:role="author maintainer">
             <dt>Name:</dt>
             <dd px:role="name">Jostein Austvik Jacobsen</dd>
@@ -55,7 +55,7 @@
     </p:option>
     <p:option name="epub-filename" required="false" select="''" px:type="string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">EPUB3 Filename</h2>
+            <h2 px:role="name">EPUB 3 Filename</h2>
             <p px:role="desc">By default, the filename is the dc:identifier with a "epub" file extension. This option can be used to set a custom filename.</p>
         </p:documentation>
     </p:option>

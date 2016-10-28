@@ -9,7 +9,7 @@ sidebar: UserGuideToc
 
 # DAISY 2.02 To EPUB 3
 
-The "DAISY 2.02 to EPUB3" script will convert a DAISY 2.02 DTB (Digital Talking Book) into an EPUB3 publication.
+The "DAISY 2.02 to EPUB 3" script will convert a DAISY 2.02 DTB (Digital Talking Book) into an EPUB 3 publication.
 This page describes the steps, comments and issues related to this transformation.
 
 ## Table of contents
@@ -30,7 +30,7 @@ On Windows:
 
     $ cli\dp2.exe daisy202-to-epub3 --x-href samples\daisy202\dontworrybehappy\ncc.html --x-output C:\Pipeline2-Output --x-mediaoverlay false --x-compatibility-mode false
 
-This command will create two entries in the output directory. One is a folder called "epub", which is a temporary directory created by the converter. The second is the resulting EPUB3 file. The EPUB3 file is given a name based on the dc:identifier and dc:title metadata elements from the original NCC; "dc:identifier - dc:title.epub".
+This command will create two entries in the output directory. One is a folder called "epub", which is a temporary directory created by the converter. The second is the resulting EPUB 3 file. The EPUB 3 file is given a name based on the dc:identifier and dc:title metadata elements from the original NCC; "dc:identifier - dc:title.epub".
 
 
 ## Outline
@@ -38,16 +38,16 @@ This command will create two entries in the output directory. One is a folder ca
 The high-level conversion workflow is as follows:
 
  * Get the SMIL-based reading order from the NCC
- * Load all the SMILs and upgrade them to EPUB3 Media Overlays
+ * Load all the SMILs and upgrade them to EPUB 3 Media Overlays
  * Extract content document references from each SMIL
  * Make a content-based reading order
- * Load all the content documents, upgrade them to EPUB3 Content Documents
+ * Load all the content documents, upgrade them to EPUB 3 Content Documents
  * If mediaoverlay = 'true'
    * Rearrange the Media Overlays to match the Content Documents
    * Get all referenced audio, images, etc.
- * Make the EPUB3 Navigation Document based on the NCC
- * Make the EPUB3 Package Document
- * Store the EPUB3 Publication in a OCF ZIP Container
+ * Make the EPUB 3 Navigation Document based on the NCC
+ * Make the EPUB 3 Package Document
+ * Store the EPUB 3 Publication in a OCF ZIP Container
 
 ## Errors
 
@@ -68,7 +68,7 @@ This is a list of defined errors for this script. Each error has a unique error 
  * [The text content document (XHTML)](http://www.daisy.org/z3986/specifications/daisy_202.html#textdoc)
  * [The SMIL document](http://www.daisy.org/z3986/specifications/daisy_202.html#smil)
 
-[EPUB3 Overview](http://idpf.org/epub/30/spec/epub30-overview.html)
+[EPUB 3 Overview](http://idpf.org/epub/30/spec/epub30-overview.html)
 
  * [EPUB Publications 3.0](http://idpf.org/epub/30/spec/epub30-publications.html)
  * [3.0](http://idpf.org/epub/30/spec/epub30-contentdocs.html EPUB Content Documents)
