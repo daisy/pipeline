@@ -106,21 +106,21 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
     <p:option name="pef-output-dir" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/x-pef+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">PEF</h2>
-            <h2 px:role="desc">Output directory for the PEF</h2>
+            <p px:role="desc">The PEF.</p>
         </p:documentation>
     </p:option>
     
     <p:option name="brf-output-dir" px:output="result" px:type="anyDirURI" px:media-type="text" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">BRF</h2>
-            <h2 px:role="desc">Output directory for the BRF</h2>
+            <p px:role="desc">A plain text ASCII version of the PEF.</p>
         </p:documentation>
     </p:option>
     
     <p:option name="preview-output-dir" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''" >
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Preview</h2>
-            <h2 px:role="desc">Output directory for the HTML preview</h2>
+            <p px:role="desc">An HTML preview of the PEF.</p>
         </p:documentation>
     </p:option>
     

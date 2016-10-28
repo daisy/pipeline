@@ -29,15 +29,15 @@
     
     <p:input port="source" primary="true" px:name="source" px:media-type="application/x-dtbook+xml">
         <p:documentation>
-            <h2 px:role="name">source</h2>
-            <p px:role="desc">Input DTBook.</p>
+            <h2 px:role="name">DTBook</h2>
+            <p px:role="desc">The DTBook to transform.</p>
         </p:documentation>
     </p:input>
     
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation>
-            <h2 px:role="name">output-dir</h2>
-            <p px:role="desc">Directory for storing result files.</p>
+            <h2 px:role="name">ODT</h2>
+            <p px:role="desc">The resulting ODT file.</p>
         </p:documentation>
     </p:option>
     

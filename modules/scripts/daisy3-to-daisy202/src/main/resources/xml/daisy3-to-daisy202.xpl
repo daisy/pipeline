@@ -21,16 +21,16 @@
     <p:input port="source" primary="true" sequence="false"
         px:media-type="application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Input OPF</h2>
+            <h2 px:role="name">OPF</h2>
             <p px:role="desc">The package file of the input DAISY 3 DTB.</p>
         </p:documentation>
     </p:input>
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output Directory</h2>
-            <p px:role="desc">Output directory for the produced DAISY 2.02 DTB.</p>
-            <pre><code class="example">file:/home/user/out/</code></pre></p:documentation>
+            <h2 px:role="name">DAISY 2.02</h2>
+            <p px:role="desc">The produced DAISY 2.02 DTB.</p>
+        </p:documentation>
     </p:option>
 
 

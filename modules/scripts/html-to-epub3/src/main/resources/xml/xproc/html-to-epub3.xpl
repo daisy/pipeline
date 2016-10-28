@@ -7,7 +7,7 @@
     type="px:html-to-epub3" name="main" version="1.0">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">HTML to EPUB3</h1>
+        <h1 px:role="name">HTML to EPUB 3</h1>
         <p px:role="desc">Transforms (X)HTML documents into an EPUB 3 publication.</p>
         <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/html-to-epub3">
             Online documentation
@@ -32,8 +32,8 @@
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output directory</h2>
-            <p px:role="desc">Output directory for the EPUB.</p>
+            <h2 px:role="name">EPUB</h2>
+            <p px:role="desc">The resulting EPUB 3 publication.</p>
         </p:documentation>
     </p:option>
 

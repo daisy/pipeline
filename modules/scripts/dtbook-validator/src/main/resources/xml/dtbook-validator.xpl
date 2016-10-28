@@ -70,15 +70,14 @@
     <p:option name="input-dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DTBook</h2>
-            <p px:role="desc">Path to the input DTBook document.</p>
+            <p px:role="desc">The input DTBook document.</p>
         </p:documentation>
     </p:option>
 
     <p:option name="output-dir" required="false" px:output="result" px:type="anyDirURI" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output directory</h2>
-            <p px:role="desc">Directory where your validation report is stored. If left blank,
-                nothing is saved to disk.</p>
+            <h2 px:role="name">Validation reports</h2>
+            <p px:role="desc">All validation reports.</p>
         </p:documentation>
     </p:option>
 

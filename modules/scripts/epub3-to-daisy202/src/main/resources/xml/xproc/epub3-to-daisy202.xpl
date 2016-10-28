@@ -26,7 +26,7 @@
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">DAISY 2.02 output</h2>
+            <h2 px:role="name">DAISY 2.02</h2>
         </p:documentation>
     </p:option>
 

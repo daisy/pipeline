@@ -20,7 +20,8 @@
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output</h2>
+            <h2 px:role="name">DTBook</h2>
+            <p px:role="desc">The resulting DTBook file.</p>
         </p:documentation>
     </p:option>
 

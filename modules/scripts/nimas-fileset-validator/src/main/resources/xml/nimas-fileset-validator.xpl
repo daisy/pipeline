@@ -71,23 +71,22 @@ See [http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML](http://co
         the wellformedness of the document cannot be taken for granted -->
     <p:option name="input-opf" required="true" px:type="anyFileURI" px:media-type="application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Package Document (*.opf)</h2>
-            <p px:role="desc">Path to the input package document (*.opf).</p>
+            <h2 px:role="name">Package Document</h2>
+            <p px:role="desc">The input package document (*.opf).</p>
         </p:documentation>
     </p:option>
 
     <p:option name="output-dir" required="false" px:output="result" px:type="anyDirURI" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">All validation reports</h2>
-            <p px:role="desc">Directory where the validation reports are stored. If left blank,
-                nothing is saved to disk.</p>
+            <h2 px:role="name">Validation reports</h2>
+            <p px:role="desc">All validation reports.</p>
         </p:documentation>
     </p:option>
 
     <p:option name="mathml-version" required="false" px:type="string" select="'3.0'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">MathML version</h2>
-            <p px:role="desc">Version of MathML in the DTBook file(s). Defaults to 3.0.</p>
+            <p px:role="desc">Version of MathML in the DTBook file(s).</p>
         </p:documentation>
     </p:option>
 
