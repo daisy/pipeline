@@ -34,6 +34,30 @@
 
 {{/inputs}}
 
+{{#reports}}
+
+### Reports
+
+<ul class="synopsis-reports">
+{{#all}}
+<li class="synopsis-report details-on">
+<div class="toggle-details"/>
+<div class="synopsis-report-name">{{name}}</div>
+<div class="synopsis-report-desc">
+{{#desc.long}}
+<div class="shortdesc">{{desc.short}}</div>
+<div class="longdesc">{{{.}}}</div>
+{{/desc.long}}
+{{^desc.long}}
+{{desc.short}}
+{{/desc.long}}
+</div>
+</li>
+{{/all}}
+</ul>
+
+{{/reports}}
+
 {{#outputs}}
 
 ### Outputs

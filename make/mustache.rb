@@ -388,16 +388,38 @@ Dir.glob(ARGV[0]).each do |f|
         else
           desc = nil
         end
-        {
-          'id' => solution.id.to_s,
-          'name' => name,
-          'desc' => desc,
-          'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false,
-          'media-type' => solution.bound?('type') ? solution.type.to_s.split(' ') : nil
-        }
-      }
-      outputs['all'].each do |output|
-        outputs[output['id']] = output
+        if solution.bound?('type')
+          type = solution.type.to_s.split(' ')
+        else
+          type = nil
+        end
+        if not (type and type.include?('application/vnd.pipeline.status+xml'))
+          {
+            'id' => solution.id.to_s,
+            'name' => name,
+            'desc' => desc,
+            'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false,
+            'media-type' => type,
+            'is-report' => (type and type.include?('application/vnd.pipeline.report+xml'))
+          }
+        end
+      }.reject{|x| x.nil? }
+      report_outputs = outputs['all'].select{ |o| o['is-report'] }
+      if not report_outputs.empty?
+        reports = Hash.new
+        page_view['reports'] = reports
+        reports['all'] = report_outputs
+        reports['all'].each do |report|
+          reports[report['id']] = report
+        end
+      end
+      outputs['all'] = outputs['all'].reject{ |o| o['is-report'] }
+      if outputs['all'].empty?
+        page_view['outputs'] = nil
+      else
+        outputs['all'].each do |output|
+          outputs[output['id']] = output
+        end
       end
     end
     page_view.template_file = f
