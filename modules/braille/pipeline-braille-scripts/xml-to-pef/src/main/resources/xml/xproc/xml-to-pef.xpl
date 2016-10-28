@@ -87,7 +87,7 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 
 Makes the variable `$page-width` available in style sheets and includes the following rule by default:
 
-~~~css
+~~~sass
 @page {
   size: $page-width $page-height;
 }
@@ -107,7 +107,7 @@ See the CSS specification for more info:
 
 Makes the variable `$page-height` available in style sheets and includes the following rule by default:
 
-~~~css
+~~~sass
 @page {
   size: $page-width $page-height;
 }
@@ -144,7 +144,7 @@ See the CSS specification for more info:
 Makes the variable `$levels-in-footer` available in style sheets and includes the following rule by
 default:
 
-~~~css
+~~~sass
 @for $level from 1 through 6 {
   @if $levels-in-footer >= $level {
     h#{$level} {
@@ -192,7 +192,7 @@ See the CSS specification for more info:
 Makes the variable `$hyphenation` available in style sheets and includes the following rule by
 default:
 
-~~~css
+~~~sass
 @if $hyphenation {
   :root {
     hyphens: auto;
@@ -224,7 +224,7 @@ See the CSS specification for more info:
 Makes the variable `$line-spacing` available in style sheets and includes the following rule by
 default:
 
-~~~css
+~~~sass
 @if $line-spacing == double {
   :root {
     line-height: 2;
@@ -253,7 +253,7 @@ See the CSS specification for more info:
 Makes the variable `$capital-letters` available in style sheets and includes the following rule by
 default:
 
-~~~css
+~~~sass
 @if $capital-letters != true {
   :root {
     text-transform: lowercase;
@@ -292,7 +292,7 @@ default:
 Makes the variable `$include-captions` available in style sheets and includes the following rule by
 default:
 
-~~~css
+~~~sass
 caption {
   display: if($include-captions, block, none);
 }
@@ -307,7 +307,7 @@ caption {
 Makes the variable `$include-images` available in style sheets and includes the following rule by
 default:
 
-~~~css
+~~~sass
 @if $include-images {
   img::after {
     content: attr(alt);
@@ -330,7 +330,7 @@ default:
 Makes the variable `$include-line-groups` available in style sheets and includes the following rule
 by default:
 
-~~~css
+~~~sass
 linegroup line {
   display: if($include-line-groups, block, inline);
 }
@@ -361,7 +361,7 @@ linegroup line {
 Makes the variable `$include-production-notes` available in style sheets and includes the following
 rule by default:
 
-~~~css
+~~~sass
 prodnote {
   display: if($include-production-notes, block, none);
 }
@@ -380,7 +380,7 @@ prodnote {
 Makes the variable `$show-braille-page-numbers` available in style sheets. In order to use the
 variable include a rule like the following in your custom style sheet:
 
-~~~css
+~~~sass
 @if $show-braille-page-numbers {
   @page {
     @top-right {
@@ -409,7 +409,7 @@ See the CSS specification for more info:
 Makes the variable `$show-print-page-numbers` available in style sheets and includes the following
 rule by default:
 
-~~~css
+~~~sass
 @if $show-print-page-numbers {
   pagenum {
     string-set: print-page content();
@@ -444,7 +444,7 @@ See the CSS specification for more info:
 Makes the variable `$force-braille-page-break` available in style sheets and includes the following
 rule by default:
 
-~~~css
+~~~sass
 @if $force-braille-page-break {
   pagenum {
     page-break-before: always;
@@ -582,7 +582,7 @@ See the CSS specification for more info:
 Makes the variable `$maximum-number-of-sheets` available in style sheets and includes the following
 rule by default:
 
-~~~css
+~~~sass
 @volume {
   max-length: $maximum-number-of-sheets;
 }
