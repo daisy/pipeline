@@ -22,34 +22,31 @@
     <p:option name="href" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">NCC</h2>
-            <p px:role="desc">Input NCC.</p>
             <pre><code class="example">file:/home/user/daisy202/ncc.html</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="output" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Output</h2>
-            <p px:role="desc">Output directory for the EPUB.</p>
             <pre><code class="example">file:/home/user/epub3/</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Temporary directory</h2>
-            <p px:role="desc">Temporary directory for the EPUB files.</p>
             <pre><code class="example">file:/tmp/</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="mediaoverlay" required="false" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Include Media Overlay</h2>
-            <p px:role="desc">Whether or not to include media overlays and associated audio files (true or false).</p>
+            <p px:role="desc">Whether or not to include media overlays and associated audio files.</p>
         </p:documentation>
     </p:option>
     <p:option name="compatibility-mode" required="false" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Backwards compatible</h2>
-            <p px:role="desc">Whether or not to include NCX-file, OPF guide element and backwards-compatible metadata (true or false).</p>
+            <p px:role="desc">Whether or not to include NCX-file, OPF guide element and backwards-compatible metadata.</p>
             <!-- TODO: if true, should convert filenames to simple ASCII filenames -->
         </p:documentation>
     </p:option>
