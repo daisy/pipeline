@@ -109,7 +109,9 @@
 {{/desc.long}}
 </div>
 <div class="synopsis-option-data-type"><b>Data-type</b>: {{{data-type}}}</div>
-<div class="synopsis-option-default"><b>Default value</b>: <code>{{default}}</code></div>
+{{#default}}
+<div class="synopsis-option-default"><b>Default value</b>: {{{.}}}</div>
+{{/default}}
 <div class="synopsis-option-required"><b>Required</b>: {{#required}}yes{{/required}}{{^required}}no{{/required}}</div>
 </li>
 {{/all}}

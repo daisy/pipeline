@@ -298,13 +298,18 @@ Dir.glob(ARGV[0]).each do |f|
         else
           desc = nil
         end
+        if solution.bound?('default')
+          default = solution.default.to_s
+        else
+          default = nil
+        end
         {
           'id' => id,
           'name' => name,
           'desc' => desc,
           'required' => solution.bound?('required') ? solution.required.true? : false,
           'sequence' => sequence,
-          'default' => solution.bound?('default') ? solution.default.to_s : nil,
+          'default' => default ? (default.empty? ? '(empty)' : "<code>#{default}</code>") : nil,
           'data-type' => data_type
         }
       }
