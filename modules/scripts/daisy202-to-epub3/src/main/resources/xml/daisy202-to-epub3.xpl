@@ -49,7 +49,8 @@
     <p:option name="compatibility-mode" required="false" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Backwards compatible</h2>
-            <p px:role="desc">Whether or not to include NCX-file, OPF guide element and ASCII filenames (true or false).</p>
+            <p px:role="desc">Whether or not to include NCX-file, OPF guide element and backwards-compatible metadata (true or false).</p>
+            <!-- TODO: if true, should convert filenames to simple ASCII filenames -->
         </p:documentation>
     </p:option>
     <p:option name="epub-filename" required="false" select="''" px:type="string">
