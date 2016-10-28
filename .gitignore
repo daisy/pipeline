@@ -12,6 +12,7 @@
 /*.deb
 .gradle-install
 .gradle-test
+target/
 
 eclipse/
 eclipse/*
