@@ -17,7 +17,7 @@
 
     <p:option name="ncc" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Input NCC</h2>
+            <h2 px:role="name">NCC</h2>
             <p px:role="desc">The NCC file in the DAISY 2.02 fileset</p>
         </p:documentation>
     </p:option>
@@ -25,7 +25,7 @@
     <p:option name="timeToleranceMs" select="500" px:type="xs:integer">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Time Tolerance</h2>
-            <p px:role="desc">The duration of the audio files can deviate from the duration declared in the DAISY 2.02 fileset by this many milliseconds (default: 500).</p>
+            <p px:role="desc">The duration of the audio files can deviate from the duration declared in the DAISY 2.02 fileset by this many milliseconds.</p>
         </p:documentation>
     </p:option>
 
