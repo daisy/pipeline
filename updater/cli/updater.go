@@ -21,7 +21,7 @@ var (
 	env = os.Getenv("DP2_HOME")
 )
 
-var service = flag.String("service", "http://defaultservice.com", "Url of the update service")
+var service = flag.String("service", "https://daisy.github.io/pipeline/updates", "URL of the update service")
 var version = flag.String("version", Latest, "Version to update to")
 var installDir = flag.String("install-dir", env, "Pipeline install directory")
 var localDescriptor = flag.String("descriptor", "", "Current descriptor")
