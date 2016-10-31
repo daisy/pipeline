@@ -17,6 +17,7 @@
 	<xsl:import href="dtbook2obfl_layout.xsl" />
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:namespace-alias stylesheet-prefix="axsl" result-prefix="xsl"/>
+	<xsl:strip-space elements="dtb:note"/>
 	<xsl:param name="toc-indent-multiplier" select="1" dotify:desc="Indentation for each toc level"/>
 	<xsl:param name="splitterMax" select="10" />
 	<xsl:param name="toc-depth" select="6" dotify:desc="The maximum depth of generated toc (A positive integer)"/>
