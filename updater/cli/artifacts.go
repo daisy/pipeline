@@ -73,16 +73,6 @@ func (la LocalArtifact) Clean() error {
 
 }
 
-//Deploys a local artifact, it copies the file or extracts it to the given path
-//depending on whether the artifact is makred to do so
-func (la LocalArtifact) Deploy(path string) error {
-	if la.Extract {
-		return la.Unzip(path)
-	} else {
-		return la.Copy(path)
-	}
-}
-
 func (la LocalArtifact) Unzip(path string) error {
 	absolute := filepath.Join(path, la.DeployPath)
 	os.MkdirAll(filepath.Dir(absolute), 0755)
@@ -205,9 +195,19 @@ func Remove(las []LocalArtifact) (ok bool, errs []error) {
 	}
 	return apply(las, fn)
 }
+
+//Deploys a local artifact, it copies the file or extracts it to the given path
+//depending on whether the artifact is marked to do so
 func Deploy(las []LocalArtifact, path string) (ok bool, errs []error) {
 	fn := func(l LocalArtifact) error {
-		return l.Copy(path)
+		Info("extract: %s", l.Extract)
+		if l.Extract {
+			ret := l.Unzip(path)
+			os.Remove(l.Path)
+			return ret
+		} else {
+			return l.Copy(path)
+		}
 	}
 	return apply(las, fn)
 }
