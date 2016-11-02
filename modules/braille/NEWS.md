@@ -1,3 +1,36 @@
+v1.9.16
+=======
+
+Changes
+-------
+- Dotify update
+- Bugfixes
+
+Components
+----------
+- liblouis ([2.6.3](https://github.com/liblouis/liblouis/releases/tag/v2.6.3)), liblouisutdml
+  ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)), liblouis-java
+  ([2.0.0](https://github.com/liblouis/liblouis-java/releases/tag/2.0.0))
+- **dotify** (**api** [**2.10.0**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv2.10.0), **common**
+  [**2.1.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.common%2Fv2.1.0), hyphenator.impl
+  [2.0.1](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.hyphenator.impl%2Fv2.0.1), translator.impl
+  [2.3.0](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.translator.impl%2Fv2.3.0), **formatter.impl**
+  [**2.6.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.formatter.impl%2Fv2.6.0), text.impl
+  [2.0.0](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.text.impl%2Fv2.0.0), **task-api**
+  [**2.3.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task-api%2Fv2.3.0), **task-runner**
+  [**1.1.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task-runner%2Fv1.1.0), **task.impl**
+  [**2.8.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task.impl%2Fv2.8.0))
+- brailleutils (api
+  [3.0.0](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.0), impl
+  [3.0.0-beta](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.impl%2Fv3.0.0-beta), pef-tools
+  [2.0.0-alpha](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv2.0.0-alpha))
+- braille-css ([1.12.0](https://github.com/snaekobbi/braille-css/releases/tag/1.12.0))
+- jstyleparser ([1.20-p9](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p9))
+- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
 v1.9.15
 =======
 
@@ -39,7 +72,7 @@ Components
 - liblouis ([2.6.3](https://github.com/liblouis/liblouis/releases/tag/v2.6.3)), liblouisutdml
   ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)), liblouis-java
   ([2.0.0](https://github.com/liblouis/liblouis-java/releases/tag/2.0.0))
-- **dotify** (**api** **[2.8.0**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv2.8.0), common
+- **dotify** (**api** [**2.8.0**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv2.8.0), common
   [2.0.2](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.common%2Fv2.0.2), hyphenator.impl
   [2.0.1](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.hyphenator.impl%2Fv2.0.1), translator.impl
   [2.3.0](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.translator.impl%2Fv2.3.0), **formatter.impl**

@@ -12,15 +12,15 @@
   
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>texhyph-utils-aggregator</artifactId>
-  <version>1.9.16-SNAPSHOT</version>
+  <version>1.9.17-SNAPSHOT</version>
   <packaging>pom</packaging>
   
   <name>DP2 Braille Modules :: texhyph-utils</name>
 
   <modules>
-    <!-- <module>texhyph-core</module> -->
-    <!-- <module>texhyph-saxon</module> -->
-    <!-- <module>texhyph-utils</module> -->
+    <module>texhyph-core</module>
+    <module>texhyph-saxon</module>
+    <module>texhyph-utils</module>
   </modules>
   
   <build>

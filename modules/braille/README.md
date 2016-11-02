@@ -52,32 +52,34 @@ Release procedure
   ```
   
 - Resolve snapshot dependencies and commit.
-- Semantic versioning should have been done already (see above). However because some modules might
-  have been disabled in the aggregator POMs because they haven't changed since the previous release,
-  but might have to be updated anyway because of major version increments of depending modules
-  (depending through "Import-Package"), that should be double-checked now. For each of the 4 script
-  modules `dtbook-to-pef`, `html-to-pef`, `epub2-to-pef` and `zedai-to-pef`, if the module is
-  disabled in the aggregator POMs, run `mvn clean test`.
 - Generate release notes template, edit and commit. (View changes since previous release with `git diff v1.9.3...HEAD`, and look for relevant Github issues on [https://github.com/search](https://github.com/search?o=desc&q=involves%3Abertfrees+repo%3Adaisy%2Fpipeline-mod-braille+repo%3Asnaekobbi%2Fpipeline-mod-braille+repo%3Asnaekobbi%2Fissues+repo%3Asnaekobbi%2Fliblouis+repo%3Aliblouis%2Fliblouis+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Ajoeha480%2Fdotify&s=updated&type=Issues))
 
   ```sh
   make release-notes
   ```
 
+- Comment out all modules in the aggregator POMs that you don't want to release. Commit.
 - Perform the release with Maven.
 
   ```sh
   mvn clean release:clean release:prepare
   mvn release:perform
   ```
+
+- Revert the commit that commented out modules.
   
-- Revert snapshot increments of modules in `maven/bom/pom.xml` and `maven/parent/pom.xml`, update
-  parent version to new snapshot in all module POMs, comment out all modules in all aggregator POMs
-  and amend to the last commit.
+  ```sh
+  git revert HEAD~2
+  git reset --soft HEAD^
+  ```
+
+- Revert snapshot increments of modules in `maven/bom/pom.xml` and `maven/parent/pom.xml` and update
+  parent version to new snapshot in all module POMs.
+- Amend to the last commit.
 - Push and make a pull request (for turning an existing issue into a PR use the `-i <issueno>` switch).
 
   ```sh
-  git push origin release/${VERSION}:release/${VERSION}
+  git push -u origin release/${VERSION}:release/${VERSION}
   hub pull-request -b daisy:master -h daisy:release/${VERSION} -m "Release version ${VERSION}"
   ```
   
