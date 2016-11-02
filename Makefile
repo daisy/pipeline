@@ -18,7 +18,7 @@ SHELL := /bin/bash
 all : compile check dist
 
 .PHONY : dist
-dist: dist-zip dist-deb
+dist: dist-zip dist-deb dist-rpm dist-webui-deb dist-webui-rpm
 
 .PHONY : dist-zip
 dist-zip : compile
@@ -31,6 +31,26 @@ dist-deb : compile
 	cd assembly && \
 	$(MVN) clean package -Pdeb | $(MVN_LOG)
 	mv assembly/target/*.deb .
+
+.PHONY : dist-rpm
+dist-rpm : compile
+	cd assembly && \
+	$(MVN) clean package -Prpm | $(MVN_LOG)
+	mv assembly/target/rpm/pipeline2/RPMS/*/*.rpm .
+
+.PHONY : dist-webui-deb
+dist-webui-deb : compile
+	# see webui README for instructions on how to make a signed package for distribution
+	cd webui && \
+	./activator clean debian:packageBin | $(MVN_LOG)
+	mv webui/target/*deb .
+
+.PHONY : dist-webui-rpm
+dist-webui-rpm : compile
+	# see webui README for instructions on how to make a signed package for distribution
+	cd webui && \
+	./activator clean rpm:packageBin
+	mv webui/target/rpm/RPMS/noarch/*.rpm .
 
 .PHONY : run
 run : assembly/target/dev-launcher/bin/pipeline2
@@ -329,7 +349,7 @@ cache :
 clean : cache
 	rm -rf $(MVN_WORKSPACE)
 	rm -f maven.log
-	rm -f *.zip *.deb
+	rm -f *.zip *.deb *.rpm
 	rm -rf webui/dp2webui
 	find * -name .maven-to-install -exec rm -r "{}" \;
 	find * -name .maven-to-test -exec rm -r "{}" \;
@@ -356,6 +376,12 @@ help :
 	echo "	Incrementally compile code and package into a ZIP for each platform"                    >&2
 	echo "make dist-deb:"                                                                           >&2
 	echo "	Incrementally compile code and package into a DEB"                                      >&2
+	echo "make dist-rpm:"                                                                           >&2
+	echo "	Incrementally compile code and package into a RPM"                                      >&2
+	echo "make dist-webui-deb:"                                                                     >&2
+	echo "	Compile Web UI and package into a DEB"                                                  >&2
+	echo "make dist-webui-rpm:"                                                                     >&2
+	echo "	Compile Web UI and package into a RPM"                                                  >&2
 	echo "make run:"                                                                                >&2
 	echo "	Incrementally compile code and run locally"                                             >&2
 	echo "make run-gui:"                                                                            >&2

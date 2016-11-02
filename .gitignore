@@ -8,6 +8,7 @@
 .maven-to-test
 .maven-to-test-dependents
 /*.deb
+/*.rpm
 /*.zip
 /.gradle-settings/
 /.gradle/
