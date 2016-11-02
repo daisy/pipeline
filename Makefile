@@ -61,7 +61,7 @@ run-gui : assembly/target/dev-launcher/bin/pipeline2
 
 .PHONY : run-webui
 run-webui :
-#	rm -r webui/dp2webui && cp -r webui/dp2webui-cleandb webui/dp2webui
+	if [ ! -d webui/dp2webui ]; then cp -r webui/dp2webui-cleandb webui/dp2webui ; fi
 	cd webui && \
 	./activator run
 
@@ -321,6 +321,7 @@ clean : cache
 	find * -name .maven-install -exec rm -r "{}" \;
 	find * -name .maven-test -exec rm -r "{}" \;
 	find * -name .maven-test-dependents -exec rm -r "{}" \;
+	rm -rf webui/dp2webui
 
 .PHONY : help
 help :
