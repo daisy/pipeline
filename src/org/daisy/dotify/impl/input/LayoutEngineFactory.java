@@ -25,6 +25,7 @@ public class LayoutEngineFactory implements TaskGroupFactory {
 		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.PEF_FORMAT, locale));
 		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.TEXT_FORMAT, locale));
 		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.TEXT_FORMAT, "en-US"));
+		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.TEXT_FORMAT, "no-NO"));
 	}
 
 	@Override
