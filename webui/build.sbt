@@ -71,7 +71,9 @@ serverLoading in Debian := SystemV
 // For packaging on Linux (CentOS/Redhat "RPM" flavor)
 // Informational, dependency, meta, scriptlet, systemV start and script settings
 packageName in Rpm := "pipeline2-webui"
+packageDescription in Rpm := packageDescription.value
 version in Rpm := version.value.replaceAll("-.*","")
+rpmGroup in Rpm := Some("Applications/Publishing")
 rpmRelease := (version.value+"-1-").replaceAll("^.*?-(\\d+)-.*$","$1")
 packageArchitecture in Rpm := "noarch"
 rpmVendor := organizationName.value
