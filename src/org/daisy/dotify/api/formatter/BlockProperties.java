@@ -18,7 +18,6 @@ public class BlockProperties implements Cloneable {
 	private final NumeralStyle listNumberFormat;
 	private final String defaultListLabel;
 	private final String listItemLabel;
-	private int listIterator;
 	private final BreakBefore breakBefore;
 	private final Keep keep;
 	private final int orphans;
@@ -397,7 +396,6 @@ public class BlockProperties implements Cloneable {
 		listNumberFormat = builder.listNumberFormat;
 		defaultListLabel = builder.defaultListLabel;
 		listItemLabel = builder.listItemLabel;
-		listIterator = 0;
 		breakBefore = builder.breakBefore;
 		keep = builder.keep;
 		orphans = builder.orphans;
@@ -432,26 +430,6 @@ public class BlockProperties implements Cloneable {
 	 */
 	public BlockSpacing getPadding() {
 		return padding;
-	}
-	
-	/**
-	 * Get text indent, in characters
-	 * @return returns the text indent
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public int getTextIndent() {
-		return textBlockProps.getTextIndent();
-	}
-	
-	/**
-	 * Get first line indent, in characters
-	 * @return returns the first line indent
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public int getFirstLineIndent() {
-		return textBlockProps.getFirstLineIndent();
 	}
 	
 	/**
@@ -501,27 +479,6 @@ public class BlockProperties implements Cloneable {
 	public String getListItemLabel() {
 		return listItemLabel;
 	}
-	
-	/**
-	 * Increments the list iterator and returns the current list number
-	 * @return returns the current list number
-	 * @deprecated keep state outside of this object
-	 */
-	@Deprecated
-	public int nextListNumber() {
-		listIterator++;
-		return listIterator;
-	}
-	
-	/**
-	 * Get current list number
-	 * @return returns the current list number
-	 * @deprecated keep state outside of this object
-	 */
-	@Deprecated
-	public int getListNumber() {
-		return listIterator;
-	}
 
 	/**
 	 * Get break before type
@@ -537,16 +494,6 @@ public class BlockProperties implements Cloneable {
 	 */
 	public FormattingTypes.Keep getKeepType() {
 		return keep;
-	}
-	
-	/**
-	 * Gets the alignment
-	 * @return returns the alignment
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public FormattingTypes.Alignment getAlignment() {
-		return textBlockProps.getAlignment();
 	}
 
 	/**
@@ -564,32 +511,11 @@ public class BlockProperties implements Cloneable {
 	public int getKeepWithNextSheets() {
 		return keepWithNextSheets;
 	}
-	
-	/**
-	 * 
-	 * @return the identifier
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public String getIdentifier() {
-		return textBlockProps.getIdentifier();
-	}
 
 	public BlockPosition getVerticalPosition() {
 		return verticalPosition;
 	}
-	
-	/**
-	 * 
-	 * @return returns the row spacing
-	 * @deprecated use <code>getTextBlockProperties</code>
-	 */
-	@Deprecated
-	public Float getRowSpacing() {
-		return textBlockProps.getRowSpacing();
-	}
 
-	
 	public TextBorderStyle getTextBorderStyle() {
 		return textBorderStyle;
 	}

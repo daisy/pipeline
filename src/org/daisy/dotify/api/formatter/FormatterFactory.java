@@ -19,23 +19,6 @@ public interface FormatterFactory {
 	public Formatter newFormatter(String locale, String mode);
 
 	/**
-	 * Provides a method to set references directly. This
-	 * is included in the interface as a compromise between OSGi visibility and
-	 * SPI compatibility.
-	 * 
-	 * In an OSGi context, the implementation should not set references
-	 * directly, but attach it to the service using DS.
-	 * 
-	 * @param c the reference class
-	 * @param reference the reference instance
-	 * 
-	 * @throws FormatterConfigurationException if a reference of type T cannot be bound to the implementation
-	 * @deprecated use setCreatedWithSPI 
-	 */
-	@Deprecated
-	public <T> void setReference(Class<T> c, T reference) throws FormatterConfigurationException;
-
-	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
 	 * information collected from a file within the <tt>META-INF/services</tt> directory.
 	 * In other words, it was created using SPI (service provider interfaces).</p>

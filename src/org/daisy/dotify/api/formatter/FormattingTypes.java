@@ -50,11 +50,6 @@ public interface FormattingTypes {
 		 */
 		AUTO,
 		/**
-		 * Keep all rows in a block
-		 * @deprecated
-		 */
-		ALL,
-		/**
 		 * Keep all rows in a block on the same page
 		 */
 		PAGE,

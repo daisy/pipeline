@@ -37,23 +37,6 @@ public interface FormatterEngineFactoryService {
 	 * @return returns a new instance
 	 */
 	public FormatterEngine newFormatterEngine(FormatterConfiguration config, PagedMediaWriter writer);
-	
-	/**
-	 * Provides a method to set references directly. This
-	 * is included in the interface as a compromise between OSGi visibility and
-	 * SPI compatibility.
-	 * 
-	 * In an OSGi context, the implementation should not set references
-	 * directly, but attach it to the service using DS.
-	 * 
-	 * @param c the reference class
-	 * @param reference the reference instance
-	 * 
-	 * @throws FormatterEngineConfigurationException if a reference of type T cannot be bound to the implementation 
-	 * @deprecated use setCreatedWithSPI
-	 */
-	@Deprecated
-	public <T> void setReference(Class<T> c, T reference) throws FormatterEngineConfigurationException;
 
 	/**
 	 * <p>Informs the implementation that it was discovered and instantiated using
