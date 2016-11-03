@@ -8,5 +8,7 @@
 	<entry key="sv-SE">resource-files/sv-SE</entry>
 	<entry key="en-US">resource-files/en-US</entry>
 	<entry key="no-NO">resource-files/no-NO</entry>
+	<entry key="de">resource-files/de-DE</entry>
+	<entry key="de-DE">resource-files/de-DE</entry>
 
 </properties>
