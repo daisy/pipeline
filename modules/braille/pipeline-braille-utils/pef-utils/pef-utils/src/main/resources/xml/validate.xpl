@@ -7,6 +7,9 @@
     
     <p:input port="source" sequence="false" primary="true"/>
     <p:output port="result" sequence="false" primary="true"/>
+    
+    <p:output port="validation-status" sequence="false"/>
+    
     <p:option name="assert-valid" required="false"/>
     <p:option name="temp-dir" required="true" px:type="anyDirURI"/>
     
