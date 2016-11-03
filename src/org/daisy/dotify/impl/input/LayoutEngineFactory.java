@@ -28,6 +28,8 @@ public class LayoutEngineFactory implements TaskGroupFactory {
 		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.TEXT_FORMAT, "no-NO"));
 		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.TEXT_FORMAT, "de"));
 		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.TEXT_FORMAT, "de-DE"));
+		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.TEXT_FORMAT, "da"));
+		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.TEXT_FORMAT, "da-DK"));
 	}
 
 	@Override

@@ -10,5 +10,7 @@
 	<entry key="no-NO">resource-files/no-NO</entry>
 	<entry key="de">resource-files/de-DE</entry>
 	<entry key="de-DE">resource-files/de-DE</entry>
+	<entry key="da">resource-files/da-DK</entry>
+	<entry key="da-DK">resource-files/da-DK</entry>
 
 </properties>
