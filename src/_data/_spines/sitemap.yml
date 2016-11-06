@@ -25,3 +25,5 @@
 - group: {{site.baseurl}}/Contribute/index.html
   pages:
     - {{site.baseurl}}/Contribute/Developer-Guide.html
+- url: http://www.daisy.org
+  title: DAISY Home

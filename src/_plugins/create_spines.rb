@@ -28,8 +28,12 @@ module Jekyll
             'group' => create_spine_item.call(item['group']),
             'pages' => item['pages'].map(&create_spine_item)
           }
-        else
+        elsif item['group']
           create_spine_item.call(item['group'])
+        elsif item['url'] and item['url'] =~ /^http:/o
+          {'external' => true}.merge(item)
+        else
+          "spine item can not be processed: #{item}"
         end
       }
       site.data['spines'] = Hash[

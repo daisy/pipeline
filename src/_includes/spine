@@ -19,7 +19,11 @@
         <li class="spine-item spine-item-current">
       {% else %}
         <li class="spine-item">
+        {% if p.external %}
+          <a href="{{p.url}}">
+        {% else %}
           <a href="{{site.baseurl}}{{p.url}}">
+        {% endif %}
       {% endif %}
       {{ p.title }}
       {% if p.url == page.url %}
