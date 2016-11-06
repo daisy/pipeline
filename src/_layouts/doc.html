@@ -5,12 +5,14 @@
     <meta charset="utf-8">
     <title>{{ page.title }}</title>
     {% include meta-title title=page.title %}
-    <link rel="stylesheet" href="{{site.baseurl}}/css/main.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/css/default.css">
     <link rel="stylesheet" href="{{site.baseurl}}/css/coderay.css">
     {% include favicon %}
   </head>
   <body>
-    {% include nav spine="sitemap" %}
-    {{ content }}
+    <div id="body">
+      {% include nav spine="sitemap" %}
+      {{ content }}
+    </div>
   </body>
 </html>

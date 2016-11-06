@@ -120,23 +120,34 @@
 {{/options}}
 
 <script type="text/javascript">
-function toggleDetails() {
-  if (this.parentElement.classList.contains('details-on')) {
-  	this.parentElement.classList.remove('details-on');
-	this.parentElement.classList.add('details-off');
-  } else {
-  	this.parentElement.classList.remove('details-off');
-	this.parentElement.classList.add('details-on');
+var allElements = [];
+function showDetailsAndHideAllOther() {
+  var windowTopBefore = window.pageYOffset;
+  var topBefore = this.offsetTop;
+  var i;
+  for (i = 0; i < allElements.length; i++) {
+    allElements[i].classList.remove('details-on');
+	allElements[i].classList.add('details-off');
+  }
+  this.classList.remove('details-off');
+  this.classList.add('details-on');
+  window.scrollTo(0, windowTopBefore + this.offsetTop - topBefore);
+}
+var onload = function() {
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-input'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-report'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-output'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-option'), 0));
+  var i;
+  for (i = 0; i < allElements.length; i++) {
+    allElements[i].classList.remove('details-on');
+    allElements[i].classList.add('details-off');
+	allElements[i].addEventListener('click', showDetailsAndHideAllOther);
   }
 }
-window.onload = function() {
-  var buttons = document.getElementsByClassName('toggle-details');
-  var i;
-  for (i = 0; i < buttons.length; i++) {
-    buttons[i].parentElement.classList.remove('details-on');
-	buttons[i].parentElement.classList.add('details-off');
-    buttons[i].addEventListener('click', toggleDetails);
-  }
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
 }
 </script>
-

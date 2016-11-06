@@ -3,12 +3,14 @@
     {% if p['group'] %}
       {% if p['group'].url == page.url %}
         <li class="spine-item spine-item-current">
+          <span>
       {% else %}
         <li class="spine-item">
           <a href="{{site.baseurl}}{{p['group'].url}}">
       {% endif %}
       {{ p['group'].title }}
       {% if p['group'].url == page.url %}
+        </span>
       {% else %}
         </a>
       {% endif %}
@@ -17,6 +19,7 @@
     {% else %}
       {% if p.url == page.url %}
         <li class="spine-item spine-item-current">
+          <span>
       {% else %}
         <li class="spine-item">
         {% if p.external %}
@@ -27,6 +30,7 @@
       {% endif %}
       {{ p.title }}
       {% if p.url == page.url %}
+        </span>
       {% else %}
         </a>
       {% endif %}

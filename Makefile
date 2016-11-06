@@ -25,7 +25,7 @@ baseurl := $(call yaml_get,$(CONFIG_FILE),baseurl)
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
-$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(JEKYLL_FILES) src/css/coderay.css
+$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(JEKYLL_FILES)
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)/
 	make/post_process.rb $< $@$(baseurl) $(CONFIG_FILE)
@@ -57,9 +57,6 @@ $(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
 	make/make_meta.rb "$<$(baseurl)/**/*.html" $<$(baseurl) $(CONFIG_FILE) >$@
-
-src/css/coderay.css :
-	coderay stylesheet > $@
 
 $(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(META_JEKYLL_FILES)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)

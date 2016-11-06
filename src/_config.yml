@@ -31,6 +31,8 @@ kramdown:
   syntax_highlighter_opts:
     line_numbers: false
     css: class
+sass:
+  sass_dir: css
 baseurl: "/pipeline"
 site_base: "http://daisy.github.io"
 meta_file: _meta.ttl

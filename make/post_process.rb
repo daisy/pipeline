@@ -135,10 +135,15 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
     link_warning(a, f)
   end
 
-  ## process spines
+  ## work around css shortcomings
   doc.css('ul.spine').each do |ul|
     if ul.xpath(".//li[contains(concat(' ',@class,' '), ' spine-item-current ')]").any?
       ul['class'] = ul['class'] + ' spine-has-current'
+    end
+  end
+  doc.css('li.spine-item').each do |li|
+    if li.xpath(".//li[contains(concat(' ',@class,' '), ' spine-item-current ')]").any?
+      li['class'] = li['class'] + ' spine-item-has-current'
     end
   end
   
