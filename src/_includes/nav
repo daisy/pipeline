@@ -1,0 +1,4 @@
+<nav id="nav-{{include.spine}}">
+  {% assign spine = site.data.spines[include.spine] %}
+  {% include spine pages=spine %}
+</nav>

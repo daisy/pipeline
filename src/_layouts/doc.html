@@ -9,9 +9,7 @@
     <link rel="stylesheet" href="{{site.baseurl}}/css/coderay.css">
   </head>
   <body>
-	<nav id="nav-sitemap">
-	  {% include spine pages=site.data.spines.sitemap %}
-	</nav>
+    {% include nav spine="sitemap" %}
     {{ content }}
   </body>
 </html>

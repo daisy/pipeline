@@ -8,14 +8,8 @@
     <link rel="stylesheet" href="{{site.baseurl}}/css/coderay.css">
   </head>
   <body>
-	<nav id="nav-wiki">
-	  {% include spine pages=site.data.spines.wiki %}
-	</nav>
-	<div class="edit-button">
-	  <a href="https://github.com/daisy/pipeline/edit/wiki/{{page.relative_path | remove:'_wiki/'}}">
-		Edit this page on Github
-	  </a>
-	</div>
+    {% include nav spine=page.spine %}
+    {% include edit-button-{{page.edit_button}} %}
     {{ content }}
   </body>
 </html>

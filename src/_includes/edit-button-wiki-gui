@@ -1,0 +1,5 @@
+<div class="edit-button">
+  <a href="https://github.com/daisy/pipeline-gui/wiki/{{page.relative_path | remove:'_wiki_gui/' | remove:'.md' }}/_edit">
+    Edit this page on Github
+  </a>
+</div>

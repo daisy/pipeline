@@ -11,11 +11,20 @@ collections:
     permalink: /wiki/webui/:path/
 defaults:
   - scope: {path: "", type: wiki}
-    values: {layout: wiki}
+    values:
+      layout: wiki
+      spine: wiki
+      edit_button: wiki
   - scope: {path: "", type: wiki_gui}
-    values: {layout: wiki-gui}
+    values:
+      layout: wiki
+      spine: sitemap
+      edit_button: wiki-gui
   - scope: {path: "", type: wiki_webui}
-    values: {layout: wiki-webui}
+    values:
+      layout: wiki
+      spine: sitemap
+      edit_button: wiki-webui
 markdown: kramdown
 kramdown:
   syntax_highlighter: coderay
