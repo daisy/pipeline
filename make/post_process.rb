@@ -119,7 +119,7 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
     if abs_path.end_with?('/')
       abs_path = abs_path[0..-2]
     end
-    if File.exist?(base_dir + abs_path)
+    if File.exist?(base_dir + abs_path) and not File.directory?(base_dir + abs_path)
       a['href'] = baseurl + abs_path + fragment
       next
     elsif File.exist?(base_dir + abs_path + '.html')

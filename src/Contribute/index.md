@@ -7,6 +7,6 @@ layout: default
 
 ## Mailing List
 
-## [Developer Guide](Developer_Guide.md)
+## [Developer Guide](Developer-Guide.md)
 
 ## Javadoc, ...

@@ -1,24 +1,27 @@
 - {{site.baseurl}}/index.html
-- group: {{site.baseurl}}/Get_Help/index.html
+- {{site.baseurl}}/Download.html
+- group: {{site.baseurl}}/Get-Help/index.html
   pages: 
-    - group: {{site.baseurl}}/Get_Help/User_Guide.html
+    - group: {{site.baseurl}}/Get-Help/User-Guide.html
       pages:
         - {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
         - group: {{site.baseurl}}/wiki/webui/User-Guide/
           pages:
             - {{site.baseurl}}/wiki/webui/Templating/
             - {{site.baseurl}}/wiki/webui/Administrator-settings/
-        {{#sparql}}
-        SELECT ?href WHERE {
-          []    a        dp2:script ;
-                dp2:doc  ?href .
-          ?href dc:title ?title ;
-                a        dp2:userdoc . }
-        ORDER BY ?title
-        - {{href}}
-        {{/sparql}}
+        - group: {{site.baseurl}}/Get-Help/User-Guide/Scripts.html
+          pages:
+
+            {{#sparql}}
+            SELECT ?href WHERE {
+              []    a        dp2:script ;
+                    dp2:doc  ?href .
+              ?href dc:title ?title ;
+                    a        dp2:userdoc . }
+            ORDER BY ?title
+            - {{href}}
+            {{/sparql}}
 
 - group: {{site.baseurl}}/Contribute/index.html
   pages:
-    - {{site.baseurl}}/Contribute/Developer_Guide.html
-- {{site.baseurl}}/Download.html
+    - {{site.baseurl}}/Contribute/Developer-Guide.html

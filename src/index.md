@@ -6,6 +6,6 @@ title: Home
 
 Welcome to the DAISY Pipeline 2 website!
 
-* [Get Help](Get_Help)
+* [Get Help](Get-Help)
 * [Contribute](Contribute)
 * [Download](Download)
