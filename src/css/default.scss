@@ -7,7 +7,7 @@
 
 :root {
 	font-family: "Lato", sans-serif;
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 300;
 	line-height: 1.5em;
 }
@@ -21,7 +21,7 @@ code,
 }
 
 h1 {
-	font-size: 300%;
+	font-size: 220%;
 	font-weight: 700;
 	line-height: 5rem;
 	margin-left: -.5em;
@@ -156,10 +156,8 @@ body {
 			float: left;
 			> a {
 				display: block;
-				padding: .625rem;
-				padding-bottom: .4375rem;
+				padding: .43rem .625rem .37rem .625rem;
 				border-radius: .5rem;
-				font-size: 110%;
 				font-weight: 600;
 				text-transform: uppercase;
 				&:hover {
@@ -185,7 +183,7 @@ body {
 					background-position-y: - ($image-height * $image-scale);
 					background-color: initial; }
 				position: relative;
-				top: -1em; }
+				top: -1.4em; }
 			&.spine-item-current > ul,
 			> ul.spine-has-current {
 				position: absolute;
