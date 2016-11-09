@@ -26,8 +26,14 @@
 
     - url: http://www.daisy.org/forums/pipeline-2
       title: "Forums"
-- group: {{site.baseurl}}/Contribute/index.html
+- group: {{site.baseurl}}/Contribute/
   pages:
+    - url: https://github.com/daisy/pipeline
+      title: "Source Code"
+    - url: https://groups.google.com/forum/#!forum/daisy-pipeline-dev
+      title: "Developers Mailing List"
+    - url: https://github.com/daisy/pipeline/issues
+      title: "Issue Tracker"
     - {{site.baseurl}}/Contribute/Developer-Guide.html
 - url: http://www.daisy.org
   title: "DAISY Home"

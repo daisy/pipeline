@@ -39,7 +39,7 @@ module Jekyll
         elsif item['group']
           create_spine_item.call(item['group'])
         elsif item['url']
-          if item['url'] =~ /^http:/o
+          if item['url'] =~ /^https?:/o
             {'external' => true}.merge(item)
           else
             merge_title(create_spine_item.call(item['url']), item['title'])
