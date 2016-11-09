@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700");
 :root {
   font-family: "Lato", sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 300;
   line-height: 1.5em; }
 
@@ -14,7 +14,7 @@ code,
   line-height: 1.3em; }
 
 h1 {
-  font-size: 300%;
+  font-size: 220%;
   font-weight: 700;
   line-height: 5rem;
   margin-left: -.5em;
@@ -117,21 +117,23 @@ body {
       color: inherit; }
       #nav-sitemap > ul.spine a:visited {
         color: inherit; }
+      #nav-sitemap > ul.spine a.external-link::after {
+        content: none; }
+    #nav-sitemap > ul.spine .spine-item-current > a {
+      cursor: default; }
     #nav-sitemap > ul.spine > li {
       display: block;
       margin: .9375rem;
       float: left; }
-      #nav-sitemap > ul.spine > li > a, #nav-sitemap > ul.spine > li > span {
+      #nav-sitemap > ul.spine > li > a {
         display: block;
-        padding: .625rem;
-        padding-bottom: .4375rem;
+        padding: .43rem .625rem .37rem .625rem;
         border-radius: .5rem;
-        font-size: 110%;
         font-weight: 600;
         text-transform: uppercase; }
-        #nav-sitemap > ul.spine > li > a:hover, #nav-sitemap > ul.spine > li > span:hover {
+        #nav-sitemap > ul.spine > li > a:hover {
           background-color: #e5ebff; }
-      #nav-sitemap > ul.spine > li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > span, #nav-sitemap > ul.spine > li.spine-item-has-current > a, #nav-sitemap > ul.spine > li.spine-item-has-current > span {
+      #nav-sitemap > ul.spine > li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > a, #nav-sitemap > ul.spine > li.spine-item-has-current > a {
         background-color: #416DF2;
         color: white; }
       #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"] {
@@ -144,12 +146,10 @@ body {
         background-size: 100% 200%;
         background-repeat: no-repeat;
         position: relative;
-        top: -1em; }
+        top: -1.4em; }
         #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:hover {
           background-position-y: -71.5px;
           background-color: initial; }
-        #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]::after {
-          content: none; }
       #nav-sitemap > ul.spine > li.spine-item-current > ul,
       #nav-sitemap > ul.spine > li > ul.spine-has-current {
         position: absolute;
@@ -162,9 +162,8 @@ body {
         #nav-sitemap > ul.spine > li.spine-item-current > ul li ul,
         #nav-sitemap > ul.spine > li > ul.spine-has-current li ul {
           margin-left: .31rem; }
-        #nav-sitemap > ul.spine > li.spine-item-current > ul li > a, #nav-sitemap > ul.spine > li.spine-item-current > ul li > span,
-        #nav-sitemap > ul.spine > li > ul.spine-has-current li > a,
-        #nav-sitemap > ul.spine > li > ul.spine-has-current li > span {
+        #nav-sitemap > ul.spine > li.spine-item-current > ul li > a,
+        #nav-sitemap > ul.spine > li > ul.spine-has-current li > a {
           display: block;
           width: 100%;
           padding-top: .625rem;
@@ -173,13 +172,12 @@ body {
           padding-right: .625rem;
           background-color: #f9fbff;
           border-left: .07rem solid #cccccc; }
-          #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:hover, #nav-sitemap > ul.spine > li.spine-item-current > ul li > span:hover,
-          #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:hover,
-          #nav-sitemap > ul.spine > li > ul.spine-has-current li > span:hover {
+          #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:hover,
+          #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:hover {
             background-color: #e5ebff; }
-        #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > span,
+        #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > a,
         #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:active,
-        #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > span {
+        #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > a {
           background-color: #416DF2;
           color: white;
           border-left: none;
@@ -188,9 +186,8 @@ body {
         #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > ul {
           margin-left: 0;
           border-left: 0.38rem solid #416DF2; }
-          #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > ul li > a, #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > ul li > span,
-          #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > ul li > a,
-          #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > ul li > span {
+          #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > ul li > a,
+          #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > ul li > a {
             border-left: none; }
   #nav-sitemap.fixed > ul.spine > li.spine-item-current > ul,
   #nav-sitemap.fixed > ul.spine > li > ul.spine-has-current {

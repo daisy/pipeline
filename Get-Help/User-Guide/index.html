@@ -1,24 +1,22 @@
 <!DOCTYPE html>
-<html prefix="dc: http://purl.org/dc/elements/1.1/
-              dp2: http://www.daisy.org/ns/pipeline/">
+<html>
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta charset="utf-8">
-    <title>xml-to-pef API</title>
-    
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="xml-to-pef API">
+	<meta charset="utf-8">
+	<title>DAISY Pipeline 2 | User Guide</title>
+	
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="User Guide">
 
 
-    <link rel="stylesheet" href="/pipeline/css/default.css">
-    <link rel="stylesheet" href="/pipeline/css/coderay.css">
-    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+	<link rel="stylesheet" href="/pipeline/css/default.css">
+	<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 
   </head>
   <body>
     <div id="body">
       <nav id="nav-sitemap">
   
-  <ul class="spine">
+  <ul class="spine spine-has-current">
   
     
       
@@ -46,17 +44,17 @@
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-has-current">
       
       <a href="/pipeline/Get-Help" tabindex="3">
       Help
       </a>
       
-      <ul class="spine">
+      <ul class="spine spine-has-current">
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-current">
       
       <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
       User Guide
@@ -484,14 +482,31 @@ if (window.addEventListener) {
 }
 </script>
 
-      <h1 id="xml-to-pef-api">xml-to-pef API</h1>
+      <h1 id="user-guide">User Guide</h1>
 
-<h2 id="a-hrefresourcesmeta-infcatalogxml-classsourcecatalogxmla"><a href="/pipeline/modules/braille/xml-to-pef/resources/META-INF/catalog.xml.html" class="source">catalog.xml</a></h2>
+<p>DAISY Pipeline 2 is an umbrella term for various things.</p>
 
-<link rev="dp2:doc" href="./">
+<p>First, DAISY Pipeline 2 is an ordinary
+<a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide">desktop application</a>.</p>
 
-<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<p>But DAISY Pipeline 2 is also a
+<a href="/pipeline/wiki/webui/User-Guide">web application</a>. This means
+that, unlike with the desktop application, multiple users can work
+together in the same application, each through their own web browser,
+while the real work happens on a central server. The web application
+offers some additional features that are not available in the desktop
+application yet, such as
+“<a href="/pipeline/wiki/webui/Templating">templates</a>”.</p>
 
+<p>Last but not least (it was originally designed for this purpose),
+DAISY Pipeline 2 can also be run as a service to which client programs
+can connect, through a web API. In fact, the DAISY Pipeline 2 web
+application is an example of such a server-client configuration. There
+is also a
+<a href="https://github.com/daisy/pipeline-cli-go" class="external-link" target="_blank">command line tool</a>.</p>
+
+<p>DAISY Pipeline 2, in all its forms, is supported on Windows, Mac OS,
+and Linux.</p>
 
     </div>
   </body>
