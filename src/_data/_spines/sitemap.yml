@@ -1,7 +1,7 @@
 - {{site.baseurl}}/index.html
 - {{site.baseurl}}/Download.html
-- group: {{site.baseurl}}/Get-Help/index.html
-  pages: 
+- group: {{site.baseurl}}/Get-Help/
+  pages:
     - group: {{site.baseurl}}/Get-Help/User-Guide/
       pages:
         - url: {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
@@ -24,6 +24,8 @@
             - {{href}}
             {{/sparql}}
 
+    - url: http://www.daisy.org/forums/pipeline-2
+      title: "Forums"
 - group: {{site.baseurl}}/Contribute/index.html
   pages:
     - {{site.baseurl}}/Contribute/Developer-Guide.html

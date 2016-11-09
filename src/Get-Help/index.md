@@ -8,6 +8,6 @@ title: Help
 
 ## [User Guide](User-Guide)
 
-## Forums
+## [Forums](http://www.daisy.org/forums/pipeline-2)
 
 ## FAQ
