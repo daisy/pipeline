@@ -32,6 +32,9 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
   
   ## process links
   doc.css('a').each do |a|
+    if not a['href']
+      next
+    end
 
     # link to source files with special class attribute
     if ['userdoc','apidoc','source'].include?(a['class'])

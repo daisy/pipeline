@@ -3,37 +3,27 @@
     {% if p['group'] %}
       {% if p['group'].url == page.url %}
         <li class="spine-item spine-item-current">
-          <span>
       {% else %}
         <li class="spine-item">
-          <a href="{{site.baseurl}}{{p['group'].url}}">
       {% endif %}
+      <a href="{{site.baseurl}}{{p['group'].url}}">
       {{ p['group'].title }}
-      {% if p['group'].url == page.url %}
-        </span>
-      {% else %}
-        </a>
-      {% endif %}
+      </a>
       {% assign nested_pages=p['pages'] %}
       {% include spine pages=nested_pages %}
     {% else %}
       {% if p.url == page.url %}
         <li class="spine-item spine-item-current">
-          <span>
       {% else %}
         <li class="spine-item">
-        {% if p.external %}
-          <a href="{{p.url}}">
-        {% else %}
-          <a href="{{site.baseurl}}{{p.url}}">
-        {% endif %}
+      {% endif %}
+      {% if p.external %}
+        <a href="{{p.url}}">
+      {% else %}
+        <a href="{{site.baseurl}}{{p.url}}">
       {% endif %}
       {{ p.title }}
-      {% if p.url == page.url %}
-        </span>
-      {% else %}
-        </a>
-      {% endif %}
+      </a>
     {% endif %}
     </li>
   {% endfor %}

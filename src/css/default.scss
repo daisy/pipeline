@@ -146,11 +146,13 @@ body {
 			color: inherit;
 			&:visited {
 				color: inherit; }}
+		.spine-item-current > a {
+			cursor: default; }
 		> li {
 			display: block;
 			margin: .9375rem;
 			float: left;
-			> { a, span {
+			> a {
 				display: block;
 				padding: .625rem;
 				padding-bottom: .4375rem;
@@ -159,11 +161,10 @@ body {
 				font-weight: 600;
 				text-transform: uppercase;
 				&:hover {
-					background-color: lighten($color-primary-4, 8%); }}}
+					background-color: lighten($color-primary-4, 8%); }}
 			> a:active,
-			&.spine-item-current > span,
-			&.spine-item-has-current > a,
-			&.spine-item-has-current > span {
+			&.spine-item-current > a,
+			&.spine-item-has-current > a {
 				background-color: $color-primary-0;
 				color: white; }
 			> a[href="http://www.daisy.org"] {
@@ -197,7 +198,7 @@ body {
 				li {
 					ul {
 						margin-left: .31rem; }
-					> { a, span {
+					> a {
 						display: block;
 						width: 100%;
 						padding-top: .625rem;
@@ -207,10 +208,10 @@ body {
 						background-color: lighten($color-primary-4, 12%);
 						border-left: .07rem solid #cccccc;
 						&:hover {
-							background-color: lighten($color-primary-4, 8%); }}}
+							background-color: lighten($color-primary-4, 8%); }}
 					$active-color: $color-primary-0;
 					> a:active,
-					&.spine-item-current > span {
+					&.spine-item-current > a {
 						background-color: $active-color;
 						color: white;
 						border-left: none;
@@ -218,8 +219,8 @@ body {
 					&.spine-item-current > ul {
 						margin-left: 0;
 						border-left: .38rem solid $active-color;
-						li > {a, span {
-							border-left: none; }}}}}}
+						li > a {
+							border-left: none; }}}}}
 	} /* > ul.spine */
 	&.fixed > ul.spine > {
 		li.spine-item-current > ul,
