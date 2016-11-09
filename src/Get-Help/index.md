@@ -6,7 +6,7 @@ title: Help
 
 ## Getting Started
 
-## [User Guide](User-Guide.md)
+## [User Guide](User-Guide)
 
 ## Forums
 

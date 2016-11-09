@@ -2,10 +2,12 @@
 - {{site.baseurl}}/Download.html
 - group: {{site.baseurl}}/Get-Help/index.html
   pages: 
-    - group: {{site.baseurl}}/Get-Help/User-Guide.html
+    - group: {{site.baseurl}}/Get-Help/User-Guide/
       pages:
-        - {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
+        - url: {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
+          title: "Desktop Application"
         - group: {{site.baseurl}}/wiki/webui/User-Guide/
+          title: "Web Application"
           pages:
             - {{site.baseurl}}/wiki/webui/Templating/
             - {{site.baseurl}}/wiki/webui/Administrator-settings/
@@ -26,4 +28,4 @@
   pages:
     - {{site.baseurl}}/Contribute/Developer-Guide.html
 - url: http://www.daisy.org
-  title: DAISY Home
+  title: "DAISY Home"

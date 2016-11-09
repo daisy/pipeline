@@ -1,5 +1,13 @@
 module Jekyll
   class CreateSpines < Generator
+    def merge_title(page, title)
+      if title
+        
+        # possibly overwriting existing title
+        page.data['title'] = title
+      end
+      return page
+    end
     def generate(site)
       pages = site.pages | site.collections.values.map(&:docs).reduce(:|)
       baseurl = site.config['baseurl']
@@ -25,13 +33,17 @@ module Jekyll
           end
         elsif item['pages']
           {
-            'group' => create_spine_item.call(item['group']),
+            'group' => merge_title(create_spine_item.call(item['group']), item['title']),
             'pages' => item['pages'].map(&create_spine_item)
           }
         elsif item['group']
           create_spine_item.call(item['group'])
-        elsif item['url'] and item['url'] =~ /^http:/o
-          {'external' => true}.merge(item)
+        elsif item['url']
+          if item['url'] =~ /^http:/o
+            {'external' => true}.merge(item)
+          else
+            merge_title(create_spine_item.call(item['url']), item['title'])
+          end
         else
           "spine item can not be processed: #{item}"
         end
