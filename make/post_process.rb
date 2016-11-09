@@ -150,5 +150,17 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
     end
   end
   
+  ## set tab order to how it appears to sighted users (top-level items
+  ## are split off from rest using css)
+  tabindex = 1
+  doc.css('#nav-sitemap > ul > li > a').each do |a|
+    a['tabindex'] = tabindex
+    tabindex = tabindex + 1
+  end
+  doc.css('#nav-sitemap > ul ul a').each do |a|
+    a['tabindex'] = tabindex
+    tabindex = tabindex + 1
+  end
+  
   File.open(f, 'w') { |f| f.write(doc.to_html) }
 end
