@@ -6,7 +6,8 @@
   <parent>
     <groupId>org.daisy.maven</groupId>
     <artifactId>xproc-maven-plugin-parent</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
   </parent>
   
   <artifactId>xproc-engine-daisy-pipeline</artifactId>
