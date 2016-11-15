@@ -52,22 +52,26 @@ public interface Context {
 	/**
 	 * Gets the total number of pages contained in the current volume, or null if not
 	 * known. This should include the volume's pre- and post-content.
+	 * @return returns the number of pages in the current volume, or null if not known.
 	 */
 	public Integer getPagesInVolume();
 	
 	/**
 	 * Gets the total number of pages contained in the document, or null if not known.
+	 * @return returns the number of pages in the document, or null if not known.
 	 */
 	public Integer getPagesInDocument();
 	
 	/**
 	 * Gets the total number of sheets contained in the current volume, or null if not
 	 * known. This should include the volume's pre- and post-content.
+	 * @return returns the number of sheets in the current volume, or null if not known.
 	 */
 	public Integer getSheetsInVolume();
 	
 	/**
 	 * Gets the total number of sheets contained in the document, or null if not known.
+	 * @return returns the number of sheets in the document, or null if not known.
 	 */
 	public Integer getSheetsInDocument();
 	

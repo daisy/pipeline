@@ -46,6 +46,7 @@ public final class TableCellProperties {
 
 		/**
 		 * Sets the padding
+		 * @param value the padding
 		 * @return returns this object
 		 */
 		public Builder padding(BlockSpacing value) {
@@ -55,6 +56,7 @@ public final class TableCellProperties {
 		
 		/**
 		 * Gets the text block properties builder
+		 * @param value the text block properties
 		 * @return returns the text block properties builder
 		 */
 		public Builder textBlockProperties(TextBlockProperties value) {

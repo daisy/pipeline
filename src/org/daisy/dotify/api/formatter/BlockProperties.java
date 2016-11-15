@@ -286,9 +286,9 @@ public class BlockProperties implements Cloneable {
 		}
 		
 		/**
-		 * 
-		 * @param value
-		 * @return returns the row spacing
+		 * Sets the row spacing for the block
+		 * @param value the row spacing
+		 * @return returns this builder
 		 */
 		public Builder rowSpacing(float value) {
 			this.textBlockPropsBuilder.rowSpacing(value);
@@ -323,8 +323,8 @@ public class BlockProperties implements Cloneable {
 		}
 		
 		/**
-		 * 
-		 * @param identifier
+		 * Sets the identifier for the block
+		 * @param identifier the identifier
 		 * @return returns "this" object
 		 */
 		public Builder identifier(String identifier) {

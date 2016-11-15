@@ -83,6 +83,7 @@ public final class TableProperties {
 		
 		/**
 		 * Sets the margin
+		 * @param value the margin
 		 * @return returns this object
 		 */
 		public Builder margin(BlockSpacing value) {
@@ -92,6 +93,7 @@ public final class TableProperties {
 		
 		/**
 		 * Sets the padding
+		 * @param value the padding
 		 * @return returns this object
 		 */
 		public Builder padding(BlockSpacing value) {
