@@ -362,6 +362,10 @@ clean : cache
 	find * -name .gradle-dependencies-to-install -exec rm -r "{}" \;
 	find * -name .gradle-dependencies-to-test -exec rm -r "{}" \;
 
+.PHONY : gradle-clean
+gradle-clean :
+	$(GRADLE) clean
+
 .PHONY : help
 help :
 	echo "make all:"                                                                                >&2
