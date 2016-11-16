@@ -292,13 +292,20 @@ Dir.glob(ARGV[0]).each do |f|
           else
             case solution.data_type
             when RDF::Literal
-              data_type = '<var>&lt;' + data_type_id + '&gt;</var>'
+              case data_type_id
+              when 'boolean'
+                data_type = '<code>true</code> or <code>false</code>'
+              when 'string', 'integer'
+                data_type = 'Any <var>&lt;' + data_type_id + '&gt;</var>'
+              else
+                data_type = '<var>&lt;' + data_type_id + '&gt;</var>'
+              end
             else
               data_type = nil
             end
           end
         else
-          data_type = '<var>&lt;string&gt;</var>'
+          data_type = 'Any <var>&lt;string&gt;</var>'
         end
         if solution.bound?('name')
           name = solution.name.to_s

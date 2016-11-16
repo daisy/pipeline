@@ -19,6 +19,7 @@
 {{desc.short}}
 {{/desc.long}}
 </div>
+{{#media-type.length}}
 <div class="synopsis-input-media-type">
 <b>Media-type</b>:
 <ul class="media-types">
@@ -27,6 +28,7 @@
 {{/media-type}}
 </ul>
 </div>
+{{/media-type.length}}
 <div class="synopsis-input-sequence"><b>Sequence</b>: {{#sequence}}yes{{/sequence}}{{^sequence}}no{{/sequence}}</div>
 </li>
 {{/all}}
@@ -76,6 +78,7 @@
 {{desc.short}}
 {{/desc.long}}
 </div>
+{{#media-type.length}}
 <div class="synopsis-output-media-type">
 <b>Media-type</b>:
 <ul class="media-types">
@@ -84,6 +87,7 @@
 {{/media-type}}
 </ul>
 </div>
+{{/media-type.length}}
 </li>
 {{/all}}
 </ul>
@@ -108,11 +112,13 @@
 {{desc.short}}
 {{/desc.long}}
 </div>
-<div class="synopsis-option-data-type"><b>Data-type</b>: {{{data-type}}}</div>
+<div class="synopsis-option-data-type"><b>Possible values</b>: {{{data-type}}}</div>
 {{#default}}
 <div class="synopsis-option-default"><b>Default value</b>: {{{.}}}</div>
 {{/default}}
+{{^default}}
 <div class="synopsis-option-required"><b>Required</b>: {{#required}}yes{{/required}}{{^required}}no{{/required}}</div>
+{{/default}}
 </li>
 {{/all}}
 </ul>

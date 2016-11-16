@@ -253,6 +253,7 @@ body {
 	padding: .5rem 1rem 0 1rem;
 	border-top: 1px solid $color-complement-3;
 	border-left: 1px solid $color-complement-3;
+	border-bottom: 1px solid white;
 	border-radius: .2rem;
 	&.details-off {
 		&:hover {
@@ -307,6 +308,14 @@ body {
 		padding-left: 0;
 		li {
 			display: inline;
-			&::after { content: ', ' }
+			&::after { content: ' or ' }
 			&:last-child::after { content: '' }}}
+	dl.choice {
+		margin-top: .3rem;
+		dt {
+			display: list-item;
+			list-style-type: "\25BA";
+			margin-left: 2rem; }
+		dd {
+			margin-bottom: .5rem; }}
 }
