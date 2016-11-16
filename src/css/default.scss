@@ -54,14 +54,13 @@ a {
 	font-weight: 400;
 	color: $color;
 	&:visited {
-		color: $color;
-	}
+		color: $color; }
 	&.external-link::after {
-		content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=);
-	}
+		content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=); }
 	&.broken-link {
-		text-decoration: line-through;
-	}
+		text-decoration: line-through; }
+	&:focus {
+		color: #ff7711; }
 }
 
 code,
@@ -82,7 +81,11 @@ code {
 pre > code {
 	display: block;
 	border-radius: .3rem;
-	padding: 10px;
+	padding: 9px 11px;
+}
+
+pre {
+	margin: 0;
 }
 
 section.important {
@@ -134,8 +137,7 @@ body {
 		background-image: url("{{site.baseurl}}/css/logo.png");
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
-		z-index: 1;
-	}
+		z-index: 1; }
 }
 
 #nav-sitemap {
@@ -173,7 +175,8 @@ body {
 				border-radius: .5rem;
 				font-weight: 600;
 				text-transform: uppercase;
-				&:hover {
+				&:hover,
+				&:focus {
 					background-color: lighten($color-primary-4, 8%); }}
 			> a:active,
 			&.spine-item-current > a,
@@ -192,9 +195,12 @@ body {
 				background-image: url("{{site.baseurl}}/css/daisy_uppercase_shadow.png");
 				background-size: 100% 200%;
 				background-repeat: no-repeat;
-				&:hover {
+				&:hover,
+				&:focus {
 					background-position-y: - ($image-height * $image-scale);
 					background-color: initial; }
+				&:focus {
+					outline: 1px dotted black; }
 				position: relative;
 				top: -1.4em; }
 			&.spine-item-current > ul,
@@ -218,7 +224,8 @@ body {
 						padding-right: .625rem;
 						background-color: lighten($color-primary-4, 12%);
 						border-left: .07rem solid #cccccc;
-						&:hover {
+						&:hover,
+						&:focus {
 							background-color: lighten($color-primary-4, 8%); }}
 					$active-color: $color-primary-0;
 					> a:active,
