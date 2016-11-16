@@ -41,11 +41,10 @@
         </p:documentation>
     </p:option>
     
-    <p:option name="template" required="false" px:type="string" select="''">
+    <p:option name="template" required="false" px:type="anyFileURI" select="''" px:media-type="application/vnd.oasis.opendocument.text-template">
         <p:documentation>
-            <h2 px:role="name">template</h2>
+            <h2 px:role="name">Template</h2>
             <p px:role="desc">OpenOffice template file (.ott) that contains the style definitions.</p>
-            <pre><code class="example">default.ott</code></pre>
         </p:documentation>
     </p:option>
     
@@ -59,8 +58,8 @@
             </px:data-type>
         </p:pipeinfo>
         <p:documentation>
-            <h2 px:role="name">asciimath</h2>
-            <p px:role="desc">How to render ASCIIMath-encoded formulas?</p>
+            <h2 px:role="name">ASCIIMath handling</h2>
+            <p px:role="desc">How to render ASCIIMath-encoded formulas.</p>
         </p:documentation>
     </p:option>
     
@@ -74,28 +73,28 @@
             </px:data-type>
         </p:pipeinfo>
         <p:documentation>
-            <h2 px:role="name">images</h2>
-            <p px:role="desc">How to render images?</p>
+            <h2 px:role="name">Images handling</h2>
+            <p px:role="desc">How to render images.</p>
         </p:documentation>
     </p:option>
     
     <p:option name="page-numbers" required="false" px:type="boolean" select="'true'">
         <p:documentation>
-            <h2 px:role="name">page-numbers</h2>
-            <p px:role="desc">Show page numbers or not.</p>
+            <h2 px:role="name">Page numbers</h2>
+            <p px:role="desc">Whether to show page numbers or not.</p>
         </p:documentation>
     </p:option>
     
     <p:option name="page-numbers-float" required="false" px:type="boolean" select="'true'">
         <p:documentation>
-            <h2 px:role="name">page-numbers-float</h2>
+            <h2 px:role="name">Float page numbers</h2>
             <p px:role="desc">Try to float page numbers to an appropriate place as opposed to exactly following print.</p>
         </p:documentation>
     </p:option>
     
     <p:option name="image-dpi" required="false" px:type="integer" select="'600'">
         <p:documentation>
-            <h2 px:role="name">image-dpi</h2>
+            <h2 px:role="name">Image resolution</h2>
             <p px:role="desc">Resolution of images in DPI.</p>
         </p:documentation>
     </p:option>

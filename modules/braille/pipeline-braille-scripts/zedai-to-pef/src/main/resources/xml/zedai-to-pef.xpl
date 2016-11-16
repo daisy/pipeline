@@ -41,11 +41,11 @@
                     <value>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/bana.css</value>
                     <documentation xml:lang="en">A CSS stylesheet for BANA formatting
 
-See [bana.css](http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/bana.css.html)</documentation>
+See [source](http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/bana.css)</documentation>
                     <value>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/ueb.css</value>
                     <documentation xml:lang="en">A CSS stylesheet for UEB formatting
 
-See [ueb.css](http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/ueb.css.html)</documentation>
+See [source](http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/ueb.css)</documentation>
                     <data type="anyURI">
                         <documentation xml:lang="en">Any other absolute URI</documentation>
                     </data>
@@ -75,17 +75,19 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="transform" required="false" px:type="string" select="'(translator:liblouis)(formatter:dotify)'">
+    <p:option name="transform" required="false" px:type="string" px:data-type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Transformer query</h2>
             <p px:role="desc">The transformer query.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="ascii-table" required="false" px:type="string" select="''">
+    <p:option name="ascii-table" required="false" px:type="string" px:data-type="transform-query" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ASCII braille table</h2>
-            <p px:role="desc">The ASCII braille table, used to render the PEF preview and the plain text version.</p>
+            <p px:role="desc">The ASCII braille table, used to render the PEF preview and the plain text version.
+
+If left blank, the locale information in the input document will be used to select a suitable table.</p>
         </p:documentation>
     </p:option>
     

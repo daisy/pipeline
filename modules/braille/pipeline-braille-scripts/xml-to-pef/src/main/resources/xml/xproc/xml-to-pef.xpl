@@ -64,16 +64,20 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
         <p px:role="desc" xml:space="preserve">Keeps the intermediary OBFL-file for debugging.</p>
       </p:documentation>
     </p:option>
-    <p:option name="ascii-file-format" required="false" px:type="string" select="''">
+    <p:option name="ascii-file-format" required="false" px:type="string" px:data-type="transform-query" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Plain text (BRF) file format</h2>
-            <p px:role="desc" xml:space="preserve">The file format to store the plain text version.</p>
+            <p px:role="desc" xml:space="preserve">The file format to store the plain text version.
+
+If left blank, the locale information in the input document will be used to select a suitable file format.</p>
         </p:documentation>
     </p:option>
-    <p:option name="ascii-table" required="false" px:type="string" select="''">
+    <p:option name="ascii-table" required="false" px:type="string" px:data-type="transform-query" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ASCII braille table</h2>
-            <p px:role="desc" xml:space="preserve">The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.</p>
+            <p px:role="desc" xml:space="preserve">The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
+
+If left blank, the locale information in the input document will be used to select a suitable table.</p>
         </p:documentation>
     </p:option>
     
