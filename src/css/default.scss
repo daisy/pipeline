@@ -95,14 +95,17 @@ section.important {
 		font-size: 180%; }
 }
 
-ul.spine {
-	display: none;
-	&.spine-has-current {
-		display: block; }
-	> li.spine-item {
+nav {
+	ul.spine {
+		ul.spine {
+			display: none;
+			&.spine-has-current {
+				display: block; }}}
+	li.spine-item {
 		&.spine-item-current {
 			> ul.spine {
-				display: block; }}}}
+				display: block; }}}
+}
 
 $left-offset: 16rem;
 $top-offset: 10rem;
