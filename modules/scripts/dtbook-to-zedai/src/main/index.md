@@ -170,6 +170,6 @@ Output:
 # See also
 
 * [Developer documentation](https://code.google.com/archive/p/daisy-pipeline/wikis/DTBookToZedAIDev.wiki)
-* [Element conversion rules](https://code.google.com/archive/p/daisy-pipeline/wikis/DTBookToZedAIConversionRules.wiki)
+* [Element conversion rules](https://daisy.github.io/pipeline/modules/dtbook-to-zedai/rules.html)
 * [ZedAI specifications](http://www.daisy.org/z3998/2012/)
 
