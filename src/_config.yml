@@ -27,6 +27,7 @@ defaults:
       edit_button: wiki-webui
 markdown: kramdown
 kramdown:
+  parse_block_html: true
   syntax_highlighter: coderay
   syntax_highlighter_opts:
     line_numbers: false
