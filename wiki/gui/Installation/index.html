@@ -1,12 +1,11 @@
 <!DOCTYPE html>
-<html prefix="dc: http://purl.org/dc/elements/1.1/
-              dp2: http://www.daisy.org/ns/pipeline/">
+<html>
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
-    <title>Development notes</title>
+    <title>Installation</title>
     
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Development notes">
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Installation">
 
 
     <link rel="stylesheet" href="/pipeline/css/default.css">
@@ -18,7 +17,7 @@
     <div id="body">
       <nav id="nav-sitemap">
   
-  <ul class="spine">
+  <ul class="spine spine-has-current">
   
     
       
@@ -46,37 +45,37 @@
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-has-current">
       
       <a href="/pipeline/Get-Help" tabindex="3">
       Help
       </a>
       
-      <ul class="spine">
+      <ul class="spine spine-has-current">
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-has-current">
       
       <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
       User Guide
       </a>
       
-      <ul class="spine">
+      <ul class="spine spine-has-current">
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-has-current">
       
       <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide" tabindex="7">
       Desktop Application
       </a>
       
-      <ul class="spine">
+      <ul class="spine spine-has-current">
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-current">
       
       
         <a href="/pipeline/wiki/gui/Installation" tabindex="8">
@@ -502,16 +501,36 @@ if (window.addEventListener) {
 </script>
 
 
-      <h1 id="development-notes">Development notes</h1>
+      
+      <div class="edit-button">
+  <a href="https://github.com/daisy/pipeline-gui/wiki/Installation/_edit" class="external-link" target="_blank">
+    Edit this page on Github
+  </a>
+</div>
 
-<p>MathML 3 element set can follow the same rules as MathML 2. Here is an analysis: <a href="http://code.google.com/p/daisy-pipeline/wiki/ComparisonOfMathMLContentElements" class="external-link" target="_blank">ComparisonOfMathMLContentElements</a>.</p>
+      <h1 id="installation">Installation</h1>
 
-<h2 id="challenges">Challenges</h2>
+<h2 id="javafx">JavaFX</h2>
+
+<!-- (linked to from pipeline2 start script if no JavaFX is detected) -->
+
+<p>DAISY Pipeline 2 (desktop application) requires <a href="https://docs.oracle.com/javafx/2/overview/jfxpub-overview.htm" class="external-link" target="_blank">JavaFX</a>. JavaFX is
+part of Oracle’s Java SE implementation (starting with Java SE 7
+Update 6). In case you can not use Oracle’s Java, have a look at the
+following alternatives for acquiring JavaFX:</p>
 
 <ul>
-  <li>Detecting the MathML version. At the start, this will be set by the user as a parameter.</li>
-  <li>Can we support integration of MathML in DTBook 2005-1? The modularization mechanisms don’t seem to be as well developed (e.g. no <code>externalFlow</code>).</li>
+  <li>for Debian/Ubuntu:
+<a href="https://packages.qa.debian.org/o/openjfx.html" class="external-link" target="_blank">https://packages.qa.debian.org/o/openjfx.html</a>
+</li>
+  <li>for modile and embedded:
+<a href="http://gluonhq.com/labs/javafxports/" class="external-link" target="_blank">http://gluonhq.com/labs/javafxports/</a>
+</li>
+  <li>JavaFX can be built from source:
+<a href="https://wiki.openjdk.java.net/display/OpenJFX/Main" class="external-link" target="_blank">https://wiki.openjdk.java.net/display/OpenJFX/Main</a>
+</li>
 </ul>
+
 
     </div>
   </body>
