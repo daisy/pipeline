@@ -46,6 +46,8 @@ a {
     content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=); }
   a.broken-link {
     text-decoration: line-through; }
+  a:focus {
+    color: #ff7711; }
 
 code,
 .CodeRay {
@@ -63,14 +65,26 @@ code {
 pre > code {
   display: block;
   border-radius: .3rem;
-  padding: 10px; }
+  padding: 9px 11px; }
 
-ul.spine {
+pre {
+  margin: 0; }
+
+section.important {
+  background-color: #e0e8ff;
+  margin-left: -1rem;
+  padding: .7rem 1rem;
+  border-radius: .5rem; }
+  section.important h2 {
+    color: #ff5500;
+    font-size: 180%; }
+
+nav ul.spine ul.spine {
   display: none; }
-  ul.spine.spine-has-current {
+  nav ul.spine ul.spine.spine-has-current {
     display: block; }
-  ul.spine > li.spine-item.spine-item-current > ul.spine {
-    display: block; }
+nav li.spine-item.spine-item-current > ul.spine {
+  display: block; }
 
 html {
   margin: 0; }
@@ -131,7 +145,7 @@ body {
         border-radius: .5rem;
         font-weight: 600;
         text-transform: uppercase; }
-        #nav-sitemap > ul.spine > li > a:hover {
+        #nav-sitemap > ul.spine > li > a:hover, #nav-sitemap > ul.spine > li > a:focus {
           background-color: #e5ebff; }
       #nav-sitemap > ul.spine > li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > a, #nav-sitemap > ul.spine > li.spine-item-has-current > a {
         background-color: #416DF2;
@@ -147,9 +161,11 @@ body {
         background-repeat: no-repeat;
         position: relative;
         top: -1.4em; }
-        #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:hover {
+        #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:hover, #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:focus {
           background-position-y: -71.5px;
           background-color: initial; }
+        #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:focus {
+          outline: 1px dotted black; }
       #nav-sitemap > ul.spine > li.spine-item-current > ul,
       #nav-sitemap > ul.spine > li > ul.spine-has-current {
         position: absolute;
@@ -172,8 +188,9 @@ body {
           padding-right: .625rem;
           background-color: #f9fbff;
           border-left: .07rem solid #cccccc; }
-          #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:hover,
-          #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:hover {
+          #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:hover, #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:focus,
+          #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:hover,
+          #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:focus {
             background-color: #e5ebff; }
         #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > a,
         #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:active,
@@ -196,6 +213,25 @@ body {
     left: 0.7rem; }
 
 /* #nav-sitemap */
+#nav-wiki {
+  float: right;
+  margin: 8rem 0 1rem 1rem;
+  border: 1px solid silver;
+  background-color: #f9fbff; }
+  #nav-wiki ul {
+    padding: 0;
+    margin: 1rem 1.5rem 1rem 2.5rem; }
+    #nav-wiki ul a {
+      color: #7596FB; }
+    #nav-wiki ul li.spine-item-current > a {
+      font-weight: 600;
+      color: #416DF2; }
+  #nav-wiki::before {
+    display: block;
+    content: 'Wiki';
+    font-weight: 600;
+    margin: 1rem 1.5rem; }
+
 .edit-button {
   position: absolute;
   right: 10px;
@@ -219,6 +255,7 @@ body {
   padding: .5rem 1rem 0 1rem;
   border-top: 1px solid #FFCE65;
   border-left: 1px solid #FFCE65;
+  border-bottom: 1px solid white;
   border-radius: .2rem; }
   .synopsis-input.details-off:hover,
   .synopsis-output.details-off:hover,
@@ -387,9 +424,26 @@ body {
       .synopsis-output ul.media-types li::after,
       .synopsis-report ul.media-types li::after,
       .synopsis-option ul.media-types li::after {
-        content: ", "; }
+        content: " or "; }
       .synopsis-input ul.media-types li:last-child::after,
       .synopsis-output ul.media-types li:last-child::after,
       .synopsis-report ul.media-types li:last-child::after,
       .synopsis-option ul.media-types li:last-child::after {
         content: ""; }
+  .synopsis-input dl.choice,
+  .synopsis-output dl.choice,
+  .synopsis-report dl.choice,
+  .synopsis-option dl.choice {
+    margin-top: .3rem; }
+    .synopsis-input dl.choice dt,
+    .synopsis-output dl.choice dt,
+    .synopsis-report dl.choice dt,
+    .synopsis-option dl.choice dt {
+      display: list-item;
+      list-style-type: "\25BA";
+      margin-left: 2rem; }
+    .synopsis-input dl.choice dd,
+    .synopsis-output dl.choice dd,
+    .synopsis-report dl.choice dd,
+    .synopsis-option dl.choice dd {
+      margin-bottom: .5rem; }

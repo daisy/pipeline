@@ -459,6 +459,8 @@
 
 </nav>
 
+
+
 <script type="text/javascript">
 var onload = function() {
   var nav = document.getElementById('nav-sitemap');
@@ -484,6 +486,7 @@ if (window.addEventListener) {
 }
 </script>
 
+
       <link rev="dp2:doc" href="resources/xml/nimas-fileset-validator.xpl">
 
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
@@ -508,7 +511,7 @@ The input package document (*.opf).
 <div class="synopsis-input-media-type">
 <b>Media-type</b>:
 <ul class="media-types">
-<li>application/oebps-package+xml</li>
+<li><a href="http://www.idpf.org/epub/301/spec/epub-publications.html#sec-package-documents" class="media-type external-link" target="_blank">application/oebps-package+xml</a></li>
 </ul>
 </div>
 <div class="synopsis-input-sequence">
@@ -537,11 +540,6 @@ Validation report comprising all documents' reports.
 <div class="synopsis-output-desc">
 Raw validation output for the package document.
 </div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-</ul>
-</div>
 </li>
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
@@ -549,22 +547,12 @@ Raw validation output for the package document.
 <div class="synopsis-output-desc">
 Raw validation output for the DTBook file(s).
 </div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-</ul>
-</div>
 </li>
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-output-name">Validation reports</div>
 <div class="synopsis-output-desc">
 All validation reports.
-</div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-</ul>
 </div>
 </li>
 </ul>
@@ -579,13 +567,11 @@ All validation reports.
 Version of MathML in the DTBook file(s).
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>3.0</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -594,13 +580,11 @@ Version of MathML in the DTBook file(s).
 Check to see that images referenced by DTBook file(s) exist on disk.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 </ul>
 

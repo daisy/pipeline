@@ -459,6 +459,8 @@
 
 </nav>
 
+
+
 <script type="text/javascript">
 var onload = function() {
   var nav = document.getElementById('nav-sitemap');
@@ -484,6 +486,7 @@ if (window.addEventListener) {
 }
 </script>
 
+
       <link rev="dp2:doc" href="resources/xml/xproc/dtbook-to-pef.xpl">
 
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
@@ -508,7 +511,7 @@ if (window.addEventListener) {
 <div class="synopsis-input-media-type">
 <b>Media-type</b>:
 <ul class="media-types">
-<li>application/x-dtbook+xml</li>
+<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
 </ul>
 </div>
 <div class="synopsis-input-sequence">
@@ -528,7 +531,7 @@ The PEF.
 <div class="synopsis-output-media-type">
 <b>Media-type</b>:
 <ul class="media-types">
-<li>application/x-pef+xml</li>
+<li><a href="http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html" class="media-type external-link" target="_blank">application/x-pef+xml</a></li>
 </ul>
 </div>
 </li>
@@ -596,7 +599,7 @@ manual</a>.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: Zero or more of the following:<dl class="choice">
+<b>Possible values</b>: Zero or more of the following:<dl class="choice">
 <dt><var>&lt;anyFileURI&gt;</var></dt>
 <dd>File path relative to input DTBook.</dd>
 <dt><var>&lt;anyURI&gt;</var></dt>
@@ -605,8 +608,6 @@ manual</a>.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -615,7 +616,7 @@ manual</a>.</p>
 The transformer query.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: A query
+<b>Possible values</b>: A query
 
 <p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
 
@@ -633,8 +634,6 @@ value
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>(translator:liblouis)(formatter:dotify)</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -643,13 +642,11 @@ value
 Whether or not to include a preview of the PEF in HTML.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -658,13 +655,11 @@ Whether or not to include a preview of the PEF in HTML.
 Whether or not to include a plain text ASCII version of the PEF.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -673,13 +668,11 @@ Whether or not to include a plain text ASCII version of the PEF.
 Keeps the intermediary OBFL-file for debugging.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -688,12 +681,10 @@ Keeps the intermediary OBFL-file for debugging.
 The file format to store the plain text version.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -702,12 +693,10 @@ The file format to store the plain text version.
 The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -737,13 +726,11 @@ The ASCII braille table, used to render the PEF preview and, if no plain text fi
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;integer&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>40</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -773,13 +760,11 @@ The ASCII braille table, used to render the PEF preview and, if no plain text fi
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;integer&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>25</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -788,13 +773,11 @@ The ASCII braille table, used to render the PEF preview and, if no plain text fi
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;integer&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>0</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -803,13 +786,11 @@ The ASCII braille table, used to render the PEF preview and, if no plain text fi
 When enabled, will print on both sides of the paper.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -860,13 +841,11 @@ the following in your custom style sheet:</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;integer&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>6</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -875,12 +854,10 @@ the following in your custom style sheet:</p>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -912,13 +889,11 @@ default:</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -951,7 +926,7 @@ property</li>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: One of the following:<dl class="choice">
+<b>Possible values</b>: One of the following:<dl class="choice">
 <dt><code>single</code></dt>
 <dd>Single</dd>
 <dt><code>double</code></dt>
@@ -961,8 +936,6 @@ property</li>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>single</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -971,13 +944,11 @@ property</li>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;integer&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>4</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1003,13 +974,11 @@ default:</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1018,13 +987,11 @@ default:</p>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1033,13 +1000,11 @@ default:</p>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1048,13 +1013,11 @@ default:</p>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1078,13 +1041,11 @@ default:</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1110,13 +1071,11 @@ default:</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1125,13 +1084,11 @@ default:</p>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1155,13 +1112,11 @@ by default:</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1170,13 +1125,11 @@ by default:</p>
 When enabled, text that is in bold or italics in the print version will be rendered in bold or italics in the braille version as well. **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1185,13 +1138,11 @@ When enabled, text that is in bold or italics in the print version will be rende
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1215,13 +1166,11 @@ rule by default:</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1260,13 +1209,11 @@ function</li>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1314,13 +1261,11 @@ sheet:</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1353,13 +1298,11 @@ property</li>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1455,13 +1398,11 @@ value</li>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;integer&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>0</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1470,12 +1411,10 @@ value</li>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1484,12 +1423,10 @@ value</li>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1498,12 +1435,10 @@ value</li>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1512,13 +1447,11 @@ value</li>
 **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;integer&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>50</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1549,13 +1482,11 @@ rule by default:</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;integer&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>70</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -1564,13 +1495,11 @@ rule by default:</p>
 The minimum number of sheets in a volume. **Not implemented**
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;integer&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>30</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 </ul>
 

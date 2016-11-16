@@ -2,15 +2,14 @@
 <html>
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta charset="utf-8">
-    <title>Building And Hacking</title>
-    
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Building And Hacking">
+	<meta charset="utf-8">
+	<title>DAISY Pipeline 2 | Sitemap</title>
+	
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Sitemap">
 
 
-    <link rel="stylesheet" href="/pipeline/css/default.css">
-    <link rel="stylesheet" href="/pipeline/css/coderay.css">
-    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+	<link rel="stylesheet" href="/pipeline/css/default.css">
+	<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 
   </head>
   <body>
@@ -486,60 +485,445 @@ if (window.addEventListener) {
 </script>
 
 
+      <h1 id="sitemap">Sitemap</h1>
+
+<ul class="spine">
+  
+    
       
-      <div class="edit-button">
-  <a href="https://github.com/daisy/pipeline-webui/wiki/Building-and-hacking/_edit" class="external-link" target="_blank">
-    Edit this page on Github
-  </a>
-</div>
-
-      <p>This page will help you set up a development environment and presents a development workflow.</p>
-
-<h3 id="prerequisites-and-dependencies">Prerequisites and dependencies</h3>
-
-<ul>
-  <li>Java 8</li>
-  <li>Play framework, automatically downloaded and installed with <code>./activator</code>
-</li>
-  <li>Ivy, also installed automatically</li>
-  <li>All code related to communicating with the Pipeline engine through the web API lives in <a href="https://github.com/daisy/pipeline-clientlib-java" class="external-link" target="_blank">pipeline-clientlib-java</a>. The clientlib-java submodule is for parsing and serializing the XML that is received from and sent to the engine. The clientlib-java-http submodule is for the HTTP communication and uses clientlib-java.</li>
-  <li>In order to test the complete functionality of the UI, a running instance of the Pipeline engine is required.</li>
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help">
+      Help
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/wiki/webui/User-Guide">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Templating">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Administrator-settings">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
 </ul>
 
-<h3 id="building">Building</h3>
-
-<ul>
-  <li>For the latest up to date version, check out the branch “big-update”.</li>
-  <li>Make sure <code>$JAVA_HOME</code> points to Java 8.</li>
-  <li>
-    <p>For some reason the application is unable to initialize the database itself, therefore upon the first run copy a clean pre-initialized version of the database:</p>
-
-    <div class="highlighter-coderay">
-<div class="CodeRay">
-  <div class="code"><pre>rm -r dp2webui &amp;&amp; cp -r dp2webui-cleandb dp2webui
-</pre></div>
-</div>
-    </div>
-  </li>
-  <li>Build and run the application by bringing up a shell with <code>./activator</code> (or alternatively a graphical interface with <code>./activator ui</code>) and invoking <code>playRun</code>. Changes to the code are automatically picked up.</li>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts.html">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
 </ul>
 
-<h3 id="workflowtips-for-developing-and-debugging">Workflow/tips for developing and debugging</h3>
-
-<ul>
-  <li>An Eclipse project can be generated with <code>./activator eclipse</code>.</li>
-  <li>Compile and run the application as explained above.</li>
-  <li>Compilation errors appear in the application itself as well as the activator shell (or ui).</li>
-  <li>The most straightforward and effective way to test/debug the application is to test it manually in the browser.</li>
-  <li>In addition, print dumps can be made with <code>console.log</code> (JavaScript) and <code>Logger.info</code> (Java).</li>
-  <li>Watching the network traffic in the development tools of your browser can also be useful.</li>
-  <li>Your best option for getting an instance of the Pipeline engine up and running is through the “dev-launcher” build of pipeline-assembly. This method allows you to easily build a custom version of the engine, and changes to engine components are automatically and dynamically loaded. For more details see https://github.com/snaekobbi/wiki/wiki/Building#pipeline-assembly.</li>
-  <li>Whenever you want to update to a new (development) version of <a href="https://github.com/daisy/pipeline-clientlib-java" class="external-link" target="_blank">pipeline-clientlib-java</a>, ???</li>
+    
+    </li>
+  
 </ul>
 
-<h4 id="known-issuesannoyances">Known issues/annoyances</h4>
-<ul>
-  <li>Derby (database) can cause difficulties during development, sometimes the Play process or the activator needs to be restarted.</li>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute">
+      Contribute
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline/issues" class="external-link" target="_blank">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide.html">
+      
+      Developer Guide
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
 </ul>
 
 

@@ -459,6 +459,8 @@
 
 </nav>
 
+
+
 <script type="text/javascript">
 var onload = function() {
   var nav = document.getElementById('nav-sitemap');
@@ -483,6 +485,7 @@ if (window.addEventListener) {
   window.attachEvent('onload', onload);
 }
 </script>
+
 
       <link rev="dp2:doc" href="resources/xml/zedai-to-pef.xpl">
 
@@ -553,7 +556,7 @@ The ZedAI you want to convert to braille.
 <div class="synopsis-input-media-type">
 <b>Media-type</b>:
 <ul class="media-types">
-<li>application/z3998-auth+xml</li>
+<li><a href="http://www.daisy.org/z3998/2012/z3998-2012.html" class="media-type external-link" target="_blank">application/z3998-auth+xml</a></li>
 </ul>
 </div>
 <div class="synopsis-input-sequence">
@@ -573,7 +576,7 @@ The PEF.
 <div class="synopsis-output-media-type">
 <b>Media-type</b>:
 <ul class="media-types">
-<li>application/x-pef+xml</li>
+<li><a href="http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html" class="media-type external-link" target="_blank">application/x-pef+xml</a></li>
 </ul>
 </div>
 </li>
@@ -635,7 +638,7 @@ manual</a>.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: Zero or more of the following:<dl class="choice">
+<b>Possible values</b>: Zero or more of the following:<dl class="choice">
 <dt><var>&lt;anyFileURI&gt;</var></dt>
 <dd>File path relative to input ZedAI.</dd>
 <dt><code>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/bana.css</code></dt>
@@ -654,8 +657,6 @@ manual</a>.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -664,13 +665,11 @@ manual</a>.</p>
 The transformer query.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>(translator:liblouis)(formatter:dotify)</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -679,12 +678,10 @@ The transformer query.
 The ASCII braille table, used to render the PEF preview and the plain text version.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -693,13 +690,11 @@ The ASCII braille table, used to render the PEF preview and the plain text versi
 Whether or not to include a preview of the PEF in HTML.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
@@ -708,13 +703,11 @@ Whether or not to include a preview of the PEF in HTML.
 Whether or not to include a plain text ASCII version of the PEF.
 </div>
 <div class="synopsis-option-data-type">
-<b>Data-type</b>: <var>&lt;boolean&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
 </div>
-<div class="synopsis-option-required">
-<b>Required</b>: no</div>
 </li>
 </ul>
 
