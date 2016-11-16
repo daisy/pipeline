@@ -162,6 +162,25 @@ class MyMustache < Mustache
   end
 end
 
+$media_type_links = {
+  'application/x-pef+xml'         => 'http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html',
+  'application/z3998-auth+xml'    => 'http://www.daisy.org/z3998/2012/z3998-2012.html',
+  'application/epub+zip'          => 'http://www.idpf.org/epub/301/spec/epub-ocf.html',
+  'application/oebps-package+xml' => 'http://www.idpf.org/epub/301/spec/epub-publications.html#sec-package-documents',
+  'application/xhtml+xml'         => 'https://www.w3.org/TR/html5/',
+  'application/x-dtbook+xml'      => 'http://www.niso.org/workrooms/daisy/Z39-86-2005.html'
+}
+
+
+def linkify_media_type(media_type)
+  link = $media_type_links[media_type]
+  if link
+    "<a href='#{link}' class='media-type'>#{media_type}</a>"
+  else
+    media_type
+  end
+end
+
 DP2 = "http://www.daisy.org/ns/pipeline/"
 DOC = RDF::URI("#{DP2}doc")
 SCRIPT = RDF::URI("#{DP2}script")
@@ -354,7 +373,7 @@ Dir.glob(ARGV[0]).each do |f|
           'name' => name,
           'desc' => desc,
           'sequence' => solution.bound?('sequence') ? solution.sequence.true? : false,
-          'media-type' => solution.bound?('type') ? solution.type.to_s.split(' ') : nil
+          'media-type' => solution.bound?('type') ? solution.type.to_s.split(' ').map(&method(:linkify_media_type)) : nil
         }
       }
       inputs['all'].each do |input|
@@ -394,7 +413,7 @@ Dir.glob(ARGV[0]).each do |f|
           desc = nil
         end
         if solution.bound?('type')
-          type = solution.type.to_s.split(' ')
+          type = solution.type.to_s.split(' ').map(&method(:linkify_media_type))
         else
           type = nil
         end
