@@ -33,15 +33,35 @@ distributed over several smaller sub-projects that each have their own
 issue tracker. If possible, use the individual trackers of the
 sub-projects for issues that clearly belong to a specific sub-project.
 
+{% capture repos %}
+  daisy/pipeline
+  daisy/pipeline-assembly
+  daisy/pipeline-framework
+  daisy/pipeline-scripts
+  daisy/pipeline-build-utils
+  daisy/pipeline-webui
+  snaekobbi/braille-css
+  snaekobbi/jStyleParser
+  brailleapps/dotify.api
+  brailleapps/dotify.formatter.impl
+{% endcapture %}
+{% assign repos = repos | normalize_whitespace | split:' ' %}
+
 Before creating a new issue, please first check the
-[existing issues](https://github.com/search?utf8=%E2%9C%93&q=repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl&type=Issues&ref=searchresults)
-to see if a similar issue was already reported.
+[existing issues](https://github.com/search?utf8=%E2%9C%93&type=Issues&q={% for r in repos %}+repo%3A{{ r | replace:'/','%2F' }}{% endfor %}) to see if a similar issue was
+already reported.
 
 ## Developer Guide
 
-Some guidance on how to get started can be found in this
+Guidance on how to get started can be found in the
 [developer guide](Developer-Guide).
 
+## Easy Hacks
+
+[These issues](https://github.com/search?utf8=%E2%9C%93&type=Issues&q=label%3Aeasyhack+state%3Aopen{% for r in repos %}+repo%3A{{ r | replace:'/','%2F' }}{% endfor %})
+have been tagged as relatively easy to fix, so should be good starting points for new developers.
+
+
 <!--
-Javadoc, ...
+API documentation: Javadoc etc.
 -->
