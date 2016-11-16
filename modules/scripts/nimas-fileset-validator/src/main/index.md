@@ -56,5 +56,7 @@ For the package document, the document type is detected as either OPF 1.2 or OPF
 
 The DTBook document type is listed as the DTBook version, e.g. 2005-3, and will say with MathML if the document contains MathML.
 
-See also [developer notes](dev-notes.md)
+# See also
+
+* [Developer notes](dev-notes.md)
 

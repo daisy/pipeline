@@ -169,7 +169,7 @@ Output:
 
 # See also
 
-* [Developer documentation](https://code.google.com/archive/p/daisy-pipeline/wikis/DTBookToZedAIDev.wiki)
+* [Developer documentation](dev-notes.md)
 * [Element conversion rules](rules.md)
 * [ZedAI specifications](http://www.daisy.org/z3998/2012/)
 

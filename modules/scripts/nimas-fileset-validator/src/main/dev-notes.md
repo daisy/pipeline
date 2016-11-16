@@ -4,24 +4,27 @@
 <!-- 
 summary: NIMAS fileset validator development notes
 -->
-# Development notes
+# NIMAS Fileset Validator Development Notes
 
 
 ## This script can
 
-_(done by DTBook validator)_
+_(via DTBook validator)_
 
 * Validate the XML content file
 * Validate MathML in the content file
 * Enforce `@alttext` and `@altimg` 
 * Check that all images linked to from the XML content file exist on disk 
 
-_ (via the [Package Doc Validator](https://github.com/daisy-consortium/pipeline-scripts/blob/master/nimas-fileset-validator/src/main/resources/xml/nimas-fileset-validator.validate-package-doc.xpl) step)_
+_(via the [Package Doc Validator](https://github.com/daisy-consortium/pipeline-scripts/blob/master/nimas-fileset-validator/src/main/resources/xml/nimas-fileset-validator.validate-package-doc.xpl) step)_
 
 * Validate the Package file against its schema
 * Enforce metadata rules in the package file:
   * "Metadata must be added to indicate the presence of MathML in a source file." 
-       `<meta name="z39-86-extension-version" scheme="http://www.w3.org/1998/Math/MathML" content="1.0" /> <meta name="DTBook-XSLTFallback" scheme="http://www.w3.org/1998/Math/MathML" content="xslt-file-name" />`
+       ~~~xml
+       <meta name="z39-86-extension-version" scheme="http://www.w3.org/1998/Math/MathML" content="1.0" /> 
+       <meta name="DTBook-XSLTFallback" scheme="http://www.w3.org/1998/Math/MathML" content="xslt-file-name" />
+       ~~~
     * "If MathML is not present, then metadata must not be present that indicates that it is (for example, automated processes must not add MathML metadata by default)."
     * NIMAS-specific metadata (from http://aim.cast.org/experience/technologies/spec-v1_1): 
       * one or more of `dc:Title` 
