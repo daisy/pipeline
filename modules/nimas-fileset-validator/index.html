@@ -493,6 +493,10 @@ if (window.addEventListener) {
 
 <meta property="dc:title" content="NIMAS Fileset Validator">
 
+<!-- 
+summary: NIMAS fileset validator module summary
+-->
+
 <h1 id="nimas-fileset-validator">NIMAS Fileset Validator</h1>
 
 <p>Validate a NIMAS Fileset. Supports inclusion of MathML.</p>
@@ -620,6 +624,51 @@ if (window.addEventListener) {
   window.attachEvent('onload', onload);
 }
 </script>
+
+<h2 id="sample-usage">Sample usage</h2>
+
+<p>This section shows how to use the NIMAS Fileset Validator via the Pipeline 2 command line interface.</p>
+
+<p>Run the script like this:</p>
+
+<pre><code>$ ./dp2 nimas-fileset-validator --x-input-opf file:/path/to/book/package.opf --x-output-dir /tmp/dpout --o-package-doc-validation-report /tmp/t1 --o-dtbook-validation-report /tmp/t2 --o-result /tmp/t3 --o-validation-status /tmp/t4
+</code></pre>
+
+<p>Make sure the directory <code>/tmp/dpout</code> already exists.</p>
+
+<p>Also note the special syntax for the input file option, e.g.: <code>--x-input-opf file:/path/to/book/package.opf</code></p>
+
+<p>When execution is complete, you will see files like this in the output directory that you specified, named for the book files they are reporting on: <code>my-dtbook.xml-report.xml</code> <code>my-package-file.opf-report.xml</code> <code>validation-report.xhtml</code></p>
+
+<p>Note: If instead of using the <code>--x-output-dir</code> option to put all output in one directory, you would rather specify a file path for each file, then just use the output parameters (prefixed by <code>--o</code>). Above they are shown as temp files (e.g. <code>/tmp/t1</code>) but they could just as easily store their output anywhere (e.g. <code>/path/to/output/my-report.xml</code>).</p>
+
+<p>Each generated file in this example is as follows:</p>
+
+<h3 id="my-dtbookxml-reportxml"><code>my-dtbook.xml-report.xml</code></h3>
+
+<p>Raw validation output from DTBook validation. See <a href="/pipeline/wiki/ValidationReportXML">ValidationReportXML</a> for details on the file format. This file is named for the relative path of the DTBook file, with slashes replaced by underscores, and <code>-report.xml</code> appended to the end. For example, if your package document refers to a DTBook file at <code>chapter_one/dtbook.xml</code>, the validation report for this DTBook file will be called <code>chapter_one_dtbook.xml-report.xml</code>.</p>
+
+<p>There will be one report like this for each DTBook file in the publication.</p>
+
+<p>Note that if the publication contains no DTBook files, or if the files were not correctly identified as application/x-dtbook+xml in the manifest, no DTBook validation reports will be produced.</p>
+
+<h3 id="my-package-fileopf-reportxml"><code>my-package-file.opf-report.xml</code></h3>
+
+<p>Raw validation output from package document validation. See ValidationReportXML for details on the file format. This file is named for the package document file name, plus <code>-report.xml</code>.</p>
+
+<h3 id="validation-reportxhtml"><code>validation-report.xhtml</code></h3>
+
+<p>XHTML file containing a summary of all validation errors for each file that was validated. Each file has its own section in the document. This file always has this name.</p>
+
+<p>The top of the document contains a table listing information about each document that was validated.</p>
+
+<h2 id="notes">Notes</h2>
+
+<p>For the package document, the document type is detected as either OPF 1.2 or OPF 1.2 (MathML detected). The latter means that one or more DTBook files in the publication contains MathML, and therefore the package document is required to have certain metadata related to this.</p>
+
+<p>The DTBook document type is listed as the DTBook version, e.g. 2005-3, and will say with MathML if the document contains MathML.</p>
+
+<p>See also <a href="/pipeline/modules/nimas-fileset-validator/dev-notes.html">developer notes</a></p>
 
 
     </div>

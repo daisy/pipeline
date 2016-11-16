@@ -679,10 +679,28 @@ Keeps the intermediary OBFL-file for debugging.
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Plain text (BRF) file format</div>
 <div class="synopsis-option-desc">
-The file format to store the plain text version.
+<div class="shortdesc">The file format to store the plain text version.
+</div>
+<div class="longdesc">The file format to store the plain text version.
+
+<p>If left blank, the locale information in the input document will be used to select a suitable file format.</p>
+</div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
@@ -691,10 +709,28 @@ The file format to store the plain text version.
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">ASCII braille table</div>
 <div class="synopsis-option-desc">
-The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
+<div class="shortdesc">The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
+</div>
+<div class="longdesc">The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
+
+<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
+</div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>

@@ -644,12 +644,12 @@ manual</a>.</p>
 <dt><code>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/bana.css</code></dt>
 <dd>A CSS stylesheet for BANA formatting
 
-<p>See <a href="http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/bana.css.html" class="broken-link">bana.css</a></p>
+<p>See <a href="/pipeline/modules/braille/zedai-to-pef/resources/css/bana.css">source</a></p>
 </dd>
 <dt><code>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/ueb.css</code></dt>
 <dd>A CSS stylesheet for UEB formatting
 
-<p>See <a href="http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/ueb.css.html" class="broken-link">ueb.css</a></p>
+<p>See <a href="/pipeline/modules/braille/zedai-to-pef/resources/css/ueb.css">source</a></p>
 </dd>
 <dt><var>&lt;anyURI&gt;</var></dt>
 <dd>Any other absolute URI</dd>
@@ -665,7 +665,20 @@ manual</a>.</p>
 The transformer query.
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>(translator:liblouis)(formatter:dotify)</code>
@@ -675,10 +688,23 @@ The transformer query.
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">ASCII braille table</div>
 <div class="synopsis-option-desc">
-The ASCII braille table, used to render the PEF preview and the plain text version.
+The ASCII braille table, used to render the PEF preview and the plain text version. If left blank, the locale information in the input document will be used to select a suitable table.
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: (empty)</div>
@@ -1080,7 +1106,9 @@ alice.brf
     <span class="key">text-indent</span>: <span class="float">-2</span>;
 }
 <span class="tag">toc</span> &gt; <span class="tag">entry</span> &gt; <span class="tag">ref</span><span class="pseudo-class">::after</span> {
-    <span class="key">content</span>: <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> <span class="error">l</span><span class="error">e</span><span class="error">a</span><span class="error">d</span><span class="error">e</span><span class="error">r</span>(<span class="string"><span class="delimiter">'</span><span class="content">⠤</span><span class="delimiter">'</span></span>) <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> <span class="error">t</span><span class="error">a</span><span class="error">r</span><span class="error">g</span><span class="error">e</span><span class="error">t</span><span class="error">-</span><span class="error">s</span><span class="error">t</span><span class="error">r</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>(<span class="function"><span class="delimiter">attr(</span><span class="content">ref</span><span class="delimiter">)</span></span>, <span class="value">print-page</span>) <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> <span class="error">t</span><span class="error">a</span><span class="error">r</span><span class="error">g</span><span class="error">e</span><span class="error">t</span><span class="error">-</span><span class="function"><span class="delimiter">counter(</span><span class="content">attr(ref</span><span class="delimiter">)</span></span>, <span class="value">page</span>);
+    <span class="key">content</span>: <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> <span class="error">l</span><span class="error">e</span><span class="error">a</span><span class="error">d</span><span class="error">e</span><span class="error">r</span>(<span class="string"><span class="delimiter">'</span><span class="content">⠤</span><span class="delimiter">'</span></span>)
+             <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> <span class="error">t</span><span class="error">a</span><span class="error">r</span><span class="error">g</span><span class="error">e</span><span class="error">t</span><span class="error">-</span><span class="error">s</span><span class="error">t</span><span class="error">r</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>(<span class="function"><span class="delimiter">attr(</span><span class="content">ref</span><span class="delimiter">)</span></span>, <span class="value">print-page</span>)
+             <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> <span class="error">t</span><span class="error">a</span><span class="error">r</span><span class="error">g</span><span class="error">e</span><span class="error">t</span><span class="error">-</span><span class="function"><span class="delimiter">counter(</span><span class="content">attr(ref</span><span class="delimiter">)</span></span>, <span class="value">page</span>);
 }
 </pre></div>
 </div>

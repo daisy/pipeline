@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <title>DTBook to ZedAI Conversion Rules</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DTBook to ZedAI Conversion Rules">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide" tabindex="7">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/wiki/webui/User-Guide" tabindex="8">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Templating" tabindex="9">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Administrator-settings" tabindex="10">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts.html" tabindex="11">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="12">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="13">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="14">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="15">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="16">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="17">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="18">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="19">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="20">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="21">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="22">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="23">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="24">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="25">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="26">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="27">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="28">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="29">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="30">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="31">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="32">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="33">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline/issues" class="external-link" target="_blank" tabindex="34">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide.html" tabindex="35">
+      
+      Developer Guide
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+    }
+  }
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+
+<meta property="dc:title" content="DTBook to ZedAI Conversion Rules">
+
+<!--
+labels: [Type-Doc,Compoment-UserGuide,Component-Module,Component-Script]
+sidebar: UserGuideToc
+-->
+
+<h1 id="dtbook-to-zedai-conversion-rules">DTBook To ZedAI Conversion Rules</h1>
+
+<p>This page gives the conversion mappings used in the DTBook-To-ZedAI module.</p>
+
+<p>##<code>a</code></p>
+
+<p><strong>ZedAI element</strong>: <code>ref</code></p>
+
+<p><strong>Dropped attributes</strong>: <code>@type</code>, <code>@hreflang</code>, <code>@accesskey</code>, <code>@tabindex</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<p><strong>Notes</strong>:</p>
+
+<p>If <code>dtbook:a@external = true</code>, then we use <code>@xlink:href</code> instead of <code>@ref</code>.</p>
+
+<h2 id="abbr"><code>abbr</code></h2>
+
+<p><strong>ZedAI</strong>: <code>abbr @type='truncation'</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span</code> role=’<code>cite</code>’`, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span</code> role=”<code>sent</code>ence”`</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>annoref</code>, <code>noteref</code> become <code>span</code></p>
+  </li>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<h2 id="acronym"><code>acronym</code></h2>
+
+<p><strong>ZedAI</strong>: <code>abbr</code></p>
+
+<p><strong>Notes</strong>:</p>
+
+<ul>
+  <li>
+<code>@pronounce="no"</code> becomes <code>@type="initialism"</code>
+</li>
+  <li>if missing <code>@pronounce</code>, becomes <code>@type="initialism"</code>
+</li>
+  <li>
+<code>@pronounce="yes"</code> becomes <code>@type="acronym"</code>
+</li>
+</ul>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span</code> role=’<code>cite</code>’, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span</code>
+</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+<code>annoref</code>, <code>noteref</code> become <code>span</code>
+</li>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<h2 id="address"><code>address</code></h2>
+
+<p><strong>ZedAI</strong>: <code>address</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="annoref"><code>annoref</code></h2>
+
+<p><strong>ZedAI</strong>: <code>annoref</code></p>
+
+<p><strong>Dropped attributes</strong>:</p>
+
+<ul>
+  <li>
+<code>@type</code> (“Type provides advisory content MIME type of the targeted id, see RFC1556.” –structguide)</li>
+</ul>
+
+<h2 id="annotation"><code>annotation</code></h2>
+
+<p><strong>ZedAI</strong>: <code>annotation</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="author"><code>author</code></h2>
+
+<p><strong>ZedAI</strong>: <code>citation</code> or <code>p @property='author' @about='IDREF'</code></p>
+
+<p>author element should be made into citation except when found inside <code>poem</code>/<code>blockquote</code>/<code>cite</code>, then use <code>p @property/@about</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="bdo"><code>bdo</code></h2>
+
+<p><strong>ZedAI</strong>: <code>span @its:dir="rtl|ltr"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="blockquote"><code>blockquote</code></h2>
+
+<p><strong>ZedAI</strong>: <code>quote</code></p>
+
+<h2 id="bodymatter"><code>bodymatter</code></h2>
+
+<p><strong>ZedAI</strong>: <code>bodymatter</code></p>
+
+<h2 id="book"><code>book</code></h2>
+
+<p><strong>ZedAI</strong>: <code>body</code></p>
+
+<h1 id="br"><code>br</code></h1>
+
+<p><strong>ZedAI</strong>: use <code>ln</code> to wrap lines</p>
+
+<h2 id="bridgehead"><code>bridgehead</code></h2>
+
+<p><strong>ZedAI</strong>: <code>hd</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="byline"><code>byline</code></h2>
+
+<p><strong>ZedAI</strong>: <code>citation</code> or <code>p @role="periodicals:byline"</code></p>
+
+<p>Notes: for most book (non-article) use cases, <code>byline</code> can be <code>citation</code>. The exception would be anthologies, for which we can call upon the periodicals vocab and actually use <code>"role = byline"</code>. For now, we will use just 1 vocabulary in this converter.</p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="caption"><code>caption</code></h2>
+
+<p><strong>ZedAI</strong>: <code>caption</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="cite"><code>cite</code></h2>
+
+<p><strong>ZedAI</strong>: <code>citation</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>
+<code>title</code> and <code>author</code>, are <code>span</code> instead of <code>p</code>
+</li>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="code"><code>code</code></h2>
+
+<p><strong>ZedAI</strong>: <code>code</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Inline content model if only children are: <code>em</code>, <code>strong</code>, <code>abbr</code>, <code>acronym</code>, <code>ln</code>, <code>sub</code>, <code>sup</code>, <code>span</code>, <code>bdo</code>, <code>pagenum</code>, <code>text</code>
+</li>
+  <li>If any of the following occur, make all children block-level: <code>dfn</code>, <code>code</code>, <code>samp</code>, <code>kbd</code>, <code>cite</code>, <code>a</code>, <code>img</code>, <code>imggroup</code>, <code>q</code>, <code>sent</code>, <code>w</code>, <code>prodnote</code>, <code>annoref</code>, <code>noteref</code>
+</li>
+  <li>deal with <code>br</code>
+</li>
+</ul>
+
+<h2 id="col"><code>col</code></h2>
+
+<p><strong>ZedAI</strong>: <code>col</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code>, <code>@width</code> (all to go in CSS)</p>
+
+<h2 id="colgroup"><code>colgroup</code></h2>
+
+<p><strong>ZedAI</strong>: <code>colgroup</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code>, <code>@width</code></p>
+
+<h2 id="covertitle"><code>covertitle</code></h2>
+
+<p><strong>ZedAI</strong>: <code>block @role='covertitle'</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="dateline"><code>dateline</code></h2>
+
+<p><strong>ZedAI</strong>: <code>p @role="time"</code></p>
+
+<p>Notes: Used <code>p</code> since <code>ln</code> is not suitable for all content models (e.g. <code>level</code>&gt;<code>dateline</code> cannot be translated as <code>section</code>&gt;<code>ln</code>)</p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="dd"><code>dd</code></h2>
+
+<p><strong>ZedAI</strong>: <code>definition</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code> * <code>br</code> to <code>ln</code> * Re-parent list, dl, div, poem, linegroup, table, sidebar * Re-parent or re-name p, dateline, epigraph, address, author, note</li>
+</ul>
+
+<h2 id="dfn"><code>dfn</code></h2>
+
+<p><strong>ZedAI</strong>: <code>term</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="div"><code>div</code></h2>
+
+<p><strong>ZedAI</strong>: <code>block</code></p>
+
+<p><strong>Adjustments</strong>: Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</p>
+
+<h2 id="dl"><code>dl</code></h2>
+
+<p><strong>ZedAI</strong>: <code>list</code></p>
+
+<p><strong>Adjustments</strong>: either wrap each term, definition in its own <code>item</code> element, or combine them into one <code>item</code> element</p>
+
+<h2 id="docauthor"><code>docauthor</code></h2>
+
+<p><strong>ZedAI</strong>: <code>p @property="author"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="doctitle"><code>doctitle</code></h2>
+
+<p><strong>ZedAI</strong>: <code>p @property="title"</code> or <code>h @property="title"</code> when child of the frontmatter</p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="dt"><code>dt</code></h2>
+
+<p><strong>ZedAI</strong>: <code>term</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span @role='cite'</code>, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span</code>
+</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>annoref</code>, <code>noteref</code> become <code>span</code></p>
+  </li>
+  <li>inline <code>samp</code>
+</li>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="dtbook"><code>dtbook</code></h2>
+
+<p><strong>ZedAI</strong>: <code>document</code></p>
+
+<p><strong>Notes</strong>: Reference default ZedAI book profile and default vocabulary.</p>
+
+<h2 id="epigraph"><code>epigraph</code></h2>
+
+<p><strong>ZedAI</strong>: <code>block @role="epigraph"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="em"><code>em</code></h2>
+
+<p><strong>ZedAI</strong>: <code>emph</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="frontmatter"><code>frontmatter</code></h2>
+
+<p><strong>ZedAI</strong>: <code>frontmatter</code></p>
+
+<p>Notes: A <code>section</code> is created automatically containing <code>doctitle</code>, <code>docauthor</code>, <code>covertitle</code>. The reason is that DTBook can have that info free-floating, whereas ZedAI must have only toc/section/biblio/glossary children and so we have to contain that info in a <code>section</code> element.</p>
+
+<h2 id="h1"><code>h1</code></h2>
+
+<p><strong>ZedAI</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="h2"><code>h2</code></h2>
+
+<p><strong>ZedAI</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="h3"><code>h3</code></h2>
+
+<p><strong>ZedAI</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="h4"><code>h4</code></h2>
+
+<p><strong>ZedAI</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="h5"><code>h5</code></h2>
+
+<p><strong>ZedAI</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="h6"><code>h6</code></h2>
+
+<p><strong>ZedAI</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="hd"><code>hd</code></h2>
+
+<p><strong>ZedAI</strong>: <code>hd</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="head"><code>head</code></h2>
+
+<p><strong>ZedAI</strong>: <code>head</code></p>
+
+<p><strong>Notes</strong>:</p>
+
+<ul>
+  <li>ZedAI book profile is hardcoded</li>
+  <li>DTBook <code>@profile</code> is not preserved.</li>
+</ul>
+
+<h2 id="img"><code>img</code></h2>
+
+<p><strong>ZedAI</strong>: <code>object</code></p>
+
+<p><strong>Notes</strong>:</p>
+
+<ul>
+  <li>
+<code>dtbook:@longdesc</code> is a URI which resolves to a <code>prodnote</code> elsewhere the book</li>
+</ul>
+
+<h2 id="imggroup"><code>imggroup</code></h2>
+
+<p><strong>ZedAI</strong>: <code>block</code> (with <code>@role='figure'</code> if a caption is present)</p>
+
+<p><strong>Notes</strong>:</p>
+
+<ul>
+  <li>Look at DTBook multiple <code>prodnote</code> descriptions</li>
+  <li>There can also be multiple captions, each targeting multiple images</li>
+</ul>
+
+<h2 id="kbd"><code>kbd</code></h2>
+
+<p><strong>ZedAI</strong>: <code>code</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Same as <code>dtb:code</code>
+</li>
+</ul>
+
+<h2 id="level"><code>level</code></h2>
+
+<p><strong>ZedAI</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<h2 id="level1"><code>level1</code></h2>
+
+<p><strong>ZedAI</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<h2 id="level2"><code>level2</code></h2>
+
+<p><strong>ZedAI</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<h2 id="level3"><code>level3</code></h2>
+
+<p><strong>ZedAI</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<h2 id="level4"><code>level4</code></h2>
+
+<p><strong>ZedAI</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<h2 id="level5"><code>level5</code></h2>
+
+<p><strong>ZedAI</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<h2 id="level6"><code>level6</code></h2>
+
+<p><strong>ZedAI</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<h2 id="lic"><code>lic</code></h2>
+
+<p><strong>ZedAI</strong>: <code>span</code></p>
+
+<h2 id="line"><code>line</code></h2>
+
+<p><strong>ZedAI</strong>: <code>ln</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>deal with <code>br</code>
+</li>
+</ul>
+
+<h2 id="linegroup"><code>linegroup</code></h2>
+
+<p><strong>ZedAI</strong>: <code>block</code></p>
+
+<h2 id="linenum"><code>linenum</code></h2>
+
+<p><strong>ZedAI</strong>: <code>lnum</code></p>
+
+<h2 id="link"><code>link</code></h2>
+
+<p>Discarded</p>
+
+<h2 id="li"><code>li</code></h2>
+
+<p><strong>ZedAI</strong>: <code>item</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="list"><code>list</code></h2>
+
+<p><strong>ZedAI</strong>: <code>list</code></p>
+
+<p><strong>Adjustments</strong>: wrap <code>dtbook:prodnote</code> and <code>dtbook:hd</code></p>
+
+<h2 id="meta"><code>meta</code></h2>
+
+<p><strong>ZedAI</strong>: <code>meta</code></p>
+
+<p><strong>Notes</strong>: See https://github.com/daisy/pipeline/issues/56</p>
+
+<h2 id="note"><code>note</code></h2>
+
+<p><strong>ZedAI</strong>: <code>note</code></p>
+
+<p><strong>Adjustments</strong>: Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</p>
+
+<h2 id="noteref"><code>noteref</code></h2>
+
+<p><strong>ZedAI</strong>: <code>noteref</code></p>
+
+<p>Dropped: <code>@type</code> (“Type provides advisory content MIME type of the targeted id, see RFC1556.”)</p>
+
+<h2 id="p"><code>p</code></h2>
+
+<p><strong>ZedAI</strong>: <code>p</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>re-parent <code>list</code>, <code>dl</code> children</li>
+</ul>
+
+<h2 id="pagenum"><code>pagenum</code></h2>
+
+<p><strong>ZedAI</strong>: <code>pagebreak</code></p>
+
+<h2 id="poem"><code>poem</code></h2>
+
+<p><strong>ZedAI</strong>: <code>block @role="poem"</code></p>
+
+<h2 id="prodnote"><code>prodnote</code></h2>
+
+<p><strong>ZedAI</strong>: <code>annotation @by="republisher"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+</ul>
+
+<h2 id="q"><code>q</code></h2>
+
+<p><strong>ZedAI</strong>: <code>quote</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="rearmatter"><code>rearmatter</code></h2>
+
+<p><strong>ZedAI</strong>: <code>backmatter</code></p>
+
+<h2 id="samp"><code>samp</code></h2>
+
+<p><strong>ZedAI</strong>: <code>block @role="example"</code></p>
+
+<p><strong>Notes</strong>: in DTBook, it seems like <code>samp</code> can be both block and inline. There are cases when it is be best translated as a <code>zedai:span</code> instead. In this case, the content model needs to be adjusted for inline-only.</p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="sent"><code>sent</code></h2>
+
+<p><strong>ZedAI</strong>: <code>s</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="sidebar"><code>sidebar</code></h2>
+
+<p><strong>ZedAI</strong>: <code>aside @role="sidebar"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="span"><code>span</code></h2>
+
+<p><strong>ZedAI</strong>: <code>span</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="strong"><code>strong</code></h2>
+
+<p><strong>ZedAI</strong>: <code>emph</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>Re-parent or rename <code>cite</code>, <code>q</code>
+</li>
+</ul>
+
+<h2 id="sub"><code>sub</code></h2>
+
+<p><strong>ZedAI</strong>: <code>sub</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span @role='cite'</code>, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span @role='sentence'</code>
+</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+  <li>
+<code>abbr</code> becomes <code>span @role='truncation'</code>
+</li>
+  <li>
+<code>acronym</code> becomes <code>span @role='acronym' | 'initialism'</code>
+</li>
+  <li>
+<code>w</code> becomes <code>span @role='word'</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>annoref</code>, <code>noteref</code> become <code>span</code></p>
+  </li>
+  <li>Re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<h2 id="sup"><code>sup</code></h2>
+
+<p><strong>ZedAI</strong>: <code>sup</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span</code> role=’<code>cite</code>’, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span</code>
+</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+  <li>
+<code>abbr</code> becomes <code>span @role='truncation'</code>
+</li>
+  <li>
+<code>acronym</code> becomes <code>span @role='acronym' | 'initialism'</code>
+</li>
+  <li>
+<code>w</code> becomes <code>span @role='word'</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>annoref</code>, <code>noteref</code> become <code>span</code></p>
+  </li>
+  <li>Re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<h2 id="table"><code>table</code></h2>
+
+<p><strong>ZedAI</strong>: <code>table</code></p>
+
+<p><strong>CSS</strong>: <code>@width</code>, <code>@border</code> (border width), <code>@cellspacing</code>, <code>@cellpadding</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Re-parent <code>caption</code> children</li>
+  <li>Move <code>col</code>s into a <code>colgroup</code>; zedai does not allow free-floating <code>col</code>s.</li>
+  <li>Move <code>tr</code> or <code>pagenum</code> into a <code>tbody</code> if <code>thead</code> or <code>tfoot</code> is present</li>
+  <li>Re-order <code>thead</code>, <code>tfoot</code>, <code>tbody</code> into <code>thead</code>, <code>tbody</code>, <code>tfoot</code>
+</li>
+</ul>
+
+<p><strong>Notes</strong>: See https://github.com/daisy/pipeline/issues/58</p>
+
+<h2 id="tbody"><code>tbody</code></h2>
+
+<p><strong>ZedAI</strong>: <code>tbody</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<h2 id="td"><code>td</code></h2>
+
+<p><strong>ZedAI</strong>: <code>td</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+</ul>
+
+<h2 id="tfoot"><code>tfoot</code></h2>
+
+<p><strong>ZedAI</strong>: <code>tfoot</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<h2 id="th"><code>th</code></h2>
+
+<p><strong>ZedAI</strong>: <code>th</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+</ul>
+
+<h2 id="thead"><code>thead</code></h2>
+
+<p><strong>ZedAI</strong>: <code>thead</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<h2 id="title"><code>title</code></h2>
+
+<p><strong>ZedAI</strong>: <code>p @property='title' @about='IDREF'</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<h2 id="tr"><code>tr</code></h2>
+
+<p><strong>ZedAI</strong>: <code>tr</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<h2 id="w"><code>w</code></h2>
+
+<p><strong>ZedAI</strong>: <code>w</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span @role='cite'</code>, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>abbr</code> becomes <code>span @role='truncation'</code>
+</li>
+  <li>acronym becomes <code>span @role='acronym' | 'initialism'</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>a</code> becomes <code>span</code></p>
+  </li>
+  <li>Re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<h2 id="common-attributes">Common Attributes</h2>
+
+<ul>
+  <li>
+<code>id</code> becomes <code>xml:id</code>
+</li>
+  <li>
+<code>xml:space</code> is copied</li>
+  <li>
+<code>class</code> is copied</li>
+  <li>
+<code>xml:lang</code> is copied</li>
+  <li>
+<code>dir</code> becomes <code>its:dir</code>
+</li>
+  <li>
+<code>showin</code> is discarded</li>
+  <li>
+<code>title</code> and <code>name</code> are discarded</li>
+</ul>
+
+    </div>
+  </body>
+</html>
