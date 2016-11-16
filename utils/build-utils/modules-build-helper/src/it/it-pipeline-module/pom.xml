@@ -24,31 +24,6 @@
     </resources>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>2.7</version>
-        <executions>
-          <execution>
-            <id>copy-sources-to-doc</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <resources>
-                <resource>
-                  <directory>src/main</directory>
-                  <includes>
-                    <include>resources/**/*</include>
-                  </includes>
-                </resource>
-              </resources>
-              <outputDirectory>${project.build.directory}/doc/</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
         <version>${modules-build-helper.version}</version>
@@ -67,8 +42,9 @@
               <goal>htmlize-sources</goal>
             </goals>
             <configuration>
-              <sourceDirectory>${project.build.directory}/doc</sourceDirectory>
+              <sourceDirectory>${project.basedir}/src/main</sourceDirectory>
               <outputDirectory>${project.build.directory}/doc</outputDirectory>
+              <catalogXmlFile>${project.basedir}/src/main/resources/META-INF/catalog.xml</catalogXmlFile>
               <includes>
                 resources/META-INF/catalog.xml,
                 resources/**/*.xpl

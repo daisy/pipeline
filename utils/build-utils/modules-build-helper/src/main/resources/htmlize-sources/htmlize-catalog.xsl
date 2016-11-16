@@ -14,13 +14,14 @@
 	
 	<xsl:output name="html" method="html"/>
 	
-	<xsl:variable name="output-uri" select="concat(resolve-uri(pf:relativize-uri(base-uri(/*),$input-base-uri),$output-base-uri), '.html')"/>
+	<xsl:variable name="output-uri"
+	              select="concat(resolve-uri(pf:relativize-uri(base-uri(/*),$input-base-uri),$output-base-uri), '/index.html')"/>
 	
 	<xsl:template match="/">
 		<xsl:result-document format="html" href="{$output-uri}">
 			<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
 				<head>
-					<link rev="doc" href="{pf:relativize-uri(base-uri(/*),$output-uri)}"/>
+					<link rev="doc" href="../{replace(base-uri(/*),'.*/([^/]+)$','$1')}"/>
 				</head>
 				<body>
 					<div class="code">
@@ -32,7 +33,7 @@
 	</xsl:template>
 	
 	<xsl:template mode="serialize" match="cat:uri">
-		<span about="{pf:relativize-uri(resolve-uri(@uri,base-uri(/*)),$output-uri)}">
+		<span about="../{@uri}">
 			<xsl:choose>
 				<xsl:when test="@px:script='true'">
 					<xsl:attribute name="typeof" select="'script'"/>
@@ -61,7 +62,7 @@
 	</xsl:template>
 
 	<xsl:template mode="attribute-value" match="cat:uri/@uri">
-		<a href="{pf:relativize-uri(resolve-uri(.,base-uri(/*)),$output-uri)}" class="apidoc">
+		<a href="../{.}" class="apidoc">
 			<xsl:value-of select="."/>
 		</a>
 	</xsl:template>

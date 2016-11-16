@@ -246,7 +246,7 @@
             <artifactId>maven-resources-plugin</artifactId>
             <executions>
               <execution>
-                <id>copy-sources-to-doc</id>
+                <id>copy-markdown</id>
                 <phase>prepare-package</phase>
                 <goals>
                   <goal>copy-resources</goal>
@@ -255,9 +255,9 @@
                   <resources>
                     <resource>
                       <directory>src/main</directory>
-                      <excludes>
-                        <exclude>resources/**/*.html</exclude>
-                      </excludes>
+                      <includes>
+                        <include>**/*.md</include>
+                      </includes>
                     </resource>
                   </resources>
                   <outputDirectory>${project.build.directory}/doc/</outputDirectory>
@@ -283,9 +283,9 @@
                   <goal>htmlize-sources</goal>
                 </goals>
                 <configuration>
-                  <sourceDirectory>${project.build.directory}/doc</sourceDirectory>
+                  <sourceDirectory>${project.basedir}/src/main</sourceDirectory>
                   <outputDirectory>${project.build.directory}/doc</outputDirectory>
-                  <catalogXmlFile>${project.build.directory}/doc/resources/META-INF/catalog.xml</catalogXmlFile>
+                  <catalogXmlFile>${project.basedir}/src/main/resources/META-INF/catalog.xml</catalogXmlFile>
                   <includes>
                     resources/META-INF/catalog.xml,
                     resources/**/*.xpl

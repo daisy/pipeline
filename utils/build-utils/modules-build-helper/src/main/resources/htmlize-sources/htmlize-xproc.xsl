@@ -20,7 +20,7 @@
 	<xsl:output name="html" method="html"/>
 	
 	<xsl:variable name="input-uri" select="base-uri(/*)"/>
-	<xsl:variable name="output-uri" select="concat(resolve-uri(pf:relativize-uri($input-uri,$input-base-uri),$output-base-uri), '.html')"/>
+	<xsl:variable name="output-uri" select="concat(resolve-uri(pf:relativize-uri($input-uri,$input-base-uri),$output-base-uri), '/index.html')"/>
 	
 	<xsl:variable name="catalog-xml" select="doc($catalog-xml-uri)"/>
 	<xsl:variable name="entry-in-catalog" select="$catalog-xml//cat:uri[resolve-uri(@uri,base-uri(.))=$input-uri]"/>
@@ -28,7 +28,7 @@
 	<xsl:template match="/">
 		<xsl:result-document format="html" href="{$output-uri}">
 			<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
-				<xsl:variable name="source" select="pf:relativize-uri(base-uri(/*),$output-uri)"/>
+				<xsl:variable name="source" select="concat('../',replace($input-uri,'.*/([^/]+)$','$1'))"/>
 				<head>
 					<link rev="doc" href="{$source}"/>
 				</head>
@@ -44,7 +44,7 @@
 	<xsl:template mode="attribute-value"
 	              match="p:import/@href|
 	                     p:xslt/p:input[@port='stylesheet']/p:document/@href">
-		<a href="{pf:relativize-uri(resolve-uri(.,$input-uri),$output-uri)}" class="source">
+		<a href="../{.}" class="source">
 			<xsl:value-of select="."/>
 		</a>
 	</xsl:template>
@@ -55,7 +55,7 @@
 			<xsl:apply-templates mode="serialize"/>
 		</xsl:variable>
 		<xsl:variable name="id" select="concat('data-type-',parent::*/parent::*/@name)"/>
-		<span typeof="data-type" id="{$id}" resource="{pf:relativize-uri(concat($input-uri,'#',$id),$output-uri)}">
+		<span typeof="data-type" id="{$id}" resource="../{replace($input-uri,'.*/([^/]+)$','$1')}#{$id}">
 			<link rel="doc" href="#{$id}"/>
 			<xsl:if test="not(@id|child::*/@id)">
 				<xsl:if test="not($entry-in-catalog)">
