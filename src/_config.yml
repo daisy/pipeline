@@ -13,7 +13,8 @@ defaults:
   - scope: {path: "", type: wiki}
     values:
       layout: wiki
-      spine: wiki
+      spine: sitemap
+      spine2: wiki
       edit_button: wiki
   - scope: {path: "", type: wiki_gui}
     values:

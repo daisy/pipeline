@@ -3,6 +3,8 @@
   {% include spine pages=spine %}
 </nav>
 
+{% if include.spine == 'sitemap' %}
+
 <script type="text/javascript">
 var onload = function() {
   var nav = document.getElementById('nav-sitemap');
@@ -27,3 +29,5 @@ if (window.addEventListener) {
   window.attachEvent('onload', onload);
 }
 </script>
+
+{% endif %}
