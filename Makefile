@@ -50,6 +50,8 @@ $(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules
 	rm -rf $@
 	cp -r $< $@
 	eval "$$(echo 'newline="'; echo '"')"; \
+	find $@ -name '*.md' -path '**/resources/**' \
+	        -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: source\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
 	find $@ -name '*.md' -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
 	find $@ -type f -exec sh -c "cat {} | sed '1 s/^---$$/&\\$${newline}layout: doc/' >{}.tmp && mv {}.tmp {}" \;; \
 	find $@ -type f -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;
@@ -81,6 +83,8 @@ $(META_JEKYLL_DIR)/modules : $(MAVEN_DIR)/modules
 	rm -rf $@
 	cp -r $< $@
 	eval "$$(echo 'newline="'; echo '"')"; \
+	find $@ -name '*.md' -path '**/resources/**' \
+	        -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: source\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
 	find $@ -name '*.md' -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
 	find $@ -type f -exec sh -c "cat {} | sed '1 s/^---$$/&\\$${newline}layout: doc/' >{}.tmp && mv {}.tmp {}" \;; \
 	find $@ -type f -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;
