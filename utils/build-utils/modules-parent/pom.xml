@@ -288,7 +288,8 @@
                   <catalogXmlFile>${project.basedir}/src/main/resources/META-INF/catalog.xml</catalogXmlFile>
                   <includes>
                     resources/META-INF/catalog.xml,
-                    resources/**/*.xpl
+                    resources/**/*.xpl,
+                    resources/**/*.css
                   </includes>
                 </configuration>
               </execution>

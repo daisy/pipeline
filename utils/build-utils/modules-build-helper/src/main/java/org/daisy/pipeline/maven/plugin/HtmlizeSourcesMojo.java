@@ -1,7 +1,11 @@
 package org.daisy.pipeline.maven.plugin;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,6 +27,7 @@ import org.daisy.maven.xproc.api.XProcEngine;
 import org.daisy.maven.xproc.api.XProcExecutionException;
 
 import static org.daisy.pipeline.maven.plugin.utils.asURI;
+import static org.daisy.pipeline.maven.plugin.utils.relativize;
 
 /**
  * @goal htmlize-sources
@@ -46,7 +51,7 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 	 * @parameter
 	 */
 	private String includes;
-	private final String defaultIncludes = "**/*.xpl";
+	private final String defaultIncludes = "**/*.xpl,**/*.css";
 	
 	/**
 	 * @parameter expression="${project.build.directory}/generated-resources/htmlize-sources"
@@ -109,6 +114,40 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 								           ImmutableMap.of("input-base-uri", asURI(sourceDirectory).toASCIIString(),
 								                           "output-base-uri", asURI(outputDirectory).toASCIIString()),
 								           params);
+						}
+					}
+				);
+				htmlizers.put(
+					new FilenameFilter() {
+						public boolean accept(File dir, String name) {
+							return name.endsWith(".css") || name.endsWith(".scss"); }},
+					new Htmlizer() {
+						public void run(Iterable<File> sources, File sourceDirectory, File outputDirectory) {
+							for (File f : sources) {
+								try {
+									File outputFile = new File(outputDirectory, relativize(asURI(sourceDirectory), asURI(f)) + "/index.md");
+									outputFile.getParentFile().mkdirs();
+									BufferedReader reader = new BufferedReader(new FileReader(f));
+									BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+									writer.write("<link rev=\"doc\" href=\"../" + f.getName() + "\"/>");
+									writer.newLine();
+									writer.newLine();
+									if (f.getName().endsWith(".scss"))
+										writer.write("~~~sass");
+									else
+										writer.write("~~~css");
+									writer.newLine();
+									String line;
+									while ((line = reader.readLine()) != null) {
+										writer.write(line);
+										writer.newLine(); }
+									writer.write("~~~");
+									writer.newLine();
+									writer.close();
+								} catch (Exception e) {
+									throw new RuntimeException("Error processing file " + f, e);
+								}
+							}
 						}
 					}
 				);
