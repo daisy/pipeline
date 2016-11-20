@@ -93,6 +93,14 @@ $(addprefix compile-,$(MAVEN_MODULES)) : compile-% : %/.gradle-install-dependenc
 		mv .maven-to-install .maven-to-test-dependents; \
 	fi
 
+.PHONY : $(addprefix check-,$(MAVEN_MODULES))
+$(addprefix check-,$(MAVEN_MODULES)) : check-% : %/.gradle-install-dependencies %/.maven-install-dependencies
+	cd $(dir $<) && \
+	$(MVN) clean test && \
+	if [ -e .maven-to-test ]; then \
+		rm .maven-to-test; \
+	fi
+
 .PHONY : $(addsuffix /.maven-test-dependencies,assembly $(MAVEN_MODULES))
 $(addsuffix /.maven-test-dependencies,assembly $(MAVEN_MODULES)) : %/.maven-test-dependencies : %/.maven-dependencies-to-test
 	if [ -s $< ]; then \
