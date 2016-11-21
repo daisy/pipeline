@@ -27,12 +27,12 @@ import java.util.Set;
  * <p>
  * Usage example:
  * </p>
- * <code><pre>
+ * <pre>
  * SimpleCharReplacer ucr = new SimpleCharReplacer();
  * ucr.addSubstitutionTable(fileURL);
  * ucr.addSubstitutionTable(fileURL2);
  * String ret = ucr.replace(input);
- * </pre></code>
+ * </pre>
  * 
  * <p>
  * The translation table file is using the same xml format as that of

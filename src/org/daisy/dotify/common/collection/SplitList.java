@@ -39,7 +39,7 @@ public class SplitList<T> {
 	 * object is backed by the original list.
 	 * 
 	 * @param in the original list
-	 * @param pos the position to split (must be >=0 && <=size())
+	 * @param pos the position to split (must be &gt;=0 &amp;&amp; &lt;=size())
 	 * @return returns the split list
 	 */
 	public static <T> SplitList<T> split(List<T> in, int pos) {

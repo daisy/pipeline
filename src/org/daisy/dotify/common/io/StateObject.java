@@ -79,7 +79,7 @@ public class StateObject {
 
 	/**
 	 * Assert that the object is open
-	 * @throws throws IllegalStateException if the object is not open
+	 * @throws IllegalStateException if the object is not open
 	 */
 	public void assertOpen() throws IllegalStateException {
 		if (state != State.OPEN) {
@@ -89,7 +89,7 @@ public class StateObject {
 	
 	/**
 	 * Assert that the object is not open
-	 * @throws throws IllegalStateException if the object is open
+	 * @throws IllegalStateException if the object is open
 	 */
 	public void assertNotOpen() throws IllegalStateException {
 		if (state == State.OPEN) {
@@ -99,7 +99,7 @@ public class StateObject {
 
 	/**
 	 * Assert that the object has been closed
-	 * @throws throws IllegalStateException if the object is not closed
+	 * @throws IllegalStateException if the object is not closed
 	 */
 	public void assertClosed() throws IllegalStateException {
 		if (state != State.CLOSED) {
@@ -109,7 +109,7 @@ public class StateObject {
 	
 	/**
 	 * Assert that the object has never been opened
-	 * @throws throws IllegalStateException if the object is not unopened
+	 * @throws IllegalStateException if the object is not unopened
 	 */
 	public void assertUnopened() throws IllegalStateException {
 		if (state != State.UNOPENED) {
