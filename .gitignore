@@ -1,4 +1,5 @@
 .DS_Store
+.classpath
 .gradle-snapshot-dependencies
 .gradle-to-install
 .gradle-to-test
@@ -7,6 +8,8 @@
 .maven-to-install
 .maven-to-test
 .maven-to-test-dependents
+.project
+.settings
 /*.deb
 /*.rpm
 /*.zip
