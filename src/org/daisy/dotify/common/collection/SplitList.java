@@ -40,6 +40,7 @@ public class SplitList<T> {
 	 * 
 	 * @param in the original list
 	 * @param pos the position to split (must be &gt;=0 &amp;&amp; &lt;=size())
+	 * @param <T> The type of list 
 	 * @return returns the split list
 	 */
 	public static <T> SplitList<T> split(List<T> in, int pos) {

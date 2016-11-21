@@ -19,6 +19,7 @@ public interface StreamJuggler extends Closeable {
 	 * 
 	 * @return Returns the current output stream or null if StreamJuggler has
 	 *         been closed
+	 * @throws IOException if an IO-problem occurs
 	 */
 	public OutputStream getOutputStream() throws IOException;
 	

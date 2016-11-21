@@ -188,6 +188,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * original list. 
 	 * 
 	 * @param in the list to trim
+	 * @param <T> the type of split list
 	 * @return the list split in two parts, one with the leading skippable units, one with
 	 * the remainder
 	 */

@@ -129,7 +129,7 @@ public class XMLTools {
 	 * Returns true if the specified file is well formed XML.
 	 * @param f the file
 	 * @return returns true if the file is well formed XML, false otherwise
-	 * @throws XMLToolsException
+	 * @throws XMLToolsException if a parser cannot be configured or if parsing fails
 	 */
 	public static final boolean isWellformedXML(File f) throws XMLToolsException {
 		return parseXML(f)!=null;
@@ -139,7 +139,7 @@ public class XMLTools {
 	 * Asserts that the specified file is well formed and returns some root node information.
 	 * @param f the file
 	 * @return returns the root node, or null if file is not well formed
-	 * @throws XMLToolsException
+	 * @throws XMLToolsException if a parser cannot be configured or if parsing fails
 	 */
 	public static final XMLInfo parseXML(File f) throws XMLToolsException {
 		return parseXML(f, false);

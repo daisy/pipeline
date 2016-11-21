@@ -112,6 +112,7 @@ public class BreakPointHandler {
 	/**
 	 * Gets the next row from this BreakPointHandler
 	 * @param breakPoint the desired breakpoint for this row
+	 * @param force if force is allowed if no breakpoint is found
 	 * @return returns the next BreakPoint
 	 */
 	public BreakPoint nextRow(int breakPoint, boolean force) {

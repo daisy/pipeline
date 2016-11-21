@@ -82,7 +82,7 @@ public class FilterLocale {
 
 	/**
 	 * This locale is a subtype of the other locale
-	 * @param other
+	 * @param other the other locale
 	 * @return returns true if this locale is a subtype of the supplied locale
 	 */
 	public boolean isA(FilterLocale other) {

@@ -10,7 +10,7 @@ public class BrailleNotationConverter {
 	
 	/**
 	 * Creates a new converter with the specified braille cell separator.
-	 * @param separator
+	 * @param separator the separator string
 	 */
 	public BrailleNotationConverter(String separator) {
 		this.separator = separator;

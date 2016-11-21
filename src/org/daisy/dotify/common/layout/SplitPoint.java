@@ -4,8 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Provides a data object to keep the information about a split point result.
- * 
+ * Provides a data object to keep the information about a split point result. 
  * @author Joel Håkansson
  */
 public class SplitPoint<T extends SplitPointUnit> {
@@ -19,7 +18,9 @@ public class SplitPoint<T extends SplitPointUnit> {
 	/**
 	 * Create a new SplitPoint.
 	 * @param head the part of the original SplitPointUnit list that fits within the target breakpoint 
+	 * @param supplements a list of supplement units
 	 * @param tail the part of the original SplitPointUnit list that is left
+	 * @param discarded a list of discarded units
 	 * @param hardBreak set to true if a break point could not be achieved with respect for break point boundaries 
 	 */
 	public SplitPoint(List<T> head, List<T> supplements, List<T> tail, List<T> discarded, boolean hardBreak) {

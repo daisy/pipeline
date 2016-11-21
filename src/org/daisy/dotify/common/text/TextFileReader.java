@@ -81,10 +81,10 @@ public class TextFileReader implements Closeable {
 	
 	/**
 	 * 
-	 * @param is
-	 * @param cs
-	 * @param regex
-	 * @param limit
+	 * @param is the input stream
+	 * @param cs the encoding
+	 * @param regex field delimiter expression
+	 * @param limit the maximum number of times the regex is matched
 	 */
 	public TextFileReader(InputStream is, Charset cs, String regex, int limit) {
 		if (is==null) {
@@ -103,7 +103,7 @@ public class TextFileReader implements Closeable {
 	/**
 	 * Gets the next line in the stream.
 	 * @return returns next line, or null if there are no more lines
-	 * @throws IOException
+	 * @throws IOException if an IO-problem occurs
 	 */
 	public LineData nextLine() throws IOException {
 		String line = lnr.readLine();
