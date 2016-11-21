@@ -4,6 +4,7 @@ import org.daisy.dotify.common.text.BreakPoint;
 import org.daisy.dotify.common.text.BreakPointHandler;
 
 
+@SuppressWarnings("javadoc")
 public class TestNSH {
 
 	public static void main(String[] args) {

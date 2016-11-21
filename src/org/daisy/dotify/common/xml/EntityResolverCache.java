@@ -9,10 +9,18 @@ import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+/**
+ * Provides an entity resolver with cache
+ * @author Joel Håkansson
+ *
+ */
 public class EntityResolverCache implements EntityResolver {
 	
 	private final URLCache cache;
 	
+	/**
+	 * Creates a new entity resolver with cache
+	 */
 	public EntityResolverCache() {
 		cache = new URLCache();
 	}

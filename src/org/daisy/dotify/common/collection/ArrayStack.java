@@ -8,6 +8,7 @@ import java.util.EmptyStackException;
  * Provides an unsynchronized stack based on ArrayList instead of Vector.
  * 
  * @author Joel Håkansson
+ * @param <E> the type of array
  */
 public class ArrayStack<E> extends ArrayList<E> {
 

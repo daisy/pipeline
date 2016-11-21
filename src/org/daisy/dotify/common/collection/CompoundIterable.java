@@ -12,6 +12,10 @@ import java.util.Iterator;
 public class CompoundIterable<T> implements Iterable<T> {
 	private final Iterable<? extends Iterable<T>> iterables;
 	
+	/**
+	 * Creates a new compound iterable
+	 * @param iterables the iterables to use
+	 */
 	public CompoundIterable(Iterable<? extends Iterable<T>> iterables) {
 		this.iterables = iterables;
 	}

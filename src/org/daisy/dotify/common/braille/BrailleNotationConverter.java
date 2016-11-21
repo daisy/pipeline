@@ -16,6 +16,11 @@ public class BrailleNotationConverter {
 		this.separator = separator;
 	}
 	
+	/**
+	 * Parses a string for braille notation and converts it to Unicode braille patterns
+	 * @param p the string to parse
+	 * @return returns the parsed string
+	 */
 	public String parseBrailleNotation(String p) {
 		String[] s = p.split(separator);
 		if (s.length == 0) {

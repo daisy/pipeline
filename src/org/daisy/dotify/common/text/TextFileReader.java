@@ -24,16 +24,30 @@ public class TextFileReader implements Closeable {
 	private int limit;
 	private int currentLine;
 	
+	/**
+	 * Provides a builder for a text file reader
+	 * @author Joel Håkansson
+	 *
+	 */
 	public static class Builder {
 		private final InputStream is;
 		private Charset cs = DEFAULT_CHARSET;
 		private String regex = DEFAULT_EXPRESSION;
 		private int limit = DEFAULT_LIMIT;
 		
+		/**
+		 * Creates a new builder with the specified input stream 
+		 * @param value the input stream
+		 */
 		public Builder(InputStream value) {
 			this.is = value;
 		}
 		
+		/**
+		 * Sets the charset for this builder
+		 * @param value the charset
+		 * @return returns this builder
+		 */
 		public Builder charset(Charset value) {
 			this.cs = value;
 			return this;
@@ -52,11 +66,21 @@ public class TextFileReader implements Closeable {
 			return this;
 		}
 		
+		/**
+		 * Sets the maximum number of times that the specified regular expression is matched
+		 * on a single row 
+		 * @param value the limit
+		 * @return returns this builder
+		 */
 		public Builder limit(int value) {
 			this.limit = value;
 			return this;
 		}
 		
+		/**
+		 * Creates a new text file reader with the current configuration
+		 * @return returns a new text file reader
+		 */
 		public TextFileReader build() {
 			return new TextFileReader(this);
 		}
@@ -126,6 +150,11 @@ public class TextFileReader implements Closeable {
 		lnr.close();
 	}
 	
+	/**
+	 * Provides the data about a single line
+	 * @author Joel Håkansson
+	 *
+	 */
 	public class LineData {
 		private final String line;
 		private final String[] fields;

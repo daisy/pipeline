@@ -11,6 +11,11 @@ import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.util.logging.Logger;
 
+/**
+ * Provides file IO tools.
+ * @author Joel Håkansson
+ *
+ */
 public class FileIO {
 
 	/**
@@ -35,10 +40,22 @@ public class FileIO {
 		bis.close();
 	}
 
+	/**
+	 * Copies an input file to an output file
+	 * @param input the input file
+	 * @param output the output file
+	 * @throws IOException if IO fails
+	 */
 	public static void copy(File input, File output) throws IOException {
 		copy(new FileInputStream(input), new FileOutputStream(output));
 	}
 
+	/**
+	 * Copies an input file to an output file
+	 * @param sourceFile the source file
+	 * @param destFile the destination file
+	 * @throws IOException if IO fails
+	 */
 	public static void copyFile(File sourceFile, File destFile) throws IOException {
 		if (!destFile.exists()) {
 			destFile.createNewFile();
@@ -60,12 +77,22 @@ public class FileIO {
 		}
 	}
 
+	/**
+	 * Creates a temp file
+	 * @return returns a the created file
+	 * @throws IOException if IO fails
+	 */
 	public static File createTempFile() throws IOException {
 		File ret = File.createTempFile("temp", null, null);
 		ret.deleteOnExit();
 		return ret;
 	}
 
+	/**
+	 * Creates a temp folder
+	 * @return returns the created folder
+	 * @throws IOException if IO fails
+	 */
 	public static File createTempDir() throws IOException {
 		File temp = File.createTempFile("temp", Long.toString(System.nanoTime()));
 		if (!temp.delete()) {
@@ -87,6 +114,11 @@ public class FileIO {
 		return f;
 	}
 
+	/**
+	 * Copies a folder recursively
+	 * @param f the source folder
+	 * @param out the destination folder
+	 */
 	public static void copyRecursive(File f, File out) {
 		if (f.isDirectory()) {
 			out.mkdirs();
@@ -102,6 +134,10 @@ public class FileIO {
 		}
 	}
 
+	/**
+	 * Deletes a folder recursively
+	 * @param f the folder to delete
+	 */
 	public static void deleteRecursive(File f) {
 		if (f.isDirectory()) {
 			for (File f1 : f.listFiles()) {

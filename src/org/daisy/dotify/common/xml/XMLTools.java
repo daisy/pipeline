@@ -30,20 +30,79 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
+/**
+ * Provides some xml tools.
+ * 
+ * @author Joel Håkansson
+ */
 public class XMLTools {
+	
+	private XMLTools() {}
 
+	/**
+	 * <p>Transforms the xml with the specified parameters. By default, this method will set up a caching entity resolver, which
+	 * will reduce the amount of fetching of dtd's from the Internet.</p>
+	 * 
+	 * <p>This method will attempt to create Source and Result objects from the supplied source, result and xslt objects. 
+	 * This process supports several types of objects from which Sources and Results are typically created, such as files, 
+	 * strings and URLs.</p>
+	 * 
+	 * <p>This method will create its own instance of a transformer factory.</p>
+	 * 
+	 * @param source the source xml
+	 * @param result the result xml
+	 * @param xslt the xslt
+	 * @param params xslt parameters
+	 * @throws XMLToolsException if the transformation is unsuccessful
+	 */
 	public static void transform(Object source, Object result, Object xslt, Map<String, Object> params) throws XMLToolsException {
 		transform(toSource(source), toResult(result), toSource(xslt), params);
 	}
 	
+	/**
+	 * <p>Transforms the xml with the specified parameters. By default, this method will set up a caching entity resolver, which
+	 * will reduce the amount of fetching of dtd's from the Internet.</p>
+	 * 
+	 * <p>This method will attempt to create Source and Result objects from the supplied source, result and xslt objects. 
+	 * This process supports several types of objects from which Sources and Results are typically created, such as files, 
+	 * strings and URLs.</p>
+	 * 
+	 * @param source the source xml
+	 * @param result the result xml
+	 * @param xslt the xslt
+	 * @param params xslt parameters
+	 * @param factory the transformer factory
+	 * @throws XMLToolsException if the transformation is unsuccessful
+	 */
 	public static void transform(Object source, Object result, Object xslt, Map<String, Object> params, TransformerFactory factory) throws XMLToolsException {
 		transform(toSource(source), toResult(result), toSource(xslt), params, factory);
 	}
 	
+	/**
+	 * Transforms the xml with the specified parameters. By default, this method will set up a caching entity resolver, which
+	 * will reduce the amount of fetching of dtd's from the Internet. 
+	 * 
+	 * <p>This method will create its own instance of a transformer factory.</p>
+	 * @param source the source xml
+	 * @param result the result xml
+	 * @param xslt the xslt
+	 * @param params xslt parameters
+	 * @throws XMLToolsException if the transformation is unsuccessful
+	 */
 	public static void transform(Source source, Result result, Source xslt, Map<String, Object> params) throws XMLToolsException {
 		transform(source, result, xslt, params, TransformerFactory.newInstance());
 	}
 
+	/**
+	 * <p>Transforms the xml with the specified parameters. By default, this method will set up a caching entity resolver, which
+	 * will reduce the amount of fetching of dtd's from the Internet.</p>
+	 * @param source the source xml
+	 * @param result the result xml
+	 * @param xslt the xslt
+	 * @param params xslt parameters
+	 * @param factory the transformer factory
+	 * @throws XMLToolsException if the transformation is unsuccessful
+	 */
 	public static void transform(Source source, Result result, Source xslt, Map<String, Object> params, TransformerFactory factory) throws XMLToolsException {
 		Transformer transformer;
 		try {
@@ -145,6 +204,15 @@ public class XMLTools {
 		return parseXML(f, false);
 	}
 	
+	/**
+	 * Returns some root node information and optionally asserts that the specified
+	 * file is well formed.
+	 * @param f the file
+	 * @param peek true if the parsing should stop after reading the root element. If true,
+	 * the file may or may not be well formed beyond the first start tag.
+	 * @return returns the root node, or null if file is not well formed
+	 * @throws XMLToolsException if a parser cannot be configured or if parsing fails
+	 */
 	public static final XMLInfo parseXML(File f, boolean peek) throws XMLToolsException {
 		SAXParserFactory factory = SAXParserFactory.newInstance();
 		factory.setNamespaceAware(true);

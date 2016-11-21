@@ -4,7 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Provides a data object to keep the information about a split point result. 
+ * Provides a data object to keep the information about a split point result.
+ * @param <T> the type of split point units 
  * @author Joel Håkansson
  */
 public class SplitPoint<T extends SplitPointUnit> {

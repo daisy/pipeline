@@ -13,6 +13,7 @@ import org.daisy.dotify.common.collection.SplitList;
  * 
  * @author Joel Håkansson
  *
+ * @param <T> the type of split point units
  */
 public class SplitPointHandler<T extends SplitPointUnit> {
 	private final List<T> EMPTY_LIST = Collections.emptyList();
@@ -34,7 +35,6 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		};
 	}
 	
-	@SafeVarargs
 	/**
 	 * Splits the data at, or before, the supplied breakPoint according to the rules
 	 * in the data. If force is used, rules may be broken to achieve a result.
@@ -43,6 +43,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * @param units the data
 	 * @return returns a split point result
 	 */
+	@SafeVarargs
 	public final SplitPoint<T> split(float breakPoint, boolean force, T ... units) {
 		return split(breakPoint, force, new SplitPointData<>(units));
 	}

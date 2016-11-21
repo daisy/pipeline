@@ -30,19 +30,22 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
- * An XMLResolver that uses a SAX EntityResolver for entity resolution.
+ * Provides an XMLResolver that uses a SAX EntityResolver for entity resolution.
  * @author Linus Ericson
  */
 public class XMLResolverAdapter implements XMLResolver {
 
     private final EntityResolver resolver;
     
+    /**
+     * Creates a new xml resolver adapter.
+     * @param entityResolver the entity resolver to use
+     */
     public XMLResolverAdapter(EntityResolver entityResolver) {
         resolver = entityResolver;
     }
     
     @Override
-	@SuppressWarnings("unused")
     public Object resolveEntity(String publicID, String systemID, String baseURI, String namespace) throws XMLStreamException {
         try {
             InputSource is = resolver.resolveEntity(publicID, systemID);

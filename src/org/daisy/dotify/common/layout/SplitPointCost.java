@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * 
  * @author Joel Håkansson
+ * @param <T> the type of split point unit
  *
  */
 // @FunctionalInterface

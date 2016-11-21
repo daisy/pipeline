@@ -42,10 +42,19 @@ public class CachingURIResolver implements URIResolver {
 
     private final XMLReader reader;
     
+    /**
+     * Creates a new uri resolver
+     * @throws XMLToolsException if something goes wrong
+     */
     public CachingURIResolver() throws XMLToolsException {
     	this(SAXParserFactory.newInstance());
     }
 
+    /**
+     * Creates a new uri resolver with the specified sax parser factory
+     * @param parserFactory the parser factory
+     * @throws XMLToolsException if something goes wrong
+     */
     public CachingURIResolver(SAXParserFactory parserFactory) throws XMLToolsException {
         parserFactory.setNamespaceAware(true);
         SAXParser parser;

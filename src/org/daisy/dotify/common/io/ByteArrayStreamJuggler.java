@@ -8,6 +8,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * Provides an in-memory stream juggler.
+ * 
+ * @author Joel Håkansson
+ */
 public class ByteArrayStreamJuggler implements StreamJuggler {
 	private final int BUF_SIZE = 65536;
 	private InputStreamMaker ci;

@@ -13,6 +13,7 @@ import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class XMLToolsTest {
 	
 	@Test

@@ -6,6 +6,7 @@ import org.daisy.dotify.common.text.BreakPoint;
 import org.daisy.dotify.common.text.BreakPointHandler;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class BreakPointHandlerTest {
 
 	@Test
