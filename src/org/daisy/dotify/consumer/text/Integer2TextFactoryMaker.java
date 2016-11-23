@@ -58,7 +58,9 @@ public class Integer2TextFactoryMaker implements
 		{
 			Iterator<Integer2TextFactoryService> i = ServiceLoader.load(Integer2TextFactoryService.class).iterator();
 			while (i.hasNext()) {
-				ret.addFactory(i.next());
+				Integer2TextFactoryService f = i.next();
+				f.setCreatedWithSPI();
+				ret.addFactory(f);
 			}
 		}
 		return ret;

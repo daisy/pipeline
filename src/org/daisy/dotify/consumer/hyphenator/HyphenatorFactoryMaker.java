@@ -57,7 +57,9 @@ public class HyphenatorFactoryMaker implements HyphenatorFactoryMakerService {
 		{
 			Iterator<HyphenatorFactoryService> i = ServiceLoader.load(HyphenatorFactoryService.class).iterator();
 			while (i.hasNext()) {
-				ret.addFactory(i.next());
+				HyphenatorFactoryService f = i.next();
+				f.setCreatedWithSPI();
+				ret.addFactory(f);
 			}
 		}
 		return ret;
