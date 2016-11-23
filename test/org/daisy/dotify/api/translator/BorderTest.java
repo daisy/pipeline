@@ -6,6 +6,7 @@ import org.daisy.dotify.api.translator.BorderSpecification.Align;
 import org.daisy.dotify.api.translator.BorderSpecification.Style;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class BorderTest {
 
 	@Test

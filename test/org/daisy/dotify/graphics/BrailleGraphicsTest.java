@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class BrailleGraphicsTest {
 	final BufferedImage lineImage;
 	final BufferedImage borderImage;

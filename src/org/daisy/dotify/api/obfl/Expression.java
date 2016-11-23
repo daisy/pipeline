@@ -2,6 +2,11 @@ package org.daisy.dotify.api.obfl;
 
 import java.util.Map;
 
+/**
+ * Provides an interface for OBFL-expressions.
+ * @author Joel Håkansson
+ *
+ */
 public interface Expression {
 
 	/**

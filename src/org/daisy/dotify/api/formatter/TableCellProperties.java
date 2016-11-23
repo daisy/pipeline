@@ -22,6 +22,9 @@ public final class TableCellProperties {
 		private TextBlockProperties textBlockProps = new TextBlockProperties.Builder().build();
 		private Border border = null;
 
+		/**
+		 * Creates a new builder
+		 */
 		public Builder() { }
 		
 		/**
@@ -74,6 +77,11 @@ public final class TableCellProperties {
 			return this;
 		}
 
+		/**
+		 * Creates a new table cell properties using the current
+		 * state of this builder.
+		 * @return returns a new table cell properties
+		 */
 		public TableCellProperties build() {
 			return new TableCellProperties(this);
 		}

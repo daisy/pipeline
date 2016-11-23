@@ -37,6 +37,10 @@ public interface HyphenatorFactoryService {
 	 */
 	public Collection<String> listLocales();
 
+	/**
+	 * Creates a new hyphenator factory.
+	 * @return returns a new hyphenator factory
+	 */
 	public HyphenatorFactory newFactory();
 	
 	/**

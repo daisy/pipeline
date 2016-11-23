@@ -36,6 +36,9 @@ public class TextBorderFactoryMaker implements TextBorderFactoryMakerService {
 	private final List<TextBorderFactoryService> factories;
 	private final Logger logger;
 
+	/**
+	 * Creates a new text border factory maker. 
+	 */
 	public TextBorderFactoryMaker() {
 		logger = Logger.getLogger(TextBorderFactoryMaker.class.getCanonicalName());
 		factories = new CopyOnWriteArrayList<>();
@@ -68,12 +71,20 @@ public class TextBorderFactoryMaker implements TextBorderFactoryMakerService {
 		return ret;
 	}
 	
+	/**
+	 * Adds a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to add
+	 */
 	@Reference(type = '*')
 	public void addFactory(TextBorderFactoryService factory) {
 		logger.finer("Adding factory: " + factory);
 		factories.add(factory);
 	}
 
+	/**
+	 * Removes a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to remove
+	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(TextBorderFactoryService factory) {
 		logger.finer("Removing factory: " + factory);

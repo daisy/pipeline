@@ -24,6 +24,10 @@ public interface BrailleTranslator {
 	 */
 	public BrailleTranslatorResult translate(Translatable specification) throws TranslationException;
 	
+	/**
+	 * Gets the translator mode of this translator.
+	 * @return returns the translator mode
+	 */
 	public String getTranslatorMode();
 
 }

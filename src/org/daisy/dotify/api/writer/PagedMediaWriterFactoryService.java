@@ -32,12 +32,19 @@ public interface PagedMediaWriterFactoryService {
 	 */
 	public boolean supportsMediaType(String mediaType);
 	
+
 	/**
-	 * Returns a list of supported locales as defined by IETF RFC 3066.
-	 * @return returns a list of locales
+	 * Lists supported media types.
+	 * @return returns a list of supported media types
 	 */
 	public Collection<String> listMediaTypes();
 
+	/**
+	 * Creates a new paged media writer factory for the specified
+	 * media type.
+	 * @param mediaType the media type.
+	 * @return returns a new factory
+	 */
 	public PagedMediaWriterFactory newFactory(String mediaType);
 
 	/**

@@ -1,5 +1,10 @@
 package org.daisy.dotify.api.translator;
 
+/**
+ * Provides a translator specification.
+ * 
+ * @author Joel Håkansson
+ */
 public class TranslatorSpecification implements Comparable<TranslatorSpecification> {
 	private final String locale; 
 	private final String mode;
@@ -85,7 +90,5 @@ public class TranslatorSpecification implements Comparable<TranslatorSpecificati
 			return this.mode.compareTo(o.mode);
 		}
 	}
-	
-	
 
 }

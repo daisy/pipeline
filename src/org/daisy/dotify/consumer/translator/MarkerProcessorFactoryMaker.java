@@ -40,6 +40,9 @@ public class MarkerProcessorFactoryMaker implements
 	private final Map<String, MarkerProcessorFactoryService> map;
 	private final Logger logger;
 
+	/**
+	 * Creates a new marker processor factory maker.
+	 */
 	public MarkerProcessorFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		factories = new CopyOnWriteArrayList<>();
@@ -73,12 +76,20 @@ public class MarkerProcessorFactoryMaker implements
 		return ret;
 	}
 	
+	/**
+	 * Adds a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to add
+	 */
 	@Reference(type = '*')
 	public void addFactory(MarkerProcessorFactoryService factory) {
 		logger.finer("Adding factory: " + factory);
 		factories.add(factory);
 	}
 
+	/**
+	 * Removes a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to remove
+	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(MarkerProcessorFactoryService factory) {
 		logger.finer("Removing factory: " + factory);

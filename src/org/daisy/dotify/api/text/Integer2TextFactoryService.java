@@ -38,6 +38,10 @@ public interface Integer2TextFactoryService {
 	 */
 	public Collection<String> listLocales();
 
+	/**
+	 * Creates a new integer to text factory.
+	 * @return returns a new factory
+	 */
 	public Integer2TextFactory newFactory();
 
 	/**

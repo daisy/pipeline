@@ -12,13 +12,18 @@ public class NumeralField implements Field {
 	private final String textStyle;
 	
 	/**
-	 * Creates a new numeral with the supplied style.
+	 * Creates a new numeral field with the supplied style.
 	 * @param style the style for this numeral
 	 */
 	public NumeralField(NumeralStyle style) {
 		this(style, null);
 	}
 	
+	/**
+	 * Creates a new numeral field with the supplied numeral and text styles
+	 * @param style the numeral style
+	 * @param textStyle the text style
+	 */
 	public NumeralField(NumeralStyle style, String textStyle) {
 		this.style = style;
 		this.textStyle = textStyle;
@@ -36,6 +41,5 @@ public class NumeralField implements Field {
 	public String getTextStyle() {
 		return textStyle;
 	}
-
 
 }

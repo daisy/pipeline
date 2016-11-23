@@ -24,20 +24,37 @@ import org.daisy.dotify.api.formatter.FormatterFactory;
 public class FormatterFactoryMaker {
 	private final FormatterFactory proxy;
 	
+	/**
+	 * Creates a new formatter factory maker
+	 */
 	public FormatterFactoryMaker() {
 		//Gets the first formatter (assumes there is at least one).
 		proxy = ServiceLoader.load(FormatterFactory.class).iterator().next();
 		proxy.setCreatedWithSPI();
 	}
 
+	/**
+	 * Creates a new instance of a formatter factory maker
+	 * @return returns a new formatter factory maker
+	 */
 	public static FormatterFactoryMaker newInstance() {
 		return new FormatterFactoryMaker();
 	}
 	
+	/**
+	 * Gets a formatter factory
+	 * @return returns a formatter factory
+	 */
 	public FormatterFactory getFactory() {
 		return proxy;
 	}
 	
+	/**
+	 * Creates a new formatter with the specified options.
+	 * @param locale the locale
+	 * @param mode the braille mode
+	 * @return returns a new formatter
+	 */
 	public Formatter newFormatter(String locale, String mode) {
 		return proxy.newFormatter(locale, mode);
 	}

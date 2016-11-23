@@ -36,6 +36,10 @@ public interface BrailleFilterFactoryService {
 	 */
 	public Collection<TranslatorSpecification> listSpecifications();
 
+	/**
+	 * Creates a new braille filter factory.
+	 * @return returns a new braille filter factory
+	 */
 	public BrailleFilterFactory newFactory();
 
 	/**

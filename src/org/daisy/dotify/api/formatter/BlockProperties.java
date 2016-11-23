@@ -265,21 +265,48 @@ public class BlockProperties implements Cloneable {
 			return this;
 		}
 		
+		/**
+		 * Sets the keep with previous sheets property for the block.
+		 * In other words, the number of previous sheets to keep in the
+		 * same volume as the end of this block.
+		 * @param keepWithPreviousSheets the number of sheets
+		 * @return returns this object
+		 */
 		public Builder keepWithPreviousSheets(int keepWithPreviousSheets) {
 			this.keepWithPreviousSheets = keepWithPreviousSheets;
 			return this;
 		}
 		
+		/**
+		 * Sets the keep with next sheets property for the block.
+		 * In other words, the number of following sheets to keep in
+		 * the same volume as the start of this block.
+		 * @param keepWithNextSheets the number of sheets
+		 * @return returns this object
+		 */
 		public Builder keepWithNextSheets(int keepWithNextSheets) {
 			this.keepWithNextSheets = keepWithNextSheets;
 			return this;
 		}
 		
+		/**
+		 * Sets the vertical position for this block. This behavior is similar to 
+		 * leader but in a vertical orientation. If the position has already been
+		 * passed when this block is rendered, it is ignored. 
+		 * @param position the position
+		 * @return returns this object
+		 */
 		public Builder verticalPosition(Position position) {
 			verticalPosition = position;
 			return this;
 		}
 
+		/**
+		 * Sets the vertical alignment for this block. This will only have have an
+		 * effect if vertical position is also set.
+		 * @param alignment the alignment
+		 * @return returns this object
+		 */
 		public Builder verticalAlignment(BlockPosition.VerticalAlignment alignment) {
 			verticalAlignment = alignment;
 			return this;
@@ -332,6 +359,11 @@ public class BlockProperties implements Cloneable {
 			return this;
 		}
 
+		/**
+		 * Sets the text border style for the block.
+		 * @param value the text border
+		 * @return returns this object
+		 */
 		public Builder textBorderStyle(TextBorderStyle value) {
 			this.textBorderStyle = value;
 			return this;
@@ -503,23 +535,43 @@ public class BlockProperties implements Cloneable {
 	public int getKeepWithNext() {
 		return keepWithNext;
 	}
-	
+
+	/**
+	 * Gets the number of previous sheets to keep in the same volume as this block
+	 * @return returns the number of sheets
+	 */
 	public int getKeepWithPreviousSheets() {
 		return keepWithPreviousSheets;
 	}
 	
+	/**
+	 * Gets the number of next sheets to keep in the same volume as this block
+	 * @return returns the number of sheets
+	 */
 	public int getKeepWithNextSheets() {
 		return keepWithNextSheets;
 	}
 
+	/**
+	 * Gets the vertical position for this block
+	 * @return returns the vertical position
+	 */
 	public BlockPosition getVerticalPosition() {
 		return verticalPosition;
 	}
 
+	/**
+	 * Gets the text border style for this block
+	 * @return returns the text border style
+	 */
 	public TextBorderStyle getTextBorderStyle() {
 		return textBorderStyle;
 	}
 	
+	/**
+	 * Gets the underline pattern for this block
+	 * @return returns the underline pattern
+	 */
 	public String getUnderlineStyle() {
 		return underlineStyle;
 	}
@@ -542,6 +594,10 @@ public class BlockProperties implements Cloneable {
 		return widows;
 	}
 	
+	/**
+	 * Gets the text block properties for this block
+	 * @return returns the text block properties
+	 */
 	public TextBlockProperties getTextBlockProperties() {
 		return textBlockProps;
 	}

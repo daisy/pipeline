@@ -1,5 +1,10 @@
 package org.daisy.dotify.api.formatter;
 
+/**
+ * Provides a page template builder.
+ * @author Joel Håkansson
+ *
+ */
 public interface PageTemplateBuilder {
 
 	/**

@@ -36,6 +36,10 @@ public interface BrailleTranslatorFactoryService {
 	 */
 	public Collection<TranslatorSpecification> listSpecifications();
 
+	/**
+	 * Creates a new braille translator factory.
+	 * @return returns a new braille translator factory
+	 */
 	public BrailleTranslatorFactory newFactory();
 
 	/**

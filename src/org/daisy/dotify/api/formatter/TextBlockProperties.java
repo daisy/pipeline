@@ -14,6 +14,9 @@ public final class TextBlockProperties {
 	private final Alignment align;
 	private final String identifier;
 	
+	/**
+	 * Provides a builder for text block properties
+	 */
 	public static class Builder {
 		private int textIndent = 0;
 		private int firstLineIndent = 0;
@@ -50,7 +53,7 @@ public final class TextBlockProperties {
 		}
 		
 		/**
-		 * Sets the alignment property for the block.
+		 * Sets the alignment for the block.
 		 * @param align the alignment
 		 * @return returns "this" object
 		 */
@@ -59,16 +62,30 @@ public final class TextBlockProperties {
 			return this;
 		}
 		
+		/**
+		 * Sets the row spacing for the block.
+		 * @param value the row spacing
+		 * @return returns this builder
+		 */
 		public Builder rowSpacing(float value) {
 			this.rowSpacing = value;
 			return this;
 		}
 		
+		/**
+		 * Sets the identifier for the block.
+		 * @param identifier the identifier
+		 * @return returns this builder
+		 */
 		public Builder identifier(String identifier) {
 			this.identifier = identifier;
 			return this;
 		}
 		
+		/**
+		 * Creates a new text block properties object
+		 * @return returns a new instance
+		 */
 		public TextBlockProperties build() {
 			return new TextBlockProperties(this);
 		}

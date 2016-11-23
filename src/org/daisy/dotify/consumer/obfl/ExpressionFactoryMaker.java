@@ -20,16 +20,27 @@ import org.daisy.dotify.api.obfl.ExpressionFactory;
 public class ExpressionFactoryMaker {
 	private final ExpressionFactory proxy;
 
+	/**
+	 * Creates a new expression factory maker
+	 */
 	public ExpressionFactoryMaker() {
 		// Gets the first formatter engine (assumes there is at least one).
 		proxy = ServiceLoader.load(ExpressionFactory.class).iterator().next();
 		proxy.setCreatedWithSPI();
 	}
 
+	/**
+	 * Creates a new expression factory maker instance
+	 * @return returns a new expression factory maker instance
+	 */
 	public static ExpressionFactoryMaker newInstance() {
 		return new ExpressionFactoryMaker();
 	}
 
+	/**
+	 * Gets an expression factory.
+	 * @return returns an expression factory
+	 */
 	public ExpressionFactory getFactory() {
 		return proxy;
 	}

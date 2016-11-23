@@ -42,6 +42,9 @@ public class BrailleTranslatorFactoryMaker implements
 	private final Map<String, BrailleTranslatorFactoryService> map;
 	private final Logger logger;
 
+	/**
+	 * Creates a new braille translator factory maker.
+	 */
 	public BrailleTranslatorFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		factories = new CopyOnWriteArrayList<>();
@@ -75,12 +78,20 @@ public class BrailleTranslatorFactoryMaker implements
 		return ret;
 	}
 	
+	/**
+	 * Adds a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to add
+	 */
 	@Reference(type = '*')
 	public void addFactory(BrailleTranslatorFactoryService factory) {
 		logger.finer("Adding factory: " + factory);
 		factories.add(factory);
 	}
 
+	/**
+	 * Removes a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to remove
+	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(BrailleTranslatorFactoryService factory) {
 		logger.finer("Removing factory: " + factory);

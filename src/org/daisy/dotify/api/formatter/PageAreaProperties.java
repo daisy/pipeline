@@ -25,12 +25,16 @@ public class PageAreaProperties {
 		/**
 		 * Aligns toward the bottom of the page, above the footer
 		 */
-		BOTTOM};
+		BOTTOM
+	}
 	private final Alignment align;
 	private final String collectionId;
 	private final int maxHeight;
 	private final List<FallbackRule> fallbackRules;
 
+	/**
+	 * Creates a new page area properties builder
+	 */
 	public static class Builder {
 		//required
 		private final String collectionId;
@@ -40,22 +44,42 @@ public class PageAreaProperties {
 		private Alignment align = Alignment.BOTTOM;
 		private final List<FallbackRule> fallbackRules;
 		
+		/**
+		 * Creates a new instance with the specified parameters
+		 * @param collectionId an identifier of the collection used
+		 * for this page area
+		 * @param maxHeight the maximum height of this page area
+		 */
 		public Builder(String collectionId, int maxHeight) {
 			this.collectionId = collectionId;
 			this.maxHeight = maxHeight;
 			this.fallbackRules = new ArrayList<>();
 		}
 		
+		/**
+		 * Sets the alignment of the page area on the page.
+		 * @param value the alignment
+		 * @return returns this builder
+		 */
 		public Builder align(Alignment value) {
 			this.align = value;
 			return this;
 		}
 		
+		/**
+		 * Adds a fallback rule.
+		 * @param rule the rule
+		 * @return returns this builder
+		 */
 		public Builder addFallback(FallbackRule rule) {
 			this.fallbackRules.add(rule);
 			return this;
 		}
 		
+		/**
+		 * Creates a new page area properties object
+		 * @return returns a new page area properties instance
+		 */
 		public PageAreaProperties build() {
 			return new PageAreaProperties(this);
 		}
@@ -106,6 +130,10 @@ public class PageAreaProperties {
 		return collectionId;
 	}
 	
+	/**
+	 * Gets the fallback rules.
+	 * @return returns the fallback rules
+	 */
 	public Iterable<FallbackRule> getFallbackRules() {
 		return fallbackRules;
 	}

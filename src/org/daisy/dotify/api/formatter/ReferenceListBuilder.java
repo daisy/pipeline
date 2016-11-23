@@ -1,8 +1,11 @@
 package org.daisy.dotify.api.formatter;
 
+/**
+ * Provides a method to add a reference list.
+ * @author Joel Håkansson
+ */
 public interface ReferenceListBuilder {
 
-	
 	/**
 	 * <p>Creates a new on collection start block.</p> 
 	 * <p>Calling this method is only valid within an item sequence.</p>

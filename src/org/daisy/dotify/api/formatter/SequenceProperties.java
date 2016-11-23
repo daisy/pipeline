@@ -10,15 +10,20 @@ package org.daisy.dotify.api.formatter;
  * @author Joel Håkansson 
  */
 public class SequenceProperties {
+	/**
+	 * Provides types of "break before" rules for sequences
+	 */
 	public enum SequenceBreakBefore {
 		/**
-		 * No break
+		 * Defines that volume breaks may or may not happen before this
+		 * sequence begins, depending on its location in the volume
 		 */
 		AUTO,
 		/**
-		 * Start block in a new volume
+		 * Specifies that the sequence should start in a new volume
 		 */
-		VOLUME};
+		VOLUME
+	}
 	private final String masterName;
 	private final Integer initialPageNumber;
 	private final SequenceBreakBefore breakBefore;

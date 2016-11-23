@@ -32,6 +32,10 @@ public interface MarkerProcessorFactoryService {
 	 */
 	public boolean supportsSpecification(String locale, String mode);
 
+	/**
+	 * Creates a new marker processor factory
+	 * @return returns a new marker processor factory
+	 */
 	public MarkerProcessorFactory newFactory();
 	
 	/**

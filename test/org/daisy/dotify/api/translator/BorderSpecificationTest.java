@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.daisy.dotify.api.translator.BorderSpecification.Style;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class BorderSpecificationTest {
 
 	@Test

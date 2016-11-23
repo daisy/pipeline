@@ -1,11 +1,18 @@
 package org.daisy.dotify.api.formatter;
 
+/**
+ * Provides a spacing definition for blocks.
+ * @author Joel Håkansson
+ */
 public final class BlockSpacing {
 	private final int left;
 	private final int right;
 	private final int top;
 	private final int bottom;
 	
+	/**
+	 * Provides a builder for block spacing.
+	 */
 	public static final class Builder {
 		int left = 0;
 		int right = 0;

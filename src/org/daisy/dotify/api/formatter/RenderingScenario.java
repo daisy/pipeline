@@ -2,6 +2,11 @@ package org.daisy.dotify.api.formatter;
 
 import java.util.Map;
 
+/**
+ * Provides a rendering scenario.
+ * 
+ * @author Joel Håkansson
+ */
 public interface RenderingScenario {
 
 	/**

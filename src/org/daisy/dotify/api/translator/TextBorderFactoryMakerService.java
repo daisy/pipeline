@@ -20,6 +20,12 @@ import java.util.Map;
  */
 public interface TextBorderFactoryMakerService {
 
+	/**
+	 * Creates a new text border style with the suppled specifications
+	 * @param features the features to use
+	 * @return returns a new text border style
+	 * @throws TextBorderConfigurationException if an instance cannot be created
+	 */
 	public TextBorderStyle newTextBorderStyle(Map<String, Object> features) throws TextBorderConfigurationException;
 
 }

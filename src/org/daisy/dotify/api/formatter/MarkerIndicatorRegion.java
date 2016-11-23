@@ -16,6 +16,9 @@ public class MarkerIndicatorRegion implements MarginRegion {
 	private final int width;
 	private final List<MarkerIndicator> indicators;
 	
+	/**
+	 * Creates a new marker indicator region builder
+	 */
 	public static class Builder {
 		private final int width;
 		
@@ -38,7 +41,9 @@ public class MarkerIndicatorRegion implements MarginRegion {
 		 * @throws IllegalStateException if the builder has already transitioned to the built state
 		 */
 		public Builder addIndicator(String name, String indicator) {
-			if (built) { throw new IllegalStateException(); }
+			if (built) {
+				throw new IllegalStateException();
+			}
 			indicators.add(new MarkerIndicator(name, indicator));
 			return this;
 		}
@@ -49,7 +54,9 @@ public class MarkerIndicatorRegion implements MarginRegion {
 		 * @throws IllegalStateException if the builder has already transitioned to the built state
 		 */
 		public MarkerIndicatorRegion build() {
-			if (built) { throw new IllegalStateException(); }
+			if (built) {
+				throw new IllegalStateException();
+			}
 			built = true;
 			return new MarkerIndicatorRegion(this);
 		}

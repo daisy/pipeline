@@ -10,7 +10,7 @@ public interface FormattingTypes {
 	/**
 	 * Defines list styles.
 	 */ 
-	public static enum ListStyle {
+	public enum ListStyle {
 		/**
 		 * Not a list
 		 */
@@ -26,11 +26,11 @@ public interface FormattingTypes {
 		/**
 		 * Preformatted list
 		 */
-		PL};
+		PL}
 	/**
 	 * Defines break before types.
 	 */
-	public static enum BreakBefore {
+	public enum BreakBefore {
 		/**
 		 * No break
 		 */
@@ -38,13 +38,13 @@ public interface FormattingTypes {
 		/**
 		 * Start block on a new page
 		 */
-		PAGE};
+		PAGE}
 		// Note:	ODD_PAGE is supported via new sequence
 		// 			EVEN_PAGE is not explicitly supported 
 	/**
 	 * Defines rows in block keep types.
 	 */
-	public static enum Keep {
+	public enum Keep {
 		/**
 		 * Do not keep
 		 */
@@ -66,7 +66,7 @@ public interface FormattingTypes {
 	/**
 	 * Defines alignment options.
 	 */
-	public static enum Alignment {
+	public enum Alignment {
 		/**
 		 * Align content to the left
 		 */

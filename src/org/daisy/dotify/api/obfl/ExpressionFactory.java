@@ -1,7 +1,16 @@
 package org.daisy.dotify.api.obfl;
 
+/**
+ * Provides a factory for expressions.
+ * @author Joel Håkansson
+ *
+ */
 public interface ExpressionFactory {
 
+	/**
+	 * Creates a new expression implementation.
+	 * @return returns a new expression implementation
+	 */
 	public Expression newExpression();
 
 	/**

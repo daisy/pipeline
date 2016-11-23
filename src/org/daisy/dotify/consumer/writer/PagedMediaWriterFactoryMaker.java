@@ -33,6 +33,9 @@ public class PagedMediaWriterFactoryMaker implements
 	private final Map<String, PagedMediaWriterFactoryService> map;
 	private final Logger logger;
 
+	/**
+	 * Creates a new paged media writer factory maker.
+	 */
 	public PagedMediaWriterFactoryMaker() {
 		logger = Logger.getLogger(this.getClass().getCanonicalName());
 		filters = new CopyOnWriteArrayList<>();
@@ -66,12 +69,20 @@ public class PagedMediaWriterFactoryMaker implements
 		return ret;
 	}
 	
+	/**
+	 * Adds a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to add
+	 */
 	@Reference(type = '*')
 	public void addFactory(PagedMediaWriterFactoryService factory) {
 		logger.finer("Adding factory: " + factory);
 		filters.add(factory);
 	}
 
+	/**
+	 * Removes a factory (intended for use by the OSGi framework)
+	 * @param factory the factory to remove
+	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(PagedMediaWriterFactoryService factory) {
 		logger.finer("Removing factory: " + factory);
