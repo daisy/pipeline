@@ -63,13 +63,7 @@ public class DotifyTaskSystem implements TaskSystem {
 	
 	@Override
 	public CompiledTaskSystem compile(Map<String, Object> pa) throws TaskSystemException {
-		RunParameters p = RunParameters.fromMap(pa);
-		HashMap<String, Object> h = new HashMap<>();
-		for (Object key : p.getKeys()) {
-			if (p.getProperty(key)!=null) {
-				h.put(key.toString(), p.getProperty(key));
-			}
-		}
+		Map<String, Object> h = RunParameters.fromMap(pa);
 		
 		DefaultCompiledTaskSystem setup = new DefaultCompiledTaskSystem(name, getOptions());
 
