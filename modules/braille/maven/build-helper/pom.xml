@@ -29,11 +29,6 @@
       <version>1.0.0</version>
     </dependency>
     <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>common-utils</artifactId>
-      <version>4.0.0</version>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xmlcatalog</artifactId>
       <version>2.0.1</version>

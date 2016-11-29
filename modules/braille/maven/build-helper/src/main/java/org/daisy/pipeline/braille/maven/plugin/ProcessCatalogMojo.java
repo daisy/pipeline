@@ -29,7 +29,7 @@ import org.apache.maven.project.MavenProject;
 import org.daisy.maven.xproc.api.XProcEngine;
 import org.daisy.maven.xproc.calabash.Calabash;
 
-import org.daisy.pipeline.braille.common.util.URLs;
+import org.daisy.pipeline.braille.maven.plugin.utils.URLs;
 import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver;
