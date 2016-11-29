@@ -1126,6 +1126,8 @@
           <ref name="blockContents"/>
           <ref name="anchor"/>
           <ref name="block"/>
+          <ref name="table"/>
+          <ref name="xml-data"/>
         </choice>
       </zeroOrMore>
     </element>
