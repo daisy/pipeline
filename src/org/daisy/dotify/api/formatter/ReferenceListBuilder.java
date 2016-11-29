@@ -22,6 +22,20 @@ public interface ReferenceListBuilder {
 	public FormatterCore newOnCollectionEnd();
 
 	/**
+	 * <p>Creates a new on volume start block.</p> 
+	 * <p>Calling this method is only valid within an item sequence.</p>
+	 * @return a formatter core
+	 */
+	public FormatterCore newOnVolumeStart();
+	
+	/**
+	 * <p>Creates a new on volume end block.</p> 
+	 * <p>Calling this method is only valid within an item sequence.</p>
+	 * @return a formatter core
+	 */
+	public FormatterCore newOnVolumeEnd();
+	
+	/**
 	 * <p>Creates a new on page start block.</p> 
 	 * <p>Calling this method is only valid within an item sequence.</p>
 	 * @return a formatter core
