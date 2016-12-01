@@ -323,6 +323,22 @@ clean : cache
 	find * -name .maven-test-dependents -exec rm -r "{}" \;
 	rm -rf webui/dp2webui
 
+.PHONY : website
+website : compile
+	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(MVN_WORKSPACE)' -Dcache='$(MVN_CACHE)'"
+
+.PHONY : serve-website
+serve-website : compile
+	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(MVN_WORKSPACE)' -Dcache='$(MVN_CACHE)'" serve
+
+.PHONY : publish-website
+publish-website : compile
+	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(MVN_WORKSPACE)' -Dcache='$(MVN_CACHE)'" publish
+
+.PHONY : clean-website
+clean-website :
+	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(MVN_WORKSPACE)' -Dcache='$(MVN_CACHE)'" clean
+
 .PHONY : help
 help :
 	echo "make all:"                                                                                >&2
@@ -349,6 +365,8 @@ help :
 	echo "	Incrementally compile code and run GUI locally"                                         >&2
 	echo "make run-webui:"                                                                          >&2
 	echo "	Compile and run web UI locally"                                                         >&2
+	echo "make website:"                                                                            >&2
+	echo "	Build the website"                                                                      >&2
 
 ifndef VERBOSE
 .SILENT:
