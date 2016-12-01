@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 set -x
-test -z "$(git status --porcelain)"
+test -z "$(git status . --porcelain)"
 GIT_HASH=$( git rev-parse HEAD )
 WORKING_DIR=$(pwd)
 SITE_DIR=$1
