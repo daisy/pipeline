@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
-    <title>Desktop Application</title>
+    <title>DTBook to ZedAI Development Notes</title>
     
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Desktop Application">
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DTBook to ZedAI Development Notes">
 
 
     <link rel="stylesheet" href="/pipeline/css/default.css">
@@ -17,7 +18,7 @@
     <div id="body">
       <nav id="nav-sitemap">
   
-  <ul class="spine spine-has-current">
+  <ul class="spine">
   
     
       
@@ -45,27 +46,27 @@
   
     
       
-        <li class="spine-item spine-item-has-current">
+        <li class="spine-item">
       
       <a href="/pipeline/Get-Help" tabindex="3">
       Help
       </a>
       
-      <ul class="spine spine-has-current">
+      <ul class="spine">
   
     
       
-        <li class="spine-item spine-item-has-current">
+        <li class="spine-item">
       
       <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
       User Guide
       </a>
       
-      <ul class="spine spine-has-current">
+      <ul class="spine">
   
     
       
-        <li class="spine-item spine-item-current">
+        <li class="spine-item">
       
       <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide" tabindex="7">
       Desktop Application
@@ -528,124 +529,29 @@ if (window.addEventListener) {
 </script>
 
 
-      
-      <div class="edit-button">
-  <a href="https://github.com/daisy/pipeline-gui/wiki/DAISY-Pipeline-2-User-Guide/_edit" class="external-link" target="_blank">
-    Edit this page on Github
-  </a>
-</div>
+      <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
 
-      <h1 id="daisy-pipeline-2">DAISY Pipeline 2</h1>
+<meta property="dc:title" content="DTBook to ZedAI Development Notes">
 
-<p>The DAISY Pipeline 2 is a piece of software that allows you to convert, upgrade, validate, generate audio for, and produce Braille from your e-books. It has built-in support for formats like EPUB and DAISY.</p>
+<!-- 
+summary: DTBook to ZedAI development notes
+-->
+<p># DTBook to ZedAI Development Notes</p>
 
-<p>The Pipeline comes with a considerable number of scripts for the actions described above. They are indexed at the bottom of this page.</p>
+<p>The DTBook2ZedAI module will convert one or more DTBook XML files to a single ZedAI file.</p>
 
-<h2 id="quick-start">Quick Start</h2>
+<p>This module is written in XProc and XSLT. It relies on the DTBookUtils and MetadataUtils modules within the Pipeline 2.</p>
 
-<p>Start the Pipeline 2 user interface by selecting the “DAISY Pipeline 2” icon on your desktop.</p>
-
-<p>A window should come up:</p>
-
-<p><img src="https://raw.githubusercontent.com/daisy/pipeline-gui/master/docs/img/window-init.png" alt="Pipeline window"></p>
-
-<p>Start your job with <strong><code>File-&gt;New job</code></strong>, or by pressing <strong><code>Cmd+N</code></strong></p>
-
-<p><img src="https://raw.githubusercontent.com/daisy/pipeline-gui/master/docs/img/menu-file.png" alt="File menu"></p>
-
-<p>A job window creation appears. Select a script from the drop-down menu:</p>
-
-<p><img src="https://raw.githubusercontent.com/daisy/pipeline-gui/master/docs/img/menu-scripts.png" alt="Scripts menu"></p>
-
-<p>Fill out the form (which is a bit different for each script):</p>
-
-<p><img src="https://raw.githubusercontent.com/daisy/pipeline-gui/master/docs/img/new-job-daisy202-epub3.png" alt="New job form"></p>
-
-<p>Select <strong><code>Run</code></strong> to run or press <strong><code>Cmd+R</code></strong>.</p>
-
-<p>The job appears in the sidebar, along with its status.</p>
-
-<p><img src="https://raw.githubusercontent.com/daisy/pipeline-gui/master/docs/img/job-running.png" alt="Job running"></p>
-
-<p>While one job is running, you may start another via <strong><code>File-&gt;New job</code></strong>.</p>
-
-<p>When a job is done, its status will be updated to <code>Done</code>. you may view the results by selecting the completed job in the sidebar and selecting one or more links to files in the <strong>Results</strong> list.</p>
-
-<p><img src="https://raw.githubusercontent.com/daisy/pipeline-gui/master/docs/img/job-done.png" alt="Job done"></p>
-
-<p>To view the folder containing all the results, point your file browser to the directory you specified for Pipeline output in the new job form.</p>
-
-<p>If the job does not appear to have started running, check the messages log for errors. Errors may include problems with how you filled out the form, as well as system errors.</p>
-
-<h2 id="commands">Commands</h2>
-
-<p><strong>New job</strong></p>
-
-<p>Shortcut: <code>Cmd+N</code></p>
-
-<p>Create a new job by selecting a script. A script may do something like convert HTML to EPUB3 or add narration to a book. After you select “New Job”, choose a script and fill out the form.</p>
-
-<p>The form will ask for things like input file, output directory, and specific options depending on the script you chose.</p>
-
-<p><strong>Run job</strong></p>
-
-<p>Shortcut: <code>Cmd+R</code></p>
-
-<p>When you’ve finished filling out the job form, select this to execute the job. The job status is displayed in the sidebar.</p>
-
-<p>If the job does not appear to have started running, check the messages log for errors in the form.</p>
-
-<p><strong>Delete job</strong></p>
-
-<p>Shortcut: <code>Delete</code></p>
-
-<p>Delete the job from the list. This does not delete the results on disk.</p>
-
-<p><strong>Run job again</strong></p>
-
-<p>Shortcut: <code>Cmd+Shift+R</code></p>
-
-<p>You may select this for any running or completed job to create a new job initialized with the same form parameters.</p>
-
-<p><strong>Copy messages to clipboard</strong></p>
-
-<p>Places the contents of the messages window onto the clipboard. Useful for reporting bugs or asking for help.</p>
-
-<p><strong>Check Updates</strong></p>
-
-<p>Launch the Pipeline updater.</p>
-
-<p><strong>User guide</strong></p>
-
-<p>This document.</p>
-
-<h2 id="included-scripts">Included Scripts</h2>
+<h2 id="steps">Steps</h2>
 
 <ul>
-  <li><a href="/pipeline/modules/daisy202-validator">DAISY 2.02 Validator</a></li>
-  <li><a href="/pipeline/modules/daisy202-to-epub3">DAISY 2.02 to EPUB 3</a></li>
-  <li><a href="/pipeline/modules/daisy3-to-daisy202">DAISY 3 to DAISY 2.02</a></li>
-  <li><a href="/pipeline/modules/daisy3-to-epub3">DAISY 3 to EPUB 3</a></li>
-  <li><a href="/pipeline/modules/dtbook-validator">DTBook Validator</a></li>
-  <li><a href="/pipeline/modules/dtbook-to-daisy3">DTBook to DAISY 3</a></li>
-  <li><a href="/pipeline/modules/dtbook-to-epub3">DTBook to EPUB3</a></li>
-  <li><a href="/pipeline/modules/dtbook-to-html">DTBook to HTML</a></li>
-  <li><a href="/pipeline/modules/braille/dtbook-to-pef">DTBook to PEF</a></li>
-  <li><a href="/pipeline/modules/dtbook-to-zedai">DTBook to ZedAI</a></li>
-  <li><a href="/pipeline/modules/epub3-validator">EPUB 3 Validator</a></li>
-  <li><a href="/pipeline/modules/epub3-to-daisy202">EPUB 3 to DAISY 2.02</a></li>
-  <li><a href="/pipeline/modules/braille/epub3-to-pef">EPUB 3 to PEF</a></li>
-  <li><a href="/pipeline/modules/html-to-epub3">HTML to EPUB3</a></li>
-  <li><a href="/pipeline/modules/braille/html-to-pef">HTML to PEF</a></li>
-  <li><a href="/pipeline/modules/nimas-fileset-validator">NIMAS Fileset Validator</a></li>
-  <li><a href="/pipeline/modules/zedai-to-epub3">ZedAI to EPUB 3</a></li>
-  <li><a href="/pipeline/modules/zedai-to-html">ZedAI to HTML</a></li>
-  <li><a href="/pipeline/modules/braille/zedai-to-pef">ZedAI to PEF</a></li>
+  <li>Upgrade. Migrate a single DTBook file from version 1.1.0, 2005-1, or 2005-2 to 2005-3, using the upgrade-dtbook utility.</li>
+  <li>If there are multiple input files, merge them into one DTBook document, using the merge-dtbook utility.</li>
+  <li>Create external metadata records, using the metadata utilities.</li>
+  <li>Transform DTBook 2005-3 to ZedAI. DTBook2ZedAI_TransformationRules lists each DTBook element and gives its ZedAI translation. The sub-steps are documented in the source code and include content model normalization as well as direct translation of elements and attributes.</li>
+  <li>In ZedAI, visual attributes are expressed in a separate CSS file. The following DTBook attributes are extracted into a separate CSS file: height, width, align, valign, abbr, axis, headers, scope, rowspan, colspan, border, frame, cellspacing, cellpadding</li>
+  <li>Copy all referenced material (e.g. images) to the output directory.</li>
 </ul>
-
-<h2 id="troubleshooting">Troubleshooting</h2>
-
-<p>If you need assistance, please use the <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank">forums</a>.</p>
 
     </div>
   </body>
