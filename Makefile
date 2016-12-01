@@ -34,9 +34,13 @@ dist-deb : compile
 
 .PHONY : dist-rpm
 dist-rpm : compile
-	cd assembly && \
-	$(MVN) clean package -Prpm | $(MVN_LOG)
-	mv assembly/target/rpm/pipeline2/RPMS/*/*.rpm .
+	if [ -f /etc/redhat-release ]; then \
+		cd assembly && \
+		$(MVN) clean package -Prpm | $(MVN_LOG) && \
+		mv assembly/target/rpm/pipeline2/RPMS/*/*.rpm .; \
+	else \
+		echo "Skipping RPM because not running RedHat/CentOS"; \
+	fi
 
 .PHONY : dist-webui-deb
 dist-webui-deb : compile
@@ -381,30 +385,30 @@ gradle-clean :
 
 .PHONY : help
 help :
-	echo "make all:"                                                                                >&2
-	echo "	Incrementally compile and test code and package into a ZIP for each platform and a DEB" >&2
-	echo "make compile:"                                                                            >&2
-	echo "	Incrementally compile code"                                                             >&2
-	echo "make check:"                                                                              >&2
-	echo "	Incrementally compile and test code"                                                    >&2
-	echo "make dist:"                                                                               >&2
-	echo "	Incrementally compile code and package into a ZIP for each platform and a DEB"          >&2
-	echo "make dist-zip:"                                                                           >&2
-	echo "	Incrementally compile code and package into a ZIP for each platform"                    >&2
-	echo "make dist-deb:"                                                                           >&2
-	echo "	Incrementally compile code and package into a DEB"                                      >&2
-	echo "make dist-rpm:"                                                                           >&2
-	echo "	Incrementally compile code and package into a RPM"                                      >&2
-	echo "make dist-webui-deb:"                                                                     >&2
-	echo "	Compile Web UI and package into a DEB"                                                  >&2
-	echo "make dist-webui-rpm:"                                                                     >&2
-	echo "	Compile Web UI and package into a RPM"                                                  >&2
-	echo "make run:"                                                                                >&2
-	echo "	Incrementally compile code and run locally"                                             >&2
-	echo "make run-gui:"                                                                            >&2
-	echo "	Incrementally compile code and run GUI locally"                                         >&2
-	echo "make run-webui:"                                                                          >&2
-	echo "	Compile and run web UI locally"                                                         >&2
+	echo "make all:"                                                                                       >&2
+	echo "	Incrementally compile and test code and package into a ZIP for each platform, a DEB and a RPM" >&2
+	echo "make compile:"                                                                                   >&2
+	echo "	Incrementally compile code"                                                                    >&2
+	echo "make check:"                                                                                     >&2
+	echo "	Incrementally compile and test code"                                                           >&2
+	echo "make dist:"                                                                                      >&2
+	echo "	Incrementally compile code and package into a ZIP for each platform, a DEB and a RPM"          >&2
+	echo "make dist-zip:"                                                                                  >&2
+	echo "	Incrementally compile code and package into a ZIP for each platform"                           >&2
+	echo "make dist-deb:"                                                                                  >&2
+	echo "	Incrementally compile code and package into a DEB"                                             >&2
+	echo "make dist-rpm:"                                                                                  >&2
+	echo "	Incrementally compile code and package into a RPM"                                             >&2
+	echo "make dist-webui-deb:"                                                                            >&2
+	echo "	Compile Web UI and package into a DEB"                                                         >&2
+	echo "make dist-webui-rpm:"                                                                            >&2
+	echo "	Compile Web UI and package into a RPM"                                                         >&2
+	echo "make run:"                                                                                       >&2
+	echo "	Incrementally compile code and run locally"                                                    >&2
+	echo "make run-gui:"                                                                                   >&2
+	echo "	Incrementally compile code and run GUI locally"                                                >&2
+	echo "make run-webui:"                                                                                 >&2
+	echo "	Compile and run web UI locally"                                                                >&2
 
 ifndef VERBOSE
 .SILENT:
