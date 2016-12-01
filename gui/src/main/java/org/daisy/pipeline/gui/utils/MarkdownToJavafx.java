@@ -113,15 +113,18 @@ public class MarkdownToJavafx implements Visitor {
         }
 
         @Override
-        public void visit(BulletListNode arg0) {
-                // TODO Auto-generated method stub
+        public void visit(BulletListNode node) {
+                visitChildren(node);
+                Text newline = new Text("\n");
+                this.parent.addChild(newline);
 
         }
 
         @Override
-        public void visit(CodeNode arg0) {
-                // TODO Auto-generated method stub
-
+        public void visit(CodeNode code) {
+                Text elem =new Text(code.getText());
+                elem.getStyleClass().add("code");
+                this.parent.addChild(elem);
         }
 
         @Override
@@ -169,7 +172,7 @@ public class MarkdownToJavafx implements Visitor {
         }
 
         @Override
-        public void visit(HtmlBlockNode arg0) {
+        public void visit(HtmlBlockNode block) {
                 // TODO Auto-generated method stub
 
         }
@@ -181,8 +184,14 @@ public class MarkdownToJavafx implements Visitor {
         }
 
         @Override
-        public void visit(ListItemNode arg0) {
-                // TODO Auto-generated method stub
+        public void visit(ListItemNode node) {
+                for (Node child : node.getChildren()) {
+                        Text bullet = new Text("\u2022 ");
+                        this.parent.addChild(bullet);
+                        child.accept(this);
+                        Text newline = new Text("\n");
+                        this.parent.addChild(newline);
+                }
 
         }
 
@@ -201,6 +210,8 @@ public class MarkdownToJavafx implements Visitor {
         @Override
         public void visit(ParaNode p) {
                 visitChildren(p);
+                Text newline = new Text("\n\n");
+                this.parent.addChild(newline);
 
         }
 
@@ -313,8 +324,12 @@ public class MarkdownToJavafx implements Visitor {
         }
 
         @Override
-        public void visit(VerbatimNode arg0) {
-                // TODO Auto-generated method stub
+        public void visit(VerbatimNode verbatim) {
+                Text elem =new Text(verbatim.getText());
+                elem.getStyleClass().add("code");
+                Text newline = new Text("\n");
+                this.parent.addChild(elem);
+                this.parent.addChild(newline);
 
         }
 

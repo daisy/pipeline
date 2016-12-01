@@ -120,3 +120,7 @@
         -fx-font-style: italic;
         -fx-font-size:13 ;
 }
+
+.code {
+        -fx-font-family: monospace;
+}
