@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>xprocspec</title>
+        <meta charset="utf-8" />
+        <script src="http://darobin.github.com/respec/builds/respec-w3c-common.js" class="remove"> </script>
+        <script class="remove">
+            var respecConfig = {
+                "specStatus": "unofficial",
+                "shortName": "xprocspec",
+                "subtitle": "A tool for testing XProc scripts",
+                "edDraftURI": "http://daisy-pipeline.github.io/xprocspec/www/documentation/index.html",
+                "editors": [
+                    {
+                        "name": "Jostein Austvik Jacobsen",
+                        "url": "http://github.com/josteinaj",
+                        "company": "NLB",
+                        "companyURL": "http://www.nlb.no/en/"
+                    }
+                ]
+            };
+        </script>
+        <style>
+            /* based on the CSS used for the HTML5 spec */
+            h2 + h3,
+            h3 + h4,
+            h4 + h5,
+            h5 + h6{
+                margin-top:0.5em;
+            }
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6{
+                page-break-after:avoid;
+            }
+            h3{
+                position:relative;
+                z-index:3;
+                padding-top:20px;
+            }
+            h2 + .element,
+            h2 + div + .element,
+            h3 + .element,
+            h3 + div + .element,
+            h4 + .element,
+            h4 + div + .element,
+            h5 + .element,
+            h5 + div + .element,
+            h6 + .element,
+            h6 + div + .element{
+                margin-top:-3em;
+                padding-top:2em;
+            }
+            .element{
+                background:#F4F4FA;
+                color:black;
+                margin:0 0 1em 0.15em;
+                padding:0 1em 1em 0.75em;
+                border-left:solid #9999FF 0.25em;
+                position:relative;
+                z-index:1;
+            }
+            .element:before{
+                position:absolute;
+                z-index:2;
+                top:0;
+                left:-1.15em;
+                height:2em;
+                width:0.9em;
+                background:#F4F4FA;
+                content:' ';
+                border-style:none none solid solid;
+                border-color:#9999FF;
+                border-width:0.25em;
+            }
+            section{
+                padding-bottom:20px;
+            }
+            dt{
+                padding-top:10px;
+            }
+            dd{
+                padding-top:5px;
+            }</style>
+    </head>
+    <body>
+        <section id="abstract"><a href="http://daisy-pipeline.github.io/xprocspec/">xprocspec</a> is a tool for testing XProc scripts. This specification defines the grammar used to define XProc tests for use with xprocspec. This document is automatically
+            generated based on the <a href="https://github.com/daisy-pipeline/xprocspec/blob/master/xprocspec/src/main/resources/content/xml/schema/xprocspec.rng">Relax NG schema for the xprocspec grammar</a>.</section>
+        <section id="replaceme"> </section>
+        <section class="appendix">
+            <h2>Acknowledgements</h2>
+            <p>This specification is based on the work done by the developers of <a href="https://code.google.com/p/xspec/">XSpec</a>.</p>
+            <p>The structure of this specification is generated with the help of <a href="https://github.com/darobin/respec" target="_blank">respec</a> (for the W3C-style specification).</p>
+            <p>The xprocspec implementation itself currently depends on the XProc processor <a href="http://xmlcalabash.com/" target="_blank">XML Calabash</a> for its implementation of dynamic pipeline evaluation (<a
+                    href="http://xmlcalabash.com/docs/reference/cx-eval.html">cx:eval</a>).</p>
+        </section>
+        <script type="text/javascript" xml:space="preserve">//<![CDATA[
+            try {
+                var pageTracker = _gat._getTracker("UA-42132238-1");
+                pageTracker._trackPageview();
+            }
+            catch (err) {
+            }//]]></script>
+    </body>
+</html>

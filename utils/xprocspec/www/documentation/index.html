@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:c="http://www.w3.org/ns/xproc-step" lang="en" dir="ltr" typeof="bibo:Document " about="" property="dcterms:language" content="en" prefix="bibo: http://purl.org/ontology/bibo/ w3p: http://www.w3.org/2001/02pd/rec54#">
+<head><title>xprocspec</title><meta charset="utf-8"><style>
+            /* based on the CSS used for the HTML5 spec */
+            h2 + h3,
+            h3 + h4,
+            h4 + h5,
+            h5 + h6{
+                margin-top:0.5em;
+            }
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6{
+                page-break-after:avoid;
+            }
+            h3{
+                position:relative;
+                z-index:3;
+                padding-top:20px;
+            }
+            h2 + .element,
+            h2 + div + .element,
+            h3 + .element,
+            h3 + div + .element,
+            h4 + .element,
+            h4 + div + .element,
+            h5 + .element,
+            h5 + div + .element,
+            h6 + .element,
+            h6 + div + .element{
+                margin-top:-3em;
+                padding-top:2em;
+            }
+            .element{
+                background:#F4F4FA;
+                color:black;
+                margin:0 0 1em 0.15em;
+                padding:0 1em 1em 0.75em;
+                border-left:solid #9999FF 0.25em;
+                position:relative;
+                z-index:1;
+            }
+            .element:before{
+                position:absolute;
+                z-index:2;
+                top:0;
+                left:-1.15em;
+                height:2em;
+                width:0.9em;
+                background:#F4F4FA;
+                content:' ';
+                border-style:none none solid solid;
+                border-color:#9999FF;
+                border-width:0.25em;
+            }
+            section{
+                padding-bottom:20px;
+            }
+            dt{
+                padding-top:10px;
+            }
+            dd{
+                padding-top:5px;
+            }</style><style>/*****************************************************************
+ * ReSpec 3 CSS
+ * Robin Berjon - http://berjon.com/
+ *****************************************************************/
+
+/* --- INLINES --- */
+em.rfc2119 { 
+    text-transform:     lowercase;
+    font-variant:       small-caps;
+    font-style:         normal;
+    color:              #900;
+}
+
+h1 acronym, h2 acronym, h3 acronym, h4 acronym, h5 acronym, h6 acronym, a acronym,
+h1 abbr, h2 abbr, h3 abbr, h4 abbr, h5 abbr, h6 abbr, a abbr {
+    border: none;
+}
+
+dfn {
+    font-weight:    bold;
+}
+
+a.internalDFN {
+    color:  inherit;
+    border-bottom:  1px solid #99c;
+    text-decoration:    none;
+}
+
+a.externalDFN {
+    color:  inherit;
+    border-bottom:  1px dotted #ccc;
+    text-decoration:    none;
+}
+
+a.bibref {
+    text-decoration:    none;
+}
+
+cite .bibref {
+    font-style: normal;
+}
+
+code {
+    color:  #ff4500;
+}
+
+/* --- TOC --- */
+.toc a, .tof a {
+    text-decoration:    none;
+}
+
+a .secno, a .figno {
+    color:  #000;
+}
+
+ul.tof, ol.tof {
+    list-style: none outside none;
+}
+
+.caption {
+    margin-top: 0.5em;
+    font-style:   italic;
+}
+
+/* --- TABLE --- */
+table.simple {
+    border-spacing: 0;
+    border-collapse:    collapse;
+    border-bottom:  3px solid #005a9c;
+}
+
+.simple th {
+    background: #005a9c;
+    color:  #fff;
+    padding:    3px 5px;
+    text-align: left;
+}
+
+.simple th[scope="row"] {
+    background: inherit;
+    color:  inherit;
+    border-top: 1px solid #ddd;
+}
+
+.simple td {
+    padding:    3px 10px;
+    border-top: 1px solid #ddd;
+}
+
+.simple tr:nth-child(even) {
+    background: #f0f6ff;
+}
+
+/* --- DL --- */
+.section dd > p:first-child {
+    margin-top: 0;
+}
+
+.section dd > p:last-child {
+    margin-bottom: 0;
+}
+
+.section dd {
+    margin-bottom:  1em;
+}
+
+.section dl.attrs dd, .section dl.eldef dd {
+    margin-bottom:  0;
+}
+
+@media print {
+    .removeOnSave {
+        display: none;
+    }
+}
+</style><link rel="stylesheet" href="https://www.w3.org/StyleSheets/TR/w3c-unofficial"><!--[if lt IE 9]><script src='https://www.w3.org/2008/site/js/html5shiv.js'></script><![endif]--></head><body style="" class="h-entry" role="document" id="respecDocument"><div class="head" role="contentinfo" id="respecHeader">
+  <p>
+    
+  </p>
+  <h1 class="title p-name" id="title" property="dcterms:title">xprocspec</h1>
+  
+    <h2 property="bibo:subtitle" id="subtitle">A tool for testing XProc scripts</h2>
+  
+  <h2 property="dcterms:issued" datatype="xsd:dateTime" content="2014-06-19T12:34:24.000Z" id="unofficial-draft-19-june-2014">Unofficial Draft <time class="dt-published" datetime="2014-06-19">19 June 2014</time></h2>
+  <dl>
+    
+    
+      <dt>Latest editor's draft:</dt>
+      <dd><a href="http://daisy-pipeline.github.io/xprocspec/www/documentation/index.html">http://daisy-pipeline.github.io/xprocspec/www/documentation/index.html</a></dd>
+    
+    
+    
+    
+    
+    
+    
+    <dt>Editor:</dt>
+    <dd class="p-author h-card vcard" rel="bibo:editor" inlist=""><span typeof="foaf:Person"><a class="u-url url p-name fn" rel="foaf:homepage" property="foaf:name" content="Jostein Austvik Jacobsen" href="http://github.com/josteinaj">Jostein Austvik Jacobsen</a>, <a rel="foaf:workplaceHomepage" class="p-org org h-org h-card" href="http://www.nlb.no/en/">NLB</a></span>
+</dd>
+
+    
+    
+  </dl>
+  
+  
+  
+  
+    
+      
+        <p class="copyright">
+          This document is licensed under a
+          <a class="subfoot" href="http://creativecommons.org/licenses/by/3.0/" rel="license">Creative Commons
+          Attribution 3.0 License</a>.
+        </p>
+      
+    
+  
+  <hr>
+</div>
+        <section id="abstract" class="introductory" property="dcterms:abstract" datatype="" typeof="bibo:Chapter" resource="#abstract" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_abstract">Abstract</h2><p><a shape="rect" href="http://daisy-pipeline.github.io/xprocspec/">xprocspec</a> is a tool for testing XProc scripts. This specification defines the grammar used to define XProc tests for use with xprocspec. This document is automatically
+            generated based on the <a shape="rect" href="https://github.com/daisy-pipeline/xprocspec/blob/master/xprocspec/src/main/resources/content/xml/schema/xprocspec.rng">Relax NG schema for the xprocspec grammar</a>.</p></section><section id="sotd" class="introductory" typeof="bibo:Chapter" resource="#sotd" rel="bibo:Chapter"><h2 aria-level="1" role="heading" id="h2_sotd">Status of This Document</h2>
+  
+    <p>
+      This document is merely a public working draft of a potential specification. It has
+      no official standing of any kind and does not represent the support or consensus of any
+      standards organisation.
+    </p>
+    
+  
+</section><section id="toc"><h2 class="introductory" aria-level="1" role="heading" id="h2_toc">Table of Contents</h2><ul class="toc" role="directory" id="respecContents"><li class="tocline"><a href="#definitions" class="tocxref"><span class="secno">1. </span>Definitions</a><ul class="toc"><li class="tocline"><a href="#the-description-element" class="tocxref"><span class="secno">1.1 </span>The <code>description</code> element</a></li><li class="tocline"><a href="#the-documentation-element" class="tocxref"><span class="secno">1.2 </span>The <code>documentation</code> element</a></li><li class="tocline"><a href="#the-script-element" class="tocxref"><span class="secno">1.3 </span>The <code>script</code> element</a></li><li class="tocline"><a href="#the-import-element" class="tocxref"><span class="secno">1.4 </span>The <code>import</code> element</a></li><li class="tocline"><a href="#the-scenario-element" class="tocxref"><span class="secno">1.5 </span>The <code>scenario</code> element</a></li><li class="tocline"><a href="#the-call-element" class="tocxref"><span class="secno">1.6 </span>The <code>call</code> element</a></li><li class="tocline"><a href="#the-pending-element" class="tocxref"><span class="secno">1.7 </span>The <code>pending</code> element</a></li><li class="tocline"><a href="#the-context-element" class="tocxref"><span class="secno">1.8 </span>The <code>context</code> element</a></li><li class="tocline"><a href="#the-expect-element" class="tocxref"><span class="secno">1.9 </span>The <code>expect</code> element</a></li><li class="tocline"><a href="#the-input-element" class="tocxref"><span class="secno">1.10 </span>The <code>input</code> element</a></li><li class="tocline"><a href="#the-option-element" class="tocxref"><span class="secno">1.11 </span>The <code>option</code> element</a></li><li class="tocline"><a href="#the-param-element" class="tocxref"><span class="secno">1.12 </span>The <code>param</code> element</a></li><li class="tocline"><a href="#the-document-element" class="tocxref"><span class="secno">1.13 </span>The <code>document</code> element</a></li></ul></li><li class="tocline"><a href="#acknowledgements" class="tocxref"><span class="secno">A. </span>Acknowledgements</a></li></ul></section>
+        
+<section xmlns:x="http://www.daisy.org/ns/pipeline/xproc/test" xmlns:f="http://www.daisy.org/ns/pipeline/xproc/test/internal-functions" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" id="definitions">
+<!--OddPage--><h2 aria-level="1" role="heading" id="h2_definitions"><span class="secno">1. </span>Definitions</h2>
+<section id="the-description-element" typeof="bibo:Chapter" resource="#the-description-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-description-element"><span class="secno">1.1 </span>The <code>description</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd><a href="#the-script-element"><code>script</code></a><small title="optional">?</small></dd><dd><a href="#the-import-element"><code>import</code></a><small title="zero or more">*</small></dd><dd><a href="#the-scenario-element"><code>scenario</code></a><small title="zero or more">*</small></dd><dd><a href="#the-pending-element"><code>pending</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-description-pending"><code>pending</code></a><small title="optional">?</small></dd><dd><a href="#attr-description-script"><code>script</code></a><small title="optional">?</small></dd><dd><a href="#attr-description-version"><code>version</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>The <a href="#the-description-element"><code>description</code></a> element is the root element of an xprocspec test and describes the functionality of a specific XProc script.</p>
+
+<p id="attr-description-pending">Assertions or scenarios with the <a href="#attr-description-pending"><code>pending</code></a> attribute will remain untested, but will be
+               reported as (eventual) desired behaviour. Its semantics is the same as for the
+               <a href="#the-pending-element"><code>pending</code></a> element.
+               Its content describes why the assertion or scenario should not be evaluated.</p>
+<p id="attr-description-script">The <a href="#attr-description-script"><code>script</code></a> attribute is a URI that points to the XProc script you want to test.</p>
+<p id="attr-description-version">The <a href="#attr-description-version"><code>version</code></a> attribute can be used to aid development over time.</p>
+</section>
+
+<section id="the-documentation-element" typeof="bibo:Chapter" resource="#the-documentation-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-documentation-element"><span class="secno">1.2 </span>The <code>documentation</code> element</h3><dl class="element"><dt>Content model:</dt><dd>Zero or more elements from any namespace.</dd><dt>Content attributes:</dt><dd>None.</dd></dl>
+<p>
+                The documentation element contains human-readable documentation.
+                There are no constraints on the content of the p:documentation element.
+                Documentation is ignored when running xprocspec tests.
+            </p>
+
+</section>
+
+<section id="the-script-element" typeof="bibo:Chapter" resource="#the-script-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-script-element"><span class="secno">1.3 </span>The <code>script</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-declare-step-element"><code>declare-step</code></a><small title="optional">?</small></dd><dd><a href="#the-pipeline-element"><code>pipeline</code></a><small title="optional">?</small></dd><dd><a href="#the-library-element"><code>library</code></a><small title="optional">?</small></dd><dt>Content attributes:</dt><dd>None.</dd></dl>
+<p>The script element can be used insted of the <a href="#attr-script-script"><code>script</code></a> attribute.
+                It allows you to inline the XProc script to test.
+                The base URI of the script is the same as the containing xprocspec document,
+                unless otherwise specified using <code>xml:base</code>. One of the <code id="the-declare-step-element">p:declare-step</code>,
+                <code id="the-pipeline-element">p:pipeline</code> or <code id="the-library-element">p:library</code> elements must be used.</p>
+
+</section>
+
+
+
+
+
+
+
+<section id="the-import-element" typeof="bibo:Chapter" resource="#the-import-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-import-element"><span class="secno">1.4 </span>The <code>import</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dt>Content attributes:</dt><dd><a href="#attr-import-href"><code>href</code></a></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>
+                An import runs the xprocspec description in the referenced file. It has no
+                effect on the scenarios in the current document, but can be a useful method
+                to group xprocspec descriptions into a test suite.
+                Importing is recursive and may be circular (although only one copy of a given
+                imported document will actually be imported).
+            </p>
+
+<p id="attr-import-href">The <a href="#attr-import-href"><code>href</code></a> attribute contains a URI pointing to the xprocspec file to be imported.</p>
+</section>
+
+<section id="the-scenario-element" typeof="bibo:Chapter" resource="#the-scenario-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-scenario-element"><span class="secno">1.5 </span>The <code>scenario</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd><a href="#the-call-element"><code>call</code></a><small title="optional">?</small></dd><dd><a href="#the-scenario-element"><code>scenario</code></a><small title="zero or more">*</small></dd><dd><a href="#the-pending-element"><code>pending</code></a><small title="zero or more">*</small></dd><dd><a href="#the-context-element"><code>context</code></a><small title="zero or more">*</small></dd><dd><a href="#the-expect-element"><code>expect</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-scenario-focus"><code>focus</code></a><small title="optional">?</small></dd><dd><a href="#attr-scenario-label"><code>label</code></a></dd><dd><a href="#attr-scenario-xfail"><code>xfail</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>
+                A scenario groups together the definition of the script environment
+                (the <a href="#the-call-element"><code>call</code></a> element) and the script assertions (the <a href="#the-context-element"><code>context</code></a> and
+                <a href="#the-expect-element"><code>expect</code></a> elements). The <a href="#the-call-element"><code>call</code></a>
+                element defines the inputs, options and parameters passed to the step
+                and the <a href="#the-context-element"><code>context</code></a> and <a href="#the-expect-element"><code>expect</code></a> elements are used to perform assertions
+                on the result. Child scenarios inherit the contents of the <a href="#the-call-element"><code>call</code></a>
+                element, but can override its inputs, options and parameters by in its
+                own <a href="#the-call-element"><code>call</code></a> element.
+            </p>
+
+<p id="attr-scenario-focus">Assertions or scenarios with the <a href="#attr-scenario-focus"><code>focus</code></a> attribute will be the only ones tested and
+               reported. When present, only that assertion or scenario will be evaluated.
+               Its content describes why you are focusing on this particular assertion or scenario.</p>
+<p id="attr-scenario-label">The <a href="#attr-scenario-label"><code>label</code></a> attribute is used to describe the current element in human-readable words.</p>
+<p id="attr-scenario-xfail">Assertions with the <a href="#attr-scenario-xfail"><code>xfail</code></a> attribute will behave just like other assertions, but
+               will succeed where other assertions fail, and will fail where other assertions succeed (i.e. the result is inverted).
+               The <a href="#attr-scenario-xfail"><code>xfail</code></a> attribute can also be applied to scenarios, in which case <code>xfail</code> will be implicitly
+               set to <code>true</code> for all of the scenarios assertions.
+               The value of the <a href="#attr-scenario-xfail"><code>xfail</code></a> attribute must be <code>true</code>.</p>
+</section>
+
+
+
+<section id="the-call-element" typeof="bibo:Chapter" resource="#the-call-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-call-element"><span class="secno">1.6 </span>The <code>call</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd><a href="#the-input-element"><code>input</code></a><small title="zero or more">*</small></dd><dd><a href="#the-option-element"><code>option</code></a><small title="zero or more">*</small></dd><dd><a href="#the-param-element"><code>param</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-call-step"><code>step</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>
+                A <a href="#the-call-element"><code>call</code></a> element defines a step call and the
+                inputs, options and parameters passed to it.
+            </p>
+
+<p id="attr-call-step">
+                        The <a href="#attr-call-step"><code>step</code></a> attribute is the name of the step (as declared in XProc scripts by the <code>p:declare-step/@type</code> attribute).
+                        For instance <code>step="example:mystep"</code>.
+                        The <a href="#attr-call-step"><code>step</code></a> attribute must be specified on either the <a href="#the-call-element"><code>call</code></a> element or one of the ancestor <a href="#the-call-element"><code>call</code></a> elements.
+                    </p>
+</section>
+
+
+
+<section id="the-pending-element" typeof="bibo:Chapter" resource="#the-pending-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-pending-element"><span class="secno">1.7 </span>The <code>pending</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dd><a href="#the-scenario-element"><code>scenario</code></a><small title="zero or more">*</small></dd><dd><a href="#the-pending-element"><code>pending</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-pending-label"><code>label</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p><em>TODO</em>: the element <code>pending</code> has not been documented yet.</p>
+
+<p id="attr-pending-label">The <a href="#attr-pending-label"><code>label</code></a> attribute is used to describe the current element in human-readable words.</p>
+</section>
+
+
+
+<section id="the-context-element" typeof="bibo:Chapter" resource="#the-context-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-context-element"><span class="secno">1.8 </span>The <code>context</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dd><a href="#the-document-element"><code>document</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-context-label"><code>label</code></a><small title="optional">?</small></dd><dd><a href="#attr-context-pending"><code>pending</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>Defines the context against which assertions are made.</p>
+
+<p id="attr-context-label">The <a href="#attr-context-label"><code>label</code></a> attribute is used to describe the current element in human-readable words.</p>
+<p id="attr-context-pending">Assertions or scenarios with the <a href="#attr-context-pending"><code>pending</code></a> attribute will remain untested, but will be
+               reported as (eventual) desired behaviour. Its semantics is the same as for the
+               <a href="#the-pending-element"><code>pending</code></a> element.
+               Its content describes why the assertion or scenario should not be evaluated.</p>
+</section>
+
+<section id="the-expect-element" typeof="bibo:Chapter" resource="#the-expect-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-expect-element"><span class="secno">1.9 </span>The <code>expect</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-document-element"><code>document</code></a><small title="zero or more">*</small></dd><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-expect-equals"><code>equals</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-focus"><code>focus</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-grammar"><code>grammar</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-href"><code>href</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-label"><code>label</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-max"><code>max</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-min"><code>min</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-normalize-space"><code>normalize-space</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-pending"><code>pending</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-step"><code>step</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-test"><code>test</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-type"><code>type</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-xfail"><code>xfail</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>
+                Defines what is expected from the context document(s).
+            </p>
+
+<p id="attr-expect-equals">
+                                When <code>type</code> is <code>xpath</code>, the <a href="#attr-expect-equals"><code>equals</code></a> attribute defines the value that the <code>test</code> expression must evaluate to for the test to succeed.
+                                By default, <code>true()</code> is used. For example, <code>&lt;x:expect test="/*/@result='value'" .../&gt;</code> is equivalent to <code>&lt;x:expect test="/*/@result" equals="'value'" .../&gt;</code>.
+                                It is recommended that you use this attribute when possible, since it will give you better error messages if it fails (you will see the actual value as well as the expected).
+                            </p>
+<p id="attr-expect-focus">Assertions or scenarios with the <a href="#attr-expect-focus"><code>focus</code></a> attribute will be the only ones tested and
+               reported. When present, only that assertion or scenario will be evaluated.
+               Its content describes why you are focusing on this particular assertion or scenario.</p>
+<p id="attr-expect-grammar">
+                            The <a href="#attr-expect-grammar"><code>grammar</code></a> attribute is used to set the grammar of the <code>x:document</code> element (used when <code>type</code> is <code>validate</code>).
+                            The assertion succeeds if all of the documents in context validates against the schema given by the child <code>x:document</code> element.
+                        </p>
+<p id="attr-expect-href">When <code>type</code> is <code>custom</code>; the <a href="#attr-expect-href"><code>href</code></a> attribute is a URI pointing to the XProc script that must be imported for the custom
+                            step to be available.</p>
+<p id="attr-expect-label">The <a href="#attr-expect-label"><code>label</code></a> attribute is used to describe the current element in human-readable words.</p>
+<p id="attr-expect-max">If <code>max</code> is specified, then there must be at most this many documents in context for the assertion to
+                                succeed.</p>
+<p id="attr-expect-min">If <code>min</code> is specified, then there must be at least this many documents in context for the assertion to
+                                succeed.</p>
+<p id="attr-expect-normalize-space">
+                                By default, whitespace normalization are performed on documents before comparing them with eachother.
+                                You can disable this by setting <code>normalize-space</code> to <code>false</code>.
+                            </p>
+<p id="attr-expect-pending">Assertions or scenarios with the <a href="#attr-expect-pending"><code>pending</code></a> attribute will remain untested, but will be
+               reported as (eventual) desired behaviour. Its semantics is the same as for the
+               <a href="#the-pending-element"><code>pending</code></a> element.
+               Its content describes why the assertion or scenario should not be evaluated.</p>
+<p id="attr-expect-step">
+                            The <a href="#attr-expect-step"><code>step</code></a> attribute is the name of the custom step (as declared in XProc scripts by the <code>p:declare-step/@type</code> attribute).
+                            For instance <code>step="example:mystep"</code>.
+                        </p>
+<p id="attr-expect-test">
+                            When <code>type</code> is <code>xpath</code>, you can use the <a href="#attr-expect-test"><code>test</code></a> attribute to define a XPath expression.
+                            By default, the expression must evaluate to <code>true()</code> for the test to succeed.
+                        </p>
+<p id="attr-expect-type">The <a href="#attr-expect-type"><code>type</code></a> attribute is used to define the type of assertion you want to make.</p><p>
+                            When <code>type</code> is <a href="#the-compare-element"><code>compare</code></a>, you can put a sequence of <code>x:document</code> elements inside the <code>x:expect</code> element.
+                            The assertion succeeds if the document sequence in context equals the document sequence inside the <code>x:expect</code> element.
+                        </p><p>When <code>type</code> is <a href="#the-validate-element"><code>validate</code></a>, the documents in context is validated against the schema provided in the <code>x:document</code> element
+                            inside the <code>x:expect</code> element.</p><p>When <code>type</code> is <code>count</code>, the number of documents in context is compared with the <a href="#attr-expect-min"><code>min</code></a> and <a href="#attr-expect-max"><code>max</code></a>
+                            attributes.</p><p>When <code>type</code> is <code>custom</code>, you can provide your own XProc implementation of an assertion. The step signature must be as follows:</p><pre><code>
+&lt;p:declare-step xmlns:p="http://www.w3.org/ns/xproc" type="(...)" (...)&gt;
+   &lt;p:input port="context" sequence="true"/&gt;
+   &lt;p:input port="expect" sequence="true"/&gt;
+   &lt;p:input port="parameters" kind="parameter" primary="true"/&gt;
+   &lt;p:output port="result" primary="true"/&gt;
+   (...)
+&lt;/p:declare-step&gt;
+                            </code></pre><p>How custom steps are invoked:</p><ul><li>All attributes on the <code>expect</code> element are provided as parameters in a c:param-set document on the primary parameter port of the step.
+                                    In addition, the <code>temp-dir</code> variable (path to temporary directory that can be used for the test) and the <code>temp-base-uri</code> variable (path to the xprocspec test document)
+                                    are passed as parameters in the namespace <code>http://www.daisy.org/ns/xprocspec</code>.
+                                    For instance,
+                                    <code>&lt;x:expect xmlns:ex="example" type="custom" ex:foo="bar"/&gt; will result in:
+                                    </code><pre><code>
+<code>&lt;c:param-set&gt;
+    &lt;c:param name="type" namespace="" value="custom"/&gt;
+    &lt;c:param name="foo" namespace="example" value="bar"/&gt;
+    &lt;c:param name="temp-dir" namespace="http://www.daisy.org/ns/xprocspec" value="file:/path-to-temp-dir"/&gt;
+    &lt;c:param name="temp-base-uri" namespace="http://www.daisy.org/ns/xprocspec" value="file:∕some-path/test.xprocspec"/&gt;
+&lt;/c:param-set&gt;</code>
+                                    </code></pre></li><li>The sequence of context documents are provided on the <code>context</code> port.</li><li>The sequence of documents defined inside the <code>x:expect</code> element are provided on the <code>expect</code> port.</li><li>The document on the result port must be a <code>x:test-result</code>, with a <code>result</code> attribute containing either 'passed', 'failed' or 'skipped',
+                                    and can contain <code>x:expected</code> and <code>x:was</code> elements (in that order, at most one of each). The contents of <code>x:expected</code> and <code>x:was</code> is either text or XML. For instance:
+                                    <pre><code>
+&lt;x:test-result xmlns:x="http://www.daisy.org/ns/xprocspec" result="passed"&gt;
+    &lt;x:expected xml:space="preserve"&gt;Description of what the value was expected to be.&lt;/x:expected&gt;
+    &lt;x:was xml:space="preserve"&gt;Description of what the value actually was.&lt;/x:was&gt;
+&lt;/x:test-result&gt;
+                                    </code></pre></li></ul>
+<p id="attr-expect-xfail">Assertions with the <a href="#attr-expect-xfail"><code>xfail</code></a> attribute will behave just like other assertions, but
+               will succeed where other assertions fail, and will fail where other assertions succeed (i.e. the result is inverted).
+               The <a href="#attr-expect-xfail"><code>xfail</code></a> attribute can also be applied to scenarios, in which case <code>xfail</code> will be implicitly
+               set to <code>true</code> for all of the scenarios assertions.
+               The value of the <a href="#attr-expect-xfail"><code>xfail</code></a> attribute must be <code>true</code>.</p>
+</section>
+
+
+
+
+
+<section id="the-input-element" typeof="bibo:Chapter" resource="#the-input-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-input-element"><span class="secno">1.10 </span>The <code>input</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dd><a href="#the-document-element"><code>document</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-input-port"><code>port</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>The input element is used to provide documents on the input ports of the XProc step you are testing.</p>
+
+<p id="attr-input-port">
+</p></section>
+
+<section id="the-option-element" typeof="bibo:Chapter" resource="#the-option-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-option-element"><span class="secno">1.11 </span>The <code>option</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-option-name"><code>name</code></a><small title="optional">?</small></dd><dd><a href="#attr-option-select"><code>select</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>The option element is used to provide values to XProc options on the XProc step you are testing.</p>
+
+<p id="attr-option-name">The <a href="#attr-option-name"><code>name</code></a> attribute is the name of the option used in the XProc step.</p>
+<p id="attr-option-select">The <a href="#attr-option-select"><code>select</code></a> attribute is a XPath expression used to select a value for the XProc option
+                        (equivalent of the <code>p:with-option/@select</code> attribute in XProc).</p><p>The variable "<code>$temp-dir</code>" is available for use in the select expression. The variable refers to the temporary
+                        directory used for the test. This is useful (for instance) if the value of
+                        the option is a URI pointing to a directory where the XProc steps will store files. Every xprocspec
+                        scenario is assigned its own temporary directory so that subsequent evaluations of the step does not conflict
+                        with eachother.</p>
+</section>
+
+<section id="the-param-element" typeof="bibo:Chapter" resource="#the-param-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-param-element"><span class="secno">1.12 </span>The <code>param</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-param-name"><code>name</code></a><small title="optional">?</small></dd><dd><a href="#attr-param-select"><code>select</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>The param element is used to provide values to XProc paramaters on the XProc step you are testing.</p>
+
+<p id="attr-param-name">The <a href="#attr-param-name"><code>name</code></a> attribute is the name of the parameter to be provided on the XProc steps primary parameter input
+                    port.</p>
+<p id="attr-param-select">The <a href="#attr-param-select"><code>select</code></a> attribute is a XPath expression used to select a value for the XProc parameter (equivalent of the <code>p:with-param/@select</code> attribute in XProc).</p><p>The variable "<code>$temp-dir</code>" is available for use in the select expression. The variable refers to the temporary directory used for the test. This is useful (for instance) if the
+                        value of the parameter is a URI pointing to a directory where the XProc steps will store files. Every xprocspec scenario is assigned its own temporary directory so that
+                        subsequent evaluations of the step does not conflict with eachother.</p>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="the-document-element" typeof="bibo:Chapter" resource="#the-document-element" rel="bibo:Chapter">
+<h3 aria-level="2" role="heading" id="h3_the-document-element"><span class="secno">1.13 </span>The <code>document</code> element</h3><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd>One element from any namespace. (optional)</dd><dt>Content attributes:</dt><dd><a href="#attr-document-base-uri"><code>base-uri</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-href"><code>href</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-method"><code>method</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-port"><code>port</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-position"><code>position</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-recursive"><code>recursive</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-select"><code>select</code></a><small title="optional">?</small></dd><dd><a href="#attr-document-type"><code>type</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<p>The <a href="#the-document-element"><code>document</code></a> element is used to define which documents are provided on a steps input ports, what the context is when making assertions, and for assertions when making comparisons
+                    or performing validations. It can be used in a number of ways:</p>
+
+<p id="attr-document-base-uri">If the <code>base-uri</code> attribute is <code>temp-dir</code>, then the URI in the <a href="#attr-document-href"><code>href</code></a> attribute (or the xml:base attribute of the
+                                <code>document</code> or inline element in the case of inline documents) will be resolved against the temporary directory used for the test, instead of the base URI of the
+                                xprocspec document.</p><!-- documented in the "inline" group --><!-- documented in the "inline" group -->
+<p id="attr-document-href">When <code>type</code> is <code>file</code>; the <a href="#attr-document-href"><code>href</code></a> attribute is a URI pointing to the file you want the contents of.</p><p>When <code>type</code> is <code>directory</code>; the <a href="#attr-document-href"><code>href</code></a> attribute is a URI pointing to the directory you want listed.</p>
+<p id="attr-document-method">By default, files loaded by using <code>method="file"</code> will be loaded as XML files. Non-XML files can be loaded by
+                                specifying another <code>method</code>.</p>
+<p id="attr-document-port">
+                            The <code>port</code> is the name of a XProc input or output port.
+                            The <code>x:document</code> element will represent the sequence of documents provided on the input port, or the sequence of documents returned on the output port.
+                        </p>
+<p id="attr-document-position">By specifying the <a href="#attr-document-position"><code>position</code></a> attribute, a certain document in the sequence of documents appearing on the port can be
+                                selected.</p>
+<p id="attr-document-recursive">
+                                By default, the result is the same as invoking the standard XProc step <code>p:directory-list</code>. If you specify the <a href="#attr-document-recursive"><code>recursive</code></a> attribute and give it the value <code>true</code>,
+                                you will get a recursive directory listing, listing all subfolders and their contents as well.
+                            </p>
+<p id="attr-document-select">
+                        The <a href="#attr-document-select"><code>select</code></a> attribute can be used to select portions of the document(s). The matching elements will be provided as a sequence of documents. It is equivalent to the XProc step <code>p:filter</code>.
+                    </p>
+<p id="attr-document-type">
+                            If the <a href="#attr-document-type"><code>type</code></a> attribute is <a href="#the-inline-element"><code>inline</code></a>, then the <a href="#the-document-element"><code>document</code></a> element is replaced by its content. There must be exactly one element inside the <a href="#the-document-element"><code>document</code></a> element. To specify the base URI of the document, you can specify a
+                            <code>xml:base</code> on either the <a href="#the-document-element"><code>document</code></a> element (implicit base URI) or the child element itself (explicit base URI).
+                        </p><p>
+                            If the <a href="#attr-document-type"><code>type</code></a> attribute is <a href="#the-port-element"><code>port</code></a>, then the <a href="#the-document-element"><code>document</code></a> element will be replaced with the documents on that port. The <a href="#attr-document-position"><code>position</code></a> attribute can be used to select only part of the sequence of documents appearing on that
+                            port.
+                        </p><p>
+                            If the <a href="#attr-document-type"><code>type</code></a> attribute is <a href="#the-file-element"><code>file</code></a>, then the <a href="#the-document-element"><code>document</code></a> element will be replaced by the contents of the file located at the location pointed to by the <a href="#attr-document-href"><code>href</code></a> attribute. The default method for reading files is <code>xml</code>, but by using
+                            the <a href="#attr-document-method"><code>method</code></a> attribute you can also choose <code>html</code>, <code>text</code> and <code>binary</code> as methods for loading the file. The <code>href</code> URI is by default resolved against the base URI of the xprocspec test document. However, if you provide the
+                            <code>base-uri</code> attribute with a value of <code>temp-dir</code>, then the <code>href</code> URI will be resolved against the temporary directory used for the test instead.
+                        </p><p>
+                            If the <a href="#attr-document-type"><code>type</code></a> attribute is <a href="#the-directory-element"><code>directory</code></a>, then the <a href="#the-document-element"><code>document</code></a> element will be replaced with a directory listing of the directory pointed to by the <a href="#attr-document-href"><code>href</code></a> attribute. The <code>href</code> URI is
+                            by default resolved against the base URI of the xprocspec test document. However, if you provide the <code>base-uri</code> attribute with a value of <code>temp-dir</code>, then the <code>href</code> URI will be resolved against the temporary directory
+                            used for the test instead.
+                        </p><p>
+                            If the <a href="#attr-document-type"><code>type</code></a> attribute is <code>errors</code>, then a <code>c:errors</code> document (as defined in the XProc spec) will be made available if any errors occur during step execution.
+                            If no errors occur, an empty sequence is returned.
+                        </p>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+</section>
+        <section class="appendix" id="acknowledgements">
+            <!--OddPage--><h2 aria-level="1" role="heading" id="h2_acknowledgements"><span class="secno">A. </span>Acknowledgements</h2>
+            <p>This specification is based on the work done by the developers of <a shape="rect" href="https://code.google.com/p/xspec/">XSpec</a>.</p>
+            <p>The structure of this specification is generated with the help of <a shape="rect" href="https://github.com/darobin/respec" target="_blank">respec</a> (for the W3C-style specification).</p>
+            <p>The xprocspec implementation itself currently depends on the XProc processor <a shape="rect" href="http://xmlcalabash.com/" target="_blank">XML Calabash</a> for its implementation of dynamic pipeline evaluation (<a shape="rect" href="http://xmlcalabash.com/docs/reference/cx-eval.html">cx:eval</a>).</p>
+        </section>
+        <script type="text/javascript" xml:space="preserve">//&lt;![CDATA[
+            try {
+                var pageTracker = _gat._getTracker("UA-42132238-1");
+                pageTracker._trackPageview();
+            }
+            catch (err) {
+            }//]]&gt;</script>
+    <div id="respec-ui" class="removeOnSave" style="position: fixed; top: 20px; right: 20px; width: 202px; text-align: right; "><button style="background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 255, 255); font-weight: bold; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: rgb(204, 204, 204); border-right-color: rgb(204, 204, 204); border-bottom-color: rgb(204, 204, 204); border-left-color: rgb(204, 204, 204); border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; border-bottom-right-radius: 5px 5px; border-bottom-left-radius: 5px 5px; background-position: initial initial; background-repeat: initial initial; ">ReSpec</button><div style="background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 255, 255); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-style: solid; border-right-style: solid; border-bottom-style: solid; border-left-style: solid; border-top-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-left-color: rgb(0, 0, 0); width: 200px; display: none; text-align: left; margin-top: 5px; margin-right: 5px; background-position: initial initial; background-repeat: initial initial; "><button style="background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 255, 255); border-top-style: none; border-right-style: none; border-left-style: none; border-width: initial; border-color: initial; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(204, 204, 204); width: 100%; text-align: left; font-size: inherit; background-position: initial initial; background-repeat: initial initial; ">Save Snapshot</button><button style="background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 255, 255); border-top-style: none; border-right-style: none; border-left-style: none; border-width: initial; border-color: initial; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(204, 204, 204); width: 100%; text-align: left; font-size: inherit; background-position: initial initial; background-repeat: initial initial; ">About ReSpec</button><button style="background-image: initial; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: rgb(255, 255, 255); border-top-style: none; border-right-style: none; border-left-style: none; border-width: initial; border-color: initial; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: rgb(204, 204, 204); width: 100%; text-align: left; font-size: inherit; background-position: initial initial; background-repeat: initial initial; ">Search Specref DB</button></div></div></body></html>

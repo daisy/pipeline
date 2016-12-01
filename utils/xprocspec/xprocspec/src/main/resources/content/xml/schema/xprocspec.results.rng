@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+    <include href="xprocspec.evaluate.rng">
+        <start>
+            <element name="test-report" ns="http://www.daisy.org/ns/xprocspec">
+                <a:documentation>The x:test-report wraps all the scenario descriptions (and their results) as a single XML document.</a:documentation>
+                <zeroOrMore>
+                    <choice>
+                        <ref name="description"/>
+                        <ref name="errors"/>
+                    </choice>
+                </zeroOrMore>
+            </element>
+        </start>
+    </include>
+
+</grammar>

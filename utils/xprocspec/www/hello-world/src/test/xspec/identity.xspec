@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/identity.xsl">
+    
+    <x:scenario label="The input element">
+        <x:context>
+            <doc>hello, world!</doc>
+        </x:context>
+        <x:expect label="should be copied to the output">
+            <doc>hello, world!</doc>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:ex="http://example.net/ns" script="../xproc/non_existing.xpl">
+    
+    <x:scenario label="Non-existing XProc script">
+        <x:call step="ex:foo"/>
+    </x:scenario>
+    
+</x:description>

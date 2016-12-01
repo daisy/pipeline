@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- xproc-maven-plugin 1.0.0 prints DEBUG messages to console;
+       this file redirects those messages to a log file instead. -->
+  <appender name="TEST_LOG" class="ch.qos.logback.core.FileAppender">
+    <file>target/test.log</file>
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+  <root level="DEBUG">
+    <appender-ref ref="TEST_LOG"/>
+  </root>
+</configuration>

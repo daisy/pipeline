@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+    <include href="xprocspec.run.rng">
+
+        <define name="description">
+            <element name="description" ns="http://www.daisy.org/ns/xprocspec">
+                <a:documentation>after evaluation, the results from all the assertions are appended to the description element</a:documentation>
+                <ref name="description.common"/>
+                <attribute name="test-base-uri"/>
+                <attribute name="test-grammar"/>
+                <choice>
+                    <group>
+                        <attribute name="temp-dir"/>
+                        <ref name="step-declaration"/>
+                        <ref name="scenario"/>
+                        <zeroOrMore>
+                            <ref name="output"/>
+                        </zeroOrMore>
+                        <optional>
+                            <!-- if an error occurs during step execution, then it is stored here -->
+                            <ref name="errors"/>
+                        </optional>
+                    </group>
+                    <group>
+                        <optional>
+                            <attribute name="temp-dir"/>
+                        </optional>
+                        <optional>
+                            <ref name="step-declaration"/>
+                        </optional>
+                        <ref name="pending-scenario"/>
+                    </group>
+                </choice>
+                <ref name="scenario-results"/>
+            </element>
+        </define>
+
+    </include>
+
+    <define name="scenario-results">
+        <zeroOrMore>
+            <element name="test-result" ns="http://www.daisy.org/ns/xprocspec">
+                <a:documentation xml:space="preserve">
+                    The x:test-result element represents the results from one specific assertion.
+                    The result from the evaluation is contained in the boolean "result" attribute.
+                    The type of assertion is given by the "test-type" attribute.
+                    <!--If the assertion is an XPath test, then the XPath expression is given in the "test" attribute.-->
+                    The expected content and the actual content are contained in the x:expected and x:was elements respectively.
+                </a:documentation>
+                <ref name="common-attributes"/>
+                <ref name="common-elements"/>
+                <ref name="label"/>
+                <optional>
+                    <ref name="pending-attribute"/>
+                </optional>
+                <attribute name="contextref">
+                    <!--<data type="IDREF"/>-->
+                </attribute>
+                <choice>
+                    <group>
+                        <!-- XPath assertion -->
+                        <attribute name="type">
+                            <value>xpath</value>
+                        </attribute>
+                        <attribute name="test"/>
+                        <optional>
+                            <attribute name="equals"/>
+                        </optional>
+                    </group>
+                    <group>
+                        <!-- Document comparison -->
+                        <attribute name="type">
+                            <value>compare</value>
+                        </attribute>
+                        <attribute name="normalize-space">
+                            <data type="boolean"/>
+                        </attribute>
+                    </group>
+                    <group>
+                        <!-- Document count -->
+                        <attribute name="type">
+                            <value>count</value>
+                        </attribute>
+                        <choice>
+                            <attribute name="min">
+                                <data type="integer"/>
+                            </attribute>
+                            <attribute name="max">
+                                <data type="integer"/>
+                            </attribute>
+                            <group>
+                                <attribute name="min">
+                                    <data type="integer"/>
+                                </attribute>
+                                <attribute name="max">
+                                    <data type="integer"/>
+                                </attribute>
+                            </group>
+                        </choice>
+                    </group>
+                    <group>
+                        <!-- Document validation -->
+                        <attribute name="type">
+                            <value>validate</value>
+                        </attribute>
+                        <attribute name="grammar">
+                            <choice>
+                                <value>relax-ng</value>
+                                <value>schematron</value>
+                                <value>xml-schema</value>
+                            </choice>
+                        </attribute>
+                    </group>
+                    <group>
+                        <!-- Custom assertion -->
+                        <attribute name="type">
+                            <value>custom</value>
+                        </attribute>
+                        <attribute name="href">
+                            <data type="anyURI"/>
+                        </attribute>
+                        <attribute name="step">
+                            <data type="QName"/>
+                        </attribute>
+                    </group>
+                </choice>
+                <attribute name="result">
+                    <choice>
+                        <value>passed</value>
+                        <value>failed</value>
+                        <value>skipped</value>
+                    </choice>
+                </attribute>
+                <optional>
+                    <element name="expected" ns="http://www.daisy.org/ns/xprocspec">
+                        <ref name="any-attribute"/>
+                        <ref name="any-content"/>
+                    </element>
+                </optional>
+                <optional>
+                    <element name="was" ns="http://www.daisy.org/ns/xprocspec">
+                        <ref name="any-attribute"/>
+                        <ref name="any-content"/>
+                    </element>
+                </optional>
+            </element>
+        </zeroOrMore>
+    </define>
+
+</grammar>

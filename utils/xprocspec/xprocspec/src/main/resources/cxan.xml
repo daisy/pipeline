@@ -1,0 +1,12 @@
+<package xmlns="http://cxan.org/ns/package" id="xprocspec">
+      
+      <abstract>xprocspec - XProc testing tool.</abstract>
+      
+      <author id="josteinaj">Jostein Austvik Jacobsen</author>
+      
+      <category id="tools">Tools</category>
+      
+      <tag>tool</tag>
+      <tag>xproc</tag>
+      
+</package>

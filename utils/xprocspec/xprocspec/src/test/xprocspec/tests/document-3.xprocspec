@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../../src/main/resources/content/xml/xproc/xprocspec.xpl">
+
+    <x:scenario label="running xprocspec test which refers to a non-existing port">
+        <x:call step="x:xprocspec">
+            <x:option name="temp-dir" select="$temp-dir"/>
+            <x:input port="source">
+                <x:document type="file" href="document-3.resources/document-3.xprocspec.skip-ci"/>
+            </x:input>
+        </x:call>
+
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="should contain exactly one document" min="1" max="1" type="count"/>
+        <x:expect label="should contain a c:errors element as its last child element" type="xpath" test="/*/(*[last()] intersect c:*)/local-name()" equals="'errors'"/>
+    </x:scenario>
+
+</x:description>

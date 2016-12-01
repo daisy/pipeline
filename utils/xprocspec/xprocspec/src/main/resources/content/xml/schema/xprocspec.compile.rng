@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+    <include href="xprocspec.preprocess.rng">
+        <start>
+            <choice>
+                <ref name="xproc-step"/>
+                <ref name="errors"/>
+            </choice>
+        </start>
+    </include>
+
+    <define name="xproc-step">
+        <element name="declare-step" ns="http://www.w3.org/ns/xproc">
+            <a:documentation>the xproc step declaration</a:documentation>
+            <ref name="any-attribute"/>
+            <ref name="any-content"/>
+        </element>
+    </define>
+
+</grammar>

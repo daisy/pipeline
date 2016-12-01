@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   <uri name="http://www.example.net/xproc/identity.xpl" uri="../xml/xproc/identity.xpl"/>
+   <uri name="http://www.example.net/xslt/identity.xsl" uri="../xml/xslt/identity.xsl"/>
+</catalog>

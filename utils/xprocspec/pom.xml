@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.daisy.maven</groupId>
+    <artifactId>xprocspec-aggregator</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>xprocspec-aggregator</name>
+    <description>Aggregator POM for xprocspec</description>
+    <url>http://daisy-pipeline.github.io/xprocspec/</url>
+    <inceptionYear>2013</inceptionYear>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License (LGPL)</name>
+            <url>http://www.gnu.org/licenses/lgpl.html</url>
+            <distribution>repo</distribution>
+            <comments>A business-friendly OSS license</comments>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Jostein Austvik Jacobsen</name>
+            <email>josteinaj@gmail.com</email>
+            <organization>NLB - the Norwegian library of talking books and braille</organization>
+            <organizationUrl>http://www.nlb.no/en/</organizationUrl>
+            <id>josteinaj</id>
+            <timezone>+1</timezone>
+            <url>https://github.com/josteinaj</url>
+        </developer>
+    </developers>
+    <issueManagement>
+        <url>https://github.com/daisy-pipeline/xprocspec/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/daisy-pipeline/xprocspec</url>
+        <connection>scm:git:git://github.com/daisy-pipeline/xprocspec.git</connection>
+        <developerConnection>scm:git:git@github.com:daisy-pipeline/xprocspec.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+    
+    <modules>
+        <module>xprocspec</module>
+        <!--<module>xprocspec-archetype-basic</module>-->
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                            <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>  
+
+</project>

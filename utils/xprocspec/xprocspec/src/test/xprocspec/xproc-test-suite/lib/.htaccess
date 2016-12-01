@@ -1,0 +1,3 @@
+RewriteEngine On                    
+RewriteBase /tests/lib/
+RewriteRule ^l1r.xpl$ l1.xpl [R,L] 

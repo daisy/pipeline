@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:e="http://example.net/ns" script="../steps/identity.xpl">
+    
+    <x:import href="import-2b.xprocspec"/>
+    
+    <x:scenario label="identity">
+        <x:call step="e:identity">
+            <x:option name="option.required" select="'import 2a'"/>
+        </x:call>
+        <x:context label="the results">
+            <x:document type="port" port="options"/>
+        </x:context>
+        <x:expect type="xpath" label="the option 'option.required' should have the value 'import 2a'" test="/*/*[@name='option.required']/@value='import 2a'"/>
+    </x:scenario>
+    
+</x:description>

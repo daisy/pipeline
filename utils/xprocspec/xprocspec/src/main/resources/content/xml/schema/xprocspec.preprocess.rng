@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+
+    <include href="xprocspec.rng">
+        <start>
+            <choice>
+                <ref name="description"/>
+                <ref name="errors"/>
+            </choice>
+        </start>
+
+        <define name="description">
+            <element name="description" ns="http://www.daisy.org/ns/xprocspec">
+                <a:documentation>after preprocessing, each description (that is not pending) has a new step-declaration element, no imports and only one scenario</a:documentation>
+                <ref name="description.common"/>
+                <attribute name="test-base-uri"/>
+                <attribute name="test-grammar"/>
+                <choice>
+                    <group>
+                        <ref name="step-declaration"/>
+                        <ref name="scenario"/>
+                    </group>
+                    <group>
+                        <optional>
+                            <ref name="step-declaration"/>
+                        </optional>
+                        <ref name="pending-scenario"/>
+                    </group>
+                </choice>
+            </element>
+        </define>
+
+        <define name="description.common">
+            <ref name="common-attributes"/>
+            <ref name="common-elements"/>
+            <attribute name="script">
+                <a:documentation xmlns="http://www.w3.org/1999/xhtml">The `script` attribute is a URI that points to the XProc script you want to test.</a:documentation>
+                <data type="anyURI"/>
+            </attribute>
+            <optional>
+                <attribute name="version">
+                    <a:documentation xmlns="http://www.w3.org/1999/xhtml">The `version` attribute can be used to aid development over time.</a:documentation>
+                    <data type="NMTOKEN"/>
+                </attribute>
+            </optional>
+            <optional>
+                <ref name="pending-attribute"/>
+            </optional>
+        </define>
+
+        <define name="pending-scenario">
+            <ref name="pending-scenario-attribute"/>
+        </define>
+
+        <define name="scenario.common-children">
+            <ref name="call"/>
+            <oneOrMore>
+                <ref name="context"/>
+                <oneOrMore>
+                    <ref name="expect"/>
+                </oneOrMore>
+            </oneOrMore>
+        </define>
+
+        <define name="context.attributes">
+            <ref name="common-attributes"/>
+            <ref name="common-elements"/>
+            <optional>
+                <ref name="pending-attribute"/>
+            </optional>
+            <ref name="label"/>
+            <attribute name="id">
+                <!--<data type="ID"/>-->
+            </attribute>
+        </define>
+
+        <define name="expect.attributes">
+            <ref name="common-attributes"/>
+            <ref name="common-elements"/>
+            <optional>
+                <ref name="pending-attribute"/>
+            </optional>
+            <ref name="label"/>
+            <attribute name="contextref">
+                <!--<data type="IDREF"/>-->
+            </attribute>
+        </define>
+
+        <define name="call">
+            <element name="call" ns="http://www.daisy.org/ns/xprocspec">
+                <ref name="call.common"/>
+                <attribute name="step">
+                    <data type="QName"/>
+                </attribute>
+                <attribute name="type" ns="http://www.daisy.org/ns/xprocspec"/>
+            </element>
+        </define>
+
+        <define name="pending-attribute">
+            <a:documentation>after preprocessing, the pending attribute must have a non-empty value</a:documentation>
+            <attribute name="pending">
+                <data type="string">
+                    <param name="pattern">.+</param>
+                </data>
+            </attribute>
+        </define>
+
+    </include>
+
+    <define name="errors">
+        <element name="errors" ns="http://www.w3.org/ns/xproc-step">
+            <a:documentation>if an error occurs an XProc error document will be returned, allowing graceful error reporting</a:documentation>
+            <zeroOrMore>
+                <choice>
+                    <ref name="common-attributes"/>
+                    <attribute name="xml:base"/>
+                </choice>
+            </zeroOrMore>
+            <ref name="common-elements"/>
+            <attribute name="error-location"/>
+            <attribute name="test-base-uri"/>
+            <optional>
+                <attribute name="test-grammar"/>
+            </optional>
+            <zeroOrMore>
+                <element name="error" ns="http://www.w3.org/ns/xproc-step">
+                    <ref name="common-attributes"/>
+                    <ref name="common-elements"/>
+                    <optional>
+                        <attribute name="name">
+                            <data type="NCName"/>
+                        </attribute>
+                    </optional>
+                    <optional>
+                        <attribute name="type">
+                            <data type="QName"/>
+                        </attribute>
+                    </optional>
+                    <optional>
+                        <attribute name="code">
+                            <data type="QName"/>
+                        </attribute>
+                    </optional>
+                    <optional>
+                        <attribute name="href">
+                            <data type="anyURI"/>
+                        </attribute>
+                    </optional>
+                    <optional>
+                        <attribute name="line">
+                            <data type="integer"/>
+                        </attribute>
+                    </optional>
+                    <optional>
+                        <attribute name="column">
+                            <data type="integer"/>
+                        </attribute>
+                    </optional>
+                    <optional>
+                        <attribute name="offset">
+                            <data type="integer"/>
+                        </attribute>
+                    </optional>
+                    <ref name="any-content"/>
+                </element>
+            </zeroOrMore>
+        </element>
+    </define>
+
+    <define name="step-declaration">
+        <a:documentation>an XProc step declaration</a:documentation>
+        <element name="step-declaration" ns="http://www.daisy.org/ns/xprocspec">
+            <choice>
+                <element name="declare-step" ns="http://www.w3.org/ns/xproc">
+                    <ref name="xproc.declare-step"/>
+                </element>
+                <element name="pipeline" ns="http://www.w3.org/ns/xproc">
+                    <ref name="xproc.declare-step"/>
+                </element>
+            </choice>
+        </element>
+    </define>
+
+
+    <!-- XProc elements (used for step signatures inside the x:step-declaration element): -->
+
+    <define name="xproc.declare-step.common">
+        <optional>
+            <attribute name="name">
+                <data type="NCName"/>
+            </attribute>
+        </optional>
+        <optional>
+            <attribute name="type">
+                <data type="QName"/>
+            </attribute>
+        </optional>
+        <attribute name="type" ns="http://www.daisy.org/ns/xprocspec">
+            <data type="string">
+                <param name="pattern">\{.*\}.*</param>
+            </data>
+        </attribute>
+        <optional>
+            <attribute name="psvi-required">
+                <data type="boolean"/>
+            </attribute>
+        </optional>
+        <optional>
+            <attribute name="xpath-version">
+                <data type="string"/>
+            </attribute>
+        </optional>
+        <optional>
+            <attribute name="exclude-inline-prefixes"/>
+        </optional>
+        <optional>
+            <attribute name="version">
+                <data type="string"/>
+            </attribute>
+        </optional>
+        <ref name="common-attributes"/>
+        <ref name="common-elements"/>
+    </define>
+
+    <define name="xproc.declare-step">
+        <a:documentation xml:space="preserve">
+             An XProc step declaration/signature
+        </a:documentation>
+        <ref name="xproc.declare-step.common"/>
+        <zeroOrMore>
+            <choice>
+                <ref name="xproc.input"/>
+                <ref name="xproc.output"/>
+                <ref name="xproc.option"/>
+            </choice>
+        </zeroOrMore>
+    </define>
+
+    <define name="xproc.option.common">
+        <attribute name="name">
+            <data type="NCName"/>
+        </attribute>
+        <choice>
+            <optional>
+                <optional>
+                    <attribute name="required">
+                        <value>false</value>
+                    </attribute>
+                </optional>
+                <attribute name="select"/>
+            </optional>
+            <optional>
+                <attribute name="required">
+                    <data type="boolean"/>
+                </attribute>
+            </optional>
+        </choice>
+        <zeroOrMore>
+            <attribute ns="">
+                <anyName>
+                    <except>
+                        <name>name</name>
+                        <name>required</name>
+                        <name>select</name>
+                        <name>value</name>
+                    </except>
+                </anyName>
+            </attribute>
+        </zeroOrMore>
+        <ref name="xproc.common"/>
+    </define>
+
+    <define name="xproc.option">
+        <element name="option" ns="http://www.w3.org/ns/xproc">
+            <ref name="xproc.option.common"/>
+        </element>
+    </define>
+
+    <define name="xproc.input">
+        <element name="input" ns="http://www.w3.org/ns/xproc">
+            <ref name="xproc.ports-common"/>
+            <optional>
+                <attribute name="select"/>
+            </optional>
+            <choice>
+                <group>
+                    <attribute name="kind">
+                        <value>document</value>
+                    </attribute>
+                    <optional>
+                        <choice>
+                            <element name="empty" ns="http://www.w3.org/ns/xproc">
+                                <ref name="any-attribute"/>
+                            </element>
+                            <zeroOrMore>
+                                <ref name="xproc.document-inline-data"/>
+                            </zeroOrMore>
+                        </choice>
+                    </optional>
+                </group>
+                <group>
+                    <attribute name="kind">
+                        <value>parameter</value>
+                    </attribute>
+                    <optional>
+                        <ref name="xproc.param-set"/>
+                    </optional>
+                </group>
+            </choice>
+        </element>
+    </define>
+
+    <define name="xproc.output">
+        <element name="output" ns="http://www.w3.org/ns/xproc">
+            <ref name="xproc.ports-common"/>
+            <attribute name="kind">
+                <value>document</value>
+            </attribute>
+            <choice>
+                <element name="empty" ns="http://www.w3.org/ns/xproc">
+                    <ref name="any-attribute"/>
+                </element>
+                <zeroOrMore>
+                    <choice>
+                        <element name="pipe" ns="http://www.w3.org/ns/xproc">
+                            <attribute name="step">
+                                <data type="NCName"/>
+                            </attribute>
+                            <attribute name="port">
+                                <data type="NCName"/>
+                            </attribute>
+                            <zeroOrMore>
+                                <attribute ns="">
+                                    <anyName>
+                                        <except>
+                                            <name>step</name>
+                                            <name>port</name>
+                                        </except>
+                                    </anyName>
+                                </attribute>
+                            </zeroOrMore>
+                        </element>
+                        <ref name="xproc.document-inline-data"/>
+                    </choice>
+                </zeroOrMore>
+            </choice>
+        </element>
+    </define>
+
+    <define name="xproc.ports-common">
+        <attribute name="port">
+            <data type="NCName"/>
+        </attribute>
+        <attribute name="sequence">
+            <data type="boolean"/>
+        </attribute>
+        <attribute name="primary">
+            <data type="boolean"/>
+        </attribute>
+        <ref name="xproc.common"/>
+        <ref name="common-attributes"/>
+        <ref name="common-elements"/>
+    </define>
+
+    <define name="xproc.document-inline-data">
+        <choice>
+            <element name="document" ns="http://www.w3.org/ns/xproc">
+                <attribute name="href">
+                    <data type="anyURI"/>
+                </attribute>
+                <zeroOrMore>
+                    <choice>
+                        <attribute ns="">
+                            <anyName>
+                                <except>
+                                    <name>href</name>
+                                </except>
+                            </anyName>
+                        </attribute>
+                        <attribute>
+                            <anyName>
+                                <except>
+                                    <nsName ns=""/>
+                                    <nsName ns="http://www.daisy.org/ns/xprocspec"/>
+                                    <nsName ns="http://www.w3.org/ns/xproc-step"/>
+                                    <nsName ns="http://www.w3.org/ns/xproc"/>
+                                </except>
+                            </anyName>
+                        </attribute>
+                    </choice>
+                </zeroOrMore>
+            </element>
+            <element name="inline" ns="http://www.w3.org/ns/xproc">
+                <ref name="any-attribute"/>
+                <ref name="any-content"/>
+            </element>
+            <element name="data" ns="http://www.w3.org/ns/xproc">
+                <attribute name="href">
+                    <data type="anyURI"/>
+                </attribute>
+                <zeroOrMore>
+                    <choice>
+                        <attribute ns="">
+                            <anyName>
+                                <except>
+                                    <name>href</name>
+                                </except>
+                            </anyName>
+                        </attribute>
+                        <attribute>
+                            <anyName>
+                                <except>
+                                    <nsName ns=""/>
+                                    <nsName ns="http://www.daisy.org/ns/xprocspec"/>
+                                    <nsName ns="http://www.w3.org/ns/xproc-step"/>
+                                    <nsName ns="http://www.w3.org/ns/xproc"/>
+                                </except>
+                            </anyName>
+                        </attribute>
+                    </choice>
+                </zeroOrMore>
+            </element>
+        </choice>
+    </define>
+
+    <define name="xproc.param-set">
+        <choice>
+            <element name="empty" ns="http://www.w3.org/ns/xproc">
+                <ref name="any-attribute"/>
+            </element>
+            <zeroOrMore>
+                <ref name="xproc.document-inline-data"/>
+            </zeroOrMore>
+        </choice>
+    </define>
+
+    <define name="xproc.common">
+        <zeroOrMore>
+            <choice>
+                <element name="documentation" ns="http://www.w3.org/ns/xproc">
+                    <ref name="any-attribute"/>
+                    <zeroOrMore>
+                        <ref name="any-element"/>
+                    </zeroOrMore>
+                </element>
+                <element name="pipeinfo" ns="http://www.w3.org/ns/xproc">
+                    <ref name="any-attribute"/>
+                    <zeroOrMore>
+                        <ref name="any-element"/>
+                    </zeroOrMore>
+                </element>
+            </choice>
+        </zeroOrMore>
+    </define>
+
+</grammar>

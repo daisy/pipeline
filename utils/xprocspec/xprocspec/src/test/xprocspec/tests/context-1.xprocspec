@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:e="http://example.net/ns" script="../steps/identity.xpl" xmlns:asdf="http://www.w3.org/ns/xproc-step">
+    
+    <!--change the context a couple of times and check that the context changes in the expect assertions-->
+    
+    <x:scenario label="identity">
+        <x:call step="e:identity">
+            <x:option name="option.required" select="''"/>
+        </x:call>
+
+        <!-- output port -->
+        <x:context label="the options">
+            <x:document type="port" port="options"/>
+        </x:context>
+        <!-- this test also uses another prefix for the xproc-step namespace which xprocspec has to account for -->
+        <x:expect type="xpath" label="The context should be the options" test="count(/asdf:*)=1"/>
+        
+        <!-- input port -->
+        <x:context label="the primary input port">
+            <x:document type="port" port="source.document.primary"/>
+        </x:context>
+        <x:expect type="count" label="There should be a single document on the primary input port" min="1" max="1"/>
+        <x:expect type="xpath" label="The document should not be options document" test="not(count(/asdf:*)=1)"/>
+    </x:scenario>
+
+</x:description>

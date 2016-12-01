@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:e="http://example.net/ns" script="../steps/identity.xpl">
+
+    <x:scenario label="identity - base-uri">
+        <x:call step="e:identity">
+            <x:option name="option" select="base-uri(.)"/>
+            <x:option name="option.required" select="base-uri(/*)"/>
+            <x:option name="option.default" select="base-uri()"/>
+        </x:call>
+
+        <x:context label="the options">
+            <x:document type="port" port="options"/>
+        </x:context>
+        <x:expect type="xpath" label="Options should be wrapped in a c:options element" test="count(/c:options)" equals="1"/>
+        <x:expect type="xpath" label="Options should not be wrapped in something other than a c:options element" test="count(/foo)" equals="0"/>
+        <x:expect type="xpath" label="Options should be stored in c:option elements inside the root c:options element" test="count(/c:options/c:option) &gt; 0"/>
+        <x:expect type="xpath" label="base-uri(.) should refer to the base URI of the xprocspec test document" test="/c:options/c:option[@name='option']/@value" equals="$test-base-uri"/>
+        <x:expect type="xpath" label="base-uri(/*) should refer to the base URI of the xprocspec test document" test="/c:options/c:option[@name='option.required']/@value" equals="$test-base-uri"/>
+        <x:expect type="xpath" label="base-uri() should refer to the base URI of the xprocspec test document" test="/c:options/c:option[@name='option.default']/@value" equals="$test-base-uri"/>
+    </x:scenario>
+
+    <x:scenario label="identity - variables">
+        <x:call step="e:identity">
+            <x:option name="option" select="$temp-dir"/>
+            <x:option name="option.required" select="$test-base-uri"/>
+        </x:call>
+
+        <x:context label="the options">
+            <x:document type="port" port="options"/>
+        </x:context>
+        <!--
+            TODO: a current limitation is that the strings '$temp-dir' and '$test-base-uri' can't be used.
+            The implementation replaces any occurrences of those strings with the variable values, even though they are part of a string and not actual variable references.
+        -->
+        <x:expect type="xpath" label="The $temp-dir variable should be available from both the x:option @select attribute and the x:expect @test attributes" test="/c:options/c:option[@name='option']/@value" equals="$temp-dir"/>
+        <x:expect type="xpath" label="The $temp-dir variable should be available from both the @test and @equals attributes" test="$temp-dir" equals="$temp-dir"/>
+        <x:expect type="xpath" label="The $test-base-uri variable should be available from both the x:option @select attribute and the x:expect @test attributes" test="/c:options/c:option[@name='option.required']/@value" equals="$test-base-uri"/>
+        <x:expect type="xpath" label="The $test-base-uri variable should be available from both the @test and @equals attributes" test="$test-base-uri" equals="$test-base-uri"/>
+
+    </x:scenario>
+
+</x:description>

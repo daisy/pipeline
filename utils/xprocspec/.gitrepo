@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:daisy/xprocspec.git
+	branch = master
+	commit = d08471e96622e73053d77e41c5e577f208123a4e
+	parent = ff946fee85e6b4e5706509c615ae8252bcb71747
+	cmdver = 0.3.0

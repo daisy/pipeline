@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:e="http://example.net/ns" script="../steps/identity.xpl">
+
+    <x:documentation>x:description-documentation</x:documentation>
+
+    <x:scenario label="identity">
+        <x:documentation>x:scenario-documentation</x:documentation>
+        <x:call step="e:identity">
+            <x:documentation>x:call-documentation</x:documentation>
+            <x:option name="option" select="'option-value'"/>
+            <x:option name="option.required" select="'option.required-value'"/>
+        </x:call>
+        <x:context label="the results">
+            <x:documentation>x:context-documentation</x:documentation>
+            <x:document type="port" port="options"/>
+        </x:context>
+        <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'">
+            <x:documentation>x:expect-documentation</x:documentation>
+        </x:expect>
+        <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+    </x:scenario>
+
+    <x:scenario label="pending scenario" pending=""/>
+
+</x:description>

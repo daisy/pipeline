@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:e="http://example.net/ns" script="../steps/identity.xpl">
+    
+    <x:scenario label="identity">
+        <x:call step="e:identity">
+            <x:option name="option.required" select="''"/>
+            <x:input port="source.document.secondary.sequence">
+                <x:document type="inline">
+                    <doc1/>
+                </x:document>
+                <x:document type="inline">
+                    <doc2/>
+                </x:document>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the input">
+            <x:document type="port" port="source.document.secondary.sequence"/>
+        </x:context>
+        <x:expect type="count" label="there must be two documents on the input port" min="2" max="2"/>
+        
+        <x:context label="the output">
+            <x:document type="port" port="result.document.secondary.sequence"/>
+        </x:context>
+        <x:expect type="count" label="there must be two documents on the output port" min="2" max="2"/>
+        
+    </x:scenario>
+    
+</x:description>

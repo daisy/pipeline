@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://ogp.me/ns/fb#">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <link href="https://fonts.googleapis.com/css?family=Chivo:900" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="www/stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="www/stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="www/stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>xprocspec</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+        <header>
+          <h1>xprocspec</h1>
+          <h2>A tool for testing XProc scripts</h2>
+        </header>
+        <section class="buttons clearfix">
+          <a href="https://github.com/daisy/xprocspec/archive/v1.1.0.zip" id="button-left" class="button">
+            <span>Download v1.1.0</span>
+          </a>
+          <a href="http://daisy.github.com/xprocspec/www/documentation/index.html" id="button-middle" class="button">
+            <span>Documentation</span>
+          </a>
+          <a href="https://github.com/daisy/xprocspec" id="button-right" class="button">
+            <span>View on GitHub</span>
+          </a>
+        </section>
+        <hr />
+        <section id="main_content">
+          <h1>
+            <a name="xprocspec---xproc-testing-tool" class="anchor" href="#xprocspec---xproc-testing-tool"><span class="octicon octicon-link"></span></a>xprocspec - XProc testing tool</h1>
+          <p>This is a tool for testing XProc scripts. Its grammar is inspired by <a href="http://code.google.com/p/xspec/wiki/WritingScenarios">XSpec</a> and is implemented in XProc.</p>
+          <!--<p>xprocspec is itself tested using xprocspec. The latest results are available as a <a href="www/documentation/test-results.html.html">xprocspec HTML report</a>. xprocspec is at this point mostly feature-complete.--> <a href="https://travis-ci.org/daisy/xprocspec"><img src="https://travis-ci.org/daisy/xprocspec.png?branch=master" alt="Build status icon"/></a></p>
+          <section>
+            <h2>XProc</h2>
+            <p>Using Calabash (calabash 1.0.10-95 or newer is recommended), provide the xprocspec test on the "source" input port, and point the "result", "html" and "junit" report ports to a location of your choice.</p>
+            <p><small>NOTE: In Windows, you must also provide a file URI to the "temp-dir" option. It defaults to "file:/tmp/" which works in Linux and OSX.</small></p>
+          </section>
+          <section>
+            <h2>Maven</h2>
+            <p>If you use the Maven plugin <a href="https://github.com/daisy/xproc-maven-plugin">xproc-maven-plugin</a>, you can do automated testing of your XProc projects! Read more on <a href="https://github.com/daisy/xproc-maven-plugin">xproc-maven-plugin</a> project homepage.</p>
+          </section>
+          <section>
+            <h2>Get started now!</h2>
+            <pre style="font-family: Monaco, monospace;">
+wget http://daisy.github.io/xprocspec/www/hello-world.zip
+unzip hello-world.zip
+cd hello-world
+mvn test
+</pre>
+            <p>This will download a <a href="www/hello-world.zip">"hello world" template project</a> and run a sample xprocspec test (as well as a xspec test, using <a href="https://github.com/daisy/xspec-maven-plugin">xspec-maven-plugin</a>).</p>
+          </section>
+        </section>
+        <footer>xprocspec is mainly maintained by <a href="https://github.com/josteinaj">Jostein Austvik Jacobsen</a><br /> Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</footer>
+        <!-- AddThis Button BEGIN -->
+        <div class="addthis_toolbox addthis_floating_style addthis_counter_style" style="left:50px;top:50px;">
+          <a class="addthis_button_google_plusone" g:plusone:size="tall"></a>
+          <a class="addthis_button_tweet" tw:count="vertical" tw:text="Check out the #XProc testing tool #xprocspec over at"></a>
+          <a class="addthis_button_facebook_like" fb:like:layout="box_count"></a>
+          <a class="addthis_counter"></a>
+        </div>
+        <script type="text/javascript">var addthis_config = {"data_track_addressbar":false,"data_track_clickback":false};</script>
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51dbedc0728d2466"></script>
+        <!-- AddThis Button END -->
+        <!-- AddThis Welcome BEGIN -->
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51dbedc0728d2466"></script>
+        <script type="text/javascript">
+addthis.bar.initialize({'default':{"backgroundColor":"#000000","buttonColor":"#098DF4","textColor":"#FFFFFF","buttonTextColor":"#FFFFFF"},rules:[{"name":"Twitter","match":{"referringService":"twitter"},"message":"If you like xprocspec:","action":{"type":"button","text":"Tweet it!","verb":"share","service":"twitter"}},{"name":"Facebook","match":{"referringService":"facebook"},"message":"Tell your XML-buddies about xprocspec:","action":{"type":"button","text":"Share on Facebook","verb":"share","service":"facebook"}},{"name":"Google","match":{"referrer":"google.com"},"message":"If you like xprocspec, let Google know:","action":{"type":"button","text":"+1","verb":"share","service":"google_plusone_share"}}]});
+</script>
+        <!-- AddThis Welcome END -->
+        <script type="text/javascript" xml:space="preserve">//<![CDATA[
+                    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl.": "http://www.");
+                    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));//]]></script>
+        <script type="text/javascript" xml:space="preserve">//<![CDATA[
+    try {
+        var pageTracker = _gat._getTracker("UA-42132238-1");
+        pageTracker._trackPageview();
+    }
+    catch (err) {
+    }//]]></script>
+      </div>
+    </div>
+  </body>
+</html>
