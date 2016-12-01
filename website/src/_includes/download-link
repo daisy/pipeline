@@ -1,0 +1,11 @@
+<a href="{{include.file.url}}">
+For
+{% case include.file.platform %}
+{% when 'windows' %} Windows
+{% when 'macosx' %}  Mac OS X
+{% when 'linux' %}   Linux
+{% else %}           Other
+{% endcase %}
+users
+</a>
+(.{{include.file.url | split:'.' | last}} file, {{include.file.size | divided_by:1048576}} Mb)

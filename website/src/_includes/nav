@@ -1,0 +1,33 @@
+<nav id="nav-{{include.spine}}">
+  {% assign spine = site.data.spines[include.spine] %}
+  {% include spine pages=spine %}
+</nav>
+
+{% if include.spine == 'sitemap' %}
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+    }
+  }
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+{% endif %}

@@ -1,0 +1,41 @@
+- {{site.baseurl}}/index.html
+- {{site.baseurl}}/Download.html
+- group: {{site.baseurl}}/Get-Help/
+  pages:
+    - group: {{site.baseurl}}/Get-Help/User-Guide/
+      pages:
+        - group: {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
+          title: "Desktop Application"
+          pages:
+            - {{site.baseurl}}/wiki/gui/Installation/
+        - group: {{site.baseurl}}/wiki/webui/User-Guide/
+          title: "Web Application"
+          pages:
+            - {{site.baseurl}}/wiki/webui/Templating/
+            - {{site.baseurl}}/wiki/webui/Administrator-settings/
+        - group: {{site.baseurl}}/Get-Help/User-Guide/Scripts.html
+          pages:
+
+            {{#sparql}}
+            SELECT ?href WHERE {
+              []    a        dp2:script ;
+                    dp2:doc  ?href .
+              ?href dc:title ?title ;
+                    a        dp2:userdoc . }
+            ORDER BY ?title
+            - {{href}}
+            {{/sparql}}
+
+    - url: http://www.daisy.org/forums/pipeline-2
+      title: "Forums"
+- group: {{site.baseurl}}/Contribute/
+  pages:
+    - url: https://github.com/daisy/pipeline
+      title: "Source Code"
+    - url: https://groups.google.com/forum/#!forum/daisy-pipeline-dev
+      title: "Developers Mailing List"
+    - url: https://github.com/daisy/pipeline/issues
+      title: "Issue Tracker"
+    - {{site.baseurl}}/Contribute/Developer-Guide.html
+- url: http://www.daisy.org
+  title: "DAISY Home"

@@ -1,0 +1,40 @@
+name: DAISY Pipeline 2
+collections:
+  wiki:
+    output: true
+    permalink: /wiki/:path/
+  wiki_gui:
+    output: true
+    permalink: /wiki/gui/:path/
+  wiki_webui:
+    output: true
+    permalink: /wiki/webui/:path/
+defaults:
+  - scope: {path: "", type: wiki}
+    values:
+      layout: wiki
+      spine: sitemap
+      spine2: wiki
+      edit_button: wiki
+  - scope: {path: "", type: wiki_gui}
+    values:
+      layout: wiki
+      spine: sitemap
+      edit_button: wiki-gui
+  - scope: {path: "", type: wiki_webui}
+    values:
+      layout: wiki
+      spine: sitemap
+      edit_button: wiki-webui
+markdown: kramdown
+kramdown:
+  parse_block_html: true
+  syntax_highlighter: coderay
+  syntax_highlighter_opts:
+    line_numbers: false
+    css: class
+sass:
+  sass_dir: css
+baseurl: "/pipeline"
+site_base: "http://daisy.github.io"
+meta_file: _meta.ttl
