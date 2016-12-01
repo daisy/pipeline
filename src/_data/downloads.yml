@@ -1,6 +1,32 @@
-- version: "1.10-beta"
-  sort: "1.10-beta"
+## For file names and sizes, see https://api.github.com/repos/daisy/pipeline-assembly/releases
+
+- version: "1.10-rc1"
+  sort: "1.10-rc1"
   state: beta
+  github_tag: "v1.10-rc1"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10-rc1"
+  files:
+    - platform: windows
+      package: installer
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-rc1/pipeline2-1.10-rc1_windows.exe"
+      size: 66577284
+    - platform: macosx
+      package: dmg
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-rc1/pipeline2-1.10-rc1_mac.dmg"
+      size: 113086857
+    - platform: linux
+      package: zip
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-rc1/pipeline2-1.10-rc1_linux.zip"
+      size: 51575942
+
+## Download links disabled
+- version: "1.10-beta1"
+  sort: "1.10-beta1"
+  state: beta
+  github_tag: "v1.10-beta1"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10-beta1"
   files:
     - platform: windows
@@ -18,9 +44,12 @@
       content: [gui, server, cli]
       url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-beta1/pipeline2-1.10-beta1_linux.zip"
       size: 49521693
+
 - version: "1.9"
   sort: "1.09"
   state: stable
+  github_tag: "v1.9"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.9"
   files:
     - platform: windows
       package: installer
@@ -37,6 +66,8 @@
       content: [desktop-webui, server, cli]
       url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.9/pipeline2-1.9-webui_linux.zip"
       size: 89009422
+
+## "Inofficial" versions created during Braille in DP2 project
 - version: "1.9.15"
   sort: "1.09.15"
   state: unofficial
