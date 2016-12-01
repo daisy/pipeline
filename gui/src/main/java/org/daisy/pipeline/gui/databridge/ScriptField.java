@@ -63,6 +63,7 @@ public class ScriptField {
 	private boolean isPrimary; /* ONLY for input/output */
 	private boolean isTemp;		/* ONLY for options */
 	private boolean isResult;	/* ONLY for options */
+	private String defaultValue; /*ONLY for options */
 	
 	
 	
@@ -79,6 +80,7 @@ public class ScriptField {
 		isPrimary = portInfo.isPrimary();
 		isTemp = false;
 		isResult = false;
+		defaultValue = "";
 	}
 	public ScriptField(XProcOptionInfo optionInfo, XProcOptionMetadata metadata, DatatypeRegistry datatypeRegistry) {
 		name = optionInfo.getName().toString();
@@ -93,6 +95,12 @@ public class ScriptField {
 		isPrimary = false;
 		isResult = metadata.getOutput() == Output.RESULT;
 		isTemp = metadata.getOutput() == Output.TEMP;
+		defaultValue = optionInfo.getSelect();
+		// trim single quotes from start/end of string
+		if (defaultValue != null && defaultValue.isEmpty() == false) {
+			defaultValue = defaultValue.replaceAll("^'|'$", "");
+		}
+
 	}
 	public String getName() {
 		return name;
@@ -129,6 +137,9 @@ public class ScriptField {
 	}
 	public boolean isResult() {
 		return isResult;
+	}
+	public String getDefaultValue() {
+		return defaultValue;
 	}
 	private DataType getDataType(String simpleType, String dataType, DatatypeRegistry datatypeRegistry) {
 		if (dataTypeMap.containsKey(dataType)) {
