@@ -13,6 +13,10 @@
           pages:
             - {{site.baseurl}}/wiki/webui/Templating/
             - {{site.baseurl}}/wiki/webui/Administrator-settings/
+        - group: {{site.baseurl}}/Get-Help/User-Guide/Pipeline-as-Service/
+          pages:
+            - url: {{site.baseurl}}/wiki/Configuration-Files/
+              title: "Configuration"
         - group: {{site.baseurl}}/Get-Help/User-Guide/Scripts.html
           pages:
 
