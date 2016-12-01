@@ -5,6 +5,10 @@
   state: beta
   github_tag: "v1.10-rc1"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10-rc1"
+  description: >
+    Includes the standalone desktop application, the server, and the command line
+    interface. Versions available for Windows (an installer EXE), Mac OS (a DMG
+    disk image containing a standard Mac OS application) and Linux (a ZIP file).
   files:
     - platform: windows
       package: installer
