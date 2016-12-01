@@ -49,6 +49,7 @@ The tree below shows the structure of the project:
   - [gui](https://github.com/daisy/pipeline-updater-gui)
 - utils
   - [build-utils](https://github.com/daisy/pipeline-build-utils)
+  - [xprocspec](https://github.com/daisy/xprocspec)
   - [xproc-maven-plugin](https://github.com/daisy/xproc-maven-plugin)
   - [xspec-maven-plugin](https://github.com/daisy/xspec-maven-plugin)
 - [webui](https://github.com/daisy/pipeline-webui)

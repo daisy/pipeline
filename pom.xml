@@ -18,6 +18,7 @@
   <modules>
     <module>utils/build-utils</module>
     <module>utils/xspec-maven-plugin</module>
+    <module>utils/xprocspec</module>
     <module>utils/xproc-maven-plugin</module>
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
