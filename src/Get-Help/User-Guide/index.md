@@ -21,7 +21,7 @@ Last but not least, DAISY Pipeline 2 can also be run as a
 [service](Pipeline-As-Service) to which client programs can connect,
 through a web API. In fact, the DAISY Pipeline 2 web application is an
 example of such a server-client configuration. There is also a
-[command line tool](https://github.com/daisy/pipeline-cli-go).
+[command line tool](Command-Line.md).
 
 DAISY Pipeline 2, in all its forms, is supported on Windows, Mac OS,
 and Linux.

@@ -17,6 +17,7 @@
           pages:
             - url: {{site.baseurl}}/wiki/Configuration-Files/
               title: "Configuration"
+        - {{site.baseurl}}/Get-Help/User-Guide/Command-Line.html
         - group: {{site.baseurl}}/Get-Help/User-Guide/Scripts.html
           pages:
 
