@@ -44,6 +44,7 @@ public class LayoutEngine implements TaskGroup {
 		p2.remove(Keys.INPUT);
 		p2.remove(Keys.INPUT_URI);
 		p2.remove("output");
+		p2.remove("obfl-output-location");
 		p2.remove(Keys.TEMP_FILES_DIRECTORY);
 		ret.add(new LayoutEngineTask(p2, spec, pmw, fe));
 		return ret;
