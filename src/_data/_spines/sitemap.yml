@@ -39,7 +39,8 @@
       title: "Source Code"
     - url: https://groups.google.com/forum/#!forum/daisy-pipeline-dev
       title: "Developers Mailing List"
-    - url: https://github.com/daisy/pipeline/issues
+      # copied from "existing issues" in http://daisy.github.io/pipeline/Contribute/
+    - url: "https://github.com/search?utf8=%E2%9C%93&type=Issues&q=+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl"
       title: "Issue Tracker"
     - {{site.baseurl}}/Contribute/Developer-Guide.html
 - url: http://www.daisy.org
