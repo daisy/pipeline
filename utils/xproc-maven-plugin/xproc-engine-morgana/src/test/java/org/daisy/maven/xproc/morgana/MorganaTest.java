@@ -1,4 +1,4 @@
-package org.daisy.maven.xproc.calabash;
+package org.daisy.maven.xproc.morgana;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,12 +15,12 @@ import org.daisy.maven.xproc.api.XProcExecutionException;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-public class CalabashTest {
+public class MorganaTest {
 	
 	@Test
 	public void testSimplePipeline() throws FileNotFoundException, XProcExecutionException {
-		XProcEngine engine = new Calabash();
-		File resourcesDir = new File(CalabashTest.class.getResource("/").getPath());
+		XProcEngine engine = new Morgana();
+		File resourcesDir = new File(MorganaTest.class.getResource("/").getPath());
 		File pipeline = new File(resourcesDir, "foo.xpl");
 		File input = new File(resourcesDir, "hello.xml");
 		File expected = new File(resourcesDir, "hello_foo_expected.xml");

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.maven</groupId>
+    <artifactId>xproc-maven-plugin-parent</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
+  </parent>
+
+  <artifactId>xproc-engine-morgana</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  <name>xproc-engine-morgana</name>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-api</artifactId>
+      <version>1.0.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-project</groupId>
+      <artifactId>MorganaXProc</artifactId>
+      <version>1.0</version>
+      <scope>system</scope>
+      <systemPath>${basedir}/lib/MorganaXProc.jar</systemPath>
+    </dependency>
+    <!--
+        dependencies of MorganaXProc
+    -->
+    <dependency>
+      <groupId>com.io7m.xom</groupId>
+      <artifactId>xom</artifactId>
+      <version>1.2.10</version>
+    </dependency>
+    <dependency>
+      <groupId>xml-resolver</groupId>
+      <artifactId>xml-resolver</artifactId>
+      <version>1.2</version>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>14.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <_dsannotations>*</_dsannotations>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
+</project>
