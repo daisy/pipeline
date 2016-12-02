@@ -33,7 +33,7 @@ public class DuplicatorTask extends ReadOnlyTask {
 		try {
 			FileIO.copyFile(input, copy);
 		} catch (IOException e) {
-			throw new InternalTaskException("Exception while copying file.", e);
+			throw new InternalTaskException("Exception while copying file " + input + " to " + copy, e);
 		}
 	}
 
