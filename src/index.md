@@ -11,15 +11,36 @@ people with print disabilities.
 
 ## Accessibility
 
-...
+The Pipeline was developed by and for the
+[DAISY community](http://www.daisy.org/), a group of organizations
+committed to making content accessible. It goes without saying that
+accessiblity is the main interest of the tool. There are Pipeline
+transformation for migrating from one accessible format to another,
+enriching an input format with certain accessible features, and
+producing formats targeting a specific disability.
 
-## Digital Content
+## Standards
 
-...
+Accessibility goes hand in hand with standards. The formats that the
+Pipeline primarily focuses on are [EPUB 3](http://idpf.org/epub/301),
+[DAISY](http://www.daisy.org/specifications) and
+[PEF](http://pef-format.org/?page_id=15).
+
+<!--
+## Automated Production
+-->
 
 ## Open-source
 
-...
+All software products maintained by the DAISY Consortium are available
+under a business-friendly licence
+([LGPL](https://www.gnu.org/licenses/lgpl.html)). This in order to
+stimulate collaboration between organizations and to maximize reuse
+and integration in other contexts, including commercial software.
+
+<!--
+Free software (free as in freedom)?
+-->
 
 Find out how you can [join the community](Contribute).
 
@@ -31,6 +52,10 @@ Download [the latest version](Download.html#latest-version) of DAISY
 Pipeline 2 and find out [how it works](Get-Help).
 
 </section>
+
+<!--
+## Feature Highlights
+-->
 
 ## Background
 
