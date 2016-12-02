@@ -1,0 +1,2410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:ex="http://example.net/ns"
+               script="identity.xpl">
+  
+  <x:scenario label="1">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="2">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="3">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="4">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="5">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="6">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="7">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="8">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="9">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="10">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="11">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="12">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="13">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="14">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="15">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="16">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="17">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="18">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="19">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="20">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="21">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="22">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="23">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="24">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="25">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+  
+  <x:scenario label="26">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="27">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="28">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="29">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="30">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="31">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="32">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="33">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="34">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="35">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="36">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="37">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="38">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="39">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="40">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="41">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="42">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="43">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="44">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="45">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="46">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="47">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="48">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="49">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+  
+  <x:scenario label="50">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+  
+  <!--
+  <x:scenario label="51">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="52">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="53">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="54">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="55">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="56">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="57">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="58">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="59">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="60">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="61">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="62">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="63">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="64">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="65">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="66">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="67">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="68">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="69">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="70">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="71">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="72">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="73">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="74">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="75">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="76">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="77">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="78">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="79">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="80">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="81">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="82">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="83">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="84">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="85">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="86">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="87">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="88">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="89">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="90">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="91">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="92">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="93">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="94">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="95">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="96">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="97">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="98">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="99">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="100">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+  -->
+  
+  <!--
+  <x:scenario label="101">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="102">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="103">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="104">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="105">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="106">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="107">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="108">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="109">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="110">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="111">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="112">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="113">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="114">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="115">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="116">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="117">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="118">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="119">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="120">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="121">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="122">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="123">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="124">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="125">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="126">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="127">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="128">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="129">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="130">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="131">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="132">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="133">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="134">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="135">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="136">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="137">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="138">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="139">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="140">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="141">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="142">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="143">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="144">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="145">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="146">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="147">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="148">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="149">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="150">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="151">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="152">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="153">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="154">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="155">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="156">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="157">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="158">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="159">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="160">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="161">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="162">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="163">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="164">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="165">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="166">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="167">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="168">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="169">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="170">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="171">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="172">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="173">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="174">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="175">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="176">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="177">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="178">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="179">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="180">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="181">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="182">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="183">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="184">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="185">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="186">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="187">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="188">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="189">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="190">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="191">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="192">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="193">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="194">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="195">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="196">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="197">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="198">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="199">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+
+  <x:scenario label="200">
+    <x:call step="ex:identity">
+      <x:option name="option" select="'option-value'"/>
+      <x:option name="option.required" select="'option.required-value'"/>
+    </x:call>
+    <x:context label="the results">
+      <x:document type="port" port="options"/>
+    </x:context>
+    <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
+    <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
+  </x:scenario>
+  -->
+  
+</x:description>
