@@ -7,10 +7,8 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore // takes too much time at the moment
 public class PerformanceTest {
 	
 	@Test

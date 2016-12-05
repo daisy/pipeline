@@ -108,7 +108,8 @@ public class XProcSpecRunner {
 			Map<String,List<String>> input = ImmutableMap.of("source", Arrays.asList(new String[]{asURI(test).toASCIIString()}));
 			Map<String,String> output = ImmutableMap.of("html", asURI(report).toASCIIString(),
 			                                            "junit", asURI(surefireReport).toASCIIString());
-			Map<String,String> options = ImmutableMap.of("temp-dir", asURI(tempDir) + "/tmp/");
+			Map<String,String> options = ImmutableMap.of("temp-dir", asURI(tempDir) + "/tmp/",
+			                                             "enable-log", "false");
 			reporter.running(testName);
 			try {
 				engine.run(xprocspec.toASCIIString(), input, output, options, null);

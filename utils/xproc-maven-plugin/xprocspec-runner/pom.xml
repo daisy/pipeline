@@ -24,7 +24,7 @@
     <dependency>
       <groupId>org.daisy.xprocspec</groupId>
       <artifactId>xprocspec</artifactId>
-      <version>[1.0.0,2.0.0)</version>
+      <version>1.1.1-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>

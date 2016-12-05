@@ -18,6 +18,8 @@
 
     <p:option name="step-available-rng" select="'false'"/>
 
+    <p:option name="enable-log" select="'true'"/>
+
     <p:import href="preprocess/preprocess.xpl"/>
     <p:import href="compile/compile.xpl"/>
     <p:import href="run/run.xpl"/>
@@ -26,7 +28,9 @@
     <p:import href="utils/logging-library.xpl"/>
 
     <p:variable name="start-time" select="adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H'))"/>
-    <p:variable name="logfile" select="concat($temp-dir,'xprocspec-log-',replace($start-time,'[^\d]',''),'.xml')"/>
+    <p:variable name="logfile" select="if ($enable-log='true')
+                                       then concat($temp-dir,'xprocspec-log-',replace($start-time,'[^\d]',''),'.xml')
+                                       else ''"/>
 
     <!--
         * Converts any other XProc test syntaxes (currently supported: XProc Test Suite).

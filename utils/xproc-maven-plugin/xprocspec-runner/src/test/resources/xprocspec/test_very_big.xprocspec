@@ -603,7 +603,6 @@
     <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
   </x:scenario>
   
-  <!--
   <x:scenario label="51">
     <x:call step="ex:identity">
       <x:option name="option" select="'option-value'"/>
@@ -1203,9 +1202,7 @@
     <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
     <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
   </x:scenario>
-  -->
   
-  <!--
   <x:scenario label="101">
     <x:call step="ex:identity">
       <x:option name="option" select="'option-value'"/>
@@ -2405,6 +2402,5 @@
     <x:expect type="xpath" label="the option 'option' should have the value 'option-value'" test="/*/*[@name='option']/@value='option-value'"/>
     <x:expect type="xpath" label="the option 'option.required' should have the value 'option-value'" test="/*/*[@name='option.required']/@value='option.required-value'"/>
   </x:scenario>
-  -->
   
 </x:description>
