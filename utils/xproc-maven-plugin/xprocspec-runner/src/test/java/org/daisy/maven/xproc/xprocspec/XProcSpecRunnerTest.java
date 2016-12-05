@@ -25,6 +25,7 @@ import org.junit.Test;
 public class XProcSpecRunnerTest {
 	
 	private static File testsDir = new File(new File(XProcSpecRunnerTest.class.getResource("/").getPath()), "xprocspec");
+	private static File logbackXml = new File(new File(XProcSpecRunnerTest.class.getResource("/").getPath()), "logback.xml");
 	private XProcSpecRunner xprocspecRunner;
 	private File reportsDir;
 	private File surefireReportsDir;
@@ -39,6 +40,7 @@ public class XProcSpecRunnerTest {
 		surefireReportsDir.deleteOnExit();
 		tempDir = Files.createTempDir();
 		tempDir.deleteOnExit();
+		System.setProperty("logback.configurationFile", logbackXml.toURI().toASCIIString());
 	}
 	
 	@Test

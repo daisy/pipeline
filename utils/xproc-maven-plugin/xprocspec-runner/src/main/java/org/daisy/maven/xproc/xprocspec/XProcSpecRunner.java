@@ -9,6 +9,9 @@ import static com.google.common.io.Files.asByteSink;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -84,6 +87,27 @@ public class XProcSpecRunner {
 		if (engine == null)
 			activate();
 		engine.setCatalog(catalog);
+		
+		// register Java implementation of px:message
+		// FIXME: make a generic step that can be used by all XProc engines
+		if (engine.getClass().getName().equals("org.daisy.maven.xproc.calabash.Calabash")) {
+			try {
+				engine.getClass().getMethod("setDefaultConfiguration", Reader.class).invoke(engine, new StringReader(
+				    "<xproc-config xmlns=\"http://xmlcalabash.com/ns/configuration\" xmlns:px=\"http://www.daisy.org/ns/xprocspec\">" +
+				    "  <implementation type=\"px:message\" class-name=\"org.daisy.maven.xproc.xprocspec.logging.calabash.impl.MessageStep\"/>" +
+				    "</xproc-config>")); }
+			catch (NoSuchMethodException e) {
+				System.out.println("WARNING: Please use a version of xproc-engine-calabash >= 1.0.1-SNAPSHOT");
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException(e.getTargetException());
+			}
+		} else if (engine.getClass().getName().equals("org.daisy.maven.xproc.pipeline.DaisyPipeline2")) {
+			
+			// assumes we are running inside OSGi
+			// org.daisy.maven.xproc.xprocspec.logging.pipeline.impl.MessageStepProvider registered through declarative services
+		}
 		
 		URI xprocspec = asURI(XProcSpecRunner.class.getResource("/content/xml/xproc/xprocspec.xpl"));
 		URI xprocspecSummary = asURI(XProcSpecRunner.class.getResource("/xprocspec-extra/xprocspec-summary.xpl"));

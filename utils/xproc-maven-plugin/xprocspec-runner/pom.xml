@@ -38,6 +38,29 @@
       <version>15.0</version>
     </dependency>
     <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-calabash</artifactId>
+      <version>1.0.1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-daisy-pipeline</artifactId>
+      <version>1.10</version>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-jdk14</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
       <version>4.3.0</version>
@@ -62,9 +85,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xproc-engine-calabash</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.0.11</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

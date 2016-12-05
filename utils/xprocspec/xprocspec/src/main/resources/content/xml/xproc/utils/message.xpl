@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step type="pxi:message" name="main" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:p="http://www.w3.org/ns/xproc" xmlns:cx="http://xmlcalabash.com/ns/extensions" xmlns:x="http://www.emc.com/documentum/xml/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/" xmlns:dp2i="http://www.daisy.org/ns/pipeline/xproc/internal" exclude-inline-prefixes="#all" version="1.0">
+    xmlns:pxi="http://www.daisy.org/ns/xprocspec/xproc-internal/" xmlns:px="http://www.daisy.org/ns/xprocspec" exclude-inline-prefixes="#all" version="1.0">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Example usage:</p>
         <pre xml:space="preserve">
-            &lt;px:message message="The value '$1' is an invalid font color. Will use black instead." severity="WARN"&gt;
+            &lt;pxi:message message="The value '$1' is an invalid font color. Will use black instead." severity="WARN"&gt;
                 &lt;p:with-param name="param1" select="$color"/&gt;
-            &lt;/px:message&gt;
+            &lt;/pxi:message&gt;
         </pre>
     </p:documentation>
 
@@ -59,8 +59,11 @@
         </p:declare-step>
     -->
 
-    <!-- TODO: implement this in Java to make use of the logging levels there -->
-    <p:declare-step type="dp2i:message">
+    <!--
+        May optionally be implemented in Java, in which case it will be used instead of cx:message
+        (Calabash) or x:message (Calumet)
+    -->
+    <p:declare-step type="px:message">
         <p:option name="message" required="true"/>
         <p:option name="severity" select="'INFO'"/>
         <p:input port="source" primary="true" sequence="true"/>
@@ -132,8 +135,8 @@
         </p:when>
         
         <!-- Pipeline 2 -->
-        <p:when test="p:step-available('dp2i:message')">
-            <dp2i:message>
+        <p:when test="p:step-available('px:message')">
+            <px:message>
                 <p:with-option name="message" select="/*/@message">
                     <p:pipe port="result" step="message"/>
                 </p:with-option>
@@ -142,7 +145,7 @@
                         <irrelevant/>
                     </p:inline>
                 </p:with-option>
-            </dp2i:message>
+            </px:message>
             <p:identity/>
         </p:when>
 

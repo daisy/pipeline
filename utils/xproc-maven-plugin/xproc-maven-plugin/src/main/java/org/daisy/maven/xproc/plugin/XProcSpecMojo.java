@@ -85,6 +85,8 @@ public class XProcSpecMojo extends AbstractMojo {
 	 */
 	private MavenProject project;
 	
+	private static final String XPROCSPEC_LOGGER_NAME = "org.daisy.xprocspec";
+	
 	public void execute() throws MojoFailureException {
 		
 		if (skip || skipTests) {
@@ -104,15 +106,15 @@ public class XProcSpecMojo extends AbstractMojo {
 			if (rootLogger.getClass().getName().equals("org.slf4j.impl.SimpleLogger")) {
 				
 				// default log settings with slf4j-simple
-				if (System.getProperty("org.slf4j.simpleLogger.defaultLogLevel") == null)
-					System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "warn");
+				if (System.getProperty("org.slf4j.simpleLogger.log." + XPROCSPEC_LOGGER_NAME) == null)
+					System.setProperty("org.slf4j.simpleLogger.log." + XPROCSPEC_LOGGER_NAME, "warn");
 				System.out.println("See http://www.slf4j.org/api/org/slf4j/impl/SimpleLogger.html for how to configure logging."); }}
 		else if (logbackXml.exists())
 			System.setProperty("logback.configurationFile", logbackXml.toURI().toASCIIString());
 		else
 			
 			// default log settings with logback
-			rootLogger.setLevel(ch.qos.logback.classic.Level.WARN);
+			((ch.qos.logback.classic.Logger)LoggerFactory.getLogger(XPROCSPEC_LOGGER_NAME)).setLevel(ch.qos.logback.classic.Level.WARN);
 		java.util.logging.LogManager.getLogManager().reset();
 		SLF4JBridgeHandler.install();
 		java.util.logging.Logger.getLogger("").setLevel(java.util.logging.Level.FINEST);
@@ -127,6 +129,8 @@ public class XProcSpecMojo extends AbstractMojo {
 					realm.addURL(new File(path).toURI().toURL());
 				for (Artifact artifact : project.getArtifacts())
 					realm.addURL(artifact.getFile().toURI().toURL());
+				
+				// assumes that this is the same engine as is used by the runner
 				XProcEngine engine = ServiceLoader.load(XProcEngine.class).iterator().next();
 				engine.getClass().getMethod("setConfiguration", File.class).invoke(engine, calabashXml);
 				runner.setXProcEngine(engine); }
