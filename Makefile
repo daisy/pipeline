@@ -100,7 +100,7 @@ $(addprefix compile-,$(MAVEN_MODULES)) : compile-% : %/.gradle-install-dependenc
 .PHONY : $(addprefix check-,$(MAVEN_MODULES))
 $(addprefix check-,$(MAVEN_MODULES)) : check-% : %/.gradle-install-dependencies %/.maven-install-dependencies
 	cd $(dir $<) && \
-	$(MVN) clean test && \
+	$(MVN) test package integration-test && \
 	if [ -e .maven-to-test ]; then \
 		rm .maven-to-test; \
 	fi
