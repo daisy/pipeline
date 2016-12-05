@@ -13,8 +13,6 @@
     <!-- this will certainly be slow if there's a lot of log statements; use with care! -->
     <!-- I would love to find a way to append to a file without loading it (something like "echo 'message' >> 'logfile'") -->
 
-    <p:import href="message.xpl"/>
-
     <p:choose>
         <p:xpath-context>
             <p:empty/>
