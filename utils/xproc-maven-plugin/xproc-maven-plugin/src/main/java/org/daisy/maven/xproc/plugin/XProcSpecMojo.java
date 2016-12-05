@@ -91,15 +91,28 @@ public class XProcSpecMojo extends AbstractMojo {
 			getLog().info("Tests are skipped.");
 			return; }
 		
+		// configure logging
 		File logbackXml = new File(new File(project.getBuild().getTestOutputDirectory()), "logback.xml");
-		if (logbackXml.exists())
-			System.setProperty("logback.configurationFile", logbackXml.toURI().toASCIIString());
-		else {
+		org.slf4j.Logger rootLogger = LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
+		if (!(rootLogger instanceof ch.qos.logback.classic.Logger)) {
+			System.out.println("WARNING: There is another SLF4J implementation on your class path that is chosen over logback.");
 			try {
-				ch.qos.logback.classic.Logger root= (ch.qos.logback.classic.Logger)LoggerFactory.getLogger(
-					ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-				root.setLevel(ch.qos.logback.classic.Level.WARN); }
-			catch (ClassCastException e) {}}
+				System.out.println(" -> " + rootLogger.getClass().getProtectionDomain().getCodeSource().getLocation()); }
+			catch (SecurityException se) {}
+			if (logbackXml.exists())
+				System.out.println("" + logbackXml + " ignored");
+			if (rootLogger.getClass().getName().equals("org.slf4j.impl.SimpleLogger")) {
+				
+				// default log settings with slf4j-simple
+				if (System.getProperty("org.slf4j.simpleLogger.defaultLogLevel") == null)
+					System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "warn");
+				System.out.println("See http://www.slf4j.org/api/org/slf4j/impl/SimpleLogger.html for how to configure logging."); }}
+		else if (logbackXml.exists())
+			System.setProperty("logback.configurationFile", logbackXml.toURI().toASCIIString());
+		else
+			
+			// default log settings with logback
+			rootLogger.setLevel(ch.qos.logback.classic.Level.WARN);
 		java.util.logging.LogManager.getLogManager().reset();
 		SLF4JBridgeHandler.install();
 		java.util.logging.Logger.getLogger("").setLevel(java.util.logging.Level.FINEST);
