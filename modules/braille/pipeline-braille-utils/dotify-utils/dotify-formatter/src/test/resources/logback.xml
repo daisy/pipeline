@@ -19,5 +19,6 @@
   </root>
   
   <logger name="org.daisy" level="DEBUG"/>
+  <logger name="org.daisy.xprocspec" level="WARN"/>
   
 </configuration>
