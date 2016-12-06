@@ -46,7 +46,9 @@
                                 <p:empty/>
                             </p:input>
                             <p:input port="options">
-                                <p:empty/>
+                                <p:inline>
+                                    <cx:options/>
+                                </p:inline>
                             </p:input>
                         </cx:eval>
                         <p:identity name="test-output"/>
@@ -72,7 +74,9 @@
                                 <p:empty/>
                             </p:input>
                             <p:input port="options">
-                                <p:empty/>
+                                <p:inline>
+                                    <cx:options/>
+                                </p:inline>
                             </p:input>
                         </cx:eval>
                         <p:identity>

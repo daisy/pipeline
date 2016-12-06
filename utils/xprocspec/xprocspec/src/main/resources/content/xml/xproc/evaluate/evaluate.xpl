@@ -421,7 +421,9 @@
                                                 <p:pipe port="result" step="custom.expect"/>
                                             </p:input>
                                             <p:input port="options">
-                                                <p:empty/>
+                                                <p:inline>
+                                                    <cx:options/>
+                                                </p:inline>
                                             </p:input>
                                         </cx:eval>
                                     </p:when>
