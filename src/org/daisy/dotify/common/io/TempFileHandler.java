@@ -56,7 +56,9 @@ public class TempFileHandler implements StreamJuggler {
 	 *             files could not be created.
 	 */
 	public TempFileHandler(File input, File output) throws IOException {
-		if (!input.exists()) { throw new FileNotFoundException(); }
+		if (!input.exists()) {
+			throw new FileNotFoundException(input.getAbsolutePath());
+		}
 		if (!input.isFile() || (output.exists() && !output.isFile())) {
 			throw new IOException("Cannot perform this operation on directories.");
 		}
@@ -106,7 +108,9 @@ public class TempFileHandler implements StreamJuggler {
 		if (getOutput().length()>0) {
 			toggle = !toggle;
 			// reset the new output to length()=0
-			new FileOutputStream(getOutput()).close();
+			try (OutputStream unused = new FileOutputStream(getOutput())) {
+				//this is empty because we only need to close it
+			}
 		} else {
 			throw new IOException("Cannot swap to an empty file.");
 		}
@@ -127,8 +131,12 @@ public class TempFileHandler implements StreamJuggler {
 			return;
 		}
 		try {
-			if (getOutput().length() > 0) { FileIO.copy(getOutput(), output); }
-			else if (getInput().length() > 0) { FileIO.copy(getInput(), output); }
+			if (getOutput().length() > 0) {
+				FileIO.copy(getOutput(), output);
+			}
+			else if (getInput().length() > 0) {
+				FileIO.copy(getInput(), output);
+			}
 			else {
 				throw new IOException("Temporary files corrupted.");
 			}

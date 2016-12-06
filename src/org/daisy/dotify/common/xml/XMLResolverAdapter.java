@@ -58,20 +58,15 @@ public class XMLResolverAdapter implements XMLResolver {
             }
             Reader rdr = is.getCharacterStream();
             if (rdr != null) {
-                StringBuffer buffer = new StringBuffer();
-                int ch = 0;
+                StringBuilder buffer = new StringBuilder();
+                int ch;
                 while ((ch = rdr.read())> -1) {
                     buffer.append((char)ch);
                 }
-                ByteArrayInputStream bais = new ByteArrayInputStream(buffer.toString().getBytes());
-                return bais;
+                return new ByteArrayInputStream(buffer.toString().getBytes());
             }
-        } catch (SAXException e) {
+        } catch (SAXException | IOException e) {
             throw new XMLStreamException(e);
-            //e.printStackTrace();
-        } catch (IOException e) {
-            throw new XMLStreamException(e);
-            //e.printStackTrace();
         }
         return null;
     }

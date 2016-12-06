@@ -29,15 +29,16 @@ public class FileIO {
 	 *             if IO fails
 	 */
 	public static void copy(InputStream is, OutputStream os) throws IOException {
-		InputStream bis = new BufferedInputStream(is);
-		OutputStream bos = new BufferedOutputStream(os);
-		int b;
-		while ((b = bis.read()) != -1) {
-			bos.write(b);
+		try (
+			InputStream bis = new BufferedInputStream(is);
+			OutputStream bos = new BufferedOutputStream(os);
+		) {
+			int b;
+			while ((b = bis.read()) != -1) {
+				bos.write(b);
+			}
+			bos.flush();
 		}
-		bos.flush();
-		bos.close();
-		bis.close();
 	}
 
 	/**
@@ -60,20 +61,13 @@ public class FileIO {
 		if (!destFile.exists()) {
 			destFile.createNewFile();
 		}
-
-		FileChannel source = null;
-		FileChannel destination = null;
-		try {
-			source = new FileInputStream(sourceFile).getChannel();
-			destination = new FileOutputStream(destFile).getChannel();
+		try (
+			FileInputStream is = new FileInputStream(sourceFile);
+			FileChannel source = is.getChannel();
+			FileOutputStream os = new FileOutputStream(destFile);
+			FileChannel destination = os.getChannel();
+		) {
 			destination.transferFrom(source, 0, source.size());
-		} finally {
-			if (source != null) {
-				source.close();
-			}
-			if (destination != null) {
-				destination.close();
-			}
 		}
 	}
 
@@ -162,9 +156,10 @@ public class FileIO {
 	 *             if IO fails
 	 */
 	public static long diff(InputStream f1, InputStream f2) throws IOException {
-		InputStream bf1 = new BufferedInputStream(f1);
-		InputStream bf2 = new BufferedInputStream(f2);
-		try {
+		try (
+			InputStream bf1 = new BufferedInputStream(f1);
+			InputStream bf2 = new BufferedInputStream(f2)
+		) {
 			int b1;
 			int b2;
 			long pos = 0;
@@ -176,9 +171,6 @@ public class FileIO {
 				return pos;
 			}
 			return -1;
-		} finally {
-			bf1.close();
-			bf2.close();
 		}
 	}
 }
