@@ -161,6 +161,14 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
     a['tabindex'] = tabindex
     tabindex = tabindex + 1
   end
+
+  ## FIXME: this is a hack!
+  ## mark part of nav-sitemap that is positioned on the left
+  doc.css('#nav-sitemap > ul.spine > li.spine-item-current > ul,
+           #nav-sitemap > ul.spine > li > ul.spine-has-current').each do |ul|
+    ul['id'] = 'nav-sitemap-left'
+    break # there is at most one
+  end
   
   File.open(f, 'w') { |f| f.write(doc.to_html) }
 end

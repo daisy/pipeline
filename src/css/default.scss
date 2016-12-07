@@ -204,7 +204,7 @@ body {
 				position: relative;
 				top: -1.4em; }
 			&.spine-item-current > ul,
-			> ul.spine-has-current {
+			> ul.spine-has-current { // #nav-sitemap-left
 				position: absolute;
 				left: - $left-offset + 3.2rem;
 				top: $top-offset + .4rem;
@@ -212,6 +212,8 @@ body {
 				margin-right: .5rem;
 				padding-right: .625rem;
 				padding-top: 0.625rem;
+				// height: set via javascript
+				overflow-x: hidden;
 				li {
 					ul {
 						margin-left: .31rem; }
