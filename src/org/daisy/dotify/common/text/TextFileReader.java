@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -16,7 +17,7 @@ import java.util.regex.PatternSyntaxException;
  *
  */
 public class TextFileReader implements Closeable {
-	private static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+	private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 	private static final String DEFAULT_EXPRESSION = ",\\s*";
 	private static final int DEFAULT_LIMIT = 0;
 	private LineNumberReader lnr;
