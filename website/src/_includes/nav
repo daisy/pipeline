@@ -13,15 +13,33 @@ var onload = function() {
   if (fixed) {
     nav.classList.add('fixed');
   }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
   window.onscroll = function(e) {
     if (fixed && window.pageYOffset < navTopBefore) {
       nav.classList.remove('fixed');
 	  fixed = false;
+      setLeftNavHeight();
     } else if (!fixed && window.pageYOffset > navTopBefore) {
       nav.classList.add('fixed');
 	  fixed = true;
+      setLeftNavHeight();
     }
   }
+  window.onresize = setLeftNavHeight;
 };
 if (window.addEventListener) {
   window.addEventListener('load', onload);
