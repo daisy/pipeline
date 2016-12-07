@@ -17,6 +17,8 @@ import java.util.logging.Logger;
  *
  */
 public class FileIO {
+	
+	private FileIO() {}
 
 	/**
 	 * Copies an input stream to an output stream
@@ -28,6 +30,7 @@ public class FileIO {
 	 * @throws IOException
 	 *             if IO fails
 	 */
+	//TODO: deprecate this in Java 9: is.transferTo(OutputStream)
 	public static void copy(InputStream is, OutputStream os) throws IOException {
 		try (
 			InputStream bis = new BufferedInputStream(is);
@@ -46,7 +49,9 @@ public class FileIO {
 	 * @param input the input file
 	 * @param output the output file
 	 * @throws IOException if IO fails
+	 * @deprecated use Files.copy(Path, Path)
 	 */
+	@Deprecated
 	public static void copy(File input, File output) throws IOException {
 		copy(new FileInputStream(input), new FileOutputStream(output));
 	}
@@ -56,7 +61,9 @@ public class FileIO {
 	 * @param sourceFile the source file
 	 * @param destFile the destination file
 	 * @throws IOException if IO fails
+	 * @deprecated use Files.copy(Path, Path)
 	 */
+	@Deprecated
 	public static void copyFile(File sourceFile, File destFile) throws IOException {
 		if (!destFile.exists()) {
 			destFile.createNewFile();
