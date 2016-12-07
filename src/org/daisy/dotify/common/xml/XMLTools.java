@@ -157,6 +157,8 @@ public class XMLTools {
 			} catch (URISyntaxException e) {
 				throw new XMLToolsException(e);
 			}
+		} else if (source instanceof URI) {
+			return new StreamSource(((URI) source).toString());
 		} else if (source instanceof Source) {
 			return (Source) source;
 		} else {
@@ -177,6 +179,8 @@ public class XMLTools {
 			} catch (URISyntaxException e) {
 				throw new XMLToolsException(e);
 			}
+		} else if (result instanceof URI) {
+			return new StreamResult(((URI) result).toString());
 		} else if (result instanceof Result) {
 			return (Result) result;
 		} else {
