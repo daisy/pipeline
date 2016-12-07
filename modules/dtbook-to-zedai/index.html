@@ -52,7 +52,7 @@
       Help
       </a>
       
-      <ul class="spine spine-has-current">
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
   
     
       
@@ -473,7 +473,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline/issues" class="external-link" target="_blank" tabindex="38">
+        <a href="https://github.com/search?utf8=%E2%9C%93&amp;type=Issues&amp;q=+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl" class="external-link" target="_blank" tabindex="38">
       
       Issue Tracker
       </a>
@@ -523,15 +523,33 @@ var onload = function() {
   if (fixed) {
     nav.classList.add('fixed');
   }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
   window.onscroll = function(e) {
     if (fixed && window.pageYOffset < navTopBefore) {
       nav.classList.remove('fixed');
 	  fixed = false;
+      setLeftNavHeight();
     } else if (!fixed && window.pageYOffset > navTopBefore) {
       nav.classList.add('fixed');
 	  fixed = true;
+      setLeftNavHeight();
     }
   }
+  window.onresize = setLeftNavHeight;
 };
 if (window.addEventListener) {
   window.addEventListener('load', onload);
@@ -740,12 +758,16 @@ TODO specify whether opt-lang overrides a language code declared in the XML
 
 <p>On Linux and Mac OS X:</p>
 
-<pre><code>$ cli/dp2 dtbook-to-zedai --i-source samples/dtbook/hauy_valid.xml --x-output-dir ~/Desktop/out
+<pre><code>$ cli/dp2 dtbook-to-zedai
+          --i-source samples/dtbook/hauy_valid.xml
+          --x-output-dir ~/Desktop/out
 </code></pre>
 
 <p>On Windows:</p>
 
-<pre><code>$ cli\dp2.exe dtbook-to-zedai --i-source samples\dtbook\hauy_valid.xml --x-output-dir C:\Pipeline2-Output
+<pre><code>$ cli\dp2.exe dtbook-to-zedai
+              --i-source samples\dtbook\hauy_valid.xml
+              --x-output-dir C:\Pipeline2-Output
 </code></pre>
 
 <p>Input:</p>
@@ -755,7 +777,8 @@ TODO specify whether opt-lang overrides a language code declared in the XML
 <div class="highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="preprocessor">&lt;?xml version='1.0' encoding='utf-8'?&gt;</span>
-<span class="doctype">&lt;!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"&gt;</span>
+<span class="doctype">&lt;!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN"
+                        "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"&gt;</span>
 <span class="preprocessor">&lt;?xml-stylesheet href="dtbookbasic.css" type="text/css"?&gt;</span>
 <span class="tag">&lt;dtbook</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2005/dtbook/</span><span class="delimiter">"</span></span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">2005-3</span><span class="delimiter">"</span></span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en-US</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
     <span class="tag">&lt;head&gt;</span>
@@ -800,19 +823,19 @@ TODO specify whether opt-lang overrides a language code declared in the XML
     <div class="highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="preprocessor">&lt;?xml-stylesheet href="dtbook-basic-zedai.css" ?&gt;</span>
-<span class="tag">&lt;document</span> 
-        <span class="attribute-name">xmlns:rend</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/z3986/authoring/features/rend/</span><span class="delimiter">"</span></span> 
-        <span class="attribute-name">xmlns:xlink</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/1999/xlink</span><span class="delimiter">"</span></span> 
-        <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/z3986/authoring/</span><span class="delimiter">"</span></span> 
-        <span class="attribute-name">xmlns:z3986</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2011/vocab/decl/#</span><span class="delimiter">"</span></span> 
-        <span class="attribute-name">xmlns:dcterms</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://purl.org/dc/terms/</span><span class="delimiter">"</span></span> 
-        <span class="attribute-name">xmlns:tmp</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/pipeline/tmp</span><span class="delimiter">"</span></span> 
-        <span class="attribute-name">xmlns:its</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/2005/11/its</span><span class="delimiter">"</span></span> 
-        <span class="attribute-name">profile</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2011/vocab/profiles/default/</span><span class="delimiter">"</span></span> 
-        <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en-US</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+<span class="tag">&lt;document</span> <span class="attribute-name">xmlns:rend</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/z3986/authoring/features/rend/</span><span class="delimiter">"</span></span> 
+          <span class="attribute-name">xmlns:xlink</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/1999/xlink</span><span class="delimiter">"</span></span> 
+          <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/z3986/authoring/</span><span class="delimiter">"</span></span> 
+          <span class="attribute-name">xmlns:z3986</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2011/vocab/decl/#</span><span class="delimiter">"</span></span> 
+          <span class="attribute-name">xmlns:dcterms</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://purl.org/dc/terms/</span><span class="delimiter">"</span></span> 
+          <span class="attribute-name">xmlns:tmp</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/pipeline/tmp</span><span class="delimiter">"</span></span> 
+          <span class="attribute-name">xmlns:its</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/2005/11/its</span><span class="delimiter">"</span></span> 
+          <span class="attribute-name">profile</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2011/vocab/profiles/default/</span><span class="delimiter">"</span></span> 
+          <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en-US</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
     <span class="tag">&lt;head&gt;</span>
             
-        <span class="tag">&lt;meta</span> <span class="attribute-name">rel</span>=<span class="string"><span class="delimiter">"</span><span class="content">z3986:profile</span><span class="delimiter">"</span></span> <span class="attribute-name">resource</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2011/auth/profiles/book/0.8/</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+        <span class="tag">&lt;meta</span> <span class="attribute-name">rel</span>=<span class="string"><span class="delimiter">"</span><span class="content">z3986:profile</span><span class="delimiter">"</span></span>
+              <span class="attribute-name">resource</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2011/auth/profiles/book/0.8/</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
         <span class="tag">&lt;meta</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">"</span><span class="content">dcterms:title</span><span class="delimiter">"</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">Pipeline 2 DTBook Test Content: Basic</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
         <span class="tag">&lt;meta</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">"</span><span class="content">dcterms:creator</span><span class="delimiter">"</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">Marisa D.</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
         <span class="tag">&lt;meta</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">"</span><span class="content">dcterms:date</span><span class="delimiter">"</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">2011-03-01</span><span class="delimiter">"</span></span> <span class="attribute-name">xml:id</span>=<span class="string"><span class="delimiter">"</span><span class="content">meta-dcdate</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
@@ -820,8 +843,10 @@ TODO specify whether opt-lang overrides a language code declared in the XML
         <span class="tag">&lt;meta</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">"</span><span class="content">dcterms:identifier</span><span class="delimiter">"</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">pipeline2-dtbook-test-20110301-basic</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
         <span class="tag">&lt;meta</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">"</span><span class="content">dcterms:language</span><span class="delimiter">"</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">en-US</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
         <span class="tag">&lt;meta</span> <span class="attribute-name">rel</span>=<span class="string"><span class="delimiter">"</span><span class="content">z3986:meta-record</span><span class="delimiter">"</span></span> <span class="attribute-name">resource</span>=<span class="string"><span class="delimiter">"</span><span class="content">dtbook-basic-zedai-mods.xml</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
-            <span class="tag">&lt;meta</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">"</span><span class="content">z3986:meta-record-type</span><span class="delimiter">"</span></span> <span class="attribute-name">about</span>=<span class="string"><span class="delimiter">"</span><span class="content">dtbook-basic-zedai-mods.xml</span><span class="delimiter">"</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">z3986:mods</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
-            <span class="tag">&lt;meta</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">"</span><span class="content">z3986:meta-record-version</span><span class="delimiter">"</span></span> <span class="attribute-name">about</span>=<span class="string"><span class="delimiter">"</span><span class="content">dtbook-basic-zedai-mods.xml</span><span class="delimiter">"</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">3.3</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;meta</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">"</span><span class="content">z3986:meta-record-type</span><span class="delimiter">"</span></span> <span class="attribute-name">about</span>=<span class="string"><span class="delimiter">"</span><span class="content">dtbook-basic-zedai-mods.xml</span><span class="delimiter">"</span></span>
+                  <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">z3986:mods</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+            <span class="tag">&lt;meta</span> <span class="attribute-name">property</span>=<span class="string"><span class="delimiter">"</span><span class="content">z3986:meta-record-version</span><span class="delimiter">"</span></span> <span class="attribute-name">about</span>=<span class="string"><span class="delimiter">"</span><span class="content">dtbook-basic-zedai-mods.xml</span><span class="delimiter">"</span></span>
+                  <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">3.3</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
         <span class="tag">&lt;/meta&gt;</span>
     <span class="tag">&lt;/head&gt;</span>
     <span class="comment">&lt;!-- test comment --&gt;</span>
@@ -857,20 +882,21 @@ TODO specify whether opt-lang overrides a language code declared in the XML
 
     <div class="highlighter-coderay">
 <div class="CodeRay">
-  <div class="code"><pre><span class="tag">&lt;mods</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.loc.gov/mods/v3</span><span class="delimiter">"</span></span> <span class="attribute-name">xmlns:dtb</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2005/dtbook/</span><span class="delimiter">"</span></span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">3.3</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
-    <span class="tag">&lt;titleInfo&gt;</span>
-        <span class="tag">&lt;title&gt;</span>Pipeline 2 DTBook Test Content: Basic<span class="tag">&lt;/title&gt;</span>
-    <span class="tag">&lt;/titleInfo&gt;</span>
-    <span class="tag">&lt;name&gt;</span>
-    <span class="tag">&lt;namePart&gt;</span>Marisa D.<span class="tag">&lt;/namePart&gt;</span>
-        <span class="tag">&lt;role&gt;</span>
-            <span class="tag">&lt;roleTerm</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">"</span><span class="content">text</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>author<span class="tag">&lt;/roleTerm&gt;</span>
-        <span class="tag">&lt;/role&gt;</span>
-    <span class="tag">&lt;/name&gt;</span>
-    <span class="tag">&lt;identifier</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">"</span><span class="content">uid</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>pipeline2-dtbook-test-20110301-basic<span class="tag">&lt;/identifier&gt;</span>
-    <span class="tag">&lt;language&gt;</span>
-        <span class="tag">&lt;languageTerm</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">"</span><span class="content">code</span><span class="delimiter">"</span></span> <span class="attribute-name">authority</span>=<span class="string"><span class="delimiter">"</span><span class="content">rfc3066</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>en-US<span class="tag">&lt;/languageTerm&gt;</span>
-    <span class="tag">&lt;/language&gt;</span>
+  <div class="code"><pre><span class="tag">&lt;mods</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.loc.gov/mods/v3</span><span class="delimiter">"</span></span> <span class="attribute-name">xmlns:dtb</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2005/dtbook/</span><span class="delimiter">"</span></span>
+      <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">3.3</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+   <span class="tag">&lt;titleInfo&gt;</span>
+       <span class="tag">&lt;title&gt;</span>Pipeline 2 DTBook Test Content: Basic<span class="tag">&lt;/title&gt;</span>
+   <span class="tag">&lt;/titleInfo&gt;</span>
+   <span class="tag">&lt;name&gt;</span>
+       <span class="tag">&lt;namePart&gt;</span>Marisa D.<span class="tag">&lt;/namePart&gt;</span>
+       <span class="tag">&lt;role&gt;</span>
+           <span class="tag">&lt;roleTerm</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">"</span><span class="content">text</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>author<span class="tag">&lt;/roleTerm&gt;</span>
+       <span class="tag">&lt;/role&gt;</span>
+   <span class="tag">&lt;/name&gt;</span>
+   <span class="tag">&lt;identifier</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">"</span><span class="content">uid</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>pipeline2-dtbook-test-20110301-basic<span class="tag">&lt;/identifier&gt;</span>
+   <span class="tag">&lt;language&gt;</span>
+       <span class="tag">&lt;languageTerm</span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">"</span><span class="content">code</span><span class="delimiter">"</span></span> <span class="attribute-name">authority</span>=<span class="string"><span class="delimiter">"</span><span class="content">rfc3066</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>en-US<span class="tag">&lt;/languageTerm&gt;</span>
+   <span class="tag">&lt;/language&gt;</span>
 <span class="tag">&lt;/mods&gt;</span>
 </pre></div>
 </div>
@@ -881,7 +907,7 @@ TODO specify whether opt-lang overrides a language code declared in the XML
 
     <div class="highlighter-coderay">
 <div class="CodeRay">
-  <div class="code"><pre><span class="id">#d212e45</span>{
+  <div class="code"><pre><span class="id">#d212e45</span> {
     <span class="key">height</span>: <span class="float">100px</span>;
     <span class="key">width</span>: <span class="float">100px</span>;
 }

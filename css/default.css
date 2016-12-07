@@ -174,7 +174,8 @@ body {
         width: 13rem;
         margin-right: .5rem;
         padding-right: .625rem;
-        padding-top: 0.625rem; }
+        padding-top: 0.625rem;
+        overflow-x: hidden; }
         #nav-sitemap > ul.spine > li.spine-item-current > ul li ul,
         #nav-sitemap > ul.spine > li > ul.spine-has-current li ul {
           margin-left: .31rem; }

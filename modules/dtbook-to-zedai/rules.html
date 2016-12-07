@@ -473,7 +473,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline/issues" class="external-link" target="_blank" tabindex="38">
+        <a href="https://github.com/search?utf8=%E2%9C%93&amp;type=Issues&amp;q=+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl" class="external-link" target="_blank" tabindex="38">
       
       Issue Tracker
       </a>
@@ -523,15 +523,33 @@ var onload = function() {
   if (fixed) {
     nav.classList.add('fixed');
   }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
   window.onscroll = function(e) {
     if (fixed && window.pageYOffset < navTopBefore) {
       nav.classList.remove('fixed');
 	  fixed = false;
+      setLeftNavHeight();
     } else if (!fixed && window.pageYOffset > navTopBefore) {
       nav.classList.add('fixed');
 	  fixed = true;
+      setLeftNavHeight();
     }
   }
+  window.onresize = setLeftNavHeight;
 };
 if (window.addEventListener) {
   window.addEventListener('load', onload);
@@ -560,17 +578,97 @@ sidebar: UserGuideToc
   <li>
 <a href="#dtbook-to-zedai-conversion-rules" id="markdown-toc-dtbook-to-zedai-conversion-rules">DTBook To ZedAI Conversion Rules</a>    <ul>
       <li><a href="#table-of-contents" id="markdown-toc-table-of-contents">Table of contents</a></li>
-      <li><a href="#remove-br" id="markdown-toc-remove-br">remove <code>br</code></a></li>
-      <li><a href="#br-to-ln" id="markdown-toc-br-to-ln"><code>br</code> to <code>ln</code></a></li>
-      <li><a href="#type-type-provides-advisory-content-mime-type-of-the-targeted-id-see-rfc1556---structguide" id="markdown-toc-type-type-provides-advisory-content-mime-type-of-the-targeted-id-see-rfc1556---structguide"><code>@type</code> (“Type provides advisory content MIME type of the targeted id, see RFC1556.” –structguide)</a></li>
+      <li><a href="#dtbook-element-a" id="markdown-toc-dtbook-element-a">DTBook element: <code>a</code></a></li>
+      <li><a href="#dtbook-element-abbr" id="markdown-toc-dtbook-element-abbr">DTBook element: <code>abbr</code></a></li>
+      <li><a href="#dtbook-element-acronym" id="markdown-toc-dtbook-element-acronym">DTBook element: <code>acronym</code></a></li>
+      <li><a href="#dtbook-element-address" id="markdown-toc-dtbook-element-address">DTBook element: <code>address</code></a></li>
+      <li><a href="#dtbook-element-annoref" id="markdown-toc-dtbook-element-annoref">DTBook element: <code>annoref</code></a></li>
       <li><a href="#dtbook-element-annotation" id="markdown-toc-dtbook-element-annotation">DTBook element: <code>annotation</code></a></li>
-      <li><a href="#remove-br-1" id="markdown-toc-remove-br-1">remove <code>br</code></a></li>
+      <li><a href="#dtbook-element-author" id="markdown-toc-dtbook-element-author">DTBook element: <code>author</code></a></li>
+      <li><a href="#dtbook-element-bdo" id="markdown-toc-dtbook-element-bdo">DTBook element: <code>bdo</code></a></li>
+      <li><a href="#dtbook-element-blockquote" id="markdown-toc-dtbook-element-blockquote">DTBook element: <code>blockquote</code></a></li>
+      <li><a href="#dtbook-element-bodymatter" id="markdown-toc-dtbook-element-bodymatter">DTBook element: <code>bodymatter</code></a></li>
+      <li><a href="#dtbook-element-book" id="markdown-toc-dtbook-element-book">DTBook element: <code>book</code></a></li>
+      <li><a href="#dtbook-element-br" id="markdown-toc-dtbook-element-br">DTBook element: <code>br</code></a></li>
+      <li><a href="#dtbook-element-bridgehead" id="markdown-toc-dtbook-element-bridgehead">DTBook element: <code>bridgehead</code></a></li>
+      <li><a href="#dtbook-element-byline" id="markdown-toc-dtbook-element-byline">DTBook element: <code>byline</code></a></li>
+      <li><a href="#dtbook-element-caption" id="markdown-toc-dtbook-element-caption">DTBook element: <code>caption</code></a></li>
+      <li><a href="#dtbook-element-cite" id="markdown-toc-dtbook-element-cite">DTBook element: <code>cite</code></a></li>
+      <li><a href="#dtbook-element-code" id="markdown-toc-dtbook-element-code">DTBook element: <code>code</code></a></li>
+      <li><a href="#dtbook-element-col" id="markdown-toc-dtbook-element-col">DTBook element: <code>col</code></a></li>
+      <li><a href="#dtbook-element-colgroup" id="markdown-toc-dtbook-element-colgroup">DTBook element: <code>colgroup</code></a></li>
+      <li><a href="#dtbook-element-covertitle" id="markdown-toc-dtbook-element-covertitle">DTBook element: <code>covertitle</code></a></li>
+      <li><a href="#dtbook-element-dateline" id="markdown-toc-dtbook-element-dateline">DTBook element: <code>dateline</code></a></li>
+      <li><a href="#dtbook-element-dd" id="markdown-toc-dtbook-element-dd">DTBook element: <code>dd</code></a></li>
+      <li><a href="#dtbook-element-dfn" id="markdown-toc-dtbook-element-dfn">DTBook element: <code>dfn</code></a></li>
+      <li><a href="#dtbook-element-div" id="markdown-toc-dtbook-element-div">DTBook element: <code>div</code></a></li>
+      <li><a href="#dtbook-element-dl" id="markdown-toc-dtbook-element-dl">DTBook element: <code>dl</code></a></li>
+      <li><a href="#dtbook-element-docauthor" id="markdown-toc-dtbook-element-docauthor">DTBook element: <code>docauthor</code></a></li>
+      <li><a href="#dtbook-element-doctitle" id="markdown-toc-dtbook-element-doctitle">DTBook element: <code>doctitle</code></a></li>
+      <li><a href="#dtbook-element-dt" id="markdown-toc-dtbook-element-dt">DTBook element: <code>dt</code></a></li>
+      <li><a href="#dtbook-element-dtbook" id="markdown-toc-dtbook-element-dtbook">DTBook element: <code>dtbook</code></a></li>
+      <li><a href="#dtbook-element-epigraph" id="markdown-toc-dtbook-element-epigraph">DTBook element: <code>epigraph</code></a></li>
+      <li><a href="#dtbook-element-em" id="markdown-toc-dtbook-element-em">DTBook element: <code>em</code></a></li>
+      <li><a href="#dtbook-element-frontmatter" id="markdown-toc-dtbook-element-frontmatter">DTBook element: <code>frontmatter</code></a></li>
+      <li><a href="#dtbook-element-h1" id="markdown-toc-dtbook-element-h1">DTBook element: <code>h1</code></a></li>
+      <li><a href="#dtbook-element-h2" id="markdown-toc-dtbook-element-h2">DTBook element: <code>h2</code></a></li>
+      <li><a href="#dtbook-element-h3" id="markdown-toc-dtbook-element-h3">DTBook element: <code>h3</code></a></li>
+      <li><a href="#dtbook-element-h4" id="markdown-toc-dtbook-element-h4">DTBook element: <code>h4</code></a></li>
+      <li><a href="#dtbook-element-h5" id="markdown-toc-dtbook-element-h5">DTBook element: <code>h5</code></a></li>
+      <li><a href="#dtbook-element-h6" id="markdown-toc-dtbook-element-h6">DTBook element: <code>h6</code></a></li>
+      <li><a href="#dtbook-element-hd" id="markdown-toc-dtbook-element-hd">DTBook element: <code>hd</code></a></li>
+      <li><a href="#dtbook-element-head" id="markdown-toc-dtbook-element-head">DTBook element: <code>head</code></a></li>
+      <li><a href="#dtbook-element-img" id="markdown-toc-dtbook-element-img">DTBook element: <code>img</code></a></li>
+      <li><a href="#dtbook-element-imggroup" id="markdown-toc-dtbook-element-imggroup">DTBook element: <code>imggroup</code></a></li>
+      <li><a href="#dtbook-element-kbd" id="markdown-toc-dtbook-element-kbd">DTBook element: <code>kbd</code></a></li>
+      <li><a href="#dtbook-element-level" id="markdown-toc-dtbook-element-level">DTBook element: <code>level</code></a></li>
+      <li><a href="#dtbook-element-level1" id="markdown-toc-dtbook-element-level1">DTBook element: <code>level1</code></a></li>
+      <li><a href="#dtbook-element-level2" id="markdown-toc-dtbook-element-level2">DTBook element: <code>level2</code></a></li>
+      <li><a href="#dtbook-element-level3" id="markdown-toc-dtbook-element-level3">DTBook element: <code>level3</code></a></li>
+      <li><a href="#dtbook-element-level4" id="markdown-toc-dtbook-element-level4">DTBook element: <code>level4</code></a></li>
+      <li><a href="#dtbook-element-level5" id="markdown-toc-dtbook-element-level5">DTBook element: <code>level5</code></a></li>
+      <li><a href="#dtbook-element-level6" id="markdown-toc-dtbook-element-level6">DTBook element: <code>level6</code></a></li>
+      <li><a href="#dtbook-element-lic" id="markdown-toc-dtbook-element-lic">DTBook element: <code>lic</code></a></li>
+      <li><a href="#dtbook-element-line" id="markdown-toc-dtbook-element-line">DTBook element: <code>line</code></a></li>
+      <li><a href="#dtbook-element-linegroup" id="markdown-toc-dtbook-element-linegroup">DTBook element: <code>linegroup</code></a></li>
+      <li><a href="#dtbook-element-linenum" id="markdown-toc-dtbook-element-linenum">DTBook element: <code>linenum</code></a></li>
+      <li><a href="#dtbook-element-link" id="markdown-toc-dtbook-element-link">DTBook element: <code>link</code></a></li>
+      <li><a href="#dtbook-element-li" id="markdown-toc-dtbook-element-li">DTBook element: <code>li</code></a></li>
+      <li><a href="#dtbook-element-list" id="markdown-toc-dtbook-element-list">DTBook element: <code>list</code></a></li>
+      <li><a href="#dtbook-element-meta" id="markdown-toc-dtbook-element-meta">DTBook element: <code>meta</code></a></li>
+      <li><a href="#dtbook-element-note" id="markdown-toc-dtbook-element-note">DTBook element: <code>note</code></a></li>
+      <li><a href="#dtbook-element-noteref" id="markdown-toc-dtbook-element-noteref">DTBook element: <code>noteref</code></a></li>
+      <li><a href="#dtbook-element-p" id="markdown-toc-dtbook-element-p">DTBook element: <code>p</code></a></li>
+      <li><a href="#dtbook-element-pagenum" id="markdown-toc-dtbook-element-pagenum">DTBook element: <code>pagenum</code></a></li>
+      <li><a href="#dtbook-element-poem" id="markdown-toc-dtbook-element-poem">DTBook element: <code>poem</code></a></li>
+      <li><a href="#dtbook-element-prodnote" id="markdown-toc-dtbook-element-prodnote">DTBook element: <code>prodnote</code></a></li>
+      <li><a href="#dtbook-element-q" id="markdown-toc-dtbook-element-q">DTBook element: <code>q</code></a></li>
+      <li><a href="#dtbook-element-rearmatter" id="markdown-toc-dtbook-element-rearmatter">DTBook element: <code>rearmatter</code></a></li>
+      <li><a href="#dtbook-element-samp" id="markdown-toc-dtbook-element-samp">DTBook element: <code>samp</code></a></li>
+      <li><a href="#dtbook-element-sent" id="markdown-toc-dtbook-element-sent">DTBook element: <code>sent</code></a></li>
+      <li><a href="#dtbook-element-sidebar" id="markdown-toc-dtbook-element-sidebar">DTBook element: <code>sidebar</code></a></li>
+      <li><a href="#dtbook-element-span" id="markdown-toc-dtbook-element-span">DTBook element: <code>span</code></a></li>
+      <li><a href="#dtbook-element-strong" id="markdown-toc-dtbook-element-strong">DTBook element: <code>strong</code></a></li>
+      <li><a href="#dtbook-element-sub" id="markdown-toc-dtbook-element-sub">DTBook element: <code>sub</code></a></li>
+      <li><a href="#dtbook-element-sup" id="markdown-toc-dtbook-element-sup">DTBook element: <code>sup</code></a></li>
+      <li><a href="#dtbook-element-table" id="markdown-toc-dtbook-element-table">DTBook element: <code>table</code></a></li>
+      <li><a href="#dtbook-element-tbody" id="markdown-toc-dtbook-element-tbody">DTBook element: <code>tbody</code></a></li>
+      <li><a href="#dtbook-element-td" id="markdown-toc-dtbook-element-td">DTBook element: <code>td</code></a></li>
+      <li><a href="#dtbook-element-tfoot" id="markdown-toc-dtbook-element-tfoot">DTBook element: <code>tfoot</code></a></li>
+      <li><a href="#dtbook-element-th" id="markdown-toc-dtbook-element-th">DTBook element: <code>th</code></a></li>
+      <li><a href="#dtbook-element-thead" id="markdown-toc-dtbook-element-thead">DTBook element: <code>thead</code></a></li>
+      <li><a href="#dtbook-element-title" id="markdown-toc-dtbook-element-title">DTBook element: <code>title</code></a></li>
+      <li><a href="#dtbook-element-tr" id="markdown-toc-dtbook-element-tr">DTBook element: <code>tr</code></a></li>
+      <li><a href="#dtbook-element-w" id="markdown-toc-dtbook-element-w">DTBook element: <code>w</code></a></li>
+      <li><a href="#common-attributes" id="markdown-toc-common-attributes">Common Attributes</a></li>
     </ul>
   </li>
 </ul>
 
 <hr>
-<p>## DTBook element: <code>a</code></p>
+
+<h2 id="dtbook-element-a">DTBook element: <code>a</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>ref</code></p>
 
@@ -592,7 +690,9 @@ sidebar: UserGuideToc
 <p>If <code>dtbook:a@external = true</code>, then we use <code>@xlink:href</code> instead of <code>@ref</code>.</p>
 
 <hr>
-<p>## DTBook element: <code>abbr</code></p>
+
+<h2 id="dtbook-element-abbr">DTBook element: <code>abbr</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>abbr @type='truncation'</code></p>
 
@@ -640,7 +740,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>acronym</code></p>
+
+<h2 id="dtbook-element-acronym">DTBook element: <code>acronym</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>abbr</code></p>
 
@@ -697,12 +799,14 @@ sidebar: UserGuideToc
   <li>re-parent <code>imggroup</code> children</li>
   <li>use inline <code>samp</code>
 </li>
-  <li>
-    <h2 id="remove-br">remove <code>br</code>
-</h2>
-    <p>## DTBook element: <code>address</code></p>
-  </li>
+  <li>remove <code>br</code>
+</li>
 </ul>
+
+<hr>
+
+<h2 id="dtbook-element-address">DTBook element: <code>address</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>address</code></p>
 
@@ -711,12 +815,14 @@ sidebar: UserGuideToc
 <ul>
   <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
   <li>
-    <h2 id="br-to-ln">
 <code>br</code> to <code>ln</code>
-</h2>
-    <p>## DTBook element: <code>annoref</code></p>
-  </li>
+</li>
 </ul>
+
+<hr>
+
+<h2 id="dtbook-element-annoref">DTBook element: <code>annoref</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>annoref</code></p>
 
@@ -724,10 +830,10 @@ sidebar: UserGuideToc
 
 <ul>
   <li>
-    <h2 id="type-type-provides-advisory-content-mime-type-of-the-targeted-id-see-rfc1556---structguide">
-<code>@type</code> (“Type provides advisory content MIME type of the targeted id, see RFC1556.” –structguide)</h2>
-  </li>
+<code>@type</code> (“Type provides advisory content MIME type of the targeted id, see RFC1556.” –structguide)</li>
 </ul>
+
+<hr>
 
 <h2 id="dtbook-element-annotation">DTBook element: <code>annotation</code>
 </h2>
@@ -744,7 +850,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>author</code></p>
+
+<h2 id="dtbook-element-author">DTBook element: <code>author</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>citation</code> or <code>p @property='author' @about='IDREF'</code></p>
 
@@ -762,7 +870,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>bdo</code></p>
+
+<h2 id="dtbook-element-bdo">DTBook element: <code>bdo</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>span @its:dir="rtl|ltr"</code></p>
 
@@ -778,27 +888,37 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>blockquote</code></p>
+
+<h2 id="dtbook-element-blockquote">DTBook element: <code>blockquote</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>quote</code></p>
 
 <hr>
-<p>## DTBook element: <code>bodymatter</code></p>
+
+<h2 id="dtbook-element-bodymatter">DTBook element: <code>bodymatter</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>bodymatter</code></p>
 
 <hr>
-<p>## DTBook element: <code>book</code></p>
+
+<h2 id="dtbook-element-book">DTBook element: <code>book</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>body</code></p>
 
 <hr>
-<p>## DTBook element: <code>br</code></p>
+
+<h2 id="dtbook-element-br">DTBook element: <code>br</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: use <code>ln</code> to wrap lines</p>
 
 <hr>
-<p>## DTBook element: <code>bridgehead</code></p>
+
+<h2 id="dtbook-element-bridgehead">DTBook element: <code>bridgehead</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>hd</code></p>
 
@@ -814,7 +934,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>byline</code></p>
+
+<h2 id="dtbook-element-byline">DTBook element: <code>byline</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>citation</code> or <code>p @role="periodicals:byline"</code></p>
 
@@ -832,7 +954,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>caption</code></p>
+
+<h2 id="dtbook-element-caption">DTBook element: <code>caption</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>caption</code></p>
 
@@ -846,7 +970,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>cite</code></p>
+
+<h2 id="dtbook-element-cite">DTBook element: <code>cite</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>citation</code></p>
 
@@ -865,7 +991,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>code</code></p>
+
+<h2 id="dtbook-element-code">DTBook element: <code>code</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>code</code></p>
 
@@ -881,21 +1009,27 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>col</code></p>
+
+<h2 id="dtbook-element-col">DTBook element: <code>col</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>col</code></p>
 
 <p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code>, <code>@width</code> (all to go in CSS)</p>
 
 <hr>
-<p>## DTBook element: <code>colgroup</code></p>
+
+<h2 id="dtbook-element-colgroup">DTBook element: <code>colgroup</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>colgroup</code></p>
 
 <p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code>, <code>@width</code></p>
 
 <hr>
-<p>## DTBook element: <code>covertitle</code></p>
+
+<h2 id="dtbook-element-covertitle">DTBook element: <code>covertitle</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>block @role='covertitle'</code></p>
 
@@ -909,7 +1043,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>dateline</code></p>
+
+<h2 id="dtbook-element-dateline">DTBook element: <code>dateline</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>p @role="time"</code></p>
 
@@ -927,7 +1063,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>dd</code></p>
+
+<h2 id="dtbook-element-dd">DTBook element: <code>dd</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>definition</code></p>
 
@@ -939,7 +1077,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>dfn</code></p>
+
+<h2 id="dtbook-element-dfn">DTBook element: <code>dfn</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>term</code></p>
 
@@ -955,21 +1095,27 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>div</code></p>
+
+<h2 id="dtbook-element-div">DTBook element: <code>div</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>block</code></p>
 
 <p><strong>Adjustments</strong>: Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</p>
 
 <hr>
-<p>## DTBook element: <code>dl</code></p>
+
+<h2 id="dtbook-element-dl">DTBook element: <code>dl</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>list</code></p>
 
 <p><strong>Adjustments</strong>: either wrap each term, definition in its own <code>item</code> element, or combine them into one <code>item</code> element</p>
 
 <hr>
-<p>## DTBook element: <code>docauthor</code></p>
+
+<h2 id="dtbook-element-docauthor">DTBook element: <code>docauthor</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>p @property="author"</code></p>
 
@@ -985,7 +1131,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>doctitle</code></p>
+
+<h2 id="dtbook-element-doctitle">DTBook element: <code>doctitle</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>p @property="title"</code> or <code>h @property="title"</code> when child of the frontmatter</p>
 
@@ -1001,7 +1149,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>dt</code></p>
+
+<h2 id="dtbook-element-dt">DTBook element: <code>dt</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>term</code></p>
 
@@ -1051,14 +1201,18 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>dtbook</code></p>
+
+<h2 id="dtbook-element-dtbook">DTBook element: <code>dtbook</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>document</code></p>
 
 <p><strong>Notes</strong>: Reference default ZedAI book profile and default vocabulary.</p>
 
 <hr>
-<p>## DTBook element: <code>epigraph</code></p>
+
+<h2 id="dtbook-element-epigraph">DTBook element: <code>epigraph</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>block @role="epigraph"</code></p>
 
@@ -1072,7 +1226,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>em</code></p>
+
+<h2 id="dtbook-element-em">DTBook element: <code>em</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>emph</code></p>
 
@@ -1088,14 +1244,18 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>frontmatter</code></p>
+
+<h2 id="dtbook-element-frontmatter">DTBook element: <code>frontmatter</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>frontmatter</code></p>
 
 <p>Notes: A <code>section</code> is created automatically containing <code>doctitle</code>, <code>docauthor</code>, <code>covertitle</code>. The reason is that DTBook can have that info free-floating, whereas ZedAI must have only toc/section/biblio/glossary children and so we have to contain that info in a <code>section</code> element.</p>
 
 <hr>
-<p>## DTBook element: <code>h1</code></p>
+
+<h2 id="dtbook-element-h1">DTBook element: <code>h1</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>h</code></p>
 
@@ -1111,7 +1271,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>h2</code></p>
+
+<h2 id="dtbook-element-h2">DTBook element: <code>h2</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>h</code></p>
 
@@ -1127,7 +1289,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>h3</code></p>
+
+<h2 id="dtbook-element-h3">DTBook element: <code>h3</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>h</code></p>
 
@@ -1143,7 +1307,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>h4</code></p>
+
+<h2 id="dtbook-element-h4">DTBook element: <code>h4</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>h</code></p>
 
@@ -1159,7 +1325,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>h5</code></p>
+
+<h2 id="dtbook-element-h5">DTBook element: <code>h5</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>h</code></p>
 
@@ -1175,7 +1343,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>h6</code></p>
+
+<h2 id="dtbook-element-h6">DTBook element: <code>h6</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>h</code></p>
 
@@ -1191,7 +1361,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>hd</code></p>
+
+<h2 id="dtbook-element-hd">DTBook element: <code>hd</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>hd</code></p>
 
@@ -1207,7 +1379,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>head</code></p>
+
+<h2 id="dtbook-element-head">DTBook element: <code>head</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>head</code></p>
 
@@ -1219,7 +1393,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>img</code></p>
+
+<h2 id="dtbook-element-img">DTBook element: <code>img</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>object</code></p>
 
@@ -1231,7 +1407,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>imggroup</code></p>
+
+<h2 id="dtbook-element-imggroup">DTBook element: <code>imggroup</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>block</code> (with <code>@role='figure'</code> if a caption is present)</p>
 
@@ -1243,7 +1421,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>kbd</code></p>
+
+<h2 id="dtbook-element-kbd">DTBook element: <code>kbd</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>code</code></p>
 
@@ -1255,61 +1435,79 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>level</code></p>
+
+<h2 id="dtbook-element-level">DTBook element: <code>level</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>section</code></p>
 
 <p><strong>Adjustments</strong>: Mixed section/block content model</p>
 
 <hr>
-<p>## DTBook element: <code>level1</code></p>
+
+<h2 id="dtbook-element-level1">DTBook element: <code>level1</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>section</code></p>
 
 <p><strong>Adjustments</strong>: Mixed section/block content model</p>
 
 <hr>
-<p>## DTBook element: <code>level2</code></p>
+
+<h2 id="dtbook-element-level2">DTBook element: <code>level2</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>section</code></p>
 
 <p><strong>Adjustments</strong>: Mixed section/block content model</p>
 
 <hr>
-<p>## DTBook element: <code>level3</code></p>
+
+<h2 id="dtbook-element-level3">DTBook element: <code>level3</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>section</code></p>
 
 <p><strong>Adjustments</strong>: Mixed section/block content model</p>
 
 <hr>
-<p>## DTBook element: <code>level4</code></p>
+
+<h2 id="dtbook-element-level4">DTBook element: <code>level4</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>section</code></p>
 
 <p><strong>Adjustments</strong>: Mixed section/block content model</p>
 
 <hr>
-<p>## DTBook element: <code>level5</code></p>
+
+<h2 id="dtbook-element-level5">DTBook element: <code>level5</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>section</code></p>
 
 <p><strong>Adjustments</strong>: Mixed section/block content model</p>
 
 <hr>
-<p>## DTBook element: <code>level6</code></p>
+
+<h2 id="dtbook-element-level6">DTBook element: <code>level6</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>section</code></p>
 
 <p><strong>Adjustments</strong>: Mixed section/block content model</p>
 
 <hr>
-<p>## DTBook element: <code>lic</code></p>
+
+<h2 id="dtbook-element-lic">DTBook element: <code>lic</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>span</code></p>
 
 <hr>
-<p>## DTBook element: <code>line</code></p>
+
+<h2 id="dtbook-element-line">DTBook element: <code>line</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>ln</code></p>
 
@@ -1324,22 +1522,30 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>linegroup</code></p>
+
+<h2 id="dtbook-element-linegroup">DTBook element: <code>linegroup</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>block</code></p>
 
 <hr>
-<p>## DTBook element: <code>linenum</code></p>
+
+<h2 id="dtbook-element-linenum">DTBook element: <code>linenum</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>lnum</code></p>
 
 <hr>
-<p>## DTBook element: <code>link</code></p>
+
+<h2 id="dtbook-element-link">DTBook element: <code>link</code>
+</h2>
 
 <p>Discarded</p>
 
 <hr>
-<p>## DTBook element: <code>li</code></p>
+
+<h2 id="dtbook-element-li">DTBook element: <code>li</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>item</code></p>
 
@@ -1353,35 +1559,45 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>list</code></p>
+
+<h2 id="dtbook-element-list">DTBook element: <code>list</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>list</code></p>
 
 <p><strong>Adjustments</strong>: wrap <code>dtbook:prodnote</code> and <code>dtbook:hd</code></p>
 
 <hr>
-<p>## DTBook element: <code>meta</code></p>
+
+<h2 id="dtbook-element-meta">DTBook element: <code>meta</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>meta</code></p>
 
 <p><strong>Notes</strong>: See https://github.com/daisy/pipeline/issues/56</p>
 
 <hr>
-<p>## DTBook element: <code>note</code></p>
+
+<h2 id="dtbook-element-note">DTBook element: <code>note</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>note</code></p>
 
 <p><strong>Adjustments</strong>: Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</p>
 
 <hr>
-<p>## DTBook element: <code>noteref</code></p>
+
+<h2 id="dtbook-element-noteref">DTBook element: <code>noteref</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>noteref</code></p>
 
 <p>Dropped: <code>@type</code> (“Type provides advisory content MIME type of the targeted id, see RFC1556.”)</p>
 
 <hr>
-<p>## DTBook element: <code>p</code></p>
+
+<h2 id="dtbook-element-p">DTBook element: <code>p</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>p</code></p>
 
@@ -1398,17 +1614,23 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>pagenum</code></p>
+
+<h2 id="dtbook-element-pagenum">DTBook element: <code>pagenum</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>pagebreak</code></p>
 
 <hr>
-<p>## DTBook element: <code>poem</code></p>
+
+<h2 id="dtbook-element-poem">DTBook element: <code>poem</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>block @role="poem"</code></p>
 
 <hr>
-<p>## DTBook element: <code>prodnote</code></p>
+
+<h2 id="dtbook-element-prodnote">DTBook element: <code>prodnote</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>annotation @by="republisher"</code></p>
 
@@ -1422,7 +1644,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>q</code></p>
+
+<h2 id="dtbook-element-q">DTBook element: <code>q</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>quote</code></p>
 
@@ -1438,12 +1662,16 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>rearmatter</code></p>
+
+<h2 id="dtbook-element-rearmatter">DTBook element: <code>rearmatter</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>backmatter</code></p>
 
 <hr>
-<p>## DTBook element: <code>samp</code></p>
+
+<h2 id="dtbook-element-samp">DTBook element: <code>samp</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>block @role="example"</code></p>
 
@@ -1459,7 +1687,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>sent</code></p>
+
+<h2 id="dtbook-element-sent">DTBook element: <code>sent</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>s</code></p>
 
@@ -1475,7 +1705,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>sidebar</code></p>
+
+<h2 id="dtbook-element-sidebar">DTBook element: <code>sidebar</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>aside @role="sidebar"</code></p>
 
@@ -1489,7 +1721,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>span</code></p>
+
+<h2 id="dtbook-element-span">DTBook element: <code>span</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>span</code></p>
 
@@ -1505,7 +1739,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>strong</code></p>
+
+<h2 id="dtbook-element-strong">DTBook element: <code>strong</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>emph</code></p>
 
@@ -1523,7 +1759,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>sub</code></p>
+
+<h2 id="dtbook-element-sub">DTBook element: <code>sub</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>sub</code></p>
 
@@ -1581,7 +1819,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>sup</code></p>
+
+<h2 id="dtbook-element-sup">DTBook element: <code>sup</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>sup</code></p>
 
@@ -1639,7 +1879,9 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>table</code></p>
+
+<h2 id="dtbook-element-table">DTBook element: <code>table</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>table</code></p>
 
@@ -1658,14 +1900,18 @@ sidebar: UserGuideToc
 <p><strong>Notes</strong>: See https://github.com/daisy/pipeline/issues/58</p>
 
 <hr>
-<p>## DTBook element: <code>tbody</code></p>
+
+<h2 id="dtbook-element-tbody">DTBook element: <code>tbody</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>tbody</code></p>
 
 <p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
 
 <hr>
-<p>## DTBook element: <code>td</code></p>
+
+<h2 id="dtbook-element-td">DTBook element: <code>td</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>td</code></p>
 
@@ -1681,14 +1927,18 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>tfoot</code></p>
+
+<h2 id="dtbook-element-tfoot">DTBook element: <code>tfoot</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>tfoot</code></p>
 
 <p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
 
 <hr>
-<p>## DTBook element: <code>th</code></p>
+
+<h2 id="dtbook-element-th">DTBook element: <code>th</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>th</code></p>
 
@@ -1704,14 +1954,18 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>thead</code></p>
+
+<h2 id="dtbook-element-thead">DTBook element: <code>thead</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>thead</code></p>
 
 <p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
 
 <hr>
-<p>## DTBook element: <code>title</code></p>
+
+<h2 id="dtbook-element-title">DTBook element: <code>title</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>p @property='title' @about='IDREF'</code></p>
 
@@ -1727,14 +1981,18 @@ sidebar: UserGuideToc
 </ul>
 
 <hr>
-<p>## DTBook element: <code>tr</code></p>
+
+<h2 id="dtbook-element-tr">DTBook element: <code>tr</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>tr</code></p>
 
 <p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
 
 <hr>
-<p>## DTBook element: <code>w</code></p>
+
+<h2 id="dtbook-element-w">DTBook element: <code>w</code>
+</h2>
 
 <p><strong>ZedAI element</strong>: <code>w</code></p>
 
@@ -1774,11 +2032,15 @@ sidebar: UserGuideToc
   <li>Re-parent <code>imggroup</code> children</li>
   <li>use inline <code>samp</code>
 </li>
-  <li>
-    <h2 id="remove-br-1">remove <code>br</code>
-</h2>
-    <p>## Common Attributes</p>
-  </li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="common-attributes">Common Attributes</h2>
+
+<ul>
   <li>
 <code>id</code> becomes <code>xml:id</code>
 </li>

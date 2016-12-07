@@ -50,7 +50,7 @@
       Help
       </a>
       
-      <ul class="spine spine-has-current">
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
   
     
       
@@ -471,7 +471,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline/issues" class="external-link" target="_blank" tabindex="38">
+        <a href="https://github.com/search?utf8=%E2%9C%93&amp;type=Issues&amp;q=+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl" class="external-link" target="_blank" tabindex="38">
       
       Issue Tracker
       </a>
@@ -521,15 +521,33 @@ var onload = function() {
   if (fixed) {
     nav.classList.add('fixed');
   }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
   window.onscroll = function(e) {
     if (fixed && window.pageYOffset < navTopBefore) {
       nav.classList.remove('fixed');
 	  fixed = false;
+      setLeftNavHeight();
     } else if (!fixed && window.pageYOffset > navTopBefore) {
       nav.classList.add('fixed');
 	  fixed = true;
+      setLeftNavHeight();
     }
   }
+  window.onresize = setLeftNavHeight;
 };
 if (window.addEventListener) {
   window.addEventListener('load', onload);
@@ -549,12 +567,149 @@ through a web API.</p>
 <p>There are several use cases:</p>
 
 <ul>
-  <li>You want to run batch jobs through a command line interface.</li>
+  <li>You want to run batch jobs through the
+<a href="/pipeline/Get-Help/User-Guide/Command-Line.html">command line interface</a>.</li>
   <li>You want to use our
 <a href="/pipeline/wiki/webui/User-Guide">web application</a>.</li>
   <li>You want to include the Pipeline in a larger setup where it needs to
 talk to other components.</li>
 </ul>
+
+<h2 id="installation">Installation</h2>
+
+<p>Choose a package from the
+<a href="/pipeline/Download.html">downloads page</a> that includes the
+server, then follow the installation instructions for that
+package.</p>
+
+<h2 id="starting-and-stopping-the-service">Starting and stopping the service</h2>
+
+<h3 id="windows">Windows</h3>
+
+<p><strong>TBD</strong></p>
+
+<h3 id="debianubuntu">Debian/Ubuntu</h3>
+
+<p>If the Pipeline was installed via the Debian package, the service is
+launched automatically on system startup. To start or stop the service
+manually, use <code>service daisy-pipeline2 start|stop|restart|status</code>.</p>
+
+<h3 id="other-distros">Other distros</h3>
+
+<p>In order to start the service, execute the file <code>pipeline2</code>. Where
+exactly this file is located on the file system depends on the
+installation. To shut down the service press <code>Ctrl-C</code>.</p>
+
+<h2 id="configuration">Configuration</h2>
+
+<h3 id="windows-1">Windows</h3>
+
+<p><strong>TBD</strong></p>
+
+<h3 id="debianubuntu-1">Debian/Ubuntu</h3>
+
+<p>Three configuration files are available if the Pipeline was installed
+via the Debian package:</p>
+
+<ul>
+  <li><code>/etc/default/daisy-pipeline2</code></li>
+  <li><code>/etc/opt/daisy-pipeline2/system.properties</code></li>
+  <li><code>/etc/opt/daisy-pipeline2/config-logback.xml</code></li>
+</ul>
+
+<p>For the latter two, see
+<a href="/pipeline/wiki/Configuration-Files">Configuration Files</a>. The
+former supports the following settings:</p>
+
+<dl>
+  <dt><code>REMOTE</code></dt>
+  <dd>When “true”, run the server in “remote” mode (“true” or
+“false”, default is “false”). Has the same effect as setting
+environment variables <code>PIPELINE2_LOCAL=false</code> and <code>PIPELINE2_AUTH=true</code>.</dd>
+</dl>
+
+<p>In addition, all available <a href="#environment-variables">environment variables</a>
+listed below, except for <code>PIPELINE2_DATA</code>, can be specified in this file in
+the format <code>export VAR=value</code>.</p>
+
+<h3 id="other-distros-1">Other distros</h3>
+
+<h4 id="environment-variables">Environment variables</h4>
+
+<p>A number of environment variables will influence the program:</p>
+
+<dl>
+  <dt><code>JAVA</code></dt>
+  <dd>Location of the “java” executable. Must be Java 8 or higher.</dd>
+  <dt><code>JAVA_HOME</code></dt>
+  <dd>Location where the Java JRE or JDK is installed. Must be Java 8 or higher.</dd>
+  <dt><code>JAVA_MIN_MEM</code></dt>
+  <dd>Sets the initial size of the heap. See Java’s
+<a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI" class="external-link" target="_blank"><code>-Xms</code> option</a>.</dd>
+  <dt><code>JAVA_MAX_MEM</code></dt>
+  <dd>Sets the maximum size of the memory allocation pool. See Java’s
+<a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABHDABI" class="external-link" target="_blank"><code>-Xmx</code> option</a>.</dd>
+  <dt><code>JAVA_PERM_MEM</code></dt>
+  <dd>Sets the permanent generation space size. See Java’s
+<a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDCEGG" class="external-link" target="_blank"><code>-XX:PermSize</code> option</a>.</dd>
+  <dt><code>JAVA_MAX_PERM_MEM</code></dt>
+  <dd>Sets the maximum permanent generation space size. See Java’s
+<a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/java.html#BABDCEGG" class="external-link" target="_blank"><code>-XX:MaxPermSize</code> option</a>.</dd>
+  <dt><code>JAVA_OPTS</code></dt>
+  <dd>Any other Java options.</dd>
+  <dt><code>JAVA_DEBUG_OPTS</code></dt>
+  <dd>Additional Java options to be passed on when <code>PIPELINE2_DEBUG</code> is set.</dd>
+  <dt><code>PIPELINE2_LOCAL</code></dt>
+  <dd>Sets the
+<a href="/pipeline/wiki/Configuration-Files"><code>org.daisy.pipeline.ws.localfs</code></a>
+system property (“true” or “false”, default is “true”). <!-- does this have precedence over system.properties? -->
+</dd>
+  <dt><code>PIPELINE2_AUTH</code></dt>
+  <dd>Sets the
+<a href="/pipeline/wiki/Configuration-Files"><code>org.daisy.pipeline.ws.authentication</code></a>
+system property (“true” or “false”, default is “false”). <!-- does this have precedence over system.properties? -->
+</dd>
+  <dt><code>PIPELINE2_DEBUG</code></dt>
+  <dd>When “true”, passes debug options to Java (“true” or “false”, default is “false”).</dd>
+  <dt><code>PIPELINE2_DATA</code></dt>
+  <dd>Directory for storing program data.</dd>
+</dl>
+
+<!--
+- `PIPELINE2_BASE`: what is this for?
+- `PIPELINE2_HOME`: will be ignored?
+- `PIPELINE2_CONFIG`: will be ignored?
+- `MAX_FD`: ?
+-->
+
+<h4 id="arguments-for-pipeline2-executable">Arguments for <code>pipeline2</code> executable</h4>
+
+<p>The following command line arguments are available. Combinations are possible.</p>
+
+<dl>
+  <dt><code>remote</code></dt>
+  <dd>Run Pipeline server in “remote” mode. Has the same effect as
+setting <code>PIPELINE2_LOCAL=false</code> and <code>PIPELINE2_AUTH=true</code>.</dd>
+  <dt><code>local</code></dt>
+  <dd>Run Pipeline server in “local” mode. Has the same effect as setting
+<code>PIPELINE2_LOCAL=true</code> and <code>PIPELINE2_AUTH=false</code>.</dd>
+  <dt><code>clean</code></dt>
+  <dd>Clean the program data.</dd>
+  <dt><code>debug</code></dt>
+  <dd>Enable debugging. Has the same effect as setting <code>PIPELINE2_DEBUG=true</code>.</dd>
+  <dt><code>shell</code></dt>
+  <dd>Enable an interactive shell for low-level system manipulation. Run
+<code>help</code> for a list of commands, <code>help COMMAND</code> for more info about a
+specific command.</dd>
+</dl>
+
+<!--
+- `gui`: Launch the graphical user interface instead of the web service.
+-->
+
+<h4 id="configuration-files">Configuration files</h4>
+
+<p>See <a href="/pipeline/wiki/Configuration-Files">Configuration Files</a>.</p>
 
     </div>
   </body>

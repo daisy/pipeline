@@ -52,7 +52,7 @@
       Help
       </a>
       
-      <ul class="spine spine-has-current">
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
   
     
       
@@ -473,7 +473,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline/issues" class="external-link" target="_blank" tabindex="38">
+        <a href="https://github.com/search?utf8=%E2%9C%93&amp;type=Issues&amp;q=+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl" class="external-link" target="_blank" tabindex="38">
       
       Issue Tracker
       </a>
@@ -523,15 +523,33 @@ var onload = function() {
   if (fixed) {
     nav.classList.add('fixed');
   }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
   window.onscroll = function(e) {
     if (fixed && window.pageYOffset < navTopBefore) {
       nav.classList.remove('fixed');
 	  fixed = false;
+      setLeftNavHeight();
     } else if (!fixed && window.pageYOffset > navTopBefore) {
       nav.classList.add('fixed');
 	  fixed = true;
+      setLeftNavHeight();
     }
   }
+  window.onresize = setLeftNavHeight;
 };
 if (window.addEventListener) {
   window.addEventListener('load', onload);
@@ -685,7 +703,13 @@ if (window.addEventListener) {
 
 <p>Run the script like this:</p>
 
-<pre><code>$ ./dp2 nimas-fileset-validator --x-input-opf file:/path/to/book/package.opf --x-output-dir /tmp/dpout --o-package-doc-validation-report /tmp/t1 --o-dtbook-validation-report /tmp/t2 --o-result /tmp/t3 --o-validation-status /tmp/t4
+<pre><code>$ ./dp2 nimas-fileset-validator
+        --x-input-opf file:/path/to/book/package.opf
+        --x-output-dir /tmp/dpout
+        --o-package-doc-validation-report /tmp/t1
+        --o-dtbook-validation-report /tmp/t2
+        --o-result /tmp/t3
+        --o-validation-status /tmp/t4
 </code></pre>
 
 <p>Make sure the directory <code>/tmp/dpout</code> already exists.</p>
