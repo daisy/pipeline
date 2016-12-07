@@ -20,11 +20,11 @@
 	<entry key="l10nTocHeadline">Inhaltsverzeichnis</entry>
 	<entry key="l10nTocDescription">Seitenverweise auf die Schwarzschriftausgabe stehen in Klammern.</entry>
 
-	<entry key="l10nTocVolumeStart">Band {0}</entry>
-	<entry key="l10nTocVolumeHeading">Inhalt Brailleband {0}</entry>
-	<entry key="l10nTocVolumeXofY">Band {0} von {1}</entry>
-	<entry key="l10nTocOneVolume">Ein Band</entry>
-	<entry key="l10nEndnotesHeading">Anmerkungen zu diesem Band</entry>
+	<entry key="l10nTocVolumeStart">Brailleband {0}</entry>
+	<entry key="l10nTocVolumeHeading">Inhaltsverzeichnis Brailleband {0}</entry>
+	<entry key="l10nTocVolumeXofY">Brailleband {0} von {1}</entry>
+	<entry key="l10nTocOneVolume">Ein Brailleband</entry>
+	<entry key="l10nEndnotesHeading">Anmerkungen zu diesem Brailleband</entry>
 	<entry key="l10nEndnotesPageStart">Seite {0}</entry>
 	<entry key="l10nEndnotesPageHeader">Anmerkungen</entry>
 
