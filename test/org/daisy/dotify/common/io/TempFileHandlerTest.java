@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +23,12 @@ public class TempFileHandlerTest {
 		//prepare input
 		List<String> lines = new ArrayList<>();
 		lines.add("test");
-		Files.write(in.toPath(), lines, Charset.forName("UTF-8"));
+		Files.write(in.toPath(), lines);
 		//test
 		try (TempFileHandler tf = new TempFileHandler(in, out)) {
 			//not processing input to output here, because that's not what this test is about
 			//instead, just write the same contents to the temporary output 
-			Files.write(tf.getOutput().toPath(), lines, Charset.forName("UTF-8"));
+			Files.write(tf.getOutput().toPath(), lines);
 			tf.reset();
 			assertEquals(in.length(), tf.getInput().length());
 			assertTrue(tf.getOutput().exists());

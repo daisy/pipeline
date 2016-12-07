@@ -8,7 +8,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,7 @@ public class FileIOTest {
 		out.deleteOnExit();
 		List<String> lines = new ArrayList<>();
 		lines.add("test");
-		Files.write(in.toPath(), lines, Charset.forName("UTF-8"));
+		Files.write(in.toPath(), lines);
 		FileIO.copyFile(in, out);
 		assertEquals(-1, FileIO.diff(new FileInputStream(in), new FileInputStream(out)));
 	}
