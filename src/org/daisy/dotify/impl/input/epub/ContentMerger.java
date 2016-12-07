@@ -2,6 +2,8 @@ package org.daisy.dotify.impl.input.epub;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,7 +129,7 @@ public class ContentMerger {
 					target = new File(targetFolder, path).getCanonicalFile();
 					logger.fine("Copying " + source + " --> " + target);
 					target.getParentFile().mkdirs();
-					FileIO.copyFile(source, target);
+					Files.copy(source.toPath(), target.toPath(), StandardCopyOption.REPLACE_EXISTING);
 				} else {
 					logger.info("Referenced file cannot be found: " + path);
 				}

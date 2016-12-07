@@ -2,11 +2,12 @@ package org.daisy.dotify.impl.input;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import org.daisy.dotify.api.tasks.AnnotatedFile;
 import org.daisy.dotify.api.tasks.InternalTaskException;
 import org.daisy.dotify.api.tasks.ReadOnlyTask;
-import org.daisy.dotify.common.io.FileIO;
 
 /**
  * <p>DuplicatorTask copies the input file both to output and to a separate file.
@@ -31,7 +32,7 @@ public class DuplicatorTask extends ReadOnlyTask {
 	@Override
 	public void execute(File input) throws InternalTaskException {
 		try {
-			FileIO.copyFile(input, copy);
+			Files.copy(input.toPath(), copy.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			throw new InternalTaskException("Exception while copying file " + input + " to " + copy, e);
 		}
