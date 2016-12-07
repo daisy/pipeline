@@ -44,7 +44,7 @@
  * file should contain two entries: transformation and validation, pointing to the xslt 
  * and schema required by the input format.</p>
  *  
- * <h3>English conversions of DTBook</h3>
+ * <h3>Conversions of DTBook</h3>
  * <ul>
  * <li><a href=
  * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.common.xslt-files.dtbook2obfl_base.html"
@@ -52,18 +52,15 @@
  * <li><a href=
  * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.common.xslt-files.xml2flow.html"
  * >xml2flow.xsl</a></li>
- * </ul>
- * <h3>Swedish conversion of DTBook</h3>
- * <ul>
  * <li><a href=
- * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.sv-SE.xslt-files.dtbook2flow_sv_SE.html"
- * >dtbook2flow_sv_SE.xsl</a></li>
+ * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.common.xslt-files.dtbook2obfl_layout.html"
+ * >dtbook2obfl_layout.xsl</a></li>
  * <li><a href=
- * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.sv-SE.xslt-files.dtbook2flow_sv_SE_braille.html"
- * >dtbook2flow_sv_SE_braille.xsl</a></li>
+ * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.common.xslt-files.dtbook2obfl_braille.html"
+ * >dtbook2obfl_braille.xsl</a></li>
  * <li><a href=
- * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.sv-SE.xslt-files.dtbook2flow_sv_SE_text.html"
- * >dtbook2flow_sv_SE_text.xsl</a></li>
+ * "../../../../../../resources/org.daisy.dotify.impl.input.xml.resource-files.common.xslt-files.dtbook2obfl_text.html"
+ * >dtbook2obfl_text.xsl</a></li>
  * </ul>
  * <h3>Adding an input format conversion</h3>
  * <p>
