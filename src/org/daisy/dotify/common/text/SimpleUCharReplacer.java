@@ -84,7 +84,7 @@ public class SimpleUCharReplacer extends HashMap<Integer, String> {
 	 * Adds a substitution table to this instance. See the class description for
 	 * the format.
 	 * @param table the url to the substitution table.
-	 * @throws IOException
+	 * @throws IOException if the table could not be added
 	 */
 	public void addSubstitutionTable(URL table) throws IOException {
 		try {
