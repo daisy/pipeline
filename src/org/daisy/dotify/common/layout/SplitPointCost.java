@@ -8,7 +8,7 @@ import java.util.List;
  * @param <T> the type of split point unit
  *
  */
-// @FunctionalInterface
+@FunctionalInterface
 public interface SplitPointCost<T extends SplitPointUnit> {
 
 	/**
