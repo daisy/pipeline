@@ -22,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Given an initial input file and a final output file, this class can be
@@ -66,7 +68,7 @@ public class TempFileHandler implements StreamJuggler {
 		this.output = output;
 		this.t1 = FileIO.createTempFile();
 		this.t2 = FileIO.createTempFile();
-		FileIO.copy(input, this.t1);
+		Files.copy(input.toPath(), this.t1.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		is = null;
 		os = null;
 	}
@@ -132,10 +134,10 @@ public class TempFileHandler implements StreamJuggler {
 		}
 		try {
 			if (getOutput().length() > 0) {
-				FileIO.copy(getOutput(), output);
+				Files.copy(getOutput().toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
 			else if (getInput().length() > 0) {
-				FileIO.copy(getInput(), output);
+				Files.copy(getInput().toPath(), output.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			}
 			else {
 				throw new IOException("Temporary files corrupted.");

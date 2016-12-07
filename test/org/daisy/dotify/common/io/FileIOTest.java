@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class FileIOTest {
 		List<String> lines = new ArrayList<>();
 		lines.add("test");
 		Files.write(in.toPath(), lines);
-		FileIO.copyFile(in, out);
+		Files.copy(in.toPath(), out.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		assertEquals(-1, FileIO.diff(new FileInputStream(in), new FileInputStream(out)));
 	}
 

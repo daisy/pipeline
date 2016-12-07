@@ -3,12 +3,11 @@ package org.daisy.dotify.common.io;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.Logger;
 
 /**
@@ -41,40 +40,6 @@ public class FileIO {
 				bos.write(b);
 			}
 			bos.flush();
-		}
-	}
-
-	/**
-	 * Copies an input file to an output file
-	 * @param input the input file
-	 * @param output the output file
-	 * @throws IOException if IO fails
-	 * @deprecated use Files.copy(Path, Path)
-	 */
-	@Deprecated
-	public static void copy(File input, File output) throws IOException {
-		copy(new FileInputStream(input), new FileOutputStream(output));
-	}
-
-	/**
-	 * Copies an input file to an output file
-	 * @param sourceFile the source file
-	 * @param destFile the destination file
-	 * @throws IOException if IO fails
-	 * @deprecated use Files.copy(Path, Path)
-	 */
-	@Deprecated
-	public static void copyFile(File sourceFile, File destFile) throws IOException {
-		if (!destFile.exists()) {
-			destFile.createNewFile();
-		}
-		try (
-			FileInputStream is = new FileInputStream(sourceFile);
-			FileChannel source = is.getChannel();
-			FileOutputStream os = new FileOutputStream(destFile);
-			FileChannel destination = os.getChannel();
-		) {
-			destination.transferFrom(source, 0, source.size());
 		}
 	}
 
@@ -128,7 +93,7 @@ public class FileIO {
 			}
 		} else {
 			try {
-				copyFile(f, out);
+				Files.copy(f.toPath(), out.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
