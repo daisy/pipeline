@@ -20,7 +20,13 @@ This section shows how to use the NIMAS Fileset Validator via the Pipeline 2 com
 
 Run the script like this: 
     
-    $ ./dp2 nimas-fileset-validator --x-input-opf file:/path/to/book/package.opf --x-output-dir /tmp/dpout --o-package-doc-validation-report /tmp/t1 --o-dtbook-validation-report /tmp/t2 --o-result /tmp/t3 --o-validation-status /tmp/t4
+    $ ./dp2 nimas-fileset-validator
+            --x-input-opf file:/path/to/book/package.opf
+            --x-output-dir /tmp/dpout
+            --o-package-doc-validation-report /tmp/t1
+            --o-dtbook-validation-report /tmp/t2
+            --o-result /tmp/t3
+            --o-validation-status /tmp/t4
 
 Make sure the directory `/tmp/dpout` already exists.
 

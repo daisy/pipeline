@@ -15,6 +15,7 @@ This page gives the conversion mappings used in the DTBook-To-ZedAI module.
 {{>toc}}
 
 ---------
+
 ## DTBook element: `a`
 
 **ZedAI element**: `ref`
@@ -32,6 +33,7 @@ This page gives the conversion mappings used in the DTBook-To-ZedAI module.
 If `dtbook:a@external = true`, then we use `@xlink:href` instead of `@ref`.
 
 ---------
+
 ## DTBook element: `abbr`
 
 **ZedAI element**: `abbr @type='truncation'`
@@ -58,6 +60,7 @@ These are a little trickier as they (may) reference something else, but as there
 * remove `br`
 
 ---------
+
 ## DTBook element: `acronym`
 
 **ZedAI element**: `abbr`
@@ -87,7 +90,9 @@ These are a little trickier as they (may) reference something else, but as there
 * re-parent `imggroup` children
 * use inline `samp`
 * remove `br`
+
 ---------
+
 ## DTBook element: `address`
 
 **ZedAI element**: `address`
@@ -96,7 +101,9 @@ These are a little trickier as they (may) reference something else, but as there
 
 * Normalize block/inline content model: if mixed, wrap inlines in `p` element. 
 * `br` to `ln`
+
 ---------
+
 ## DTBook element: `annoref`
 
 **ZedAI element**: `annoref`
@@ -104,6 +111,7 @@ These are a little trickier as they (may) reference something else, but as there
 **Dropped attributes**: 
 
 * `@type` ("Type provides advisory content MIME type of the targeted id, see RFC1556." --structguide)
+
 ---------
 
 ## DTBook element: `annotation`
@@ -116,6 +124,7 @@ These are a little trickier as they (may) reference something else, but as there
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `author`
 
 **ZedAI element**: `citation` or `p @property='author' @about='IDREF'` 
@@ -129,6 +138,7 @@ author element should be made into citation except when found inside `poem`/`blo
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `bdo`
 
 **ZedAI element**: `span @its:dir="rtl|ltr"`
@@ -140,26 +150,31 @@ author element should be made into citation except when found inside `poem`/`blo
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `blockquote`
 
 **ZedAI element**: `quote`
 
 ---------
+
 ## DTBook element: `bodymatter`
 
 **ZedAI element**: `bodymatter`
 
 ---------
+
 ## DTBook element: `book`
 
 **ZedAI element**: `body`
 
 ---------
+
 ## DTBook element: `br`
 
 **ZedAI element**: use `ln` to wrap lines
 
 ---------
+
 ## DTBook element: `bridgehead`
 
 **ZedAI element**: `hd`
@@ -171,6 +186,7 @@ author element should be made into citation except when found inside `poem`/`blo
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `byline`
 
 **ZedAI element**: `citation` or `p @role="periodicals:byline"`
@@ -184,6 +200,7 @@ Notes: for most book (non-article) use cases, `byline` can be `citation`. The ex
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `caption`
 
 **ZedAI element**: `caption`
@@ -194,6 +211,7 @@ Notes: for most book (non-article) use cases, `byline` can be `citation`. The ex
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `cite`
 
 **ZedAI element**: `citation`
@@ -206,6 +224,7 @@ Notes: for most book (non-article) use cases, `byline` can be `citation`. The ex
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `code`
 
 **ZedAI element**: `code`
@@ -217,6 +236,7 @@ Notes: for most book (non-article) use cases, `byline` can be `citation`. The ex
 * deal with `br`
 
 ---------
+
 ## DTBook element: `col`
 
 **ZedAI element**: `col`
@@ -224,6 +244,7 @@ Notes: for most book (non-article) use cases, `byline` can be `citation`. The ex
 **CSS**: `@align`, `@valign`, `@width` (all to go in CSS)
 
 ---------
+
 ## DTBook element: `colgroup`
 
 **ZedAI element**: `colgroup`
@@ -231,6 +252,7 @@ Notes: for most book (non-article) use cases, `byline` can be `citation`. The ex
 **CSS**: `@align`, `@valign`, `@width`
 
 ---------
+
 ## DTBook element: `covertitle`
 
 **ZedAI element**: `block @role='covertitle'`
@@ -241,6 +263,7 @@ Notes: for most book (non-article) use cases, `byline` can be `citation`. The ex
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `dateline`
 
 **ZedAI element**: `p @role="time"`
@@ -254,6 +277,7 @@ Notes: Used `p` since `ln` is not suitable for all content models (e.g. `level`>
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `dd`
 
 **ZedAI element**: `definition`
@@ -264,6 +288,7 @@ Notes: Used `p` since `ln` is not suitable for all content models (e.g. `level`>
 * use inline `samp` * `br` to `ln` * Re-parent list, dl, div, poem, linegroup, table, sidebar * Re-parent or re-name p, dateline, epigraph, address, author, note
 
 ---------
+
 ## DTBook element: `dfn`
 
 **ZedAI element**: `term`
@@ -275,6 +300,7 @@ Notes: Used `p` since `ln` is not suitable for all content models (e.g. `level`>
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `div`
 
 **ZedAI element**: `block`
@@ -282,6 +308,7 @@ Notes: Used `p` since `ln` is not suitable for all content models (e.g. `level`>
 **Adjustments**: Normalize block/inline content model: if mixed, wrap inlines in `p` element.
 
 ---------
+
 ## DTBook element: `dl`
 
 **ZedAI element**: `list`
@@ -289,6 +316,7 @@ Notes: Used `p` since `ln` is not suitable for all content models (e.g. `level`>
 **Adjustments**: either wrap each term, definition in its own `item` element, or combine them into one `item` element
 
 ---------
+
 ## DTBook element: `docauthor`
 
 **ZedAI element**: `p @property="author"`
@@ -300,6 +328,7 @@ Notes: Used `p` since `ln` is not suitable for all content models (e.g. `level`>
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `doctitle`
 
 **ZedAI element**: `p @property="title"` or `h @property="title"` when child of the frontmatter
@@ -311,6 +340,7 @@ Notes: Used `p` since `ln` is not suitable for all content models (e.g. `level`>
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `dt`
 
 **ZedAI element**: `term`
@@ -337,6 +367,7 @@ These are a little trickier as they (may) reference something else, but as there
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `dtbook`
 
 **ZedAI element**: `document`
@@ -344,6 +375,7 @@ These are a little trickier as they (may) reference something else, but as there
 **Notes**: Reference default ZedAI book profile and default vocabulary.
 
 ---------
+
 ## DTBook element: `epigraph`
 
 **ZedAI element**: `block @role="epigraph"`
@@ -354,6 +386,7 @@ These are a little trickier as they (may) reference something else, but as there
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `em`
 
 **ZedAI element**: `emph`
@@ -365,6 +398,7 @@ These are a little trickier as they (may) reference something else, but as there
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `frontmatter`
 
 **ZedAI element**: `frontmatter`
@@ -372,6 +406,7 @@ These are a little trickier as they (may) reference something else, but as there
 Notes: A `section` is created automatically containing `doctitle`, `docauthor`, `covertitle`. The reason is that DTBook can have that info free-floating, whereas ZedAI must have only toc/section/biblio/glossary children and so we have to contain that info in a `section` element.
 
 ---------
+
 ## DTBook element: `h1`
 
 **ZedAI element**: `h`
@@ -383,6 +418,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `h2`
 
 **ZedAI element**: `h`
@@ -394,6 +430,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `h3`
 
 **ZedAI element**: `h`
@@ -405,6 +442,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `h4`
 
 **ZedAI element**: `h`
@@ -416,6 +454,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `h5`
 
 **ZedAI element**: `h`
@@ -427,6 +466,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `h6`
 
 **ZedAI element**: `h`
@@ -438,6 +478,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `hd`
 
 **ZedAI element**: `hd`
@@ -449,6 +490,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `head`
 
 **ZedAI element**: `head`
@@ -459,6 +501,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * DTBook `@profile` is not preserved.
 
 ---------
+
 ## DTBook element: `img`
 
 **ZedAI element**: `object`
@@ -468,6 +511,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * `dtbook:@longdesc` is a URI which resolves to a `prodnote` elsewhere the book 
 
 ---------
+
 ## DTBook element: `imggroup`
 
 **ZedAI element**: `block` (with `@role='figure'` if a caption is present)
@@ -478,6 +522,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * There can also be multiple captions, each targeting multiple images
 
 ---------
+
 ## DTBook element: `kbd`
 
 **ZedAI element**: `code`
@@ -487,6 +532,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * Same as `dtb:code`
 
 ---------
+
 ## DTBook element: `level`
 
 **ZedAI element**: `section`
@@ -494,6 +540,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 **Adjustments**: Mixed section/block content model
 
 ---------
+
 ## DTBook element: `level1`
 
 **ZedAI element**: `section`
@@ -501,6 +548,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 **Adjustments**: Mixed section/block content model
 
 ---------
+
 ## DTBook element: `level2`
 
 **ZedAI element**: `section`
@@ -508,6 +556,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 **Adjustments**: Mixed section/block content model
 
 ---------
+
 ## DTBook element: `level3`
 
 **ZedAI element**: `section`
@@ -515,6 +564,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 **Adjustments**: Mixed section/block content model
 
 ---------
+
 ## DTBook element: `level4`
 
 **ZedAI element**: `section`
@@ -522,6 +572,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 **Adjustments**: Mixed section/block content model
 
 ---------
+
 ## DTBook element: `level5`
 
 **ZedAI element**: `section`
@@ -529,6 +580,7 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 **Adjustments**: Mixed section/block content model
 
 ---------
+
 ## DTBook element: `level6`
 
 **ZedAI element**: `section`
@@ -536,11 +588,13 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 **Adjustments**: Mixed section/block content model
 
 ---------
+
 ## DTBook element: `lic`
 
 **ZedAI element**: `span`
 
 ---------
+
 ## DTBook element: `line`
 
 **ZedAI element**: `ln`
@@ -552,21 +606,25 @@ Notes: A `section` is created automatically containing `doctitle`, `docauthor`, 
 * deal with `br`
 
 ---------
+
 ## DTBook element: `linegroup`
 
 **ZedAI element**: `block`
 
 ---------
+
 ## DTBook element: `linenum`
 
 **ZedAI element**: `lnum`
 
 ---------
+
 ## DTBook element: `link`
 
 Discarded
 
 ---------
+
 ## DTBook element: `li`
 
 **ZedAI element**: `item`
@@ -577,6 +635,7 @@ Discarded
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `list`
 
 **ZedAI element**: `list`
@@ -584,6 +643,7 @@ Discarded
 **Adjustments**: wrap `dtbook:prodnote` and `dtbook:hd`
 
 ---------
+
 ## DTBook element: `meta`
 
 **ZedAI element**: `meta`
@@ -591,6 +651,7 @@ Discarded
 **Notes**: See https://github.com/daisy/pipeline/issues/56
 
 ---------
+
 ## DTBook element: `note`
 
 **ZedAI element**: `note`
@@ -598,6 +659,7 @@ Discarded
 **Adjustments**: Normalize block/inline content model: if mixed, wrap inlines in `p` element.
 
 ---------
+
 ## DTBook element: `noteref`
 
 **ZedAI element**: `noteref`
@@ -605,6 +667,7 @@ Discarded
 Dropped: `@type` ("Type provides advisory content MIME type of the targeted id, see RFC1556.")
 
 ---------
+
 ## DTBook element: `p`
 
 **ZedAI element**: `p`
@@ -617,16 +680,19 @@ Dropped: `@type` ("Type provides advisory content MIME type of the targeted id, 
 * re-parent `list`, `dl` children
 
 ---------
+
 ## DTBook element: `pagenum`
 
 **ZedAI element**: `pagebreak`
 
 ---------
+
 ## DTBook element: `poem`
 
 **ZedAI element**: `block @role="poem"`
 
 ---------
+
 ## DTBook element: `prodnote`
 
 **ZedAI element**: `annotation @by="republisher"`
@@ -637,6 +703,7 @@ Dropped: `@type` ("Type provides advisory content MIME type of the targeted id, 
 * Normalize block/inline content model: if mixed, wrap inlines in `p` element.
 
 ---------
+
 ## DTBook element: `q`
 
 **ZedAI element**: `quote`
@@ -648,11 +715,13 @@ Dropped: `@type` ("Type provides advisory content MIME type of the targeted id, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `rearmatter`
 
 **ZedAI element**: `backmatter`
 
 ---------
+
 ## DTBook element: `samp`
 
 **ZedAI element**: `block @role="example"`
@@ -665,6 +734,7 @@ Dropped: `@type` ("Type provides advisory content MIME type of the targeted id, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `sent`
 
 **ZedAI element**: `s`
@@ -676,6 +746,7 @@ Dropped: `@type` ("Type provides advisory content MIME type of the targeted id, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `sidebar`
 
 **ZedAI element**: `aside @role="sidebar"`
@@ -686,6 +757,7 @@ Dropped: `@type` ("Type provides advisory content MIME type of the targeted id, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `span`
 
 **ZedAI element**: `span`
@@ -697,6 +769,7 @@ Dropped: `@type` ("Type provides advisory content MIME type of the targeted id, 
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `strong`
 
 **ZedAI element**: `emph`
@@ -709,6 +782,7 @@ Dropped: `@type` ("Type provides advisory content MIME type of the targeted id, 
 * Re-parent or rename `cite`, `q`
 
 ---------
+
 ## DTBook element: `sub`
 
 **ZedAI element**: `sub`
@@ -738,6 +812,7 @@ These are a little trickier as they (may) reference something else, but as there
 * remove `br`
 
 ---------
+
 ## DTBook element: `sup`
 
 **ZedAI element**: `sup`
@@ -767,6 +842,7 @@ These are a little trickier as they (may) reference something else, but as there
 * remove `br`
 
 ---------
+
 ## DTBook element: `table`
 
 **ZedAI element**: `table`
@@ -783,6 +859,7 @@ These are a little trickier as they (may) reference something else, but as there
 **Notes**: See https://github.com/daisy/pipeline/issues/58
 
 ---------
+
 ## DTBook element: `tbody`
 
 **ZedAI element**: `tbody`
@@ -790,6 +867,7 @@ These are a little trickier as they (may) reference something else, but as there
 **CSS**: `@align`, `@valign`
 
 ---------
+
 ## DTBook element: `td`
 
 **ZedAI element**: `td`
@@ -802,6 +880,7 @@ These are a little trickier as they (may) reference something else, but as there
 * Normalize block/inline content model: if mixed, wrap inlines in `p` element.
 
 ---------
+
 ## DTBook element: `tfoot`
 
 **ZedAI element**: `tfoot`
@@ -809,6 +888,7 @@ These are a little trickier as they (may) reference something else, but as there
 **CSS**: `@align`, `@valign`
 
 ---------
+
 ## DTBook element: `th`
 
 **ZedAI element**: `th`
@@ -821,6 +901,7 @@ These are a little trickier as they (may) reference something else, but as there
 * Normalize block/inline content model: if mixed, wrap inlines in `p` element.
 
 ---------
+
 ## DTBook element: `thead`
 
 **ZedAI element**: `thead`
@@ -828,6 +909,7 @@ These are a little trickier as they (may) reference something else, but as there
 **CSS**: `@align`, `@valign`
 
 ---------
+
 ## DTBook element: `title`
 
 **ZedAI element**: `p @property='title' @about='IDREF'`
@@ -839,6 +921,7 @@ These are a little trickier as they (may) reference something else, but as there
 * `br` to `ln`
 
 ---------
+
 ## DTBook element: `tr`
 
 **ZedAI element**: `tr`
@@ -846,6 +929,7 @@ These are a little trickier as they (may) reference something else, but as there
 **CSS**: `@align`, `@valign`
 
 ---------
+
 ## DTBook element: `w`
 
 **ZedAI element**: `w`
@@ -869,7 +953,9 @@ These are a little trickier as they (may) reference something else, but as there
 * Re-parent `imggroup` children
 * use inline `samp`
 * remove `br`
+
 ---------
+
 ## Common Attributes
 
 * `id` becomes `xml:id`

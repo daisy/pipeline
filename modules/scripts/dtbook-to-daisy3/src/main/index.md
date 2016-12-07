@@ -4,7 +4,7 @@
 
 # DTBook to DAISY 3
 
-Converts multiple dtbooks to daisy 3 format
+Converts multiple DTBooks to DAISY 3 format.
 
 ## Synopsis
 

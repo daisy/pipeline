@@ -36,11 +36,15 @@ TODO specify whether opt-lang overrides a language code declared in the XML
 
 On Linux and Mac OS X:
 
-    $ cli/dp2 dtbook-to-zedai --i-source samples/dtbook/hauy_valid.xml --x-output-dir ~/Desktop/out
+    $ cli/dp2 dtbook-to-zedai
+              --i-source samples/dtbook/hauy_valid.xml
+              --x-output-dir ~/Desktop/out
 
 On Windows:
 
-    $ cli\dp2.exe dtbook-to-zedai --i-source samples\dtbook\hauy_valid.xml --x-output-dir C:\Pipeline2-Output
+    $ cli\dp2.exe dtbook-to-zedai
+                  --i-source samples\dtbook\hauy_valid.xml
+                  --x-output-dir C:\Pipeline2-Output
 
 Input:
 
@@ -48,7 +52,8 @@ DTBook
 
 ~~~xml
 <?xml version='1.0' encoding='utf-8'?>
-<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN"
+                        "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
 <?xml-stylesheet href="dtbookbasic.css" type="text/css"?>
 <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en-US">
     <head>
@@ -88,51 +93,53 @@ Output:
 
    ~~~xml
    <?xml-stylesheet href="dtbook-basic-zedai.css" ?>
-   <document 
-   	xmlns:rend="http://www.daisy.org/ns/z3986/authoring/features/rend/" 
-   	xmlns:xlink="http://www.w3.org/1999/xlink" 
-   	xmlns="http://www.daisy.org/ns/z3986/authoring/" 
-   	xmlns:z3986="http://www.daisy.org/z3986/2011/vocab/decl/#" 
-   	xmlns:dcterms="http://purl.org/dc/terms/" 
-   	xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" 
-   	xmlns:its="http://www.w3.org/2005/11/its" 
-   	profile="http://www.daisy.org/z3986/2011/vocab/profiles/default/" 
-   	xml:lang="en-US">
+   <document xmlns:rend="http://www.daisy.org/ns/z3986/authoring/features/rend/" 
+             xmlns:xlink="http://www.w3.org/1999/xlink" 
+             xmlns="http://www.daisy.org/ns/z3986/authoring/" 
+             xmlns:z3986="http://www.daisy.org/z3986/2011/vocab/decl/#" 
+             xmlns:dcterms="http://purl.org/dc/terms/" 
+             xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" 
+             xmlns:its="http://www.w3.org/2005/11/its" 
+             profile="http://www.daisy.org/z3986/2011/vocab/profiles/default/" 
+             xml:lang="en-US">
        <head>
             
-   	<meta rel="z3986:profile" resource="http://www.daisy.org/z3986/2011/auth/profiles/book/0.8/"/>
-   	<meta property="dcterms:title" content="Pipeline 2 DTBook Test Content: Basic"/>
-   	<meta property="dcterms:creator" content="Marisa D."/>
-   	<meta property="dcterms:date" content="2011-03-01" xml:id="meta-dcdate"/>
-   	<meta property="dcterms:publisher" content="Marisa D."/>
-   	<meta property="dcterms:identifier" content="pipeline2-dtbook-test-20110301-basic"/>
-   	<meta property="dcterms:language" content="en-US"/>
-   	<meta rel="z3986:meta-record" resource="dtbook-basic-zedai-mods.xml">
-   	    <meta property="z3986:meta-record-type" about="dtbook-basic-zedai-mods.xml" content="z3986:mods"/>
-   	    <meta property="z3986:meta-record-version" about="dtbook-basic-zedai-mods.xml" content="3.3"/>
-   	</meta>
+           <meta rel="z3986:profile"
+                 resource="http://www.daisy.org/z3986/2011/auth/profiles/book/0.8/"/>
+           <meta property="dcterms:title" content="Pipeline 2 DTBook Test Content: Basic"/>
+           <meta property="dcterms:creator" content="Marisa D."/>
+           <meta property="dcterms:date" content="2011-03-01" xml:id="meta-dcdate"/>
+           <meta property="dcterms:publisher" content="Marisa D."/>
+           <meta property="dcterms:identifier" content="pipeline2-dtbook-test-20110301-basic"/>
+           <meta property="dcterms:language" content="en-US"/>
+           <meta rel="z3986:meta-record" resource="dtbook-basic-zedai-mods.xml">
+               <meta property="z3986:meta-record-type" about="dtbook-basic-zedai-mods.xml"
+                     content="z3986:mods"/>
+               <meta property="z3986:meta-record-version" about="dtbook-basic-zedai-mods.xml"
+                     content="3.3"/>
+           </meta>
        </head>
        <!-- test comment -->
        <body>
            <frontmatter>
-   	    <section>
-   	        <p role="title">Pipeline 2 DTBook Test Content: Basic</p>
-   		<p role="author">Marisa D.</p>
-   	    </section>
-   	</frontmatter>
+               <section>
+                   <p role="title">Pipeline 2 DTBook Test Content: Basic</p>
+                   <p role="author">Marisa D.</p>
+               </section>
+           </frontmatter>
            <bodymatter>
                <section>
-   		<h>Introduction</h>
-   		<p><s>The DAISY Pipeline 2 is an ongoing project to develop a next generation
+                   <h>Introduction</h>
+                   <p><s>The DAISY Pipeline 2 is an ongoing project to develop a next generation
                       framework for automated production of accessible materials for people with
                       print disabilities.</s>
                       <s>It is the follow-up and total redesign of the original DAISY Pipeline 1
                       project.</s>
-   		</p>
-   		<object src="image.jpg" xml:id="d212e45">
-   		    <description>DAISY logo</description>
-   	        </object>
-   	    </section>
+                   </p>
+                   <object src="image.jpg" xml:id="d212e45">
+                       <description>DAISY logo</description>
+                   </object>
+               </section>
            </bodymatter>
        </body>
    </document>
@@ -141,27 +148,28 @@ Output:
 2. MODS
 
    ~~~xml
-   <mods xmlns="http://www.loc.gov/mods/v3" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" version="3.3">
-       <titleInfo>
-   	<title>Pipeline 2 DTBook Test Content: Basic</title>
-       </titleInfo>
-       <name>
-       <namePart>Marisa D.</namePart>
-   	<role>
-   	    <roleTerm type="text">author</roleTerm>
-   	</role>
-       </name>
-       <identifier type="uid">pipeline2-dtbook-test-20110301-basic</identifier>
-       <language>
-           <languageTerm type="code" authority="rfc3066">en-US</languageTerm>
-       </language>
+   <mods xmlns="http://www.loc.gov/mods/v3" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+         version="3.3">
+      <titleInfo>
+          <title>Pipeline 2 DTBook Test Content: Basic</title>
+      </titleInfo>
+      <name>
+          <namePart>Marisa D.</namePart>
+          <role>
+              <roleTerm type="text">author</roleTerm>
+          </role>
+      </name>
+      <identifier type="uid">pipeline2-dtbook-test-20110301-basic</identifier>
+      <language>
+          <languageTerm type="code" authority="rfc3066">en-US</languageTerm>
+      </language>
    </mods>
    ~~~
 
 3. CSS
 
    ~~~css
-   #d212e45{
+   #d212e45 {
        height: 100px;
        width: 100px;
    }

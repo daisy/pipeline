@@ -24,11 +24,19 @@ This page describes the steps, comments and issues related to this transformatio
 
 On Linux and Mac OS X:
 
-    $ cli/dp2 daisy202-to-epub3 --x-href samples/daisy202/dontworrybehappy/ncc.html --x-output ~/Desktop/out --x-mediaoverlay false --x-compatibility-mode false
+    $ cli/dp2 daisy202-to-epub3
+              --x-href samples/daisy202/dontworrybehappy/ncc.html
+              --x-output ~/Desktop/out
+              --x-mediaoverlay false
+              --x-compatibility-mode false
 
 On Windows:
 
-    $ cli\dp2.exe daisy202-to-epub3 --x-href samples\daisy202\dontworrybehappy\ncc.html --x-output C:\Pipeline2-Output --x-mediaoverlay false --x-compatibility-mode false
+    $ cli\dp2.exe daisy202-to-epub3
+              --x-href samples\daisy202\dontworrybehappy\ncc.html
+              --x-output C:\Pipeline2-Output
+              --x-mediaoverlay false
+              --x-compatibility-mode false
 
 This command will create two entries in the output directory. One is a folder called "epub", which is a temporary directory created by the converter. The second is the resulting EPUB 3 file. The EPUB 3 file is given a name based on the dc:identifier and dc:title metadata elements from the original NCC; "dc:identifier - dc:title.epub".
 

@@ -38,11 +38,11 @@ output:
 More advanded example:
 
     $ ./dp2 zedai-to-pef \
-    	--i-source samples/zedai/alice.xml \
-    	--x-include-preview true \
-        --x-default-stylesheet bana.css \
-    	--x-transform "(formatter:dotify)" \
-    	--x-output ~/Desktop/out
+            --i-source samples/zedai/alice.xml \
+            --x-include-preview true \
+            --x-default-stylesheet bana.css \
+            --x-transform "(formatter:dotify)" \
+            --x-output ~/Desktop/out
 
 ## Getting a preview
 
@@ -301,7 +301,9 @@ toc > entry > ref {
     text-indent: -2;
 }
 toc > entry > ref::after {
-    content: ' ' leader('⠤') ' ' target-string(attr(ref), print-page) ' ' target-counter(attr(ref), page);
+    content: ' ' leader('⠤')
+             ' ' target-string(attr(ref), print-page)
+             ' ' target-counter(attr(ref), page);
 }
 ~~~
 

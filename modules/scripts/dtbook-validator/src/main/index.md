@@ -27,7 +27,13 @@ This section shows how to use the DTBook Validator via the Pipeline 2 command li
 
 Run the script like this:
 
-    $ ./dp2 dtbook-validator --x-input-dtbook file:/path/to/book/dtbook.xml --o-result /tmp/t1 --o-report /tmp/t2 --o-html-report /tmp/t3 --o-validation-status /tmp/t4 --x-output-dir /tmp/dpout 
+    $ ./dp2 dtbook-validator
+            --x-input-dtbook file:/path/to/book/dtbook.xml
+            --o-result /tmp/t1
+            --o-report /tmp/t2
+            --o-html-report /tmp/t3
+            --o-validation-status /tmp/t4
+            --x-output-dir /tmp/dpout 
 
 Make sure the directory `/tmp/dpout` already exists.
 
