@@ -52,7 +52,9 @@
     <p:option name="tts-config" required="false" px:type="anyFileURI" select="''">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
 	<h2 px:role="name">Text-To-Speech configuration file</h2>
-	<p px:role="desc">Configuration file for the Text-To-Speech.</p>
+	<p px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
+
+[More details on the configuration properties](http://daisy.github.io/pipeline/modules/tts-common/tts-config.html).</p>
       </p:documentation>
     </p:option>
 

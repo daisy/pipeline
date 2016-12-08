@@ -42,3 +42,5 @@
   artifact: xml-to-pef
 - group: org.daisy.pipeline.modules.braille
   artifact: common-utils
+- group: org.daisy.pipeline.modules
+  artifact: tts-common

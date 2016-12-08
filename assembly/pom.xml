@@ -93,7 +93,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.10.0</version>
+        <version>1.10.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
