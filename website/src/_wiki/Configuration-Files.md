@@ -1,178 +1,187 @@
-# Configuration
+# Configuration Files
 
-When using DAISY Pipeline 2 as a service, especially when integrating
-it in a custom setup, you probably want to configure a thing or
-two. Two files are intended to be edited by you for this
-purpose. Where on the file system these files are located depends on
-the distribution.
+## Logback
 
-## `config-logback.xml`
+With the file `config-logback.xml` you can control most of the
+logging: to which files log messages are written, log rolling, the
+level of details that are logged, which log messages show up in the
+user interface, etc. See
+[Logback configuration](http://logback.qos.ch/manual/configuration.html)
+for help on the format. The location of this file is specified in
+[`system.properties`](#system-properties).
 
-With this file you can control the logging: to which files log
-messages are written, log rolling, the level of details that are
-logged, which log messages show up in the user interface, etc.
+## System properties
 
-## `system.properties`
+`org.daisy.pipeline.procs`
+: Maximum allowed number of jobs running simultaneously
+: **Allowed values**: A positive number
+: **Initial setting**: "2"
+: **Required**: No, defaults to "2"
 
-**This is old information. Needs to be updated!**
+`org.daisy.pipeline.ws.host`
+: Host address for the web service
+: **Allowed values**: A host address
+: **Initial setting**: "localhost"
+: **Required**: No, defaults to "localhost"
 
-<table>
-<thead>
-<tr>
-<th>Property</th>
-<th>Description</th>
-<th>Allowed values</th>
-<th>Default value</th>
-<th>Required</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>org.daisy.pipeline.mode</code></td>
-<td>Indicates whether the Pipeline will run in web service or command line interface mode</td>
-<td>"ws" or "cmd"</td>
-<td>None</td>
-<td>Yes</td>
-</tr>
+`org.daisy.pipeline.ws.port`
+: Port number for the web service
+: **Allowed values**: Any available port, from 0 to 65535
+: **Required**: No, defaults to "8181"
 
-<tr>
-<td><code>org.daisy.pipeline.iobase</code></td>
-<td>Path to a writable temporary directory</td>
-<td>Local directory path</td>
-<td>None</td>
-<td>TBD</td>
-</tr>
+`org.daisy.pipeline.ws.path`
+: Path for the web service
+: **Allowed values**: Any URI path fragment
+: **Required**: No, defaults to "/ws"
 
-<tr>
-<td><code>org.daisy.pipeline.home</code></td>
-<td>Path to the framework root directory</td>
-<td>Local directory</td>
-<td>None (automatically detected)</td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.ws.authentication.key`
+: Initial admin's authentication ID
+: **Allowed values**: A non-empty string
+: **Required**: Yes, if `org.daisy.pipeline.ws.authentication` is set
 
-<tr>
-<td><code>org.daisy.pipeline.logdir</code></td>
-<td>Path to output the logging info</td>
-<td>Local directory path</td>
-<td><code>org.daisy.pipeline.home/log/</code></td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.ws.authentication.secret`
+: Initial admin's authentication secret
+: **Allowed values**: A non-empty string
+: **Required**: Yes, if `org.daisy.pipeline.ws.authentication` is set
 
-<tr>
-<td><code>org.daisy.pipeline.xproc.configuration</code></td>
-<td>Extras for calabash configuration</td>
-<td>Path to a valid calabash configuration file</td>
-<td><code>org.daisy.pipline.home/etc/conf_calabash.xml</code></td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.ws.ssl`
+: Makes the web service use the secure socket layer
+: **Allowed values**: "true" or "false"
+: **Required**: No, defaults to "false"
 
-<tr>
-<td><code>org.daisy.pipeline.ws.local</code></td>
-<td>Tells if the framework runs on local mode</td>
-<td>true or false</td>
-<td><code>false</code></td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.ws.ssl.keystore`
+: Path to the SSL keystore file
+: **Allowed values**: Local file path
+: **Required**: Yes, if `org.daisy.pipeline.ws.ssl` is set
 
-<tr>
-<td><code>org.daisy.pipeline.ws.port</code></td>
-<td>Port number for the web service</td>
-<td>Any available port, from 0 to 65535.</td>
-<td><code>8181</code> (local mode) or <code>8182</code> (remote mode)</td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.ws.ssl.keystorepassword`
+: Keystore file password
+: **Allowed values**: A non-empty string
+: **Required**: Yes, if `org.daisy.pipeline.ws.ssl` is set
 
-<tr>
-<td><code>org.daisy.pipeline.ws.path</code></td>
-<td>Path for the web service</td>
-<td>Any URI path fragment</td>
-<td><code>/ws</code></td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.ws.ssl.keypassword`
+: Key password
+: **Allowed values**: A non-empty string
+: **Required**: Yes, if `org.daisy.pipeline.ws.ssl` is set
 
-<tr>
-<td><code>org.daisy.pipeline.ws.maxrequesttime</code></td>
-<td>Maximum amount of time (in ms) that a web service request is considered valid</td>
-<td>Any long number</td>
-<td><code>600,000</code> (10 minutes)</td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.ws.maxrequesttime`
+: Maximum amount of time (in ms) that a web service request is considered valid
+: **Allowed values**: A positive long number
+: **Required**: No, defaults to "600000" (10 minutes)
 
-<tr>
-<td><code>org.daisy.pipeline.ws.tmpdir</code></td>
-<td>Path to a writable temporary directory</td>
-<td>Local directory path</td>
-<td><code>/tmp</code></td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.ws.tmpdir`
+: Path to a writable temporary directory
+: **Allowed values**: Local directory path
+: **Required**: No, defaults to "${java.io.tmpdir}" or "/tmp"
 
-<tr>
-<td><code>org.daisy.pipeline.ws.authentication</code></td>
-<td>Indicates whether the web service requires authentication</td>
-<td>"true" or "false"</td>
-<td><code>true</code></td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.liblouis.external`
+: Whether to use the Liblouis library present on the system instead of the embedded version
+: **Allowed values**: "true" or "false"
+: **Required**: No, defaults to "false"
 
-<tr>
-<td><code>org.daisy.pipeline.ws.ssl</code></td>
-<td>Makes the WS to use the secure socket layer</td>
-<td>"true" or "false"</td>
-<td><code>false</code></td>
-<td>No</td>
-</tr>
+<!-- The following are used in persistence-mysql but persistence-mysql is not included -->
 
-<tr>
-<td><code>org.daisy.pipeline.ws.ssl.keystore</code></td>
-<td>Path to the keystore file</td>
-<td>Local file path</td>
-<td>None</td>
-<td>No</td>
-</tr>
+<!--
+`org.daisy.pipeline.persistence.url`
+: Database connection URL
+: **Allowed values**: A JDBC url
+: **Initial setting**: "jdbc:mysql://localhost:3306/daisy_pipeline"
+: **Required**: Yes
 
-<tr>
-<td><code>org.daisy.pipeline.ws.ssl.keystorepassword</code></td>
-<td>Keystore file password</td>
-<td>string</td>
-<td>None</td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.persistence.user`
+: Database user
+: **Allowed values**: A non-empty string
+: **Required**: Yes
 
-<tr>
-<td><code>org.daisy.pipeline.ws.ssl.keypassword</code></td>
-<td>Key password</td>
-<td>string</td>
-<td>None</td>
-<td>No</td>
-</tr>
+`org.daisy.pipeline.persistence.password`
+: Database password
+: **Allowed values**: A non-empty string
+: **Required**: Yes
+-->
 
-<tr>
-<td><code>org.daisy.pipeline.persistence.url</code> (<code>*</code>)(<code>p</code>)</td>
-<td>Database connection URL</td>
-<td>jdbc urls</td>
-<td>None</td>
-<td>No</td>
-</tr>
+---
 
-<tr>
-<td><code>org.daisy.pipeline.persistence.user</code> (<code>*</code>)(<code>p</code>)</td>
-<td>Database user</td>
-<td>string</td>
-<td>None</td>
-<td>No</td>
-</tr>
+The following properties should not be edited! <!-- FIXME: move them to a different file -->
 
-<tr>
-<td><code>org.daisy.pipeline.persistence.password</code> (<code>*</code>)(<code>p</code>)</td>
-<td>Database password</td>
-<td>string</td>
-<td>None</td>
-<td>No</td>
-</tr>
-</tbody>
-</table>
+`org.daisy.pipeline.home`
+: Automatically set to the program's root directory
 
+`org.daisy.pipeline.version`
+: The program's version number
 
-- `*` = New feature not available in all builds yet
-- `p` = Only when using persistence models which actually require configuration ( namely persistence-mysql )
+`org.daisy.pipeline.data`
+: Path to a writeable directory for storing program data
+: Automatically set based on the platform and the
+  [`PIPELINE2_DATA`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
+  environment variable
+
+`org.daisy.pipeline.ws.localfs`
+: Whether or not to allow local filesystem interaction when the client is running on the same machine as the server
+: Automatically set based on the
+  [`PIPELINE2_LOCAL`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
+  environment variable and the
+  [`local`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#arguments-for-pipeline2-executable)
+  argument
+
+`org.daisy.pipeline.ws.authentication`
+: Whether or not the web service requires authentication
+: Automatically set based on the
+  [`PIPELINE2_AUTH`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
+  environment variable and the
+  [`remote`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#arguments-for-pipeline2-executable)
+  argument
+
+`org.daisy.pipeline.iobase`
+: Path to a writable directory for storing job data
+: **Set to**: "${org.daisy.pipeline.data}/jobs"
+
+`org.daisy.pipeline.logdir`
+: Path to a writeable directory for storing global logging info
+: Property is used in [`config-logback.xml`](#logback)
+: **Set to**: "/var/log/daisy-pipeline2" (on Debian/Ubuntu) or
+  "${org.daisy.pipeline.home}/log/" (on other platforms)
+
+`derby.stream.error.file`
+: Path to a writeable file for storing Derby specific logging info
+: **Set to**: "/var/log/daisy-pipeline2/derby.log" (on Debian/Ubuntu)
+  or "${org.daisy.pipeline.home}/log/derby.log" (on other platforms)
+
+`logback.configurationFile`
+: Path (file URI) to Logback configuration file (see [`config-logback.xml`](#logback))
+: **Set to**: "file:/etc/opt/daisy-pipeline2/config-logback.xml" (on Debian/Ubuntu) or
+  "file:${org.daisy.pipeline.home}/etc/config-logback.xml" (on other platforms)
+
+`org.pipeline.updater.bin`
+: **Set to**: "${org.daisy.pipeline.home}/updater/${pipeline.updater}"
+
+`org.pipeline.updater.deployPath`
+: **Set to**: "${org.daisy.pipeline.home}/"
+
+`org.pipeline.updater.releaseDescriptor`
+: **Set to**: "${org.daisy.pipeline.home}/etc/releaseDescriptor.xml"
+
+`org.pipeline.updater.updateSite`
+: **Set to**: "http://daisy.github.io/pipeline-assembly/releases/"
+
+`org.daisy.pipeline.xproc.configuration`
+: Path to Calabash configuration file
+: **Set to**: "${org.daisy.pipeline.home}/etc/config-calabash.xml"
+
+`java.awt.headless`
+: **Set to**: "true"
+
+`com.xmlcalabash.config.user`
+: **Set to**: ""
+
+`file.encoding`
+: **Set to**: "UTF8"
+
+`org.ops4j.pax.logging.DefaultServiceLog.level` <!-- what is this for? -->
+: **Set to**: "WARN"
+
+`org.ops4j.pax.logging.service.frameworkEventsLogLevel` <!-- what is this for? -->
+: **Set to**: "TRACE"
+
+<!--
+`org.daisy.pipeline.base`
+-->

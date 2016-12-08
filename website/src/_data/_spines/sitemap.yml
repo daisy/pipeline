@@ -16,7 +16,7 @@
         - group: {{site.baseurl}}/Get-Help/User-Guide/Pipeline-as-Service/
           pages:
             - url: {{site.baseurl}}/wiki/Configuration-Files/
-              title: "Configuration"
+              title: "Configuration Files"
         - {{site.baseurl}}/Get-Help/User-Guide/Command-Line.html
         - group: {{site.baseurl}}/Get-Help/User-Guide/Scripts.html
           pages:
