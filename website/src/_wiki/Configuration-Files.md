@@ -79,6 +79,33 @@ for help on the format. The location of this file is specified in
 : **Allowed values**: "true" or "false"
 : **Required**: No, defaults to "false"
 
+`tts.config`
+: File to load TTS configuration properties from at start-up
+: **Allowed values**: Local file path
+: **Required**: No
+
+`espeak.path`
+: Path to eSpeak executable
+: **Allowed values**: Local file path
+: **Required**: Yes, if you wish to use the eSpeak TTS engine and the
+  executable can not be found in one of the directories specified by
+  the environment variable "PATH"
+
+`osxspeech.path`
+: Alternative path to OSX's command line program "say"
+: **Allowed values**: Local file path
+: **Required**: No, defaults to "/usr/bin/say"
+
+<!--
+`att.bin.priority`
+`att.servers`
+`att.client.path`
+-->
+
+<!--
+`host.protection`
+-->
+
 <!-- The following are used in persistence-mysql but persistence-mysql is not included -->
 
 <!--
