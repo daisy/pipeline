@@ -1,6 +1,8 @@
 
 {{! does not work within html }}
 
+<div class="gui-synopsis">
+
 {{#inputs}}
 
 ### Inputs
@@ -150,6 +152,110 @@ var onload = function() {
     allElements[i].classList.add('details-off');
 	allElements[i].addEventListener('click', showDetailsAndHideAllOther);
   }
+}
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+</div>
+
+
+
+<div class="cli-synopsis hidden">
+
+<pre>Usage: dp2 [GLOBAL_OPTIONS] {{id}} [OPTIONS]
+
+Options:</pre>
+<table>
+{{#inputs}}
+{{#all}}
+<tr>
+<td>--{{id}} <span style="text-transform: uppercase">{{id}}</span></td>
+<td>{{desc.short}}</td>
+</tr>
+{{/all}}
+{{/inputs}}
+{{#options}}
+{{#all}}
+<tr>
+<td>--{{id}} {{^required}}[{{/required}}<span style="text-transform: uppercase">{{id}}</span>{{^required}}]{{/required}}</td>
+<td>{{name}}{{#default}} (default: <span class="synopsis-option-default">{{{.}}}</span>){{/default}}</td>
+</tr>
+{{/all}}
+{{/options}}
+<tr>
+<td>-o,--output [OUTPUT]</td>
+<td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>
+</tr>
+<tr>
+<td>-z,--zip</td>
+<td>Write the output to a zip file rather than to a folder</td>
+</tr>
+<tr>
+<td>-n,--nicename [NICENAME]</td>
+<td>Set job's nice name</td>
+</tr>
+<tr>
+<td>-r,--priority [PRIORITY]</td>
+<td>Set job's priority (high|medium|low)</td>
+</tr>
+<tr>
+<td>-q,--quiet</td>
+<td>Do not print the job's messages</td>
+</tr>
+<tr>
+<td>-p,--persistent</td>
+<td>Delete the job after it is executed</td>
+</tr>
+<tr>
+<td>-b,--background</td>
+<td>Sends the job and exits</td>
+</tr>
+</table>
+</div>
+
+<script type="text/javascript">
+var guiSynopsis = document.getElementsByClassName('gui-synopsis')[0];
+var cliSynopsis = document.getElementsByClassName('cli-synopsis')[0];
+function switchToCliView() {
+  guiSynopsis.classList.add('hidden');
+  cliSynopsis.classList.remove('hidden');
+}
+function switchToGuiView() {
+  guiSynopsis.classList.remove('hidden');
+  cliSynopsis.classList.add('hidden');
+}
+var loaded = false;
+var onload = function() {
+  if (loaded)
+    return;
+  var button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToCliView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToCliView();
+    }
+  });
+  guiSynopsis.insertBefore(button, guiSynopsis.firstChild);
+  button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToGuiView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToGuiView();
+    }
+  });
+  cliSynopsis.insertBefore(button, cliSynopsis.firstChild);
+  loaded = true;
 }
 if (window.addEventListener) {
   window.addEventListener('load', onload);
