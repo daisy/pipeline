@@ -145,7 +145,7 @@
       
         <a href="/pipeline/wiki/Configuration-Files" tabindex="13">
       
-      Configuration
+      Configuration Files
       </a>
     
     </li>
@@ -602,24 +602,27 @@ installation. To shut down the service press <code>Ctrl-C</code>.</p>
 
 <h2 id="configuration">Configuration</h2>
 
+<h3 id="configuration-files">Configuration files</h3>
+
+<p>When using DAISY Pipeline 2 as a service, especially when integrating
+it in a custom setup, you probably want to configure a thing or
+two. Two files are intended to be edited by you for this purpose:
+<code>system.properties</code> and <code>config-logback.xml</code>. See
+<a href="/pipeline/wiki/Configuration-Files">Configuration files</a> for
+details. Where on the file system these files are located depends on
+the installation.</p>
+
 <h3 id="windows-1">Windows</h3>
 
 <p><strong>TBD</strong></p>
 
 <h3 id="debianubuntu-1">Debian/Ubuntu</h3>
 
-<p>Three configuration files are available if the Pipeline was installed
-via the Debian package:</p>
-
-<ul>
-  <li><code>/etc/default/daisy-pipeline2</code></li>
-  <li><code>/etc/opt/daisy-pipeline2/system.properties</code></li>
-  <li><code>/etc/opt/daisy-pipeline2/config-logback.xml</code></li>
-</ul>
-
-<p>For the latter two, see
-<a href="/pipeline/wiki/Configuration-Files">Configuration Files</a>. The
-former supports the following settings:</p>
+<p>If the Pipeline was installed via the Debian package,
+<code>system.properties</code> and <code>config-logback.xml</code> are located in
+<code>/etc/opt/daisy-pipeline2</code>. In addition there is a third configuration
+file available: <code>/etc/default/daisy-pipeline2</code>. It supports the
+following settings:</p>
 
 <dl>
   <dt><code>REMOTE</code></dt>
@@ -660,15 +663,10 @@ the format <code>export VAR=value</code>.</p>
   <dt><code>JAVA_DEBUG_OPTS</code></dt>
   <dd>Additional Java options to be passed on when <code>PIPELINE2_DEBUG</code> is set.</dd>
   <dt><code>PIPELINE2_LOCAL</code></dt>
-  <dd>Sets the
-<a href="/pipeline/wiki/Configuration-Files"><code>org.daisy.pipeline.ws.localfs</code></a>
-system property (“true” or “false”, default is “true”). <!-- does this have precedence over system.properties? -->
-</dd>
+  <dd>Whether to allow local filesystem interaction when the client is running
+on the same machine as the server (“true” or “false”, default is “true”).</dd>
   <dt><code>PIPELINE2_AUTH</code></dt>
-  <dd>Sets the
-<a href="/pipeline/wiki/Configuration-Files"><code>org.daisy.pipeline.ws.authentication</code></a>
-system property (“true” or “false”, default is “false”). <!-- does this have precedence over system.properties? -->
-</dd>
+  <dd>Whether the web service requires authentication (“true” or “false”, default is “false”).</dd>
   <dt><code>PIPELINE2_DEBUG</code></dt>
   <dd>When “true”, passes debug options to Java (“true” or “false”, default is “false”).</dd>
   <dt><code>PIPELINE2_DATA</code></dt>
@@ -706,10 +704,6 @@ specific command.</dd>
 <!--
 - `gui`: Launch the graphical user interface instead of the web service.
 -->
-
-<h4 id="configuration-files">Configuration files</h4>
-
-<p>See <a href="/pipeline/wiki/Configuration-Files">Configuration Files</a>.</p>
 
     </div>
   </body>
