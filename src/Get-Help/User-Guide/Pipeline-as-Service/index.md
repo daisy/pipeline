@@ -44,22 +44,27 @@ installation. To shut down the service press `Ctrl-C`.
 
 ## Configuration
 
+### Configuration files
+
+When using DAISY Pipeline 2 as a service, especially when integrating
+it in a custom setup, you probably want to configure a thing or
+two. Two files are intended to be edited by you for this purpose:
+`system.properties` and `config-logback.xml`. See
+[Configuration files]({{site.baseurl}}/wiki/Configuration-Files) for
+details. Where on the file system these files are located depends on
+the installation.
+
 ### Windows
 
 **TBD**
 
 ### Debian/Ubuntu
 
-Three configuration files are available if the Pipeline was installed
-via the Debian package:
-
-- `/etc/default/daisy-pipeline2`
-- `/etc/opt/daisy-pipeline2/system.properties`
-- `/etc/opt/daisy-pipeline2/config-logback.xml`
-
-For the latter two, see
-[Configuration]({{site.baseurl}}/wiki/Configuration-Files). The former
-supports the following settings:
+If the Pipeline was installed via the Debian package,
+`system.properties` and `config-logback.xml` are located in
+`/etc/opt/daisy-pipeline2`. In addition there is a third configuration
+file available: `/etc/default/daisy-pipeline2`. It supports the
+following settings:
 
 `REMOTE`
 : When "true", run the server in "remote" mode ("true" or
@@ -105,14 +110,11 @@ A number of environment variables will influence the program:
 : Additional Java options to be passed on when `PIPELINE2_DEBUG` is set.
 
 `PIPELINE2_LOCAL`
-: Sets the
-  [`org.daisy.pipeline.ws.localfs`]({{site.baseurl}}/wiki/Configuration-Files)
-  system property ("true" or "false", default is "true"). <!-- does this have precedence over system.properties? -->
+: Whether to allow local filesystem interaction when the client is running
+  on the same machine as the server ("true" or "false", default is "true").
 
 `PIPELINE2_AUTH`
-: Sets the
-  [`org.daisy.pipeline.ws.authentication`]({{site.baseurl}}/wiki/Configuration-Files)
-  system property ("true" or "false", default is "false"). <!-- does this have precedence over system.properties? -->
+: Whether the web service requires authentication ("true" or "false", default is "false").
 
 `PIPELINE2_DEBUG`
 : When "true", passes debug options to Java ("true" or "false", default is "false").
@@ -153,7 +155,3 @@ The following command line arguments are available. Combinations are possible.
 <!--
 - `gui`: Launch the graphical user interface instead of the web service.
 -->
-
-#### Configuration files
-
-See [Configuration]({{site.baseurl}}/wiki/Configuration-Files).
