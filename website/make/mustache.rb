@@ -335,7 +335,7 @@ Dir.glob(ARGV[0]).each do |f|
           'desc' => desc,
           'required' => solution.bound?('required') ? solution.required.true? : false,
           'sequence' => sequence,
-          'default' => default ? (default.empty? ? '(empty)' : "<code>#{default}</code>") : nil,
+          'default' => default ? (default.include?(' ') ? "<code class='contains-space'>#{default}</code>" : "<code>#{default}</code>") : nil,
           'data-type' => data_type
         }
       }
