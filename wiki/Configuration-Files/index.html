@@ -732,7 +732,37 @@ for help on the format. The location of this file is specified in
 <strong>Allowed values</strong>: “true” or “false”</dd>
   <dd>
 <strong>Required</strong>: No, defaults to “false”</dd>
+  <dt><code>tts.config</code></dt>
+  <dd>File to load TTS configuration properties from at start-up</dd>
+  <dd>
+<strong>Allowed values</strong>: Local file path</dd>
+  <dd>
+<strong>Required</strong>: No</dd>
+  <dt><code>espeak.path</code></dt>
+  <dd>Path to eSpeak executable</dd>
+  <dd>
+<strong>Allowed values</strong>: Local file path</dd>
+  <dd>
+<strong>Required</strong>: Yes, if you wish to use the eSpeak TTS engine and the
+executable can not be found in one of the directories specified by
+the environment variable “PATH”</dd>
+  <dt><code>osxspeech.path</code></dt>
+  <dd>Alternative path to OSX’s command line program “say”</dd>
+  <dd>
+<strong>Allowed values</strong>: Local file path</dd>
+  <dd>
+<strong>Required</strong>: No, defaults to “/usr/bin/say”</dd>
 </dl>
+
+<!--
+`att.bin.priority`
+`att.servers`
+`att.client.path`
+-->
+
+<!--
+`host.protection`
+-->
 
 <!-- The following are used in persistence-mysql but persistence-mysql is not included -->
 
@@ -816,7 +846,7 @@ or “${org.daisy.pipeline.home}/log/derby.log” (on other platforms)</dd>
   <dd>
 <strong>Set to</strong>: “http://daisy.github.io/pipeline-assembly/releases/”</dd>
   <dt><code>org.daisy.pipeline.xproc.configuration</code></dt>
-  <dd>Path to calabash configuration file</dd>
+  <dd>Path to Calabash configuration file</dd>
   <dd>
 <strong>Set to</strong>: “${org.daisy.pipeline.home}/etc/config-calabash.xml”</dd>
   <dt><code>java.awt.headless</code></dt>

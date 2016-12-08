@@ -37,17 +37,25 @@ h4 {
 b {
   font-weight: 600; }
 
-a {
+a,
+[role=link] {
   font-weight: 400;
   color: #01797e; }
-  a:visited {
+  a:visited,
+  [role=link]:visited {
     color: #01797e; }
-  a.external-link::after {
+  a.external-link::after,
+  [role=link].external-link::after {
     content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=); }
-  a.broken-link {
+  a.broken-link,
+  [role=link].broken-link {
     text-decoration: line-through; }
-  a:focus {
+  a:focus,
+  [role=link]:focus {
     color: #ff7711; }
+  a:hover,
+  [role=link]:hover {
+    cursor: pointer; }
 
 code,
 .CodeRay {
@@ -239,6 +247,45 @@ body {
   top: 10.625rem;
   font-size: 80%; }
 
+.gui-synopsis, .cli-synopsis {
+  position: relative; }
+  .gui-synopsis.hidden, .cli-synopsis.hidden {
+    display: none; }
+
+.cli-synopsis {
+  background-color: #f9fbff;
+  border: 1px solid #e6e6e6;
+  border-radius: .2rem;
+  padding: 9px 11px; }
+  .cli-synopsis > pre,
+  .cli-synopsis > table {
+    font-family: monospace;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.3em;
+    color: #003377; }
+  .cli-synopsis code {
+    background-color: initial;
+    border: initial;
+    padding: 0; }
+  .cli-synopsis .synopsis-option-default code:empty::after, .cli-synopsis .synopsis-option-default code:empty::before, .cli-synopsis .synopsis-option-default code.contains-space::after, .cli-synopsis .synopsis-option-default code.contains-space::before {
+    content: "'"; }
+  .cli-synopsis td {
+    vertical-align: top; }
+    .cli-synopsis td:first-child {
+      white-space: pre;
+      padding-left: 3em;
+      padding-right: 1em; }
+
+.toggle-synopsis-button {
+  position: absolute;
+  right: 1rem;
+  top: -2.5rem; }
+  .gui-synopsis .toggle-synopsis-button::before {
+    content: 'Switch to CLI view'; }
+  .cli-synopsis .toggle-synopsis-button::before {
+    content: 'Switch to GUI view'; }
+
 .synopsis-inputs,
 .synopsis-outputs,
 .synopsis-reports,
@@ -258,6 +305,23 @@ body {
   border-left: 1px solid #FFCE65;
   border-bottom: 1px solid white;
   border-radius: .2rem; }
+  .synopsis-input .synopsis-option-default code:empty,
+  .synopsis-output .synopsis-option-default code:empty,
+  .synopsis-report .synopsis-option-default code:empty,
+  .synopsis-option .synopsis-option-default code:empty {
+    padding: 0;
+    border: none;
+    color: initial;
+    background-color: initial;
+    font-family: "Lato", sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.5em; }
+    .synopsis-input .synopsis-option-default code:empty::after,
+    .synopsis-output .synopsis-option-default code:empty::after,
+    .synopsis-report .synopsis-option-default code:empty::after,
+    .synopsis-option .synopsis-option-default code:empty::after {
+      content: "(empty)"; }
   .synopsis-input.details-off:hover,
   .synopsis-output.details-off:hover,
   .synopsis-report.details-off:hover,

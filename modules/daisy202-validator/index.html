@@ -571,9 +571,11 @@ if (window.addEventListener) {
 
 <h2 id="synopsis">Synopsis</h2>
 
-<h3 id="inputs">Inputs</h3>
+<div class="gui-synopsis">
 
-<ul class="synopsis-inputs">
+  <h3 id="inputs">Inputs</h3>
+
+  <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-input-name">NCC</div>
@@ -592,9 +594,9 @@ The NCC file in the DAISY 2.02 fileset
 </li>
 </ul>
 
-<h3 id="reports">Reports</h3>
+  <h3 id="reports">Reports</h3>
 
-<ul class="synopsis-reports">
+  <ul class="synopsis-reports">
 <li class="synopsis-report details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-report-name">Validation report</div>
@@ -604,9 +606,9 @@ The NCC file in the DAISY 2.02 fileset
 </li>
 </ul>
 
-<h3 id="options">Options</h3>
+  <h3 id="options">Options</h3>
 
-<ul class="synopsis-options">
+  <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Time Tolerance</div>
@@ -622,7 +624,7 @@ The duration of the audio files can deviate from the duration declared in the DA
 </li>
 </ul>
 
-<script type="text/javascript">
+  <script type="text/javascript">
 var allElements = [];
 function showDetailsAndHideAllOther() {
   var windowTopBefore = window.pageYOffset;
@@ -647,6 +649,102 @@ var onload = function() {
     allElements[i].classList.add('details-off');
 	allElements[i].addEventListener('click', showDetailsAndHideAllOther);
   }
+}
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+</div>
+
+<div class="cli-synopsis hidden">
+
+  <pre>Usage: dp2 [GLOBAL_OPTIONS] daisy202-validator [OPTIONS]
+
+Options:</pre>
+  <table>
+<tr>
+<td>--ncc <span style="text-transform: uppercase">ncc</span>
+</td>
+<td>The NCC file in the DAISY 2.02 fileset</td>
+</tr>
+<tr>
+<td>--timeToleranceMs [<span style="text-transform: uppercase">timeToleranceMs</span>]</td>
+<td>Time Tolerance (default: <span class="synopsis-option-default"><code>500</code></span>)</td>
+</tr>
+<tr>
+<td>-o,--output [OUTPUT]</td>
+<td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>
+</tr>
+<tr>
+<td>-z,--zip</td>
+<td>Write the output to a zip file rather than to a folder</td>
+</tr>
+<tr>
+<td>-n,--nicename [NICENAME]</td>
+<td>Set job's nice name</td>
+</tr>
+<tr>
+<td>-r,--priority [PRIORITY]</td>
+<td>Set job's priority (high|medium|low)</td>
+</tr>
+<tr>
+<td>-q,--quiet</td>
+<td>Do not print the job's messages</td>
+</tr>
+<tr>
+<td>-p,--persistent</td>
+<td>Delete the job after it is executed</td>
+</tr>
+<tr>
+<td>-b,--background</td>
+<td>Sends the job and exits</td>
+</tr>
+</table>
+</div>
+
+<script type="text/javascript">
+var guiSynopsis = document.getElementsByClassName('gui-synopsis')[0];
+var cliSynopsis = document.getElementsByClassName('cli-synopsis')[0];
+function switchToCliView() {
+  guiSynopsis.classList.add('hidden');
+  cliSynopsis.classList.remove('hidden');
+}
+function switchToGuiView() {
+  guiSynopsis.classList.remove('hidden');
+  cliSynopsis.classList.add('hidden');
+}
+var loaded = false;
+var onload = function() {
+  if (loaded)
+    return;
+  var button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToCliView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToCliView();
+    }
+  });
+  guiSynopsis.insertBefore(button, guiSynopsis.firstChild);
+  button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToGuiView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToGuiView();
+    }
+  });
+  cliSynopsis.insertBefore(button, cliSynopsis.firstChild);
+  loaded = true;
 }
 if (window.addEventListener) {
   window.addEventListener('load', onload);
