@@ -2,8 +2,10 @@ package org.daisy.dotify.impl.input.xml;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
+import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskGroupFactory;
 import org.daisy.dotify.api.tasks.TaskGroupSpecification;
@@ -25,6 +27,8 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 	private final XMLL10nResourceLocator locator;
 
 	private final Set<TaskGroupSpecification> supportedSpecifications;
+	private final Set<TaskGroupInformation> supportedTaskGroupInformations;
+	private final Set<String> supportedLocales;
 	
 	public XMLInputManagerFactory() {
 		this.locator = XMLL10nResourceLocator.getInstance();
@@ -32,21 +36,54 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 		Set<String> supportedFormats = p.listFileFormats();
 		supportedFormats.add("xml");
 		supportedSpecifications = new HashSet<>();
+		this.supportedLocales = locator.listSupportedLocales();
+		Set<TaskGroupInformation> tmp = new HashSet<>();
 		for (String format : supportedFormats) {
-			for (String locale : locator.listSupportedLocales()) {
+			for (String locale : supportedLocales) {
+				if ("obfl".equals(format)) {
+					tmp.add(TaskGroupInformation.newEnhanceBuilder(format).locale(locale).build());
+				} else {
+					tmp.add(TaskGroupInformation.newConvertBuilder(format, "obfl").locale(locale).build());
+				}
 				supportedSpecifications.add(new TaskGroupSpecification(format, "obfl", locale));
 			}
 		}
+		supportedTaskGroupInformations = Collections.unmodifiableSet(tmp);
 	}
 
 	@Override
 	public boolean supportsSpecification(TaskGroupSpecification spec) {
-		return supportedSpecifications.contains(spec);
+		//TODO: move this to default implementation after move to java 8
+		for (TaskGroupInformation i : listAll()) {
+			if (spec.matches(i)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	@Override
+	@Deprecated
 	public Set<TaskGroupSpecification> listSupportedSpecifications() {
 		return Collections.unmodifiableSet(supportedSpecifications);
+	}
+	
+	@Override
+	public Set<TaskGroupInformation> listAll() {
+		return supportedTaskGroupInformations;
+	}
+
+	@Override
+	public Set<TaskGroupInformation> list(String locale) {
+		//TODO: move this to default implementation after move to java 8 (and use streams)
+		Objects.requireNonNull(locale);
+		Set<TaskGroupInformation> ret = new HashSet<>();
+		for (TaskGroupInformation info : listAll()) {
+			if (info.matchesLocale(locale)) {
+				ret.add(info.newCopyBuilder().locale(locale).build());
+			}
+		}
+		return ret;
 	}
 
 	@Override
@@ -56,6 +93,7 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 
 	@Override
 	public void setCreatedWithSPI() {
+		//TODO: remove after move to java 8
 	}
 	
 }
