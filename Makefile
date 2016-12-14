@@ -247,7 +247,7 @@ $(addsuffix /.maven-snapshot-dependencies,assembly $(MAVEN_MODULES)) : %/.maven-
 .INTERMEDIATE : $(addsuffix /.gradle-dependencies-to-test,assembly $(MAVEN_MODULES))
 $(addsuffix /.gradle-dependencies-to-test,assembly $(MAVEN_MODULES)) : %/.gradle-dependencies-to-test : %/.gradle-dependencies-to-install
 	for module in $$(cat $$(dirname $@)/.gradle-snapshot-dependencies); do \
-		if [ -e $$module/.maven-to-test ]; then \
+		if [ -e $$module/.gradle-to-test ]; then \
 			echo $$module; \
 		fi \
 	done > $@
@@ -264,6 +264,8 @@ $(addsuffix /.gradle-dependencies-to-install,assembly $(MAVEN_MODULES)) : %/.gra
 		   [[ ! -e "$$dest/maven-metadata-local.xml" ]] || \
 		   [[ -n $$(find $$module/{build.gradle,gradle.properties,src} -newer "$$dest/maven-metadata-local.xml" 2>/dev/null) ]]; then \
 			touch $$module/.gradle-to-{install,test}; \
+		elif [[ -n $$(find $$module/test -newer "$$dest/maven-metadata-local.xml" 2>/dev/null) ]]; then \
+			touch $$module/.gradle-to-test; \
 		fi \
 	done
 	for module in $$(cat $<); do \
