@@ -53,7 +53,28 @@ module Jekyll
           [
             name,
             if spine
-              spine.map(&create_spine_item)
+              if spine.is_a? Hash and spine['github_wiki']
+                if spine.length > 1
+                  raise "github_wiki must be the only key"
+                end
+                wiki_path = site.source + '/' + spine['github_wiki'] + '/'
+                File.readlines(wiki_path + '_Sidebar.md').reject { |line| line.empty? } .map { |line|
+                  if line =~ /^\* \[\[(.+)\|(.+)\]\]$/o
+                    title = $1
+                    path = wiki_path + $2 + '.md'
+                    page = pages.detect { |page| page.path == path }
+                    if page
+                      merge_title(page, title)
+                    else
+                      raise "spine link can not be resolved: #{$2}"
+                    end
+                  else
+                    raise "expecting item of the form '* [[Title|path]]' but got: #{line}"
+                  end
+                }
+              else
+                spine.map(&create_spine_item)
+              end
             end
           ]
         }
