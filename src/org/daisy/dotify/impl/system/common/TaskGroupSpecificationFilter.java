@@ -3,24 +3,24 @@ package org.daisy.dotify.impl.system.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
+import org.daisy.dotify.api.tasks.TaskGroupInformation;
 
 class TaskGroupSpecificationFilter {
-	private final List<TaskGroupSpecification> convert;
-	private final List<TaskGroupSpecification> enhance;
+	private final List<TaskGroupInformation> convert;
+	private final List<TaskGroupInformation> enhance;
 	
-	private TaskGroupSpecificationFilter(List<TaskGroupSpecification> convert, List<TaskGroupSpecification> enhance) {
+	private TaskGroupSpecificationFilter(List<TaskGroupInformation> convert, List<TaskGroupInformation> enhance) {
 		this.convert = convert;
 		this.enhance = enhance;
 	}
 
-	static TaskGroupSpecificationFilter filterLocaleGroupByType(List<TaskGroupSpecification> candidates, String locale) {
-		List<TaskGroupSpecification> convert = new ArrayList<>();
-		List<TaskGroupSpecification> enhance = new ArrayList<>();
+	static TaskGroupSpecificationFilter filterLocaleGroupByType(List<TaskGroupInformation> candidates) {
+		List<TaskGroupInformation> convert = new ArrayList<>();
+		List<TaskGroupInformation> enhance = new ArrayList<>();
 		if (candidates != null) {
-			for (TaskGroupSpecification spec : candidates) {
-				if (locale.equals(spec.getLocale())) {
-					switch (spec.getType()) {
+			for (TaskGroupInformation spec : candidates) {
+
+					switch (spec.getActivity()) {
 						case CONVERT:
 							convert.add(spec);
 							break;
@@ -30,17 +30,16 @@ class TaskGroupSpecificationFilter {
 						default:
 							
 					}
-				}
 			}
 		}
 		return new TaskGroupSpecificationFilter(convert, enhance);
 	}
 
-	List<TaskGroupSpecification> getConvert() {
+	List<TaskGroupInformation> getConvert() {
 		return convert;
 	}
 
-	List<TaskGroupSpecification> getEnhance() {
+	List<TaskGroupInformation> getEnhance() {
 		return enhance;
 	}
 

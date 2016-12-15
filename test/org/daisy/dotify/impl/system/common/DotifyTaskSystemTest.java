@@ -8,22 +8,23 @@ import java.util.List;
 import java.util.Map;
 
 import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskGroupActivity;
+import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskGroupSpecification;
-import org.daisy.dotify.api.tasks.TaskGroupSpecification.Type;
 import org.daisy.dotify.consumer.tasks.TaskGroupFactoryMaker;
 import org.junit.Test;
 public class DotifyTaskSystemTest {
 
 	@Test
 	public void testPath_01() {
-		TaskGroupSpecification spec = new TaskGroupSpecification("dtbook", "pef", "sv-SE");
+		TaskGroupInformation spec = TaskGroupInformation.newConvertBuilder("dtbook", "pef").build();
 		TaskGroupFactoryMaker tgf = TaskGroupFactoryMaker.newInstance();
-		List<TaskGroupSpecification> specs = DotifyTaskSystem.getPath(tgf, spec, new HashMap<String, Object>());
+		List<TaskGroupInformation> specs = DotifyTaskSystem.getPath(tgf, spec, "sv-SE");
 		assertEquals(3, specs.size());
 		List<TaskGroup> tasks = new ArrayList<>();
-		for (TaskGroupSpecification s : specs) {
-			if (s.getType()==Type.CONVERT) {
-				TaskGroup g = tgf.newTaskGroup(s);
+		for (TaskGroupInformation s : specs) {
+			if (s.getActivity()==TaskGroupActivity.CONVERT) {
+				TaskGroup g = tgf.newTaskGroup(s.toSpecificationBuilder("sv-SE").build());
 				tasks.add(g);
 				System.out.println(g.getName());
 			}
@@ -35,14 +36,14 @@ public class DotifyTaskSystemTest {
 	
 	@Test
 	public void testPath_02() {
-		TaskGroupSpecification spec = new TaskGroupSpecification("epub", "pef", "sv-SE");
+		TaskGroupInformation spec = TaskGroupInformation.newConvertBuilder("epub", "pef").build();
 		TaskGroupFactoryMaker tgf = TaskGroupFactoryMaker.newInstance();
-		List<TaskGroupSpecification> specs = DotifyTaskSystem.getPath(tgf, spec, new HashMap<String, Object>());
+		List<TaskGroupInformation> specs = DotifyTaskSystem.getPath(tgf, spec, "sv-SE");
 		assertEquals(4, specs.size());
 		List<TaskGroup> tasks = new ArrayList<>();
-		for (TaskGroupSpecification s : specs) {
-			if (s.getType()==Type.CONVERT) {
-				TaskGroup g = tgf.newTaskGroup(s);
+		for (TaskGroupInformation s : specs) {
+			if (s.getActivity()==TaskGroupActivity.CONVERT) {
+				TaskGroup g = tgf.newTaskGroup(s.toSpecificationBuilder("sv-SE").build());
 				tasks.add(g);
 				System.out.println(g.getName());
 			}
@@ -53,8 +54,8 @@ public class DotifyTaskSystemTest {
 		assertEquals("Layout Engine", tasks.get(2).getName());
 	}
 	
-	static Map<String, List<TaskGroupSpecification>> inputs = new HashMap<>();
-	static Map<String, List<TaskGroupSpecification>> inputsE = new HashMap<>();
+	static Map<String, List<TaskGroupInformation>> inputs = new HashMap<>();
+	static Map<String, List<TaskGroupInformation>> inputsE = new HashMap<>();
 	static String loc = "sv-SE";
 	static {
 		inputs.put("A", buildSpecs(loc, "A", false, "B", "C"));
@@ -67,14 +68,14 @@ public class DotifyTaskSystemTest {
 		inputsE.put("C", buildSpecs(loc, "C", true, "D", "E"));
 		inputsE.put("D", buildSpecs(loc, "D", true, "E", "G"));
 		inputsE.put("E", buildSpecs(loc, "E", true, "F"));
-		List<TaskGroupSpecification> sp = new ArrayList<>();
-		sp.add(new TaskGroupSpecification("G", "G", loc));
+		List<TaskGroupInformation> sp = new ArrayList<>();
+		sp.add(TaskGroupInformation.newEnhanceBuilder("G").build());
 		inputsE.put("G", sp);
 	}
 	
 	@Test
 	public void testPath_03() {
-		List<TaskGroupSpecification> ret = DotifyTaskSystem.getPathSpecifications("A", "E", loc, inputs);
+		List<TaskGroupInformation> ret = DotifyTaskSystem.getPathSpecifications("A", "E", inputs);
 		assertEquals(2, ret.size());
 		assertEquals("A -> C (sv-SE)", asString(ret.get(0)));
 		assertEquals("C -> E (sv-SE)", asString(ret.get(1)));
@@ -82,7 +83,7 @@ public class DotifyTaskSystemTest {
 	
 	@Test
 	public void testPath_04() {
-		List<TaskGroupSpecification> ret = DotifyTaskSystem.getPathSpecifications("A", "F", loc, inputs);
+		List<TaskGroupInformation> ret = DotifyTaskSystem.getPathSpecifications("A", "F", inputs);
 		assertEquals(3, ret.size());
 		assertEquals("A -> C (sv-SE)", asString(ret.get(0)));
 		assertEquals("C -> E (sv-SE)", asString(ret.get(1)));
@@ -91,7 +92,7 @@ public class DotifyTaskSystemTest {
 	
 	@Test
 	public void testPath_05() {
-		List<TaskGroupSpecification> ret = DotifyTaskSystem.getPathSpecifications("A", "G", loc, inputs);
+		List<TaskGroupInformation> ret = DotifyTaskSystem.getPathSpecifications("A", "G", inputs);
 		assertEquals(3, ret.size());
 		assertEquals("A -> B (sv-SE)", asString(ret.get(0)));
 		assertEquals("B -> D (sv-SE)", asString(ret.get(1)));
@@ -100,7 +101,7 @@ public class DotifyTaskSystemTest {
 	
 	@Test
 	public void testPathEnhance_01() {
-		List<TaskGroupSpecification> ret = DotifyTaskSystem.getPathSpecifications("A", "G", loc, inputsE);
+		List<TaskGroupInformation> ret = DotifyTaskSystem.getPathSpecifications("A", "G", inputsE);
 		assertEquals(7, ret.size());
 		assertEquals("A -> A (sv-SE)", asString(ret.get(0)));
 		assertEquals("A -> B (sv-SE)", asString(ret.get(1)));
@@ -111,19 +112,19 @@ public class DotifyTaskSystemTest {
 		assertEquals("G -> G (sv-SE)", asString(ret.get(6)));
 	}
 	
-	private static List<TaskGroupSpecification> buildSpecs(String locale, String input, boolean withEnhance, String ... outputs) {
-		List<TaskGroupSpecification> specs = new ArrayList<>();
+	private static List<TaskGroupInformation> buildSpecs(String locale, String input, boolean withEnhance, String ... outputs) {
+		List<TaskGroupInformation> specs = new ArrayList<>();
 		for (String r : outputs) {
-			specs.add(new TaskGroupSpecification(input, r, locale));
+			specs.add(TaskGroupInformation.newConvertBuilder(input, r).build());
 		}
 		if (withEnhance) {
-			specs.add(new TaskGroupSpecification(input, input, locale));
+			specs.add(TaskGroupInformation.newEnhanceBuilder(input).build());
 		}
 		return specs;
 	}
 	
-	private static String asString(TaskGroupSpecification spec) {
-		return spec.getInputFormat() + " -> " + spec.getOutputFormat() + " (" + spec.getLocale() + ")";
+	private static String asString(TaskGroupInformation spec) {
+		return spec.getInputFormat() + " -> " + spec.getOutputFormat() + " (sv-SE)";
 	}
 
 }

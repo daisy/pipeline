@@ -11,9 +11,9 @@ import java.util.logging.Logger;
 import org.daisy.dotify.api.tasks.CompiledTaskSystem;
 import org.daisy.dotify.api.tasks.DefaultCompiledTaskSystem;
 import org.daisy.dotify.api.tasks.TaskGroup;
+import org.daisy.dotify.api.tasks.TaskGroupActivity;
 import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
-import org.daisy.dotify.api.tasks.TaskGroupSpecification.Type;
+import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.api.tasks.TaskSystem;
 import org.daisy.dotify.api.tasks.TaskSystemException;
@@ -66,16 +66,16 @@ public class DotifyTaskSystem implements TaskSystem {
 		String inputFormat = h.get(Keys.INPUT_FORMAT).toString();
 
 		logger.info("Finding path...");
-		for (TaskGroupSpecification spec : getPath(imf, new TaskGroupSpecification(inputFormat, outputFormat, context), pa)) {
-			TaskGroup g = imf.newTaskGroup(spec);
-			if (spec.getType()==Type.ENHANCE) {
+		for (TaskGroupInformation spec : getPath(imf, TaskGroupInformation.newConvertBuilder(inputFormat, outputFormat).build(), context)) {
+			TaskGroup g = imf.newTaskGroup(spec.toSpecificationBuilder(context).build());
+			if (spec.getActivity()==TaskGroupActivity.ENHANCE) {
 				// For enhance, only include the options required to enable the task group. Once enabled,
 				// additional options may be presented
 				for (TaskOption o : spec.getRequiredOptions()) {
 					setup.addOption(o);
 				}
 			}
-			if (spec.getType()==Type.CONVERT || matchesRequiredOptions(spec, pa, false)) {
+			if (spec.getActivity()==TaskGroupActivity.CONVERT || matchesRequiredOptions(spec, pa, false)) {
 				//TODO: these options should be on the group level instead of on the system level
 				List<TaskOption> opts = g.getOptions();
 				if (opts!=null) {
@@ -102,11 +102,11 @@ public class DotifyTaskSystem implements TaskSystem {
 	 * @param parameters the parameters
 	 * @return returns a list of task groups
 	 */
-	static List<TaskGroupSpecification> getPath(TaskGroupFactoryMakerService imf, TaskGroupSpecification def, Map<String, Object> parameters) {
-		Set<TaskGroupSpecification> specs = imf.listSupportedSpecifications();
-		Map<String, List<TaskGroupSpecification>> byInput = byInput(specs);
+	static List<TaskGroupInformation> getPath(TaskGroupFactoryMakerService imf, TaskGroupInformation def, String locale) {
+		Set<TaskGroupInformation> specs = imf.list(locale);
+		Map<String, List<TaskGroupInformation>> byInput = byInput(specs);
 
-		return getPathSpecifications(def.getInputFormat(), def.getOutputFormat(), def.getLocale(), byInput);
+		return getPathSpecifications(def.getInputFormat(), def.getOutputFormat(), byInput);
 	}
 	
 	/**
@@ -117,25 +117,25 @@ public class DotifyTaskSystem implements TaskSystem {
 	 * @param inputs a list of specifications ordered by input format
 	 * @return returns the shortest path
 	 */
-	static List<TaskGroupSpecification> getPathSpecifications(String input, String output, String locale, Map<String, List<TaskGroupSpecification>> inputs) {
+	static List<TaskGroupInformation> getPathSpecifications(String input, String output, Map<String, List<TaskGroupInformation>> inputs) {
 		// queue root
 		List<QueueInfo> queue = new ArrayList<>();
-		queue.add(new QueueInfo(locale, new HashMap<>(inputs).remove(input), new ArrayList<TaskGroupSpecification>()));
+		queue.add(new QueueInfo(new HashMap<>(inputs).remove(input), new ArrayList<TaskGroupInformation>()));
 		
 		while (!queue.isEmpty()) {
 			QueueInfo current = queue.remove(0);
-			for (TaskGroupSpecification candidate : current.getCandidates().getConvert()) {
+			for (TaskGroupInformation candidate : current.getCandidates().getConvert()) {
 				logger.info("Evaluating " + candidate.getInputFormat() + " -> " + candidate.getOutputFormat());
 				if (candidate.getOutputFormat().equals(output)) {
-					List<TaskGroupSpecification> ret = new ArrayList<>(current.getSpecs());
+					List<TaskGroupInformation> ret = new ArrayList<>(current.getSpecs());
 					ret.addAll(current.getCandidates().getEnhance());
 					ret.add(candidate);
-					QueueInfo next = new QueueInfo(locale, new HashMap<>(inputs).remove(candidate.getOutputFormat()), current.getSpecs());
+					QueueInfo next = new QueueInfo(new HashMap<>(inputs).remove(candidate.getOutputFormat()), current.getSpecs());
 					ret.addAll(next.getCandidates().getEnhance());
 					return ret;
 				} else {
 					// add for later evaluation
-					QueueInfo info = new QueueInfo(locale, new HashMap<>(inputs).remove(candidate.getOutputFormat()), current.getSpecs());
+					QueueInfo info = new QueueInfo(new HashMap<>(inputs).remove(candidate.getOutputFormat()), current.getSpecs());
 					info.getSpecs().addAll(current.getCandidates().getEnhance());
 					info.getSpecs().add(candidate);
 					queue.add(info);
@@ -145,7 +145,7 @@ public class DotifyTaskSystem implements TaskSystem {
 		return Collections.emptyList();
 	}
 	
-	static boolean matchesRequiredOptions(TaskGroupSpecification candidate, Map<String, Object> parameters, boolean emptyReturn) {
+	static boolean matchesRequiredOptions(TaskGroupInformation candidate, Map<String, Object> parameters, boolean emptyReturn) {
 		if (candidate.getRequiredOptions().isEmpty()) {
 			return emptyReturn;
 		}
@@ -163,10 +163,10 @@ public class DotifyTaskSystem implements TaskSystem {
 		return true;
 	}
 	
-	static Map<String, List<TaskGroupSpecification>> byInput(Set<TaskGroupSpecification> specs) {
-		Map<String, List<TaskGroupSpecification>> ret = new HashMap<>();
-		for (TaskGroupSpecification spec : specs) {
-			List<TaskGroupSpecification> group = ret.get(spec.getInputFormat());
+	static Map<String, List<TaskGroupInformation>> byInput(Set<TaskGroupInformation> specs) {
+		Map<String, List<TaskGroupInformation>> ret = new HashMap<>();
+		for (TaskGroupInformation spec : specs) {
+			List<TaskGroupInformation> group = ret.get(spec.getInputFormat());
 			if (group==null) {
 				group = new ArrayList<>();
 				ret.put(spec.getInputFormat(), group);

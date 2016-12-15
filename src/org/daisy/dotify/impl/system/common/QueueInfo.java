@@ -3,14 +3,14 @@ package org.daisy.dotify.impl.system.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
+import org.daisy.dotify.api.tasks.TaskGroupInformation;
 
 class QueueInfo {
 	private final TaskGroupSpecificationFilter candidates;
-	private final List<TaskGroupSpecification> specs;
+	private final List<TaskGroupInformation> specs;
 
-	QueueInfo(String locale, List<TaskGroupSpecification> inputs, List<TaskGroupSpecification> specs) {
-		this.candidates = TaskGroupSpecificationFilter.filterLocaleGroupByType(inputs, locale);
+	QueueInfo(List<TaskGroupInformation> inputs, List<TaskGroupInformation> specs) {
+		this.candidates = TaskGroupSpecificationFilter.filterLocaleGroupByType(inputs);
 		this.specs = new ArrayList<>(specs);
 	}
 
@@ -18,7 +18,7 @@ class QueueInfo {
 		return candidates;
 	}
 
-	List<TaskGroupSpecification> getSpecs() {
+	List<TaskGroupInformation> getSpecs() {
 		return specs;
 	}
 

@@ -1,7 +1,7 @@
 package org.daisy.dotify.impl.system.common;
 
 import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
+import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskSystem;
 import org.daisy.dotify.api.tasks.TaskSystemFactory;
 import org.daisy.dotify.api.tasks.TaskSystemFactoryException;
@@ -21,8 +21,8 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 
 	@Override
 	public boolean supportsSpecification(String locale, String outputFormat) {
-		for (TaskGroupSpecification spec : imf.listSupportedSpecifications()) {
-			if (spec.getOutputFormat().equals(outputFormat) && locale.equalsIgnoreCase(spec.getLocale())) {
+		for (TaskGroupInformation info : imf.list(locale)) {
+			if (info.getOutputFormat().equals(outputFormat)) {
 				return true;
 			}
 		}
