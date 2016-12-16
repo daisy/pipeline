@@ -4,10 +4,9 @@
   pages:
     - group: {{site.baseurl}}/Get-Help/User-Guide/
       pages:
-        - group: {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
+        - {{site.baseurl}}/Get-Help/User-Guide/Installation/
+        - url: {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
           title: "Desktop Application"
-          pages:
-            - {{site.baseurl}}/wiki/gui/Installation/
         - group: {{site.baseurl}}/wiki/webui/User-Guide/
           title: "Web Application"
           pages:

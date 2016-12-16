@@ -411,6 +411,13 @@ run() {
             shift
             ;;
         'gui')
+            if ! "$JAVA" -showversion 2>&1 | grep oracle >/dev/null; then
+                warn "Your version of Java possibly does not support JavaFX, which is required to start the GUI. See http://daisy.github.io/pipeline/Get-Help/User-Guide/Installation/#javafx for more information."
+                if [ -t 0 ]; then
+                    echo "Will continue in 10s. Hit ^C to abort, or ENTER to continue now."
+                    read -t10
+                fi
+            fi
             MODE=" -Dorg.daisy.pipeline.main.mode=gui"
             shift
             ;;
