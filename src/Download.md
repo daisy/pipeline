@@ -4,7 +4,7 @@ layout: default
 # Download
 
 For installation instructions see
-[Installation]({{site.baseurl}}/wiki/gui/Installation/).
+[Installation]({{site.baseurl}}/Get-Help/User-Guide/Installation/).
 
 {% assign all = site.data.downloads | sort:'sort' %}
 
