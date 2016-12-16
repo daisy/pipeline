@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskGroup;
@@ -24,6 +25,7 @@ import aQute.bnd.annotation.component.Component;
  */
 @Component
 public class XMLInputManagerFactory implements TaskGroupFactory {
+	private static final Logger logger = Logger.getLogger(XMLInputManagerFactory.class.getCanonicalName());
 	private final XMLL10nResourceLocator locator;
 
 	private final Set<TaskGroupSpecification> supportedSpecifications;
@@ -39,13 +41,13 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 		this.supportedLocales = locator.listSupportedLocales();
 		Set<TaskGroupInformation> tmp = new HashSet<>();
 		for (String format : supportedFormats) {
-			for (String locale : supportedLocales) {
-				if ("obfl".equals(format)) {
-					tmp.add(TaskGroupInformation.newEnhanceBuilder(format).locale(locale).build());
-				} else {
+			if ("obfl".equals(format)) {
+				logger.info("Ignoring obfl.");
+			} else {
+				for (String locale : supportedLocales) {				
 					tmp.add(TaskGroupInformation.newConvertBuilder(format, "obfl").locale(locale).build());
+					supportedSpecifications.add(new TaskGroupSpecification(format, "obfl", locale));
 				}
-				supportedSpecifications.add(new TaskGroupSpecification(format, "obfl", locale));
 			}
 		}
 		supportedTaskGroupInformations = Collections.unmodifiableSet(tmp);

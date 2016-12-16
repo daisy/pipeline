@@ -10,7 +10,6 @@ import java.util.Map;
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskGroupActivity;
 import org.daisy.dotify.api.tasks.TaskGroupInformation;
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 import org.daisy.dotify.consumer.tasks.TaskGroupFactoryMaker;
 import org.junit.Test;
 public class DotifyTaskSystemTest {
@@ -20,7 +19,7 @@ public class DotifyTaskSystemTest {
 		TaskGroupInformation spec = TaskGroupInformation.newConvertBuilder("dtbook", "pef").build();
 		TaskGroupFactoryMaker tgf = TaskGroupFactoryMaker.newInstance();
 		List<TaskGroupInformation> specs = DotifyTaskSystem.getPath(tgf, spec, "sv-SE");
-		assertEquals(3, specs.size());
+		assertEquals(2, specs.size());
 		List<TaskGroup> tasks = new ArrayList<>();
 		for (TaskGroupInformation s : specs) {
 			if (s.getActivity()==TaskGroupActivity.CONVERT) {
@@ -39,7 +38,7 @@ public class DotifyTaskSystemTest {
 		TaskGroupInformation spec = TaskGroupInformation.newConvertBuilder("epub", "pef").build();
 		TaskGroupFactoryMaker tgf = TaskGroupFactoryMaker.newInstance();
 		List<TaskGroupInformation> specs = DotifyTaskSystem.getPath(tgf, spec, "sv-SE");
-		assertEquals(4, specs.size());
+		assertEquals(3, specs.size());
 		List<TaskGroup> tasks = new ArrayList<>();
 		for (TaskGroupInformation s : specs) {
 			if (s.getActivity()==TaskGroupActivity.CONVERT) {

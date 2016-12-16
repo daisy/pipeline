@@ -3,16 +3,9 @@
 <properties>		
 	<comment>
 		Maps a root element and namespace (separated by the @-character) to a file name.
-		
-		If value is "" then the format is assumed to be ready for the formatter without 
-		any additional processing, i.e. in OBFL-format.
 	</comment>
 
 	<entry key="dtbook@http://www.daisy.org/z3986/2005/dtbook/">dtbook.properties</entry>
-
 	<entry key="html@http://www.w3.org/1999/xhtml">html.properties</entry>
-
-	<entry key="obfl@http://www.daisy.org/ns/2011/obfl"></entry>
-	<entry key="obfl"></entry>
 
 </properties>
