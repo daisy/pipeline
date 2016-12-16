@@ -46,6 +46,11 @@ public class Epub3InputManagerFactory implements TaskGroupFactory {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean supportsSpecification(TaskGroupInformation spec) {
+		return listAll().contains(spec);
+	}
 
 	@Override
 	public TaskGroup newTaskGroup(TaskGroupSpecification spec) {

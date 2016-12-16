@@ -67,7 +67,6 @@ public class DotifyTaskSystem implements TaskSystem {
 
 		logger.info("Finding path...");
 		for (TaskGroupInformation spec : getPath(imf, TaskGroupInformation.newConvertBuilder(inputFormat, outputFormat).build(), context)) {
-			TaskGroup g = imf.newTaskGroup(spec.toSpecificationBuilder(context).build());
 			if (spec.getActivity()==TaskGroupActivity.ENHANCE) {
 				// For enhance, only include the options required to enable the task group. Once enabled,
 				// additional options may be presented
@@ -76,6 +75,7 @@ public class DotifyTaskSystem implements TaskSystem {
 				}
 			}
 			if (spec.getActivity()==TaskGroupActivity.CONVERT || matchesRequiredOptions(spec, pa, false)) {
+				TaskGroup g = imf.newTaskGroup(spec, context);
 				//TODO: these options should be on the group level instead of on the system level
 				List<TaskOption> opts = g.getOptions();
 				if (opts!=null) {

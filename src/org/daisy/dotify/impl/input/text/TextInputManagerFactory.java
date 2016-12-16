@@ -44,6 +44,11 @@ public class TextInputManagerFactory implements TaskGroupFactory {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean supportsSpecification(TaskGroupInformation spec) {
+		return listAll().contains(spec);
+	}
 
 	@Override
 	public TaskGroup newTaskGroup(TaskGroupSpecification spec) {
