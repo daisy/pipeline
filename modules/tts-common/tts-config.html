@@ -4,9 +4,9 @@
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
-    <title>TTS Configuration</title>
+    <title>Text-To-Speech Configuration</title>
     
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="TTS Configuration">
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Text-To-Speech Configuration">
 
 
     <link rel="stylesheet" href="/pipeline/css/default.css">
@@ -556,41 +556,70 @@ if (window.addEventListener) {
 </script>
 
 
-      <h1 id="tts-configuration">TTS Configuration</h1>
+      <h1 id="text-to-speech-configuration">Text-To-Speech Configuration</h1>
 
-<p>TTS supported in scripts
-  - <a href="/pipeline/modules/dtbook-to-daisy3">dtbook-to-daisy3</a>,
-  - <a href="/pipeline/modules/dtbook-to-epub3">dtbook-to-epub3</a> and
-  - <a href="/pipeline/modules/zedai-to-epub3">zedai-to-epub3</a></p>
+<p>The following scripts support the production of an aural presentation
+of the document via speech synthesis, or “text-to-speech” (TTS):</p>
 
-<h2 id="engine-configuration">Engine configuration</h2>
+<ul>
+  <li>
+<a href="/pipeline/modules/dtbook-to-daisy3">dtbook-to-daisy3</a>,</li>
+  <li>
+<a href="/pipeline/modules/dtbook-to-epub3">dtbook-to-epub3</a> and</li>
+  <li><a href="/pipeline/modules/zedai-to-epub3">zedai-to-epub3</a></li>
+</ul>
 
-<p>Specify “static” configuration through system property
-<a href="/pipeline/wiki/Configuration-Files#system-properties"><code>tts.config</code></a>
-(file path).</p>
+<p>The result is either an audio-only version of the document, or the
+combination of a text layer and an audio layer synchronized with each
+other.</p>
 
-<p>Specify “dynamic” configuration through script input.</p>
+<p>The way text-to-speech is configured is common to all scripts. Speech
+engines are configured with special properties, and the exact aural
+rendering of the document (TTS voices, pronunciations, speech pitch,
+speech rates, speech levels, etc.) is controlled with CSS style sheets
+and PLS lexicons.</p>
 
-<h3 id="file-media-type">File media type</h3>
-
-<p>TODO: invent a media type, for example: <code>application/vnd.pipeline.tss-config+xml</code></p>
-
-<h3 id="file-format">File format</h3>
+<p>TTS configuration files may contain properties, links to aural CSS
+style sheets, and links to PLS lexicons. The file format is as
+follows:</p>
 
 <div class="highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;config&gt;</span>
-  <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">x</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
-  <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">y</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
-  <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">z</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">acapela.samplerate</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">44100</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;css</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">css/aural.css</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;lexicon</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">lexicons/fr.pls</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
 <span class="tag">&lt;/config&gt;</span>
 </pre></div>
 </div>
 </div>
 
-<h3 id="available-properties">Available properties</h3>
+<!--
+TODO: what about <voice engine="acapela"
+                        name="claire"
+                        lang="fr"
+                        gender="female-adult"
+                        priority="12"/>
+TODO: what about <annotations type="" href="">
+                    ...
+                 </annotations>
+-->
 
-<h4 id="common-settings">Common settings</h4>
+<p>Configuration files may either be specified “statically”, through the
+system property
+<a href="/pipeline/wiki/Configuration-Files#system-properties"><code>tts.config</code></a>,
+or “dynamically” through a script input.</p>
+
+<!--
+TODO: invent a media type, for example: `application/vnd.pipeline.tss-config+xml`
+-->
+
+<h2 id="engine-configuration">Engine configuration</h2>
+
+<p>TTS engines are configured with global properties. The following
+properties are available:</p>
+
+<h3 id="common-settings">Common settings</h3>
 
 <dl>
   <dt><code>audio.tmpdir</code></dt>
@@ -613,7 +642,7 @@ if (window.addEventListener) {
   <dd>Defaults to “2.0”</dd>
 </dl>
 
-<h4 id="acapela">Acapela</h4>
+<h3 id="acapela">Acapela</h3>
 
 <dl>
   <dt><code>acapela.samplerate</code></dt>
@@ -632,7 +661,7 @@ if this one has a higher priority.</dd>
   <dd>Defaults to “15”</dd>
 </dl>
 
-<h4 id="att">AT&amp;T</h4>
+<h3 id="att">AT&amp;T</h3>
 
 <dl>
   <dt><code>att.servers</code></dt>
@@ -643,7 +672,7 @@ if this one has a higher priority.</dd>
   <dd>Defaults to “10”</dd>
 </dl>
 
-<h4 id="espeak">eSpeak</h4>
+<h3 id="espeak">eSpeak</h3>
 
 <dl>
   <dt><code>espeak.priority</code></dt>
@@ -652,7 +681,7 @@ if this one has a higher priority.</dd>
   <dd>Defaults to “2”</dd>
 </dl>
 
-<h4 id="mac-os">Mac OS</h4>
+<h3 id="mac-os">Mac OS</h3>
 
 <dl>
   <dt><code>osxspeech.priority</code></dt>
@@ -661,7 +690,7 @@ if this one has a higher priority.</dd>
   <dd>Defaults to “2”</dd>
 </dl>
 
-<h4 id="sapi">SAPI</h4>
+<h3 id="sapi">SAPI</h3>
 
 <dl>
   <dt><code>sapi.samplerate</code></dt>
@@ -675,7 +704,7 @@ if this one has a higher priority.</dd>
   <dd>Defaults to “7”</dd>
 </dl>
 
-<h4 id="lame-encoder">LAME encoder</h4>
+<h3 id="lame-encoder">LAME encoder</h3>
 
 <dl>
   <dt><code>lame.path</code></dt>
@@ -686,30 +715,83 @@ directories specified by the environment variable “PATH”</dd>
   <dd>Additional command line options passed to lame</dd>
 </dl>
 
-<h2 id="voice-configuration">Voice configuration</h2>
-
-<p>TBD</p>
-
-<div class="highlighter-coderay">
-<div class="CodeRay">
-  <div class="code"><pre><span class="tag">&lt;voice</span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span>
-       <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span>
-       <span class="attribute-name">engine</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span>
-       <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span>
-       <span class="attribute-name">priority</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span>
-       <span class="attribute-name">gender</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span>
-       <span class="attribute-name">marks</span>=<span class="string"><span class="delimiter">"</span><span class="content">...</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
-</pre></div>
-</div>
-</div>
-
 <h2 id="css">CSS</h2>
 
-<p>TBD</p>
+<!-- TODO: update to CSS 3: https://www.w3.org/TR/css3-speech -->
+
+<p>The CSS properties that are supported by DAISY Pipeline are:</p>
+
+<dl>
+  <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-voice-family" class="external-link" target="_blank"><code>voice-family</code></a></dt>
+  <dd>Used for selecting a voice based on gender, age, name and/or vendor.
+<!-- see also CSS3 "voice-family" property -->
+<!-- see also <ssml:voice> -->
+</dd>
+  <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-speak" class="external-link" target="_blank"><code>speak</code></a></dt>
+  <dd>Used for preventing certain text to be rendered aurally, or for
+spelling text one letter at a time.
+<!-- see also CSS3 "speak" and "speak-as" properties -->
+<!-- see also <ssml:say-as interpret-as="..."> -->
+</dd>
+  <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-volume" class="external-link" target="_blank"><code>volume</code></a></dt>
+  <dd>Used for controlling the loudness of the speech.
+<!-- see also CSS3 "voice-volume" property -->
+<!-- see also <ssml:prosody volume="..."> -->
+</dd>
+  <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pitch" class="external-link" target="_blank"><code>pitch</code></a></dt>
+  <dd>Used for controlling the average pitch of the speech.
+<!-- see also CSS3 "voice-pitch" property -->
+<!-- see also <ssml:prosody pitch="..."> -->
+</dd>
+  <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-speech-rate" class="external-link" target="_blank"><code>speech-rate</code></a></dt>
+  <dd>Used for controlling the rate of the speech in terms of words per
+minute.
+<!-- see also CSS3 "voice-rate" property -->
+<!-- see also <ssml:prosody rate="..."> -->
+</dd>
+  <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pitch-range" class="external-link" target="_blank"><code>pitch-range</code></a></dt>
+  <dd>Used for controlling the variation in average pitch of the speech.
+<!-- see also CSS3 "voice-range" property -->
+<!-- see also <ssml:prosody range="..."> -->
+</dd>
+  <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-speak-numeral" class="external-link" target="_blank"><code>speak-numeral</code></a></dt>
+  <dd>Used for speaking out numbers one digit at a time.
+<!-- see also CSS3 "speak-as" property -->
+<!-- see also <ssml:say-as interpret-as="..."> -->
+</dd>
+  <dt>
+<a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pause-before" class="external-link" target="_blank"><code>pause-before</code></a>, <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pause-after" class="external-link" target="_blank"><code>pause-after</code></a> and <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pause" class="external-link" target="_blank"><code>pause</code></a>
+</dt>
+  <dd>Used for specifying silences with a certain duration before or
+after an element.
+<!-- see also <ssml:break time="..."> -->
+</dd>
+  <dt>
+<a href="https://www.w3.org/TR/CSS2/aural.html#propdef-cue-before" class="external-link" target="_blank"><code>cue-before</code></a>, <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-cue-after" class="external-link" target="_blank"><code>cue-after</code></a> and <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-cue" class="external-link" target="_blank"><code>cue</code></a>
+</dt>
+  <dd>Used for playing pre-recorded sound clips before or after an
+element.
+<!-- see also <ssml:audio src="..."> -->
+</dd>
+</dl>
+
+<!--
+- [`stress`](https://www.w3.org/TR/CSS2/aural.html#propdef-stress)
+- [`richness`](https://www.w3.org/TR/CSS2/aural.html#propdef-richness)
+- [`azimuth`](https://www.w3.org/TR/CSS2/aural.html#propdef-azimuth)
+- [`play-during`](https://www.w3.org/TR/CSS2/aural.html#propdef-play-during)
+- [`elevation`](https://www.w3.org/TR/CSS2/aural.html#propdef-elevation)
+- [`speak-punctuation`](https://www.w3.org/TR/CSS2/aural.html#propdef-speak-punctuation)
+- [`speak-header`](https://www.w3.org/TR/CSS2/aural.html#propdef-speak-header)
+-->
 
 <h2 id="pls">PLS</h2>
 
-<p>TBD</p>
+<p>PLS lexicons allow you to define the pronunciations of words. When a
+word is defined in a lexicon the TTS engine will use the provided
+pronunciation in place of the default rendering. A PLS lexicon is an
+XML file. The syntax is defined in
+<a href="https://www.w3.org/TR/pronunciation-lexicon" class="external-link" target="_blank">https://www.w3.org/TR/pronunciation-lexicon</a>.</p>
 
     </div>
   </body>
