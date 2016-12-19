@@ -20,27 +20,6 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 	private TaskGroupFactoryMakerService imf;
 
 	@Override
-	@Deprecated
-	public boolean supportsSpecification(String locale, String outputFormat) {
-		for (TaskGroupInformation info : imf.list(locale)) {
-			if (info.getOutputFormat().equals(outputFormat)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	@Deprecated
-	public TaskSystem newTaskSystem(String locale, String outputFormat) throws TaskSystemFactoryException {
-		if (supportsSpecification(locale, outputFormat)) {
-			return new DotifyTaskSystem("Dotify Task System", outputFormat, locale, imf);
-		}
-		throw new TaskSystemFactoryException("Unsupported specification: " + locale + "/" + outputFormat);
-	}
-	
-
-	@Override
 	public boolean supportsSpecification(String inputFormat, String outputFormat, String locale) {
 		boolean inputMatch = false;
 		boolean outputMatch = false;

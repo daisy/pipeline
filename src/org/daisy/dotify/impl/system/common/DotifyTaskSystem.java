@@ -40,12 +40,7 @@ public class DotifyTaskSystem implements TaskSystem {
 	private final String context;
 	private final String name;
 	private final TaskGroupFactoryMakerService imf;
-	
-	@Deprecated
-	public DotifyTaskSystem(String name, String outputFormat, String context, TaskGroupFactoryMakerService imf) {
-		this(name, null, outputFormat, context, imf);
-	}
-	
+
 	public DotifyTaskSystem(String name, String inputFormat, String outputFormat, String context, TaskGroupFactoryMakerService imf) {
 		this.context = context;
 		this.inputFormat = inputFormat;
@@ -70,14 +65,9 @@ public class DotifyTaskSystem implements TaskSystem {
 		}
 		
 		DefaultCompiledTaskSystem setup = new DefaultCompiledTaskSystem(name, getOptions());
-		//TODO: remove once the constructur without input format is removed
-		String localInputFormat = this.inputFormat;
-		if (localInputFormat==null) {
-			localInputFormat = h.get(Keys.INPUT_FORMAT).toString();
-		}
 
 		logger.info("Finding path...");
-		for (TaskGroupInformation spec : getPath(imf, TaskGroupInformation.newConvertBuilder(localInputFormat, outputFormat).build(), context)) {
+		for (TaskGroupInformation spec : getPath(imf, TaskGroupInformation.newConvertBuilder(inputFormat, outputFormat).build(), context)) {
 			if (spec.getActivity()==TaskGroupActivity.ENHANCE) {
 				// For enhance, only include the options required to enable the task group. Once enabled,
 				// additional options may be presented
@@ -98,11 +88,6 @@ public class DotifyTaskSystem implements TaskSystem {
 			}
 		}
 		return setup;
-	}
-
-	@Override
-	public List<TaskOption> getOptions() {
-		return Collections.emptyList();
 	}
 	
 	/**

@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.daisy.dotify.api.tasks.InternalTask;
 import org.daisy.dotify.api.tasks.TaskGroup;
-import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 
 class TextInputManager implements TaskGroup {
@@ -26,12 +25,6 @@ class TextInputManager implements TaskGroup {
 		List<InternalTask> ret = new ArrayList<>();
 		ret.add(new Text2ObflTask("Text to OBFL converter", rootLang, parameters));
 		return ret;
-	}
-
-	@Override
-	public List<TaskOption> getOptions() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

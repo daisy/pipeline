@@ -2,13 +2,12 @@ package org.daisy.dotify.impl.input.xml;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskGroupFactory;
+import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 
 import aQute.bnd.annotation.component.Component;
@@ -54,25 +53,8 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 	}
 
 	@Override
-	public boolean supportsSpecification(TaskGroupSpecification spec) {
-		//TODO: move this to default implementation after move to java 8
-		for (TaskGroupInformation i : listAll()) {
-			if (spec.matches(i)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	@Override
 	public boolean supportsSpecification(TaskGroupInformation spec) {
 		return listAll().contains(spec);
-	}
-	
-	@Override
-	@Deprecated
-	public Set<TaskGroupSpecification> listSupportedSpecifications() {
-		return Collections.unmodifiableSet(supportedSpecifications);
 	}
 	
 	@Override
@@ -81,26 +63,8 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 	}
 
 	@Override
-	public Set<TaskGroupInformation> list(String locale) {
-		//TODO: move this to default implementation after move to java 8 (and use streams)
-		Objects.requireNonNull(locale);
-		Set<TaskGroupInformation> ret = new HashSet<>();
-		for (TaskGroupInformation info : listAll()) {
-			if (info.matchesLocale(locale)) {
-				ret.add(info);
-			}
-		}
-		return ret;
-	}
-
-	@Override
 	public TaskGroup newTaskGroup(TaskGroupSpecification spec) {
         return new XMLInputManager(locator.getResourceLocator(spec.getLocale()), new CommonResourceLocator("resource-files/common"));
 	}
 
-	@Override
-	public void setCreatedWithSPI() {
-		//TODO: remove after move to java 8
-	}
-	
 }

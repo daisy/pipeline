@@ -29,9 +29,4 @@ public class XmlIdentifierFactory implements IdentifierFactory {
 				&& !type.getProperties().containsKey("xmlns");
 	}
 
-	@Override
-	public void setCreatedWithSPI() {
-		// no op
-	}
-
 }

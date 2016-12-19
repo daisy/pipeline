@@ -24,16 +24,11 @@
  * to locate a resource in the base folder of the locale.</p>
  * 
  * <h3>localization.xml</h3>
- * <p><del>Parameters of the input format conversion can be stored as presets, these 
- * can be placed in the "config" implementation package. See this package for more
- * information. Content localization should be stored independently of the
- * presets. A mechanism for supplying content localization exists in this package.
- * The localization data can therefore be stored separately from the input transformation
- * data. Since each locale has its own input transformation, this may seem redundant,
- * however it could be useful if there are a lot of formats to manage and the
+ * <p>A mechanism for supplying content localization exists in this package.
+ * This is useful when there are a lot of formats to manage and the
  * localization information must be updated or if a fallback input transformation is 
- * used. Therefore, a great deal of care must be taken to ensure that the same keys 
- * are used in all input transformations in this package.</del></p>
+ * used. Therefore, care must be taken to ensure that the same keys  are used in all 
+ * input transformations in this package.</p>
  * 
  * <h3>Template selection</h3>
  * <p>The process of interpreting an input file format as OBFL is managed by a properties 
