@@ -39,7 +39,8 @@ javadoc {
 
 repositories {
 	mavenCentral()
-	mavenLocal()
+	//mavenLocal()
+	maven { url "https://oss.sonatype.org/content/groups/staging" }
 	//maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
@@ -53,7 +54,7 @@ sourceSets.main {
 dependencies {
 	provided group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
 	compile 'org.daisy.dotify:dotify.api:2.10.0'
-	compile 'org.daisy.dotify:dotify.task-api:2.5.0'
+	compile 'org.daisy.dotify:dotify.task-api:2.5.1'
 	compile 'org.daisy.dotify:dotify.common:2.2.0'
 	compile group: 'org.daisy.libs', name: 'jing', version: '20120724.0.0'	
 	compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {

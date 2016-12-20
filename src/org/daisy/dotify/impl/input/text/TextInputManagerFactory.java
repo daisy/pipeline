@@ -73,7 +73,7 @@ public class TextInputManagerFactory implements TaskGroupFactory {
 		Set<TaskGroupInformation> ret = new HashSet<>();
 		for (TaskGroupInformation info : listAll()) {
 			if (info.matchesLocale(locale)) {
-				ret.add(info.newCopyBuilder().locale(locale).build());
+				ret.add(info);
 			}
 		}
 		return ret;
