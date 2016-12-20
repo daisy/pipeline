@@ -579,14 +579,16 @@ rendering of the document (TTS voices, pronunciations, speech pitch,
 speech rates, speech levels, etc.) is controlled with CSS style sheets
 and PLS lexicons.</p>
 
-<p>TTS configuration files may contain properties, links to aural CSS
-style sheets, and links to PLS lexicons. The file format is as
+<p>TTS configuration files may contain properties, (links to) aural CSS
+style sheets, and (links to) PLS lexicons. The file format is as
 follows:</p>
 
 <div class="highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;config&gt;</span>
   <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">acapela.samplerate</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">44100</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">log</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">true</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;voice</span> <span class="attribute-name">engine</span>=<span class="string"><span class="delimiter">"</span><span class="content">acapela</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">claire</span><span class="delimiter">"</span></span> <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">fr</span><span class="delimiter">"</span></span> <span class="attribute-name">gender</span>=<span class="string"><span class="delimiter">"</span><span class="content">female-adult</span><span class="delimiter">"</span></span> <span class="attribute-name">priority</span>=<span class="string"><span class="delimiter">"</span><span class="content">12</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
   <span class="tag">&lt;css</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">css/aural.css</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
   <span class="tag">&lt;lexicon</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">lexicons/fr.pls</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
 <span class="tag">&lt;/config&gt;</span>
@@ -595,11 +597,6 @@ follows:</p>
 </div>
 
 <!--
-TODO: what about <voice engine="acapela"
-                        name="claire"
-                        lang="fr"
-                        gender="female-adult"
-                        priority="12"/>
 TODO: what about <annotations type="" href="">
                     ...
                  </annotations>
@@ -608,16 +605,68 @@ TODO: what about <annotations type="" href="">
 <p>Configuration files may either be specified “statically”, through the
 system property
 <a href="/pipeline/wiki/Configuration-Files#system-properties"><code>tts.config</code></a>,
-or “dynamically” through a script input.</p>
+or “dynamically” through the optional script input.</p>
 
-<!--
-TODO: invent a media type, for example: `application/vnd.pipeline.tss-config+xml`
--->
+<p>Both relative and absolute paths are accepted as a value of the “href”
+attributes. Relative paths are relative to the configuration file’s
+location.</p>
+
+<!-- Absolute paths work only when the Pipeline is running in "local
+mode" (true by default, see
+[Pipeline as a Service](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service/)). -->
+
+<!-- The elements can be put in any namespace since namespaces aren’t
+checked. If there is any syntax error in the file, you will be
+notified in the server’s logs. -->
+
+<!-- TODO: invent a media type, for example:
+`application/vnd.pipeline.tss-config+xml` -->
 
 <h2 id="engine-configuration">Engine configuration</h2>
 
-<p>TTS engines are configured with global properties. The following
-properties are available:</p>
+<p>The audio encoder LAME must be installed.
+<!-- LAME's location must be in the system PATH (i.e. $PATH on Unix,
+%PATH% on Windows), unless it is provided via the 'lame.path' system
+property. -->
+In addition, one of the following text-to-speech processors must be
+installed.</p>
+
+<p>For Unix users,</p>
+
+<ul>
+  <li>
+<a href="http://www.acapela-group.com" class="external-link" target="_blank">Acapela</a>;</li>
+  <li>
+<a href="http://espeak.sourceforge.net/" class="external-link" target="_blank">eSpeak</a>.</li>
+</ul>
+
+<p>For Windows users,</p>
+
+<ul>
+  <li>
+<a href="http://espeak.sourceforge.net/" class="external-link" target="_blank">eSpeak</a>;</li>
+  <li>
+<a href="https://en.wikipedia.org/wiki/Microsoft_Speech_API" class="external-link" target="_blank">SAPI</a> with adequate voices.</li>
+</ul>
+
+<p>For MacOS users,</p>
+
+<ul>
+  <li>
+<a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man1/say.1.html" class="external-link" target="_blank">say</a>.</li>
+</ul>
+
+<p>It is strongly recommended to install eSpeak anyway, as it can handle
+almost any language out there.
+<!-- Just as Lame’s directory must be in the system PATH if it were
+installed in a dedicated subdirectory, you may need to append eSpeak’s
+installation directory to your PATH as well. On Unix systems, 'apt-get
+install' already takes care of installing eSpeak to a known
+location. On Windows, however, the PATH variable must be changed
+manually using the 'environment variables' panel.--></p>
+
+<p>The audio encoder and the TTS processors are configured with
+properties. The following properties are available:</p>
 
 <h3 id="common-settings">Common settings</h3>
 
@@ -640,6 +689,15 @@ properties are available:</p>
   <dt><code>encoding.speed</code></dt>
   <dd>Maximum number of seconds of encoded audio per seconds of encoding</dd>
   <dd>Defaults to “2.0”</dd>
+  <dt><code>log</code></dt>
+  <dd>If set to “true”, will result in the Pipeline logging stuff in the
+output directory in a file named ‘tts-log.xml’. The Pipeline will
+log a great deal of information to this file, which can be quite
+helpful for troubleshooting. Most of the log entries concern
+particular chunks of text of the input document. For more general
+errors, see the main server’s logs.</dd>
+  <dd>Defaults to “false”</dd>
+  <dd>dtbook-to-daisy3 only</dd>
 </dl>
 
 <h3 id="acapela">Acapela</h3>
@@ -681,6 +739,12 @@ if this one has a higher priority.</dd>
   <dd>Defaults to “2”</dd>
 </dl>
 
+<p>In addition there is the
+<a href="/pipeline/wiki/Configuration-Files#system-properties"><code>espeak.path</code></a>
+system property for setting the path to the eSpeak executable. If not
+specified, Pipeline will automatically look for “espeak” in the
+directories specified by the “PATH” environment variable.</p>
+
 <h3 id="mac-os">Mac OS</h3>
 
 <dl>
@@ -690,14 +754,23 @@ if this one has a higher priority.</dd>
   <dd>Defaults to “2”</dd>
 </dl>
 
+<p>In addition there is the
+<a href="/pipeline/wiki/Configuration-Files#system-properties"><code>osxspeech.path</code></a>
+system property for setting an alternative path to OSX’s command line
+program “say” (default is “/usr/bin/say”).</p>
+
 <h3 id="sapi">SAPI</h3>
 
 <dl>
   <dt><code>sapi.samplerate</code></dt>
   <dd>Sample rate (in Hz)</dd>
   <dd>Defaults to “22050”</dd>
+  <dd>Can not be overridden at runtime. The server must be restarted to
+change this property.</dd>
   <dt><code>sapi.bytespersample</code></dt>
   <dd>Defaults to “2”</dd>
+  <dd>Can not be overridden at runtime. The server must be restarted to
+change this property.</dd>
   <dt><code>sapi.priority</code></dt>
   <dd>This engine is chosen over another engine that serves the same voice
 if this one has a higher priority.</dd>
@@ -710,51 +783,84 @@ if this one has a higher priority.</dd>
   <dt><code>lame.path</code></dt>
   <dd>Path to LAME executable</dd>
   <dd>If not specified, will automatically look for “lame” in the
-directories specified by the environment variable “PATH”</dd>
+directories specified by the environment variable “PATH”.</dd>
   <dt><code>lame.cli.options</code></dt>
   <dd>Additional command line options passed to lame</dd>
 </dl>
 
 <h2 id="css">CSS</h2>
 
-<!-- TODO: update to CSS 3: https://www.w3.org/TR/css3-speech -->
+<p>The text-to-speech voices and prosody can be configured with Aural
+CSS. To do so, add one or more “css” elements to the configuration
+file. If the “href” attribute is missing, the CSS stylesheets will be
+interpreted as inlined in the configuration file:</p>
 
-<p>The CSS properties that are supported by DAISY Pipeline are:</p>
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;config&gt;</span>
+  <span class="tag">&lt;css&gt;</span>
+    p {
+      volume: soft;
+      voice-family: female;
+    }
+  <span class="tag">&lt;/css&gt;</span>
+<span class="tag">&lt;/config&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<p>In addition to the configuration option, local CSS stylesheets
+referenced in
+<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instructions</a>
+and by <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘links’</a> in the
+header will be loaded too.</p>
+
+<p>The CSS properties that are supported by DAISY Pipeline are a subset
+of <a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">Aural CSS 2.1</a> (and partly
+inspired by <a href="https://www.w3.org/TR/css3-speech" class="external-link" target="_blank">CSS 3 Speech</a>):</p>
+
+<!-- TODO: update completely to CSS 3 -->
 
 <dl>
   <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-voice-family" class="external-link" target="_blank"><code>voice-family</code></a></dt>
-  <dd>Used for selecting a voice based on gender, age, name and/or vendor.
-<!-- see also CSS3 "voice-family" property -->
+  <dd>Used for selecting a voice based on gender, age, name and/or vendor.</dd>
+  <dd>See text below.
 <!-- see also <ssml:voice> -->
 </dd>
   <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-speak" class="external-link" target="_blank"><code>speak</code></a></dt>
+  <dd>“none” or “spell-out”</dd>
   <dd>Used for preventing certain text to be rendered aurally, or for
 spelling text one letter at a time.
 <!-- see also CSS3 "speak" and "speak-as" properties -->
 <!-- see also <ssml:say-as interpret-as="..."> -->
 </dd>
   <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-volume" class="external-link" target="_blank"><code>volume</code></a></dt>
+  <dd>A number, “silent”, “x-soft”, “soft”, “medium”, “loud” or “x-loud”</dd>
   <dd>Used for controlling the loudness of the speech.
 <!-- see also CSS3 "voice-volume" property -->
 <!-- see also <ssml:prosody volume="..."> -->
 </dd>
   <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pitch" class="external-link" target="_blank"><code>pitch</code></a></dt>
+  <dd>“x-low”, “low”, “medium”, “high” or “x-high”</dd>
   <dd>Used for controlling the average pitch of the speech.
 <!-- see also CSS3 "voice-pitch" property -->
 <!-- see also <ssml:prosody pitch="..."> -->
 </dd>
   <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-speech-rate" class="external-link" target="_blank"><code>speech-rate</code></a></dt>
+  <dd>A number, “x-slow”, “slow”, “medium”, “fast” or “x-fast”</dd>
   <dd>Used for controlling the rate of the speech in terms of words per
 minute.
 <!-- see also CSS3 "voice-rate" property -->
 <!-- see also <ssml:prosody rate="..."> -->
 </dd>
   <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pitch-range" class="external-link" target="_blank"><code>pitch-range</code></a></dt>
+  <dd>A number</dd>
   <dd>Used for controlling the variation in average pitch of the speech.
 <!-- see also CSS3 "voice-range" property -->
 <!-- see also <ssml:prosody range="..."> -->
 </dd>
   <dt><a href="https://www.w3.org/TR/CSS2/aural.html#propdef-speak-numeral" class="external-link" target="_blank"><code>speak-numeral</code></a></dt>
+  <dd>“digits” or “continuous”</dd>
   <dd>Used for speaking out numbers one digit at a time.
 <!-- see also CSS3 "speak-as" property -->
 <!-- see also <ssml:say-as interpret-as="..."> -->
@@ -762,6 +868,7 @@ minute.
   <dt>
 <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pause-before" class="external-link" target="_blank"><code>pause-before</code></a>, <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pause-after" class="external-link" target="_blank"><code>pause-after</code></a> and <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-pause" class="external-link" target="_blank"><code>pause</code></a>
 </dt>
+  <dd>A duration</dd>
   <dd>Used for specifying silences with a certain duration before or
 after an element.
 <!-- see also <ssml:break time="..."> -->
@@ -769,6 +876,7 @@ after an element.
   <dt>
 <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-cue-before" class="external-link" target="_blank"><code>cue-before</code></a>, <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-cue-after" class="external-link" target="_blank"><code>cue-after</code></a> and <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-cue" class="external-link" target="_blank"><code>cue</code></a>
 </dt>
+  <dd>A URL</dd>
   <dd>Used for playing pre-recorded sound clips before or after an
 element.
 <!-- see also <ssml:audio src="..."> -->
@@ -785,13 +893,167 @@ element.
 - [`speak-header`](https://www.w3.org/TR/CSS2/aural.html#propdef-speak-header)
 -->
 
+<p><code>voice-family</code> is a comma-separated list of voice characteristics that
+place conditions on the voice selection. It is inspired by (but not
+the same as) the specification of the
+<a href="https://www.w3.org/TR/css3-speech#voice-family" class="external-link" target="_blank">voice-family property in CSS 3</a>.</p>
+
+<p>If a full voice name is provided, e.g. “acapela, alice”, this voice
+will be selected regardless of the document language. If this voice is
+not available, a fallback voice will be chosen such that it will match
+with the same characteristics as those of the requested voice: same
+language, same engine, same gender. If none is available, the pipeline
+broadens its search by relaxing the criteria: first the gender is
+relaxed and then the engine.</p>
+
+<p>If no voice name is provided, e.g. “acapela”, “female” or “female,
+old”, the selection algorithm will take into consideration only the
+voices that match the current language. It starts by looking for a
+voice with the specified gender and supplied by the specified engine,
+and will broaden to any gender if the first search yielded no
+results. If neither the gender nor the engine match, language will be
+the only criterion.</p>
+
+<p>When multiple voices match the criteria, the algorithm chooses the
+voice with the highest priority. Each voice has a default priority,
+though they can be overridden via the “voice” entries of the
+configuration file, as follows:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;config&gt;</span>
+  <span class="tag">&lt;voice</span> <span class="attribute-name">engine</span>=<span class="string"><span class="delimiter">"</span><span class="content">sapi</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">Microsoft Todd</span><span class="delimiter">"</span></span> <span class="attribute-name">gender</span>=<span class="string"><span class="delimiter">"</span><span class="content">male-adult</span><span class="delimiter">"</span></span> <span class="attribute-name">priority</span>=<span class="string"><span class="delimiter">"</span><span class="content">100</span><span class="delimiter">"</span></span> <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+<span class="tag">&lt;/config&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<!-- TODO: "marks" attribute: you may set this attribute to "false" if
+you have installed a new voice that can’t interpret SSML or mark-based
+audio synchronization, which may compromise SAPI’s
+initialization. Microsoft’s built-in voices do handle SSML and marks.
+-->
+
+<p>Notice that it is also a convenient way to add voices that are not
+natively supported by the Pipeline. In the example above, Todd is now
+a registered voice and, as such, can be selected automatically by the
+Pipeline when the document is written in English.</p>
+
+<p>AT&amp;T, eSpeak and Acapela’s voice names can be found in their
+corresponding documentation. For Windows users, SAPI voices are
+enumerated in the system settings (Start &gt; All Control Panel Items &gt;
+Speech Recognition &gt; Advanced Speech Options). You will also need to
+know the value of the “engine” attribute. This attribute must take as
+value one of the following:</p>
+
+<ul>
+  <li>“att” for AT&amp;T voices;</li>
+  <li>“espeak” for eSpeak voices;</li>
+  <li>“acapela” for Acapela voices;</li>
+  <li>“osx-speech” for Apple voices;</li>
+  <li>“sapi” for Microsoft voices or for any other voice installed to work
+with the SAPI engine, including some versions of AT&amp;T and Acapela’s
+products.</li>
+</ul>
+
+<p>In case of any doubt, engines and voice names can be retrieved from
+the server’s log in which all the voices are enumerated:</p>
+
+<pre><code>Available voices:
+* {engine:'sapi', name:'NTMNTTS Voice (Male)'} by sapi-native
+* {engine:'acapela', name:'alice'} by acapela-jna
+</code></pre>
+
 <h2 id="pls">PLS</h2>
 
-<p>PLS lexicons allow you to define the pronunciations of words. When a
-word is defined in a lexicon the TTS engine will use the provided
-pronunciation in place of the default rendering. A PLS lexicon is an
-XML file. The syntax is defined in
-<a href="https://www.w3.org/TR/pronunciation-lexicon" class="external-link" target="_blank">https://www.w3.org/TR/pronunciation-lexicon</a>.</p>
+<p>PLS lexicons allow you to define custom pronunciations of words. It is
+meant to help TTS processors deal with ambiguous abbreviations and
+pronunciation of proper names. When a word is defined in a lexicon the
+processor will use the provided pronunciation in place of the default
+rendering.</p>
+
+<p>Lexicons are configured using the “lexicon” elements in the
+configuration file. If the “href” attribute is missing, the pipeline
+will read the lexicons inside the config nodes, as in this example:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;config&gt;</span>
+  <span class="tag">&lt;lexicon</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/2005/01/pronunciation-lexicon</span><span class="delimiter">"</span></span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">1.0</span><span class="delimiter">"</span></span>
+           <span class="attribute-name">alphabet</span>=<span class="string"><span class="delimiter">"</span><span class="content">ipa</span><span class="delimiter">"</span></span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;lexeme&gt;</span>
+      ...
+    <span class="tag">&lt;/lexeme&gt;</span>
+  <span class="tag">&lt;/lexicon&gt;</span>
+<span class="tag">&lt;/config&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<p>The syntax of a PLS lexicon is defined in
+<a href="https://www.w3.org/TR/pronunciation-lexicon" class="external-link" target="_blank">Pronunciation Lexicon Specification Version 1.0</a>,
+extended with regular expression matching. To enable regular
+expression matching, add the “regex” attribute, as follows:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;lexicon</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/2005/01/pronunciation-lexicon</span><span class="delimiter">"</span></span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">1.0</span><span class="delimiter">"</span></span>
+         <span class="attribute-name">alphabet</span>=<span class="string"><span class="delimiter">"</span><span class="content">ipa</span><span class="delimiter">"</span></span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;lexeme</span> <span class="attribute-name">regex</span>=<span class="string"><span class="delimiter">"</span><span class="content">true</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;grapheme&gt;</span>([0-9]+)-([0-9]+)<span class="tag">&lt;/grapheme&gt;</span>
+    <span class="tag">&lt;alias&gt;</span>between $1 and $2<span class="tag">&lt;/alias&gt;</span>
+  <span class="tag">&lt;/lexeme&gt;</span>
+<span class="tag">&lt;/lexicon&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<p>The regex feature works only with alias-based substitutions. The regex
+syntax used is that from
+<a href="https://www.w3.org/TR/xpath-functions/#regex-syntax" class="external-link" target="_blank">XQuery 1.0 and XPath 2.0</a>.</p>
+
+<p>Whether or not the regex attribute is set to “true”, the grapheme
+matching can be made more accurate by specifying the
+“positive-lookahead” and “negative-lookahead” attributes:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;lexicon</span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">1.0</span><span class="delimiter">"</span></span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/2005/01/pronunciation-lexicon</span><span class="delimiter">"</span></span>
+         <span class="attribute-name">alphabet</span>=<span class="string"><span class="delimiter">"</span><span class="content">ipa</span><span class="delimiter">"</span></span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;lexeme&gt;</span>
+    <span class="tag">&lt;grapheme</span> <span class="attribute-name">positive-lookahead</span>=<span class="string"><span class="delimiter">"</span><span class="content">[ ]+is</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>SB<span class="tag">&lt;/grapheme&gt;</span>
+    <span class="tag">&lt;alias&gt;</span>somebody<span class="tag">&lt;/alias&gt;</span>
+  <span class="tag">&lt;/lexeme&gt;</span>
+  <span class="tag">&lt;lexeme&gt;</span>
+    <span class="tag">&lt;grapheme&gt;</span>SB<span class="tag">&lt;/grapheme&gt;</span>
+    <span class="tag">&lt;alias&gt;</span>should be<span class="tag">&lt;/alias&gt;</span>
+  <span class="tag">&lt;/lexeme&gt;</span>
+  <span class="tag">&lt;lexeme</span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">fr</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;grapheme</span> <span class="attribute-name">positive-lookahead</span>=<span class="string"><span class="delimiter">"</span><span class="content">[ ]+[cC]ity</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>boston<span class="tag">&lt;/grapheme&gt;</span>
+    <span class="tag">&lt;phoneme&gt;</span>bɔstøn<span class="tag">&lt;/phoneme&gt;</span>
+  <span class="tag">&lt;/lexeme&gt;</span>
+<span class="tag">&lt;/lexicon&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<p>Graphemes with “positive-lookahead” will match if the beginning of
+what follows matches the “position-lookahead” pattern. Graphemes with
+“negative-lookahead” will match if the beginning of what follows does
+not match the “negative-lookahead” pattern. The lookaheads are
+case-sensitive while the grapheme contents are not.</p>
+
+<p>The lexemes are reorganized so as to be matched in this order:</p>
+
+<ol>
+  <li>Graphemes with regex=”false” come first, no matter if there is a lookahead or not;</li>
+  <li>Graphemes with regex=”true” and no lookahead;</li>
+  <li>Graphemes with regex=”true” and one or two lookaheads.</li>
+</ol>
+
+<p>Within these categories, lexemes are matched in the same order as they
+appear in the lexicons.</p>
+
 
     </div>
   </body>
