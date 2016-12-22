@@ -109,8 +109,8 @@
     </xsl:template>
     
     <xsl:template match="cat:uri[@px:extends]" mode="ds">
-        <xsl:variable name="generated-href" select="concat($outputDir,f:generated-href(@uri))"/>
-        <xsl:result-document href="{$generated-href}" method="xml">
+        <xsl:variable name="generated-href" select="f:generated-href(@uri)"/>
+        <xsl:result-document href="{resolve-uri($generated-href,concat($outputDir,'/META-INF/catalog.xml'))}" method="xml">
             <xsl:variable name="doc">
                 <xsl:call-template name="extend-script">
                     <xsl:with-param name="script-uri" select="resolve-uri(@uri,base-uri(.))"/>
@@ -129,7 +129,7 @@
         </xsl:result-document>
         <xsl:copy>
             <xsl:apply-templates select="@* except @uri" mode="#current"/>
-            <xsl:attribute name="uri" select="concat('..',f:generated-href(@uri))"/>
+            <xsl:attribute name="uri" select="$generated-href"/>
             <xsl:apply-templates mode="#current"/>
         </xsl:copy>
     </xsl:template>
@@ -141,13 +141,13 @@
                 <xsl:variable name="doc" select="document($uri)"/>
                 <xsl:choose>
                     <xsl:when test="$doc/p:*/p:option/p:pipeinfo/pxd:data-type">
-                        <xsl:variable name="generated-href" select="concat($outputDir,f:generated-href(@uri))"/>
-                        <xsl:result-document href="{$generated-href}" method="xml">
+                        <xsl:variable name="generated-href" select="f:generated-href(@uri)"/>
+                        <xsl:result-document href="{resolve-uri($generated-href,concat($outputDir,'/META-INF/catalog.xml'))}" method="xml">
                             <xsl:apply-templates select="$doc" mode="finalize-script"/>
                         </xsl:result-document>
                         <xsl:copy>
                             <xsl:apply-templates select="@* except @uri" mode="#current"/>
-                            <xsl:attribute name="uri" select="concat('..',f:generated-href(@uri))"/>
+                            <xsl:attribute name="uri" select="$generated-href"/>
                             <xsl:apply-templates mode="#current"/>
                         </xsl:copy>
                     </xsl:when>
@@ -164,7 +164,7 @@
     
     <xsl:function name="f:generated-href">
         <xsl:param name="uri" as="xs:string"/>
-        <xsl:value-of select="concat('/generated-scripts/',replace($uri,'^.*/([^/]+)$','$1'))"/>
+        <xsl:value-of select="replace($uri,'^(.*/)?([^/]+)$','$1__processed__$2')"/>
     </xsl:function>
     
     <xsl:template match="cat:uri[@px:data-type]" mode="ds" priority="1">

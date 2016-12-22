@@ -1,7 +1,6 @@
 package org.daisy.pipeline.maven.plugin;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -67,14 +66,6 @@ public class ProcessCatalogMojo extends AbstractMojo {
 			if (addResources) {
 				Resource generatedResources = new Resource(); {
 					generatedResources.setDirectory(outputDirectory.getAbsolutePath());
-					List<String> includes = new ArrayList<String>(); {
-						includes.add("META-INF/catalog.xml");
-						includes.add("generated-scripts");
-						includes.add("generated-scripts/*");
-						includes.add("data-types");
-						includes.add("data-types/**/*");
-					}
-					generatedResources.setIncludes(includes);
 				}
 				mavenProject.addResource(generatedResources);
 			}
