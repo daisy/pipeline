@@ -261,7 +261,11 @@ public class GridPaneHelper extends GridPane {
         // add a text field with a button for file browsing
         public void addFileDirPicker(ScriptFieldAnswer.ScriptFieldAnswerString answer) {
                 Text label = new Text();
-                label.setText(answer.getField().getNiceName() + ":");
+                String labelText = answer.getField().getNiceName() + ":";
+                if (answer.getField().isResult()) {
+                    labelText = "Output directory for: " + labelText;
+                }
+                label.setText(labelText);
                 final TextField inputFileText = new TextField();
                 inputFileText.textProperty().bindBidirectional(answer.answerProperty());
                 Button inputFileButton = new Button("Browse");
