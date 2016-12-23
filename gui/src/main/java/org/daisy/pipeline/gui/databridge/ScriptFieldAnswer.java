@@ -1,5 +1,9 @@
 package org.daisy.pipeline.gui.databridge;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -74,6 +78,25 @@ public interface ScriptFieldAnswer<T> {
 			answer = FXCollections.observableArrayList();
 		}
 		public ObservableList<String> answerProperty() {
+			return answer;
+		}
+	}
+	
+	public class ScriptFieldAnswerTempDir extends ScriptFieldAnswerString {
+		private SimpleStringProperty answer;
+		
+		public ScriptFieldAnswerTempDir(ScriptField field) {
+			super(field);
+			try {
+				File tempDir = Files.createTempDirectory(null).toFile();
+				tempDir.delete();
+				answer = new SimpleStringProperty(tempDir.getAbsolutePath());
+			} catch(IOException e) {
+				answer = new SimpleStringProperty("");
+			}
+		}
+		
+		public SimpleStringProperty answerProperty() {		
 			return answer;
 		}
 	}

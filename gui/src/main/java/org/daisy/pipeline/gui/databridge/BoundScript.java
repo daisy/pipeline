@@ -83,6 +83,9 @@ public class BoundScript {
 //			SimpleBooleanProperty b = (SimpleBooleanProperty)answer.answerProperty();
 //			b.set(true);
 		}
+		else if (field.getDataType() == DataType.DIRECTORY && field.isTemp()) {
+			answer = new ScriptFieldAnswer.ScriptFieldAnswerTempDir(field);
+		}
 		else {
 			if (field.isSequence() == true) {
 				answer = new ScriptFieldAnswer.ScriptFieldAnswerList(field);
