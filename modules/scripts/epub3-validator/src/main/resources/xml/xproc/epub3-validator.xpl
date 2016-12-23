@@ -32,7 +32,7 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
-            <p px:role="desc" xml:space="preserve">The validation status
+            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
 
 [More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>

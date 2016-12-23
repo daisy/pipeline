@@ -7,8 +7,8 @@
     xmlns:z="http://www.daisy.org/ns/z3986/authoring/" xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:d="http://www.daisy.org/ns/pipeline/data" exclude-inline-prefixes="#all">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">DTBook to EPUB3</h1>
-        <p px:role="desc">Converts multiple dtbooks to epub3 format</p>
+        <h1 px:role="name">DTBook to EPUB 3</h1>
+        <p px:role="desc">Converts multiple dtbooks to EPUB 3 format</p>
         <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-to-epub3">
             Online documentation
         </a>
@@ -30,7 +30,7 @@
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">EPUB 3</h2>
+            <h2 px:role="name">EPUB</h2>
             <p px:role="desc">The resulting EPUB 3 publication.</p>
         </p:documentation>
     </p:option>
