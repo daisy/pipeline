@@ -1,5 +1,6 @@
 package org.daisy.pipeline.gui;
 
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -17,6 +18,7 @@ public class ServiceRegistry{
         private  JobManagerFactory jobManagerFactory = null;
         private  EventBusProvider eventBusProvider = null;
         private WebserviceStorage webserviceStorage = null;
+        private DatatypeRegistry datatypeRegistry = null;
 
         private static ServiceRegistry instance=null;
 
@@ -27,7 +29,8 @@ public class ServiceRegistry{
                                 ServiceRegistry.this.scriptRegistry!=null &&
                                 ServiceRegistry.this.jobManagerFactory!=null &&
                                 ServiceRegistry.this.eventBusProvider!=null &&
-                                ServiceRegistry.this.webserviceStorage!=null
+                                ServiceRegistry.this.webserviceStorage!=null &&
+                                ServiceRegistry.this.datatypeRegistry!=null
                                 ;
                 }
         };
@@ -120,6 +123,22 @@ public class ServiceRegistry{
         public void setWebserviceStorage(WebserviceStorage webserviceStorage) {
                 this.monitor.enter();
                 this.webserviceStorage = webserviceStorage;
+                this.monitor.leave();
+        }
+
+        /**
+         * @return the datatypeRegistry
+         */
+        public DatatypeRegistry getDatatypeRegistry() {
+                return datatypeRegistry;
+        }
+
+        /**
+         * @param datatypeRegistry the datatypeRegistry to set
+         */
+        public void setDatatypeRegistry(DatatypeRegistry datatypeRegistry) {
+                this.monitor.enter();
+                this.datatypeRegistry = datatypeRegistry;
                 this.monitor.leave();
         }
 

@@ -1,6 +1,7 @@
 package org.daisy.pipeline.gui.databridge;
 
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.gui.MainWindow;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
@@ -15,9 +16,11 @@ import javafx.collections.ObservableList;
 public class DataManager {
 	
 	MainWindow main;
+	DatatypeRegistry datatypeRegistry;
 	
-	public DataManager(MainWindow main) {
+	public DataManager(MainWindow main, DatatypeRegistry datatypeRegistry) {
 		this.main = main;
+		this.datatypeRegistry = datatypeRegistry;
 		initData();
 	}
 	
@@ -64,7 +67,7 @@ public class DataManager {
 	}
 	
 	private void addScript(XProcScript xprocScript) {
-		Script script = new Script(xprocScript);
+		Script script = new Script(xprocScript, datatypeRegistry);
 		main.getScriptData().add(script);
 	}
 	

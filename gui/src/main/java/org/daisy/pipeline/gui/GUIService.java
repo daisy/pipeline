@@ -1,4 +1,5 @@
 package org.daisy.pipeline.gui;
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -51,6 +52,9 @@ public class GUIService
         }
         public void setWebserviceStorage(WebserviceStorage webserviceStorage) {
                 ServiceRegistry.getInstance().setWebserviceStorage(webserviceStorage);
+        }
+        public void setDatatypeRegistry(DatatypeRegistry datatypeRegistry) {
+                ServiceRegistry.getInstance().setDatatypeRegistry(datatypeRegistry);
         }
 
 }

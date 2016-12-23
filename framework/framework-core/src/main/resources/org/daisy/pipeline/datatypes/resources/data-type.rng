@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+  <start>
+    <choice>
+      <element name="choice">
+        <optional>
+          <attribute name="id">
+            <data type="QName"/>
+          </attribute>
+        </optional>
+        <oneOrMore>
+          <choice>
+            <group>
+              <element name="value">
+                <text/>
+              </element>
+              <optional>
+                <ref name="documentation"/>
+              </optional>
+            </group>
+            <element name="data">
+              <attribute name="type">
+                <value>anyURI</value>
+              </attribute>
+              <optional>
+                <ref name="documentation"/>
+              </optional>
+            </element>
+            <element name="data">
+              <attribute name="type">
+                <value>anyFileURI</value>
+              </attribute>
+              <attribute name="datatypeLibrary">
+                <value>http://www.daisy.org/ns/pipeline/xproc</value>
+              </attribute>
+              <optional>
+                <ref name="documentation"/>
+              </optional>
+            </element>
+          </choice>
+        </oneOrMore>
+      </element>
+      <element name="data">
+        <optional>
+          <attribute name="id">
+            <data type="QName"/>
+          </attribute>
+        </optional>
+        <attribute name="type">
+          <value>string</value>
+        </attribute>
+        <optional>
+          <ref name="documentation"/>
+        </optional>
+        <element name="param">
+          <attribute name="name">
+            <value>pattern</value>
+          </attribute>
+          <text/>
+        </element>
+      </element>
+    </choice>
+  </start>
+  <define name="documentation">
+    <choice>
+      <element name="documentation">
+        <optional>
+          <attribute name="xml:lang"/>
+        </optional>
+        <text/>
+      </element>
+      <element name="a:documentation">
+        <optional>
+          <attribute name="xml:lang"/>
+        </optional>
+        <text/>
+      </element>
+    </choice>
+  </define>
+</grammar>

@@ -312,6 +312,23 @@ public class GridPaneHelper extends GridPane {
 
                 TextFlow flow = new TextFlow();
 
+                DataType fieldDataType = answer.getField().getDataType();
+                if (fieldDataType instanceof DataType.Enumeration) {
+                        StringBuilder b = new StringBuilder();
+                        String last = "";
+                        for (String v : ((DataType.Enumeration)fieldDataType).getValues()) {
+                                if (b.length() > 0) {
+                                        b.append(", ");
+                                }
+                                b.append(last);
+                                last = v;
+                        }
+                        if (b.length() > 0) {
+                                b.append(" or ");
+                        }
+                        b.append(last);
+                        getJavaFxParent(flow).addChild(new Text("Possible values: " + b + "\n"));
+                }
                 MarkdownToJavafx mdToFx = new MarkdownToJavafx(this.getJavaFxParent(flow));
                 PegDownProcessor mdProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
                 if (answer.getField().getDescription() != null) {
