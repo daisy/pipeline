@@ -5,6 +5,7 @@ Import-Package:  \
 Export-Package:  \
 	org.daisy.dotify.tasks.tools
 Private-Package: \
+	org.daisy.dotify.impl.identity,\
 	org.daisy.dotify.impl.input,\
 	org.daisy.dotify.impl.input.epub,\
 	org.daisy.dotify.impl.input.text,\

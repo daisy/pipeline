@@ -9,10 +9,12 @@ import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.daisy.dotify.api.identity.IdentificationFailedException;
 import org.daisy.dotify.api.tasks.AnnotatedFile;
 import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
 import org.daisy.dotify.api.tasks.ExpandingTask;
@@ -26,6 +28,7 @@ import org.daisy.dotify.common.io.ResourceLocatorException;
 import org.daisy.dotify.common.xml.XMLInfo;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
+import org.daisy.dotify.impl.identity.XmlIdentifier;
 import org.daisy.dotify.impl.input.DuplicatorTask;
 import org.daisy.dotify.impl.input.Keys;
 import org.daisy.dotify.impl.input.ValidatorTask;
@@ -150,21 +153,22 @@ public class XMLInputManager implements TaskGroup {
 
 		@Override
 		public List<InternalTask> resolve(AnnotatedFile input) throws InternalTaskException {
-			//String input = parameters.get(Keys.INPUT).toString();
 			String inputformat = null;
 			String rootElement = null;
 			try {
-				XMLInfo peekResult = XMLTools.parseXML(input.getFile(), true);
-				String rootNS = peekResult.getUri();
-				rootElement = peekResult.getLocalName();
+				if (!input.getProperties().containsKey(XmlIdentifier.LOCAL_NAME_KEY) || !input.getProperties().containsKey(XmlIdentifier.XMLNS_KEY)) {
+					 input = new XmlIdentifier().identify(input);
+				}
+				String rootNS = String.valueOf(input.getProperties().get(XmlIdentifier.XMLNS_KEY));
+				rootElement = String.valueOf(input.getProperties().get(XmlIdentifier.LOCAL_NAME_KEY));
 				DefaultInputUrlResourceLocator p = DefaultInputUrlResourceLocator.getInstance();
 
 				inputformat = p.getConfigFileName(rootElement, rootNS);
 				if (inputformat !=null && "".equals(inputformat)) {
 					return new ArrayList<>();
 				}
-			} catch (XMLToolsException e) {
-				throw new InternalTaskException("XMLToolsException while reading input", e);
+			} catch (IdentificationFailedException e) {
+				throw new InternalTaskException("Failed to read input as xml", e);
 			} catch (IOException e) {
 				throw new InternalTaskException("IOException while reading input", e);
 			}
