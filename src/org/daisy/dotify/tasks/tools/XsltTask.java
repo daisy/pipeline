@@ -76,7 +76,7 @@ public class XsltTask extends ReadWriteTask {
 		} catch (XMLToolsException e) {
 			throw new InternalTaskException("Error: ", e);
 		}
-		return new DefaultAnnotatedFile.Builder(output).extension("xslt").mediaType("application/xslt+xml").build();
+		return new DefaultAnnotatedFile.Builder(output).extension("xml").mediaType("application/xml").build();
 	}
 
 	@Override
