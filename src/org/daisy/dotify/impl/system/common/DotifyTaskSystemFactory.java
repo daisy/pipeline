@@ -20,6 +20,7 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 	private TaskGroupFactoryMakerService imf;
 
 	@Override
+	@Deprecated
 	public boolean supportsSpecification(String locale, String outputFormat) {
 		for (TaskGroupInformation info : imf.list(locale)) {
 			if (info.getOutputFormat().equals(outputFormat)) {
@@ -30,11 +31,40 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 	}
 
 	@Override
+	@Deprecated
 	public TaskSystem newTaskSystem(String locale, String outputFormat) throws TaskSystemFactoryException {
 		if (supportsSpecification(locale, outputFormat)) {
 			return new DotifyTaskSystem("Dotify Task System", outputFormat, locale, imf);
 		}
 		throw new TaskSystemFactoryException("Unsupported specification: " + locale + "/" + outputFormat);
+	}
+	
+
+	@Override
+	public boolean supportsSpecification(String inputFormat, String outputFormat, String locale) {
+		boolean inputMatch = false;
+		boolean outputMatch = false;
+		for (TaskGroupInformation info : imf.list(locale)) {
+			if (info.getInputFormat().equals(inputFormat)) {
+				inputMatch = true;
+			}
+			if (info.getOutputFormat().equals(outputFormat)) {
+				outputMatch = true;
+			}
+			if (inputMatch && outputMatch) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public TaskSystem newTaskSystem(String inputFormat, String outputFormat, String locale)
+			throws TaskSystemFactoryException {
+		if (supportsSpecification(inputFormat, outputFormat, locale)) {
+			return new DotifyTaskSystem("Dotify Task System", inputFormat, outputFormat, locale, imf);
+		}
+		throw new TaskSystemFactoryException("Unsupported specification: " + locale + "(" + inputFormat + "->" + outputFormat + ")");
 	}
 
 	@Reference
