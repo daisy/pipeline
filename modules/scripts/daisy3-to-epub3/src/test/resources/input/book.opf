@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE package
+  PUBLIC "+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN" "http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd">
+<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/"
+         unique-identifier="uid">
+   <metadata>
+      <dc-metadata xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/"
+                   xmlns:dc="http://purl.org/dc/elements/1.1/">
+         <dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+         <dc:Language>en</dc:Language>
+         <dc:Date>2017-01-05</dc:Date>
+         <dc:Publisher>unknown</dc:Publisher>
+         <dc:Title>Minimal DTBook</dc:Title>
+         <dc:Identifier id="uid">CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6-packaged</dc:Identifier>
+      </dc-metadata>
+      <x-metadata>
+         <meta name="dtb:multimediaType" content="audioFullText"/>
+         <meta name="dtb:totalTime" content="0:00:30.048"/>
+         <meta name="dtb:multimediaContent" content="audio,text"/>
+      </x-metadata>
+   </metadata>
+   <manifest>
+      <item href="mo0.smil" id="mo0" media-type="application/smil"/>
+      <item href="minimal.xml" id="opf-2" media-type="application/x-dtbook+xml"/>
+      <item href="navigation.ncx"
+            id="ncx"
+            media-type="application/x-dtbncx+xml"/>
+      <item href="30sec.mp3" id="opf-4" media-type="audio/mpeg"/>
+      <item href="resources.res"
+            id="resource"
+            media-type="application/x-dtbresource+xml"/>
+      <item href="book.opf" id="opf-6" media-type="text/xml"/>
+   </manifest>
+   <spine>
+      <itemref idref="mo0"/>
+   </spine>
+</package>
