@@ -1,6 +1,7 @@
 -buildpath: biz.aQute.bnd.annotation,\
 	javax.xml.stream
 Import-Package:  \
+	org.daisy.dotify.api.identity; provide:=true,\
 	org.daisy.dotify.api.tasks; provide:=true, *
 Export-Package:  \
 	org.daisy.dotify.tasks.tools
