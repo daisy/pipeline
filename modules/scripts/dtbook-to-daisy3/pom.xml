@@ -17,39 +17,8 @@
   <name>DAISY Pipeline 2 module :: DTBook to DAISY 3</name>
   
   <dependencies>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xproc-api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>xmlunit</groupId>
-      <artifactId>xmlunit</artifactId>
-      <version>1.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.commons-io</artifactId>
-      <version>1.4_3</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- uncomment the following dependency to get the tests working with Eclipse -->
-    <!-- <dependency> -->
-    <!--   <groupId>org.daisy.libs</groupId> -->
-    <!--   <artifactId>zedval-osgi</artifactId> -->
-    <!--   <version>2.1</version> -->
-    <!--   <scope>test</scope> -->
-    <!-- </dependency> -->
-    
     <!--
-          runtime dependencies
+        runtime dependencies
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
@@ -98,90 +67,147 @@
     </dependency>
   </dependencies>
 
-  <properties>
-    <dependencies.dir>${project.build.directory}/deps</dependencies.dir>
-  </properties>
-
-  <!-- allow us to use .versionAsInProject() -->
-  <build>
-    <plugins>
-      <plugin>
-	<groupId>org.apache.servicemix.tooling</groupId>
-	<artifactId>depends-maven-plugin</artifactId>
-	<version>1.2</version>
-	<executions>
-	  <execution>
-	    <id>generate-depends-file</id>
-	    <goals>
-	      <goal>generate-depends-file</goal>
-	    </goals>
-	  </execution>
-	</executions>
-      </plugin>
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-surefire-plugin</artifactId>
-	<version>2.17</version>
-	<configuration>
-	  <systemPropertyVariables>
-	    <dependencies.dir>${dependencies.dir}</dependencies.dir>
-	    <target.dir>${project.build.directory}</target.dir>
-	  </systemPropertyVariables>
-	</configuration>
-      </plugin>
-    </plugins>
-  </build>
-
   <profiles>
     <profile>
-      <activation>
-	<activeByDefault>true</activeByDefault>
-      </activation>
-      <id>notester</id>
-      <properties>
-	<maven.test.skip>true</maven.test.skip>
-      </properties>
-    </profile>
-    <profile>
       <id>tester</id>
-      <!-- The two following dependencies must be installed before running this profile -->
+      <!--
+          Tests are executed in a separate project, but list some of the test dependencies here too so
+          that if they are snapshots Maven will put them in the reactor before this project.
+      -->
+      <properties>
+        <jaxp-standalone.version>1.4.2</jaxp-standalone.version>
+        <zedval-osgi.version>2.1</zedval-osgi.version>
+        <xproc-engine-daisy-pipeline.version>1.10.1-SNAPSHOT</xproc-engine-daisy-pipeline.version>
+        <xprocspec.version>1.1.0</xprocspec.version>
+        <xprocspec-runner.version>1.0.0</xprocspec-runner.version>
+        <pax-exam-helper.version>1.9.1</pax-exam-helper.version>
+      </properties>
       <dependencies>
-	<dependency>
-	  <groupId>org.daisy.libs</groupId>
-	  <artifactId>jaxp-standalone</artifactId>
-	  <version>1.4.2</version>
-	  <scope>test</scope>
-	</dependency>
-	<dependency>
-	  <groupId>org.daisy.libs</groupId>
-	  <artifactId>zedval-osgi</artifactId>
-	  <version>2.1</version>
-	  <scope>test</scope>
-	</dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline</groupId>
+          <artifactId>xproc-api</artifactId>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.maven</groupId>
+          <artifactId>xproc-engine-daisy-pipeline</artifactId>
+          <version>${xproc-engine-daisy-pipeline.version}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.xprocspec</groupId>
+          <artifactId>xprocspec</artifactId>
+          <version>${xprocspec.version}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.maven</groupId>
+          <artifactId>xprocspec-runner</artifactId>
+          <version>${xprocspec-runner.version}</version>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline</groupId>
+          <artifactId>pax-exam-helper</artifactId>
+          <version>${pax-exam-helper.version}</version>
+          <scope>test</scope>
+        </dependency>
       </dependencies>
       <build>
-	<plugins>
-	  <!-- Copy the dependencies so we can put them in the classpath if necessary -->
-	  <plugin>
-	    <groupId>org.apache.maven.plugins</groupId>
-	    <artifactId>maven-dependency-plugin</artifactId>
-	    <version>2.9</version>
-	    <executions>
-	      <execution>
-		<id>copy-dependencies</id>
-		<phase>process-test-resources</phase>
-		<goals>
-		  <goal>copy-dependencies</goal>
-		</goals>
-		<configuration>
-		  <outputDirectory>${dependencies.dir}</outputDirectory>
-		  <excludeTransitive>true</excludeTransitive>
-		</configuration>
-	      </execution>
-	    </executions>
-	  </plugin>
-	</plugins>
+        <plugins>
+          <plugin>
+            <artifactId>maven-invoker-plugin</artifactId>
+            <version>1.8</version>
+            <configuration>
+              <settingsFile>${basedir}/src/test/resources/settings.xml</settingsFile>
+              <localRepositoryPath>${project.build.directory}/test/local-repo</localRepositoryPath>
+              <properties>
+                <!-- for settings file -->
+                <testDependenciesLibUrl>${project.baseUri}/src/test/resources/deps/lib</testDependenciesLibUrl>
+              </properties>
+            </configuration>
+            <executions>
+              <!-- build jaxp-standalone and zedval-osgi -->
+              <execution>
+                <id>build-test-dependencies</id>
+                <phase>generate-test-resources</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <projectsDirectory>${basedir}/src/test/resources/deps/src</projectsDirectory>
+                  <cloneProjectsTo>${project.build.directory}/test/deps/src</cloneProjectsTo>
+                  <pomIncludes>
+                    <pomInclude>jaxp-standalone</pomInclude>
+                    <pomInclude>zedval-osgi</pomInclude>
+                  </pomIncludes>
+                  <goals>
+                    <goal>install</goal>
+                  </goals>
+                </configuration>
+              </execution>
+              <execution>
+                <id>install-dtbook-to-daisy3</id>
+                <!-- to make sure that by now dtbook-to-daisy3 jar has been built (see
+                     "bundle-before-test" execution of maven-bundle-plugin which is bound to
+                     generate-test-resources phase) -->
+                <phase>process-test-resources</phase>
+                <goals>
+                  <goal>install</goal>
+                </goals>
+              </execution>
+              <!-- need to run tests in separate project because generated test dependencies can not be
+                   added dynamically in Maven -->
+              <execution>
+                <id>execute-test</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <projectsDirectory>${basedir}/src/test/resources</projectsDirectory>
+                  <cloneProjectsTo>${project.build.directory}/test</cloneProjectsTo>
+                  <properties>
+                    <localRepositoryPath>${project.build.directory}/test/local-repo</localRepositoryPath>
+                    <dtbook-to-daisy3.version>${project.version}</dtbook-to-daisy3.version>
+                    <jaxp-standalone.version>${jaxp-standalone.version}</jaxp-standalone.version>
+                    <zedval-osgi.version>${zedval-osgi.version}</zedval-osgi.version>
+                    <xproc-engine-daisy-pipeline.version>${xproc-engine-daisy-pipeline.version}</xproc-engine-daisy-pipeline.version>
+                    <xprocspec.version>${xprocspec.version}</xprocspec.version>
+                    <xprocspec-runner.version>${xprocspec-runner.version}</xprocspec-runner.version>
+                    <pax-exam-helper.version>${pax-exam-helper.version}</pax-exam-helper.version>
+                  </properties>
+                  <pomIncludes>
+                    <pomInclude>test</pomInclude>
+                  </pomIncludes>
+                  <goals>
+                    <goal>test</goal>
+                  </goals>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>default-testResources</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>default-testCompile</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
       </build>
     </profile>
   </profiles>
+
 </project>

@@ -18,9 +18,7 @@
   <name>ZedVal (OSGi Bundle)</name>
   <description>OSGi bundle for ZedVal</description>
 
-
   <dependencies>
-
     <dependency>
       <groupId>batik</groupId>
       <artifactId>batik-css</artifactId>
@@ -95,7 +93,6 @@
       <artifactId>stax-api</artifactId>
       <version>1.0.1</version>
     </dependency>
-    <!-- The following dependencies have to be manually installed: -->
     <dependency>
       <groupId>javazoom</groupId>
       <artifactId>jlayer</artifactId>
