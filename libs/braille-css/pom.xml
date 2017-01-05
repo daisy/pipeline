@@ -40,11 +40,6 @@
           </exclusion>
         </exclusions>
       </dependency>
-      <dependency>
-        <groupId>org.apache.servicemix.bundles</groupId>
-        <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
-        <version>3.5.2_1</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -52,14 +47,6 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>jstyleparser</artifactId>
-    </dependency>
-    <!--
-        runtime dependencies
-    -->
-    <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <!--
         test dependencies
