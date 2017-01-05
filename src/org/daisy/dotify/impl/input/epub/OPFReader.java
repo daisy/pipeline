@@ -10,8 +10,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+/**
+ * Provides a reader of OPF-files.
+ * @author Joel Håkansson
+ */
 public class OPFReader extends AbstractContainerReader {
 
+	/**
+	 * Parses a file and returns an OPF.
+	 * @param root the root folder of the epub publication
+	 * @param pathToOpf the path to the opf, relative to the root
+	 * @return returns a parsed OPF.
+	 * @throws EPUB3ReaderException if the opf could not be parsed
+	 */
 	public OPF parse(File root, String pathToOpf) throws EPUB3ReaderException {
 		File opf = new File(root, pathToOpf);
 		if (!opf.isFile()) {
@@ -19,7 +30,7 @@ public class OPFReader extends AbstractContainerReader {
 		}
 
 		Document d = readFromStreamAsXML(opf);
-		Map<String, String> manifest = new HashMap<String, String>();
+		Map<String, String> manifest = new HashMap<>();
 		{
 			NodeList nl = d.getElementsByTagName("item");
 			for (int i = 0; i < nl.getLength(); i++) {
@@ -27,7 +38,7 @@ public class OPFReader extends AbstractContainerReader {
 				manifest.put(n.getAttributes().getNamedItem("id").getNodeValue(), n.getAttributes().getNamedItem("href").getNodeValue());
 			}
 		}
-		List<String> spine = new ArrayList<String>();
+		List<String> spine = new ArrayList<>();
 		// spine contains itemrefs
 		{
 			NodeList nl = d.getElementsByTagName("itemref");

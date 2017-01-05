@@ -16,26 +16,50 @@ import org.daisy.dotify.common.io.ResourceLocatorException;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
 
+/**
+ * Provides an merger for epub 3 html files.
+ * @author Joel Håkansson
+ */
 public class ContentMerger {
 	private static final String CONTENT_NAME = "package.opf.html";
 	private final ContainerReader container;
 	private final Logger logger;
 	private final ResourceLocator locator;
 
-	public ContentMerger(ContainerReader container) throws EPUB3ReaderException {
+	/**
+	 * Creates a new content merger with the specified reader.
+	 * @param container the container reader
+	 */
+	public ContentMerger(ContainerReader container) {
 		this.logger = Logger.getLogger(this.getClass().getCanonicalName());
 		this.container = container;
 		this.locator = new EpubResourceLocator("resource-files");
 	}
 
+	/**
+	 * Creates a new content merger with the specified epub root folder.
+	 * @param epub the epub root folder.
+	 * @throws EPUB3ReaderException if the container file could not be read 
+	 */
 	public ContentMerger(File epub) throws EPUB3ReaderException {
 		this(new ContainerReader(epub));
 	}
 	
+	/**
+	 * Reads an unzipped epub folder and creates a copy of it but with the content files merged.
+	 * @param epub the epub root folder
+	 * @param output the output folder
+	 * @throws EPUB3ReaderException if there is a problem reading the epub
+	 */
 	public static void copyMerged(File epub, File output) throws EPUB3ReaderException {
 		new ContentMerger(epub).copyMerged(output);
 	}
 
+	/**
+	 * Creates a copy of the epub folder with the content files merged.
+	 * @param output the output folder
+	 * @throws EPUB3ReaderException if there is a problem reading the epub
+	 */
 	public void copyMerged(File output) throws EPUB3ReaderException {
 		output.mkdirs();
 
@@ -57,7 +81,7 @@ public class ContentMerger {
 		resultFile.getParentFile().mkdirs();
 
 		File contentFile = new File(resultFile.getParentFile(), CONTENT_NAME);
-		Map<String, String> manifest = new HashMap<String, String>(opf.getManifest());
+		Map<String, String> manifest = new HashMap<>(opf.getManifest());
 		logger.info("Merging spine to " + resultFile);
 
 		//remove spine items
@@ -79,7 +103,7 @@ public class ContentMerger {
 	 * @throws EPUB3ReaderException
 	 */
 	private void makeMergedSpineOPF(String contentName, File sourceOpf, File targetOpf) throws EPUB3ReaderException {
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		params.put("content", contentName);
 		try {
 			XMLTools.transform(sourceOpf, targetOpf, locator.getResource("opf-merge-spine.xslt"), params);
@@ -88,6 +112,12 @@ public class ContentMerger {
 		}
 	}
 	
+	/**
+	 * Makes a single content document based on the original spine items.
+	 * @param opfPath the OPF path relative to the epub root
+	 * @param resultFile the resulting document
+	 * @throws EPUB3ReaderException if the content could not be merged
+	 */
 	public void makeSingleContentDocument(String opfPath, File resultFile) throws EPUB3ReaderException {
 		makeSingleContentDocument(new File(container.getFolder(), opfPath), resultFile);
 	}
@@ -96,13 +126,13 @@ public class ContentMerger {
 	 * Makes a single content document based on the original spine items.
 	 * @param opfFile the original opf
 	 * @param resultFile the resulting document
-	 * @throws EPUB3ReaderException
+	 * @throws EPUB3ReaderException if content could not be merged
 	 */
 	public void makeSingleContentDocument(File opfFile, File resultFile) throws EPUB3ReaderException {
 		if (!opfFile.exists()) {
 			throw new EPUB3ReaderException("File not found: " + opfFile);
 		}
-		Map<String, Object> params = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<>();
 		try {
 			XMLTools.transform(opfFile, resultFile, locator.getResource("opf-merge-content-docs.xslt"), params,  new net.sf.saxon.TransformerFactoryImpl());
 		} catch (XMLToolsException | ResourceLocatorException e) {

@@ -46,11 +46,19 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 		throw new TaskSystemFactoryException("Unsupported specification: " + locale + "(" + inputFormat + "->" + outputFormat + ")");
 	}
 
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
 	public void setInputManagerFactory(TaskGroupFactoryMakerService service) {
 		this.imf = service;
 	}
 
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
 	public void unsetInputManagerFactory(TaskGroupFactoryMakerService service) {
 		this.imf = null;
 	}

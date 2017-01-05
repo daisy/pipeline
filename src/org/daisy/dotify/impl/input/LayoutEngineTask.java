@@ -78,7 +78,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	 * @param spec the specification
 	 * @param pmw the paged media writer factory maker service
 	 * @param fe the formatter engine factory service
-	 * @throws TaskSystemException
+	 * @throws TaskSystemException if the instance could not be created 
 	 */
 	public LayoutEngineTask(Properties p2, TaskGroupSpecification spec, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe) throws TaskSystemException {
 		super(buildName(spec.getOutputFormat().toUpperCase()));

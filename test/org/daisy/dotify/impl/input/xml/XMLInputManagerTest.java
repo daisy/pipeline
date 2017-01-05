@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 
+@SuppressWarnings("javadoc")
 public class XMLInputManagerTest {
 
 	@Test

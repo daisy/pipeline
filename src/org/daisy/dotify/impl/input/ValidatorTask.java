@@ -42,11 +42,23 @@ import com.thaiopensource.validate.prop.rng.RngProperty;
 public class ValidatorTask extends ReadOnlyTask {
 	private URL schema;
 
+	/**
+	 * Creates a new validator task with the specified name and schema
+	 * @param name the name of the task
+	 * @param schema the validation schema
+	 */
 	public ValidatorTask(String name, URL schema) {
 		super(name);
 		this.schema = schema;
 	}
 	
+	/**
+	 * Validates the specified file against the specified validation schema
+	 * @param input the input file
+	 * @param schema the schema
+	 * @return returns true if the file is valid, false otherwise
+	 * @throws ValidatorException if validation fails
+	 */
 	public static boolean validate(File input, URL schema) throws ValidatorException {
 		URL url;
 		try {

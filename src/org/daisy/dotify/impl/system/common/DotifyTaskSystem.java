@@ -17,7 +17,6 @@ import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.api.tasks.TaskSystem;
 import org.daisy.dotify.api.tasks.TaskSystemException;
-import org.daisy.dotify.impl.input.Keys;
 
 
 /**
@@ -41,6 +40,14 @@ public class DotifyTaskSystem implements TaskSystem {
 	private final String name;
 	private final TaskGroupFactoryMakerService imf;
 
+	/**
+	 * Creates a new Dotify task system with the specified parameters.
+	 * @param name the name of the task system
+	 * @param inputFormat the input format
+	 * @param outputFormat the output format
+	 * @param context the context locale
+	 * @param imf a task group factory maker service
+	 */
 	public DotifyTaskSystem(String name, String inputFormat, String outputFormat, String context, TaskGroupFactoryMakerService imf) {
 		this.context = context;
 		this.inputFormat = inputFormat;

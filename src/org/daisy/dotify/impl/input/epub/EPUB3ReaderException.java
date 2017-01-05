@@ -1,5 +1,9 @@
 package org.daisy.dotify.impl.input.epub;
 
+/**
+ * Provides an exception for epub reading.
+ * @author Joel Håkansson
+ */
 public class EPUB3ReaderException extends Exception {
 
 	/**

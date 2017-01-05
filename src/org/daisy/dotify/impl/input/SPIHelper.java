@@ -23,6 +23,8 @@ public class SPIHelper {
 	private static FormatterEngineFactoryService formatterEngingeFactory;
 	private static final Logger logger = Logger.getLogger(SPIHelper.class.getCanonicalName());
 	
+	private SPIHelper() {}
+
 	/**
 	 * <p>Gets a table catalog instance, or null if not found.</p> 
 	 * 
@@ -51,6 +53,11 @@ public class SPIHelper {
 	
 	//the following differs from the ones above because there isn't an interface for the maker implementation
 	//to hide behind and thus they cannot be used.
+	/**
+	 * Gets a formatter engine factory service instance, or null if not found.
+	 * 
+	 * @return returns a formatter engine factory service
+	 */
 	public static FormatterEngineFactoryService getFormatterEngineFactoryService() {
 		if (formatterEngingeFactory == null) {
 			formatterEngingeFactory = ServiceLoader.load(FormatterEngineFactoryService.class).iterator().next();

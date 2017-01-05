@@ -14,6 +14,10 @@ import org.daisy.dotify.api.tasks.ReadWriteTask;
 import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.common.io.FileIO;
 
+/**
+ * Provides an epub to html task.
+ * @author Joel Håkansson
+ */
 public class Epub3Task extends ReadWriteTask {
 	private final Logger logger;
 	private final String opfPath;

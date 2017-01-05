@@ -10,6 +10,7 @@ import javax.xml.transform.TransformerException;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class TableSplitTest {
 /*
 	@Test

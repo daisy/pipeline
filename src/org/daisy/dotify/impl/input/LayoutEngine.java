@@ -12,12 +12,23 @@ import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 
+/**
+ * Provides a task group for running the Dotify formatter.
+ * 
+ * @author Joel Håkansson
+ */
 public class LayoutEngine implements TaskGroup {
 
 	private final TaskGroupSpecification spec;
 	private final PagedMediaWriterFactoryMakerService pmw;
 	private final FormatterEngineFactoryService fe;
 
+	/**
+	 * Creates a new layout engine with the specified parameters.
+	 * @param spec the task group specification
+	 * @param pmw a paged media writer factory maker service
+	 * @param fe a formatter engine factory service
+	 */
 	public LayoutEngine(TaskGroupSpecification spec, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe) {
 		this.spec = spec;
 		this.pmw = pmw;

@@ -11,7 +11,15 @@ import java.util.logging.Logger;
 import org.daisy.dotify.common.io.AbstractResourceLocator;
 import org.daisy.dotify.common.io.ResourceLocator;
 
+/**
+ * Provides a resource locator for xml localization data.
+ * 
+ * @author Joel Håkansson
+ */
 public enum XMLL10nResourceLocator {
+	/**
+	 * The instance 
+	 */
 	INSTANCE;
 	private final Properties locales;
 	
@@ -31,6 +39,10 @@ public enum XMLL10nResourceLocator {
 		}
 	}
 	
+	/**
+	 * Gets the singleton instance.
+	 * @return returns the instance
+	 */
 	public static XMLL10nResourceLocator getInstance() {
 		return INSTANCE;
 	}

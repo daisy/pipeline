@@ -60,7 +60,8 @@ public abstract class StaxFilter2 {
     private OutputStream outputStream = null;
     private XMLEventWriter writer;
 
-	public StaxFilter2(XMLEventReader xer, XMLEventFactory xef, XMLOutputFactory xof, OutputStream outStream) throws XMLStreamException {
+	@SuppressWarnings("javadoc")
+	public StaxFilter2(XMLEventReader xer, XMLEventFactory xef, XMLOutputFactory xof, OutputStream outStream) {
         reader = xer;
         eventFactory = xef;
         outputFactory = xof;
@@ -68,22 +69,27 @@ public abstract class StaxFilter2 {
         writer = null;
     }
     
-    public StaxFilter2(XMLEventReader xer, XMLEventFactory xef, OutputStream outStream) throws XMLStreamException {
+	@SuppressWarnings("javadoc")
+    public StaxFilter2(XMLEventReader xer, XMLEventFactory xef, OutputStream outStream) {
         this(xer, xef, XMLOutputFactory.newInstance(), outStream);
     }
     
-    public StaxFilter2(XMLEventReader xer, XMLOutputFactory xof, OutputStream outStream) throws XMLStreamException {
+	@SuppressWarnings("javadoc")
+    public StaxFilter2(XMLEventReader xer, XMLOutputFactory xof, OutputStream outStream) {
         this(xer, XMLEventFactory.newInstance(), xof, outStream);
     }
     
-    public StaxFilter2(XMLEventReader xer, OutputStream outStream) throws XMLStreamException {
+	@SuppressWarnings("javadoc")
+    public StaxFilter2(XMLEventReader xer, OutputStream outStream) {
         this(xer, XMLEventFactory.newInstance(), XMLOutputFactory.newInstance(), outStream);
     }
     
+	@SuppressWarnings("javadoc")
     public void close() throws IOException {
     	outputStream.close();
     }
     
+	@SuppressWarnings("javadoc")
     public final void filter() throws XMLStreamException {
         boolean rootElementSeen = false;
         boolean textSeen = false;

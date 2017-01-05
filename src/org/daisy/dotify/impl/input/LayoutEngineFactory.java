@@ -14,6 +14,11 @@ import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
 
+/**
+ * Provides a task group factory for running the Dotify formatter.
+ *  
+ * @author Joel Håkansson
+ */
 @Component
 public class LayoutEngineFactory implements TaskGroupFactory {
 	private static final String LOCALE = "sv-SE";
@@ -22,6 +27,9 @@ public class LayoutEngineFactory implements TaskGroupFactory {
 	private PagedMediaWriterFactoryMakerService pmw;
 	private FormatterEngineFactoryService fe;
 
+	/**
+	 * Creates a new layout engine factory.
+	 */
 	public LayoutEngineFactory() {
 		supportedSpecifications = new HashSet<>();
 		supportedSpecifications.add(new TaskGroupSpecification("obfl", Keys.PEF_FORMAT, LOCALE));
@@ -62,20 +70,36 @@ public class LayoutEngineFactory implements TaskGroupFactory {
 		}
 	}
 	
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
 	public void setPagedMediaWriterFactory(PagedMediaWriterFactoryMakerService service) {
 		this.pmw = service;
 	}
 
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
 	public void unsetPagedMediaWriterFactory(PagedMediaWriterFactoryMakerService service) {
 		this.pmw = null;
 	}
-	
+
+	/**
+	 * Sets a factory dependency.
+	 * @param service the dependency
+	 */
 	@Reference
 	public void setFormatterEngineFactory(FormatterEngineFactoryService service) {
 		this.fe = service;
 	}
 	
+	/**
+	 * Removes a factory dependency.
+	 * @param service the dependency to remove
+	 */
 	public void unsetFormatterEngineFactory(FormatterEngineFactoryService service) {
 		this.fe = null;
 	}

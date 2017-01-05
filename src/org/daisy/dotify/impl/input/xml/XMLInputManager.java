@@ -71,7 +71,7 @@ public class XMLInputManager implements TaskGroup {
 	private final Logger logger;
 
 	/**
-	 * Create a new InputDetectorTaskSystem. 
+	 * Creates a new xml input manager with the specified options. 
 	 * @param localLocator a locator for local resources
 	 * @param commonLocator a locator for common resources
 	 */
@@ -79,6 +79,12 @@ public class XMLInputManager implements TaskGroup {
 		this(localLocator, commonLocator, "XMLInputManager");
 	}
 	
+	/**
+	 * Creates a new xml input manager with the specified options. 
+	 * @param localLocator a locator for local resources
+	 * @param commonLocator a locator for common resources
+	 * @param name a name for the task group
+	 */
 	public XMLInputManager(ResourceLocator localLocator, ResourceLocator commonLocator, String name) {
 		this.localLocator = localLocator;
 		this.commonLocator = commonLocator;

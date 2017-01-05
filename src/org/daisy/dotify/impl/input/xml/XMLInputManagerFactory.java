@@ -31,6 +31,9 @@ public class XMLInputManagerFactory implements TaskGroupFactory {
 	private final Set<TaskGroupInformation> supportedTaskGroupInformations;
 	private final Set<String> supportedLocales;
 	
+	/**
+	 * Creates a new xml input manager factory.
+	 */
 	public XMLInputManagerFactory() {
 		this.locator = XMLL10nResourceLocator.getInstance();
 		DefaultInputUrlResourceLocator p = DefaultInputUrlResourceLocator.getInstance();

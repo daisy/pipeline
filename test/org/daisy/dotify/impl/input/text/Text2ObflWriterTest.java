@@ -13,6 +13,7 @@ import javax.xml.transform.TransformerException;
 
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class Text2ObflWriterTest {
 
 	public Text2ObflWriterTest() {

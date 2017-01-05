@@ -6,11 +6,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+/**
+ * Provides unpacking of epub 3 files. 
+ * @author Joel Håkansson
+ *
+ */
 public class ContentExtractor {
+	private static final Logger logger = Logger.getLogger(ContentExtractor.class.getCanonicalName());
 	private final ZipInputStream zis;
 	private final File output;
 
@@ -22,6 +29,12 @@ public class ContentExtractor {
 		this.zis = new ZipInputStream(input);
 	}
 
+	/**
+	 * Unpacks the input stream and puts it in the output folder.
+	 * @param input the input stream
+	 * @param output the output folder
+	 * @throws EPUB3ReaderException if unpacking fails
+	 */
 	public static void unpack(InputStream input, File output) throws EPUB3ReaderException {
 		new ContentExtractor(input, output).unpack();
 	}
@@ -32,7 +45,7 @@ public class ContentExtractor {
 			try {
 				boolean mimetypeChecked = false;
 				while ((entry = zis.getNextEntry()) != null) {
-					if (entry.getName().equals("mimetype")) {
+					if ("mimetype".equals(entry.getName())) {
 						processMimetype(entry);
 						mimetypeChecked = true;
 					} else {
@@ -53,6 +66,9 @@ public class ContentExtractor {
 				try {
 					zis.close();
 				} catch (IOException e) {
+					if (logger.isLoggable(Level.FINE)) {
+						logger.log(Level.FINE, "Failed to close zip input stream.", e);
+					}
 				}
 			}
 		}
@@ -75,7 +91,7 @@ public class ContentExtractor {
 			} else {
 				f.getParentFile().mkdirs();
 				try {
-					writeToStream(entry.getSize(), new FileOutputStream(f));
+					writeToStream(new FileOutputStream(f));
 				} catch (FileNotFoundException e) {
 					throw new EPUB3ReaderException(e);
 				}
@@ -84,11 +100,14 @@ public class ContentExtractor {
 			try {
 				zis.closeEntry();
 			} catch (IOException e) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.log(Level.FINE, "Failed to close zip entry.", e);
+				}
 			}
 		}
 	}
 
-	protected void writeToStream(long s, OutputStream os) throws EPUB3ReaderException {
+	protected void writeToStream(OutputStream os) throws EPUB3ReaderException {
 		int buf = 2048;
 		byte[] b = new byte[buf];
 		int read = 0;
@@ -102,6 +121,9 @@ public class ContentExtractor {
 			try {
 				os.close();
 			} catch (IOException e) {
+				if (logger.isLoggable(Level.FINE)) {
+					logger.log(Level.FINE, "Failed to close output stream.", e);
+				}
 			}
 		}
 	}

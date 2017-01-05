@@ -17,11 +17,9 @@
  */
 package org.daisy.dotify.impl.input;
 
-import java.io.FileNotFoundException;
 import java.io.OutputStream;
 
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Characters;
 
 import org.daisy.dotify.common.text.StringFilter;
@@ -39,13 +37,11 @@ public class TextNodeFilter extends StaxFilter2 {
 
 	/**
 	 * Create a new TextNodeFilter
-	 * @param input
-	 * @param output
+	 * @param input an xml event reader
+	 * @param output the output stream
 	 * @param filters ArrayList of regular expressions
-	 * @throws XMLStreamException
-	 * @throws FileNotFoundException
 	 */
-	public TextNodeFilter(XMLEventReader input, OutputStream output, StringFilter filters) throws XMLStreamException, FileNotFoundException {
+	public TextNodeFilter(XMLEventReader input, OutputStream output, StringFilter filters) {
 		super(input, output);
 		this.filters = filters;
 	}

@@ -37,8 +37,14 @@ public class XsltTask extends ReadWriteTask {
 	List<TaskOption> uiOptions;
 	
 	/**
-	 * Create a new XSLT task. Use system property javax.xml.transform.TransformerFactory
-	 * to set factory implementation if needed.
+	 * <p>Create a new XSLT task. Use system property javax.xml.transform.TransformerFactory
+	 * to set factory implementation if needed.</p>
+	 * 
+	 * <p>User options are collected from the xslt
+	 * itself. The value of the attribute <code>@dotify:desc</code> on any top level
+	 * <code>xsl:param</code> within the xslt will be presented to a user. The namespace for 
+	 * <code>@dotify:desc</code> should be 
+	 * <code>http://brailleapps.github.io/ns/dotify</code></p>
 	 * @param name task name
 	 * @param url relative path to XSLT
 	 * @param options XSLT parameters
@@ -46,6 +52,14 @@ public class XsltTask extends ReadWriteTask {
 	public XsltTask(String name, URL url, Map<String, Object> options) {
 		this(name, url, options, null);
 	}
+	/**
+	 * Creates a new XSLT task. Use system property javax.xml.transform.TransformerFactory
+	 * to set factory implementation if needed.
+	 * @param name the task name
+	 * @param url the relative path to the XSLT
+	 * @param options the xslt parameters
+	 * @param uiOptions the options presented to a user
+	 */
 	public XsltTask(String name, URL url, Map<String, Object> options, List<TaskOption> uiOptions) {
 		super(name);
 		this.url = url;

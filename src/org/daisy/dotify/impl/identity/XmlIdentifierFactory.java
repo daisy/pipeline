@@ -6,6 +6,10 @@ import org.daisy.dotify.api.tasks.FileDetails;
 
 import aQute.bnd.annotation.component.Component;
 
+/**
+ * Provides a factory for identifying xml files.
+ * @author Joel Håkansson
+ */
 @Component
 public class XmlIdentifierFactory implements IdentifierFactory {
 
@@ -13,7 +17,7 @@ public class XmlIdentifierFactory implements IdentifierFactory {
 	 * Creates a new xml identifer factory.
 	 */
 	public XmlIdentifierFactory() {
-		// no fields
+		super();
 	}
 
 	@Override

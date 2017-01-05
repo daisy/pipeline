@@ -3,6 +3,10 @@ package org.daisy.dotify.impl.input.epub;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Provides a data object for an OPF-file.
+ * @author Joel Håkansson
+ */
 public class OPF {
 	private final String path;
 	private final List<String> spine;
@@ -15,14 +19,26 @@ public class OPF {
 		this.manifest = manifest;
 	}
 
+	/**
+	 * Gets the path of this OPF relative to the root of the epub publication.
+	 * @return returns the relative path
+	 */
 	public String getPath() {
 		return path;
 	}
 
-	public List<String> getSpine() throws EPUB3ReaderException {
+	/**
+	 * Gets a list of spine idrefs.
+	 * @return returns a list of spine idrefs
+	 */
+	public List<String> getSpine() {
 		return spine;
 	}
 
+	/**
+	 * Gets the manifest ids and paths.
+	 * @return returns the manifest
+	 */
 	public Map<String, String> getManifest() {
 		return manifest;
 	}

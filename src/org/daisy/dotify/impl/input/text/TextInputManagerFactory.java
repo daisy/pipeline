@@ -11,11 +11,18 @@ import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 
 import aQute.bnd.annotation.component.Component;
 
+/**
+ * Provides a task group factory for text input.
+ * @author Joel Håkansson
+ */
 @Component
 public class TextInputManagerFactory implements TaskGroupFactory {
 	private final Set<TaskGroupSpecification> specs;
 	private final Set<TaskGroupInformation> information;
 
+	/**
+	 * Creates a new text input manager factory.
+	 */
 	public TextInputManagerFactory() {
 		this.specs = new HashSet<>();
 		String text = "text";

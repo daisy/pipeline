@@ -43,6 +43,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+@SuppressWarnings("javadoc")
 public class TestHelper {
 	private static DocumentBuilder db = null;
 	private static TransformerFactory tf = null;

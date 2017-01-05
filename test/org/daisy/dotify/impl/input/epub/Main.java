@@ -8,13 +8,13 @@ import java.util.logging.Logger;
 
 import org.daisy.dotify.common.io.FileIO;
 
+@SuppressWarnings("javadoc")
 public class Main {
 
 	/**
 	 * @param args
 	 * @throws FileNotFoundException
 	 * @throws EPUB3ReaderException
-	 * @throws InternalTaskException
 	 * @throws IOException
 	 */
 	public static void main(String[] args) throws EPUB3ReaderException, IOException {

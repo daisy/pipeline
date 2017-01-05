@@ -11,10 +11,18 @@ import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 
 import aQute.bnd.annotation.component.Component;
 
+/**
+ * Provides an factory for epub 3 to html conversion.
+ * @author Joel Håkansson
+ *
+ */
 @Component
 public class Epub3InputManagerFactory implements TaskGroupFactory {
 	private final Set<TaskGroupInformation> information;
 
+	/**
+	 * Creates a new epub 3 input manager factory.
+	 */
 	public Epub3InputManagerFactory() {
 		Set<TaskGroupInformation> tmp = new HashSet<>();
 		tmp.add(TaskGroupInformation.newConvertBuilder("epub", "html").build());

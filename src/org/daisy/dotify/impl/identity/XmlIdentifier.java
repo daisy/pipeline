@@ -8,13 +8,36 @@ import org.daisy.dotify.common.xml.XMLInfo;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
 
+/**
+ * Provides an identifier for xml files. This identifier will attach some additional
+ * information about the root element of the file. These can be accessed using 
+ * {@link AnnotatedFile#getProperties()}. The keys are included below.
+ * 
+ * In addition, the meta data regarding some xml formats that are relevant to this
+ * bundle (namely dtbook, html, obfl and pef) are specified to a greater detail
+ * with respect to format name and media type.
+ * 
+ * @author Joel Håkansson
+ */
 public class XmlIdentifier implements Identifier {
-	public static String XMLNS_KEY = "xmlns";
-	public static String LOCAL_NAME_KEY = "local-name";
-	public static String ATTRIBUTES_KEY = "attributes";
+	/**
+	 * Defines the property key for the root element namespace.
+	 */
+	public static final String XMLNS_KEY = "xmlns";
+	/**
+	 * Defines the property key for the root element local name.
+	 */
+	public static final String LOCAL_NAME_KEY = "local-name";
+	/**
+	 * Defines the property key for the root element attributes.
+	 */
+	public static final String ATTRIBUTES_KEY = "attributes";
 
+	/**
+	 * Creates a new xml identifier instance.
+	 */
 	public XmlIdentifier() {
-		// no fields
+		super();
 	}
 
 	@Override

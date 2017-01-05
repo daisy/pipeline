@@ -12,6 +12,7 @@ import org.daisy.dotify.api.tasks.TaskGroupActivity;
 import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.consumer.tasks.TaskGroupFactoryMaker;
 import org.junit.Test;
+@SuppressWarnings("javadoc")
 public class DotifyTaskSystemTest {
 
 	@Test

@@ -6,6 +6,7 @@ import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 import org.daisy.dotify.common.text.FilterLocale;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class XMLInputManagerFactoryTest {
 
 	@Test

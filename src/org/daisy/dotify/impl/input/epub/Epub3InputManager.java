@@ -8,6 +8,11 @@ import org.daisy.dotify.api.tasks.InternalTask;
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 
+/**
+ * Provides an epub 3 to html task group.
+ * @author Joel Håkansson
+ *
+ */
 public class Epub3InputManager implements TaskGroup {
 
 	@Override
