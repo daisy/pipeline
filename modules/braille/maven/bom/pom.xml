@@ -32,7 +32,7 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>common-utils</artifactId>
-                <version>5.1.0</version>
+                <version>5.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -52,27 +52,27 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-calabash</artifactId>
-                <version>2.0.1</version>
+                <version>2.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-core</artifactId>
-                <version>2.0.1</version>
+                <version>2.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-formatter</artifactId>
-                <version>1.11.1</version>
+                <version>1.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-saxon</artifactId>
-                <version>2.1.1</version>
+                <version>2.2.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-utils</artifactId>
-                <version>2.0.0</version>
+                <version>2.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -203,7 +203,7 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>texhyph-core</artifactId>
-                <version>4.0.1</version>
+                <version>4.1.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -277,47 +277,47 @@
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.api</artifactId>
-                <version>2.10.0</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.common</artifactId>
-                <version>2.2.0</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.translator.impl</artifactId>
-                <version>2.3.0</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.hyphenator.impl</artifactId>
-                <version>2.0.1</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.formatter.impl</artifactId>
-                <version>2.7.0</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.task-api</artifactId>
-                <version>2.6.0</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.task-runner</artifactId>
-                <version>1.2.0</version>
+                <version>2.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.task.impl</artifactId>
-                <version>2.15.0</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.dotify</groupId>
                 <artifactId>dotify.text.impl</artifactId>
-                <version>2.0.0</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>com.googlecode.texhyphj</groupId>
