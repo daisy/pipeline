@@ -245,11 +245,13 @@
 		<xsl:param name="footnotesNotInFrontMatter" as="xs:integer"/>
 		<xsl:param name="insertToc" as="xs:boolean"/>
 		<xsl:param name="additionalPreContent"/>
+		<xsl:param name="firstInFirstVolumeContent"/>
 		<xsl:choose>
 			<xsl:when test="$insertToc">
 				<volume-template volume-number-variable="volume" volume-count-variable="volumes" use-when="(= $volume 1)" sheets-in-volume-max="{$splitterMax}">
 					<pre-content>
 						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						<xsl:copy-of select="$firstInFirstVolumeContent"/>
 						<toc-sequence master="front" toc="full-toc" range="document" initial-page-number="1">
 							<on-toc-start>
 								<block padding-bottom="1"><xsl:value-of select="$l10nTocHeadline"/></block>
@@ -287,7 +289,16 @@
 				</volume-template>
 			</xsl:when>
 			<xsl:otherwise>
-				<volume-template sheets-in-volume-max="{$splitterMax}">
+				<volume-template sheets-in-volume-max="{$splitterMax}" use-when="(= $volume 1)">
+					<pre-content>
+						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						<xsl:copy-of select="$firstInFirstVolumeContent"/>
+					</pre-content>
+					<post-content>
+						<xsl:copy-of select="obfl:insertPostContentNotes($footnotesInFrontMatter, $footnotesNotInFrontMatter)"/>
+					</post-content>
+				</volume-template>
+				<volume-template sheets-in-volume-max="{$splitterMax}" use-when="(> $volume 1)">
 					<pre-content>
 						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
 					</pre-content>

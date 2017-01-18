@@ -54,6 +54,14 @@
 		<xsl:if test="$insertToc">
 			<xsl:call-template name="insertToc"/>
 		</xsl:if>
+		<xsl:variable name="firstInFirstVolumeContent">
+			<xsl:if test="$colophon-metadata-placement='begin'">
+				<xsl:call-template name="insertColophon"/>
+			</xsl:if>
+			<xsl:if test="$rear-cover-placement='begin'">
+				<xsl:call-template name="insertCoverCopy"/>
+			</xsl:if>
+		</xsl:variable>
 		<xsl:variable name="additionalPreContent" as="empty-sequence()"/>
 		<!-- /dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle  -->
 		<!-- /dtb:dtbook/dtb:book/dtb:frontmatter/dtb:docauthor -->
@@ -64,7 +72,8 @@
 			count($footnotesInFrontmatter),
 			count($footnotesNotInFrontmatter),
 			$insertToc,
-			$additionalPreContent)"/>
+			$additionalPreContent,
+			$firstInFirstVolumeContent)"/>
 	</xsl:template>
 	
 	<xsl:template name="insertNoteCollection">
@@ -146,12 +155,6 @@
 	</xsl:template>
 	
 	<xsl:template match="html:body">
-		<xsl:if test="$colophon-metadata-placement='begin'">
-			<xsl:call-template name="insertColophon"/>
-		</xsl:if>
-		<xsl:if test="$rear-cover-placement='begin'">
-			<xsl:call-template name="insertCoverCopy"/>
-		</xsl:if>
 		<xsl:if test="*[epub:types(.)=('frontmatter') and not(epub:types(.)=('cover', 'colophon', 'toc'))]">
 			<sequence master="front" initial-page-number="1">
 				<xsl:apply-templates select="*[epub:types(.)=('frontmatter') and not(epub:types(.)=('cover', 'colophon', 'toc'))]"/>

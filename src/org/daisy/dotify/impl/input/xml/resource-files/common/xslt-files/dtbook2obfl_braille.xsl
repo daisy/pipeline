@@ -92,6 +92,14 @@
 				<xsl:apply-templates select="//dtb:level1" mode="toc"/>
 			</table-of-contents>
 		</xsl:if>
+		<xsl:variable name="firstInFirstVolumeContent">
+			<xsl:if test="$colophon-metadata-placement='begin'">
+				<xsl:call-template name="insertColophon"/>
+			</xsl:if>
+			<xsl:if test="$rear-cover-placement='begin'">
+				<xsl:call-template name="insertBackCoverTextAndRearJacketCopy"/>
+			</xsl:if>
+		</xsl:variable>
 		<xsl:variable name="additionalPreContent"><xsl:if test="$insertToc"><xsl:apply-templates select="//dtb:frontmatter" mode="pre-volume-mode"/></xsl:if></xsl:variable>
 		<xsl:copy-of select="obfl:insertVolumeTemplate(
 			/dtb:dtbook/dtb:book/dtb:frontmatter/dtb:doctitle,
@@ -99,7 +107,8 @@
 			count(//dtb:note[key('noterefs', @id)[ancestor::dtb:frontmatter]]),
 			count(//dtb:note[key('noterefs', @id)[not(ancestor::dtb:frontmatter)]]),
 			$insertToc,
-			$additionalPreContent)"/>
+			$additionalPreContent,
+			$firstInFirstVolumeContent)"/>
 	</xsl:template>
 
 	<xsl:template name="insertNoteCollection">

@@ -333,12 +333,6 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 	
 	<!-- Organize colophon and rearjacketcopy -->
 	<xsl:template match="dtb:book" priority="10">
-		<xsl:if test="$colophon-metadata-placement='begin'">
-			<xsl:call-template name="insertColophon"/>
-		</xsl:if>
-		<xsl:if test="$rear-cover-placement='begin'">
-			<xsl:call-template name="insertBackCoverTextAndRearJacketCopy"/>
-		</xsl:if>
 		<xsl:apply-templates/>
 		<xsl:if test="not($colophon-metadata-placement='begin')">
 			<xsl:call-template name="insertColophon"/>
