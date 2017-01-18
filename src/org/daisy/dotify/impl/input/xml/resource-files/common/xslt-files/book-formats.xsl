@@ -49,21 +49,23 @@
 		<layout-master name="front" page-width="{$page-width}" 
 							page-height="{$page-height}" inner-margin="{$inner-margin}"
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
-			<template use-when="(= (% $page 2) 0)">
-				<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers)">
-					<header>
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
-						<field><string value=""/></field>
-					</header>
-				</xsl:if>
-				<header>
-					<xsl:if test="$show-braille-page-numbers">
-						<field><string value="&#xA0;&#xA0;"/><current-page number-format="roman"/></field>
+			<xsl:if test="$duplex">
+				<template use-when="(= (% $page 2) 0)">
+					<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers)">
+						<header>
+							<xsl:attribute name="row-spacing">1</xsl:attribute>
+							<field><string value=""/></field>
+						</header>
 					</xsl:if>
-				</header>
-				<footer></footer>
-				<xsl:call-template name="margin-region"/>
-			</template>
+					<header>
+						<xsl:if test="$show-braille-page-numbers">
+							<field><string value="&#xA0;&#xA0;"/><current-page number-format="roman"/></field>
+						</xsl:if>
+					</header>
+					<footer></footer>
+					<xsl:call-template name="margin-region"/>
+				</template>
+			</xsl:if>
 			<default-template>
 				<header>
 					<xsl:if test="$show-braille-page-numbers">
@@ -95,36 +97,38 @@
 		<layout-master name="main" page-width="{$page-width}" 
 							page-height="{$page-height}" inner-margin="{$inner-margin}"
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
-			<template use-when="(= (% $page 2) 0)">
-				<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers or $show-print-page-numbers)">
-					<header>
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
-						<field><string value=""/></field>
-					</header>
-				</xsl:if>
-				<header>
-					<xsl:if test="$show-braille-page-numbers or $show-print-page-numbers">
-						<field><string value="&#xA0;&#xA0;"/>
-							<xsl:if test="$show-braille-page-numbers">
-								<current-page number-format="default"/>
-							</xsl:if>
-						</field>
-						<field>
-							<xsl:choose>
-								<xsl:when test="$show-print-page-numbers">
-									<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
-									<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
-								</xsl:when>
-								<xsl:otherwise>
-									<string value=""/>
-								</xsl:otherwise>
-							</xsl:choose>
-						</field>
+			<xsl:if test="$duplex">
+				<template use-when="(= (% $page 2) 0)">
+					<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers or $show-print-page-numbers)">
+						<header>
+							<xsl:attribute name="row-spacing">1</xsl:attribute>
+							<field><string value=""/></field>
+						</header>
 					</xsl:if>
-				</header>
-				<footer></footer>
-				<xsl:call-template name="margin-region"/>
-			</template>
+					<header>
+						<xsl:if test="$show-braille-page-numbers or $show-print-page-numbers">
+							<field><string value="&#xA0;&#xA0;"/>
+								<xsl:if test="$show-braille-page-numbers">
+									<current-page number-format="default"/>
+								</xsl:if>
+							</field>
+							<field>
+								<xsl:choose>
+									<xsl:when test="$show-print-page-numbers">
+										<marker-reference marker="pagenum-turn" direction="forward" scope="page-content"/>
+										<marker-reference marker="pagenum" direction="backward" scope="sequence"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<string value=""/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</field>
+						</xsl:if>
+					</header>
+					<footer></footer>
+					<xsl:call-template name="margin-region"/>
+				</template>
+			</xsl:if>
 			<default-template>
 				<header>
 					<xsl:if test="$show-braille-page-numbers or $show-print-page-numbers">
@@ -166,11 +170,13 @@
 		<layout-master name="plain" page-width="{$page-width}" 
 							page-height="{$page-height}" inner-margin="{$inner-margin}"
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
-			<template use-when="(= (% $page 2) 0)">
-				<header><field><string value=""/></field></header>
-				<footer></footer>
-				<xsl:call-template name="margin-region"/>
-			</template>
+			<xsl:if test="$duplex">
+				<template use-when="(= (% $page 2) 0)">
+					<header><field><string value=""/></field></header>
+					<footer></footer>
+					<xsl:call-template name="margin-region"/>
+				</template>
+			</xsl:if>
 			<default-template>
 				<header>
 					<!-- This looks weird, but it is correct. If row-spacing is double, then offset the header
@@ -187,21 +193,23 @@
 		<layout-master name="notes" page-width="{$page-width}" 
 							page-height="{$page-height}" inner-margin="{$inner-margin}"
 							outer-margin="{$outer-margin}" row-spacing="{$row-spacing}" duplex="{$duplex}">
-			<template use-when="(= (% $page 2) 0)">
-				<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers)">
-					<header>
-						<xsl:attribute name="row-spacing">1</xsl:attribute>
-						<field><string value=""/></field>
-					</header>
-				</xsl:if>
-				<header>
-					<xsl:if test="$show-braille-page-numbers">
-						<field><string value="&#xA0;&#xA0;"/><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field>
+			<xsl:if test="$duplex">
+				<template use-when="(= (% $page 2) 0)">
+					<xsl:if test="$row-spacing=2 and not($show-braille-page-numbers)">
+						<header>
+							<xsl:attribute name="row-spacing">1</xsl:attribute>
+							<field><string value=""/></field>
+						</header>
 					</xsl:if>
-				</header>
-				<footer></footer>
-				<xsl:call-template name="margin-region"/>
-			</template>
+					<header>
+						<xsl:if test="$show-braille-page-numbers">
+							<field><string value="&#xA0;&#xA0;"/><string value="{$l10nEndnotesPageHeader} "/><current-page number-format="default"/></field>
+						</xsl:if>
+					</header>
+					<footer></footer>
+					<xsl:call-template name="margin-region"/>
+				</template>
+			</xsl:if>
 			<default-template>
 				<header>
 					<xsl:if test="$show-braille-page-numbers">
