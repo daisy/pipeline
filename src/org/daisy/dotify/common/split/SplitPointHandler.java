@@ -27,10 +27,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		this.trimTrailing = true;
 		this.cost = new SplitPointCost<T>() {
 			@Override
-			public double getCost(SplitPointDataSource<T> units, int index, int breakpoint) {
+			public double getCost(SplitPointDataSource<T> data, int index, int breakpoint) {
 				// 1. the smaller the result, the higher the cost
 				// 2. breakable units are always preferred over forced ones
-				return (units.get(index).isBreakable()?1:2)*breakpoint-index;
+				return (data.get(index).isBreakable()?1:2)*breakpoint-index;
 			}
 		};
 	}
@@ -132,7 +132,6 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		Supplements<T> map = data.getSupplements();
 		int strPos = forwardSkippable(data, startPos);
 		// check next unit to see if it can be removed.
-		//strPos==units.size()-1
 		if (!data.hasElementAt(strPos+1)) { // last unit?
 			List<T> head = data.head(strPos+1);
 			int tailStart = strPos+1;
@@ -225,15 +224,15 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	
 	/**
 	 * Finds the index for the last unit that fits into the given space
-	 * @param charsStr
+	 * @param data
 	 * @param impl
 	 * @return returns the index for the last unit
 	 */
-	static <T extends SplitPointUnit> int findCollapse(SplitPointDataSource<T> charsStr, StepForward<T> impl) {
+	static <T extends SplitPointUnit> int findCollapse(SplitPointDataSource<T> data, StepForward<T> impl) {
 		int units = -1;
 		T maxCollapsable = null;
-		for (int i=0; charsStr.hasElementAt(i); i++) {
-			T c = charsStr.get(i);
+		for (int i=0; data.hasElementAt(i); i++) {
+			T c = data.get(i);
 			units++;
 			if (c.isCollapsible()) {
 				if (maxCollapsable!=null) {
@@ -272,14 +271,12 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		return units;
 	}
 
-	static int forwardSkippable(SplitPointDataSource<? extends SplitPointUnit> charsStr, final int pos) {
+	static int forwardSkippable(SplitPointDataSource<? extends SplitPointUnit> data, final int pos) {
 		SplitPointUnit c;
 		int ret = pos;
-		//ret<charsStr.size()
-		if (charsStr.hasElementAt(ret) && !(c=charsStr.get(ret)).isBreakable()) {
+		if (data.hasElementAt(ret) && !(c=data.get(ret)).isBreakable()) {
 			ret++;
-			//ret<charsStr.size()
-			while (charsStr.hasElementAt(ret) && (c=charsStr.get(ret)).isSkippable()) {
+			while (data.hasElementAt(ret) && (c=data.get(ret)).isSkippable()) {
 				if (c.isBreakable()) {
 					return ret;
 				} else {
@@ -287,8 +284,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 				}
 			}
 			//have we passed last element?
-			//ret==charsStr.size()
-			if (!charsStr.hasElementAt(ret)) {
+			if (!data.hasElementAt(ret)) {
 				return ret-1;
 			} else {
 				return pos;
@@ -298,19 +294,19 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 	}
 
-	static <T extends SplitPointUnit> BreakPointScannerResult findBreakpointBefore(SplitPointDataSource<T> units, int strPos, SplitPointCost<T> cost) {
+	static <T extends SplitPointUnit> BreakPointScannerResult findBreakpointBefore(SplitPointDataSource<T> data, int strPos, SplitPointCost<T> cost) {
 		BreakPointScannerResult res = new BreakPointScannerResult();
 		res.bestBreakable = -1;
 		res.bestSplitPoint = strPos;
 		double currentCost = Double.MAX_VALUE;
 		double currentBreakableCost = Double.MAX_VALUE;
 		for (int index=0; index<=strPos; index++) {
-			double c = cost.getCost(units, index, strPos);
+			double c = cost.getCost(data, index, strPos);
 			if (c<currentCost) { // this should always be true for the first unit
 				res.bestSplitPoint = index;
 				currentCost = c;
 			}
-			if (c<currentBreakableCost && units.get(index).isBreakable()) {
+			if (c<currentBreakableCost && data.get(index).isBreakable()) {
 				res.bestBreakable = index;
 				currentBreakableCost = c;
 			}
@@ -326,28 +322,28 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	/**
 	 * Returns true if the total size is less than or equal to the limit, false otherwise.
 	 * 
-	 * @param units the units
+	 * @param data the units
 	 * @param limit the maximum width that is relevant to calculate
 	 * @return returns the size 
 	 */
-	static <T extends SplitPointUnit> boolean fits(SplitPointDataSource<T> units, float limit) {
-		return totalSize(units, limit)<=limit;
+	static <T extends SplitPointUnit> boolean fits(SplitPointDataSource<T> data, float limit) {
+		return totalSize(data, limit)<=limit;
 	}
 	/**
 	 * If the total size is less than the limit, the size is returned, otherwise a value greater
 	 * than or equal to the limit is returned.
 	 * 
-	 * @param units the units
+	 * @param data the units
 	 * @param limit the maximum width that is relevant to calculate
 	 * @return returns the size 
 	 */
-	static <T extends SplitPointUnit> float totalSize(SplitPointDataSource<T> units, float limit) {
+	static <T extends SplitPointUnit> float totalSize(SplitPointDataSource<T> data, float limit) {
 		float ret = 0;
 		Set<String> ids = new HashSet<>();
-		Supplements<T> map = units.getSupplements();
+		Supplements<T> map = data.getSupplements();
 		// we check up to the limit and beyond by one element, to make sure that we check enough units
-		for (int i=0; units.hasElementAt(i) && ret<=limit; i++) {
-			T unit = units.get(i);
+		for (int i=0; data.hasElementAt(i) && ret<=limit; i++) {
+			T unit = data.get(i);
 			List<String> suppIds = unit.getSupplementaryIDs();
 			if (suppIds!=null) {
 				for (String id : suppIds) {
@@ -360,7 +356,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 				}
 			}
 			//last unit?
-			if (!units.hasElementAt(i+1)) {
+			if (!data.hasElementAt(i+1)) {
 				ret += unit.getLastUnitSize();
 			} else {
 				ret += unit.getUnitSize();
