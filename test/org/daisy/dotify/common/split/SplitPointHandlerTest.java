@@ -46,8 +46,8 @@ public class SplitPointHandlerTest {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
 		bph.setCost(new SplitPointCost<DummySplitPoint>(){
 			@Override
-			public double getCost(List<DummySplitPoint> units, int breakpoint) {
-				return breakpoint==1?0:100;
+			public double getCost(SplitPointDataSource<DummySplitPoint> units, int index, int breakpoint) {
+				return index==1?0:100;
 			}});
 		SplitPoint<DummySplitPoint> bp = bph.split(4, true, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
 		assertEquals("" + bp.getHead().size(), Arrays.asList(c, c), bp.getHead());
@@ -61,8 +61,8 @@ public class SplitPointHandlerTest {
 		bph.setCost(new SplitPointCost<DummySplitPoint>(){
 			double[] values = {4, 5, 3, 1, 2, 4, 5, 100, 12, 1};
 			@Override
-			public double getCost(List<DummySplitPoint> units, int breakpoint) {
-				return values[breakpoint];
+			public double getCost(SplitPointDataSource<DummySplitPoint> units, int index, int breakpoint) {
+				return values[index];
 			}});
 		SplitPoint<DummySplitPoint> bp = bph.split(6, true, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
 		assertEquals("" + bp.getHead().size(), Arrays.asList(c, c, c, c), bp.getHead());

@@ -27,10 +27,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		this.trimTrailing = true;
 		this.cost = new SplitPointCost<T>() {
 			@Override
-			public double getCost(List<T> units, int breakpoint) {
+			public double getCost(SplitPointDataSource<T> units, int index, int breakpoint) {
 				// 1. the smaller the result, the higher the cost
 				// 2. breakable units are always preferred over forced ones
-				return (units.get(breakpoint).isBreakable()?1:2)*units.size()-breakpoint;
+				return (units.get(index).isBreakable()?1:2)*breakpoint-index;
 			}
 		};
 	}
@@ -145,7 +145,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	private SplitPoint<T> newBreakpointFromPosition(SplitPointDataSource<T> data, int strPos, Supplements<T> map, boolean force) {
 		List<T> units = data.getUnits();
 		// back up
-		BreakPointScannerResult result=findBreakpointBefore(units, strPos, cost);
+		BreakPointScannerResult result=findBreakpointBefore(data, strPos, cost);
 		List<T> head;
 		boolean hard = false;
 		int tailStart;
@@ -300,14 +300,14 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 	}
 
-	static <T extends SplitPointUnit> BreakPointScannerResult findBreakpointBefore(List<T> units, int strPos, SplitPointCost<T> cost) {
+	static <T extends SplitPointUnit> BreakPointScannerResult findBreakpointBefore(SplitPointDataSource<T> units, int strPos, SplitPointCost<T> cost) {
 		BreakPointScannerResult res = new BreakPointScannerResult();
 		res.bestBreakable = -1;
 		res.bestSplitPoint = strPos;
 		double currentCost = Double.MAX_VALUE;
 		double currentBreakableCost = Double.MAX_VALUE;
 		for (int index=0; index<=strPos; index++) {
-			double c = cost.getCost(units, index);
+			double c = cost.getCost(units, index, strPos);
 			if (c<currentCost) { // this should always be true for the first unit
 				res.bestSplitPoint = index;
 				currentCost = c;

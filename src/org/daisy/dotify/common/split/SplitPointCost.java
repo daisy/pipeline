@@ -1,7 +1,5 @@
 package org.daisy.dotify.common.split;
 
-import java.util.List;
-
 /**
  * 
  * @author Joel Håkansson
@@ -15,8 +13,9 @@ public interface SplitPointCost<T extends SplitPointUnit> {
 	 * Returns the cost of breaking after the unit with the specified index
 	 * @param units the units
 	 * @param index the index of the breakpoint unit
+	 * @param limit the maximum length to consider
 	 * @return returns the cost
 	 */
-	public double getCost(List<T> units, int index);
+	public double getCost(SplitPointDataSource<T> units, int index, int limit);
 	
 }
