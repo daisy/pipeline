@@ -75,7 +75,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 			return new SplitPoint<>(EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, false);
 		} else if (breakPoint<=0) {
 			return emptyHead(data);
-		} else if (totalSize(data.getUnits(), data.getSupplements(), breakPoint)<=breakPoint) {
+		} else if (totalSize(data, breakPoint)<=breakPoint) {
 			return emptyTail(data);
 		} else {
 			int startPos = findCollapse(data, new SizeStep<>(breakPoint, data.getSupplements()));
@@ -331,11 +331,12 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * @param limit the maximum width that is relevant to calculate
 	 * @return returns the size 
 	 */
-	static <T extends SplitPointUnit> float totalSize(List<T> units, Supplements<T> map, float limit) {
+	static <T extends SplitPointUnit> float totalSize(SplitPointDataSource<T> units, float limit) {
 		float ret = 0;
 		Set<String> ids = new HashSet<>();
+		Supplements<T> map = units.getSupplements();
 		// we check up to the limit and beyond by one element, to make sure that we check enough units
-		for (int i=0; i<units.size() && ret<=limit; i++) {
+		for (int i=0; units.hasElementAt(i) && ret<=limit; i++) {
 			T unit = units.get(i);
 			List<String> suppIds = unit.getSupplementaryIDs();
 			if (suppIds!=null) {
@@ -348,7 +349,8 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 					}
 				}
 			}
-			if (i==units.size()-1) {
+			//last unit?
+			if (!units.hasElementAt(i+1)) {
 				ret += unit.getLastUnitSize();
 			} else {
 				ret += unit.getUnitSize();

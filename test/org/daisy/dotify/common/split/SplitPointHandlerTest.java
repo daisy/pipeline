@@ -240,7 +240,7 @@ public class SplitPointHandlerTest {
 			public DummySplitPoint get(String id) {
 				return null;
 			}};
-		float res = SplitPointHandler.totalSize(Arrays.asList(s1, s2, s3), empty, 3);
+		float res = SplitPointHandler.totalSize(new SplitPointDataList<DummySplitPoint>(Arrays.asList(s1, s2, s3)), 3);
 		assertEquals(2.5, res, 0);
 	}
 	
