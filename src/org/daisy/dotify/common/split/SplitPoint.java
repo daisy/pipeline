@@ -12,7 +12,7 @@ public class SplitPoint<T extends SplitPointUnit> {
 
 	private final List<T> head;
 	private final List<T> supplements;
-	private final List<T> tail;
+	private final SplitPointDataSource<T> tail;
 	private final List<T> discarded;
 	private final boolean hardBreak;
 
@@ -24,7 +24,7 @@ public class SplitPoint<T extends SplitPointUnit> {
 	 * @param discarded a list of discarded units
 	 * @param hardBreak set to true if a break point could not be achieved with respect for break point boundaries 
 	 */
-	public SplitPoint(List<T> head, List<T> supplements, List<T> tail, List<T> discarded, boolean hardBreak) {
+	public SplitPoint(List<T> head, List<T> supplements, SplitPointDataSource<T> tail, List<T> discarded, boolean hardBreak) {
 		if (head == null) {
 			head = Collections.emptyList();
 		}
@@ -32,7 +32,7 @@ public class SplitPoint<T extends SplitPointUnit> {
 			supplements = Collections.emptyList();
 		}
 		if (tail == null) {
-			tail = Collections.emptyList();
+			tail = SplitPointDataList.emptyManager();
 		}
 		if (discarded == null) {
 			discarded = Collections.emptyList();
@@ -64,7 +64,7 @@ public class SplitPoint<T extends SplitPointUnit> {
 	 * Get the tail part of the SplitPointUnit list
 	 * @return returns the tail part of the SplitPointUnit list
 	 */
-	public List<T> getTail() {
+	public SplitPointDataSource<T> getTail() {
 		return tail;
 	}
 	

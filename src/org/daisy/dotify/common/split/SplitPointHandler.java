@@ -72,11 +72,11 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	public SplitPoint<T> split(float breakPoint, boolean force, SplitPointDataSource<T> data) {
 		if (data.isEmpty()) {
 			// pretty simple...
-			return new SplitPoint<>(EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, false);
+			return new SplitPoint<>(EMPTY_LIST, EMPTY_LIST, SplitPointDataList.emptyManager(), EMPTY_LIST, false);
 		} else if (breakPoint<=0) {
 			return emptyHead(data);
 		} else if (fits(data, breakPoint)) {
-			return finalizeBreakpointTrimTail(new SplitList<>(data.getRemaining(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
+			return finalizeBreakpointTrimTail(new SplitList<>(data.getRemaining(), EMPTY_LIST), SplitPointDataList.emptyManager(), data.getSupplements(), false);
 		} else {
 			int startPos = findCollapse(data, new SizeStep<>(breakPoint, data.getSupplements()));
 			if (startPos<0) {
@@ -88,7 +88,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	}
 	
 	private SplitPoint<T> emptyHead(SplitPointDataSource<T> data) {
-		return finalizeBreakpointTrimTail(new SplitList<>(EMPTY_LIST, EMPTY_LIST), data.getUnits(), data.getSupplements(), false);
+		return finalizeBreakpointTrimTail(new SplitList<>(EMPTY_LIST, EMPTY_LIST), data, data.getSupplements(), false);
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	}
 	
 	private SplitPoint<T> finalizeBreakpointFull(SplitPointDataSource<T> data, List<T> head, int tailStart, Supplements<T> map, boolean hard) {
-		List<T> tail = getTail(data, tailStart).getUnits();
+		SplitPointDataSource<T> tail = getTail(data, tailStart);
 
 		if (trimTrailing) {
 			return finalizeBreakpointTrimTail(trimTrailing(head), tail, map, hard);
@@ -174,7 +174,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 	}
 
-	private SplitPoint<T> finalizeBreakpointTrimTail(SplitList<T> head, List<T> tail, Supplements<T> map, boolean hard) {
+	private SplitPoint<T> finalizeBreakpointTrimTail(SplitList<T> head, SplitPointDataSource<T> tail, Supplements<T> map, boolean hard) {
 		TrimStep<T> trimmed = new TrimStep<>(map);
 		findCollapse(new SplitPointDataList<T>(head.getFirstPart()), trimmed);
 		List<T> discarded = trimmed.getDiscarded();
@@ -219,7 +219,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		if (data.hasElementAt(tailStart)) {
 			return data.tail(tailStart);
 		} else {
-			return new SplitPointDataList<T>(Collections.emptyList());
+			return SplitPointDataList.emptyManager();
 		}
 	}
 	
