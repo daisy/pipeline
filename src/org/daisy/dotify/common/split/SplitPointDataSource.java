@@ -13,13 +13,6 @@ import java.util.List;
  * @param <T> the type of split point units
  */
 public interface SplitPointDataSource<T extends SplitPointUnit> {
-	
-	/**
-	 * @return returns all units
-	 * @deprecated this is retained during the refactoring process
-	 */
-	@Deprecated
-	public List<T> getUnits();
 
 	/**
 	 * Gets the item at index.
