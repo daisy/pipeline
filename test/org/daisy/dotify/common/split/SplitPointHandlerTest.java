@@ -331,6 +331,15 @@ public class SplitPointHandlerTest {
 	}
 	
 	@Test
+	public void testEmpty() {
+		int breakPoint = 6;
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
+		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, false, Arrays.asList());
+		assertEquals(Arrays.asList(), bp.getHead());
+		assertEquals(Arrays.asList(), bp.getTail());
+	}
+	
+	@Test
 	public void testSupplementsSize_01() {
 		int breakPoint = 6;
 		Supplements<DummySplitPoint> supps = new Supplements<DummySplitPoint>() {
