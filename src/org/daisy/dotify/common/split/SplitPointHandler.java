@@ -76,7 +76,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		} else if (breakPoint<=0) {
 			return emptyHead(data);
 		} else if (fits(data, breakPoint)) {
-			return finalizeBreakpointTrimTail(new SplitList<>(data.getUnits(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
+			return finalizeBreakpointTrimTail(new SplitList<>(data.getRemaining(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
 		} else {
 			int startPos = findCollapse(data, new SizeStep<>(breakPoint, data.getSupplements()));
 			if (startPos<0) {
@@ -136,14 +136,13 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		if (!data.hasElementAt(strPos+1)) { // last unit?
 			List<T> head = data.head(strPos+1);
 			int tailStart = strPos+1;
-			return finalizeBreakpointFull(data.getUnits(), head, tailStart, map, false);
+			return finalizeBreakpointFull(data, head, tailStart, map, false);
 		} else {
 			return newBreakpointFromPosition(data, strPos, map, force);
 		}
 	}
 	
 	private SplitPoint<T> newBreakpointFromPosition(SplitPointDataSource<T> data, int strPos, Supplements<T> map, boolean force) {
-		List<T> units = data.getUnits();
 		// back up
 		BreakPointScannerResult result=findBreakpointBefore(data, strPos, cost);
 		List<T> head;
@@ -152,21 +151,21 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		if (result.bestBreakable!=result.bestSplitPoint) { // no breakable found, break hard 
 			if (force) {
 				hard = true;
-				head = units.subList(0, result.bestSplitPoint+1);
+				head = data.head(result.bestSplitPoint+1);
 				tailStart = result.bestSplitPoint+1;
 			} else {
 				head = EMPTY_LIST;
 				tailStart = 0;
 			}
 		} else {
-			head = units.subList(0, result.bestBreakable+1);
+			head = data.head(result.bestBreakable+1);
 			tailStart = result.bestBreakable+1;
 		}
-		return finalizeBreakpointFull(units, head, tailStart, map, hard);
+		return finalizeBreakpointFull(data, head, tailStart, map, hard);
 	}
 	
-	private SplitPoint<T> finalizeBreakpointFull(List<T> units, List<T> head, int tailStart, Supplements<T> map, boolean hard) {
-		List<T> tail = getTail(units, tailStart);
+	private SplitPoint<T> finalizeBreakpointFull(SplitPointDataSource<T> data, List<T> head, int tailStart, Supplements<T> map, boolean hard) {
+		List<T> tail = getTail(data, tailStart).getUnits();
 
 		if (trimTrailing) {
 			return finalizeBreakpointTrimTail(trimTrailing(head), tail, map, hard);
@@ -216,12 +215,11 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		return SplitList.split(in, i+1);
 	}
 	
-	static <T extends SplitPointUnit> List<T> getTail(List<T> units, int tailStart) {
-		if (units.size()>tailStart) {
-			List<T> tail = units.subList(tailStart, units.size());
-			return tail;
+	static <T extends SplitPointUnit> SplitPointDataSource<T> getTail(SplitPointDataSource<T> data, int tailStart) {
+		if (data.hasElementAt(tailStart)) {
+			return data.tail(tailStart);
 		} else {
-			return Collections.emptyList();
+			return new SplitPointDataList<T>(Collections.emptyList());
 		}
 	}
 	
