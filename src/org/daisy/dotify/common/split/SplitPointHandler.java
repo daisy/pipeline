@@ -75,24 +75,20 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 			return new SplitPoint<>(EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, false);
 		} else if (breakPoint<=0) {
 			return emptyHead(data);
-		} else if (totalSize(data, breakPoint)<=breakPoint) {
-			return emptyTail(data);
+		} else if (fits(data, breakPoint)) {
+			return finalizeBreakpointTrimTail(new SplitList<>(data.getUnits(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
 		} else {
 			int startPos = findCollapse(data, new SizeStep<>(breakPoint, data.getSupplements()));
 			if (startPos<0) {
 				return emptyHead(data);
 			} else {
-				return findBreakpoint(data.getUnits(), data.getSupplements(), force, startPos);
+				return findBreakpoint(data, force, startPos);
 			}
 		}
 	}
 	
 	private SplitPoint<T> emptyHead(SplitPointDataSource<T> data) {
 		return finalizeBreakpointTrimTail(new SplitList<>(EMPTY_LIST, EMPTY_LIST), data.getUnits(), data.getSupplements(), false);
-	}
-	
-	private SplitPoint<T> emptyTail(SplitPointDataSource<T> data) {
-		return finalizeBreakpointTrimTail(new SplitList<>(data.getUnits(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
 	}
 
 	/**
@@ -132,8 +128,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		this.cost = cost;
 	}
 	
-	private SplitPoint<T> findBreakpoint(List<T> units, Supplements<T> map, boolean force, int startPos) {
-		int strPos = forwardSkippable(units, startPos);
+	private SplitPoint<T> findBreakpoint(SplitPointDataSource<T> data, boolean force, int startPos) {
+		Supplements<T> map = data.getSupplements();
+		List<T> units = data.getUnits();
+		int strPos = forwardSkippable(data, startPos);
 		// check next unit to see if it can be removed.
 		if (strPos==units.size()-1) { // last unit?
 			List<T> head = units.subList(0, strPos+1);
@@ -275,19 +273,23 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		return units;
 	}
 
-	static int forwardSkippable(List<? extends SplitPointUnit> charsStr, final int pos) {
+	static int forwardSkippable(SplitPointDataSource<? extends SplitPointUnit> charsStr, final int pos) {
 		SplitPointUnit c;
 		int ret = pos;
-		if (ret<charsStr.size() && !(c=charsStr.get(ret)).isBreakable()) {
+		//ret<charsStr.size()
+		if (charsStr.hasElementAt(ret) && !(c=charsStr.get(ret)).isBreakable()) {
 			ret++;
-			while (ret<charsStr.size() && (c=charsStr.get(ret)).isSkippable()) {
+			//ret<charsStr.size()
+			while (charsStr.hasElementAt(ret) && (c=charsStr.get(ret)).isSkippable()) {
 				if (c.isBreakable()) {
 					return ret;
 				} else {
 					ret++;
 				}
 			}
-			if (ret==charsStr.size()) {
+			//have we passed last element?
+			//ret==charsStr.size()
+			if (!charsStr.hasElementAt(ret)) {
 				return ret-1;
 			} else {
 				return pos;
@@ -323,11 +325,20 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	}
 	
 	/**
-	 * If the total size is less than the limit, the size is returned, otherwise a value greater
-	 * than the limit is returned.
+	 * Returns true if the total size is less than or equal to the limit, false otherwise.
 	 * 
 	 * @param units the units
-	 * @param map the supplements
+	 * @param limit the maximum width that is relevant to calculate
+	 * @return returns the size 
+	 */
+	static <T extends SplitPointUnit> boolean fits(SplitPointDataSource<T> units, float limit) {
+		return totalSize(units, limit)<=limit;
+	}
+	/**
+	 * If the total size is less than the limit, the size is returned, otherwise a value greater
+	 * than or equal to the limit is returned.
+	 * 
+	 * @param units the units
 	 * @param limit the maximum width that is relevant to calculate
 	 * @return returns the size 
 	 */

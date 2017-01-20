@@ -121,21 +121,21 @@ public class SplitPointHandlerTest {
 	public void testSkippable_01() {
 		DummySplitPoint t = new DummySplitPoint.Builder().breakable(false).skippable(true).size(1).build();
 		DummySplitPoint a = new DummySplitPoint.Builder().breakable(true).skippable(true).size(1).build();
-		int res = SplitPointHandler.forwardSkippable(Arrays.asList(t, t, t, a), 0);
+		int res = SplitPointHandler.forwardSkippable(new SplitPointDataList<DummySplitPoint>(Arrays.asList(t, t, t, a)), 0);
 		assertEquals(3, res);
 	}
 	
 	@Test
 	public void testSkippable_02() {
 		DummySplitPoint t = new DummySplitPoint.Builder().breakable(false).skippable(true).size(1).build();
-		int res = SplitPointHandler.forwardSkippable(Arrays.asList(t, t, t, c), 0);
+		int res = SplitPointHandler.forwardSkippable(new SplitPointDataList<DummySplitPoint>(Arrays.asList(t, t, t, c)), 0);
 		assertEquals(0, res);
 	}
 	
 	@Test
 	public void testSkippable_03() {
 		DummySplitPoint t = new DummySplitPoint.Builder().breakable(false).skippable(true).size(1).build();
-		int res = SplitPointHandler.forwardSkippable(Arrays.asList(t, t, t, t), 0);
+		int res = SplitPointHandler.forwardSkippable(new SplitPointDataList<DummySplitPoint>(Arrays.asList(t, t, t, t)), 0);
 		assertEquals(3, res);
 	}
 	
