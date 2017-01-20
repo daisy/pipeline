@@ -130,19 +130,20 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	
 	private SplitPoint<T> findBreakpoint(SplitPointDataSource<T> data, boolean force, int startPos) {
 		Supplements<T> map = data.getSupplements();
-		List<T> units = data.getUnits();
 		int strPos = forwardSkippable(data, startPos);
 		// check next unit to see if it can be removed.
-		if (strPos==units.size()-1) { // last unit?
-			List<T> head = units.subList(0, strPos+1);
+		//strPos==units.size()-1
+		if (!data.hasElementAt(strPos+1)) { // last unit?
+			List<T> head = data.head(strPos+1);
 			int tailStart = strPos+1;
-			return finalizeBreakpointFull(units, head, tailStart, map, false);
+			return finalizeBreakpointFull(data.getUnits(), head, tailStart, map, false);
 		} else {
-			return newBreakpointFromPosition(units, strPos, map, force);
+			return newBreakpointFromPosition(data, strPos, map, force);
 		}
 	}
 	
-	private SplitPoint<T> newBreakpointFromPosition(List<T> units, int strPos, Supplements<T> map, boolean force) {
+	private SplitPoint<T> newBreakpointFromPosition(SplitPointDataSource<T> data, int strPos, Supplements<T> map, boolean force) {
+		List<T> units = data.getUnits();
 		// back up
 		BreakPointScannerResult result=findBreakpointBefore(units, strPos, cost);
 		List<T> head;

@@ -44,6 +44,12 @@ public class SplitPointDataListTest {
 		assertTrue(m.hasElementAt(0));
 		assertFalse(m.hasElementAt(1));
 	}
+	
+	@Test
+	public void testGetUntil() {
+		SplitPointDataSource<SplitPointUnit> m = new SplitPointDataList<>(mock(SplitPointUnit.class), mock(SplitPointUnit.class));
+		assertEquals(1, m.head(1).size());
+	}
 
 
 }
