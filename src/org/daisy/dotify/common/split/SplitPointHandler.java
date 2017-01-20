@@ -45,7 +45,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 */
 	@SafeVarargs
 	public final SplitPoint<T> split(float breakPoint, boolean force, T ... units) {
-		return split(breakPoint, force, new SplitPointData<>(units));
+		return split(breakPoint, force, new SplitPointDataList<>(units));
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * @return returns a split point result
 	 */
 	public SplitPoint<T> split(float breakPoint, boolean force, List<T> units) {
-		return split(breakPoint, force, new SplitPointData<>(units));
+		return split(breakPoint, force, new SplitPointDataList<>(units));
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * @param data the data to split
 	 * @return returns a split point result
 	 */
-	public SplitPoint<T> split(float breakPoint, boolean force, SplitPointData<T> data) {
+	public SplitPoint<T> split(float breakPoint, boolean force, SplitPointDataSource<T> data) {
 		if (data.getUnits().size()==0) {
 			// pretty simple...
 			return new SplitPoint<>(data.getUnits(), EMPTY_LIST, EMPTY_LIST, EMPTY_LIST, false);
@@ -87,11 +87,11 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 	}
 	
-	private SplitPoint<T> emptyHead(SplitPointData<T> data) {
+	private SplitPoint<T> emptyHead(SplitPointDataSource<T> data) {
 		return finalizeBreakpointTrimTail(new SplitList<>(EMPTY_LIST, EMPTY_LIST), data.getUnits(), data.getSupplements(), false);
 	}
 	
-	private SplitPoint<T> emptyTail(SplitPointData<T> data) {
+	private SplitPoint<T> emptyTail(SplitPointDataSource<T> data) {
 		return finalizeBreakpointTrimTail(new SplitList<>(data.getUnits(), EMPTY_LIST), EMPTY_LIST, data.getSupplements(), false);
 	}
 
