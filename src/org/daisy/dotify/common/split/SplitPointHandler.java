@@ -78,7 +78,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		} else if (totalSize(data.getUnits(), data.getSupplements(), breakPoint)<=breakPoint) {
 			return emptyTail(data);
 		} else {
-			int startPos = findCollapse(data.getUnits(), new SizeStep<>(breakPoint, data.getSupplements()));
+			int startPos = findCollapse(data, new SizeStep<>(breakPoint, data.getSupplements()));
 			if (startPos<0) {
 				return emptyHead(data);
 			} else {
@@ -178,7 +178,7 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 
 	private SplitPoint<T> finalizeBreakpointTrimTail(SplitList<T> head, List<T> tail, Supplements<T> map, boolean hard) {
 		TrimStep<T> trimmed = new TrimStep<>(map);
-		findCollapse(head.getFirstPart(), trimmed);
+		findCollapse(new SplitPointDataList<T>(head.getFirstPart()), trimmed);
 		List<T> discarded = trimmed.getDiscarded();
 		discarded.addAll(head.getSecondPart());
 		return new SplitPoint<>(trimmed.getResult(), trimmed.getSupplements(), tail, discarded, hard);
@@ -232,10 +232,11 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * @param impl
 	 * @return returns the index for the last unit
 	 */
-	static <T extends SplitPointUnit> int findCollapse(List<T> charsStr, StepForward<T> impl) {
+	static <T extends SplitPointUnit> int findCollapse(SplitPointDataSource<T> charsStr, StepForward<T> impl) {
 		int units = -1;
 		T maxCollapsable = null;
-		for (T c : charsStr) {
+		for (int i=0; charsStr.hasElementAt(i); i++) {
+			T c = charsStr.get(i);
 			units++;
 			if (c.isCollapsible()) {
 				if (maxCollapsable!=null) {
