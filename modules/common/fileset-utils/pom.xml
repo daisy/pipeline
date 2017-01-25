@@ -40,11 +40,17 @@
       <artifactId>zip-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!--
+        for unzip-fileset
+        (skip for now because it causes a circular dependency)
+    -->
+    <!--
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>mediatype-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
+    -->
     <!--
         test dependencies
     -->

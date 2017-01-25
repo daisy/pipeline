@@ -61,6 +61,8 @@ public class XProcSpecTest {
 				pipelineModule("fileset-utils"),
 				pipelineModule("metadata-utils"),
 				pipelineModule("dtbook-utils"),
+				// for p:unzip-fileset in fileset-utils
+				pipelineModule("mediatype-utils"),
 				// logging
 				logbackClassic(),
 				// xprocspec

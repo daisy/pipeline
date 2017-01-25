@@ -53,6 +53,8 @@ public class LiblouisMathMLTest {
 				brailleModule("liblouis-native").forThisPlatform(),
 				pipelineModule("file-utils"),
 				pipelineModule("fileset-utils"),
+				// for p:unzip-fileset in fileset-utils
+				pipelineModule("mediatype-utils"),
 				// logging
 				logbackClassic(),
 				// xprocspec

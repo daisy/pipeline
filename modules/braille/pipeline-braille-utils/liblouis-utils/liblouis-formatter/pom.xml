@@ -72,6 +72,14 @@
       <scope>runtime</scope>
     </dependency>
     <!--
+        for p:unzip-fileset in fileset-utils
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>mediatype-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
         test dependencies
     -->
     <dependency>
