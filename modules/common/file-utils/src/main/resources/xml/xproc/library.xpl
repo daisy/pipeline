@@ -18,6 +18,7 @@
     <p:import href="set-doctype.xpl"/>
     <p:import href="peek.xpl"/>
     <p:import href="xml-peek.xpl"/>
+    <p:import href="set-xml-declaration.xpl"/>
     
     <p:import href="java-library.xpl"/>
 
