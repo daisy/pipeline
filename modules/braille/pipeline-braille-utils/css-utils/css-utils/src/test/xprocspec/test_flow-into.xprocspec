@@ -9,7 +9,8 @@
         <x:document type="inline">
           <body style="text-align:right">
             <note style="display:list-item"
-                  css:flow="footnote"> foo </note>
+				  css:flow="footnote"
+                  css:id="xyz"> foo </note>
           </body>
         </x:document>
       </x:input>
@@ -20,7 +21,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body style="text-align:right">
-          <css:_ css:id="d1083e3"/>
+          <css:_ css:id="xyz"/>
         </body>
       </x:document>
     </x:expect>
@@ -31,7 +32,7 @@
       <x:document type="inline">
         <css:_ css:flow="footnote">
           <note style="display: list-item; text-align: right"
-                css:anchor="d1083e3"> foo </note>
+                css:anchor="xyz"> foo </note>
         </css:_>
       </x:document>
     </x:expect>

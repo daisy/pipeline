@@ -13,27 +13,36 @@
     </xsl:template>
     
     <xsl:template match="*[@css:content]">
-        <xsl:variable name="context" as="element()">
+        <xsl:variable name="context" as="element()?">
             <xsl:choose>
                 <xsl:when test="self::css:before or self::css:after">
                     <xsl:sequence select="parent::*"/>
                 </xsl:when>
-                <xsl:when test="self::css:duplicate or self::css:alternate">
+                <xsl:when test="self::css:alternate">
                     <xsl:variable name="anchor" select="@css:anchor"/>
                     <xsl:sequence select="//*[@css:id=$anchor]"/>
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="self::css:footnote-call">
                     <xsl:sequence select="."/>
+                </xsl:when>
+                <xsl:when test="self::css:*[matches(local-name(),'^_.+')]">
+                    <xsl:sequence select="."/>
+                </xsl:when>
+                <xsl:when test="@css:content='none'"/>
+                <xsl:otherwise>
+                    <xsl:message>'content' property only supported on ::before, ::after, ::alternate and ::footnote-call pseudo-elements</xsl:message>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
         <xsl:copy>
             <xsl:sequence select="@* except @css:content"/>
             <xsl:apply-templates select="css:before"/>
-            <xsl:apply-templates select="css:parse-content-list(@css:content, $context)" mode="eval-content-list">
-                <xsl:with-param name="context" select="$context"/>
-                <xsl:with-param name="parent" select="."/>
-            </xsl:apply-templates>
+            <xsl:if test="exists($context)">
+                <xsl:apply-templates select="css:parse-content-list(@css:content, $context)" mode="eval-content-list">
+                    <xsl:with-param name="context" select="$context"/>
+                    <xsl:with-param name="parent" select="."/>
+                </xsl:apply-templates>
+            </xsl:if>
             <xsl:apply-templates select="css:after"/>
         </xsl:copy>
     </xsl:template>
@@ -69,17 +78,17 @@
                 <xsl:sequence select="."/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message>flow() function not supported in content property of elements except for before or after pseudo-elements</xsl:message>
+                <xsl:message>flow() function not supported in content property of elements except for ::before or ::after pseudo-elements</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
     
     <xsl:template match="css:content[not(@target)]" mode="eval-content-list">
-        <xsl:message>content() function not supported in content property of (pseudo-)elements</xsl:message>
+        <xsl:message>content() function not supported in content property of pseudo-elements</xsl:message>
     </xsl:template>
     
     <xsl:template match="css:flow[@from and @scope]" mode="eval-content-list">
-        <xsl:message>flow() function with argument '<xsl:value-of select="@scope"/>' not supported in content property of (pseudo-)elements</xsl:message>
+        <xsl:message>flow() function with argument '<xsl:value-of select="@scope"/>' not supported in content property of pseudo-elements</xsl:message>
     </xsl:template>
     
     <xsl:template match="*" mode="eval-content-list">

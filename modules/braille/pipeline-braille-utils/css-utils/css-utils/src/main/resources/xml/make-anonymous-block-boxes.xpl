@@ -34,19 +34,20 @@
         </p:documentation>
     </p:output>
     
-    <p:rename match="/css:_[@css:flow[not(.='normal')]]/css:_" new-name="css:_box_"/>
-    <p:wrap match="/css:_[@css:flow[not(.='normal')]]/css:box[@type='inline']" wrapper="css:_box_"/>
-    <p:add-attribute match="css:_box_" attribute-name="type" attribute-value="block"/>
-    <p:label-elements match="css:_box_[child::*/@css:anchor]" attribute="css:anchor" label="child::*/@css:anchor"/>
-    <p:delete match="css:_box_/*/@css:anchor"/>
-    <p:rename match="css:_box_" new-name="css:box"/>
+    <p:rename match="/css:_[@css:flow[not(.='normal')]]/css:_" new-name="css:_block-box_"/>
+    <p:wrap match="/css:_[@css:flow[not(.='normal')]]/css:box[@type='inline']" wrapper="css:_block-box_"/>
+    <p:add-attribute match="css:_block-box_" attribute-name="type" attribute-value="block"/>
+    <p:label-elements match="css:_block-box_[child::*/@css:anchor]" attribute="css:anchor" label="child::*/@css:anchor"/>
+    <p:delete match="css:_block-box_/*/@css:anchor"/>
+    <p:rename match="css:_block-box_" new-name="css:box"/>
     
     <p:wrap match="css:box[@type='inline'][preceding-sibling::css:box[@type=('block','table')] or
                                            following-sibling::css:box[@type=('block','table')] or
-                                           parent::css:_]"
+                                           parent::css:_ or
+                                           not(parent::*)]"
             group-adjacent="true()"
-            wrapper="css:_box_"/>
-    <p:add-attribute match="css:_box_" attribute-name="type" attribute-value="block"/>
-    <p:rename match="css:_box_" new-name="css:box"/>
+            wrapper="css:_block-box_"/>
+    <p:add-attribute match="css:_block-box_" attribute-name="type" attribute-value="block"/>
+    <p:rename match="css:_block-box_" new-name="css:box"/>
     
 </p:declare-step>

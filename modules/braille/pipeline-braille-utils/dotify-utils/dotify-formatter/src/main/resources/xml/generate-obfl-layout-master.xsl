@@ -100,7 +100,7 @@
             </xsl:if>
             <xsl:for-each select="$footnotes-content[self::css:flow[@from]][1]">
                 <xsl:variable name="footnotes-border-top" as="xs:string"
-                              select="($footnotes-properties[@name='border-top'][1]/@value,css:initial-value('border-top'))[1]"/>
+                              select="($footnotes-properties[@name='border-top-pattern'][1]/@value,css:initial-value('border-top-pattern'))[1]"/>
                 <xsl:variable name="footnotes-max-height" as="xs:string"
                               select="($footnotes-properties[@name='max-height'][1]/@value,css:initial-value('max-height'))[1]"/>
                 <xsl:variable name="footnotes-max-height" as="xs:integer"
@@ -398,7 +398,11 @@
             </xsl:when>
             <xsl:when test="$scope=('start','page-start')">
                 <!--
-                    FIXME: scope="page-content" does not work as expected
+                    Note that "start" behaves like "first" when no assignments have been made yet,
+                    which is not exactly according to the spec (see
+                    https://github.com/snaekobbi/pipeline-mod-dedicon/issues/49 and
+                    https://github.com/sbsdev/pipeline-mod-sbs/issues/42). An alternative solution
+                    could be to use "start" inside @page and "first" inside @page:first.
                 -->
                 <marker-reference marker="{@name}/prev" direction="forward" scope="page-content"
                                   text-style="-dotify-def:{$var-name};{$text-transform-decl}"/>
@@ -413,7 +417,8 @@
             </xsl:when>
             <xsl:when test="$scope=('start-except-last','page-start-except-last')">
                 <!--
-                    FIXME: scope="page-content" does not work as expected
+                    Note that "start" behaves like "first" when no assignments have been made yet,
+                    which is not exactly according to the spec.
                 -->
                 <marker-reference marker="{@name}/prev" direction="forward" scope="page-content">
                     <xsl:if test="not($text-transform=('none','auto'))">
@@ -431,14 +436,8 @@
                                   text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
             </xsl:when>
             <xsl:when test="$scope=('last-except-start','page-last-except-start')">
-                <!--
-                    FIXME: scope="page-content" does not work as expected
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="page-content">
-                    <xsl:if test="not($text-transform=('none','auto'))">
-                        <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
-                    </xsl:if>
-                </marker-reference>
+                <xsl:message terminate="yes"
+                             select="concat('string(',@name,', ',$scope,') currently not supported. If you want to use it in combination with string(start), please consider using the combination start-except-last/last instead.')"/>
             </xsl:when>
             <xsl:when test="$scope='spread-first'">
                 <marker-reference marker="{@name}" direction="forward" scope="spread"
@@ -461,9 +460,10 @@
             </xsl:when>
             <xsl:when test="$scope='spread-start'">
                 <!--
-                    FIXME: scope="spread-content"
+                    Note that "start" behaves like "first" when no assignments have been made yet,
+                    which is not exactly according to the spec.
                 -->
-                <marker-reference marker="{@name}/prev" direction="forward" scope="spread"
+                <marker-reference marker="{@name}/prev" direction="forward" scope="spread-content"
                                   text-style="-dotify-def:{$var-name};{$text-transform-decl}">
                     <xsl:if test="$page-side='right'">
                         <xsl:attribute name="start-offset" select="'-1'"/>
@@ -484,9 +484,10 @@
             </xsl:when>
             <xsl:when test="$scope='spread-start-except-last'">
                 <!--
-                    FIXME: scope="spread-content"
+                    Note that "start" behaves like "first" when no assignments have been made yet,
+                    which is not exactly according to the spec.
                 -->
-                <marker-reference marker="{@name}/prev" direction="forward" scope="spread">
+                <marker-reference marker="{@name}/prev" direction="forward" scope="spread-content">
                     <xsl:if test="$page-side='right'">
                         <xsl:attribute name="start-offset" select="'-1'"/>
                     </xsl:if>
@@ -509,17 +510,8 @@
                                   text-style="-dotify-ifndef:{$var-name};{$text-transform-decl}"/>
             </xsl:when>
             <xsl:when test="$scope='spread-last-except-start'">
-                <!--
-                    FIXME: scope="spread-content"
-                -->
-                <marker-reference marker="{@name}" direction="backward" scope="spread">
-                    <xsl:if test="$page-side='left'">
-                        <xsl:attribute name="start-offset" select="'1'"/>
-                    </xsl:if>
-                    <xsl:if test="not($text-transform=('none','auto'))">
-                        <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
-                    </xsl:if>
-                </marker-reference>
+                <xsl:message terminate="yes"
+                             select="concat('string(',@name,', ',$scope,') currently not supported. If you want to use it in combination with string(start), please consider using the combination start-except-last/last instead.')"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message terminate="yes"

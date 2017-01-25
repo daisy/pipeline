@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>css-utils</artifactId>
-  <version>3.2.1-SNAPSHOT</version>
+  <version>3.3.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: css-utils :: css-utils</name>
@@ -30,8 +30,38 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jstyleparser</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>xml-apis</groupId>
+      <artifactId>xml-apis</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>io.bit3.jsass</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+    <dependency>
       <groupId>net.sf.saxon</groupId>
       <artifactId>Saxon-HE</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>com.xmlcalabash</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-jdk14</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -46,19 +76,41 @@
     <!--
         runtime dependencies
     -->
+    <!--
+        for saxon (FIXME: use for compilation?)
+    -->
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--
-        optional (but keep mandatory as long as there is only one implementation)
+        for com.xmlcalabash & calabash-adapter (FIXME: verify + move elsewhere)
     -->
     <dependency>
-      <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>css-calabash</artifactId>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient-osgi</artifactId>
       <scope>runtime</scope>
-      <!-- <optional>true</optional> -->
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore-osgi</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>woodstox-osgi-adapter</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>javax.persistence</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <!--
         test dependencies
@@ -94,6 +146,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>logging-appender</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
       <version>1.7.2</version>
@@ -125,8 +182,11 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <_dsannotations>*</_dsannotations>
-            <Require-Capability>xproc.step;filter:="(name={http://www.daisy.org/ns/pipeline/braille-css}inline)"</Require-Capability>
+            <_dsannotations>
+              org.daisy.pipeline.braille.css.calabash.impl.CssInlineStep$Provider,
+              org.daisy.pipeline.braille.css.calabash.impl.CssShiftStringSetStep$Provider,
+              org.daisy.pipeline.braille.css.saxon.impl.RenderTableByDefinition
+            </_dsannotations>
           </instructions>
         </configuration>
         <executions>

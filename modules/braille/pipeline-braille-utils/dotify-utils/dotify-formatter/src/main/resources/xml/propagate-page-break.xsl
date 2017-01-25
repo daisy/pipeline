@@ -16,7 +16,13 @@
     
     <xsl:template match="@css:page-break-before|
                          @css:page-break-after|
-                         @css:page-break-inside"/>
+                         @css:page-break-inside|
+                         @css:volume-break-before|
+                         @css:volume-break-after|
+                         @css:start-page|
+                         @css:end-page|
+                         @css:start-volume|
+                         @css:end-volume"/>
     
     <xsl:template match="css:box[@type='block']">
         <xsl:param name="avoid-break-after" as="xs:boolean" select="false()"/>
@@ -25,60 +31,83 @@
         <xsl:variable name="page-break-after" as="xs:string*" select="if ($avoid-break-after) then ('avoid') else ()"/>
         <xsl:variable name="self" as="element()" select="."/>
         <!--
-            A 'page-break-before' property with value 'left', 'right' or 'always' is propagated to
-            the closest ancestor-or-self block box with a preceding sibling, or if there is no such
-            element, to the outermost ancestor-or-self block box.
+            A 'page-break-before' property is propagated to the closest ancestor-or-self block box
+            with a preceding sibling, or if there is no such element, to the outermost
+            ancestor-or-self block box.
         -->
         <xsl:variable name="page-break-before" as="xs:string*"
                       select=".[preceding-sibling::* or not(parent::css:box)]
                               /(.|descendant::css:box[@type='block'])
-                               [@css:page-break-before=('always','right','left')]
+                               [@css:page-break-before]
                                [not(preceding::* intersect $self/descendant::css:box[@type='block'])]
                                /@css:page-break-before/string()"/>
         <!--
-            A 'page-break-after' property with value 'avoid' is propagated to the closest
-            ancestor-or-self block box with a following sibling.
+            A 'volume-break-before' property is propagated to the closest ancestor-or-self block box
+            with a preceding sibling, or if there is no such element, to the outermost
+            ancestor-or-self block box.
+        -->
+        <xsl:variable name="volume-break-before" as="xs:string*"
+                      select=".[preceding-sibling::* or not(parent::css:box)]
+                              /(.|descendant::css:box[@type='block'])
+                               [@css:volume-break-before]
+                               [not(preceding::* intersect $self/descendant::css:box[@type='block'])]
+                               /@css:volume-break-before/string()"/>
+        <!--
+            A 'page-break-after' property is propagated to the closest ancestor-or-self block box
+            with a following sibling, or if there is no such element, to the outermost
+            ancestor-or-self block box.
         -->
         <xsl:variable name="page-break-after" as="xs:string*"
                       select="($page-break-after,
-                               .[following-sibling::*]
+                               .[following-sibling::* or not(parent::css:box)]
                                /(.|descendant::css:box[@type='block'])
-                                [@css:page-break-after='avoid']
+                                [@css:page-break-after]
                                 [not(following::* intersect $self/descendant::css:box[@type='block'])]
                                 /@css:page-break-after/string())"/>
         <!--
-            A 'page-break-before' property with value 'avoid' is converted into a 'page-break-after'
-            property on the preceding sibling of the closest ancestor-or-self block box with a
-            preceding sibling.
-        -->
-        <xsl:variable name="page-break-after" as="xs:string*"
-                      select="($page-break-after,
-                               following-sibling::*[1]
-                               /(.|descendant::css:box[@type='block'])
-                                [@css:page-break-before='avoid']
-                                [not(preceding::* intersect $self/following-sibling::*[1]/descendant::css:box[@type='block'])]
-                                /@css:page-break-before/string())"/>
-        <!--
-            A 'page-break-after' property with value 'left', 'right' or 'always' is converted into a
-            'page-break-before' property on the immediately following block box,
+            Forced page breaks of type 'right' are introduced where needed to satisfy the 'page'
+            properties.
         -->
         <xsl:variable name="page-break-before" as="xs:string*"
-                      select="(preceding-sibling::*[1]
-                               /(.|descendant::css:box[@type='block'])
-                                [@css:page-break-after=('always','right','left')]
-                                [not(following::* intersect $self/preceding-sibling::*[1]/descendant::css:box[@type='block'])]
-                                /@css:page-break-after/string(),
-                               $page-break-before)"/>
-        <!--
-            or if there is no such element, moved to the outermost ancestor-or-self block box.
-        -->
+                      select="if (
+                                exists(
+                                  .[preceding-sibling::* or not(parent::css:box)]
+                                  /(.|descendant::css:box)
+                                   [@css:start-page]
+                                   [not(preceding::* intersect $self/descendant::css:box)]))
+                              then ('right')
+                              else $page-break-before"/>
         <xsl:variable name="page-break-after" as="xs:string*"
-                      select="($page-break-after,
-                               .[not(parent::css:box) and not(following-sibling::*)]
-                               /(.|descendant::css:box[@type='block'])
-                                 [@css:page-break-after=('always','right','left')]
-                                 [not(following::* intersect $self/descendant::css:box[@type='block'])]
-                                 /@css:page-break-after/string())"/>
+                      select="if (
+                                exists(
+                                  .[following-sibling::* or not(parent::css:box)]
+                                  /(.|descendant::css:box)
+                                   [@css:end-page]
+                                   [not(following::* intersect $self/descendant::css:box)]))
+                              then ('right')
+                              else $page-break-after"/>
+        <!--
+            Forced page breaks of type 'always' are introduced where needed to satisfy the 'volume'
+            properties.
+        -->
+        <xsl:variable name="volume-break-before" as="xs:string*"
+                      select="if (
+                                exists(
+                                  .[preceding-sibling::* or not(parent::css:box)]
+                                  /(.|descendant::css:box)
+                                   [@css:start-volume]
+                                   [not(preceding::* intersect $self/descendant::css:box)]))
+                              then ('always')
+                              else $volume-break-before"/>
+        <xsl:variable name="volume-break-after" as="xs:string*"
+                      select="if (
+                                exists(
+                                  .[following-sibling::* or not(parent::css:box)]
+                                  /(.|descendant::css:box)
+                                   [@css:end-volume]
+                                   [not(following::* intersect $self/descendant::css:box)]))
+                              then ('always')
+                              else ()"/>
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:if test="exists($page-break-before)">
@@ -89,6 +118,12 @@
             </xsl:if>
             <xsl:if test="$avoid-break-inside and not(child::css:box[@type='block'])">
                 <xsl:attribute name="css:page-break-inside" select="'avoid'"/>
+            </xsl:if>
+            <xsl:if test="exists($volume-break-before)">
+                <xsl:attribute name="css:volume-break-before" select="pxi:combine($volume-break-before)"/>
+            </xsl:if>
+            <xsl:if test="exists($volume-break-after)">
+                <xsl:attribute name="css:volume-break-after" select="pxi:combine($volume-break-after)"/>
             </xsl:if>
             <!--
                 A 'page-break-inside' property with value 'avoid' on a box with child block boxes is
@@ -120,7 +155,7 @@
     <xsl:function name="pxi:combine" as="xs:string">
         <xsl:param name="values" as="xs:string*"/>
         <xsl:choose>
-          <xsl:when test="$values[.=('left','right')]">
+          <xsl:when test="exists($values[.=('left','right')])">
               <xsl:sequence select="$values[.=('left','right')][last()]"/>
           </xsl:when>
           <xsl:when test="'always'=$values">

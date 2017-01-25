@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>common-utils</artifactId>
-  <version>5.1.1-SNAPSHOT</version>
+  <version>5.2.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: common-utils</name>

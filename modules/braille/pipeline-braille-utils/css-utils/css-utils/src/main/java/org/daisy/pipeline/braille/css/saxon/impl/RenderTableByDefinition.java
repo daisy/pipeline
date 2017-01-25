@@ -1,6 +1,5 @@
 package org.daisy.pipeline.braille.css.saxon.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import static java.util.Collections.sort;
 import java.util.Comparator;
@@ -12,51 +11,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.Stack;
 
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import static javax.xml.stream.XMLStreamConstants.CHARACTERS;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamWriter;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
 
-import cz.vutbr.web.css.CombinedSelector;
-import cz.vutbr.web.css.CSSException;
-import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.Declaration;
-import cz.vutbr.web.css.NetworkProcessor;
-import cz.vutbr.web.css.Rule;
-import cz.vutbr.web.css.RuleFactory;
-import cz.vutbr.web.css.RuleSet;
-import cz.vutbr.web.css.Selector;
+import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.Selector.PseudoClass;
-import cz.vutbr.web.css.Selector.SelectorPart;
-import cz.vutbr.web.css.StyleSheet;
-import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermPair;
-import cz.vutbr.web.csskit.antlr.CSSParserFactory;
-import cz.vutbr.web.csskit.antlr.CSSParserFactory.SourceType;
-import cz.vutbr.web.csskit.DefaultNetworkProcessor;
-import cz.vutbr.web.domassign.DeclarationTransformer;
 
-import net.sf.saxon.event.PipelineConfiguration;
-import net.sf.saxon.event.Receiver;
-import net.sf.saxon.event.StreamWriterToReceiver;
-import net.sf.saxon.evpull.Decomposer;
-import net.sf.saxon.evpull.EventIteratorOverSequence;
-import net.sf.saxon.evpull.EventToStaxBridge;
+import net.sf.saxon.Configuration;
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -64,18 +41,22 @@ import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.om.Sequence;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.Axis;
-import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.SequenceType;
 
-import static org.daisy.pipeline.braille.common.util.Strings.join;
-import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
-import org.daisy.braille.css.BrailleCSSParserFactory;
-import org.daisy.braille.css.BrailleCSSRuleFactory;
+import org.daisy.braille.css.InlinedStyle;
+import org.daisy.braille.css.InlinedStyle.RuleMainBlock;
+import org.daisy.braille.css.InlinedStyle.RulePseudoElementBlock;
 import org.daisy.braille.css.SelectorImpl.PseudoClassImpl;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
-import org.daisy.braille.css.SupportedBrailleCSS;
+
+import static org.daisy.pipeline.braille.common.util.Strings.join;
+
+import org.daisy.pipeline.braille.common.saxon.StreamToStreamTransform;
+import org.daisy.pipeline.braille.common.saxon.StreamToStreamTransform.util.Events;
+import org.daisy.pipeline.braille.common.saxon.StreamToStreamTransform.util.ToStringWriter;
+import org.daisy.pipeline.braille.common.TransformationException;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -122,33 +103,19 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			public Sequence call(XPathContext context, Sequence[] arguments) throws XPathException {
 				try {
 					String axes = arguments[0].head().getStringValue();
-					PipelineConfiguration pipeConfig = new PipelineConfiguration(context.getConfiguration());
 					NodeInfo tableElement = (NodeInfo)arguments[1].head();
 					
 					// FIXME: why does this not work?
 					// URI base = new URI(tableElement.getBaseURI());
-					XMLStreamReader reader
-						= new EventToStaxBridge(
-							new Decomposer(
-								new EventIteratorOverSequence(tableElement.iterate()), pipeConfig), pipeConfig);
-					XdmDestination destination = new XdmDestination();
-					Receiver receiver = destination.getReceiver(context.getConfiguration());
-					receiver.open();
-					XMLStreamWriter writer = new StreamWriterToReceiver(receiver);
-					renderTableBy(axes, reader, writer);
-					receiver.close();
-					return ((XdmNode)destination.getXdmNode().axisIterator(Axis.CHILD).next()).getUnderlyingNode(); }
-				catch (Exception e) {
+					XdmNode result = new TableAsList(context.getConfiguration(), axes).transform(tableElement);
+					result = (XdmNode)result.axisIterator(Axis.CHILD).next(); // because result is document-node
+					return result.getUnderlyingNode(); }
+				catch (TransformationException e) {
 					logger.error("css:render-table-by failed", e);
 					e.printStackTrace();
 					throw new XPathException("css:render-table-by failed"); }
 			}
 		};
-	}
-	
-	private static void renderTableBy(String axes, XMLStreamReader reader, XMLStreamWriter writer)
-			throws XMLStreamException, IOException, CSSException {
-		new TableAsList(axes, reader).write(writer);
 	}
 	
 	private static final QName _STYLE = new QName("style");
@@ -182,38 +149,33 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 	private static final Splitter HEADERS_SPLITTER = Splitter.on(' ').trimResults().omitEmptyStrings();
 	private static final Splitter AXIS_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
 	
-	private static final SupportedCSS brailleCSS = SupportedBrailleCSS.getInstance();
-	private static final RuleFactory rf = new BrailleCSSRuleFactory();
-	private static final NetworkProcessor network = new DefaultNetworkProcessor();
-	private static final SelectorPart dummyElementDOM = rf.createElementDOM(null, true);
-	
-	private static DeclarationTransformer brailleDeclarationTransformer; static {
-		CSSFactory.registerSupportedCSS(brailleCSS);
-		brailleDeclarationTransformer = new BrailleCSSDeclarationTransformer();
-	}
-	
-	private static class TableAsList {
+	private static class TableAsList extends StreamToStreamTransform {
 		
 		final List<String> axes;
-		final List<Function<XMLStreamWriter,Void>> writeActionsBefore = new ArrayList<Function<XMLStreamWriter,Void>>();
-		final List<Function<XMLStreamWriter,Void>> writeActionsAfter = new ArrayList<Function<XMLStreamWriter,Void>>();
-		final List<TableCell> cells = new ArrayList<TableCell>();
-		final Set<CellCoordinates> coveredCoordinates = new HashSet<CellCoordinates>();
-		QName _;
 		
-		private TableAsList(String axes, XMLStreamReader reader) throws XMLStreamException, IOException, CSSException {
+		private TableAsList(Configuration configuration, String axes) {
+			super(configuration);
 			this.axes = new ArrayList<String>(AXIS_SPLITTER.splitToList(axes));
 			if (this.axes.remove("auto"))
 				if (!this.axes.isEmpty())
 					throw new RuntimeException();
-			CSSParserFactory pf = new BrailleCSSParserFactory();
-			CSSFactory.registerRuleFactory(rf);
-			CSSFactory.registerCSSParserFactory(pf);
+		}
+		
+		List<Event> writeActionsBefore;
+		List<Event> writeActionsAfter;
+		List<TableCell> cells;
+		Set<CellCoordinates> coveredCoordinates;
+		QName _;
+		
+		protected void _transform(XMLStreamReader reader, BufferedWriter writer) {
 			
-			// OK to skip print CSS?
-			CSSFactory.registerSupportedCSS(brailleCSS);
-			CSSFactory.registerDeclarationTransformer(brailleDeclarationTransformer);
-			List<Function<XMLStreamWriter,Void>> writeActions = writeActionsBefore;
+			try {
+			
+			writeActionsBefore = new ArrayList<Event>();
+			writeActionsAfter = new ArrayList<Event>();
+			cells = new ArrayList<TableCell>();
+			coveredCoordinates = new HashSet<CellCoordinates>();
+			List<Event> writeActions = writeActionsBefore;
 			int depth = 0;
 			TableCell withinCell = null;
 			TableCell.RowType rowType = TableCell.RowType.TBODY;
@@ -260,9 +222,9 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							if (isHTMLorDTBookElement(TH, name))
 								withinCell.type = TableCell.CellType.TH;
 							writeActions = withinCell.writeActions; }
-						writeActions.add(writeStartElement(name));
+						writeActions.add(Events.startElement(name));
 						for (int i = 0; i < reader.getNamespaceCount(); i++)
-							writeActions.add(writeNamespace(reader.getNamespacePrefix(i), reader.getNamespaceURI(i)));
+							writeActions.add(Events.namespace(reader.getNamespacePrefix(i), reader.getNamespaceURI(i)));
 						for (int i = 0; i < reader.getAttributeCount(); i++) {
 							QName attrName = reader.getAttributeName(i);
 							String attrValue = reader.getAttributeValue(i);
@@ -314,26 +276,14 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							else if (isCell && _ID.equals(attrName))
 								withinCell.id = attrValue;
 							else if (depth == 1 && _STYLE.equals(attrName)) {
-								
-								// OK to pass null for element because only used in Analyzer.evaluateDOM()
-								// OK to pass null for base?
-								StyleSheet style = pf.parse(attrValue, network, null,
-								                            SourceType.INLINE, null, true, null);
+								InlinedStyle style = new InlinedStyle(attrValue);
 								String newStyle = null;
-								for (Rule<?> rule : style) {
-									assertThat(rule instanceof RuleSet);
-									RuleSet ruleset = (RuleSet)rule;
-									List<CombinedSelector> selectors = ruleset.getSelectors();
-									assertThat(selectors.size() == 1);
-									CombinedSelector combinedSelector = selectors.get(0);
-									assertThat(combinedSelector.size() == 1);
-									Selector selector = combinedSelector.get(0);
-									assertThat(selector.size() > 0 && dummyElementDOM.equals(selector.get(0)));
-									assertThat(selector.size() < 3);
-									if (selector.size() == 2) {
-										SelectorPart part = selector.get(1);
-										assertThat(part instanceof PseudoElementImpl);
-										PseudoElementImpl pseudo = (PseudoElementImpl)part;
+								for (RuleBlock<?> block : style) {
+									if (block instanceof RuleMainBlock)
+										newStyle = joinRuleSets(newStyle, serializeRuleSet(style.getMainStyle(), null));
+									else if (block instanceof RulePseudoElementBlock) {
+										List<Declaration> ruleset = (RulePseudoElementBlock)block;
+										PseudoElementImpl pseudo = ((RulePseudoElementBlock)block).getPseudoElement();
 										if ("list-item".equals(pseudo.getName()))
 											addListItemStyle(
 												pseudo.getPseudoClasses(),
@@ -362,14 +312,14 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 										else
 											newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset, pseudo)); }
 									else
-										newStyle = joinRuleSets(newStyle, serializeRuleSet(ruleset, null)); }
+										throw new RuntimeException("Unexpected style " + block); }
 								if (newStyle != null)
-									writeActions.add(writeAttribute(attrName, newStyle)); }
+									writeActions.add(Events.attribute(attrName, newStyle)); }
 							else
-								writeActions.add(writeAttribute(attrName, attrValue)); }
+								writeActions.add(Events.attribute(attrName, attrValue)); }
 						break;
 					case CHARACTERS:
-						writeActions.add(writeCharacters(reader.getText()));
+						writeActions.add(Events.characters(reader.getText()));
 						break;
 					case END_ELEMENT:
 						name = reader.getName();
@@ -384,7 +334,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 							col = 1;
 							while (isCovered(row, col)) col++;
 							break; }
-						writeActions.add(writeEndElement);
+						writeActions.add(Events.endElement);
 						if (isHTMLorDTBookElement(TD, name) || isHTMLorDTBookElement(TH, name)) {
 							withinCell = null;
 							writeActions = writeActionsAfter;
@@ -428,6 +378,12 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 					newRow++; }
 				c.rowGroup = newRowGroup;
 				c.row = newRow; }
+			
+			write(writer);
+			
+			} catch (XMLStreamException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		
 		private boolean isHTMLorDTBookElement(String element, QName name) {
@@ -447,16 +403,16 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			return coveredCoordinates.contains(new CellCoordinates(row, col));
 		}
 		
-		private void write(XMLStreamWriter writer) {
-			for (Function<XMLStreamWriter,Void> action : writeActionsBefore)
-				action.apply(writer);
+		private void write(Writer writer) throws XMLStreamException {
+			for (Event action : writeActionsBefore)
+				action.writeTo(writer);
 			List<TableCell> dataCells = new ArrayList<TableCell>();
 			for (TableCell c : cells)
 				if (!isHeader(c))
 					dataCells.add(c);
 			new TableCellGroup(dataCells, axes.iterator()).write(writer);
-			for (Function<XMLStreamWriter,Void> action : writeActionsAfter)
-				action.apply(writer);
+			for (Event action : writeActionsAfter)
+				action.writeTo(writer);
 		}
 		
 		private static final List<TableCell> emptyList = new ArrayList<TableCell>();
@@ -464,7 +420,7 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 		private abstract class TableCellCollection {
 			public abstract List<TableCell> newlyRenderedHeaders();
 			public abstract List<TableCell> newlyPromotedHeaders();
-			public abstract void write(XMLStreamWriter writer);
+			public abstract void write(Writer writer) throws XMLStreamException;
 		}
 		
 		private class SingleTableCell extends TableCellCollection {
@@ -534,14 +490,17 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 				return newlyRenderedHeaders;
 			}
 			
-			public void write(XMLStreamWriter writer) {
+			public void write(Writer writer) throws XMLStreamException {
 				cell.write(writer);
 			}
 			
 			@Override
 			public String toString() {
-				XMLStreamWriterToString xml = new XMLStreamWriterToString();
-				write(xml);
+				ToStringWriter xml = new ToStringWriter();
+				try {
+					write(xml); }
+				catch (Exception e) {
+					throw new RuntimeException("coding error", e); }
 				StringBuilder s = new StringBuilder();
 				s.append("SingleTableCell[header: ").append(newlyRenderedHeaders());
 				s.append(", cell: ").append(cell);
@@ -765,70 +724,73 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 				return newlyRenderedHeaders;
 			}
 			
-			public void write(XMLStreamWriter writer) {
-				List<List<TableCell>> promotedHeaders = null;
-				int i = 0;
-				for (TableCellCollection c : children) {
-					if (c instanceof TableCellGroup) {
-						TableCellGroup g = (TableCellGroup)c;
-						int j = 0;
-						for (TableCellCollection cc : g.children) {
-							if (!cc.newlyPromotedHeaders().isEmpty()) {
-								if (promotedHeaders == null) {
-									if (i == 0 && j == 0) {
-										writeStartElement(writer, _);
-										writeStyleAttribute(writer,
-										                    groupingAxis != null ? getTableByStyle(groupingAxis).getListHeaderStyle()
-										                                         : getListHeaderStyle());
-										writeStartElement(writer, _);
-										writeStyleAttribute(writer, getTableByStyle(g.groupingAxis));
-										promotedHeaders = new ArrayList<List<TableCell>>(); }
-									else
-										throw new RuntimeException("Some headers of children promoted but not all children have a promoted header."); }
-								if (i == 0) {
-									writeStartElement(writer, _);
-									Predicate<PseudoClass> matcher = matchesPosition(j + 1, g.children.size());
-									writeStyleAttribute(writer, getTableByStyle(g.groupingAxis).getListItemStyle(matcher));
-									for (TableCell h : cc.newlyPromotedHeaders())
-										h.write(writer);
-									writeEndElement(writer);
-									promotedHeaders.add(cc.newlyPromotedHeaders()); }
-								else if (!promotedHeaders.get(j).equals(cc.newlyPromotedHeaders()))
-									throw new RuntimeException("Headers of children promoted but not the same as promoted headers of sibling groups."); }
-							else if (promotedHeaders != null)
-								throw new RuntimeException("Some headers of children promoted but not all children have a promoted header.");
-							j++; }
-						if (promotedHeaders != null && promotedHeaders.size() != j) {
-							throw new RuntimeException("Headers of children promoted but not the same as promoted headers of sibling groups."); }}
-					else if (promotedHeaders != null)
-						throw new RuntimeException("Coding error");
-					i++; }
-				if (promotedHeaders != null) {
-					writeEndElement(writer);
-					writeEndElement(writer); }
-				i = 0;
-				for (TableCellCollection c : children) {
-					writeStartElement(writer, _);
-					Predicate<PseudoClass> matcher = matchesPosition(i + 1, children.size());
-					writeStyleAttribute(writer,
-					                    groupingAxis != null ? getTableByStyle(groupingAxis).getListItemStyle(matcher)
-					                                         : getListItemStyle(matcher));
-					for (TableCell h : c.newlyRenderedHeaders())
-						h.write(writer);
-					if (c instanceof TableCellGroup) {
-						TableCellGroup g = (TableCellGroup)c;
-						writeStartElement(writer, _);
-						writeStyleAttribute(writer, getTableByStyle(g.groupingAxis)); }
-					c.write(writer);
-					if (c instanceof TableCellGroup)
-						writeEndElement(writer);
-					writeEndElement(writer);
-					i++; }
+			public void write(Writer writer) {
+				try {
+					List<List<TableCell>> promotedHeaders = null;
+					int i = 0;
+					for (TableCellCollection c : children) {
+						if (c instanceof TableCellGroup) {
+							TableCellGroup g = (TableCellGroup)c;
+							int j = 0;
+							for (TableCellCollection cc : g.children) {
+								if (!cc.newlyPromotedHeaders().isEmpty()) {
+									if (promotedHeaders == null) {
+										if (i == 0 && j == 0) {
+											writer.writeStartElement(_);
+											writeStyleAttribute(writer,
+											                    groupingAxis != null ? getTableByStyle(groupingAxis).getListHeaderStyle()
+											                                         : getListHeaderStyle());
+											writer.writeStartElement(_);
+											writeStyleAttribute(writer, getTableByStyle(g.groupingAxis));
+											promotedHeaders = new ArrayList<List<TableCell>>(); }
+										else
+											throw new RuntimeException("Some headers of children promoted but not all children have a promoted header."); }
+									if (i == 0) {
+										writer.writeStartElement(_);
+										Predicate<PseudoClass> matcher = matchesPosition(j + 1, g.children.size());
+										writeStyleAttribute(writer, getTableByStyle(g.groupingAxis).getListItemStyle(matcher));
+										for (TableCell h : cc.newlyPromotedHeaders())
+											h.write(writer);
+										writer.writeEndElement();
+										promotedHeaders.add(cc.newlyPromotedHeaders()); }
+									else if (!promotedHeaders.get(j).equals(cc.newlyPromotedHeaders()))
+										throw new RuntimeException("Headers of children promoted but not the same as promoted headers of sibling groups."); }
+								else if (promotedHeaders != null)
+									throw new RuntimeException("Some headers of children promoted but not all children have a promoted header.");
+								j++; }
+							if (promotedHeaders != null && promotedHeaders.size() != j) {
+								throw new RuntimeException("Headers of children promoted but not the same as promoted headers of sibling groups."); }}
+						else if (promotedHeaders != null)
+							throw new RuntimeException("Coding error");
+						i++; }
+					if (promotedHeaders != null) {
+						writer.writeEndElement();
+						writer.writeEndElement(); }
+					i = 0;
+					for (TableCellCollection c : children) {
+						writer.writeStartElement(_);
+						Predicate<PseudoClass> matcher = matchesPosition(i + 1, children.size());
+						writeStyleAttribute(writer,
+						                    groupingAxis != null ? getTableByStyle(groupingAxis).getListItemStyle(matcher)
+						                                         : getListItemStyle(matcher));
+						for (TableCell h : c.newlyRenderedHeaders())
+							h.write(writer);
+						if (c instanceof TableCellGroup) {
+							TableCellGroup g = (TableCellGroup)c;
+							writer.writeStartElement(_);
+							writeStyleAttribute(writer, getTableByStyle(g.groupingAxis)); }
+						c.write(writer);
+						if (c instanceof TableCellGroup)
+							writer.writeEndElement();
+						writer.writeEndElement();
+						i++; }}
+				catch (XMLStreamException e) {
+					throw new RuntimeException(e); }
 			}
 			
 			@Override
 			public String toString() {
-				XMLStreamWriterToString xml = new XMLStreamWriterToString();
+				ToStringWriter xml = new ToStringWriter();
 				write(xml);
 				StringBuilder s = new StringBuilder();
 				s.append("TableCellGroup[header: ").append(newlyRenderedHeaders());
@@ -838,9 +800,9 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 			}
 		}
 		
-		private static void writeStyleAttribute(XMLStreamWriter writer, PseudoElementStyle style) {
+		private static void writeStyleAttribute(Writer writer, PseudoElementStyle style) throws XMLStreamException {
 			if (!style.isEmpty())
-				writeAttribute(writer, _STYLE, style.toString());
+				writer.writeAttribute(_STYLE, style.toString());
 		}
 		
 		final private Map<String,TableByStyle> tableByStyles = new HashMap<String,TableByStyle>();
@@ -1101,337 +1063,165 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 					return c;
 			return null;
 		}
-	}
-	
-	private static boolean isHeader(TableCell cell) {
-		return (cell.type == TableCell.CellType.TH || (cell.axis != null) || (cell.scope != null));
-	}
-	
-	@SafeVarargs
-	private static final <T> Comparator<T> compose(final Comparator<T>... comparators) {
-		return new Comparator<T>() {
-			public int compare(T x1, T x2) {
-				for (Comparator<T> comparator : comparators) {
-					int result = comparator.compare(x1, x2);
-					if (result != 0)
-						return result; }
-				return 0;
+		
+		
+		private static boolean isHeader(TableCell cell) {
+			return (cell.type == TableCell.CellType.TH || (cell.axis != null) || (cell.scope != null));
+		}
+		
+		@SafeVarargs
+		private static final <T> Comparator<T> compose(final Comparator<T>... comparators) {
+			return new Comparator<T>() {
+				public int compare(T x1, T x2) {
+					for (Comparator<T> comparator : comparators) {
+						int result = comparator.compare(x1, x2);
+						if (result != 0)
+							return result; }
+					return 0;
+				}
+			};
+		}
+		
+		private static final Comparator<TableCell> sortByRow = new Comparator<TableCell>() {
+			public int compare(TableCell c1, TableCell c2) {
+				return new Integer(c1.row).compareTo(c2.row);
 			}
 		};
-	}
-	
-	private static final Comparator<TableCell> sortByRow = new Comparator<TableCell>() {
-		public int compare(TableCell c1, TableCell c2) {
-			return new Integer(c1.row).compareTo(c2.row);
-		}
-	};
-	
-	private static final Comparator<TableCell> sortByColumn = new Comparator<TableCell>() {
-		public int compare(TableCell c1, TableCell c2) {
-			return new Integer(c1.col).compareTo(c2.col);
-		}
-	};
-	
-	private static final Comparator<TableCell> sortByRowType = new Comparator<TableCell>() {
-		public int compare(TableCell c1, TableCell c2) {
-			return c1.rowType.compareTo(c2.rowType);
-		}
-	};
-	
-	private static final Comparator<TableCell> sortByRowAndThenColumn = compose(sortByRow, sortByColumn);
-	
-	private static final Comparator<TableCell> sortByColumnAndThenRow = compose(sortByColumn, sortByRow);
-	
-	private static class TableCell {
 		
-		private enum CellType {
-			TD,
-			TH
-		}
+		private static final Comparator<TableCell> sortByColumn = new Comparator<TableCell>() {
+			public int compare(TableCell c1, TableCell c2) {
+				return new Integer(c1.col).compareTo(c2.col);
+			}
+		};
 		
-		private enum RowType {
-			THEAD,
-			TBODY,
-			TFOOT
-		}
+		private static final Comparator<TableCell> sortByRowType = new Comparator<TableCell>() {
+			public int compare(TableCell c1, TableCell c2) {
+				return c1.rowType.compareTo(c2.rowType);
+			}
+		};
 		
-		private enum HeaderPolicy {
-			ALWAYS,
-			ONCE,
-			FRONT
-		}
+		private static final Comparator<TableCell> sortByRowAndThenColumn = compose(sortByRow, sortByColumn);
 		
-		// TODO: handle colgroup and rowgroup
-		private enum Scope {
-			COL,
-			ROW
-		}
+		private static final Comparator<TableCell> sortByColumnAndThenRow = compose(sortByColumn, sortByRow);
 		
-		private int rowGroup;
-		private int row;
-		private int col;
-		private CellType type = CellType.TD;
-		private RowType rowType = RowType.TBODY;
-		private HeaderPolicy headerPolicy = HeaderPolicy.ONCE;
-		private String id;
-		private List<String> headers;
-		private Scope scope = null;
-		private List<String> axis;
-		private int rowspan = 1;
-		private int colspan = 1;
-		
-		private List<Function<XMLStreamWriter,Void>> writeActions = new ArrayList<Function<XMLStreamWriter,Void>>();
-		
-		public void write(XMLStreamWriter writer) {
-			for (Function<XMLStreamWriter,Void> action : writeActions)
-				action.apply(writer);
-		}
-		
-		public TableCell clone() {
-			TableCell clone = new TableCell();
-			clone.rowGroup = this.rowGroup;
-			clone.row = this.row;
-			clone.col = this.col;
-			clone.type = this.type;
-			clone.rowType = this.rowType;
-			clone.headerPolicy = this.headerPolicy;
-			clone.id = this.id;
-			clone.headers = this.headers;
-			clone.scope = this.scope;
-			clone.axis = this.axis;
-			clone.rowspan = this.rowspan;
-			clone.colspan = this.colspan;
-			clone.writeActions.addAll(this.writeActions);
-			return clone;
-		}
-		
-		@Override
-		public String toString() {
-			XMLStreamWriterToString xml = new XMLStreamWriterToString();
-			write(xml);
-			StringBuilder s = new StringBuilder();
-			s.append("TableCell{" + row + "," + col + "}[").append(xml).append("]");
-			return s.toString();
-		}
-	}
-	
-	private static class CellCoordinates {
+		private static class TableCell {
 			
-		private final int row;
-		private final int col;
+			private enum CellType {
+				TD,
+				TH
+			}
 			
-		private CellCoordinates(int row, int col) {
-			this.row = row;
-			this.col = col;
-		}
+			private enum RowType {
+				THEAD,
+				TBODY,
+				TFOOT
+			}
 			
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + col;
-			result = prime * result + row;
-			return result;
+			private enum HeaderPolicy {
+				ALWAYS,
+				ONCE,
+				FRONT
+			}
+			
+			// TODO: handle colgroup and rowgroup
+			private enum Scope {
+				COL,
+				ROW
+			}
+			
+			private int rowGroup;
+			private int row;
+			private int col;
+			private CellType type = CellType.TD;
+			private RowType rowType = RowType.TBODY;
+			private HeaderPolicy headerPolicy = HeaderPolicy.ONCE;
+			private String id;
+			private List<String> headers;
+			private Scope scope = null;
+			private List<String> axis;
+			private int rowspan = 1;
+			private int colspan = 1;
+			
+			private List<Event> writeActions = new ArrayList<Event>();
+			
+			public void write(Writer writer) throws XMLStreamException {
+				for (Event action : writeActions)
+					action.writeTo(writer);
+			}
+			
+			public TableCell clone() {
+				TableCell clone = new TableCell();
+				clone.rowGroup = this.rowGroup;
+				clone.row = this.row;
+				clone.col = this.col;
+				clone.type = this.type;
+				clone.rowType = this.rowType;
+				clone.headerPolicy = this.headerPolicy;
+				clone.id = this.id;
+				clone.headers = this.headers;
+				clone.scope = this.scope;
+				clone.axis = this.axis;
+				clone.rowspan = this.rowspan;
+				clone.colspan = this.colspan;
+				clone.writeActions.addAll(this.writeActions);
+				return clone;
+			}
+			
+			@Override
+			public String toString() {
+				ToStringWriter xml = new ToStringWriter();
+				try {
+					write(xml); }
+				catch (Exception e) {
+					throw new RuntimeException("coding error", e); }
+				StringBuilder s = new StringBuilder();
+				s.append("TableCell{" + row + "," + col + "}[").append(xml).append("]");
+				return s.toString();
+			}
 		}
-
-		public boolean equals(Object obj) {
-			if (this == obj)
+		
+		private static class CellCoordinates {
+				
+			private final int row;
+			private final int col;
+				
+			private CellCoordinates(int row, int col) {
+				this.row = row;
+				this.col = col;
+			}
+				
+			public int hashCode() {
+				final int prime = 31;
+				int result = 1;
+				result = prime * result + col;
+				result = prime * result + row;
+				return result;
+			}
+		
+			public boolean equals(Object obj) {
+				if (this == obj)
+					return true;
+				if (obj == null)
+					return false;
+				if (getClass() != obj.getClass())
+					return false;
+				CellCoordinates other = (CellCoordinates) obj;
+				if (col != other.col)
+					return false;
+				if (row != other.row)
+					return false;
 				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			CellCoordinates other = (CellCoordinates) obj;
-			if (col != other.col)
-				return false;
-			if (row != other.row)
-				return false;
-			return true;
-		}
-	}
-	
-	private static int nonNegativeInteger(String s) {
-		try {
-			int i = Integer.parseInt(s);
-			if (i >= 0)
-				return i; }
-		catch(NumberFormatException e) {}
-		throw new RuntimeException("Expected positive integer but got "+ s);
-	}
-	
-	private static void assertThat(boolean test) {
-		if (!test)
-			throw new RuntimeException("Coding error");
-	}
-	
-	private static void writeStartElement(XMLStreamWriter writer, QName name) {
-		try {
-			writer.writeStartElement(name.getPrefix(), name.getLocalPart(), name.getNamespaceURI()); }
-		catch (XMLStreamException e) {
-			throw new RuntimeException(e); }
-	}
-	
-	private static Function<XMLStreamWriter,Void> writeStartElement(final QName name) {
-		return new Function<XMLStreamWriter,Void>() {
-			public Void apply(XMLStreamWriter writer) {
-				writeStartElement(writer, name);
-				return null;
 			}
-		};
-	}
-	
-	private static Function<XMLStreamWriter,Void> writeNamespace(final String prefix, final String namespaceURI) {
-		return new Function<XMLStreamWriter,Void>() {
-			public Void apply(XMLStreamWriter writer) {
-				try {
-					writer.writeNamespace(prefix, namespaceURI);
-					return null; }
-				catch (XMLStreamException e) {
-					throw new RuntimeException(e); }
-			}
-		};
-	}
-	
-	private static void writeAttribute(XMLStreamWriter writer, QName name, String value) {
-		try {
-			writer.writeAttribute(name.getPrefix(), name.getNamespaceURI(), name.getLocalPart(), value); }
-		catch (XMLStreamException e) {
-			throw new RuntimeException(e); }
-	}
-	
-	private static Function<XMLStreamWriter,Void> writeAttribute(final QName name, final String value) {
-		return new Function<XMLStreamWriter,Void>() {
-			public Void apply(XMLStreamWriter writer) {
-				writeAttribute(writer, name, value);
-				return null;
-			}
-		};
-	}
-	
-	private static Function<XMLStreamWriter,Void> writeCharacters(final String text) {
-		return new Function<XMLStreamWriter,Void>() {
-			public Void apply(XMLStreamWriter writer) {
-				try {
-					writer.writeCharacters(text);
-					return null;  }
-				catch (XMLStreamException e) {
-					throw new RuntimeException(e); }
-			}
-		};
-	}
-	
-	private static void writeEndElement(XMLStreamWriter writer) {
-		try {
-			writer.writeEndElement(); }
-		catch (XMLStreamException e) {
-			throw new RuntimeException(e); }
-	}
-	
-	private static Function<XMLStreamWriter,Void> writeEndElement
-	= new Function<XMLStreamWriter,Void>() {
-		public Void apply(XMLStreamWriter writer) {
-			writeEndElement(writer);
-			return null;
-		}
-	};
-	
-	// for debugging only
-	private static class XMLStreamWriterToString implements XMLStreamWriter {
-		
-		StringBuilder b = new StringBuilder();
-		
-		Stack<String> elements = new Stack<String>();
-		boolean startTagOpen = false;
-		
-		@Override
-		public String toString() {
-			return b.toString();
 		}
 		
-		public void writeStartElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
-			if (startTagOpen) {
-				b.append(">");
-				startTagOpen = false; }
-			elements.push(localName);
-			b.append("<").append(localName);
-			startTagOpen = true;
+		private static int nonNegativeInteger(String s) {
+			try {
+				int i = Integer.parseInt(s);
+				if (i >= 0)
+					return i; }
+			catch(NumberFormatException e) {}
+			throw new RuntimeException("Expected positive integer but got "+ s);
 		}
-		
-		public void writeEndElement() throws XMLStreamException {
-			if (startTagOpen) {
-				b.append("/>");
-				startTagOpen = false;
-				elements.pop(); }
-			else
-				b.append("</").append(elements.pop()).append(">");
-		}
-		
-		public void writeAttribute(String prefix, String namespaceURI, String localName, String value) throws XMLStreamException {
-			b.append(" ").append(localName).append("='").append(value).append("'");
-		}
-		
-		public void writeNamespace(String prefix, String namespaceURI) throws XMLStreamException {}
-		
-		public void writeCharacters(String text) throws XMLStreamException {
-			if (startTagOpen) {
-				b.append(">");
-				startTagOpen = false; }
-			b.append(text);
-		}
-		
-		public void writeStartElement(String localName) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeStartElement(String namespaceURI, String localName) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeEmptyElement(String namespaceURI, String localName) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeEmptyElement(String prefix, String localName, String namespaceURI) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeEmptyElement(String localName) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeEndDocument() throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void close() throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void flush() throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeAttribute(String localName, String value) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeAttribute(String namespaceURI, String localName, String value) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeDefaultNamespace(String namespaceURI) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeComment(String data) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeProcessingInstruction(String target) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeProcessingInstruction(String target, String data) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeCData(String data) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeDTD(String dtd) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeEntityRef(String name) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeStartDocument() throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeStartDocument(String version) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeStartDocument(String encoding, String version) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void writeCharacters(char[] text, int start, int len) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public String getPrefix(String uri) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void setPrefix(String prefix, String uri) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void setDefaultNamespace(String uri) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public void setNamespaceContext(NamespaceContext context) throws XMLStreamException {
-			throw new UnsupportedOperationException(); }
-		public NamespaceContext getNamespaceContext() {
-			throw new UnsupportedOperationException(); }
-		public Object getProperty(String name) throws IllegalArgumentException {
-			throw new UnsupportedOperationException(); }
 	}
 	
 	/*

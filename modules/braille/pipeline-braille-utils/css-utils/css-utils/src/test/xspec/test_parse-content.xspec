@@ -50,20 +50,23 @@
   <x:scenario label="test_03">
     <x:context>
       <toc>
-        <entry ref="h1" style="display: block"
-               css:content="target-text(attr(ref)) ' '
-                            leader('⠄⠄') ' '
-                            target-counter(attr(ref), braille-page) ' '
-                            target-string(attr(ref), print-page)"/>
+        <entry ref="h1" style="display: block">
+          <css:after css:content="target-text(attr(ref)) ' '
+                                  leader('⠄⠄') ' '
+                                  target-counter(attr(ref), braille-page) ' '
+                                  target-string(attr(ref), print-page)"/>
+        </entry>
       </toc>
     </x:context>
     <x:expect label="result">
       <toc>
         <entry ref="h1" style="display: block">
-          <css:text target="h1"/>
-          <css:leader pattern="⠄⠄"/>
-          <css:counter target="h1" name="braille-page"/>
-          <css:string target="h1" name="print-page"/>
+          <css:after>
+            <css:text target="h1"/>
+            <css:leader pattern="⠄⠄"/>
+            <css:counter target="h1" name="braille-page"/>
+            <css:string target="h1" name="print-page"/>
+          </css:after>
         </entry>
       </toc>
     </x:expect>

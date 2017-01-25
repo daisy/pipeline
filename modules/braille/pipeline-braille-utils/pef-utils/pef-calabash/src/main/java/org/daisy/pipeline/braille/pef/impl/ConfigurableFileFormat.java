@@ -191,7 +191,7 @@ public class ConfigurableFileFormat implements FileFormat {
 	public Object getFeature(String key) {
 		if ("table".equals(key))
 			return table;
-		if ("locale".equals(key))
+		else if ("locale".equals(key))
 			return locale;
 		else if ("line-breaks".equals(key))
 			return lineBreaks;

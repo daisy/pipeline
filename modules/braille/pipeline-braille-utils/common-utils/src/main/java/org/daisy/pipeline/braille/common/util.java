@@ -178,7 +178,7 @@ public abstract class util {
 			return result;
 		}
 		
-		public static<T> T reduce(Iterator<T> iterator, Function2<? super T,? super T,? extends T> function) {
+		public static <T> T reduce(Iterator<T> iterator, Function2<? super T,? super T,? extends T> function) {
 			T seed = iterator.next();
 			return Iterators.<T,T>fold(iterator, function, seed);
 		}
@@ -318,14 +318,14 @@ public abstract class util {
 		@SuppressWarnings(
 			"unchecked" // safe cast to Iterator<Object>
 		)
-		public static String join(Iterator<? extends Object> strings, final Object separator, final Function<Object,String> toStringFunction) {
+		public static <T> String join(Iterator<? extends T> strings, final Object separator, final Function<? super T,String> toStringFunction) {
 			if (!strings.hasNext()) return "";
 			String seed = toStringFunction.apply(strings.next());
-			return Iterators.<String,Object>fold(
-				(Iterator<Object>)strings,
-				new Function2<String,Object,String>() {
-					public String apply(String s1, Object s2) {
-						return s1 + toStringFunction.apply(separator) + toStringFunction.apply(s2); }},
+			return Iterators.<String,T>fold(
+				(Iterator<T>)strings,
+				new Function2<String,T,String>() {
+					public String apply(String s1, T s2) {
+						return s1 + separator.toString() + toStringFunction.apply(s2); }},
 				seed);
 		}
 		
@@ -333,7 +333,7 @@ public abstract class util {
 			return join(strings, separator, toStringFunction());
 		}
 		
-		public static String join(Iterable<?> strings, final Object separator, final Function<Object,String> toStringFunction) {
+		public static <T> String join(Iterable<? extends T> strings, final Object separator, final Function<? super T,String> toStringFunction) {
 			return join(strings.iterator(), separator, toStringFunction);
 		}
 		
@@ -345,7 +345,7 @@ public abstract class util {
 			return join(strings, "");
 		}
 		
-		public static String join(Object[] strings, Object separator, final Function<Object,String> toStringFunction) {
+		public static <T> String join(T[] strings, Object separator, final Function<? super T,String> toStringFunction) {
 			return join(Arrays.asList(strings), separator, toStringFunction);
 		}
 		

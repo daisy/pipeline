@@ -34,13 +34,13 @@
     <!--
         <ident>
     -->
-    <xsl:variable name="css:IDENT_RE" select="'(\p{L}|_)(\p{L}|_|-)*'"/>
+    <xsl:variable name="css:IDENT_RE" select="'(\p{L}|_)(\p{L}|[0-9]|_|-)*'"/>
     <xsl:variable name="css:IDENT_RE_groups" select="2"/>
     
     <xsl:variable name="css:IDENT_LIST_RE" select="re:space-separated($css:IDENT_RE)"/>
     <xsl:variable name="css:IDENT_LIST_RE_groups" select="re:space-separated-groups($css:IDENT_RE_groups)"/>
     
-    <xsl:variable name="css:VENDOR_PRF_IDENT_RE" select="'-(\p{L}|_)+-(\p{L}|_)(\p{L}|_|-)*'"/>
+    <xsl:variable name="css:VENDOR_PRF_IDENT_RE" select="'-(\p{L}|_)+-(\p{L}|[0-9]|_)(\p{L}|[0-9]|_|-)*'"/>
     <xsl:variable name="css:VENDOR_PRF_IDENT_RE_groups" select="3"/>
     
     <!--
@@ -240,10 +240,11 @@
     <xsl:variable name="css:PSEUDOELEMENT_RE" select="concat('::(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\(',$css:IDENT_RE,'\))?')"/>
     <xsl:variable name="css:PSEUDOELEMENT_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1 + $css:IDENT_RE_groups"/>
     
-    <xsl:variable name="css:RULE_RE" select="concat('(((@',$css:IDENT_RE,')(',$css:PSEUDOCLASS_RE,')?|(',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')((',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')*))\s*)?\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
+    <xsl:variable name="css:RULE_RE" select="concat('(((@',$css:IDENT_RE,')','(\s+(',$css:IDENT_RE,'))?','(',$css:PSEUDOCLASS_RE,')?|(',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')((',$css:PSEUDOELEMENT_RE,'|',$css:PSEUDOCLASS_RE,')*))\s*)?\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
     <xsl:variable name="css:RULE_RE_selector" select="2"/>
     <xsl:variable name="css:RULE_RE_selector_atrule" select="$css:RULE_RE_selector + 1"/>
-    <xsl:variable name="css:RULE_RE_selector_atrule_pseudoclass" select="$css:RULE_RE_selector_atrule + $css:IDENT_RE_groups + 1"/>
+    <xsl:variable name="css:RULE_RE_selector_atrule_name" select="$css:RULE_RE_selector_atrule + $css:IDENT_RE_groups + 2"/>
+    <xsl:variable name="css:RULE_RE_selector_atrule_pseudoclass" select="$css:RULE_RE_selector_atrule_name + $css:IDENT_RE_groups + 1"/>
     <xsl:variable name="css:RULE_RE_selector_pseudo" select="$css:RULE_RE_selector_atrule_pseudoclass + $css:PSEUDOCLASS_RE_groups + 1"/>
     <xsl:variable name="css:RULE_RE_selector_pseudo_stack" select="$css:RULE_RE_selector_pseudo + $css:PSEUDOELEMENT_RE_groups + $css:PSEUDOCLASS_RE_groups + 1"/>
     <xsl:variable name="css:RULE_RE_value" select="$css:RULE_RE_selector_pseudo_stack + 1 + $css:PSEUDOELEMENT_RE_groups + $css:PSEUDOCLASS_RE_groups + 1"/>
@@ -282,7 +283,10 @@
                         <xsl:element name="css:rule">
                             <xsl:if test="regex-group($css:RULE_RE_selector)!=''">
                                 <xsl:attribute name="selector" select="concat(
-                                                                         regex-group($css:RULE_RE_selector_atrule),
+                                                                         normalize-space(
+                                                                           concat(regex-group($css:RULE_RE_selector_atrule),
+                                                                                  ' ',
+                                                                                  regex-group($css:RULE_RE_selector_atrule_name))),
                                                                          regex-group($css:RULE_RE_selector_pseudo)[1])"/>
                             </xsl:if>
                             <xsl:variable name="style" as="xs:string"
@@ -631,8 +635,7 @@
             tunnel parameters)
         -->
         <xsl:param name="context" as="element()" select="."/>
-        <xsl:variable name="parent" as="element()?"
-                      select="$context/ancestor::*[not(self::css:* except (self::css:box|self::css:block))][1]"/>
+        <xsl:variable name="parent" as="element()?" select="$context/ancestor::*[not(self::css:_)][1]"/>
         <xsl:choose>
             <xsl:when test="exists($parent) and $compute">
                 <xsl:call-template name="css:computed-properties">
@@ -1054,14 +1057,56 @@
                       select="$context/(self::*|preceding::*|ancestor::*)
                               [contains(@css:string-set,$name) or contains(@css:string-entry,$name)]
                               [last()]"/>
-        <xsl:if test="$last-set">
-            <xsl:variable name="value" as="xs:string?"
-                          select="(css:parse-string-set($last-set/@css:string-entry),
-                                   css:parse-string-set($last-set/@css:string-set))
-                                  [@name=$name][last()]/@value"/>
-            <xsl:sequence select="if ($value) then css:parse-content-list($value, $context)
-                                  else css:string($name, $last-set/(preceding::*|ancestor::*)[last()])"/>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="$context/ancestor::*/@css:flow[not(.='normal')]">
+                <xsl:choose>
+                    <xsl:when test="$last-set
+                                    intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*">
+                        <xsl:variable name="value" as="xs:string?"
+                                      select="(css:parse-string-set($last-set/@css:string-entry),
+                                               css:parse-string-set($last-set/@css:string-set))
+                                              [@name=$name][last()]/@value"/>
+                        <xsl:choose>
+                            <xsl:when test="$value">
+                                <xsl:sequence select="css:parse-content-list($value, $context)"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:variable name="context" as="element()?"
+                                              select="$last-set/(preceding::*|ancestor::*)[last()]
+                                                      intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*"/>
+                                <xsl:if test="$context">
+                                    <xsl:sequence select="css:string($name, $context)"/>
+                                </xsl:if>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="anchor" as="xs:string" select="$context/ancestor::*/@css:anchor"/>
+                        <xsl:variable name="context" as="element()?" select="collection()//*[@css:id=$anchor][1]"/>
+                        <xsl:if test="$context">
+                            <xsl:sequence select="css:string($name, $context)"/>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="$last-set">
+                <xsl:variable name="value" as="xs:string?"
+                              select="(css:parse-string-set($last-set/@css:string-entry),
+                                       css:parse-string-set($last-set/@css:string-set))
+                                      [@name=$name][last()]/@value"/>
+                <xsl:choose>
+                    <xsl:when test="$value">
+                        <xsl:sequence select="css:parse-content-list($value, $context)"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="context" as="element()?" select="$last-set/(preceding::*|ancestor::*)[last()]"/>
+                        <xsl:if test="$context">
+                            <xsl:sequence select="css:string($name, $context)"/>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+        </xsl:choose>
     </xsl:function>
     
 </xsl:stylesheet>

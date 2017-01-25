@@ -291,6 +291,7 @@ public class BrailleFilterFactoryImpl implements BrailleFilterFactory {
 			if (s == null && parentStyle == null)
 				style = null;
 			else
+				// FIXME: extend caching of parsed CSS to support parentStyle!
 				style = new SimpleInlineStyle(s != null ? s : "", parentStyle); }
 		if (attributes != null && attributes.hasChildren())
 			return cssStyledTextFromTranslatable(text, attributes.iterator(), false, style);

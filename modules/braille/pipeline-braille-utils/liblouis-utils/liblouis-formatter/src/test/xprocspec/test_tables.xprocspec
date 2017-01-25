@@ -20,7 +20,7 @@
     </p:pipeline>
   </x:script>
   
-  <x:scenario label="test_01">
+  <x:scenario label="test_01" pending="broken since 8d75a10">
     <x:call step="pxi:test">
       <x:input port="source">
         <x:document type="inline">

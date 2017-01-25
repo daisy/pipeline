@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/propagate-page-break.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <css:box type="block" css:page-break-before="right">
+        <css:box type="block" css:page-break-before="right"/>
+      </css:box>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="block" css:page-break-before="right">
+        <css:box type="block"/>
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

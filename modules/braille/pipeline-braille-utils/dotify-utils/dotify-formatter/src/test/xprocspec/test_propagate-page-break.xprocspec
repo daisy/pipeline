@@ -36,9 +36,9 @@
         <css:box type="block"
                  css:page-break-before="left"
                  css:page-break-after="always">
+          <css:box type="block"/>
           <css:box type="block"
-                   css:page-break-after="avoid"/>
-          <css:box type="block">
+                   css:page-break-before="avoid">
             <css:box type="block"
                      css:page-break-inside="avoid"
                      css:page-break-after="avoid">
@@ -48,10 +48,10 @@
                      css:page-break-inside="avoid"
                      css:page-break-after="avoid"/>
             <css:box type="block"
-                     css:page-break-inside="avoid"/>
-            <css:box type="block"
                      css:page-break-inside="avoid"
-                     css:page-break-before="always"/>
+                     css:page-break-after="always"/>
+            <css:box type="block"
+                     css:page-break-inside="avoid"/>
           </css:box>
           <css:box/>
         </css:box>
@@ -60,46 +60,6 @@
   </x:scenario>
   
   <x:scenario label="test_02">
-    <x:call step="pxi:propagate-page-break">
-      <x:input port="source">
-        <x:document type="inline">
-          <css:_>
-            <css:box type="block" css:page-break-after="always">
-              <css:box type="inline">
-                ⠤⠤⠤
-              </css:box>
-            </css:box>
-            <css:box type="block" css:page-break-after="always">
-              <css:box type="inline">
-                ⠤⠤⠤
-              </css:box>
-            </css:box>
-          </css:_>
-        </x:document>
-      </x:input>
-    </x:call>
-    <x:context label="result">
-      <x:document type="port" port="result"/>
-    </x:context>
-    <x:expect label="result" type="compare">
-      <x:document type="inline">
-        <css:_>
-            <css:box type="block">
-              <css:box type="inline">
-                ⠤⠤⠤
-              </css:box>
-            </css:box>
-            <css:box type="block" css:page-break-before="always" css:page-break-after="always">
-              <css:box type="inline">
-                ⠤⠤⠤
-              </css:box>
-            </css:box>
-          </css:_>
-      </x:document>
-    </x:expect>
-  </x:scenario>
-  
-  <x:scenario label="test_03">
     <x:call step="pxi:propagate-page-break">
       <x:input port="source">
         <x:document type="inline">

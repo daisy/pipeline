@@ -26,7 +26,6 @@
 
   <modules>
     <module>maven/bom</module>
-    <module>maven/build-helper</module>
     <module>maven/parent</module>
     <module>pipeline-braille-utils/common-utils</module>
     <module>pipeline-braille-utils/css-utils</module>

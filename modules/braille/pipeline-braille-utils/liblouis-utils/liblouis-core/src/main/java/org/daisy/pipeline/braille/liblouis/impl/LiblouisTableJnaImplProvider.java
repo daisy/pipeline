@@ -233,8 +233,10 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 									throw new NoSuchElementException(); }
 								type = "display"; }
 							if (q.containsKey("table"))
+								// FIXME: type and remaining features in query are ignored
 								table = q.removeOnly("table").getValue().get();
 							else if (q.containsKey("liblouis-table"))
+								// FIXME: type and remaining features in query are ignored
 								table = q.removeOnly("liblouis-table").getValue().get();
 							else if (!q.isEmpty()) {
 								StringBuilder b = new StringBuilder();

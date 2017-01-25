@@ -60,4 +60,14 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_05">
+    <x:context>
+      <doc style="@text-transform  foo  {{ system: foo }} @text-transform  bar  {{ system: bar }} "/>
+    </x:context>
+    <x:expect label="result">
+      <doc css:text-transform-foo="system: foo"
+           css:text-transform-bar="system: bar"/>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

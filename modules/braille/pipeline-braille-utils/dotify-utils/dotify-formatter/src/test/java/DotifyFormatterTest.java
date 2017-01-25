@@ -51,6 +51,7 @@ import org.ops4j.pax.exam.util.PathUtils;
 
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 
 import org.osgi.framework.BundleContext;
 
@@ -66,6 +67,7 @@ public class DotifyFormatterTest {
 			logbackConfigFile(),
 			calabashConfigFile(),
 			domTraversalPackage(),
+			systemPackage("javax.xml.stream;version=\"1.0.1\""),
 			felixDeclarativeServices(),
 			thisBundle(),
 			junitBundles(),

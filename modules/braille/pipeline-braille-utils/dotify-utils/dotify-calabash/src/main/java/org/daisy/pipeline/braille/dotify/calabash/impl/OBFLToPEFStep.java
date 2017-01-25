@@ -118,12 +118,16 @@ public class OBFLToPEFStep extends DefaultStep {
 			boolean hyphenate; {
 				String p = params.get("hyphenate");
 				hyphenate = (p == null) ? true : !p.equalsIgnoreCase("false"); }
+			boolean allowTextOverflowTrimming; {
+				String p = params.get("allow-text-overflow-trimming");
+				allowTextOverflowTrimming = (p == null) ? false : p.equalsIgnoreCase("true"); }
 			boolean removeStyles; {
 				String p = params.get("remove-styles");
 				removeStyles = (p == null) ? false : p.equalsIgnoreCase("true"); }
 			FormatterConfiguration.Builder config = FormatterConfiguration.with(locale, mode)
 				.markCapitalLetters(markCapitalLetters)
-				.hyphenate(hyphenate);
+				.hyphenate(hyphenate)
+				.allowsTextOverflowTrimming(allowTextOverflowTrimming);
 			if (removeStyles)
 				config.ignoreStyle("em").ignoreStyle("strong");
 			

@@ -61,6 +61,9 @@
 				
 			<dotify:obfl-to-pef locale="und">
 				<p:with-option name="mode" select="$text-transform"/>
+				<p:input port="parameters">
+					<p:pipe step="main" port="parameters"/>
+				</p:input>
 			</dotify:obfl-to-pef>
 		</p:when>
 		<p:otherwise>

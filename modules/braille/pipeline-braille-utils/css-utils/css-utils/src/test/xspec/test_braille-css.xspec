@@ -544,4 +544,21 @@
 		<x:expect label="result" select="'@page { size: 32 27 @bottom-center { content: none } } @page:left { size: 32 27 @bottom-center { content: none } }'"/>
 	</x:scenario>
 	
+	<x:scenario label="test_35">
+		<x:call function="css:specified-properties">
+			<x:param select="'#all text-transform'"/>
+			<x:param select="true()"/>
+			<x:param select="false()"/>
+			<x:param select="false()"/>
+			<x:param select="//foo">
+				<css:foo style="text-transform: auto">
+					<foo/>
+				</css:foo>
+			</x:param>
+		</x:call>
+		<x:expect label="result">
+			<css:property name="text-transform" value="auto"/>
+		</x:expect>
+	</x:scenario>
+	
 </x:description>

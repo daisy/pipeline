@@ -26,7 +26,10 @@
             element's style attribute) are moved to the next preserved descendant box, and 'inherit'
             values on the next preserved descendant box are concretized. css:_ elements are
             retained. All adjacent nodes that are not boxes or css:_ elements containing a box and
-            that are not already contained in an inline box are wrapped into an anonymous one.
+            that are not already contained in an inline box are wrapped into an anonymous one,
+            unless they are all white space nodes or empty css:_ elements. Additional anonymous
+            inline boxes are created in order to ensure that all block boxes have at least one
+            descendant box.
         </p:documentation>
     </p:output>
     
@@ -38,5 +41,13 @@
             <p:empty/>
         </p:input>
     </p:xslt>
+    
+    <p:wrap match="css:box[@type='block'][not(descendant::css:box)]/node()" group-adjacent="true" wrapper="css:box"/>
+    <p:add-attribute match="css:box[not(@type)]" attribute-name="type" attribute-value="inline"/>
+    <p:insert match="css:box[@type='block'][not(node())]" position="first-child">
+        <p:input port="insertion">
+            <p:inline><css:box type="inline"/></p:inline>
+        </p:input>
+    </p:insert>
     
 </p:declare-step>

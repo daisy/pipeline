@@ -334,12 +334,12 @@
           <header/>
           <footer>
             <field>
-              <marker-reference marker="print-page/prev" direction="forward" scope="page-content" start-offset="-1" text-style="def:tmp_d74e6 text-transform:print-page"/>
+              <marker-reference marker="print-page/prev" direction="forward" scope="page" start-offset="-1" text-style="def:tmp_d74e6 text-transform:print-page"/>
               <marker-reference marker="print-page" direction="backward" scope="sequence" start-offset="-1" text-style="ifndef:tmp_d74e6 text-transform:print-page"/>
               <marker-reference marker="slash-print-page" direction="backward" scope="spread" text-style="text-transform:print-page"/>
             </field>
             <field>
-              <marker-reference marker="running-footer/prev" direction="forward" scope="page-content" start-offset="-1" text-style="def:tmp_d77e3"/>
+              <marker-reference marker="running-footer/prev" direction="forward" scope="page" start-offset="-1" text-style="def:tmp_d77e3"/>
               <marker-reference marker="running-footer" direction="backward" scope="sequence" start-offset="-1" text-style="ifndef:tmp_d77e3"/>
             </field>
             <field>
@@ -357,7 +357,7 @@
   
   <x:scenario label="test_11">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'size: 15 15; @footnotes { border-top:⠒; max-height:10; content:flow(footnote) }'"/>
+      <x:param select="'size: 15 15; @footnotes { border-top-pattern:⠒; max-height:10; content:flow(footnote) }'"/>
       <x:param select="'x'"/>
       <x:param select="true()"/>
     </x:call>

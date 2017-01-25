@@ -1,5 +1,6 @@
 package org.daisy.pipeline.braille.common;
 
+import static java.lang.Math.min;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -84,7 +85,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 				public void reset();
 			}
 			
-			public LineIterator transform(final Iterable<CSSStyledText> text) {
+			public LineIterator transform(final Iterable<CSSStyledText> text) throws TransformationException {
 				
 				// FIXME: determine wordSpacing of individual segments
 				int wordSpacing; {
@@ -107,8 +108,8 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 						if (wordSpacing < 0)
 							wordSpacing = spacing;
 						else if (wordSpacing != spacing)
-							throw new RuntimeException("word-spacing must be constant, but both "
-							                           + wordSpacing + " and " + spacing + " specified"); }
+							throw new TransformationException("word-spacing must be constant, but both "
+							                                  + wordSpacing + " and " + spacing + " specified"); }
 					if (wordSpacing < 0) wordSpacing = 1; }
 				return new LineIterator(translateAndHyphenate(text), blankChar, hyphenChar, wordSpacing);
 			}
@@ -120,7 +121,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					next = mark = string;
 				}
 				public boolean hasNext() {
-					return (next != null);
+					return (next != null && !next.isEmpty());
 				}
 				public String next(int limit, boolean force) {
 					if (next == null)
@@ -204,22 +205,42 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 				 * Fill the character (charBuffer) and soft wrap opportunity (wrapInfo) buffers while normalising and collapsing spaces
 				 * - until the buffers are at least 'limit' long
 				 * - or until the current row is full according to the input feed (BrailleStream)
-				 * - and while the remaining input starts with SPACE, LF, CR, TAB, NBSP or BRAILLE PATTERN BLANK
+				 * - and while the remaining input starts with SPACE, LF, CR, TAB, NBSP, BRAILLE PATTERN BLANK, SHY, ZWSP or LS
 				 */
 				private void fillRow(int limit, boolean force) {
 					int bufSize = charBuffer.length();
 				  loop: while (true) {
 						if (inputBuffer == null || !inputBuffer.hasNext()) {
-							if (limit != 0 && bufSize >= limit)
-								return;
-							else if (inputStream.hasNext()) {
-								String next = limit == 0 ? inputStream.remainder() : inputStream.next(limit - bufSize, force && (bufSize == 0));
-								if (next.isEmpty()) // row full according to input feed
-									return;
+							inputBuffer = null;
+							if (!inputStream.hasNext()) {} // end of stream
+							else if (limit == 0) {
+								String remainder = inputStream.remainder();
+								if (remainder.isEmpty())
+									throw new RuntimeException("coding error");
+								inputBuffer = peekingIterator(charactersOf(inputStream.remainder()).iterator()); }
+							else if (bufSize < limit) {
+								String next = inputStream.next(limit - bufSize, force && (bufSize == 0));
+								if (next.isEmpty()) {} // row full according to input feed
 								else
 									inputBuffer = peekingIterator(charactersOf(next).iterator()); }
-							else
-								return; }
+							if (inputBuffer == null) {
+								if (!inputStream.hasNext()) { // end of stream
+									if (bufSize > 0)
+										wrapInfo.set(bufSize - 1, (byte)(wrapInfo.get(bufSize - 1) | SOFT_WRAP_WITHOUT_HYPHEN));
+									return; }
+								switch (inputStream.peek()) {
+								case SHY:    case TAB:
+								case ZWSP:   case BLANK:
+								case SPACE:  case NBSP:
+								case LF:     case LS:
+								case CR:
+									String next = inputStream.next(1, true);
+									if (next.isEmpty())
+										throw new RuntimeException("coding error");
+									inputBuffer = peekingIterator(charactersOf(next).iterator());
+									break;
+								default:
+									return; }}}
 						char next = inputBuffer.peek();
 						switch (next) {
 						case SHY:
@@ -277,69 +298,95 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					wrapInfo = new ArrayList<Byte>(wrapInfo.subList(size, wrapInfo.size()));
 				}
 				
+				/**
+				 * @param limit specifies the maximum number of characters allowed in the result
+				 * @param force specifies if the translator should force a break at the limit
+				 *              if no natural break point is found
+				 * @return returns the translated string preceding the row break, including a translated hyphen
+				 *                 at the end if needed.
+				 */
 				public String nextTranslatedRow(int limit, boolean force) {
 					fillRow(limit, force);
 					int bufSize = charBuffer.length();
 					
 					// always break at preserved line breaks
-					for (int i = 0; i < bufSize; i++) {
+					for (int i = 0; i < min(bufSize, limit); i++) {
 						if (wrapInfo.get(i) == HARD_WRAP) {
-							String rv = charBuffer.substring(0, i + 1);
-							flushBuffers(i + 1);
+							int cut = i + 1;
+							
+							// strip trailing SPACE/LF/CR/TAB/BLANK/NBSP (all except NBSP are already collapsed into one)
+							while (cut > 0 && charBuffer.charAt(cut - 1) == blankChar) cut--;
+							
+							// preserve if at beginning of stream
+							if (cut == 0)
+								cut = i + 1;
+							String rv = charBuffer.substring(0, cut);
+							
+							// strip leading SPACE/LF/CR/TAB/BLANK in remaining text (are already collapsed into one)
+							cut = i + 1;
+							while (cut < bufSize && wrapInfo.get(cut) == SOFT_WRAP_AFTER_SPACE) cut++;
+							flushBuffers(cut);
 							return rv; }}
 					
 					// no need to break if remaining text is shorter than line
 					if (bufSize < limit) {
-						String rv = charBuffer.toString();
+						String rv = charBuffer.substring(0, bufSize);
 						charBuffer.setLength(0);
 						wrapInfo.clear();
+						
+						// strip trailing SPACE/LF/CR/TAB/BLANK/NBSP (all except NBSP are already collapsed into one)
+						int cut = bufSize;
+						while (cut > 0 && rv.charAt(cut - 1) == blankChar) cut--;
+						
+						// preserve if at beginning of stream or end of stream
+						if (cut > 0 && cut < bufSize && hasNext())
+							rv = rv.substring(0, cut);
 						return rv; }
-					
-					if (bufSize == limit) {
-						Character next = (inputBuffer != null && inputBuffer.hasNext()) ? inputBuffer.peek()
-							: inputStream.hasNext() ? inputStream.peek() : null;
-						boolean wrapWithoutHyphen; {
-							wrapWithoutHyphen = false;
-							if (next == null)
-								wrapWithoutHyphen = true;
-							else
-								switch (next) {
-								case ZWSP:
-								case SPACE:
-								case LF:
-								case CR:
-								case TAB:
-								case BLANK:
-								case LS:
-									wrapWithoutHyphen = true; }}
-						if (wrapWithoutHyphen) {
-							String rv = charBuffer.toString();
-							charBuffer.setLength(0);
-							wrapInfo.clear();
-							return rv; }}
 					
 					// return nothing if limit is 0
 					if (limit == 0) {
 						
-						// strip leading SPACE in remaining text
-						while (limit < bufSize && wrapInfo.get(limit) == SOFT_WRAP_AFTER_SPACE) limit++;
-						flushBuffers(limit);
+						// strip leading SPACE/LF/CR/TAB/BLANK in remaining text (are already collapsed into one)
+						int cut = 0;
+						while (cut < bufSize && wrapInfo.get(cut) == SOFT_WRAP_AFTER_SPACE) cut++;
+						flushBuffers(cut);
 						return ""; }
 					
 					// break at SPACE or ZWSP
 					if ((wrapInfo.get(limit - 1) & SOFT_WRAP_WITHOUT_HYPHEN) == SOFT_WRAP_WITHOUT_HYPHEN) {
-						String rv = charBuffer.substring(0, limit);
+						int cut = limit;
 						
-						// strip leading SPACE in remaining text
-						while (limit < bufSize && wrapInfo.get(limit) == SOFT_WRAP_AFTER_SPACE) limit++;
-						flushBuffers(limit);
+						// strip trailing SPACE/LF/CR/TAB/BLANK/NBSP (all except NBSP are already collapsed into one)
+						while (cut > 0 && charBuffer.charAt(cut - 1) == blankChar) cut--;
+						
+						// strip leading SPACE/LF/CR/TAB/BLANK in remaining text (are already collapsed into one)
+						int cut2 = limit;
+						while (cut2 < bufSize && wrapInfo.get(cut2) == SOFT_WRAP_AFTER_SPACE) cut2++;
+						String rv = charBuffer.substring(0, cut2);
+						flushBuffers(cut2);
+						
+						// preserve if at beginning of stream or end of stream
+						if (cut > 0 && cut < cut2 && hasNext())
+							rv = rv.substring(0, cut);
 						return rv; }
 					
 					// try to break later if the overflowing characters are blank
 					for (int i = limit + 1; i - 1 < bufSize && charBuffer.charAt(i - 1) == blankChar; i++)
 						if ((wrapInfo.get(i - 1) & SOFT_WRAP_WITHOUT_HYPHEN) == SOFT_WRAP_WITHOUT_HYPHEN) {
-							String rv = charBuffer.substring(0, limit);
-							flushBuffers(i);
+							
+							// strip trailing SPACE/LF/CR/TAB/BLANK/NBSP (all except NBSP are already collapsed into one)
+							int cut = limit;
+							while (cut > 0 && charBuffer.charAt(cut - 1) == blankChar) cut--;
+							
+							// strip leading SPACE/LF/CR/TAB/BLANK in remaining text (are already collapsed into one)
+							int cut2 = i;
+							while (cut2 < bufSize && wrapInfo.get(cut2) == SOFT_WRAP_AFTER_SPACE) cut2++;
+							String rv = charBuffer.substring(0, cut2);
+							flushBuffers(cut2);
+							
+							// preserve if at end of stream
+							if (cut < cut2 && hasNext())
+								rv = rv.substring(0, cut);
 							return rv; }
 					
 					// try to break sooner
@@ -347,16 +394,28 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 						
 						// break at SPACE, ZWSP or SHY
 						if (wrapInfo.get(i - 1) > 0) {
-							String rv = charBuffer.substring(0, i);
+							int cut = i;
+							String rv;
 							
 							// insert hyphen glyph at SHY
-							if (wrapInfo.get(i - 1) == 0x1)
-								rv += hyphenChar;
+							if (wrapInfo.get(cut - 1) == 0x1) {
+								rv = charBuffer.substring(0, cut);
+								rv += hyphenChar; }
+							else {
+								
+								// strip trailing SPACE/LF/CR/TAB/BLANK/NBSP (all except NBSP are already collapsed into one)
+								while (cut > 0 && charBuffer.charAt(cut - 1) == blankChar) cut--;
+								
+								// preserve if at beginning of stream
+								if (cut == 0)
+									cut = i;
+								rv = charBuffer.substring(0, cut); }
 							
-							// strip leading SPACE in remaining text
-							// NB: breaks cases where space after SHY is not from letter-spacing
-							while(i < bufSize && charBuffer.charAt(i) == blankChar) i++;
-							flushBuffers(i);
+							// strip leading SPACE/LF/CR/TAB/BLANK in remaining text (are already collapsed into one)
+							// FIXME: breaks cases where space after SHY is not from letter-spacing
+							cut = i;
+							while(cut < bufSize && charBuffer.charAt(cut) == blankChar) cut++;
+							flushBuffers(cut);
 							return rv; }}
 					
 					// force hard break
@@ -368,29 +427,18 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					return "";
 				}
 				
-				// FIXME: there must be a better way to do this!!!
+				/**
+				 * @return returns true if there are characters not yet extracted with nextTranslatedRow
+				 */
 				public boolean hasNext() {
-					if (charBuffer.length() > 0)
-						return true;
-					inputStream.mark();
-					List<Character> save_inputBuffer = inputBuffer != null ? copyOf(inputBuffer) : null;
-					inputBuffer = save_inputBuffer != null ? peekingIterator(save_inputBuffer.iterator()) : null;
-					StringBuilder save_charBuffer = charBuffer;
-					charBuffer = new StringBuilder();
-					ArrayList<Byte> save_wrapInfo = wrapInfo;
-					wrapInfo = new ArrayList<Byte>();
-					boolean save_lastCharIsSpace = lastCharIsSpace;
-					lastCharIsSpace = false;
-					fillRow(3, true);
-					boolean hasNext = charBuffer.length() > 0;
-					inputStream.reset();
-					inputBuffer = save_inputBuffer != null ? peekingIterator(save_inputBuffer.iterator()) : null;
-					charBuffer = save_charBuffer;
-					wrapInfo = save_wrapInfo;
-					lastCharIsSpace = save_lastCharIsSpace;
-					return hasNext;
+					return charBuffer.length() > 0
+						|| (inputBuffer != null && inputBuffer.hasNext())
+						|| inputStream.hasNext();
 				}
 				
+				/**
+				 * @return returns the characters not yet extracted with nextTranslatedRow
+				 */
 				public String getTranslatedRemainder() {
 					BrailleStream save_inputStream = inputStream;
 					inputStream = emptyBrailleStream;
@@ -414,6 +462,9 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					return remainder;
 				}
 				
+				/**
+				 * @return returns the number of characters in getTranslatedRemainder
+				 */
 				public int countRemaining() {
 					return getTranslatedRemainder().length();
 				}

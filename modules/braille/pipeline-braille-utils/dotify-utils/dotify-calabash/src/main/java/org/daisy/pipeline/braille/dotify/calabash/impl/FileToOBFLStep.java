@@ -8,13 +8,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.transform.stream.StreamSource;
 
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.dotify.api.identity.IdentityProviderService;
+import org.daisy.dotify.api.tasks.AnnotatedFile;
+import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
 import org.daisy.dotify.api.tasks.InternalTask;
 import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
+import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskSystem;
 import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.api.tasks.TaskSystemFactoryException;
@@ -63,20 +67,25 @@ public class FileToOBFLStep extends DefaultStep {
     private static final QName _rowgap = new QName("rowgap");
     private static final QName _splitterMax = new QName("splitterMax");
     private static final QName _identifier = new QName("identifier");
+    
+    private static final Logger logger = LoggerFactory.getLogger(FileToOBFLStep.class);
 	
 	private WritablePipe result = null;
-	private final Map<String,String> parameters = new HashMap<String,String>();
+	private final Map<String,String> parameters = new HashMap<>();
 	
 	private final TaskSystemFactoryMakerService taskSystemFactoryService;
 	private final TaskGroupFactoryMakerService taskGroupFactoryService;
-	
+	private final IdentityProviderService identityService;
+
 	public FileToOBFLStep(XProcRuntime runtime,
 	                      XAtomicStep step,
 	                      TaskSystemFactoryMakerService taskSystemFactoryService,
-	                      TaskGroupFactoryMakerService taskGroupFactoryService) {
+	                      TaskGroupFactoryMakerService taskGroupFactoryService,
+	                      IdentityProviderService identityService) {
 		super(runtime, step);
 		this.taskSystemFactoryService = taskSystemFactoryService;
 		this.taskGroupFactoryService = taskGroupFactoryService;
+		this.identityService = identityService;
 	}
 	
 	@Override
@@ -135,9 +144,8 @@ public class FileToOBFLStep extends DefaultStep {
 			
 			params.putAll(parameters);
 			String locale = getOption(_locale, Locale.getDefault().toString());
-			InputStream resultStream = convert(
-					newTaskSystem(locale, getOption(_format, "obfl")),
-					inputFile, locale, params);
+			String outputFormat = getOption(_format, "obfl");
+			InputStream resultStream = convert(inputFile, outputFormat, locale, params);
 			
 			// Write result
 			result.write(runtime.getProcessor().newDocumentBuilder().build(new StreamSource(resultStream)));
@@ -155,28 +163,32 @@ public class FileToOBFLStep extends DefaultStep {
 		}
 	}
 		
-	private InputStream convert(TaskSystem system, File src, String locale, Map<String, Object> params) throws TaskSystemFactoryException, TaskSystemException, IOException {
+	private InputStream convert(File input, String outputFormat, String locale, Map<String, Object> params) throws TaskSystemFactoryException, TaskSystemException, IOException {
 		
 		// FIXME: see https://github.com/joeha480/dotify/issues/205
-		String inputFormat; {
-			inputFormat = "";
-			String inp = src.getName();
-			int inx = inp.lastIndexOf('.');
-			if (inx > -1) {
-				inputFormat = inp.substring(inx + 1);
-				if (!taskGroupFactoryService.listSupportedSpecifications().contains(new TaskGroupSpecification(inputFormat, "obfl", locale))) {
-					logger.debug("No input factory for " + inputFormat);
-					// attempt to detect a supported type
-					try {
-						if (XMLTools.isWellformedXML(src)) {
-							inputFormat = "xml";
-							logger.info("Input is well-formed xml."); }}
-					catch (XMLToolsException e) {
-						e.printStackTrace(); }}
-				else
-					logger.info("Found an input factory for " + inputFormat); }}
+		AnnotatedFile ai = identityService.identify(input);
+
+		String inputFormat = getFormatString(ai);
+		if (!supportsInputFormat(inputFormat, taskGroupFactoryService.listAll())) {
+			logger.debug("No input factory for " + inputFormat);
+			logger.info("Note, the following detection code has been deprected. In future versions, an exception will be thrown if this point is reached."
+						+ " To avoid this, use the IdentifierFactory interface to implement a detector for the file type.");
+			// attempt to detect a supported type
+			try {
+				if (XMLTools.isWellformedXML(ai.getFile())) {
+					ai = DefaultAnnotatedFile.with(ai).extension("xml").build();
+					inputFormat = ai.getExtension();
+					logger.info("Input is well-formed xml."); }}
+			catch (XMLToolsException e) {
+				logger.info("File is not well-formed xml: " + ai.getFile(), e);
+			}
+		} else {
+			logger.info("Found an input factory for " + inputFormat);
+		}
+
 		params.put("inputFormat", inputFormat);
-		params.put("input", src.getAbsolutePath());
+		params.put("input", ai.getFile().getAbsolutePath());
+		TaskSystem system = newTaskSystem(inputFormat, outputFormat, locale);
 		List<InternalTask> tasks = system.compile(params);
 		
 		// Create a destination file
@@ -185,14 +197,37 @@ public class FileToOBFLStep extends DefaultStep {
 		
 		// Run tasks
 		TaskRunner runner = TaskRunner.withName("dotify:file-to-obfl").build();
-		runner.runTasks(src, dest, tasks);
+		runner.runTasks(ai, dest, tasks);
 		
 		// Return stream
 		return new FileInputStream(dest);
 	}
+	
+	private static boolean supportsInputFormat(String inputFormat, Set<TaskGroupInformation> specs) {
+		for (TaskGroupInformation s : specs) {
+			if (s.getInputFormat().equals(inputFormat)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static String getFormatString(AnnotatedFile f) {
+		// FIXME: see https://github.com/joeha480/dotify/issues/205
 
-	private TaskSystem newTaskSystem(String locale, String format) throws TaskSystemFactoryException {
-		return taskSystemFactoryService.newTaskSystem(locale, format);
+		if (f.getFormatName()!=null) {
+			return f.getFormatName();
+		} else if (f.getExtension()!=null) {
+			return f.getExtension();
+		} else if (f.getMediaType()!=null) {
+			return f.getMediaType();
+		} else {
+			return null;
+		}
+	}
+
+	private TaskSystem newTaskSystem(String inputFormat, String outputFormat, String locale) throws TaskSystemFactoryException {
+		return taskSystemFactoryService.newTaskSystem(inputFormat, outputFormat, locale);
 	}
 	
 	@Component(
@@ -204,11 +239,12 @@ public class FileToOBFLStep extends DefaultStep {
 		
 		@Override
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-			return new FileToOBFLStep(runtime, step, taskSystemFactoryService, taskGroupFactoryService);
+			return new FileToOBFLStep(runtime, step, taskSystemFactoryService, taskGroupFactoryService, identityService);
 		}
 		
 		private TaskSystemFactoryMakerService taskSystemFactoryService = null;
 		private TaskGroupFactoryMakerService taskGroupFactoryService = null;
+		private IdentityProviderService identityService = null;
 		
 		@Reference(
 			name = "TaskSystemFactoryMakerService",
@@ -229,8 +265,16 @@ public class FileToOBFLStep extends DefaultStep {
 		protected void bindTaskGroupFactoryMakerService(TaskGroupFactoryMakerService service) {
 			taskGroupFactoryService = service;
 		}
+		
+		@Reference(
+			name = "IdentityProviderService",
+			service = IdentityProviderService.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.STATIC
+		)
+		protected void bindIdentityProviderService(IdentityProviderService service) {
+			identityService = service;
+		}
 	}
-	
-	private static final Logger logger = LoggerFactory.getLogger(FileToOBFLStep.class);
 	
 }

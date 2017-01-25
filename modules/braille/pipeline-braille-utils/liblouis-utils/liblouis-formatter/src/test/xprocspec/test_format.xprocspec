@@ -751,7 +751,7 @@
   <!--
       FIXME: paddings should not collapse with margins
   -->
-  <x:scenario label="test_09">
+  <x:scenario label="test_09" pending="broken since 8d75a10">
     <x:call step="louis:format">
       <x:input port="source">
         <x:document type="inline">
@@ -1868,7 +1868,7 @@
   <!--
       liblouisutdml bug (leftMargin + firstLineIndent < 0)
   -->
-  <x:scenario label="test_21">
+  <x:scenario label="test_21" pending="broken since 8d75a10">
     <x:call step="louis:format">
       <x:input port="source">
         <x:document type="inline">

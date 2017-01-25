@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.3</version>
+    <version>1.5</version>
     <relativePath />
   </parent>
 
@@ -174,17 +174,20 @@
     <pluginManagement>
       <plugins>
         <plugin>
-          <groupId>org.daisy.pipeline.modules.braille</groupId>
-          <artifactId>build-helper</artifactId>
-          <version>1.1.1</version>
-        </plugin>
-        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
             <source>1.7</source>
             <target>1.7</target>
           </configuration>
+        </plugin>
+        <!--
+            overrides version in daisy-4 (2.19.1) because tests are crashing with that version
+        -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.16</version>
         </plugin>
         <plugin>
           <groupId>org.apache.felix</groupId>
@@ -289,69 +292,6 @@
       </plugins>
     </pluginManagement>
   </build>
-  
-  <profiles>
-    <profile>
-      <id>pipeline-braille-xml-module</id>
-      <activation>
-        <file>
-          <exists>src/main/resources/META-INF/catalog.xml</exists>
-        </file>
-      </activation>
-      <build>
-        <resources>
-          <resource>
-            <directory>src/main/resources</directory>
-            <excludes>
-              <exclude>META-INF/catalog.xml</exclude>
-            </excludes>
-          </resource>
-          <resource>
-            <directory>${project.build.directory}/generated-resources</directory>
-            <includes>
-              <include>META-INF/catalog.xml</include>
-              <include>generated-scripts</include>
-              <include>generated-scripts/*</include>
-              <include>data-types</include>
-              <include>data-types/**/*</include>
-            </includes>
-          </resource>
-        </resources>
-        <plugins>
-          <!--
-              disable catalog-to-ds step from modules-parent
-          -->
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>xml-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>default</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.daisy.pipeline.modules.braille</groupId>
-            <artifactId>build-helper</artifactId>
-            <executions>
-              <execution>
-                <id>process-catalog</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>process-catalog</goal>
-                </goals>
-                <configuration>
-                  <catalogFile>src/main/resources/META-INF/catalog.xml</catalogFile>
-                  <outputDir>${project.build.directory}/generated-resources</outputDir>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
   
   <!--
       for javax.persistence

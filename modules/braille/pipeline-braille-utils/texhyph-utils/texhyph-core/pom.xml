@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>texhyph-core</artifactId>
-  <version>4.0.2-SNAPSHOT</version>
+  <version>4.1.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: texhyph-utils :: texhyph-core</name>

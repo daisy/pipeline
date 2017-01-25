@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:brl="http://www.daisy.org/z3986/2009/braille/"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               script="../../../main/resources/xml/inline.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foo="http://example.com/ns/">
+            <head>
+              <style media="embossed" type="text/css">
+                @namespace foo url(http://example.com/ns/);
+                p {
+                  display: block;
+                }
+                |p {
+                  margin-top: 1;
+                }
+                foo|p {
+                  text-align: center;
+                }
+              </style>
+            </head>
+            <body>
+              <p/>
+              <foo:p/>
+              <fu:p xmlns:fu="http://example.com/ns/"/>
+              <p xmlns="http://example.com/ns/"/>
+              <p xmlns=""/>
+            </body>
+          </html>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//html:body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body xmlns="http://www.w3.org/1999/xhtml">
+          <p style="display: block;"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-align: center;"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-align: center;"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-align: center;"/>
+          <p xmlns="" style="display: block; margin-top: 1;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foo="http://example.com/ns/">
+            <head>
+              <style media="embossed" type="text/css">
+                @namespace url(http://example.com/ns/);
+                @namespace foo url(http://www.w3.org/1999/xhtml);
+                p {
+                  display: block;
+                }
+                |p {
+                  margin-top: 1;
+                }
+                *|p {
+                  text-indent: 2;
+                }
+                foo|p {
+                  text-align: center;
+                }
+              </style>
+            </head>
+            <body>
+              <p/>
+              <foo:p/>
+              <fu:p xmlns:fu="http://example.com/ns/"/>
+              <p xmlns="http://example.com/ns/"/>
+              <p xmlns=""/>
+            </body>
+          </html>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//html:body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body xmlns="http://www.w3.org/1999/xhtml">
+          <p style="text-align: center; text-indent: 2;"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-indent: 2;"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-indent: 2;"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-indent: 2;"/>
+          <p xmlns="" style="margin-top: 1; text-indent: 2;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <html xmlns="http://www.w3.org/1999/xhtml" xmlns:foo="http://example.com/ns/">
+            <head>
+              <style media="embossed" type="text/css">
+                @namespace url(http://www.w3.org/1999/xhtml);
+                @namespace foo url(http://example.com/ns/);
+                [class~=foo] {
+                  display: block;
+                }
+                [|class~=foo] {
+                  margin-top: 1;
+                }
+                [foo|class~=foo] {
+                  text-align: center;
+                }
+                [*|class~=foo] {
+                  text-indent: 2;
+                }
+                .foo {
+                  padding-left: 2;
+                }
+              </style>
+            </head>
+            <body>
+              <p class="foo"/>
+              <p foo:class="foo"/>
+              <p xmlns:fu="http://example.com/ns/" fu:class="foo"/>
+              <p xmlns:html="http://www.w3.org/1999/xhtml" html:class="foo"/>
+            </body>
+          </html>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//html:body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body xmlns="http://www.w3.org/1999/xhtml">
+          <p class="foo" style="display: block; margin-top: 1; padding-left: 2; text-indent: 2;"/>
+          <p xmlns:x="http://example.com/ns/" x:class="foo" style="text-align: center; text-indent: 2;"/>
+          <p xmlns:x="http://example.com/ns/" x:class="foo"  style="text-align: center; text-indent: 2;"/>
+          <p xmlns:x="http://www.w3.org/1999/xhtml" x:class="foo" style="text-indent: 2;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_04">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @namespace xml "http://www.w3.org/XML/1998/namespace";
+                [xml|space=preserve] {
+                  white-space: pre-wrap;
+                }
+              </style>
+            </head>
+            <body>
+              <p xml:space="preserve"/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p xml:space="preserve" style="white-space: pre-wrap;"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

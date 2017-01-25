@@ -6,19 +6,19 @@
   <x:scenario label="test_01">
     <x:context>
       <doc>
-        <css:box type="block" css:padding-left="2" style="border-left: ⠇">
+        <css:box type="block" css:padding-left="2" style="border-left-pattern: ⠇">
           <css:_>
-            <css:box style="border-left: inherit"/>
+            <css:box style="border-left-pattern: inherit"/>
           </css:_>
         </css:box>
       </doc>
     </x:context>
     <x:expect label="result">
       <doc>
-        <css:box type="block" style="border-left: ⠇">
+        <css:box type="block" style="border-left-pattern: ⠇">
           <css:box type="block" css:margin-left="2" css:collapsing-margins="no">
             <css:_>
-              <css:box style="border-left: ⠇"/>
+              <css:box style="border-left-pattern: ⠇"/>
             </css:_>
           </css:box>
         </css:box>

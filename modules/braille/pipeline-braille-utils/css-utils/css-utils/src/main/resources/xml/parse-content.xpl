@@ -13,21 +13,23 @@
         <p:documentation>
             The 'content' properties of elements in the input must be declared in css:content
             attributes, and must conform to
-            http://snaekobbi.github.io/braille-css-spec/#the-content-property. '::duplicate' and
-            '::alternate' pseudo-elements must be reprented by css:duplicate and css:alternate
-            elements with a css:anchor attribute that points to the original element.
+            http://snaekobbi.github.io/braille-css-spec/#the-content-property. '::before' and
+            '::after' and '::footnote-call' pseudo-elements must be represented by css:before,
+            css:after and css:footnote-call elements. '::alternate' pseudo-elements must be
+            reprented by css:alternate elements with a css:anchor attribute that points to the
+            original element. Custom pseudo-elements must be represented by css:_* elements.
         </p:documentation>
     </p:input>
     
     <p:output port="result">
         <p:documentation>
-            For each element in the input with a css:content attribute, the content list in that
-            attribute is parsed, partly evaluated, and inserted in the output in place of the
-            element's original content. String values and attr() values are evaluated to
-            text. counter(), string(), target-counter(), target-text(), target-string(),
-            target-content(), flow() and leader() values and custom function are inserted as
-            css:counter, css:string, css:text, css:content, css:flow, css:leader and css:custom-func
-            elements. string() values are invalid.
+            For each '::before', '::after', '::footnote-call' or '::alternate' pseudo-element in the
+            input with a css:content attribute, the content list in that attribute is parsed, partly
+            evaluated, and inserted in the output in place of the element's original content. String
+            values and attr() values are evaluated to text. counter(), string(), target-counter(),
+            target-text(), target-string(), target-content(), flow() and leader() values and custom
+            function are inserted as css:counter, css:string, css:text, css:content, css:flow,
+            css:leader and css:custom-func elements.
         </p:documentation>
     </p:output>
     

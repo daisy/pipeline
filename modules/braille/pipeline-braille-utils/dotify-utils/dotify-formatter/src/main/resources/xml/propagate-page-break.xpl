@@ -7,8 +7,7 @@
                 version="1.0">
     
     <p:documentation>
-        Change, add and remove page-break properties so that they can be mapped one-to-one on OBFL
-        properties.
+        Propagate page breaking related properties.
     </p:documentation>
     
     <p:input port="source">
@@ -18,31 +17,51 @@
             parent of a box must be another box (or a css:_ element if it's the document
             root). Inline boxes must have at least one non-inline box ancestor and must not have
             non-inline descendant or sibling boxes. All other nodes must have at least one inline
-            box ancestor. The 'page-break' properties of block boxes must be declared in
-            css:page-break-before, css:page-break-after and css:page-break-inside attributes.
+            box ancestor. The 'page-break' and 'volume-break' properties of block boxes must be
+            declared in css:page-break-before, css:page-break-after, css:page-break-inside and
+            css:volume-break-before attributes. 'page' properties must be declared in css:page
+            attributes. 'counter-set' properties for the 'page' counter must be declared in
+            css:counter-set-page attributes. 'volume' properties must be declared in css:volume
+            attributes.
         </p:documentation>
     </p:input>
     
     <p:output port="result">
         <p:documentation>
-            A 'page-break-before' property with value 'left', 'right' or 'always' is propagated to
-            the closest ancestor-or-self block box with a preceding sibling, or if there is no such
-            element, to the outermost ancestor-or-self block box. A 'page-break-after' property with
-            value 'avoid' is propagated to the closest ancestor-or-self block box with a following
-            sibling. A 'page-break-before' property with value 'avoid' is converted into a
-            'page-break-after' property on the preceding sibling of the closest ancestor-or-self
-            block box with a preceding sibling. A 'page-break-after' property with value 'left',
-            'right' or 'always' is converted into a 'page-break-before' property on the immediately
-            following block box, or if there is no such element, moved to the outermost
-            ancestor-or-self block box. A 'page-break-inside' property with value 'avoid' on a box
-            with child block boxes is propagated to all its children, and all children except the
-            last get a 'page-break-after' property with value 'avoid'. In case of conflicting values
-            for a certain property, 'left' and 'right' win from 'always', 'always' wins from
-            'avoid', and 'avoid' wins from 'auto'. When 'left' and 'right' are combined, the value
-            specified on the latest element in the document wins. In case of conflicting values
-            between adjacent siblings, the value 'always' takes precedence over 'avoid'.
+            A 'page-break-before' or 'volume-break-before' property is propagated to the closest
+            ancestor-or-self block box with a preceding sibling, or if there is no such element, to
+            the outermost ancestor-or-self block box. A 'page-break-after' or 'volume-break-after'
+            property is propagated to the closest ancestor-or-self block box with a following
+            sibling, or if there is no such element, moved to the outermost ancestor-or-self block
+            box. A 'page-break-inside' property with value 'avoid' on a box with child block boxes
+            is propagated to all its children, and all children except the last get a
+            'page-break-after' property with value 'avoid'. In case of conflicting values for a
+            certain property, 'left' and 'right' win from 'always', 'always' wins from 'avoid', and
+            'avoid' wins from 'auto'. When 'left' and 'right' are combined, the value specified on
+            the latest element in the document wins. In case of conflicting values between adjacent
+            siblings, the same precedence rules apply. Forced page breaks of type 'right' are
+            introduced where needed to satisfy the 'page' properties. Forced page breaks of type
+            'always' are introduced where needed to satisfy the 'volume' properties. These forced
+            page breaks are propagated also as described above.
         </p:documentation>
     </p:output>
+    
+    <p:label-elements match="css:box[some $page in @css:page satisfies
+                                     preceding::css:box[@type='inline'][1][not((ancestor-or-self::*/@css:page)[last()][.=$page])]]"
+                      attribute="css:start-page"
+                      label="@css:page"/>
+    <p:label-elements match="css:box[some $page in @css:page satisfies
+                                     following::css:box[@type='inline'][1][not((ancestor-or-self::*/@css:page)[last()][.=$page])]]"
+                      attribute="css:end-page"
+                      label="@css:page"/>
+    <p:label-elements match="css:box[some $volume in @css:volume satisfies
+                                     preceding::css:box[@type='inline'][1][not((ancestor-or-self::*/@css:volume)[last()][.=$volume])]]"
+                      attribute="css:start-volume"
+                      label="@css:volume"/>
+    <p:label-elements match="css:box[some $volume in @css:volume satisfies
+                                     following::css:box[@type='inline'][1][not((ancestor-or-self::*/@css:volume)[last()][.=$volume])]]"
+                      attribute="css:end-volume"
+                      label="@css:volume"/>
     
     <p:xslt>
         <p:input port="stylesheet">
@@ -54,9 +73,17 @@
     </p:xslt>
     
     <!--
-        In case of conflicting values between adjacent siblings, the value 'always' takes precedence
-        over 'avoid'.
+        In case of conflicting values between adjacent siblings, the same precedence rules apply.
     -->
+    <p:delete match="@css:page-break-after[.='auto']"/>
+    <p:delete match="@css:page-break-before[.='auto']"/>
     <p:delete match="@css:page-break-after[.='avoid' and parent::*/following-sibling::*[1]/@css:page-break-before=('always','right','left')]"/>
+    <p:delete match="@css:page-break-before[.='avoid' and parent::*/preceding-sibling::*[1]/@css:page-break-after=('always','right','left')]"/>
+    <p:delete match="@css:page-break-after[.='always' and parent::*/following-sibling::*[1]/@css:page-break-before=('right','left')]"/>
+    <p:delete match="@css:page-break-before[.='always' and parent::*/preceding-sibling::*[1]/@css:page-break-after=('right','left')]"/>
+    <p:delete match="@css:page-break-after[.=('right','left') and parent::*/following-sibling::*[1]/@css:page-break-before=('right','left')]"/>
+    
+    <p:delete match="@css:volume-break-after[.='auto']"/>
+    <p:delete match="@css:volume-break-before[.='auto']"/>
     
 </p:declare-step>

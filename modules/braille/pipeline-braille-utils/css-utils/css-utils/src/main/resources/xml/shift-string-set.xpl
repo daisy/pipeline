@@ -6,37 +6,33 @@
                 version="1.0">
     
     <p:documentation>
-        Move 'string-set' declarations to boxes.
+        Move 'string-set' declarations to inline boxes.
     </p:documentation>
     
-    <p:input port="source" sequence="true">
+    <p:input port="source">
         <p:documentation>
-            Boxes must be represented by css:box elements. 'string-set' properties must be declared
-            in css:string-set attributes, and must conform to
+            Boxes must be represented by css:box elements. All block boxes must have at least one
+            descendant inline box and inline boxes must have no descendant block boxes. 'string-set'
+            properties must be declared in css:string-set attributes, and must conform to
             http://snaekobbi.github.io/braille-css-spec/#the-string-set-property.
         </p:documentation>
     </p:input>
     
-    <p:output port="result" sequence="true">
+    <p:output port="result">
         <p:documentation>
-            For each non-css:box element in the input that is not a descendant of an inline css:box,
-            if it has a css:string-set attribute it is moved to the first following css:box. If this
-            css:box element already has a css:string-set attribute in the input, the 'string-set'
-            declarations are prepended to it.
+            For each element in the input that has a css:string-set attribute and is not a
+            descendant of an inline box and not an inline box itself, the attribute is moved to the
+            first descendant or following inline box within the same block (which may be the element
+            itself). If there is no such element, the attribute is placed on an empty css:_ element
+            inserted as the last child of the last preceding inline box (in the same block). In the
+            former case, if the attribute is moved to a css:box element that already has a
+            css:string-set attribute in the input, the 'string-set' declarations are prepended to
+            it.
         </p:documentation>
     </p:output>
     
-    <p:wrap-sequence wrapper="_"/>
-    
-    <p:xslt>
-        <p:input port="stylesheet">
-            <p:document href="shift-string-set.xsl"/>
-        </p:input>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-    </p:xslt>
-    
-    <p:filter select="/_/*"/>
+    <!--
+        Implemented in Java
+    -->
     
 </p:declare-step>
