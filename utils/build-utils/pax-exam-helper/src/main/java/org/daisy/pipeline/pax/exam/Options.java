@@ -1,7 +1,7 @@
 package org.daisy.pipeline.pax.exam;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
@@ -115,13 +116,17 @@ public abstract class Options {
 		String components = manifest.getMainAttributes().getValue("Service-Component");
 		if (components != null)
 			for (String component : components.split(","))
-				if (!(new File(classes, component)).exists())
-					return bundle("reference:"
-					              + (new File(PathUtils.getBaseDir() + "/target/")).listFiles(
-					                  new FilenameFilter() {
-					                      public boolean accept(File dir, String name) {
-					                          return name.endsWith(".jar"); }}
-						              )[0].toURI());
+				if (!(new File(classes, component)).exists()) {
+					Properties dependencies = new Properties();
+					try {
+						dependencies.load(new FileInputStream(new File(classes, "META-INF/maven/dependencies.properties"))); }
+					catch (IOException e) {
+						throw new RuntimeException(e); }
+					String artifactId = dependencies.getProperty("artifactId");
+					String version = dependencies.getProperty("version");
+					
+					// assuming JAR is named ${artifactId}-${version}.jar
+					return bundle("reference:" + new File(PathUtils.getBaseDir() + "/target/" + artifactId + "-" + version + ".jar").toURI()); }
 		return bundle("reference:" + classes.toURI());
 	}
 	
