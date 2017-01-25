@@ -7,7 +7,7 @@ package cz.vutbr.web.css;
  *
  * @param <T> Internal content of rule
  */
-public interface RuleBlock<T> extends Rule<T>{
+public interface RuleBlock<T> extends Rule<T>, Cloneable {
 
 	/**
 	 * Sets the owner style sheet for this rule.
@@ -20,5 +20,7 @@ public interface RuleBlock<T> extends Rule<T>{
 	 * @return The stylesheet.
 	 */
 	public StyleSheet getStyleSheet();
+
+	public Object clone();
 	
 }

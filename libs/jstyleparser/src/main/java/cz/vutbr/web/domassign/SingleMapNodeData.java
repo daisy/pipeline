@@ -74,6 +74,7 @@ public class SingleMapNodeData implements NodeData, Cloneable {
         
         if(includeInherited) {
             if(q.curValue!=null) return q.curValue;
+            if(q.curProp!=null) return null;
             return q.inhValue;
         }
         
@@ -205,10 +206,10 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 			Quadruple q = map.get(key);
 
 			CSSProperty prop = q.curProp;
-			if(prop==null) prop = q.inhProp;
-
 			Term<?> value = q.curValue;
-			if(value==null) value = q.inhValue;
+			if(prop==null) {
+				prop = q.inhProp;
+				if (value==null) value = q.inhValue; }
 			
 			sb.append(key).append(OutputUtil.PROPERTY_OPENING);
 			
