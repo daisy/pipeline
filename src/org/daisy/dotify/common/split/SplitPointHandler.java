@@ -17,47 +17,51 @@ import org.daisy.dotify.common.collection.SplitList;
  */
 public class SplitPointHandler<T extends SplitPointUnit> {
 	private final List<T> EMPTY_LIST = Collections.emptyList();
-	private boolean trimTrailing;
-	private SplitPointCost<T> cost;
-	
-	/**
-	 * Creates a new split point handler.
-	 */
-	public SplitPointHandler() {
-		this.trimTrailing = true;
-		this.cost = new SplitPointCost<T>() {
-			@Override
-			public double getCost(SplitPointDataSource<T> data, int index, int breakpoint) {
-				// 1. the smaller the result, the higher the cost
-				// 2. breakable units are always preferred over forced ones
-				return (data.get(index).isBreakable()?1:2)*breakpoint-index;
-			}
-		};
-	}
+	private final SplitPointCost<T> defaultCost = new SplitPointCost<T>() {
+		@Override
+		public double getCost(SplitPointDataSource<T> data, int index, int breakpoint) {
+			// 1. the smaller the result, the higher the cost
+			// 2. breakable units are always preferred over forced ones
+			return (data.get(index).isBreakable()?1:2)*breakpoint-index;
+		}
+	};
 	
 	/**
 	 * Splits the data at, or before, the supplied breakPoint according to the rules
 	 * in the data. If force is used, rules may be broken to achieve a result.
 	 * @param breakPoint the split point
-	 * @param force true if force is allowed, false otherwise
 	 * @param units the data
 	 * @return returns a split point result
 	 */
 	@SafeVarargs
-	public final SplitPoint<T> split(float breakPoint, boolean force, T ... units) {
-		return split(breakPoint, force, new SplitPointDataList<>(units));
+	public final SplitPoint<T> split(float breakPoint, T ... units) {
+		return split(breakPoint, new SplitPointDataList<>(units), defaultCost);
 	}
 
 	/**
 	 * Splits the data at, or before, the supplied breakPoint according to the rules
 	 * in the data. If force is used, rules may be broken to achieve a result.
 	 * @param breakPoint the split point
-	 * @param force true if force is allowed, false otherwise
 	 * @param units the data
+	 * @param options the split options
 	 * @return returns a split point result
 	 */
-	public SplitPoint<T> split(float breakPoint, boolean force, List<T> units) {
-		return split(breakPoint, force, new SplitPointDataList<>(units));
+	public SplitPoint<T> split(float breakPoint, List<T> units, SplitOption ... options) {
+		return split(breakPoint, new SplitPointDataList<T>(units), defaultCost, options);
+	}
+	
+	/**
+	 * Splits the data at, or before, the supplied breakPoint according to the rules
+	 * in the data. If force is used, rules may be broken to achieve a result.
+	 * @param breakPoint the split point
+	 * @param units the data
+	 * @param cost the cost function used when determining the optimal <i>forced</i> split point. In other words,
+	 * 		 the cost function is only used if there are no breakable units available.
+	 * @param options the split options
+	 * @return returns a split point result
+	 */
+	public SplitPoint<T> split(float breakPoint, List<T> units, SplitPointCost<T> cost, SplitOption ... options) {
+		return split(breakPoint, new SplitPointDataList<>(units), cost, options);
 	}
 
 	/**
@@ -65,11 +69,32 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * in the data. If force is used, rules may be broken to achieve a result.
 	 * 
 	 * @param breakPoint the split point
-	 * @param force true if force is allowed, false otherwise
 	 * @param data the data to split
+	 * @param options the split options
 	 * @return returns a split point result
+	 * @throws IllegalArgumentException if cost is null
 	 */
-	public SplitPoint<T> split(float breakPoint, boolean force, SplitPointDataSource<T> data) {
+	public SplitPoint<T> split(float breakPoint, SplitPointDataSource<T> data, SplitOption ... options) {
+		return split(breakPoint, data, defaultCost, options);
+	}
+
+	/**
+	 * Splits the data at, or before, the supplied breakPoint according to the rules
+	 * in the data. If force is used, rules may be broken to achieve a result.
+	 * 
+	 * @param breakPoint the split point
+	 * @param data the data to split
+	 * @param cost the cost function used when determining the optimal <i>forced</i> split point. In other words,
+	 * 		 the cost function is only used if there are no breakable units available.
+	 * @param options the split options
+	 * @return returns a split point result
+	 * @throws IllegalArgumentException if cost is null
+	 */
+	public SplitPoint<T> split(float breakPoint, SplitPointDataSource<T> data, SplitPointCost<T> cost, SplitOption ... options) {
+		SplitOptions opts = SplitOptions.parse(options);
+		if (cost==null) {
+			throw new IllegalArgumentException("Null cost not allowed.");
+		}
 		if (data.isEmpty()) {
 			// pretty simple...
 			return new SplitPoint<>(EMPTY_LIST, EMPTY_LIST, SplitPointDataList.emptyManager(), EMPTY_LIST, false);
@@ -82,8 +107,29 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 			if (startPos<0) {
 				return emptyHead(data);
 			} else {
-				return findBreakpoint(data, force, startPos);
+				return findBreakpoint(data, opts.useForce, startPos, cost, opts.trimTrailing);
 			}
+		}
+	}
+	
+	private static class SplitOptions {
+		boolean useForce = false;
+		boolean trimTrailing = true;
+		static SplitOptions parse(SplitOption ... opts) {
+			SplitOptions result = new SplitOptions();
+			for (SplitOption option : opts) {
+				if (option==StandardSplitOption.ALLOW_FORCE) {
+					result.useForce = true;
+				} else if (option==StandardSplitOption.RETAIN_TRAILING) {
+					result.trimTrailing = false;
+				} else if (option == null) {
+                   //no-op
+				} else {
+					throw new UnsupportedOperationException("'" + option +
+                    "' is not a recognized split option");
+				}
+			}
+			return result;
 		}
 	}
 	
@@ -91,57 +137,20 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		return finalizeBreakpointTrimTail(new SplitList<>(EMPTY_LIST, EMPTY_LIST), data, data.getSupplements(), false);
 	}
 
-	/**
-	 * Returns true if trailing skippable units will be removed.
-	 * @return true if trailing skippable units will be removed, false otherwise
-	 */
-	public boolean isTrimTrailing() {
-		return trimTrailing;
-	}
-
-	/**
-	 * Sets whether to trim trailing skippable units or not.
-	 * @param trimTrailing the new value
-	 */
-	public void setTrimTrailing(boolean trimTrailing) {
-		this.trimTrailing = trimTrailing;
-	}
-	
-	/**
-	 * Gets the cost function
-	 * @return returns the cost function
-	 */
-	public SplitPointCost<T> getCost() {
-		return cost;
-	}
-	
-	/**
-	 * <p>Sets the cost function used when determining the optimal <i>forced</i> split point.</p>
-	 * <p>Note that the cost function is only used if there are no breakable units available.</p>
-	 * @param cost the cost function
-	 * @throws IllegalArgumentException if cost is null
-	 */
-	public void setCost(SplitPointCost<T> cost) {
-		if (cost==null) {
-			throw new IllegalArgumentException("Null not allowed.");
-		}
-		this.cost = cost;
-	}
-	
-	private SplitPoint<T> findBreakpoint(SplitPointDataSource<T> data, boolean force, int startPos) {
+	private SplitPoint<T> findBreakpoint(SplitPointDataSource<T> data, boolean force, int startPos, SplitPointCost<T> cost, boolean trimTrailing) {
 		Supplements<T> map = data.getSupplements();
 		int strPos = forwardSkippable(data, startPos);
 		// check next unit to see if it can be removed.
 		if (!data.hasElementAt(strPos+1)) { // last unit?
 			List<T> head = data.head(strPos+1);
 			int tailStart = strPos+1;
-			return finalizeBreakpointFull(data, head, tailStart, map, false);
+			return finalizeBreakpointFull(data, head, tailStart, map, false, trimTrailing);
 		} else {
-			return newBreakpointFromPosition(data, strPos, map, force);
+			return newBreakpointFromPosition(data, strPos, map, force, cost, trimTrailing);
 		}
 	}
 	
-	private SplitPoint<T> newBreakpointFromPosition(SplitPointDataSource<T> data, int strPos, Supplements<T> map, boolean force) {
+	private SplitPoint<T> newBreakpointFromPosition(SplitPointDataSource<T> data, int strPos, Supplements<T> map, boolean force, SplitPointCost<T> cost, boolean trimTrailing) {
 		// back up
 		BreakPointScannerResult result=findBreakpointBefore(data, strPos, cost);
 		List<T> head;
@@ -160,10 +169,10 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 			head = data.head(result.bestBreakable+1);
 			tailStart = result.bestBreakable+1;
 		}
-		return finalizeBreakpointFull(data, head, tailStart, map, hard);
+		return finalizeBreakpointFull(data, head, tailStart, map, hard, trimTrailing);
 	}
 	
-	private SplitPoint<T> finalizeBreakpointFull(SplitPointDataSource<T> data, List<T> head, int tailStart, Supplements<T> map, boolean hard) {
+	private SplitPoint<T> finalizeBreakpointFull(SplitPointDataSource<T> data, List<T> head, int tailStart, Supplements<T> map, boolean hard, boolean trimTrailing) {
 		SplitPointDataSource<T> tail = getTail(data, tailStart);
 
 		if (trimTrailing) {
