@@ -14,7 +14,9 @@ import org.daisy.dotify.common.collection.SplitList;
  * @author Joel Håkansson
  *
  * @param <T> the type of split point units
+ * @deprecated use the corresponding class in the org.daisy.dotify.common.split package.
  */
+@Deprecated
 public class SplitPointHandler<T extends SplitPointUnit> {
 	private final List<T> EMPTY_LIST = Collections.emptyList();
 	private boolean trimTrailing;

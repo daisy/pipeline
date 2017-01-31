@@ -3,6 +3,7 @@ package org.daisy.dotify.common.layout;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 class DummySplitPoint implements SplitPointUnit {
 	private final boolean breakable, skippable, collapsible;
 	private final float size;

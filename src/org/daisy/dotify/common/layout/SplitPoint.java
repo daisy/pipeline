@@ -7,7 +7,9 @@ import java.util.List;
  * Provides a data object to keep the information about a split point result.
  * @param <T> the type of split point units 
  * @author Joel Håkansson
+ * @deprecated use the corresponding class in the org.daisy.dotify.common.split package.
  */
+@Deprecated
 public class SplitPoint<T extends SplitPointUnit> {
 
 	private final List<T> head;

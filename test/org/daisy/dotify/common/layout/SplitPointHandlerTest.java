@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+@Deprecated
 @SuppressWarnings("javadoc")
 public class SplitPointHandlerTest {
 

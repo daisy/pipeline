@@ -5,7 +5,9 @@ package org.daisy.dotify.common.layout;
  * @author joha
  *
  * @param <T>
+ * @deprecated use the corresponding class in the org.daisy.dotify.common.split package.
  */
+@Deprecated
 interface StepForward<T extends SplitPointUnit> {
 	/**
 	 * Performed when a unit should be included.

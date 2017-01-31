@@ -6,8 +6,9 @@ import java.util.List;
  * 
  * @author Joel Håkansson
  * @param <T> the type of split point unit
- *
+ * @deprecated use the corresponding class in the org.daisy.dotify.common.split package.
  */
+@Deprecated
 @FunctionalInterface
 public interface SplitPointCost<T extends SplitPointUnit> {
 

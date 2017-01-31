@@ -5,7 +5,9 @@ package org.daisy.dotify.common.layout;
  * @author Joel Håkansson
  *
  * @param <T> the type of units
+ * @deprecated use the corresponding class in the org.daisy.dotify.common.split package.
  */
+@Deprecated
 public interface Supplements<T> {
 
 	/**

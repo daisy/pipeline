@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Deprecated
 class TrimStep<T extends SplitPointUnit> implements StepForward<T> {
 	private final List<T> ret;
 	private final List<T> supplements;

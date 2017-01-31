@@ -6,7 +6,9 @@ import java.util.List;
  * Provides an interface for split point units.
  * @author Joel Håkansson
  *
+ * @deprecated use the corresponding class in the org.daisy.dotify.common.split package.
  */
+@Deprecated
 public interface SplitPointUnit {
 	
 	/**

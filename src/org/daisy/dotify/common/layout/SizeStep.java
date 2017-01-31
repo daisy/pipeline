@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Deprecated
 class SizeStep<T extends SplitPointUnit> implements StepForward<T> {
 	private float size = 0;
 	private final Supplements<T> map;
