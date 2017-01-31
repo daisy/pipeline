@@ -92,10 +92,11 @@ pre {
 }
 
 section.important {
-	background-color: lighten($color-primary-4, 7%);
+	background-color: #f7f7ff;
 	margin-left: -1rem;
 	padding: .7rem 1rem;
 	border-radius: .5rem;
+	border: 1px solid silver;
 	h2 {
 		color: #ff5500;
 		font-size: 180%; }
