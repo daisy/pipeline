@@ -79,10 +79,11 @@ pre {
   margin: 0; }
 
 section.important {
-  background-color: #e0e8ff;
+  background-color: #f7f7ff;
   margin-left: -1rem;
   padding: .7rem 1rem;
-  border-radius: .5rem; }
+  border-radius: .5rem;
+  border: 1px solid silver; }
   section.important h2 {
     color: #ff5500;
     font-size: 180%; }

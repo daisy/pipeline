@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>Building</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Building">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      
+      Installation
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide" tabindex="8">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/wiki/webui/User-Guide" tabindex="9">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Templating" tabindex="10">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Administrator-settings" tabindex="11">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="12">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/Configuration-Files" tabindex="13">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line.html" tabindex="14">
+      
+      Command Line Tool
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts.html" tabindex="15">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="16">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="17">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="18">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="19">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="20">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="21">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="22">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="23">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="24">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="25">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="26">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="27">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="28">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="29">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="30">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="31">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="32">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="33">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="34">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="35">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="36">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="37">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/search?utf8=%E2%9C%93&amp;type=Issues&amp;q=+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl" class="external-link" target="_blank" tabindex="38">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide.html" tabindex="39">
+      
+      Developer Guide
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      
+        <nav id="nav-wiki">
+  
+  <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/Home">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/Documentation-Contract">
+      
+      Documentation contract
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/ValidationReportXML">
+      
+      Document Validation Report
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/ValidationStatusXML">
+      
+      Validation Status XML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/Configuration-Files">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/Presentations">
+      
+      Presentations
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+      
+      <div class="edit-button">
+  <a href="https://github.com/daisy/pipeline/edit/wiki/Building.md" class="external-link" target="_blank">
+    Edit this page on Github
+  </a>
+</div>
+
+      <h1 id="build-system">Build System</h1>
+
+<p>This page explains how to build the various components the system is
+composed of, and at the same time tries to give an idea of which
+components are responsible for which functionalities.</p>
+
+<p>TODO: links to READMEs</p>
+
+<p>TODO: link from snaekobbi wiki to this page</p>
+
+<h2 id="building">Building</h2>
+
+<h3 id="prerequisites-build-tools">Prerequisites (build tools)</h3>
+
+<h3 id="building-individual-components">Building individual components</h3>
+
+<h3 id="building-everything-at-once">Building everything at once</h3>
+
+<p>aggregator project</p>
+
+<p>including some dependencies (external libraries) that require changes frequently</p>
+
+<h3 id="building-incrementally-and-with-local-workspace">Building incrementally and with local workspace</h3>
+
+<h3 id="full-build-building-without-internal-versions">Full build (building without internal versions)</h3>
+
+<h2 id="building-individual-components-1">Building individual components</h2>
+
+<p>While the system as a whole makes use of several build tools
+(<a href="https://en.wikipedia.org/wiki/Apache_Maven" class="external-link" target="_blank">Maven</a>, <a href="https://en.wikipedia.org/wiki/Gradle" class="external-link" target="_blank">Gradle</a>, <a href="https://en.wikipedia.org/wiki/GNU_build_system" class="external-link" target="_blank">Autotools</a>, etc.), the way of connecting
+the individual components is completely Maven based, which means that
+upon releasing a certain component, the artifact is made available
+(“deployed”) in an online Maven repository to any component that wants
+to make use of it. Dependencies are resolved and downloaded
+automatically and do not have to be copied explicitely.</p>
+
+<p>Gradle is Maven compatible. Liblouis and Libhyphen are built with
+Autotools, but the binary artifacts are made part of the Maven system
+by packaging them into a special kind of JAR file (see
+e.g. [liblouis-nar][]).</p>
+
+<p>As a result of this approach, components only need to be built locally
+when changes have been made to them and need to be tested or used in
+other components. These development versions must be marked as
+“snapshots”. Although theoretically possible, it does not make a lot
+of sense to rebuild artifacts that have already been released. Maven
+has a rule that says versions must always be snapshots except in a
+“release commit”, and that no two release commits may have the same
+version number. Because when under development an artifact (snapshot)
+can change from one day to the other, no released versions should ever
+depend on a snapshot. Snapshot dependencies between components that
+live in different source repositories are also best kept to a minimum.</p>
+
+<p>The various components are listed below in the order they need to be
+built.</p>
+
+<h3 id="liblouisliblouisliblouis"><a href="https://github.com/liblouis/liblouis" class="external-link" target="_blank">liblouis</a></h3>
+
+<p>Liblouis is the component that implements the braille translation
+codes for most of the languages, specified in so called Liblouis
+translation tables.</p>
+
+<p>For more information and build instructions see <a href="https://github.com/liblouis/liblouis" class="external-link" target="_blank">liblouis/liblouis</a> and
+<a href="https://github.com/liblouis/liblouis-nar" class="external-link" target="_blank">liblouis/liblouis-nar</a>.</p>
+
+<h3 id="dotifyjoeha480dotify"><a href="https://github.com/joeha480/dotify" class="external-link" target="_blank">dotify</a></h3>
+
+<p>Dotify is the component that implements the Open Braille Formatting
+Language <a href="http://files.pef-format.org/drafts/obfl/obfl-specification.html" class="external-link" target="_blank">OBFL</a>, in other words it is our formatter. Dotify also
+provides an implementation of the Swedish braille code.</p>
+
+<p>For more information and build instructions see <a href="https://github.com/joeha480/dotify" class="external-link" target="_blank">joeha480/dotify</a>.</p>
+
+<h3 id="braille-csssnaekobbibraille-css"><a href="https://github.com/snaekobbi/braille-css" class="external-link" target="_blank">braille-css</a></h3>
+
+<p>braille-css is the ANTLR based parser for
+<a href="http://snaekobbi.github.io/braille-css-spec" class="external-link" target="_blank">Braille CSS</a>.</p>
+
+<p>For more information and build instructions see <a href="https://github.com/snaekobbi/braille-css" class="external-link" target="_blank">snaekobbi/braille-css</a>.</p>
+
+<h3 id="brailleutilsjoeha480brailleutils"><a href="https://github.com/joeha480/brailleutils" class="external-link" target="_blank">brailleutils</a></h3>
+
+<p>Braille Utils contains everything related to converting from and to
+the Portable Embosser Format <a href="http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html" class="external-link" target="_blank">PEF</a>.</p>
+
+<p>For more information and build instructions see <a href="https://github.com/joeha480/brailleutils" class="external-link" target="_blank">joeha480/brailleutils</a>.</p>
+
+<h3 id="pipeline-mod-brailledaisypipeline-mod-braille"><a href="https://github.com/daisy/pipeline-mod-braille" class="external-link" target="_blank">pipeline-mod-braille</a></h3>
+
+<p>pipeline-mod-braille is the component (group of Pipeline modules) that
+builds on the Pipeline framework and integrates and interconnects all
+the lower-level components such as <a href="#dotify">dotify</a>,
+<a href="#liblouis">liblouis</a>, <a href="#braille-css">braille-css</a>, etc. It does not
+include agency specific things (see
+<a href="#pipeline-mod--celia--dedicon--mtm--nlb--nota--sbs">below</a>).</p>
+
+<p>pipeline-mod-braille is special in that it is a multi-module
+project. The modules have inter-dependencies as well as external
+dependencies. All modules can be built at once by invoking <code>mvn</code> from
+the root directory of the project (the “aggregator”). The build order
+is determined by Maven. If only a single module has changes since it
+was last built, it suffices to rebuild that single module.</p>
+
+<p>In order to avoid having to release <em>all</em> modules whenever a single
+module is released, every module is disabled after each release (by
+removing it from the aggregator), and modules are enabled again as
+soon as they have changes in the code. Important is that whenever a
+module is enabled and you want to use that snapshot elsewhere, you
+should also update that module’s version number in <code>bom/pom.xml</code>, the
+so called “Bill of Materials”. The purpose of the BoM is to be a
+central record of the version numbers of all modules and external
+dependencies that can be imported by every module and every external
+project that wishes to use a braille module or the braille modules as
+a whole.</p>
+
+<p>The version of the braille modules as a group is declared in both
+<code>parent/pom.xml</code> and <code>bom/pom.xml</code> and is chosen to match the version
+of the next <a href="#pipeline-assembly">pipeline-assembly</a>.</p>
+
+<h4 id="dependencies">Dependencies</h4>
+<ul>
+  <li><a href="#liblouis">liblouis</a></li>
+  <li><a href="#dotify">dotify</a></li>
+  <li><a href="#braille-css">braille-css</a></li>
+  <li><a href="#brailleutils">brailleutils</a></li>
+  <li>libhyphen</li>
+</ul>
+
+<p>The versions of these external dependencies are declared in <code>bom/pom.xml</code>.</p>
+
+<h4 id="build-instructions">Build instructions</h4>
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>mvn clean install
+</pre></div>
+</div>
+</div>
+
+<p>This will also invoke the unit tests. Java 8 is required.</p>
+
+<h3 id="pipeline-assemblydaisypipeline-assembly"><a href="https://github.com/daisy/pipeline-assembly" class="external-link" target="_blank">pipeline-assembly</a></h3>
+
+<p>pipeline-assembly is the build script that assembles the complete
+Pipeline engine including the
+<a href="#pipeline-mod-braille">braille modules</a>, and packages everything in a
+DEB file.</p>
+
+<p>The version is declared in <code>pom.xml</code>.</p>
+
+<h4 id="dependencies-1">Dependencies</h4>
+<ul>
+  <li><a href="#pipeline-mod-braille">pipeline-mod-braille</a></li>
+</ul>
+
+<p>The version of <code>braille-modules-bom</code> in <code>pom.xml</code> must match the
+version of <a href="#pipeline-mod-braille">pipeline-mod-braille</a>, and all
+modules and dependencies (including transitive ones) from
+<a href="#pipeline-mod-braille">pipeline-mod-braille</a> should be included in
+<code>copy-pipeline-bundles</code> resp. <code>copy-libs-bundles</code>.</p>
+
+<h4 id="build-instructions-1">Build instructions</h4>
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>mvn clean install -Pdeb
+</pre></div>
+</div>
+</div>
+
+<p>If while developing there is the need to test a component with the
+<a href="#pipeline-webui">web interface</a>, it may be convenient to build a
+“development version” of the Pipeline engine which automatically and
+dynamically reloads bundles upon installing them in your local Maven
+repository (with <code>mvn install</code>), allowing you to skip the step
+<a href="#building-the-entire-system-including-the-web-interface">“Building the entire system”</a>
+after each change in the component or one of its dependencies.</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>mvn clean package -Pdev-launcher
+</pre></div>
+</div>
+</div>
+
+<p>Until a certain <a href="https://github.com/daisy/pipeline-assembly/issues/92" class="external-link" target="_blank">bug</a> is fixed an additional step is required: if you are on Linux run <code>rm target/dev-launcher/etc/*{mac,windows}*</code> (and something similar if you are on Windows).</p>
+
+<p>Launch with:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>target/dev-launcher/bin/pipeline2
+</pre></div>
+</div>
+</div>
+
+<p>Java 8 is required.</p>
+
+<p>To check if it works, go to e.g. “http://localhost:8181/ws/alive” or “http://localhost:8181/ws/scripts” in your browser.</p>
+
+<p>Note that whenever you want to include a new component, the
+dev-launcher needs to be rebuilt.</p>
+
+<h3 id="pipeline-mod--celiasnaekobbipipeline-mod-celia--dediconsnaekobbipipeline-mod-dedicon--mtmsnaekobbipipeline-mod-mtm--nlbsnaekobbipipeline-mod-nlb--notasnaekobbipipeline-mod-nota--sbssnaekobbipipeline-mod-sbs">pipeline-mod- <a href="https://github.com/snaekobbi/pipeline-mod-celia" class="external-link" target="_blank">celia</a> | <a href="https://github.com/snaekobbi/pipeline-mod-dedicon" class="external-link" target="_blank">dedicon</a> | <a href="https://github.com/snaekobbi/pipeline-mod-mtm" class="external-link" target="_blank">mtm</a> | <a href="https://github.com/snaekobbi/pipeline-mod-nlb" class="external-link" target="_blank">nlb</a> | <a href="https://github.com/snaekobbi/pipeline-mod-nota" class="external-link" target="_blank">nota</a> | <a href="https://github.com/snaekobbi/pipeline-mod-sbs" class="external-link" target="_blank">sbs</a>
+</h3>
+
+<p>These modules contain all agency specific scripts, code, CSS files,
+liblouis tables, etc. that do not have a place in the main
+<a href="#pipeline-mod-braille">braille modules</a>.</p>
+
+<p>The version is declared in <code>pom.xml</code>.</p>
+
+<h4 id="dependencies-2">Dependencies</h4>
+<ul>
+  <li><a href="#pipeline-mod-braille">pipeline-mod-braille</a></li>
+</ul>
+
+<p>The version of <code>braille-modules-parent</code> in <code>pom.xml</code> must match the version of <a href="#pipeline-mod-braille">pipeline-mod-braille</a>.</p>
+
+<h4 id="build-instructions-2">Build instructions</h4>
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>mvn clean install
+</pre></div>
+</div>
+</div>
+
+<p>This will also invoke the unit tests.</p>
+
+<h3 id="pipeline-webuidaisypipeline-webui"><a href="https://github.com/daisy/pipeline-webui" class="external-link" target="_blank">pipeline-webui</a></h3>
+
+<p>This is the web-based user interface.</p>
+
+<p>For build instructions see <a href="https://github.com/daisy/pipeline-webui/wiki/Building-and-hacking" class="external-link" target="_blank">Building and hacking</a>.</p>
+
+<h2 id="building-the-entire-system-including-the-web-interface">Building the entire system including the web interface</h2>
+
+<h3 id="systemsnaekobbisystem"><a href="https://github.com/snaekobbi/system" class="external-link" target="_blank">system</a></h3>
+<p>#### Dependencies
+- <a href="#pipeline-assembly">pipeline-assembly</a>
+- <a href="#pipeline-mod--celia--dedicon--mtm--nlb--nota--sbs">pipeline-mod-celia</a>
+- <a href="#pipeline-mod--celia--dedicon--mtm--nlb--nota--sbs">pipeline-mod-dedicon</a>
+- <a href="#pipeline-mod--celia--dedicon--mtm--nlb--nota--sbs">pipeline-mod-mtm</a>
+- <a href="#pipeline-mod--celia--dedicon--mtm--nlb--nota--sbs">pipeline-mod-nlb</a>
+- <a href="#pipeline-mod--celia--dedicon--mtm--nlb--nota--sbs">pipeline-mod-nota</a>
+- <a href="#pipeline-mod--celia--dedicon--mtm--nlb--nota--sbs">pipeline-mod-sbs</a>
+- <a href="#pipeline-webui">pipeline-webui</a></p>
+
+<p>The versions of the dependencies are declared in <code>roles/test-server/vars/debs.yml</code>.</p>
+
+<h4 id="build-instructions-3">Build instructions</h4>
+<p>To install the system locally (on a Linux machine):
+<code>sh
+make
+ansible-playbook test-server.yml -l local
+</code></p>
+
+<p>To install the system on a Vagrant test VM:
+<code>sh
+vagrant up
+make
+ansible-playbook test-server.yml -l vagrant-test-server
+</code></p>
+
+
+    </div>
+  </body>
+</html>
