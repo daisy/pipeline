@@ -1,3 +1,2 @@
-# depends on branch "doc"
-assembly: 1.10.0-beta2-SNAPSHOT
+assembly: 1.10.0
 css-spec: 20160801

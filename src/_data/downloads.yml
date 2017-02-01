@@ -1,5 +1,32 @@
 ## For file names and sizes, see https://api.github.com/repos/daisy/pipeline-assembly/releases
 
+- version: "1.10"
+  sort: "1.10-xxx"
+  state: stable
+  github_tag: "v1.10.0"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0"
+  description: >
+    Includes the standalone desktop application, the server, and the command line
+    interface. Versions available for Windows (an installer EXE), Mac OS (a DMG
+    disk image containing a standard Mac OS application) and Linux (a ZIP file).
+  files:
+    - platform: windows
+      package: installer
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.0/pipeline2-1.10.0_windows.exe"
+      size: 63410422
+    - platform: macosx
+      package: dmg
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.0/pipeline2-1.10.0_mac.dmg"
+      size: 109808795
+    - platform: linux
+      package: zip
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.0/pipeline2-1.10.0_linux.zip"
+      size: 48292859
+
+
 - version: "1.10-rc1"
   sort: "1.10-rc1"
   state: beta
