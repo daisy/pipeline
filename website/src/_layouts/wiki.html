@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>{{ page.title }}</title>
+    {% include meta-title title=page.title %}
+    <link rel="stylesheet" href="{{site.baseurl}}/css/default.css">
+    <link rel="stylesheet" href="{{site.baseurl}}/css/coderay.css">
+    {% include favicon %}
+  </head>
+  <body>
+    <div id="body">
+      {% include nav spine=page.spine %}
+      {% if page.spine2 %}
+        {% include nav spine=page.spine2 %}
+      {% endif %}
+      {% include edit-button-{{page.edit_button}} %}
+      {{ content }}
+    </div>
+  </body>
+</html>

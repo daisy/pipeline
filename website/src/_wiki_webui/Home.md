@@ -1,0 +1,3 @@
+Welcome to the pipeline-webui wiki!
+
+Not much here yet except a guide to using templates...

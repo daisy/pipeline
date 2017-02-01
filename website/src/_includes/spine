@@ -1,0 +1,30 @@
+<ul class="spine">
+  {% for p in include.pages %}
+    {% if p['group'] %}
+      {% if p['group'].url == page.url %}
+        <li class="spine-item spine-item-current">
+      {% else %}
+        <li class="spine-item">
+      {% endif %}
+      <a href="{{site.baseurl}}{{p['group'].url}}">
+      {{ p['group'].title }}
+      </a>
+      {% assign nested_pages=p['pages'] %}
+      {% include spine pages=nested_pages %}
+    {% else %}
+      {% if p.url == page.url %}
+        <li class="spine-item spine-item-current">
+      {% else %}
+        <li class="spine-item">
+      {% endif %}
+      {% if p.external %}
+        <a href="{{p.url}}">
+      {% else %}
+        <a href="{{site.baseurl}}{{p.url}}">
+      {% endif %}
+      {{ p.title }}
+      </a>
+    {% endif %}
+    </li>
+  {% endfor %}
+</ul>

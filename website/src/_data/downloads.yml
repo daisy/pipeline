@@ -1,0 +1,238 @@
+## For file names and sizes, see https://api.github.com/repos/daisy/pipeline-assembly/releases
+
+- version: "1.10"
+  sort: "1.10-xxx"
+  state: stable
+  github_tag: "v1.10.0"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0"
+  description: >
+    Includes the standalone desktop application, the server, and the command line
+    interface. Versions available for Windows (an installer EXE), Mac OS (a DMG
+    disk image containing a standard Mac OS application) and Linux (a ZIP file).
+  files:
+    - platform: windows
+      package: installer
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.0/pipeline2-1.10.0_windows.exe"
+      size: 63410422
+    - platform: macosx
+      package: dmg
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.0/pipeline2-1.10.0_mac.dmg"
+      size: 109808795
+    - platform: linux
+      package: zip
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.0/pipeline2-1.10.0_linux.zip"
+      size: 48292859
+
+
+- version: "1.10-rc1"
+  sort: "1.10-rc1"
+  state: beta
+  github_tag: "v1.10-rc1"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10-rc1"
+  description: >
+    Includes the standalone desktop application, the server, and the command line
+    interface. Versions available for Windows (an installer EXE), Mac OS (a DMG
+    disk image containing a standard Mac OS application) and Linux (a ZIP file).
+  files:
+    - platform: windows
+      package: installer
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-rc1/pipeline2-1.10-rc1_windows.exe"
+      size: 66577284
+    - platform: macosx
+      package: dmg
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-rc1/pipeline2-1.10-rc1_mac.dmg"
+      size: 113086857
+    - platform: linux
+      package: zip
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-rc1/pipeline2-1.10-rc1_linux.zip"
+      size: 51575942
+
+## Download links disabled
+- version: "1.10-beta1"
+  sort: "1.10-beta1"
+  state: beta
+  github_tag: "v1.10-beta1"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10-beta1"
+  files:
+    - platform: windows
+      package: installer
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-beta1/pipeline2-1.10-beta1_windows.exe"
+      size: 66663154
+    - platform: macosx
+      package: dmg
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-beta1/pipeline2-1.10-beta1_mac.dmg"
+      size: 121753189
+    - platform: linux
+      package: zip
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-beta1/pipeline2-1.10-beta1_linux.zip"
+      size: 49521693
+
+- version: "1.9"
+  sort: "1.09"
+  state: stable
+  github_tag: "v1.9"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.9"
+  files:
+    - platform: windows
+      package: installer
+      content: [desktop-webui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.9/pipeline2-1.9-webui_windows.exe"
+      size: 82779673
+    - platform: macosx
+      package: zip
+      content: [desktop-webui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.9/pipeline2-1.9-webui_mac.zip"
+      size: 88985969
+    - platform: linux
+      package: zip
+      content: [desktop-webui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.9/pipeline2-1.9-webui_linux.zip"
+      size: 89009422
+
+## "Inofficial" versions created during Braille in DP2 project
+- version: "1.9.15"
+  sort: "1.09.15"
+  state: unofficial
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.15/assembly-1.9.15-all.deb"
+      size: 38458812
+- version: "1.9.14"
+  sort: "1.09.14"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.14"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.14/assembly-1.9.14-all.deb"
+      size: 38424522
+- version: "1.9.13"
+  sort: "1.09.13"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.13"
+- version: "1.9.12"
+  sort: "1.09.12"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.12"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.12/assembly-1.9.12-all.deb"
+      size: 38297918
+- version: "1.9.11"
+  sort: "1.09.11"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.11"
+- version: "1.9.10"
+  sort: "1.09.10"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.10"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.10/assembly-1.9.10-all.deb"
+      size: 38185936
+- version: "1.9.9"
+  sort: "1.09.09"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.9"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.9/assembly-1.9.9-all.deb"
+      size: 35831912
+- version: "1.9.8"
+  sort: "1.09.08"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.8"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.8/assembly-1.9.8-all.deb"
+      size: 35762856
+- version: "1.9.7"
+  sort: "1.09.07"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.7"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.7/assembly-1.9.7-all.deb"
+      size: 35615356
+- version: "1.9.6"
+  sort: "1.09.06"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.6"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.6/assembly-1.9.6-all.deb"
+      size: 35534540
+- version: "1.9.5"
+  sort: "1.09.05"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.5"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.5/assembly-1.9.5-all.deb"
+      size: 35478928
+- version: "1.9.4"
+  sort: "1.09.04"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.4"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.4/assembly-1.9.4-all.deb"
+      size: 35300126
+- version: "1.9.3"
+  sort: "1.09.03"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.3"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.3/assembly-1.9.3-all.deb"
+      size: 35260172
+- version: "1.9.2"
+  sort: "1.09.02"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.2"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.2/assembly-1.9.2-all.deb"
+      size: 35259096
+- version: "1.9.1"
+  sort: "1.09.01"
+  state: unofficial
+  github_url: "https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.9.1"
+  files:
+    - platform: debian
+      package: deb
+      content: [server, cli]
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/assembly/1.9.1/assembly-1.9.1-all.deb"
+      size: 34906564

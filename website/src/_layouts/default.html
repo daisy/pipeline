@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="content-language" content="en">
+	<title>{{ site.name }} | {{ page.title }}</title>
+	{% include meta-title title=page.title %}
+	<link rel="stylesheet" href="{{site.baseurl}}/css/default.css">
+	{% include favicon %}
+  </head>
+  <body>
+    <div id="body">
+      {% include nav spine="sitemap" %}
+      {{ content }}
+    </div>
+  </body>
+</html>
