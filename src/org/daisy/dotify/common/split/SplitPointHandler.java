@@ -72,7 +72,6 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 	 * @param data the data to split
 	 * @param options the split options
 	 * @return returns a split point result
-	 * @throws IllegalArgumentException if cost is null
 	 */
 	public SplitPoint<T> split(float breakPoint, SplitPointDataSource<T> data, SplitOption ... options) {
 		return split(breakPoint, data, defaultCost, options);

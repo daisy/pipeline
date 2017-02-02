@@ -1,7 +1,8 @@
 package org.daisy.dotify.common.split;
 
 /**
- * 
+ * Provides a cost function for a split point.
+ *  
  * @author Joel Håkansson
  * @param <T> the type of split point unit
  *

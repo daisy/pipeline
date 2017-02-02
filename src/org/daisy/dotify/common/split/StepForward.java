@@ -2,7 +2,7 @@ package org.daisy.dotify.common.split;
 
 /**
  * Provides a package interface for iterating over a list of units
- * @author joha
+ * @author Joel Håkansson
  *
  * @param <T>
  */
