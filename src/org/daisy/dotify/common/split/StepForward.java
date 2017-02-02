@@ -1,13 +1,11 @@
-package org.daisy.dotify.common.layout;
+package org.daisy.dotify.common.split;
 
 /**
  * Provides a package interface for iterating over a list of units
- * @author joha
+ * @author Joel Håkansson
  *
  * @param <T>
- * @deprecated use the corresponding class in the org.daisy.dotify.common.split package.
  */
-@Deprecated
 interface StepForward<T extends SplitPointUnit> {
 	/**
 	 * Performed when a unit should be included.

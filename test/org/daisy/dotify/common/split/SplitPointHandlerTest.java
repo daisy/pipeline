@@ -1,14 +1,12 @@
-package org.daisy.dotify.common.layout;
+package org.daisy.dotify.common.split;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import org.junit.Test;
 
-@Deprecated
 @SuppressWarnings("javadoc")
 public class SplitPointHandlerTest {
 
@@ -18,74 +16,72 @@ public class SplitPointHandlerTest {
 	@Test
 	public void testHardBreak_01() {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(9, true, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(9, Arrays.asList(c, c, c, c, c, c, c, c, c, c), StandardSplitOption.ALLOW_FORCE);
 		assertEquals(Arrays.asList(c, c, c, c, c, c, c, c, c), bp.getHead());
-		assertEquals(Arrays.asList(c), bp.getTail());
+		assertEquals(Arrays.asList(c), bp.getTail().getRemaining());
 		assertTrue(bp.isHardBreak());
 	}
 	
 	@Test
 	public void testHardBreak_02() {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(1, true, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(1, Arrays.asList(c, c, c, c, c, c, c, c, c, c), StandardSplitOption.ALLOW_FORCE);
 		assertEquals(Arrays.asList(c), bp.getHead());
-		assertEquals(Arrays.asList(c, c, c, c, c, c, c, c, c), bp.getTail());
+		assertEquals(Arrays.asList(c, c, c, c, c, c, c, c, c), bp.getTail().getRemaining());
 		assertTrue(bp.isHardBreak());
 	}
 
 	@Test
 	public void testHardBreak_03() {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(4, true, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(4, Arrays.asList(c, c, c, c, c, c, c, c, c, c), StandardSplitOption.ALLOW_FORCE);
 		assertEquals(Arrays.asList(c, c, c, c), bp.getHead());
-		assertEquals(Arrays.asList(c, c, c, c, c, c), bp.getTail());
+		assertEquals(Arrays.asList(c, c, c, c, c, c), bp.getTail().getRemaining());
 		assertTrue(bp.isHardBreak());
 	}
 
 	@Test
 	public void testHardBreakWithCost_01() {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		bph.setCost(new SplitPointCost<DummySplitPoint>(){
+		SplitPoint<DummySplitPoint> bp = bph.split(4, Arrays.asList(c, c, c, c, c, c, c, c, c, c), new SplitPointCost<DummySplitPoint>(){
 			@Override
-			public double getCost(List<DummySplitPoint> units, int breakpoint) {
-				return breakpoint==1?0:100;
-			}});
-		SplitPoint<DummySplitPoint> bp = bph.split(4, true, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
+			public double getCost(SplitPointDataSource<DummySplitPoint> units, int index, int breakpoint) {
+				return index==1?0:100;
+			}}, StandardSplitOption.ALLOW_FORCE);
 		assertEquals("" + bp.getHead().size(), Arrays.asList(c, c), bp.getHead());
-		assertEquals(Arrays.asList(c, c, c, c, c, c, c, c), bp.getTail());
+		assertEquals(Arrays.asList(c, c, c, c, c, c, c, c), bp.getTail().getRemaining());
 		assertTrue(bp.isHardBreak());
 	}
 	
 	@Test
 	public void testHardBreakWithCost_02() {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		bph.setCost(new SplitPointCost<DummySplitPoint>(){
+		SplitPoint<DummySplitPoint> bp = bph.split(6, Arrays.asList(c, c, c, c, c, c, c, c, c, c), new SplitPointCost<DummySplitPoint>(){
 			double[] values = {4, 5, 3, 1, 2, 4, 5, 100, 12, 1};
 			@Override
-			public double getCost(List<DummySplitPoint> units, int breakpoint) {
-				return values[breakpoint];
-			}});
-		SplitPoint<DummySplitPoint> bp = bph.split(6, true, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
+			public double getCost(SplitPointDataSource<DummySplitPoint> units, int index, int breakpoint) {
+				return values[index];
+			}}, StandardSplitOption.ALLOW_FORCE);
 		assertEquals("" + bp.getHead().size(), Arrays.asList(c, c, c, c), bp.getHead());
-		assertEquals(Arrays.asList(c, c, c, c, c, c), bp.getTail());
+		assertEquals(Arrays.asList(c, c, c, c, c, c), bp.getTail().getRemaining());
 		assertTrue(bp.isHardBreak());
 	}
 	
 	@Test
 	public void testBreakBefore() {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(0, false, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(0, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
 		assertEquals(new ArrayList<DummySplitPoint>(), bp.getHead());
-		assertEquals(Arrays.asList(c, c, c, c, c, c, c, c, c, c), bp.getTail());
+		assertEquals(Arrays.asList(c, c, c, c, c, c, c, c, c, c), bp.getTail().getRemaining());
 		assertTrue(!bp.isHardBreak());		
 	}
 	
 	@Test
 	public void testBreakAfter() {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(35, false, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(35, Arrays.asList(c, c, c, c, c, c, c, c, c, c));
 		assertEquals(Arrays.asList(c, c, c, c, c, c, c, c, c, c), bp.getHead());
-		assertEquals(new ArrayList<DummySplitPoint>(), bp.getTail());
+		assertEquals(new ArrayList<DummySplitPoint>(), bp.getTail().getRemaining());
 		assertTrue(!bp.isHardBreak());
 	}
 
@@ -93,18 +89,18 @@ public class SplitPointHandlerTest {
 	public void testSoftBreakIncWhiteSpace() {
 		DummySplitPoint t = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(5, false, Arrays.asList(c, c, c, c, t, c, c, c, c, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(5, Arrays.asList(c, c, c, c, t, c, c, c, c, c));
 		assertEquals(Arrays.asList(c, c, c, c, t), bp.getHead());
-		assertEquals(Arrays.asList(c, c, c, c, c), bp.getTail());
+		assertEquals(Arrays.asList(c, c, c, c, c), bp.getTail().getRemaining());
 		assertTrue(!bp.isHardBreak());
 	}
 
 	@Test
 	public void testHyphen_01() {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(5, false, Arrays.asList(c, c, c, c, c, e, c, c, c, c, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(5, Arrays.asList(c, c, c, c, c, e, c, c, c, c, c));
 		assertEquals(Arrays.asList(c, c, c, c, c), bp.getHead());
-		assertEquals(Arrays.asList(c, c, c, c, c), bp.getTail());
+		assertEquals(Arrays.asList(c, c, c, c, c), bp.getTail().getRemaining());
 		assertTrue(!bp.isHardBreak());
 	}
 	
@@ -112,9 +108,9 @@ public class SplitPointHandlerTest {
 	public void testSpace_01() {
 		DummySplitPoint t = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(5, false, Arrays.asList(c, c, c, e, e, e, e, e, c, c, c, t, c, c, c, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(5, Arrays.asList(c, c, c, e, e, e, e, e, c, c, c, t, c, c, c, c));
 		assertEquals(Arrays.asList(c, c, c), bp.getHead());
-		assertEquals(Arrays.asList(c, c, c, t, c, c, c, c), SplitPointHandler.trimLeading(bp.getTail()).getSecondPart());
+		assertEquals(Arrays.asList(c, c, c, t, c, c, c, c), SplitPointHandler.trimLeading(bp.getTail().getRemaining()).getSecondPart());
 		assertTrue(!bp.isHardBreak());
 	}
 	
@@ -122,21 +118,21 @@ public class SplitPointHandlerTest {
 	public void testSkippable_01() {
 		DummySplitPoint t = new DummySplitPoint.Builder().breakable(false).skippable(true).size(1).build();
 		DummySplitPoint a = new DummySplitPoint.Builder().breakable(true).skippable(true).size(1).build();
-		int res = SplitPointHandler.forwardSkippable(Arrays.asList(t, t, t, a), 0);
+		int res = SplitPointHandler.forwardSkippable(new SplitPointDataList<DummySplitPoint>(Arrays.asList(t, t, t, a)), 0);
 		assertEquals(3, res);
 	}
 	
 	@Test
 	public void testSkippable_02() {
 		DummySplitPoint t = new DummySplitPoint.Builder().breakable(false).skippable(true).size(1).build();
-		int res = SplitPointHandler.forwardSkippable(Arrays.asList(t, t, t, c), 0);
+		int res = SplitPointHandler.forwardSkippable(new SplitPointDataList<DummySplitPoint>(Arrays.asList(t, t, t, c)), 0);
 		assertEquals(0, res);
 	}
 	
 	@Test
 	public void testSkippable_03() {
 		DummySplitPoint t = new DummySplitPoint.Builder().breakable(false).skippable(true).size(1).build();
-		int res = SplitPointHandler.forwardSkippable(Arrays.asList(t, t, t, t), 0);
+		int res = SplitPointHandler.forwardSkippable(new SplitPointDataList<DummySplitPoint>(Arrays.asList(t, t, t, t)), 0);
 		assertEquals(3, res);
 	}
 	
@@ -144,7 +140,7 @@ public class SplitPointHandlerTest {
 	public void testWidth() {
 		DummySplitPoint t = new DummySplitPoint.Builder().breakable(true).skippable(false).size(0.7f).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(2, false, Arrays.asList(t, t, t, t));
+		SplitPoint<DummySplitPoint> bp = bph.split(2, Arrays.asList(t, t, t, t));
 		assertEquals(Arrays.asList(t, t), bp.getHead());
 	}
 	
@@ -153,7 +149,7 @@ public class SplitPointHandlerTest {
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(true).collapsable(true).size(2).build();
 		DummySplitPoint y = new DummySplitPoint.Builder().breakable(true).skippable(true).collapsable(true).size(4).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(6, false, Arrays.asList(c, x, y, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(6, Arrays.asList(c, x, y, c));
 		assertEquals(Arrays.asList(c, y, c), bp.getHead());
 		assertEquals(Arrays.asList(x), bp.getDiscarded());
 	}
@@ -163,9 +159,9 @@ public class SplitPointHandlerTest {
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(true).collapsable(true).size(2).build();
 		DummySplitPoint y = new DummySplitPoint.Builder().breakable(true).skippable(true).collapsable(true).size(4).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(6, false, Arrays.asList(c, c, x, y, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(6, Arrays.asList(c, c, x, y, c));
 		assertEquals(Arrays.asList(c, c), bp.getHead());
-		assertEquals(Arrays.asList(c), bp.getTail());
+		assertEquals(Arrays.asList(c), bp.getTail().getRemaining());
 	}
 	
 	@Test
@@ -173,9 +169,9 @@ public class SplitPointHandlerTest {
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(true).collapsable(true).size(2).build();
 		DummySplitPoint y = new DummySplitPoint.Builder().breakable(true).skippable(true).collapsable(true).size(4.1f).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(6, false, Arrays.asList(c, c, x, y, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(6, Arrays.asList(c, c, x, y, c));
 		assertEquals(Arrays.asList(c, c), bp.getHead());
-		assertEquals(Arrays.asList(c), SplitPointHandler.trimLeading(bp.getTail()).getSecondPart());
+		assertEquals(Arrays.asList(c), SplitPointHandler.trimLeading(bp.getTail().getRemaining()).getSecondPart());
 	}
 	
 	@Test
@@ -183,9 +179,9 @@ public class SplitPointHandlerTest {
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(false).collapsable(true).size(2).build();
 		DummySplitPoint y = new DummySplitPoint.Builder().breakable(true).skippable(false).collapsable(true).size(4.1f).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(6, false, Arrays.asList(c, c, x, y, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(6, Arrays.asList(c, c, x, y, c));
 		assertEquals(Arrays.asList(c, c, x), bp.getHead());
-		assertEquals(Arrays.asList(y, c), bp.getTail());
+		assertEquals(Arrays.asList(y, c), bp.getTail().getRemaining());
 	}
 	
 	@Test
@@ -193,9 +189,9 @@ public class SplitPointHandlerTest {
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(true).collapsable(true).size(2).build();
 		DummySplitPoint y = new DummySplitPoint.Builder().breakable(false).skippable(true).collapsable(true).size(4).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
-		SplitPoint<DummySplitPoint> bp = bph.split(6, false, Arrays.asList(c, c, x, y, c));
+		SplitPoint<DummySplitPoint> bp = bph.split(6, Arrays.asList(c, c, x, y, c));
 		assertEquals(Arrays.asList(c, c), bp.getHead());
-		assertEquals(Arrays.asList(y, c), bp.getTail());
+		assertEquals(Arrays.asList(y, c), bp.getTail().getRemaining());
 	}
 	
 	@Test
@@ -223,10 +219,10 @@ public class SplitPointHandlerTest {
 		DummySplitPoint c5 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
 
-		SplitPointData<DummySplitPoint> spd = new SplitPointData<>(Arrays.asList(c1, c2, c3, c4, c5), supps);
-		SplitPoint<DummySplitPoint> bp = bph.split(6, false, spd);
+		SplitPointDataSource<DummySplitPoint> spd = new SplitPointDataList<>(Arrays.asList(c1, c2, c3, c4, c5), supps);
+		SplitPoint<DummySplitPoint> bp = bph.split(6, spd);
 		assertEquals(Arrays.asList(c1, c2, c3, c4), bp.getHead());
-		assertEquals(Arrays.asList(c5), bp.getTail());
+		assertEquals(Arrays.asList(c5), bp.getTail().getRemaining());
 		assertEquals(Arrays.asList(s1, s2), bp.getSupplements());
 	}
 	
@@ -235,13 +231,7 @@ public class SplitPointHandlerTest {
 		final DummySplitPoint s1 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).minSize(0.5f).build();
 		final DummySplitPoint s2 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).minSize(0.5f).build();
 		final DummySplitPoint s3 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).minSize(0.5f).build();
-		Supplements<DummySplitPoint> empty = new Supplements<DummySplitPoint>() {
-
-			@Override
-			public DummySplitPoint get(String id) {
-				return null;
-			}};
-		float res = SplitPointHandler.totalSize(Arrays.asList(s1, s2, s3), empty);
+		float res = SplitPointHandler.totalSize(new SplitPointDataList<DummySplitPoint>(Arrays.asList(s1, s2, s3)), 3);
 		assertEquals(2.5, res, 0);
 	}
 	
@@ -270,10 +260,10 @@ public class SplitPointHandlerTest {
 		DummySplitPoint c5 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
 
-		SplitPointData<DummySplitPoint> spd = new SplitPointData<>(Arrays.asList(c1, c2, c3, c4, c5), supps);
-		SplitPoint<DummySplitPoint> bp = bph.split(6, false, spd);
+		SplitPointDataSource<DummySplitPoint> spd = new SplitPointDataList<>(Arrays.asList(c1, c2, c3, c4, c5), supps);
+		SplitPoint<DummySplitPoint> bp = bph.split(6, spd);
 		assertEquals(Arrays.asList(c1, c2, c3, c4), bp.getHead());
-		assertEquals(Arrays.asList(c5), bp.getTail());
+		assertEquals(Arrays.asList(c5), bp.getTail().getRemaining());
 		assertEquals(Arrays.asList(s1, s2), bp.getSupplements());
 	}
 	
@@ -302,10 +292,10 @@ public class SplitPointHandlerTest {
 		DummySplitPoint c5 = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
 
-		SplitPointData<DummySplitPoint> spd = new SplitPointData<>(Arrays.asList(c1, c2, c3, c4, c5), supps);
-		SplitPoint<DummySplitPoint> bp = bph.split(6, false, spd);
+		SplitPointDataSource<DummySplitPoint> spd = new SplitPointDataList<>(Arrays.asList(c1, c2, c3, c4, c5), supps);
+		SplitPoint<DummySplitPoint> bp = bph.split(6, spd);
 		assertEquals(Arrays.asList(c1, c2, c3, c4), bp.getHead());
-		assertEquals(Arrays.asList(c5), bp.getTail());
+		assertEquals(Arrays.asList(c5), bp.getTail().getRemaining());
 		assertEquals(Arrays.asList(s1, s2), bp.getSupplements());
 	}
 	
@@ -315,9 +305,9 @@ public class SplitPointHandlerTest {
 		int breakPoint = 6;
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(false).collapsable(true).size(unitSize).build();
-		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, true, Arrays.asList(x, x));
+		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, Arrays.asList(x, x));
 		assertEquals(Arrays.asList(), bp.getHead());
-		assertEquals(Arrays.asList(x, x), bp.getTail());
+		assertEquals(Arrays.asList(x, x), bp.getTail().getRemaining());
 	}
 	
 	@Test
@@ -326,9 +316,18 @@ public class SplitPointHandlerTest {
 		int breakPoint = 6;
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(false).collapsable(true).size(unitSize).build();
-		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, false, Arrays.asList(x, x));
+		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, Arrays.asList(x, x));
 		assertEquals(Arrays.asList(), bp.getHead());
-		assertEquals(Arrays.asList(x, x), bp.getTail());
+		assertEquals(Arrays.asList(x, x), bp.getTail().getRemaining());
+	}
+	
+	@Test
+	public void testEmpty() {
+		int breakPoint = 6;
+		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
+		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, Arrays.asList());
+		assertEquals(Arrays.asList(), bp.getHead());
+		assertEquals(Arrays.asList(), bp.getTail().getRemaining());
 	}
 	
 	@Test
@@ -347,10 +346,10 @@ public class SplitPointHandlerTest {
 		SplitPointHandler<DummySplitPoint> bph = new SplitPointHandler<>();
 		DummySplitPoint x = new DummySplitPoint.Builder().breakable(true).skippable(false).supplementID("s1").size(1).build();
 		//DummySplitPoint y = new DummySplitPoint.Builder().breakable(true).skippable(false).size(1).build();
-		SplitPointData<DummySplitPoint> spd = new SplitPointData<>(Arrays.asList(x), supps);
-		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, true, spd);
+		SplitPointDataSource<DummySplitPoint> spd = new SplitPointDataList<>(Arrays.asList(x), supps);
+		SplitPoint<DummySplitPoint> bp = bph.split(breakPoint, spd);
 		assertEquals(Arrays.asList(), bp.getHead());
-		assertEquals(Arrays.asList(x), bp.getTail());
+		assertEquals(Arrays.asList(x), bp.getTail().getRemaining());
 	}
 
 }

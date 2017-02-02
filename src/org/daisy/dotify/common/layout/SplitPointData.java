@@ -8,7 +8,9 @@ import java.util.List;
  * @author Joel Håkansson
  *
  * @param <T> the type of split point units
+ * @deprecated use the corresponding class in the org.daisy.dotify.common.split package.
  */
+@Deprecated
 public final class SplitPointData<T extends SplitPointUnit> {
 	private final List<T> units;
 	private final Supplements<T> supplements;

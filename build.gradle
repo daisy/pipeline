@@ -42,6 +42,7 @@ repositories {
 
 dependencies {
     testCompile group: "junit", name: "junit", version: "4.7"
+    testCompile "org.mockito:mockito-core:1.10.19"
 }
 
 buildscript {

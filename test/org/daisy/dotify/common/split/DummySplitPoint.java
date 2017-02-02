@@ -1,9 +1,8 @@
-package org.daisy.dotify.common.layout;
+package org.daisy.dotify.common.split;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Deprecated
 class DummySplitPoint implements SplitPointUnit {
 	private final boolean breakable, skippable, collapsible;
 	private final float size;
