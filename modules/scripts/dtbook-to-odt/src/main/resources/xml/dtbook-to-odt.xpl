@@ -14,6 +14,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to ODT</h1>
         <p px:role="desc">Transforms a DTBook (DAISY 3 XML) document into an ODT (Open Document Text).</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-to-odt">
+            Online documentation
+        </a>
         <dl px:role="author">
             <dt>Name:</dt>
             <dd px:role="name">Bert Frees</dd>
@@ -26,61 +29,73 @@
     
     <p:input port="source" primary="true" px:name="source" px:media-type="application/x-dtbook+xml">
         <p:documentation>
-            <h2 px:role="name">source</h2>
-            <p px:role="desc">Input DTBook.</p>
+            <h2 px:role="name">DTBook</h2>
+            <p px:role="desc">The DTBook to transform.</p>
         </p:documentation>
     </p:input>
     
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation>
-            <h2 px:role="name">output-dir</h2>
-            <p px:role="desc">Directory for storing result files.</p>
+            <h2 px:role="name">ODT</h2>
+            <p px:role="desc">The resulting ODT file.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="template" required="false" px:type="string" select="''">
+    <p:option name="template" required="false" px:type="anyFileURI" select="''" px:media-type="application/vnd.oasis.opendocument.text-template">
         <p:documentation>
-            <h2 px:role="name">template</h2>
+            <h2 px:role="name">Template</h2>
             <p px:role="desc">OpenOffice template file (.ott) that contains the style definitions.</p>
-            <pre><code class="example">default.ott</code></pre>
         </p:documentation>
     </p:option>
     
-    <p:option name="asciimath" required="false" px:type="string" select="''">
+    <p:option name="asciimath" required="false" px:type="string" select="'ASCIIMATH'">
+        <p:pipeinfo>
+            <px:data-type>
+                <choice>
+                    <value>ASCIIMATH</value>
+                    <value>MATHML</value>
+                </choice>
+            </px:data-type>
+        </p:pipeinfo>
         <p:documentation>
-            <h2 px:role="name">asciimath</h2>
-            <p px:role="desc">How to render ASCIIMath-encoded formulas? `ASCIIMATH' or `MATHML'. Default is `ASCIIMATH'.</p>
-            <pre><code class="example">MATHML</code></pre>
+            <h2 px:role="name">ASCIIMath handling</h2>
+            <p px:role="desc">How to render ASCIIMath-encoded formulas.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="images" required="false" px:type="string" select="''">
+    <p:option name="images" required="false" px:type="string" select="'EMBED'">
+        <p:pipeinfo>
+            <px:data-type>
+                <choice>
+                    <value>EMBED</value>
+                    <value>LINK</value>
+                </choice>
+            </px:data-type>
+        </p:pipeinfo>
         <p:documentation>
-            <h2 px:role="name">images</h2>
-            <p px:role="desc">How to render images? `EMBED' or `LINK'. Default is `EMBED'.</p>
-            <pre><code class="example">LINK</code></pre>
+            <h2 px:role="name">Images handling</h2>
+            <p px:role="desc">How to render images.</p>
         </p:documentation>
     </p:option>
     
     <p:option name="page-numbers" required="false" px:type="boolean" select="'true'">
         <p:documentation>
-            <h2 px:role="name">page-numbers</h2>
-            <p px:role="desc">Show page numbers or not.</p>
+            <h2 px:role="name">Page numbers</h2>
+            <p px:role="desc">Whether to show page numbers or not.</p>
         </p:documentation>
     </p:option>
     
     <p:option name="page-numbers-float" required="false" px:type="boolean" select="'true'">
         <p:documentation>
-            <h2 px:role="name">page-numbers-float</h2>
+            <h2 px:role="name">Float page numbers</h2>
             <p px:role="desc">Try to float page numbers to an appropriate place as opposed to exactly following print.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="image-dpi" required="false" px:type="string" select="''">
+    <p:option name="image-dpi" required="false" px:type="integer" select="'600'">
         <p:documentation>
-            <h2 px:role="name">image-dpi</h2>
-            <p px:role="desc">Resolution of images. Default is 600 DPI.</p>
-            <pre><code class="example">600</code></pre>
+            <h2 px:role="name">Image resolution</h2>
+            <p px:role="desc">Resolution of images in DPI.</p>
         </p:documentation>
     </p:option>
     
@@ -137,9 +152,9 @@
                     <irrelevant/>
                 </p:inline>
             </p:with-option>
-            <p:with-option name="asciimath" select="if ($asciimath=('MATHML')) then $asciimath else 'ASCIIMATH'"/>
-            <p:with-option name="images" select="if ($images=('LINK')) then $images else 'EMBED'"/>
-            <p:with-param port="parameters" name="image_dpi" select="if ($image-dpi='') then '600' else $image-dpi"/>
+            <p:with-option name="asciimath" select="$asciimath"/>
+            <p:with-option name="images" select="$images"/>
+            <p:with-param port="parameters" name="image_dpi" select="$image-dpi"/>
             <p:with-param port="parameters" name="page_numbers" select="$page-numbers"/>
             <p:with-param port="parameters" name="page_numbers_float" select="$page-numbers-float"/>
         </px:dtbook-to-odt.convert>

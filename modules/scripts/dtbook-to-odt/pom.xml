@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-parent</artifactId>
-    <version>1.10.1-SNAPSHOT</version>
+    <version>1.10.2-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
   
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>dtbook-to-odt</artifactId>
-  <version>1.1.1-SNAPSHOT</version>
+  <version>1.1.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 module :: DTBook to ODT</name>

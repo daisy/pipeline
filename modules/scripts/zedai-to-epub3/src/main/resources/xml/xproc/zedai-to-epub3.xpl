@@ -5,8 +5,11 @@
     type="px:zedai-to-epub3" name="zedai-to-epub3" version="1.0">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">ZedAI to EPUB3</h1>
+        <h1 px:role="name">ZedAI to EPUB 3</h1>
         <p px:role="desc">Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3 publication.</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/zedai-to-epub3">
+            Online documentation
+        </a>
     </p:documentation>
 
     <p:input port="source" primary="true" px:name="source" px:media-type="application/z3998-auth+xml">
@@ -18,8 +21,8 @@
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output directory</h2>
-            <p px:role="desc">Output directory for the EPUB.</p>
+            <h2 px:role="name">EPUB</h2>
+            <p px:role="desc">The resulting EPUB 3 publication.</p>
         </p:documentation>
     </p:option>
 
@@ -33,7 +36,9 @@
     <p:option name="tts-config" required="false" px:type="anyFileURI" select="''">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
 	<h2 px:role="name">Text-To-Speech configuration file</h2>
-	<p px:role="desc">Configuration file for the Text-To-Speech.</p>
+	<p px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
+
+[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/tts-config.html).</p>
       </p:documentation>
     </p:option>
 

@@ -37,12 +37,12 @@
     </p:option>
     <p:option name="asciimath" required="true">
         <p:documentation>
-            How to render ASCIIMath-encoded formulas? `ASCIIMATH' or `MATHML'.
+            How to render ASCIIMath-encoded formulas? `ASCIIMATH` or `MATHML`.
         </p:documentation>
     </p:option>
     <p:option name="images" required="true">
         <p:documentation>
-            How to render images? `EMBED' or `LINK'.
+            How to render images? `EMBED` or `LINK`.
         </p:documentation>
     </p:option>
     

@@ -12,12 +12,12 @@
                 (organization: <span px:role="organization">NLB</span>,
                 e-mail: <a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>).</p>
         </address>
-        <p><a px:role="homepage" href="https://github.com/daisy/pipeline-scripts/tree/master/daisy202-validator">Online Documentation</a></p>
+        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/modules/daisy202-validator">Online Documentation</a></p>
     </p:documentation>
 
     <p:option name="ncc" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Input NCC</h2>
+            <h2 px:role="name">NCC</h2>
             <p px:role="desc">The NCC file in the DAISY 2.02 fileset</p>
         </p:documentation>
     </p:option>
@@ -25,14 +25,13 @@
     <p:option name="timeToleranceMs" select="500" px:type="xs:integer">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Time Tolerance</h2>
-            <p px:role="desc">The duration of the audio files can deviate from the duration declared in the DAISY 2.02 fileset by this many milliseconds (default: 500).</p>
+            <p px:role="desc">The duration of the audio files can deviate from the duration declared in the DAISY 2.02 fileset by this many milliseconds.</p>
         </p:documentation>
     </p:option>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML Report</h1>
-            <p px:role="desc">An HTML-formatted version of the validation report.</p>
+            <h1 px:role="name">Validation report</h1>
         </p:documentation>
         <p:pipe port="result" step="html-report"/>
     </p:output>
@@ -40,7 +39,9 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
-            <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+            <p px:role="desc" xml:space="preserve">The validation status
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe port="result" step="validation-status"/>
     </p:output>

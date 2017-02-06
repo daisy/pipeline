@@ -11,7 +11,10 @@
 
   <p:documentation xmlns="http://www.w3.org/1999/xhtml">
     <h1 px:role="name">DTBook to DAISY 3</h1>
-    <p px:role="desc">Converts multiple dtbooks to daisy 3 format</p>
+    <p px:role="desc">Converts multiple DTBooks to DAISY 3 format</p>
+    <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-to-daisy3">
+      Online documentation
+    </a>
   </p:documentation>
 
   <p:input port="source" primary="true" sequence="true" px:media-type="application/x-dtbook+xml">
@@ -33,15 +36,17 @@
 
   <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Output directory</h2>
-      <p px:role="desc">Directory where the resulting DAISY 3 publication is stored.</p>
+      <h2 px:role="name">DAISY 3</h2>
+      <p px:role="desc">The resulting DAISY 3 publication.</p>
     </p:documentation>
   </p:option>
 
   <p:option name="tts-config" required="false" px:type="anyFileURI" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <h2 px:role="name">Text-To-Speech configuration file</h2>
-      <p px:role="desc">Configuration file for the Text-To-Speech.</p>
+      <p px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
+
+[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/tts-config.html).</p>
     </p:documentation>
   </p:option>
 

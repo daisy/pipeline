@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-aggregator</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.10.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for the Default Scripts</name>
@@ -56,6 +56,13 @@
         <version>2.4</version>
         <configuration>
           <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <preparationGoals>clean install</preparationGoals>
         </configuration>
       </plugin>
     </plugins>
