@@ -73,8 +73,8 @@ public class AcapelaEngine extends TTSEngine {
 
 		public ThreadResources() {
 			execData = new NSC_EXEC_DATA();
-			execData.ulEventFilter = new NativeLong(NscubeLibrary.NSC_EVTBIT_TEXT
-			        | NscubeLibrary.NSC_EVTBIT_BOOKMARK);
+			execData.ulEventFilter = NscubeLibrary.NSC_EVTBIT_TEXT
+			        | NscubeLibrary.NSC_EVTBIT_BOOKMARK;
 			execData.bEventSynchroReq = 1;
 			execData.vsSoundData.uiSize = 0;
 			execData.vsSoundData.pSoundBuffer = null;

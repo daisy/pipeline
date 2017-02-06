@@ -10,10 +10,10 @@
     <xsl:param name="ending-mark" select="''"/>
 
     <xsl:variable name="end">
-    	<ssml:break time="250ms"/>
     	<xsl:if test="$ending-mark != ''">
     		<ssml:mark name="{$ending-mark}"/>
     	</xsl:if>
+    	<ssml:break time="250ms"/>
     </xsl:variable>
 
     <xsl:template match="*">

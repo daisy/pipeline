@@ -9,29 +9,33 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class NSC_EVENT_DATA_TextStarted extends Structure {
-	public int uiSize;
-	/** C type : void* */
-	public Pointer pUserData;
-	public NSC_EVENT_DATA_TextStarted() {
+public class NSC_SRVSTATUS_DATAEX extends Structure {
+	/** C type : char[4096] */
+	public byte[] szData = new byte[4096];
+	public int nData1;
+	public int nData2;
+	public NSC_SRVSTATUS_DATAEX() {
 		super();
 	}
 	protected List<? > getFieldOrder() {
-		return Arrays.asList("uiSize", "pUserData");
+		return Arrays.asList("szData", "nData1", "nData2");
 	}
-	/** @param pUserData C type : void* */
-	public NSC_EVENT_DATA_TextStarted(int uiSize, Pointer pUserData) {
+	/** @param szData C type : char[4096] */
+	public NSC_SRVSTATUS_DATAEX(byte szData[], int nData1, int nData2) {
 		super();
-		this.uiSize = uiSize;
-		this.pUserData = pUserData;
+		if ((szData.length != this.szData.length)) 
+			throw new IllegalArgumentException("Wrong array size !");
+		this.szData = szData;
+		this.nData1 = nData1;
+		this.nData2 = nData2;
 	}
-	public NSC_EVENT_DATA_TextStarted(Pointer peer) {
+	public NSC_SRVSTATUS_DATAEX(Pointer peer) {
 		super(peer);
 	}
-	public static class ByReference extends NSC_EVENT_DATA_TextStarted implements Structure.ByReference {
+	public static class ByReference extends NSC_SRVSTATUS_DATAEX implements Structure.ByReference {
 		
 	};
-	public static class ByValue extends NSC_EVENT_DATA_TextStarted implements Structure.ByValue {
+	public static class ByValue extends NSC_SRVSTATUS_DATAEX implements Structure.ByValue {
 		
 	};
 }
