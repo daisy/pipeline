@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+               stylesheet="../../main/resources/xml/shift-obfl-marker.xsl">
+    
+    <x:scenario label="test_01">
+        <x:context>
+            <_>
+                <css:_>
+                    <css:box type="block" name="body" style="text-transform: none"
+                             css:page="size: 15 5; margin-left: 2; @left {{ content: -obfl-marker-indicator(pagenum, '⠿') }}">
+                        <css:box type="inline">
+                            <css:_ name="pagenum" css:_obfl-marker="pagenum"/>
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            <css:_ name="pagenum" css:_obfl-marker="pagenum"/>
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            <css:_ name="pagenum" css:_obfl-marker="pagenum"/>
+                        </css:box>
+                    </css:box>
+                </css:_>
+            </_>
+        </x:context>
+        <x:expect label="result">
+            <_>
+                <css:_>
+                    <css:box type="block" name="body" style="text-transform: none"
+                             css:page="size: 15 5; margin-left: 2; @left {{ content: -obfl-marker-indicator(pagenum, '⠿') }}">
+                        <css:box type="inline">
+                            <css:_ name="pagenum" css:_obfl-marker="pagenum"/>
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            <css:_ name="pagenum" css:_obfl-marker="pagenum"/>
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                            <css:_ name="pagenum" css:_obfl-marker="pagenum"/>
+                        </css:box>
+                    </css:box>
+                </css:_>
+            </_>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="test_02">
+        <x:context>
+            <_>
+                <css:_>
+                    <css:_>
+                        <css:box type="block" name="frontmatter" css:page="size: 30 5" style="text-transform: none">
+                            <css:box type="inline">
+                                ⠤⠤⠤
+                            </css:box>
+                        </css:box>
+                        <css:box type="block" name="bodymatter" style="text-transform: none" css:page="size: 15 5">
+                            <css:box type="inline">
+                                ⠤⠤⠤
+                            </css:box>
+                        </css:box>
+                        <css:box type="block" name="rearmatter" css:page="size: 30 5" style="text-transform: none">
+                            <css:box type="inline">
+                                ⠤⠤⠤
+                            </css:box>
+                        </css:box>
+                    </css:_>
+                </css:_>
+            </_>
+        </x:context>
+        <x:expect label="result">
+            <_>
+                <css:_>
+                    <css:_>
+                        <css:box type="block" name="frontmatter" css:page="size: 30 5" style="text-transform: none">
+                            <css:box type="inline">
+                                ⠤⠤⠤
+                            </css:box>
+                        </css:box>
+                        <css:box type="block" name="bodymatter" style="text-transform: none" css:page="size: 15 5">
+                            <css:box type="inline">
+                                ⠤⠤⠤
+                            </css:box>
+                        </css:box>
+                        <css:box type="block" name="rearmatter" css:page="size: 30 5" style="text-transform: none">
+                            <css:box type="inline">
+                                ⠤⠤⠤
+                            </css:box>
+                        </css:box>
+                    </css:_>
+                </css:_>
+            </_>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+    stylesheet="../../main/resources/xml/split.xsl">
+    
+    <x:scenario label="test_01">
+        <x:context mode="label-split-points">
+            <css:box type="block" css:page="size: 30 15">
+                <front css:page="size: 30 15; @bottom-right {'{'} content: counter(page, lower-roman) {'}'}">
+                    <css:box> foo </css:box>
+                </front>
+                <body>
+                    <css:box> bar </css:box>
+                </body>
+                <rear>
+                    <css:box css:counter-set-page="1"> baz </css:box>
+                </rear>
+            </css:box>
+        </x:context>
+        
+        <x:expect label="result">
+            <css:box type="block" css:page="size: 30 15" pxi:split-before="true" pxi:split-after="true">
+                <front css:page="size: 30 15; @bottom-right {'{'} content: counter(page, lower-roman) {'}'}" pxi:split-before="true" pxi:split-after="true">
+                    <css:box> foo </css:box>
+                </front>
+                <body>
+                    <css:box> bar </css:box>
+                </body>
+                <rear>
+                    <css:box css:counter-set-page="1" pxi:split-before="true"> baz </css:box>
+                </rear>
+            </css:box>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="test_02">
+        <x:context>
+            <css:box type="block" css:page="size: 30 15">
+                <front css:page="size: 30 15; @bottom-right {'{'} content: counter(page, lower-roman) {'}'}">
+                    <css:box> foo </css:box>
+                </front>
+                <body>
+                    <css:box> bar </css:box>
+                </body>
+                <rear>
+                    <css:box css:counter-set-page="1"> baz </css:box>
+                </rear>
+            </css:box>
+        </x:context>
+
+        <x:expect label="result">
+            <_>
+                <css:box type="block" part="first" css:page="size: 30 15"/>
+                <css:box type="block" part="middle" css:page="size: 30 15">
+                    <front css:page="size: 30 15; @bottom-right {'{'} content: counter(page, lower-roman) {'}'}">
+                        <css:box> foo </css:box>
+                    </front>
+                </css:box>
+                <css:box type="block" part="middle" css:page="size: 30 15">
+                    <body>
+                        <css:box> bar </css:box>
+                    </body>
+                    <rear>
+                    </rear>
+                </css:box>
+                <css:box type="block" part="last" css:page="size: 30 15">
+                    <rear>
+                        <css:box css:counter-set-page="1"> baz </css:box>
+                    </rear>
+                </css:box>
+            </_>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="test_03">
+        <x:context>
+            <css:box type="block" css:counter-set-page="1">
+                <css:box> foo </css:box>
+                <css:box css:counter-set-page="2"> bar </css:box>
+                <css:box> baz </css:box>
+            </css:box>
+        </x:context>
+        <x:expect label="result">
+            <_>
+                <css:box type="block" part="first" css:counter-set-page="1">
+                    <css:box> foo </css:box>
+                </css:box>
+                <css:box type="block" part="last">
+                    <css:box css:counter-set-page="2"> bar </css:box>
+                    <css:box> baz </css:box>
+                </css:box>
+            </_>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="test_04">
+        <x:context xml:space="preserve">
+            <_ css:page="foo">
+                <css:box type="block">
+                    <css:_ css:page="bar">
+                        <css:box> xxx </css:box>
+                    </css:_>
+                    <css:box> xxx </css:box>
+                    <css:_ css:page="baz">
+                        <css:box> xxx </css:box>
+                    </css:_>
+                </css:box>
+            </_>
+        </x:context>
+        <x:expect label="result" xml:space="preserve">
+            <_>
+                <_ css:page="foo">
+                    <css:box type="block" part="first">
+                    </css:box>
+                </_>
+                <_ css:page="foo">
+                    <css:box type="block" part="middle">
+                        <css:_ css:page="bar">
+                            <css:box> xxx </css:box>
+                        </css:_>
+                    </css:box>
+                </_>
+                <_ css:page="foo">
+                    <css:box type="block" part="middle">
+                        <css:box> xxx </css:box>
+                    </css:box>
+                </_>
+                <_ css:page="foo">
+                    <css:box type="block" part="middle">
+                        <css:_ css:page="baz">
+                            <css:box> xxx </css:box>
+                        </css:_>
+                    </css:box>
+                </_>
+                <_ css:page="foo">
+                    <css:box type="block" part="last">
+                    </css:box>
+                </_>
+            </_>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="test_05 - don't duplicate ids">
+        <x:context>
+            <css:box type="block" css:id="a">
+                <css:box css:page="1"/>
+                <css:box css:page="2" css:id="b">
+                    <css:box css:page="3"/>
+                    <css:box css:page="4" css:id="c"/>
+                </css:box>
+                <css:box css:page="4"/>
+            </css:box>
+        </x:context>
+        <x:expect label="result">
+            <_>
+                <css:box part="first" type="block" css:id="a"> </css:box>
+                <css:box part="middle" type="block">
+                    <css:box css:page="1"/>
+                </css:box>
+                <css:box part="middle" type="block">
+                    <css:box css:page="2" css:id="b"/>
+                </css:box>
+                <css:box part="middle" type="block">
+                    <css:box css:page="2">
+                        <css:box css:page="3"/>
+                    </css:box>
+                </css:box>
+                <css:box part="middle" type="block">
+                    <css:box css:page="2">
+                        <css:box css:page="4" css:id="c"/>
+                    </css:box>
+                </css:box>
+                <css:box part="last" type="block">
+                    <css:box css:page="4"/>
+                </css:box>
+            </_>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="test_06 - avoid deep recursion" pending="we don't need to run this every time; it takes a littlebit of time to run so we skip this by default">
+        <!-- According to https://sourceforge.net/p/saxon/mailman/message/21353372/ we should try to keep recursion depth below 250. -->
+        <x:context href="../resources/css-xml/deep-css.xml"/>
+        <x:expect test="count(/*/*) &gt;= 1" label="output was produced"/>
+    </x:scenario>
+    
+</x:description>

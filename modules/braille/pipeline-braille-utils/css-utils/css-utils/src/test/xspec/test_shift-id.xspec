@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:css="http://www.daisy.org/ns/pipeline/braille-css" stylesheet="../../../src/main/resources/xml/shift-id.xsl">
+    
+    <x:scenario label="test_01">
+        <x:context>
+            <_>
+                <_>
+                    <css:_ css:id="a">
+                        <css:_ css:id="b"/>
+                    </css:_>
+                    <css:box css:id="c"/>
+                    <css:box/>
+                </_>
+                <css:_ css:flow="foo">
+                    <css:box css:anchor="a"/>
+                </css:_>
+                <_>
+                    <css:counter name="x" target="b"/>
+                </_>
+            </_>
+        </x:context>
+        <x:expect label="result">
+            <_>
+                <_>
+                    <css:_>
+                        <css:_/>
+                    </css:_>
+                    <css:box css:id="c"/>
+                    <css:box/>
+                </_>
+                <css:_ css:flow="foo">
+                    <css:box css:anchor="c"/>
+                </css:_>
+                <_>
+                    <css:counter name="x" target="c"/>
+                </_>
+            </_>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="test_02">
+        <x:context>
+            <_>
+                <css:box type="block">
+                    <css:box type="inline">
+                        ⠤⠤⠤
+                        <css:_ css:id="a"/>
+                        ⠤⠤⠤
+                        <css:_ css:id="b"/>
+                        ⠤⠤⠤
+                    </css:box>
+                </css:box>
+                <css:_ css:flow="footnotes">
+                    <css:box type="block" css:anchor="a"/>
+                    <css:box type="block" css:anchor="b"/>
+                </css:_>
+            </_>
+        </x:context>
+        <x:expect label="result">
+            <_>
+                <css:box type="block">
+                    <css:box type="inline">
+                        ⠤⠤⠤
+                        <css:_ css:id="a"/>
+                        ⠤⠤⠤
+                        <css:_ css:id="b"/>
+                        ⠤⠤⠤
+                    </css:box>
+                </css:box>
+                <css:_ css:flow="footnotes">
+                    <css:box type="block" css:anchor="a"/>
+                    <css:box type="block" css:anchor="b"/>
+                </css:_>
+            </_>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>
