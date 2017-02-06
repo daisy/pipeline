@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-aggregator</artifactId>
-  <version>1.10.2-SNAPSHOT</version>
+  <version>1.10.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Aggregator</name>
@@ -27,26 +27,26 @@
   <modules>
     <module>bom</module>
     <module>parent</module>
-    <!-- <module>xmlcatalog</module> -->
-    <!-- <module>calabash-adapter</module> -->
-    <!-- <module>calabash-custom-steps</module> -->
-    <!-- <module>common-utils</module> -->
+    <module>xmlcatalog</module>
+    <module>calabash-adapter</module>
+    <module>calabash-custom-steps</module>
+    <module>common-utils</module>
     <module>framework-core</module>
-    <!-- <module>framework-persistence</module> -->
-    <!-- <module>framework-volatile</module> -->
-    <!-- <module>logging-activator</module> -->
-    <!-- <module>logging-appender</module> -->
-    <!-- <module>modules-registry</module> -->
-    <!-- <module>persistence-derby</module> -->
-    <!-- <module>persistence-mysql</module> -->
-    <!-- <module>push-notifier</module> -->
+    <module>framework-persistence</module>
+    <module>framework-volatile</module>
+    <module>logging-activator</module>
+    <module>logging-appender</module>
+    <module>modules-registry</module>
+    <module>persistence-derby</module>
+    <module>persistence-mysql</module>
+    <module>push-notifier</module>
     <module>updater-wrapper</module>
     <module>webservice</module>
     <module>webservice-utils</module>
-    <!-- <module>woodstox-osgi-adapter</module> -->
-    <!-- <module>xpath-registry</module> -->
-    <!-- <module>xproc-api</module> -->
-    <!-- <module>launcher</module> -->
+    <module>woodstox-osgi-adapter</module>
+    <module>xpath-registry</module>
+    <module>xproc-api</module>
+    <module>launcher</module>
   </modules>
   
   <build>
