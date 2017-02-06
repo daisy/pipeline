@@ -74,6 +74,14 @@
       <scope>runtime</scope>
     </dependency>
     <!--
+        for framework-core (FIXME: move elsewhere)
+    -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jing</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
         for com.xmlcalabash & calabash-adapter (FIXME: verify + move elsewhere)
     -->
     <dependency>
