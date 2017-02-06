@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>script-utils-aggregator</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.10.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for the Script Utility Modules</name>
@@ -24,7 +24,7 @@
     <module>parent</module>
     <module>asciimath-utils</module>
     <module>common-entities</module>
-    <!-- <module>css-utils</module> -->
+    <module>css-utils</module>
     <module>daisy202-utils</module>
     <module>daisy3-utils</module>
     <module>dtbook-utils</module>
