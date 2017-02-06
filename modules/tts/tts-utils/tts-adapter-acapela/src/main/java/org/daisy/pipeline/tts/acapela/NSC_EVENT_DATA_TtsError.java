@@ -9,39 +9,31 @@ import java.util.List;
  * a tool written by <a href="http://ochafik.com/">Olivier Chafik</a> that <a href="http://code.google.com/p/jnaerator/wiki/CreditsAndLicense">uses a few opensource projects.</a>.<br>
  * For help, please visit <a href="http://nativelibs4java.googlecode.com/">NativeLibs4Java</a> , <a href="http://rococoa.dev.java.net/">Rococoa</a>, or <a href="http://jna.dev.java.net/">JNA</a>.
  */
-public class NSC_EVENT_DATA_Bookmark extends Structure {
+public class NSC_EVENT_DATA_TtsError extends Structure {
 	public int uiSize;
 	/** C type : void* */
 	public Pointer pUserData;
-	/** bookmark value */
-	public int uiVal;
-	/** position in bytes in whole audio signal */
-	public int uiByteCount;
-	public NSC_EVENT_DATA_Bookmark() {
+	public int nError;
+	public NSC_EVENT_DATA_TtsError() {
 		super();
 	}
 	protected List<? > getFieldOrder() {
-		return Arrays.asList("uiSize", "pUserData", "uiVal", "uiByteCount");
+		return Arrays.asList("uiSize", "pUserData", "nError");
 	}
-	/**
-	 * @param pUserData C type : void*<br>
-	 * @param uiVal bookmark value<br>
-	 * @param uiByteCount position in bytes in whole audio signal
-	 */
-	public NSC_EVENT_DATA_Bookmark(int uiSize, Pointer pUserData, int uiVal, int uiByteCount) {
+	/** @param pUserData C type : void* */
+	public NSC_EVENT_DATA_TtsError(int uiSize, Pointer pUserData, int nError) {
 		super();
 		this.uiSize = uiSize;
 		this.pUserData = pUserData;
-		this.uiVal = uiVal;
-		this.uiByteCount = uiByteCount;
+		this.nError = nError;
 	}
-	public NSC_EVENT_DATA_Bookmark(Pointer peer) {
+	public NSC_EVENT_DATA_TtsError(Pointer peer) {
 		super(peer);
 	}
-	public static class ByReference extends NSC_EVENT_DATA_Bookmark implements Structure.ByReference {
+	public static class ByReference extends NSC_EVENT_DATA_TtsError implements Structure.ByReference {
 		
 	};
-	public static class ByValue extends NSC_EVENT_DATA_Bookmark implements Structure.ByValue {
+	public static class ByValue extends NSC_EVENT_DATA_TtsError implements Structure.ByValue {
 		
 	};
 }
