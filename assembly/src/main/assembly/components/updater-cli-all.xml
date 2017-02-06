@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>target/updater/linux32</directory>
+      <outputDirectory>updater/linux</outputDirectory>
+      <includes>
+        <include>pipeline-updater*</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>target/updater/mac32</directory>
+      <outputDirectory>updater/mac</outputDirectory>
+      <includes>
+        <include>pipeline-updater*</include>
+      </includes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+  </fileSets>
+  <files>
+    <file>
+      <source>target/updater/win32/pipeline-updater.exe</source>
+      <outputDirectory>updater/windows</outputDirectory>
+      <destName>pipeline-updater.exe</destName>
+      <fileMode>0755</fileMode>
+    </file>
+    <file>
+      <source>target/release-descriptor/releaseDescriptor.xml</source>
+      <outputDirectory>etc</outputDirectory>
+      <destName>releaseDescriptor.xml</destName>
+    </file>
+  </files>
+</component>

@@ -1,2 +1,2 @@
 ${pipeline.config}/config-logback.xml
-/etc/default/pipeline2d
+/etc/default/daisy-pipeline2

@@ -4,34 +4,6 @@
     <fileSet>
       <directory>src/main/resources</directory>
       <includes>
-        <include>etc/**</include>
-        <include>samples/**</include>
-        <include>NOTICE.txt</include>
-        <include>README.txt</include>
-      </includes>
-      <excludes>
-        <exclude>etc/system.properties</exclude>
-        <exclude>etc/config.properties</exclude>
-        <exclude>etc/config-logback.xml</exclude>
-        <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
-        <exclude>etc/org.apache.felix.fileinstall-libs.cfg</exclude>
-      </excludes>
-      <outputDirectory>/</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>src/main/resources</directory>
-      <includes>
-        <include>etc/system.properties</include>
-        <include>etc/config.properties</include>
-        <include>etc/config-logback.xml</include>
-        <include>etc/org.apache.felix.fileinstall-modules.cfg</include>
-      </includes>
-      <filtered>true</filtered>
-      <outputDirectory>/</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>src/main/resources</directory>
-      <includes>
         <include>bin/**</include>
       </includes>
       <outputDirectory>/</outputDirectory>

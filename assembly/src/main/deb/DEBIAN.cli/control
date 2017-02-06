@@ -1,5 +1,5 @@
 Package: daisy-pipeline2-cli
-Version: [[version]]
+Version: [[cli.version]]
 Section: text
 Priority: optional
 Architecture: all
