@@ -76,8 +76,9 @@ public class MarkdownToJavafxTest {
         public void testSimpleText() throws Exception {
                 //process hellow world
                 mdProcessor.parseMarkdown("Hello world".toCharArray()).accept(this.mdToFx);
-                Assert.assertEquals("We have one element in the parent",1,parent.nodes.size());
+                Assert.assertEquals("We have two elements, the text and the cr in the parent",2,parent.nodes.size());
                 Assert.assertEquals("The simple text is maintained", ((Text)parent.nodes.get(0)).getText(),"Hello world");
+                Assert.assertEquals("And we got the line breaks","\n\n",((Text)parent.nodes.get(1)).getText());
         }
 
         @Test
@@ -118,18 +119,20 @@ public class MarkdownToJavafxTest {
         public void testBoldText() throws Exception {
 
                 mdProcessor.parseMarkdown("**text**".toCharArray()).accept(this.mdToFx);
-                Assert.assertEquals("We have two elements, the text and the cr in the parent",1,parent.nodes.size());
+                Assert.assertEquals("We have two elements, the text and the cr in the parent",2,parent.nodes.size());
                 Assert.assertEquals("The text is maintained", ((Text)parent.nodes.get(0)).getText(),"text");
                 Assert.assertFalse("The element contains the class bold", ((Text)parent.nodes.get(0)).getStyleClass().indexOf(MarkdownToJavafx.STRONG)==-1);
+                Assert.assertEquals("And we got the line breaks","\n\n",((Text)parent.nodes.get(1)).getText());
         
         }
         @Test
         public void testEmph() throws Exception {
 
                 mdProcessor.parseMarkdown("*text*".toCharArray()).accept(this.mdToFx);
-                Assert.assertEquals("We have one element in the parent",1,parent.nodes.size());
+                Assert.assertEquals("We have two elements, the text and the cr in the parent",2,parent.nodes.size());
                 Assert.assertEquals("The text is maintained", ((Text)parent.nodes.get(0)).getText(),"text");
                 Assert.assertFalse("The element contains the class emph", ((Text)parent.nodes.get(0)).getStyleClass().indexOf(MarkdownToJavafx.EMPH)==-1);
+                Assert.assertEquals("And we got the line breaks","\n\n",((Text)parent.nodes.get(1)).getText());
         
         }
 
@@ -137,9 +140,10 @@ public class MarkdownToJavafxTest {
 public void testLink() throws Exception {
 
                 mdProcessor.parseMarkdown("[Google](http://www.google.com)".toCharArray()).accept(this.mdToFx);
-                Assert.assertEquals("We have one element in the parent",1,parent.nodes.size());
+                Assert.assertEquals("We have two elements, the text and the cr in the parent",2,parent.nodes.size());
                 Hyperlink link = (Hyperlink) parent.nodes.get(0);
                 Assert.assertEquals("The text has been set",link.getText(),"Google");
+                Assert.assertEquals("And we got the line breaks","\n\n",((Text)parent.nodes.get(1)).getText());
         
 }
 

@@ -93,7 +93,7 @@ public class JobExecutor {
                     builder.withInput(name, prov);
                         }
                         else {
-                                if (dataType==DataType.DIRECTORY || dataType == DataType.FILE){
+                                if (!"".equals(value) && (dataType==DataType.DIRECTORY || dataType == DataType.FILE)){
                                         value=new File(value).toURI().toString();
                                 }
                                 builder.withOption(new QName(name), value);

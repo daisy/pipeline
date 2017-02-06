@@ -31,10 +31,13 @@ public class PipelineApplication extends Application {
                                         ServiceRegistry services=PipelineApplication.this.services;
                                         HostServices hostServices = getHostServices();
                                         Client client = services.getWebserviceStorage().getClientStorage().defaultClient();
-                                        MainWindow mainWindow = new MainWindow(services.getScriptRegistry(), services.getJobManagerFactory(),
+                                        MainWindow mainWindow = new MainWindow(
+                                                services.getScriptRegistry(),
+                                                services.getJobManagerFactory(),
                                                 client, 
                                                 services.getEventBusProvider(), 
-                                                hostServices);
+                                                hostServices,
+                                                services.getDatatypeRegistry());
 
                                         stage.setScene(mainWindow.getScene());
                                         stage.setTitle("DAISY Pipeline 2");

@@ -31,7 +31,7 @@ public interface ScriptFieldAnswer<T> {
 		
 		public ScriptFieldAnswerString(ScriptField field) {
 			super(field);
-			answer = new SimpleStringProperty("");
+			answer = new SimpleStringProperty(field.getDefaultValue());
 		}
 		
 		public SimpleStringProperty answerProperty() {		
@@ -46,6 +46,12 @@ public interface ScriptFieldAnswer<T> {
 		public ScriptFieldAnswerBoolean(ScriptField field) {
 			super(field);
 			answer = new SimpleBooleanProperty();
+			if (field.getDefaultValue().equals("true")) {
+				answer.set(true);
+			}
+			else {
+				answer.set(false);
+			}
 		}
 		public SimpleBooleanProperty answerProperty() {
 			return answer;

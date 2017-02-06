@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.gui.databridge.BoundScript;
 import org.daisy.pipeline.gui.databridge.DataManager;
@@ -57,7 +58,7 @@ public class MainWindow extends BorderPane {
 	
 	public MainWindow(ScriptRegistry scriptRegistry, 
 			JobManagerFactory jobManagerFactory, Client client, EventBusProvider eventBusProvider,
-			HostServices hostServices) {
+			HostServices hostServices, DatatypeRegistry datatypeRegistry) {
 		super();
 		
 		this.eventBusProvider = eventBusProvider;
@@ -70,7 +71,7 @@ public class MainWindow extends BorderPane {
 		
 		jobData = FXCollections.observableArrayList();
 		scriptData = FXCollections.observableArrayList();
-		dataManager = new DataManager(this);
+		dataManager = new DataManager(this, datatypeRegistry);
 		this.eventBusListener = new EventBusListener(this);	
 		eventBusProvider.get().register(eventBusListener);
 		
