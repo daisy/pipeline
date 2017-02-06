@@ -116,11 +116,11 @@ case "$1" in
         
         # install the System V style init script links
         
-        update-rc.d pipeline2d defaults >/dev/null
+        update-rc.d daisy-pipeline2 defaults >/dev/null
         
         # start the daemon
         
-        /etc/init.d/pipeline2d start
+        /etc/init.d/daisy-pipeline2 start
         
     ;;
 

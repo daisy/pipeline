@@ -5,11 +5,11 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>2</version>
-    <relativePath/>
+    <relativePath />
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.10-beta1</version>
+  <version>1.10.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,8 +17,11 @@
     <connection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</developerConnection>
-    <tag>v1.10-beta1</tag>
+    <tag>v1.10.0</tag>
   </scm>
+  <properties>
+    <cli.version>2.1.0</cli.version>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.apache.felix</groupId>
@@ -31,17 +34,17 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>cli</artifactId>
-        <version>2.1.0</version>
+        <version>${cli.version}</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>gui</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>updater</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -51,35 +54,35 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.1</version>
+        <version>1.10.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-bom</artifactId>
-        <version>1.10.0</version>
+        <version>1.10.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.10.0</version>
+        <version>1.10.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.10.0</version>
+        <version>1.10.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.9.17-SNAPSHOT</version>
+        <version>1.10.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -317,16 +320,16 @@
             <configuration>
               <outputDirectory>${project.build.directory}/bundles/libs</outputDirectory>
               <artifactItems>
-                <dependency>
+                <artifactItem>
                   <groupId>javax.xml.crypto</groupId>
                   <artifactId>jsr105-api</artifactId>
                   <version>1.0.1</version>
-                </dependency>
-                <dependency>
+                </artifactItem>
+                <artifactItem>
                   <groupId>javax.xml.parsers</groupId>
                   <artifactId>jaxp-api</artifactId>
                   <version>1.4.5</version>
-                </dependency>
+                </artifactItem>
                 <!-- Runtime dependencies -->
                 <artifactItem>
                   <groupId>org.apache.httpcomponents</groupId>
@@ -469,11 +472,11 @@
                 <!--
                     for braille modules
                 -->
-                <dependency>
+                <artifactItem>
                   <groupId>org.apache.commons</groupId>
                   <artifactId>commons-lang3</artifactId>
                   <version>3.4</version>
-                </dependency>
+                </artifactItem>
                 <artifactItem>
                   <groupId>com.googlecode.texhyphj</groupId>
                   <artifactId>texhyphj</artifactId>
@@ -1079,10 +1082,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules.braille</groupId>
-                  <artifactId>liblouis-formatter</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline.modules.braille</groupId>
                   <artifactId>liblouis-mathml</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -1214,6 +1213,7 @@
         </dependencies>
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>
+          <arguments>-Plinux,mac,win</arguments>
         </configuration>
       </plugin>
           <plugin>
@@ -1244,10 +1244,10 @@
                 <configuration>
                   <target>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-release.xslt"/>
-                      <arg value="time=${maven.build.timestamp}"/>
-                      <arg line="-o:./target/release-descriptor/releaseDescriptor.xml"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-release.xslt" />
+                      <arg value="time=${maven.build.timestamp}" />
+                      <arg line="-o:./target/release-descriptor/releaseDescriptor.xml" />
                     </java>
                   </target>
                 </configuration>
@@ -1289,7 +1289,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -1302,7 +1302,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -1314,6 +1314,81 @@
   </build>
 
   <profiles>
+    <profile>
+      <id>minimal</id>
+      <!--
+        This profile contains the updater, and any files not downloaded by the updater.
+        These files are not downloaded by the updater, and so are included here (except `/samples`):
+        - `/bin`
+        - `/*.txt`
+        - `/etc`
+      -->
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-updater-all</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater</artifactId>
+                      <type>zip</type>
+                      <classifier>linux_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/linux32</outputDirectory>
+                    </artifactItem>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater</artifactId>
+                      <type>zip</type>
+                      <classifier>darwin_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/mac32</outputDirectory>
+                    </artifactItem>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline</groupId>
+                      <artifactId>updater</artifactId>
+                      <type>zip</type>
+                      <classifier>windows_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>dist-minimal</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <attach>false</attach>
+                  <descriptors>
+                    <descriptor>src/main/assembly/dist-minimal.xml</descriptor>
+                  </descriptors>
+                  <filters>
+                    <filter>src/main/assembly/dist.properties</filter>
+                    <filter>src/main/assembly/dist-nix.properties</filter>
+                  </filters>
+                  <appendAssemblyId>false</appendAssemblyId>
+                  <finalName>pipeline2-${project.version}_minimal</finalName>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
     <profile>
       <id>mac</id>
       <activation>
@@ -1354,7 +1429,7 @@
                       <groupId>org.daisy.pipeline</groupId>
                       <artifactId>updater</artifactId>
                       <type>zip</type>
-                      <classifier>linux_386</classifier>
+                      <classifier>darwin_386</classifier>
                       <outputDirectory>${project.build.directory}/updater/mac32</outputDirectory>
                     </artifactItem>
                   </artifactItems>
@@ -1372,6 +1447,7 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
+                  <attach>false</attach>
                   <descriptors>
                     <descriptor>src/main/assembly/dist-mac.xml</descriptor>
                   </descriptors>
@@ -1381,6 +1457,118 @@
                   </filters>
                   <appendAssemblyId>false</appendAssemblyId>
                   <finalName>pipeline2-${project.version}_mac</finalName>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>1.12</version>
+            <executions>
+              <execution>
+                <id>parse-version</id>
+                <goals>
+                  <goal>parse-version</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-app-package</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <target xmlns:fx="javafx:com.sun.javafx.tools.ant">
+                    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${env.JAVA_HOME}/lib/ant-javafx.jar" />
+                    <fx:deploy outdir="${project.build.directory}/javapackager" outfile="dp2" nativeBundles="image">
+                      <fx:application id="org.daisy.pipeline2" mainClass="org.apache.felix.main.Main" name="DAISY Pipeline 2" version="${project.version}">
+                      </fx:application>
+                      <fx:info description="A tool for automated production of accessible digital publication" title="DAISY Pipeline 2" vendor="DAISY Consortium">
+                        <fx:icon href="${project.basedir}/src/main/mac/pipeline-logo.icns" />
+                      </fx:info>
+                      <fx:platform j2se="8.0+">
+                        <fx:jvmarg value="-Xms256M" />
+                        <fx:jvmarg value="-Xmx1G" />
+                        <fx:jvmarg value="-XX:PermSize=16M" />
+                        <fx:jvmarg value="-XX:MaxPermSize=256M" />
+                        <fx:property name="org.daisy.pipeline.main.mode" value="gui" />
+                        <fx:property name="org.daisy.pipeline.home" value="." />
+                        <fx:property name="org.daisy.pipeline.data" value="data" />
+                        <fx:property name="org.daisy.pipeline.base" value="." />
+                        <fx:property name="org.daisy.pipeline.ws.localfs" value="true" />
+                        <fx:property name="org.daisy.pipeline.ws.authentication" value="false" />
+                        <fx:property name="felix.config.properties" value="file:etc/config.properties" />
+                        <fx:property name="felix.system.properties" value="file:etc/system.properties" />
+                      </fx:platform>
+                      <fx:resources>
+                        <fx:fileset type="jar" dir="${project.build.directory}/pipeline2-${project.version}_mac/daisy-pipeline" includes="system/bootstrap/felix.jar" />
+                        <fx:fileset type="license" os="osx" dir="${project.build.directory}/pipeline2-${project.version}_mac/daisy-pipeline" includes="NOTICE.txt" />
+                        <fx:fileset dir="${project.build.directory}/pipeline2-${project.version}_mac/daisy-pipeline">
+                          <include name="**/*" />
+                        </fx:fileset>
+                      </fx:resources>
+                      <fx:bundleArgument arg="mac.CFBundleIdentifier" value="org.daisy.pipeline2" />
+                      <fx:bundleArgument arg="mac.CFBundleVersion" value="${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}" />
+                    </fx:deploy>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>1.3</version>
+            <executions>
+              <execution>
+                <id>install-node</id>
+                <goals>
+                  <goal>install-node-and-yarn</goal>
+                </goals>
+                <configuration>
+                  <nodeVersion>v6.9.1</nodeVersion>
+                  <yarnVersion>v0.17.8</yarnVersion>
+                </configuration>
+              </execution>
+              <execution>
+                <id>install-appdmg</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>add appdmg</arguments>
+                </configuration>
+              </execution>
+            </executions>
+            <configuration>
+              <workingDirectory>${project.build.directory}</workingDirectory>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.5.0</version>
+            <executions>
+              <execution>
+                <id>exec-appdmg</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>node/node</executable>
+                  <workingDirectory>${project.build.directory}</workingDirectory>
+                  <arguments>
+                    <argument>node_modules/appdmg/bin/appdmg.js</argument>
+                    <argument>${project.basedir}/src/main/mac/dmg.json</argument>
+                    <argument>pipeline2-${project.version}_mac.dmg</argument>
+                  </arguments>
                 </configuration>
               </execution>
             </executions>
@@ -1429,8 +1617,8 @@
                       <groupId>org.daisy.pipeline</groupId>
                       <artifactId>updater</artifactId>
                       <type>zip</type>
-                      <classifier>darwin_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/linux</outputDirectory>
+                      <classifier>linux_386</classifier>
+                      <outputDirectory>${project.build.directory}/updater/linux32</outputDirectory>
                     </artifactItem>
                   </artifactItems>
                 </configuration>
@@ -1447,6 +1635,7 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
+                  <attach>false</attach>
                   <descriptors>
                     <descriptor>src/main/assembly/dist-linux.xml</descriptor>
                   </descriptors>
@@ -1471,6 +1660,10 @@
           <family>windows</family>
         </os>
       </activation>
+      <properties>
+        <nsis.scriptfile>target/nsis/installer.nsi</nsis.scriptfile>
+        <nsis.output.file>pipeline2-${project.version}_windows.exe</nsis.output.file>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -1540,6 +1733,7 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
+                  <attach>false</attach>
                   <descriptors>
                     <descriptor>src/main/assembly/dist-win.xml</descriptor>
                   </descriptors>
@@ -1549,6 +1743,82 @@
                   </filters>
                   <appendAssemblyId>false</appendAssemblyId>
                   <finalName>pipeline2-${project.version}_win</finalName>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- NSIS Installer -->
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>copy-resources</id>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${basedir}/target/nsis</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>src/main/nsis</directory>
+                      <includes>
+                        <include>installer.nsi</include>
+                      </includes>
+                      <filtering>true</filtering>
+                    </resource>
+                    <resource>
+                      <directory>src/main/nsis</directory>
+                      <excludes>
+                        <exclude>installer.nsi</exclude>
+                      </excludes>
+                      <filtering>false</filtering>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>nsis-maven-plugin</artifactId>
+            <version>1.0-alpha-1</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>generate-headerfile</goal>
+                  <goal>make</goal>
+                </goals>
+                <configuration>
+                  <attach>false</attach>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!-- !!!FIXME!!! -->
+          <!-- This a gross hack to detach the `exe` artifact,
+               since nsis-maven-plugin doesn't expose the option 
+               to *not* attach the resulting executable -->
+          <plugin>
+            <groupId>org.codehaus.gmaven</groupId>
+            <artifactId>groovy-maven-plugin</artifactId>
+            <version>2.0</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>execute</goal>
+                </goals>
+                <configuration>
+                  <source>
+                    org.apache.maven.artifact.Artifact exe;
+                    for (artifact in project.getAttachedArtifacts()) {
+                      if(artifact.getType()=="exe")
+                        exe = artifact;
+                    }
+                    project.getAttachedArtifacts().remove(exe);
+                  </source>
                 </configuration>
               </execution>
             </executions>
@@ -1589,85 +1859,85 @@
                 <configuration>
                   <target>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
-                      <arg value="id=copy-pipeline-bundles"/>
-                      <arg value="startLevel=30"/>
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
-                      <arg value="prefix=pipeline"/>
-                      <arg value="localRepository=${settings.localRepository}"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-pipeline-bundles" />
+                      <arg value="startLevel=30" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
+                      <arg value="prefix=pipeline" />
+                      <arg value="localRepository=${settings.localRepository}" />
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
-                      <arg value="id=copy-pipeline-modules"/>
-                      <arg value="startLevel=50"/>
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
-                      <arg value="prefix=modules"/>
-                      <arg value="localRepository=${settings.localRepository}"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-pipeline-modules" />
+                      <arg value="startLevel=50" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
+                      <arg value="prefix=modules" />
+                      <arg value="localRepository=${settings.localRepository}" />
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
-                      <arg value="id=copy-pipeline-modules-linux"/>
-                      <arg value="startLevel=50"/>
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
-                      <arg value="prefix=modules"/>
-                      <arg value="localRepository=${settings.localRepository}"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-pipeline-modules-linux" />
+                      <arg value="startLevel=50" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
+                      <arg value="prefix=modules" />
+                      <arg value="localRepository=${settings.localRepository}" />
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
-                      <arg value="id=copy-frontend"/>
-                      <arg value="startLevel=100"/>
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice"/>
-                      <arg value="prefix=frontend"/>
-                      <arg value="localRepository=${settings.localRepository}"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-frontend" />
+                      <arg value="startLevel=100" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice" />
+                      <arg value="prefix=frontend" />
+                      <arg value="localRepository=${settings.localRepository}" />
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
-                      <arg value="id=copy-pipeline-modules-mac"/>
-                      <arg value="startLevel=50"/>
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
-                      <arg value="prefix=modules"/>
-                      <arg value="localRepository=${settings.localRepository}"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-pipeline-modules-mac" />
+                      <arg value="startLevel=50" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
+                      <arg value="prefix=modules" />
+                      <arg value="localRepository=${settings.localRepository}" />
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
-                      <arg value="id=copy-pipeline-modules-win"/>
-                      <arg value="startLevel=50"/>
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc"/>
-                      <arg value="prefix=modules"/>
-                      <arg value="localRepository=${settings.localRepository}"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-pipeline-modules-win" />
+                      <arg value="startLevel=50" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
+                      <arg value="prefix=modules" />
+                      <arg value="localRepository=${settings.localRepository}" />
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
-                      <arg value="id=copy-gui"/>
-                      <arg value="startLevel=100"/>
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui"/>
-                      <arg value="prefix=frontend"/>
-                      <arg value="localRepository=${settings.localRepository}"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-gui" />
+                      <arg value="startLevel=100" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui" />
+                      <arg value="prefix=frontend" />
+                      <arg value="localRepository=${settings.localRepository}" />
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
-                      <arg value="id=copy-volatile-pipeline-bundles"/>
-                      <arg value="startLevel=100"/>
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui"/>
-                      <arg value="prefix=frontend"/>
-                      <arg value="localRepository=${settings.localRepository}"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-volatile-pipeline-bundles" />
+                      <arg value="startLevel=100" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui" />
+                      <arg value="prefix=frontend" />
+                      <arg value="localRepository=${settings.localRepository}" />
                     </java>
                     <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml"/>
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl"/>
-                      <arg value="id=copy-persistence-pipeline-bundles"/>
-                      <arg value="startLevel=100"/>
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice"/>
-                      <arg value="prefix=frontend"/>
-                      <arg value="localRepository=${settings.localRepository}"/>
+                      <arg value="target/tmp/effective-pom.xml" />
+                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-persistence-pipeline-bundles" />
+                      <arg value="startLevel=100" />
+                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice" />
+                      <arg value="prefix=frontend" />
+                      <arg value="localRepository=${settings.localRepository}" />
                     </java>
                   </target>
                 </configuration>
@@ -1703,6 +1973,7 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
+                  <attach>false</attach>
                   <descriptors>
                     <descriptor>src/main/assembly/dev.xml</descriptor>
                   </descriptors>
@@ -1711,7 +1982,6 @@
                   </filters>
                   <appendAssemblyId>false</appendAssemblyId>
                   <finalName>dev-launcher</finalName>
-                  <attach>false</attach>
                 </configuration>
               </execution>
             </executions>
@@ -1870,7 +2140,7 @@
                     <!-- daemon -->
                     <!-- ====== -->
                     <data>
-                      <src>target/filtered-resources/deb/etc/init.d/pipeline2d</src>
+                      <src>target/filtered-resources/deb/etc/init.d/daisy-pipeline2</src>
                       <type>file</type>
                       <mapper>
                         <type>perm</type>
@@ -1922,8 +2192,8 @@
                     </data>
                     <data>
                       <type>file</type>
-                      <src>src/main/deb/etc/default/pipeline2d</src>
-                      <dst>/etc/default/pipeline2d</dst>
+                      <src>src/main/deb/etc/default/daisy-pipeline2</src>
+                      <dst>/etc/default/daisy-pipeline2</dst>
                     </data>
                     <!-- ============== -->
                     <!-- system bundles -->
@@ -2010,6 +2280,17 @@
                     <!-- log files -->
                     <!-- ========= -->
                     <data>
+                      <type>directory</type>
+                      <src>target/bundles/gui</src>
+                      <mapper>
+                        <prefix>${pipeline.home}/system/gui</prefix>
+                        <type>perm</type>
+                      </mapper>
+                    </data>
+                    <!-- ========= -->
+                    <!-- log files -->
+                    <!-- ========= -->
+                    <data>
                       <type>template</type>
                       <paths>
                         <path>${pipeline.log}</path>
@@ -2020,7 +2301,7 @@
               </execution>
               <execution>
                 <id>package-deb-cli</id>
-                <phase>none</phase>
+                <phase>package</phase>
                 <goals>
                   <goal>jdeb</goal>
                 </goals>
@@ -2028,7 +2309,7 @@
                   <controlDir>target/filtered-resources/deb/DEBIAN.cli</controlDir>
                   <timestamped>true</timestamped>
                   <classifier>cli_all</classifier>
-                  <deb>target/daisy-pipeline2-cli_${project.version}_all.deb</deb>
+                  <deb>target/daisy-pipeline2-cli_${cli.version}_all.deb</deb>
                   <dataSet>
                     <!-- ============ -->
                     <!-- cli binaries -->
@@ -2081,6 +2362,39 @@
               </execution>
             </executions>
           </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-app-package</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>install-node</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>install-appdmg</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>exec-appdmg</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
         </plugins>
       </build>
     </profile>
@@ -2108,6 +2422,7 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
+                  <attach>false</attach>
                   <formats>
                     <format>dir</format>
                   </formats>
@@ -2168,18 +2483,6 @@
                         <exclude>etc/config.properties</exclude>
                         <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
                         <exclude>etc/org.apache.felix.fileinstall-libs.cfg</exclude>
-                      </excludes>
-                    </source>
-                    <source>
-                      <location>src/main/resources</location>
-                      <includes>
-                        <include>samples/daisy202/**</include>
-                        <include>samples/daisy3/**</include>
-                        <include>samples/dtbook/**</include>
-                        <include>samples/zedai/**</include>
-                      </includes>
-                      <excludes>
-                        <exclude>samples/html/**</exclude>
                       </excludes>
                     </source>
                   </sources>
@@ -2292,6 +2595,17 @@
                   </sources>
                 </mapping>
                 <mapping>
+                  <directory>${pipeline.home}/system/gui</directory>
+                  <filemode>0644</filemode>
+                  <username>${pipeline.user}</username>
+                  <groupname>${pipeline.group}</groupname>
+                  <sources>
+                    <source>
+                      <location>${project.basedir}/target/bundles/gui</location>
+                    </source>
+                  </sources>
+                </mapping>
+                <mapping>
                   <directory>${pipeline.home}/${bundles.modules}</directory>
                   <filemode>0644</filemode>
                   <username>${pipeline.user}</username>
@@ -2377,6 +2691,7 @@ rm -rf /opt/daisy-pipeline2
             <configuration>
               <name>pipeline2-cli</name>
               <group>daisy-pipeline2-cli</group>
+              <projversion>${cli.version}</projversion>
               <description>daisy-pipeline2-cli</description>
               <needarch>x86_64</needarch>
               <mappings>
@@ -2460,6 +2775,7 @@ rm -rf /opt/daisy-pipeline2/cli
                   <goal>single</goal>
                 </goals>
                 <configuration>
+                  <attach>false</attach>
                   <descriptors>
                     <descriptor>src/main/assembly/webui-mac.xml</descriptor>
                   </descriptors>
@@ -2478,6 +2794,7 @@ rm -rf /opt/daisy-pipeline2/cli
                   <goal>single</goal>
                 </goals>
                 <configuration>
+                  <attach>false</attach>
                   <descriptors>
                     <descriptor>src/main/assembly/webui-linux.xml</descriptor>
                   </descriptors>
@@ -2496,6 +2813,7 @@ rm -rf /opt/daisy-pipeline2/cli
                   <goal>single</goal>
                 </goals>
                 <configuration>
+                  <attach>false</attach>
                   <descriptors>
                     <descriptor>src/main/assembly/webui-win.xml</descriptor>
                   </descriptors>
@@ -2513,64 +2831,6 @@ rm -rf /opt/daisy-pipeline2/cli
       </build>
     </profile>
 
-    <!-- NSIS Profile for installer generation invoke with -P installer -->
-    <profile>
-      <id>installer</id>
-      <properties>
-        <nsis.scriptfile>target/nsis/installer.nsi</nsis.scriptfile>
-        <nsis.output.file>pipeline2-${project.version}.exe</nsis.output.file>
-      </properties>
-      <build>
-        <plugins>
-          <!-- copy nsis file for windows installer generation -->
-          <plugin>
-            <artifactId>maven-resources-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>copy-resources</id>
-                <phase>process-resources</phase>
-                <goals>
-                  <goal>copy-resources</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>${basedir}/target/nsis</outputDirectory>
-                  <resources>
-                    <resource>
-                      <directory>src/main/nsis</directory>
-                      <includes>
-                        <include>installer.nsi</include>
-                      </includes>
-                      <filtering>true</filtering>
-                    </resource>
-                    <resource>
-                      <directory>src/main/nsis</directory>
-                      <excludes>
-                        <exclude>installer.nsi</exclude>
-                      </excludes>
-                      <filtering>false</filtering>
-                    </resource>
-                  </resources>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>nsis-maven-plugin</artifactId>
-            <version>1.0-alpha-1</version>
-            <executions>
-              <execution>
-                <phase>package</phase>
-                <goals>
-                  <goal>generate-headerfile</goal>
-                  <goal>make</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
   </profiles>
   <repositories>
     <!--

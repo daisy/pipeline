@@ -35,10 +35,10 @@ case "$1" in
         fi
         
         # stop the daemon
-        /etc/init.d/pipeline2d stop
+        /etc/init.d/daisy-pipeline2 stop
         
         # remove the System V style init script links
-        update-rc.d -f pipeline2d remove >/dev/null
+        update-rc.d -f daisy-pipeline2 remove >/dev/null
         
     ;;
     
