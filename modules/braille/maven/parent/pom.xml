@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>braille-modules-parent</artifactId>
-  <version>1.9.17-SNAPSHOT</version>
+  <version>1.10.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Braille Modules Parent POM</name>
@@ -33,7 +33,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.9.17-SNAPSHOT</version>
+        <version>1.10.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

@@ -388,20 +388,17 @@
                 <p:document href="obfl-css-definition.xsl"/>
             </p:input>
         </css:new-definition>
-        <p:delete match="css:box[@type='block']
-                                [matches(string(.), '^[\s&#x2800;]*$') and
-                                 not(descendant::css:white-space or
-                                     descendant::css:string or
-                                     descendant::css:counter or
-                                     descendant::css:text or
-                                     descendant::css:content or
-                                     descendant::css:leader or
-                                     descendant::css:custom-func)]
-                                //text()">
+        <p:xslt>
+            <p:input port="parameters">
+                <p:empty/>
+            </p:input>
+            <p:input port="stylesheet">
+                <p:document href="css-to-obfl.block-boxes-with-no-line-boxes.xsl"/>
+            </p:input>
             <p:documentation>
                 Remove text nodes from block boxes with no line boxes.
             </p:documentation>
-        </p:delete>
+        </p:xslt>
         <p:delete match="//css:box[@type='table']//*/@css:page-break-before|
                          //css:box[@type='table']//*/@css:page-break-after|
                          //*[@css:_obfl-toc]//*/@css:page-break-before|

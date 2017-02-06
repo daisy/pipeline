@@ -1,0 +1,58 @@
+<_><css:_ xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
+            
+              <css:box xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" type="block" name="section" css:page="size: 15 5; @bottom-right { content: counter(page) }"><css:box type="inline">
+                ⠤⠤⠤
+              </css:box></css:box>
+              
+              
+              
+              
+              
+            
+          </css:_><css:_ xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
+            
+              
+              <css:box xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" css:page="size: 15 5" type="block" name="section" css:page-break-before="right"><css:box type="inline">
+                ⠤⠤⠤
+              </css:box></css:box>
+              
+              
+              
+              
+            
+          </css:_><css:_ xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
+            
+              
+              
+              <css:box xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" css:page="size: 15 5; @bottom-right { content: counter(page) }" type="block" name="section" css:page-break-before="right"><css:box type="inline">
+                ⠤⠤⠤
+              </css:box></css:box>
+              
+              
+              
+            
+          </css:_><css:_ xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
+            
+              
+              
+              
+              <css:box xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" css:counter-set-page="10" css:page="size: 15 5; @bottom-right { content: counter(page) }" type="block" name="section" css:page-break-before="always"><css:box type="inline">
+                ⠤⠤⠤
+              </css:box></css:box>
+              <css:box xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" type="block" name="section" css:page="size: 15 5; @bottom-right { content: counter(page) }" css:page-break-before="always"><css:box type="inline">
+                ⠤⠤⠤
+              </css:box></css:box>
+              
+            
+          </css:_><css:_ xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
+            
+              
+              
+              
+              
+              
+              <css:box xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" css:page="size: 15 5; @top-right { content: counter(page) }" type="block" name="section" css:page-break-before="right"><css:box type="inline">
+                ⠤⠤⠤
+              </css:box></css:box>
+            
+          </css:_></_>
