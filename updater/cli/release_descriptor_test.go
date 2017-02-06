@@ -32,7 +32,7 @@ func GenerateArtifacts() []Artifact {
 func TestNewReleaseDescriptor(t *testing.T) {
 	Convey("So we create a new descriptor", t, func() {
 		href := "localhost"
-		version := "1.0.1"
+		version := "1.0.1-beta2+SNAPSHOT-a1b2c3"
 		artifacts := GenerateArtifacts()
 		rd, err := NewReleaseDescriptor(href, version, artifacts...)
 		So(err, ShouldBeNil)
@@ -40,6 +40,12 @@ func TestNewReleaseDescriptor(t *testing.T) {
 			So(rd.Href, ShouldEqual, href)
 		})
 		Convey("The version is set and parsed", func() {
+			So(rd.Version.Major, ShouldEqual, 1)
+			So(rd.Version.Minor, ShouldEqual, 0)
+			So(rd.Version.Patch, ShouldEqual, 1)
+			So(rd.Version.Pre[0].String(), ShouldEqual, "beta2")
+			So(rd.Version.Build[0], ShouldEqual, "SNAPSHOT-a1b2c3")
+			So(rd.Version.String(), ShouldEqual, "1.0.1-beta2+SNAPSHOT-a1b2c3")
 			So(rd.Version.String(), ShouldEqual, semver.MustParse(version).String())
 		})
 		Convey("The artifacts are set", func() {
