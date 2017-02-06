@@ -7,6 +7,7 @@ import java.util.Comparator;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
@@ -20,7 +21,7 @@ public class Script {
         private ArrayList<ScriptField> optionalOptionFields;
         private XProcScript xprocScript;
         
-        public Script(XProcScript script) {
+        public Script(XProcScript script, DatatypeRegistry datatypeRegistry) {
                 inputFields = new ArrayList<ScriptField>();
                 requiredOptionFields = new ArrayList<ScriptField>();
                 optionalOptionFields = new ArrayList<ScriptField>();
@@ -38,7 +39,7 @@ public class Script {
                 
                 for (XProcOptionInfo optionInfo : scriptInfo.getOptions()) {
                         XProcOptionMetadata metadata = script.getOptionMetadata(optionInfo.getName());
-                        ScriptField field = new ScriptField(optionInfo, metadata);
+                        ScriptField field = new ScriptField(optionInfo, metadata, datatypeRegistry);
                         if (field.isRequired()) {
                                 requiredOptionFields.add(field);
                         }

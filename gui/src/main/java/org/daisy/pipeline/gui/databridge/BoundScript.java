@@ -80,8 +80,8 @@ public class BoundScript {
 		if (field.getDataType() == DataType.BOOLEAN) {
 			answer = new ScriptFieldAnswer.ScriptFieldAnswerBoolean(field);
 			// default to true for bool fields
-			SimpleBooleanProperty b = (SimpleBooleanProperty)answer.answerProperty();
-			b.set(true);
+//			SimpleBooleanProperty b = (SimpleBooleanProperty)answer.answerProperty();
+//			b.set(true);
 		}
 		else {
 			if (field.isSequence() == true) {

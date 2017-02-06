@@ -1,5 +1,6 @@
 package org.daisy.pipeline.gui;
 
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.event.EventBusProvider;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -18,6 +19,7 @@ public class ServiceRegistryTest {
         @Mock  JobManagerFactory jobManagerFactory;
         @Mock  EventBusProvider eventBusProvider;
         @Mock WebserviceStorage webserviceStorage;
+        @Mock DatatypeRegistry datatypeRegistry;
         @Mock PipelineApplication app;
         @Before
         public void setUp(){
@@ -41,6 +43,8 @@ public class ServiceRegistryTest {
                 reg.setScriptRegistry(scriptRegistry);
                 Mockito.verify(app, Mockito.times(0)).setServiceRegistry(reg);
                 reg.setJobManagerFactory(jobManagerFactory);
+                Mockito.verify(app, Mockito.times(0)).setServiceRegistry(reg);
+                reg.setDatatypeRegistry(datatypeRegistry);
                 Mockito.verify(app, Mockito.times(0)).setServiceRegistry(reg);
                 reg.setWebserviceStorage(webserviceStorage);
                 try {

@@ -261,7 +261,11 @@ public class GridPaneHelper extends GridPane {
         // add a text field with a button for file browsing
         public void addFileDirPicker(ScriptFieldAnswer.ScriptFieldAnswerString answer) {
                 Text label = new Text();
-                label.setText(answer.getField().getNiceName() + ":");
+                String labelText = answer.getField().getNiceName() + ":";
+                if (answer.getField().isResult()) {
+                    labelText = "Output directory for: " + labelText;
+                }
+                label.setText(labelText);
                 final TextField inputFileText = new TextField();
                 inputFileText.textProperty().bindBidirectional(answer.answerProperty());
                 Button inputFileButton = new Button("Browse");
@@ -308,6 +312,23 @@ public class GridPaneHelper extends GridPane {
 
                 TextFlow flow = new TextFlow();
 
+                DataType fieldDataType = answer.getField().getDataType();
+                if (fieldDataType instanceof DataType.Enumeration) {
+                        StringBuilder b = new StringBuilder();
+                        String last = "";
+                        for (String v : ((DataType.Enumeration)fieldDataType).getValues()) {
+                                if (b.length() > 0) {
+                                        b.append(", ");
+                                }
+                                b.append(last);
+                                last = v;
+                        }
+                        if (b.length() > 0) {
+                                b.append(" or ");
+                        }
+                        b.append(last);
+                        getJavaFxParent(flow).addChild(new Text("Possible values: " + b + "\n"));
+                }
                 MarkdownToJavafx mdToFx = new MarkdownToJavafx(this.getJavaFxParent(flow));
                 PegDownProcessor mdProcessor = new PegDownProcessor(Extensions.FENCED_CODE_BLOCKS);
                 if (answer.getField().getDescription() != null) {

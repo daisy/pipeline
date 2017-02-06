@@ -7,5 +7,7 @@
    <reference name="script-registry" interface="org.daisy.pipeline.script.ScriptRegistry" cardinality="1..1" policy="static" bind="setScriptRegistry"/>
    <reference name="job-manager-factory" interface="org.daisy.pipeline.job.JobManagerFactory" cardinality="1..1" policy="static" bind="setJobManagerFactory"/>
    <reference name="webservice-storage" interface="org.daisy.pipeline.webserviceutils.storage.WebserviceStorage" cardinality="1..1" policy="static" bind="setWebserviceStorage"/>
-   <reference name="event-bus-provider" interface="org.daisy.pipeline.event.EventBusProvider"  bind="setEventBusProvider" cardinality="1..1" policy="static"/>    
+   <reference name="event-bus-provider" interface="org.daisy.pipeline.event.EventBusProvider"  bind="setEventBusProvider" cardinality="1..1" policy="static"/>
+   <reference name="datatype-registry" interface="org.daisy.pipeline.datatypes.DatatypeRegistry" bind="setDatatypeRegistry" cardinality="1..1" policy="static"/>
+   
 </scr:component>

@@ -5,29 +5,18 @@ Desktop GUI interface for the pipeline. Written in JavaFX.
 
 # Building this code
 
-Requires Java 8. Get the latest Java 8 for the best accessibility support.
+Requires Java 8. 
 
-Get the following repositories:
- * pipeline-gui 'javafx' branch
- * pipeline-assembly 'javafx' branch
- * pipeline-framework 'master' branch
+Clone the [DAISY Pipeline repository](http://github.com/daisy/pipeline) and follow the build instructions.
 
-Plus any scripts or modules that you want to use.
-
-Build all and run './pipeline2' from the assembly target directory.
+Run './pipeline2 gui' from the `assembly/target/pipeline/bin` directory.
 
 # Features
- * View jobs list
- * View job details
- * Access job results in separate application(s)
- * Create new job
- * Run job again
- * Delete job
+ * Run any Pipeline script
+ * Screenreader-accessible interface
+ * Keyboard shortcuts
 
-## Keyboard shortcuts
- * New job: Control + N
- * Delete job: Delete
- * Run job again: Control + Shift + R
+ See [the user guide](https://daisy.github.io/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide/) for a complete list of features.
  
 # Out of scope 
  * authentication/connecting to a remote pipeline installation

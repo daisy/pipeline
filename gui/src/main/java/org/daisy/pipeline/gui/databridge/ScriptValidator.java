@@ -56,6 +56,7 @@ public class ScriptValidator {
 		private String NOTANUM = "ERROR: Numeric value required for ";
 		private String CANTCREATEDIR = "ERROR: Could not create directory ";
 		private String NOTADIR = "ERROR: Not a directory: ";
+		private String NOTINENUM = "ERROR: Value is not in the list of accepted values: ";
 		
 	
 		String message;
@@ -77,6 +78,9 @@ public class ScriptValidator {
 			if (dataType == DataType.STRING) {
 				return validateString(answer);
 			}
+			if (dataType instanceof DataType.Enumeration) {
+				return validateEnumeration(answer, (DataType.Enumeration)dataType);
+			}
 			return validateString(answer); // default to string
 		}
 		
@@ -94,7 +98,7 @@ public class ScriptValidator {
 			ScriptFieldAnswer.ScriptFieldAnswerString answer_ = (ScriptFieldAnswer.ScriptFieldAnswerString)answer;
 			
 			String answerString = answer_.answerProperty().get();
-			if (answer.getField().isRequired() && answerString.isEmpty()) {
+			if (answer.getField().isRequired() && (answerString == null || answerString.isEmpty())) {
 				message = EMPTYSTRING + answer.getField().getNiceName();
 				return false;
 			}
@@ -198,6 +202,19 @@ public class ScriptValidator {
 			}
 			catch (NumberFormatException e) {
 				message = NOTANUM + answer.getField().getNiceName();
+				return false;
+			}
+			return true;
+		}
+		
+		private boolean validateEnumeration(ScriptFieldAnswer answer, DataType.Enumeration enumeration) {
+			if (!validateString(answer)) {
+				return false;
+			}
+			ScriptFieldAnswer.ScriptFieldAnswerString answer_ = (ScriptFieldAnswer.ScriptFieldAnswerString)answer;
+			String answerString = answer_.answerProperty().get();
+			if (!enumeration.getValues().contains(answerString)) {
+				message = NOTINENUM + answer.getField().getNiceName();
 				return false;
 			}
 			return true;
