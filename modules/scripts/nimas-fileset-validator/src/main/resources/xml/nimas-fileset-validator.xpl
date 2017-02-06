@@ -15,9 +15,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">NIMAS Fileset Validator</h1>
         <p px:role="desc">Validate a NIMAS Fileset. Supports inclusion of MathML.</p>
-        <a px:role="homepage"
-            href="http://code.google.com/p/daisy-pipeline/wiki/NimasFilesetValidator">
-            http://code.google.com/p/daisy-pipeline/wiki/NimasFilesetValidator </a>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/nimas-fileset-validator">
+            Online documentation
+        </a>
         <div px:role="author maintainer">
             <p px:role="name">Marisa DeMeglio</p>
             <a px:role="contact" href="mailto:marisa.demeglio@gmail.com"
@@ -34,9 +34,8 @@
 
     <p:output port="result" primary="true" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML report</h1>
-            <p px:role="desc">An HTML-formatted validation report comprising all documents'
-                reports.</p>
+            <h1 px:role="name">Validation report</h1>
+            <p px:role="desc">Validation report comprising all documents' reports.</p>
         </p:documentation>
         <p:pipe step="if-package-wellformed" port="result"/>
     </p:output>
@@ -60,8 +59,9 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation Status</h1>
-            <p px:role="desc">Validation status
-                (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+            <p px:role="desc" xml:space="preserve">The validation status
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe step="if-package-wellformed" port="validation-status"/>
     </p:output>
@@ -70,23 +70,22 @@
         the wellformedness of the document cannot be taken for granted -->
     <p:option name="input-opf" required="true" px:type="anyFileURI" px:media-type="application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Package Document (*.opf)</h2>
-            <p px:role="desc">Path to the input package document (*.opf).</p>
+            <h2 px:role="name">Package Document</h2>
+            <p px:role="desc">The input package document (*.opf).</p>
         </p:documentation>
     </p:option>
 
     <p:option name="output-dir" required="false" px:output="result" px:type="anyDirURI" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">All validation reports</h2>
-            <p px:role="desc">Directory where the validation reports are stored. If left blank,
-                nothing is saved to disk.</p>
+            <h2 px:role="name">Validation reports</h2>
+            <p px:role="desc">All validation reports.</p>
         </p:documentation>
     </p:option>
 
     <p:option name="mathml-version" required="false" px:type="string" select="'3.0'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">MathML version</h2>
-            <p px:role="desc">Version of MathML in the DTBook file(s). Defaults to 3.0.</p>
+            <p px:role="desc">Version of MathML in the DTBook file(s).</p>
         </p:documentation>
     </p:option>
 

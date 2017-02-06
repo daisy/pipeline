@@ -12,20 +12,19 @@
                 (organization: <span px:role="organization">NLB</span>,
                 e-mail: <a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>).</p>
         </address>
-        <p><a px:role="homepage" href="https://github.com/IDPF/epubcheck/wiki">Online Documentation</a></p>
+        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/modules/epub3-validator">Online Documentation</a></p>
     </p:documentation>
 
     <p:option name="epub" required="true" px:type="anyFileURI" px:media-type="application/epub+zip application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB</h2>
-            <p px:role="desc">EPUB to be validated.</p>
+            <p px:role="desc">Either a *.epub file or a *.opf file.</p>
         </p:documentation>
     </p:option>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML Report</h1>
-            <p px:role="desc">An HTML-formatted version of the validation report.</p>
+            <h1 px:role="name">Validation report</h1>
         </p:documentation>
         <p:pipe port="result" step="html-report"/>
     </p:output>
@@ -33,7 +32,9 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
-            <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe port="result" step="status"/>
     </p:output>

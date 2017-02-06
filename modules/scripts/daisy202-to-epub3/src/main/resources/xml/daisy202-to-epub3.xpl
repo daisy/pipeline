@@ -6,8 +6,8 @@
     type="px:daisy202-to-epub3" version="1.0">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">DAISY 2.02 to EPUB3</h1>
-        <p px:role="desc">Transforms a DAISY 2.02 publication into an EPUB3 publication.</p>
+        <h1 px:role="name">DAISY 2.02 to EPUB 3</h1>
+        <p px:role="desc">Transforms a DAISY 2.02 publication into an EPUB 3 publication.</p>
         <dl px:role="author maintainer">
             <dt>Name:</dt>
             <dd px:role="name">Jostein Austvik Jacobsen</dd>
@@ -16,45 +16,40 @@
             <dt>Organization:</dt>
             <dd px:role="organization">NLB</dd>
         </dl>
-        <p><a px:role="homepage" href="http://code.google.com/p/daisy-pipeline/wiki/DAISY202ToEPUB3Doc">Online Documentation</a></p>
+        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/modules/daisy202-to-epub3">Online Documentation</a></p>
     </p:documentation>
 
     <p:option name="href" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">NCC</h2>
-            <p px:role="desc">Input NCC.</p>
-            <pre><code class="example">file:/home/user/daisy202/ncc.html</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="output" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output</h2>
-            <p px:role="desc">Output directory for the EPUB.</p>
-            <pre><code class="example">file:/home/user/epub3/</code></pre>
+            <h2 px:role="name">EPUB</h2>
         </p:documentation>
     </p:option>
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Temporary directory</h2>
-            <p px:role="desc">Temporary directory for the EPUB files.</p>
-            <pre><code class="example">file:/tmp/</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="mediaoverlay" required="false" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Include Media Overlay</h2>
-            <p px:role="desc">Whether or not to include media overlays and associated audio files (true or false).</p>
+            <p px:role="desc">Whether or not to include media overlays and associated audio files.</p>
         </p:documentation>
     </p:option>
     <p:option name="compatibility-mode" required="false" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Backwards compatible</h2>
-            <p px:role="desc">Whether or not to include NCX-file, OPF guide element and ASCII filenames (true or false).</p>
+            <p px:role="desc">Whether or not to include NCX-file, OPF guide element and backwards-compatible metadata.</p>
+            <!-- TODO: if true, should convert filenames to simple ASCII filenames -->
         </p:documentation>
     </p:option>
     <p:option name="epub-filename" required="false" select="''" px:type="string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">EPUB3 Filename</h2>
+            <h2 px:role="name">EPUB 3 Filename</h2>
             <p px:role="desc">By default, the filename is the dc:identifier with a "epub" file extension. This option can be used to set a custom filename.</p>
         </p:documentation>
     </p:option>

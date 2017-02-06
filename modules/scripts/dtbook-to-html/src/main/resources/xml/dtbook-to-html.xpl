@@ -13,6 +13,9 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to HTML</h1>
         <p px:role="desc">Transforms DTBook XML into HTML.</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-to-html">
+            Online documentation
+        </a>
     </p:documentation>
     <p:input port="source" primary="true" sequence="true" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -31,8 +34,8 @@
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output directory</h2>
-            <p px:role="desc">Directory where the resulting HTML document is stored.</p>
+            <h2 px:role="name">HTML</h2>
+            <p px:role="desc">The resulting HTML document.</p>
         </p:documentation>
     </p:option>
 

@@ -9,8 +9,8 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to ZedAI</h1>
         <p px:role="desc">Transforms DTBook XML into ZedAI XML.</p>
-        <a px:role="homepage" href="http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI">
-            http://code.google.com/p/daisy-pipeline/wiki/DTBookToZedAI
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-to-zedai">
+            Online documentation
         </a>
         <div px:role="author maintainer">
             <p px:role="name">Marisa DeMeglio</p>
@@ -28,8 +28,8 @@
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output directory</h2>
-            <p px:role="desc">The directory to store the generated files in.</p>
+            <h2 px:role="name">ZedAI</h2>
+            <p px:role="desc">The resulting ZedAI XML file.</p>
         </p:documentation>
     </p:option>
     <p:option name="zedai-filename" required="false" px:type="string" select="''">

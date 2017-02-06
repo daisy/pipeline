@@ -48,7 +48,7 @@
             <p:xslt>
                 <p:input port="stylesheet">
                     <p:document
-                        href="http://www.daisy.org/pipeline/modules/html-utils/html-to-fileset.xsl"
+                        href="http://www.daisy.org/pipeline/modules/fileset-utils/html-to-fileset.xsl"
                     />
                 </p:input>
                 <p:input port="parameters">

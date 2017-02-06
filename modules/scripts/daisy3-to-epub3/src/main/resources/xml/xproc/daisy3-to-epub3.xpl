@@ -17,8 +17,8 @@
             <dt>Organization:</dt>
             <dd px:role="organization">DAISY</dd>
         </dl>
-        <p>Homepage: <a px:role="homepage"
-                >http://code.google.com/p/daisy-pipeline/wiki/DAISY3ToEPUB3</a>.</p>
+        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/modules/daisy3-to-epub3"
+                >Online documentation</a></p>
     </p:documentation>
 
 
@@ -28,16 +28,16 @@
 
     <p:input port="source" primary="true" sequence="false" px:media-type="application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Input OPF</h2>
+            <h2 px:role="name">OPF</h2>
             <p px:role="desc">The package file of the input DTB.</p>
         </p:documentation>
     </p:input>
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output Directory</h2>
-            <p px:role="desc">Output directory for the produced EPUB.</p>
-            <pre><code class="example">file:/home/user/epub3/</code></pre></p:documentation>
+            <h2 px:role="name">EPUB</h2>
+            <p px:role="desc">The produced EPUB.</p>
+        </p:documentation>
     </p:option>
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">

@@ -12,8 +12,8 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook Validator</h1>
         <p px:role="desc">Validates DTBook documents. Supports inclusion of MathML.</p>
-        <a px:role="homepage" href="http://code.google.com/p/daisy-pipeline/wiki/DTBookValidator">
-            http://code.google.com/p/daisy-pipeline/wiki/DTBookValidator
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/modules/dtbook-validator">
+            Online documentation
         </a>
         <div px:role="author maintainer">
             <p px:role="name">Marisa DeMeglio</p>
@@ -26,7 +26,7 @@
     <!-- INPUTS / OUTPUTS / OPTIONS -->
     <!-- ***************************************************** -->
 
-    <!-- NOTE: the "input" here is given by an option string "input-opf" -->
+    <!-- NOTE: the "input" here is given by an option string "input-dtbook" -->
 
 
     <!--<p:output port="result" primary="true">
@@ -39,16 +39,17 @@
 
     <p:output port="report" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">XML Reports</h1>
-            <p px:role="desc">Raw output from all types of validation used (RelaxNG, Schematron, custom).</p>
+            <h1 px:role="name">Raw validation report</h1>
+            <p px:role="desc" xml:space="preserve">Raw XML-formatted report which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom).
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationReportXML).</p>
         </p:documentation>
         <p:pipe port="xml-report" step="if-dtbook-wellformed"/>
     </p:output>
 
     <p:output port="html-report" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">HTML Report</h1>
-            <p px:role="desc">An HTML-formatted version of the validation report.</p>
+            <h1 px:role="name">Validation report</h1>
         </p:documentation>
         <p:pipe port="html-report" step="if-dtbook-wellformed"/>
     </p:output>
@@ -56,7 +57,9 @@
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Validation status</h1>
-            <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
+
+[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe port="validation-status" step="if-dtbook-wellformed"/>
     </p:output>
@@ -66,19 +69,30 @@
     <p:option name="input-dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DTBook</h2>
-            <p px:role="desc">Path to the input DTBook document.</p>
+            <p px:role="desc">The input DTBook document.</p>
         </p:documentation>
     </p:option>
 
     <p:option name="output-dir" required="false" px:output="result" px:type="anyDirURI" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Output directory</h2>
-            <p px:role="desc">Directory where your validation report is stored. If left blank,
-                nothing is saved to disk.</p>
+            <h2 px:role="name">Validation report in XML and HTML</h2>
+            <p px:role="desc" xml:space="preserve">Validation report in two formats: the raw XML-formatted report, which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom), and the HTML-formatted version.
+
+[More details on the XML format](http://daisy.github.io/pipeline/wiki/ValidationReportXML).</p>
         </p:documentation>
     </p:option>
 
     <p:option name="mathml-version" required="false" px:type="string" select="'3.0'">
+        <p:pipeinfo>
+            <px:data-type>
+                <choice>
+                    <value>3.0</value>
+                    <value>2.0</value>
+                    <value>1.01</value>
+                    <value>1.0</value>
+                </choice>
+            </px:data-type>
+        </p:pipeinfo>
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">MathML version</h2>
             <p px:role="desc">Version of MathML in the DTBook file.</p>
