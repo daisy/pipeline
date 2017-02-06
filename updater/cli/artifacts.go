@@ -25,6 +25,7 @@ type Artifact struct {
 	Version    string   `xml:"version,attr"`    //version
 	DeployPath string   `xml:"deployPath,attr"` //relative path where to copy the artifact file
 	Extract    bool     `xml:"extract,attr"`    //tells if the artifact should be extracted
+	Classifier string   `xml:"classifier,attr"` //classifier
 }
 
 //downloads the artifact from href
@@ -73,16 +74,6 @@ func (la LocalArtifact) Clean() error {
 
 }
 
-//Deploys a local artifact, it copies the file or extracts it to the given path
-//depending on whether the artifact is makred to do so
-func (la LocalArtifact) Deploy(path string) error {
-	if la.Extract {
-		return la.Unzip(path)
-	} else {
-		return la.Copy(path)
-	}
-}
-
 func (la LocalArtifact) Unzip(path string) error {
 	absolute := filepath.Join(path, la.DeployPath)
 	os.MkdirAll(filepath.Dir(absolute), 0755)
@@ -104,6 +95,10 @@ func (la LocalArtifact) Unzip(path string) error {
 			return err
 		}
 		defer f.Close()
+		err = os.Chmod(extrPath, zEntry.Mode())
+		if err != nil {
+			Error("%s setting file permissions", err)
+		}
 		_, err = io.Copy(f, zC)
 		if err != nil {
 			return err
@@ -205,9 +200,16 @@ func Remove(las []LocalArtifact) (ok bool, errs []error) {
 	}
 	return apply(las, fn)
 }
+
+//Deploys a local artifact, it copies the file or extracts it to the given path
+//depending on whether the artifact is marked to do so
 func Deploy(las []LocalArtifact, path string) (ok bool, errs []error) {
 	fn := func(l LocalArtifact) error {
-		return l.Copy(path)
+		if l.Extract {
+			return l.Unzip(path)
+		} else {
+			return l.Copy(path)
+		}
 	}
 	return apply(las, fn)
 }

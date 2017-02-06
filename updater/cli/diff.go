@@ -1,6 +1,8 @@
 package main
 
 import "path/filepath"
+import "runtime"
+import "strings"
 
 //Differences between two release descriptors
 type Diff struct {
@@ -11,6 +13,25 @@ type Diff struct {
 //Gets the artifact to be downloaded from this difference
 func (d Diff) ToDownload() (a Artifact, ok bool) {
 	if d.New != nil {
+		if strings.HasPrefix(d.New.Classifier, "linux") && runtime.GOOS != "linux" {
+			Info("Skipping %s with classifier %s since you're not running Linux", d.New.Id, d.New.Classifier)
+			ok = false
+			return
+		}
+		if (strings.HasPrefix(d.New.Classifier, "darwin") || strings.HasPrefix(d.New.Classifier, "mac")) && runtime.GOOS != "darwin" {
+			Info("Skipping %s with classifier %s since you're not running Mac", d.New.Id, d.New.Classifier)
+			ok = false
+			return
+		}
+		if strings.HasPrefix(d.New.Classifier, "windows") && runtime.GOOS != "windows" {
+			Info("Skipping %s with classifier %s since you're not running Windows", d.New.Id, d.New.Classifier)
+			ok = false
+			return
+		}
+		if d.New.Classifier != "" {
+			Info("Including %s even though it has an unknown classifier: %s", d.New.Id, d.New.Classifier)
+		}
+		
 		a = *d.New
 		ok = true
 	}

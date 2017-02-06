@@ -21,9 +21,9 @@ var (
 	env = os.Getenv("DP2_HOME")
 )
 
-var service = flag.String("service", "http://defaultservice.com", "Url of the update service")
+var service = flag.String("service", "", "Url of the update service")
 var version = flag.String("version", Latest, "Version to update to")
-var installDir = flag.String("install-dir", env, "Pipeline install directory")
+var installDir = flag.String("install-dir", env, "Pipeline install directory, defaults to value of DP2_HOME")
 var localDescriptor = flag.String("descriptor", "", "Current descriptor")
 var force = flag.Bool("force", false, "Forces to update without comparing the versions, use if updating to nightly builds")
 
@@ -40,7 +40,14 @@ func main() {
 		os.Exit(-1)
 	}
 	log.SetOutput(logfile)
-
+	if *service == "" {
+		Error("Please specify the url of the update service. Run %s --help for more information.", os.Args[0])
+		os.Exit(-1)
+	}
+	if *installDir == "" {
+		Error("Please specify the Pipeline install directory. Run %s --help for more information.", os.Args[0])
+		os.Exit(-1)
+	}
 	remote, err := LoadRemote(*service, *version)
 	if err != nil {
 		Error(err.Error())
