@@ -43,7 +43,7 @@
     </dependency>
     <!-- EpubCheck -->
     <dependency>
-      <groupId>org.idpf</groupId>
+      <groupId>org.daisy</groupId>
       <artifactId>epubcheck</artifactId>
     </dependency>
   </dependencies>

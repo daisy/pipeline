@@ -816,7 +816,7 @@
                   <artifactId>epubcheck-adapter</artifactId>
                 </artifactItem>
                 <artifactItem>
-                  <groupId>org.idpf</groupId>
+                  <groupId>org.daisy</groupId>
                   <artifactId>epubcheck</artifactId>
                 </artifactItem>
                 <artifactItem>
