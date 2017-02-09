@@ -18,7 +18,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.thaiopensource</groupId>
+      <groupId>org.daisy.libs</groupId>
       <artifactId>jing</artifactId>
     </dependency>
     <dependency>

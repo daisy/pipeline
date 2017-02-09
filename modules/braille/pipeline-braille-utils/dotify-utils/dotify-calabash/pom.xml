@@ -38,8 +38,8 @@
       <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>Saxon-HE</artifactId>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -89,14 +89,6 @@
     <dependency>
       <groupId>org.daisy.dotify</groupId>
       <artifactId>dotify.task.impl</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
-        runtime dependencies (OSGi) (FIXME: use for compilation)
-    -->
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>saxon-he</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--

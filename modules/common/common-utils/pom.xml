@@ -33,16 +33,8 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>Saxon-HE</artifactId>
-    </dependency>
-    <!--
-        runtime dependencies (OSGi) (FIXME: use for compilation)
-    -->
-    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <!--
         test dependencies

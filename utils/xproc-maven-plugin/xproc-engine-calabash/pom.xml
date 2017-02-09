@@ -27,14 +27,14 @@
       <version>1.0.18</version>
     </dependency>
     <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>Saxon-HE</artifactId>
-      <version>9.5.1-5</version>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <version>9.5.1.5</version>
     </dependency>
     <dependency>
-      <groupId>com.thaiopensource</groupId>
+      <groupId>org.daisy.libs</groupId>
       <artifactId>jing</artifactId>
-      <version>20091111</version>
+      <version>20120724.0.0</version>
       <exclusions>
         <exclusion>
           <groupId>net.sf.saxon</groupId>
@@ -67,15 +67,6 @@
       <artifactId>org.osgi.compendium</artifactId>
       <version>4.3.0</version>
       <scope>provided</scope>
-    </dependency>
-    <!--
-        runtime dependencies (OSGi) (FIXME: use for compilation)
-    -->
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>saxon-he</artifactId>
-      <version>9.5.1.5</version>
-      <scope>runtime</scope>
     </dependency>
   </dependencies>
   <build>

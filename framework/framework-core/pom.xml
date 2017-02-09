@@ -17,7 +17,7 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.thaiopensource</groupId>
+      <groupId>org.daisy.libs</groupId>
       <artifactId>jing</artifactId>
     </dependency>
     <dependency>
@@ -52,14 +52,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>woodstox-osgi-adapter</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
-        FIXME: use for compilation and runtime
-    -->
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>jing</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

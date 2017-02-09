@@ -50,10 +50,8 @@
     <eclipse.persistence.version>2.3.2</eclipse.persistence.version>
     <guava.version>15.0</guava.version>
     <javax.persistence.version>2.0.3</javax.persistence.version>
-    <javax.servlet-api.version>2.5</javax.servlet-api.version>
-    <javax.servlet-api.osgi.version>2.5.0</javax.servlet-api.osgi.version> <!-- FIXME: use for compilation and runtime -->
-    <jing.version>20091111</jing.version>
-    <jing.osgi.version>20120724.0.0</jing.osgi.version> <!-- FIXME: use same version for compilation and runtime -->
+    <javax.servlet-api.version>2.5.0</javax.servlet-api.version>
+    <jing.version>20120724.0.0</jing.version>
     <jetty.version>7.6.5.v20120716</jetty.version>
     <junit.version>4.10</junit.version>
     <logback.version>1.0.11</logback.version>
@@ -61,8 +59,7 @@
     <osgi.version>4.3.1</osgi.version>
     <powermock.version>1.5.4</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
-    <saxon-he.version>9.5.1-5</saxon-he.version>
-    <saxon-he.osgi.version>9.5.1.5</saxon-he.osgi.version> <!-- FIXME: use for compilation and runtime -->
+    <saxon-he.version>9.5.1.5</saxon-he.version>
     <slf4j.version>1.7.2</slf4j.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
@@ -196,7 +193,7 @@
         <version>${guava.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.thaiopensource</groupId>
+        <groupId>org.daisy.libs</groupId>
         <artifactId>jing</artifactId>
         <version>${jing.version}</version>
         <exclusions>
@@ -212,14 +209,13 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.libs</groupId>
-        <artifactId>jing</artifactId>
-        <version>${jing.osgi.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
         <version>${calabash.version}</version>
         <exclusions>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+          </exclusion>
           <exclusion>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
@@ -263,18 +259,13 @@
         <version>${commons.io.version}</version>
       </dependency>
       <dependency>
-        <groupId>javax.servlet</groupId>
+        <groupId>org.daisy.libs</groupId>
         <artifactId>servlet-api</artifactId>
         <version>${javax.servlet-api.version}</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.libs</groupId>
-        <artifactId>servlet-api</artifactId>
-        <version>${javax.servlet-api.osgi.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>net.sf.saxon</groupId>
-        <artifactId>Saxon-HE</artifactId>
+        <artifactId>saxon-he</artifactId>
         <version>${saxon-he.version}</version>
         <!-- TODO remove when the fix to issue 1501 is pushed to Maven Central
              see http://dev.saxonica.com/community/issues/1501 -->
@@ -292,11 +283,6 @@
             <artifactId>dom4j</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>saxon-he</artifactId>
-        <version>${saxon-he.osgi.version}</version>
       </dependency>
       <dependency>
         <groupId>org.codehaus.woodstox</groupId>
