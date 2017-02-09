@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:daisy/epubcheck.git
+	branch = master
+	commit = dc9637e80a46ff8f50216278b9e38eb73cadadca
+	parent = ff7a3a4fc6401250755625da0a75a812a0df3115
+	cmdver = 0.3.0
