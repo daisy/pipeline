@@ -1,0 +1,426 @@
+/*
+ * Copyright (c) 2007 Adobe Systems Incorporated
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a copy of
+ *  this software and associated documentation files (the "Software"), to deal in
+ *  the Software without restriction, including without limitation the rights to
+ *  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+ *  the Software, and to permit persons to whom the Software is furnished to do so,
+ *  subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included in all
+ *  copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+ *  FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+ *  COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+ *  IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ *  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ */
+
+package com.adobe.epubcheck.ocf;
+
+import static com.adobe.epubcheck.opf.ValidationContext.ValidationContextPredicates.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+import com.adobe.epubcheck.api.EPUBLocation;
+import com.adobe.epubcheck.api.EPUBProfile;
+import com.adobe.epubcheck.api.FeatureReport;
+import com.adobe.epubcheck.api.Report;
+import com.adobe.epubcheck.messages.MessageId;
+import com.adobe.epubcheck.opf.OPFChecker;
+import com.adobe.epubcheck.opf.OPFCheckerFactory;
+import com.adobe.epubcheck.opf.OPFData;
+import com.adobe.epubcheck.opf.OPFHandler;
+import com.adobe.epubcheck.opf.OPFHandler30;
+import com.adobe.epubcheck.opf.ValidationContext;
+import com.adobe.epubcheck.opf.ValidationContext.ValidationContextBuilder;
+import com.adobe.epubcheck.util.CheckUtil;
+import com.adobe.epubcheck.util.EPUBVersion;
+import com.adobe.epubcheck.util.FeatureEnum;
+import com.adobe.epubcheck.util.ValidatorMap;
+import com.adobe.epubcheck.vocab.EpubCheckVocab;
+import com.adobe.epubcheck.xml.XMLParser;
+import com.adobe.epubcheck.xml.XMLValidator;
+import com.adobe.epubcheck.xml.XMLValidators;
+import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
+
+public class OCFChecker
+{
+
+  @SuppressWarnings("unchecked")
+  private static final ValidatorMap validatorMap = ValidatorMap.builder()
+      .put(Predicates.and(path(OCFData.containerEntry), version(EPUBVersion.VERSION_2)),
+          XMLValidators.CONTAINER_20_RNG)
+      .put(Predicates.and(path(OCFData.containerEntry), version(EPUBVersion.VERSION_3)),
+          XMLValidators.CONTAINER_30_RNC)
+      .put(Predicates.and(path(OCFData.containerEntry), version(EPUBVersion.VERSION_3)),
+          XMLValidators.CONTAINER_30_RENDITIONS_SCH)
+      .put(Predicates.and(path(OCFData.encryptionEntry), version(EPUBVersion.VERSION_3)),
+          XMLValidators.ENC_30_RNC)
+      .put(Predicates.and(path(OCFData.encryptionEntry), version(EPUBVersion.VERSION_2)),
+          XMLValidators.ENC_20_RNG)
+      .put(Predicates.and(path(OCFData.signatureEntry), version(EPUBVersion.VERSION_2)),
+          XMLValidators.SIG_20_RNG)
+      .put(Predicates.and(path(OCFData.signatureEntry), version(EPUBVersion.VERSION_3)),
+          XMLValidators.SIG_30_RNC)
+      .put(
+          Predicates.and(path(OCFData.metadataEntry),
+              hasProp(EpubCheckVocab.VOCAB.get(EpubCheckVocab.PROPERTIES.MULTIPLE_RENDITION))),
+          XMLValidators.META_30_RNC)
+      .put(
+          Predicates.and(path(OCFData.metadataEntry),
+              hasProp(EpubCheckVocab.VOCAB.get(EpubCheckVocab.PROPERTIES.MULTIPLE_RENDITION))),
+          XMLValidators.META_30_SCH)
+      .put(Predicates.and(path(OCFData.metadataEntry),
+          hasProp(EpubCheckVocab.VOCAB.get(EpubCheckVocab.PROPERTIES.MULTIPLE_RENDITION)),
+          profile(EPUBProfile.EDUPUB)), XMLValidators.META_EDUPUB_SCH)
+      .putAll(hasProp(EpubCheckVocab.VOCAB.get(EpubCheckVocab.PROPERTIES.RENDITION_MAPPING)),
+          XMLValidators.RENDITION_MAPPING_RNC, XMLValidators.RENDITION_MAPPING_SCH)
+      .build();
+
+  private final ValidationContext context;
+  private final OCFPackage ocf;
+  private final Report report;
+
+  public OCFChecker(ValidationContext context)
+  {
+    Preconditions.checkState(context.ocf.isPresent());
+    this.context = context;
+    this.ocf = context.ocf.get();
+    this.report = context.report;
+  }
+
+  public void runChecks()
+  {
+    // Create a new validation context builder from the parent context
+    // It will be augmented with detected validation version, profile, etc.
+    ValidationContextBuilder newContextBuilder = new ValidationContextBuilder(context);
+
+    ocf.setReport(report);
+    if (!ocf.hasEntry(OCFData.containerEntry))
+    {
+      report.message(MessageId.RSC_002, EPUBLocation.create(ocf.getName()));
+      return;
+    }
+    long l = ocf.getTimeEntry(OCFData.containerEntry);
+    if (l > 0)
+    {
+      Date d = new Date(l);
+      String formattedDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(d);
+      report.info(OCFData.containerEntry, FeatureEnum.CREATION_DATE, formattedDate);
+    }
+    OCFData containerData = ocf.getOcfData();
+
+    // retrieve the paths of root files
+    List<String> opfPaths = containerData.getEntries(OPFData.OPF_MIME_TYPE);
+    if (opfPaths == null || opfPaths.isEmpty())
+    {
+      report.message(MessageId.RSC_003, EPUBLocation.create(OCFData.containerEntry));
+      return;
+    }
+    else if (opfPaths.size() > 0)
+    {
+      if (opfPaths.size() > 1)
+      {
+        report.info(null, FeatureEnum.EPUB_RENDITIONS_COUNT, Integer.toString(opfPaths.size()));
+      }
+
+      // test every element for empty or missing @full-path attribute
+      // bugfix for issue 236 / issue 95
+      int rootfileErrorCounter = 0;
+      for (String opfPath : opfPaths)
+      {
+        if (opfPath == null)
+        {
+          ++rootfileErrorCounter;
+          report.message(MessageId.OPF_016, EPUBLocation.create(OCFData.containerEntry));
+        }
+        else if (opfPath.isEmpty())
+        {
+          ++rootfileErrorCounter;
+          report.message(MessageId.OPF_017, EPUBLocation.create(OCFData.containerEntry));
+        }
+        else if (!ocf.hasEntry(opfPath))
+        {
+          report.message(MessageId.OPF_002, EPUBLocation.create(OCFData.containerEntry), opfPath);
+          return;
+        }
+      }
+      if (rootfileErrorCounter == opfPaths.size())
+      {
+        // end validation at this point when @full-path attribute is missing in
+        // container.xml
+        // otherwise, tons of errors would be thrown
+        // ("XYZ exists in the zip file, but is not declared in the OPF file")
+        return;
+      }
+    }
+
+    //
+    // Compute the validation version
+    // ------------------------------
+    // Detect the version of the first root file
+    // and compare with the asked version (if set)
+    EPUBVersion detectedVersion = null;
+    final EPUBVersion validationVersion;
+    OPFData opfData = ocf.getOpfData().get(opfPaths.get(0));
+    if (opfData == null) return;// The error must have been reported during
+                                // parsing
+    detectedVersion = opfData.getVersion();
+    report.info(null, FeatureEnum.FORMAT_VERSION, detectedVersion.toString());
+    assert(detectedVersion != null);
+
+    if (context.version != EPUBVersion.Unknown && context.version != detectedVersion)
+    {
+      report.message(MessageId.PKG_001, EPUBLocation.create(opfPaths.get(0)), context.version,
+          detectedVersion);
+
+      validationVersion = context.version;
+    }
+    else
+    {
+      validationVersion = detectedVersion;
+    }
+    newContextBuilder.version(validationVersion);
+
+    //
+    // Compute the validation profile
+    // ------------------------------
+    EPUBProfile validationProfile = context.profile;
+    // FIXME get profile from metadata.xml if available
+    if (validationVersion == EPUBVersion.VERSION_2 && validationProfile != EPUBProfile.DEFAULT)
+    {
+      // Validation profile is unsupported for EPUB 2.0
+      report.message(MessageId.PKG_023, EPUBLocation.create(opfPaths.get(0)));
+    }
+    else if (validationVersion == EPUBVersion.VERSION_3)
+    {
+      // Override the given validation profile depending on the primary OPF
+      // dc:type
+      validationProfile = EPUBProfile.makeOPFCompatible(validationProfile, opfData, opfPaths.get(0),
+          report);
+    }
+    newContextBuilder.profile(validationProfile);
+
+    //
+    // Check multiple renditions
+    // ------------------------------
+    // EPUB 2.0 says there SHOULD be only one OPS rendition
+    if (validationVersion == EPUBVersion.VERSION_2 && opfPaths.size() > 1)
+    {
+      report.message(MessageId.PKG_013, EPUBLocation.create(OCFData.containerEntry));
+    }
+    // EPUB 3.0 Multiple Renditions recommends the presence of a metadata file
+    if (validationVersion == EPUBVersion.VERSION_3 && opfPaths.size() > 1)
+    {
+      newContextBuilder
+          .addProperty(EpubCheckVocab.VOCAB.get(EpubCheckVocab.PROPERTIES.MULTIPLE_RENDITION));
+      if (!ocf.hasEntry(OCFData.metadataEntry))
+      {
+        report.message(MessageId.RSC_019, EPUBLocation.create(ocf.getName()));
+      }
+      if (containerData.getMapping().isPresent())
+      {
+        validateRenditionMapping(new ValidationContextBuilder(newContextBuilder.build())
+            .mimetype("application/xhtml+xml").path(containerData.getMapping().get())
+            .addProperty(EpubCheckVocab.VOCAB.get(EpubCheckVocab.PROPERTIES.RENDITION_MAPPING))
+            .build());
+      }
+    }
+
+    //
+    // Check the mimetype file
+    // ------------------------------
+    //
+    InputStream mimetype = null;
+    try
+    {
+      mimetype = ocf.getInputStream("mimetype");
+      StringBuilder sb = new StringBuilder(2048);
+      if (ocf.hasEntry("mimetype")
+          && !CheckUtil.checkTrailingSpaces(mimetype, validationVersion, sb))
+      {
+        report.message(MessageId.PKG_007, EPUBLocation.create("mimetype"));
+      }
+      if (sb.length() != 0)
+      {
+        report.info(null, FeatureEnum.FORMAT_NAME, sb.toString().trim());
+      }
+    } catch (IOException ignored)
+    {
+      // missing file will be reported later
+    } finally
+    {
+      try
+      {
+        if (mimetype != null)
+        {
+          mimetype.close();
+        }
+      } catch (IOException ignored)
+      {
+        // eat it
+      }
+    }
+
+    //
+    // Check the META-INF files
+    // ------------------------------
+    //
+    validateMetaFiles(newContextBuilder.mimetype("xml").build());
+
+    //
+    // Check each OPF (i.e. Rendition)
+    // -------------------------------
+    //
+    // Validate each OPF and keep a reference of the OPFHandler
+    List<OPFHandler> opfHandlers = new LinkedList<OPFHandler>();
+    for (String opfPath : opfPaths)
+    {
+      OPFChecker opfChecker = OPFCheckerFactory.getInstance()
+          .newInstance(newContextBuilder.path(opfPath).mimetype(OPFData.OPF_MIME_TYPE)
+              .featureReport(new FeatureReport()).build());
+      opfChecker.runChecks();
+      opfHandlers.add(opfChecker.getOPFHandler());
+    }
+
+    //
+    // Check container integrity
+    // -------------------------------
+    //
+    try
+    {
+      Set<String> entriesSet = new HashSet<String>();
+      Set<String> normalizedEntriesSet = new HashSet<String>();
+      for (final String entry : ocf.getFileEntries())
+      {
+        if (!entriesSet.add(entry.toLowerCase(Locale.ENGLISH)))
+        {
+          report.message(MessageId.OPF_060, EPUBLocation.create(ocf.getPackagePath()), entry);
+        }
+        else if (!normalizedEntriesSet.add(Normalizer.normalize(entry, Form.NFC)))
+        {
+          report.message(MessageId.OPF_061, EPUBLocation.create(ocf.getPackagePath()), entry);
+        }
+
+        ocf.reportMetadata(entry, report);
+
+        // if the entry is not in the whitelist (META-INF/* + mimetype)
+        // and not declared in (one of) the OPF document(s)
+        if (!entry.startsWith("META-INF/") && !entry.startsWith("META-INF\\")
+            && !entry.equals("mimetype") && !containerData.getEntries().contains(entry)
+            && !entry.equals(containerData.getMapping().orNull())
+            && !Iterables.tryFind(opfHandlers, new Predicate<OPFHandler>()
+            {
+              @Override
+              public boolean apply(OPFHandler opfHandler)
+              {
+                // found if declared as an OPF item
+                // or in an EPUB 3 link element
+                return opfHandler.getItemByPath(entry).isPresent()
+                    || (validationVersion == EPUBVersion.VERSION_3
+                        && ((OPFHandler30) opfHandler).getLinkedResources().hasPath(entry));
+              }
+            }).isPresent())
+        {
+          report.message(MessageId.OPF_003, EPUBLocation.create(ocf.getName()), entry);
+        }
+        OCFFilenameChecker.checkCompatiblyEscaped(entry, report, validationVersion);
+      }
+
+      for (String directory : ocf.getDirectoryEntries())
+      {
+        boolean hasContents = false;
+        for (String file : ocf.getFileEntries())
+        {
+          if (file.startsWith(directory))
+          {
+            hasContents = true;
+            break;
+          }
+        }
+        if (!hasContents)
+        {
+          report.message(MessageId.PKG_014, EPUBLocation.create(ocf.getName()), directory);
+        }
+      }
+    } catch (IOException e)
+    {
+      report.message(MessageId.PKG_015, EPUBLocation.create(ocf.getName()), e.getMessage());
+    }
+  }
+
+  private boolean validateMetaFiles(ValidationContext context)
+  {
+    // validate container
+    validateMetaFile(new ValidationContextBuilder(context).path(OCFData.containerEntry).build());
+
+    // Validate encryption.xml
+    if (ocf.hasEntry(OCFData.encryptionEntry))
+    {
+      validateMetaFile(new ValidationContextBuilder(context).path(OCFData.encryptionEntry).build());
+      report.info(null, FeatureEnum.HAS_ENCRYPTION, OCFData.encryptionEntry);
+    }
+
+    // validate signatures.xml
+    if (ocf.hasEntry(OCFData.signatureEntry))
+    {
+      validateMetaFile(new ValidationContextBuilder(context).path(OCFData.signatureEntry).build());
+      report.info(null, FeatureEnum.HAS_SIGNATURES, OCFData.signatureEntry);
+    }
+
+    // validate signatures.xml
+    if (ocf.hasEntry(OCFData.metadataEntry))
+    {
+      validateMetaFile(new ValidationContextBuilder(context).path(OCFData.metadataEntry).build());
+    }
+
+    return false;
+  }
+
+  private void validateMetaFile(ValidationContext context)
+  {
+    XMLParser parser = new XMLParser(context);
+    if (context.path.equals(OCFData.encryptionEntry))
+    {
+      parser.addXMLHandler(new EncryptionHandler(ocf, parser));
+    }
+    else
+    {
+      parser.addXMLHandler(new OCFHandler(parser));
+    }
+    for (XMLValidator validator : validatorMap.getValidators(context))
+    {
+      parser.addValidator(validator);
+    }
+    parser.process();
+  }
+
+  private void validateRenditionMapping(ValidationContext context)
+  {
+    XMLParser parser = new XMLParser(context);
+    for (XMLValidator validator : validatorMap.getValidators(context))
+    {
+      parser.addValidator(validator);
+    }
+    parser.process();
+  }
+
+}
