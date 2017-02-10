@@ -18,7 +18,9 @@
   <name>DAISY Pipeline 2 module :: DTBook to ODT</name>
   
   <dependencies>
-    <!-- runtime dependencies -->
+    <!--
+        runtime dependencies
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>asciimath-utils</artifactId>
@@ -38,6 +40,14 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>odt-utils</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   
@@ -96,43 +106,6 @@
           </execution>
         </executions>
       </plugin>
-      <!--<plugin>
-        <groupId>org.ops4j.pax.exam</groupId>
-        <artifactId>maven-paxexam-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-depends-file</id>
-            <goals>
-              <goal>generate-depends-file</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>-->
-      <plugin>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>default-testCompile</id>
-            <phase>test-compile</phase>
-            <goals>
-              <goal>testCompile</goal>
-            </goals>
-            <configuration>
-              <testExcludes>
-                <exclude>DtbookToOdtTest.java</exclude>
-              </testExcludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <!--<plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <excludes>
-            <exclude>**/DtbookToOdtTest.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>-->
     </plugins>
   </build>
 </project>
