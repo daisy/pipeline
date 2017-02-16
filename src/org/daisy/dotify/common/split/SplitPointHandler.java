@@ -207,6 +207,26 @@ public class SplitPointHandler<T extends SplitPointUnit> {
 		}
 		return SplitList.split(in, i);
 	}
+	
+	
+	/**
+	 * Trims leading skippable units in the supplied list. The result is backed by the
+	 * original data source.
+	 * 
+	 * @param in the list to trim
+	 * @param <T> the type of split list
+	 * @return a split point, the leading skippable units are placed in {@link SplitPoint#getDiscarded()}, the
+	 * remainder are placed in {@link SplitPoint#getTail()}
+	 */
+	public static <T extends SplitPointUnit> SplitPoint<T> trimLeading(SplitPointDataSource<T> in) {
+		int i;
+		for (i = 0; in.hasElementAt(i); i++) {
+			if (!in.get(i).isSkippable()) {
+				break;
+			}
+		}
+		return new SplitPoint<T>(null, null, in.tail(i), in.head(i), false);
+	}
 
 	static <T extends SplitPointUnit> T maxSize(T u1, T u2) {
 		return (u1.getUnitSize()>=u2.getUnitSize()?u1:u2); 
