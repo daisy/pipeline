@@ -18,12 +18,24 @@ SHELL := /bin/bash
 all : compile check dist
 
 .PHONY : dist
-dist: dist-zip dist-deb dist-rpm dist-webui-deb dist-webui-rpm
+dist: dist-dmg dist-exe dist-zip-linux dist-deb dist-rpm dist-webui-deb dist-webui-rpm
 
-.PHONY : dist-zip
-dist-zip : compile
+.PHONY : dist-dmg
+dist-dmg : compile
 	cd assembly && \
-	$(MVN) clean package -Plinux,mac,win | $(MVN_LOG)
+	$(MVN) clean package -Pmac | $(MVN_LOG)
+	mv assembly/target/*.dmg .
+
+.PHONY : dist-exe
+dist-exe : compile
+	cd assembly && \
+	$(MVN) clean package -Pwin | $(MVN_LOG)
+	mv assembly/target/*.exe .
+
+.PHONY : dist-zip-linux
+dist-zip-linux : compile
+	cd assembly && \
+	$(MVN) clean package -Plinux | $(MVN_LOG)
 	mv assembly/target/*.zip .
 
 .PHONY : dist-deb
@@ -403,32 +415,36 @@ clean-website :
 
 .PHONY : help
 help :
-	echo "make all:"                                                                                       >&2
-	echo "	Incrementally compile and test code and package into a ZIP for each platform, a DEB and a RPM" >&2
-	echo "make compile:"                                                                                   >&2
-	echo "	Incrementally compile code"                                                                    >&2
-	echo "make check:"                                                                                     >&2
-	echo "	Incrementally compile and test code"                                                           >&2
-	echo "make dist:"                                                                                      >&2
-	echo "	Incrementally compile code and package into a ZIP for each platform, a DEB and a RPM"          >&2
-	echo "make dist-zip:"                                                                                  >&2
-	echo "	Incrementally compile code and package into a ZIP for each platform"                           >&2
-	echo "make dist-deb:"                                                                                  >&2
-	echo "	Incrementally compile code and package into a DEB"                                             >&2
-	echo "make dist-rpm:"                                                                                  >&2
-	echo "	Incrementally compile code and package into a RPM"                                             >&2
-	echo "make dist-webui-deb:"                                                                            >&2
-	echo "	Compile Web UI and package into a DEB"                                                         >&2
-	echo "make dist-webui-rpm:"                                                                            >&2
-	echo "	Compile Web UI and package into a RPM"                                                         >&2
-	echo "make run:"                                                                                       >&2
-	echo "	Incrementally compile code and run locally"                                                    >&2
-	echo "make run-gui:"                                                                                   >&2
-	echo "	Incrementally compile code and run GUI locally"                                                >&2
-	echo "make run-webui:"                                                                                 >&2
-	echo "	Compile and run web UI locally"                                                                >&2
-	echo "make website:"                                                                                   >&2
-	echo "	Build the website"                                                                             >&2
+	echo "make all:"                                                                                                >&2
+	echo "	Incrementally compile and test code and package into a DMG, a EXE, a ZIP (for Linux), a DEB and a RPM"  >&2
+	echo "make compile:"                                                                                            >&2
+	echo "	Incrementally compile code"                                                                             >&2
+	echo "make check:"                                                                                              >&2
+	echo "	Incrementally compile and test code"                                                                    >&2
+	echo "make dist:"                                                                                               >&2
+	echo "	Incrementally compile code and package into a DMG, a EXE, a ZIP (for Linux), a DEB and a RPM"           >&2
+	echo "make dist-dmg:"                                                                                           >&2
+	echo "	Incrementally compile code and package into a DMG"                                                      >&2
+	echo "make dist-exe:"                                                                                           >&2
+	echo "	Incrementally compile code and package into a EXE"                                                      >&2
+	echo "make dist-zip-linux:"                                                                                     >&2
+	echo "	Incrementally compile code and package into a ZIP (for Linux)"                                          >&2
+	echo "make dist-deb:"                                                                                           >&2
+	echo "	Incrementally compile code and package into a DEB"                                                      >&2
+	echo "make dist-rpm:"                                                                                           >&2
+	echo "	Incrementally compile code and package into a RPM"                                                      >&2
+	echo "make dist-webui-deb:"                                                                                     >&2
+	echo "	Compile Web UI and package into a DEB"                                                                  >&2
+	echo "make dist-webui-rpm:"                                                                                     >&2
+	echo "	Compile Web UI and package into a RPM"                                                                  >&2
+	echo "make run:"                                                                                                >&2
+	echo "	Incrementally compile code and run locally"                                                             >&2
+	echo "make run-gui:"                                                                                            >&2
+	echo "	Incrementally compile code and run GUI locally"                                                         >&2
+	echo "make run-webui:"                                                                                          >&2
+	echo "	Compile and run web UI locally"                                                                         >&2
+	echo "make website:"                                                                                            >&2
+	echo "	Build the website"                                                                                      >&2
 
 ifndef VERBOSE
 .SILENT:
