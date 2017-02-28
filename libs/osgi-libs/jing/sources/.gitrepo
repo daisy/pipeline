@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:relaxng/jing-trang.git
+	branch = master
+	commit = 5b984fca4dc2a0a8b80030c9d428e9d845d1a060
+	parent = 8401cffafe0e964791e138b611fca90a7548e3ce
+	cmdver = 0.3.0

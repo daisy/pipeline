@@ -20,14 +20,14 @@
 
   <modules>
     <!-- <module>calabash</module> -->
-    <!-- <module>jing</module> -->
+    <module>jing</module>
     <!-- <module>jnaerator</module> -->
     <!-- <module>jsslutils</module> -->
     <!-- <module>logback-osgi-adapter</module> -->
     <!-- <module>mysql</module> -->
     <module>parboiled</module>
     <module>pegdown</module>
-    <!-- <module>saxon</module> -->
+    <module>saxon</module>
     <!-- <module>servlet-api</module> -->
   </modules>
 

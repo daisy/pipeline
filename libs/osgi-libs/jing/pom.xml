@@ -6,18 +6,14 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>2</version>
+    <version>4</version>
     <relativePath />
   </parent>
 
   <groupId>org.daisy.libs</groupId>
   <artifactId>jing</artifactId>
-  <version>20120724.0.1-SNAPSHOT</version>
+  <version>20151127.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
-  
-  <properties>
-	<jing.ant>ant</jing.ant>
-  </properties>
 
   <name>Jing</name>
   <description>Jing - tool for validating RelaxNG - (OSGi-compatible version)</description>
@@ -32,11 +28,6 @@
       <url>http://www.opensource.org/licenses/bsd-license.php</url>
     </license>
   </licenses>
-  <scm>
-    <connection>scm:svn:http://jing-trang.googlecode.com/svn/trunk/</connection>
-    <url>http://code.google.com/p/jing-trang/source/browse/</url>
-    <tag>HEAD</tag>
-  </scm>
   <developers>
     <developer>
       <id>jclark</id>
@@ -101,30 +92,27 @@
   <build>
     <plugins>
         <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <configuration>
+            <filesets>
+              <fileset>
+                <directory>sources</directory>
+                <includes>
+                  <include>build/</include>
+                  <include>modbuild.xml</include>
+                  <include>modules.xml</include>
+                </includes>
+              </fileset>
+            </filesets>
+          </configuration>
+        </plugin>
+        <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
             <excludes>
               <exclude>**</exclude>
             </excludes>
           </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-scm-plugin</artifactId>
-          <version>1.7</version>
-          <executions>
-            <execution>
-              <id>checkout</id>
-              <phase>generate-sources</phase>
-              <goals>
-                <goal>checkout</goal>
-              </goals>
-              <configuration>
-                <scmVersion>2360</scmVersion>
-                <scmVersionType>revision</scmVersionType>
-                <skipCheckoutIfExists>true</skipCheckoutIfExists>
-              </configuration>
-            </execution>
-          </executions>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -137,12 +125,13 @@
               <goals>
                 <goal>exec</goal>
               </goals>
+              <configuration>
+                <workingDirectory>${project.basedir}/sources</workingDirectory>
+                <executable>./ant</executable>
+                <commandlineArgs>jar</commandlineArgs>
+              </configuration>
             </execution>
           </executions>
-          <configuration>
-            <executable>${project.build.directory}/checkout/${jing.ant}</executable>
-            <workingDirectory>${project.build.directory}/checkout</workingDirectory>
-          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-antrun-plugin</artifactId>
@@ -155,7 +144,7 @@
               </goals>
               <configuration>
                 <target>
-                    <unzip src="${project.build.directory}/checkout/build/jing.jar" dest="${project.build.directory}/classes" /> 
+                    <unzip src="${project.basedir}/sources/build/jing.jar" dest="${project.build.directory}/classes" /> 
                 </target>
               </configuration>
             </execution>
@@ -181,16 +170,17 @@
                                 org.relaxng.datatype.helpers,
                                 com.thaiopensource.*
                 </Export-Package>
-                <Import-Package><!-- com.icl.saxon;resolution:=optional,
-                                                net.sf.saxon;resolution:=optional,
-                                                org.apache.tools.ant.*;resolution:=optional,
-                                                org.apache.xalan.*;resolution:=optional,
-                                                org.apache.xerces.*;resolution:=optional,
-                                                org.apache.xml.resolver.*;resolution:=optional,
-                                                org.apache.tools.ant.*;resolution:=optional,
-                                                org.iso_relax.*;resolution:=optional, -->
-                                *                                        
+                <Import-Package>
+                  com.icl.saxon;resolution:=optional,
+                  net.sf.saxon;resolution:=optional,
+                  org.apache.tools.ant.*;resolution:=optional,
+                  org.apache.xalan.*;resolution:=optional,
+                  org.apache.xerces.*;resolution:=optional,
+                  org.apache.xml.resolver.*;resolution:=optional,
+                  org.iso_relax.*;resolution:=optional,
+                  *
                 </Import-Package>
+                <SPI-Consumer>javax.xml.parsers.SAXParserFactory#newInstance</SPI-Consumer>
                 <_removeheaders>Built-By,Bnd-LastModified,Embed-Dependency,Private-Package</_removeheaders>
             </instructions>
           </configuration>
@@ -240,13 +230,13 @@
                 <goals>
                   <goal>exec</goal>
                 </goals>
+                <configuration>
+                  <workingDirectory>${project.basedir}/sources</workingDirectory>
+                  <executable>./ant</executable>
+                  <commandlineArgs>jing-dist</commandlineArgs>
+                </configuration>
               </execution>
             </executions>
-            <configuration>
-              <executable>${project.build.directory}/checkout/${jing.ant}</executable>
-              <commandlineArgs>jing-dist</commandlineArgs>
-              <workingDirectory>${project.build.directory}/checkout</workingDirectory>
-            </configuration>
           </plugin>
           <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
@@ -259,9 +249,9 @@
                 </goals>
                 <configuration>
                   <target>
-                      <unzip src="${project.build.directory}/checkout/build/mod/jing/src.zip" dest="${project.build.directory}/sources" /> 
+                      <unzip src="${project.basedir}/sources/build/mod/jing/src.zip" dest="${project.build.directory}/sources" /> 
                       <copy todir="${project.build.directory}/javadoc">
-                          <fileset dir="${project.build.directory}/checkout/build/api/jing" />
+                          <fileset dir="${project.basedir}/sources/build/api/jing" />
                       </copy>
                   </target>
                 </configuration>
