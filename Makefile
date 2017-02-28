@@ -114,7 +114,9 @@ assembly/target/dev-launcher/bin/pipeline2 : assembly/.dependencies | .maven-ini
 	fi
 
 ifneq ($(MAKECMDGOALS), clean)
+ifneq ($(MAKECMDGOALS), dump-maven-cmd)
 -include $(addsuffix /.deps.mk,$(MODULES))
+endif
 endif
 
 SAXON := $(MVN_WORKSPACE)/net/sf/saxon/Saxon-HE/9.4/Saxon-HE-9.4.jar
@@ -317,7 +319,9 @@ clean-website :
 
 .PHONY : dump-maven-cmd
 dump-maven-cmd :
-	echo $(MVN)
+	echo "mvn () { $(shell dirname "$$(which mvn)")/$(MVN) \"\$$@\"; }"
+	echo '# Run this command to configure your shell: '
+	echo '# eval $$(make $@)'
 
 .PHONY : dump-gradle-cmd
 dump-gradle-cmd :
@@ -353,6 +357,8 @@ help :
 	echo "	Compile and run web UI locally"                                                                         >&2
 	echo "make website:"                                                                                            >&2
 	echo "	Build the website"                                                                                      >&2
+	echo "make dump-maven-cmd:"                                                                                     >&2
+	echo '	Get the Maven command used. To configure your shell: eval $$(make dump-maven-cmd)'                      >&2
 
 ifndef VERBOSE
 .SILENT:
