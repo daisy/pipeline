@@ -24,9 +24,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.braille.api.factory.FactoryFilter;
 import org.daisy.braille.api.factory.FactoryProperties;
@@ -71,7 +70,7 @@ public class ValidatorFactory implements ValidatorFactoryService {
 	 */
 	public static ValidatorFactory newInstance() {
 		ValidatorFactory ret = new ValidatorFactory();
-		Iterator<ValidatorProvider> i = ServiceRegistry.lookupProviders(ValidatorProvider.class);
+		Iterator<ValidatorProvider> i = ServiceLoader.load(ValidatorProvider.class).iterator();
 		while (i.hasNext()) {
 			ret.addFactory(i.next());
 		}

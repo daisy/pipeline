@@ -23,8 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
-import javax.imageio.spi.ServiceRegistry;
+import java.util.ServiceLoader;
 
 import org.daisy.braille.api.paper.Paper;
 import org.daisy.braille.api.paper.PaperCatalogService;
@@ -66,7 +65,7 @@ public class PaperCatalog implements PaperCatalogService {
 	 */
 	public static PaperCatalog newInstance() {
 		PaperCatalog ret = new PaperCatalog();
-		Iterator<PaperProvider> i = ServiceRegistry.lookupProviders(PaperProvider.class);
+		Iterator<PaperProvider> i = ServiceLoader.load(PaperProvider.class).iterator();
 		while (i.hasNext()) {
 			PaperProvider provider = i.next();
 			ret.addFactory(provider);

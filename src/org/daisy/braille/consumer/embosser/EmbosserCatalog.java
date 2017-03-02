@@ -24,10 +24,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.braille.api.embosser.Embosser;
 import org.daisy.braille.api.embosser.EmbosserCatalogService;
@@ -76,7 +75,7 @@ public class EmbosserCatalog implements FactoryCatalog<Embosser>, EmbosserCatalo
 	 */
 	public static EmbosserCatalog newInstance() {
 		EmbosserCatalog ret = new EmbosserCatalog();
-		Iterator<EmbosserProvider> i = ServiceRegistry.lookupProviders(EmbosserProvider.class);
+		Iterator<EmbosserProvider> i = ServiceLoader.load(EmbosserProvider.class).iterator();
 		while (i.hasNext()) {
 			EmbosserProvider ep = i.next();
 			ep.setCreatedWithSPI();

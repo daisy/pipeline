@@ -24,10 +24,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import javax.imageio.spi.ServiceRegistry;
 
 import org.daisy.braille.api.factory.FactoryCatalog;
 import org.daisy.braille.api.factory.FactoryProperties;
@@ -75,7 +74,7 @@ public class TableCatalog implements FactoryCatalog<Table>, TableCatalogService 
 	 */
 	public static TableCatalog newInstance() {
 		TableCatalog ret = new TableCatalog();
-		Iterator<TableProvider> i = ServiceRegistry.lookupProviders(TableProvider.class);
+		Iterator<TableProvider> i = ServiceLoader.load(TableProvider.class).iterator();
 		while (i.hasNext()) {
 			ret.addFactory(i.next());
 		}
