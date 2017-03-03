@@ -30,7 +30,7 @@ rwildcard = $(shell find $1 -type f | sed 's/ /\\ /g')
 all : check dist
 
 .PHONY : dist
-dist: dist-dmg dist-exe dist-zip-linux dist-deb dist-rpm dist-webui-deb dist-webui-rpm
+dist: dist-dmg dist-exe dist-zip-linux dist-zip-minimal dist-deb dist-rpm dist-webui-deb dist-webui-rpm
 
 .PHONY : dist-dmg
 dist-dmg : assembly/.dependencies | .maven-init
@@ -48,6 +48,12 @@ dist-exe : assembly/.dependencies | .maven-init
 dist-zip-linux : assembly/.dependencies | .maven-init
 	cd assembly && \
 	$(MVN) clean package -Plinux | $(MVN_LOG)
+	mv assembly/target/*.zip .
+
+.PHONY : dist-zip-minimal
+dist-zip-minimal : assembly/.dependencies | .maven-init
+	cd assembly && \
+	$(MVN) clean package -Pminimal | $(MVN_LOG)
 	mv assembly/target/*.zip .
 
 .PHONY : dist-deb
