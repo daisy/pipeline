@@ -164,7 +164,8 @@ endif
 
 $(addsuffix /.build.mk,$(GRADLE_MODULES)) : $(GRADLE_FILES)
 	module=$$(dirname $@) && \
-	v=$$(cat $$module/gradle.properties | grep '^version' | sed 's/^version=//') && \
+	v=$$((cat $$module/gradle.properties | grep '^distVersion' || \
+	      cat $$module/gradle.properties | grep '^version' ) | sed 's/.*=//') && \
 	a=$$(basename $$module) && \
 	g=$$(cat $$module/build.gradle | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/") && \
 	while true; do \
