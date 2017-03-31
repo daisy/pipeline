@@ -11,19 +11,19 @@
 	<xsl:param name="page-height" select="10" as="xs:integer" dotify:desc="The height of the page (a positive integer)"/>
 	<xsl:param name="inner-margin" select="0" as="xs:integer" dotify:desc="The inner margin (a non-negative integer)"/>
 	<xsl:param name="outer-margin" select="0" as="xs:integer" dotify:desc="The outer margin (a non-negative integer)"/>
-	<xsl:param name="row-spacing" select="1" as="xs:decimal" dotify:desc="The row spacing (a number >= 1)"/>
-	<xsl:param name="duplex" select="true()" as="xs:boolean" dotify:desc="Layout on both sides of the sheet (true/false)"/>
-	<xsl:param name="hyphenate" select="true()" as="xs:boolean" dotify:desc="Defines hyphenation policy (true/false)"/>
+	<xsl:param name="row-spacing" select="1" as="xs:decimal" dotify:desc="The row spacing (a number >= 1)" dotify:default="1"/>
+	<xsl:param name="duplex" select="true()" as="xs:boolean" dotify:desc="Layout on both sides of the sheet" dotify:default="true" dotify:values="true/false"/>
+	<xsl:param name="hyphenate" select="true()" as="xs:boolean" dotify:desc="Defines hyphenation policy" dotify:default="true" dotify:values="true/false"/>
 
 	<xsl:param name="splitterMax" select="10" dotify:desc="The maximum number of sheets in a volume (A positive integer)"/>
-	<xsl:param name="volume-toc" as="xs:boolean" select="true()" dotify:desc="Include a toc in each volume (true/false)"/>
-	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()" dotify:desc="Show braille page numbers in the header (true/false)"/>
-	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()" dotify:desc="Show print page numbers in the header (true/false)"/>
-	<xsl:param name="show-print-page-breaks" as="xs:boolean" select="false()" dotify:desc="Show print page breaks where they occur in the text (true/false)"/>
-	<xsl:param name="matrix-table-columns-max" select="10" dotify:desc="The maximum number of columns in a matrix table (A positive integer)"/>
-	<xsl:param name="staircase-table-columns-max" select="10" dotify:desc="The maximum number of columns in a staircase table (A positive integer)"/>
-	<xsl:param name="colophon-metadata-placement" select="'end'" dotify:desc="The placement of colophon (begin/end)"/>
-	<xsl:param name="rear-cover-placement" select="'end'" dotify:desc="The placement of rear-cover text (begin/end)"/>
+	<xsl:param name="volume-toc" as="xs:boolean" select="true()" dotify:desc="Include a toc in each volume" dotify:default="true" dotify:values="true/false"/>
+	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()" dotify:desc="Show braille page numbers in the header" dotify:default="true" dotify:values="true/false"/>
+	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()" dotify:desc="Show print page numbers in the header" dotify:default="true" dotify:values="true/false"/>
+	<xsl:param name="show-print-page-breaks" as="xs:boolean" select="false()" dotify:desc="Show print page breaks where they occur in the text" dotify:default="false" dotify:values="true/false"/>
+	<xsl:param name="matrix-table-columns-max" select="10" dotify:desc="The maximum number of columns in a matrix table (A positive integer)" dotify:default="10"/>
+	<xsl:param name="staircase-table-columns-max" select="10" dotify:desc="The maximum number of columns in a staircase table (A positive integer)" dotify:default="10"/>
+	<xsl:param name="colophon-metadata-placement" select="'end'" dotify:desc="The placement of colophon" dotify:default="end" dotify:values="begin/end"/>
+	<xsl:param name="rear-cover-placement" select="'end'" dotify:desc="The placement of rear-cover text" dotify:default="end" dotify:values="begin/end"/>
 
 	<xsl:param name="l10nLang" select="'en'"/>
 	<xsl:param name="l10nTocHeadline" select="'Table Of Contents'"/>

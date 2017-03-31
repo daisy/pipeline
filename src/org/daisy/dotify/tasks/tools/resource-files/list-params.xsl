@@ -33,7 +33,8 @@
 	</xsl:template>
 	<xsl:template match="xsl:param">
 		<xsl:if test="@dotify:desc">
-			<entry key="{@name}"><xsl:value-of select="@dotify:desc"/></entry>
+			<!-- using tab as field separator, any tabs inside values will be converted to a regular space -->
+			<entry key="{@name}"><xsl:value-of select="concat(normalize-space(@dotify:default), '&#0009;', normalize-space(@dotify:values), '&#0009;', normalize-space(@dotify:desc))"/></entry>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="node()">

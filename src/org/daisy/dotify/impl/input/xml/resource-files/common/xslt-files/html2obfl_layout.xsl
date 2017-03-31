@@ -11,10 +11,10 @@
 	<xsl:import href="book-formats.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
 	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string"/> <!-- empty-line or indent -->
-	<xsl:param name="toc-depth" select="6" dotify:desc="The maximum depth of generated toc (A positive integer)"/>
-	<xsl:param name="toc-indent-multiplier" select="1" dotify:desc="Indentation for each toc level"/>
+	<xsl:param name="toc-depth" select="6" dotify:desc="The maximum depth of generated toc (A positive integer)" dotify:default="6"/>
+	<xsl:param name="toc-indent-multiplier" select="1" dotify:desc="Indentation for each toc level"  dotify:default="1"/>
 	<!-- TODO: should also support value 'keep' to keep the original toc -->
-	<xsl:param name="toc-policy" select="'replace'" dotify:desc="The toc generation policy (replace/always)"/>
+	<xsl:param name="toc-policy" select="'replace'" dotify:desc="The toc generation policy" dotify:default="replace" dotify:values="replace/always"/>
 	
 	<xsl:key name="noterefs" match="html:a[epub:noteref(.)]" use="substring-after(@href, '#')"/>
 

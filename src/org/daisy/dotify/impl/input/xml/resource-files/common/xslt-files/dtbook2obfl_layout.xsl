@@ -44,7 +44,7 @@
 	<xsl:param name="outer-margin" select="0" as="xs:integer"/>
 	<xsl:param name="row-spacing" select="1" as="xs:decimal"/>
 	<xsl:param name="duplex" select="true()" as="xs:boolean"/>
-	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string" dotify:desc="Default paragraph separator (empty-line/indent)"/> <!-- empty-line or indent -->
+	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string" dotify:desc="Default paragraph separator" dotify:default="indent" dotify:values="empty-line/indent"/> <!-- empty-line or indent -->
 	
 	
 	<xsl:param name="l10nimagedescription" select="'Image description'"/>
