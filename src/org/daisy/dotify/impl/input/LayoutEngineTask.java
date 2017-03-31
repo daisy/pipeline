@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -50,27 +53,17 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	private static final String HYPHENATE = "hyphenate";
 	private static final String TRANSLATE = "translate";
 	private static final String REMOVE_STYLES = "remove-styles";
+	private static final String DATE_FORMAT = "dateFormat";
+	private static final String DATE = "date";
+	private static final String IDENTIFIER = "identifier";
+	private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	private static final QName ENTRY = new QName("http://www.daisy.org/ns/2015/dotify", "entry", "generator");
 	private final FormatterConfiguration config;
 	private final PagedMediaWriter writer;
 	private final FormatterEngineFactoryService fe;
+	private final TaskGroupSpecification spec;
 	private static final Logger logger = Logger.getLogger(LayoutEngineTask.class.getCanonicalName());
 	private List<TaskOption> options;
-	
-	/**
-	 * Creates a new instance of LayoutEngineTask.
-	 * @param name the name of the task
-	 * @param config the formatter configuration
-	 * @param writer the output writer
-	 * @param fe the factory service
-	 */
-	public LayoutEngineTask(String name, FormatterConfiguration config, PagedMediaWriter writer, FormatterEngineFactoryService fe) {
-		super(name);
-		this.config = config;
-		this.writer = writer;
-		this.fe = fe;
-		this.options = null;
-	}
 	
 	/**
 	 * Creates a new instance.
@@ -82,7 +75,9 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	 */
 	public LayoutEngineTask(Properties p2, TaskGroupSpecification spec, PagedMediaWriterFactoryMakerService pmw, FormatterEngineFactoryService fe) throws TaskSystemException {
 		super(buildName(spec.getOutputFormat().toUpperCase()));
+		addDefaults(p2);
 		String translatorMode = getTranslationMode(p2, spec.getOutputFormat());
+		this.spec = spec;
 		this.writer = getWriter(p2, spec, pmw);
 		this.config = getFormatterConfig(p2, translatorMode, spec.getLocale());
 		this.fe = fe;
@@ -139,16 +134,33 @@ public class LayoutEngineTask extends ReadWriteTask  {
 		return config.build();
 	}
 	
+	private static void addDefaults(Properties p2) {
+ 		String dateFormat = p2.getProperty(DATE_FORMAT);
+		if (dateFormat==null || "".equals(dateFormat)) {
+			dateFormat = DEFAULT_DATE_FORMAT;
+			p2.put(DATE_FORMAT, dateFormat);
+		}
+		if (p2.getProperty(DATE)==null || "".equals(p2.getProperty(DATE))) {
+			p2.put(DATE, getDefaultDate(dateFormat));
+		}
+		if (p2.getProperty(IDENTIFIER)==null || "".equals(p2.getProperty(IDENTIFIER))) {
+			String id = Double.toHexString(Math.random());
+			id = id.substring(id.indexOf('.')+1);
+			id = id.substring(0, id.indexOf('p'));
+			p2.put(IDENTIFIER, "dummy-id-"+ id);
+		}
+	}
+	
 	private static List<MetaDataItem> asMetadata(Properties p2) {
 		ArrayList<MetaDataItem> meta = new ArrayList<>();
 		
-		String ident = p2.getProperty("identifier");
+		String ident = p2.getProperty(IDENTIFIER);
 		if (ident!=null) {
-			meta.add(asDCItem("identifier", ident));
+			meta.add(asDCItem(IDENTIFIER, ident));
 		}
-		String date = p2.getProperty("date");
+		String date = p2.getProperty(DATE);
 		if (date!=null) {
-			meta.add(asDCItem("date", date));
+			meta.add(asDCItem(DATE, date));
 		}
 		for (Object key : p2.keySet()) {
 			meta.add(new MetaDataItem.Builder(ENTRY, p2.get(key).toString()).attribute(new AttributeItem("key", key.toString())).build());
@@ -160,7 +172,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 		return new MetaDataItem.Builder(new QName("http://purl.org/dc/elements/1.1/", name, "dc"), value).build();
 	}
 
-	private static List<TaskOption> buildOptions() {
+	private static List<TaskOption> buildOptions(TaskGroupSpecification spec) {
 		List<TaskOption> ret = new ArrayList<>();
 		ret.add(withBooleanValues(
 				new TaskOption.Builder(MARK_CAPITAL_LETTERS)
@@ -180,12 +192,29 @@ public class LayoutEngineTask extends ReadWriteTask  {
 		ret.add(new TaskOption.Builder(TRANSLATE)
 			.description("Specifies a translation mode.")
 			.build());
+		//PEF supports additional options
+		if (Keys.PEF_FORMAT.equals(spec.getOutputFormat())) {
+			ret.add(new TaskOption.Builder(IDENTIFIER)
+				.description("Sets identifier in meta data.")
+				.build());
+			ret.add(new TaskOption.Builder(DATE)
+				.description("Sets date in meta data.")
+				.defaultValue(getDefaultDate(DEFAULT_DATE_FORMAT))
+				.build());
+		}
 		return ret;
 	}
 	
 	private static TaskOption.Builder withBooleanValues(TaskOption.Builder builder) {
 		return builder.addValue(new TaskOptionValue.Builder("true").build())
 		.addValue(new TaskOptionValue.Builder("false").build());
+	}
+	
+	private static String getDefaultDate(String dateFormat) {
+		Calendar c = Calendar.getInstance();
+		c.setTime(new Date());
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+		return sdf.format(c.getTime());
 	}
 
 	@Override
@@ -219,7 +248,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	@Override
 	public List<TaskOption> getOptions() {
 		if (options==null) {
-			options = Collections.unmodifiableList(buildOptions());
+			options = Collections.unmodifiableList(buildOptions(spec));
 		}
 		return options;
 	}
