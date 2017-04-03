@@ -1,7 +1,13 @@
 ## For file names and sizes, see https://api.github.com/repos/daisy/pipeline-assembly/releases
 
+- version: "1.10.1"
+  sort: "1.10.1"
+  state: update
+  github_tag: "v1.10.1"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.1"
+
 - version: "1.10"
-  sort: "1.10-xxx"
+  sort: "1.10.0"
   state: stable
   github_tag: "v1.10.0"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0"

@@ -20,9 +20,23 @@ For installation instructions see
 {% endfor %}
 </ul>
 
+{% assign updates = all | where:'state','update' %}
+
+{% if updates.last.sort > stable.last.sort %}
+
+## Latest update: {{ updates.last.version }}
+
+No downloads are available for this release, but you can get it
+through the updater tool. See the
+[installation instructions](http://daisy.github.io/pipeline/Get-Help/User-Guide/Installation#updater)
+for more info.
+
+{% endif %}
+
 {% assign beta = all | where:'state','beta' %}
 
 {% if beta.last.sort > stable.last.sort %}
+{% if beta.last.sort > updates.last.sort  %}
 
 ## Latest beta version: {{ beta.last.version }}
 
@@ -34,6 +48,7 @@ For installation instructions see
 {% endfor %}
 </ul>
 
+{% endif %}
 {% endif %}
 
 {% assign nightly = all | where:'state','nightly' %}
@@ -60,7 +75,7 @@ For installation instructions see
 
 {% for item in previous %}
 
-### Verion {{ item.version }}
+### Version {{ item.version }}
 
 {{ item.description }}
 
