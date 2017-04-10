@@ -13,6 +13,11 @@ import java.util.Map;
  * @author Joel Håkansson
  */
 public class RunParameters {
+	private static final int ROWGAP_DEFAULT = 0;
+	private static final int ROWS_DEFAULT = 29;
+	private static final int COLS_DEFAULT = 28;
+	private static final int INNER_MARGIN_DEFAULT = 2;
+	private static final int OUTER_MARGIN_DEFAULT = 2;
 	public static String COLS = "cols";
 	public static String PAGE_WIDTH = "page-width";
 	public static String INNER_MARGIN = "inner-margin";
@@ -34,12 +39,12 @@ public class RunParameters {
 	static void verifyAndSetWidth(Map<String, Object> p1) {
 		Integer cols = asInteger(p1.get(COLS), null);
 		Integer pageWidth = asInteger(p1.get(PAGE_WIDTH), null);
-		int innerMargin = asInteger(p1.get(INNER_MARGIN), 2);
-		int outerMargin = asInteger(p1.get(OUTER_MARGIN), 2);
+		int innerMargin = asInteger(p1.get(INNER_MARGIN), INNER_MARGIN_DEFAULT);
+		int outerMargin = asInteger(p1.get(OUTER_MARGIN), OUTER_MARGIN_DEFAULT);
 
 		if (cols==null && pageWidth==null) {
 			//use default
-			cols = 28;
+			cols = COLS_DEFAULT;
 		}
 		if (cols==null) {
 			cols = pageWidth - innerMargin - outerMargin;
@@ -60,7 +65,7 @@ public class RunParameters {
 		Integer pageHeight = asInteger(p1.get(PAGE_HEIGHT), null);
 		if (rows==null && pageHeight==null) {
 			//use default
-			rows = 29;
+			rows = ROWS_DEFAULT;
 		}
 		if (rows==null) {
 			rows = pageHeight;
@@ -78,7 +83,7 @@ public class RunParameters {
 		Float rowSpacing = asFloat(p1.get(ROW_SPACING), null);
 		if (rowgap==null && rowSpacing==null) {
 			//use default
-			rowgap = 0;
+			rowgap = ROWGAP_DEFAULT;
 		}
 		if (rowgap==null) {
 			float t = (rowSpacing-1)*4;
