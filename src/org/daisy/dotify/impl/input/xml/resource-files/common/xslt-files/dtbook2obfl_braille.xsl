@@ -19,7 +19,6 @@
 	<xsl:namespace-alias stylesheet-prefix="axsl" result-prefix="xsl"/>
 	<xsl:strip-space elements="dtb:note"/>
 	<xsl:param name="toc-indent-multiplier" select="1" dotify:desc="Indentation for each toc level" dotify:default="1"/>
-	<xsl:param name="splitterMax" select="10" />
 	<xsl:param name="toc-depth" select="6" dotify:desc="The maximum depth of generated toc (A positive integer)" dotify:default="6"/>
 	<xsl:param name="volume-toc" as="xs:boolean" select="true()"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()"/>

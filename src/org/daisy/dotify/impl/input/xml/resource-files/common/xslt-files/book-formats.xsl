@@ -15,7 +15,7 @@
 	<xsl:param name="duplex" select="true()" as="xs:boolean" dotify:desc="Layout on both sides of the sheet" dotify:default="true" dotify:values="true/false"/>
 	<xsl:param name="hyphenate" select="true()" as="xs:boolean" dotify:desc="Defines hyphenation policy" dotify:default="true" dotify:values="true/false"/>
 
-	<xsl:param name="splitterMax" select="10" dotify:desc="The maximum number of sheets in a volume (A positive integer)"/>
+	<xsl:param name="splitterMax" select="50" dotify:desc="The maximum number of sheets in a volume (A positive integer)" dotify:default="50"/>
 	<xsl:param name="volume-toc" as="xs:boolean" select="true()" dotify:desc="Include a toc in each volume" dotify:default="true" dotify:values="true/false"/>
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()" dotify:desc="Show braille page numbers in the header" dotify:default="true" dotify:values="true/false"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()" dotify:desc="Show print page numbers in the header" dotify:default="true" dotify:values="true/false"/>
