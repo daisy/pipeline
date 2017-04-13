@@ -21,7 +21,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.2</version>
+        <version>1.10.3-SNAPSHOT</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>scripts-utils-bom</artifactId>
+        <version>1.10.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -34,13 +41,11 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
     </dependency>
-
     <!-- EpubCheck -->
     <dependency>
-  	  <groupId>org.idpf</groupId>
-  	  <artifactId>epubcheck</artifactId>
-      <version>4.0.1</version>
-  	</dependency>
+      <groupId>org.daisy</groupId>
+      <artifactId>epubcheck</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

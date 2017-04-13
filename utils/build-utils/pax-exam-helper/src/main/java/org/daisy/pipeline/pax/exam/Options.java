@@ -92,7 +92,7 @@ public abstract class Options {
 	}
 	
 	public static MavenBundleOption xprocspec() {
-		return mavenBundleComposite(
+		return mavenBundles(
 			mavenBundle("org.daisy.maven:xprocspec-runner:?"),
 			mavenBundle("org.daisy.xprocspec:xprocspec:?")
 		);
@@ -294,12 +294,13 @@ public abstract class Options {
 		}
 	}
 	
-	private static MavenBundleOption mavenBundleComposite(final MavenBundleOption... options) {
+	public static MavenBundleOption mavenBundles(final MavenBundleOption... options) {
 		final MavenBundle[] bundles; {
 			List<MavenBundle> list = new ArrayList<MavenBundle>();
 			for (MavenBundleOption o : options)
-				for (MavenBundle b : o.getBundles())
-					list.add(b);
+				if (o != null)
+					for (MavenBundle b : o.getBundles())
+						list.add(b);
 			bundles = list.toArray(new MavenBundle[list.size()]); }
 		return new MavenBundleCompositeOption() {
 			public MavenBundle[] getBundles() {
@@ -318,6 +319,13 @@ public abstract class Options {
 				return sb.toString();
 			}
 		};
+	}
+	
+	public static MavenBundleOption mavenBundles(final String... artifactCoords) {
+		MavenBundle[] bundles = new MavenBundle[artifactCoords.length];
+		for (int i = 0; i < artifactCoords.length; i++)
+			bundles[i] = artifactCoords == null ? null : mavenBundle(artifactCoords[i]);
+		return mavenBundles(bundles);
 	}
 	
 	private static abstract class MavenBundleCompositeOption implements MavenBundleOption, CompositeOption {
@@ -519,7 +527,7 @@ public abstract class Options {
 		return b.toString();
 	}
 	
-	private static String thisPlatform() {
+	public static String thisPlatform() {
 		String name = System.getProperty("os.name").toLowerCase();
 		if (name.startsWith("windows"))
 			return "windows";

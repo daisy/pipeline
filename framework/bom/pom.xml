@@ -23,7 +23,7 @@
     <daisy.calabash-adapter.version>2.0.3</daisy.calabash-adapter.version>
     <daisy.calabash-custom-steps.version>2.0.0</daisy.calabash-custom-steps.version>
     <daisy.common-utils.version>2.1.2</daisy.common-utils.version>
-    <daisy.framework-core.version>3.1.0</daisy.framework-core.version>
+    <daisy.framework-core.version>3.1.1-SNAPSHOT</daisy.framework-core.version>
     <daisy.framework-persistence.version>2.0.3</daisy.framework-persistence.version>
     <daisy.framework-volatile.version>2.0.1</daisy.framework-volatile.version>
     <daisy.launcher.version>1.0.0</daisy.launcher.version>
@@ -38,7 +38,7 @@
     <daisy.webservice-utils.version>2.2.1</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.0</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.1</daisy.xmlcatalog.version>
-    <daisy.xpath-registry.version>1.0.1</daisy.xpath-registry.version>
+    <daisy.xpath-registry.version>1.0.2-SNAPSHOT</daisy.xpath-registry.version>
     <daisy.xproc-api.version>2.0.0</daisy.xproc-api.version>
 
     <!-- Dependencies Versions -->
@@ -50,8 +50,8 @@
     <eclipse.persistence.version>2.3.2</eclipse.persistence.version>
     <guava.version>15.0</guava.version>
     <javax.persistence.version>2.0.3</javax.persistence.version>
-    <javax.servlet-api.version>2.5</javax.servlet-api.version>
-    <jing.version>20091111</jing.version>
+    <javax.servlet-api.version>2.5.0</javax.servlet-api.version>
+    <jing.version>20120724.0.0</jing.version>
     <jetty.version>7.6.5.v20120716</jetty.version>
     <junit.version>4.10</junit.version>
     <logback.version>1.0.11</logback.version>
@@ -59,7 +59,7 @@
     <osgi.version>4.3.1</osgi.version>
     <powermock.version>1.5.4</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
-    <saxon-he.version>9.5.1-5</saxon-he.version>
+    <saxon-he.version>9.5.1.5</saxon-he.version>
     <slf4j.version>1.7.2</slf4j.version>
     <woodstox.core.version>4.1.2</woodstox.core.version>
     <woodstox.stax2-api.version>3.1.1</woodstox.stax2-api.version>
@@ -183,12 +183,17 @@
         <version>10.9.1.0</version>
       </dependency>
       <dependency>
+        <groupId>org.eclipse.gemini</groupId>
+        <artifactId>org.apache.derby</artifactId>
+        <version>10.8.2.2</version>
+      </dependency>
+      <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>${guava.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.thaiopensource</groupId>
+        <groupId>org.daisy.libs</groupId>
         <artifactId>jing</artifactId>
         <version>${jing.version}</version>
         <exclusions>
@@ -204,14 +209,13 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.libs</groupId>
-        <artifactId>jing</artifactId>
-        <version>20120724.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
         <version>${calabash.version}</version>
         <exclusions>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+          </exclusion>
           <exclusion>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
@@ -219,9 +223,20 @@
         </exclusions>
       </dependency>
       <dependency>
+        <groupId>nu.validator.htmlparser</groupId>
+        <artifactId>htmlparser</artifactId>
+        <version>1.4</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient-osgi</artifactId>
         <version>4.2.5</version>
+        <exclusions>
+          <exclusion>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
@@ -244,13 +259,13 @@
         <version>${commons.io.version}</version>
       </dependency>
       <dependency>
-        <groupId>javax.servlet</groupId>
+        <groupId>org.daisy.libs</groupId>
         <artifactId>servlet-api</artifactId>
         <version>${javax.servlet-api.version}</version>
       </dependency>
       <dependency>
-        <groupId>net.sf.saxon</groupId>
-        <artifactId>Saxon-HE</artifactId>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>saxon-he</artifactId>
         <version>${saxon-he.version}</version>
         <!-- TODO remove when the fix to issue 1501 is pushed to Maven Central
              see http://dev.saxonica.com/community/issues/1501 -->
@@ -270,11 +285,6 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>saxon-he</artifactId>
-        <version>9.5.1.5</version>
-      </dependency>
-      <dependency>
         <groupId>org.codehaus.woodstox</groupId>
         <artifactId>stax2-api</artifactId>
         <version>${woodstox.stax2-api.version}</version>
@@ -291,10 +301,39 @@
           </exclusion>
         </exclusions>
       </dependency>
+      <!-- Note: 1.1.0 requires EclipseLink org.eclipse.persistence.asm:3.3.1.v201206041142
+           which doesn't seem to be accepted by Felix (JarInputStream) -->
+      <dependency>
+        <groupId>org.eclipse</groupId>
+        <artifactId>org.eclipse.gemini.jpa</artifactId>
+        <version>1.0.0.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.gemini</groupId>
+        <artifactId>org.eclipse.gemini.dbaccess.derby</artifactId>
+        <version>1.1.0.RELEASE</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.gemini</groupId>
+        <artifactId>org.eclipse.gemini.dbaccess.util</artifactId>
+        <version>1.1.0.RELEASE</version>
+      </dependency>
       <dependency>
         <groupId>org.eclipse.persistence</groupId>
         <artifactId>javax.persistence</artifactId>
         <version>${javax.persistence.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>org.eclipse.persistence.asm</artifactId>
+        <version>${eclipse.persistence.version}</version>
+        <!-- <version>3.3.1.v201206041142</version> -->
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.persistence</groupId>
+        <artifactId>org.eclipse.persistence.antlr</artifactId>
+        <version>${eclipse.persistence.version}</version>
+        <!-- <version>3.2.0.v201206041011</version> -->
       </dependency>
       <dependency>
         <groupId>org.eclipse.persistence</groupId>
@@ -305,8 +344,30 @@
         <groupId>org.eclipse.persistence</groupId>
         <artifactId>org.eclipse.persistence.jpa</artifactId>
         <version>${eclipse.persistence.version}</version>
-        <scope>test</scope>
       </dependency>
+      <dependency>
+        <groupId>com.mysql.jdbc</groupId>
+        <artifactId>com.springsource.com.mysql.jdbc</artifactId>
+        <version>5.1.6</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>logback-osgi-adapter</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.xml.crypto</groupId>
+        <artifactId>jsr105-api</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.xml.parsers</groupId>
+        <artifactId>jaxp-api</artifactId>
+        <version>1.4.5</version>
+      </dependency>
+
+
+      <!-- OSGi -->
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.core</artifactId>
@@ -415,26 +476,95 @@
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
         <version>${slf4j.version}</version>
-        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>jul-to-slf4j</artifactId>
         <version>${slf4j.version}</version>
-        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-jdk14</artifactId>
         <version>${slf4j.version}</version>
-        <scope>runtime</scope>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>log4j-over-slf4j</artifactId>
         <version>${slf4j.version}</version>
-        <scope>runtime</scope>
       </dependency>
+
+
+      <!-- Third-Party Libraries required by modules -->
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna</artifactId>
+        <version>4.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>jnaerator</artifactId>
+        <version>0.11</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>jstyleparser</artifactId>
+        <version>1.20-p11-SNAPSHOT</version>
+        <exclusions>
+          <exclusion>
+            <groupId>xerces</groupId>
+            <artifactId>xercesImpl</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.unbescape</groupId>
+        <artifactId>unbescape</artifactId>
+        <version>1.1.0.RELEASE</version>
+      </dependency>
+
+
+      <!-- Third-Party Libraries required by GUI -->
+      <dependency>
+        <groupId>de.codecentric.centerdevice</groupId>
+        <artifactId>centerdevice-nsmenufx</artifactId>
+        <version>2.1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>pegdown</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>parboiled</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.parboiled</groupId>
+        <artifactId>parboiled-core</artifactId>
+        <version>1.1.7</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm</artifactId>
+        <version>5.0.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm-analysis</artifactId>
+        <version>5.0.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm-tree</artifactId>
+        <version>5.0.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm-util</artifactId>
+        <version>5.0.3</version>
+      </dependency>
+
 
       <!-- Testing -->
       <dependency>

@@ -76,7 +76,6 @@ public class CommonUtilsTest {
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?"),
 				// xspec
 				xspec(),
-				mavenBundle("org.apache.servicemix.bundles:org.apache.servicemix.bundles.xmlresolver:?"),
 				mavenBundle("org.daisy.pipeline:saxon-adapter:?"))
 		);
 	}

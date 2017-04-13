@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+			   xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/dtbook-to-html.xpl">
+
+    <x:scenario label="minimal">
+        <x:call step="px:dtbook-to-html">
+			<x:input port="source">
+				<x:document type="file" href="../resources/minimal.xml"/>
+			</x:input>
+            <x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+        </x:call>
+		<x:context label="the output HTML">
+            <x:document type="file" base-uri="temp-dir" href="minimal/output-dir/minimal.xhtml"/>
+		</x:context>
+		<!--
+			FIXME: generated id attributes make test brittle
+		-->
+        <x:expect label="the output HTML" type="compare">
+            <x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+					<head>
+						<meta charset="UTF-8"/>
+						<title>Minimal DTBook</title>
+					</head>
+					<body>
+						<section xmlns:epub="http://www.idpf.org/2007/ops" epub:type="frontmatter">
+							<section id="d3739e7">
+								<h1 epub:type="title">Minimal DTBook</h1>
+								<p>Bert</p>
+							</section>
+						</section>
+						<section xmlns:epub="http://www.idpf.org/2007/ops" epub:type="bodymatter">
+							<section id="d3739e13">
+								<span epub:type="pagebreak" title="1" id="page_1"/>
+								<h1>Chapter</h1>
+								<p>Paragraph</p>
+								<span epub:type="pagebreak" title="2" id="page_2"/>
+								<p>Another paragraph</p>
+							</section>
+						</section>
+				</body></html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

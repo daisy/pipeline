@@ -57,12 +57,10 @@ public class LiblouisFormatterTest {
 				brailleModule("liblouis-utils"),
 				brailleModule("liblouis-native").forThisPlatform(),
 				pipelineModule("file-utils"),
-				pipelineModule("common-utils"),
 				pipelineModule("fileset-utils"),
-				pipelineModule("html-utils"),
-				pipelineModule("zip-utils"),
-				pipelineModule("mediatype-utils"),
 				brailleModule("liblouis-tables"),
+				// for p:unzip-fileset in fileset-utils
+				pipelineModule("mediatype-utils"),
 				// logging
 				logbackClassic(),
 				// xprocspec
@@ -70,7 +68,6 @@ public class LiblouisFormatterTest {
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?"),
 				// xspec
 				xspec(),
-				mavenBundle("org.apache.servicemix.bundles:org.apache.servicemix.bundles.xmlresolver:?"),
 				mavenBundle("org.daisy.pipeline:saxon-adapter:?"))
 		);
 	}

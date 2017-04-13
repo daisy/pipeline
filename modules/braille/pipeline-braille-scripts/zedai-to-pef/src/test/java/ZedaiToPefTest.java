@@ -59,14 +59,7 @@ public class ZedaiToPefTest {
 				brailleModule("pef-utils"),
 				brailleModule("liblouis-native").forThisPlatform(),
 				pipelineModule("file-utils"),
-				pipelineModule("common-utils"),
-				pipelineModule("html-utils"),
-				pipelineModule("zip-utils"),
-				pipelineModule("mediatype-utils"),
-				pipelineModule("fileset-utils"),
 				pipelineModule("metadata-utils"),
-				pipelineModule("validation-utils"),
-				pipelineModule("dtbook-validator"),
 				// logging
 				logbackClassic(),
 				// xprocspec

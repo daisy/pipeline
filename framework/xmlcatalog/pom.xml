@@ -30,7 +30,7 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <!--
-        OSGi runtime dependencies
+        runtime dependencies (for javax.xml.stream.XMLInputFactory)
     -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
@@ -38,7 +38,6 @@
       <scope>runtime</scope>
     </dependency>
   </dependencies>
-
 
   <build>
     <plugins>

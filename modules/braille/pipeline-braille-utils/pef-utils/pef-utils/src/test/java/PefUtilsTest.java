@@ -48,9 +48,6 @@ public class PefUtilsTest {
 				brailleModule("pef-calabash"),
 				brailleModule("pef-saxon"),
 				pipelineModule("file-utils"),
-				// for file-utils
-				pipelineModule("common-utils"),
-				mavenBundle("org.daisy.libs:saxon-he:?"),
 				// logging
 				logbackClassic(),
 				// xprocspec

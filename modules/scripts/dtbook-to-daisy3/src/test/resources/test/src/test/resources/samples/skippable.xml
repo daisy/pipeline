@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN"
+                        "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3"
+        xml:lang="en-US">
+  <head>
+    <meta name="dt:version" content="1.0"/>
+    <meta name="dtb:uid"
+          content="CECIREADER-TEST-281333D4-6F03-11E4-B9BB-973E1BF07E77"/>
+    <meta name="dc:Title" content="Skippable structures"/>
+    <meta name="dc:Creator" content="Frédéric Wang"/>
+    <meta name="dc:Date" content="2014-11-18"/>
+    <meta name="dc:Publisher" content="BrailleNet"/>
+    <meta name="dc:Identifier"
+          content="CECIREADER-TEST-281333D4-6F03-11E4-B9BB-973E1BF07E77"/>
+   </head>
+  <book>
+    <frontmatter>
+      <doctitle>Skippable structures</doctitle>
+      <docauthor>Frédéric Wang</docauthor>
+    </frontmatter>
+    <bodymatter>
+      <level1>
+        <pagenum page="front" id="pageI">I</pagenum>
+        <h1>Skippable structures</h1>
+        <p>This document contains some skippable structures like
+        notes <noteref idref="#note1">1</noteref> or
+         <annoref idref="#annotation1">annotations</annoref>.</p>
+        <sidebar render="optional">
+          <hd>Optional Sidebar</hd>
+          <p>This is an optional sidebar</p>
+        </sidebar>
+        <sidebar render="required">
+          <hd>Required Sidebar</hd>
+          <p>This is a required sidebar</p>
+        </sidebar>
+
+        <pagenum page="normal" id="page2">2</pagenum>
+        <poem>
+          <line>begin <linenum>1</linenum> This is a first line</line>
+          <line>begin <linenum>2</linenum> This is a second line</line>
+          <line>begin <linenum>3</linenum> This is a third line</line>
+        </poem>
+        <prodnote render="optional">This is an optional producer note.</prodnote>
+        <prodnote render="required">This is a required producer note.</prodnote>
+
+        <pagenum page="special" id="pageThree">Three</pagenum>
+        <note id="note1"><p>This is a note</p></note>
+        <annotation id="annotation1"><p>This is an annotation</p></annotation>
+	<list type="ul">
+	  <li>
+	    before <epigraph>inside epigraph</epigraph> after
+	  </li>
+	</list>
+      </level1>
+    </bodymatter>
+  </book>
+</dtbook>

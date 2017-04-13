@@ -14,16 +14,6 @@
       <artifactId>xproc-engine-daisy-pipeline</artifactId>
       <version>${xproc-engine-daisy-pipeline.version}</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-jdk14</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.daisy.xprocspec</groupId>

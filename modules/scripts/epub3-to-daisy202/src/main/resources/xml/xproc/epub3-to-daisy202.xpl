@@ -34,6 +34,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
 
     <p:variable name="epub-href" select="resolve-uri($epub,base-uri(/*))">
         <p:inline>
@@ -41,33 +42,28 @@
         </p:inline>
     </p:variable>
 
-    <px:unzip-fileset name="unzip">
+    <px:fileset-unzip store-to-disk="true" name="unzip">
         <p:with-option name="href" select="$epub-href"/>
         <p:with-option name="unzipped-basedir" select="concat($temp-dir,'epub/')"/>
-    </px:unzip-fileset>
-
-    <px:fileset-store name="load.stored">
-        <p:input port="fileset.in">
-            <p:pipe port="fileset.out" step="unzip"/>
-        </p:input>
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="unzip"/>
-        </p:input>
-    </px:fileset-store>
-    <p:identity>
+    </px:fileset-unzip>
+    <p:sink/>
+    <px:mediatype-detect name="mediatype">
         <p:input port="source">
-            <p:pipe port="fileset.out" step="load.stored"/>
+            <p:pipe step="unzip" port="fileset"/>
         </p:input>
-    </p:identity>
-    <p:viewport match="/*/d:file">
-        <p:add-attribute match="/*" attribute-name="original-href">
-            <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri())"/>
-        </p:add-attribute>
-    </p:viewport>
+    </px:mediatype-detect>
+    <px:fileset-load name="load">
+        <p:input port="in-memory">
+            <p:empty/>
+        </p:input>
+    </px:fileset-load>
 
     <px:epub3-to-daisy202-convert name="convert.daisy202">
+        <p:input port="fileset.in">
+            <p:pipe port="result" step="mediatype"/>
+        </p:input>
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="unzip"/>
+            <p:pipe port="result" step="load"/>
         </p:input>
     </px:epub3-to-daisy202-convert>
 

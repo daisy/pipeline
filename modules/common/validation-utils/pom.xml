@@ -17,6 +17,9 @@
   <name>DAISY Pipeline 2 module :: validation-utils</name>
   
   <dependencies>
+    <!--
+        runtime dependencies
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>file-utils</artifactId>
@@ -30,6 +33,14 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        for p:validate-with-relax-ng (used in l:relax-ng-report and px:combine-validation-reports)
+    -->
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jing</artifactId>
       <scope>runtime</scope>
     </dependency>
   </dependencies>

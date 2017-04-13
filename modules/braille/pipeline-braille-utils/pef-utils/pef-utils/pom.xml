@@ -26,19 +26,6 @@
       <scope>runtime</scope>
     </dependency>
     <!--
-        for file-utils
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>common-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>saxon-he</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
         optional (but keep mandatory as long as there is only one implementation)
     -->
     <dependency>

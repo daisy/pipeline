@@ -68,7 +68,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epubcheck-adapter</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -89,6 +89,14 @@
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>zedai-utils</artifactId>
         <version>1.0.1</version>
+      </dependency>
+      <!--
+          Third-Party Libraries
+      -->
+      <dependency>
+        <groupId>org.daisy</groupId>
+        <artifactId>epubcheck</artifactId>
+        <version>4.0.2-a11y-2-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
