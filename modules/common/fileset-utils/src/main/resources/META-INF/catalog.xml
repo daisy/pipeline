@@ -13,6 +13,5 @@
     <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
     <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
     
 </catalog>

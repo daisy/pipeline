@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../main/resources/xml/xslt/i18n.xsl" xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/resources/xml/xslt/i18n.xsl" xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
     xmlns:d="http://www.daisy.org/ns/pipeline/data">
 
     <x:scenario label="Scenario for testing pf:i18n-translate">

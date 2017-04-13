@@ -43,51 +43,9 @@
           test dependencies
       -->
       <dependency>
-        <groupId>org.daisy.xprocspec</groupId>
-        <artifactId>xprocspec</artifactId>
-        <version>1.1.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xprocspec-runner</artifactId>
-        <version>1.0.0</version>
-        <exclusions>
-          <exclusion>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xproc-engine-daisy-pipeline</artifactId>
-        <version>1.10.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>xml-apis</groupId>
-        <artifactId>xml-apis</artifactId>
-        <version>1.3.04</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xspec-runner</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
-        <exclusions>
-          <exclusion>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>saxon-adapter</artifactId>
-        <version>1.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>pax-exam-helper</artifactId>
-        <version>2.1.2-SNAPSHOT</version>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-test-helper</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
