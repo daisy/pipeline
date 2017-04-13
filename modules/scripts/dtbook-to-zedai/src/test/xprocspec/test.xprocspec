@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+			   xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+               script="../../main/resources/xml/dtbook-to-zedai.xpl">
+
+    <x:scenario label="minimal">
+        <x:call step="px:dtbook-to-zedai">
+			<x:input port="source">
+				<x:document type="file" href="../resources/minimal.xml"/>
+			</x:input>
+			<x:option name="zedai-filename" select="'result.xml'"/>
+            <x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+        </x:call>
+		<x:context label="the output ZedAI">
+            <x:document type="file" base-uri="temp-dir" href="minimal/output-dir/result.xml" select="//z:body"/>
+		</x:context>
+		<!--
+			FIXME: generated id attributes make test brittle
+		-->
+        <x:expect label="the output ZedAI" type="compare">
+            <x:document type="inline">
+				<body xmlns="http://www.daisy.org/ns/z3998/authoring/">
+					<frontmatter>
+						<section xml:id="d2874e7">
+							<h role="title">Minimal DTBook</h>
+							<p role="author">Bert</p>
+						</section>
+					</frontmatter>
+					<bodymatter>
+						<section xml:id="d2874e13">
+							<pagebreak value="1" xml:id="page_1"/>
+							<h>Chapter</h>
+							<p>Paragraph</p>
+							<pagebreak value="2" xml:id="page_2"/>
+							<p>Another paragraph</p>
+						</section>
+					</bodymatter>
+				</body>
+			</x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

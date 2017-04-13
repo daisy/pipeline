@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/epub3-validator.xpl">
+
+    <x:scenario label="moby dick">
+        <x:call step="px:epub3-validator">
+            <!--
+                reusing test data from epub3-to-daisy202
+            -->
+            <x:option name="epub" select="resolve-uri('../../../../epub3-to-daisy202/src/test/xprocspec/moby-dick-mo-20120214.epub')"/>
+			<!--
+				FIXME: why does the following not work?
+            <x:option name="epub" select="resolve-uri('../../../../epub3-to-daisy202/src/test/xprocspec/moby-dick-mo-20120214/OPS/package.opf')"/>
+			-->
+        </x:call>
+        <x:context label="the validation status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the validation should succeed" type="compare">
+            <x:document>
+                <d:validation-status result="ok"/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

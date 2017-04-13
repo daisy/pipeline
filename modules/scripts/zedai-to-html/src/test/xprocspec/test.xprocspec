@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/xproc/zedai-to-html.xpl">
+
+	<x:scenario label="alice">
+		<x:call step="px:zedai-to-html">
+			<x:input port="source">
+				<x:document type="file" href="../resources/resources/alice.xml"/>
+			</x:input>
+			<x:option name="output-dir" select="resolve-uri('alice/output-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the output directory">
+			<x:document type="directory" base-uri="temp-dir" href="alice/output-dir/" recursive="true"/>
+		</x:context>
+		<x:expect label="the output directory should contain the XHTML" type="compare" >
+			<x:document>
+				<c:directory name="output-dir">
+					<c:file name="alice.xhtml"/>
+				</c:directory>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

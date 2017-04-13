@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil
+  PUBLIC "-//NISO//DTD dtbsmil 2005-2//EN" "http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd">
+<smil xmlns="http://www.w3.org/2001/SMIL20/">
+   <head>
+      <meta content="CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6-packaged"
+            name="dtb:uid"/>
+      <meta content="0:00:00" name="dtb:totalElapsedTime"/>
+      <meta content="DAISY Pipeline 2" name="dtb:generator"/>
+      <customAttributes>
+         <customTest defaultState="false" id="pagenum" override="visible"/>
+         <customTest defaultState="false" id="note" override="visible"/>
+         <customTest defaultState="false" id="noteref" override="visible"/>
+         <customTest defaultState="false" id="annotation" override="visible"/>
+         <customTest defaultState="false" id="linenum" override="visible"/>
+         <customTest defaultState="false" id="sidebar" override="visible"/>
+         <customTest defaultState="false" id="prodnote" override="visible"/>
+      </customAttributes>
+   </head>
+   <body>
+      <seq id="sforsmil-d1386e16" class="doctitle">
+         <par id="sstd1325e17" class="sent">
+            <text src="minimal.xml#std1325e17"/>
+            <audio src="30sec.mp3" clipBegin="00:00:00" clipEnd="00:00:04.292"/>
+         </par>
+      </seq>
+      <seq id="sforsmil-d1386e24" class="docauthor">
+         <par id="sstd1325e25" class="sent">
+            <text src="minimal.xml#std1325e25"/>
+            <audio src="30sec.mp3" clipBegin="00:00:04.292" clipEnd="00:00:08.585"/>
+         </par>
+      </seq>
+      <par id="spage_1" class="pagenum" customTest="pagenum">
+         <text src="minimal.xml#page_1"/>
+         <audio src="30sec.mp3" clipBegin="00:00:08.585" clipEnd="00:00:12.878"/>
+      </par>
+      <seq id="sforsmil-d1386e37" class="h1">
+         <par id="sstd1325e38" class="sent">
+            <text src="minimal.xml#std1325e38"/>
+            <audio src="30sec.mp3" clipBegin="00:00:12.878" clipEnd="00:00:17.170"/>
+         </par>
+      </seq>
+      <seq id="sforsmil-d1386e42" class="p">
+         <par id="sstd1325e43" class="sent">
+            <text src="minimal.xml#std1325e43"/>
+            <audio src="30sec.mp3" clipBegin="00:00:17.170" clipEnd="00:00:21.463"/>
+         </par>
+      </seq>
+      <par id="spage_2" class="pagenum" customTest="pagenum">
+         <text src="minimal.xml#page_2"/>
+         <audio src="30sec.mp3" clipBegin="00:00:21.463" clipEnd="00:00:25.756"/>
+      </par>
+      <seq id="sforsmil-d1386e50" class="p">
+         <par id="sstd1325e51" class="sent">
+            <text src="minimal.xml#std1325e51"/>
+            <audio src="30sec.mp3" clipBegin="00:00:25.756" clipEnd="00:00:30.048"/>
+         </par>
+      </seq>
+   </body>
+</smil>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+  <head>
+    <meta content="CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6-packaged" name="dtb:uid"/>
+    <meta name="dc:Title" content="Minimal DTBook"/>
+    <meta name="dc:Creator" content="Bert"/>
+  </head>
+  <book>
+    <frontmatter>
+      <doctitle smilref="mo0.smil#sforsmil-d1386e16" id="forsmil-d1386e16"><sent smilref="mo0.smil#sstd1325e17" id="std1325e17"><w>Minimal</w> <w>DTBook</w></sent></doctitle>
+      <docauthor smilref="mo0.smil#sforsmil-d1386e24" id="forsmil-d1386e24"><sent smilref="mo0.smil#sstd1325e25" id="std1325e25"><w>Bert</w></sent></docauthor>
+    </frontmatter>
+    <bodymatter>
+      <level1>
+        <pagenum smilref="mo0.smil#spage_1" id="page_1" page="normal">1</pagenum>
+        <h1 smilref="mo0.smil#sforsmil-d1386e37" id="forsmil-d1386e37"><sent smilref="mo0.smil#sstd1325e38" id="std1325e38"><w>Chapter</w></sent></h1>
+        <p smilref="mo0.smil#sforsmil-d1386e42" id="forsmil-d1386e42"><sent smilref="mo0.smil#sstd1325e43" id="std1325e43"><w>Paragraph</w></sent></p>
+        <pagenum smilref="mo0.smil#spage_2" id="page_2" page="normal">2</pagenum>
+        <p smilref="mo0.smil#sforsmil-d1386e50" id="forsmil-d1386e50"><sent smilref="mo0.smil#sstd1325e51" id="std1325e51"><w>Another</w> <w>paragraph</w></sent></p>
+      </level1>
+    </bodymatter>
+  </book>
+</dtbook>

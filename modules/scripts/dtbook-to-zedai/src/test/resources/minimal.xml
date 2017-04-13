@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+  <head>
+    <meta name="dtb:uid" content="CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6"/>
+    <meta name="dc:Title" content="Minimal DTBook"/>
+    <meta name="dc:Creator" content="Bert"/>
+  </head>
+  <book>
+    <frontmatter>
+      <doctitle>Minimal DTBook</doctitle>
+      <docauthor>Bert</docauthor>
+    </frontmatter>
+    <bodymatter>
+      <level1>
+        <pagenum id="page_1">1</pagenum>
+        <h1>Chapter</h1>
+        <p>Paragraph</p>
+        <pagenum id="page_2">2</pagenum>
+        <p>Another paragraph</p>
+      </level1>
+    </bodymatter>
+  </book>
+</dtbook>

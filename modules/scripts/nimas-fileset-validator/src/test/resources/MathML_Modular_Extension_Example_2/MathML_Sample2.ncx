@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN"
+"http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+
+<ncx version="2005-1" xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/ncx/">
+<head>
+	<smilCustomTest id="pagenum" defaultState="true" override="visible" bookStruct="PAGE_NUMBER" />
+	<smilCustomTest id="sidebar" defaultState="true" override="visible" bookStruct="OPTIONAL_SIDEBAR" />
+	<smilCustomTest id="prodnote" defaultState="true" override="visible" bookStruct="OPTIONAL_PRODUCER_NOTE" />
+	<meta name="dtb:uid" content="ghBOOK1211576859" />
+	<meta name="dtb:depth" content="4" />
+	<meta name="dtb:generator" content="gh DTB Maker 4.0" />
+	<meta name="dtb:maxPageNumber" content="4" />
+	<meta name="dtb:totalPageCount" content="4" />
+</head>
+<docTitle><text>MathML Modular Extension Example 2</text></docTitle>
+<docAuthor><text>N/A</text></docAuthor><navMap>
+	<navPoint id="ghGen3" class="h1" playOrder="2">
+		<navLabel>
+			<text>5-9 Powers of Products and Quotients</text>
+		</navLabel>
+		<content src="MathML_Sample2.smil#ghGen3" />
+		<navPoint id="ghGen71" class="h2" playOrder="3">
+			<navLabel>
+				<text>1 Finding Powers of Products</text>
+			</navLabel>
+			<content src="MathML_Sample2.smil#ghGen71" />
+			<navPoint id="ghGen173" class="h3" playOrder="4">
+				<navLabel>
+					<text>Key Concepts Rule for Raising a Product to a Power</text>
+				</navLabel>
+				<content src="MathML_Sample2.smil#ghGen173" />
+			</navPoint>
+
+			<navPoint id="ghGen231" class="h3" playOrder="5">
+				<navLabel>
+					<text>1 Example Simplifying a Power of a Product</text>
+				</navLabel>
+				<content src="MathML_Sample2.smil#ghGen231" />
+				<navPoint id="ghGen320" class="h4" playOrder="6">
+					<navLabel>
+						<text>Quick Check</text>
+					</navLabel>
+					<content src="MathML_Sample2.smil#ghGen320" />
+				</navPoint>
+
+			</navPoint>
+
+			<navPoint id="ghGen369" class="h3" playOrder="8">
+				<navLabel>
+					<text>2 Example Working With a Negative Sign</text>
+				</navLabel>
+				<content src="MathML_Sample2.smil#ghGen369" />
+				<navPoint id="ghGen491" class="h4" playOrder="9">
+					<navLabel>
+						<text>Quick Check</text>
+					</navLabel>
+					<content src="MathML_Sample2.smil#ghGen491" />
+				</navPoint>
+
+			</navPoint>
+
+		</navPoint>
+
+		<navPoint id="ghGen530" class="h2" playOrder="10">
+			<navLabel>
+				<text>2 Finding Powers of Quotients</text>
+			</navLabel>
+			<content src="MathML_Sample2.smil#ghGen530" />
+			<navPoint id="ghGen570" class="h3" playOrder="11">
+				<navLabel>
+					<text>Key Concepts Raising a Quotient to a Power</text>
+				</navLabel>
+				<content src="MathML_Sample2.smil#ghGen570" />
+			</navPoint>
+
+			<navPoint id="ghGen628" class="h3" playOrder="12">
+				<navLabel>
+					<text>3 Example Real-World Problem Solving</text>
+				</navLabel>
+				<content src="MathML_Sample2.smil#ghGen628" />
+				<navPoint id="ghGen629" class="h4" playOrder="13">
+					<navLabel>
+						<text>Geometry </text>
+					</navLabel>
+					<content src="MathML_Sample2.smil#ghGen629" />
+				</navPoint>
+
+				<navPoint id="ghGen671" class="h4" playOrder="14">
+					<navLabel>
+						<text>Quick Check</text>
+					</navLabel>
+					<content src="MathML_Sample2.smil#ghGen671" />
+				</navPoint>
+
+			</navPoint>
+
+		</navPoint>
+
+		<navPoint id="ghGen706" class="h2" playOrder="16">
+			<navLabel>
+				<text>Exercises</text>
+			</navLabel>
+			<content src="MathML_Sample2.smil#ghGen706" />
+			<navPoint id="ghGen710" class="h3" playOrder="17">
+				<navLabel>
+					<text>Practice and Problem Solving</text>
+				</navLabel>
+				<content src="MathML_Sample2.smil#ghGen710" />
+				<navPoint id="ghGen711" class="h4" playOrder="18">
+					<navLabel>
+						<text>A Practice by Example </text>
+					</navLabel>
+					<content src="MathML_Sample2.smil#ghGen711" />
+				</navPoint>
+
+				<navPoint id="ghGen1061" class="h4" playOrder="19">
+					<navLabel>
+						<text>B Apply Your Skills</text>
+					</navLabel>
+					<content src="MathML_Sample2.smil#ghGen1061" />
+				</navPoint>
+
+				<navPoint id="ghGen1389" class="h4" playOrder="20">
+					<navLabel>
+						<text>C Challenge</text>
+					</navLabel>
+					<content src="MathML_Sample2.smil#ghGen1389" />
+				</navPoint>
+
+			</navPoint>
+
+			<navPoint id="ghGen1493" class="h3" playOrder="22">
+				<navLabel>
+					<text>Test Prep</text>
+				</navLabel>
+				<content src="MathML_Sample2.smil#ghGen1493" />
+				<navPoint id="ghGen1494" class="h4" playOrder="23">
+					<navLabel>
+						<text>Multiple Choice</text>
+					</navLabel>
+					<content src="MathML_Sample2.smil#ghGen1494" />
+				</navPoint>
+
+				<navPoint id="ghGen1637" class="h4" playOrder="24">
+					<navLabel>
+						<text>Short Response</text>
+					</navLabel>
+					<content src="MathML_Sample2.smil#ghGen1637" />
+				</navPoint>
+
+			</navPoint>
+
+			<navPoint id="ghGen1681" class="h3" playOrder="25">
+				<navLabel>
+					<text>Mixed Review</text>
+				</navLabel>
+				<content src="MathML_Sample2.smil#ghGen1681" />
+			</navPoint>
+
+		</navPoint>
+
+	</navPoint>
+
+</navMap>
+
+
+<pageList id="pages">
+	<navLabel>
+		<text></text>
+	</navLabel>
+	<pageTarget id="ghGen2" class="pagenum" value="1" type="normal" playOrder="1">
+		<navLabel>
+			<text>278</text>
+		</navLabel>
+		<content src="MathML_Sample2.smil#ghGen2" />
+	</pageTarget>
+
+	<pageTarget id="ghGen366" class="pagenum" value="2" type="normal" playOrder="7">
+		<navLabel>
+			<text>279</text>
+		</navLabel>
+		<content src="MathML_Sample2.smil#ghGen366" />
+	</pageTarget>
+
+	<pageTarget id="ghGen705" class="pagenum" value="3" type="normal" playOrder="15">
+		<navLabel>
+			<text>280</text>
+		</navLabel>
+		<content src="MathML_Sample2.smil#ghGen705" />
+	</pageTarget>
+
+	<pageTarget id="ghGen1461" class="pagenum" value="4" type="normal" playOrder="21">
+		<navLabel>
+			<text>281</text>
+		</navLabel>
+		<content src="MathML_Sample2.smil#ghGen1461" />
+	</pageTarget>
+
+</pageList>
+
+</ncx>
+  		    
+ 			  	 
+  		 	  
+  	 	 		
+  		 	  
+ 					  
+ 	 			  
+  	 				
+ 					  
