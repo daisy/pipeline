@@ -302,6 +302,14 @@ publish-website : assembly/.dependencies
 clean-website :
 	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)'" clean
 
+.PHONY : dump-maven-cmd
+dump-maven-cmd :
+	echo $(MVN)
+
+.PHONY : dump-gradle-cmd
+dump-gradle-cmd :
+	echo $(GRADLE)
+
 .PHONY : help
 help :
 	echo "make all:"                                                                                                >&2
