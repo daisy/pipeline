@@ -2,6 +2,7 @@ package org.daisy.dotify.impl.system.common;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Provides parameters needed when running a Task system.
@@ -13,6 +14,8 @@ import java.util.Map;
  * @author Joel Håkansson
  */
 public class RunParameters {
+	private static final Logger logger = Logger.getLogger(RunParameters.class.getCanonicalName());
+	private static final String DEPRECATED_PROPERTY_MSG = "Property %s is deprecated, use %s instead.";
 	private static final int ROWGAP_DEFAULT = 0;
 	private static final int ROWS_DEFAULT = 29;
 	private static final int COLS_DEFAULT = 28;
@@ -42,6 +45,9 @@ public class RunParameters {
 		int innerMargin = asInteger(p1.get(INNER_MARGIN), INNER_MARGIN_DEFAULT);
 		int outerMargin = asInteger(p1.get(OUTER_MARGIN), OUTER_MARGIN_DEFAULT);
 
+		if (cols!=null) {
+			logger.warning(String.format(DEPRECATED_PROPERTY_MSG, COLS, PAGE_WIDTH));
+		}
 		if (cols==null && pageWidth==null) {
 			//use default
 			cols = COLS_DEFAULT;
@@ -63,6 +69,9 @@ public class RunParameters {
 	static void verifyAndSetHeight(Map<String, Object> p1) {
 		Integer rows = asInteger(p1.get(ROWS), null);
 		Integer pageHeight = asInteger(p1.get(PAGE_HEIGHT), null);
+		if (rows!=null) {
+			logger.warning(String.format(DEPRECATED_PROPERTY_MSG, ROWS, PAGE_HEIGHT));
+		}
 		if (rows==null && pageHeight==null) {
 			//use default
 			rows = ROWS_DEFAULT;
@@ -81,6 +90,9 @@ public class RunParameters {
 	static void verifyAndSetRowSpacing(Map<String, Object> p1) {
 		Integer rowgap = asInteger(p1.get(ROWGAP), null);
 		Float rowSpacing = asFloat(p1.get(ROW_SPACING), null);
+		if (rowgap!=null) {
+			logger.warning(String.format(DEPRECATED_PROPERTY_MSG, ROWGAP, ROW_SPACING));
+		}
 		if (rowgap==null && rowSpacing==null) {
 			//use default
 			rowgap = ROWGAP_DEFAULT;
