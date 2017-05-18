@@ -73,9 +73,11 @@ buildscript {
     dependencies { classpath group: "org.dm.gradle", name: "gradle-bundle-plugin", version: "0.6.4" }
 }
 
-task updateBndVersion() << {
-	String contents = file('bnd.bnd').getText('UTF-8')
-	file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
+task updateBndVersion() {
+	doLast() {
+		String contents = file('bnd.bnd').getText('UTF-8')
+		file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
+	}
 }
 
 bundle {
@@ -99,26 +101,28 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
-task xsltdoc() << {
-	ant {
-		xslt (
-			basedir: "src",
-			destdir: (new File(docsDir, "javadoc/resources")),
-			style: "build-resources/build-xslt-doc.xsl",
-			includes: "**/*.xsl",
-			excludes:"lib, build-resources, build",
-			filenameparameter: "filename"
-		) {
-			mapper (
-				type: "package",
-				from: "*.xsl",
-				to: "*.html"
-			)
-			xmlcatalog {
-				dtd (
-					publicId: "-//W3C//DTD XHTML 1.0 Strict//EN",
-					location: "build-resources/xhtml10/xhtml1-strict.dtd"
+task xsltdoc() {
+	doLast() {
+		ant {
+			xslt (
+				basedir: "src",
+				destdir: (new File(docsDir, "javadoc/resources")),
+				style: "build-resources/build-xslt-doc.xsl",
+				includes: "**/*.xsl",
+				excludes:"lib, build-resources, build",
+				filenameparameter: "filename"
+			) {
+				mapper (
+					type: "package",
+					from: "*.xsl",
+					to: "*.html"
 				)
+				xmlcatalog {
+					dtd (
+						publicId: "-//W3C//DTD XHTML 1.0 Strict//EN",
+						location: "build-resources/xhtml10/xhtml1-strict.dtd"
+					)
+				}
 			}
 		}
 	}
