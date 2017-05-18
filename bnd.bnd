@@ -2,7 +2,8 @@
 	javax.xml.stream
 Import-Package:  \
 	org.daisy.dotify.api.identity; provide:=true,\
-	org.daisy.dotify.api.tasks; provide:=true, *
+	org.daisy.dotify.api.tasks; provide:=true,\
+	org.daisy.dotify.api.validity; provide:=true, *
 Export-Package:  \
 	org.daisy.dotify.tasks.tools
 Private-Package: \
@@ -11,7 +12,8 @@ Private-Package: \
 	org.daisy.dotify.impl.input.epub,\
 	org.daisy.dotify.impl.input.text,\
 	org.daisy.dotify.impl.input.xml,\
-	org.daisy.dotify.impl.system.common
+	org.daisy.dotify.impl.system.common,\
+	org.daisy.dotify.impl.validity
 Include-Resource: / = src/
 -sources: false
 Service-Component: *
