@@ -45,4 +45,14 @@ public class Preparator extends SimplePreparator {
 		log.info("Create @" + area + " with:\n{}", rva);
 		return rva;
 	}
+	
+	public RuleTextTransform prepareRuleTextTransform(String name, List<Declaration> declarations) {
+		if ((declarations == null || declarations.isEmpty())) {
+			log.debug("Empty RuleTextTransform was omited");
+			return null; }
+		RuleTextTransform rtt = new RuleTextTransform(name);
+		rtt.replaceAll(declarations);
+		log.info("Create @text-transform with:\n{}", rtt);
+		return rtt;
+	}
 }

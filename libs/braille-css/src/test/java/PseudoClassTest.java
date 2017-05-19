@@ -47,7 +47,7 @@ public class PseudoClassTest {
 	private static final RuleFactory rf = new BrailleCSSRuleFactory();
 	
 	public PseudoClassTest() {
-		CSSFactory.registerSupportedCSS(SupportedBrailleCSS.getInstance());
+		CSSFactory.registerSupportedCSS(new SupportedBrailleCSS());
 		CSSFactory.registerDeclarationTransformer(new BrailleCSSDeclarationTransformer());
 	}
 	

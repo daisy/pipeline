@@ -10,7 +10,6 @@ import cz.vutbr.web.css.CombinedSelector.Specificity;
 import cz.vutbr.web.css.CombinedSelector.Specificity.Level;
 import cz.vutbr.web.css.MatchCondition;
 import cz.vutbr.web.css.Selector;
-import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.csskit.OutputUtil;
 import cz.vutbr.web.csskit.CombinedSelectorImpl.SpecificityImpl;
 

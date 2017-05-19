@@ -15,7 +15,10 @@ import cz.vutbr.web.css.MediaQuery;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
+import cz.vutbr.web.css.RuleMargin;
+import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
+import cz.vutbr.web.csskit.RuleArrayList;
 }
 
 @members {
@@ -40,9 +43,12 @@ import cz.vutbr.web.css.Selector;
     }
 }
 
+// @Override
+// Added volume and text_transform_def
 unknown_atrule returns [RuleBlock<?> stmnt]
 @init { $stmnt = null; }
     : (v=volume) { $stmnt = v; }
+    | (tt=text_transform_def) { $stmnt = tt; }
     | INVALID_ATSTATEMENT { gCSSTreeParser.debug("Skipping invalid at statement"); }
     ;
 
@@ -89,6 +95,14 @@ volume_area returns [RuleVolumeArea area]
       }
     ;
 
+text_transform_def returns [RuleTextTransform def]
+    : ^( TEXT_TRANSFORM n=IDENT decl=declarations ) {
+          $def = preparator.prepareRuleTextTransform(n.getText(), decl);
+      }
+    ;
+
+// @Override
+// Added :not() and :has()
 pseudo returns [Selector.PseudoPage pseudoPage]
     : ^(PSEUDOCLASS m=MINUS? i=IDENT) {
           String name = i.getText();
@@ -166,6 +180,12 @@ pseudo returns [Selector.PseudoPage pseudoPage]
       }
     ;
 
+/*
+ * Selector list
+ * (https://drafts.csswg.org/selectors-4/#selector-list), used in
+ * negation pseudo-class
+ * (https://drafts.csswg.org/selectors-4/#negation-pseudo)
+ */
 selector_list returns [List<Selector> list]
 @init {
     $list = new ArrayList<Selector>();
@@ -180,6 +200,12 @@ relative_selector_list returns [List<CombinedSelector> list]
     : (s=relative_selector { list.add(s); })+
     ;
 
+/*
+ * Relative selector
+ * (https://drafts.csswg.org/selectors-4/#relative-selector), used in
+ * relational pseudo-class
+ * (https://drafts.csswg.org/selectors-4/#relational)
+ */
 relative_selector returns [CombinedSelector combinedSelector]
 @init {
     $combinedSelector = (CombinedSelector)gCSSTreeParser.rf.createCombinedSelector().unlock();
@@ -187,8 +213,71 @@ relative_selector returns [CombinedSelector combinedSelector]
     : ASTERISK (c=combinator s=selector { combinedSelector.add(s.setCombinator(c)); })+
     ;
 
+/*
+ * Simple list of declarations.
+ */
 simple_inlinestyle returns [List<Declaration> style]
     : ^(INLINESTYLE decl=declarations) {
           $style = decl;
+      }
+    ;
+
+/*
+ * Format allowed in style attributes that are the result of
+ * "inlining" a style sheet attached to a document. Inlining is an
+ * operation intended to be done by CSS processors internally, and as
+ * such the resulting style attributes are not valid in an input
+ * document. See the "inlinestyle" rule for what is allowed in style
+ * attributes of an input document.
+ */
+inlinedstyle returns [RuleList rules]
+@init {
+    $rules = gCSSTreeParser.rules = new RuleArrayList();
+}
+    : ^(INLINESTYLE decl=declarations) {
+          RuleBlock<?> b = preparator.prepareInlineRuleSet(decl, null);
+          $rules.add(b);
+      }
+    | ^(INLINESTYLE (ib=inlineblock {
+          // TODO: check that there is at most one block of simple
+          // declarations, that all page at-rules have a different
+          // pseudo-class, etc.
+          $rules.add(ib);
+      })+ )
+    ;
+
+inlineblock returns [RuleBlock<?> b]
+    : irs=inlineset { $b = irs; }
+    | tt=text_transform_def { $b = tt; }
+
+// TODO: allowed as well but skip for now:
+//  | p=page { $b = p; }
+
+// TODO: need a slightly different format that allows @page inside @begin and @end:
+//  | v=volume { $b = v; }
+    ;
+
+// TODO: move to CSSTreeParser.g
+page returns [RuleBlock<?> stmnt]
+@init {
+    List<RuleSet> rules = null;
+    List<RuleMargin> margins = null;
+    String pseudo = null;
+}
+    : ^(PAGE
+          (^(PSEUDOCLASS i=IDENT) {
+              pseudo = i.getText();
+          })?
+          decl=declarations
+          ^(SET
+              (m=margin {
+                  if (m != null) {
+                      if (margins == null) margins = new ArrayList<RuleMargin>();
+                      margins.add(m);
+                  }
+              })*
+          )
+      ) {
+          $stmnt = preparator.prepareRulePage(decl, margins, null, pseudo);
       }
     ;

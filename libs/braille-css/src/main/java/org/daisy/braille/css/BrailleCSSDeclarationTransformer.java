@@ -2,15 +2,20 @@ package org.daisy.braille.css;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.Set;
 
 import org.daisy.braille.css.BrailleCSSProperty.AbsoluteMargin;
-import org.daisy.braille.css.BrailleCSSProperty.Border;
+import org.daisy.braille.css.BrailleCSSProperty.BorderAlign;
+import org.daisy.braille.css.BrailleCSSProperty.BorderPattern;
+import org.daisy.braille.css.BrailleCSSProperty.BorderStyle;
+import org.daisy.braille.css.BrailleCSSProperty.BorderWidth;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.Display;
 import org.daisy.braille.css.BrailleCSSProperty.Flow;
@@ -36,7 +41,6 @@ import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.CSSProperty.GenericCSSPropertyProxy;
 import cz.vutbr.web.css.Declaration;
-import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
@@ -46,8 +50,13 @@ import cz.vutbr.web.css.TermPair;
 import cz.vutbr.web.css.TermString;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.Repeater;
+import cz.vutbr.web.domassign.Variator;
 
 public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
+	
+	public BrailleCSSDeclarationTransformer() {
+		super();
+	}
 	
 	protected Map<String, Method> parsingMethods() {
 		Map<String, Method> map = new HashMap<String, Method>(css.getTotalProperties(), 1.0f);
@@ -129,37 +138,172 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	 ****************************************************************/
 	
 	@SuppressWarnings("unused")
+	private boolean processBorder(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		Variator border = new BorderVariator();
+		border.assignTermsFromDeclaration(d);
+		border.assignDefaults(properties, values);
+		return border.vary(properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderAlign(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		Repeater r = new BorderAlignRepeater();
+		return r.repeatOverFourTermDeclaration(d, properties, values);
+	}
+	
+	@SuppressWarnings("unused")
 	private boolean processBorderBottom(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrDotPattern(Border.class, Border.dot_pattern,
+		Variator borderSide = new BorderSideVariator("bottom");
+		borderSide.assignTermsFromDeclaration(d);
+		borderSide.assignDefaults(properties, values);
+		return borderSide.vary(properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderBottomAlign(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdent(BorderAlign.class, d, properties);
+	}
+
+	@SuppressWarnings("unused")
+	private boolean processBorderBottomPattern(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrDotPattern(BorderPattern.class, BorderPattern.dot_pattern,
+				d, properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderBottomStyle(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdent(BorderStyle.class, d, properties);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderBottomWidth(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrInteger(BorderWidth.class, BorderWidth.integer, true,
 				d, properties, values);
 	}
 	
 	@SuppressWarnings("unused")
 	private boolean processBorderLeft(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrDotPattern(Border.class, Border.dot_pattern,
+		Variator borderSide = new BorderSideVariator("left");
+		borderSide.assignTermsFromDeclaration(d);
+		borderSide.assignDefaults(properties, values);
+		return borderSide.vary(properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderLeftAlign(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdent(BorderAlign.class, d, properties);
+	}
+
+	@SuppressWarnings("unused")
+	private boolean processBorderLeftPattern(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrDotPattern(BorderPattern.class, BorderPattern.dot_pattern,
+				d, properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderLeftStyle(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdent(BorderStyle.class, d, properties);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderLeftWidth(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrInteger(BorderWidth.class, BorderWidth.integer, true,
 				d, properties, values);
 	}
 	
 	@SuppressWarnings("unused")
 	private boolean processBorderRight(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrDotPattern(Border.class, Border.dot_pattern,
+		Variator borderSide = new BorderSideVariator("right");
+		borderSide.assignTermsFromDeclaration(d);
+		borderSide.assignDefaults(properties, values);
+		return borderSide.vary(properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderRightAlign(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdent(BorderAlign.class, d, properties);
+	}
+
+	@SuppressWarnings("unused")
+	private boolean processBorderRightPattern(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrDotPattern(BorderPattern.class, BorderPattern.dot_pattern,
 				d, properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderRightStyle(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdent(BorderStyle.class, d, properties);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderRightWidth(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrInteger(BorderWidth.class, BorderWidth.integer, true,
+				d, properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderStyle(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		Repeater r = new BorderStyleRepeater();
+		return r.repeatOverFourTermDeclaration(d, properties, values);
 	}
 	
 	@SuppressWarnings("unused")
 	private boolean processBorderTop(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrDotPattern(Border.class, Border.dot_pattern,
+		Variator borderSide = new BorderSideVariator("top");
+		borderSide.assignTermsFromDeclaration(d);
+		borderSide.assignDefaults(properties, values);
+		return borderSide.vary(properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderTopAlign(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdent(BorderAlign.class, d, properties);
+	}
+
+	@SuppressWarnings("unused")
+	private boolean processBorderTopPattern(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrDotPattern(BorderPattern.class, BorderPattern.dot_pattern,
 				d, properties, values);
 	}
 	
 	@SuppressWarnings("unused")
-	private boolean processBorder(Declaration d,
+	private boolean processBorderTopStyle(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		Repeater r = new BorderRepeater();
+		return genericOneIdent(BorderStyle.class, d, properties);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderTopWidth(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrInteger(BorderWidth.class, BorderWidth.integer, true,
+				d, properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processBorderWidth(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		Repeater r = new BorderWidthRepeater();
 		return r.repeatOverFourTermDeclaration(d, properties, values);
 	}
 	
@@ -256,23 +400,27 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	}
 	
 	@SuppressWarnings("unused")
+	private boolean processListStyle(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return processListStyleType(d, properties, values);
+	}
+	
 	private boolean processListStyleType(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		String propertyName = "list-style-type";
 		if (d.size() != 1)
 			return false;
 		Term<?> term = d.get(0);
-		if (genericTermIdent(ListStyleType.class, term, ALLOW_INH, d.getProperty(), properties))
+		if (genericTermIdent(ListStyleType.class, term, ALLOW_INH, propertyName, properties))
 			return true;
 		else
 			try {
 				if (TermString.class.isInstance(term)) {
-					String propertyName = d.getProperty();
 					properties.put(propertyName, ListStyleType.braille_string);
 					values.put(propertyName, term);
 					return true; }
 				else if (TermFunction.class.isInstance(term)
 				         && "symbols".equals(((TermFunction)term).getFunctionName().toLowerCase())) {
-					String propertyName = d.getProperty();
 					properties.put(propertyName, ListStyleType.symbols_fn);
 					values.put(propertyName, term);
 					return true; }}
@@ -584,40 +732,6 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	 * REPEATER CLASSES
 	 ****************************************************************/
 	
-	private final class BorderRepeater extends Repeater {
-			
-		public BorderRepeater() {
-			super(4);
-			type = Border.class;
-			names.add("border-top");
-			names.add("border-right");
-			names.add("border-bottom");
-			names.add("border-left");
-		}
-		
-		protected boolean operation(int i,
-		                            Map<String,CSSProperty> properties,
-		                            Map<String,Term<?>> values) {
-			
-			Term<?> term = terms.get(i);
-			
-			if (genericTermIdent(type, term, AVOID_INH, names.get(i), properties))
-				return true;
-			
-			try {
-				if (TermIdent.class.isInstance(term)) {
-					String propertyName = names.get(i);
-					TermDotPattern value = TermDotPattern.createDotPattern((TermIdent)term);
-					properties.put(propertyName, Border.dot_pattern);
-					values.put(propertyName, value);
-					return true;
-				}
-			} catch (Exception e) {
-			}
-			return false;
-		}
-	}
-	
 	private final class MarginRepeater extends Repeater {
 
 		public MarginRepeater() {
@@ -656,5 +770,214 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 				|| genericTerm(TermInteger.class, terms.get(i), names.get(i),
 				               Padding.integer, false, properties, values);
 		}
+	}
+	
+	private final class BorderStyleRepeater extends Repeater {
+		
+		public BorderStyleRepeater() {
+			super(4);
+			this.type = BorderStyle.class;
+			names.add("border-top-style");
+			names.add("border-right-style");
+			names.add("border-bottom-style");
+			names.add("border-left-style");
+		}
+		
+		@Override
+		protected boolean operation(int i, Map<String, CSSProperty> properties,
+		                            Map<String, Term<?>> values) {
+			return genericTermIdent(BorderStyle.class, terms.get(i), ALLOW_INH, names.get(i),
+			                        properties);
+		}
+	}
+	
+	private final class BorderAlignRepeater extends Repeater {
+		
+		public BorderAlignRepeater() {
+			super(4);
+			this.type = BorderAlign.class;
+			names.add("border-top-align");
+			names.add("border-right-align");
+			names.add("border-bottom-align");
+			names.add("border-left-align");
+		}
+		
+		@Override
+		protected boolean operation(int i, Map<String, CSSProperty> properties,
+		                            Map<String, Term<?>> values) {
+			return genericTermIdent(BorderAlign.class, terms.get(i), ALLOW_INH, names.get(i),
+			                        properties);
+		}
+	}
+	
+	private final class BorderWidthRepeater extends Repeater {
+		
+		public BorderWidthRepeater() {
+			super(4);
+			this.type = BorderWidth.class;
+			names.add("border-top-width");
+			names.add("border-right-width");
+			names.add("border-bottom-width");
+			names.add("border-left-width");
+		}
+
+		@Override
+		protected boolean operation(int i, Map<String, CSSProperty> properties,
+		                            Map<String, Term<?>> values) {
+			return genericTermIdent(type, terms.get(i), ALLOW_INH, names.get(i), properties)
+				|| genericTerm(TermInteger.class, terms.get(i), names.get(i), BorderWidth.integer,
+				               false, properties, values);
+		}
+	}
+	
+	
+	/****************************************************************
+	 * VARIATOR CLASSES
+	 ****************************************************************/
+	
+	private final class BorderVariator extends Variator {
+		
+		public static final int WIDTH = 0;
+		public static final int STYLE = 1;
+		public static final int ALIGN = 2;
+		
+		private List<Repeater> repeaters;
+		
+		public BorderVariator() {
+			super(3);
+			types.add(BorderWidth.class);
+			types.add(BorderStyle.class);
+			types.add(BorderAlign.class);
+			repeaters = new ArrayList<Repeater>(variants);
+			repeaters.add(new BorderWidthRepeater());
+			repeaters.add(new BorderStyleRepeater());
+			repeaters.add(new BorderAlignRepeater());
+		}
+		
+		@Override
+		protected boolean variant(int variant, IntegerRef iteration,
+		                          Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+			int i = iteration.get();
+			Term<?> term = terms.get(i);
+			Repeater r;
+			switch (variant) {
+			case WIDTH:
+			case STYLE:
+			case ALIGN:
+				r = repeaters.get(variant);
+				r.assignTerms(term, term, term, term);
+				return r.repeat(properties, values);
+			default:
+				return false;
+			}
+		}
+		
+		@Override
+		protected boolean checkInherit(int variant, Term<?> term, Map<String, CSSProperty> properties) {
+			if (!(term instanceof TermIdent)
+			    || !CSSProperty.INHERIT_KEYWORD.equalsIgnoreCase(((TermIdent) term).getValue())) {
+				return false;
+			}
+			if (variant == ALL_VARIANTS) {
+				for (int i = 0; i < variants; i++) {
+					Repeater r = repeaters.get(i);
+					r.assignTerms(term, term, term, term);
+					r.repeat(properties, null);
+				}
+				return true;
+			}
+			Repeater r = repeaters.get(variant);
+			r.assignTerms(term, term, term, term);
+			r.repeat(properties, null);
+			return true;
+		}
+		
+		@Override
+		public void assignDefaults(Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+			for (Repeater r : repeaters)
+				r.assignDefaults(properties, values);
+		}
+	}
+	
+	private final class BorderSideVariator extends Variator {
+		
+		public static final int ALIGN = 0;
+		public static final int STYLE = 1;
+		public static final int WIDTH = 2;
+		
+		private final String borderPatternName;
+		
+		public BorderSideVariator(String side) {
+			super(3);
+			names.add("border-" + side + "-align");
+			types.add(BorderAlign.class);
+			names.add("border-" + side + "-style");
+			types.add(BorderStyle.class);
+			names.add("border-" + side + "-width");
+			types.add(BorderWidth.class);
+			borderPatternName = "border-" + side + "-pattern";
+		}
+		
+		@Override
+		public void assignDefaults(Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+			super.assignDefaults(properties, values);
+			assignDefault(borderPatternName, properties, values);
+		}
+		
+		@Override
+		protected boolean variant(int variant, IntegerRef iteration,
+		                          Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+			int i = iteration.get();
+			switch (variant) {
+			case WIDTH:
+				return genericTermIdent(types.get(variant), terms.get(i), AVOID_INH, names.get(variant),
+				                        properties)
+					|| genericTerm(TermInteger.class, terms.get(i), names.get(variant), BorderWidth.integer,
+					               false, properties, values);
+			case ALIGN:
+			case STYLE:
+				return genericTermIdent(types.get(variant), terms.get(i), AVOID_INH, names.get(variant),
+				                        properties);
+			default:
+				return false;
+			}
+		}
+		
+		private boolean patternVariant(Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+			if (terms.size() != 1)
+				return false;
+			Term<?> t = terms.get(0);
+			if (genericTermIdent(BorderPattern.class, t, ALLOW_INH, borderPatternName, properties))
+				return true;
+			try {
+				if (TermIdent.class.isInstance(t)) {
+					TermDotPattern value = TermDotPattern.createDotPattern((TermIdent)t);
+					properties.put(borderPatternName, BorderPattern.dot_pattern);
+					values.put(borderPatternName, value);
+					return true;
+				}
+			} catch (Exception e) {
+			}
+			return false;
+		}
+		
+		@Override
+		public boolean vary(Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+			boolean rv = false;
+			if (super.vary(properties, values))
+				rv = true;
+			if (patternVariant(properties, values))
+				rv = true;
+			return rv;
+		}
+	}
+	
+	private final void assignDefault(String propertyName, Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		CSSProperty dp = css.getDefaultProperty(propertyName);
+		if (dp != null)
+			properties.put(propertyName, dp);
+		Term<?> dv = css.getDefaultValue(propertyName);
+		if (dv != null)
+			values.put(propertyName, dv);
 	}
 }

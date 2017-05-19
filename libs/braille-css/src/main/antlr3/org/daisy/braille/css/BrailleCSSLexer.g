@@ -39,3 +39,5 @@ MARGIN_AREA
 NOT : 'not(' ;
 
 HAS : 'has(' ;
+
+TEXT_TRANSFORM : '@text-transform' ;

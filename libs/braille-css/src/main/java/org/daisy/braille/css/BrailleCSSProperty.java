@@ -9,7 +9,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	 ************************************************************************/
 	
 	public enum AbsoluteMargin implements BrailleCSSProperty {
-		integer(""), INHERIT("inherit");
+		integer(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -25,18 +25,23 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
 		}
 	}
 	
-	public enum Border implements BrailleCSSProperty {
-		dot_pattern(""), component_values(""), NONE("none"), INHERIT("inherit");
+	public enum BorderAlign implements BrailleCSSProperty {
+		component_values(""), INNER("inner"), CENTER("center"), OUTER("outer"),
+		INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
-		private Border(String text) {
+		private BorderAlign(String text) {
 			this.text = text;
 		}
 
@@ -48,14 +53,101 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+	
+	public enum BorderPattern implements BrailleCSSProperty {
+		dot_pattern(""), NONE("none"), INHERIT("inherit"), INITIAL("initial");
+
+		private String text;
+
+		private BorderPattern(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+	
+	public enum BorderStyle implements BrailleCSSProperty {
+		component_values(""), NONE("none"), SOLID("solid"), INHERIT("inherit"),
+		INITIAL("initial");
+
+		private String text;
+
+		private BorderStyle(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
 		}
 	}
 
+	public enum BorderWidth implements BrailleCSSProperty {
+		integer(""), component_values(""), THIN("thin"), MEDIUM("medium"),
+		THICK("thick"), INHERIT("inherit"), INITIAL("initial");
+
+		private String text;
+
+		private BorderWidth(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+	
 	public enum Content implements BrailleCSSProperty {
-		content_list(""), NONE("none"), INHERIT("inherit");
+		content_list(""), NONE("none"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -70,6 +162,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 		public boolean equalsInherit() {
 			return this == INHERIT;
 		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
 	
 		@Override
 		public String toString() {
@@ -78,9 +174,8 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum Display implements BrailleCSSProperty {
-		INLINE("inline"), BLOCK("block"), LIST_ITEM("list-item"),
-		NONE("none"), TABLE("table"), INHERIT("inherit"),
-		custom("");
+		INLINE("inline"), BLOCK("block"), LIST_ITEM("list-item"), NONE("none"),
+		TABLE("table"), custom(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -96,6 +191,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -103,7 +202,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum Flow implements CSSProperty {
-		identifier(""), NORMAL("normal"), INHERIT("inherit");
+		identifier(""), NORMAL("normal"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -119,6 +218,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -126,7 +229,8 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum Hyphens implements BrailleCSSProperty {
-		NONE("none"), AUTO("auto"), MANUAL("manual"), INHERIT("inherit");
+		NONE("none"), AUTO("auto"), MANUAL("manual"), INHERIT("inherit"),
+		INITIAL("initial");
 
 		private String text;
 
@@ -142,6 +246,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -149,7 +257,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum LetterSpacing implements BrailleCSSProperty {
-		length(""), INHERIT("inherit");
+		length(""), INHERIT("inherit"), INITIAL("initial");
 		
 		private String text;
 		
@@ -164,6 +272,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 		public boolean equalsInherit() {
 			return this == INHERIT;
 		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
 		
 		@Override
 		public String toString() {
@@ -172,7 +284,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum LineHeight implements BrailleCSSProperty {
-		integer(""), INHERIT("inherit");
+		integer(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -188,6 +300,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -197,7 +313,8 @@ public interface BrailleCSSProperty extends CSSProperty {
 	public enum ListStyleType implements BrailleCSSProperty {
 		braille_string(""), symbols_fn(""),
 		DECIMAL("decimal"), LOWER_ALPHA("lower-alpha"), LOWER_ROMAN("lower-roman"),
-		NONE("none"), UPPER_ALPHA("upper-alpha"), UPPER_ROMAN("upper-roman"), INHERIT("inherit");
+		NONE("none"), UPPER_ALPHA("upper-alpha"), UPPER_ROMAN("upper-roman"),
+		INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -213,6 +330,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -220,7 +341,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum Margin implements BrailleCSSProperty {
-		integer(""), component_values(""), INHERIT("inherit");
+		integer(""), component_values(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -236,6 +357,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -243,7 +368,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum MinLength implements BrailleCSSProperty {
-		integer(""), AUTO("auto"), INHERIT("inherit");
+		integer(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -259,6 +384,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -266,7 +395,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum MaxLength implements BrailleCSSProperty {
-		integer(""), AUTO("auto"), INHERIT("inherit");
+		integer(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -282,6 +411,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -289,7 +422,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum Padding implements BrailleCSSProperty {
-		integer(""), component_values(""), INHERIT("inherit");
+		integer(""), component_values(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -305,6 +438,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -312,7 +449,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum Page implements CSSProperty {
-		identifier(""), AUTO("auto"), INHERIT("inherit");
+		identifier(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -328,6 +465,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -335,7 +476,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum RenderTableBy implements BrailleCSSProperty {
-		axes(""), AUTO("auto"), INHERIT("inherit");
+		axes(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
 		
 		private String text;
 
@@ -351,6 +492,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -358,7 +503,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum StringSet implements BrailleCSSProperty {
-		list_values(""), NONE("none"), INHERIT("inherit");
+		list_values(""), NONE("none"), INHERIT("inherit"), INITIAL("initial");
 		
 		private String text;
 
@@ -374,6 +519,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -381,7 +530,8 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum TableHeaderPolicy implements BrailleCSSProperty {
-		ONCE("once"), ALWAYS("always"), FRONT("front"), INHERIT("inherit");
+		ONCE("once"), ALWAYS("always"), FRONT("front"), INHERIT("inherit"),
+		INITIAL("initial");
 
 		private String text;
 
@@ -398,6 +548,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -405,7 +559,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 
 	public enum TextIndent implements BrailleCSSProperty {
-		integer(""), INHERIT("inherit");
+		integer(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -421,6 +575,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -428,7 +586,8 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum TextTransform implements BrailleCSSProperty {
-		list_values(""), AUTO("auto"), NONE("none"), INHERIT("inherit");
+		list_values(""), AUTO("auto"), NONE("none"), INHERIT("inherit"),
+		INITIAL("initial");
 		
 		private String text;
 		
@@ -443,6 +602,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 		public boolean equalsInherit() {
 			return this == INHERIT;
 		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
 		
 		@Override
 		public String toString() {
@@ -451,7 +614,8 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum VolumeBreak implements BrailleCSSProperty {
-		ALWAYS("always"), AUTO("auto"), AVOID("avoid"), PREFER("prefer"), INHERIT("inherit");
+		ALWAYS("always"), AUTO("auto"), AVOID("avoid"), PREFER("prefer"),
+		INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
@@ -467,6 +631,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -474,7 +642,8 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum VolumeBreakInside implements BrailleCSSProperty {
-		AUTO("auto"), AVOID("avoid"), INHERIT("inherit"), obfl_keep("");
+		AUTO("auto"), AVOID("avoid"), obfl_keep(""), INHERIT("inherit"),
+		INITIAL("initial");
 
 		private String text;
 
@@ -490,6 +659,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return this == INHERIT;
 		}
 
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
 		@Override
 		public String toString() {
 			return text;
@@ -497,7 +670,8 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum WhiteSpace implements BrailleCSSProperty {
-		NORMAL("normal"), PRE_WRAP("pre-wrap"), PRE_LINE("pre-line"), INHERIT("inherit");
+		NORMAL("normal"), PRE_WRAP("pre-wrap"), PRE_LINE("pre-line"),
+		INHERIT("inherit"), INITIAL("initial");
 		
 		private String text;
 		
@@ -512,6 +686,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 		public boolean equalsInherit() {
 			return this == INHERIT;
 		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
 		
 		@Override
 		public String toString() {
@@ -520,7 +698,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum WordSpacing implements BrailleCSSProperty {
-		length(""), INHERIT("inherit");
+		length(""), INHERIT("inherit"), INITIAL("initial");
 		
 		private String text;
 		
@@ -534,6 +712,10 @@ public interface BrailleCSSProperty extends CSSProperty {
 		
 		public boolean equalsInherit() {
 			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
 		}
 		
 		@Override
