@@ -2,13 +2,16 @@ package org.daisy.maven.xproc.xprocspec;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableMap;
 import static com.google.common.io.Files.asByteSink;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -17,11 +20,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
+import java.util.Set;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.xpath.XPath;
@@ -74,6 +79,34 @@ public class XProcSpecRunner {
 		}
 	}
 	
+	private static final Map<String,String> XPROCSPEC_NS = new HashMap<String,String>(); {
+		XPROCSPEC_NS.put("x", "http://www.daisy.org/ns/xprocspec");
+	}
+	
+	public boolean hasFocus(File testDir) {
+		return hasFocus(listXProcSpecFilesRecursively(testDir));
+	}
+	
+	public boolean hasFocus(Collection<File> tests) {
+		for (File test : tests)
+			if (test.exists())
+				if (fileHasFocus(test))
+					return true;
+		return false;
+	}
+	
+	private boolean fileHasFocus(File test) {
+		return (Boolean)evaluateXPath(test,
+		                              "exists(//x:scenario[@focus and not(ancestor-or-self::*[@pending])]) or " +
+		                              "exists(/x:description[not(@pending) and @focus])",
+		                              XPROCSPEC_NS,
+		                              Boolean.class);
+	}
+	
+	private boolean fileIsPending(File test) {
+		return (Boolean)evaluateXPath(test, "exists(/x:description[@pending])", XPROCSPEC_NS, Boolean.class);
+	}
+	
 	public boolean run(Map<String,File> tests,
 	                   File reportsDir,
 	                   File surefireReportsDir,
@@ -84,6 +117,27 @@ public class XProcSpecRunner {
 		if (engine == null)
 			activate();
 		engine.setCatalog(catalog);
+		
+		// register Java implementation of px:message
+		// FIXME: make a generic step that can be used by all XProc engines
+		if (engine.getClass().getName().equals("org.daisy.maven.xproc.calabash.Calabash")) {
+			try {
+				engine.getClass().getMethod("setDefaultConfiguration", Reader.class).invoke(engine, new StringReader(
+				    "<xproc-config xmlns=\"http://xmlcalabash.com/ns/configuration\" xmlns:px=\"http://www.daisy.org/ns/xprocspec\">" +
+				    "  <implementation type=\"px:message\" class-name=\"org.daisy.maven.xproc.xprocspec.logging.calabash.impl.MessageStep\"/>" +
+				    "</xproc-config>")); }
+			catch (NoSuchMethodException e) {
+				System.out.println("WARNING: Please use a version of xproc-engine-calabash >= 1.0.1-SNAPSHOT");
+			} catch (IllegalAccessException e) {
+				throw new RuntimeException(e);
+			} catch (InvocationTargetException e) {
+				throw new RuntimeException(e.getTargetException());
+			}
+		} else if (engine.getClass().getName().equals("org.daisy.maven.xproc.pipeline.DaisyPipeline2")) {
+			
+			// assumes we are running inside OSGi
+			// org.daisy.maven.xproc.xprocspec.logging.pipeline.impl.MessageStepProvider registered through declarative services
+		}
 		
 		URI xprocspec = asURI(XProcSpecRunner.class.getResource("/content/xml/xproc/xprocspec.xpl"));
 		URI xprocspecSummary = asURI(XProcSpecRunner.class.getResource("/xprocspec-extra/xprocspec-summary.xpl"));
@@ -97,19 +151,36 @@ public class XProcSpecRunner {
 		int totalErrors = 0;
 		int totalSkipped = 0;
 		
+		Set<String> focusTests = new HashSet<String>(); {
+			for (String testName : tests.keySet()) {
+				File test = tests.get(testName);
+				if (test.exists())
+					if (fileHasFocus(test))
+						focusTests.add(testName); }}
+		Set<String> skipTests = new HashSet<String>(); {
+			for (String testName : tests.keySet()) {
+				File test = tests.get(testName);
+				if ((!focusTests.isEmpty() && !focusTests.contains(testName))
+				    || (test.exists() && fileIsPending(test)))
+					skipTests.add(testName); }}
+		
 		long startTime = System.nanoTime();
 		
 		reporter.init();
 		
 		for (String testName : tests.keySet()) {
+			if (skipTests.contains(testName)) {
+				reporter.skipping(testName);
+				continue; }
 			File test = tests.get(testName);
 			File report = new File(reportsDir, testName + ".html");
 			File surefireReport = new File(surefireReportsDir, "TEST-" + testName + ".xml");
 			Map<String,List<String>> input = ImmutableMap.of("source", Arrays.asList(new String[]{asURI(test).toASCIIString()}));
 			Map<String,String> output = ImmutableMap.of("html", asURI(report).toASCIIString(),
 			                                            "junit", asURI(surefireReport).toASCIIString());
-			Map<String,String> options = ImmutableMap.of("temp-dir", asURI(tempDir) + "/tmp/");
-			reporter.running(testName);
+			Map<String,String> options = ImmutableMap.of("temp-dir", asURI(tempDir) + "/tmp/",
+			                                             "enable-log", "false");
+			reporter.running(testName, focusTests.contains(testName));
 			try {
 				engine.run(xprocspec.toASCIIString(), input, output, options, null);
 				if (!surefireReport.exists()) {
@@ -138,21 +209,28 @@ public class XProcSpecRunner {
 		
 		/* Generate summary */
 		try {
-			String[] testNames = new String[tests.size()];
-			String[] surefireReports = new String[tests.size()];
-			String[] reports = new String[tests.size()];
+			String[] testNames = new String[tests.size() - skipTests.size()];
+			String[] skipTestNames = new String[skipTests.size()];
+			String[] surefireReports = new String[tests.size() - skipTests.size()];
+			String[] reports = new String[tests.size() - skipTests.size()];
 			File summary = new File(reportsDir, "index.html");
 			File css = new File(reportsDir, "xspec.css");
 			Joiner joiner = Joiner.on(" ");
 			int i = 0;
+			int j = 0;
 			for (String testName : tests.keySet()) {
-				testNames[i] = testName;
-				File surefireReport = new File(surefireReportsDir, "TEST-" + testName + ".xml");
-				surefireReports[i] = asURI(surefireReport).toASCIIString();
-				File report = new File(reportsDir, testName + ".html");
-				reports[i++] = asURI(report).toASCIIString(); }
+				if (skipTests.contains(testName))
+					skipTestNames[j++] = testName;
+				else {
+					testNames[i] = testName;
+					File surefireReport = new File(surefireReportsDir, "TEST-" + testName + ".xml");
+					surefireReports[i] = asURI(surefireReport).toASCIIString();
+					File report = new File(reportsDir, testName + ".html");
+					reports[i] = asURI(report).toASCIIString();
+					i++; }}
 			Map<String,String> output = ImmutableMap.of("result", asURI(summary).toASCIIString());
 			Map<String,String> params = ImmutableMap.of("test-names", joiner.join(testNames),
+			                                            "skip-test-names", joiner.join(skipTestNames),
 			                                            "surefire-reports", joiner.join(surefireReports),
 			                                            "reports", joiner.join(reports));
 			engine.run(xprocspecSummary.toASCIIString(), null, output, null, ImmutableMap.of("parameters", params));
@@ -186,7 +264,8 @@ public class XProcSpecRunner {
 	public static interface Reporter {
 		
 		public void init();
-		public void running(String name) ;
+		public void running(String name, boolean focus);
+		public void skipping(String name);
 		public void result(int run, int failures, int errors, int skipped, long time, String shortDesc, String longDesc);
 		public void finish(int run, int failures, int errors, int skipped, long time);
 		
@@ -215,10 +294,12 @@ public class XProcSpecRunner {
 				println("-------------------------------------------------------");
 			}
 			
-			public void running(String name) {
+			public void running(String name, boolean focus) {
 				println("Running %s", name);
 				currentTest = name;
 			}
+			
+			public void skipping(String name) {}
 			
 			public void result(int run, int failures, int errors, int skipped, long time, String shortDesc, String longDesc) {
 				println("Tests run: %d, Failures: %d, Errors: %d, Skipped: %d, Time elapsed: %s sec%s",
@@ -259,8 +340,8 @@ public class XProcSpecRunner {
 	 * FileUtils.listFiles from Apache Commons IO could be used here as well,
 	 * but would introduce another dependency.
 	 */
-	private static Collection<File> listXProcSpecFilesRecursively(File directory) {
-		ImmutableList.Builder<File> builder = new ImmutableList.Builder<File>();
+	public static Set<File> listXProcSpecFilesRecursively(File directory) {
+		ImmutableSet.Builder<File> builder = new ImmutableSet.Builder<File>();
 		if (directory.isDirectory())
 			for (File file : directory.listFiles()) {
 				if (file.isDirectory())

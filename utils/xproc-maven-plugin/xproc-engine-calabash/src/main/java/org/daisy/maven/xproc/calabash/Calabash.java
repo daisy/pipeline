@@ -1,7 +1,10 @@
 package org.daisy.maven.xproc.calabash;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileOutputStream;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -50,7 +53,8 @@ public class Calabash implements XProcEngine {
 	
 	private URIResolver nextURIResolver = null;
 	private File nextCatalogFile = null;
-	private File nextConfigFile = null;
+	private Reader nextConfig = null;
+	private Reader nextDefaultConfig = null;
 	
 	@Reference(
 		name = "URIResolver",
@@ -67,24 +71,41 @@ public class Calabash implements XProcEngine {
 		nextCatalogFile = catalogFile;
 	}
 	
+	// Settings from a custom calabash.xml
 	public void setConfiguration(File configFile) {
-		nextConfigFile = configFile;
+		if (configFile == null)
+			nextConfig = null;
+		else
+			try {
+				nextConfig = new FileReader(configFile); }
+			catch (FileNotFoundException e) {
+				throw new IllegalArgumentException("Config file does not exist", e); }
+	}
+	
+	// Settings to be always applied
+	public void setDefaultConfiguration(Reader defaultConfig) {
+		nextDefaultConfig = defaultConfig;
 	}
 	
 	private XProcRuntime currentRuntime = null;
 	private URIResolver currentURIResolver = null;
 	private File currentCatalogFile = null;
-	private File currentConfigFile = null;
+	private Reader currentConfig = null;
+	private Reader currentDefaultConfig = null;
 	
 	private XProcRuntime runtime() {
 		System.setProperty("com.xmlcalabash.config.user", "false");
 		System.setProperty("com.xmlcalabash.config.local", "false");
-		if (currentRuntime == null || !equal(nextConfigFile, currentConfigFile)) {
+		if (currentRuntime == null || !equal(nextConfig, currentConfig) || !equal(nextDefaultConfig, currentDefaultConfig)) {
 			XProcConfiguration config = new XProcConfiguration("he", false);
-			if (nextConfigFile != null && nextConfigFile.exists()) {
+			if (nextDefaultConfig != null) {
 				try {
-					config.parse(config.getProcessor().newDocumentBuilder().build(
-						             new SAXSource(new InputSource(nextConfigFile.toURI().toASCIIString())))); }
+					config.parse(config.getProcessor().newDocumentBuilder().build(new SAXSource(new InputSource(nextDefaultConfig)))); }
+				catch (SaxonApiException e) {
+					throw new RuntimeException(e); }}
+			if (nextConfig != null) {
+				try {
+					config.parse(config.getProcessor().newDocumentBuilder().build(new SAXSource(new InputSource(nextConfig)))); }
 				catch (SaxonApiException e) {
 					throw new RuntimeException(e); }}
 			currentRuntime = new XProcRuntime(config); }
@@ -99,7 +120,8 @@ public class Calabash implements XProcEngine {
 				currentRuntime.setURIResolver(fallingBackURIResolver(jarURIResolver(), nextURIResolver)); }
 		currentURIResolver = nextURIResolver;
 		currentCatalogFile = nextCatalogFile;
-		currentConfigFile = nextConfigFile;
+		currentConfig = nextConfig;
+		currentDefaultConfig = nextDefaultConfig;
 		return currentRuntime;
 	}
 	

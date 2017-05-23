@@ -20,6 +20,7 @@
       <p:inline>
         <xsl:stylesheet version="2.0">
           <xsl:param name="test-names" as="xs:string" required="yes"/>
+          <xsl:param name="skip-test-names" as="xs:string" required="yes"/>
           <xsl:param name="surefire-reports" as="xs:string" required="yes"/>
           <xsl:param name="reports" as="xs:string" required="yes"/>
           <xsl:template name="main">
@@ -88,6 +89,24 @@
                       </tr>
                     </xsl:otherwise>
                   </xsl:choose>
+                </xsl:for-each>
+                <xsl:for-each select="tokenize($skip-test-names, ' ')">
+                  <tr class="pending">
+                    <th>
+                      <xsl:value-of select="."/>
+                    </th>
+                    <th>
+                      <span>0</span>
+                      <xsl:text>/</xsl:text>
+                      <span>1</span>
+                      <xsl:text>/</xsl:text>
+                      <span>0</span>
+                      <xsl:text>/</xsl:text>
+                      <span>0</span>
+                      <xsl:text>/</xsl:text>
+                      <span>1</span>
+                    </th>
+                  </tr>
                 </xsl:for-each>
               </tbody>
             </xsl:variable>

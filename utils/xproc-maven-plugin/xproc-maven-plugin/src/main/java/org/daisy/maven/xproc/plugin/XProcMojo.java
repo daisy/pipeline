@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.ServiceLoader;
 
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
 
 import org.daisy.maven.xproc.api.XProcEngine;
 import org.daisy.maven.xproc.api.XProcExecutionException;
@@ -61,7 +62,7 @@ public class XProcMojo extends AbstractMojo {
 		}
 	}
 	
-	public void execute() {
+	public void execute() throws MojoExecutionException {
 		String pipelineAsURI = asURI(pipeline).toASCIIString();
 		Map<String,List<String>> inputsAsURIs = null;
 		Map<String,String> outputsAsURIs = null;
@@ -87,7 +88,8 @@ public class XProcMojo extends AbstractMojo {
 			getLog().error(e.getMessage());
 			Throwable cause = e.getCause();
 			if (cause != null)
-				getLog().debug(cause); }
+				getLog().error(cause);
+			throw new MojoExecutionException("XProc transformation failed", e); }
 	}
 	
 	public static URI asURI(File file) {

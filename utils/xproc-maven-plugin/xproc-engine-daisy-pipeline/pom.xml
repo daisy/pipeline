@@ -11,7 +11,7 @@
   </parent>
   
   <artifactId>xproc-engine-daisy-pipeline</artifactId>
-  <version>1.10.2-SNAPSHOT</version>
+  <version>1.10.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>xproc-engine-daisy-pipeline</name>
   
@@ -20,7 +20,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.2</version>
+        <version>1.10.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -39,40 +39,51 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xproc-api</artifactId>
+      <!--
+          dependency of calabash-adapter
+      -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
+      <!--
+          dependency of calabash-adapter
+      -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>calabash-adapter</artifactId>
-      <scope>runtime</scope>
+      <!--
+          dependency of calabash-adapter
+      -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
-      <version>4.3.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
-      <version>4.3.0</version>
       <scope>provided</scope>
     </dependency>
     <!--
-        runtime dependency for framework-core
+        runtime dependencies (for org.daisy.common.xproc.XProcEngine)
     -->
+    <!--
+        disabled in order to force users of xproc-engine-daisy-pipeline to also explicitely include
+        (a specific version of) calabash-adapter
+    -->
+    <!--
     <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>jing</artifactId>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
       <scope>runtime</scope>
     </dependency>
+    -->
   </dependencies>
   <build>
     <plugins>
