@@ -35,6 +35,7 @@
     <module>gui</module>
     <module>updater/cli</module>
     <module>updater/gui</module>
+    <module>assembly</module>
   </modules>
   
   <build>
