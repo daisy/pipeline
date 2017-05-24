@@ -22,13 +22,10 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-persistence</artifactId>
     </dependency>
-    <!-- <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-    </dependency> -->
     <dependency>
       <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.enterprise</artifactId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

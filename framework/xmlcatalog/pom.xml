@@ -30,15 +30,22 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <!--
-        OSGi runtime dependencies
+        runtime dependencies (for javax.xml.stream.XMLInputFactory)
     -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>woodstox-osgi-adapter</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
-
 
   <build>
     <plugins>

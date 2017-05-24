@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Message Step">
-   <implementation class="org.daisy.common.xproc.calabash.steps.impl.MessageProvider"/>
-   <service>
-      <provide interface="org.daisy.common.xproc.calabash.XProcStepProvider"/>
-   </service>
-   <property name="type" type="String" value="{http://xmlcalabash.com/ns/extensions}message"/>
-</scr:component>
