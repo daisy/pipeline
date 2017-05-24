@@ -4,7 +4,7 @@ before_install:
 script: mvn verify
 after_success:
 - |-
-  [ "$TRAVIS_BRANCH" == org.daisy.libs_jstyleparser ] && [ "$TRAVIS_PULL_REQUEST" == false ] && mvn deploy -DskipTests
+  [ "$TRAVIS_BRANCH" == org.daisy.libs ] && [ "$TRAVIS_PULL_REQUEST" == false ] && mvn deploy -DskipTests
 env:
   global:
   - secure: dL+l18nDhnMbnGDYkyspj6iNWNby4LFRJHoaacPRgeZ2s1UQYt4epkfLcDRlojvHyLeP1YFGy75qE/HBcSJW+XOLx0H3wy2ludiOup10iU4uet3h9UtE0iMuqfh1s5aiKiWOKr7wpA3TudcfzhjIsfPzmqkkK+DjkXVivNJNL1k=
