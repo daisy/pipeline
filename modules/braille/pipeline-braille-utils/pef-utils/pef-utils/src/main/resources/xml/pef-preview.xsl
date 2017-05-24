@@ -14,7 +14,7 @@
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
                 <link rel="stylesheet" type="text/css" href="pef-preview.css"/>
-                <script type="text/javascript" href="pef-preview.js"/>
+                <script type="text/javascript" src="pef-preview.js"/>
             </head>
             <body>
                 <div id="header">

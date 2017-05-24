@@ -80,7 +80,8 @@ public class LiblouisTablesTest {
 				brailleModule("pef-core"),
 				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
 				// logging
-				logbackClassic())
+				logbackClassic(),
+				mavenBundle("org.slf4j:jcl-over-slf4j:1.7.2")) // required by httpclient (TODO: add to runtime dependencies of calabash))
 		);
 	}
 }

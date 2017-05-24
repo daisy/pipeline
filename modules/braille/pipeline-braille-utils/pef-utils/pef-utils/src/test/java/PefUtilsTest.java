@@ -48,13 +48,13 @@ public class PefUtilsTest {
 				brailleModule("pef-calabash"),
 				brailleModule("pef-saxon"),
 				pipelineModule("file-utils"),
-				// for file-utils
-				pipelineModule("common-utils"),
-				mavenBundle("org.daisy.libs:saxon-he:?"),
 				// logging
 				logbackClassic(),
+				mavenBundle("org.daisy.pipeline:logging-activator:?"),
+				mavenBundle("org.slf4j:jcl-over-slf4j:1.7.2"), // required by httpclient (TODO: add to runtime dependencies of calabash)
 				// xprocspec
 				xprocspec(),
+				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?"))
 		);
 	}

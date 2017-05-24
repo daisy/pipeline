@@ -47,30 +47,20 @@
         </p:documentation>
     </p:output>
     
-    <p:identity>
-        <p:input port="source">
-            <p:document href="split.xsl"/>
-        </p:input>
-    </p:identity>
-    <p:add-attribute match="/*/*[@name='split-before']" attribute-name="match">
-        <p:with-option name="attribute-value" select="$split-before"/>
-    </p:add-attribute>
-    <p:add-attribute match="/*/*[@name='split-after']" attribute-name="match">
-        <p:with-option name="attribute-value" select="$split-after"/>
-    </p:add-attribute>
-    <p:identity name="css-split.compiled-xslt"/>
+    <p:declare-step type="pxi:css-split">
+        <p:input port="source"/>
+        <p:option name="split-before" required="true"/>
+        <p:option name="split-after" required="true"/>
+        <p:output port="result"/>
+        <!--
+            implemented in Java
+        -->
+    </p:declare-step>
     
-    <p:xslt name="css-split.xslt">
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-        <p:input port="source">
-            <p:pipe port="source" step="main"/>
-        </p:input>
-        <p:input port="stylesheet">
-            <p:pipe port="result" step="css-split.compiled-xslt"/>
-        </p:input>
-    </p:xslt>
+    <pxi:css-split>
+        <p:with-option name="split-before" select="$split-before"/>
+        <p:with-option name="split-after" select="$split-after"/>
+    </pxi:css-split>
     
     <p:filter select="/*/*"/>
     

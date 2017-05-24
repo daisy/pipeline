@@ -22,7 +22,7 @@
             css:volume-break-before attributes. 'page' properties must be declared in css:page
             attributes. 'counter-set' properties for the 'page' counter must be declared in
             css:counter-set-page attributes. 'volume' properties must be declared in css:volume
-            attributes.
+            attributes. <!-- TODO: handle css:counter-set-page? -->
         </p:documentation>
     </p:input>
     

@@ -21,9 +21,10 @@
     
     <p:output port="result" sequence="true">
         <p:documentation>
-            For each element that is referenced somewhere, a css:id attribute that matches the
-            xml:id or id attribute of the element is added in the output. No two elements will get
-            the same css:id attribute.
+            For each element that is referenced somewhere, a css:id attribute is added in the
+            output. No two elements will get the same css:id attribute. The target attributes on
+            css:text, css:string, css:counter and css:content elements are modified to match the new
+            css:id attributes.
         </p:documentation>
     </p:output>
     

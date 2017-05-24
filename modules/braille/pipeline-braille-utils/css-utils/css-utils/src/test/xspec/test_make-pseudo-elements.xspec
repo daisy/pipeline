@@ -17,7 +17,7 @@
       <doc>
         <body>
           <p style="display: block">
-            <css:before style="display: block; margin-left: 2; content: 'bar'"/>
+            <css:before style="display: block; margin-left: 2; content: 'bar'" name="p::before"/>
             foo
           </p>
         </body>
@@ -40,7 +40,7 @@
         <body>
           <p foo="bar">
             foo
-          <css:after style="content: attr(bar)"/>
+          <css:after style="content: attr(bar)" name="p::after"/>
           </p>
         </body>
       </doc>
@@ -62,9 +62,9 @@
         <body>
           <p css:id="...">
             foo
-          <css:after style="content: 'bar'"/>
+          <css:after style="content: 'bar'" name="p::after"/>
           </p>
-          <css:duplicate css:anchor="..." style="flow: abc">
+          <css:duplicate css:anchor="..." style="flow: abc" name="p::duplicate">
             foo
           </css:duplicate>
         </body>
@@ -84,7 +84,7 @@
       <doc>
         <body>
           <p css:id="..." css:flow="footnotes"/>
-          <css:footnote-call css:anchor="..." style="content:'aaa'"/>
+          <css:footnote-call css:anchor="..." style="content:'aaa'" name="p::footnote-call"/>
         </body>
       </doc>
     </x:expect>

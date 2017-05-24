@@ -29,7 +29,8 @@ ul#nav {
     top: 0;
     left: 0;
     background-color: #444;
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: scroll;
     height: 100%;
     width: 220px;
     margin: 0;

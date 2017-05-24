@@ -213,11 +213,6 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 						if (inputBuffer == null || !inputBuffer.hasNext()) {
 							inputBuffer = null;
 							if (!inputStream.hasNext()) {} // end of stream
-							else if (limit == 0) {
-								String remainder = inputStream.remainder();
-								if (remainder.isEmpty())
-									throw new RuntimeException("coding error");
-								inputBuffer = peekingIterator(charactersOf(inputStream.remainder()).iterator()); }
 							else if (bufSize < limit) {
 								String next = inputStream.next(limit - bufSize, force && (bufSize == 0));
 								if (next.isEmpty()) {} // row full according to input feed
@@ -343,8 +338,8 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 							rv = rv.substring(0, cut);
 						return rv; }
 					
-					// return nothing if limit is 0
-					if (limit == 0) {
+					// return nothing if limit is 0 (limit should not be less than 0, but check anyway)
+					if (limit <= 0) {
 						
 						// strip leading SPACE/LF/CR/TAB/BLANK in remaining text (are already collapsed into one)
 						int cut = 0;
@@ -365,9 +360,11 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 						String rv = charBuffer.substring(0, cut2);
 						flushBuffers(cut2);
 						
-						// preserve if at beginning of stream or end of stream
+						// preserve if at beginning of stream or end of stream and not overflowing
 						if (cut > 0 && cut < cut2 && hasNext())
 							rv = rv.substring(0, cut);
+						else if (cut2 > limit)
+							rv = rv.substring(0, limit);
 						return rv; }
 					
 					// try to break later if the overflowing characters are blank
@@ -384,9 +381,11 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 							String rv = charBuffer.substring(0, cut2);
 							flushBuffers(cut2);
 							
-							// preserve if at end of stream
+							// preserve if at end of stream and not overflowing
 							if (cut < cut2 && hasNext())
 								rv = rv.substring(0, cut);
+							else if (cut2 > limit)
+								rv = rv.substring(0, limit);
 							return rv; }
 					
 					// try to break sooner

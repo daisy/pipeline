@@ -2,61 +2,26 @@
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:p="http://www.w3.org/ns/xproc"
-               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
-  
-  <x:script>
-    <p:declare-step type="pxi:test-split" version="1.0">
-      <p:input port="source"/>
-      <p:output port="result" sequence="true"/>
-      <p:import href="../../main/resources/xml/split.xpl"/>
-      <p:option name="split-before" select="'*[@css:page or @css:counter-set-page]'"/>
-      <p:option name="split-after" select="'*[@css:page]'"/>
-      <p:option name="raw-output" select="'false'"/>
-      <css:split>
-        <p:with-option name="split-before" select="$split-before"/>
-        <p:with-option name="split-after" select="$split-after"/>
-      </css:split>
-      <p:choose>
-        <p:xpath-context>
-          <p:empty/>
-        </p:xpath-context>
-        <p:when test="$raw-output = 'false'">
-          <p:split-sequence test="//css:box"/>
-          <p:for-each>
-            <p:label-elements match="/*[descendant::*/@css:page]" attribute="css:page"
-                              label="(descendant::*/@css:page)[last()]"/>
-            <p:label-elements match="/*[descendant::*/@css:counter-set-page]" attribute="css:counter-set-page"
-                              label="(descendant::*/@css:counter-set-page)[last()]"/>
-            <p:delete match="/*//*/@css:page"/>
-            <p:delete match="/*//*/@css:counter-set-page"/>
-            <p:unwrap match="css:_[not(@css:*)]"/>
-          </p:for-each>
-        </p:when>
-        <p:otherwise>
-          <p:identity/>
-        </p:otherwise>
-      </p:choose>
-    </p:declare-step>
-  </x:script>
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../main/resources/xml/split.xpl">
   
   <x:scenario label="test_01">
-    <x:call step="pxi:test-split">
+    <x:call step="css:split">
+      <x:option name="split-before" select="'*[@css:page or @css:counter-set-page]'"/>
+      <x:option name="split-after" select="'*[@css:page]'"/>
       <x:input port="source">
         <x:document type="inline">
-          <_>
-            <css:box type="block" css:page="size: 30 15">
-              <front css:page="size: 30 15; @bottom-right { content: counter(page, lower-roman) }">
-                <css:box> foo </css:box>
-              </front>
-              <body>
-                <css:box> bar </css:box>
-              </body>
-              <rear>
-                <css:box css:counter-set-page="1"> baz </css:box>
-              </rear>
-            </css:box>
-          </_>
+          <css:box type="block" css:page="size: 30 15">
+            <front css:page="size: 30 15; @bottom-right { content: counter(page, lower-roman) }">
+              <css:box> foo </css:box>
+            </front>
+            <body>
+              <css:box> bar </css:box>
+            </body>
+            <rear>
+              <css:box css:counter-set-page="1"> baz </css:box>
+            </rear>
+          </css:box>
         </x:document>
       </x:input>
     </x:call>
@@ -65,53 +30,45 @@
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
-        <_ css:page="size: 30 15">
-          <css:box type="block" part="first"/>
-        </_>
+        <css:box type="block" part="first" css:page="size: 30 15"/>
       </x:document>
       <x:document type="inline">
-        <_ css:page="size: 30 15; @bottom-right { content: counter(page, lower-roman) }">
-          <css:box type="block" part="middle">
-            <front>
-              <css:box> foo </css:box>
-            </front>
-          </css:box>
-        </_>
+        <css:box type="block" css:page="size: 30 15" part="middle">
+          <front css:page="size: 30 15; @bottom-right { content: counter(page, lower-roman) }">
+            <css:box> foo </css:box>
+          </front>
+        </css:box>
       </x:document>
       <x:document type="inline">
-        <_ css:page="size: 30 15">
-          <css:box type="block" part="middle">
-            <body>
-              <css:box> bar </css:box>
-            </body>
-            <rear>
-            </rear>
-          </css:box>
-        </_>
+        <css:box type="block" css:page="size: 30 15" part="middle">
+          <body>
+            <css:box> bar </css:box>
+          </body>
+          <rear>
+          </rear>
+        </css:box>
       </x:document>
       <x:document type="inline">
-        <_ css:page="size: 30 15" css:counter-set-page="1">
-          <css:box type="block" part="last">
-            <rear>
-              <css:box> baz </css:box>
-            </rear>
-          </css:box>
-        </_>
+        <css:box type="block" css:page="size: 30 15" part="last">
+          <rear>
+            <css:box css:counter-set-page="1"> baz </css:box>
+          </rear>
+        </css:box>
       </x:document>
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_02">
-    <x:call step="pxi:test-split">
+    <x:call step="css:split">
+      <x:option name="split-before" select="'*[@css:counter-set-page]'"/>
+      <x:option name="split-after" select="'nomatch'"/>
       <x:input port="source">
         <x:document type="inline">
-          <_>
-            <css:box type="block" css:counter-set-page="1">
-              <css:box> foo </css:box>
-              <css:box css:counter-set-page="2"> bar </css:box>
-              <css:box> baz </css:box>
-            </css:box>
-          </_>
+          <css:box type="block" css:counter-set-page="1">
+            <css:box> foo </css:box>
+            <css:box css:counter-set-page="2"> bar </css:box>
+            <css:box> baz </css:box>
+          </css:box>
         </x:document>
       </x:input>
     </x:call>
@@ -120,25 +77,23 @@
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
-        <_ css:counter-set-page="1">
-          <css:box type="block" part="first">
-            <css:box> foo </css:box>
-          </css:box>
-        </_>
+        <css:box type="block" css:counter-set-page="1" part="first">
+          <css:box> foo </css:box>
+        </css:box>
       </x:document>
       <x:document type="inline">
-        <_ css:counter-set-page="2">
-          <css:box type="block" part="last">
-            <css:box> bar </css:box>
-            <css:box> baz </css:box>
-          </css:box>
-        </_>
+        <css:box type="block" part="last">
+          <css:box css:counter-set-page="2"> bar </css:box>
+          <css:box> baz </css:box>
+        </css:box>
       </x:document>
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_03">
-    <x:call step="pxi:test-split">
+    <x:call step="css:split">
+      <x:option name="split-before" select="'*[@css:page]'"/>
+      <x:option name="split-after" select="'*[@css:page]'"/>
       <x:input port="source">
         <x:document type="inline">
           <_ css:page="foo">
@@ -165,9 +120,11 @@
         </_>
       </x:document>
       <x:document type="inline">
-        <_ css:page="bar">
+        <_ css:page="foo">
           <css:box type="block" part="middle">
-            <css:box> xxx </css:box>
+            <css:_ css:page="bar">
+              <css:box> xxx </css:box>
+            </css:_>
           </css:box>
         </_>
       </x:document>
@@ -179,9 +136,11 @@
         </_>
       </x:document>
       <x:document type="inline">
-        <_ css:page="baz">
+        <_ css:page="foo">
           <css:box type="block" part="middle">
-            <css:box> xxx </css:box>
+            <css:_ css:page="baz">
+              <css:box> xxx </css:box>
+            </css:_>
           </css:box>
         </_>
       </x:document>
@@ -194,19 +153,166 @@
   </x:scenario>
   
   <x:scenario label="test_04">
-    <x:call step="pxi:test-split">
-      <x:option name="raw-output" select="'true'"/>
-      <x:option name="split-before" select="'css:box[preceding::css:box][@css:counter-set-page or @css:page-break-before=''right'' or @css:volume-break-before=''always'' or @type=''table'']'"/>
-      <x:option name="split-after" select="'css:box[following::css:box][@type=''table'']'"/>
+    <x:call step="css:split">
+      <x:option name="split-before" select="'css:box[preceding::css:box][@css:counter-set-page or @css:page-break-before=''right'']'"/>
+      <x:option name="split-after" select="'nomatch'"/>
       <x:input port="source">
-        <x:document type="file" href="../resources/split/split.in.xml"/>
+        <x:document type="inline">
+          <css:_>
+            <css:box type="block">
+              <css:box type="inline"> ⠤⠤⠤ </css:box>
+            </css:box>
+            <css:box type="block"
+                     css:page-break-before="right">
+              <css:box type="inline"> ⠤⠤⠤ </css:box>
+            </css:box>
+            <css:box type="block"
+                     css:page-break-before="right">
+              <css:box type="inline"> ⠤⠤⠤ </css:box>
+            </css:box>
+            <css:box type="block"
+                     css:counter-set-page="10"
+                     css:page-break-before="always">
+              <css:box type="inline"> ⠤⠤⠤ </css:box>
+            </css:box>
+            <css:box type="block"
+                     css:page-break-before="always">
+              <css:box type="inline"> ⠤⠤⠤ </css:box>
+            </css:box>
+            <css:box type="block"
+                     css:page-break-before="right">
+              <css:box type="inline"> ⠤⠤⠤ </css:box>
+            </css:box>
+          </css:_>
+        </x:document>
       </x:input>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
     <x:expect label="result" type="compare">
-      <x:document type="file" href="../resources/split/split.out.xml" select="/*/*"/>
+      <x:document type="inline">
+        <css:_>
+          <css:box type="block">
+            <css:box type="inline"> ⠤⠤⠤ </css:box>
+          </css:box>
+        </css:_>
+      </x:document>
+      <x:document type="inline">
+        <css:_>
+          <css:box type="block"
+                   css:page-break-before="right">
+            <css:box type="inline"> ⠤⠤⠤ </css:box>
+          </css:box>
+        </css:_>
+      </x:document>
+      <x:document type="inline">
+        <css:_>
+          <css:box type="block"
+                   css:page-break-before="right">
+            <css:box type="inline"> ⠤⠤⠤ </css:box>
+          </css:box>
+        </css:_>
+      </x:document>
+      <x:document type="inline">
+        <css:_>
+          <css:box type="block"
+                   css:counter-set-page="10"
+                   css:page-break-before="always">
+            <css:box type="inline"> ⠤⠤⠤ </css:box>
+          </css:box>
+          <css:box type="block"
+                   css:page-break-before="always">
+            <css:box type="inline"> ⠤⠤⠤ </css:box>
+          </css:box>
+        </css:_>
+      </x:document>
+      <x:document type="inline">
+        <css:_>
+          <css:box type="block"
+                   css:page-break-before="right">
+            <css:box type="inline"> ⠤⠤⠤ </css:box>
+          </css:box>
+        </css:_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_05">
+    <x:call step="css:split">
+      <x:option name="split-before" select="'*[@css:page]'"/>
+      <x:option name="split-after" select="'*[@css:page]'"/>
+      <x:input port="source">
+        <x:document type="inline">
+          <css:box type="block" css:id="a">
+            <css:box css:page="1"/>
+            <css:box css:page="2" css:id="b">
+              <css:box css:page="3"/>
+              <css:box css:page="4" css:id="c"/>
+              <css:box/>
+            </css:box>
+            <css:box css:page="4"/>
+          </css:box>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <css:box type="block" css:id="a" part="first"/>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="middle">
+          <css:box css:page="1"/>
+        </css:box>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="middle"/>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="middle">
+          <css:box css:page="2" css:id="b" part="first"/>
+        </css:box>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="middle">
+          <css:box css:page="2" part="middle">
+            <css:box css:page="3"/>
+          </css:box>
+        </css:box>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="middle">
+          <css:box css:page="2" part="middle"/>
+        </css:box>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="middle">
+          <css:box css:page="2" part="middle">
+            <css:box css:page="4" css:id="c"/>
+          </css:box>
+        </css:box>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="middle">
+          <css:box css:page="2" part="last">
+            <css:box/>
+          </css:box>
+        </css:box>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="middle"/>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="middle">
+          <css:box css:page="4"/>
+        </css:box>
+      </x:document>
+      <x:document type="inline">
+        <css:box type="block" part="last"/>
+      </x:document>
     </x:expect>
   </x:scenario>
   

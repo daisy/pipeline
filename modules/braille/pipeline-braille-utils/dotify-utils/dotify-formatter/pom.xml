@@ -38,6 +38,15 @@
       <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
@@ -105,29 +114,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.xmlresolver</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>saxon-adapter</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jul-to-slf4j</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>logging-activator</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -172,7 +165,8 @@
               org.daisy.pipeline.braille.dotify.impl.MarkerProcessorFactoryServiceImpl,
               org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl,
               org.daisy.pipeline.braille.dotify.impl.DotifyCSSStyledDocumentTransform$Provider,
-              org.daisy.pipeline.braille.dotify.impl.DotifyOBFLTransform$Provider
+              org.daisy.pipeline.braille.dotify.impl.DotifyOBFLTransform$Provider,
+              org.daisy.pipeline.braille.dotify.calabash.impl.ShiftObflMarkerStep$Provider
             </_dsannotations>
           </instructions>
         </configuration>

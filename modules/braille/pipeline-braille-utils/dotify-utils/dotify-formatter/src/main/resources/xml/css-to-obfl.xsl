@@ -559,12 +559,20 @@
                                 <list-of-references collection="{$collection/@arg1}" range="document">
                                     <xsl:if test="exists($on-volume-start)">
                                         <on-volume-start>
-                                            <xsl:apply-templates mode="sequence" select="$on-volume-start"/>
+                                            <xsl:for-each select="$on-volume-start">
+                                                <xsl:apply-templates mode="sequence" select=".">
+                                                    <xsl:with-param name="first-in-sequence" tunnel="yes" select="position()=1"/>
+                                                </xsl:apply-templates>
+                                            </xsl:for-each>
                                         </on-volume-start>
                                     </xsl:if>
                                     <xsl:if test="exists($on-volume-end)">
                                         <on-volume-end>
-                                            <xsl:apply-templates mode="sequence" select="$on-volume-end"/>
+                                            <xsl:for-each select="$on-volume-end">
+                                                <xsl:apply-templates mode="sequence" select=".">
+                                                    <xsl:with-param name="first-in-sequence" tunnel="yes" select="position()=1"/>
+                                                </xsl:apply-templates>
+                                            </xsl:for-each>
                                         </on-volume-end>
                                     </xsl:if>
                                 </list-of-references>
@@ -580,13 +588,21 @@
                                 <xsl:if test="$flow=$collection-flows">
                                     <list-of-references collection="meta/{$flow}" range="document">
                                         <on-collection-start>
-                                            <xsl:apply-templates mode="sequence" select="current-group()"/>
+                                            <xsl:for-each select="current-group()">
+                                                <xsl:apply-templates mode="sequence" select=".">
+                                                    <xsl:with-param name="first-in-sequence" tunnel="yes" select="position()=1"/>
+                                                </xsl:apply-templates>
+                                            </xsl:for-each>
                                         </on-collection-start>
                                     </list-of-references>
                                 </xsl:if>
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:apply-templates mode="sequence" select="current-group()"/>
+                                <xsl:for-each select="current-group()">
+                                    <xsl:apply-templates mode="sequence" select=".">
+                                        <xsl:with-param name="first-in-sequence" tunnel="yes" select="position()=1"/>
+                                    </xsl:apply-templates>
+                                </xsl:for-each>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each-group>
@@ -1353,6 +1369,18 @@
     <xsl:template mode="block-attr"
                   match="css:box[@type='block']/@css:page-break-before[.='always']">
         <xsl:attribute name="break-before" select="'page'"/>
+    </xsl:template>
+    
+    <!--
+        ignore page-break-before on first box of sequence
+    -->
+    <xsl:template mode="block-attr
+                        table-attr"
+                  match="css:box[@type='block'][not(parent::css:box) and not(preceding-sibling::*)]/@css:page-break-before[.='always']">
+        <xsl:param name="first-in-sequence" as="xs:boolean" tunnel="yes" select="true()"/>
+        <xsl:if test="not($first-in-sequence)">
+            <xsl:next-match/>
+        </xsl:if>
     </xsl:template>
     
     <!--

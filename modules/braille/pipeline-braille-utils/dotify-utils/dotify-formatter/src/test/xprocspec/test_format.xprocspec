@@ -528,7 +528,7 @@
             </block>
           </sequence>
           <sequence master="c" initial-page-number="10">
-            <block break-before="page">
+            <block>
               ⠤⠤⠤
             </block>
             <block break-before="page">
@@ -6922,7 +6922,7 @@
             </default-template>
           </layout-master>
           <sequence master="main">
-            <block break-before="page">
+            <block>
               <block>
                 ⠤⠤⠤
               </block>
@@ -8092,7 +8092,7 @@
             <pre-content>
               <toc-sequence master="main" range="document" toc="toc">
                 <on-toc-start>
-                  <block break-before="page" translate="">
+                  <block translate="">
                     <block>⠿⠿⠿ 0</block>
                   </block>
                   <block break-before="page"/>
@@ -8101,7 +8101,7 @@
             </pre-content>
           </volume-template>
           <sequence master="main">
-            <block break-before="page" translate="" id="x">
+            <block translate="" id="x">
               <block id="a">⠿⠿⠿ 1</block>
               <block>⠤⠤⠤</block>
             </block>
@@ -11449,6 +11449,97 @@
                   <row>⠼⠃</row>
                   <row>⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒</row>
                   <row>⠿⠿⠿⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_101">
+    <x:documentation>
+      Tests concatenation of flow().
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="@page { size: 15 5 }
+                      @volume { @begin { content: flow(titlepage1) flow(titlepage2) }}
+                      { text-transform: none }">
+            <front>
+              <titlepage style="display: block; flow: titlepage1">
+                ⠿⠿⠿
+              </titlepage>
+              <titlepage style="display: block; flow: titlepage2; page-break-before: always">
+                ⠿⠿⠿
+              </titlepage>
+            </front>
+            <body style="display: block">
+              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            </body>
+          </doc>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="main" page-width="15" page-height="5" duplex="true" page-number-variable="page">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <volume-template sheets-in-volume-max="1000">
+            <pre-content>
+              <sequence master="main">
+                <block>
+                  ⠿⠿⠿
+                </block>
+                <block break-before="page">
+                  ⠿⠿⠿
+                </block>
+              </sequence>
+            </pre-content>
+          </volume-template>
+          <sequence master="main">
+            <block translate=""/>
+            <block>
+              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="5" cols="15" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠿</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                 </page>
               </section>
             </volume>

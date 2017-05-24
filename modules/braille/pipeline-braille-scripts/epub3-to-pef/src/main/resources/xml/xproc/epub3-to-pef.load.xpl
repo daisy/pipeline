@@ -29,36 +29,29 @@
     -->
     <p:choose name="result">
         <p:when test="ends-with(lower-case($epub),'.epub')">
-            <p:output port="fileset.out" primary="true"/>
+            <p:output port="fileset.out" primary="true">
+                <p:pipe step="mediatype" port="result"/>
+            </p:output>
             <p:output port="in-memory.out" sequence="true">
-                <p:pipe port="in-memory.out" step="unzip"/>
+                <p:pipe step="load" port="result"/>
             </p:output>
             
             <px:message severity="DEBUG" message="EPUB is in a ZIP container; unzipping"/>
-            <px:unzip-fileset name="unzip">
+            <px:fileset-unzip store-to-disk="true" name="unzip">
                 <p:with-option name="href" select="$epub"/>
                 <p:with-option name="unzipped-basedir" select="concat($temp-dir,'epub/')"/>
-            </px:unzip-fileset>
-            <px:fileset-store name="load.stored">
-                <p:input port="fileset.in">
-                    <p:pipe port="fileset.out" step="unzip"/>
-                </p:input>
-                <p:input port="in-memory.in">
-                    <p:pipe port="in-memory.out" step="unzip"/>
-                </p:input>
-            </px:fileset-store>
-            <p:identity>
+            </px:fileset-unzip>
+            <p:sink/>
+            <px:mediatype-detect name="mediatype">
                 <p:input port="source">
-                    <p:pipe port="fileset.out" step="load.stored"/>
+                    <p:pipe step="unzip" port="fileset"/>
                 </p:input>
-            </p:identity>
-            <p:viewport match="/*/d:file">
-                <p:add-attribute match="/*" attribute-name="original-href">
-                    <p:with-option name="attribute-value" select="resolve-uri(/*/@href,base-uri())"/>
-                </p:add-attribute>
-            </p:viewport>
-            <px:mediatype-detect/>
-            
+            </px:mediatype-detect>
+            <px:fileset-load name="load">
+                <p:input port="in-memory">
+                    <p:empty/>
+                </p:input>
+            </px:fileset-load>
         </p:when>
         <p:otherwise>
             <p:output port="fileset.out" primary="true">

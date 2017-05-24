@@ -1,5 +1,8 @@
 $padding-left: 'just a littlebit' !default;
 $margin-left: 'something' !default;
+$padding-right: 'nothing' !default;
+$margin-right: 'nothing' !default;
+$padding-top: 'something' !default;
 
 p {
     @if $padding-left = 'A great lot\':!' {
@@ -16,5 +19,29 @@ p {
         margin-left: 2;
     } @else {
         margin-left: 1;
+    }
+    
+    @if $padding-right == 'a lot' {
+        padding-right: 3;
+    } @else if $padding-right == 'something' {
+        padding-right: 2;
+    } @else {
+        padding-right: 1;
+    }
+    
+    @if $margin-right == 'a lot' {
+        margin-right: 3;
+    } @else if $margin-right == something {
+        margin-right: 2;
+    } @else {
+        margin-right: 1;
+    }
+    
+    @if $padding-top == 'a lot' {
+        padding-top: 3;
+    } @else if $padding-top == '' {
+        padding-top: 0;
+    } @else {
+        padding-top: 1;
     }
 }

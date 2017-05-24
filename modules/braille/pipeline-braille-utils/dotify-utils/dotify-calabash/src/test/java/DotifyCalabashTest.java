@@ -83,13 +83,14 @@ public class DotifyCalabashTest {
 				// for the query syntax
 				brailleModule("css-core"),
 				// other
+				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
 				brailleModule("common-utils"),
 				brailleModule("obfl-utils"),
 				brailleModule("pef-utils"),
 				// logging
 				logbackClassic(),
-				mavenBundle("org.slf4j:jul-to-slf4j:?"),
 				mavenBundle("org.daisy.pipeline:logging-activator:?"),
+				mavenBundle("org.slf4j:jcl-over-slf4j:1.7.2"), // required by httpclient (TODO: add to runtime dependencies of calabash)
 				// xprocspec
 				xprocspec(),
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?"))

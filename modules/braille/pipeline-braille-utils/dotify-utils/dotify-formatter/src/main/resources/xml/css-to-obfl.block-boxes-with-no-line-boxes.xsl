@@ -15,34 +15,37 @@
                 //text()">
     -->
 
-    <xsl:template match="@* | node()" mode="#all">
+    <xsl:template match="node()">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
-            <xsl:apply-templates select="node()" mode="#current"/>
+            <xsl:sequence select="@*"/>
+            <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
 
     <xsl:template match="css:box[@type='block']">
         <xsl:copy>
-            <xsl:copy-of select="@*"/>
+            <xsl:sequence select="@*"/>
             <xsl:choose>
-
                 <xsl:when test="descendant::*[self::css:white-space | self::css:string | self::css:counter | self::css:text | self::css:content | self::css:leader | self::css:custom-func]">
-                    <xsl:apply-templates select="node()" mode="#current"/>
+                    <xsl:apply-templates/>
                 </xsl:when>
-
                 <xsl:when test="not(matches(string(.), '^[\s&#x2800;]*$'))">
-                    <xsl:apply-templates select="node()" mode="#current"/>
+                    <xsl:apply-templates/>
                 </xsl:when>
-
                 <xsl:otherwise>
-                    <xsl:apply-templates select="node()" mode="remove-text-nodes"/>
+                    <xsl:apply-templates mode="remove-text-nodes"/>
                 </xsl:otherwise>
-
             </xsl:choose>
         </xsl:copy>
     </xsl:template>
 
     <xsl:template match="text()" mode="remove-text-nodes"/>
 
+    <xsl:template match="*" mode="remove-text-nodes">
+        <xsl:copy>
+            <xsl:sequence select="@*"/>
+            <xsl:apply-templates mode="#current"/>
+        </xsl:copy>
+    </xsl:template>
+    
 </xsl:stylesheet>

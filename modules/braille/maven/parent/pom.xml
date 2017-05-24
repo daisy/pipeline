@@ -43,7 +43,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.2</version>
+        <version>1.10.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -53,14 +53,14 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.10.1</version>
+        <version>1.10.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.10.1</version>
+        <version>1.10.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -82,12 +82,12 @@
       <dependency>
         <groupId>org.daisy.xprocspec</groupId>
         <artifactId>xprocspec</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xprocspec-runner</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>com.google.guava</groupId>
@@ -98,13 +98,7 @@
       <dependency>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-engine-daisy-pipeline</artifactId>
-        <version>1.10.2-SNAPSHOT</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-          </exclusion>
-        </exclusions>
+        <version>1.10.3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>xml-apis</groupId>
@@ -114,11 +108,7 @@
       <dependency>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xspec-runner</artifactId>
-        <!--
-            depends on https://github.com/daisy/xspec-maven-plugin/pull/11
-        -->
-        <!-- <version>1.0.1-SNAPSHOT</version> -->
-        <version>1.0.0</version>
+        <version>1.0.1-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <groupId>com.google.guava</groupId>
@@ -127,20 +117,9 @@
         </exclusions>
       </dependency>
       <dependency>
-        <groupId>org.apache.servicemix.bundles</groupId>
-        <artifactId>org.apache.servicemix.bundles.xmlresolver</artifactId>
-        <version>1.2_5</version>
-      </dependency>
-      <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>saxon-adapter</artifactId>
-        <version>1.1</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-jdk14</artifactId>
-          </exclusion>
-        </exclusions>
+        <version>1.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>

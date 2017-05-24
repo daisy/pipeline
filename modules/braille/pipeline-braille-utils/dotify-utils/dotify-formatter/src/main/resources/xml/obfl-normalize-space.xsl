@@ -4,9 +4,9 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
     
-    <xsl:template match="@*|node()" mode="#all">
+    <xsl:template match="@*|node()">
        <xsl:copy>
-           <xsl:apply-templates select="@*|node()" mode="#current"/>
+           <xsl:apply-templates select="@*|node()"/>
        </xsl:copy>
     </xsl:template>
     
@@ -39,6 +39,10 @@
     
     <xsl:template match="text()" mode="normalize">
         <xsl:value-of select="replace(., '^\s+', '')"/>
+    </xsl:template>
+    
+    <xsl:template match="@*" mode="normalize">
+       <xsl:sequence select="."/>
     </xsl:template>
     
 </xsl:stylesheet>

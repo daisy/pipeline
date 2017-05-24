@@ -3,6 +3,7 @@ package org.daisy.pipeline.braille.common.saxon;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Stack;
 
@@ -80,6 +81,7 @@ public abstract class StreamToStreamTransform {
 		public void copyComment(XMLStreamReader reader) throws XMLStreamException;
 		public void copyCData(XMLStreamReader reader) throws XMLStreamException;
 		public void copyPI(XMLStreamReader reader) throws XMLStreamException;
+		public void copyElement(XMLStreamReader reader) throws XMLStreamException;
 	}
 	
 	protected interface Event {
@@ -286,6 +288,32 @@ public abstract class StreamToStreamTransform {
 				writeProcessingInstruction(target);
 			else
 				writeProcessingInstruction(target, data);
+		}
+		
+		public void copyElement(XMLStreamReader reader) throws XMLStreamException {
+			writeStartElement(reader.getName());
+			copyAttributes(reader);
+			int depth = 0;
+			boolean done = false;
+			while (true)
+				try {
+					int event = reader.next();
+					switch (event) {
+					case START_ELEMENT:
+						copyStartElement(reader);
+						copyAttributes(reader);
+						depth++;
+						break;
+					case END_ELEMENT:
+						writeEndElement();
+						depth--;
+						if (depth < 0)
+							return;
+						break;
+					default:
+						copyEvent(event, reader); }}
+				catch (NoSuchElementException e) {
+					throw new RuntimeException("coding error"); }
 		}
 	}
 	
@@ -499,6 +527,31 @@ public abstract class StreamToStreamTransform {
 					writeProcessingInstruction(target);
 				else
 					writeProcessingInstruction(target, data);
+			}
+			
+			public void copyElement(XMLStreamReader reader) throws XMLStreamException {
+				writeStartElement(reader.getName());
+				int depth = 0;
+				boolean done = false;
+				while (true)
+					try {
+						int event = reader.next();
+						switch (event) {
+						case START_ELEMENT:
+							copyStartElement(reader);
+							copyAttributes(reader);
+							depth++;
+							break;
+						case END_ELEMENT:
+							writeEndElement();
+							depth--;
+							if (depth < 0)
+								return;
+							break;
+						default:
+							copyEvent(event, reader); }}
+					catch (NoSuchElementException e) {
+						throw new RuntimeException("coding error"); }
 			}
 		}
 	}

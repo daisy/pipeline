@@ -52,15 +52,13 @@ public class LiblouisMathMLTest {
 				brailleModule("liblouis-utils"),
 				brailleModule("liblouis-native").forThisPlatform(),
 				pipelineModule("file-utils"),
-				pipelineModule("common-utils"),
 				pipelineModule("fileset-utils"),
-				pipelineModule("html-utils"),
-				pipelineModule("zip-utils"),
-				pipelineModule("mediatype-utils"),
 				// logging
 				logbackClassic(),
+				mavenBundle("org.slf4j:jcl-over-slf4j:1.7.2"), // required by httpclient (TODO: add to runtime dependencies of calabash)
 				// xprocspec
 				xprocspec(),
+				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?"))
 		);
 	}

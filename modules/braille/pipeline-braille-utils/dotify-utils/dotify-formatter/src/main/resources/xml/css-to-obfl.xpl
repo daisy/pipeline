@@ -417,10 +417,10 @@
         <p:for-each>
             <pxi:propagate-page-break>
                 <p:documentation>
-                    Propagate css:page-break-before, css:page-break-after, css:page-break-inside,
-                    css:page, css:counter-set-page, css:volume and css:volume-break-before
-                    attributes,so that splitting can be performed without creating empty boxes. <!--
-                    depends on make-anonymous-block-boxes -->
+                    Propagate css:page-break-before, css:page-break-after, css:volume-break-before
+                    and css:volume-break-after attributes, so that splitting can be performed
+                    without creating empty boxes, and also insert forced page breaks to satisfy the
+                    'page' and 'volume' properties. <!-- depends on make-anonymous-block-boxes -->
                 </p:documentation>
             </pxi:propagate-page-break>
             <p:group>
@@ -470,6 +470,8 @@
                 <p:delete match="/*//*/@css:counter-set-page"/>
                 <p:delete match="/*//*/@css:volume"/>
             </p:group>
+            <p:delete match="css:box[@part[not(.='first')]]/@css:page-break-before"/>
+            <p:delete match="css:box[@part[not(.='last')]]/@css:page-break-after"/>
             <p:group>
                 <p:documentation>
                     Move around and change page breaking related properties so that they can be mapped
@@ -477,9 +479,11 @@
                 </p:documentation>
                 <pxi:propagate-page-break>
                     <p:documentation>
-                        Propagate css:page-break-before, css:page-break-after, css:page-break-inside,
-                        css:page, css:counter-set-page, css:volume and css:volume-break-before
-                        attributes.
+                        Propagate css:page-break-before, css:page-break-after,
+                        css:page-break-inside, css:volume-break-before and css:volume-break-after
+                        attributes. (Needs to be done a second time because the box tree has been
+                        broken up by css:split. css:page-break-before='right' will now be propagated
+                        all the wait to the root box.)
                     </p:documentation>
                 </pxi:propagate-page-break>
                 <p:group>

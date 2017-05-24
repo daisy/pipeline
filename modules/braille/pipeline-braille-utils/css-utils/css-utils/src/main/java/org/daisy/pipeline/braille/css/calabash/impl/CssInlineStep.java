@@ -128,8 +128,12 @@ public class CssInlineStep extends DefaultStep {
 	private final String scssNumber = "\\d*\\.\\d+";
 	private final String scssColor = "(#[\\da-zA-Z]+|(rgb|hsl)a?\\([^)]*\\))";
 	private final String scssBadStringChars = "!\"#$'()*+,\\.\\/:<=>?@\\[\\\\\\]^`{|}~-";
-	private final String scssNumberColorString = "\\s*(\\s*|"+ scssNumber +"|"+ scssColor +"|"+ "[^"+scssBadStringChars+"]+" +"|"+ "\\\"[^'"+scssBadStringChars+"]+\\\"" +"|"+ "'[^\\\""+scssBadStringChars+"]+'" +")\\s*";
-	private final String scssValue = scssNumberColorString + "(" + "(\\s+|\\s*,\\s*)" + scssNumberColorString + ")*";
+	private final String scssNumberColorString = "\\s*("+ scssNumber
+	                                                +"|"+ scssColor
+	                                                +"|[^\\s"+scssBadStringChars+"]+"
+	                                                +"|\"([^\"]|\\\")*\""
+	                                                +"|'([^']|\\')*'"
+	                                                +")\\s*";
 	
 	private static final QName _default_stylesheet = new QName("default-stylesheet");
 	private static final QName _media = new QName("media");
@@ -196,15 +200,11 @@ public class CssInlineStep extends DefaultStep {
 					String scss = "";
 					for (String var : sassVariables.keySet()) {
 						String value = sassVariables.get(var);
-						if (value.matches("\\s*")) {
-							logger.debug("scss variable '"+var+"' contains only white space: "+value);
-							value = "'"+value+"'";
-							logger.debug("scss variable '"+var+"' was quoted               : "+value);
-						} else if (!value.matches(scssValue)) {
-							// if value contains special characters that can mess up parsing; wrap it in single quotes
+						if (!value.matches(scssNumberColorString)) {
+							// if value contains spaces or special characters that can mess up parsing; wrap it in single quotes
 							logger.debug("scss variable '"+var+"' contains special characters: "+value);
 							value = "'"+value.replaceAll("'", "\\\\'")+"'";
-							logger.debug("scss variable '"+var+"' was escaped                : "+value);
+							logger.debug("scss variable '"+var+"' was quoted                 : "+value);
 						} else {
 							logger.debug("scss variable '"+var+"' contains no special characters: "+value);
 						}

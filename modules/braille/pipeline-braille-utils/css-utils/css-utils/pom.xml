@@ -46,8 +46,8 @@
       <artifactId>commons-io</artifactId>
     </dependency>
     <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>Saxon-HE</artifactId>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -56,12 +56,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-jdk14</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -72,45 +66,6 @@
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <!--
-        runtime dependencies
-    -->
-    <!--
-        for saxon (FIXME: use for compilation?)
-    -->
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>saxon-he</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <!--
-        for com.xmlcalabash & calabash-adapter (FIXME: verify + move elsewhere)
-    -->
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient-osgi</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore-osgi</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>woodstox-osgi-adapter</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.persistence</groupId>
-      <artifactId>javax.persistence</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <!--
         test dependencies
@@ -136,11 +91,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.xmlresolver</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>saxon-adapter</artifactId>
       <scope>test</scope>
@@ -148,12 +98,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>logging-appender</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
-      <version>1.7.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -185,6 +129,7 @@
             <_dsannotations>
               org.daisy.pipeline.braille.css.calabash.impl.CssInlineStep$Provider,
               org.daisy.pipeline.braille.css.calabash.impl.CssShiftStringSetStep$Provider,
+              org.daisy.pipeline.braille.css.calabash.impl.CssSplitStep$Provider,
               org.daisy.pipeline.braille.css.saxon.impl.RenderTableByDefinition
             </_dsannotations>
           </instructions>

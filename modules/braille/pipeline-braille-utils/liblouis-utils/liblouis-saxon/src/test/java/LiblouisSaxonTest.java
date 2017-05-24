@@ -51,6 +51,7 @@ public class LiblouisSaxonTest {
 				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
 				// logging
 				logbackClassic(),
+				mavenBundle("org.slf4j:jcl-over-slf4j:1.7.2"), // required by httpclient (TODO: add to runtime dependencies of calabash)
 				// xspec
 				xspec(),
 				mavenBundle("org.apache.servicemix.bundles:org.apache.servicemix.bundles.xmlresolver:?"),
