@@ -48,8 +48,10 @@ public class XProcSpecTest {
 				pipelineModule("file-utils"),
 				pipelineModule("html-utils"),
 				pipelineModule("zip-utils"),
+				pipelineModule("mediatype-utils"),
 				logbackClassic(),
 				xprocspec(),
+				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?")
 			)
 		);

@@ -50,7 +50,7 @@
     <p:with-option name="attribute-value" select="if (starts-with($href, $fileset-base) and ends-with($fileset-base,'/')) then substring-after($href, $fileset-base) else $href"/>
   </p:add-attribute>
   <p:add-attribute match="/*" attribute-name="original-href">
-    <p:with-option name="attribute-value" select="if ($original-href and $fileset-base) then resolve-uri($original-href, $fileset-base) else ''"/>
+    <p:with-option name="attribute-value" select="if ($original-href) then resolve-uri($original-href, $fileset-base) else ''"/>
   </p:add-attribute>
   <p:delete match="@media-type[not(normalize-space())]"/>
   <p:delete match="@original-href[not(normalize-space())]"/>
