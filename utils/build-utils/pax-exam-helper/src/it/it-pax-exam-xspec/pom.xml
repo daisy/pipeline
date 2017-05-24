@@ -14,16 +14,6 @@
       <artifactId>saxon-adapter</artifactId>
       <version>1.1</version>
       <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-jdk14</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.daisy.maven</groupId>
@@ -38,24 +28,9 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.xmlresolver</artifactId>
-      <version>1.2_5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>pax-exam-helper</artifactId>
       <version>${pax-exam-helper.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <!--
-        force Maven to use the latest common-utils
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>common-utils</artifactId>
-      <version>2.1.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

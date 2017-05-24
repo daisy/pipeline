@@ -40,7 +40,6 @@ public class XSpecTest {
 				logbackClassic(),
 				// xspec
 				xspec(),
-				mavenBundle("org.apache.servicemix.bundles:org.apache.servicemix.bundles.xmlresolver:?"),
 				mavenBundle("org.daisy.pipeline:saxon-adapter:?")),
 			junitBundles()
 		);
