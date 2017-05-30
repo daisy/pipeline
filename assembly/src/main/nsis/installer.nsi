@@ -24,7 +24,7 @@ RequestExecutionLevel admin ;Require admin rights on NT6+ (When UAC is turned on
 ;   Installer General Settings
 ;----------------------------------------------------------
 Name "${APPNAME}"
-;OutFile "../debug-installer.exe"
+;OutFile "..\debug-installer.exe"
 ShowInstDetails show
 ShowUnInstDetails show
 SetCompressor zlib
@@ -32,7 +32,7 @@ InstallDir "$PROGRAMFILES\${APPNAME}"
 ;----------------------------------------------------------
 ; Maven properties
 ;----------------------------------------------------------
-!include ../project.nsh
+!include ..\project.nsh
 
 ;----------------------------------------------------------
 ;   Multi-User settings
@@ -258,15 +258,15 @@ section -Main SEC01
 
 	setOutPath $INSTDIR
 	SetOverwrite on
-	file ./logo.ico 
+	file .\logo.ico 
         
 	writeUninstaller "$INSTDIR\uninstall.exe"
 	#setOutPath "$INSTDIR\${PROJECT_ARTIFACT_ID}"
 
 	#Copy the whole daisy-pipeline dir
 	file /r "${PROJECT_BUILD_DIR}\pipeline2-${VERSION}_win\daisy-pipeline"
-	file ./pipeline2-gui.vbs
-        file ./pipeline2-webservice.vbs
+	file .\pipeline2-gui.vbs
+	file .\pipeline2-webservice.vbs
 
 	###############
 	# Registry information for add/remove programs
