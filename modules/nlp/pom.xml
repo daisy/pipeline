@@ -22,11 +22,11 @@
     <module>bom</module>
     <module>parent</module>
     <module>nlp-utils/nlp-common</module>
-    <!-- <module>nlp-utils/lexing</module> -->
+    <module>nlp-utils/lexing</module>
     <module>nlp-utils/break-detection</module>
-    <!-- <module>ruled-lexer</module> -->
-    <!-- <module>light-lexer</module> -->
-    <!-- <module>omnilang-lexer</module> -->
+    <module>ruled-lexer</module>
+    <module>light-lexer</module>
+    <module>omnilang-lexer</module>
     <module>zedai-break-detection</module>
     <module>html-break-detection</module>
     <module>dtbook-break-detection</module>
