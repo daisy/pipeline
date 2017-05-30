@@ -28,6 +28,7 @@
 		xmlns:f="functions"
 		exclude-result-prefixes="#all">
 	
+	<xsl:import href="http://www.daisy.org/pipeline/modules/image-utils/library.xsl"/>
 	<xsl:include href="utilities.xsl"/>
 	
 	<!-- ========================== -->

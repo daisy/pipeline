@@ -39,6 +39,11 @@
       <artifactId>odt-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>image-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   
   <build>

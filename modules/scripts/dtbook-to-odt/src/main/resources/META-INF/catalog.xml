@@ -10,4 +10,5 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:odt-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:asciimath-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:image-utils"/>
 </catalog>
