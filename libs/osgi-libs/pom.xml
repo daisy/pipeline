@@ -19,8 +19,6 @@
   <description>Aggregator POM to build all the DAISY Pipeline 2</description>
 
   <modules>
-    <!-- <module>brailleutils/core</module> -->
-    <!-- <module>brailleutils/catalog</module> -->
     <!-- <module>calabash</module> -->
     <!-- <module>jing</module> -->
     <!-- <module>jnaerator</module> -->

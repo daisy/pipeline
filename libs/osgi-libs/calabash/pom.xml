@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>3</version>
+    <version>4</version>
     <relativePath />
   </parent>
 
@@ -36,19 +36,33 @@
   <dependencies>
     <!-- required -->
     <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>Saxon-HE</artifactId>
-      <version>9.5.1-8</version>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <version>9.5.1.5</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>4.2.5</version>
+      <exclusions>
+        <!--
+            replaced by jcl-over-slf4j
+        -->
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>1.7.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.2</version>
     </dependency>
     <!-- optional -->
     <dependency>
@@ -58,9 +72,9 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.thaiopensource</groupId>
+      <groupId>org.daisy.libs</groupId>
       <artifactId>jing</artifactId>
-      <version>20091111</version>
+      <version>20120724.0.0</version>
       <optional>true</optional>
       <exclusions>
         <exclusion>
