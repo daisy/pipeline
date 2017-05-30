@@ -28,42 +28,36 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.2</version>
+        <version>1.10.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
-  <dependency>
-    <groupId>de.codecentric.centerdevice</groupId>
-    <artifactId>centerdevice-nsmenufx</artifactId>
-    <version>2.1.0</version>
-</dependency>
+    <dependency>
+      <groupId>de.codecentric.centerdevice</groupId>
+      <artifactId>centerdevice-nsmenufx</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>updater</artifactId>
-      <version>1.0.0</version>
+      <artifactId>updater-wrapper</artifactId>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
-      <!-- TODO declare version elsewhere as in other poms -->
-      <version>4.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
-      <version>4.3.1</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>pegdown</artifactId>
-      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
