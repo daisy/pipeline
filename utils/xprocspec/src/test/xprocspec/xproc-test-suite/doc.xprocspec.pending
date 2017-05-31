@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<t:test-suite xmlns:t="http://xproc.org/ns/testsuite">
+    <t:title>Doc</t:title>
+    <t:test href="doc/address-invalid-sample.xml"/>
+    <t:test href="doc/address-nonexistent-dtd.xml"/>
+    <t:test href="doc/address-valid-sample.xml"/>
+    <t:test href="doc/chaps/div.xml"/>
+    <t:test href="doc/chaps/div2.xml"/>
+    <t:test href="doc/compoundDoc.xml"/>
+    <t:test href="doc/compoundEntity.xml"/>
+    <t:test href="doc/divs/div.xml"/>
+    <t:test href="doc/divs/p.xml"/>
+    <t:test href="doc/docbook-invalid.xml"/>
+    <t:test href="doc/docbook-valid.xml"/>
+    <t:test href="doc/document-ns.xml"/>
+    <t:test href="doc/document.xml"/>
+    <t:test href="doc/document2.xml"/>
+    <t:test href="doc/envelope.xml"/>
+    <t:test href="doc/input-cs.xml"/>
+    <t:test href="doc/input-en-cs.xml"/>
+    <t:test href="doc/input-en.xml"/>
+    <t:test href="doc/input-xinclude-loop-source.xml"/>
+    <t:test href="doc/input-xinclude-loop-target.xml"/>
+    <t:test href="doc/input-xinclude-recursive-1.xml"/>
+    <t:test href="doc/input-xinclude.xml"/>
+    <t:test href="doc/input.xml"/>
+    <t:test href="doc/invalid.xml"/>
+    <t:test href="doc/nfc-input.xml"/>
+    <t:test href="doc/nfkc-input.xml"/>
+    <t:test href="doc/nfkd-input.xml"/>
+    <t:test href="doc/non-well-formed.xml"/>
+    <t:test href="doc/s-input.xml"/>
+    <t:test href="doc/s-input2.xml"/>
+    <t:test href="doc/xidoc.xml"/>
+    <t:test href="doc/xinclude/input-xinclude-recursive-2.xml"/>
+    <t:test href="doc/xinclude/para.xml"/>
+    <t:test href="doc/xml-base-chap.xml"/>
+    <t:test href="doc/xml-base-test.xml"/>
+    <t:test href="doc/xml11.xml"/>
+    <t:test href="doc/xmldata.xml"/>
+    <t:test href="doc/xpath-xinclude-doc.xml"/>
+</t:test-suite>

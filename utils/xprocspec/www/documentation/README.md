@@ -1,7 +1,7 @@
 xprocspec documentation
 =======================
 
-The documentation for the xprocspec grammar is available online at http://daisy-pipeline.github.io/xprocspec/documentation/index.html.
+The documentation for the xprocspec grammar is available online at http://daisy.github.io/xprocspec/documentation/index.html.
 
 The documentation is generated based on the Relax NG schema (which can be found through the link above).
 

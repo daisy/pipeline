@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" script="invalid-xproc-script.xpl">
+    
+    <x:scenario label="test for invalid xproc script">
+        <x:call step="x:foo"/>
+        <x:context label="some document">
+            <x:document type="inline">
+                <whatever/>
+            </x:document>
+        </x:context>
+        <x:expect type="compare" label="should relate to some document somehow">
+            <x:document type="inline">
+                <whatnot/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

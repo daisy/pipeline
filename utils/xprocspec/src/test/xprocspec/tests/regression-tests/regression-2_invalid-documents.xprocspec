@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:x="http://www.daisy.org/ns/xprocspec" script="../../../../../src/main/resources/content/xml/xproc/xprocspec.xpl">
+
+    <x:scenario label="running xprocspec test which refers to a invalid XProc document">
+        <x:call step="x:xprocspec">
+            <x:option name="temp-dir" select="$temp-dir"/>
+            <x:input port="source">
+                <x:document type="file" href="regression-2.resources/valid-test-referring-to-invalid-XProc.xprocspec.skip-ci"/>
+            </x:input>
+        </x:call>
+
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="should contain exactly one document" min="1" max="1" type="count"/>
+        <x:expect label="should contain a c:errors element as its last child element" type="xpath" test="/*/(*[last()] intersect c:*)/local-name()" equals="'errors'"/>
+
+        <x:context label="the junit port">
+            <x:document type="port" port="junit"/>
+        </x:context>
+        <x:expect label="should contain exactly one document" min="1" max="1" type="count"/>
+        <x:expect label="should state that there were 1 test" type="xpath" test="/*/@tests" equals="1"/>
+        <x:expect label="should state that there were 0 failures" type="xpath" test="/*/@failures" equals="0"/>
+        <x:expect label="should state that there were 1 error" type="xpath" test="/*/@errors" equals="1"/>
+
+        <x:context label="the html port">
+            <x:document type="port" port="html"/>
+        </x:context>
+        <x:expect label="should contain exactly one document" min="1" max="1" type="count"/>
+    </x:scenario>
+    
+    <x:scenario label="running xprocspec test which refers to a invalid XProc document">
+        <x:call step="x:xprocspec">
+            <x:option name="temp-dir" select="$temp-dir"/>
+            <x:input port="source">
+                <x:document type="file" href="regression-2.resources/valid-test-referring-to-invalid-XProc.xprocspec.skip-ci"/>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="should contain exactly one document" min="1" max="1" type="count"/>
+        <x:expect label="should contain a c:errors element as its last child element" type="xpath" test="/*/(*[last()] intersect c:*)/local-name()" equals="'errors'"/>
+        
+        <x:context label="the junit port">
+            <x:document type="port" port="junit"/>
+        </x:context>
+        <x:expect label="should contain exactly one document" min="1" max="1" type="count"/>
+        <x:expect label="should state that there were 1 test" type="xpath" test="/*/@tests" equals="1"/>
+        <x:expect label="should state that there were 0 failures" type="xpath" test="/*/@failures" equals="0"/>
+        <x:expect label="should state that there were 1 error" type="xpath" test="/*/@errors" equals="1"/>
+        
+        <x:context label="the html port">
+            <x:document type="port" port="html"/>
+        </x:context>
+        <x:expect label="should contain exactly one document" min="1" max="1" type="count"/>
+    </x:scenario>
+
+    <!--<x:scenario label="loading an invalid document on an input port">
+        <x:call step="x:xprocspec">
+            <x:option name="temp-dir" select="$temp-dir"/>
+            <x:input port="source">
+                <x:document type="file" href="regression-2.resources/invalid-xprocspec.xprocspec.skip-ci"/>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the error document">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect label="should contain exactly one document" min="1" max="1" type="count"/>
+        <x:expect label="should be a c:errors document" type="xpath" test="/c:errors"/>
+    </x:scenario>-->
+    
+    <!--<x:scenario label="loading a non-existent document on an input port">
+        <x:call step="x:xprocspec">
+            <x:option name="temp-dir" select="$temp-dir"/>
+            <x:input port="source">
+                <x:document type="file" href="regression-2.resources/does-not-exist"/>
+            </x:input>
+        </x:call>
+        
+        <x:context label="the error document">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect label="should contain exactly one document" min="1" max="1" type="count"/>
+        <x:expect label="should be a c:errors document" type="xpath" test="/c:errors"/>
+    </x:scenario>-->
+
+</x:description>

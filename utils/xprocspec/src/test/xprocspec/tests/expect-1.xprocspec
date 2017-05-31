@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:e="http://example.net/ns" script="../steps/identity.xpl">
+
+    <x:scenario label="identity - base-uri">
+        <x:call step="e:identity">
+            <x:option name="option.required" select="'option'"/>
+        </x:call>
+
+        <x:context label="empty sequence"/>
+        <x:expect type="xpath" label="test='false()' against a empty sequence should succeed" test="false()"/>
+        <x:expect type="compare" label="compare two empty sequences"/>
+        <x:expect type="count" label="the empty sequence contains at most 0 documents" max="0"/>
+
+        <x:context label="one document">
+            <x:document type="inline">
+                <doc1 attr="value1"/>
+            </x:document>
+        </x:context>
+        <x:expect type="compare" label="compare two single documents">
+            <x:document type="inline">
+                <doc1 attr="value1"/>
+            </x:document>
+        </x:expect>
+        <x:expect type="count" label="a sequence of one document contains between 1 and 10 documents" min="1" max="10"/>
+        <x:expect type="count" label="a sequence of one document contains between 0 and 1 document" min="0" max="1"/>
+        <x:expect type="count" label="a sequence of one document contains between 1 and 1 document" min="1" max="1"/>
+
+        <x:context label="two documents">
+            <x:document type="inline">
+                <doc1 attr="value1"/>
+            </x:document>
+            <x:document type="inline">
+                <doc2 attr="value2"/>
+            </x:document>
+        </x:context>
+        <x:expect type="xpath" label="test='/*' against a sequence of two documents should succeed" test="/*"/>
+        <x:expect type="compare" label="compare two identical sequences of two documents">
+            <x:document type="inline">
+                <doc1 attr="value1"/>
+            </x:document>
+            <x:document type="inline">
+                <doc2 attr="value2"/>
+            </x:document>
+        </x:expect>
+        <x:expect type="count" label="a sequence of two document contains between 2 and 10 documents" min="2" max="10"/>
+        <x:expect type="count" label="a sequence of two document contains between 1 and 2 documents" min="1" max="2"/>
+        <x:expect type="count" label="a sequence of two document contains between 2 and 2 documents" min="2" max="2"/>
+        <x:expect type="count" label="a sequence of two document contains at least 1 document" min="1"/>
+
+        <x:context label="single document with text node">
+            <x:document type="inline">
+                <doc><![CDATA[   this string   contains several spaces   ]]></doc>
+            </x:document>
+        </x:context>
+        <x:expect type="compare" label="by default, text nodes should be normalized">
+            <x:document type="inline">
+                <doc><![CDATA[this string contains several spaces]]></doc>
+            </x:document>
+        </x:expect>
+        <x:expect type="compare" label="if normalize-space is false, then text nodes should *not* be normalized">
+            <x:document type="inline">
+                <doc><![CDATA[   this string   contains several spaces   ]]></doc>
+            </x:document>
+        </x:expect>
+
+        <!-- TODO: Validation is not tested. It is not implemented either. -->
+
+        <x:context label="a sequence of documents">
+            <x:document type="inline">
+                <doc1/>
+            </x:document>
+            <x:document type="inline">
+                <doc2/>
+            </x:document>
+            <x:document type="inline">
+                <doc3/>
+            </x:document>
+        </x:context>
+        <x:expect type="custom" label="The custom 'count' step should be successful." xmlns:custom="http://www.example.org/ns/custom" step="custom:count" href="../steps/custom-count.xpl"
+            custom:count="[2,4]"/>
+
+        <x:context label="a 'doc1'-document">
+            <x:document type="inline">
+                <doc1/>
+            </x:document>
+        </x:context>
+        <x:expect xfail="some text here" type="compare" label="...should not equal a 'doc2'-document (xfail attribute on `x:expect`-element)">
+            <x:document type="inline">
+                <doc2/>
+            </x:document>
+        </x:expect>
+        <x:expect xfail="" type="compare" label="...should not equal a 'doc2'-document (empty xfail attribute)">
+            <x:document type="inline">
+                <doc2/>
+            </x:document>
+        </x:expect>
+
+    </x:scenario>
+
+    <x:scenario label="identity - xfail attribute on scenario" xfail="some text here">
+        <x:call step="e:identity">
+            <x:option name="option.required" select="'option'"/>
+        </x:call>
+
+        <x:context label="a 'doc1'-document">
+            <x:document type="inline">
+                <doc3/>
+            </x:document>
+        </x:context>
+        <x:expect type="compare" label="...should not equal a 'doc2'-document">
+            <x:document type="inline">
+                <doc4/>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+</x:description>

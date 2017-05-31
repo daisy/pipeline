@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
     <link href="https://fonts.googleapis.com/css?family=Chivo:900" rel="stylesheet" type="text/css" />
+    <!-- Tactile theme by [Jason Long](https://twitter.com/jasonlong) -->
     <link rel="stylesheet" type="text/css" href="www/stylesheets/stylesheet.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="www/stylesheets/pygment_trac.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="www/stylesheets/print.css" media="print" />
@@ -11,6 +12,13 @@
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <title>xprocspec</title>
+    <style>
+      pre { background: inherit; }
+      .inner {
+        width: auto;
+        max-width: 1100px;
+      }
+    </style>
   </head>
 
   <body>
@@ -21,10 +29,10 @@
           <h2>A tool for testing XProc scripts</h2>
         </header>
         <section class="buttons clearfix">
-          <a href="https://github.com/daisy/xprocspec/archive/v1.1.0.zip" id="button-left" class="button">
-            <span>Download v1.1.0</span>
+          <a href="https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.2.0/xprocspec-1.2.0.jar" id="button-left" class="button">
+            <span>Download v1.2.0</span>
           </a>
-          <a href="http://daisy.github.com/xprocspec/www/documentation/index.html" id="button-middle" class="button">
+          <a href="www/documentation/index.html" id="button-middle" class="button">
             <span>Documentation</span>
           </a>
           <a href="https://github.com/daisy/xprocspec" id="button-right" class="button">
@@ -33,47 +41,211 @@
         </section>
         <hr />
         <section id="main_content">
-          <h1>
-            <a name="xprocspec---xproc-testing-tool" class="anchor" href="#xprocspec---xproc-testing-tool"><span class="octicon octicon-link"></span></a>xprocspec - XProc testing tool</h1>
-          <p>This is a tool for testing XProc scripts. Its grammar is inspired by <a href="http://code.google.com/p/xspec/wiki/WritingScenarios">XSpec</a> and is implemented in XProc.</p>
-          <!--<p>xprocspec is itself tested using xprocspec. The latest results are available as a <a href="www/documentation/test-results.html.html">xprocspec HTML report</a>. xprocspec is at this point mostly feature-complete.--> <a href="https://travis-ci.org/daisy/xprocspec"><img src="https://travis-ci.org/daisy/xprocspec.png?branch=master" alt="Build status icon"/></a></p>
-          <section>
-            <h2>XProc</h2>
-            <p>Using Calabash (calabash 1.0.10-95 or newer is recommended), provide the xprocspec test on the "source" input port, and point the "result", "html" and "junit" report ports to a location of your choice.</p>
-            <p><small>NOTE: In Windows, you must also provide a file URI to the "temp-dir" option. It defaults to "file:/tmp/" which works in Linux and OSX.</small></p>
-          </section>
-          <section>
-            <h2>Maven</h2>
-            <p>If you use the Maven plugin <a href="https://github.com/daisy/xproc-maven-plugin">xproc-maven-plugin</a>, you can do automated testing of your XProc projects! Read more on <a href="https://github.com/daisy/xproc-maven-plugin">xproc-maven-plugin</a> project homepage.</p>
-          </section>
-          <section>
-            <h2>Get started now!</h2>
-            <pre style="font-family: Monaco, monospace;">
-wget http://daisy.github.io/xprocspec/www/hello-world.zip
-unzip hello-world.zip
-cd hello-world
-mvn test
-</pre>
-            <p>This will download a <a href="www/hello-world.zip">"hello world" template project</a> and run a sample xprocspec test (as well as a xspec test, using <a href="https://github.com/daisy/xspec-maven-plugin">xspec-maven-plugin</a>).</p>
-          </section>
+          <h1><a name="xprocspec---xproc-testing-tool" class="anchor" href="#xprocspec---xproc-testing-tool"><span class="octicon octicon-link"></span></a>xprocspec - XProc testing tool</h1>
+          
+          <p>This is a tool for testing XProc scripts, implemented in XProc. Its grammar is inspired by <a href="http://code.google.com/p/xspec/wiki/WritingScenarios">XSpec</a>.</p>
+          <p><a href="https://travis-ci.org/daisy/xprocspec"><img src="https://travis-ci.org/daisy/xprocspec.png?branch=master" alt="Build status icon"/></a></p>
+
+
+
+<h2>Getting started</h2>
+
+<p>Create a project directory. For instance:</p>
+
+<pre><code class="bash">mkdir ~/my-project &amp;&amp; cd ~/my-project
+</code></pre>
+
+<p>Store the following as <code>src/main/resources/xml/script.xpl</code>:</p>
+
+<pre><code class="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:ex="http://www.example.net/"
+                type="ex:hello"
+                version="1.0"&gt;
+    
+    &lt;p:input port="source"&gt;
+        &lt;p:inline&gt;
+            &lt;doc&gt;Hello world!&lt;/doc&gt;
+        &lt;/p:inline&gt;
+    &lt;/p:input&gt;
+    
+    &lt;p:output port="result"/&gt;
+    
+    &lt;p:identity/&gt;
+    
+&lt;/p:declare-step&gt;
+</code></pre>
+
+<p>Store the following as <code>src/test/xprocspec/test.xprocspec</code></p>
+
+<pre><code class="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng"
+               type="application/xml"
+               schematypens="http://relaxng.org/ns/structure/1.0"?&gt;
+&lt;x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:ex="http://www.example.net/"
+               script="../../main/resources/xml/script.xpl"&gt;
+    
+    &lt;x:scenario label="Hello world!"&gt;
+        &lt;x:call step="ex:hello"/&gt;
+        
+        &lt;x:context label="the result port"&gt;
+            &lt;x:document type="port" port="result"/&gt;
+        &lt;/x:context&gt;
+        &lt;x:expect type="compare" label="should be a doc element containing the text 'Hello world!'"&gt;
+            &lt;x:document type="inline"&gt;
+                &lt;doc&gt;Hello world!&lt;/doc&gt;
+            &lt;/x:document&gt;
+        &lt;/x:expect&gt;
+    &lt;/x:scenario&gt;
+    
+&lt;/x:description&gt;
+</code></pre>
+
+<p>In this example, the directory structure (<code>src/main/resources</code>, <code>src/test</code>) is chosen because it works with Maven projects.</p>
+
+<p>The next sub-sections describe ways of running this xprocspec test.</p>
+
+
+<h3>Calabash</h3>
+
+<p>If you haven't already, install <a href="http://xmlcalabash.com/" target="_blank">XML Calabash</a>.</p>
+
+<p><strong>Known issue: Something seems to have been broken from XML Calabash 1.0.32 and onwards, so if you're getting the error <code style="white-space: nowrap;">ERROR: Pipeline failed: null</code>, then please use 1.0.31 or earlier for now.</strong></p>
+
+<pre><code class="bash"># download and unzip xprocspec v1.2.0
+wget https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.2.0/xprocspec-1.2.0.jar
+unzip xprocspec-1.2.0.jar -d xprocspec
+
+# run the xprocspec test
+calabash -i src/test/xprocspec/test.xprocspec \
+         -o html=result.html \
+         -o junit=junit.xml \
+         -o result=result.xml \
+         xprocspec/content/xml/xproc/xprocspec.xpl
+</code></pre>
+
+<p>Now, open <code>result.html</code> in a browser to view the detailed results.</p>
+
+
+<h3>EXPath Packaging System</h3>
+
+<p>If you haven't already, install the <a href="http://expath.org/files" target="_blank">EXPath Packaging - Repository Manager</a>.</p>
+
+<pre><code class="bash"># create a local expath repository
+xrepo create repo
+export EXPATH_REPO=`pwd`/repo
+
+# download and install xprocspec v1.2.0
+wget https://oss.sonatype.org/content/repositories/releases/org/daisy/xprocspec/xprocspec/1.2.0/xprocspec-1.2.0.jar
+xrepo install xprocspec-1.2.0.jar
+
+# optionally, observe that xprocspec is installed
+xrepo list
+xrepo lookup xproc http://www.daisy.org/ns/xprocspec/xprocspec.xpl
+xrepo lookup rng http://www.daisy.org/ns/xprocspec/xprocspec.rng
+
+# run the xprocspec test
+calabash -i src/test/xprocspec/test.xprocspec \
+         -o html=result.html \
+         -o junit=junit.xml \
+         -o result=result.xml \
+         http://www.daisy.org/ns/xprocspec/xprocspec.xpl
+</code></pre>
+
+<p>Now, open <code>result.html</code> in a browser to view the detailed results.</p>
+
+
+<h3>Maven project</h3>
+
+<p>Make sure you have <a href="https://maven.apache.org/" target="_blank">Maven</a> installed.
+This method uses the <a href="https://github.com/daisy/xproc-maven-plugin" target="_blank">xproc-maven-plugin</a>
+to run xprocspec as part of the Maven test phase.</p>
+
+<p>Store the following file as <code>pom.xml</code> in your project directory:</p>
+
+<pre><code class="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+
+    &lt;groupId&gt;net.example&lt;/groupId&gt;
+    &lt;artifactId&gt;hello-world&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+
+    &lt;name&gt;Hello World&lt;/name&gt;
+    
+    &lt;build&gt;
+        &lt;plugins&gt;
+            &lt;!-- XProc testing using xprocspec and xproc-maven-plugin --&gt;
+            &lt;plugin&gt;
+              &lt;groupId&gt;org.daisy.maven&lt;/groupId&gt;
+              &lt;artifactId&gt;xproc-maven-plugin&lt;/artifactId&gt;
+              &lt;version&gt;1.0.0&lt;/version&gt;
+              &lt;executions&gt;
+                &lt;execution&gt;
+                  &lt;phase&gt;test&lt;/phase&gt;
+                  &lt;goals&gt;
+                    &lt;goal&gt;xprocspec&lt;/goal&gt;
+                  &lt;/goals&gt;
+                &lt;/execution&gt;
+              &lt;/executions&gt;
+              &lt;dependencies&gt;
+                &lt;dependency&gt;
+                  &lt;groupId&gt;org.daisy.xprocspec&lt;/groupId&gt;
+                  &lt;artifactId&gt;xprocspec&lt;/artifactId&gt;
+                  &lt;version&gt;1.2.0&lt;/version&gt;
+                &lt;/dependency&gt;
+                &lt;dependency&gt;
+                  &lt;groupId&gt;org.daisy.maven&lt;/groupId&gt;
+                  &lt;artifactId&gt;xproc-engine-calabash&lt;/artifactId&gt;
+                  &lt;version&gt;1.0.0&lt;/version&gt;
+                &lt;/dependency&gt;
+              &lt;/dependencies&gt;
+            &lt;/plugin&gt;
+            
+            &lt;!-- XSLT testing using xspec and xspec-maven-plugin --&gt;
+            &lt;!-- uncomment to enable testing of xspec tests in src/test/xspec --&gt;
+            &lt;!--&lt;plugin&gt;
+                &lt;groupId&gt;org.daisy.maven&lt;/groupId&gt;
+                &lt;artifactId&gt;xspec-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;1.0.0&lt;/version&gt;
+                &lt;executions&gt;
+                    &lt;execution&gt;
+                        &lt;phase&gt;test&lt;/phase&gt;
+                        &lt;goals&gt;
+                            &lt;goal&gt;test&lt;/goal&gt;
+                        &lt;/goals&gt;
+                    &lt;/execution&gt;
+                &lt;/executions&gt;
+            &lt;/plugin&gt;--&gt;
+            
+        &lt;/plugins&gt;
+    &lt;/build&gt;
+&lt;/project&gt;
+</code></pre>
+
+<p>Run tests:</p>
+
+<pre><code class="bash">mvn test
+</code></pre>
+
+<p>Now, open <code>target/xprocspec-reports/index.html</code> in a browser to view the detailed results.</p>
+
+<p>Also, xprocspec itself is a Maven project and uses this method to test itself.
+So you could also try cloning <a href="https://github.com/daisy/xprocspec" target="_blank">xprocspec on GitHub</a>
+and run <code>mvn test</code> from its root directory to see how test reports for a full test suite looks like.</p>
+
+
+
+
         </section>
-        <footer>xprocspec is mainly maintained by <a href="https://github.com/josteinaj">Jostein Austvik Jacobsen</a><br /> Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</footer>
-        <!-- AddThis Button BEGIN -->
-        <div class="addthis_toolbox addthis_floating_style addthis_counter_style" style="left:50px;top:50px;">
-          <a class="addthis_button_google_plusone" g:plusone:size="tall"></a>
-          <a class="addthis_button_tweet" tw:count="vertical" tw:text="Check out the #XProc testing tool #xprocspec over at"></a>
-          <a class="addthis_button_facebook_like" fb:like:layout="box_count"></a>
-          <a class="addthis_counter"></a>
-        </div>
-        <script type="text/javascript">var addthis_config = {"data_track_addressbar":false,"data_track_clickback":false};</script>
-        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51dbedc0728d2466"></script>
-        <!-- AddThis Button END -->
-        <!-- AddThis Welcome BEGIN -->
-        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51dbedc0728d2466"></script>
-        <script type="text/javascript">
-addthis.bar.initialize({'default':{"backgroundColor":"#000000","buttonColor":"#098DF4","textColor":"#FFFFFF","buttonTextColor":"#FFFFFF"},rules:[{"name":"Twitter","match":{"referringService":"twitter"},"message":"If you like xprocspec:","action":{"type":"button","text":"Tweet it!","verb":"share","service":"twitter"}},{"name":"Facebook","match":{"referringService":"facebook"},"message":"Tell your XML-buddies about xprocspec:","action":{"type":"button","text":"Share on Facebook","verb":"share","service":"facebook"}},{"name":"Google","match":{"referrer":"google.com"},"message":"If you like xprocspec, let Google know:","action":{"type":"button","text":"+1","verb":"share","service":"google_plusone_share"}}]});
-</script>
-        <!-- AddThis Welcome END -->
+        <footer>xprocspec is mainly maintained by <a href="https://github.com/josteinaj">Jostein Austvik Jacobsen</a>.</footer>
         <script type="text/javascript" xml:space="preserve">//<![CDATA[
                     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl.": "http://www.");
                     document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));//]]></script>
@@ -86,5 +258,9 @@ addthis.bar.initialize({'default':{"backgroundColor":"#000000","buttonColor":"#0
     }//]]></script>
       </div>
     </div>
+    <!--<link rel="stylesheet" href="/tmp/default.css">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.9.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>

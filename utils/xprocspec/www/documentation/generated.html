@@ -3,7 +3,7 @@
                 "specStatus": "unofficial",
                 "shortName": "xprocspec",
                 "subtitle": "A tool for testing XProc scripts",
-                "edDraftURI": "http://daisy-pipeline.github.io/xprocspec/www/documentation/index.html",
+                "edDraftURI": "http://daisy.github.io/xprocspec/www/documentation/index.html",
                 "editors": [
                     {
                         "name": "Jostein Austvik Jacobsen",
@@ -78,15 +78,18 @@
             dd{
                 padding-top:5px;
             }</style></head><body>
-        <section id="abstract"><a shape="rect" href="http://daisy-pipeline.github.io/xprocspec/">xprocspec</a> is a tool for testing XProc scripts. This specification defines the grammar used to define XProc tests for use with xprocspec. This document is automatically
-            generated based on the <a shape="rect" href="https://github.com/daisy-pipeline/xprocspec/blob/master/xprocspec/src/main/resources/content/xml/schema/xprocspec.rng">Relax NG schema for the xprocspec grammar</a>.</section>
+        <section id="abstract"><a shape="rect" href="http://daisy.github.io/xprocspec/">xprocspec</a> is a tool for testing XProc scripts. This specification defines the grammar used to define XProc tests for use with xprocspec. This document is automatically
+            generated based on the <a shape="rect" href="https://github.com/daisy/xprocspec/blob/master/src/main/resources/content/xml/schema/xprocspec.rng">Relax NG schema for the xprocspec grammar</a>.</section>
         
 <section xmlns:x="http://www.daisy.org/ns/pipeline/xproc/test" xmlns:f="http://www.daisy.org/ns/pipeline/xproc/test/internal-functions" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
 <h2>Definitions</h2>
 <section id="the-description-element">
-<h2>The <code>description</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd><a href="#the-script-element"><code>script</code></a><small title="optional">?</small></dd><dd><a href="#the-import-element"><code>import</code></a><small title="zero or more">*</small></dd><dd><a href="#the-scenario-element"><code>scenario</code></a><small title="zero or more">*</small></dd><dd><a href="#the-pending-element"><code>pending</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-description-pending"><code>pending</code></a><small title="optional">?</small></dd><dd><a href="#attr-description-script"><code>script</code></a><small title="optional">?</small></dd><dd><a href="#attr-description-version"><code>version</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<h2>The <code>description</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd><a href="#the-script-element"><code>script</code></a><small title="optional">?</small></dd><dd><a href="#the-import-element"><code>import</code></a><small title="zero or more">*</small></dd><dd><a href="#the-scenario-element"><code>scenario</code></a><small title="zero or more">*</small></dd><dd><a href="#the-pending-element"><code>pending</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-description-focus"><code>focus</code></a><small title="optional">?</small></dd><dd><a href="#attr-description-pending"><code>pending</code></a><small title="optional">?</small></dd><dd><a href="#attr-description-script"><code>script</code></a><small title="optional">?</small></dd><dd><a href="#attr-description-version"><code>version</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
 <p>The <a href="#the-description-element"><code>description</code></a> element is the root element of an xprocspec test and describes the functionality of a specific XProc script.</p>
 
+<p id="attr-description-focus">Assertions or scenarios with the <a href="#attr-description-focus"><code>focus</code></a> attribute will be the only ones tested and
+               reported. When present, only that assertion or scenario will be evaluated.
+               Its content describes why you are focusing on this particular assertion or scenario.</p>
 <p id="attr-description-pending">Assertions or scenarios with the <a href="#attr-description-pending"><code>pending</code></a> attribute will remain untested, but will be
                reported as (eventual) desired behaviour. Its semantics is the same as for the
                <a href="#the-pending-element"><code>pending</code></a> element.
@@ -135,7 +138,7 @@
 </section>
 
 <section id="the-scenario-element">
-<h2>The <code>scenario</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd><a href="#the-call-element"><code>call</code></a><small title="optional">?</small></dd><dd><a href="#the-scenario-element"><code>scenario</code></a><small title="zero or more">*</small></dd><dd><a href="#the-pending-element"><code>pending</code></a><small title="zero or more">*</small></dd><dd><a href="#the-context-element"><code>context</code></a><small title="zero or more">*</small></dd><dd><a href="#the-expect-element"><code>expect</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-scenario-focus"><code>focus</code></a><small title="optional">?</small></dd><dd><a href="#attr-scenario-label"><code>label</code></a></dd><dd><a href="#attr-scenario-xfail"><code>xfail</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<h2>The <code>scenario</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="optional">?</small></dd><dd><a href="#the-call-element"><code>call</code></a><small title="optional">?</small></dd><dd><a href="#the-scenario-element"><code>scenario</code></a><small title="zero or more">*</small></dd><dd><a href="#the-pending-element"><code>pending</code></a><small title="zero or more">*</small></dd><dd><a href="#the-context-element"><code>context</code></a><small title="zero or more">*</small></dd><dd><a href="#the-expect-element"><code>expect</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-scenario-focus"><code>focus</code></a><small title="optional">?</small></dd><dd><a href="#attr-scenario-label"><code>label</code></a></dd><dd><a href="#attr-scenario-pending"><code>pending</code></a><small title="optional">?</small></dd><dd><a href="#attr-scenario-xfail"><code>xfail</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
 <p>
                 A scenario groups together the definition of the script environment
                 (the <a href="#the-call-element"><code>call</code></a> element) and the script assertions (the <a href="#the-context-element"><code>context</code></a> and
@@ -151,11 +154,14 @@
                reported. When present, only that assertion or scenario will be evaluated.
                Its content describes why you are focusing on this particular assertion or scenario.</p>
 <p id="attr-scenario-label">The <a href="#attr-scenario-label"><code>label</code></a> attribute is used to describe the current element in human-readable words.</p>
+<p id="attr-scenario-pending">Assertions or scenarios with the <a href="#attr-scenario-pending"><code>pending</code></a> attribute will remain untested, but will be
+               reported as (eventual) desired behaviour. Its semantics is the same as for the
+               <a href="#the-pending-element"><code>pending</code></a> element.
+               Its content describes why the assertion or scenario should not be evaluated.</p>
 <p id="attr-scenario-xfail">Assertions with the <a href="#attr-scenario-xfail"><code>xfail</code></a> attribute will behave just like other assertions, but
                will succeed where other assertions fail, and will fail where other assertions succeed (i.e. the result is inverted).
                The <a href="#attr-scenario-xfail"><code>xfail</code></a> attribute can also be applied to scenarios, in which case <code>xfail</code> will be implicitly
-               set to <code>true</code> for all of the scenarios assertions.
-               The value of the <a href="#attr-scenario-xfail"><code>xfail</code></a> attribute must be <code>true</code>.</p>
+               enabled for all of the scenarios assertions. Its content describes why you are expecting the test to fail.</p>
 </section>
 
 
@@ -186,9 +192,12 @@
 
 
 <section id="the-context-element">
-<h2>The <code>context</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dd><a href="#the-document-element"><code>document</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-context-label"><code>label</code></a><small title="optional">?</small></dd><dd><a href="#attr-context-pending"><code>pending</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<h2>The <code>context</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dd><a href="#the-document-element"><code>document</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-context-focus"><code>focus</code></a><small title="optional">?</small></dd><dd><a href="#attr-context-label"><code>label</code></a><small title="optional">?</small></dd><dd><a href="#attr-context-pending"><code>pending</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
 <p>Defines the context against which assertions are made.</p>
 
+<p id="attr-context-focus">Assertions or scenarios with the <a href="#attr-context-focus"><code>focus</code></a> attribute will be the only ones tested and
+               reported. When present, only that assertion or scenario will be evaluated.
+               Its content describes why you are focusing on this particular assertion or scenario.</p>
 <p id="attr-context-label">The <a href="#attr-context-label"><code>label</code></a> attribute is used to describe the current element in human-readable words.</p>
 <p id="attr-context-pending">Assertions or scenarios with the <a href="#attr-context-pending"><code>pending</code></a> attribute will remain untested, but will be
                reported as (eventual) desired behaviour. Its semantics is the same as for the
@@ -197,11 +206,15 @@
 </section>
 
 <section id="the-expect-element">
-<h2>The <code>expect</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-document-element"><code>document</code></a><small title="zero or more">*</small></dd><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-expect-equals"><code>equals</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-focus"><code>focus</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-grammar"><code>grammar</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-href"><code>href</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-label"><code>label</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-max"><code>max</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-min"><code>min</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-normalize-space"><code>normalize-space</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-pending"><code>pending</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-step"><code>step</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-test"><code>test</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-type"><code>type</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-xfail"><code>xfail</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<h2>The <code>expect</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-document-element"><code>document</code></a><small title="zero or more">*</small></dd><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-expect-code"><code>code</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-equals"><code>equals</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-focus"><code>focus</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-grammar"><code>grammar</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-href"><code>href</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-label"><code>label</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-max"><code>max</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-message"><code>message</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-min"><code>min</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-normalize-space"><code>normalize-space</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-pending"><code>pending</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-step"><code>step</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-test"><code>test</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-type"><code>type</code></a><small title="optional">?</small></dd><dd><a href="#attr-expect-xfail"><code>xfail</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
 <p>
                 Defines what is expected from the context document(s).
             </p>
 
+<p id="attr-expect-code">
+                                    When <code>type</code> is <code>error</code>, the <a href="#attr-expect-code"><code>code</code></a> attribute is used to declare what the expected error code is.
+                                    The <a href="#attr-expect-code"><code>code</code></a> attribute is a string. If you need to evaluate XPath expressions, then set the <a href="#attr-expect-type"><code>type</code></a> attribute to <code>xpath</code> instead. 
+                                </p>
 <p id="attr-expect-equals">
                                 When <code>type</code> is <code>xpath</code>, the <a href="#attr-expect-equals"><code>equals</code></a> attribute defines the value that the <code>test</code> expression must evaluate to for the test to succeed.
                                 By default, <code>true()</code> is used. For example, <code>&lt;x:expect test="/*/@result='value'" .../&gt;</code> is equivalent to <code>&lt;x:expect test="/*/@result" equals="'value'" .../&gt;</code>.
@@ -219,6 +232,10 @@
 <p id="attr-expect-label">The <a href="#attr-expect-label"><code>label</code></a> attribute is used to describe the current element in human-readable words.</p>
 <p id="attr-expect-max">If <code>max</code> is specified, then there must be at most this many documents in context for the assertion to
                                 succeed.</p>
+<p id="attr-expect-message">
+                                    When <code>type</code> is <code>error</code>, the <a href="#attr-expect-code"><code>code</code></a> attribute is used to declare what the expected error code is.
+                                    The <a href="#attr-expect-code"><code>code</code></a> attribute is a string. If you need to evaluate XPath expressions, then set the <a href="#attr-expect-type"><code>type</code></a> attribute to <code>xpath</code> instead. 
+                                </p>
 <p id="attr-expect-min">If <code>min</code> is specified, then there must be at least this many documents in context for the assertion to
                                 succeed.</p>
 <p id="attr-expect-normalize-space">
@@ -242,7 +259,7 @@
                             The assertion succeeds if the document sequence in context equals the document sequence inside the <code>x:expect</code> element.
                         </p><p>When <code>type</code> is <a href="#the-validate-element"><code>validate</code></a>, the documents in context is validated against the schema provided in the <code>x:document</code> element
                             inside the <code>x:expect</code> element.</p><p>When <code>type</code> is <code>count</code>, the number of documents in context is compared with the <a href="#attr-expect-min"><code>min</code></a> and <a href="#attr-expect-max"><code>max</code></a>
-                            attributes.</p><p>When <code>type</code> is <code>custom</code>, you can provide your own XProc implementation of an assertion. The step signature must be as follows:</p><pre><code>
+                            attributes.</p><p>The <a href="#attr-expect-type"><code>type</code></a> attribute is used to define the type of assertion you want to make.</p><p>When <code>type</code> is <code>custom</code>, you can provide your own XProc implementation of an assertion. The step signature must be as follows:</p><pre><code>
 &lt;p:declare-step xmlns:p="http://www.w3.org/ns/xproc" type="(...)" (...)&gt;
    &lt;p:input port="context" sequence="true"/&gt;
    &lt;p:input port="expect" sequence="true"/&gt;
@@ -273,8 +290,7 @@
 <p id="attr-expect-xfail">Assertions with the <a href="#attr-expect-xfail"><code>xfail</code></a> attribute will behave just like other assertions, but
                will succeed where other assertions fail, and will fail where other assertions succeed (i.e. the result is inverted).
                The <a href="#attr-expect-xfail"><code>xfail</code></a> attribute can also be applied to scenarios, in which case <code>xfail</code> will be implicitly
-               set to <code>true</code> for all of the scenarios assertions.
-               The value of the <a href="#attr-expect-xfail"><code>xfail</code></a> attribute must be <code>true</code>.</p>
+               enabled for all of the scenarios assertions. Its content describes why you are expecting the test to fail.</p>
 </section>
 
 
@@ -289,9 +305,12 @@
 </section>
 
 <section id="the-option-element">
-<h2>The <code>option</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-option-name"><code>name</code></a><small title="optional">?</small></dd><dd><a href="#attr-option-select"><code>select</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<h2>The <code>option</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-option-base-uri"><code>base-uri</code></a><small title="optional">?</small></dd><dd><a href="#attr-option-name"><code>name</code></a><small title="optional">?</small></dd><dd><a href="#attr-option-select"><code>select</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
 <p>The option element is used to provide values to XProc options on the XProc step you are testing.</p>
 
+<p id="attr-option-base-uri">If the <code>base-uri</code> attribute is <code>temp-dir</code>, then the base URI in the context
+                        will be the temporary directory used for the test, instead of the base URI of the xprocspec document.
+                        This can be used with for instance <code>base-uri()</code> and <code>resolve-uri('...')</code></p>
 <p id="attr-option-name">The <a href="#attr-option-name"><code>name</code></a> attribute is the name of the option used in the XProc step.</p>
 <p id="attr-option-select">The <a href="#attr-option-select"><code>select</code></a> attribute is a XPath expression used to select a value for the XProc option
                         (equivalent of the <code>p:with-option/@select</code> attribute in XProc).</p><p>The variable "<code>$temp-dir</code>" is available for use in the select expression. The variable refers to the temporary
@@ -302,11 +321,18 @@
 </section>
 
 <section id="the-param-element">
-<h2>The <code>param</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-param-name"><code>name</code></a><small title="optional">?</small></dd><dd><a href="#attr-param-select"><code>select</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
+<h2>The <code>param</code> element</h2><dl class="element"><dt>Content model:</dt><dd><a href="#the-documentation-element"><code>documentation</code></a><small title="zero or more">*</small></dd><dt>Content attributes:</dt><dd><a href="#attr-param-base-uri"><code>base-uri</code></a><small title="optional">?</small></dd><dd><a href="#attr-param-name"><code>name</code></a><small title="optional">?</small></dd><dd><a href="#attr-param-port"><code>port</code></a><small title="optional">?</small></dd><dd><a href="#attr-param-select"><code>select</code></a><small title="optional">?</small></dd><dd>Zero or more attributes from any namespace.</dd></dl>
 <p>The param element is used to provide values to XProc paramaters on the XProc step you are testing.</p>
 
+<p id="attr-param-base-uri">If the <code>base-uri</code> attribute is <code>temp-dir</code>, then the base URI in the context
+                        will be the temporary directory used for the test, instead of the base URI of the xprocspec document.
+                        This can be used with for instance <code>base-uri()</code> and <code>resolve-uri('...')</code></p>
 <p id="attr-param-name">The <a href="#attr-param-name"><code>name</code></a> attribute is the name of the parameter to be provided on the XProc steps primary parameter input
                     port.</p>
+<p id="attr-param-port">
+                        The <code>port</code> is the name of a XProc input parameter port.
+                        The parameter will be sent to this port if provided, or to the default parameter port if not provided.
+                    </p>
 <p id="attr-param-select">The <a href="#attr-param-select"><code>select</code></a> attribute is a XPath expression used to select a value for the XProc parameter (equivalent of the <code>p:with-param/@select</code> attribute in XProc).</p><p>The variable "<code>$temp-dir</code>" is available for use in the select expression. The variable refers to the temporary directory used for the test. This is useful (for instance) if the
                         value of the parameter is a URI pointing to a directory where the XProc steps will store files. Every xprocspec scenario is assigned its own temporary directory so that
                         subsequent evaluations of the step does not conflict with eachother.</p>

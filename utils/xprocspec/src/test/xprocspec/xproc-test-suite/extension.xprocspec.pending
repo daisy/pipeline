@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<t:test-suite xmlns:t="http://xproc.org/ns/testsuite">
+    <t:title>Extension</t:title>
+    <t:test href="extension/unimpl-001.xml"/>
+</t:test-suite>

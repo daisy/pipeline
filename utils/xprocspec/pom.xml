@@ -2,14 +2,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.daisy.maven</groupId>
-    <artifactId>xprocspec-aggregator</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <parent>
+        <groupId>org.daisy</groupId>
+        <artifactId>daisy</artifactId>
+        <version>3</version>
+        <relativePath />
+    </parent>
+    
+    <groupId>org.daisy.xprocspec</groupId>
+    <artifactId>xprocspec</artifactId>
+    <version>1.2.1-SNAPSHOT</version>
+    <packaging>bundle</packaging>
 
-    <name>xprocspec-aggregator</name>
-    <description>Aggregator POM for xprocspec</description>
-    <url>http://daisy-pipeline.github.io/xprocspec/</url>
+    <name>xprocspec</name>
+    <description>A tool for testing XProc scripts</description>
+    
+    <url>http://daisy.github.io/xprocspec/</url>
     <inceptionYear>2013</inceptionYear>
     <licenses>
         <license>
@@ -31,23 +39,47 @@
         </developer>
     </developers>
     <issueManagement>
-        <url>https://github.com/daisy-pipeline/xprocspec/issues</url>
+        <url>https://github.com/daisy/xprocspec/issues</url>
         <system>GitHub Issues</system>
     </issueManagement>
-
+    
     <scm>
-        <url>https://github.com/daisy-pipeline/xprocspec</url>
-        <connection>scm:git:git://github.com/daisy-pipeline/xprocspec.git</connection>
-        <developerConnection>scm:git:git@github.com:daisy-pipeline/xprocspec.git</developerConnection>
+        <url>http://github.com/daisy/xprocspec</url>
+        <connection>scm:git:git@github.com:daisy/xprocspec.git</connection>
+        <developerConnection>scm:git:git@github.com:daisy/xprocspec.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
     
-    <modules>
-        <module>xprocspec</module>
-        <!--<module>xprocspec-archetype-basic</module>-->
-    </modules>
-
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
     <build>
+        <resources>
+            
+            <!-- set project version in expath-pkg.xml -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>expath-pkg.xml</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>expath-pkg.xml</include>
+                </includes>
+            </resource>
+            
+            <!-- include RNC version in output JAR -->
+            <resource>
+                <directory>target/generated-resources</directory>
+                <includes>
+                    <include>content/xml/schema/*.rnc</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-release-plugin</artifactId>
@@ -58,9 +90,79 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
+            
+            <!-- compile RNC version of RNGs -->
+            <plugin>
+                <groupId>us.bryon</groupId>
+                <artifactId>relaxng-maven-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <id>generate-relaxng</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>trang</goal>
+                        </goals>
+                        <configuration>
+                            <src>src/main/resources/content/xml/schema</src>
+                            <dest>target/generated-resources/content/xml/schema</dest>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- run xprocspec tests on xprocspec -->
+            <plugin>
+              <groupId>org.daisy.maven</groupId>
+              <artifactId>xproc-maven-plugin</artifactId>
+              <version>1.0.0</version>
+              <executions>
+                <execution>
+                  <phase>test</phase>
+                  <goals>
+                    <goal>xprocspec</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <dependencies>
+                <dependency>
+                  <!-- use project version of xprocspec -->
+                  <groupId>org.daisy.xprocspec</groupId>
+                  <artifactId>xprocspec</artifactId>
+                  <version>${project.version}</version>
+                </dependency>
+                <dependency>
+                  <groupId>org.daisy.maven</groupId>
+                  <artifactId>xproc-engine-calabash</artifactId>
+                  <version>1.0.0</version>
+                </dependency>
+                <dependency>
+                  <groupId>nu.validator.htmlparser</groupId>
+                  <artifactId>htmlparser</artifactId>
+                  <version>1.4</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+            
+            <!-- OSGi packagine -->
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.4.0</version>
+                <extensions>true</extensions>
+            </plugin>
+            
         </plugins>
     </build>
-
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
+    
     <profiles>
         <profile>
             <id>release</id>

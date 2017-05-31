@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:e="http://example.net/ns" script="../steps/error.xpl">
+
+    <x:scenario label="error">
+        <x:call step="e:error"/>
+        
+        <!-- test getting errors document (should be c:errors when errors) -->
+        <x:context label="the error document">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect label="the error document must have c:errors as its root element" type="xpath" test="/c:errors"/>
+        <x:expect label="there must be exactly one c:error in the c:errors element" type="xpath" test="count(/c:errors/c:error)" equals="1"/>
+        <x:expect label="there must be no other elements than c:error in the c:errors element" type="xpath" test="count(/c:errors/*[not(self::c:error)])" equals="0"/>
+        <x:expect label="the error code must be 'ex:TESTERROR'" type="xpath" test="/c:errors/c:error/@code" equals="'ex:TESTERROR'"/>
+        <x:expect label="the error message must be 'MESSAGE'" type="xpath" test="normalize-space(/c:errors/c:error/text())" equals="'MESSAGE'"/>
+    </x:scenario>
+    
+    <x:scenario label="simplified error assertion">
+        <x:call step="e:error"/>
+        
+        <x:context label="the error document">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect label="the error code must be 'ex:TESTERROR'" type="error" code="ex:TESTERROR"/>
+        <x:expect label="the error code must not be 'ex:FOO'" type="error" code="ex:FOO" xfail=""/>
+        <x:expect label="the error message must be 'MESSAGE'" type="error" message="MESSAGE"/>
+        <x:expect label="the error message must not be 'FOO'" type="error" message="FOO" xfail=""/>
+        <x:expect label="both the error code must be 'ex:TESTERROR' and the error message must be 'MESSAGE' (#1)" type="error" code="ex:FOO" message="FOO" xfail=""/>
+        <x:expect label="both the error code must be 'ex:TESTERROR' and the error message must be 'MESSAGE' (#2)" type="error" code="ex:FOO" message="MESSAGE" xfail=""/>
+        <x:expect label="both the error code must be 'ex:TESTERROR' and the error message must be 'MESSAGE' (#3)" type="error" code="ex:TESTERROR" message="FOO" xfail=""/>
+        <x:expect label="both the error code must be 'ex:TESTERROR' and the error message must be 'MESSAGE' (#4)" type="error" code="ex:TESTERROR" message="MESSAGE"/>
+    </x:scenario>
+    
+    <x:scenario label="script that gives an error, with xfail on the x:scenario element" xfail="">
+        <x:call step="e:error"/>
+        
+        <x:context label="an empty sequence of documents"/>
+        <x:expect type="count" label="test that is expected to succeed" min="0" max="0"/>
+        <x:expect type="count" label="test that is expected to fail" min="10" xfail=""/>
+    </x:scenario>
+    
+    <x:scenario label="script that gives an error, with xfail on the x:scenario element, while checking for errors with x:expect" xfail="">
+        <x:call step="e:error"/>
+        
+        <x:context label="the error document">
+            <x:document type="errors"/>
+        </x:context>
+        <x:expect label="test if the error code is 'ex:FOO'" type="error" code="ex:FOO"/>
+    </x:scenario>
+
+</x:description>

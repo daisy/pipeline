@@ -29,7 +29,7 @@
     <p:identity name="template"/>
     <p:sink/>
     
-    <p:load href="../../xprocspec/src/main/resources/content/xml/schema/xprocspec.rng"/>
+    <p:load href="../../src/main/resources/content/xml/schema/xprocspec.rng"/>
     <p:xslt>
         <p:input port="parameters">
             <p:empty/>
