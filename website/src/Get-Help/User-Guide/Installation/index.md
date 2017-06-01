@@ -68,6 +68,45 @@ application, the server and the command line tool. To install, simply
 extract the contents to any destination you want.
 
 
+## Updater
+
+Some packages also include an updater tool that you can use for quickly
+updating your current installation to the latest version. The updater
+can be invoked either via the desktop application or via the command
+line. The desktop application has a menu item "Check updates" under
+"Help". On the command line it is different for each platform.
+
+<!-- Windows: to do -->
+
+### Mac OS
+
+~~~sh
+/Applications/DAISY\ Pipeline\ 2.app/Contents/Java/updater/pipeline-updater \
+    -service="http://daisy.github.io/pipeline-assembly/releases/" \
+    -install-dir="/Applications/DAISY Pipeline 2.app/Contents/Java/" \
+    -descriptor="/Applications/DAISY Pipeline 2.app/Contents/Java/etc/releaseDescriptor.xml" \
+    -version=current
+~~~
+
+In the above command replace "/Applications" with whichever directory
+you have installed the application file in.
+
+<!-- Debian and Red Hat: updater not available -->
+
+### Linux (ZIP)
+
+~~~sh
+/home/bert/pipeline2/updater/pipeline-updater \
+    -service="http://daisy.github.io/pipeline-assembly/releases/" \
+    -install-dir=/home/bert/pipeline2/ \
+    -descriptor=/home/bert/pipeline2/etc/releaseDescriptor.xml \
+    -version=current
+~~~
+
+In the above command replace "/home/bert/pipeline2" with whichever directory
+you have unpacked the ZIP file to.
+
+
 ## System Requirements
 
 ### Java

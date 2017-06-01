@@ -106,7 +106,7 @@ $(MAVEN_DIR)/modules : $(MAVEN_DIR)/pom.xml
 	                    $(MVN_OPTS) \
 	                    "dependency:unpack-dependencies" \
 	                    -Dclassifier=doc -DexcludeTransitive -Dmdep.unpack.excludes='META-INF,META-INF/**/*' \
-	                    -Dmdep.useRepositoryLayout
+	                    -Dmdep.useRepositoryLayout -Dmdep.failOnMissingClassifierArtifact=true
 	cd $(dir $<)/target/dependency/org/daisy/pipeline/modules && find . -type d -name '[0-9]*' -prune -exec bash -c \
 		'mkdir -p $(CURDIR)/$@/$$(dirname {}); cp -r {}/* $$_' \; || true
 
