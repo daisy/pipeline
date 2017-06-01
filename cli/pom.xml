@@ -35,6 +35,17 @@
               <commandlineArgs>dist</commandlineArgs>
             </configuration>
           </execution>
+          <execution>
+            <id>clean-builddir</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>make</executable>
+              <commandlineArgs>clean</commandlineArgs>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
