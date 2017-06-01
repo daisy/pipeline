@@ -1,0 +1,51 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+include "../base/priority.rnc"
+start = 
+    element jobRequest {
+        element script {
+            attribute href { xsd:anyURI }
+        }
+	& element nicename {text}?
+	& element priority{priority}?
+        & element input {
+            attribute name { text } 
+            & (item+ | docwrapper+) # files or inline documents
+        }* 
+        
+        & element option {
+            attribute name { text } 
+            & (text | item+)
+        }* 
+        
+        & element output {
+            attribute name { text } 
+            & (text | item+)
+        }*
+        & element callback {
+            attribute href { text }
+            & attribute type { callback.type }
+            & attribute frequency { text }?
+        }*
+    }    
+  
+  
+item =
+    element item {
+        attribute value { text }
+     }
+
+callback.type = "messages" | "status"
+
+# docwrapper can contain anything
+docwrapper = 
+    element docwrapper {
+        anyElement
+    }
+    
+anyElement =
+  element * {
+    (attribute * { text }
+     | text
+     | anyElement)*
+  }
+ 

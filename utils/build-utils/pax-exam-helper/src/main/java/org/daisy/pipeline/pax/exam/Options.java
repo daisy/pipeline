@@ -11,12 +11,23 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Vector;
 
 import org.apache.maven.repository.internal.DefaultServiceLocator;
 import org.apache.maven.repository.internal.MavenRepositorySystemSession;
+import org.apache.maven.settings.building.DefaultSettingsBuilderFactory;
+import org.apache.maven.settings.building.DefaultSettingsBuildingRequest;
+import org.apache.maven.settings.building.SettingsBuilder;
+import org.apache.maven.settings.building.SettingsBuildingException;
+import org.apache.maven.settings.building.SettingsBuildingRequest;
+import org.apache.maven.settings.building.SettingsBuildingResult;
+import org.apache.maven.settings.Profile;
+import org.apache.maven.settings.Repository;
+import org.apache.maven.settings.Settings;
+import org.apache.maven.wagon.providers.file.FileWagon;
 import org.apache.maven.wagon.providers.http.HttpWagon;
 import org.apache.maven.wagon.Wagon;
 
@@ -44,6 +55,7 @@ import org.sonatype.aether.graph.Dependency;
 import org.sonatype.aether.graph.DependencyNode;
 import org.sonatype.aether.repository.LocalRepository;
 import org.sonatype.aether.repository.RemoteRepository;
+import org.sonatype.aether.repository.RepositoryPolicy;
 import org.sonatype.aether.RepositorySystem;
 import org.sonatype.aether.resolution.DependencyRequest;
 import org.sonatype.aether.resolution.DependencyResolutionException;
@@ -81,9 +93,9 @@ public abstract class Options {
 	
 	public static Option spiflyBundles() {
 		return composite(
-			mavenBundle().groupId("org.ow2.asm").artifactId("asm-all").version("4.0"),
+			mavenBundle().groupId("org.ow2.asm").artifactId("asm-all").version("5.0"),
 			mavenBundle().groupId("org.apache.aries").artifactId("org.apache.aries.util").version("1.0.0"),
-			mavenBundle().groupId("org.apache.aries.spifly").artifactId("org.apache.aries.spifly.dynamic.bundle").version("1.0.0")
+			mavenBundle().groupId("org.apache.aries.spifly").artifactId("org.apache.aries.spifly.dynamic.bundle").version("1.0.2")
 		);
 	}
 	
@@ -92,7 +104,7 @@ public abstract class Options {
 	}
 	
 	public static MavenBundleOption xprocspec() {
-		return mavenBundleComposite(
+		return mavenBundles(
 			mavenBundle("org.daisy.maven:xprocspec-runner:?"),
 			mavenBundle("org.daisy.xprocspec:xprocspec:?")
 		);
@@ -192,6 +204,9 @@ public abstract class Options {
 						logger.error("Could not find version of " + groupId + ":" + artifactId + " in Maven project");
 						throw new RuntimeException("Could not find version of " + groupId + ":" + artifactId + " in Maven project"); }
 				bundle.version(version);
+				if (startLevel > 0) {
+					bundle.startLevel(startLevel);
+				}
 				// special handling of xprocspec
 				if (groupId.equals("org.daisy.xprocspec") && artifactId.equals("xprocspec"))
 					url = wrappedBundle(bundle)
@@ -255,6 +270,16 @@ public abstract class Options {
 			return this;
 		}
 		
+		private int startLevel = -1;
+		
+		public MavenBundle startLevel(int level) {
+			if (level <= 0) {
+				throw new IllegalArgumentException("start level must be > 0");
+			}
+			this.startLevel = level;
+			return this;
+		}
+		
 		public MavenBundle versionAsInProject() {
 			return version("?");
 		}
@@ -272,7 +297,10 @@ public abstract class Options {
 		@Override
 		public String toString() {
 			StringBuilder sb = new StringBuilder();
-			sb.append("mavenBundle(\"").append(artifactCoords(asArtifact())).append("\")");
+			sb.append("mavenBundle(\"").append(artifactCoords(asArtifact()));
+			if (startLevel > 0)
+				sb.append("(start@").append(startLevel).append(")");
+			sb.append("\")");
 			return sb.toString();
 		}
 		
@@ -294,12 +322,13 @@ public abstract class Options {
 		}
 	}
 	
-	private static MavenBundleOption mavenBundleComposite(final MavenBundleOption... options) {
+	public static MavenBundleOption mavenBundles(final MavenBundleOption... options) {
 		final MavenBundle[] bundles; {
 			List<MavenBundle> list = new ArrayList<MavenBundle>();
 			for (MavenBundleOption o : options)
-				for (MavenBundle b : o.getBundles())
-					list.add(b);
+				if (o != null)
+					for (MavenBundle b : o.getBundles())
+						list.add(b);
 			bundles = list.toArray(new MavenBundle[list.size()]); }
 		return new MavenBundleCompositeOption() {
 			public MavenBundle[] getBundles() {
@@ -318,6 +347,13 @@ public abstract class Options {
 				return sb.toString();
 			}
 		};
+	}
+	
+	public static MavenBundleOption mavenBundles(final String... artifactCoords) {
+		MavenBundle[] bundles = new MavenBundle[artifactCoords.length];
+		for (int i = 0; i < artifactCoords.length; i++)
+			bundles[i] = artifactCoords == null ? null : mavenBundle(artifactCoords[i]);
+		return mavenBundles(bundles);
 	}
 	
 	private static abstract class MavenBundleCompositeOption implements MavenBundleOption, CompositeOption {
@@ -359,30 +395,83 @@ public abstract class Options {
 		private MavenBundle[] bundles = null;
 		
 		public MavenBundle[] getBundles() {
-			if (bundles == null) {
-				Set<MavenBundle> set = resolveBundles(fromBundles);
-				bundles = set.toArray(new MavenBundle[set.size()]); }
-			return bundles;
+			try {
+				if (bundles == null) {
+					Set<MavenBundle> set = resolveBundles(fromBundles);
+					bundles = set.toArray(new MavenBundle[set.size()]); }
+				return bundles; }
+			catch (RuntimeException e) {
+				e.printStackTrace();
+				throw e; }
 		}
 		
 		private static Set<MavenBundle> resolveBundles(List<MavenBundle> fromBundles) {
-			File localRepository; {
-				String prop = System.getProperty("org.ops4j.pax.url.mvn.localRepository");
+			File settingsFile; {
+				// For now don't use "org.ops4j.pax.url.mvn.settings" because Pax Exam itself does not support
+				// system properties inside a settings file.
+				String prop = System.getProperty("org.daisy.org.ops4j.pax.url.mvn.settings");
 				if (prop != null)
-					localRepository = new File(prop);
+					settingsFile = new File(prop);
 				else
-					localRepository = DEFAULT_LOCAL_REPOSITORY; }
+					settingsFile = new File(System.getProperty("user.home"), ".m2/settings.xml"); }
+			File localRepository;
+			List<RemoteRepository> repositories; {
+				localRepository = null;
+				repositories = new Vector<RemoteRepository>();
+				boolean centralRedefined = false;
+				String localRepositoryProp = System.getProperty("org.ops4j.pax.url.mvn.localRepository");
+				if (localRepositoryProp != null)
+					localRepository = new File(localRepositoryProp);
+				if (settingsFile.exists()) {
+					Settings settings; {
+						SettingsBuilder b = new DefaultSettingsBuilderFactory().newInstance();
+						SettingsBuildingRequest req = new DefaultSettingsBuildingRequest();
+						req.setGlobalSettingsFile(settingsFile);
+						req.setSystemProperties(System.getProperties());
+						try {
+							SettingsBuildingResult res = b.build(req);
+							settings = res.getEffectiveSettings(); }
+						catch (SettingsBuildingException e) {
+							throw new RuntimeException(e); }}
+					if (localRepository == null)
+						if (settings.getLocalRepository() != null)
+							localRepository = new File(settings.getLocalRepository());
+					for (Profile profile : settings.getProfiles()) {
+						String profileName = profile.getId();
+						if ((settings.getActiveProfiles() != null && settings.getActiveProfiles().contains(profileName))
+						    || (profile.getActivation() != null && profile.getActivation().isActiveByDefault())) {
+							for (Repository repo : profile.getRepositories()) {
+								RemoteRepository remoteRepo; {
+									remoteRepo = new RemoteRepository(repo.getId(), "default", repo.getUrl());
+									remoteRepo.setPolicy(false,
+										repo.getReleases() != null ?
+											new RepositoryPolicy(
+												repo.getReleases().isEnabled(),
+												repo.getReleases().getUpdatePolicy(),
+												repo.getReleases().getChecksumPolicy()) :
+											new RepositoryPolicy());
+									remoteRepo.setPolicy(true,
+										repo.getSnapshots() != null ?
+											new RepositoryPolicy(
+												repo.getSnapshots().isEnabled(),
+												repo.getSnapshots().getUpdatePolicy(),
+												repo.getSnapshots().getChecksumPolicy()) :
+											new RepositoryPolicy()); }
+								if ("central".equals(repo.getId()))
+									centralRedefined = true;
+								repositories.add(remoteRepo); }}}}
+				if (localRepository == null)
+					localRepository = DEFAULT_LOCAL_REPOSITORY;
+				if (!centralRedefined)
+					repositories.add(new RemoteRepository("central", "default", "http://repo1.maven.org/maven2/")); }
 			CollectRequest request = new CollectRequest();
 			for (MavenBundle bundle : fromBundles) {
 				request.addDependency(new Dependency(bundle.asArtifact(), "runtime")); }
-			List<RemoteRepository> repositories = new Vector<RemoteRepository>();
-			RemoteRepository central = new RemoteRepository("central", "default", "http://repo1.maven.org/maven2/");
-			repositories.add(central);
 			for (RemoteRepository r : repositories)
 				request.addRepository(r);
 			request.setRequestContext("runtime");
 			DefaultServiceLocator locator = new DefaultServiceLocator();
-			locator.addService(WagonProvider.class, HttpWagonProvider.class);
+			locator.addService(WagonProvider.class, HttpAndFileWagonProvider.class);
 			locator.addService(RepositoryConnectorFactory.class, WagonRepositoryConnectorFactory.class);
 			RepositorySystem system = locator.getService(RepositorySystem.class);
 			DefaultRepositorySystemSession session = new MavenRepositorySystemSession()
@@ -391,69 +480,73 @@ public abstract class Options {
 						new LocalRepository(localRepository.getAbsolutePath())))
 				.setOffline(false);
 			Set<MavenBundle> bundles = new HashSet<MavenBundle>();
-			try {
-				if (dependenciesAsBundles(
-					    bundles,
-					    system.resolveDependencies(session, new DependencyRequest().setCollectRequest(request)).getRoot(),
-					    false,
-					    fromBundles,
-					    null))
-					return bundles;
-				else
-					return resolveBundles(fromBundles); }
-			catch (DependencyResolutionException e) {
-				throw new RuntimeException(e); }
+			DependencyNode root; {
+				try {
+					root = system.resolveDependencies(session, new DependencyRequest().setCollectRequest(request)).getRoot(); }
+				catch (DependencyResolutionException e) {
+					throw new RuntimeException(e); }}
+			int startLevel = 4;
+			for (DependencyNode n : root.getChildren())
+				if (!dependenciesAsBundles(bundles, n, false, fromBundles, null, startLevel++))
+					return resolveBundles(fromBundles);
+			return bundles;
 		}
 		
 		private static boolean dependenciesAsBundles(Set<MavenBundle> bundles, DependencyNode node, boolean versionAsInProject,
-		                                             List<MavenBundle> fromBundles, Artifact parent) {
+		                                             List<MavenBundle> fromBundles, Artifact parent, int startLevel) {
 			Dependency dep = node.getDependency();
-			Artifact a = null;
-			if (dep != null) {
-				a = dep.getArtifact();
-				String groupId = a.getGroupId();
-				String artifactId = a.getArtifactId();
-				String type = a.getExtension();
-				String classifier = a.getClassifier();
-				try {
-					if (// these should not be runtime dependencies -> fix in POMs
-						!(groupId.equals("org.osgi") && (artifactId.equals("org.osgi.compendium") || artifactId.equals("org.osgi.core")))) {
-						if ((classifier.equals("linux") || classifier.equals("mac") || classifier.equals("windows"))
-						    && !classifier.equals(thisPlatform()));
-						else {
-							boolean noStart = false;
-							if (!(groupId.equals("org.daisy.xprocspec") && artifactId.equals("xprocspec")))
-								noStart = validateBundleAndIsFragmentBundle(a.getFile());
-							for (MavenBundle b : fromBundles)
-								if (b.groupId.equals(groupId)
-								    && b.artifactId.equals(artifactId)
-								    && b.type.equals(type)
-								    && b.classifier.equals(classifier)) {
-									if (b.versionAsInProject && !a.getVersion().equals(b.version))
-										throw new Exception("Coding error");
-									versionAsInProject = b.versionAsInProject;
-									break; }
-							if (versionAsInProject
-							    && !a.getBaseVersion().equals(MavenUtils.asInProject().getVersion(groupId, artifactId))) {
-								MavenBundle b = new MavenBundle(a, true);
-								logger.info("Forcing transitive dependency \"" + artifactCoords(b.asArtifact()) + "\" (version as in project) "
-								            + "because it would otherwise resolve to version \"" + a.getBaseVersion() + "\" "
-								            + "(via \"" + artifactCoords(parent) + "\")");
-								fromBundles.add(b);
-								return false; }
-							MavenBundle b = new MavenBundle(a);
-							if (noStart)
-								b.noStart();
-							bundles.add(b); }}}
-				catch(Exception e) {}}
+			if (dep == null)
+				throw new RuntimeException("Coding error");
+			Artifact a = dep.getArtifact();
+			String groupId = a.getGroupId();
+			String artifactId = a.getArtifactId();
+			String type = a.getExtension();
+			String classifier = a.getClassifier();
+			try {
+				if (// these should not be runtime dependencies -> fix in POMs
+					!(groupId.equals("org.osgi") && (artifactId.equals("org.osgi.compendium") || artifactId.equals("org.osgi.core")))) {
+					if ((classifier.equals("linux") || classifier.equals("mac") || classifier.equals("windows"))
+					    && !classifier.equals(thisPlatform()));
+					else {
+						boolean noStart = false;
+						if (!(groupId.equals("org.daisy.xprocspec") && artifactId.equals("xprocspec")))
+							noStart = validateBundleAndIsFragmentBundle(a.getFile());
+						for (MavenBundle b : fromBundles)
+							if (b.groupId.equals(groupId)
+							    && b.artifactId.equals(artifactId)
+							    && b.type.equals(type)
+							    && b.classifier.equals(classifier)) {
+								if (b.versionAsInProject && !a.getVersion().equals(b.version))
+									throw new RuntimeException("Coding error");
+								versionAsInProject = b.versionAsInProject;
+								if (b.startLevel > 0)
+									startLevel = b.startLevel;
+								break; }
+						if (versionAsInProject
+						    && !a.getBaseVersion().equals(MavenUtils.asInProject().getVersion(groupId, artifactId))) {
+							MavenBundle b = new MavenBundle(a, true);
+							logger.info("Forcing transitive dependency \"" + artifactCoords(b.asArtifact()) + "\" (version as in project) "
+							            + "because it would otherwise resolve to version \"" + a.getBaseVersion() + "\" "
+							            + "(via \"" + artifactCoords(parent) + "\")");
+							b.startLevel(startLevel);
+							fromBundles.add(b);
+							return false; }
+						MavenBundle b = new MavenBundle(a);
+						if (noStart)
+							b.noStart();
+						else
+							b.startLevel(startLevel);
+						bundles.add(b); }}}
+			catch (InvalidBundleException e) {
+				logger.info("Ignoring dependency " + groupId + ":" + artifactId + ": not a valid bundle."); }
 			for (DependencyNode n : node.getChildren())
-				if (!dependenciesAsBundles(bundles, n, versionAsInProject, fromBundles, a != null ? a : parent))
+				if (!dependenciesAsBundles(bundles, n, versionAsInProject, fromBundles, a, startLevel))
 					return false;
 			return true;
 		}
 		
 		@Override
-		public String toString() {
+			public String toString() {
 			StringBuilder sb = new StringBuilder();
 			sb.append("mavenBundlesWithDependencies(");
 			int i = 0;
@@ -466,7 +559,7 @@ public abstract class Options {
 		}
 		
 		// throw exception if bundle is not valid, and return true if it is a fragment bundle
-		private static boolean validateBundleAndIsFragmentBundle(File bundle) {
+		private static boolean validateBundleAndIsFragmentBundle(File bundle) throws InvalidBundleException {
 			JarFile jar = null;
 			try {
 				jar = new JarFile(bundle, false);
@@ -477,7 +570,7 @@ public abstract class Options {
 				String bundleSymbolicName = mainAttrs.getValue("Bundle-SymbolicName");
 				String bundleName = mainAttrs.getValue("Bundle-Name");
 				if (bundleSymbolicName == null && bundleName == null)
-					throw new RuntimeException("[" + bundle + "] is not a valid bundle: Bundle-SymbolicName and Bundle-Name are missing");
+					throw new InvalidBundleException("[" + bundle + "] is not a valid bundle: Bundle-SymbolicName and Bundle-Name are missing");
 				return (mainAttrs.getValue("Fragment-Host") != null); }
 			catch (IOException e) {
 				throw new RuntimeException("[" + bundle + "] is not a valid bundle: failed reading jar", e); }
@@ -488,13 +581,21 @@ public abstract class Options {
 					catch (IOException e) {}}
 		}
 		
-		public static class HttpWagonProvider implements WagonProvider {
+		public static class HttpAndFileWagonProvider implements WagonProvider {
 			public Wagon lookup(String roleHint) throws Exception {
 				if ("http".equals(roleHint) || "https".equals(roleHint))
 					return new HttpWagon();
+				else if ("file".equals(roleHint))
+					return new FileWagon();
 				return null;
 			}
 			public void release(Wagon wagon) {}
+		}
+		
+		private static class InvalidBundleException extends Exception {
+			InvalidBundleException(String message) {
+				super(message);
+			}
 		}
 	}
 	
@@ -519,7 +620,7 @@ public abstract class Options {
 		return b.toString();
 	}
 	
-	private static String thisPlatform() {
+	public static String thisPlatform() {
 		String name = System.getProperty("os.name").toLowerCase();
 		if (name.startsWith("windows"))
 			return "windows";

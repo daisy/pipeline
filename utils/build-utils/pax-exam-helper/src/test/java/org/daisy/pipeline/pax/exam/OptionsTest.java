@@ -20,8 +20,8 @@ public class OptionsTest {
 		for (Option b : mavenBundlesWithDependencies(logbackClassic()).getBundles())
 			bundles.add(b.toString());
 		sort(bundles);
-		assertEquals(bundles.get(0).toString(), "mavenBundle(\"ch.qos.logback:logback-classic:1.0.11\")");
-		assertEquals(bundles.get(1).toString(), "mavenBundle(\"ch.qos.logback:logback-core:1.0.11\")");
-		assertEquals(bundles.get(2).toString(), "mavenBundle(\"org.slf4j:slf4j-api:1.7.4\")");
+		assertEquals(bundles.get(0).toString(), "mavenBundle(\"ch.qos.logback:logback-classic:1.0.11(start@4)\")");
+		assertEquals(bundles.get(1).toString(), "mavenBundle(\"ch.qos.logback:logback-core:1.0.11(start@4)\")");
+		assertEquals(bundles.get(2).toString(), "mavenBundle(\"org.slf4j:slf4j-api:1.7.4(start@4)\")");
 	}
 }

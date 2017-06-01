@@ -20,6 +20,7 @@
   <properties>
     <felix.version>4.4.1</felix.version>
     <pax-exam.version>3.3.0</pax-exam.version>
+    <pax-url.version>1.6.0</pax-url.version>
     <junit.version>4.11</junit.version>
     <slf4j.version>1.6.3</slf4j.version>
     <logback.version>0.9.30</logback.version>
@@ -70,6 +71,21 @@
       <version>${wagon.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.maven.wagon</groupId>
+      <artifactId>wagon-file</artifactId>
+      <version>${wagon.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings</artifactId>
+      <version>${maven.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-settings-builder</artifactId>
+      <version>${maven.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <version>${slf4j.version}</version>
@@ -85,22 +101,35 @@
       <version>${felix.version}</version>
       <scope>runtime</scope>
     </dependency>
+    <!--
+        Using the forked container can apparently result in the Surefire error "The forked VM
+        terminated without properly saying goodbye". Setting forkCount to 0 in Surefire doesn't help
+        because it results in the error "java.net.MalformedURLException: unknown protocol:
+        link". Using the native container does fix the problem. Note that according to the Pax Exam
+        documentation the native container could result in classloader issues, but fortunately this
+        is not the case for us. Also note that the forked container has better isolation and
+        resembles better a production environment. We should therefore also try to run tests with
+        the forked container.
+        
+        See https://ops4j1.jira.com/wiki/display/PAXEXAM3/OSGi+Containers.
+    -->
     <dependency>
       <groupId>org.ops4j.pax.exam</groupId>
-      <artifactId>pax-exam-container-forked</artifactId>
+      <!-- <artifactId>pax-exam-container-forked</artifactId> -->
+      <artifactId>pax-exam-container-native</artifactId>
       <version>${pax-exam.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.url</groupId>
       <artifactId>pax-url-reference</artifactId>
-      <version>1.6.0</version>
+      <version>${pax-url.version}</version>
      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.ops4j.pax.url</groupId>
       <artifactId>pax-url-wrap</artifactId>
-      <version>1.6.0</version>
+      <version>${pax-url.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -153,6 +182,31 @@
       <artifactId>xproc-engine-daisy-pipeline</artifactId>
       <version>${xproc-engine-daisy-pipeline.version}</version>
       <scope>test</scope>
+      <!--
+          xproc-engine-daisy-pipeline 1.10 depends on various log libraries which may mess up the test log
+      -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-jdk14</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>jcl-over-slf4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>log4j-over-slf4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.daisy.xprocspec</groupId>
@@ -198,6 +252,15 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <logback.configurationFile>${project.basedir}/src/test/resources/config-logback.xml</logback.configurationFile>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <version>2.4.0</version>
@@ -231,6 +294,8 @@
                 <xprocspec.version>${xprocspec.version}</xprocspec.version>
                 <xprocspec-runner.version>${xprocspec-runner.version}</xprocspec-runner.version>
                 <xproc-engine-daisy-pipeline.version>${xproc-engine-daisy-pipeline.version}</xproc-engine-daisy-pipeline.version>
+                <org.ops4j.pax.url.mvn.localRepository>${project.build.directory}/local-repo</org.ops4j.pax.url.mvn.localRepository>
+                <org.daisy.org.ops4j.pax.url.mvn.settings>${basedir}/src/it/settings.xml</org.daisy.org.ops4j.pax.url.mvn.settings>
               </properties>
               <goals>
                 <goal>clean</goal>

@@ -14,6 +14,15 @@
       <artifactId>xproc-engine-daisy-pipeline</artifactId>
       <version>${xproc-engine-daisy-pipeline.version}</version>
       <scope>test</scope>
+      <!--
+          osgi.core 4.3.1 is dependency of xproc-engine-daisy-pipeline 1.10 but is not compatible with Felix 4.4.1
+      -->
+      <exclusions>
+        <exclusion>
+          <groupId>org.osgi</groupId>
+          <artifactId>org.osgi.core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.daisy.xprocspec</groupId>
