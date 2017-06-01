@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline-updater-gui.git
 	branch = master
 	commit = 826425e7f32bd45f825aef1779e8a57cfc37b3c6
-	parent = d8feb70efcf0ee1a4ea7c8e148316c045b95a1b5
+	parent = 44eddfedbf542e80cd859b809790672db7effff1
 	cmdver = 0.3.0
