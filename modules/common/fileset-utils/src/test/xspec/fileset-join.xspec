@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xproc/fileset-join.xsl" xmlns="http://www.w3.org/1999/xhtml"
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../../src/main/resources/xml/xslt/fileset-join.xsl" xmlns="http://www.w3.org/1999/xhtml"
     xmlns:d="http://www.daisy.org/ns/pipeline/data">
 
     <x:scenario label="Single-in, single-out - not wrapped">

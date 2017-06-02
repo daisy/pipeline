@@ -1,69 +1,18 @@
-import java.io.File;
-
-import javax.inject.Inject;
-
-import org.daisy.maven.xproc.xprocspec.XProcSpecRunner;
-
-import static org.daisy.pipeline.pax.exam.Options.brailleModule;
-import static org.daisy.pipeline.pax.exam.Options.calabashConfigFile;
-import static org.daisy.pipeline.pax.exam.Options.felixDeclarativeServices;
-import static org.daisy.pipeline.pax.exam.Options.logbackClassic;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundlesWithDependencies;
-import static org.daisy.pipeline.pax.exam.Options.logbackConfigFile;
-import static org.daisy.pipeline.pax.exam.Options.pipelineModule;
-import static org.daisy.pipeline.pax.exam.Options.thisBundle;
-import static org.daisy.pipeline.pax.exam.Options.xprocspec;
+import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertTrue;
-
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
-import org.ops4j.pax.exam.spi.reactors.PerClass;
-import org.ops4j.pax.exam.util.PathUtils;
-
-import static org.ops4j.pax.exam.CoreOptions.junitBundles;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.options;
-
-@RunWith(PaxExam.class)
-@ExamReactorStrategy(PerClass.class)
-public class XProcSpecTest {
+public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	
-	@Configuration
-	public Option[] config() {
-		return options(
-			logbackConfigFile(),
-			calabashConfigFile(),
-			felixDeclarativeServices(),
-			thisBundle(),
-			junitBundles(),
-			mavenBundlesWithDependencies(
-				pipelineModule("common-utils"),
-				logbackClassic(),
-				xprocspec(),
-				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
-				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?")
-			)
-		);
+	@Override
+	protected String[] testDependencies() {
+		return new String[] {
+			pipelineModule("common-utils")
+		};
 	}
 	
-	@Inject
-	private XProcSpecRunner xprocspecRunner;
-		
-	@Test
-	public void runXProcSpec() throws Exception {
-		File baseDir = new File(PathUtils.getBaseDir());
-		boolean success = xprocspecRunner.run(new File(baseDir, "src/test/xprocspec"),
-		                                      new File(baseDir, "target/xprocspec-reports"),
-		                                      new File(baseDir, "target/surefire-reports"),
-		                                      new File(baseDir, "target/xprocspec"),
-		                                      new XProcSpecRunner.Reporter.DefaultReporter());
-		assertTrue("XProcSpec tests should run with success", success);
+	@Override @Test
+	public void runXSpec() {
+		// already run with xspec-maven-plugin
 	}
 }

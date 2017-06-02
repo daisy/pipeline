@@ -51,6 +51,9 @@
         </x:expect>
     </x:scenario>
 
+    <!--
+        FIXME: this test does not work when run offline
+    -->
     <x:scenario label="test-href-zip">
         <x:call step="px:fileset-load">
             <x:input port="fileset">
@@ -68,6 +71,26 @@
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="file" method="xml" href="samples/fileset2/e.svg"/>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="test-href-zip-special-characters" xfail="true">
+        <x:call step="px:fileset-load">
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="samples/fileset2/a.zip!/e%5Bxml%5D" media-type="application/xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory"/>
+            <x:option name="href" select="resolve-uri('samples/fileset2/a.zip!/e%5Bxml%5D')"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect type="compare" label="the result should be as expected">
+            <x:document type="file" method="xml" href="samples/fileset2/e%5Bxml%5D"/>
         </x:expect>
     </x:scenario>
 
