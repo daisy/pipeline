@@ -2,6 +2,8 @@ package org.daisy.integration;
 
 import java.io.IOException;
 
+import org.daisy.pipeline.client.PipelineClient;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;

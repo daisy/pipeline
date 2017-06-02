@@ -1,8 +1,0 @@
-datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
-default namespace = "http://www.daisy.org/ns/pipeline/data"
-start= 
-    element alive{
-        attribute localfs {xsd:string}
-        & attribute authentication {xsd:string}
-        & attribute version {xsd:string}
-    }

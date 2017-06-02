@@ -1,8 +1,0 @@
-default namespace = "http://www.daisy.org/ns/pipeline/data"
-
-jobSize = element jobSize {
-        attribute id { text }
-        & attribute log { xsd:long }
-        & attribute context {  xsd:long }
-        & attribute output { xsd:long }
-    }

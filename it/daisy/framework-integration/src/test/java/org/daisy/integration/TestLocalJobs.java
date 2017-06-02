@@ -6,11 +6,12 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import org.daisy.pipeline.webservice.jabx.base.Alive;
-import org.daisy.pipeline.webservice.jabx.job.Job;
-import org.daisy.pipeline.webservice.jabx.job.Result;
-import org.daisy.pipeline.webservice.jabx.request.JobRequest;
-import org.daisy.pipeline.webservice.jabx.script.Scripts;
+import org.daisy.pipeline.client.PipelineClient;
+import org.daisy.pipeline.webservice.jaxb.base.Alive;
+import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.Result;
+import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
+import org.daisy.pipeline.webservice.jaxb.script.Scripts;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

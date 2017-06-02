@@ -2,11 +2,12 @@ package org.daisy.integration;
 
 import java.util.List;
 
-import org.daisy.pipeline.webservice.jabx.clients.Client;
-import org.daisy.pipeline.webservice.jabx.clients.Priority;
-import org.daisy.pipeline.webservice.jabx.job.Job;
-import org.daisy.pipeline.webservice.jabx.queue.Queue;
-import org.daisy.pipeline.webservice.jabx.request.JobRequest;
+import org.daisy.pipeline.client.PipelineClient;
+import org.daisy.pipeline.webservice.jaxb.clients.Client;
+import org.daisy.pipeline.webservice.jaxb.clients.Priority;
+import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.queue.Queue;
+import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

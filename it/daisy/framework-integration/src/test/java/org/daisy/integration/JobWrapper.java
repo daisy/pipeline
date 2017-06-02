@@ -2,8 +2,8 @@ package org.daisy.integration;
 
 import java.util.List;
 
-import org.daisy.pipeline.webservice.jabx.job.Job;
-import org.daisy.pipeline.webservice.jabx.job.Results;
+import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.Results;
 
 public class JobWrapper {
 

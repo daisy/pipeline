@@ -24,8 +24,7 @@
   </scm>
 
   <modules>
-          <module>webservice-jabx</module>
-          <module>framework-integration</module>
+    <module>framework-integration</module>
   </modules>
 
 

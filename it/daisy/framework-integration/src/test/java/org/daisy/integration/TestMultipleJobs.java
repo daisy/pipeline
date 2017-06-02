@@ -3,11 +3,12 @@ package org.daisy.integration;
 import java.io.IOException;
 import java.util.List;
 
-import org.daisy.pipeline.webservice.jabx.request.Priority;
-import org.daisy.pipeline.webservice.jabx.queue.Queue;
-import org.daisy.pipeline.webservice.jabx.job.Job;
-import org.daisy.pipeline.webservice.jabx.job.Jobs;
-import org.daisy.pipeline.webservice.jabx.request.JobRequest;
+import org.daisy.pipeline.client.PipelineClient;
+import org.daisy.pipeline.webservice.jaxb.request.Priority;
+import org.daisy.pipeline.webservice.jaxb.queue.Queue;
+import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.Jobs;
+import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -76,9 +77,9 @@ public class TestMultipleJobs {
                 }
                 
                 try{
-                        List<org.daisy.pipeline.webservice.jabx.queue.Job> queue =CLIENT.queue().getJob();
+                        List<org.daisy.pipeline.webservice.jaxb.queue.Job> queue =CLIENT.queue().getJob();
                         //printQueue(queue);
-                        org.daisy.pipeline.webservice.jabx.queue.Job last=queue.get(queue.size()-1);
+                        org.daisy.pipeline.webservice.jaxb.queue.Job last=queue.get(queue.size()-1);
                         //As the algorithm is time dependent it has different behaviours depending
                         //on the machine this test is exectuted 
                         //Assert.assertEquals("last job has priority low",last.getJobPriority().value(),"low");
@@ -101,8 +102,8 @@ public class TestMultipleJobs {
                 logger.info(String.format("%s testQueue OUT",TestLocalJobs.class));
         }
 
-        //private static void printQueue(List<org.daisy.pipeline.webservice.jabx.queue.Job> queue){
-                //for (org.daisy.pipeline.webservice.jabx.queue.Job j:queue){
+        //private static void printQueue(List<org.daisy.pipeline.webservice.jaxb.queue.Job> queue){
+                //for (org.daisy.pipeline.webservice.jaxb.queue.Job j:queue){
                         //System.out.println(String.format("Id: %s Job: %s Client:%s computed: %s time:%s ",j.getId(), j.getJobPriority().value(),j.getClientPriority().value(),j.getComputedPriority(),j.getRelativeTime()));
                 //}
                 //System.out.println("+++++++++++++++++++++++++++++++++");

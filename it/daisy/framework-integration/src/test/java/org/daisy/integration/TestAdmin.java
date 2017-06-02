@@ -3,10 +3,11 @@ package org.daisy.integration;
 import java.io.IOException;
 import java.util.List;
 
-import org.daisy.pipeline.webservice.jabx.job.Job;
-import org.daisy.pipeline.webservice.jabx.job.JobSizes;
-import org.daisy.pipeline.webservice.jabx.properties.Properties;
-import org.daisy.pipeline.webservice.jabx.request.JobRequest;
+import org.daisy.pipeline.client.PipelineClient;
+import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.JobSizes;
+import org.daisy.pipeline.webservice.jaxb.properties.Properties;
+import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

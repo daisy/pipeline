@@ -9,11 +9,12 @@ import java.util.zip.ZipInputStream;
 
 import javax.ws.rs.core.Response;
 
-import org.daisy.pipeline.webservice.jabx.base.Alive;
-import org.daisy.pipeline.webservice.jabx.job.Job;
-import org.daisy.pipeline.webservice.jabx.job.Result;
-import org.daisy.pipeline.webservice.jabx.request.JobRequest;
-import org.daisy.pipeline.webservice.jabx.request.Priority;
+import org.daisy.pipeline.client.PipelineClient;
+import org.daisy.pipeline.webservice.jaxb.base.Alive;
+import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.job.Result;
+import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
+import org.daisy.pipeline.webservice.jaxb.request.Priority;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;

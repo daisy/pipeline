@@ -5,14 +5,15 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.apache.commons.io.FileUtils;
-import org.daisy.pipeline.webservice.jabx.job.Job;
-import org.daisy.pipeline.webservice.jabx.request.Input;
-import org.daisy.pipeline.webservice.jabx.request.Item;
-import org.daisy.pipeline.webservice.jabx.request.JobRequest;
-import org.daisy.pipeline.webservice.jabx.request.ObjectFactory;
-import org.daisy.pipeline.webservice.jabx.request.Priority;
-import org.daisy.pipeline.webservice.jabx.request.Script;
-import org.daisy.pipeline.webservice.jabx.script.Scripts;
+import org.daisy.pipeline.client.PipelineClient;
+import org.daisy.pipeline.webservice.jaxb.job.Job;
+import org.daisy.pipeline.webservice.jaxb.request.Input;
+import org.daisy.pipeline.webservice.jaxb.request.Item;
+import org.daisy.pipeline.webservice.jaxb.request.JobRequest;
+import org.daisy.pipeline.webservice.jaxb.request.ObjectFactory;
+import org.daisy.pipeline.webservice.jaxb.request.Priority;
+import org.daisy.pipeline.webservice.jaxb.request.Script;
+import org.daisy.pipeline.webservice.jaxb.script.Scripts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +73,7 @@ public class Utils {
 
         public static Optional<String> getScriptHref(String name,PipelineClient client){
                 Scripts scripts=client.scripts();
-                for(org.daisy.pipeline.webservice.jabx.script.Script s : scripts.getScript()){
+                for(org.daisy.pipeline.webservice.jaxb.script.Script s : scripts.getScript()){
                         if (s.getId().equals(name)){
                                 return Optional.of(s.getHref());
                         }

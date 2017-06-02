@@ -23,28 +23,13 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>2.9</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.media</groupId>
-      <artifactId>jersey-media-moxy</artifactId>
-      <version>2.9</version>
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.media</groupId>
-      <artifactId>jersey-media-multipart</artifactId>
-      <version>2.9</version>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>1.18.1</version>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>clientlib-java-jaxb</artifactId>
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>webservice-jabx</artifactId>
+      <artifactId>webservice-jaxb</artifactId>
       <version>1.0.0-SNAPSHOT</version>
     </dependency>
     <dependency>
@@ -64,11 +49,6 @@
 	<version>${slf4j.version}</version>
 </dependency>
     
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.9</version>
-    </dependency>
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
