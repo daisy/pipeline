@@ -1,0 +1,3 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+
+nicename= element nicename{text}

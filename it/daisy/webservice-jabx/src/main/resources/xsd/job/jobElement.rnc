@@ -1,0 +1,58 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+
+#the nicename inclusion is defined in script element
+include "../script/scriptElement.rnc"
+
+include "../base/priority.rnc"
+
+job = 
+element job {
+	attribute id { text }
+
+	& attribute href { xsd:anyURI }
+
+	& attribute status { job.status }
+
+        & attribute priority{ priority }
+
+
+	& nicename ?
+
+	& script?
+
+        & element messages {
+                element message { 
+                        attribute level { message.level }
+                        & attribute sequence { text }
+                        & text
+                }*
+        }?
+
+	& element log {
+		attribute href { xsd:anyURI }
+	}?
+
+	& element results {
+		attribute href { xsd:anyURI }
+		& attribute mime-type { text }
+		& result+
+	}?
+}
+
+result= 
+element result{
+	attribute href { xsd:anyURI }
+	& attribute mime-type { text }?
+	& (attribute file { text }) ?
+	& attribute size { xsd:long }?
+	& ( 	
+			attribute from { text }
+			& attribute name { text }
+			& attribute nicename{ text } 
+	  )?
+		& result*
+}
+
+job.status = "IDLE" | "RUNNING" | "DONE" | "ERROR" | "VALIDATION_FAIL"
+
+message.level = "WARNING" | "ERROR" | "INFO" | "DEBUG" | "TRACE"

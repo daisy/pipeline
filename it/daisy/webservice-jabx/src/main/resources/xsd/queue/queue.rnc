@@ -1,0 +1,21 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+include "../base/priority.rnc"
+start =
+element queue {
+	attribute href { xsd:anyURI }
+        & element job{
+                attribute id {text}
+                & attribute href {xsd:anyURI}
+                & attribute jobPriority {priority}
+                & attribute clientPriority{priority}
+                & attribute computedPriority{xsd:double}
+                & attribute relativeTime{xsd:double}
+                & attribute timestamp{xsd:long}
+                & attribute moveDown{xsd:anyURI}
+                & attribute moveUp{xsd:anyURI}
+
+        }*
+}
+
+
+

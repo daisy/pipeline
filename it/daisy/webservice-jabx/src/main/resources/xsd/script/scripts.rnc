@@ -1,0 +1,9 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+
+include "scriptElement.rnc"
+
+start = 
+    element scripts {
+        attribute href { xsd:anyURI }?,
+        script*
+    }
