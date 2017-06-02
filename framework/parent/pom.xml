@@ -163,6 +163,9 @@
                     <exclude>commons-logging:commons-logging</exclude>
                     <exclude>log4j:log4j</exclude>
                   </excludes>
+                  <includes>
+                    <include>commons-logging:commons-logging:*:jar:test</include>
+                  </includes>
                 </bannedDependencies>
               </rules>
             </configuration>

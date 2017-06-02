@@ -56,7 +56,7 @@
     <junit.version>4.10</junit.version>
     <logback.version>1.0.11</logback.version>
     <mockito.version>1.9.5</mockito.version>
-    <osgi.version>4.3.1</osgi.version>
+    <osgi.version>5.0.0</osgi.version>
     <powermock.version>1.5.4</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
     <saxon-he.version>9.5.1.5</saxon-he.version>
@@ -381,7 +381,7 @@
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.enterprise</artifactId>
-        <version>4.2.0</version>
+        <version>${osgi.version}</version>
       </dependency>
 
 
