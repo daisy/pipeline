@@ -241,6 +241,18 @@ cache :
 		rsync -mr --exclude "*-SNAPSHOT" --exclude "maven-metadata-*.xml" $(MVN_WORKSPACE)/ $(MVN_CACHE); \
 	fi
 
+TEMP_REPOS := modules/scripts/dtbook-to-daisy3/target/test/local-repo
+
+.PHONY : go-offline
+go-offline :
+	if [ -e $(MVN_WORKSPACE) ]; then \
+		for repo in $(TEMP_REPOS); do \
+			if [ -e $$repo ]; then \
+				rsync -mr --exclude "*-SNAPSHOT" --exclude "maven-metadata-*.xml" $$repo/ $(MVN_WORKSPACE); \
+			fi \
+		done \
+	fi
+
 .PHONY : clean
 clean : cache
 	rm -rf $(MVN_WORKSPACE)
