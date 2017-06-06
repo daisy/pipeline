@@ -17,7 +17,9 @@ MVN_LOG := tee -a $(CURDIR)/maven.log | cut -c1-1000 | pcregrep -M "^\[INFO\] -+
 
 SHELL := /bin/bash
 
-rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
+rwildcard = $(shell find $1 -type f | sed 's/ /\\ /g')
+# does not support spaces in file names:
+#rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
 .PHONY : all
 all : check dist
