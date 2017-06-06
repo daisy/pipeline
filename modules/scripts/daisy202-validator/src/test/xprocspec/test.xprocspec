@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/xproc/daisy202-validator.xpl">
+
+    <x:scenario label="simple validation">
+        <x:call step="px:daisy202-validator">
+            <!--
+                reusing test data from daisy202-to-epub3
+            -->
+            <x:option name="ncc" select="resolve-uri('../../../../daisy202-to-epub3/src/test/resources/input/book1/ncc.html')"/>
+        </x:call>
+        <x:context label="the validation status">
+            <x:document type="port" port="validation-status"/>
+        </x:context>
+        <x:expect label="the validation should fail" type="compare">
+            <x:document>
+                <d:validation-status result="error"/>
+            </x:document>
+        </x:expect>
+        <x:context label="the validation report">
+            <x:document type="port" port="html-report"/>
+        </x:context>
+        <x:expect label="the validation report should say something about 'shape' attributes"
+                  type="xpath" test="count(//*[@class='message-error'
+                                               and contains(string(.),'attribute &quot;shape&quot; not allowed here; expected attribute &quot;id&quot;')]
+                                           )=9">
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

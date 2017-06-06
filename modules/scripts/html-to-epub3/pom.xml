@@ -17,7 +17,9 @@
   <name>DAISY Pipeline 2 module :: HTML to EPUB 3</name>
   
   <dependencies>
-    <!-- runtime dependencies -->
+    <!--
+        runtime dependencies
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
@@ -63,25 +65,12 @@
       <artifactId>zedai-to-html</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <!-- test dependencies -->
+    <!--
+        test dependencies
+    -->
     <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xproc-engine-daisy-pipeline</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.xprocspec</groupId>
-      <artifactId>xprocspec</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xprocspec-runner</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>pax-exam-helper</artifactId>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

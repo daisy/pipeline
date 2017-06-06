@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "http://www.w3.org/TR/REC-SMIL/SMIL10.dtd" >
+<smil>
+	<head>
+		<meta name="ncc:generator" content="DMFC z3986-2005 to Daisy 2.02 (smil2smil v0.2)" />
+		<meta name="dc:format" content="Daisy 2.02" />
+		<meta name="dc:identifier" content="F00000" />
+		<meta name="title" content="Notes" />
+		<meta name="dc:title" content="Don't Worry, Be Happy" />
+		<meta name="ncc:totalElapsedTime" content="0:02:38" />
+		<meta name="ncc:timeInThisSmil" content="0:00:23" />
+		<layout>
+			<region id="txtView" />
+		</layout>
+	</head>
+	<body>
+		<seq dur="23.325s">
+			<par endsync="last" id="tcp55">
+				<text id="txtd103e11" src="content.html#dtb55" />
+				<audio src="speechgen0007.mp3" clip-begin="npt=0.000s" clip-end="npt=1.629s" id="audd103e12" />
+			</par>
+			<par endsync="last" id="tcp57" system-required="footnote-on">
+				<text id="txtd103e15" src="content.html#dtb56" />
+				<audio src="speechgen0007.mp3" clip-begin="npt=1.629s" clip-end="npt=11.237s" id="audd103e16" />
+			</par>
+			<par endsync="last" id="tcp59" system-required="footnote-on">
+				<text id="txtd103e19" src="content.html#dtb57" />
+				<audio src="speechgen0007.mp3" clip-begin="npt=11.237s" clip-end="npt=15.450s" id="audd103e20" />
+			</par>
+			<par endsync="last" id="tcp60" system-required="footnote-on">
+				<text id="txtd103e22" src="content.html#dtb58" />
+				<audio src="speechgen0007.mp3" clip-begin="npt=15.450s" clip-end="npt=23.325s" id="audd103e23" />
+			</par>
+		</seq>
+	</body>
+</smil>

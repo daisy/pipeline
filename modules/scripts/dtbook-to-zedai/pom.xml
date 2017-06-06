@@ -17,7 +17,9 @@
   <name>DAISY Pipeline 2 module :: DTBook to ZedAI</name>
   
   <dependencies>
-    <!-- runtime dependencies -->
+    <!--
+        runtime dependencies
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
@@ -62,6 +64,14 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>validation-utils</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

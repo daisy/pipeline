@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE ncx
+  PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd">
+<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+   <head>
+      <meta content="DAISY Pipeline 2" name="dtb:generator"/>
+      <meta name="dtb:uid"
+            content="CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6-packaged"/>
+      <meta name="dtb:depth" content="01"/>
+      <meta name="dtb:totalPageCount" content="2"/>
+      <meta name="dtb:maxPageNumber" content="2"/>
+      <smilCustomTest bookStruct="PAGE_NUMBER"
+                      defaultState="false"
+                      id="pagenum"
+                      override="visible"/>
+      <smilCustomTest bookStruct="NOTE"
+                      defaultState="false"
+                      id="note"
+                      override="visible"/>
+      <smilCustomTest bookStruct="NOTE_REFERENCE"
+                      defaultState="false"
+                      id="noteref"
+                      override="visible"/>
+      <smilCustomTest bookStruct="ANNOTATION"
+                      defaultState="false"
+                      id="annotation"
+                      override="visible"/>
+      <smilCustomTest bookStruct="LINE_NUMBER"
+                      defaultState="false"
+                      id="linenum"
+                      override="visible"/>
+      <smilCustomTest bookStruct="OPTIONAL_SIDEBAR"
+                      defaultState="false"
+                      id="sidebar"
+                      override="visible"/>
+      <smilCustomTest bookStruct="OPTIONAL_PRODUCER_NOTE"
+                      defaultState="false"
+                      id="prodnote"
+                      override="visible"/>
+   </head>
+   <docTitle>
+      <text>Minimal DTBook</text>
+      <audio src="30sec.mp3" clipBegin="00:00:00" clipEnd="00:00:04.292"/>
+   </docTitle>
+   <docAuthor>
+      <text>Bert</text>
+      <audio src="30sec.mp3" clipBegin="00:00:04.292" clipEnd="00:00:08.585"/>
+   </docAuthor>
+   <navMap>
+      <navPoint playOrder="1" id="ncx-1">
+         <navLabel>
+            <text>Chapter</text>
+            <audio src="30sec.mp3" clipBegin="00:00:12.878" clipEnd="00:00:17.170"/>
+         </navLabel>
+         <content src="mo0.smil#sforsmil-d1386e37"/>
+      </navPoint>
+   </navMap>
+   <pageList>
+      <pageTarget type="normal" value="1" playOrder="2" id="ncx-2">
+         <navLabel>
+            <text>1</text>
+            <audio src="30sec.mp3" clipBegin="00:00:08.585" clipEnd="00:00:12.878"/>
+         </navLabel>
+         <content src="mo0.smil#spage_1"/>
+      </pageTarget>
+      <pageTarget type="normal" value="2" playOrder="3" id="ncx-3">
+         <navLabel>
+            <text>2</text>
+            <audio src="30sec.mp3" clipBegin="00:00:21.463" clipEnd="00:00:25.756"/>
+         </navLabel>
+         <content src="mo0.smil#spage_2"/>
+      </pageTarget>
+   </pageList>
+</ncx>

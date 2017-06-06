@@ -17,33 +17,8 @@
   <name>DAISY Pipeline 2 module :: DTBook to DAISY 3</name>
   
   <dependencies>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>xproc-api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>xmlunit</groupId>
-      <artifactId>xmlunit</artifactId>
-      <version>1.5</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.commons-io</artifactId>
-      <version>1.4_3</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- uncomment the following dependency to get the tests working with Eclipse -->
-    <!-- <dependency> -->
-    <!--   <groupId>org.daisy.libs</groupId> -->
-    <!--   <artifactId>zedval-osgi</artifactId> -->
-    <!--   <version>2.1</version> -->
-    <!--   <scope>test</scope> -->
-    <!-- </dependency> -->
-    
     <!--
-          runtime dependencies
+        runtime dependencies
     -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
@@ -90,92 +65,175 @@
       <artifactId>tts-helpers</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy</groupId>
+      <artifactId>zedval</artifactId>
+      <version>2.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xproc-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>xmlunit</groupId>
+      <artifactId>xmlunit</artifactId>
+      <version>1.5</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy3-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-break-detection</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nlp-omnilang-lexer</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!--
+        for zedval
+    -->
+    <dependency>
+      <groupId>org.daisy</groupId>
+      <artifactId>daisy-util</artifactId>
+      <version>20100125</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>javazoom</groupId>
+      <artifactId>jlayer</artifactId>
+      <version>1.0.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.9.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <!--
+          version that is compatible with SPI (via SPI-Fly)
+      -->
+      <version>9.5.1.5-1-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jing</artifactId>
+      <!--
+          version that is compatible with SPI (via SPI-Fly)
+      -->
+      <version>20151127.0.0-SNAPSHOT</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-cli</groupId>
+      <artifactId>commons-cli</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.w3c.css</groupId>
+      <artifactId>sac</artifactId>
+      <version>1.3</version>
+      <scope>test</scope>
+    </dependency>
+    <!--
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-css</artifactId>
+      <version>1.6-1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>batik</groupId>
+      <artifactId>batik-util</artifactId>
+      <version>1.6-1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge.jchardet</groupId>
+      <artifactId>jchardet</artifactId>
+      <version>1.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.idpf</groupId>
+      <artifactId>epubcheck</artifactId>
+      <version>3.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.ibm.icu</groupId>
+      <artifactId>icu4j</artifactId>
+      <version>3.8</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccil.cowan.tagsoup</groupId>
+      <artifactId>tagsoup</artifactId>
+      <version>1.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>wstx-lgpl</artifactId>
+      <version>3.2.9</version>
+      <scope>test</scope>
+    </dependency>
+    -->
   </dependencies>
-
-  <properties>
-    <dependencies.dir>${project.build.directory}/deps</dependencies.dir>
-  </properties>
-
-  <!-- allow us to use .versionAsInProject() -->
+  
   <build>
     <plugins>
       <plugin>
-	<groupId>org.apache.servicemix.tooling</groupId>
-	<artifactId>depends-maven-plugin</artifactId>
-	<version>1.2</version>
-	<executions>
-	  <execution>
-	    <id>generate-depends-file</id>
-	    <goals>
-	      <goal>generate-depends-file</goal>
-	    </goals>
-	  </execution>
-	</executions>
-      </plugin>
-      <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-surefire-plugin</artifactId>
-	<version>2.17</version>
-	<configuration>
-	  <systemPropertyVariables>
-	    <dependencies.dir>${dependencies.dir}</dependencies.dir>
-	    <target.dir>${project.build.directory}</target.dir>
-	  </systemPropertyVariables>
-	</configuration>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <target.dir>${project.build.directory}</target.dir>
+          </systemPropertyVariables>
+        </configuration>
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <activation>
-	<activeByDefault>true</activeByDefault>
-      </activation>
-      <id>notester</id>
-      <properties>
-	<maven.test.skip>true</maven.test.skip>
-      </properties>
-    </profile>
-    <profile>
-      <id>tester</id>
-      <!-- The two following dependencies must be installed before running this profile -->
-      <dependencies>
-	<dependency>
-	  <groupId>org.daisy.libs</groupId>
-	  <artifactId>jaxp-standalone</artifactId>
-	  <version>1.4.2</version>
-	  <scope>test</scope>
-	</dependency>
-	<dependency>
-	  <groupId>org.daisy.libs</groupId>
-	  <artifactId>zedval-osgi</artifactId>
-	  <version>2.1</version>
-	  <scope>test</scope>
-	</dependency>
-      </dependencies>
-      <build>
-	<plugins>
-	  <!-- Copy the dependencies so we can put them in the classpath if necessary -->
-	  <plugin>
-	    <groupId>org.apache.maven.plugins</groupId>
-	    <artifactId>maven-dependency-plugin</artifactId>
-	    <version>2.9</version>
-	    <executions>
-	      <execution>
-		<id>copy-dependencies</id>
-		<phase>process-test-resources</phase>
-		<goals>
-		  <goal>copy-dependencies</goal>
-		</goals>
-		<configuration>
-		  <outputDirectory>${dependencies.dir}</outputDirectory>
-		  <excludeTransitive>true</excludeTransitive>
-		</configuration>
-	      </execution>
-	    </executions>
-	  </plugin>
-	</plugins>
-      </build>
-    </profile>
-  </profiles>
+  
+  <repositories>
+    <!-- for jlayer, daisy-util and zedval -->
+    <repository>
+      <id>test-deps-lib</id>
+      <url>${project.baseUri}/lib</url>
+      <releases>
+        <enabled>true</enabled>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  
 </project>

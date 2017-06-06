@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/xproc/zedai-to-epub3.xpl">
+
+	<x:scenario label="alice">
+		<x:call step="px:zedai-to-epub3">
+			<x:input port="source">
+				<x:document type="file" href="../resources/resources/alice.xml"/>
+			</x:input>
+			<x:option name="output-dir" select="resolve-uri('alice/output-dir/',$temp-dir)"/>
+			<x:option name="temp-dir" select="resolve-uri('alice/temp-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the output directory">
+			<x:document type="directory" base-uri="temp-dir" href="alice/output-dir/" recursive="true"/>
+		</x:context>
+		<x:expect label="the output directory should contain the EPUB 3" type="compare" >
+			<x:document>
+				<c:directory name="output-dir">
+					<c:file name="alice.epub"/>
+				</c:directory>
+			</x:document>
+		</x:expect>
+		<x:context label="the temp directory">
+			<x:document type="directory" base-uri="temp-dir" href="alice/temp-dir/" recursive="true"/>
+		</x:context>
+		<x:expect label="the temp directory should contain the expanded EPUB 3" type="compare" >
+			<x:document>
+				<c:directory name="temp-dir">
+					<c:directory name="epub">
+						<c:directory name="EPUB">
+							<c:file name="alice-1.xhtml"/>
+							<c:file name="alice-2.xhtml"/>
+							<c:file name="alice-3.xhtml"/>
+							<c:file name="alice-4.xhtml"/>
+							<c:directory name="images">
+								<c:file name="alice01a.png"/>
+								<c:file name="alice02a.png"/>
+								<c:file name="alice03a.png"/>
+								<c:file name="alice04a.png"/>
+								<c:file name="alice05a.png"/>
+								<c:file name="alice06a.png"/>
+								<c:file name="alice07a.png"/>
+								<c:file name="alice08a.png"/>
+								<c:file name="alice09a.png"/>
+								<c:file name="alice10a.png"/>
+							</c:directory>
+							<c:file name="package.opf"/>
+							<c:file name="toc.xhtml"/>
+						</c:directory>
+						<c:directory name="META-INF">
+							<c:file name="container.xml"/>
+						</c:directory>
+						<c:file name="mimetype"/>
+					</c:directory>
+				</c:directory>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

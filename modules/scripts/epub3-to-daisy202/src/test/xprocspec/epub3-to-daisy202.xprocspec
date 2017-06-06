@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:opf="http://www.idpf.org/2007/opf"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               script="../../main/resources/xml/xproc/epub3-to-daisy202.xpl">
+    
+    <x:scenario label="moby-dick">
+        <x:call step="px:epub3-to-daisy202">
+            <x:option name="epub" select="resolve-uri('moby-dick-mo-20120214.small.epub')"/>
+            <x:option name="output-dir" select="resolve-uri('moby-dick/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('moby-dick/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the output directory">
+            <x:document type="directory" base-uri="temp-dir" href="moby-dick/output-dir/" recursive="true"/>
+        </x:context>
+        <x:expect label="the output directory should contain the DAISY 2.02" type="compare" >
+            <x:document type="inline">
+                <c:directory name="output-dir">
+                    <c:directory name="urn_isbn_9780316000000">
+                        <c:directory name="audio">
+                            <c:file name="mobydick_001_002_melville.mp4"/>
+                        </c:directory>
+                        <c:file name="chapter_001.html"/>
+                        <c:file name="chapter_001_overlay.smil"/>
+                        <c:file name="chapter_002.html"/>
+                        <c:file name="chapter_002_overlay.smil"/>
+                        <c:file name="chapter_003.html"/>
+                        <c:directory name="css">
+                            <c:file name="stylesheet.css"/>
+                        </c:directory>
+                        <c:directory name="fonts">
+                            <c:file name="STIXGeneral.otf"/>
+                            <c:file name="STIXGeneralBol.otf"/>
+                            <c:file name="STIXGeneralBolIta.otf"/>
+                            <c:file name="STIXGeneralItalic.otf"/>
+                        </c:directory>
+                        <c:directory name="images">
+                            <c:file name="9780316000000.jpg"/>
+                            <c:file name="Moby-Dick_FE_title_page.jpg"/>
+                        </c:directory>
+                        <c:file name="ncc.html"/>
+                    </c:directory>
+                </c:directory>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>
