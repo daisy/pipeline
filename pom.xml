@@ -22,7 +22,6 @@
     <module>utils/xproc-maven-plugin</module>
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
-    <module>libs/epubcheck</module>
     <module>libs/osgi-libs</module>
     <module>framework</module>
     <module>modules/braille</module>
