@@ -8,7 +8,8 @@ MVN_WORKSPACE := .maven-workspace
 MVN_CACHE := .maven-cache
 
 MVN := mvn --settings "$(CURDIR)/settings.xml" -Dworkspace="$(CURDIR)/$(MVN_WORKSPACE)" -Dcache="$(CURDIR)/$(MVN_CACHE)" \
-           -Dorg.ops4j.pax.url.mvn.localRepository="$(CURDIR)/$(MVN_WORKSPACE)"
+           -Dorg.ops4j.pax.url.mvn.localRepository="$(CURDIR)/$(MVN_WORKSPACE)" \
+           -Dorg.daisy.org.ops4j.pax.url.mvn.settings="$(CURDIR)/settings.xml"
 GRADLE := M2_HOME=$(CURDIR)/.gradle-settings $(CURDIR)/libs/dotify/dotify.api/gradlew -Dworkspace="$(CURDIR)/$(MVN_WORKSPACE)" -Dcache="$(CURDIR)/$(MVN_CACHE)"
 
 MVN_LOG := tee -a $(CURDIR)/maven.log | cut -c1-1000 | pcregrep -M "^\[INFO\] -+\n\[INFO\] Building .*\n\[INFO\] -+$$|^\[(ERROR|WARNING)\]"; \
