@@ -20,6 +20,7 @@
 	<xsl:param name="show-braille-page-numbers" as="xs:boolean" select="true()" dotify:desc="Show braille page numbers in the header" dotify:default="true" dotify:values="true/false"/>
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()" dotify:desc="Show print page numbers in the header" dotify:default="true" dotify:values="true/false"/>
 	<xsl:param name="show-print-page-breaks" as="xs:boolean" select="false()" dotify:desc="Show print page breaks where they occur in the text" dotify:default="false" dotify:values="true/false"/>
+	<xsl:param name="show-toc-preamble" as="xs:boolean" select="true()" dotify:desc="Show toc preamble" dotify:default="true" dotify:values="true/false"/>
 	<xsl:param name="matrix-table-columns-max" select="10" dotify:desc="The maximum number of columns in a matrix table (A positive integer)" dotify:default="10"/>
 	<xsl:param name="staircase-table-columns-max" select="10" dotify:desc="The maximum number of columns in a staircase table (A positive integer)" dotify:default="10"/>
 	<xsl:param name="colophon-metadata-placement" select="'end'" dotify:desc="The placement of colophon" dotify:default="end" dotify:values="begin/end"/>
@@ -263,7 +264,7 @@
 						<toc-sequence master="front" toc="full-toc" range="document" initial-page-number="1">
 							<on-toc-start>
 								<block padding-bottom="1"><xsl:value-of select="$l10nTocHeadline"/></block>
-								<xsl:if test="$l10nTocDescription!=''">
+								<xsl:if test="$show-toc-preamble and $l10nTocDescription!=''">
 									<block padding-bottom="1"><xsl:value-of select="$l10nTocDescription"/></block>
 								</xsl:if>
 							</on-toc-start>
