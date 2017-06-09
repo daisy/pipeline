@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Test CSS module
-Bundle-SymbolicName: test.css-module
-Bundle-Version: 0.0.0.SNAPSHOT

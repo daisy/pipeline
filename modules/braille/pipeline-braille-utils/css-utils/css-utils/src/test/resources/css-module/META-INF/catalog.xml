@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-	<uri name="http://test/css-module/css/css_1.css" uri="../css/css_1.css"/>
-	<uri name="http://test/css-module/css/css_2_imports_css_3.css" uri="../css/css_2_imports_css_3.css"/>
-	<uri name="http://test/css-module/sass/sass_1.scss" uri="../sass/sass_1.scss"/>
-	<uri name="http://test/css-module/sass/sass_2.scss" uri="../sass/sass_2.scss"/>
-	<uri name="http://test/css-module/sass/sass_3_imports_css_3.scss" uri="../sass/sass_3_imports_css_3.scss"/>
-	<uri name="http://test/css-module/sass/sass_4_imports_sass_5.scss" uri="../sass/sass_4_imports_sass_5.scss"/>
-</catalog>

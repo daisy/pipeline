@@ -1,5 +1,3 @@
-package org.daisy.pipeline.braille.libhyphen;
-
 import javax.inject.Inject;
 
 import static org.daisy.pipeline.braille.common.Hyphenator.FullHyphenator;
@@ -7,37 +5,23 @@ import static org.daisy.pipeline.braille.common.Hyphenator.LineBreaker;
 import static org.daisy.pipeline.braille.common.Hyphenator.LineIterator;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 
-import static org.daisy.pipeline.pax.exam.Options.brailleModule;
-import static org.daisy.pipeline.pax.exam.Options.domTraversalPackage;
-import static org.daisy.pipeline.pax.exam.Options.felixDeclarativeServices;
-import static org.daisy.pipeline.pax.exam.Options.logbackClassic;
-import static org.daisy.pipeline.pax.exam.Options.logbackConfigFile;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundlesWithDependencies;
-import static org.daisy.pipeline.pax.exam.Options.thisBundle;
+import org.daisy.pipeline.braille.libhyphen.LibhyphenHyphenator;
+
+import org.daisy.pipeline.junit.AbstractTest;
+
+import static org.daisy.pipeline.pax.exam.Options.thisPlatform;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
-import org.ops4j.pax.exam.spi.reactors.PerClass;
-import org.ops4j.pax.exam.util.PathUtils;
-
-import static org.ops4j.pax.exam.CoreOptions.bundle;
-import static org.ops4j.pax.exam.CoreOptions.junitBundles;
-import static org.ops4j.pax.exam.CoreOptions.options;
+import org.ops4j.pax.exam.ProbeBuilder;
+import org.ops4j.pax.exam.TestProbeBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RunWith(PaxExam.class)
-@ExamReactorStrategy(PerClass.class)
-public class LibhyphenCoreTest {
+public class LibhyphenCoreTest extends AbstractTest {
 	
 	@Inject
 	LibhyphenHyphenator.Provider provider;
@@ -106,23 +90,20 @@ public class LibhyphenCoreTest {
 		return s;
 	}
 	
-	@Configuration
-	public Option[] config() {
-		return options(
-			logbackConfigFile(),
-			domTraversalPackage(),
-			felixDeclarativeServices(),
-			thisBundle(),
-			junitBundles(),
-			mavenBundlesWithDependencies(
-				mavenBundle("org.daisy.bindings:jhyphen:?"),
-				brailleModule("common-utils"),
-				brailleModule("css-core"),
-				brailleModule("libhyphen-native").forThisPlatform(),
-				// logging
-				logbackClassic(),
-				mavenBundle("org.slf4j:jcl-over-slf4j:1.7.2")), // required by httpclient (TODO: add to runtime dependencies of calabash)
-			bundle("reference:file:" + PathUtils.getBaseDir() + "/target/test-classes/table_paths/")
-		);
+	@Override
+	protected String[] testDependencies() {
+		return new String[] {
+			"org.daisy.bindings:jhyphen:?",
+			brailleModule("common-utils"),
+			brailleModule("css-core"),
+			"org.daisy.pipeline.modules.braille:libhyphen-native:jar:" + thisPlatform() + ":?"
+		};
+	}
+	
+	@ProbeBuilder
+	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
+		probe.setHeader("Import-Package", "org.daisy.pipeline.braille.libhyphen");
+		probe.setHeader("Service-Component", "OSGI-INF/table_paths.xml");
+		return probe;
 	}
 }

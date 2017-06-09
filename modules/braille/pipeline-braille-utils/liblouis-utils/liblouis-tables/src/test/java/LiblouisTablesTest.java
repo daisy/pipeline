@@ -6,32 +6,16 @@ import javax.inject.Inject;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 
-import static org.daisy.pipeline.pax.exam.Options.brailleModule;
-import static org.daisy.pipeline.pax.exam.Options.domTraversalPackage;
-import static org.daisy.pipeline.pax.exam.Options.felixDeclarativeServices;
-import static org.daisy.pipeline.pax.exam.Options.logbackClassic;
-import static org.daisy.pipeline.pax.exam.Options.logbackConfigFile;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundlesWithDependencies;
-import static org.daisy.pipeline.pax.exam.Options.thisBundle;
+import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
+
+import static org.daisy.pipeline.pax.exam.Options.thisPlatform;
 
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
-import org.ops4j.pax.exam.spi.reactors.PerClass;
 import org.ops4j.pax.exam.util.PathUtils;
 
-import static org.ops4j.pax.exam.CoreOptions.junitBundles;
-import static org.ops4j.pax.exam.CoreOptions.options;
-
-@RunWith(PaxExam.class)
-@ExamReactorStrategy(PerClass.class)
-public class LiblouisTablesTest {
+public class LiblouisTablesTest extends AbstractXSpecAndXProcSpecTest {
 	
 	@Inject
 	LiblouisTranslator.Provider provider;
@@ -65,23 +49,14 @@ public class LiblouisTablesTest {
 			throw new AssertionError(message); }
 	}
 	
-	@Configuration
-	public Option[] config() {
-		return options(
-			logbackConfigFile(),
-			domTraversalPackage(),
-			felixDeclarativeServices(),
-			thisBundle(),
-			junitBundles(),
-			mavenBundlesWithDependencies(
-				brailleModule("liblouis-core"),
-				brailleModule("liblouis-native").forThisPlatform(),
-				brailleModule("libhyphen-core"),
-				brailleModule("pef-core"),
-				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
-				// logging
-				logbackClassic(),
-				mavenBundle("org.slf4j:jcl-over-slf4j:1.7.2")) // required by httpclient (TODO: add to runtime dependencies of calabash))
-		);
+	@Override
+	protected String[] testDependencies() {
+		return new String[] {
+			brailleModule("liblouis-core"),
+			"org.daisy.pipeline.modules.braille:liblouis-native:jar:" + thisPlatform() + ":?",
+			brailleModule("libhyphen-core"),
+			brailleModule("pef-core"),
+			"org.daisy.pipeline:calabash-adapter:?"
+		};
 	}
 }

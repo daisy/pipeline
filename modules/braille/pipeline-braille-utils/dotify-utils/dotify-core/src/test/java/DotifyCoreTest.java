@@ -10,32 +10,13 @@ import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.dotify.DotifyHyphenator;
 import org.daisy.pipeline.braille.dotify.DotifyTranslator;
 
-import static org.daisy.pipeline.pax.exam.Options.brailleModule;
-import static org.daisy.pipeline.pax.exam.Options.domTraversalPackage;
-import static org.daisy.pipeline.pax.exam.Options.felixDeclarativeServices;
-import static org.daisy.pipeline.pax.exam.Options.logbackClassic;
-import static org.daisy.pipeline.pax.exam.Options.logbackConfigFile;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundlesWithDependencies;
-import static org.daisy.pipeline.pax.exam.Options.thisBundle;
+import org.daisy.pipeline.junit.AbstractTest;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
 
-import org.ops4j.pax.exam.Configuration;
-import org.ops4j.pax.exam.junit.PaxExam;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
-import org.ops4j.pax.exam.spi.reactors.PerClass;
-
-import static org.ops4j.pax.exam.CoreOptions.junitBundles;
-import static org.ops4j.pax.exam.CoreOptions.options;
-
-@RunWith(PaxExam.class)
-@ExamReactorStrategy(PerClass.class)
-public class DotifyCoreTest {
+public class DotifyCoreTest extends AbstractTest {
 	
 	@Inject
 	DotifyTranslator.Provider provider;
@@ -43,25 +24,16 @@ public class DotifyCoreTest {
 	@Inject
 	DotifyHyphenator.Provider hyphenatorProvider;
 	
-	@Configuration
-	public Option[] config() {
-		return options(
-			logbackConfigFile(),
-			domTraversalPackage(),
-			felixDeclarativeServices(),
-			thisBundle(),
-			junitBundles(),
-			mavenBundlesWithDependencies(
-				brailleModule("common-utils"),
-				brailleModule("css-core"),
-				mavenBundle("org.daisy.dotify:dotify.api:?"),
-				mavenBundle("org.daisy.dotify:dotify.translator.impl:?"),
-				mavenBundle("org.daisy.dotify:dotify.hyphenator.impl:?"),
-				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
-				// logging
-				logbackClassic(),
-				mavenBundle("org.slf4j:jcl-over-slf4j:1.7.2")) // required by httpclient (TODO: add to runtime dependencies of calabash)
-		);
+	@Override
+	protected String[] testDependencies() {
+		return new String[] {
+			brailleModule("common-utils"),
+			brailleModule("css-core"),
+			"org.daisy.dotify:dotify.api:?",
+			"org.daisy.dotify:dotify.translator.impl:?",
+			"org.daisy.dotify:dotify.hyphenator.impl:?",
+			"org.daisy.pipeline:calabash-adapter:?"
+		};
 	}
 	
 	@Test
