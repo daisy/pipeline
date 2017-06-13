@@ -24,17 +24,17 @@
     <daisy.calabash-custom-steps.version>2.0.0</daisy.calabash-custom-steps.version>
     <daisy.common-utils.version>2.1.3-SNAPSHOT</daisy.common-utils.version>
     <daisy.framework-core.version>3.1.1-SNAPSHOT</daisy.framework-core.version>
-    <daisy.framework-persistence.version>2.0.3</daisy.framework-persistence.version>
+    <daisy.framework-persistence.version>2.0.4-SNAPSHOT</daisy.framework-persistence.version>
     <daisy.framework-volatile.version>2.0.2-SNAPSHOT</daisy.framework-volatile.version>
     <daisy.launcher.version>1.0.0</daisy.launcher.version>
     <daisy.logging-activator.version>2.0.2-SNAPSHOT</daisy.logging-activator.version>
     <daisy.logging-appender.version>1.1.1-SNAPSHOT</daisy.logging-appender.version>
     <daisy.modules-registry.version>2.0.1-SNAPSHOT</daisy.modules-registry.version>
-    <daisy.persistence-derby.version>2.0.0</daisy.persistence-derby.version>
+    <daisy.persistence-derby.version>2.0.1-SNAPSHOT</daisy.persistence-derby.version>
     <daisy.persistence-mysql.version>2.0.0</daisy.persistence-mysql.version>
     <daisy.push-notifier.version>2.0.1-SNAPSHOT</daisy.push-notifier.version>
     <daisy.updater-wrapper.version>1.0.1</daisy.updater-wrapper.version>
-    <daisy.webservice.version>2.1.1</daisy.webservice.version>
+    <daisy.webservice.version>2.1.2-SNAPSHOT</daisy.webservice.version>
     <daisy.webservice-utils.version>2.2.2-SNAPSHOT</daisy.webservice-utils.version>
     <daisy.woodstox-osgi-adapter.version>2.0.1-SNAPSHOT</daisy.woodstox-osgi-adapter.version>
     <daisy.xmlcatalog.version>2.0.2-SNAPSHOT</daisy.xmlcatalog.version>
@@ -43,9 +43,9 @@
 
     <!-- Dependencies Versions -->
     <benchmark.version>0.7.2</benchmark.version>
-    <calabash.version>1.0.23</calabash.version>
+    <calabash.version>1.1.9-p1-95-SNAPSHOT</calabash.version>
     <commons.codec.version>1.6</commons.codec.version>
-    <commons.fileupload.version>1.2.2</commons.fileupload.version>
+    <commons.fileupload.version>1.3</commons.fileupload.version>
     <commons.io.version>2.3</commons.io.version>
     <eclipse.persistence.version>2.3.2</eclipse.persistence.version>
     <guava.version>15.0</guava.version>
@@ -213,12 +213,20 @@
         <version>${calabash.version}</version>
         <exclusions>
           <exclusion>
+            <groupId>com.thaiopensource</groupId>
+            <artifactId>jing</artifactId>
+          </exclusion>
+          <exclusion>
             <groupId>net.sf.saxon</groupId>
             <artifactId>Saxon-HE</artifactId>
           </exclusion>
           <exclusion>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
           </exclusion>
         </exclusions>
       </dependency>
@@ -270,6 +278,10 @@
         <!-- TODO remove when the fix to issue 1501 is pushed to Maven Central
              see http://dev.saxonica.com/community/issues/1501 -->
         <exclusions>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+          </exclusion>
           <exclusion>
             <groupId>org.jdom</groupId>
             <artifactId>jdom</artifactId>
