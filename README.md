@@ -16,8 +16,10 @@ The tree below shows the structure of the project:
 
 - [assembly](https://github.com/daisy/pipeline-assembly)
 - [cli](https://github.com/daisy/pipeline-cli-go)
+- [clientlib-java](https://github.com/daisy/pipeline-clientlib-java)
 - [framework](https://github.com/daisy/pipeline-framework)
 - [gui](https://github.com/daisy/pipeline-gui)
+- [it](https://github.com/daisy/pipeline-it)
 - libs
   - [braille-css](https://github.com/daisy/braille-css)
   - braille-utils
