@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<script href="http://localhost:8181/ws/scripts/dtbook-validator" id="dtbook-validator" xmlns="http://www.daisy.org/ns/pipeline/data">
+	<nicename>DTBook Validator</nicename>
+	<description>Validates DTBook-2005-3 documents.</description>
+	<input desc="A DTBook-2005-3 document" name="source" sequence="false"/>
+	<option desc="Directory where your validation report is stored. If left blank, nothing is saved to disk." name="output-dir" ordered="true" outputType="result" required="false" sequence="false" type="anyDirURI"/>
+	<output desc="A copy of the input document; may include PSVI annotations." name="result" sequence="false"/>
+	<output desc="Raw output from the schematron validation." name="schematron-report" sequence="false"/>
+	<output desc="Raw output from the RelaxNG validation." name="relaxng-report" sequence="true"/>
+	<output desc="An HTML-formatted version of both the RelaxNG and Schematron reports." name="html-report" sequence="false"/>
+</script>

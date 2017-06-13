@@ -1,0 +1,25 @@
+language: java
+
+jdk:
+  - oraclejdk8
+
+# configure the Maven environment
+before_install:
+  - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_install)
+
+# main task, run the verify goal
+script: mvn verify
+
+# if the build succeeds, deploy the artifact (tests are skipped)
+after_success: 
+  - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/after_success)
+
+# whitelist; only deploy master branch
+branches:
+  only:
+  - master
+
+env:
+  global:
+    - secure: "OIa8YSXJ6iuT9Nys1pyCDHnJotHXhEYS5q6TtQH75+h1Wr1V/BrPvybNaP4wNIaHExvL4gew13c97J3X3FDCakTpO/pW+M3ikFZwm2PFZIoabaIO9YO+1plf4Ga6BoVc74r+0Ou0ecQlInN/h3IIyoSujdDAQ90022aviRAar4c="
+    - secure: "UN2B0qgUdwU2BQcJgQdzfzzufS2n1vvI4FJPwGYdI4zYibnXkNzE3SknY82XyDiru9upVv7bfZ2uXkx4zdoroEkfC043iEdYwuYxcFM2vy0/ybrHq1ONjD4PzD3a7bFQ5cmr9PRNQpK+vKLYOGp4b/YXK2s0AkhT+SgsupCvztc="

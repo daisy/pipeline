@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<job xmlns="http://www.daisy.org/ns/pipeline/data" id="job1">
+    <script href="http://localhost:8181/ws/scripts/dtbook-to-epub3" id="dtbook-to-epub3" xmlns="http://www.daisy.org/ns/pipeline/data">
+	    <nicename>DTBook to EPUB3</nicename>
+	    <description>Converts multiple dtbooks to epub3 format</description>
+	    <version>1.2.0</version>
+	    <input desc="One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed." mediaType="application/x-dtbook+xml" name="source" nicename="DTBook file(s)" required="true" sequence="true">
+	        <item value="hauy_valid.xml"/>
+        	<item value="dtbook.2005.basic.css"/>
+        </input>
+	    <option desc="Language code of the input document." name="language" nicename="Language code" ordered="true" required="false" sequence="false" type="string">en</option>
+	    <option desc="Whether to stop processing and raise an error on validation issues." name="assert-valid" nicename="Assert validity" ordered="true" required="false" sequence="false" type="boolean">true</option>
+	    <option desc="Configuration file for the Text-To-Speech." name="tts-config" nicename="Text-To-Speech configuration file" ordered="true" required="false" sequence="false" type="anyFileURI"/>
+	    <option desc="Whether to use a speech synthesizer to produce audio files." name="audio" nicename="Enable Text-To-Speech" ordered="true" required="false" sequence="false" type="boolean">true</option>
+	</script>
+    <nicename>Nicename</nicename>
+    <description xml:space="preserve">
+short description
+
+long description
+</description>
+</job>

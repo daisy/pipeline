@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.daisy</groupId>
+        <artifactId>daisy</artifactId>
+        <version>3</version>
+        <relativePath />
+    </parent>
+
+    <groupId>org.daisy.pipeline</groupId>
+    <artifactId>clientlib-java</artifactId>
+    <version>4.7.1-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+
+    <name>DAISY Pipeline 2 :: Java Client Library</name>
+    <description>A Java library for communicating with the DAISY Pipeline 2.</description>
+    <url>https://github.com/daisy/pipeline-clientlib-java</url>
+    <inceptionYear>2012</inceptionYear>
+    <organization>
+        <name>The DAISY Consortium</name>
+        <url>http://www.daisy.org/</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License, Version 3</name>
+            <url>http://www.gnu.org/copyleft/lesser.html</url>
+            <distribution>manual</distribution>
+        </license>
+    </licenses>
+
+    <mailingLists>
+        <mailingList>
+            <name>DAISY Pipeline Developers</name>
+            <subscribe>http://groups.google.com/group/daisy-pipeline-dev/subscribe</subscribe>
+            <unsubscribe>daisy-pipeline-dev+unsubscribe@googlegroups.com</unsubscribe>
+            <post>daisy-pipeline-dev@googlegroups.com</post>
+            <archive>http://groups.google.com/group/daisy-pipeline-dev</archive>
+        </mailingList>
+    </mailingLists>
+    <issueManagement>
+        <system>GitHub Issue Tracker</system>
+        <url>https://github.com/daisy/pipeline-clientlib-java/issues</url>
+    </issueManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Main-Class>org.daisy.pipeline.client.Main</Main-Class>
+                    </instructions>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

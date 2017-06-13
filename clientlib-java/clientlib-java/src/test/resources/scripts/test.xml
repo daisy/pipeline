@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<script href="http://localhost:8181/ws/scripts/test" id="test" xmlns="http://www.daisy.org/ns/pipeline/data">
+    <nicename>Test</nicename>
+    <description>Test description</description>
+    <input desc="DTBook input port" mediaType="application/x-dtbook+xml" name="source" sequence="true"/>
+    <option desc="Boolean option" name="boolean" ordered="true" required="false" sequence="false" type="boolean"/>
+    <option desc="Result directory option" name="output-dir" ordered="true" outputType="result" required="true" sequence="false" type="anyDirURI"/>
+    <option desc="String option" name="string" ordered="true" required="false" sequence="false" type="string"/>
+    <option desc="String sequence option" name="string-list" ordered="true" required="false" sequence="true" type="string"/>
+</script>

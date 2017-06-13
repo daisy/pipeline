@@ -1,0 +1,2608 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-2//EN"
+                        "http://www.daisy.org/z3986/2005/dtbook-2005-2.dtd">
+<?xml-stylesheet href="dtbook.2005.basic.css" type="text/css"?>
+<dtbook version="2005-2" xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+   <head>
+      <meta content="Valentin Haüy - the father of the education for the blind" name="dc:Title"/>
+      <meta content="Beatrice Christensen Sköld" name="dc:Creator"/>
+      <meta content="C00000" name="dc:Identifier"/>
+      <meta content="TPB" name="dc:Publisher"/>
+      <meta content="en-GB" name="dc:Language"/>
+      <meta content="2006-03-23" name="dc:Date"/>
+      <meta content="C00000" name="dtb:uid"/>
+   </head>
+   <book>
+	   <!-- note- this evil document has an h2 as its first hx-->	
+      <frontmatter>
+         <doctitle>
+            <sent id="dtb1">Valentin Haüy. </sent>
+            <sent id="dtb2">The father of the education for the blind</sent>
+         </doctitle>
+         <docauthor>
+            <sent id="dtb3">Beatrice Christensen Sköld</sent>
+         </docauthor>
+         <level1>
+            <p>
+               <sent
+                     id="dtb4">Published by the Swedish Library of Talking Books and Braille (<acronym
+                     pronounce="no" title="The Swedish Library of Talking Books and Braille">TPB</acronym>).</sent>
+            </p>
+            <imggroup>
+               <img alt="Picture of Valentin Haüy" src="valentin.jpg"/>
+               <caption>
+                  <sent id="dtb5">Valentin Haüy</sent>
+               </caption>
+            </imggroup>
+            <prodnote id="dtb6" render="required">
+               <p>
+                  <sent id="dtb7">This version is a for-test-use-only modification of the published original.</sent>
+               </p>
+               <p>
+                  <sent id="dtb8">Modifications have been done primarily to the footnotes, which in the original version used inline parentheses, and in this version use a noteref-endnote system.</sent>
+               </p>
+            </prodnote>
+            <p>
+               <sent id="dtb9">In this study the life and works of Valentin Haüy are described. </sent>
+               <sent id="dtb10">Valentin Haüy (1745-1821), of many called the father of the education of the blind, founded a school for blind children of both sexes in Paris in 1785. </sent>
+               <sent id="dtb11">In 1786 he published the first known book about education for the blind. </sent>
+               <sent id="dtb12">His main idea was the necessity of educating the blind to an independent life. </sent>
+               <sent id="dtb13">Thus the blind were trained for different professions such as printing, basket making, sewing etc. </sent>
+               <sent id="dtb14">Another of Haüys ideas was that blind children should not be segregated but educated together with sighted children. </sent>
+               <sent id="dtb15">His method of printing books with letters in relief and ink-print was a minor revolution that enabled the blind to read books. </sent>
+            </p>
+            <p>
+               <sent id="dtb16">In the study a hitherto unknown period in Haüys life is described. </sent>
+               <sent id="dtb17">It is the period 1807-1820 which he spent in St Petersburg, then the capital of Russia. </sent>
+               <sent id="dtb18">In the study there is also an analysis of Haüy’s influence on the education of the blind in other European countries. </sent>
+            </p>
+            <p>
+               <sent id="dtb19">Key words: Valentin Haüy, education of the blind, relief print, visual communication, history</sent>
+            </p>
+            <level2>
+               <h2>
+                  <sent id="dtb20">List of contents</sent>
+               </h2>
+               <table id="dtb21">
+                  <tr id="dtb22">
+                     <td>
+                        <sent id="dtb23">Preface</sent>
+                     </td>
+                     <td/>
+                     <td>
+                        <sent id="dtb24">4</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb25">
+                     <td>
+                        <sent id="dtb26">1.</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb27">Research questions</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb28">5</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb29">
+                     <td>
+                        <sent id="dtb30">2.</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb31">Purpose, method and sources</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb32">5</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb33">
+                     <td>
+                        <sent id="dtb34">3.</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb35">Valentin Haüy</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb36">7</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb37">
+                     <td>
+                        <sent id="dtb38">3.1</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb39">Introduction</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb40">7</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb41">
+                     <td>
+                        <sent id="dtb42">3.2</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb43">Biographical background</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb44">8</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb45">
+                     <td>
+                        <sent id="dtb46">3.3</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb47">The market in St Ovid's Square</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb48">8</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb49">
+                     <td>
+                        <sent id="dtb50">3.4</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb51">Maria Theresia von Paradis (1733-1808)</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb52">9</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb53">
+                     <td>
+                        <sent id="dtb54">3.5</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb55">Haüy's meeting with Lesueur and the foundation
+             of l'Institution des Jeunes Aveugles</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb56">10</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb57">
+                     <td>
+                        <sent id="dtb58">3.6</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb59">Valentin Haüy's teaching methods</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb60">11</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb61">
+                     <td>
+                        <sent id="dtb62">3.7</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb63">The French revolution</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb64">13</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb65">
+                     <td>
+                        <sent id="dtb66">3.8</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb67">Musée des Aveugles</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb68">14</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb69">
+                     <td>
+                        <sent id="dtb70">3.9</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb71">Valentin Haüy in Russia</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb72">15</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb73">
+                     <td>
+                        <sent id="dtb74">3.9.1</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb75">An invitation from Alexander I</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb76">15</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb77">
+                     <td>
+                        <sent id="dtb78">3.9.2</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb79">Berlin</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb80">16</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb81">
+                     <td>
+                        <sent id="dtb82">3.9.3</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb83">In St Petersburg</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb84">16</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb85">
+                     <td>
+                        <sent id="dtb86">3.9.4</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb87">Haüy's last will and testament</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb88">20</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb89">
+                     <td>
+                        <sent id="dtb90">3.9.5</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb91">Education of deaf pupils in St Petersburg</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb92">21</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb93">
+                     <td>
+                        <sent id="dtb94">3.10</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb95">Haüy's telegraph</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb96">22</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb97">
+                     <td>
+                        <sent id="dtb98">3.11</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb99">The final years</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb100">22</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb101">
+                     <td>
+                        <sent id="dtb102">4.</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb103">The importance of Haüy in the education of the blind
+             in Sweden and other countries</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb104">23</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb105">
+                     <td>
+                        <sent id="dtb106">5.</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb107">Discussion and conclusions</sent>
+                     </td>
+                     <td>
+                        <sent id="dtb108">26</sent>
+                     </td>
+                  </tr>
+                  <tr id="dtb109">
+                     <td>
+                        <sent id="dtb110">References</sent>
+                     </td>
+                     <td/>
+                     <td>
+                        <sent id="dtb111">29</sent>
+                     </td>
+                  </tr>
+               </table>
+               <pagenum id="page_4" page="normal">4</pagenum>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb112">Preface</sent>
+               </h2>
+               <p>
+                  <sent
+                        id="dtb113">During my 19 years at the Swedish Library of Talking Books and Braille (<acronym
+                        pronounce="no" title="The Swedish Library of Talking Books and Braille">TPB</acronym>), I have frequently been asked about the history of the Braille system and these questions were really what motivated my research into the life of Louis Braille, the inventor of the system of writing for the blind which was named after him. </sent>
+                  <sent id="dtb114">My investigations revealed that Louis Braille himself would have had almost no schooling at all if it had not been for Valentin Haüy, the father of education for the blind.</sent>
+               </p>
+               <p>
+                  <sent id="dtb115">As there is very little literature available in Swedish on either Valentin Haüy or Louis Braille, the two principle figures in the history of education for the blind, I decided to do something to remedy this. </sent>
+                  <sent id="dtb116">I starrrrted with Louis Braille, the inventor of the system of writing for the blind which is in use today, and when I had finished my studies of Braille's life, I naturally went on to investigate the life of Valentin Haüy. </sent>
+                  <sent id="dtb117">At the time I had to write a paper on education for the blind, as part of my studies at the Department of Education (Stockholm university), so I decided to kill two birds with one stone and combine both tasks.</sent>
+               </p>
+               <p>
+                  <sent id="dtb118">Working on this paper was no easy task as so few sources can be consulted in Sweden. </sent>
+                  <sent id="dtb119">There is an international lending network, but borrowing books is a slow process since foreign libraries do not always deliver by airmail. </sent>
+                  <sent id="dtb120">My principal source was thus the library at the Danish Museum of the Blind, originally the library of the Royal Institute for the Blind. </sent>
+                  <sent id="dtb121">It was there that I came across a copy of Haüy's first book on education for the blind.</sent>
+               </p>
+               <p>
+                  <sent id="dtb122">I particularly wish to thank Mogens Bang, head of the Danish Museum of the Blind, who made it possible for me to spend time in the museum sifting through the material in their unique collection of older books on education for the blind.</sent>
+               </p>
+               <p>
+                  <sent id="dtb123">I would also like to thank Marie Strömbäck and Kerstin Wallin, who helped me with the translations from French. </sent>
+                  <sent id="dtb124">Finally, I am much obliged to Eric Engström, my tutor, for inspiring and encouraging me in my work.</sent>
+               </p>
+               <p>
+                  <sent id="dtb125">Beatrice Christensen-Sköld</sent>
+               </p>
+               <pagenum id="page_5" page="normal">5</pagenum>
+            </level2>
+         </level1>
+      </frontmatter>
+      <bodymatter>
+         <level1>
+            <h1>
+               <sent id="dtb126">1. </sent>
+               <sent id="dtb127">Research questions</sent>
+            </h1>
+            <p>
+               <sent
+                     id="dtb128">My interest in Valentin Haüy, the father of education for the blind in Europe, was aroused while working at <acronym
+                     pronounce="no" title="The Swedish Library of Talking Books and Braille">TPB</acronym> on a book about Louis Braille, the creator of the Braille system. </sent>
+               <sent id="dtb129">I discovered that there was a dearth of literature on Haüy in Swedish, and that in the limited literature I was able to consult, information about him was often contradictory. </sent>
+               <sent id="dtb130">In particular, I noticed that there were no references to the period of the more than ten years which Haüy spent in Russia.</sent>
+            </p>
+            <p>
+               <sent id="dtb131">In this paper I have proposed a number of research questions:</sent>
+            </p>
+            <list id="dtb132" type="ul">
+               <li>
+                  <sent id="dtb133">Who was Valentin Haüy? </sent>
+                  <sent id="dtb134">What do we know about his life?</sent>
+               </li>
+               <li>
+                  <sent id="dtb135">What role did he play in the creation of special education for the blind?</sent>
+               </li>
+               <li>
+                  <sent id="dtb136">Was he really "the father of education for the blind" or were there others who merit that distinction?</sent>
+               </li>
+               <li>
+                  <sent id="dtb137">How great was his influence on the introduction of education for the blind in Sweden and other countries?</sent>
+               </li>
+               <li>
+                  <sent id="dtb138">What were his teaching methods?</sent>
+               </li>
+               <li>
+                  <sent id="dtb139">What happened during his stay in Russia - did he in fact found an institute for the blind in St Petersburg?</sent>
+               </li>
+            </list>
+         </level1>
+         <level1>
+            <h1>
+               <sent id="dtb140">2. </sent>
+               <sent id="dtb141">Purpose, method and sources</sent>
+            </h1>
+            <p>
+               <sent id="dtb142">My purpose in this paper is to shed some light on Valentin Haüy, the person, and the role he played in the history of education for the blind, and to attempt to ascertain whether he was influential in the introduction of education for the blind in other countries, particularly in Sweden.</sent>
+            </p>
+            <p>
+               <sent id="dtb143">For obvious reasons, I have chosen a hermeneutic method. </sent>
+               <sent id="dtb144">I was unable, of course, to interview Valentin Haüy in person; he has been dead for nearly 200 years. </sent>
+               <sent id="dtb145">Initially, I had in mind the idea of adopting an idiographic approach to my investigation but found this difficult to apply to an historical personage such as Haüy. </sent>
+               <sent id="dtb146">However, it was, above all, the lack of first-hand sources which most discouraged me.</sent>
+            </p>
+            <p>
+               <sent id="dtb147">In historical research, one must have access to the remains or traces of "reality in the past tense," as Sjöstrand (1972) put it. </sent>
+               <sent id="dtb148">The researcher pieces together, in a manner of speaking, a mosaic from the fragments he manages to find. </sent>
+               <sent>
+                  <span id="dtb149">These remains and traces may be many and varied; in the case of Haüy, they are mainly written sources </span>
+                  <noteref class="endnote" id="dtb150" idref="#fn_1">1</noteref>
+                  <span id="dtb151">.</span>
+               </sent>
+            </p>
+            <p>
+               <sent id="dtb152">One of the purposes of this paper is to create a portrait in writing of Valentin Haüy. </sent>
+               <sent id="dtb153">In other words, a biography. </sent>
+               <sent>
+                  <span id="dtb154">When writing a biography, one should make use of material which directly or indirectly, in part or completely provides information about the life of one or several people </span>
+                  <noteref class="endnote" id="dtb155" idref="#fn_2">2</noteref>
+                  <span id="dtb156">. </span>
+               </sent>
+               <sent id="dtb157">This may or may not be written material. </sent>
+               <sent id="dtb158">Written material produced by the investigated person himself or herself is, according to Engström, "first-person documentation," while material about the person investigated is "third-person documentation". </sent>
+               <sent>
+                  <span id="dtb159">The lack of first-hand sources naturally means that the validity of this type of documentation is questionable </span>
+                  <noteref class="endnote" id="dtb160" idref="#fn_3">3</noteref>
+                  <span id="dtb161">. </span>
+               </sent>
+               <sent id="dtb162">However, some of the documentation I have used does in fact quote from first-hand sources or "first-person documents". </sent>
+               <sent id="dtb163">To judge from the literature available on the subject, I am one of the very few (if not the only) researchers who have used Skrébitsky as a source.</sent>
+            </p>
+            <pagenum id="page_6" page="normal">6</pagenum>
+            <p>
+               <sent id="dtb164">I did have access to a single first-hand source - the information I use to describe Haüy's pedagogical methods was, in part, gleaned from his own Essai sur l'Education des Aveugles.</sent>
+            </p>
+            <p>
+               <sent id="dtb165">I have hunted for sources in museums and archives where most of the material available was in printed form. </sent>
+               <sent id="dtb166">The few hand-written documents in existence are in the possession of the Association Valentin Haüy in Paris.</sent>
+            </p>
+            <p>
+               <sent id="dtb167">Most of the documents I have used for this paper are in the library at the Danish Museum of the Blind, which is the only Nordic library that possesses a copy of Valentin Haüy's Essai de l'Education des Jeunes Aveugles, together with the Institution des Jeunes Aveugles' annual reports. </sent>
+               <sent id="dtb168">One of these reports merits special attention since it contains a relatively early biographical article on Valentin Haüy written by the director of the institute, Dr P-A Dufau. </sent>
+               <sent id="dtb169">The report is dated 1852, when the institute transferred to its present location in the Boulevard des Invalides. </sent>
+               <sent id="dtb170">The article in question was written in 1844 and was published separately. </sent>
+               <sent id="dtb171">Dufau's main source is a letter written by Valentin Haüy to his son.</sent>
+            </p>
+            <p>
+               <sent id="dtb172">Paul Henri, head of the Association Valentin Haüy in the 1950s, in his biography of Louis Braille (The Life and Work of Louis Braille 1809-1852) dedicated an ample section to Valentin Haüy and his pioneering work in the field of education for the blind. </sent>
+               <sent id="dtb173">His biography first appeared in France in the 1950s in a Braille version and was later, on the decision of the World Blind Union, translated into English and published by the South African National Council for the Blind in 1987. </sent>
+               <sent id="dtb174">According to Didier-Weygand (2000), Henri also published a separate biography of Valentin Haüy (Paris, 1984), but unfortunately this information reached me only when the present paper was to all intents and purposes completed.</sent>
+            </p>
+            <p>
+               <sent id="dtb175">Existing literature tends to ignore Valentin Haüy's stay in St Petersburg. so I have paid particular attention to that period in his life. </sent>
+               <sent id="dtb176">A valuable source was the Russian ophtalmologist Alexander Skrébitsky's little publication, Valentin Haüy à St. </sent>
+               <sent id="dtb177">Petersbourg (1884). </sent>
+               <sent id="dtb178">Skrébitsky can be said to have rediscovered Haüy in Russia during his own attempts to improve conditions for the blind. </sent>
+               <sent id="dtb179">Haüy's institute for the blind in St Petersburg had by then been closed and forgotten for many years, but Skrébitsky found material in its archives on which he based his book. </sent>
+               <sent id="dtb180">There was, for example, a box full of documents dating from the period 1807-1809, but only a few documents from the latter part of Haüy's stay in Russia. </sent>
+               <sent>
+                  <span id="dtb181">Skrébitsky managed to smuggle the box out of Russia and donated it to the Valentin Haüy Museum in Paris where it is still kept </span>
+                  <noteref class="endnote" id="dtb182" idref="#fn_4">4</noteref>
+                  <span id="dtb183">. </span>
+               </sent>
+               <sent id="dtb184">I have been able to ascertain that this information is correct, but have not had the opportunity to consult these documents personally. </sent>
+               <sent id="dtb185">I trust that Skrébitsky's quotations from them are accurate.</sent>
+            </p>
+            <p>
+               <sent id="dtb186">The French historian Zina Weygand published a booklet entitled Les Temps des Fondateurs 1784-1844 for the second Congress on the history of the blind in Paris in 1998. </sent>
+               <sent id="dtb187">Her booklet is interesting as she had access to the archives of the Institution des Jeunes Aveugles (INJA) created by Valentin Haüy, the Bibliothèque National de France, the Bibliothèque Association Valentin Haüy, as well as those of the Archive du C.N.H.O. des Quinze-Vingt. </sent>
+               <sent id="dtb188">Her booklet is only a foretaste of her doctoral thesis, La Cécité et les Aveugles dans la Société Française: Représentations et Institution du Moyen Âge aux Premières Années du XIX Siècle, published in March 2000. </sent>
+               <sent id="dtb189">Weygand married shortly after the Paris Congress and now uses a double surname, Didier-Weygand. </sent>
+               <sent id="dtb190">Her sources include documents from archives, press cuttings and documents and letters written by Haüy himself. </sent>
+               <sent id="dtb191">She is the only researcher to have made use of the minutes kept by the various revolutionary committees in Paris during the 1790s. </sent>
+               <sent id="dtb192">She does not, however, write about Haüy's years in Russia.</sent>
+            </p>
+            <pagenum id="page_7" page="normal">7</pagenum>
+            <p>
+               <sent id="dtb193">To illustrate Haüy's influence on the development of education for the blind in other countries, I have chosen D.G. </sent>
+               <sent id="dtb194">Pritchard's Education and the Handicapped 1760-1960 (1963) as my main source since it is considered a standard work. </sent>
+               <sent id="dtb195">My sources on the work of pioneers in the education of the blind in Sweden are O.E. </sent>
+               <sent
+                     id="dtb196">Borg's Minnen från den svenska blindundervisningens <w class="num-word">70-års</w> jubileum den 21 maj 1883, Kjell-åke Johanssons research report Om blindundervisningen i Sverige från 1809 (1974) and Staffan Förhammar's doctoral thesis Från tärande till närande (1991).</sent>
+            </p>
+            <p>
+               <sent id="dtb197">I have also consulted press articles, amongst them Marlene Jantsch's article on Maria Theresia von Paradis, in the Wiener Medizinische Wochenschrift 47/1955.</sent>
+            </p>
+         </level1>
+         <level1>
+            <h1>
+               <sent id="dtb198">3. </sent>
+               <sent id="dtb199">Valentin Haüy</sent>
+            </h1>
+            <level2>
+               <h2>
+                  <sent id="dtb200">3.1 Introduction</sent>
+               </h2>
+               <p>
+                  <sent id="dtb201">Special education for the deaf, the visually handicapped and the disabled has its roots in the France of the Enlightenment, a period of growing interest in the creation of organised education for the handicapped. </sent>
+                  <sent>
+                     <span id="dtb202">In 1760, the abbé l'épée founded the first school for the deaf, where his educational methods were based on the teaching of sign language </span>
+                     <noteref class="endnote" id="dtb203" idref="#fn_5">5</noteref>
+                     <span id="dtb204">. </span>
+                  </sent>
+                  <sent>
+                     <span id="dtb205">Interest in education methods for the disabled began to develop seriously in the early years of the 19th century </span>
+                     <noteref class="endnote" id="dtb206" idref="#fn_6">6</noteref>
+                     <span id="dtb207">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb208">The debate on the social value of the handicapped and their learning capacity began with John Locke (1632-1704) and his essay "The Molyneux Problem," included in "An Essay Concerning Human Understanding" </span>
+                     <noteref class="endnote" id="dtb209" idref="#fn_7">7</noteref>
+                     <span id="dtb210">. </span>
+                  </sent>
+                  <sent id="dtb211">Locke received a letter from William Molyneux, an Irishman, dated 2nd March 1693, in which the following question was posed: "If a person who was born blind, and who has learnt to distinguish by touch between a cube and a sphere regains vision after an operation, will he then be able to distinguish the cube from the sphere by sight alone?" </sent>
+                  <sent>
+                     <noteref class="endnote" id="dtb212" idref="#fn_8">8</noteref>
+                     <span id="dtb213">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb214">Locke had a great influence on the French philosophers of the Enlightenment, and the famous debate on the "Molyneux problem" inspired the French philosopher Denis Diderot (1713-1784) to make contact with blind people and later publish his experiences in a pamphlet, Lettre sur les Aveugles pour Ceux qui voient (A Letter to the Blind for Those Who Can See). </sent>
+                  <sent id="dtb215">His letter served several purposes. </sent>
+                  <sent id="dtb216">On the one hand, Diderot exposed a fraud which had taken place in the drawing-room of the scientist S.A. </sent>
+                  <sent>
+                     <span id="dtb217">Réaumur , while on the other he made a number of observations which were a radical criticism of the conventional ideas of the time </span>
+                     <noteref class="endnote" id="dtb218" idref="#fn_9">9</noteref>
+                     <span id="dtb219">. </span>
+                  </sent>
+                  <sent id="dtb220">The fraud in question consisted of a performance by a girl who claimed to be blind in Réaumur's drawing-room during which she played, sang and answered a series of general knowledge questions (for example, the length of certain rivers, the names of European cities, etc.). </sent>
+                  <sent id="dtb221">Diderot unmasked this humbug, but also pointed out that fraudulent performances were unnecessary, since the blind could in fact be educated. </sent>
+                  <sent id="dtb222">As an example of this, he mentioned the blind English mathematician Nicholas Saunderson. </sent>
+                  <sent>
+                     <span id="dtb223">In the second half of his letter, Diderot has Saunderson express, in an imaginary dialogue, his own atheistic philosophy of life, for which Diderot paid with a brief sojourn in prison </span>
+                     <noteref class="endnote" id="dtb224" idref="#fn_10">10</noteref>
+                     <span id="dtb225">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb226">Diderot's letter made the bourgeoisie of the time aware that the blind could in fact be educated. </sent>
+                  <sent>
+                     <span id="dtb227">He went on to found a philanthrophic society in 1780 - the Société Philanthropique </span>
+                     <noteref class="endnote" id="dtb228" idref="#fn_11">11</noteref>
+                     <span id="dtb229">, which opened up homes for the blind where they were taught handicrafts. </span>
+                  </sent>
+                  <sent>
+                     <span id="dtb230">These "homes for the blind" -"Maisons des Enfans-Aveugles"- took in blind persons between the ages of 20 and 25 </span>
+                     <noteref class="endnote" id="dtb231" idref="#fn_12">12</noteref>
+                     <span id="dtb232">.</span>
+                  </sent>
+               </p>
+               <pagenum id="page_8" page="normal">8</pagenum>
+               <p>
+                  <sent id="dtb233">With the support of the Société Philanthropique,Valentin Haüy founded the first special school for blind children and adolescents in 1784.</sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb234">Diderot himself had a blind pupil, Mélanie de Salignac (1741-1763), who was his friend Sophie Volland's niece </span>
+                     <noteref class="endnote" id="dtb235" idref="#fn_13">13</noteref>
+                     <span id="dtb236">. </span>
+                  </sent>
+                  <sent id="dtb237">He wrote about her in Addition de Lettre sur les Aveugles. </sent>
+                  <sent id="dtb238">Salignac was mainly taught, however, by her mother. </sent>
+                  <sent id="dtb239">She could read and write and, what is particularly interesting, she wrote in raised print, which Haüy then experimented with on a larger scale.</sent>
+               </p>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb240">3.2 Biographical background</sent>
+               </h2>
+               <p>
+                  <sent id="dtb241">Valentin Haüy was born on 13th November 1745 in Saint-Just en Chaussé (Picardy), a small village approximately 35 km east of Paris. </sent>
+                  <sent id="dtb242">His father was a weaver. </sent>
+                  <sent>
+                     <span id="dtb243">Haüy's elder brother, the abbé René Just Haüy (1743-1822), was the pioneer of crystallography (the science of the structure, forms and property of crystals) and played an important role in the introduction of the metric system </span>
+                     <noteref class="endnote" id="dtb244" idref="#fn_14">14</noteref>
+                     <span id="dtb245">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb246">In 1751, the family took up residence in Paris and the two brothers began to attend a school run by a Catholic order. </sent>
+                  <sent id="dtb247">Later, both of them studied at the Sorbonne; Valentin studied Latin, Greek and Hebrew and was said to be fluent in about ten modern languages. </sent>
+                  <sent id="dtb248">He earned a living as a translator of private and public documents and was soon able to boast the title of Royal Interpreter. </sent>
+                  <sent id="dtb249">He was also interpreter to the city council of Paris and the Admiralty. </sent>
+                  <sent id="dtb250">Before his appointment as royal interpreter he had become senior master in a secondary school. </sent>
+                  <sent>
+                     <span id="dtb251">He later became a member of the Bureau Académique des écritures, founded by Louis XVI, probably because he had invented a method of deciphering secret codes and military code systems </span>
+                     <noteref class="endnote" id="dtb252" idref="#fn_15">15</noteref>
+                     <span id="dtb253">. </span>
+                  </sent>
+                  <sent id="dtb254">In 1771, the French police began to take an interest in deciphering codes, and during the following ten years, Valentin Haüy worked for the secret police, where his task was to investigate all foreign correspondence carried by the French postal service and to decipher secret documents. </sent>
+                  <sent id="dtb255">He continued these activities under the various revolutionary governments in the latter part of the century.</sent>
+               </p>
+               <p>
+                  <sent id="dtb256">Haüy was also interested in the education of the deaf. </sent>
+                  <sent>
+                     <span id="dtb257">He is said to have been actively involved in the teaching of deaf pupils and to have worked from time to time with the abbé l'épée </span>
+                     <noteref class="endnote" id="dtb258" idref="#fn_16">16</noteref>
+                     <span id="dtb259">. </span>
+                  </sent>
+                  <sent>
+                     <span id="dtb260">We can assume that his interest in the handicapped had already been aroused in 1771 when he visited one of the public performances given by the abbé's deaf pupils </span>
+                     <noteref class="endnote" id="dtb261" idref="#fn_17">17</noteref>
+                     <span id="dtb262">.</span>
+                  </sent>
+               </p>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb263">3.3 The market in St Ovid's Square</sent>
+               </h2>
+               <p>
+                  <sent>
+                     <span id="dtb264">In a letter to his son, Haüy tells how during the annual market in St Ovid's Square in Paris, he saw blind musicians from the Quinze-Vingt asylum perform </span>
+                     <noteref class="endnote" id="dtb265" idref="#fn_18">18</noteref>
+                     <span id="dtb266">. </span>
+                  </sent>
+                  <sent id="dtb267">He was sitting at a café when he saw some very strange creatures fitted with huge paper spectacles and pointed hats with donkey's ears affixed to them. </sent>
+                  <sent id="dtb268">Sheet music was placed upside down on the blind musicians' music stands while they banged, blew, and squeezed noises out of their worn-out instruments.</sent>
+               </p>
+               <p>
+                  <sent id="dtb269">Haüy was shocked by the way the disabled musicians' wretchedness was exaggerated by their ridiculous outfits. </sent>
+                  <sent id="dtb270">He was also upset by the callousness of the audience, who howled with laughter at this shambles of an orchestra. </sent>
+                  <sent id="dtb271">Haüy did not see any reason to laugh at people just because they had a physical impediment.</sent>
+               </p>
+               <pagenum id="page_9" page="normal">9</pagenum>
+               <p>
+                  <sent id="dtb272">From that day he decided to dedicate his life to improving the conditions of the blind.</sent>
+               </p>
+               <p>
+                  <sent id="dtb273">In his letter, he reflects:</sent>
+               </p>
+               <blockquote id="dtb274">
+                  <p>
+                     <sent id="dtb275">"We asked ourselves: does not a blind person recognise objects by their different shapes? 
+     </sent>
+                     <sent id="dtb276">Is he mistaken as to the value of a coin? </sent>
+                     <sent id="dtb277">Why should it be impossible for him to distinguish between a C and a G, or between an A and an F, if those letters were made easier to distinguish? </sent>
+                     <sent id="dtb278">We sometimes reflected on the use of this performance (...)</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb279">We soon saw various examples that convinced us how useful it would be for the blind to have access to teaching methods which could increase their knowledge so that they would not have to wait for help or sometimes ask the sighted to help them, often to no avail"</sent>
+                  </p>
+               </blockquote>
+               <p>
+                  <sent>
+                     <noteref class="endnote" id="dtb280" idref="#fn_19">19</noteref>
+                     <span id="dtb281">.</span>
+                  </sent>
+               </p>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb282">3.4 Maria Theresia von Paradis (1733-1808)</sent>
+               </h2>
+               <p>
+                  <sent id="dtb283">Maria Theresia von Paradis was a woman who had a significant influence on Haüy and his teaching methods. </sent>
+                  <sent id="dtb284">They met in Paris in 1785 while Paradis was on a concert tour of Europe. </sent>
+                  <sent id="dtb285">Weygand (1998) says that Haüy read an article in a Parisian newspaper informing the public that the blind child prodigy Mara Theresia von Paradis was in the city and decided to contact her. </sent>
+                  <sent>
+                     <span id="dtb286">Maria Theresia von Paradis was born in Vienna and became blind at about 4 years of age </span>
+                     <noteref class="endnote" id="dtb287" idref="#fn_20">20</noteref>
+                     <span id="dtb288">. </span>
+                  </sent>
+                  <sent id="dtb289">Jantsch suggests that the girl's blindness had hysterical origins. </sent>
+                  <sent id="dtb290">Her father was a well-to-do lawyer. </sent>
+                  <sent id="dtb291">Maria Theresia was extremely musical and became a virtuoso on the piano; she had her own school in Vienna where she taught piano and singing. </sent>
+                  <sent id="dtb292">Between 1784 and 1785, she toured Europe, playing at the courts of Paris, London, Brussels, Hanover and Berlin, and giving concerts in several other cities. </sent>
+                  <sent id="dtb293">Mozart composed a concerto for piano and orchestra especially for her European tour and von Paradis also wrote her own music, using a system for writing musical notes which she had had specially invented. </sent>
+               </p>
+               <p>
+                  <sent id="dtb294">Before von Paradis set off on her grand tour of Europe, she had relief maps made of the different countries and cities she was to visit. </sent>
+                  <sent id="dtb295">On these maps, frontiers and rivers were embroidered in backstitch, while cities and towns were represented by different-sized buttons; large buttons for capitals, smaller buttons for smaller cities or towns. </sent>
+                  <sent>
+                     <span id="dtb296">Von Paradis had raised texts printed; a special printing press was made for her by Wolfgang Ritter von Kempelen </span>
+                     <noteref class="endnote" id="dtb297" idref="#fn_21">21</noteref>
+                     <span id="dtb298">. </span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb299">Von Paradis corresponded with Johan Ludwig Weissenburg, who was also blind and who himself used raised maps and writing. </sent>
+                  <sent id="dtb300">Their letters show that they discussed how raised pictures and maps could be made. </sent>
+                  <sent id="dtb301">For mathematical calculations, Paradis used an arithmetic board made in England by Saunderson. </sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb302">Haüy's meeting with Maria Theresia von Paradis gave him the inspiration and encouragement he so desperately needed at that time to develop an educational programme for blind children </span>
+                     <noteref class="endnote" id="dtb303" idref="#fn_22">22</noteref>
+                     <span id="dtb304">. </span>
+                  </sent>
+                  <sent>
+                     <span id="dtb305">He presented his plan, "Plan de l'Education à l'Usage des Aveugles," to the Philanthropic Society, which at that time sponsored twelve children from poor families </span>
+                     <noteref class="endnote" id="dtb306" idref="#fn_23">23</noteref>
+                     <span id="dtb307">. </span>
+                  </sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb308">In his Essai sur l'Education des Enfans-Aveugles </span>
+                     <noteref class="endnote" id="dtb309" idref="#fn_24">24</noteref>
+                     <span id="dtb310">, Haüy repeatedly mentions that several of the tools he recommended for the teaching of blind children had been used by Maria Theresia von Paradis. </span>
+                  </sent>
+               </p>
+               <pagenum id="page_10" page="normal">10</pagenum>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb311">3.5 Haüy's meeting with Lesueur and the founding of l'Institution des Jeunes Aveugles</sent>
+               </h2>
+               <p>
+                  <sent>
+                     <span id="dtb312">Haüy was convinced that the blind deserved a better life than begging and performing in market places </span>
+                     <noteref class="endnote" id="dtb313" idref="#fn_25">25</noteref>
+                     <span id="dtb314">. </span>
+                  </sent>
+                  <sent id="dtb315">They ought to enjoy the same right to education and work as the sighted. </sent>
+                  <sent id="dtb316">Not until thirteen years after the market in St Ovid's Square did he have an opportunity to demonstrate that the blind could be educated. </sent>
+                  <sent id="dtb317">This occurred when he was invited to teach François Lesueur, or Le Sueur, as Didier-Weygand sometimes writes his name.</sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb318">Haüy first met Lesueur, standing begging at the entrance to the church of Saint-Germain-des Prés </span>
+                     <noteref class="endnote" id="dtb319" idref="#fn_26">26</noteref>
+                     <span id="dtb320">. </span>
+                  </sent>
+                  <sent>
+                     <span id="dtb321">Lesueur was a professional beggar who supported himself, his parents and four siblings with the money he was given by churchgoers (since the Middle Ages, the Catholic Church had allowed the blind to beg outside churches) </span>
+                     <noteref class="endnote" id="dtb322" idref="#fn_27">27</noteref>
+                     <span id="dtb323">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb324">The story goes on to tell how Haüy, when he gave Lesueur some money, was told, "You thought you gave me a measly sou when in fact it was an écu " </span>
+                     <noteref class="endnote" id="dtb325" idref="#fn_28">28</noteref>
+                     <span id="dtb326">. </span>
+                  </sent>
+                  <sent id="dtb327">From this incident Haüy immediately drew conclusions regarding the fine sense of touch the blind possess. </sent>
+                  <sent id="dtb328">If we compare this version of their meeting with Haüy's own words in section 3.3, we can guess how the story originated.</sent>
+               </p>
+               <p>
+                  <sent id="dtb329">Haüy started by teaching Lesueur good manners, grammatically correct speech and arithmetic. </sent>
+                  <sent id="dtb330">Haüy's main interest, however, was teaching the blind to read. </sent>
+                  <sent id="dtb331">He had wooden letters made so that Lesueur could learn the alphabet and later learn to read. </sent>
+                  <sent id="dtb332">This was achieved by forming the letters into words in a wooden frame. </sent>
+                  <sent id="dtb333">In a similar way, Lesueur learned the four arithmetical rules; in this case, wooden numbers were placed in different compartments in a frame. </sent>
+                  <sent id="dtb334">A major problem proved to be a supply of books for Lesueur. </sent>
+                  <sent id="dtb335">Haüy soon realised that his pupil could recognise raised letters, so he began to produce raised letters on waxed paper. </sent>
+                  <sent id="dtb336">Haüy had started teaching Lesueur on 31st May 1784. </sent>
+                  <sent>
+                     <span id="dtb337">By September of the same year, he was able to announce his progress in an article in the Journal de Paris </span>
+                     <noteref class="endnote" id="dtb338" idref="#fn_29">29</noteref>
+                     <span id="dtb339">. </span>
+                  </sent>
+                  <sent id="dtb340">On November 18th, both teacher and pupil appeared before the Académie de l'écriture. </sent>
+                  <sent id="dtb341">It was common practice at that time for pupils to appear before the Academy and the Court, and not just "handicapped prodigies". </sent>
+                  <sent>
+                     <span id="dtb342">The Academy apparently fulfilled some kind of educational inspecting and authorising function </span>
+                     <noteref class="endnote" id="dtb343" idref="#fn_30">30</noteref>
+                     <span id="dtb344">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb345">Lesueur could read, recognise countries on a map and identify raised numbers on cardboard. </sent>
+                  <sent id="dtb346">This made Haüy's name as a teacher of the blind. </sent>
+                  <sent>
+                     <span id="dtb347">The Academy decided to recommend his methods of teaching the blind </span>
+                     <noteref class="endnote" id="dtb348" idref="#fn_31">31</noteref>
+                     <span id="dtb349">. </span>
+                  </sent>
+                  <sent id="dtb350">Thanks to Haüy's brother René-Just, the French Academy of Science became interested in his teaching methods. </sent>
+                  <sent id="dtb351">Four members of the Academy studied Haüy's methods and expressed their approval. </sent>
+                  <sent>
+                     <span id="dtb352">Their report was registered by the Academy on 16th February 1785 </span>
+                     <noteref class="endnote" id="dtb353" idref="#fn_32">32</noteref>
+                     <span id="dtb354">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb355">In January 1785, Haüy became a member of the Société Philanthropique which also entrusted him with the teaching of their twelve blind protégés. </sent>
+                  <sent>
+                     <span id="dtb356">These were all young adults aged between 20 and 30 </span>
+                     <noteref class="endnote" id="dtb357" idref="#fn_33">33</noteref>
+                     <span id="dtb358">. </span>
+                  </sent>
+                  <sent id="dtb359">Haüy could now rent a house in the Rue Coquillère where he taught his pupils. </sent>
+                  <sent id="dtb360">A year later, when the number of pupils had increased, he moved into a house in the Rue Notre-Dame-des-Victoires, where the Société Philanthropique had its workshop for the blind, and so l'Institution des Jeunes Aveugles (the Institute for Blind Children ) was born. </sent>
+                  <sent>
+                     <span id="dtb361">The pupils who now arrived at the institute were young children </span>
+                     <noteref class="endnote" id="dtb362" idref="#fn_34">34</noteref>
+                     <span id="dtb363">.</span>
+                  </sent>
+               </p>
+               <pagenum id="page_11" page="normal">11</pagenum>
+               <p>
+                  <sent id="dtb364">Twice a year the blind children performed before the Court. </sent>
+                  <sent id="dtb365">Louis XVI was patron of the institute and also contributed economically to its upkeep. </sent>
+                  <sent id="dtb366">In an appendix to Haüy's pamphlet, Essai sur l'éducation des Aveugles, there is a list of the first twelve pupils to perform at the Court.</sent>
+               </p>
+               <p>
+                  <sent id="dtb367">Boys and girls alike attended the institute. </sent>
+                  <sent id="dtb368">The blind children came from poor homes and were not charged for their tuition. </sent>
+                  <sent id="dtb369">Haüy did, however, accept sighted children from well-to-do families who paid for their children's education. </sent>
+                  <sent>
+                     <span id="dtb370">Haüy believed that sighted and blind children should be educated together without restriction </span>
+                     <noteref class="endnote" id="dtb371" idref="#fn_35">35</noteref>
+                     <span id="dtb372">.</span>
+                  </sent>
+               </p>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb373">3.6 Valentin Haüy's teaching methods</sent>
+               </h2>
+               <p>
+                  <sent id="dtb374">Valentin Haüy's first and only pamphlet on his teaching methods was published in 1786 with the long title of Essai sur l'éducation des aveugles ou Exposé de différens moyens, vérifiés par l'expérience, pour les mettre en état de lire, à l'aide du tact, d'imprimer des livres dans lesquels ils puissent prendre des connaissances des langues, d'histoire, de la Géographie, de la Musique, &amp;c., d'exécuter différens travaux relatifs aux Métiers, &amp;c., Dédié au Roi, par M. </sent>
+                  <sent id="dtb375">Haüy. </sent>
+                  <sent id="dtb376">It was printed by Haüy's blind pupils. </sent>
+                  <sent id="dtb377">Only the preface was set in normal type; the main text was set in the type created by Haüy for use with ink print or raised print. </sent>
+                  <sent id="dtb378">It was dedicated to the French king, Louis XVI. </sent>
+                  <sent id="dtb379">The title page reads, "Au Roi", followed by a brief preface dedicated to the king:</sent>
+               </p>
+               <blockquote id="dtb380">
+                  <line>
+                     <sent id="dtb381">"To the KING OF FRANCE</sent>
+                  </line>
+                  <line>
+                     <sent id="dtb382">SIRE,</sent>
+                  </line>
+                  <p>
+                     <sent id="dtb383">THE Protection with which your Majesty honours distinguished Talents ascertains your Claim to their Reverence and Respect. </sent>
+                     <sent id="dtb384">But when their Productions have a Tendency to console the Miseries of suffering Humanity, they have still a more powerful Title to attract the attention of Louis the Beneficent. </sent>
+                     <sent id="dtb385">It was under the influence of Sentiments inspired by a Title so amiable, which is deeply engraven on all the Hearts of France, that I conceived the desire of presenting to your Majesty the Fruits of my Labours ; if they have any Value, they will owe it to the double Advantage of appearing under a Patronage so august, and of becoming Vehicles to the Bounty expected from Sovereign by the Young and unhappy, who have been early deprived of the Benefit of Light with all its numerous and important Resources.</sent>
+                  </p>
+                  <line>
+                     <sent id="dtb386">I am, With the profoundest respect,</sent>
+                  </line>
+                  <line>
+                     <sent id="dtb387">Sire,</sent>
+                  </line>
+                  <line>
+                     <sent id="dtb388">Your Majesty’s most humble,</sent>
+                  </line>
+                  <line>
+                     <sent id="dtb389">must obedient</sent>
+                  </line>
+                  <line>
+                     <sent id="dtb390">and most faithful subject and Servant,</sent>
+                  </line>
+                  <line>
+                     <sent id="dtb391">HAÙY".</sent>
+                  </line>
+               </blockquote>
+               <p>
+                  <sent id="dtb392">In his essay Haüy expounds his pedagogical theories and presents a programme of studies for blind children. </sent>
+                  <sent id="dtb393">His basic premise was that the "unfortunate Blind," who until then had been deprived of education, could in fact be educated and ought therefore to be given the opportunity to attend school and learn a trade by which they could later make a living.</sent>
+               </p>
+               <p>
+                  <sent id="dtb394">Each subject is dealt with in a short chapter. </sent>
+                  <sent id="dtb395">Haüy gives simple, practical advice on teaching methods and on the production of material for use in object lessons and of a variety of teaching aids.</sent>
+               </p>
+               <pagenum id="page_12" page="normal">12</pagenum>
+               <p>
+                  <sent id="dtb396">He lays particular stress on the methods to be used to teach blind children to read and write and on how to produce raised print books. </sent>
+                  <sent id="dtb397">An entire chapter is dedicated to explaining how blind pupils can be trained as compositors. </sent>
+                  <sent id="dtb398">He also attempts to demonstrate that those blind pupils who did learn some kind of handicraft (at Quinze-Vingt, for example) were able to earn their own living. </sent>
+                  <sent id="dtb399">Haüy therefore recommends that teaching of the blind should include activities such as the production of walking sticks and hairnets, sewing, bookbinding, etc.</sent>
+               </p>
+               <p>
+                  <sent id="dtb400">Haüy also insists that blind pupils should study history, geography and music. </sent>
+                  <sent id="dtb401">In the chapter on the teaching of geography, he mentions Maria Theresia von Paradis and stresses the importance of tactile maps and the terrestrial globe to illustrate the concepts of countries, lakes, rivers, mountains, etc. </sent>
+                  <sent>
+                     <span id="dtb402">He goes on to describe the method of producing maps developed by von Paradis and Weissenburg </span>
+                     <noteref class="endnote" id="dtb403" idref="#fn_36">36</noteref>
+                     <span id="dtb404">. </span>
+                  </sent>
+                  <sent>
+                     <span id="dtb405">As for music and the possibility of a blind person's earning his living as a musician, Haüy points to von Paradis's success and her system of raised musical notes </span>
+                     <noteref class="endnote" id="dtb406" idref="#fn_37">37</noteref>
+                     <span id="dtb407">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb408">When he touches on the teaching of mathematics, Haüy affirms that although he admires Saunderson and Weissenburg's "arithmetic boards", he firmly believes that blind and sighted children should be taught together and for this reason he does not agree with the use of special mathematical teaching aids for blind children. </sent>
+                  <sent id="dtb409">Haüy does recognise that blind pupils may need some kind of assistance when drawing geometrical figures, for example, and had paper templates for this purpose.</sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb410">Haüy's invention, a method of producing raised letters on paper with the types he had cast, was completely new </span>
+                     <noteref class="endnote" id="dtb411" idref="#fn_38">38</noteref>
+                     <span id="dtb412">. </span>
+                  </sent>
+                  <sent id="dtb413">He now saw as his principle task to attempt to produce as many copies of books for the blind as possible. </sent>
+                  <sent id="dtb414">He wanted every blind child to have his or her own collection of raised print books. </sent>
+                  <sent id="dtb415">In time he designed and had made a printing press which could produce raised print and to which he added a device for dyeing the raised letters black. </sent>
+                  <sent>
+                     <span id="dtb416">The first two books printed by Haüy for his blind pupils were produced in this way </span>
+                     <noteref class="endnote" id="dtb417" idref="#fn_39">39</noteref>
+                     <span id="dtb418">. </span>
+                  </sent>
+                  <sent id="dtb419">One was his own treatise on education for the blind: Essai sur l'Education des Enfans-Aveugles (1786); the other a historical review of the institute's first five years of existence entitled Notice Historique de l'Institution des Enfans-Aveugles (1791).</sent>
+               </p>
+               <p>
+                  <sent id="dtb420">Haüy believed that his printing method would make it possible for the blind to print books not only for their own use but also for the sighted. </sent>
+                  <sent id="dtb421">He dreamed of a time when his blind pupils would become teachers of sighted children; the blind teacher and the sighted pupils would read from the same book. </sent>
+                  <sent id="dtb422">Haüy's method was, however, a form of printing, that is, it involved typographic composition, so to enable the blind to correspond with the sighted in a simpler fashion, Haüy designed a "writing board" on which the writer wrote with a steel pen which had an undivided nib. </sent>
+                  <sent id="dtb423">His idea was that the blind person should write his letter by hand on the one side of a suitable type of paper. </sent>
+                  <sent id="dtb424">This would produce raised letters on the other side of the paper, letters which the writer himself would be able to read by touch. </sent>
+                  <sent>
+                     <span id="dtb425">Unfortunately, his apparatus was not of much use to those who had never seen letters </span>
+                     <noteref class="endnote" id="dtb426" idref="#fn_40">40</noteref>
+                     <span id="dtb427">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb428">The school in the Rue Victoires did more than provide its blind pupils with a basic education, it also taught them a useful trade. </sent>
+                  <sent id="dtb429">Their teachers believed in the positive value of work. </sent>
+                  <sent id="dtb430">The children spun thread, wove, knitted, made leather belts and hairnets, etc. </sent>
+                  <sent id="dtb431">They produced raised print but also printed in ink. </sent>
+                  <sent>
+                     <span id="dtb432">Towards the end of his essay on the education of the blind, </span>
+                     <noteref class="endnote" id="dtb433" idref="#fn_41">41</noteref>
+                     <span id="dtb434"> there are ten or so examples of the blind children's printing activities (invitation cards, announcements, invoices, prospectuses, etc.). </span>
+                  </sent>
+                  <sent id="dtb435">Although Haüy had raised scores made, he did not at first consider music to be anything more than an entertainment for the blind.</sent>
+               </p>
+               <pagenum id="page_13" page="normal">13</pagenum>
+               <p>
+                  <sent>
+                     <span id="dtb436">He changed his opinion later when he discovered that the blind could learn to play the organ and thus could be employed as church organists </span>
+                     <noteref class="endnote" id="dtb437" idref="#fn_42">42</noteref>
+                     <span id="dtb438">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb439">The aim behind Haüy's teaching methods was to enable his blind pupils to communicate satisfactorily with the sighted </span>
+                     <noteref class="endnote" id="dtb440" idref="#fn_43">43</noteref>
+                     <span id="dtb441">. </span>
+                  </sent>
+                  <sent id="dtb442">He therefore rejected all writing systems for the blind which did not use the Roman alphabet. </sent>
+                  <sent id="dtb443">He would probably never have approved of Braille's system.</sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb444">At first, boys and girls were taught together in mixed classes, but some years later, after Haüy had been severely criticised for the co-educational organisation of his school, the sexes were segregated </span>
+                     <noteref class="endnote" id="dtb445" idref="#fn_44">44</noteref>
+                     <span id="dtb446">.</span>
+                  </sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb447">Haüy's successor at the institute, Guillé, was himself severely criticised for his harsh methods of punishment </span>
+                     <noteref class="endnote" id="dtb448" idref="#fn_45">45</noteref>
+                     <span id="dtb449">. </span>
+                  </sent>
+                  <sent id="dtb450">In the accusations made against Guillé, his severity was compared with Haüy's mild methods and his concern for his pupils. </sent>
+                  <sent id="dtb451">It is not clear, however, whether the critics implied by this that Haüy never used corporal punishment.</sent>
+               </p>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb452">3.7 The French Revolution</sent>
+               </h2>
+               <p>
+                  <sent id="dtb453">Louis XVI was Haüy's patron and the institute's most important financial sponsor. </sent>
+                  <sent id="dtb454">When the monarchy was overthrown in 1791, the Institute for the Blind came under the authority of the new revolutionary government. </sent>
+                  <sent id="dtb455">Education at the institute, however, continued along the same lines as it had done under the monarchy. </sent>
+                  <sent>
+                     <span id="dtb456">The various revolutionary governments for their part believed that all forms of education should be free of charge and controlled by the State </span>
+                     <noteref class="endnote" id="dtb457" idref="#fn_46">46</noteref>
+                     <span id="dtb458">. </span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb459">The National Convention issued a decree on 28th September 1791 which nationalised the Institute for the Blind. </sent>
+                  <sent id="dtb460">The need to reduce financial costs was responsible for the fusion of the Institute for the Blind and L'épée's Institute for the Deaf. </sent>
+                  <sent>
+                     <span id="dtb461">The resulting institute was moved to a monastery </span>
+                     <noteref class="endnote" id="dtb462" idref="#fn_47">47</noteref>
+                     <span id="dtb463">. </span>
+                  </sent>
+                  <sent id="dtb464">This fusion, however, was unsuccessful, and in 1794 the National Convention decided to separate the two schools once more. </sent>
+                  <sent id="dtb465">Haüy played an important part in this decision. </sent>
+                  <sent id="dtb466">He attacked l'épée's successor, Sicard, because he had criticised his teaching methods. </sent>
+                  <sent id="dtb467">Haüy was at that time a member of one of the revolutionary committees in Paris and was able to have Sicard arrested (Didier Weygand). </sent>
+                  <sent id="dtb468">Sicard was soon released, however, and two years later (1796) he had his revenge when he accused Haüy of belonging to an illegal secret society. </sent>
+                  <sent id="dtb469">Haüy was arrested and spent a brief spell in prison. </sent>
+               </p>
+               <p>
+                  <sent>
+                     <span id="dtb470">After the break-up, the Institute for the Blind moved to a former convent at 34, Rue Denis, where it was renamed l'Institut National des Aveugles Travailleurs , that is The National Institute for Blind Craftsmen </span>
+                     <noteref class="endnote" id="dtb471" idref="#fn_48">48</noteref>
+                     <span id="dtb472">. </span>
+                  </sent>
+                  <sent id="dtb473">Coinciding with the move, the institute was reorganised and the pupils now had to contribute to the upkeep of the new, revolutionary France (28th July, 1795). </sent>
+                  <sent id="dtb474">The blind pupils' first task was to make 86 purses. </sent>
+                  <sent>
+                     <span id="dtb475">At this point, the revolutionary committees began to debate whether institutes for the disabled should be classed as schools or asylums </span>
+                     <noteref class="endnote" id="dtb476" idref="#fn_49">49</noteref>
+                     <span id="dtb477">. </span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb478">Haüy initially sided with the Revolution. </sent>
+                  <sent>
+                     <span id="dtb479">He was, as we said, an active member of one of the revolutionary committees </span>
+                     <noteref class="endnote" id="dtb480" idref="#fn_50">50</noteref>
+                     <span id="dtb481">, and on 8th of June 1794, "the Day of Pure Reason", he did not hesitate to have his blind musicians appear on a mobile platform from which he, in revolutionary language, urged them to follow Robespierre, who was dressed as the high priest of Pure Reason </span>
+                     <noteref class="endnote" id="dtb482" idref="#fn_51">51</noteref>
+                     <span id="dtb483">. </span>
+                  </sent>
+               </p>
+               <pagenum id="page_14" page="normal">14</pagenum>
+               <p>
+                  <sent id="dtb484">Under the monarchy, his blind pupils regularly appeared in public to demonstrate their progress and these performances continued during the revolutionary period. </sent>
+                  <sent id="dtb485">Haüy's ability to adapt to the different régimes would later go against him, however. </sent>
+                  <sent>
+                     <span id="dtb486">During the Directorate, Haüy founded what was called a theophilanthropic cult with two other revolutionaries, La Revellère-Lepeaux and Chemin-Dupontè </span>
+                     <noteref class="endnote" id="dtb487" idref="#fn_52">52</noteref>
+                     <span id="dtb488">. </span>
+                  </sent>
+                  <sent id="dtb489">This could be described as a development of the cult of pure reason in which the magistrate assumed the role of the priest. </sent>
+                  <sent>
+                     <span id="dtb490">The theophilanthropists substituted the head of the family for the priest; their philosophy was a mixture of theodicy and belief in the good individual </span>
+                     <noteref class="endnote" id="dtb491" idref="#fn_53">53</noteref>
+                     <span id="dtb492">. </span>
+                  </sent>
+                  <sent id="dtb493">Haüy's successor as director of the institute (Guillé) was a strict Catholic who was horrified by Haüy's philosophical ideas. </sent>
+                  <sent id="dtb494">He later accused Haüy of heresy (amongst other things) as one of his reasons for not permitting Haüy to visit the institute. </sent>
+               </p>
+               <p>
+                  <sent id="dtb495">At the end of the revolutionary decade, the institute was bankrupt. </sent>
+                  <sent id="dtb496">The State owed the institute <w class="num-with-space">30 000</w> francs, apart from nine months' salary to teachers and other staff. </sent>
+                  <sent id="dtb497">Teachers and pupils alike starved and froze. </sent>
+                  <sent id="dtb498">Haüy lodged a complaint with the consular government but this was rejected outright; no money was forthcoming. </sent>
+                  <sent>
+                     <span id="dtb499">His activities during the Reign of Terror and the Directorate spoke against him </span>
+                     <noteref class="endnote" id="dtb500" idref="#fn_54">54</noteref>
+                     <span id="dtb501">. </span>
+                  </sent>
+                  <sent>
+                     <span id="dtb502">On 14th March 1801, Napoleon Bonaparte, now First Consul, decided that the Institute for Blind Craftsmen should be integrated into the Quinze-Vingt Hospital, an asylum for elderly blind people which had existed since the end of the 13th Century </span>
+                     <noteref class="endnote" id="dtb503" idref="#fn_55">55</noteref>
+                     <span id="dtb504">. </span>
+                  </sent>
+                  <sent id="dtb505">Napoleon furthermore forbade the theophilanthropists to practise their cult. </sent>
+                  <sent id="dtb506">Teaching at the institute was now reduced to two hours a day; during the rest of the day the blind children worked with sighted adults in the Quinze-Vingt workshops. </sent>
+                  <sent id="dtb507">Haüy was extremely affected and protested in three letters to the Minister of Interior Affairs (Lucien Bonaparte, one of Napoleon's brothers and Second Consul during the Second Consulate). </sent>
+                  <sent>
+                     <span id="dtb508">The minister answered that the State was responsible for the education of the blind; Haüy's role was simply to carry out the State's orders </span>
+                     <noteref class="endnote" id="dtb509" idref="#fn_56">56</noteref>
+                     <span id="dtb510">. </span>
+                  </sent>
+                  <sent id="dtb511">The answer to the last of the letters (dated 12th February 1802) was Haüy's dismissal, although he was granted a pension of 2000 livres a year. </sent>
+               </p>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb512">3.8 Musée des Aveugles</sent>
+               </h2>
+               <p>
+                  <sent id="dtb513">In spite of this adversity, Haüy did not give up. </sent>
+                  <sent>
+                     <span id="dtb514">He was now assured of an annual income of 2000 livres, so it was not long before he founded a private institute for the blind which he called the Musée des Aveugles </span>
+                     <noteref class="endnote" id="dtb515" idref="#fn_57">57</noteref>
+                     <span id="dtb516">. </span>
+                  </sent>
+                  <sent id="dtb517">He planned that the new institute should complement the National Institute for the Blind. </sent>
+                  <sent id="dtb518">It was divided into two departments: one for pre-school children aged between four and seven years of age, the other for pupils over the age of sixteen who were taught a trade. </sent>
+                  <sent id="dtb519">Haüy was thus a precursor of Fröbel as far as pre-school education is concerned. </sent>
+                  <sent id="dtb520">The new institute fulfilled another of Haüy's dreams. </sent>
+                  <sent id="dtb521">His blind adolescent pupils taught the sighted children who boarded in an annexe of the Musée des Aveugles. </sent>
+                  <sent id="dtb522">In the long run, however, Haüy could not make ends meet and had to close the institute in 1806. </sent>
+                  <sent id="dtb523">According to Weygand (1998), he simply did not have enough pupils.</sent>
+               </p>
+               <p>
+                  <sent id="dtb524">Skrébitsky says that Haüy was very heavily in debt when he eventually arrived in St Petersburg. </sent>
+                  <sent>
+                     <span id="dtb525">A Maltese banker, amongst others, demanded payment which was deducted from his salary in Russia </span>
+                     <noteref class="endnote" id="dtb526" idref="#fn_58">58</noteref>
+                     <span id="dtb527">.</span>
+                  </sent>
+               </p>
+               <pagenum id="page_15" page="normal">15</pagenum>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb528">3.9 Valentin Haüy in Russia</sent>
+               </h2>
+               <level3>
+                  <h3>
+                     <sent id="dtb529">3.9.1 An invitation from Alexander I</sent>
+                  </h3>
+                  <p>
+                     <sent id="dtb530">Word of Valentin Haüy's success soon spread throughout Europe. </sent>
+                     <sent>
+                        <span id="dtb531">Several of the enlightened rulers were interested in acquiring his services </span>
+                        <noteref class="endnote" id="dtb532" idref="#fn_59">59</noteref>
+                        <span id="dtb533">. </span>
+                     </sent>
+                     <sent id="dtb534">Teaching of the blind had started both in Vienna and in Berlin and Haüy exported his typographic cases and material for use in object lessons to institutes for the blind in these two capitals and in other European cities. </sent>
+                     <sent id="dtb535">When his finances were so depleted that he had to close down the Musée des Aveugles, a number of welcome invitations arrived, one of them from Tsar Alexander I of Russia. </sent>
+                     <sent>
+                        <span id="dtb536">The tsar, himself educated in the spirit of Enlightenment </span>
+                        <noteref class="endnote" id="dtb537" idref="#fn_60">60</noteref>
+                        <span id="dtb538">, invited Haüy to come to Russia for the purpose of founding an institute for the blind </span>
+                        <noteref class="endnote" id="dtb539" idref="#fn_61">61</noteref>
+                        <span id="dtb540">.</span>
+                     </sent>
+                  </p>
+                  <p>
+                     <sent id="dtb541">According to Skrébitsky (1884), Alexander I employed a number of agents who informed him of every new idea that could successfully be introduced into Russia. </sent>
+                     <sent id="dtb542">Negotiations with Haüy were arranged by General Hitrowo, and plans were drawn up for the creation of an institute for the blind in St Petersburg. </sent>
+                     <sent id="dtb543">These plans show that Haüy had no intention of remaining in St Petersburg for any length of time. </sent>
+                     <sent id="dtb544">The project basically involved:</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb545">1. </sent>
+                     <sent id="dtb546">The supervision, in Paris, of the production of all the teaching material destined for use in the education and occupation of blind children and adults in Russia. </sent>
+                     <sent id="dtb547">Haüy promised to take with him to Russia educational material such as letters and numbers for reading, counting and printing, maps, writing boards, etc.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb548">2. </sent>
+                     <sent id="dtb549">Haüy would travel to Russia the following Spring (1804) and remain there for about a year, accompanied by one of his blind pupils who had been taught by his methods. </sent>
+                     <sent id="dtb550">Haüy believed that his visit would bring success to the new institute and the ideas behind it and that it would encourage competition amongst the young Russians.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb551">3. </sent>
+                     <sent>
+                        <span id="dtb552">Haüy, whose idea the project was, agreed to teach his methods faithfully to the person appointed by His Imperial Highness Alexander I to direct the St Petersburg Institute for the Blind </span>
+                        <noteref class="endnote" id="dtb553" idref="#fn_62">62</noteref>
+                        <span id="dtb554">.</span>
+                     </sent>
+                  </p>
+                  <p>
+                     <sent id="dtb555">According to Skrébitsky, the Russian government asked Haüy's advice on the personal qualities and qualifications required of the new director of the St Petersburg institute for the blind, and on the economic compensation Haüy was willing to accept to take on the responsibility of setting up the institute. </sent>
+                     <sent id="dtb556">The Russian government also wanted to know how much the project would cost. </sent>
+                     <sent id="dtb557">As to the necessary qualities and qualifications of the director of the institute, Haüy (according to Skrébitsky) would have answered that this person should be selected from amongst those teachers who had a good knowledge of Russian and French and, if possible, German. </sent>
+                     <sent id="dtb558">The Director must also have an elementary knowledge of practical activities such as spinning, knitting, the making of hairnets, different kinds of weaving, etc. </sent>
+                     <sent id="dtb559">Haüy furthermore pointed out that the director must be familiar with the art of printing if he was to fulfil his task. </sent>
+                     <sent id="dtb560">Only an amateur's knowledge of music was required, however. </sent>
+                     <sent id="dtb561">Haüy added that apart from these basic qualifications, the director must have a good head on his shoulders, be gentle and patient and have a love for mankind in general.</sent>
+                  </p>
+                  <p>
+                     <sent
+                           id="dtb562">Haüy asked his imperial highness for an annual salary of at least <w class="num-with-space">40 000</w> roubles, of which half would be paid in advance when Haüy began his work. </sent>
+                     <sent id="dtb563">He also asked the crown to provide, at no cost to himself, a furnished house, light and fuel.</sent>
+                  </p>
+                  <pagenum id="page_16" page="normal">16</pagenum>
+                  <p>
+                     <sent id="dtb564">Finally, he asked for <w class="num-with-space">2 000</w> roubles in advance, as travel allowance for himself and his blind pupil. </sent>
+                     <sent id="dtb565">Haüy did not ask for travel allowances for his wife and son, who accompanied him to Russia. </sent>
+                     <sent
+                           id="dtb566">He estimated the costs of inventories, including teaching material such as maps and a globe, at <w
+                           class="num-with-space">4 500</w> francs and the annual operating costs, including salaries, at <w class="num-with-space">54 700</w> francs. </sent>
+                     <sent id="dtb567">The institute should be staffed by three teachers, one of them a music teacher, and a manager for the printing works.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb568">Haüy estimated that costs would decrease as the pupils progressed in their activities. </sent>
+                     <sent id="dtb569">This he based on his experience in Paris where his pupils, once they had acquired a certain degree of skill in handicrafts and printing were able to make a profit for the institute. </sent>
+                     <sent id="dtb570">Haüy was convinced that his experience in Paris could be transferred to St Petersburg, which shows how little he knew about the country he was about to visit.</sent>
+                  </p>
+               </level3>
+               <level3>
+                  <h3>
+                     <sent id="dtb571">3.9.2 Berlin</sent>
+                  </h3>
+                  <p>
+                     <sent id="dtb572">Haüy made a stop in Berlin en route to Russia in 1806. </sent>
+                     <sent id="dtb573">He had already received a request from the king of Prussia who wondered if Haüy would be interested in founding a school for the blind in Berlin. </sent>
+                     <sent>
+                        <span id="dtb574">In Prussia initiatives had already been taken in the 1780s to gain State control of all educational activities </span>
+                        <noteref class="endnote" id="dtb575" idref="#fn_63">63</noteref>
+                        <span id="dtb576">. </span>
+                     </sent>
+                     <sent id="dtb577">King Frederick William III introduced Haüy to professor Johan August Zeune (1778-1853), who was already engaged in teaching blind children. </sent>
+                     <sent>
+                        <span id="dtb578">Haüy and Zeune together designed a curriculum for an institute for the blind in Berlin </span>
+                        <noteref class="endnote" id="dtb579" idref="#fn_64">64</noteref>
+                        <span id="dtb580">. </span>
+                     </sent>
+                     <sent id="dtb581">Professor Zeune later became the director of the institute. </sent>
+                     <sent>
+                        <span id="dtb582">In Berlin as in Paris attempts were made to fulfil an important pedagogical objective: the combination of a theoretical-humanistic education and practical activities </span>
+                        <noteref class="endnote" id="dtb583" idref="#fn_65">65</noteref>
+                        <span id="dtb584">. </span>
+                     </sent>
+                     <sent>
+                        <span id="dtb585">The battle of Jena and Auerstedt delayed Haüy's departure for St Petersburg, but in spite of this delay, he took time during the journey from Berlin to make a detour to Mitau in Kurland (today Jelgava in Latvia), where the Bourbon pretender to the French throne, Louis XVIII, was living in exile </span>
+                        <noteref class="endnote" id="dtb586" idref="#fn_66">66</noteref>
+                        <span id="dtb587">. </span>
+                     </sent>
+                     <sent id="dtb588">Haüy paid his respects to Louis XVIII, who assured him of his support when he returned to France.</sent>
+                  </p>
+               </level3>
+               <level3>
+                  <h3>
+                     <sent id="dtb589">3.9.3 In St Petersburg</sent>
+                  </h3>
+                  <p>
+                     <sent id="dtb590">Haüy arrived in St Petersburg on September 9th 1806, and five days later sent a letter to the Tsar in which he sought an audience for himself and his seventeen-year-old blind pupil. </sent>
+                     <sent id="dtb591">He wrote that he thought the Tsar would be interested in meeting a blind person who was not only skilled in a handicraft but could also read and write and was well-versed in academic subjects such as history and geography. </sent>
+                     <sent>
+                        <span id="dtb592">Haüy also wished to demonstrate an invention of his, the "advanced telegraph" </span>
+                        <noteref class="endnote" id="dtb593" idref="#fn_67">67</noteref>
+                        <span id="dtb594">. </span>
+                     </sent>
+                     <sent id="dtb595">Skrébitsky states that he was unable to find any sources indicating that the Tsar actually received Haüy.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb596">Haüy's financial problems increased since none of the promises he had been given of compensation, a house, etc., were fulfilled. </sent>
+                     <sent id="dtb597">On 11th October 1806, he wrote a petition to the Tsar in which he set out his complaints. </sent>
+                     <sent>
+                        <span id="dtb598">Skrébitsky says that he has found the letter in question and that it had a note in the margin (with a signature which probably belonged to the Minister of the General Education, Count Zawadowsky) which read, "The Tsar ordered this bill to be paid, premises to be found for the institute and a director who would learn Haüy's teaching methods to be selected and appointed to the institute" </span>
+                        <noteref class="endnote" id="dtb599" idref="#fn_68">68</noteref>
+                        <span id="dtb600">. </span>
+                     </sent>
+                     <sent id="dtb601">Eight days after Haüy presented his petition, the money he had been promised was paid.</sent>
+                  </p>
+                  <pagenum id="page_17" page="normal">17</pagenum>
+                  <p>
+                     <sent id="dtb602">The person who became head of the new institute for the blind was a certain Bouchoueff, who taught at a school in St Petersburg and claimed he was sufficiently fluent in French to be able to converse with Haüy and learn his pedagogical ideas. </sent>
+                     <sent id="dtb603">Bouchoueff was to live in Haüy's house. </sent>
+                     <sent id="dtb604">A report from the ministry dated 10th March 1807 shows that Haüy employed two assistants to work with Bouchoueff and himself. </sent>
+                     <sent id="dtb605">Fournier, Haüy's blind pupil, helped to instruct these assistants. </sent>
+                     <sent id="dtb606">Haüy invited public officials and members of the Russian Academy of Science to be present during Fournier's lectures, hoping to enlist their support. </sent>
+                     <sent id="dtb607">However, there were still no blind pupils. </sent>
+                     <sent id="dtb608">Haüy was told that the lack of pupils arose from the fact that there were no blind people in Russia. </sent>
+                     <sent id="dtb609">To this, Haüy replied:</sent>
+                  </p>
+                  <blockquote id="dtb610">
+                     <p>
+                        <sent id="dtb611">"If no blind people are to be seen on the streets, this is because the head of the family keeps them at home and because orphans and the children of imperial serfs are placed in asylums. </sent>
+                        <sent id="dtb612">It was not long before events proved my assumption to be correct, not to mention the blind beggars who had escaped the surveillance of the police and to whom I hastened to give alms. </sent>
+                        <sent id="dtb613">I would gladly have quadrupled the alms had they consented to regard the money as a daily wage in exchange for their work."</sent>
+                     </p>
+                  </blockquote>
+                  <p>
+                     <sent>
+                        <noteref class="endnote" id="dtb614" idref="#fn_69">69</noteref>
+                        <span id="dtb615">.</span>
+                     </sent>
+                  </p>
+                  <p>
+                     <sent id="dtb616">At this time, St Petersburg was a town with a multicultural population. </sent>
+                     <sent id="dtb617">There were many families of French origin; French was, in fact, the language used by the educated classes; reviews and newspapers were published in French. </sent>
+                     <sent id="dtb618">In his quest for pupils, Haüy placed advertisements in Le Lycée, a review, and in the daily Gazette de Petersbourg. </sent>
+                     <sent id="dtb619">These advertisements brought him two new pupils, both of foreign extraction.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb620">After some time, a Russian woman came to Haüy asking him to help her blind son who was an inmate of the asylum in Smolny . </sent>
+                     <sent id="dtb621">Haüy went to Smolny where he found several blind children living with the aged and the handicapped inmates. </sent>
+                     <sent id="dtb622">He took the son of the woman who had asked for his help back to St Petersburg with him and asked the authorities for permission to teach the other blind children in Smolny. </sent>
+                     <sent id="dtb623">The children were to be picked up by coach, in twos, and later returned to the asylum. </sent>
+                     <sent id="dtb624">Haüy himself would undertake to teach the boys, while his wife would teach the little girls. </sent>
+                     <sent id="dtb625">The director of the Smolny asylum, however, refused to give his permission. </sent>
+                     <sent id="dtb626">Haüy then sent a written request to the "Committee for General Beneficence" and later to the "Civil Governor", who promised to grant Haüy's request as soon as he found time to do so. </sent>
+                     <sent id="dtb627">He never had, however, any spare time. </sent>
+                     <sent id="dtb628">In the same document (dated 10th March 1807), Haüy also complained about his cramped lodgings which made it impossible for him to take in more than one blind pupil at a time. </sent>
+                     <sent id="dtb629">His other pupil, from Moscow, had to lodge elsewhere in the town. </sent>
+                     <sent id="dtb630">Haüy asked the authorities to provide him with the house he had been promised to enable him to establish his school under more suitable conditions. </sent>
+                     <sent>
+                        <span id="dtb631">In his letter Haüy also mentioned his two assistants and praised Bouchoueff, but complained about the latter's " weak health, which permitted him to dedicate only half-days to studies which required at least a year of continuous dedication" </span>
+                        <noteref class="endnote" id="dtb632" idref="#fn_70">70</noteref>
+                        <span id="dtb633">.</span>
+                     </sent>
+                  </p>
+                  <p>
+                     <sent id="dtb634">Was it for tactical reasons that Haüy praised Bouchoueff, who obviously did not make any major contribution to the work of the institute? </sent>
+                     <sent>
+                        <span id="dtb635">Haüy did not receive much help from his two assistants either, since they drank and turned out to be generally inept </span>
+                        <noteref class="endnote" id="dtb636" idref="#fn_71">71</noteref>
+                        <span id="dtb637">. </span>
+                     </sent>
+                     <sent id="dtb638">Two other persons, however, announced their interest in teaching at Haüy's school. </sent>
+                     <sent id="dtb639">They were Galitch, a student at the Institute of Pedagogy in St Petersburg, and Louet, a French immigrant (a naturalized Russian citizen), who offered to give music classes.</sent>
+                  </p>
+                  <pagenum id="page_18" page="normal">18</pagenum>
+                  <p>
+                     <sent id="dtb640">Galitch taught a pupil who came from the Kronstadt fortress in the Bay of Finland and who spoke only Russian. </sent>
+                     <sent id="dtb641">According to Skrébitsky, Bouchoueff had already lost heart in his work.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb642">Haüy had intended to reproduce the printing works he had had at the Institution des Jeunes Aveugles. </sent>
+                     <sent id="dtb643">A printing press was a major investment, but it had paid off well in Paris, and had, in fact, been the means of earning a regular income for the blind pupils and the institute. </sent>
+                     <sent id="dtb644">Haüy valued very highly the trades associated with printing. </sent>
+                     <sent id="dtb645">In the document dated 10th March 1807, he asked permission to establish a printing works at the institute, where not only ordinary books and books in raised print for the blind could be produced, but also such articles as visiting cards and other texts not subject to official censorship. </sent>
+                     <sent id="dtb646">Finally, he asked to be given the use of one of the crown's empty buildings for his institute, and to be allowed to select young blind people who could benefit from his teaching methods from the asylums, especially the Smolny asylum. </sent>
+                     <sent id="dtb647">He also wished to appoint staff to take charge of the administration of the institute.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb648">In his petition, Haüy also stressed that he had agreed to teach according to his methods for a period of one year, but that to date he had only been allowed to teach one pupil. </sent>
+                     <sent id="dtb649">By May 1807, Haüy still had no premises and once again sent a petition to the Minister of General Education in which he referred to former unfulfilled promises. </sent>
+                     <sent id="dtb650">He had been given a building, but it turned out to be unsuitable for a school. </sent>
+                     <sent id="dtb651">He further mentioned that attempts were still being made to convince him that there were no blind people in Russia, but that he had seen the many blind beggars for himself and had also seen many blind children in Smolny whom he would gladly teach.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb652">It has already been said that Haüy did have a few pupils, one of whom lived in his house. </sent>
+                     <sent id="dtb653">As there was no reaction from the minister, Haüy, who now only had four months of his contract left, decided to occupy the building offered in spite of the fact that it was not in a fit condition to house a school. </sent>
+                     <sent id="dtb654">Bouchoueff was still unwell and of little use to him. </sent>
+                     <sent id="dtb655">His two assistants, Galitch and Louet, however, did an excellent job.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb656">Once again Haüy asked to be allowed to select some blind children from the Smolny asylum as pupils. </sent>
+                     <sent
+                           id="dtb657">Skrébitsky states that he found no answer to this letter, although he did discover a decision by the tsar, dated 10th August 1807, giving Haüy permission to teach 15 pupils at an annual cost of <w
+                           class="num-with-space">14 150</w> roubles with an extra allowance of <w class="num-with-space">5 185</w> roubles, but this did not solve Haüy's problems. </sent>
+                     <sent id="dtb658">Now the authorities concerned began to harass him and demand that he should deduct the amount granted from what he had previously received. </sent>
+                     <sent id="dtb659">In addition, a heated debate ensued on the carriage required by Haüy to transport his purchases to the institute. </sent>
+                     <sent id="dtb660">The discussion ended when the tsar ordered General Hitrowo to tell Haüy to conduct himself in a proper manner.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb661">Prior to that curt, rather perfunctory decision, Baron Dolst, director of secondary schools, had been ordered to inspect Haüy's school. </sent>
+                     <sent id="dtb662">The inspection was preceded by a letter from Haüy to the minister of education, in which he wrote:</sent>
+                  </p>
+                  <blockquote id="dtb663">
+                     <p>
+                        <sent id="dtb664">"In answer to the objections expressed over the fact that I have undertaken to prepare my successor to take charge of the institute in six months or a year, I answer that this is quite correct but that the note referred to clearly states that there were two conditions: 1. </sent>
+                        <sent id="dtb665">That I would be given a sufficient number of blind pupils;2. </sent>
+                        <sent id="dtb666">That my colleague would be chosen in competition amongst those who in a special examination would be tested to see whether they possessed the talents required for this kind of education, which demands knowledge beyond what is expected in ordinary schools.</sent>
+                     </p>
+                  </blockquote>
+                  <pagenum id="page_19" page="normal">19</pagenum>
+                  <blockquote id="dtb667">
+                     <p>
+                        <sent id="dtb668">I remain in your service as temporary head of the institute only because my colleague, who at an inopportune moment assured the ministry that he could manage the institute by himself, is far from fit to do so. </sent>
+                        <sent id="dtb669">I have, for several reasons, twenty times addressed M. </sent>
+                        <sent id="dtb670">De Novossilzeff at the chancellery, as my colleague has not dedicated sufficient time to his teaching. </sent>
+                        <sent id="dtb671">It would be beneficial if he would show his talents today rather than wait until tomorrow! </sent>
+                        <sent id="dtb672">I am in haste to leave a difficult profession, which I have exercised for 37 years and as my wishes now have been fulfilled and I can no longer be of any use, not even to Russia, I will enjoy the rest I am truly in need of.</sent>
+                     </p>
+                     <p>
+                        <sent id="dtb673">When I finally plead the justness of my demands, it is no criticism of the Tsar, the ministry or any of its respected officials. </sent>
+                        <sent id="dtb674">M. </sent>
+                        <sent id="dtb675">Bouchoueff alone is the reason why the Government, without realising it, has neglected its obligations to me."</sent>
+                     </p>
+                  </blockquote>
+                  <p>
+                     <sent>
+                        <noteref class="endnote" id="dtb676" idref="#fn_72">72</noteref>
+                        <span id="dtb677">.</span>
+                     </sent>
+                  </p>
+                  <p>
+                     <sent id="dtb678">This letter clearly shows that at this time relations between Haüy and Bouchoueff were extremely strained.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb679">Baron Dolst admitted in his report after his inspection of the institute (13th August 1808) that the premises to which it had moved were not suitable, located as they were on the fourth floor, with the dormitories next to the earth closets. </sent>
+                     <sent id="dtb680">As to the teaching at the institute, Dolst affirmed that he could find no differences in knowledge between the pupils taught by Haüy and those taught by Bouchoueff. </sent>
+                     <sent id="dtb681">He did find that a few pupils had made considerable progress in reading after following Haüy's methods, but that printing had had to be abandoned for lack of typecast. </sent>
+                     <sent id="dtb682">Basket-making and straw plaiting for chair bottoms were taught at the institute; the girls learned how to make hairnets and to knit. </sent>
+                     <sent id="dtb683">Dolst considered that the teaching of handicrafts had achieved good results.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb684">As for the teaching of music, however, Dolst was not satisfied. </sent>
+                     <sent id="dtb685">The children had learnt only three French and two Italian songs. </sent>
+                     <sent id="dtb686">The Baron did not find this lack of progress so remarkable, since the songs were all in foreign languages. </sent>
+                     <sent id="dtb687">He therefore suggested that the immigrant Louet should be replaced by a Russian music teacher who would be assisted by a blind person by the name of Shiline.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb688">After the inspection, Haüy asked Dolst if he might hand in his resignation and leave the institute together with Fournier and Louet. </sent>
+                     <sent id="dtb689">Dolst submitted Haüy's letter of resignation to the minister of education. </sent>
+                     <sent id="dtb690">In it he asked to be relieved of his duties because of the serious conflict between himself and Bouchoueff.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb691">According to Skrébitsky, neither Dolst's report nor Haüy's letter of resignation had any effect, and Haüy continued as head of the institute until 1817. </sent>
+                     <sent id="dtb692">Bouchoueff, too, retained his post at the institute and shortly afterwards disbanded the girls' section (which consisted of three pupils).</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb693">Skrébitsky claims to have found notes by an anonymous writer in one of the archives. </sent>
+                     <sent id="dtb694">These notes proved that the original intention was to admit two categories of pupils to the institute: the poor, who would learn reading, writing, typesetting, music and handicrafts, and the well-to-do, who would learn writing, geography, poetry, etc. </sent>
+                     <sent id="dtb695">Religion would be a compulsory subject for both social groups.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb696">The author of the note was of the opinion that the Rosminazoffs' house, where the institute was located, was very suitable in spite of the fact that both Baron Dolst and Haüy thought the contrary. </sent>
+                     <sent id="dtb697">He was also very critical of Haüy, who he found had made improper use of his position by appropriating the best rooms for his own personal use.</sent>
+                  </p>
+                  <pagenum id="page_20" page="normal">20</pagenum>
+                  <p>
+                     <sent id="dtb698">The children's dormitory was cold in winter and stiflingly hot in summer. </sent>
+                     <sent id="dtb699">To make matters worse, they were obliged to pass through the bedroom to empty their chamber pots. </sent>
+                     <sent id="dtb700">Music classes, study and a variety of activities were held in the general classroom while normal classes were going on. </sent>
+                     <sent id="dtb701">At one table, pupils were taught reading or grammar, at another arithmetic. </sent>
+                     <sent id="dtb702">The space for printing works was in one corner, while in the centre of the room, pupils played the piano or the violin. </sent>
+                     <sent id="dtb703">The anonymous author added that Haüy's son or his pupil Fournier sometimes amused themselves by adding to the general noise by starting up the lathe in order to disturb the Russian teachers at their work, and so that later they would be able to criticise their methods.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb704">The unknown critic also took a very negative view of the teaching of handicrafts. </sent>
+                     <sent id="dtb705">It had, for example, taken a whole year to teach a pupil to plait and the finished result was a mere half archine which would only fetch 10 kopeks. </sent>
+                     <sent id="dtb706">He also noted that the printing press was used only to print brochures about Haüy's telegraph, with the result that the type was worn and could not be used for its original purpose. </sent>
+                     <sent id="dtb707">The author accused Fournier, who was in charge of these activities, of deliberately destroying the type. </sent>
+                     <sent id="dtb708">The lathe was in equally bad shape, the music teaching deficient, etc. </sent>
+                     <sent id="dtb709">The author ends by suggesting that the French teachers should be dismissed and replaced by Russians.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb710">Haüy very much resented what he considered to be harassment which Skrébitsky believes Bouchoueff was responsible for. </sent>
+                     <sent id="dtb711">In a letter dated 19th August 1808, Haüy asked Count Zawadowsky (the minister of education) to order Baron Dolst to continue his inspections and demanded that examinations should be held in French in the presence of witnesses. </sent>
+                     <sent id="dtb712">Haüy wanted to be able to refute any criticism which might be made of his work and had no desire to be at the mercy of the caprice of a single judge. </sent>
+                     <sent id="dtb713">This letter was followed by another to Baron Dolst, in which Haüy asked to be allowed to participate in decisions concerning the final organisation of the institute. </sent>
+                     <sent id="dtb714">He yet again asked to be moved to more suitable premises and requested a list of poor blind children who might be admitted to the institute and another of well-to-do children who might be potential pupils.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb715">Bouchoueff died before Haüy left Russia. </sent>
+                     <sent id="dtb716">According to Skrébitsky, there are no sources which might explain why Haüy stayed in Russia for as long as eleven years, in spite of all adversities. </sent>
+                     <sent id="dtb717">An official document dated 6th May 1817 makes it clear that Haüy wished to leave the institute. </sent>
+                     <sent id="dtb718">It is a letter is addressed to Prince Galitzin (who had replaced Zawadowsky as minister of education). </sent>
+                     <sent id="dtb719">In it, Haüy asks to be removed from office or to be granted six months leave for himself and Fournier. </sent>
+                     <sent id="dtb720">As Haüy was in a state of ill health by this time, Galitzin agreed to his dismissal, stating that he would thus be able to end his days in the bosom of his family. </sent>
+                     <sent id="dtb721">The French ambassador requested permission to take Haüy and Fournier back to France aboard a warship which was soon to leave. </sent>
+                     <sent id="dtb722">The Tsar gave his approval to the application and on Haüy's departure decorated him with the Order of Saint Vladimir, fourth class.</sent>
+                  </p>
+               </level3>
+               <level3>
+                  <h3>
+                     <sent id="dtb723">3.9.4 Haüy's last will and testament</sent>
+                  </h3>
+                  <p>
+                     <sent id="dtb724">Before returning to France, Haüy wrote one more letter to the minister of education, Prince Galitzin, which Skrébitsky sees as Haüy's last will and testament:</sent>
+                  </p>
+                  <blockquote id="dtb725">
+                     <p>
+                        <sent id="dtb726">"It is urgent</sent>
+                     </p>
+                     <p>
+                        <sent id="dtb727">1) that you appoint in my place Mr. </sent>
+                        <sent id="dtb728">Protopopoff, an honest family man who has really made himself familiar with all aspects of our work.</sent>
+                     </p>
+                     <p>
+                        <sent id="dtb729">(2) The ministry must provide him with a worthy collaborator who can assist him by behaving appropriately and who possesses the necessary talents for the post. </sent>
+                        <sent id="dtb730">I have already nominated young Vaganoff as a worthy successor to this post.</sent>
+                     </p>
+                     <pagenum id="page_21" page="normal">21</pagenum>
+                     <p>
+                        <sent id="dtb731">(3) The minister, rather than the inspector, who does more harm than good, must appoint a person who will direct only the teaching of such handicrafts as may prepare the blind pupils for a trade. (4) For Fournier's post, the ministry should appoint the three blind pupils Smourof, Vemblad and Stiaguine and have them divide his honoraries into three equal parts. </sent>
+                        <sent id="dtb732">I take advantage of this occasion to ask the minister to persist in encouraging these three blind pupils and the three sighted members of the staff to manage the institute without external help. (5) The ministry must increase the number of pupils so that the institute Haüy founded can function successfully. </sent>
+                        <sent id="dtb733">The number of blind pupils has been restricted to 15, which is too few. </sent>
+                        <sent id="dtb734">This fact has constituted a major impediment to the institute's success, as we, for example, have had to allow our pupils to carry out a number of activities for which, to be successful, at least 60 pupils would have been necessary."</sent>
+                     </p>
+                  </blockquote>
+                  <p>
+                     <sent>
+                        <noteref class="endnote" id="dtb735" idref="#fn_73">73</noteref>
+                        <span id="dtb736">.</span>
+                     </sent>
+                  </p>
+               </level3>
+               <level3>
+                  <h3>
+                     <sent id="dtb737">3.9.5 The education of deaf pupils in St Petersburg</sent>
+                  </h3>
+                  <p>
+                     <sent id="dtb738">At an early date, Haüy had become interested in the abbé l'épée's teaching of the deaf. </sent>
+                     <sent id="dtb739">Skrébitsky (1884) says that in 1784, the abbé l'épée on one occasion himself entrusted Haüy with the teaching of a deaf person. </sent>
+                     <sent id="dtb740">Skrébitsky's source was probably a footnote in Haüy's Essai sur l'Education des Aveugles. </sent>
+                     <sent id="dtb741">In one chapter, Haüy writes that he wished to compare the teaching of the blind with that of the deaf. </sent>
+                     <sent id="dtb742">This chapter, however, is mainly a panegyric dedicated to the abbé l'épée. </sent>
+                     <sent id="dtb743">In passing, however, Haüy says that he can testify to the fact that it is much easier to teach the blind than the deaf. </sent>
+                     <sent id="dtb744">In the footnote mentioned, Haüy states that he had had the opportunity of following the progress of a young deaf man who had been shipwrecked and washed ashore on the coast of Normandy. </sent>
+                     <sent id="dtb745">Haüy also promised that the partially deaf man would write his autobiography and that his blind pupils would print it. </sent>
+                     <sent id="dtb746">That promise, to the best of my knowledge, was never kept.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb747">In October 1807, a Russian lady approached Haüy and asked him to teach her deaf daughter. </sent>
+                     <sent id="dtb748">According to Skrébitsky's sources, Haüy commented on this as follows:</sent>
+                  </p>
+                  <blockquote id="dtb749">
+                     <p>
+                        <sent id="dtb750">"She imagined that I would agree to teach her daughter, Eugénie, who had been tormented by deafness since her early years. </sent>
+                        <sent id="dtb751">In vain I tried to dissuade her, on the pretext of my lack of practical experience of this difficult art, which often surpasses the capacity of even the very well-prepared. </sent>
+                        <sent id="dtb752">Eventually I had to give in and accept. </sent>
+                        <sent id="dtb753">The very limited progress I made with her soon attracted attention and further pupils were sent to me."</sent>
+                     </p>
+                  </blockquote>
+                  <p>
+                     <sent>
+                        <noteref class="endnote" id="dtb754" idref="#fn_74">74</noteref>
+                     </sent>
+                  </p>
+                  <p>
+                     <sent id="dtb755">Haüy invited the public to observe his efforts in order to show the progress which could be made by means of methods of teaching the deaf which had developed in France.
+       </sent>
+                     <sent id="dtb756">His work aroused great surprise and admiration, although there were also sceptics. </sent>
+                     <sent id="dtb757">Skrébitsky quotes Haüy, who recounts an incident which occurred during one of his public classes:</sent>
+                  </p>
+                  <blockquote id="dtb758">
+                     <p>
+                        <sent id="dtb759">"One day, during one of my classes, when I had just finished praising the abbé l'épée and the abbé Sicard and was commenting on my admiration of the intelligence usually shown by my deaf-dumb pupils, a member of the audience pointed out that these children, whom Nature had treated so unkindly, only repeated, in parrot-fashion, what had been poured into their minds by their teachers. </sent>
+                        <sent id="dtb760">The person in question was suggesting that it was useless to teach this type of pupil. </sent>
+                        <sent id="dtb761">Considering all that has been achieved by the famous men who developed these teaching methods, this asseveration appeared to me a mockery of their talents and I was filled with a desire to defend them to the utmost, if they should indeed require my help.</sent>
+                     </p>
+                  </blockquote>
+                  <pagenum id="page_22" page="normal">22</pagenum>
+                  <blockquote id="dtb762">
+                     <p>
+                        <sent id="dtb763">M. l'abbé Sicard receives daily proof of the intelligence of the deaf-dumb when he gives them written exercises, when he makes them understand and when he sets them questions on subjects such as physics and morale..."</sent>
+                     </p>
+                  </blockquote>
+                  <p>
+                     <sent>
+                        <noteref class="endnote" id="dtb764" idref="#fn_75">75</noteref>
+                        <span id="dtb765">.</span>
+                     </sent>
+                  </p>
+                  <p>
+                     <sent id="dtb766">Haüy did not become deeply involved in the teaching of the deaf, but did manage to arouse the interest of the Dowager Tsarina who had experts brought from France. </sent>
+                     <sent id="dtb767">Among them was a M. </sent>
+                     <sent id="dtb768">Jouffret, who became the most prominent figure in the teaching of the deaf during its pioneering years. </sent>
+                     <sent id="dtb769">However, writes Skrébitsky, after the initial period of interest, the teaching of the blind and the deaf was soon forgotten.</sent>
+                  </p>
+               </level3>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb770">3.10 Haüy's telegraph</sent>
+               </h2>
+               <p>
+                  <sent id="dtb771">During his years of teaching, Haüy continued to take an interest in ciphers and codes. </sent>
+                  <sent>
+                     <span id="dtb772">He was, for example, very interested in the telegraph and its use in military intelligence </span>
+                     <noteref class="endnote" id="dtb773" idref="#fn_76">76</noteref>
+                     <span id="dtb774"> (this was before electricity was in general use). </span>
+                  </sent>
+                  <sent id="dtb775">Haüy also probably saw the telegraph as a means of earning money. </sent>
+                  <sent id="dtb776">The criticisms made against him by his opponents (section 3.9.3) are proof that telegraphic experimentation and the printing of brochures took place at the institute. </sent>
+                  <sent id="dtb777">When Haüy first arrived in St Petersburg, he tried to interest the tsar in his telegraphic invention. </sent>
+                  <sent>
+                     <span id="dtb778">In a letter dated 1st July 1807, he described his invention and enclosed a brochure entitled Mémoire historique abrévé sur les télégraphes en général et sur les télégraphes de St Pétersbourg 1801 </span>
+                     <noteref class="endnote" id="dtb779" idref="#fn_77">77</noteref>
+                     <span id="dtb780">. </span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb781">Haüy called his telegraph the "pasigraph". </sent>
+                  <sent id="dtb782">It was based on a system of writing in which the symbols corresponded not to sounds but to concepts such as numbers or musical notes. </sent>
+                  <sent id="dtb783">He explained that the system could be used during the day and at night by a simple addition to the machine. </sent>
+                  <sent id="dtb784">The pasigraph was based on five elements of information: </sent>
+               </p>
+               <blockquote id="dtb785">
+                  <p>
+                     <sent id="dtb786">"1. </sent>
+                     <sent id="dtb787">A stenographic and sound alphabet;</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb788">2. </sent>
+                     <sent id="dtb789">A numerical element</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb790">3. </sent>
+                     <sent id="dtb791">A word element. </sent>
+                  </p>
+                  <p>
+                     <sent id="dtb792">4. </sent>
+                     <sent id="dtb793">A grammatical element and</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb794">5. finally, a format.</sent>
+                  </p>
+                  <p>
+                     <sent id="dtb795">These five elements of information, which together can be fitted onto a surface of about 4 archines in length and 1 archine in width, are sufficient to permit simple and rapid communication of all forms of speech, regardless of the language used. </sent>
+                     <sent id="dtb796">I ascribe to the secretaries and interpreters a knowledge of grammar and of the most important languages, for which the Russians show great skill. </sent>
+                     <sent id="dtb797">This prior knowledge permits them, in just a few days, to learn my system, my five elements of information and their use"</sent>
+                  </p>
+               </blockquote>
+               <p>
+                  <sent>
+                     <noteref class="endnote" id="dtb798" idref="#fn_78">78</noteref>
+                     <span id="dtb799">. </span>
+                  </sent>
+               </p>
+               <p>
+                  <sent id="dtb800">To support his idea, Haüy contracted a mechanic by the name of Winzelmeyer to construct a small model of the pasigraph. </sent>
+                  <sent id="dtb801">He demonstrated his invention to the head of the Russian Academy of Science, Novossiltzeff. </sent>
+                  <sent id="dtb802">When the Minister of the Navy, Tchitchagoff, appointed a commission in 1808 to express its opinion on the British and French telegraphic systems, Haüy was present. </sent>
+                  <sent id="dtb803">He was given the opportunity to test his pasigraph between the fortress of Kronstad and a frigate anchored seven verst off the coast of St Petersburg. </sent>
+                  <sent>
+                     <span id="dtb804">The experiment was successful as to speed and precision; however, it is not known what became of Haüy's telegraph </span>
+                     <noteref class="endnote" id="dtb805" idref="#fn_79">79</noteref>
+                     <span id="dtb806">. </span>
+                  </sent>
+               </p>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb807">3.11 The final years</sent>
+               </h2>
+               <p>
+                  <sent id="dtb808">After the defeat of Napoleon at Waterloo in 1814, the National Institute in Paris became once more an autonomous entity. </sent>
+                  <sent>
+                     <span id="dtb809">The new director was Sebastien Guillé, a doctor of medicine, a fanatical royalist and an orthodox Roman Catholic </span>
+                     <noteref class="endnote" id="dtb810" idref="#fn_80">80</noteref>
+                     <span id="dtb811">. </span>
+                  </sent>
+                  <sent id="dtb812">He forbade Haüy to visit the school since he considered that he had betrayed the French monarchy during the Revolution. </sent>
+                  <sent>
+                     <span id="dtb813">He was particularly critical of Haüy's attitude to religion </span>
+                     <noteref class="endnote" id="dtb814" idref="#fn_81">81</noteref>
+                     <span id="dtb815">. </span>
+                  </sent>
+               </p>
+               <pagenum id="page_23" page="normal">23</pagenum>
+               <p>
+                  <sent id="dtb816">Not until 1821 was Valentin Haüy able to revisit his old school, which had then been extended to admit some 60 pupils. </sent>
+                  <sent id="dtb817">During a ceremony held on 21st August 1821, Haüy was honoured for his pioneering work in the education of the blind. </sent>
+                  <sent id="dtb818">One of the participants in that ceremony was the young Louis Braille, who had joined the institute in 1819.
+				 </sent>
+                  <sent id="dtb819">Valentin Haüy died on 18th March 1822, at his brother's home in Paris. </sent>
+               </p>
+            </level2>
+         </level1>
+         <level1>
+            <h1>
+               <sent id="dtb820">4. </sent>
+               <sent id="dtb821">The importance of Haüy in the education of the blind in Sweden and elsewhere</sent>
+            </h1>
+            <p>
+               <sent>
+                  <span id="dtb822">Blind individuals have probably been educated to some degree or other in a number of countries throughout the world for many centuries </span>
+                  <noteref class="endnote" id="dtb823" idref="#fn_82">82</noteref>
+                  <span id="dtb824">. </span>
+               </sent>
+               <sent id="dtb825">Organised education of the blind, however, did not exist before the end of the 18th century and the beginning of the 19th century.</sent>
+            </p>
+            <p>
+               <sent id="dtb826">D.G. </sent>
+               <sent id="dtb827">Pritchard (1965) demonstrated that organised education of the blind began in Britain in the 1780s, independent of Haüy, but that rumours of his work reached that country after a few years. </sent>
+               <sent id="dtb828">Education of the blind in Britain, which was entirely private, initially only aimed at teaching the pupils some sort of handicraft while education proper can be said to have commenced in 1800.</sent>
+            </p>
+            <p>
+               <sent id="dtb829">Education of the blind in the German-speaking world began, give or take a few years, at the period when Haüy initiated his activities. </sent>
+               <sent id="dtb830">In both cases John Locke and other Enlightenment philosophers exerted a powerful influence over the pioneers of education for the blind. </sent>
+               <sent>
+                  <span id="dtb831">Another pioneer in this field was Johan Wilhelm Klein, who in 1804 founded an institute for the blind in Vienna </span>
+                  <noteref class="endnote" id="dtb832" idref="#fn_83">83</noteref>
+                  <span id="dtb833">. </span>
+               </sent>
+               <sent>
+                  <span id="dtb834">From the first, Klein regarded his school as a public concern </span>
+                  <noteref class="endnote" id="dtb835" idref="#fn_84">84</noteref>
+                  <span id="dtb836"> and his real wish was to integrate blind children into ordinary classes. </span>
+               </sent>
+               <sent id="dtb837">Klein's institute was from the outset financed by the State, while the institute which Haüy and Zeune founded in Berlin in 1806 also received State funds.</sent>
+            </p>
+            <p>
+               <sent>
+                  <span id="dtb838">The birth of Swedish education for the blind is usually considered to have occurred in 1807 </span>
+                  <noteref class="endnote" id="dtb839" idref="#fn_85">85</noteref>
+                  <span id="dtb840">. </span>
+               </sent>
+               <sent id="dtb841">At that time, the Keeper of Royal Records, Pär Aron Borg, received a visit from the 24- year old Charlotta Seijerling, who had become blind at the age of four and later boarded with the Borg family where she was taught music, writing, arithmetic, German, French, etc.
+       </sent>
+               <sent>
+                  <span id="dtb842">In Berättelse om den i Maj månad 1808 med en blind Elev hållne första Examen (The story of the first exam taken by a blind pupil in May 1808), Pär Aron Borg describes the public examination of Charlotta Seijerling, who was able to demonstrate her skill in reading, singing, playing the piano and the harp and also in "a number of handicrafts, which she had been taught such as spinning, knitting and needlework; and she had, particularly in the latter crafts, acquired such skill that she was able to show a sweater which she had made for herself". </span>
+                  <noteref class="endnote" id="dtb843" idref="#fn_86">86</noteref>
+                  <span id="dtb844">. </span>
+               </sent>
+               <sent id="dtb845">This examination was held prior to the funding of the institute. </sent>
+               <sent id="dtb846">Borg points out that he had only been able to teach her in his "spare moments" and that Seijerling would probably have achieved much better results if she had been able to dedicate more time to her education.</sent>
+            </p>
+            <p>
+               <sent id="dtb847">After this public examination, Borg asked the king, King Gustav IV Adolf, to contribute financially to extending the institute's activities so that greater numbers of blind persons could be taught. </sent>
+               <sent id="dtb848">In his letter to the king, he also requested permission to teach the deaf. </sent>
+               <sent>
+                  <span id="dtb849">Borg's petition met with approval and he was granted an annual personal allowance of 450 riksdaler banco </span>
+                  <noteref class="endnote" id="dtb850" idref="#fn_87">87</noteref>
+                  <span id="dtb851">. </span>
+               </sent>
+               <sent id="dtb852">Johansson is of the opinion that this decision led to the establishment in Sweden of an institute for the blind, the deaf and the mentally infirm.</sent>
+            </p>
+            <pagenum id="page_24" page="normal">24</pagenum>
+            <p>
+               <sent id="dtb853">The allowance continued to be paid after the events of March 1809, when Gustav IV Adolf was forced to abdicate in favour of his uncle (Carl XIII).</sent>
+            </p>
+            <p>
+               <sent>
+                  <span id="dtb854">In his application to the monarch for funds, Borg also committed himself to holding annual public examinations of the institute's pupils, as demanded by the new régime, which at the same time had increased the institute's funding </span>
+                  <noteref class="endnote" id="dtb855" idref="#fn_88">88</noteref>
+                  <span id="dtb856">.</span>
+               </sent>
+            </p>
+            <p>
+               <sent id="dtb857">During the Autumn and Winter of 1808 to 1809, Borg initiated teaching activities on a larger scale, by accepting six deaf pupils and one blind pupil. </sent>
+               <sent>
+                  <span id="dtb858">Borg claimed that he was familiar with the educational methods in vogue in other countries in Europe, but that he preferred to follow his own ideas </span>
+                  <noteref class="endnote" id="dtb859" idref="#fn_89">89</noteref>
+                  <span id="dtb860">. </span>
+               </sent>
+               <sent id="dtb861">With regard to the deaf, however, he allowed himself to be oriented by l'épée in his use of sign language and the finger alphabet. </sent>
+               <sent id="dtb862">Handicrafts formed an important part of his teaching methods, as they had for Haüy.</sent>
+            </p>
+            <p>
+               <sent id="dtb863">Johansson (1974) believes that it is difficult to form an idea of how the handicapped pupils were taught during the institute's early years on the basis of the material which has survived. </sent>
+               <sent>
+                  <span id="dtb864">Because of the shortage of blind pupils, the institute eventually accepted only deaf children </span>
+                  <noteref class="endnote" id="dtb865" idref="#fn_90">90</noteref>
+                  <span id="dtb866">. </span>
+               </sent>
+               <sent id="dtb867">Pär Aron Borg left the institute in 1818, after a series of conflicts, to found a private institute for the deaf in Manhem.</sent>
+            </p>
+            <p>
+               <sent id="dtb868">Serious debate on organised education for the blind and deaf did not develop until the introduction of the Elementary Schools Law in 1842. </sent>
+               <sent>
+                  <span id="dtb869">During the parliamentary session of 1844 to 1845, education for the disabled was discussed, and in the course of that debate it was in fact suggested that this type of education should be integrated into the general elementary school system </span>
+                  <noteref class="endnote" id="dtb870" idref="#fn_91">91</noteref>
+                  <span id="dtb871">. </span>
+               </sent>
+               <sent id="dtb872">The decision to create a separate school for the blind was taken in the Riddarhus (House of the Nobility) by Nils af Zellén, head of department at the Ministry of Education and Ecclesiastic Affairs. </sent>
+               <sent id="dtb873">In this debate, Zellén particularly emphasised the element of self-sufficiency and referred to the fact that most civilised countries in Europe had developed a system of education which helped the blind to become self-supporting.</sent>
+            </p>
+            <p>
+               <sent>
+                  <span id="dtb874">Ossian Edmund Borg, the son of Pär Aron Borg, had become director of the General Institute for the Deaf at Manilla and was sent on a tour of Denmark, Germany, Belgium and France for the purpose of studying the progress of the education for the blind in these countries </span>
+                  <noteref class="endnote" id="dtb875" idref="#fn_92">92</noteref>
+                  <span id="dtb876">. </span>
+               </sent>
+               <sent id="dtb877">In 1846, the Riksdag (Swedish parliament) decided that a new department for the blind should be established at Manilla. </sent>
+               <sent id="dtb878">This regulation of education for the deaf and blind was a symptom, in Förhammars opinion, of the socializing ideas which had inspired the Elementary School Law of 1842. </sent>
+               <sent id="dtb879">The blind were offered 13 free places (one from each diocese) at the Manilla institute. </sent>
+               <sent id="dtb880">The curriculum was to include reading, writing, Luther's catechism and handicrafts. </sent>
+               <sent id="dtb881">Musical skills would also be taught. </sent>
+               <sent>
+                  <span id="dtb882">The children would attend the institute from 12 to 18 years of age </span>
+                  <noteref class="endnote" id="dtb883" idref="#fn_93">93</noteref>
+                  <span id="dtb884">. </span>
+               </sent>
+               <sent id="dtb885">Prior to that, they would be admitted to the school in the locality in which they officially resided.</sent>
+            </p>
+            <p>
+               <sent id="dtb886">In Denmark, the situation was somewhat different. </sent>
+               <sent>
+                  <span id="dtb887">The Kjaeden Order had been founded towards the end of the 18th century; one of its activities was helping the blind </span>
+                  <noteref class="endnote" id="dtb888" idref="#fn_94">94</noteref>
+                  <span id="dtb889">. </span>
+               </sent>
+               <sent id="dtb890">Originally the Order ran an asylum which admitted a certain number of blind persons who were taught handicrafts. </sent>
+               <sent id="dtb891">This idea originated in France, where the Philanthropic Society carried out similar activities.</sent>
+            </p>
+            <p>
+               <sent id="dtb892">Word of the school for the blind in Paris reached Copenhagen, and in 1803, a young doctor by the name of P.A. </sent>
+               <sent id="dtb893">Castberg was commissioned by the Danish government (Cancelliet) to travel to Paris to study in the first place the education of the blind but also to "investigate the organisation of the institutes for the blind which exist in Paris, where the blind, each according to his capacity, are educated to become useful citizens since they are taught different skills in the production of a variety of articles."</sent>
+            </p>
+            <pagenum id="page_25" page="normal">25</pagenum>
+            <p>
+               <sent id="dtb894">Castberg spent the winter of 1804 to 1805 in Paris but there is no written testimony of his having informed the Institute for Blind Youth in Copenhagen of what he had observed. </sent>
+               <sent id="dtb895">This is probably because the institute was not efficiently organised at that time. </sent>
+               <sent>
+                  <span id="dtb896">A letter from Castberg, however, contains an interesting piece of information; he mentions that during his stay in Paris he tried to buy Haüy's book but that only second-hand copies were to be had </span>
+                  <noteref class="endnote" id="dtb897" idref="#fn_95">95</noteref>
+                  <span id="dtb898">. </span>
+               </sent>
+               <sent id="dtb899">He bought three copies, one of which he kept for himself. </sent>
+               <sent id="dtb900">One of the other copies eventually arrived in Dresden, where it was translated into German.</sent>
+            </p>
+            <p>
+               <sent>
+                  <span id="dtb901">A pamphlet entitled Journal udgiven til Fordel for Blinde was published in 1811 in Copenhagen in which an article on Haüy, written by Daniel Fürst, a merchant, appeared </span>
+                  <noteref class="endnote" id="dtb902" idref="#fn_96">96</noteref>
+                  <span id="dtb903">. </span>
+               </sent>
+               <sent id="dtb904">Fürst writes that he spent six months in 1805 in daily contact with Haüy and that he had learned how to teach the blind from him. </sent>
+               <sent id="dtb905">It is not known whether Castberg and Fürst knew each other or whether they had met in Paris. </sent>
+               <sent id="dtb906">Castberg eventually became a leading figure in education for the deaf in Denmark and in 1818 was appointed head of the Manilla Institute in Stockholm.</sent>
+            </p>
+            <p>
+               <sent id="dtb907">Johansen states that in 1810 the Kjaeden Order was interested in expanding its activities and that one of its members, Brother C.F. </sent>
+               <sent id="dtb908">Brorson, suggested the creation of a school for blind children. </sent>
+               <sent id="dtb909">Frederick VI supported the project and personally contributed funds towards it. </sent>
+               <sent id="dtb910">He himself inaugurated the institute and named it "The Royal Institute for the Blind". </sent>
+               <sent id="dtb911">Johansen could find no evidence to indicate that Fürst was a member of the Kjaeden Order, although he did find proof that he had approached Brorson after the creation of the institute for the blind and offered to teach there without compensation. </sent>
+               <sent id="dtb912">The institute's curriculum included reading and writing and Fürst is said to have taught those subjects. </sent>
+               <sent id="dtb913">Johansen, however, believes that education at the institute could not have been very successful, as Brorson was a decided opponent of the purchase of a printing press for the production of raised print books. </sent>
+               <sent id="dtb914">The Danish Museum for the Blind, in spite of this opposition to the printing press, contains both a typographic case produced by Haüy and a copy of his famous essay. </sent>
+               <sent id="dtb915">Were they perhaps Fürst's? </sent>
+               <sent id="dtb916">Is the book one of the three copies Castberg bought in Paris? </sent>
+               <sent id="dtb917">These questions remain unanswered. </sent>
+               <sent id="dtb918">In the 1850s, management of the institute was taken over by the State. </sent>
+               <sent id="dtb919">Nationalisation was preceded by a commission headed by Professor N.G. </sent>
+               <sent id="dtb920">Melchior who had visited the institute in Paris in 1852 and seen for himself that blind pupils could learn to read with the help of raised print books. </sent>
+               <sent>
+                  <span id="dtb921">He later stated in his report that the Danish institute had not kept up with developments in this field </span>
+                  <noteref class="endnote" id="dtb922" idref="#fn_97">97</noteref>
+                  <span id="dtb923">. </span>
+               </sent>
+               <sent id="dtb924">As a result of Melchior's report, the commission suggested that the institute should employ special teachers to teach the blind pupils to read and write. </sent>
+               <sent id="dtb925">They should learn not only to write in ink in order to be able to communicate with the sighted, but also the Braille system so that they could communicate with one another. </sent>
+               <sent id="dtb926">It was further suggested in the report that in their own interest blind children should be taught in their local school during their early years. </sent>
+               <sent id="dtb927">They would then be admitted to the Institute for the Blind at the age of eleven.</sent>
+            </p>
+            <p>
+               <sent id="dtb928">Melchior later travelled to England to acquire suitable writing aids for the blind pupils.</sent>
+            </p>
+            <pagenum id="page_26" page="normal">26</pagenum>
+            <p>
+               <sent id="dtb929">In 1855, Haüy's Essai sur l'Education des Aveugles was translated into Danish by a young blind man by the name of Hans S/ondring. </sent>
+               <sent id="dtb930">The Danish translation was called Om de Blinde (About the Blind). </sent>
+               <sent id="dtb931">The National Institute for the Blind was inaugurated in 1856; the Kjaeden Order's final contribution to the education of blind children was to assume the costs of the new school building. </sent>
+               <sent id="dtb932">The Order is still in existence and funds research into the history of the blind. </sent>
+               <sent id="dtb933">From all this, it is obvious that Haüy's methods did not reach Denmark until the middle of the 19th century, in spite of Fürst's activities.</sent>
+            </p>
+         </level1>
+         <level1>
+            <h1>
+               <sent id="dtb934">5. </sent>
+               <sent id="dtb935">Discussion and conclusions</sent>
+            </h1>
+            <p>
+               <sent id="dtb936">In Chapter 1, I posed a number of questions. </sent>
+               <sent id="dtb937">Have I answered them successfully?</sent>
+            </p>
+            <p>
+               <sent id="dtb938">By contrasting information from different sources, I have managed to compile a biography of Valentin Haüy. </sent>
+               <sent id="dtb939">During my studies, further questions emerged:</sent>
+            </p>
+            <p>
+               <sent id="dtb940">- What factors can be said to have determined Haüy's abandoning his work as a translator and interpreter in order to dedicate his efforts to the education of the blind?</sent>
+            </p>
+            <p>
+               <sent id="dtb941">My answer is: There were probably several factors involved. </sent>
+               <sent id="dtb942">We can assume that the first proof Haüy had that the disabled were educable was when he witnessed deaf pupils from the abbé l'épée's institute performing in public. </sent>
+               <sent id="dtb943">As he himself said, his encounter with the blind musicians at the St Ovid market was of decisive importance to his commitment to the blind. </sent>
+               <sent id="dtb944">That incident may in fact be seen as an epiphany (moment of revelation), a turning-point in Haüy's life. </sent>
+               <sent id="dtb945">Another such critical incident was his meeting with Lésueur. </sent>
+               <sent id="dtb946">Denzin (1989) in Engström (1995), describes epiphanies as "interactional moments and experiences which leave marks on people's lives".</sent>
+            </p>
+            <p>
+               <sent id="dtb947">- What is the characteristic feature of Haüy's life?</sent>
+            </p>
+            <p>
+               <sent id="dtb948">If I dared to classify Haüy's life at all, I would say that in many ways it was dramatic. </sent>
+               <sent id="dtb949">Initially, Haüy appears to have been a monarchist, but at the same time he belonged to the Age of Enlightenment. </sent>
+               <sent id="dtb950">Louis XVI was his benefactor, and in fact Haüy's pedagogic work, Essai sur l'education des aveugles, is dedicated to him. </sent>
+               <sent id="dtb951">Later, Haüy became an active revolutionary. </sent>
+               <sent id="dtb952">But is this so remarkable? </sent>
+               <sent>
+                  <span id="dtb953">He moved in precisely those circles - mainly composed of academics and public officials - from which the French Revolution sprang </span>
+                  <noteref class="endnote" id="dtb954" idref="#fn_98">98</noteref>
+                  <span id="dtb955">.</span>
+               </sent>
+            </p>
+            <p>
+               <sent id="dtb956">Haüy's behaviour to Sicard was certainly not particularly friendly, but on the other hand, Sicard had his revenge when he denounced Haüy to the police. </sent>
+               <sent id="dtb957">In any case, it would seem that Haüy's activities during the French Revolution did not perturb Alexander I or Louis XVIII to any great degree.</sent>
+            </p>
+            <p>
+               <sent id="dtb958">Haüy was also a utilitarian (a term coined by Jeremy Bentham). </sent>
+               <sent id="dtb959">He believed wholeheartedly that the blind should taught to be self-sufficient. </sent>
+               <sent
+                     id="dtb960">This utilitarian view characterised teaching of the blind for a long time and is still the basis of education for the blind in the <acronym
+                     pronounce="no" title="United States of America">USA</acronym>, Canada and several Asian countries where the aim of the education for the blind is that they should eventually be able to fend for themselves in life. </sent>
+               <sent>
+                  <span id="dtb961">Haüy does not stand alone amongst his contemporaries in taking this utilitarian view of education for the visually impaired: it was characteristic of all teaching during the period of the French Revolution </span>
+                  <noteref class="endnote" id="dtb962" idref="#fn_99">99</noteref>
+                  <span id="dtb963">.</span>
+               </sent>
+            </p>
+            <p>
+               <sent id="dtb964">- Can we rightly call Haüy the father of education for the blind?</sent>
+            </p>
+            <p>
+               <sent id="dtb965">I have shown that experimentation in education for visually impaired pupils originated in several countries; there are thus several persons, contemporaries of Haüy, who might well be called pioneers of education for the blind.</sent>
+            </p>
+            <pagenum id="page_27" page="normal">27</pagenum>
+            <p>
+               <sent id="dtb966">Pritchard (1963), however, emphasises that Haüy was unique in that he created a system of organised education for the blind based on a carefully thought-out method. </sent>
+               <sent id="dtb967">The outstanding feature of Haüy's enterprise - which sets him apart from British pedagogues of the time - was the founding of a school in the true sense, which imparted free education to all blind children, regardless of sex or social class. </sent>
+               <sent id="dtb968">A pupil did not have to be rich or highly intelligent to be admitted to his school. </sent>
+               <sent id="dtb969">All previous attempts at educating the visually handicapped had been limited to children of well-to-do families and a few "blind child prodigies". </sent>
+               <sent id="dtb970">Haüy was also a pioneer of integration and equal opportunities. </sent>
+               <sent id="dtb971">At the Paris institute, blind and sighted children were taught side by side. </sent>
+               <sent id="dtb972">Haüy was convinced that his blind pupils, in time, would be capable of teaching the sighted. </sent>
+               <sent id="dtb973">Furthermore, Haüy's methods involved co-education, which must be considered quite radical for the time. </sent>
+               <sent id="dtb974">Haüy was, too, a pioneer of education for young children; he was teaching small children at the Musée des Aveugles long before Fröbel founded his school at Kilham in Germany in 1816. </sent>
+               <sent id="dtb975">The idea of integration crops up repeatedly in his Essai sur l'Education des Aveugles. </sent>
+               <sent id="dtb976">He insisted in postponing for as long as possible the use of special teaching aids for the blind in such subjects as arithmetic since he wished the blind and the sighted to be taught together.</sent>
+            </p>
+            <p>
+               <sent id="dtb977">One of the most basic elements in the education of the blind is the teaching of reading and writing. </sent>
+               <sent id="dtb978">Today we describe visual impairment as "an information handicap". </sent>
+               <sent id="dtb979">Haüy's greatest claim to fame is that he genuinely attempted to solve this enormous obstacle to learning by producing raised print books.</sent>
+            </p>
+            <p>
+               <sent id="dtb980">Folke Johansen (1983) believes that Valentin Haüy's raised letters were very difficult to read, but that his printing method was a unique invention. </sent>
+               <sent id="dtb981">It remained in use until modern computer technology made it possible to produce tactile writing. </sent>
+               <sent>
+                  <span id="dtb982">Indeed, Haüy has sometimes been called "The Gutenberg of the Blind" </span>
+                  <noteref class="endnote" id="dtb983" idref="#fn_100">100</noteref>
+                  <span id="dtb984">.</span>
+               </sent>
+            </p>
+            <p>
+               <sent>
+                  <span id="dtb985">Haüy was not a pioneer of object lessons for blind children, although he did continue what others before him had begun </span>
+                  <noteref class="endnote" id="dtb986" idref="#fn_101">101</noteref>
+                  <span id="dtb987">. </span>
+               </sent>
+               <sent id="dtb988">He was more practical in his approach to the problems involved in educating blind children, producing useful material and equipment (such as his printing press) which he exported to other institutes for the blind in Europe.</sent>
+            </p>
+            <p>
+               <sent id="dtb989">Chapter 4 demonstrates Haüy's indirect influence on education for the blind in Sweden and Denmark in the early 19th century. </sent>
+               <sent id="dtb990">Pär Aron Borg was unwilling to recognise that he had learned anything from other pedagogues, although we find ample evidence that he was in fact influenced by Haüy. </sent>
+               <sent id="dtb991">In Denmark, Brorson consciously opposed Haüy's ideas when he refused to introduce his methods of teaching the blind to read and write. </sent>
+               <sent id="dtb992">In the wider perspective, however, it is clearly the case that Haüy's teaching methods formed the basis of the organised education of the blind which developed in the Nordic countries in the 1850s and 1860s. </sent>
+               <sent id="dtb993">A general interest in the education of blind children in Sweden and Denmark is not evident, however, before the introduction of elementary schooling.</sent>
+            </p>
+            <p>
+               <sent id="dtb994">Pierre Henri (1987) suggests that Haüy's teaching methods were in many aspects rather naïve and indicated serious deficiencies in his knowledge of the blind. </sent>
+               <sent id="dtb995">Henri underlines the fact that Haüy's successor and critic, Guillé, in his Essai sur l'instruction des aveugles, ou exposé analytique des procédés employés pour les instruire (1819) developed a much more sophisticated theoretical approach to the education of the blind. </sent>
+               <sent>
+                  <span id="dtb996">While he was director of the institute, however, Guillé did not increase the number of textbooks or teaching aids for use in object lessons </span>
+                  <noteref class="endnote" id="dtb997" idref="#fn_102">102</noteref>
+                  <span id="dtb998">.</span>
+               </sent>
+            </p>
+            <pagenum id="page_28" page="normal">28</pagenum>
+            <p>
+               <sent id="dtb999">Then we come to the question: Did Haüy in fact found an institute for the blind in St Petersburg?</sent>
+            </p>
+            <p>
+               <sent id="dtb1000">It is clear that during his stay in Russia Haüy did found a school for the blind in St Petersburg in spite of considerable difficulties, one of which was the fact that he had no knowledge of the Russian language. </sent>
+               <sent id="dtb1001">I ask myself how a man who was said to possess a gift for languages and who was fluent, it was also said, in ten or so modern languages, could have travelled to Russia without knowing any Russian, although it is possible that he learned the language during the period which Skrébitsky was unable to document (1811-1817). </sent>
+               <sent id="dtb1002">It is highly probable that Haüy's difficulties in Russia were in fact caused by his lack of knowledge of Russian and by the fact that he was not familiar with the religion or culture of that country. </sent>
+               <sent id="dtb1003">One illustration of his lack of knowledge of Russian society is that he tried to teach blind students to play the organ while in St Petersburg, in his ignorance of the fact that organ music does not form part of the Greek Orthodox Church's rites. </sent>
+               <sent id="dtb1004">Skrébitsky (1884) also believes that Haüy was completely taken in by the public officials at the ministry and became a victim of Russian bureaucracy.</sent>
+            </p>
+            <p>
+               <sent id="dtb1005">Skrébitsky proves that Haüy brought his wife and son to Russia although he never requested any extra travel allowance for them. </sent>
+               <sent id="dtb1006">Madame Haüy remains a mystery and it is impossible to judge her contribution as a teacher. </sent>
+               <sent>
+                  <span id="dtb1007">All we know is that she taught at both the Musée des Aveugles </span>
+                  <noteref class="endnote" id="dtb1008" idref="#fn_103">103</noteref>
+                  <span id="dtb1009"> and the institute in St Petersburg.</span>
+               </sent>
+            </p>
+            <p>
+               <sent id="dtb1010">Finally, I am convinced that this brief outline of the life of Valentin Haüy demonstrates beyond doubt his importance in the history of education of the blind and that he is truly worthy to be called "the father of education for the blind".</sent>
+            </p>
+            <p>
+               <sent id="dtb1011">The Riksdag (Swedish parliament) and the government's policy concerning handicapped children towards the end of the 1970s and early 1980s stated, amongst other things, that the latter should be integrated into the general educational system. </sent>
+               <sent id="dtb1012">Underlying this policy is a belief in equality and fraternity, two of the fundamental values of the Enlightenment. </sent>
+               <sent id="dtb1013">The Swedish government recently presented the draft of a proposed law (pro. 1999/2000:79) to the Riksdag: Från patient till medborgare - en nationell handlingsplan för handikappolitiken (From patient to citizen - a national policy for the handicapped). </sent>
+               <sent
+                     id="dtb1014">This was a consequence of Sweden's adoption of the <acronym
+                     pronounce="no" title="United Nations">UN</acronym> standard legislation on the right of the handicapped to participation and equality and other amendments to the Declaration of Human Rights. </sent>
+               <sent id="dtb1015">Haüy's ideas on integration and participation in society were thus strikingly modern.</sent>
+            </p>
+         </level1>
+         <level1>
+            <h1>
+               <sent id="dtb1016">References</sent>
+            </h1>
+            <pagenum id="page_29" page="normal">29</pagenum>
+            <level2>
+               <h2 id="fn">
+                  <sent id="dtb1017">Footnotes</sent>
+               </h2>
+               <note class="endnote" id="fn_1">
+                  <p>
+                     <sent id="dtb1018">Sjöstrand 1972</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_2">
+                  <p>
+                     <sent id="dtb1019">Engström 1995</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_3">
+                  <p>
+                     <sent id="dtb1020">Sjöstrand 1972</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_4">
+                  <p>
+                     <sent id="dtb1021">Skrébitsky 1884</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_5">
+                  <p>
+                     <sent id="dtb1022">Didier-Weygand 2000</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_6">
+                  <p>
+                     <sent id="dtb1023">Förhammar 1991</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_7">
+                  <p>
+                     <sent id="dtb1024">Lowe 1995</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_8">
+                  <p>
+                     <sent id="dtb1025">Lowe 1995</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_9">
+                  <p>
+                     <sent id="dtb1026">Helldén 1994</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_10">
+                  <p>
+                     <sent id="dtb1027">Helldén 1994, Didier-Weygand 2000</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_11">
+                  <p>
+                     <sent id="dtb1028">Helldén 1994</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_12">
+                  <p>
+                     <sent id="dtb1029">Didier-Weygand</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_13">
+                  <p>
+                     <sent id="dtb1030">Eriksson 1998, Helldén 1994</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_14">
+                  <p>
+                     <sent id="dtb1031">Dufau 1852, Henri 1987, Sakula 1998, Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_15">
+                  <p>
+                     <sent id="dtb1032">Henri 1987</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_16">
+                  <p>
+                     <sent id="dtb1033">Skrébitsky 1884; see below, section 3.9</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_17">
+                  <p>
+                     <sent id="dtb1034">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_18">
+                  <p>
+                     <sent id="dtb1035">Borg 1883, Dufau 1852, Didier-Weygand 2000</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_19">
+                  <p>
+                     <sent id="dtb1036">Weygand, 1998 p. 8</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_20">
+                  <p>
+                     <sent id="dtb1037">Jantsch 1955, Eriksson, 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_21">
+                  <p>
+                     <sent id="dtb1038">Jantsch 1955</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_22">
+                  <p>
+                     <sent id="dtb1039">Eriksson 1998, Didier-Weygand 2000</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_23">
+                  <p>
+                     <sent id="dtb1040">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_24">
+                  <p>
+                     <sent id="dtb1041">cf. section 3.7</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_25">
+                  <p>
+                     <sent id="dtb1042">Dufau 1844, Henri 1987</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_26">
+                  <p>
+                     <sent id="dtb1043">Didier-Weygand 2000</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_27">
+                  <p>
+                     <sent id="dtb1044">Kretschmer 1937</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_28">
+                  <p>
+                     <sent id="dtb1045">Webster 1964</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_29">
+                  <p>
+                     <sent id="dtb1046">Weygand 1998, Henri 1987</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_30">
+                  <p>
+                     <sent id="dtb1047">Didier-Weygand</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_31">
+                  <p>
+                     <sent id="dtb1048">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_32">
+                  <p>
+                     <sent id="dtb1049">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_33">
+                  <p>
+                     <sent id="dtb1050">Didier-Weygand</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_34">
+                  <p>
+                     <sent id="dtb1051">Didier-Weygand</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_35">
+                  <p>
+                     <sent id="dtb1052">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_36">
+                  <p>
+                     <sent id="dtb1053">see section 3.4</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_37">
+                  <p>
+                     <sent id="dtb1054">cf. </sent>
+                     <sent id="dtb1055">Section 3.4</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_38">
+                  <p>
+                     <sent id="dtb1056">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_39">
+                  <p>
+                     <sent id="dtb1057">see above</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_40">
+                  <p>
+                     <sent id="dtb1058">Didier-Weygand</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_41">
+                  <p>
+                     <sent id="dtb1059">Haüy 1786</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_42">
+                  <p>
+                     <sent id="dtb1060">Skrébitsky 1884</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_43">
+                  <p>
+                     <sent id="dtb1061">Haüy 1786</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_44">
+                  <p>
+                     <sent id="dtb1062">Didier-Weygand</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_45">
+                  <p>
+                     <sent id="dtb1063">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_46">
+                  <p>
+                     <sent id="dtb1064">Förhammar 1991, Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_47">
+                  <p>
+                     <sent id="dtb1065">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_48">
+                  <p>
+                     <sent id="dtb1066">Didier-Weygand, 2000</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_49">
+                  <p>
+                     <sent id="dtb1067">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_50">
+                  <p>
+                     <sent id="dtb1068">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_51">
+                  <p>
+                     <sent id="dtb1069">Henri 1987, Didier-Weygand 2000</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_52">
+                  <p>
+                     <sent id="dtb1070">Henri 1987, Weygand 1998, Didier-Weygand 2000</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_53">
+                  <p>
+                     <sent id="dtb1071">Didier-Weygand</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_54">
+                  <p>
+                     <sent id="dtb1072">Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_55">
+                  <p>
+                     <sent id="dtb1073">Kretschmer 1937, Weygand 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_56">
+                  <p>
+                     <sent id="dtb1074">Didier-Weygand</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_57">
+                  <p>
+                     <sent id="dtb1075">Kretschmer 1937, Weygand 1998, Didier-Weygand 2000</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_58">
+                  <p>
+                     <sent id="dtb1076">Skrébitsky 1884</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_59">
+                  <p>
+                     <sent id="dtb1077">Skrébitsky 1884</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_60">
+                  <p>
+                     <sent id="dtb1078">Troyat 1977, p. 324 f</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_61">
+                  <p>
+                     <sent id="dtb1079">Skrébitsky 1884</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_62">
+                  <p>
+                     <sent id="dtb1080">Skrébitsky 1884, p. 11</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_63">
+                  <p>
+                     <sent id="dtb1081">Sjöstrand, 1968</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_64">
+                  <p>
+                     <sent id="dtb1082">Skrébitsky 1884, Rath 1991</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_65">
+                  <p>
+                     <sent id="dtb1083">Rath 1991</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_66">
+                  <p>
+                     <sent id="dtb1084">Skrébitsky 1884</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_67">
+                  <p>
+                     <sent id="dtb1085">see section 3.11 below</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_68">
+                  <p>
+                     <sent id="dtb1086">Skrébitsky 1884, page 21</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_69">
+                  <p>
+                     <sent id="dtb1087">Skrébitsky 1884, p. 23</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_70">
+                  <p>
+                     <sent id="dtb1088">Skrébitsky 1884, p. 24</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_71">
+                  <p>
+                     <sent id="dtb1089">Skrébitsky 1884</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_72">
+                  <p>
+                     <sent id="dtb1090">Skrébitsky 1884, p. 28</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_73">
+                  <p>
+                     <sent id="dtb1091">Skrébitsky 1884, p.42</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_74">
+                  <p>
+                     <sent id="dtb1092">Skrébitsky, 1884, p. 44</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_75">
+                  <p>
+                     <sent id="dtb1093">Skrébitsky 1884, p. 45 f</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_76">
+                  <p>
+                     <sent id="dtb1094">Skrébitsky 1884</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_77">
+                  <p>
+                     <sent id="dtb1095">Skrébitsky 1884, p. 49 f</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_78">
+                  <p>
+                     <sent id="dtb1096">Skrébitsky 1884, p. 50 f</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_79">
+                  <p>
+                     <sent id="dtb1097">Skrébitsky 1884</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_80">
+                  <p>
+                     <sent id="dtb1098">cf. </sent>
+                     <sent id="dtb1099">Section 3.7</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_81">
+                  <p>
+                     <sent id="dtb1100">Henri 1987</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_82">
+                  <p>
+                     <sent id="dtb1101">Johansson 1974, Kretschmer 1937, Pritchard 1963</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_83">
+                  <p>
+                     <sent id="dtb1102">Eriksson 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_84">
+                  <p>
+                     <sent id="dtb1103">Förhammar 1991</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_85">
+                  <p>
+                     <sent id="dtb1104">Förhammar 1991</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_86">
+                  <p>
+                     <sent id="dtb1105">Borg 1883, p. 11 f</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_87">
+                  <p>
+                     <sent id="dtb1106">Borg 1883, Johansson 1974</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_88">
+                  <p>
+                     <sent id="dtb1107">Johansson, 1974</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_89">
+                  <p>
+                     <sent id="dtb1108">Förhammar 1991</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_90">
+                  <p>
+                     <sent id="dtb1109">Johansson 1974</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_91">
+                  <p>
+                     <sent id="dtb1110">Förhammar 1991</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_92">
+                  <p>
+                     <sent id="dtb1111">Förhammar 1991</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_93">
+                  <p>
+                     <sent id="dtb1112">Förhammar 1991</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_94">
+                  <p>
+                     <sent id="dtb1113">Förhammar 1991, Johansen 1983</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_95">
+                  <p>
+                     <sent id="dtb1114">Johansen, 1983</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_96">
+                  <p>
+                     <sent id="dtb1115">Johansen 1983</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_97">
+                  <p>
+                     <sent id="dtb1116">Johansen 1983</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_98">
+                  <p>
+                     <sent id="dtb1117">Didier-Weygand 2000, Nationalencyklopedin volume 6, 1996</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_99">
+                  <p>
+                     <sent id="dtb1118">Didier-Weygand</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_100">
+                  <p>
+                     <sent id="dtb1119">Johansen 1983</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_101">
+                  <p>
+                     <sent id="dtb1120">Eriksson 1998</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_102">
+                  <p>
+                     <sent id="dtb1121">Henri 1987</sent>
+                  </p>
+               </note>
+               <note class="endnote" id="fn_103">
+                  <p>
+                     <sent id="dtb1122">Didier-Weygand 2000</sent>
+                  </p>
+               </note>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb1123">Literature</sent>
+               </h2>
+               <p>
+                  <sent id="dtb1124">Didier-Weygand, Zina. (2000) La cécité et les aveugles dans la société française: représentations et institutions du moyen âge aux premières années du XIXe siècle. </sent>
+                  <sent id="dtb1125">Thèse pour le nouveau doctorat 1997-1998 Université de Paris I - Panthéon Sorbonne U.F.R. d'histoire. </sent>
+                  <sent id="dtb1126">Seprentrion Presse Universitaires. </sent>
+                  <sent id="dtb1127">Paris: Thèse à la carte</sent>
+               </p>
+               <p>
+                  <sent id="dtb1128">Dufau, P.</sent>
+                  <sent id="dtb1129">-A. (1852) Notice historique, statistique et discriptive sur l'Institution National des Jeunes Aveugles de Paris, chez le Concierge de l'Institution, Boulevard des Invalides, 56, Paris</sent>
+               </p>
+               <p>
+                  <sent id="dtb1130">Engström, Eric. (1995) Användning av biografiskt material i pedagogisk forskning, 2.a upplagan, Stockholm: Pedagogiska institutionen, Stockholms universitet</sent>
+               </p>
+               <p>
+                  <sent id="dtb1131">Eriksson, Yvonne. (1998) Tactile Pictures. </sent>
+                  <sent id="dtb1132">Pictorial representations for the blind 1784-1940. </sent>
+                  <sent id="dtb1133">Gothenburg Studies in Art and Architecture 4. </sent>
+                  <sent id="dtb1134">Doctoral thesis. </sent>
+                  <sent id="dtb1135">Göteborg: Acta Universitatis Gothoburgensis.</sent>
+               </p>
+               <p>
+                  <sent id="dtb1136">Förhammar, Staffan. (1991) Från tärande till närande. </sent>
+                  <sent
+                        id="dtb1137">Handikapputbildningens bakgrund och socialpolitiska funktion i <w class="num-word">1800-talets</w> Sverige. </sent>
+                  <sent id="dtb1138">Stockholm Studies in History 43, Doktorsavhandling. </sent>
+                  <sent id="dtb1139">Acta Universitatis Stockholmiensis, Stockholm: A&amp;W International</sent>
+               </p>
+               <p>
+                  <sent id="dtb1140">Haüy, Valentin. (1786) Essai sur l'éducation des aveugles ou Exposé de différens moyens, vérifie par l'expérience, pour les mettre en état de lire, à l'aide du tact, d'imprimer des livres dans lesquels ils puissent presendre des connaissances de langues, d'histoire, de la Géographie, de la Musique, &amp;c.</sent>
+                  <sent id="dtb1141">,d'exécuter différens travaux relatifs aux Métier, &amp;c., Dédie au Roi, par M. </sent>
+                  <sent id="dtb1142">Haüy. </sent>
+                  <sent id="dtb1143">A Paris, imprimé par les enfans-aveugles, sous la direction de M. </sent>
+                  <sent id="dtb1144">Clouisier, imprimeur du Roi, 1786 Sous le privilège de l'Académie des sciences</sent>
+               </p>
+               <p>
+                  <sent id="dtb1145">Haüy, Valentin. (1786,1894) An Essay on the Education of the Blind by M. </sent>
+                  <sent id="dtb1146">Haüy. </sent>
+                  <sent id="dtb1147">(Dedicated to the king of France. </sent>
+                  <sent id="dtb1148">Paris 1786. </sent>
+                  <sent id="dtb1149">Sampson, Low, Marston&amp;Company, limited. </sent>
+                  <sent id="dtb1150">St Dunsitans House, Fetter Lane, Fleet Street, E.C.</sent>
+               </p>
+               <p>
+                  <sent id="dtb1151">Helldén, Arne. (1994) Diderot. </sent>
+                  <sent id="dtb1152">En biografi. </sent>
+                  <sent id="dtb1153">Stockholm:Atlantis</sent>
+               </p>
+               <p>
+                  <sent id="dtb1154">Henri, Pierre. (1987) The life and work of Louis Braille 1809-1852. </sent>
+                  <sent id="dtb1155">The Inventor of the alphabet for the Blind. </sent>
+                  <sent id="dtb1156">Pretoria: South African National Council for the Blind</sent>
+               </p>
+               <p>
+                  <sent id="dtb1157">Johansen, Folke. (1983) Sådan fik danske blinde et skriftsprog. </sent>
+                  <sent id="dtb1158">En historisk oversigt. </sent>
+                  <sent id="dtb1159">Social- og sundhedsforvaltningen i Koebenhavn, Hellerup: Instituttet for Blinde og svagsynede</sent>
+               </p>
+               <p>
+                  <sent id="dtb1160">Johansson, Kjell-åke. </sent>
+                  <sent id="dtb1161">(IMFO-GRUPPEN 1974:1) Om blindundervisningen i Sverige från 1809. </sent>
+                  <sent id="dtb1162">Förändringar i de pedagogiska perspektiven inom den tidiga specialundervisningen. </sent>
+                  <sent id="dtb1163">Pedagogiska institutionen vid Stockholms Universitet: Stockholm</sent>
+               </p>
+               <p>
+                  <sent id="dtb1164">Kretschmer, Reinhold. (1937) De Blindas historia, Stockholm: P.A. </sent>
+                  <sent id="dtb1165">Norstedt &amp; Söner: Stockholm Lowe, E.J. (1995) Ruthledge Philosophy Guidebook to John Locke on Human Understanding, Ruthledge: London and New York</sent>
+               </p>
+               <p>
+                  <sent id="dtb1166">Nationalencyklopedin (1996) Bokförlaget Bra Böcker: Höganäs</sent>
+               </p>
+               <p>
+                  <sent id="dtb1167">Regeringens proposition 1999/2000:79 Från patient till medborgare - en nationell handlingsplan för handikappolitiken, Socialdepartementet: Stockholm</sent>
+               </p>
+               <pagenum id="page_30" page="normal">30</pagenum>
+               <p>
+                  <sent id="dtb1168">Sjöstrand, Wilhelm. (1968) Pedagogiska grundproblem i historisk belysning, Gleerups: Lund</sent>
+               </p>
+               <p>
+                  <sent id="dtb1169">Sjöstrand, Wilhelm. (1972) Källkritiska problem inom pedagogisk och historisk forskning, Studentlitteratur:Lund</sent>
+               </p>
+               <p>
+                  <sent id="dtb1170">Skrébitsky, Alexandre. (1884) Valentin Haüy à Saint-Pétersbourg, d'après des documents inédits, Imprimerie de la Société de Typographie: Paris</sent>
+               </p>
+               <p>
+                  <sent id="dtb1171">Troyat, Henri. (1977) Katarina den stora. </sent>
+                  <sent id="dtb1172">Norstedts faktapocket: Stockholm</sent>
+               </p>
+               <p>
+                  <sent id="dtb1173">Webster, Gary. (1964) Journey into light. </sent>
+                  <sent id="dtb1174">The Story of Louis Braille.World's Work, Kingswood and London</sent>
+               </p>
+               <p>
+                  <sent id="dtb1175">Weygand, Zina. (1998) Les temps des Fondateurs. 1784-1844 Une étape vers l'integration. </sent>
+                  <sent id="dtb1176">I.N.J.A. 56, Boulevard des invalides - 75007, C.N.A.M: Paris</sent>
+               </p>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb1177">Articles</sent>
+               </h2>
+               <p>
+                  <sent id="dtb1178">Jantsch, Marlene.(1955) Das Leben der Maria Theresia Paradis und seine Bedeutung des Blindenbildung. </sent>
+                  <sent id="dtb1179">Wiener Medezinische Wochenschrift, 47/1955</sent>
+               </p>
+               <p>
+                  <sent id="dtb1180">Rath, Waldtraut. (1991) Prinzenerziehung oder bürgerliche Brauchbarkeit? </sent>
+                  <sent id="dtb1181">Entstehung und Entwicklung der Blindenbildung. </sent>
+                  <sent id="dtb1182">Ingår i utställningskatalogen 100 Jahre Blinden-museum 1891-1991. </sent>
+                  <sent id="dtb1183">Ein Museum zum Anfassen</sent>
+               </p>
+               <p>
+                  <sent id="dtb1184">Sakula, Alex. (1998) That the blind may read: the legacy of Valentin Haüy, Charles Barbier, Louis Braille and William Moon. </sent>
+                  <sent id="dtb1185">Journal of Medical Biography, 1998:6, s. 21-27</sent>
+               </p>
+            </level2>
+            <level2>
+               <h2>
+                  <sent id="dtb1186">Electronic media</sent>
+               </h2>
+               <p>
+                  <sent id="dtb1187">Fokus 4.0 (CD-ROM)</sent>
+               </p>
+            </level2>
+         </level1>
+      </bodymatter>
+   </book>
+</dtbook>

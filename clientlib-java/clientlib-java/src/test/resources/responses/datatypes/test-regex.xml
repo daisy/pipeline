@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<data type="string" id="test-regex">
+    <param name="pattern">\d</param>
+</data>

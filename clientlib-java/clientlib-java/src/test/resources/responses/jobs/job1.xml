@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/jobs/job1" id="job1" status="DONE">
+    <script href="http://localhost:8181/ws/scripts/dtbook-to-zedai" id="dtbook-to-zedai">
+        <nicename>DTBook to ZedAI</nicename>
+        <description>Transforms DTBook XML into ZedAI XML.</description>
+    </script>
+    <messages>
+        <message level="INFO" sequence="0">Message:ZedAI file name: zedai.xml</message>
+        <message level="INFO" sequence="1">Message:MODS file name: zedai-mods.xml</message>
+        <message level="INFO" sequence="2">Message:CSS file name: zedai-css.css</message>
+        <message level="INFO" sequence="3">Message:Input document version: 2005-2</message>
+        <message level="INFO" sequence="4">Message:Input document is valid</message>
+        <message level="INFO" sequence="5">Renaming certain elements to span with @role</message>
+        <message level="INFO" sequence="6">
+            Renaming code and kbd elements to reflect block or phrase variants.
+        </message>
+        <message level="INFO" sequence="7">
+            Renaming annotation elements to identify block or phrase variants.
+        </message>
+        <message level="INFO" sequence="8">Convert br to lines</message>
+        <message level="INFO" sequence="9">Grouping contents of a definition list into items</message>
+        <message level="INFO" sequence="10">Move out inlined image groups</message>
+        <message level="INFO" sequence="11">Move out inlined lists</message>
+        <message level="INFO" sequence="12">Move out inlined definition lists</message>
+        <message level="INFO" sequence="13">Move out inlined prodnotes</message>
+        <message level="INFO" sequence="14">Move out inlined divs</message>
+        <message level="INFO" sequence="15">Move out inlined poems</message>
+        <message level="INFO" sequence="16">Move out inlined linegroups</message>
+        <message level="INFO" sequence="17">Move out inlined tables</message>
+        <message level="INFO" sequence="18">Move out inlined sidebars</message>
+        <message level="INFO" sequence="19">Move out inlined notes</message>
+        <message level="INFO" sequence="20">Move out inlined epigraphs</message>
+        <message level="INFO" sequence="21">Move out inlined annotation blocks</message>
+        <message level="INFO" sequence="22">Move out inlined code blocks</message>
+        <message level="INFO" sequence="23">Normalize mixed block/inline content</message>
+        <message level="INFO" sequence="24">Normalize mixed section/block content</message>
+        <message level="INFO" sequence="25">
+            Normalize mixed section and block content model for level1
+        </message>
+        <message level="INFO" sequence="26">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="27">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="28">
+            Normalize mixed section and block content model for level1
+        </message>
+        <message level="INFO" sequence="29">
+            Normalize mixed section and block content model for level1
+        </message>
+        <message level="INFO" sequence="30">
+            Normalize mixed section and block content model for level1
+        </message>
+        <message level="INFO" sequence="31">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="32">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="33">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="34">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="35">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="36">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="37">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="38">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="39">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="40">
+            Normalize mixed section and block content model for level3
+        </message>
+        <message level="INFO" sequence="41">
+            Normalize mixed section and block content model for level3
+        </message>
+        <message level="INFO" sequence="42">
+            Normalize mixed section and block content model for level3
+        </message>
+        <message level="INFO" sequence="43">
+            Normalize mixed section and block content model for level3
+        </message>
+        <message level="INFO" sequence="44">
+            Normalize mixed section and block content model for level3
+        </message>
+        <message level="INFO" sequence="45">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="46">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="47">
+            Normalize mixed section and block content model for level1
+        </message>
+        <message level="INFO" sequence="48">
+            Normalize mixed section and block content model for level1
+        </message>
+        <message level="INFO" sequence="49">
+            Normalize mixed section and block content model for level1
+        </message>
+        <message level="INFO" sequence="50">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="51">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="52">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="53">
+            Normalize mixed section and block content model for level2
+        </message>
+        <message level="INFO" sequence="54">Translate to ZedAI</message>
+        <message level="INFO" sequence="55">
+            Annotations without @ref will be attached to their nearest section parent element.
+        </message>
+        <message level="INFO" sequence="56">Generating CSS</message>
+        <message level="INFO" sequence="57">Message:Validating ZedAI</message>
+        <message level="INFO" sequence="58">Message:ZedAI output is valid.</message>
+        <message level="INFO" sequence="59">
+            Message:file:/tmp/jobContext293532058981488693/dtbook/valentin.jpg --> file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/job1/output/output-dir/valentin.jpg
+        </message>
+        <message level="INFO" sequence="60">Message:Conversion complete.</message>
+        <message level="INFO" sequence="61">Message:Storing ZedAI fileset.</message>
+    </messages>
+    <log href="http://localhost:8181/ws/jobs/job1/log"/>
+    <results href="http://localhost:8181/ws/jobs/job1/result" mime-type="application/zip">
+        <result from="option" href="http://localhost:8181/ws/jobs/job1/result/option/output-dir" mime-type="application/zip" name="output-dir">
+            <result file="/responses/jobs/job1/result/option/output-dir/idx/output-dir/zedai-mods.xml" href="http://localhost:8181/ws/jobs/job1/result/option/output-dir/idx/output-dir/zedai-mods.xml" size="442"/>
+            <result file="/responses/jobs/job1/result/option/output-dir/idx/output-dir/zedai.xml" href="http://localhost:8181/ws/jobs/job1/result/option/output-dir/idx/output-dir/zedai.xml" size="151891"/>
+            <result file="/responses/jobs/job1/result/option/output-dir/idx/output-dir/valentin.jpg" href="http://localhost:8181/ws/jobs/job1/result/option/output-dir/idx/output-dir/valentin.jpg" size="25740"/>
+            <result file="/responses/jobs/job1/result/F00000%20-%20Don't%20Worry,%20Be%20Happy%20Lyrics.epub.xml" href="http://localhost:8181/ws/jobs/job1/result/option/output-dir/idx/output-dir/F00000%20-%20Don't%20Worry,%20Be%20Happy%20Lyrics.epub.xml" size="7"/>
+        </result>
+    </results>
+</job>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<script href="http://localhost:8181/ws/scripts/zedai-to-epub3" id="zedai-to-epub3" xmlns="http://www.daisy.org/ns/pipeline/data">
+    <nicename>ZedAI to EPUB3</nicename>
+    <description>Transforms a ZedAI (DAISY 4 XML) document into an EPUB 3 publication.</description>
+    <input desc="Input ZedAI." mediaType="application/z3998-auth+xml" name="source" sequence="false"/>
+    <option desc="Output directory for the EPUB." name="output-dir" ordered="true" outputType="result" required="true" sequence="false" type="anyDirURI"/>
+</script>

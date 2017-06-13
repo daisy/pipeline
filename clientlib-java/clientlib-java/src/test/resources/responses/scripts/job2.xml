@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job xmlns="http://www.daisy.org/ns/pipeline/data" href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5" id="313ded3e-37b7-4de6-831c-05f8639326f5" status="DONE">
+    <script href="http://localhost:8181/ws/scripts/nordic-dtbook-to-epub3" id="nordic-dtbook-to-epub3">
+        <nicename>Nordic DTBook to EPUB3</nicename>
+        <description> Transforms a DTBook document into an EPUB3 publication according to the nordic markup guidelines. </description>
+    </script>
+    <messages>
+        <message level="INFO" sequence="0"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/context/dtbook.imgfolder/hauy_valid.xml </message>
+        <message level="INFO" sequence="1"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/context/dtbook.imgfolder/hauy_valid.xml </message>
+        <message level="INFO" sequence="2"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content.xhtml </message>
+        <message level="INFO" sequence="3"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content.xhtml </message>
+        <message level="INFO" sequence="4"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-1.xhtml </message>
+        <message level="INFO" sequence="5"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-2.xhtml </message>
+        <message level="INFO" sequence="6"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-3.xhtml </message>
+        <message level="INFO" sequence="7"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-4.xhtml </message>
+        <message level="INFO" sequence="8"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-5.xhtml </message>
+        <message level="INFO" sequence="9"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-6.xhtml </message>
+        <message level="INFO" sequence="10"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-7.xhtml </message>
+        <message level="INFO" sequence="11"> Message:[INFO] ncx base:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/ </message>
+        <message level="INFO" sequence="12"> Message:[INFO] epub-dir: file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/ </message>
+        <message level="INFO" sequence="13"> Message:processing file from memory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/package.opf </message>
+        <message level="INFO" sequence="14"> Message:[INFO] #1 - fileset/@xml:base =
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/ </message>
+        <message level="INFO" sequence="15"> Message:Making directory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/css/ </message>
+        <message level="INFO" sequence="16"> Message:Copied accessibility.css to EPUB/Content/css/accessibility.css </message>
+        <message level="INFO" sequence="17"> Message:Making directory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/css/fonts/opendyslexic/ </message>
+        <message level="INFO" sequence="18"> Message:Copied OpenDyslexic-Regular.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-Regular.otf </message>
+        <message level="INFO" sequence="19"> Message:Copied OpenDyslexic-Italic.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-Italic.otf </message>
+        <message level="INFO" sequence="20"> Message:Copied OpenDyslexic-Bold.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-Bold.otf </message>
+        <message level="INFO" sequence="21"> Message:Copied OpenDyslexic-BoldItalic.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf </message>
+        <message level="INFO" sequence="22"> Message:Copied OpenDyslexicMono-Regular.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf </message>
+        <message level="INFO" sequence="23"> Message:Making directory:
+            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/img/ </message>
+        <message level="INFO" sequence="24">Message:Copy error:</message>
+        <message level="INFO" sequence="25">Message:Writing in-memory document to EPUB/ncx.xml</message>
+        <message level="INFO" sequence="26"> Message:Writing in-memory document to EPUB/navigation.xhtml </message>
+        <message level="INFO" sequence="27"> Message:Writing in-memory document to EPUB/Content/content-1.xhtml </message>
+        <message level="INFO" sequence="28"> Message:Writing in-memory document to EPUB/Content/content-2.xhtml </message>
+        <message level="INFO" sequence="29"> Message:Writing in-memory document to EPUB/Content/content-3.xhtml </message>
+        <message level="INFO" sequence="30"> Message:Writing in-memory document to EPUB/Content/content-4.xhtml </message>
+        <message level="INFO" sequence="31"> Message:Writing in-memory document to EPUB/Content/content-5.xhtml </message>
+        <message level="INFO" sequence="32"> Message:Writing in-memory document to EPUB/Content/content-6.xhtml </message>
+        <message level="INFO" sequence="33"> Message:Writing in-memory document to EPUB/Content/content-7.xhtml </message>
+        <message level="INFO" sequence="34"> Message:Writing in-memory document to EPUB/package.opf </message>
+        <message level="INFO" sequence="35"> Message:Writing in-memory document to META-INF/container.xml </message>
+    </messages>
+    <log href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/log"/>
+    <results href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result" mime-type="application/zip">
+        <result from="option" href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir" mime-type="application/zip" name="output-dir">
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/mimetype" size="20"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-Regular.otf"
+                size="46464"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/ValentinHaüythefatheroftheeducationfortheblind.epub" size="280582"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/dtbook-to-html/OpenDyslexic-Italic.otf" size="69628"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/content-7.xhtml" size="39591"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/dtbook-to-html/OpenDyslexicMono-Regular.otf" size="53888"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/content-5.xhtml" size="24173"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/dtbook-to-html/LICENSE.txt" size="2746"/>
+            <result
+                href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf"
+                size="74924"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/navigation.xhtml" size="6845"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/content-6.xhtml" size="19758"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/content-1.xhtml" size="22931"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/dtbook-to-html/OpenDyslexic-Regular.otf" size="46464"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-Bold.otf"
+                size="46816"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/content-3.xhtml" size="15023"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/ncx.xml" size="9096"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/dtbook-to-html/OpenDyslexic-BoldItalic.otf" size="74924"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/css/accessibility.css" size="2122"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/META-INF/container.xml" size="237"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/dtbook-to-html/OpenDyslexic-Bold.otf" size="46816"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/dtbook-to-html/accessibility.css" size="2122"/>
+            <result
+                href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf"
+                size="53888"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/content-2.xhtml" size="6067"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/package.opf" size="2503"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-Italic.otf"
+                size="69628"/>
+            <result href="http://localhost:8181/ws/jobs/313ded3e-37b7-4de6-831c-05f8639326f5/result/option/output-dir/idx/output-dir/epub/EPUB/Content/content-4.xhtml" size="118792"/>
+        </result>
+    </results>
+</job>
