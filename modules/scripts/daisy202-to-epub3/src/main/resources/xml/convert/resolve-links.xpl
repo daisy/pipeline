@@ -55,49 +55,51 @@
     <p:variable name="content-filename-position" select="string-length($content-filename)+1"/>
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">For each 'a'-link</p:documentation>
-    <p:viewport match="//html:a">
-        <p:variable name="original-uri" select="resolve-uri(tokenize(/*/@href,'#')[1],$content-base)"/>
-        <p:variable name="original-fragment" select="if (contains(/*/@href,'#')) then tokenize(/*/@href,'#')[last()] else ''"/>
-        <p:variable name="result" select="/*/*[base-uri(.)=$original-uri]/*[(@par-id,@text-id)=$original-fragment]/@src">
-            <p:pipe port="resolve-links-mapping" step="resolve-links"/>
-        </p:variable>
-
-        <p:choose>
-            <p:when test="$result != ''">
-                <p:xslt>
-                    <p:with-param name="from" select="$content-base"/>
-                    <p:with-param name="to" select="$result"/>
-                    <p:with-param name="filename" select="$content-filename"/>
-                    <p:with-param name="filename-position" select="$content-filename-position"/>
-                    <p:input port="stylesheet">
-                        <p:inline>
-                            <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" version="2.0">
-                                <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-                                <xsl:param name="from" required="yes"/>
-                                <xsl:param name="to" required="yes"/>
-                                <xsl:param name="filename" required="yes"/>
-                                <xsl:param name="filename-position" required="yes"/>
-                                <xsl:template match="/*">
-                                    <xsl:copy>
-                                        <xsl:copy-of select="@*"/>
-                                        <xsl:attribute name="href" select="pf:relativize-uri($to,$from)"/>
-                                        <xsl:if test="starts-with(/*/@href,$filename)">
-                                            <xsl:attribute name="href" select="substring(/*/@href,$filename-position)"/>
-                                        </xsl:if>
-                                        <xsl:copy-of select="node()"/>
-                                    </xsl:copy>
-                                </xsl:template>
-                            </xsl:stylesheet>
-                        </p:inline>
-                    </p:input>
-                </p:xslt>
-            </p:when>
-            <p:otherwise>
-                <p:identity/>
-            </p:otherwise>
-        </p:choose>
-        <p:delete match="/*/@xml:base"/>
-    </p:viewport>
+    <p:xslt>
+        <p:with-param name="content-base" select="$content-base"/>
+        <p:with-param name="content-filename" select="$content-filename"/>
+        <p:with-param name="content-filename-position" select="$content-filename-position"/>
+        <p:input port="source">
+            <p:pipe step="resolve-links" port="source"/>
+            <p:pipe step="resolve-links" port="resolve-links-mapping"/>
+        </p:input>
+        <p:input port="stylesheet">
+            <p:inline>
+                <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                                xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
+                    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
+                    <xsl:param name="content-base" required="yes"/>
+                    <xsl:param name="content-filename" required="yes"/>
+                    <xsl:param name="content-filename-position" required="yes"/>
+                    <xsl:variable name="resolve-links-mapping" select="collection()[2]"/>
+                    <xsl:template match="*">
+                        <xsl:copy>
+                            <xsl:copy-of select="@*"/>
+                            <xsl:apply-templates/>
+                        </xsl:copy>
+                    </xsl:template>
+                    <xsl:template match="html:a">
+                        <xsl:variable name="original-uri" select="resolve-uri(tokenize(@href,'#')[1],$content-base)"/>
+                        <xsl:variable name="original-fragment"
+                                      select="if (contains(@href,'#')) then tokenize(@href,'#')[last()] else ''"/>
+                        <xsl:variable name="result"
+                                      select="$resolve-links-mapping/*/*[base-uri(.)=$original-uri]
+                                                                    /*[(@par-id,@text-id)=$original-fragment]/@src"/>
+                        <xsl:copy>
+                            <xsl:copy-of select="@* except @xml:base"/>
+                            <xsl:if test="exists($result)">
+                                <xsl:attribute name="href" select="pf:relativize-uri($result,$content-base)"/>
+                                <xsl:if test="starts-with(@href,$content-filename)">
+                                    <xsl:attribute name="href" select="substring(@href,$content-filename-position)"/>
+                                </xsl:if>
+                            </xsl:if>
+                            <xsl:apply-templates/>
+                        </xsl:copy>
+                    </xsl:template>
+                </xsl:stylesheet>
+            </p:inline>
+        </p:input>
+    </p:xslt>
     <px:message message="dereferenced all links in $1">
         <p:with-option name="param1" select="$content-base"/>
     </px:message>

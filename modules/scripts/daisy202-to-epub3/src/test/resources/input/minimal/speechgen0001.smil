@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "http://www.w3.org/TR/REC-SMIL/SMIL10.dtd" >
+<smil>
+	<head>
+	</head>
+	<body>
+		<seq dur="3.000s">
+			<par endsync="last" id="a">
+				<text id="txta" src="content.html#a" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=0.000s" clip-end="npt=1.000s" id="auda" />
+			</par>
+			<par endsync="last" id="b">
+				<text id="txtb" src="content.html#b" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=1.000s" clip-end="npt=2.000s" id="audb" />
+			</par>
+			<par endsync="last" id="c">
+				<text id="txtc" src="content.html#c" />
+				<audio src="speechgen0001.mp3" clip-begin="npt=2.000s" clip-end="npt=3.000s" id="audc" />
+			</par>
+		</seq>
+	</body>
+</smil>

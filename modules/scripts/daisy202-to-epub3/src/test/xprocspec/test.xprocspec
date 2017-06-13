@@ -2,6 +2,9 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
 			   xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 			   xmlns:c="http://www.w3.org/ns/xproc-step"
+			   xmlns:mo="http://www.w3.org/ns/SMIL"
+			   xmlns:epub="http://www.idpf.org/2007/ops"
+			   xmlns:html="http://www.w3.org/1999/xhtml"
 			   script="../../main/resources/xml/daisy202-to-epub3.xpl">
 
     <x:scenario label="Running with media overlays and compatibility mode enabled">
@@ -15,7 +18,7 @@
 		</x:context>
         <x:expect type="compare"
 				  label="the output directory should contain the EPUB file, and it should be named after the title of the book">
-            <x:document>
+            <x:document type="inline">
                 <c:directory name="output">
                     <c:file name="F00000.epub"/>
                 </c:directory>
@@ -71,8 +74,58 @@
 		</x:context>
         <x:expect type="compare"
 				  label="the mimetype file should contain the string 'application/epub+zip'">
-            <x:document>
+            <x:document type="inline">
                 <c:body>application/epub+zip</c:body>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <x:scenario label="* SMIL references in content document are removed, also inside links (issue #74)
+                       * there should be no 'attribute-value' attributes in SMIL (issue #75)
+                       * epub:textref attributes in SMIL should refer to .xhtml files (issue #76)">
+        <x:call step="px:daisy202-to-epub3">
+            <x:option name="href" select="resolve-uri('../resources/input/minimal/ncc.html')"/>
+            <x:option name="output" select="resolve-uri('scenario3/output/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('scenario3/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the #b span in the content document">
+            <x:document type="file" base-uri="temp-dir" href="scenario3/temp-dir/epub/EPUB/Content/content.xhtml" method="xml"
+                        select="//html:span[@id='b']"/>
+        </x:context>
+        <x:expect label="the #b span in the content document should have spans instead of links" type="compare">
+            <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+                <span class="sentence" id="b">
+                  <span>Paragraph</span>
+                </span>
+            </x:document>
+        </x:expect>
+        <x:context label="the #c span in the content document">
+            <x:document type="file" base-uri="temp-dir" href="scenario3/temp-dir/epub/EPUB/Content/content.xhtml" method="xml"
+                        select="//html:span[@id='c']"/>
+        </x:context>
+        <x:expect label="the #c span in the content document should have a span instead of the smil link" type="compare">
+            <x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+                <span class="sentence" id="c">
+                  <a href="http://www.foobar.com">
+                    <span>A link</span>
+                  </a>
+                </span>
+            </x:document>
+        </x:expect>
+        <x:context label="the epub:textref attributes in SMIL">
+            <x:document type="file" base-uri="temp-dir" href="scenario3/temp-dir/epub/EPUB/Content/content.smil" method="xml"
+                        select="//mo:seq[1]"/>
+        </x:context>
+        <x:expect label="the epub:textref attributes in SMIL should refer to .xhtml files and
+                         there should be no 'attribute-value' attributes in the SMIL"
+                  type="compare">
+            <x:document type="inline">
+                <mo:seq id="mo1_seq1" epub:textref="content.xhtml#h1_chapter">
+                    <mo:par id="mo1_seq1_par1">
+                        <mo:text id="mo1_seq1_par1_text" src="content.xhtml#a"/>
+                        <mo:audio clipBegin="0s" clipEnd="1s" id="mo1_seq1_par1_audio" src="speechgen0001.mp3"/>
+                    </mo:par>
+                </mo:seq>
             </x:document>
         </x:expect>
     </x:scenario>

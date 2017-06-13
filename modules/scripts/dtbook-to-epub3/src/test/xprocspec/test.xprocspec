@@ -2,6 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 			   xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:html="http://www.w3.org/1999/xhtml"
                script="../../main/resources/xml/dtbook-to-epub3.xpl">
 
     <x:scenario label="minimal">
@@ -16,7 +17,7 @@
             <x:document type="directory" base-uri="temp-dir" href="minimal/output-dir/" recursive="true"/>
 		</x:context>
         <x:expect label="the output directory should contain the EPUB 3" type="compare" >
-            <x:document>
+            <x:document type="inline">
 				<c:directory name="output-dir">
 					<c:file name="minimal.epub"/>
 				</c:directory>
@@ -26,7 +27,7 @@
             <x:document type="directory" base-uri="temp-dir" href="minimal/temp-dir/" recursive="true"/>
 		</x:context>
         <x:expect label="the temp directory should contain the expanded EPUB 3" type="compare" >
-            <x:document>
+            <x:document type="inline">
 				<c:directory name="temp-dir">
 					<c:directory name="epub">
 						<c:directory name="EPUB">
@@ -41,6 +42,98 @@
 						<c:file name="mimetype"/>
 					</c:directory>
 				</c:directory>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="assert-valid">
+        <x:call step="px:dtbook-to-epub3">
+            <x:input port="source">
+                <x:document type="inline">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+                        <head>
+                            <meta name="dtb:uid" content="CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6"/>
+                            <meta name="dc:Title" content="Minimal DTBook"/>
+                            <meta name="dc:Creator" content="Bert"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>Minimal DTBook</doctitle>
+                                <docauthor>Bert</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level2>
+                                    <h1>Chapter</h1>
+                                    <p>Paragraph</p>
+                                </level2>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+        </x:call>
+        <x:scenario label="true (default)">
+            <x:call>
+                <x:option name="assert-valid" select="'true'"/>
+                <x:option name="output-dir" select="resolve-uri('assert-valid-true/output-dir/',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('assert-valid-true/temp-dir/',$temp-dir)"/>
+            </x:call>
+            <x:context label="the error">
+                <x:document type="errors"/>
+            </x:context>
+            <x:expect label="the script should fail with a 'XC0053' error" type="xpath" test="//c:error[@code='ERR:XC0053']"/>
+        </x:scenario>
+        <x:scenario label="false">
+            <x:call>
+                <x:option name="assert-valid" select="'false'"/>
+                <x:option name="output-dir" select="resolve-uri('assert-valid-false/output-dir/',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('assert-valid-false/temp-dir/',$temp-dir)"/>
+            </x:call>
+            <x:context label="the output directory">
+                <x:document type="directory" base-uri="temp-dir" href="assert-valid-false/output-dir/" recursive="true"/>
+            </x:context>
+            <x:expect label="the script should succeed" type="compare" >
+                <x:document type="inline">
+                    <c:directory name="output-dir">
+                        <c:file name="test.epub"/>
+                    </c:directory>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+    
+    <x:scenario label="preserve significant white space (issue #94)">
+        <x:call step="px:dtbook-to-epub3">
+            <x:input port="source">
+                <x:document type="inline">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+                        <head>
+                            <meta name="dc:Title" content="Selections from &quot;Great Pictures, As Seen and Described by Famous Writers&quot;"/>
+                            <meta name="dc:Creator" content="Esther Singleton"/>
+                            <meta name="dc:Language" content="en-US"/>
+                        </head>
+                        <book>
+                            <bodymatter>
+                                <level1>
+                                    <h1 id="chapter_1">
+                                        <em>CHAPTER 1</em> <strong>THE LAST JUDGEMENT (MICHAEL ANGELO)</strong>
+                                    </h1>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="assert-valid" select="'false'"/>
+            <x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the output directory">
+            <x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test.epub!/EPUB/test-2.xhtml" select="//html:h1[1]"/>
+        </x:context>
+        <x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false" xfail="true">
+            <x:document type="inline">
+                <h1 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1"><em>CHAPTER 1</em> <em>THE LAST JUDGEMENT (MICHAEL ANGELO)</em></h1>
             </x:document>
         </x:expect>
     </x:scenario>

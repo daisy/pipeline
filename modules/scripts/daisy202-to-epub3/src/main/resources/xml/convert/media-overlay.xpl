@@ -126,7 +126,7 @@
                                 <xsl:template match="mo:seq[@epub:textref]">
                                     <xsl:copy>
                                         <xsl:apply-templates select="@*"/>
-                                        <xsl:attribute name="attribute-value" select="replace(@epub:textref,'^(.+)\.[^\.]*#(.*)$','$1.xhtml#$2')"/>
+                                        <xsl:attribute name="epub:textref" select="replace(@epub:textref,'^(.+)\.[^\.]*#(.*)$','$1.xhtml#$2')"/>
                                         <xsl:apply-templates select="node()"/>
                                     </xsl:copy>
                                 </xsl:template>
