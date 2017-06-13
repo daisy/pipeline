@@ -11,9 +11,11 @@ import java.util.Random;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioFormat.Encoding;
 
+import org.daisy.common.shell.BinaryFinder;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.audio.AudioEncoder;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -52,6 +54,9 @@ public class LameTest {
 	private static byte[] mp3ToPCM(AudioFormat originalFormat, String mp3File)
 	        throws IOException, InterruptedException {
 
+		Assume.assumeTrue("Test can not be run because avconv not present",
+		                  BinaryFinder.find("avconv").isPresent());
+		
 		String tmp = System.getProperty("java.io.tmpdir");
 		File pcmFile = new File(tmp, "converted.pcm");
 		try {
@@ -103,6 +108,10 @@ public class LameTest {
 
 	@BeforeClass
 	public static void buildReference() throws Throwable {
+		
+		Assume.assumeTrue("Test can not be run because lame not present",
+		                  BinaryFinder.find("lame").isPresent());
+		
 		refFormat = new AudioFormat(8000, 8, 1, true, true); //8 bits signed big-endian (for easy comparisons)
 
 		ref = new AudioBufferTest(1024 * 100);
