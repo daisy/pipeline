@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class IOHelper {
 	 * @param path the path
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public static void dump(InputStream is,URI base,URI path) throws IOException{
+	public static void dump(InputStream is,URI base,URI path) throws IOException {
 			//linux & mac doesnt create empty files out of outstreams where nothing was written
 			//but win does, anyway this piece is more elegant than before.
 			File fout = new File(base.resolve(path));
@@ -79,8 +80,12 @@ public class IOHelper {
 	 */
 	public static void dump(JobResources resources,URIMapper mapper) throws IOException {
 		for (String path : resources.getNames()) {
-			IOHelper.dump(resources.getResource(path).get(),mapper.getInputBase() 
-					, URI.create(path.replace("\\", "/")));
+			try {
+				IOHelper.dump(resources.getResource(path).get(),mapper.getInputBase() 
+						, new URI(null, null, path.replace("\\", "/"), null, null));
+			} catch (URISyntaxException e) {
+				throw new RuntimeException("Resource path could not be converted to URI: " + path, e);
+			}
 		}
 	}
 

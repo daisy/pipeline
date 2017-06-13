@@ -88,4 +88,14 @@ public class TestNonLocalJobs extends Base {
 		Assert.assertTrue(String.format("The result has stuff %s", result.getHref()), strRes.length() > 0);
 		ris.close();
 	}
+	
+	@Test
+	public void testSpacesInZip() throws Exception {
+		Optional<JobRequest> req = newJobRequest(Priority.LOW, "hello.xml");
+		Assert.assertTrue("The request is present", req.isPresent());
+		Job job = client().sendJob(req.get(), getResourceAsStream("data2.zip"));
+		deleteAfterTest(job);
+		Assert.assertTrue("Job has been sent", job.getId() != null && job.getId().length() > 0);
+		waitForStatus("DONE", job, 10000);
+	}
 }

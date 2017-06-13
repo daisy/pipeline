@@ -1,5 +1,6 @@
 package org.daisy.common.shell;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import junit.framework.Assert;
@@ -14,11 +15,22 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import com.google.common.base.Optional;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(BinaryFinder.class)
+@PrepareForTest({
+	BinaryFinder.class,
+	BinaryFinder.PathFromPathHelper.class
+})
 public class BinaryFinderTest {
 
-	public Optional<String> regularTest(String existingFolder, String existingBin,
+	Optional<String> regularTest(String existingFolder, String existingBin,
 	        String existingExtension, String path, String lookForBin,
+	        String... availableExtensions) throws Exception {
+		return testWithFileMocks(existingFolder, existingBin, existingExtension,
+		                         BinaryFinder.pathFromString(path, ":"), lookForBin,
+		                         availableExtensions);
+	}
+	
+	Optional<String> testWithFileMocks(String existingFolder, String existingBin,
+	        String existingExtension, Iterable<String> path, String lookForBin,
 	        String... availableExtensions) throws Exception {
 		String expectedPath = existingFolder + "/" + existingBin + existingExtension;
 
@@ -34,7 +46,7 @@ public class BinaryFinderTest {
 		PowerMockito.when(goodFileMock.isFile()).thenReturn(true);
 		PowerMockito.when(goodFileMock.getAbsolutePath()).thenReturn(expectedPath);
 
-		return BinaryFinder.find(lookForBin, availableExtensions, path, ":");
+		return BinaryFinder.find(lookForBin, availableExtensions, path);
 	}
 
 	@Test
@@ -88,7 +100,31 @@ public class BinaryFinderTest {
 	public void malformedPath() {
 		Optional<String> result = BinaryFinder.find("x", new String[]{
 			""
-		}, ":@%*<>!?##+:^^", ":");
+		}, BinaryFinder.pathFromString(":@%*<>!?##+:^^", ":"));
 		Assert.assertFalse(result.isPresent());
+	}
+	
+	@Test
+	public void pathFromPathHelper() throws Exception {
+		String pathHelperExecPath = "/usr/libexec/path_helper";
+		File pathHelperExecFile = PowerMockito.mock(File.class);
+		PowerMockito.whenNew(File.class)
+		            .withArguments(pathHelperExecPath)
+		            .thenReturn(pathHelperExecFile);
+		PowerMockito.when(pathHelperExecFile.isFile())
+		            .thenReturn(true);
+		ProcessBuilder processBuilderMock = PowerMockito.mock(ProcessBuilder.class);
+		PowerMockito.whenNew(ProcessBuilder.class)
+		            .withArguments(pathHelperExecPath, "-s")
+		            .thenReturn(processBuilderMock);
+		Process pathHelperProcessMock = PowerMockito.mock(Process.class);
+		PowerMockito.when(processBuilderMock.start())
+		            .thenReturn(pathHelperProcessMock);
+		String pathHelperPath = "/e:/f:/a/b";
+		PowerMockito.when(pathHelperProcessMock.getInputStream())
+		            .thenReturn(new ByteArrayInputStream(("PATH=\"" + pathHelperPath + "\"; export PATH;\n").getBytes()));
+		
+		Optional<String> actualPath = testWithFileMocks("/a/b", "bin", "", BinaryFinder.pathFromPathHelper(), "bin", "");
+		Assert.assertEquals("/a/b/bin", actualPath.get());
 	}
 }

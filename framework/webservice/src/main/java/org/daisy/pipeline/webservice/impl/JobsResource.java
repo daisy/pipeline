@@ -131,8 +131,7 @@ public class JobsResource extends AuthenticatedResource {
                         try{
                                 data = processMultipart(request);
                         }catch(Exception e){
-                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                                return this.getErrorRepresentation(e);
+                                return badRequest(e);
                         }
                         if (data == null) {
                                 setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
@@ -152,17 +151,11 @@ public class JobsResource extends AuthenticatedResource {
                                 InputSource is = new InputSource(new StringReader(s));
                                 doc = builder.parse(is);
                         } catch (IOException e) {
-                                logger.error(e.getMessage());
-                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                                return this.getErrorRepresentation(e);
+                                return badRequest(e);
                         } catch (ParserConfigurationException e) {
-                                logger.error(e.getMessage());
-                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                                return this.getErrorRepresentation(e);
+                                return badRequest(e);
                         } catch (SAXException e) {
-                                logger.error(e.getMessage());
-                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                                return this.getErrorRepresentation(e);
+                                return badRequest(e);
                         }
                 }
 
@@ -177,11 +170,9 @@ public class JobsResource extends AuthenticatedResource {
                 try {
                         job = createJob(doc, zipfile );
                 } catch (LocalInputException e) {
-                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation(e.getMessage());
-                } catch (IllegalArgumentException iea) {
-                        setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation(iea.getMessage());
+                        return badRequest(e);
+                } catch (IllegalArgumentException e) {
+                        return badRequest(e);
                 }
 
                 if (!job.isPresent()) {
@@ -201,6 +192,12 @@ public class JobsResource extends AuthenticatedResource {
 
         }
 
+        private Representation badRequest(Exception e) {
+                logger.error("bad request:", e);
+                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+                return this.getErrorRepresentation(e.getMessage());
+        }
+        
         /*
          * taken from an example at:
          * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
@@ -372,7 +369,7 @@ public class JobsResource extends AuthenticatedResource {
                   filteredOptions = XProcScriptFilter.INSTANCE.filter(script).getXProcPipelineInfo().getOptions();
                   }*/
 
-                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip==null);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
+                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, inBuilder,zip!=null);// script.getXProcPipelineInfo().getOptions(), builder, filteredOptions);
                 addOutputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"output"), script.getXProcPipelineInfo().getOutputPorts(), outBuilder);
 
                 BoundXProcScript bound= BoundXProcScript.from(script,inBuilder.build(),outBuilder.build());
@@ -561,20 +558,21 @@ public class JobsResource extends AuthenticatedResource {
 
                                 //if input we have to check
                                 if (name.equals(optionName)) {
-                                        boolean isInput = metadata.getType()== "anyDirURI" ||metadata.getType()== "anyFileURI";
+                                        boolean isInput = "anyDirURI".equals(metadata.getType()) || "anyFileURI".equals(metadata.getType());
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
                                         NodeList items = optionElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
                                         if (metadata.isSequence() && items.getLength()>0) {
                                                 // concat items
-                                                String val = ((Element)items.item(0)).getAttribute("value");
-
-                                                for (int j = 1; j<items.getLength(); j++) {
+                                                String val = "";
+                                                for (int j = 0; j<items.getLength(); j++) {
                                                         Element e = (Element)items.item(j);
                                                         if(isInput){
                                                                 checkInput(e.getAttribute("value"),zippedContext);
                                                         }
-                                                        val += metadata.getSeparator() + e.getAttribute("value");
+                                                        if (j > 0)
+                                                                val += metadata.getSeparator();
+                                                        val += e.getAttribute("value");
                                                 }
                                                 builder.withOption(new QName(name), val);
                                         }
