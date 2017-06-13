@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline-mod-braille.git
 	branch = master
 	commit = 416babd57b1a4219e0706f9956d1a7cdc8c48a0e
-	parent = 6146149b5b8e4900294c8e680b22919440d049f7
+	parent = 97bd4f62a0514514ef12f51cc6702f88b8266a81
 	cmdver = 0.3.0

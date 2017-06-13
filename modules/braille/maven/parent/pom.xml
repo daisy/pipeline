@@ -222,14 +222,19 @@
     </pluginManagement>
   </build>
   
-  <!--
-      for javax.persistence
-  -->
   <repositories>
+    <!-- for javax.persistence -->
     <repository>
       <id>eclipselink</id>
       <name>EclipseLink Releases</name>
       <url>http://download.eclipse.org/rt/eclipselink/maven.repo</url>
+    </repository>
+    
+    <!-- Restlet maven repository -->
+    <repository>
+      <id>restlet-repo</id>
+      <name>Public online Restlet repository</name>
+      <url>http://maven.restlet.org</url>
     </repository>
   </repositories>
   
