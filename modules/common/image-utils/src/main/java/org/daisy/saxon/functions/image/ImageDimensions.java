@@ -11,7 +11,6 @@ import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.om.LazySequence;
 import net.sf.saxon.om.Sequence;
-import net.sf.saxon.om.SequenceIterator;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.tree.iter.ArrayIterator;
@@ -55,7 +54,7 @@ public class ImageDimensions extends ExtensionFunctionDefinition {
 					BufferedImage image = ImageIO.read(new URL(URLDecoder
 							.decode(path)));
 					return new LazySequence(
-							new ArrayIterator < IntegerValue > (new IntegerValue[] {
+							new ArrayIterator (new IntegerValue[] {
 									new BigIntegerValue(image.getWidth()),
 									new BigIntegerValue(image.getHeight()) }));
 				} catch (Exception e) {
