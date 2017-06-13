@@ -42,7 +42,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-api</artifactId>
-      <version>1.0.0</version>
+      <version>1.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.maven</groupId>
@@ -68,6 +68,16 @@
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-calabash</artifactId>
       <version>${it.xproc-engine-calabash.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>com.xmlcalabash</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

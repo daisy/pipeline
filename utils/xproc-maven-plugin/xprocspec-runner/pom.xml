@@ -30,7 +30,6 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-      <version>9.5.1.5</version>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>

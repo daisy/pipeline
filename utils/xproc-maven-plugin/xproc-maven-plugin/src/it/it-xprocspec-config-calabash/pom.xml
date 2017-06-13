@@ -6,11 +6,20 @@
   <groupId>org.daisy.pipeline.maven</groupId>
   <artifactId>it-xprocspec-config-calabash</artifactId>
   <version>0.0-SNAPSHOT</version>
+  <parent>
+    <groupId>org.daisy.maven</groupId>
+    <artifactId>xproc-maven-plugin-parent</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <relativePath>../../../../parent/</relativePath>
+  </parent>
   <dependencies>
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
-      <version>1.0.18</version>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
     </dependency>
   </dependencies>
   <build>

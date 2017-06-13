@@ -16,6 +16,56 @@
   <packaging>pom</packaging>
   <name>xproc-maven-plugin-parent</name>
   
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>com.xmlcalabash</artifactId>
+        <version>1.1.9-p1-95-SNAPSHOT</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.thaiopensource</groupId>
+            <artifactId>jing</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>saxon-he</artifactId>
+        <version>9.5.1.5</version>
+        <exclusions>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>jing</artifactId>
+        <version>20120724.0.0</version>
+        <exclusions>
+          <exclusion>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>saxon</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  
   <build>
     <pluginManagement>
       <plugins>
@@ -52,5 +102,13 @@
       </plugins>
     </pluginManagement>
   </build>
+  
+  <repositories>
+    <repository>
+      <id>restlet-repo</id>
+      <name>Public online Restlet repository</name>
+      <url>http://maven.restlet.org</url>
+    </repository>
+  </repositories>
   
 </project>

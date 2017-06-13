@@ -24,27 +24,14 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
-      <version>1.0.18</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-      <version>9.5.1.5</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>jing</artifactId>
-      <version>20120724.0.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>net.sf.saxon</groupId>
-          <artifactId>saxon</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xml-apis</groupId>
-          <artifactId>xml-apis</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.google.guava</groupId>
