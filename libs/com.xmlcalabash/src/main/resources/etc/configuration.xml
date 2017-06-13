@@ -1,0 +1,5 @@
+<!--*- nxml -*-->
+<xproc-config xmlns="http://xmlcalabash.com/ns/configuration">
+<!-- This file intentionally left blank; implementations are
+     now specified with an annotation. -->
+</xproc-config>

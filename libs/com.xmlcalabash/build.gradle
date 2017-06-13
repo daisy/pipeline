@@ -1,0 +1,489 @@
+/* Requires gradle 2.x */
+
+import groovy.swing.SwingBuilder
+import java.awt.Point
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath fileTree(dir: 'lib').include("*.jar")
+    classpath group: 'net.sf.saxon', name: 'Saxon-HE', version: saxonVersion
+  }
+}
+
+plugins {
+  id "java"
+  id "osgi"
+  id "maven"
+  id "maven-publish"
+  id "signing"
+  id "com.bmuschko.izpack" version "2.0"
+  id "de.undercouch.download" version "2.0.0"
+}
+
+import de.undercouch.gradle.tasks.download.Download
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+repositories {
+  mavenLocal()
+  mavenCentral()
+  maven { url "http://maven.restlet.org" }
+  maven { url "http://developer.marklogic.com/maven2" }
+  maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
+configurations {
+  reportruntime {
+    extendsFrom runtime
+  }
+}
+
+configurations.all {
+  resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+    if (details.requested.name == 'saxon' && details.requested.version == '8.7') {
+      details.useTarget "net.sf.saxon:Saxon-HE:" + saxonVersion
+    }
+  }
+}
+
+dependencies {
+  izpack 'org.codehaus.izpack:izpack-standalone-compiler:4.3.4'
+
+  compile fileTree(dir: 'lib').include("*.jar")
+  compile (
+    [group: 'com.nwalsh', name: 'nwalsh-annotations', version: '1.0.0'],
+    [group: 'com.thaiopensource', name: 'jing', version: '20091111', transitive: false],
+    [group: 'javax.servlet', name: 'javax.servlet-api', version: '3.1.0'],
+    [group: 'junit', name: 'junit', version: '4.12'],
+    [group: 'net.java.dev.msv', name: 'msv-core', version: '2013.6.1'],
+    [group: 'net.sf.saxon', name: 'Saxon-HE', version: saxonVersion ],
+    [group: 'com.ibm.icu', name: 'icu4j', version: '49.1'],
+    [group: 'nu.validator.htmlparser', name: 'htmlparser', version: '1.4'],
+    [group: 'org.apache.ant', name: 'ant', version: '1.9.4'],
+    [group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.2.5'],
+    [group: 'org.apache.httpcomponents', name: 'httpcore', version: '4.2.5'],
+    [group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.1'],
+    [group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.1'],
+    [group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.1'],
+    [group: 'org.atteo.classindex', name: 'classindex', version: '3.3'],
+    [group: 'org.ccil.cowan.tagsoup', name: 'tagsoup', version: '1.2.1'],
+    [group: 'org.restlet.jee', name: 'org.restlet', version: '2.2.2'],
+    [group: 'org.restlet.jee', name: 'org.restlet.ext.fileupload', version: '2.2.2'],
+    [group: 'org.restlet.jee', name: 'org.restlet.ext.slf4j', version: '2.2.2'],
+    [group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.10'],
+    [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.10'],
+    [group: 'org.xmlresolver', name: 'xmlresolver', version: '0.12.3'],
+    [group: 'org.osgi', name: 'org.osgi.core', version: '4.3.1'],
+    // OSGi bundle that provides isorelax (which is a dependency of net.java.dev.msv, needed for validate-rng)
+    [group: 'com.sun.xml.bind', name: 'jaxb-extra-osgi', version: '2.2.11'],
+  )
+
+  reportruntime (
+    fileTree(dir: 'lib').include("*.jar"),
+    fileTree(dir: 'lib/' + saxonVersion).include('*.jar'),
+    files("lib/deltaxml.lic"),
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-asciidoctor', version: '1.1.0'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-deltaxml', version: '1.1.2'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-ditaa', version: '1.1.2'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-mathml-to-svg', version: '1.1.2'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-metadata-extractor', version: '1.1.2'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-plantuml', version: '1.1.2'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-print', version: '1.1.2'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-rdf', version: '1.1.2'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-sendmail', version: '1.1.2'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-xcc', version: '1.1.2'],
+    [group: 'com.xmlcalabash', name: 'xmlcalabash1-xmlunit', version: '1.1.2']
+  )
+}
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src/main/java'
+      exclude 'com/xmlcalabash/testdrivers/**'
+    }
+    resources {
+      srcDirs 'src/main/resources'
+    }
+  }
+}
+
+// Variables
+project.ext.saxonRelease = saxonVersion.substring(0,5)
+project.ext.saxonBranch  = saxonVersion.substring(0,3).replaceAll("\\.", "")
+project.ext.releaseVersion = version
+project.ext.distVersion = version + "-" + saxonBranch + snapshot
+project.ext.osgiVersion = version.replaceAll("-.*", "")
+project.ext.refDocZip = 'xmlcalabash-ref-' + docsVersion + '.zip'
+
+version = project.ext.distVersion // - gets turned into . in some contexts
+group = "org.daisy.libs"
+
+def Properties versionProps = new Properties()
+def versionPropsFile = file("src/main/resources/etc/version.properties")
+versionProps['version'] = releaseVersion
+versionProps.store(versionPropsFile.newWriter(),null)
+
+task copyLib(type: Copy) {
+  FileCollection runtime  = configurations.runtime
+  FileCollection localLib = fileTree(dir: 'lib').include("*.jar")
+  FileCollection lib = runtime - localLib
+  lib = lib.filter { File f -> !(f.name ==~ /.*osgi.*/) }
+  String path = ""
+  lib.each {
+    File file -> path += " lib/" + file.name
+  }
+  project.ext.runtimeClasspath = path.trim()
+
+  from lib
+  into { "build/dist/lib" }
+}
+
+jar {
+  baseName "com.xmlcalabash"
+  manifest {
+    version = project.ext.osgiVersion
+    instruction 'Built-By', builtBy
+    instruction 'Implementation-Vendor', 'Norman Walsh'
+    instruction 'Implementation-Title', 'XML Calabash'
+    instruction 'Implementation-Version', project.ext.distVersion
+    instruction 'Main-Class', 'com.xmlcalabash.drivers.Main'
+    instruction 'Bundle-RequiredExecutionEnvironment', 'J2SE-1.6'
+    instruction 'Export-Package', 'com.xmlcalabash.*;version=' + project.ext.osgiVersion + ',\
+  com.nwalsh.annotations,\
+  org.xmlresolver,\
+  etc'
+    instruction 'Import-Package', 'net.sf.saxon.*;version=' + project.ext.saxonRelease + ',\
+  javax.crypto.*,\
+  javax.xml.*,\
+  org.apache.commons.httpclient.*,\
+  org.xml.sax.*,\
+  !org.osgi.*,\
+  !com.xmlcalabash.*,\
+  !com.nwalsh.annotations,\
+  !org.xmlresolver,\
+  *;resolution:=optional'
+    instruction 'DynamicImport-Package', '*'
+    instruction 'Class-Path', project.ext.runtimeClasspath + " lib"
+    instruction 'Bundle-ClassPath', '.,lib/nwalsh-annotations.jar,lib/xmlresolver.jar'
+  }
+  from('build/dist') {
+    include 'lib/nwalsh-annotations-*.jar'
+    include 'lib/xmlresolver-*.jar'
+    rename '(.*)-.*.jar','$1.jar'
+  }
+}
+
+izpack {
+  baseDir = file("build/dist")
+  installFile = file("build/install.xml")
+  outputFile = file("build/distributions/xmlcalabash-" + project.ext.distVersion + ".jar")
+}
+
+compileJava {
+  options.deprecation = true
+}
+
+task copyNotices(type: Copy) {
+  from 'resources/notices'
+  into 'build/dist/docs/notices'
+}
+jar.dependsOn copyNotices
+
+task downloadReferenceDocs(type: Download) {
+  src docsBaseURI + project.ext.refDocZip
+  dest new File(buildDir, refDocZip)
+}
+downloadReferenceDocs.onlyIf { !file("$buildDir/$refDocZip").exists() }
+
+task copyReferenceDocs(dependsOn: downloadReferenceDocs, type: Copy) {
+  from zipTree(downloadReferenceDocs.dest)
+  into { "build" }
+  doLast {
+    copy {
+      from "build/xmlcalabash-ref-" + docsVersion
+      into "build/dist/docs/reference"
+    }
+  }
+}
+
+task copySchemas(type: Copy) {
+  from 'resources/schemas'
+  into 'build/dist/schemas'
+}
+
+task copyREADME(type: Copy) {
+  from 'resources/README'
+  into 'build/dist'
+}
+
+task copyXpl(type: Copy) {
+  FileCollection xpl = fileTree(dir: 'xpl').exclude("submit-test-report.xpl")
+  from xpl
+  into 'build/dist/xpl'
+}
+
+// Just depend on something that will create build/dist
+task copyVERSION(dependsOn: copyXpl) << {
+  def outputFile = new File("$buildDir/dist", "VERSION")
+  outputFile.withPrintWriter { writer ->
+    writer.println project.ext.distVersion
+  }
+}
+
+task copyToDist(dependsOn: [copyLib,copyNotices,copyReferenceDocs,copySchemas,
+                            copyXpl,copyREADME,copyVERSION]) {
+}
+jar.dependsOn copyToDist
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  baseName = "com.xmlcalabash"
+  classifier = 'javadoc'
+  from tasks.javadoc.destinationDir
+}
+
+task sourcesJar(type: Jar) {
+  baseName = "com.xmlcalabash"
+  from sourceSets.main.allSource
+  classifier = 'sources'
+}
+
+task copyJar(dependsOn: jar, type: Copy) {
+  from "build/libs/xmlcalabash-" + distVersion + ".jar"
+  into "build/dist"
+}
+
+task copyJavaDoc(dependsOn: javadoc, type: Copy) {
+  from "build/docs"
+  into "build/dist/docs"
+}
+
+task makeDist(dependsOn: [ build, copyJar, copyLib ]) << {
+  println "Created distribution in build/dist"
+}
+
+task zipDist(dependsOn: makeDist, type: Zip) {
+  from('build/dist')
+  exclude(["calabash", "calabash.bat"])
+  into 'xmlcalabash-' + version
+  archiveName 'xmlcalabash-' + version + ".zip"
+}
+
+task izPackDist(dependsOn: izPackCreateInstaller) {
+  // nop
+}
+
+task dist(dependsOn: [zipDist, izPackDist]) {
+  // nop
+}
+
+task testSuiteMessages << {
+  println "Running test-suite...this may take a few minutes..."
+  println "  Sending report to " + testsReport + "; errors to " + testsErrors
+}
+
+task testSuite(dependsOn: [makeDist, testSuiteMessages], type: JavaExec) {
+  classpath = configurations.reportruntime + configurations.runtime + sourceSets.main.output
+
+  main = 'com.xmlcalabash.drivers.RunTestReport'
+  maxHeapSize = "1024m"
+  args('-D', '-a',
+       testsRoot + '/tests/required/test-suite.xml',
+       testsRoot + '/tests/serialization/test-suite.xml',
+       testsRoot + '/tests/optional/test-suite.xml',
+       testsRoot + '/tests/extension/test-suite.xml',
+       'http://xmlcalabash.com/tests/test-suite.xml')
+  // 'http://localhost:8130/tests/test-suite.xml')
+
+  standardOutput = new FileOutputStream(new File(testsReport))
+  errorOutput = new FileOutputStream(new File(testsErrors))
+}
+
+task htmlReport(dependsOn: testSuite, type: JavaExec) {
+  classpath = configurations.reportruntime + configurations.runtime + sourceSets.main.output
+  main = 'net.sf.saxon.Transform'
+  args('-s:' + testsReport,
+       '-xsl:resources/format-report.xsl',
+       '-o:' + testsFormat)
+}
+
+task aDocReport(dependsOn: testSuite, type: JavaExec) {
+  classpath = configurations.reportruntime + configurations.runtime + sourceSets.main.output
+  main = 'net.sf.saxon.Transform'
+  args('-s:' + testsReport,
+       '-xsl:resources/asciidoc-report.xsl',
+       '-o:' + testsADoc)
+}
+
+task aDocErrReport(dependsOn: testSuite, type: JavaExec) {
+  classpath = configurations.reportruntime + configurations.runtime + sourceSets.main.output
+  main = 'net.sf.saxon.Transform'
+  args('-s:' + testsReport,
+       '-xsl:resources/asciidoc-report.xsl',
+       '-o:' + testsFailADoc,
+       'show-pass=0',
+       'show-partial=0')
+}
+
+task report(dependsOn: [htmlReport,aDocReport,aDocErrReport]) {
+  // nop
+}
+
+// Just depend on something that will create build/dist
+task makeIZPackShell(dependsOn: copyVERSION) << {
+  def shell = new File("$buildDir/dist", "calabash")
+  shell.withPrintWriter { writer ->
+    writer.println '#!/bin/bash'
+    writer.println 'java -Xmx1024m -cp %INSTALL_PATH/xmlcalabash-' + version + '.jar com.xmlcalabash.drivers.Main "$@"'
+  }
+  shell.setExecutable(true)
+
+  def batch = new File("$buildDir/dist", "calabash.bat")
+  batch.withPrintWriter { writer ->
+    writer.println 'java -Xmx1024m -cp %INSTALL_PATH/xmlcalabash-' + version + '.jar com.xmlcalabash.drivers.Main %*'
+  }
+}
+
+task setupIZPack(dependsOn: [makeDist, makeIZPackShell], type: JavaExec) {
+  classpath = configurations.reportruntime + configurations.runtime + sourceSets.main.output
+
+  main = 'net.sf.saxon.Transform'
+  args('-s:src/main/izpack/install.xml',
+       '-xsl:resources/izpack-filter.xsl',
+       '-o:build/install.xml',
+       'version.label='+project.ext.distVersion)
+}
+izPackCreateInstaller.dependsOn setupIZPack
+
+artifacts {
+  archives javadocJar
+  archives sourcesJar
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      groupId 'org.daisy.libs'
+      artifactId 'com.xmlcalabash'
+      version version
+      from components.java
+    }
+  }
+  repositories {
+    maven {
+      url 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath
+    }
+  }
+}
+
+signing {
+  required { gradle.taskGraph.hasTask("uploadArchives") }
+  sign configurations.archives
+}
+
+// I refuse to put my PGP password in a file.
+//
+// Adapted from
+// https://www.timroes.de/2014/01/19/using-password-prompts-with-gradle-build-files/
+//
+// N.B. This can't work in a CI environment so there's no way to
+// automatically publish the artifacts from, for example, Travis CI.
+//
+gradle.taskGraph.whenReady { taskGraph ->
+  if(taskGraph.hasTask(':uploadArchives')) {
+
+    def pass = ''
+    if(System.console() == null) {
+      new SwingBuilder().edt {
+        dialog(modal: true,
+            title: 'Enter password',
+            alwaysOnTop: true,
+            resizable: false,
+            locationRelativeTo: null,
+            locationByPlatform: true,
+            // On my Linux multi-monitor setup, the dialog "appears" at
+            // the top of the virtual desktop below my desktop. So move
+            // the damned thing somewhere visible. Meh.
+            location: new Point(100,100),
+            pack: true,
+            show: true
+        ) {
+          vbox { //
+            label(text: "Please enter key passphrase:")
+            input = passwordField()
+            button(defaultButton: true, text: 'OK', actionPerformed: {
+              pass = input.password;
+              dispose();
+            })
+          }
+        }
+      }
+    } else {
+      pass = System.console().readPassword("\nPlease enter key passphrase: ")
+      pass = new String(pass)
+    }
+
+    if (pass.size() <= 0) {
+      throw new InvalidUserDataException("You must enter a password to proceed.")
+    }
+
+    allprojects { ext."signing.password" = pass }
+
+  }
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment ->
+        signing.signPom(deployment)
+      }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: sonatypeUsername, password: sonatypePassword)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: sonatypeUsername, password: sonatypePassword)
+      }
+
+      pom.project {
+        name 'XML Calabash'
+        packaging 'jar'
+        description 'An XProc 1.0 processor'
+        url 'https://github.com/ndw/xmlcalabash1'
+
+        scm {
+          url 'scm:git@github.com:ndw/xmlcalabash1.git'
+          connection 'scm:git@github.com:ndw/xmlcalabash1.git'
+          developerConnection 'scm:git@github.com:ndw/xmlcalabash1.git'
+        }
+
+        licenses {
+          license {
+            name 'Common Development and Distribution License (CDDL) version 1.0'
+            url 'http://www.opensource.org/licenses/cddl1.txt'
+            distribution 'repo'
+          }
+          license {
+            name 'GNU General Public License version 2'
+            url 'http://www.gnu.org/licenses/gpl-2.0.txt'
+            distribution 'repo'
+          }
+        }
+
+        developers {
+          developer {
+            id 'ndw'
+            name 'Norman Walsh'
+          }
+        }
+      }
+    }
+  }
+}

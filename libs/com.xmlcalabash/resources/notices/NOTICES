@@ -1,0 +1,77 @@
+Copyright (C) 2007-2015 Norman Walsh
+Portions Copyright (C) 2008, 2009 MarkLogic Corporation
+Portions Copyright (C) 2007 Sun Microsystems, Inc.
+All rights reserved.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License Version 2 (the
+"GPL") as published by the Free Software Foundation or the Common
+Development and Distribution License ("CDDL") as published by the Open
+Source Initiative (OSI).
+
+This program is distributed in the hope that it will be useful,but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GPL
+License or CDDL License for more details.
+
+You should have received a copy of the GPL or CDDL licenses along with
+this program. If not, see http://www.gnu.org/licenses/ or
+http://www.opensource.org/licenses/CDDL-1.0
+
+In addition, certain libraries used in XML Calabash are released under
+their own license terms, as listed below.
+
+The following unmodified libraries are released under the Apache
+license, Version 2.0:
+
+  ant-x.x.x.jar
+  ant-launcher-x.x.x.jar
+  classindex-x.x.jar
+  commons-codec-x.x.jar
+  commons-fileupload-x.x.jar
+  commons-io-x.x.jar
+  commons-logging-x.x.x.jar
+  httpclient-x.x.x.jar
+  httpcore-x.x.x.jar
+  jcl-over-slf4j-x.x.x.jar
+  junit-x.x.jar
+  log4j-api-x.x.jar
+  log4j-core-x.x.jar
+  log4j-slf4j-impl-x.x.jar
+  slf4j-api-x.x.x.jar
+  tagsoup-x.x.x.jar
+  xmlresolver-x.x.x.jar
+
+The following unmodified library is released under the MIT License:
+
+  isorelax-xxxxxxxx.jar
+  jing-xxxxxxxx.jar
+  msv-core-xxxx.x.x.jar
+  relaxngDatatype-xxxxxxxx.jar
+  xsdlib-xxxx.x.x.jar
+
+The following unmodified libraries are released under the BSD License:
+
+  hamcrest-core-x.x.jar
+
+The following unmodified library is released under the Mozilla Public
+License:
+
+  Saxon-HE-x.x.x-x.jar
+
+The following unmodified libraries are released under their own terms:
+
+  htmlparser-x.x.jar
+  org.restlet-x.x.x.jar
+  org.restlet.ext.fileupload-x.x.x.jar
+  org.restlet.ext.slf4j-x.x.x.jar
+
+The following unmodified libraries are released under the Common
+Development and Distribution License (CDDL) v1.1 and GNU General
+Public License (GPL) v2 with Classpath Exception:
+
+  javax.servlet-api-x.x.x.jar
+
+Contacting the Author
+---------------------
+XML Calabash is maintained by Norman Walsh, <ndw@nwalsh.com>
