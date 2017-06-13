@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.daisy.common.shell.BinaryFinder;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.tts.AudioBufferAllocator;
 import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
@@ -13,7 +14,9 @@ import org.daisy.pipeline.tts.StraightBufferAllocator;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
+
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
 public class EspeakTest {
@@ -29,7 +32,9 @@ public class EspeakTest {
 	}
 
 	private static ESpeakEngine allocateEngine() throws Throwable {
-		ESpeakService s = new ESpeakService();
+		Assume.assumeTrue("Test can not be run because espeak not present",
+		                  BinaryFinder.find("espeak").isPresent());
+ESpeakService s = new ESpeakService();
 		return (ESpeakEngine) s.newEngine(new HashMap<String, String>());
 	}
 

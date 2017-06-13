@@ -25,6 +25,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
     <!-- For the binary finder: -->
@@ -48,30 +49,6 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <id>notester</id>
-      <build>
-	<plugins>
-	  <plugin>
-	    <artifactId>maven-surefire-plugin</artifactId>
-	    <configuration>
-	      <excludes>
-		<exclude>**/EspeakTest.java</exclude>
-	      </excludes>
-	    </configuration>
-	  </plugin>
-	</plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>tester</id>
-    </profile>
-  </profiles>
 
 
 </project>

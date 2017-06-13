@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.daisy.common.shell.BinaryFinder;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.tts.AudioBufferAllocator;
 import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
@@ -13,7 +14,9 @@ import org.daisy.pipeline.tts.StraightBufferAllocator;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
+
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
 public class OSXSpeechTest {
@@ -29,6 +32,10 @@ public class OSXSpeechTest {
 	}
 
 	private static OSXSpeechEngine allocateEngine() throws Throwable {
+		Assume.assumeTrue("Test can not be run because not on Mac OS X",
+		                  System.getProperty("os.name").toLowerCase().startsWith("mac os x"));
+		Assume.assumeTrue("Test can not be run because say not present",
+		                  BinaryFinder.find("say").isPresent());
 		OSXSpeechService s = new OSXSpeechService();
 		return (OSXSpeechEngine) s.newEngine(new HashMap<String, String>());
 	}
