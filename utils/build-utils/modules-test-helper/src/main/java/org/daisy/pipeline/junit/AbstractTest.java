@@ -55,6 +55,8 @@ public abstract class AbstractTest {
 					thisBundle(),
 					junitBundles(),
 					systemPackage("javax.xml.stream;version=\"1.0.1\""),
+					systemPackage("com.sun.org.apache.xml.internal.resolver"),
+					systemPackage("com.sun.org.apache.xml.internal.resolver.tools"),
 					mavenBundle("org.daisy.pipeline.build:modules-test-helper:?"),
 					mavenBundlesWithDependencies(
 						testDependencies,
