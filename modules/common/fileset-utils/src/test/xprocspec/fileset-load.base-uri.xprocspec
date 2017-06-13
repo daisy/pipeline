@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data">
+    
+    <x:script>
+        <p:declare-step type="px:fileset-load-and-get-base-uri" version="1.0" name="main">
+            <p:input port="fileset" primary="true"/>
+            <p:input port="in-memory" sequence="true">
+                <p:empty/>
+            </p:input>
+            <p:option name="href" select="''"/>
+            <p:option name="media-types" select="''"/>
+            <p:option name="not-media-types" select="''"/>
+            <p:option name="fail-on-not-found" select="'false'"/>
+            <p:option name="load-if-not-in-memory" select="'true'"/>
+            <p:option name="method" select="''"/>
+            
+            <p:output port="result"/>
+            
+            <p:import href="../../main/resources/xml/xproc/fileset-load.xpl"/>
+            
+            <px:fileset-load>
+                <p:input port="fileset">
+                    <p:pipe step="main" port="fileset"/>
+                </p:input>
+                <p:input port="in-memory">
+                    <p:pipe step="main" port="in-memory"/>
+                </p:input>
+                <p:with-option name="href" select="$href"/>
+                <p:with-option name="media-types" select="$media-types"/>
+                <p:with-option name="not-media-types" select="$not-media-types"/>
+                <p:with-option name="fail-on-not-found" select="$fail-on-not-found"/>
+                <p:with-option name="load-if-not-in-memory" select="$load-if-not-in-memory"/>
+                <p:with-option name="method" select="$method"/>
+            </px:fileset-load>
+            <p:split-sequence test="position()=1"/>
+            <p:delete match="/*/@xml:base"/>
+            <p:identity name="load"/>
+            
+            <p:xslt name="xslt">
+                <p:input port="stylesheet">
+                    <p:inline>
+                        <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                            <xsl:template match="/">
+                                <xsl:copy-of select="/*"/>
+                            </xsl:template>
+                        </xsl:stylesheet>
+                    </p:inline>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+            <p:sink/>
+            
+            <p:identity>
+                <p:input port="source">
+                    <p:inline>
+                        <d:results/>
+                    </p:inline>
+                </p:input>
+            </p:identity>
+            <p:add-attribute match="/*" attribute-name="document-base-uri-before-xslt">
+                <p:with-option name="attribute-value" select="base-uri(/)">
+                    <p:pipe step="load" port="result"/>
+                </p:with-option>
+            </p:add-attribute>
+            <p:add-attribute match="/*" attribute-name="document-element-base-uri-before-xslt">
+                <p:with-option name="attribute-value" select="base-uri(/*)">
+                    <p:pipe step="load" port="result"/>
+                </p:with-option>
+            </p:add-attribute>
+            <p:add-attribute match="/*" attribute-name="document-base-uri-after-xslt">
+                <p:with-option name="attribute-value" select="base-uri(/)">
+                    <p:pipe step="xslt" port="result"/>
+                </p:with-option>
+            </p:add-attribute>
+            <p:add-attribute match="/*" attribute-name="document-element-base-uri-after-xslt">
+                <p:with-option name="attribute-value" select="base-uri(/*)">
+                    <p:pipe step="xslt" port="result"/>
+                </p:with-option>
+            </p:add-attribute>
+        </p:declare-step>
+    </x:script>
+
+    <x:scenario label="from-memory">
+        <x:call step="px:fileset-load-and-get-base-uri">
+            <x:input port="fileset">
+                <x:document type="inline" xml:base="file:/from-memory/">
+                    <d:fileset>
+                        <d:file href="foo.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory">
+                <x:document type="inline">
+                    <doc xml:base="file:/from-memory/foo.xml"/>
+                </x:document>
+            </x:input>
+            <x:option name="href" select="'file:/from-memory/foo.xml'"/>
+        </x:call>
+        <x:context label="the results">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the base-uri of the loaded document is the requested uri" type="xpath"
+                  test="/d:results/@document-base-uri-before-xslt" equals="'file:/from-memory/foo.xml'"/>
+        <x:expect label="the base-uri of the document element is the requested uri" type="xpath"
+                  test="/d:results/@document-element-base-uri-before-xslt" equals="'file:/from-memory/foo.xml'"/>
+        <x:expect label="the base-uri of the loaded document should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-base-uri-before-xslt" equals="'file:/from-memory/foo.xml'"/>
+        <x:expect label="the base-uri of the document element should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-element-base-uri-after-xslt" equals="'file:/from-memory/foo.xml'"/>
+    </x:scenario>
+    
+    <x:scenario label="from-file">
+        <x:call step="px:fileset-load-and-get-base-uri">
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="samples/fileset/test.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:option name="href" select="'samples/fileset/test.xml'"/>
+        </x:call>
+        <x:context label="the results">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the base-uri of the loaded document is the requested uri" type="xpath"
+                  test="/d:results/@document-base-uri-before-xslt" equals="resolve-uri('samples/fileset/test.xml')"/>
+        <x:expect label="the base-uri of the document element is the requested uri" type="xpath"
+                  test="/d:results/@document-element-base-uri-before-xslt" equals="resolve-uri('samples/fileset/test.xml')"/>
+        <x:expect label="the base-uri of the loaded document should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-base-uri-after-xslt" equals="resolve-uri('samples/fileset/test.xml')"/>
+        <x:expect label="the base-uri of the document element should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-element-base-uri-after-xslt" equals="resolve-uri('samples/fileset/test.xml')"/>
+    </x:scenario>
+    
+    <x:scenario label="copy-from-file">
+        <x:call step="px:fileset-load-and-get-base-uri">
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="samples/fileset/copy.xml" original-href="samples/fileset/test.xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:option name="href" select="'samples/fileset/copy.xml'"/>
+        </x:call>
+        <x:context label="the results">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the base-uri of the loaded document is the requested uri" type="xpath"
+                  test="/d:results/@document-base-uri-before-xslt" equals="resolve-uri('samples/fileset/copy.xml')"/>
+        <x:expect label="the base-uri of the document element is the requested uri" type="xpath"
+                  test="/d:results/@document-element-base-uri-before-xslt" equals="resolve-uri('samples/fileset/copy.xml')"/>
+        <x:expect label="the base-uri of the loaded document should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-base-uri-after-xslt" equals="resolve-uri('samples/fileset/copy.xml')"/>
+        <x:expect label="the base-uri of the document element should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-element-base-uri-after-xslt" equals="resolve-uri('samples/fileset/copy.xml')"/>
+    </x:scenario>
+    
+    <x:scenario label="from-zip">
+        <x:call step="px:fileset-load-and-get-base-uri">
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="samples/fileset2/a.zip!/e.svg" media-type="image/svg+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:option name="href" select="'samples/fileset2/a.zip!/e.svg'"/>
+        </x:call>
+        <x:context label="the results">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the base-uri of the loaded document is the requested uri" type="xpath"
+                  test="/d:results/@document-base-uri-before-xslt" equals="resolve-uri('samples/fileset2/a.zip!/e.svg')"/>
+        <x:expect label="the base-uri of the document element is the requested uri" type="xpath"
+                  test="/d:results/@document-element-base-uri-before-xslt" equals="resolve-uri('samples/fileset2/a.zip!/e.svg')"/>
+        <x:expect label="the base-uri of the loaded document should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-base-uri-after-xslt" equals="resolve-uri('samples/fileset2/a.zip!/e.svg')"/>
+        <x:expect label="the base-uri of the document element should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-element-base-uri-after-xslt" equals="resolve-uri('samples/fileset2/a.zip!/e.svg')"/>
+    </x:scenario>
+    
+</x:description>

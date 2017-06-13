@@ -53,6 +53,34 @@
     <p:http-request/>
   </p:declare-step>
 
+  <p:declare-step type="pxi:set-base-uri">
+    <p:input port="source"/>
+    <p:output port="result"/>
+    <p:option name="base-uri"/>
+    <p:xslt>
+      <p:with-option name="output-base-uri" select="$base-uri"/>
+      <p:with-param name="output-base-uri" select="$base-uri"/>
+      <p:input port="stylesheet">
+        <p:inline>
+          <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+            <xsl:param name="output-base-uri" required="yes"/>
+            <xsl:template match="/*">
+              <xsl:sequence select="."/>
+            </xsl:template>
+            <!-- if xml:base attribute is defined on document element, also adapt it -->
+            <xsl:template match="/*[@xml:base]">
+              <xsl:copy>
+                <xsl:sequence select="@* except @xml:base"/>
+                <xsl:attribute name="xml:base" select="$output-base-uri"/>
+                <xsl:sequence select="node()"/>
+              </xsl:copy>
+            </xsl:template>
+          </xsl:stylesheet>
+        </p:inline>
+      </p:input>
+    </p:xslt>
+  </p:declare-step>
+
   <p:add-attribute match="/*" attribute-name="href">
     <p:with-option name="attribute-value" select="$href"/>
   </p:add-attribute>
@@ -182,10 +210,9 @@
                       <p:with-option name="file" select="replace($on-disk, '^([^!]+)!/(.+)$', '$2')"/>
                       <p:with-option name="content-type" select="$media-type"/>
                     </px:unzip>
-                    <p:add-attribute match="/*" attribute-name="xml:base">
-                      <p:with-option name="attribute-value" select="$target"/>
-                    </p:add-attribute>
-                    <p:delete match="/*/@xml:base"/>
+                    <pxi:set-base-uri>
+                      <p:with-option name="base-uri" select="$target"/>
+                    </pxi:set-base-uri>
                   </p:when>
 
                   <!-- Force HTML -->
@@ -272,6 +299,18 @@
                   </p:otherwise>
 
                 </p:choose>
+                
+                <p:choose>
+                  <p:when test="not($on-disk=$target)">
+                    <pxi:set-base-uri>
+                      <p:with-option name="base-uri" select="$target"/>
+                    </pxi:set-base-uri>
+                  </p:when>
+                  <p:otherwise>
+                    <p:identity/>
+                  </p:otherwise>
+                </p:choose>
+                
               </p:group>
               <p:catch>
                 <!-- could not retrieve file from neither memory nor disk -->
@@ -379,7 +418,12 @@
       <p:pipe port="in-memory" step="main"/>
     </p:iteration-source>
 
+    <!--
+        The base URI is computed based on the xml:base attribute if present. If it is a relative
+        URI, it is resolved against the original base URI.
+    -->
     <p:variable name="base-uri" select="resolve-uri(base-uri(/*))"/>
+    <p:variable name="base-uri-changed" select="not($base-uri=base-uri(/))"/>
 
     <px:fileset-add-entry name="normalized.fileset">
       <p:with-option name="href" select="$base-uri"/>
@@ -389,31 +433,21 @@
     </px:fileset-add-entry>
 
     <p:choose>
-      <p:when test="/d:fileset/d:file/resolve-uri(@href, base-uri()) != $base-uri">
-        <!-- document has incorrect base URI; let's fix it -->
-        <p:add-attribute match="/*" attribute-name="xml:base">
-          <p:with-option name="attribute-value" select="$base-uri"/>
+      <!--
+          If URI was normalized in px:fileset-add-entry, adapt the actual base URI of the
+          document. Also adapt the actual base URI if the value passed to px:fileset-add-entry was
+          computed based on the xml:base attribute.
+      -->
+      <p:when test="/d:fileset/d:file/resolve-uri(@href, base-uri()) != $base-uri
+                    or $base-uri-changed='true'">
+        <pxi:set-base-uri>
           <p:input port="source">
             <p:pipe port="current" step="normalized"/>
           </p:input>
-        </p:add-attribute>
-        <p:choose>
-          <p:xpath-context>
-            <p:pipe port="current" step="normalized"/>
-          </p:xpath-context>
-          <p:when test="/*[@xml:base]">
-            <!-- keep xml:base attribute -->
-            <p:identity/>
-          </p:when>
-          <p:otherwise>
-            <!-- don't keep xml:base attribute -->
-            <p:delete match="/*/@xml:base"/>
-          </p:otherwise>
-        </p:choose>
-
+          <p:with-option name="base-uri" select="$base-uri"/>
+        </pxi:set-base-uri>
       </p:when>
       <p:otherwise>
-        <!-- document has correct base URI already -->
         <p:identity>
           <p:input port="source">
             <p:pipe port="current" step="normalized"/>
