@@ -66,7 +66,7 @@
                 </p:inline>
             </p:input>
         </p:uuid>
-        <p:wrap-sequence wrapper="d:wrapper">
+        <p:wrap-sequence wrapper="_">
             <p:input port="source">
                 <p:pipe port="metadata" step="main"/>
                 <p:pipe port="result" step="default-metadata"/>
@@ -122,7 +122,7 @@
                     </p:identity>
                 </p:when>
                 <p:otherwise>
-                    <p:wrap-sequence wrapper="d:wrapper">
+                    <p:wrap-sequence wrapper="_">
                         <p:input port="source">
                             <p:pipe port="result" step="metadata.durations"/>
                         </p:input>

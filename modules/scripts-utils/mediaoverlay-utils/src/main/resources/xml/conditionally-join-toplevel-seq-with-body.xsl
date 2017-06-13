@@ -15,7 +15,7 @@
                             />
                         </xsl:if>
                         <xsl:if test="mo:body/mo:seq/@epub:type">
-                            <xsl:attribute name="epub:textref" select="mo:body/mo:seq/@epub:type"/>
+                            <xsl:attribute name="epub:type" select="mo:body/mo:seq/@epub:type"/>
                         </xsl:if>
                         <xsl:copy-of select="mo:body/mo:seq/*"/>
                     </body>
