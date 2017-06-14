@@ -1,6 +1,6 @@
 package org.daisy.pipeline.updater.gui;
 
-
+import java.io.File;
 import java.util.Iterator;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -9,6 +9,7 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.sun.jna.platform.win32.Advapi32Util;
+import com.sun.jna.platform.win32.Win32Exception;
 import com.sun.jna.platform.win32.WinReg;
 
 import javafx.application.Application;
@@ -21,15 +22,23 @@ public class Main extends Application {
     
     @Override
     public void start(final Stage primaryStage) {
-            //Optional<String> propsFileName = Optional.fromNullable(System.getProperty("org.daisy.properties",null));
-            //if (!propsFileName.isPresent()){
-                    //throw new RuntimeException("org.daisy.properties is not set");
-            //}
 
-            String pipelineHome =  Advapi32Util.registryGetStringValue(
-                                        WinReg.HKEY_LOCAL_MACHINE, "SOFTWARE\\DAISY Pipeline 2", "Pipeline2Home");
-            if (Strings.isNullOrEmpty(pipelineHome)){
-                    throw new RuntimeException("Couldn't find the pipeline home in the registry");
+            String pipelineHome; {
+                    pipelineHome = null;
+                    try {
+                            pipelineHome = Advapi32Util.registryGetStringValue(
+                                                WinReg.HKEY_LOCAL_MACHINE, "SOFTWARE\\DAISY Pipeline 2", "Pipeline2Home");
+                    } catch (Win32Exception e) {
+                    }
+                    if (Strings.isNullOrEmpty(pipelineHome)) {
+                            pipelineHome = System.getenv("PIPELINE2_HOME");
+                    }
+                    if (Strings.isNullOrEmpty(pipelineHome)) {
+                            throw new RuntimeException("Couldn't find the pipeline home in the registry");
+                    }
+            }
+            if (!new File(pipelineHome).exists()) {
+                    throw new RuntimeException("Pipeline home directory does not exist: " + pipelineHome);
             }
 
             String propsFileName= pipelineHome+"\\etc\\system.properties";
@@ -38,9 +47,6 @@ public class Main extends Application {
             PropertiesConfiguration config;
             try {
                     config = new PropertiesConfiguration(propsFileName);
-                    //for(String prop:System.getProperties().stringPropertyNames()){
-                            //config.addProperty(prop,System.getProperties().getProperty(prop));
-                    //}
                     config.addProperty("org.daisy.pipeline.home",pipelineHome);
                     config.load();
             } catch (ConfigurationException e) {
