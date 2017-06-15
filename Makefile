@@ -109,17 +109,31 @@ ifneq ($(MAKECMDGOALS), clean)
 include .maven-build.mk $(addsuffix /.build.mk,$(GRADLE_MODULES))
 endif
 
-.maven-build.mk : .effective-pom.xml
-	if ! xsltproc --stringparam CURDIR "$(CURDIR)" \
-	         --stringparam MODULE "." \
-	         --stringparam SRC_DIR "$$(cat .maven-modules | while read -r m; do test -e $$m/src && echo $$m/src; done | paste -sd ' ' -)" \
-	         --stringparam MAIN_DIR "$$(cat .maven-modules | while read -r m; do test -e $$m/src/main && echo $$m/src/main; done | paste -sd ' ' -)" \
-	         --stringparam OUTPUT_FILENAME ".build.mk" \
-	         -o $@ \
-	         .make/maven-build.xsl $<; then \
-		rm -f $@ && \
+SAXON := $(MVN_WORKSPACE)/net/sf/saxon/Saxon-HE/9.4/Saxon-HE-9.4.jar
+
+$(addsuffix /.build.mk,$(MAVEN_MODULES)) : .maven-build.mk
+	touch $@
+
+.SECONDARY : .maven-build.mk
+.maven-build.mk : .effective-pom.xml | $(SAXON)
+	if ! java -cp $(SAXON) net.sf.saxon.Transform \
+	          -s:$< \
+	          -xsl:.make/make-maven-build.mk.xsl \
+	          CURDIR="$(CURDIR)" \
+	          MODULE="." \
+	          SRC_DIR="$$(cat .maven-modules | while read -r m; do test -e $$m/src && echo $$m/src; done | paste -sd ' ' -)" \
+	          MAIN_DIR="$$(cat .maven-modules | while read -r m; do test -e $$m/src/main && echo $$m/src/main; done | paste -sd ' ' -)" \
+	          OUTPUT_FILENAME=".build.mk" \
+	          >/dev/null \
+	; then \
+		rm -f $(addsuffix /.build.mk,$(MAVEN_MODULES)) && \
 		exit 1; \
 	fi
+
+$(SAXON) :
+	# cd into random directory in order to force Maven "stub" project
+	cd .make && \
+	$(MVN) org.apache.maven.plugins:maven-dependency-plugin:3.0.0:get -Dartifact=net.sf.saxon:Saxon-HE:9.4:jar
 
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 # can not use $^ because it includes .dependencies-init
@@ -221,7 +235,7 @@ libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
 	mkdir -p $(dir $@)
 	cp $< $@
 
-$(addsuffix /.build.mk,$(MODULES)) .effective-pom.xml .maven-modules : .dependencies-init
+$(addsuffix /.build.mk,$(MODULES)) .maven-build.mk .effective-pom.xml .maven-modules : .dependencies-init
 
 .SECONDARY : .dependencies-init
 .dependencies-init :
@@ -262,9 +276,9 @@ clean : cache
 	rm -rf webui/dp2webui
 	rm -f .effective-pom.xml .maven-modules
 	find * -name .last-tested -exec rm -r "{}" \;
-	rm -f .maven-build.mk
 	find * -name .build.mk -exec rm -r "{}" \;
 	# generated in previous versions:
+	rm -f .maven-build.mk
 	find * -name .maven-to-install -exec rm -r "{}" \;
 	find * -name .maven-to-test -exec rm -r "{}" \;
 	find * -name .maven-to-test-dependents -exec rm -r "{}" \;

@@ -10,7 +10,6 @@
 /.effective-pom.xml
 /.gradle-settings/
 /.gradle/
-/.maven-build.mk
 /.maven-cache/
 /.maven-modules
 /.maven-workspace/

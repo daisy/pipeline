@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet version="1.0"
+<xsl:stylesheet version="2.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:pom="http://maven.apache.org/POM/4.0.0"
-                xmlns:exsl="http://exslt.org/common"
-                xmlns:exslf="http://exslt.org/functions"
-                xmlns:str="http://exslt.org/strings"
-                xmlns:fn="my-functions"
-                extension-element-prefixes="exslf">
+                xmlns:fn="my-functions">
 	
 	<xsl:param name="CURDIR"/>
 	<xsl:param name="MODULE"/>
@@ -18,19 +14,19 @@
 	
 	<xsl:variable name="effective-pom" select="/*"/>
 	
-	<xsl:variable name="src-dirs" select="str:split($SRC_DIR, ' ')"/>
-	<xsl:variable name="main-dirs" select="str:split($MAIN_DIR, ' ')"/>
+	<xsl:variable name="src-dirs" select="tokenize($SRC_DIR, ' ')"/>
+	<xsl:variable name="main-dirs" select="tokenize($MAIN_DIR, ' ')"/>
 	
 	<xsl:template match="/">
-		<exsl:document href="{concat($MODULE,'/',$OUTPUT_FILENAME)}" method="text">
+		<xsl:result-document href="{concat($MODULE,'/',$OUTPUT_FILENAME)}" method="text">
 			<xsl:call-template name="main">
 				<xsl:with-param name="module" select="$MODULE"/>
 				<xsl:with-param name="module-pom" select="document(concat($CURDIR,'/',$MODULE,'/pom.xml'))"/>
 			</xsl:call-template>
-		</exsl:document>
+		</xsl:result-document>
 	</xsl:template>
 	
-	<xsl:variable name="internal-runtime-dependencies-rtf">
+	<xsl:variable name="internal-runtime-dependencies" as="element()">
 		<pom:projects>
 			<xsl:for-each select="/*/pom:project">
 				<xsl:copy>
@@ -50,7 +46,6 @@
 			</xsl:for-each>
 		</pom:projects>
 	</xsl:variable>
-	<xsl:variable name="internal-runtime-dependencies" select="exsl:node-set($internal-runtime-dependencies-rtf)"/>
 	
 	<xsl:template name="main">
 		<xsl:param name="module"/>
@@ -95,7 +90,7 @@
 					<xsl:choose>
 						<xsl:when test="$submodule-pom/pom:project/pom:modules/pom:module">
 							<xsl:call-template name="install-command">
-								<xsl:with-param name="module" select="$submodule"/>
+								<xsl:with-param name="dirname" select="$submodule"/>
 							</xsl:call-template>
 						</xsl:when>
 						<xsl:otherwise>
@@ -118,14 +113,14 @@
 						</xsl:otherwise>
 					</xsl:choose>
 					<xsl:text>&#x0A;</xsl:text>
-					<exsl:document href="{concat($submodule,'/',$OUTPUT_FILENAME)}" method="text">
+					<xsl:result-document href="{concat($submodule,'/',$OUTPUT_FILENAME)}" method="text">
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:call-template name="main">
 							<xsl:with-param name="module" select="$submodule"/>
 							<xsl:with-param name="module-pom" select="$submodule-pom"/>
 						</xsl:call-template>
 						<xsl:text>&#x0A;</xsl:text>
-					</exsl:document>
+					</xsl:result-document>
 				</xsl:for-each>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>.PHONY : </xsl:text>
@@ -293,10 +288,10 @@
 				<xsl:for-each select="$effective-pom/pom:project[pom:groupId=$groupId and
 				                                                 pom:artifactId=$artifactId and
 				                                                 pom:version=$version]">
-					<xsl:variable name="managed-internal-runtime-dependencies">
+					<xsl:variable name="managed-internal-runtime-dependencies" as="element()">
 						<xsl:variable name="dependencyManagement" select="pom:dependencyManagement"/>
 						<pom:projects>
-							<xsl:for-each select="$internal-runtime-dependencies/pom:projects/pom:project">
+							<xsl:for-each select="$internal-runtime-dependencies/pom:project">
 								<xsl:copy>
 									<xsl:copy-of select="pom:groupId"/>
 									<xsl:copy-of select="pom:artifactId"/>
@@ -333,7 +328,7 @@
 					</xsl:variable>
 					<xsl:apply-templates select=".">
 						<xsl:with-param name="dirname" select="$dirname"/>
-						<xsl:with-param name="managed-internal-runtime-dependencies" select="exsl:node-set($managed-internal-runtime-dependencies)"/>
+						<xsl:with-param name="managed-internal-runtime-dependencies" select="$managed-internal-runtime-dependencies"/>
 					</xsl:apply-templates>
 				</xsl:for-each>
 			</xsl:otherwise>
@@ -434,8 +429,8 @@
 				    dependencies of the non-snapshot version of B are the same.
 				-->
 				<xsl:when test="self::pom:dependency and not(pom:scope='test') and not(pom:scope='provided')">
-					<xsl:apply-templates select="$managed-internal-runtime-dependencies/pom:projects/pom:project[pom:groupId=$groupId and
-					                                                                                             pom:artifactId=$artifactId]">
+					<xsl:apply-templates select="$managed-internal-runtime-dependencies/pom:project[pom:groupId=$groupId and
+					                                                                                pom:artifactId=$artifactId]">
 						<xsl:with-param name="dirname" select="$dirname"/>
 						<xsl:with-param name="managed-internal-runtime-dependencies" select="$managed-internal-runtime-dependencies"/>
 					</xsl:apply-templates>
@@ -477,18 +472,16 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<exslf:function name="fn:starts-with">
+	<xsl:function name="fn:starts-with">
 		<xsl:param name="arg1"/>
 		<xsl:param name="arg2"/>
-		<exslf:result select="substring($arg1, 1, string-length($arg2)) = $arg2"/>
-	</exslf:function>
+		<xsl:sequence select="substring($arg1, 1, string-length($arg2)) = $arg2"/>
+	</xsl:function>
 	
-	<exslf:function name="fn:ends-with">
+	<xsl:function name="fn:ends-with">
 		<xsl:param name="arg1"/>
 		<xsl:param name="arg2"/>
-		<exslf:result select="substring($arg1, string-length($arg1) - string-length($arg2) + 1) = $arg2"/>
-	</exslf:function>
-	
-	<xsl:include href="lib/str.split.function.xsl"/>
+		<xsl:sequence select="substring($arg1, string-length($arg1) - string-length($arg2) + 1) = $arg2"/>
+	</xsl:function>
 	
 </xsl:stylesheet>
