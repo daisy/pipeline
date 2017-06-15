@@ -106,16 +106,22 @@ assembly/target/dev-launcher/bin/pipeline2 : assembly/.dependencies | $(MVN_WORK
 	fi
 
 ifneq ($(MAKECMDGOALS), clean)
-include .maven-build.mk $(addsuffix /.build.mk,$(GRADLE_MODULES))
+-include $(addsuffix /.build.mk,$(MODULES))
 endif
 
 SAXON := $(MVN_WORKSPACE)/net/sf/saxon/Saxon-HE/9.4/Saxon-HE-9.4.jar
 
 $(addsuffix /.build.mk,$(MAVEN_MODULES)) : .maven-build.mk
+	if ! test -e $@; then \
+		if cat .maven-modules | grep -Fx "$$(dirname $@)" >/dev/null; then \
+			echo "\$$(error $@ could not be generated)" >$@; \
+		fi \
+	fi
 	touch $@
 
 .SECONDARY : .maven-build.mk
 .maven-build.mk : .effective-pom.xml | $(SAXON)
+	rm -f $(addsuffix /.build.mk,$(MAVEN_MODULES)) && \
 	if ! java -cp $(SAXON) net.sf.saxon.Transform \
 	          -s:$< \
 	          -xsl:.make/make-maven-build.mk.xsl \
