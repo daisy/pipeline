@@ -17,6 +17,8 @@ MVN_LOG := tee -a $(CURDIR)/maven.log | cut -c1-1000 | pcregrep -M "^\[INFO\] -+
 
 SHELL := /bin/bash
 
+export MVN MVN_LOG GRADLE
+
 rwildcard = $(shell find $1 -type f | sed 's/ /\\ /g')
 # does not support spaces in file names:
 #rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
@@ -28,31 +30,31 @@ all : check dist
 dist: dist-dmg dist-exe dist-zip-linux dist-deb dist-rpm dist-webui-deb dist-webui-rpm
 
 .PHONY : dist-dmg
-dist-dmg : assembly/.dependencies | $(MVN_WORKSPACE)
+dist-dmg : assembly/.dependencies | .maven-init
 	cd assembly && \
 	$(MVN) clean package -Pmac | $(MVN_LOG)
 	mv assembly/target/*.dmg .
 
 .PHONY : dist-exe
-dist-exe : assembly/.dependencies | $(MVN_WORKSPACE)
+dist-exe : assembly/.dependencies | .maven-init
 	cd assembly && \
 	$(MVN) clean package -Pwin | $(MVN_LOG)
 	mv assembly/target/*.exe .
 
 .PHONY : dist-zip-linux
-dist-zip-linux : assembly/.dependencies | $(MVN_WORKSPACE)
+dist-zip-linux : assembly/.dependencies | .maven-init
 	cd assembly && \
 	$(MVN) clean package -Plinux | $(MVN_LOG)
 	mv assembly/target/*.zip .
 
 .PHONY : dist-deb
-dist-deb : assembly/.dependencies | $(MVN_WORKSPACE)
+dist-deb : assembly/.dependencies | .maven-init
 	cd assembly && \
 	$(MVN) clean package -Pdeb | $(MVN_LOG)
 	mv assembly/target/*.deb .
 
 .PHONY : dist-rpm
-dist-rpm : assembly/.dependencies | $(MVN_WORKSPACE)
+dist-rpm : assembly/.dependencies | .maven-init
 	if [ -f /etc/redhat-release ]; then \
 		cd assembly && \
 		$(MVN) clean package -Prpm | $(MVN_LOG) && \
@@ -95,7 +97,7 @@ check : $(addprefix check-,$(MODULES))
 .PHONY : $(addprefix check-,$(MODULES))
 $(addprefix check-,$(MODULES)) : check-% : %/.last-tested
 
-assembly/target/dev-launcher/bin/pipeline2 : assembly/.dependencies | $(MVN_WORKSPACE)
+assembly/target/dev-launcher/bin/pipeline2 : assembly/.dependencies | .maven-init
 	cd assembly && \
 	$(MVN) clean package -Pdev-launcher | $(MVN_LOG)
 	rm assembly/target/dev-launcher/etc/*windows*
@@ -106,12 +108,12 @@ assembly/target/dev-launcher/bin/pipeline2 : assembly/.dependencies | $(MVN_WORK
 	fi
 
 ifneq ($(MAKECMDGOALS), clean)
--include $(addsuffix /.build.mk,$(MODULES))
+-include $(addsuffix /.deps.mk,$(MODULES))
 endif
 
 SAXON := $(MVN_WORKSPACE)/net/sf/saxon/Saxon-HE/9.4/Saxon-HE-9.4.jar
 
-$(addsuffix /.build.mk,$(MAVEN_MODULES)) : .maven-build.mk
+$(addsuffix /.deps.mk,$(MAVEN_MODULES)) : .maven-deps.mk
 	if ! test -e $@; then \
 		if cat .maven-modules | grep -Fx "$$(dirname $@)" >/dev/null; then \
 			echo "\$$(error $@ could not be generated)" >$@; \
@@ -119,20 +121,20 @@ $(addsuffix /.build.mk,$(MAVEN_MODULES)) : .maven-build.mk
 	fi
 	touch $@
 
-.SECONDARY : .maven-build.mk
-.maven-build.mk : .effective-pom.xml | $(SAXON)
-	rm -f $(addsuffix /.build.mk,$(MAVEN_MODULES)) && \
+.SECONDARY : .maven-deps.mk
+.maven-deps.mk : .effective-pom.xml | $(SAXON)
+	rm -f $(addsuffix /.deps.mk,$(MAVEN_MODULES)) && \
 	if ! java -cp $(SAXON) net.sf.saxon.Transform \
 	          -s:$< \
-	          -xsl:.make/make-maven-build.mk.xsl \
+	          -xsl:.make/make-maven-deps.mk.xsl \
 	          CURDIR="$(CURDIR)" \
 	          MODULE="." \
 	          SRC_DIR="$$(cat .maven-modules | while read -r m; do test -e $$m/src && echo $$m/src; done | paste -sd ' ' -)" \
 	          MAIN_DIR="$$(cat .maven-modules | while read -r m; do test -e $$m/src/main && echo $$m/src/main; done | paste -sd ' ' -)" \
-	          OUTPUT_FILENAME=".build.mk" \
+	          OUTPUT_FILENAME=".deps.mk" \
 	          >/dev/null \
 	; then \
-		rm -f $(addsuffix /.build.mk,$(MAVEN_MODULES)) && \
+		rm -f $(addsuffix /.deps.mk,$(MAVEN_MODULES)) && \
 		exit 1; \
 	fi
 
@@ -144,7 +146,7 @@ $(SAXON) :
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 # can not use $^ because it includes .dependencies-init
 # .maven-modules omitted because it has no additional prerequisites
-.effective-pom.xml : .maven-modules $(POMS) | $(MVN_WORKSPACE)
+.effective-pom.xml : .maven-modules $(POMS) | .maven-init
 	if ! find $@ $(POMS) >/dev/null 2>/dev/null || [[ -n $$(find $(POMS) -newer $@ 2>/dev/null) ]]; then \
 		cat $< | while read -r module; do \
 			pom=$$module/pom.xml && \
@@ -182,9 +184,10 @@ $(SAXON) :
 	} && \
 	print_modules_recursively . >$@
 
-$(addsuffix /.build.mk,$(GRADLE_MODULES)) : $(GRADLE_FILES)
-	module=$$(dirname $@) && \
-	bash .make/make-gradle-build.mk.sh $$module >$@
+$(addsuffix /.deps.mk,$(GRADLE_MODULES)) : $(GRADLE_FILES)
+	if ! bash .make/make-gradle-deps.mk.sh $$(dirname $@) >$@; then \
+		echo "\$$(error $@ could not be generated)" >$@; \
+	fi
 
 .SECONDARY : cli/.install.zip
 cli/.install.zip : cli/.install
@@ -193,17 +196,20 @@ cli/.install : cli/cli/*.go
 
 updater/cli/.install : updater/cli/*.go
 
+.SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
 
-.gradle-settings/conf/settings.xml : settings.xml
-	mkdir -p $(dir $@)
-	cp $< $@
-
-$(addsuffix /.build.mk,$(MODULES)) .maven-build.mk .effective-pom.xml .maven-modules : .dependencies-init
+$(addsuffix /.deps.mk,$(MODULES)) .maven-deps.mk .effective-pom.xml .maven-modules : .dependencies-init
 
 .SECONDARY : .dependencies-init
 .dependencies-init :
 	echo "Recomputing dependencies between modules..." >&2
+
+.SECONDARY : .maven-init
+.maven-init : | $(MVN_WORKSPACE)
+
+.SECONDARY : .gradle-init
+.gradle-init : | $(MVN_WORKSPACE) .gradle-settings/conf/settings.xml
 
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 $(MVN_WORKSPACE) :
@@ -211,6 +217,10 @@ $(MVN_WORKSPACE) :
 		mkdir -p $(MVN_CACHE) && \
 		cp -r $(MVN_CACHE) $@; \
 	fi
+
+.gradle-settings/conf/settings.xml : settings.xml
+	mkdir -p $(dir $@)
+	cp $< $@
 
 .PHONY : cache
 cache :
@@ -240,9 +250,10 @@ clean : cache
 	rm -rf webui/dp2webui
 	rm -f .effective-pom.xml .maven-modules
 	find * -name .last-tested -exec rm -r "{}" \;
-	find * -name .build.mk -exec rm -r "{}" \;
+	find * -name .deps.mk -exec rm -r "{}" \;
 	# generated in previous versions:
 	rm -f .maven-build.mk
+	find . -name .build.mk -exec rm -r "{}" \;
 	find * -name .maven-to-install -exec rm -r "{}" \;
 	find * -name .maven-to-test -exec rm -r "{}" \;
 	find * -name .maven-to-test-dependents -exec rm -r "{}" \;

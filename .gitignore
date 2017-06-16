@@ -1,6 +1,6 @@
 .DS_Store
-.build.mk
 .classpath
+.deps.mk
 .project
 .last-tested
 .settings

@@ -145,15 +145,12 @@
 				<xsl:text>.SECONDARY : </xsl:text>
 				<xsl:value-of select="concat($dirname,'.test')"/>
 				<xsl:text>&#x0A;</xsl:text>
-				<xsl:value-of select="concat($dirname,'.test : | $(MVN_WORKSPACE)')"/>
+				<xsl:value-of select="concat($dirname,'.test : | .maven-init')"/>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>ifndef DUMP_DEPENDENCIES</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x09;</xsl:text>
-				<xsl:text>cd $(dir $@) &amp;&amp; \</xsl:text>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:text>&#x09;</xsl:text>
-				<xsl:text>$(MVN) clean verify | $(MVN_LOG)</xsl:text>
+				<xsl:text>bash .make/mvn-test.sh $$(dirname $@)</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>endif</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
@@ -236,7 +233,7 @@
 				<xsl:call-template name="install-command">
 					<xsl:with-param name="dirname" select="$dirname"/>
 				</xsl:call-template>
-				<xsl:text> : | $(MVN_WORKSPACE)</xsl:text>
+				<xsl:text> : | .maven-init</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>ifdef DUMP_DEPENDENCIES</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
@@ -246,10 +243,7 @@
 				<xsl:text>else</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x09;</xsl:text>
-				<xsl:text>cd $(dir $@) &amp;&amp; \</xsl:text>
-				<xsl:text>&#x0A;</xsl:text>
-				<xsl:text>&#x09;</xsl:text>
-				<xsl:text>$(MVN) clean install -DskipTests -Dinvoker.skip=true | $(MVN_LOG)</xsl:text>
+				<xsl:text>bash .make/mvn-install.sh $$(dirname $@)</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>endif</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
