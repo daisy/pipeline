@@ -1,13 +1,13 @@
 .DS_Store
 .classpath
 .deps.mk
+.effective-pom.xml
 .project
 .last-tested
 .settings
 /*.deb
 /*.rpm
 /*.zip
-/.effective-pom.xml
 /.gradle-settings/
 /.gradle/
 /.maven-cache/

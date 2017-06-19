@@ -3,6 +3,7 @@ MAVEN_MODULES := $(patsubst %/pom.xml,%,$(filter-out pom.xml,$(POMS)))
 GRADLE_FILES := $(shell find * -name build.gradle -o -name settings.gradle -o -name gradle.properties)
 GRADLE_MODULES := $(patsubst %/build.gradle,%,$(filter %/build.gradle,$(GRADLE_FILES)))
 MODULES := $(MAVEN_MODULES) $(GRADLE_MODULES)
+GITREPOS := $(shell find * -name .gitrepo -exec dirname {} \;)
 
 MVN_WORKSPACE := .maven-workspace
 MVN_CACHE := .maven-cache
@@ -17,7 +18,9 @@ MVN_LOG := tee -a $(CURDIR)/maven.log | cut -c1-1000 | pcregrep -M "^\[INFO\] -+
 
 SHELL := /bin/bash
 
-export MVN MVN_LOG GRADLE
+EVAL := :
+
+export CURDIR MVN MVN_LOG GRADLE MVN_CACHE MAKE MAKEFLAGS MAKECMDGOALS
 
 rwildcard = $(shell find $1 -type f | sed 's/ /\\ /g')
 # does not support spaces in file names:
@@ -94,6 +97,9 @@ run-webui : # webui/.dependencies
 .PHONY : check
 check : $(addprefix check-,$(MODULES))
 
+.PHONY : release
+release : assembly/.release
+
 .PHONY : $(addprefix check-,$(MODULES))
 $(addprefix check-,$(MODULES)) : check-% : %/.last-tested
 
@@ -112,6 +118,7 @@ ifneq ($(MAKECMDGOALS), clean)
 endif
 
 SAXON := $(MVN_WORKSPACE)/net/sf/saxon/Saxon-HE/9.4/Saxon-HE-9.4.jar
+export SAXON
 
 $(addsuffix /.deps.mk,$(MAVEN_MODULES)) : .maven-deps.mk
 	if ! test -e $@; then \
@@ -129,8 +136,9 @@ $(addsuffix /.deps.mk,$(MAVEN_MODULES)) : .maven-deps.mk
 	          -xsl:.make/make-maven-deps.mk.xsl \
 	          CURDIR="$(CURDIR)" \
 	          MODULE="." \
-	          SRC_DIR="$$(cat .maven-modules | while read -r m; do test -e $$m/src && echo $$m/src; done | paste -sd ' ' -)" \
-	          MAIN_DIR="$$(cat .maven-modules | while read -r m; do test -e $$m/src/main && echo $$m/src/main; done | paste -sd ' ' -)" \
+	          SRC_DIRS="$$(cat .maven-modules | while read -r m; do test -e $$m/src && echo $$m/src; done | paste -sd ' ' -)" \
+	          MAIN_DIRS="$$(cat .maven-modules | while read -r m; do test -e $$m/src/main && echo $$m/src/main; done | paste -sd ' ' -)" \
+	          RELEASE_DIRS="$$(for x in $(GITREPOS); do [ -e $$x/bom/pom.xml ] || [ -e $$x/maven/bom/pom.xml ] && echo $$x; done )" \
 	          OUTPUT_FILENAME=".deps.mk" \
 	          >/dev/null \
 	; then \
@@ -199,6 +207,21 @@ updater/cli/.install : updater/cli/*.go
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
 
+.SECONDARY : .group-eval
+.group-eval :
+ifndef SKIP_GROUP_EVAL_TARGET
+	commands=$$($(MAKE) -qs EVAL="bash -c \"printf '\\\"%s\\\" ' \\\"\\$$\$$@\\\" && echo\" --" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS)); \
+	if [ $$? == 1 ]; then \
+		if [ -n "$$commands" ]; then \
+			echo "$$commands" | perl .make/group-eval.pl; \
+		fi \
+	else \
+		exit $$?; \
+	fi
+endif
+
+.group-eval : | .maven-init .gradle-init
+
 $(addsuffix /.deps.mk,$(MODULES)) .maven-deps.mk .effective-pom.xml .maven-modules : .dependencies-init
 
 .SECONDARY : .dependencies-init
@@ -248,7 +271,8 @@ clean : cache
 	rm -f maven.log
 	rm -f *.zip *.deb *.rpm
 	rm -rf webui/dp2webui
-	rm -f .effective-pom.xml .maven-modules
+	rm -f .maven-modules
+	find . -name .effective-pom.xml -exec rm -r "{}" \;
 	find * -name .last-tested -exec rm -r "{}" \;
 	find * -name .deps.mk -exec rm -r "{}" \;
 	# generated in previous versions:

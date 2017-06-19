@@ -1,4 +1,6 @@
 [[ -n ${VERBOSE+x} ]] && set -x
 set -e
-cd $1
-eval $MVN clean verify | eval $MVN_LOG
+for arg in "$@"; do
+    cd $arg
+    eval $MVN clean verify | eval $MVN_LOG
+done
