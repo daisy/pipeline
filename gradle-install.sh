@@ -1,4 +1,6 @@
 [[ -n ${VERBOSE+x} ]] && set -x
 set -e
-cd $1
-eval $GRADLE install
+for arg in "$@"; do
+    cd $arg
+    eval $GRADLE install
+done
