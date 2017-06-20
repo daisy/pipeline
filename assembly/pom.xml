@@ -59,7 +59,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-bom</artifactId>
-        <version>1.10.2-SNAPSHOT</version>
+        <version>1.10.1</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -94,7 +94,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.10.1</version>
+        <version>1.10.2-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -2456,6 +2456,7 @@
         <bundles.auto.deploy>system/felix</bundles.auto.deploy> <!-- don't change! must be the same as in dist.properties -->
         <bundles.bootstrap>system/bootstrap</bundles.bootstrap> <!-- don't change! must be the same as in dist.properties -->
         <bundles.modules>modules</bundles.modules> <!-- don't change! must be the same as in dist.properties -->
+        <pipeline.log.jobappender>org.daisy.pipeline.logging.IgnoreSiftAppender</pipeline.log.jobappender>
       </properties>
       <build>
         <plugins>
@@ -2546,6 +2547,7 @@
                         <include>etc/system.properties</include>
                         <include>etc/config.properties</include>
                         <include>etc/org.apache.felix.fileinstall-modules.cfg</include>
+                        <include>etc/config-logback.xml</include>
                       </includes>
                       <filter>true</filter>
                     </source>
