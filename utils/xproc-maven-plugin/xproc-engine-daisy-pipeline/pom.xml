@@ -11,7 +11,7 @@
   </parent>
   
   <artifactId>xproc-engine-daisy-pipeline</artifactId>
-  <version>1.10.3-SNAPSHOT</version>
+  <version>1.10.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>xproc-engine-daisy-pipeline</name>
   
@@ -20,7 +20,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.3-SNAPSHOT</version>
+        <version>1.10.2</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
