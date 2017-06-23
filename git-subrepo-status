@@ -1,0 +1,357 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Term::ANSIColor;
+
+my $fetch = 0;
+my $show_pr_numbers = 0;
+my $include_dirs_file;
+my $sha_only = 0;
+my $repo;
+
+while (@ARGV) {
+	my $arg = $ARGV[0];
+	if ($arg eq "--fetch" and not $fetch) {
+		$fetch = 1;
+		shift;
+	} elsif ($arg eq "--prs" and not $show_pr_numbers and not $sha_only) {
+		$show_pr_numbers = 1;
+		shift;
+	} elsif ($arg eq "--sha-only" and not $sha_only and not $show_pr_numbers) {
+		$sha_only = 1;
+		shift;
+	} elsif ($arg eq "--include" and not $include_dirs_file and not $repo) {
+		shift;
+		if (not @ARGV) {
+			die "Missing value for --include option";
+		}
+		$include_dirs_file = $ARGV[0];
+		shift;
+	} elsif (not $repo and not $include_dirs_file) {
+		$repo = $arg;
+		shift;
+	} else {
+		die "Unexpected argument: $arg";
+	}
+}
+
+sub print_color {
+	my ($color) = @_;
+	print -t STDOUT ? color($color) : "";
+}
+
+sub print_color_reset {
+	print -t STDOUT ? color("reset") : "";
+}
+
+sub cmp_tree_with_subtree {
+	my ($revision_a, $revision_b, $subdir_b) = @_;
+	my $tree_a = `git ls-tree -r $revision_a 2>/dev/null | awk '{print \$3}'`;
+	my $tree_b = `git ls-tree -r $revision_b $subdir_b 2>/dev/null | grep -v $subdir_b/.gitrepo | awk '{print \$3}'`;
+	return ("$tree_a" eq "$tree_b");
+}
+
+my @git_subrepo_commits; {
+	@git_subrepo_commits = `git log --grep='subrepo:' --format=format:%H`;
+	for (@git_subrepo_commits) {
+		chomp;
+	}
+}
+
+sub find_last_git_subrepo_commit {
+	my ($subdir) = @_;
+	for my $commit (@git_subrepo_commits) {
+		my $commit_message = `git log --format=%B -n 1 $commit`;
+		if ($commit_message =~ /^subrepo:\n +subdir: *"([^"]*)"\n  merged: *"([0-9a-f]{7,})"/m) {
+			if ($1 eq $subdir) {
+				if (cmp_tree_with_subtree($2, $commit, $subdir)) {
+					return ($commit, $2);
+				} else {
+					
+					# FIXME: show warning?
+					# can have several causes:
+					# - commit does not exists anymore (got purged): test with `git rev-parse --verify $commit 2>/dev/null` in cmp_tree_with_subtree
+					# - corrupt git-subrepo commit
+				}
+			}
+		}
+	}
+	return;
+}
+
+# FIXME: also includes commits with only changes to $subdir/.gitrepo
+sub count_local_commits {
+	my ($subdir, $since_commit) = @_;
+	return grep { `git diff-tree --quiet -r $_ -- $subdir`; $? } distance($since_commit, "HEAD");
+}
+
+sub get_remote {
+	my ($subdir) = @_;
+	chomp(my $remote = `git config --file $subdir/.gitrepo --get subrepo.remote`);
+	return $remote;
+}
+
+sub remote_is_github {
+	my ($remote) = @_;
+	if ($remote =~ /^(?:https?:\/\/github\.com\/|git\@github\.com:)([^\.\/]+)\/([^\.\/]+)(\.git)?$/) {
+		return ($1, $2);
+	} else {
+		return;
+	}
+}
+
+sub get_pr_for_branch_via_gh_api {
+	my ($user, $repo, $branch) = @_;
+	my @pr = `curl "https://api.github.com/repos/$user/$repo/pulls?head=$user:$branch&state=open" 2>/dev/null | jq -r '.[].number' 2>/dev/null`;
+	for (@pr) {
+		chomp;
+	}
+	return @pr;
+}
+
+# FIXME: problem is that closed prs are also listed
+sub get_pr_for_branch {
+	my ($remote, $branch) = @_;
+	my $commit = rev_parse("$remote/$branch");
+	my @pr;
+	for (`git ls-remote $remote`) {
+		chomp;
+		if ($_ =~ /^$commit\trefs\/pull\/([0-9]+)\/head$/) {
+			push @pr, $1;
+		}
+	}
+	return @pr;
+}
+
+sub has_uncommitted_changes {
+	my ($subdir) = @_;
+	`git diff-index --quiet HEAD -- $subdir`;
+	return $?;
+}
+
+sub rev_parse {
+	my ($revision) = @_;
+	chomp(my $commit = `git rev-parse $revision`);
+	return $commit;
+}
+
+sub distance {
+	my ($from, $to) = @_;
+	my @commits = defined $from ? `git rev-list $to ^$from` : `git rev-list $to`;
+	for (@commits) {
+		chomp;
+	}
+	return @commits;
+}
+
+# also in List::Util but only as of version 1.33
+sub any(&@) {
+	my $predicate = \&{shift @_};
+	for (@_) {
+		if ($predicate->($_)) {
+			return $_;
+		}
+	}
+	return;
+}
+
+my @subrepos; {
+	if (defined $repo) {
+		push @subrepos, $repo;
+	} else {
+		my $prev;
+		for (`find . -type f -name .gitrepo`) {
+			chomp;
+			s/\/\.gitrepo$//;
+			s/^\.\///;
+			my $repo = $_;
+			if (not defined $prev or not $repo =~ /^\Q$prev\E\//) {
+				push @subrepos, $repo;
+				$prev = $repo;
+			}
+		}
+		if (defined $include_dirs_file) {
+			my @include_dirs; {
+				open my $fh, $include_dirs_file or die "Can't open $include_dirs_file: $!";
+				for (<$fh>) {
+					chomp;
+					s/\/$//;
+					s/^\.\///;
+					push @include_dirs, $_;
+				}
+			}
+			@subrepos = grep { my $repo = $_; any { $_ eq $repo or $repo =~ /^\Q$_\E\// or $_ =~ /^\Q$repo\E\// } @include_dirs } @subrepos;
+		}
+	}
+	@subrepos = grep { `git ls-files $_ --error-unmatch >/dev/null 2>/dev/null`; not $? } @subrepos;
+}
+
+for my $subrepo (@subrepos) {
+	print "$subrepo";
+	my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
+	if ($fetch) {
+		# FIXME: what if $remote does not exist? use get_remote()?
+		`git fetch --prune $remote 2>/dev/null`;
+	}
+	my ($commit, $subrepo_commit) = find_last_git_subrepo_commit($subrepo);
+	
+	# FIXME: can take long time if distance is big
+	# -> make it an option to just show whether there are local changes or not, not the number of commits
+	#    this only requires a single diff
+	my $local_changes = count_local_commits($subrepo, $commit);
+	if ($sha_only) {
+		if (not defined $commit) {
+			die;
+		}
+		if ($local_changes or has_uncommitted_changes $subrepo) {
+			
+			# FIXME: don't die if not (has_uncommitted_changes $subrepo) and $behind_but_equal (see below)
+			# -> or even more general: "behind_but_equal_to_some_commit" (--sha-only does not require that "some commit" is present on remote)
+			die "You specified --sha-only but local changes were found in $subrepo";
+		}
+		print " @ ";
+		print_color("bold yellow");
+		print "$subrepo_commit";
+		print_color_reset;
+	} elsif (defined $commit) {
+		print " @ ";
+		my @subrepo_branches;
+		my $behind;
+		my $ahead;
+		my %remote_branches; {
+			for (`git ls-remote . "refs/remotes/$remote/*"`) {
+				$_ =~ /^([0-9a-f]+)\trefs\/remotes\/\Q$remote\E\/(.+)$/ or die;
+				$remote_branches{$2} = $1;
+			}
+		}
+		$subrepo_commit = rev_parse($subrepo_commit);
+		@subrepo_branches = grep { $remote_branches{$_} eq $subrepo_commit } keys %remote_branches;
+		if (not @subrepo_branches) {
+			my @behind_branches; {
+				for (`git branch -r --contains $subrepo_commit`) {
+					if ($_ =~ /^ *\Q$remote\E\/(.+)$/) {
+						push @behind_branches, $1;
+					}
+				}
+			}
+			if (@behind_branches) {
+				for (@behind_branches) {
+					my $dist = distance($subrepo_commit, "$remote/$_");
+					if (not defined $behind or $dist < $behind) {
+						$behind = $dist;
+						@subrepo_branches = $_;
+					} elsif ($dist == $behind) {
+						push @subrepo_branches, $_;
+					}
+				}
+			} else {
+				my @ahead_of_branches = grep { `git merge-base --is-ancestor $remote/$_ $subrepo_commit` ; not $? }
+				                        keys %remote_branches;
+				for (@ahead_of_branches) {
+					my $dist = distance("$remote/$_", $subrepo_commit);
+					if (not defined $ahead or $dist < $ahead) {
+						$ahead = $dist;
+						@subrepo_branches = $_;
+					} elsif ($dist == $ahead) {
+						push @subrepo_branches, $_;
+					}
+				}
+			}
+		}
+		if ("master" ~~ @subrepo_branches) {
+			@subrepo_branches = "master";
+		}
+		my $behind_but_equal = 0;
+		if (@subrepo_branches) {
+			my $branch;
+			if ($behind) {
+			    for (@subrepo_branches) {
+					if (cmp_tree_with_subtree("$remote/$_", "HEAD", $subrepo)) {
+						$branch = $_;
+						$behind_but_equal = 1;
+						last;
+					}
+				}
+			}
+			if (not defined $branch) {
+				$branch = $subrepo_branches[0];
+			}
+			print_color("bold yellow");
+			print "$branch";
+			print_color_reset;
+			my @pr_number;
+			if ($show_pr_numbers) {
+				# my $remote_url = get_remote($subrepo);
+				# my ($user, $repo) = remote_is_github($remote_url);
+				# if (defined $repo) {
+				# 	@pr_number = get_pr_for_branch_via_gh_api($user, $repo, $branch);
+				# }
+				if (not $branch eq "master") {
+					@pr_number = get_pr_for_branch($remote, $branch);
+				}
+			}
+			if (@pr_number) {
+				print " (#";
+				print_color("bold yellow");
+				print "$pr_number[0]";
+				print_color_reset;
+				print ")";
+			}
+		} else {
+			print_color("bold yellow");
+			print substr("$subrepo_commit", 0, 7 + 1);
+			print_color_reset;
+		}
+		if ($behind_but_equal) {
+			print_color("bold red");
+			print " *";
+			print_color_reset;
+		} else {
+			if ($behind) {
+				print_color("bold red");
+				# TODO: use format with tilde ~ and/or caret ^ (e.g. "master~209^2~15")
+				print " -$behind";
+				print_color_reset;
+			} elsif ($ahead) {
+				print_color("bold red");
+				print " +$ahead";
+				print_color_reset;
+			}
+			if ($behind or $ahead) {
+				print " (";
+				my $local_branch; {
+					for (`git branch --contains $subrepo_commit`) {
+						chomp;
+						s/\*? *//;
+						if ($subrepo_commit eq rev_parse($_)) {
+							$local_branch = $_;
+							last;
+						}
+					}
+				}
+				if (defined $local_branch) {
+					print "$local_branch";
+				} else {
+					print substr("$subrepo_commit", 0, 7 + 1);
+				}
+				print ")";
+			}
+			if ($local_changes) {
+				print_color("bold red");
+				print " ++$local_changes";
+				print_color_reset;
+			}
+		}
+	} else {
+		if ($local_changes) {
+			print_color("bold red");
+			print " ++$local_changes";
+			print_color_reset;
+		}
+	}
+	if (has_uncommitted_changes $subrepo) {
+		print " M";
+	}
+	print "\n";
+}
