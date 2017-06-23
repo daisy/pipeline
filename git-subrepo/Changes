@@ -1,0 +1,51 @@
+---
+version: 0.3.1
+date:    Tue Jan  3 23:08:56 PST 2017
+changes:
+- Updated release for homebrew
+- Fix #192
+---
+version: 0.3.0
+date:    Wed Dec  2 19:19:43 PST 2015
+changes:
+- Fix issue #98 and host of others (89, 91, 95, 96)
+- Adds support for the merge-base command
+- Adds stability to many commands
+- Command completion updates
+- Rename `init` to `.rc`
+- @grimmySwe++ @dzzh++ @jrosdahl++ @perlpunk++
+---
+version: 0.2.3
+date:    Sun Aug  9 13:44:22 PDT 2015
+changes:
+- Fix issues #75 and #76
+---
+version: 0.2.2
+date:    Wed Jul 22 09:45:13 PDT 2015
+changes:
+- Added the `init` subcommand
+- Applied doc fixes
+---
+version: 0.2.1
+date:    Sat Mar 28 07:52:22 PDT 2015
+changes:
+- Allows subrepo clone to clone to an empty branch; fixes #26.
+- Refs in status
+- Empty parent set to 'none' in .gitrepo file.
+- Bug fixes
+---
+version: 0.2.0
+date:    Sat Jan 24 06:22:05 PST 2015
+changes:
+- Massive overhaul
+- .gitrepo files remain the same so backwards compatible
+- Introduce the branch and commit subcommands
+- The checkout subcommand goes away
+- Operations work much smoother like normal Git flow
+- Much more testing
+- Better doc
+---
+version: 0.1.0
+date:    Fri Feb 21 12:25:53 2014 -0800
+changes:
+- First version
