@@ -317,6 +317,22 @@
 							<xsl:value-of select="concat($dirname,'.install.jar')"/>
 							<xsl:text> : %/.install.jar : %/.install </xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
+							<xsl:if test="$effective-pom
+							              /pom:project[pom:groupId=$groupId and
+							                           pom:artifactId=$artifactId and
+							                           pom:version=$version]
+							              //pom:build/pom:plugins/pom:plugin[(not(pom:groupId) or pom:groupId='org.apache.maven.plugins')
+							                                                 and pom:artifactId='maven-jar-plugin']
+							              /pom:executions/pom:execution[pom:goals[pom:goal='jar']]
+							              /pom:configuration/pom:classifier[string(.)='doc']">
+								<xsl:text>&#x0A;</xsl:text>
+								<xsl:text>.SECONDARY : </xsl:text>
+								<xsl:value-of select="concat($dirname,'.install-doc.jar')"/>
+								<xsl:text>&#x0A;</xsl:text>
+								<xsl:value-of select="concat($dirname,'.install-doc.jar')"/>
+								<xsl:text> : %/.install-doc.jar : %/.install </xsl:text>
+								<xsl:text>&#x0A;</xsl:text>
+							</xsl:if>
 						</xsl:if>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>.SECONDARY : </xsl:text>

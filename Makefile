@@ -121,14 +121,16 @@ assembly/target/dev-launcher/bin/pipeline2 : assembly/.dependencies | .maven-ini
 
 ifneq ($(MAKECMDGOALS), clean)
 ifneq ($(MAKECMDGOALS), dump-maven-cmd)
--include $(addsuffix /.deps.mk,$(MODULES))
+ifneq ($(MAKECMDGOALS), clean-website)
+-include $(addsuffix /.deps.mk,$(MODULES) website/target/maven)
+endif
 endif
 endif
 
 SAXON := $(MVN_WORKSPACE)/net/sf/saxon/Saxon-HE/9.4/Saxon-HE-9.4.jar
 export SAXON
 
-$(addsuffix /.deps.mk,$(MAVEN_MODULES)) : .maven-deps.mk
+$(addsuffix /.deps.mk,$(MAVEN_MODULES) website/target/maven) : .maven-deps.mk
 	if ! test -e $@; then \
 		if cat .maven-modules | grep -Fx "$$(dirname $@)" >/dev/null; then \
 			echo "\$$(error $@ could not be generated)" >$@; \
@@ -138,7 +140,7 @@ $(addsuffix /.deps.mk,$(MAVEN_MODULES)) : .maven-deps.mk
 
 .SECONDARY : .maven-deps.mk
 .maven-deps.mk : .effective-pom.xml | $(SAXON)
-	rm -f $(addsuffix /.deps.mk,$(MAVEN_MODULES)) && \
+	rm -f $(addsuffix /.deps.mk,$(MAVEN_MODULES) website/target/maven) && \
 	if ! java -cp $(SAXON) net.sf.saxon.Transform \
 	          -s:$< \
 	          -xsl:.make/make-maven-deps.mk.xsl \
@@ -150,7 +152,7 @@ $(addsuffix /.deps.mk,$(MAVEN_MODULES)) : .maven-deps.mk
 	          OUTPUT_FILENAME=".deps.mk" \
 	          >/dev/null \
 	; then \
-		rm -f $(addsuffix /.deps.mk,$(MAVEN_MODULES)) && \
+		rm -f $(addsuffix /.deps.mk,$(MAVEN_MODULES) website/target/maven) && \
 		exit 1; \
 	fi
 
@@ -162,8 +164,9 @@ $(SAXON) :
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 # can not use $^ because it includes .dependencies-init
 # .maven-modules omitted because it has no additional prerequisites
-.effective-pom.xml : .maven-modules $(POMS) | .maven-init
-	if ! find $@ $(POMS) >/dev/null 2>/dev/null || [[ -n $$(find $(POMS) -newer $@ 2>/dev/null) ]]; then \
+.effective-pom.xml : .maven-modules $(POMS) website/target/maven/pom.xml | .maven-init
+	if ! find $@ $(POMS) website/target/maven/pom.xml >/dev/null 2>/dev/null \
+	     || [[ -n $$(find $(POMS) website/target/maven/pom.xml -newer $@ 2>/dev/null) ]]; then \
 		cat $< | while read -r module; do \
 			pom=$$module/pom.xml && \
 			v=$$(xmllint --xpath "/*/*[local-name()='version']/text()" $$pom) && \
@@ -181,7 +184,7 @@ $(SAXON) :
 		touch $@; \
 	fi
 
-.maven-modules : $(POMS)
+.maven-modules : $(POMS) website/target/maven/pom.xml
 	function print_modules_recursively() { \
 		local module=$$1 && \
 		submodules=($$(xmllint --format --xpath "/*/*[local-name()='modules']/*" $$module/pom.xml 2>/dev/null \
@@ -238,7 +241,7 @@ endif
 
 .group-eval : | .maven-init .gradle-init
 
-$(addsuffix /.deps.mk,$(MODULES)) .maven-deps.mk .effective-pom.xml .maven-modules : .dependencies-init
+$(addsuffix /.deps.mk,$(MODULES) website/target/maven) .maven-deps.mk .effective-pom.xml .maven-modules : .dependencies-init
 
 .SECONDARY : .dependencies-init
 .dependencies-init :
@@ -307,6 +310,8 @@ clean : cache
 	find * -name .gradle-dependencies-to-install -exec rm -r "{}" \;
 	find * -name .gradle-dependencies-to-test -exec rm -r "{}" \;
 
+clean : clean-website
+
 .PHONY : gradle-clean
 gradle-clean :
 	$(GRADLE) clean
@@ -315,21 +320,36 @@ gradle-clean :
 checked :
 	touch $(addsuffix /.last-tested,$(MODULES))
 
+website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml versions.yml)
+	cd website && \
+	make target/maven/pom.xml
+
+export MVN_OPTS = --settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)'
+
+website/target/maven/modules : website/target/maven/.deps.mk website/target/maven/.dependencies
+	rm -rf $@
+	cd website && \
+	make target/maven/modules
+
 .PHONY : website
-website : assembly/.dependencies
-	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)'"
+website : | website/target/maven/modules
+	cd website && \
+	make
 
 .PHONY : serve-website
-serve-website : assembly/.dependencies
-	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)'" serve
+serve-website : | website/target/maven/modules
+	cd website && \
+	make serve
 
 .PHONY : publish-website
-publish-website : assembly/.dependencies
-	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)'" publish
+publish-website : | website/target/maven/modules
+	cd website && \
+	make publish
 
 .PHONY : clean-website
 clean-website :
-	cd website && make MVN_OPTS="--settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)'" clean
+	cd website && \
+	make clean
 
 .PHONY : dump-maven-cmd
 dump-maven-cmd :

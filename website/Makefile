@@ -101,14 +101,9 @@ $(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/modules $(JEKYLL_DIR)/$(meta_file)
 
 $(MAVEN_DIR)/modules : $(MAVEN_DIR)/pom.xml
 	rm -rf $@
-	mkdir -p $@
-	cd $(dir $<) && mvn --quiet \
-	                    $(MVN_OPTS) \
-	                    "dependency:unpack-dependencies" \
-	                    -Dclassifier=doc -DexcludeTransitive -Dmdep.unpack.excludes='META-INF,META-INF/**/*' \
-	                    -Dmdep.useRepositoryLayout -Dmdep.failOnMissingClassifierArtifact=true
-	cd $(dir $<)/target/dependency/org/daisy/pipeline/modules && find . -type d -name '[0-9]*' -prune -exec bash -c \
-		'mkdir -p $(CURDIR)/$@/$$(dirname {}); cp -r {}/* $$_' \; || true
+	cd $(dir $<) && \
+	mvn --quiet $(MVN_OPTS) "process-sources"
+	test -e $@
 
 $(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml
 	mkdir -p $(dir $@)
