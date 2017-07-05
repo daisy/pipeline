@@ -11,14 +11,14 @@
 	-->
 	<entry key="l10nLang">no</entry>
 		
-	<entry key="l10nrearjacketcopy">Baksidestekt</entry>
+	<entry key="l10nrearjacketcopy">Baksidetekst</entry>
 	<entry key="l10nimagedescription">Bildebeskrivelse</entry>
 	<entry key="l10ncolophon">Kolofon</entry>
 	<entry key="l10ncaption">Bildetekst</entry>
 	<entry key="l10ntable">Tabell</entry>
 	<entry key="l10ntablepart">Tabelldel</entry>
 	<entry key="l10nTocHeadline">Innholdsfortegnelse</entry>
-	<entry key="l10nTocDescription">Sidehenvisninger til svart­skrifts­bo­ken står i pa­ren­tes.</entry>
+	<entry key="l10nTocDescription">Sidehenvisninger til svartskriftboken står i parentes.</entry>
 
 	<entry key="l10nTocVolumeStart">Hefte {0}</entry>
 	<entry key="l10nTocVolumeHeading">Innholdsfortegnelse for hefte {0}</entry>
