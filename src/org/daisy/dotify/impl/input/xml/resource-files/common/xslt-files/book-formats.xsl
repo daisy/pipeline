@@ -21,6 +21,7 @@
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()" dotify:desc="Show print page numbers in the header" dotify:default="true" dotify:values="true/false"/>
 	<xsl:param name="show-print-page-breaks" as="xs:boolean" select="false()" dotify:desc="Show print page breaks where they occur in the text" dotify:default="false" dotify:values="true/false"/>
 	<xsl:param name="show-toc-preamble" as="xs:boolean" select="true()" dotify:desc="Show toc preamble" dotify:default="true" dotify:values="true/false"/>
+	<xsl:param name="show-cover-page" as="xs:boolean" select="true()" dotify:desc="Show cover page" dotify:default="true" dotify:values="true/false"/>
 	<xsl:param name="matrix-table-columns-max" select="10" dotify:desc="The maximum number of columns in a matrix table (A positive integer)" dotify:default="10"/>
 	<xsl:param name="staircase-table-columns-max" select="10" dotify:desc="The maximum number of columns in a staircase table (A positive integer)" dotify:default="10"/>
 	<xsl:param name="colophon-metadata-placement" select="'end'" dotify:desc="The placement of colophon" dotify:default="end" dotify:values="begin/end"/>
@@ -259,7 +260,9 @@
 			<xsl:when test="$insertToc">
 				<volume-template volume-number-variable="volume" volume-count-variable="volumes" use-when="(= $volume 1)" sheets-in-volume-max="{$splitterMax}">
 					<pre-content>
-						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						<xsl:if test="$show-cover-page">
+							<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						</xsl:if>
 						<xsl:copy-of select="$firstInFirstVolumeContent"/>
 						<toc-sequence master="front" toc="full-toc" range="document" initial-page-number="1">
 							<on-toc-start>
@@ -283,7 +286,9 @@
 				</volume-template>
 				<volume-template volume-number-variable="volume" volume-count-variable="volumes" use-when="(> $volume 1)" sheets-in-volume-max="{$splitterMax}">
 					<pre-content>
-						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						<xsl:if test="$show-cover-page">
+							<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						</xsl:if>
 						<xsl:if test="$volume-toc">
 							<toc-sequence master="front" toc="full-toc" range="volume" initial-page-number="1">
 								<on-toc-start>
@@ -300,7 +305,9 @@
 			<xsl:otherwise>
 				<volume-template sheets-in-volume-max="{$splitterMax}" use-when="(= $volume 1)">
 					<pre-content>
-						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						<xsl:if test="$show-cover-page">
+							<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						</xsl:if>
 						<xsl:copy-of select="$firstInFirstVolumeContent"/>
 					</pre-content>
 					<post-content>
@@ -309,7 +316,9 @@
 				</volume-template>
 				<volume-template sheets-in-volume-max="{$splitterMax}" use-when="(> $volume 1)">
 					<pre-content>
-						<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						<xsl:if test="$show-cover-page">
+							<xsl:copy-of select="obfl:insertCoverPage($title, $authors)"/>
+						</xsl:if>
 					</pre-content>
 					<post-content>
 						<xsl:copy-of select="obfl:insertPostContentNotes($footnotesInFrontMatter, $footnotesNotInFrontMatter)"/>
