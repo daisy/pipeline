@@ -22,13 +22,22 @@ public class Main extends Application {
     
     @Override
     public void start(final Stage primaryStage) {
-
             String pipelineHome; {
                     pipelineHome = null;
+					String jvmBit = System.getProperty("sun.arch.data.model");
                     try {
-                            pipelineHome = Advapi32Util.registryGetStringValue(
-                                                WinReg.HKEY_LOCAL_MACHINE, "SOFTWARE\\DAISY Pipeline 2", "Pipeline2Home");
-                    } catch (Win32Exception e) {
+							if (jvmBit.equals("32")) {
+								System.err.println("32-bit JRE detected, looking for home in SOFTWARE/DAISY Pipeline 2");
+								pipelineHome = Advapi32Util.registryGetStringValue(
+												WinReg.HKEY_LOCAL_MACHINE, "SOFTWARE\\DAISY Pipeline 2", "Pipeline2Home");
+							} else if (jvmBit.equals("64")) {
+								System.err.println("64-bit JRE detected, looking for home in SOFTWARE/WOW6432Node/DAISY Pipeline 2");
+								pipelineHome = Advapi32Util.registryGetStringValue(
+												WinReg.HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\DAISY Pipeline 2", "Pipeline2Home");
+							}
+					} catch (Win32Exception e) {
+						System.err.println("Win32Exception" + e.getMessage());
+						e.printStackTrace();
                     }
                     if (Strings.isNullOrEmpty(pipelineHome)) {
                             pipelineHome = System.getenv("PIPELINE2_HOME");
