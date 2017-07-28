@@ -3,6 +3,7 @@ use Term::ANSIColor;
 my @commands;
 while (<>) {
 	chomp;
+	$_ =~ s/'/'"'"'/g;
 	(my $c, my @a) = `eval 'printf "%s\n" $_'`;
  	chomp $c;
  	chomp @a;
