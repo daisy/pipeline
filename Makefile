@@ -218,8 +218,15 @@ libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
 .SECONDARY : .group-eval
 .group-eval :
 ifndef SKIP_GROUP_EVAL_TARGET
-	commands=$$($(MAKE) -qs EVAL="bash -c \"printf '\\\"%s\\\" ' \\\"\\$$\$$@\\\" && echo\" --" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS)); \
-	if [ $$? == 1 ]; then \
+	set -o pipefail; \
+	if commands=$$( \
+		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) \
+		| perl -e '$$take = 1; \
+		           while (<>) { \
+		             if ($$_ eq ":") {} \
+		             elsif ($$_ =~ /^: xxx (.+)/) { if ($$take) { print "$$1\n" } \
+		             else { exit 1 }} else { $$take = 0 }}' \
+	); then \
 		if [ -n "$$commands" ]; then \
 			echo "$$commands" | perl .make/group-eval.pl; \
 		fi \
