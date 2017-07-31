@@ -1,0 +1,4 @@
+Start command_line test('severity_fatal')
+No errors or warnings detected.
+epubcheck completed
+Completed command_line test('severity_fatal')
