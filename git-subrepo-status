@@ -3,6 +3,9 @@
 use strict;
 use warnings;
 use Term::ANSIColor;
+use FindBin;
+use lib "$FindBin::Bin";
+use Utils;
 
 my $fetch = 0;
 my $show_pr_numbers = 0;
@@ -45,45 +48,10 @@ sub print_color_reset {
 	print -t STDOUT ? color("reset") : "";
 }
 
-sub cmp_tree_with_subtree {
-	my ($revision_a, $revision_b, $subdir_b) = @_;
-	my $tree_a = `git ls-tree -r $revision_a 2>/dev/null | awk '{print \$3}'`;
-	my $tree_b = `git ls-tree -r $revision_b $subdir_b 2>/dev/null | grep -v $subdir_b/.gitrepo | awk '{print \$3}'`;
-	return ("$tree_a" eq "$tree_b");
-}
-
-my @git_subrepo_commits; {
-	@git_subrepo_commits = `git log --grep='subrepo:' --format=format:%H`;
-	for (@git_subrepo_commits) {
-		chomp;
-	}
-}
-
-sub find_last_git_subrepo_commit {
-	my ($subdir) = @_;
-	for my $commit (@git_subrepo_commits) {
-		my $commit_message = `git log --format=%B -n 1 $commit`;
-		if ($commit_message =~ /^subrepo:\n +subdir: *"([^"]*)"\n  merged: *"([0-9a-f]{7,})"/m) {
-			if ($1 eq $subdir) {
-				if (cmp_tree_with_subtree($2, $commit, $subdir)) {
-					return ($commit, $2);
-				} else {
-					
-					# FIXME: show warning?
-					# can have several causes:
-					# - commit does not exists anymore (got purged): test with `git rev-parse --verify $commit 2>/dev/null` in cmp_tree_with_subtree
-					# - corrupt git-subrepo commit
-				}
-			}
-		}
-	}
-	return;
-}
-
-# FIXME: also includes commits with only changes to $subdir/.gitrepo
 sub count_local_commits {
-	my ($subdir, $since_commit) = @_;
-	return grep { `git diff-tree --quiet -r $_ -- $subdir`; $? } distance($since_commit, "HEAD");
+	my ($subdir, $from_commit, $to_commit) = @_;
+	$to_commit = $to_commit || "HEAD";
+	return grep { `git diff-tree -r $_ -- $subdir | grep -v '\t$subdir/\.gitrepo$$'` } distance($from_commit, $to_commit);
 }
 
 sub get_remote {
@@ -128,21 +96,6 @@ sub has_uncommitted_changes {
 	my ($subdir) = @_;
 	`git diff-index --quiet HEAD -- $subdir`;
 	return $?;
-}
-
-sub rev_parse {
-	my ($revision) = @_;
-	chomp(my $commit = `git rev-parse $revision`);
-	return $commit;
-}
-
-sub distance {
-	my ($from, $to) = @_;
-	my @commits = defined $from ? `git rev-list $to ^$from` : `git rev-list $to`;
-	for (@commits) {
-		chomp;
-	}
-	return @commits;
 }
 
 # also in List::Util but only as of version 1.33
@@ -228,13 +181,7 @@ for my $subrepo (@subrepos) {
 		$subrepo_commit = rev_parse($subrepo_commit);
 		@subrepo_branches = grep { $remote_branches{$_} eq $subrepo_commit } keys %remote_branches;
 		if (not @subrepo_branches) {
-			my @behind_branches; {
-				for (`git branch -r --contains $subrepo_commit`) {
-					if ($_ =~ /^ *\Q$remote\E\/(.+)$/) {
-						push @behind_branches, $1;
-					}
-				}
-			}
+			my @behind_branches = in_remote_branches($subrepo_commit, $remote);
 			if (@behind_branches) {
 				for (@behind_branches) {
 					my $dist = distance($subrepo_commit, "$remote/$_");
