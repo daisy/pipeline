@@ -1,0 +1,373 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use Array::Utils qw(intersect array_minus);
+use FindBin;
+use lib "$FindBin::Bin";
+use Utils;
+
+my $merge_revision;
+
+# If --rebase is specified, perform rebases instead of merges. Instead of
+# merging $merge_revision into the current branch, the current branch is rebased
+# onto $merge_revision.
+my $rebase = 0;
+
+while (@ARGV) {
+	my $arg = $ARGV[0];
+	if ($arg eq "--rebase" and not $rebase) {
+		$rebase = 1;
+		shift;
+	} elsif (not $merge_revision) {
+		$merge_revision = $arg;
+		shift;
+	} else {
+		die "Unexpected argument: $arg";
+	}
+}
+
+if (not $merge_revision) {
+	die "$0 requires a revision arguments";
+}
+
+for ($merge_revision) {
+	if (not revision_exists($_)) {
+		die "Unknown revision: $_";
+	}
+}
+
+`git diff-index --quiet HEAD`;
+if ($?) {
+	die "You have uncommitted changes";
+}
+
+chomp(my $current_branch = `git rev-parse --abbrev-ref HEAD`);
+
+if ($current_branch eq "HEAD") {
+	die "You are not on a branch";
+}
+
+sub list_subrepos {
+	my ($rev) = @_;
+	my @subrepos; {
+		my $prev;
+		for (`git ls-tree -r --name-only $rev | grep /\.gitrepo\$`) {
+			chomp;
+			s/\/\.gitrepo$//;
+			s/^\.\///;
+			my $repo = $_;
+			if (not defined $prev or not $repo =~ /^\Q$prev\E\//) {
+				push @subrepos, $repo;
+				$prev = $repo;
+			}
+		}
+	}
+	return @subrepos;
+}
+
+my @generated_branch_names = ();
+
+sub generate_branch_name {
+	my ($prefix) = @_;
+	my $branch;
+	while (1) {
+		$branch = sprintf("${prefix}%08x", rand(0xffffffff));
+		if (not $branch ~~ @generated_branch_names and not revision_exists($branch)) {
+			push @generated_branch_names, $branch;
+			return $branch;
+		}
+	}
+}
+
+my @generated_variables = ();
+
+sub generate_variable {
+	my ($prefix) = @_;
+	my $var;
+	while (1) {
+		$var = sprintf("${prefix}%08x", rand(0xffffffff));
+		if (not $var ~~ @generated_variables) {
+			push @generated_variables, $var;
+			return $var;
+		}
+	}
+}
+
+# find all commits between $from and $to that either can reach, or are reachable from, any other commit
+sub common_path_between {
+	my ($from, $to) = @_;
+    is_ancestor($from, $to) or die;
+	$from = rev_parse($from);
+	$to = rev_parse($to);
+	return if ($from eq $to);
+	my @path;
+	my @commits;
+	chomp(@commits = `git rev-list $to ^$from`);
+	$commits[0] eq $to or die "coding error";
+	push @path, shift @commits;
+	while (@commits) {
+		chomp(my @independent = `git merge-base --independent @commits`);
+		if (@independent == 1) {
+			@commits = array_minus(@commits, @independent); # not necessarily the first
+			push @path, @independent;
+		} elsif (@independent > 1) {
+			chomp(my $base = `git merge-base @independent`);
+			for (@independent) {
+				chomp(my @side_path = `git rev-list $_ ^$base`);
+				@commits = array_minus(@commits, @side_path);
+			}
+			$commits[0] eq $base or die "coding error";
+			push @path, shift @commits;
+		} else {
+			die "coding error";
+		}
+	}
+	return @path;
+}
+
+sub merge_base {
+	my ($rev_a, $rev_b) = @_;
+	chomp(my $merge_base = `git merge-base $rev_a $rev_b`);
+	return $merge_base;
+}
+
+sub merge_base_sub {
+	my ($rev_a, $rev_b, $subdir) = @_;
+	#            [super, sub  ]
+	my $base_a = [undef, undef];
+	my $base_b = [undef, undef];
+	my $merge_base = merge_base($rev_a, $rev_b);
+	if ($merge_base) {
+	    my @last_a = find_last_git_subrepo_commit($subdir, $rev_a);
+	    my @last_b = find_last_git_subrepo_commit($subdir, $rev_b);
+		if (@last_a and @last_b) {
+			my $base_sub = merge_base($last_a[1], $last_b[1]);
+			if ($base_sub) {
+				$base_a = $base_b = [undef, $base_sub];
+				my @commits_a; {
+					for (grep { `git diff-tree -r $_ -- $subdir` } distance($last_a[0], $rev_a)) {
+						push @commits_a, [$_, undef];
+					}
+					my @commits_sub = common_path_between($base_sub, $last_a[1]);
+					if (@commits_sub) {
+						$last_a[1] eq shift @commits_sub or die "coding error";
+						push @commits_a, \@last_a;
+						for (@commits_sub) {
+							push @commits_a, [undef, $_];
+						}
+					}
+				}
+				my @commits_b; {
+					for (grep { `git diff-tree -r $_ -- $subdir` } distance($last_b[0], $rev_b)) {
+						push @commits_b, [$_, undef];
+					}
+					my @commits_sub = common_path_between($base_sub, $last_b[1]);
+					if (@commits_sub) {
+						$last_b[1] eq shift @commits_sub or die "coding error";
+						push @commits_b, \@last_b;
+						for (@commits_sub) {
+							push @commits_b, [undef, $_];
+						}
+					}
+				}
+				while (1) {
+					if (@commits_a and @commits_b) {
+						my $a = pop @commits_a;
+						my $b = pop @commits_b;
+						my $cmp =
+							(@$a[1] and @$b[1]) ? cmp_tree                (@$a[1], @$b[1]) :
+							 @$a[1]             ? cmp_tree_with_subtree   (@$a[1], @$b[0], $subdir) :
+							            @$b[1]  ? cmp_tree_with_subtree   (@$b[1], @$a[0], $subdir) : 
+							                      cmp_subtree_with_subtree(@$a[0], @$b[0], $subdir);
+						if ($cmp) {
+							$base_a = $a;
+							$base_b = $b;
+						} else {
+							last;
+						}
+					} else {
+					    last
+					}
+				}
+			}
+		}
+	}
+	return ($base_a, $base_b);
+}
+
+sub rebase_on_subrepo {
+	my ($subdir, $rev, $base, $onto) = @_;
+	my @last_sync = find_last_git_subrepo_commit($subdir, $rev);
+	if (@last_sync) {
+		$base = $base || \@last_sync;
+		$onto = $onto || @$base[1];
+		if (revision_exists($onto)) {
+			$onto = rev_parse($onto);
+		}
+		if (@$base[0]) {
+			if (@$base[1]) {
+				@$base[0] eq $last_sync[0] and @$base[1] eq $last_sync[1] or die "coding error";
+			} else {
+				not (@$base[0] eq $last_sync[0]) or die "coding error";
+			}
+			my $commits_in_subtree = grep { `git diff-tree -r $_ -- $subdir` } distance(@$base[0], $rev);
+			if ($commits_in_subtree) {
+				print "git checkout $rev\n";
+				print "git subrepo branch $subdir\n";
+				print "git checkout \$(git rev-parse subrepo/$subdir)\n";
+				print "git branch -D subrepo/$subdir\n";
+				if (not @$base[1]) {
+					print "gitk $onto HEAD\n";
+				} elsif (not (@$base[1] eq $onto)) {
+					print "gitk $onto @$base[1] HEAD\n";
+				}
+				print "git rebase --onto $onto HEAD~$commits_in_subtree HEAD\n";
+				my $var = generate_variable("tmp_");
+				print "$var=\$(git rev-parse HEAD)\n";
+				return "\$$var";
+			} else {
+				return $onto;
+			}
+		} elsif (@$base[1]) {
+			# not (@$base[1] eq $last_sync[1]) or die "coding error";
+			my $commits_in_subtree = grep { `git diff-tree -r $_ -- $subdir` } distance($last_sync[0], $rev);
+			if ($commits_in_subtree) {
+				print "git checkout $rev\n";
+				print "git subrepo branch $subdir\n";
+				print "git checkout \$(git rev-parse subrepo/$subdir)\n";
+				print "git branch -D subrepo/$subdir\n";
+				print "git rebase --onto $last_sync[1] HEAD~$commits_in_subtree HEAD\n";
+			}
+			if ($onto eq @$base[1]) {
+				if (not $commits_in_subtree) {
+					return $last_sync[1];
+				}
+			} else {
+				if ($commits_in_subtree) {
+					print "gitk $onto HEAD\n";
+					print "git rebase --onto $onto @$base[1] HEAD\n";
+				} elsif (@$base[1] eq $last_sync[1]) {
+					return $onto;
+				} else {
+					print "gitk $onto $last_sync[1]\n";
+					print "git rebase --onto $onto @$base[1] $last_sync[1]\n";
+				}
+			}
+			my $var = generate_variable("tmp_");
+			print "$var=\$(git rev-parse HEAD)\n";
+			return "\$$var";
+		} else {
+			die "coding error";
+		}
+	} else {
+		die "FIXME: $subdir, $rev";
+	}
+}
+
+# https://clojuredocs.org/clojure.core/min-key
+sub min_key(&@) {
+	my $fn = \&{shift @_};
+	my $min_val;
+	my $min_key;
+	for (@_) {
+		if (not defined $min_val or $fn->($_) < $min_val) {
+			$min_key = $_;
+		}
+	}
+	return $min_key;
+}
+
+my $merge_base = merge_base($current_branch, $merge_revision);
+
+if ($merge_base) {
+	my @subrepos_a = list_subrepos($current_branch);
+	my @subrepos_b = list_subrepos($merge_revision);
+	my @subrepos_common = intersect(@subrepos_a, @subrepos_b);
+	my @subrepos_only_b = array_minus(@subrepos_b, @subrepos_a);
+	my $current_branch_save = generate_branch_name("$current_branch-");
+	print "git checkout -b $current_branch_save\n";
+	for my $subrepo (@subrepos_common) {
+		my ($base_a, $base_b) = merge_base_sub($current_branch_save, $merge_revision, $subrepo);
+		my $onto =
+			(@$base_a[1] and not @$base_b[1]) ? @$base_a[1] :
+			(@$base_a[1] or @$base_b[1])      ? @$base_b[1] :
+			rebase_on_subrepo($subrepo, @$base_b[0]);
+		my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_save, $base_a, $onto);
+		my $rebased_b = rebase_on_subrepo($subrepo, $merge_revision,        $base_b, $onto);
+		if (not $rebased_a eq $rebased_b) {
+			my $merged;
+			if (revision_exists($rebased_a)
+				and revision_exists($rebased_b)
+				and (is_ancestor($rebased_b, $rebased_a) or is_ancestor($rebased_a, $rebased_b))) {
+				$merged = is_ancestor($rebased_b, $rebased_a) ? $rebased_a : $rebased_b;
+				if (cmp_tree_with_subtree($merged, $current_branch, $subrepo)) {
+					$merged = undef;
+				}
+			} else {
+				print "git checkout $rebased_a\n";
+				print "gitk HEAD $rebased_b\n";
+				if ($rebase) {
+					print "git rebase $rebased_b\n";
+				} else {
+					print "git merge $rebased_b\n";
+				}
+				my $var = generate_variable("tmp_");
+				print "$var=\$(git rev-parse HEAD)\n";
+				$merged = "\$$var";
+			}
+			if ($merged) {
+				print "git checkout $current_branch\n";
+				print "git subrepo commit $subrepo $merged\n";
+				my $pulled_branch; {
+					if (revision_exists($rebased_b)) {
+						my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
+						my @in_branches = in_remote_branches($rebased_b, $remote);
+						$pulled_branch =
+							"master"  ~~ @in_branches ? "master" :
+							"develop" ~~ @in_branches ? "develop" :
+							min_key { distance($rebased_b, "$remote/$_") } @in_branches;
+						$pulled_branch = $pulled_branch || "super/$merge_revision";
+					}
+					$pulled_branch = $pulled_branch || "?";
+				}
+				print "git commit --amend -m \"git subrepo pull $subrepo ($pulled_branch)\" \\\n";
+				print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\"\n";
+			} else {
+				print "# $subrepo is up to date\n";
+			}
+		} else {
+			print "# $subrepo is up to date\n";
+		}
+	}
+	for my $subrepo (@subrepos_only_b) {
+		my $rebased_b  = rebase_on_subrepo($subrepo, $merge_revision);
+		chomp(my $remote = `git show $merge_revision:$subrepo/.gitrepo | git config --file - --get subrepo.remote`);
+		print "git checkout $current_branch\n";
+		print "git subrepo clone $remote $subrepo\n";
+		print "git subrepo commit $subrepo $rebased_b\n";
+		my $pulled_branch; {
+			if (revision_exists($rebased_b)) {
+				my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
+				my @in_branches = in_remote_branches($rebased_b, $remote);
+				$pulled_branch =
+					"master"  ~~ @in_branches ? "master" :
+					"develop" ~~ @in_branches ? "develop" :
+					min_key { distance($rebased_b, "$remote/$subrepo") } @in_branches;
+				$pulled_branch = $pulled_branch || "super/$merge_revision";
+			}
+			$pulled_branch = $pulled_branch || "?";
+		}
+		print "git commit --amend -m \"git subrepo pull $subrepo ($pulled_branch)\" \\\n";
+		print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\"\n";
+	}
+	print "git checkout $current_branch\n";
+	print "git branch -D $current_branch_save\n";
+	if ($rebase) {
+		print "# FIXME: now rebase all changes from $current_branch that are not in any subrepo\n"
+	} else {
+		print "# FIXME: now merge all changes from $merge_revision that are not in any subrepo\n"
+	}
+} else {
+	die "FIXME";
+}
