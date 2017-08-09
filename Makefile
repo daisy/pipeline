@@ -223,6 +223,7 @@ ifndef SKIP_GROUP_EVAL_TARGET
 		$(MAKE) -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) \
 		| perl -e '$$take = 1; \
 		           while (<>) { \
+		             chomp; \
 		             if ($$_ eq ":") {} \
 		             elsif ($$_ =~ /^: xxx (.+)/) { if ($$take) { print "$$1\n" } \
 		             else { exit 1 }} else { $$take = 0 }}' \
