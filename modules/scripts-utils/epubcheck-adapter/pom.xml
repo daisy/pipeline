@@ -43,8 +43,9 @@
     </dependency>
     <!-- EpubCheck -->
     <dependency>
-      <groupId>org.idpf</groupId>
+      <groupId>org.daisy</groupId>
       <artifactId>epubcheck</artifactId>
+      <version>4.0.2-a11y-2-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
