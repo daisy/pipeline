@@ -5,7 +5,7 @@
 ;
 [subrepo]
 	remote = git@github.com:daisy/epubcheck.git
-	branch = master
-	commit = dc9637e80a46ff8f50216278b9e38eb73cadadca
-	parent = ff7a3a4fc6401250755625da0a75a812a0df3115
+	branch = update-guava
+	commit = a58f7b9d102de70ce7061e5e1302e6a985378916
+	parent = 590826313830cd16eef50a16faece3480cbfd48e
 	cmdver = 0.3.0
