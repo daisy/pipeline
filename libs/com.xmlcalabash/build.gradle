@@ -381,8 +381,10 @@ publishing {
   }
 }
 
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
 signing {
-  required { gradle.taskGraph.hasTask("uploadArchives") }
+  required { isReleaseVersion && gradle.taskGraph.hasTask(":uploadArchives") }
   sign configurations.archives
 }
 
@@ -445,11 +447,11 @@ uploadArchives {
       }
 
       repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        authentication(userName: sonatypeUsername, password: sonatypePassword)
+        authentication(userName: "ignored")
       }
 
       snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-        authentication(userName: sonatypeUsername, password: sonatypePassword)
+        authentication(userName: "ignored")
       }
 
       pom.project {
@@ -483,6 +485,32 @@ uploadArchives {
             name 'Norman Walsh'
           }
         }
+      }
+    }
+    // settings.xml is not automatically consulted for authentication settings
+    // this workaround is taken from https://issues.gradle.org/browse/GRADLE-1039
+    doFirst {
+      def settings = new File(System.getProperty('user.home') + '/.m2/settings.xml')
+      if (settings.exists()) {
+        def xml = new XmlSlurper().parse(settings)
+        def serverID = isReleaseVersion ? 'sonatype-nexus-staging' : 'sonatype-nexus-snapshots'
+        def server = xml.servers.children().find({ it.id.text() == serverID })
+        if (server) {
+          def mavenUsername = server.username.text()
+          def mavenPassword = server.password.text()
+          println 'Found server definition "' + serverID + '", username: ' + mavenUsername
+          if (isReleaseVersion) {
+            repositories.mavenDeployer.repository.authentication.userName = mavenUsername
+            repositories.mavenDeployer.repository.authentication.password = mavenPassword
+          } else {
+            repositories.mavenDeployer.snapshotRepository.authentication.userName = mavenUsername
+            repositories.mavenDeployer.snapshotRepository.authentication.password = mavenPassword
+          }
+        } else {
+          println 'No server definition "' + serverID + '" was found in ' + settings
+        }
+      } else {
+        println 'Maven settings file was not found: ' + settings
       }
     }
   }
