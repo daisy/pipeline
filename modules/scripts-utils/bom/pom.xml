@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>scripts-utils-bom</artifactId>
-  <version>1.10.2-SNAPSHOT</version>
+  <version>1.10.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Script Utility Modules BoM</name>
@@ -63,7 +63,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-pub-utils</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
