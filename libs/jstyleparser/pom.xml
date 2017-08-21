@@ -12,7 +12,7 @@
 
 	<groupId>org.daisy.libs</groupId>
 	<artifactId>jstyleparser</artifactId>
-	<version>1.20-p11-SNAPSHOT</version>
+	<version>1.20-p12-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>jStyleParser</name>
 	<description>jStyleParser is a CSS parser written in Java. It has its own application interface that is designed to allow an efficient CSS processing in Java and mapping the values to the Java data types. It parses CSS 2.1 style sheets into structures that can be efficiently assigned to DOM elements. It is intended be the primary CSS parser for the CSSBox library. While handling errors, it is user agent conforming according to the CSS specification.</description>
@@ -68,7 +68,7 @@
 	<parent>
 		<groupId>org.daisy</groupId>
 		<artifactId>daisy</artifactId>
-		<version>2</version>
+		<version>4</version>
 		<relativePath />
 	</parent>
   
@@ -215,13 +215,13 @@
 						</goals>
 						<configuration>
 							<target>
-								<echo message="package cz.vutbr.web.csskit.antlr;${line.separator}${line.separator}" file="target/antrun/header"/>
+								<echo message="package cz.vutbr.web.csskit.antlr;${line.separator}${line.separator}" file="target/antrun/header" />
 								<move todir="target/generated-sources/antlr3/cz/vutbr/web/csskit/antlr">
 									<fileset dir="target/generated-sources/antlr3">
-										<include name="*.java"/>
+										<include name="*.java" />
 									</fileset>
 									<filterchain>
-										<concatfilter prepend="target/antrun/header"/>
+										<concatfilter prepend="target/antrun/header" />
 									</filterchain>
 								</move>
 							</target>
@@ -237,11 +237,9 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.1</version>
+					<version>2.5.2</version>
 					<configuration>
-						<mavenExecutorId>forked-path</mavenExecutorId>
-						<useReleaseProfile>false</useReleaseProfile>
-						<arguments>-Psonatype-oss-release</arguments>
+						<tagNameFormat>jStyleParser-@{project.version}</tagNameFormat>
 					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
@@ -262,7 +260,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -279,7 +277,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -298,7 +296,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
