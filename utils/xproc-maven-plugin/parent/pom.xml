@@ -12,7 +12,7 @@
   
   <groupId>org.daisy.maven</groupId>
   <artifactId>xproc-maven-plugin-parent</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>xproc-maven-plugin-parent</name>
   
@@ -21,7 +21,7 @@
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
-        <version>1.1.9-p1-95-SNAPSHOT</version>
+        <version>1.1.9-p1-95</version>
         <exclusions>
           <exclusion>
             <groupId>com.thaiopensource</groupId>
@@ -110,5 +110,4 @@
       <url>http://maven.restlet.org</url>
     </repository>
   </repositories>
-  
 </project>

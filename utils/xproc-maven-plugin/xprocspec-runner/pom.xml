@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.maven</groupId>
     <artifactId>xproc-maven-plugin-parent</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <relativePath>../parent/</relativePath>
   </parent>
   
   <artifactId>xprocspec-runner</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>xprocspec-runner</name>
   
@@ -19,7 +19,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-api</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
+      <version>1.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.daisy.xprocspec</groupId>
@@ -44,7 +44,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-calabash</artifactId>
-      <version>1.0.1-SNAPSHOT</version>
+      <version>1.1.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
