@@ -55,9 +55,6 @@
 		<xsl:variable name="braille-css-version" select="/pom:project/pom:dependencyManagement
 		                                                 /pom:dependencies/pom:dependency[pom:artifactId='braille-css']
 		                                                 /pom:version"/>
-		<xsl:variable name="jstyleparser-version" select="/pom:project/pom:dependencyManagement
-		                                                  /pom:dependencies/pom:dependency[pom:artifactId='jstyleparser']
-		                                                  /pom:version"/>
 		<xsl:variable name="jsass-version" select="/pom:project/pom:dependencyManagement
 		                                           /pom:dependencies/pom:dependency[pom:artifactId='io.bit3.jsass']
 		                                           /pom:version"/>
@@ -147,23 +144,18 @@
 		<xsl:text>), impl&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
 		<xsl:value-of select="$braille-utils.impl-version"/>
-		<xsl:text>](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.impl%2Fv</xsl:text>
+		<xsl:text>](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv</xsl:text>
 		<xsl:value-of select="$braille-utils.impl-version"/>
 		<xsl:text>), pef-tools&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
 		<xsl:value-of select="$braille-utils.pef-tools-version"/>
-		<xsl:text>](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv</xsl:text>
+		<xsl:text>](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv</xsl:text>
 		<xsl:value-of select="$braille-utils.pef-tools-version"/>
 		<xsl:text>))&#10;</xsl:text>
 		<xsl:text>- braille-css ([</xsl:text>
 		<xsl:value-of select="$braille-css-version"/>
-		<xsl:text>](https://github.com/snaekobbi/braille-css/releases/tag/</xsl:text>
+		<xsl:text>](https://github.com/daisy/braille-css/releases/tag/</xsl:text>
 		<xsl:value-of select="$braille-css-version"/>
-		<xsl:text>))&#10;</xsl:text>
-		<xsl:text>- jstyleparser ([</xsl:text>
-		<xsl:value-of select="$jstyleparser-version"/>
-		<xsl:text>](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-</xsl:text>
-		<xsl:value-of select="$jstyleparser-version"/>
 		<xsl:text>))&#10;</xsl:text>
 		<xsl:text>- jsass ([</xsl:text>
 		<xsl:value-of select="$jsass-version"/>

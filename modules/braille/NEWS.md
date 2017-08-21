@@ -1,3 +1,128 @@
+v1.10.1
+=======
+
+Changes
+-------
+- Liblouis update
+- Dotify update (https://github.com/daisy/pipeline-mod-braille/pull/138,
+  https://github.com/daisy/pipeline-mod-braille/pull/139)
+- Improved performance (https://github.com/snaekobbi/issues/issues/28,
+  https://github.com/ndw/xmlcalabash1/pull/256) <!-- fixed memory leak and various step
+  optimizations -->
+- Improved thread safety (https://github.com/liblouis/liblouis-java/issues/8)
+- Fix to PEF preview
+- Support for new `border-align`, `border-top-align`, `border-right-align`, `border-bottom-align`,
+  `border-left-align`, `border-style`, `border-top-style`, `border-right-style`,
+  `border-bottom-style`, `border-left-style`, `border-width`, `border-top-width`,
+  `border-right-width`, `border-bottom-width`, `border-left-width`, `border-top-pattern`,
+  `border-right-pattern`, `border-bottom-pattern` and `border-left-pattern` properties and changed
+  behavior of existing `border`, `border-top`, `border-right`, `border-bottom` and `border-left`
+  properties (https://github.com/braillespecs/braille-css/issues/44)
+- Improvements to print page number ranges
+  - Changed behavior of `string()` keywords `page-start` and `page-start-except-last`: on the first
+    page `page-start` now behaves like `page-first`
+    (https://github.com/sbsdev/pipeline-mod-sbs/issues/42,
+    https://github.com/snaekobbi/pipeline-mod-dedicon/issues/49)
+  - Dropped support for `page-last-except-start` and `spread-last-except-start`
+  - Fixed behavior of `page-last`, `page-start-except-last`, `spread-last` and
+    `spread-start-except-last`: "last" now includes "border" pagenums
+    (https://github.com/sbsdev/pipeline-mod-sbs/issues/45)
+  - Fixed behavior of `page-start`, `page-start-except-last`, `spread-start` and
+    `spread-start-except-last`: "start" now does not include "border" pagenums, except on the first
+    page (https://github.com/sbsdev/pipeline-mod-sbs/issues/45,
+    https://github.com/brailleapps/dotify/issues/150,
+    https://github.com/brailleapps/dotify.formatter.impl/pull/16) <!--
+  • Fixed behavior w.r.t. "border" pagenums that precede an element with top padding (78cbc55) -->
+- Improved manual volume breaking (https://github.com/sbsdev/pipeline-mod-sbs/issues/33,
+  https://github.com/brailleapps/dotify/issues/212,
+  https://github.com/brailleapps/dotify.formatter.impl/issues/2)
+- Support for `-obfl-underline: ⠂` (https://github.com/daisy/pipeline-mod-braille/issues/96,
+  https://github.com/brailleapps/dotify.formatter.impl/pull/14,
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/34)
+- Support for grouping endnotes according to volume
+  (https://github.com/brailleapps/dotify.formatter.impl/pull/18,
+  https://github.com/braillespecs/obfl/issues/58) <!--
+  http://braillespecs.github.io/braille-css/20161201/obfl#lists-of-references -->
+  - `display:-obfl-list-of-properties` value
+  - support for `::-obfl-on-volume-start` and `::-obfl-on-volume-end` pseudo-elements on
+    `-obfl-list-of-properties` elements
+- Support for `@text-transform` rules (https://github.com/sbsdev/pipeline-mod-sbs/issues/38)
+- Fixes to line breaking and white space handling
+  (https://github.com/sbsdev/pipeline-mod-sbs/issues/61,
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/32, ...) <!-- 2568b3d, c44e94b, 6d0b8f2,
+  e4b6911, https://github.com/sbsdev/pipeline-mod-sbs/issues/31,
+  https://github.com/snaekobbi/pipeline-mod-dedicon/issues/58 -->
+- Removal of erroneous empty pages <!-- https://github.com/snaekobbi/pipeline-mod-dedicon/issues/57,
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/33 -->
+- Truncation of long header and footer lines
+  (https://github.com/brailleapps/dotify.formatter.impl/pull/10,
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/28)
+- Support for `counter-set:page` inside `@begin` and `@end` areas
+  (https://github.com/daisy/pipeline-mod-braille/issues/121)
+- Support for `symbols()` function with `target-counter()` on main page area
+  (https://github.com/daisy/pipeline-mod-braille/issues/115,
+  https://github.com/brailleapps/dotify.formatter.impl/pull/9)
+- Support for `text-transform` on `target-counter()` function
+  (https://github.com/daisy/pipeline-mod-braille/issues/114,
+  https://github.com/brailleapps/dotify.formatter.impl/pull/9)
+- Fixed behavior of `hyphens:none` <!-- https://github.com/sbsdev/pipeline-mod-sbs/issues/13 -->
+- Fixed support for `margin-top` on `::-obfl-on-toc-start`, `::-obfl-on-toc-end`,
+  `::-obfl-on-volume-start` and `::-obfl-on-volume-end` pseudo-elements <!--
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/31 -->
+- Fixed behavior of `counter()` on `::alternate::alternate` <!--
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/59 -->
+- Fixed behavior of `-obfl-evaluate()` when expression evaluates to nothing
+  (https://github.com/brailleapps/dotify.formatter.impl/pull/15)
+- Fixed behavior of `hyphens` in presence of `text-transform`
+- Support for `list-style` as an alias for `list-style-type`
+  (https://github.com/daisy/pipeline-mod-braille/issues/98)
+- Support for CSS value `initial`
+- Various other small fixes <!--
+  • Allow blocks within blocks with a `-obfl-underline` property
+    (https://github.com/brailleapps/dotify.formatter.impl/pull/17)
+  • Fixed handling of SASS variables with spaces or special characters
+  • Fixed style inheritance on `::-obfl-on-toc-start`, `::-obfl-on-toc-end`,
+    `::-obfl-on-volume-start` and `::-obfl-on-volume-end` pseudo-elements
+  • `content` property now only allowed on `::before`, `::after`, `::alternate` and
+  • `::footnote-call` pseudo-elements
+    ...
+• Fixed behavior of `string-set` and `string()` within named flows
+  (https://github.com/daisy/pipeline-mod-braille/issues/110,
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/36): omit for now because broken in 8d1a23a (and
+  fixed in 5674a23 but not on master yet) -->
+
+Components
+----------
+- **liblouis** ([**3.0.0.alpha1**](https://github.com/liblouis/liblouis/releases/tag/v3.0.0.alpha1)), liblouisutdml
+  ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)), **liblouis-java**
+  ([**3.1.0**](https://github.com/liblouis/liblouis-java/releases/tag/3.1.0))
+- **dotify** (**api** [**3.1.0**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv3.1.0), **common**
+  [**3.0.0**](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv3.0.0), **hyphenator.impl**
+  [**3.0.0**](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv3.0.0), **translator.impl**
+  [**3.0.0**](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv3.0.0), **formatter.impl**
+  [**3.1.0**](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv3.1.0), **text.impl**
+  [**3.0.0**](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv3.0.0), **task-api**
+  [**3.0.0**](https://github.com/brailleapps/dotify.task-api/releases/tag/releases%2Fv3.0.0), **task-runner**
+  [**2.0.0**](https://github.com/brailleapps/dotify.task-runner/releases/tag/releases%2Fv2.0.0), **task.impl**
+  [**3.0.0**](https://github.com/brailleapps/dotify.task.impl/releases/tag/releases%2Fv3.0.0))
+- brailleutils (api
+  [3.0.0](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.0), impl
+  [3.0.0-beta](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0-beta), pef-tools
+  [2.0.0-alpha](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.0.0-alpha))
+- **braille-css** ([**1.13.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.13.0))
+- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+v1.10.0
+=======
+
+Changes
+-------
+- Improvements to in-script documentation (option descriptions etc.)
+  (https://github.com/daisy/pipeline-mod-braille/pull/137)
+
 v1.9.16
 =======
 
@@ -12,18 +137,18 @@ Components
   ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)), liblouis-java
   ([2.0.0](https://github.com/liblouis/liblouis-java/releases/tag/2.0.0))
 - **dotify** (**api** [**2.10.0**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv2.10.0), **common**
-  [**2.1.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.common%2Fv2.1.0), hyphenator.impl
+  [**2.1.0**](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv2.1.0), hyphenator.impl
   [2.0.1](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.hyphenator.impl%2Fv2.0.1), translator.impl
   [2.3.0](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.translator.impl%2Fv2.3.0), **formatter.impl**
-  [**2.6.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.formatter.impl%2Fv2.6.0), text.impl
+  [**2.6.0**](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv2.6.0), text.impl
   [2.0.0](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.text.impl%2Fv2.0.0), **task-api**
-  [**2.3.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task-api%2Fv2.3.0), **task-runner**
-  [**1.1.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task-runner%2Fv1.1.0), **task.impl**
-  [**2.8.0**](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task.impl%2Fv2.8.0))
+  [**2.3.0**](https://github.com/brailleapps/dotify.task-api/releases/tag/releases%2Fv2.3.0), **task-runner**
+  [**1.1.0**](https://github.com/brailleapps/dotify.task-runner/releases/tag/releases%2Fv1.1.0), **task.impl**
+  [**2.8.0**](https://github.com/brailleapps/dotify.task.impl/releases/tag/releases%2Fv2.8.0))
 - brailleutils (api
   [3.0.0](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.0), impl
-  [3.0.0-beta](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.impl%2Fv3.0.0-beta), pef-tools
-  [2.0.0-alpha](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv2.0.0-alpha))
+  [3.0.0-beta](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0-beta), pef-tools
+  [2.0.0-alpha](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.0.0-alpha))
 - braille-css ([1.12.0](https://github.com/snaekobbi/braille-css/releases/tag/1.12.0))
 - jstyleparser ([1.20-p9](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p9))
 - jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
@@ -60,7 +185,8 @@ Changes
 - Support for collecting information about flows with `-obfl-use-when-collection-not-empty` property
   (https://github.com/joeha480/dotify/issues/200)
 - Support for `text-transform` on `-obfl-evaluate()` function
-  (https://github.com/daisy/pipeline-mod-braille/issues/114)
+  (https://github.com/daisy/pipeline-mod-braille/issues/114,
+  https://github.com/brailleapps/dotify.formatter.impl/pull/9)
 - Support for hyphenation with Hyphen on Windows
   (https://github.com/daisy/pipeline-mod-braille/issues/107)
 - Internal changes (https://github.com/joeha480/dotify/issues/118,
@@ -83,8 +209,8 @@ Components
   [2.4.0](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task.impl%2Fv2.4.0))
 - **brailleutils** (**api**
   [**3.0.0**](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.0), **impl**
-  [**3.0.0-beta**](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.impl%2Fv3.0.0-beta), **pef-tools**
-  [**2.0.0-alpha**](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv2.0.0-alpha))
+  [**3.0.0-beta**](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0-beta), **pef-tools**
+  [**2.0.0-alpha**](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.0.0-alpha))
 - **braille-css** ([**1.11.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.11.0))
 - **jstyleparser** ([**1.20-p9**](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p9))
 - jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
@@ -574,7 +700,7 @@ Changes
 - Dotify based formatter (https://github.com/daisy/pipeline-mod-braille/pull/11,
   https://github.com/snaekobbi/pipeline-mod-braille/pull/2, https://github.com/snaekobbi/pipeline-mod-braille/issues/32,
   https://github.com/snaekobbi/pipeline-mod-braille/pull/33)
-- Support for text-transform property (https://github.com/daisy/pipeline-mod-braille/pull/23)
+- Support for `text-transform` property (https://github.com/daisy/pipeline-mod-braille/pull/23)
 - Better logging (https://github.com/daisy/pipeline-mod-braille/issues/19)
 - Framework redesign (https://github.com/daisy/pipeline-mod-braille/pull/15,
   https://github.com/snaekobbi/pipeline-mod-braille/pull/1)

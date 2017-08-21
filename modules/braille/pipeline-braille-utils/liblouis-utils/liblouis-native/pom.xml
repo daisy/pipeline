@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.10.1-SNAPSHOT</version>
+    <version>1.10.2-SNAPSHOT</version>
     <relativePath>../../../maven/parent/</relativePath>
   </parent>
 
@@ -153,15 +153,15 @@
               <tasks>
                 <copy todir="target/generated-resources/native">
                   <fileset dir="target/dependency">
-                    <include name="**/*.so" />
-                    <include name="**/*.dylib" />
-                    <include name="**/*.dll" />
-                    <include name="**/file2brl" />
-                    <include name="**/file2brl.exe" />
+                    <include name="**/*.so"/>
+                    <include name="**/*.dylib"/>
+                    <include name="**/*.dll"/>
+                    <include name="**/file2brl"/>
+                    <include name="**/file2brl.exe"/>
                   </fileset>
                   <mapper>
-                    <globmapper handledirsep="yes" from="bin/*" to="*" />
-                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2" />
+                    <globmapper handledirsep="yes" from="bin/*" to="*"/>
+                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2"/>
                   </mapper>
                 </copy>
               </tasks>

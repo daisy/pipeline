@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.10.1-SNAPSHOT</version>
+    <version>1.10.2-SNAPSHOT</version>
     <relativePath>../../../maven/parent/</relativePath>
   </parent>
 
@@ -110,25 +110,25 @@
                 </goals>
                 <configuration>
                   <target>
-                    <mkdir dir="target/checkout" />
-                    <get dest="target/checkout/liblouis.tar.gz" src="${liblouis.tarball.url}" usetimestamp="true" skipexisting="true" />
-                    <local name="checksum.matches" />
-                    <local name="checksum.matches.fail" />
-                    <checksum file="target/checkout/liblouis.tar.gz" algorithm="sha1" property="${liblouis.tarball.sha1}" verifyproperty="checksum.matches" />
+                    <mkdir dir="target/checkout"/>
+                    <get dest="target/checkout/liblouis.tar.gz" src="${liblouis.tarball.url}" usetimestamp="true" skipexisting="true"/>
+                    <local name="checksum.matches"/>
+                    <local name="checksum.matches.fail"/>
+                    <checksum file="target/checkout/liblouis.tar.gz" algorithm="sha1" property="${liblouis.tarball.sha1}" verifyproperty="checksum.matches"/>
                     <condition property="checksum.matches.fail">
-                      <equals arg1="${checksum.matches}" arg2="false" />
+                      <equals arg1="${checksum.matches}" arg2="false"/>
                     </condition>
                     <fail if="checksum.matches.fail">Checksum error</fail>
                     <untar src="target/checkout/liblouis.tar.gz" compression="gzip" dest="src/main/resources">
                       <patternset>
-                        <include name="*/tables/*" />
-                        <exclude name="*/tables/lang2table" />
-                        <exclude name="*/tables/Makefile.am" />
-                        <exclude name="*/tables/maketablelist.sh" />
-                        <exclude name="*/tables/README" />
+                        <include name="*/tables/*"/>
+                        <exclude name="*/tables/lang2table"/>
+                        <exclude name="*/tables/Makefile.am"/>
+                        <exclude name="*/tables/maketablelist.sh"/>
+                        <exclude name="*/tables/README"/>
                       </patternset>
                       <mapper>
-                        <globmapper from="liblouis-liblouis-e043e8c/*" to="*" />
+                        <globmapper from="liblouis-liblouis-e043e8c/*" to="*"/>
                       </mapper>
                     </untar>
                   </target>
