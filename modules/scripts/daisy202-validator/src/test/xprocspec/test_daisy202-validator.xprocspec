@@ -2,6 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:html="http://www.w3.org/1999/xhtml"
                script="../../main/resources/xml/xproc/daisy202-validator.xpl">
 
     <x:scenario label="simple validation">
@@ -14,19 +15,16 @@
         <x:context label="the validation status">
             <x:document type="port" port="validation-status"/>
         </x:context>
-        <x:expect label="the validation should fail" type="compare">
-            <x:document>
-                <d:validation-status result="error"/>
+        <x:expect label="the validation should pass" type="compare">
+            <x:document type="inline">
+                <d:validation-status result="ok"/>
             </x:document>
         </x:expect>
         <x:context label="the validation report">
             <x:document type="port" port="html-report"/>
         </x:context>
-        <x:expect label="the validation report should say something about 'shape' attributes"
-                  type="xpath" test="count(//*[@class='message-error'
-                                               and contains(string(.),'attribute &quot;shape&quot; not allowed here; expected attribute &quot;id&quot;')]
-                                           )=9">
-        </x:expect>
+        <x:expect label="the validation report should say '0 issues found'"
+                  type="xpath" test="string(html:html/html:body/html:div[2]/html:div[1]/html:p[3])='0 issues found.'"/>
     </x:scenario>
     
 </x:description>

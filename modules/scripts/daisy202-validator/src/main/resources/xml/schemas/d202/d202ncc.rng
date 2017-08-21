@@ -225,7 +225,7 @@
     <ref name="attribute.id.optional"/>
     <!-- DTD defaulting stuff: 
     <ref name="attribute.shape"/> 
-    -->
+     -->
     <ref name="attribute.href.required.relative.smilwithfragment"/>
   </define>  
       
