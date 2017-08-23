@@ -13,12 +13,12 @@ site_base = config['site_base']
 baseurl = config['baseurl'] || ''
 graph = RDF::Graph.load(meta_file)
 
-def link_error(link, source_file)
-  raise "link can not be processed: #{link['href']} (source: #{source_file})"
+def link_error(link, href_attr, source_file)
+  raise "link can not be processed: #{link[href_attr]} (source: #{source_file})"
 end
 
-def link_warning(link, source_file)
-  puts "WARNING: link can not be processed: #{link['href']} (source: #{source_file})"
+def link_warning(link, href_attr, source_file)
+  puts "WARNING: link can not be processed: #{link[href_attr]} (source: #{source_file})"
   link['class'] = ((link['class']||'').split(' ') << 'broken-link').join(' ')
 end
 
@@ -30,14 +30,16 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
   f_path = f[base_dir.length..-1]
   page_url = RDF::URI(site_base + baseurl + f_path)
   
-  ## process links
-  doc.css('a').each do |a|
-    if not a['href']
+  ## process links and images
+  doc.css('a, img').each do |a|
+    href_attr = (a.name == 'img') ? 'src' : 'href';
+    
+    if not a[href_attr]
       next
     end
 
     # link to source files with special class attribute
-    if ['userdoc','apidoc','source'].include?(a['class'])
+    if a.name == 'a' and ['userdoc','apidoc','source'].include?(a['class'])
       query = SPARQL.parse(%Q{
         BASE <#{page_url}>
         PREFIX dp2: <http://www.daisy.org/ns/pipeline/>
@@ -52,25 +54,25 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
       if not result.empty?
         abs_url = result[0]['href']
       elsif a['href'] =~ /http.*/o
-        link_warning(a, f)
+        link_warning(a, href_attr, f)
         next
       end
     else
 
       # absolute path
-      if a['href'] =~ /^\//o
-        abs_path = a['href']
+      if a[href_attr] =~ /^\//o
+        abs_path = a[href_attr]
         
       # absolute url
-      elsif a['href'] =~ /http.*/o
-        abs_url = a['href']
+      elsif a[href_attr] =~ /http.*/o
+        abs_url = a[href_attr]
       end
     end
     if not abs_path
       if not abs_url
         
         # relative path
-        rel_path = a['href']
+        rel_path = a[href_attr]
         if rel_path =~ /^([^#]*)(#.*)$/o
           rel_path = $1
           fragment = $2
@@ -91,20 +93,22 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
 
       # external link
       if not abs_url.to_s.start_with?("#{site_base}#{baseurl}")
-        a['class'] = ((a['class']||'').split(' ') << 'external-link').join(' ')
-        a['target'] = '_blank'
+        if a.name == 'a'
+          a['class'] = ((a['class']||'').split(' ') << 'external-link').join(' ')
+          a['target'] = '_blank'
+        end
         next
       end
       abs_path = abs_url.to_s[site_base.length..-1]
     end
     if not baseurl.empty?
       if not abs_path.start_with?(baseurl)
-        link_error(a, f)
+        link_error(a, href_attr, f)
       end
       abs_path = abs_path[baseurl.length..-1]
     end
     if rel_path and f_path.start_with?('/wiki/') and not abs_path.start_with?('/wiki/')
-      link_error(a, f)
+      link_error(a, href_attr, f)
     end
     if not fragment
       if abs_path =~ /^([^#]*)(#.*)$/o
@@ -123,19 +127,19 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
       abs_path = abs_path[0..-2]
     end
     if File.exist?(base_dir + abs_path) and not File.directory?(base_dir + abs_path)
-      a['href'] = baseurl + abs_path + fragment
+      a[href_attr] = baseurl + abs_path + fragment
       next
     elsif File.exist?(base_dir + abs_path + '.html')
-      # a['href'] = basedir + abs_path + fragment
-      a['href'] = baseurl + abs_path + '.html' + fragment
+      # a[href_attr] = basedir + abs_path + fragment
+      a[href_attr] = baseurl + abs_path + '.html' + fragment
       next
     elsif File.exist?(base_dir + abs_path + '/index.html')
-      a['href'] = baseurl + abs_path + fragment
+      a[href_attr] = baseurl + abs_path + fragment
       next
     end
 
-    # link_error(a, f)
-    link_warning(a, f)
+    # link_error(a, href_attr, f)
+    link_warning(a, href_attr, f)
   end
 
   ## work around css shortcomings

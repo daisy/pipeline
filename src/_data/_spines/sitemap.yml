@@ -4,7 +4,10 @@
   pages:
     - group: {{site.baseurl}}/Get-Help/User-Guide/
       pages:
-        - {{site.baseurl}}/Get-Help/User-Guide/Installation/
+        - group: {{site.baseurl}}/Get-Help/User-Guide/Installation/
+          pages:
+            - url: {{site.baseurl}}/wiki/webui/Installation-and-configuation/
+              title: Web Application
         - url: {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
           title: "Desktop Application"
         - group: {{site.baseurl}}/wiki/webui/User-Guide/
@@ -12,6 +15,7 @@
           pages:
             - {{site.baseurl}}/wiki/webui/Templating/
             - {{site.baseurl}}/wiki/webui/Administrator-settings/
+            - {{site.baseurl}}/wiki/webui/Branding/
         - group: {{site.baseurl}}/Get-Help/User-Guide/Pipeline-as-Service/
           pages:
             - url: {{site.baseurl}}/wiki/Configuration-Files/
