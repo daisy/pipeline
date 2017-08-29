@@ -1,4 +1,4 @@
-              DAISY Pipeline 2 - 1.10.0-rc1 - November 21, 2016
+              DAISY Pipeline 2 - 1.10.2 - August 21, 2017
 ==============================================================================
 
 
@@ -68,53 +68,63 @@ The package includes:
 3. Release Notes
 ------------------------------------------------------------------------------
 
-The package includes the 1.10.0-rc1 version of the project.
+The package includes the 1.10.2 version of the project.
 This is a release candidate.
 
-### Changes in v1.10.0-rc1
+### Installer/Updater
 
-* Distribution
-  * [NEW] new graphical user interface (GUI)
-  * [NEW] installers for the GUI on Windows
-  * [NEW] packaged application on Mac OS X
-  * online Java installer bundled in the Windows installer
-  * Java Runtime Environment bundled in the Mac OS X app
+- [FIX] Updater couldn't find the Pipeline installation from the registry on
+  64bit Windows
+- [FIX] Updater couldn't find releases info ("404 not found")
 
-* Command Line Interface
-  * [NEW] `clean` command to remove jobs with an `ERROR` status
-  * inputs and options arguments are no longer prefixed with `--i` and `--x`
-  * the `version` command now works as expected
-  * Properly detect Java under OpenJDK and Ubuntu 15.04
+### Framework and API
 
-* Framework and API
-  * [NEW] Add datatypes to options and list them through the api
-  * [NEW] Expose the default value for options
-  * [NEW] Add support for job batches
-  * Get rid of the folder in zipped ports and options
-  * Catch out of memory errors
-  * Return a more meaningful error when inputs are not corect
-  * Improved control of script removal
-  * Improved logging filters
-  * Normalize whitespace in script documentation parsing
-  * Do not strip out spaces if xml:space="preserve"
-  * Allow posting job requests using a namespace prefix   
+- Improve launch-time stability
+- Support file names with spaces inside zipped job context
+- Improve search algorithm for binaries
+- [FIX] Spaces in paths of book files cause job failure
 
-* Modules
-  * [NEW] DAISY 2.02 validator
-  * [NEW] DAISY 3 (audio-only) to DAISY 2.02
-  * [NEW] EPUB 3 validator (EpubCheck)
-  * [NEW] EPUB 3 to PEF script
-  * [NEW] HTML to PEF script
-  * Experimental audio-only DAISY 3 production
-  * Improved MathML production in DAISY 3
-  * Improved NIMAS validation
-  * Optimized fileset lading
-  * ... and various other bug fixes
+### Modules
+
+- Add basic tests for all scripts
+- daisy202-to-epub3
+  - [FIX] smil references inside links should also be removed
+  - [FIX] Whenever a `epub:textref` attribute is added to a SMIL, an
+    `attribute-value` attribute with the same value is added
+  - [FIX] `epub:textref` in SMIL refers to `.html` files instead of `.xhtml`
+    files
+  - [FIX] Remove superfluous xmlns:d from package document metadata
+- dtbook-to-epub3
+  - [FIX] Issue with whitespace being removed
+  - [FIX] The "assert validity" option on dtbook-to-epub3 does not seem to work
+- daisy202-validator
+  - [FIX] Attribute "shape" not allowed here
+- Braille modules
+  - See details at:
+    https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1101
+- TTS modules
+  - [FIX] problem finding lame
+- Utility modules
+  - [fileset-utils] change the actual base URI of documents in `px:fileset-load`
+
+### Build maintenance
+
+- Cleanup dependencies in Maven POMs
+- Update Calabash to v1.1.9
+- Reorganize the build of some modified/OSGified 3rd party libraries
+- Move web API tests to the `pipeline-framework` project
+- Add a `modules-test-helper` project for reducing boiloplate in Pipeline
+  modules tests
+- Various enhancements to the `pax-exam-helper` test helper
+- Various improvements to the `xproc-maven-plugin`
+- Re-enable all XSpec and and XProcSpec tests in the modules
+
+
 
 See also the full release notes on the release page:
-  https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0-beta1
+  https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.2
 
-4. Prerequisites                   
+4. Prerequisites
 ------------------------------------------------------------------------------
 
 Modules already include their dependent libraries and only require a recent
@@ -139,7 +149,7 @@ For instance:
 	--output "C:\Users\John Doe\Desktop\out"
 
 
-will run the DTBook to ZedAI converter on Windows and will output the result 
+will run the DTBook to ZedAI converter on Windows and will output the result
 in the "out" directory on the desktop of the user named "John Doe".
 
 
@@ -156,12 +166,12 @@ in the "out" directory on the desktop of the user named "John Doe".
 
 6. Documentation
 ------------------------------------------------------------------------------
-  
+
   Usage dp2 [GLOBAL_OPTIONS] command [COMMAND_OPTIONS] [PARAMS]
-  
-  
+
+
   Script commands:
-  
+
      daisy202-to-epub3        Transforms a DAISY 2.02 publication into an EPUB3
                               publication.
      daisy202-validator       Validates a DAISY 2.02 fileset.
@@ -182,33 +192,33 @@ in the "out" directory on the desktop of the user named "John Doe".
      html-to-pef              Transforms a HTML document into a PEF.
      nimas-fileset-validator  Validate a NIMAS Fileset. Supports inclusion of
                               MathML.
-     zedai-to-epub3           Transforms a ZedAI (DAISY 4 XML) document into an 
+     zedai-to-epub3           Transforms a ZedAI (DAISY 4 XML) document into an
                               EPUB 3 publication.
      zedai-to-html            Transforms ZedAI XML (ANSI/NISO Z39.98-2012 Authoring
                               and Interchange) into HTML.
      zedai-to-pef             Transforms a ZedAI (DAISY 4 XML) document into a PEF.
-  
-          
-  
+
+
+
   General commands:
-  
+
      status        Returns the status of the job with id JOB_ID
      delete        Removes a job from the pipeline
      results       Stores the results from a job
      jobs          Returns the list of jobs present in the server
      log           Stores the results from a job
-     queue         Shows the execution queue and the job's priorities. 
+     queue         Shows the execution queue and the job's priorities.
      moveup        Moves the job up the execution queue
      movedown      Moves the job down the execution queue
      clean         Removes the jobs with an ERROR status
      halt          Stops the webservice
      version       Prints the version and authentication information
-          
-  
-  
+
+
+
   List of global options:                 dp2 help -g
   List of admin commands:                 dp2 help -a
-  Detailed help for a single command:     dp2 help COMMAND  
+  Detailed help for a single command:     dp2 help COMMAND
 
 A complete user guide is in the works and will be available soon.
 
@@ -220,7 +230,7 @@ Please refer to the issue tracker:
  https://github.com/daisy/pipeline-issues/issues
 
 
-8. Contact 
+8. Contact
 ------------------------------------------------------------------------------
 
 If you want to join the effort and contribute to the Pipeline 2 project, feel
