@@ -116,12 +116,11 @@ public class ValidateWithXSD extends DefaultStep {
         super.run();
 
         Processor proc = runtime.getProcessor();
-        SchemaManager manager = proc.getSchemaManager();
-
-        if (manager == null) {
-            validateWithXerces();
-        } else {
+        if (proc.isSchemaAware()) {
+            SchemaManager manager = proc.getSchemaManager();
             validateWithSaxonSA(manager);
+        } else {
+            validateWithXerces();
         }
     }
 
