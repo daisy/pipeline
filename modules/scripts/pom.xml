@@ -30,6 +30,7 @@
     <module>dtbook-to-epub3</module>
     <module>dtbook-to-html</module>
     <module>dtbook-to-odt</module>
+    <module>dtbook-to-rtf</module>
     <module>dtbook-to-zedai</module>
     <module>dtbook-validator</module>
     <module>epub3-to-daisy202</module>
