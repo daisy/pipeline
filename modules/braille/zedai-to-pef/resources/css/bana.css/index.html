@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>bana.css</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../bana.css">
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="comment">/* ------------------------------------------------------------------------- */</span>
+<span class="comment">/*  http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/bana.css  */</span>
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+<span class="comment">/*                                  general                                  */</span>
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+
+<span class="directive">@page</span> {
+    <span class="key">size</span>: <span class="float">40</span> <span class="float">25</span>;
+    <span class="directive">@top-right</span> {
+        <span class="key">content</span>: <span class="error">s</span><span class="error">t</span><span class="error">r</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>(<span class="value">print-page</span>);
+    }
+    <span class="directive">@bottom-right</span> {
+        <span class="key">content</span>: <span class="function"><span class="delimiter">counter(</span><span class="content">braille-page</span><span class="delimiter">)</span></span>;
+    }
+}
+
+<span class="tag">pagebreak</span> {
+    <span class="key">display</span>: <span class="value">page-break</span>;
+    <span class="key">string-set</span>: <span class="value">print-page</span> <span class="function"><span class="delimiter">attr(</span><span class="content">value</span><span class="delimiter">)</span></span>;
+}
+
+<span class="tag">head</span> {
+    <span class="key">display</span>: <span class="value">none</span>;
+}
+
+<span class="tag">annotation</span>[<span class="attribute-name">role="production"</span>] {
+    <span class="key">display</span>: <span class="value">none</span>;
+}
+
+<span class="tag">section</span>,
+<span class="tag">frontmatter</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">page-break-before</span>: <span class="value">always</span>;
+    <span class="key">page-break-after</span>: <span class="value">always</span>;
+}
+
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+<span class="comment">/*                                paragraphs                                 */</span>
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+
+<span class="tag">p</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">text-indent</span>: <span class="float">2</span>;
+}
+
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+<span class="comment">/*                                 headings                                  */</span>
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+
+<span class="tag">h</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">page-break-after</span>: <span class="value">avoid</span>;
+}
+
+<span class="tag">bodymatter</span> &gt; <span class="tag">section</span> &gt; <span class="tag">h</span> {
+    <span class="key">page-break-before</span>: <span class="value">always</span>;
+    <span class="key">text-align</span>: <span class="value">center</span>;
+    <span class="key">margin-top</span>: <span class="float">1</span>;
+    <span class="key">margin-bottom</span>: <span class="float">1</span>;
+    <span class="key">margin-left</span>: <span class="float">3</span>;
+    <span class="key">margin-right</span>: <span class="float">3</span>;
+}
+
+<span class="tag">bodymatter</span> &gt; <span class="tag">section</span> &gt; <span class="tag">section</span> &gt; <span class="tag">h</span> {
+    <span class="key">margin-bottom</span>: <span class="float">1</span>;
+    <span class="key">margin-left</span>: <span class="float">3</span>;
+    <span class="key">margin-right</span>: <span class="float">3</span>;
+}
+
+<span class="tag">bodymatter</span> &gt; <span class="tag">section</span> &gt; <span class="tag">section</span> &gt; <span class="tag">section</span> &gt; <span class="tag">h</span> {
+    <span class="key">text-align</span>: <span class="value">left</span>;
+    <span class="key">margin-left</span>: <span class="float">4</span>;
+    <span class="key">margin-top</span>: <span class="float">1</span>;
+}
+
+<span class="tag">bodymatter</span> &gt; <span class="tag">section</span> &gt; <span class="tag">section</span> &gt; <span class="tag">section</span> &gt; <span class="tag">section</span> &gt; <span class="tag">h</span> {
+    <span class="key">text-align</span>: <span class="value">left</span>;
+    <span class="key">margin-top</span>: <span class="float">1</span>;
+}
+
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+<span class="comment">/*                                  lists                                    */</span>
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+
+<span class="tag">list</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">type="unordered"</span>] {
+    <span class="key">list-style-type</span>: <span class="error">⠶</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">prefix="decimal"</span>] {
+    <span class="key">list-style-type</span>: <span class="value">decimal</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">prefix="lower-alpha"</span>] {
+    <span class="key">list-style-type</span>: <span class="value">lower-alpha</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">prefix="lower-roman"</span>] {
+    <span class="key">list-style-type</span>: <span class="value">lower-roman</span>;
+}
+
+<span class="tag">item</span> {
+    <span class="key">display</span>: <span class="value">list-item</span>;
+}
+
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+<span class="comment">/*                                  tables                                   */</span>
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+
+<span class="tag">table</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">border-top</span>: <span class="error">⠶</span>;
+    <span class="key">border-bottom</span>: <span class="error">⠛</span>;
+}
+
+<span class="tag">thead</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">border-bottom</span>: <span class="error">⠒</span>;
+}
+
+<span class="tag">tr</span>, <span class="tag">td</span>, <span class="tag">th</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+}
+
+<span class="tag">th</span><span class="pseudo-class">:first-child</span>,
+<span class="tag">td</span><span class="pseudo-class">:first-child</span> { <span class="key">margin-left</span>: <span class="float">0</span>; }
+<span class="tag">th</span><span class="pseudo-class">:nth-child</span>(<span class="float">2</span>),
+<span class="tag">td</span><span class="pseudo-class">:nth-child</span>(<span class="float">2</span>) { <span class="key">margin-left</span>: <span class="float">2</span>; }
+<span class="tag">th</span><span class="pseudo-class">:nth-child</span>(<span class="float">3</span>),
+<span class="tag">td</span><span class="pseudo-class">:nth-child</span>(<span class="float">3</span>) { <span class="key">margin-left</span>: <span class="float">4</span>; }
+<span class="tag">th</span><span class="pseudo-class">:nth-child</span>(<span class="float">4</span>),
+<span class="tag">td</span><span class="pseudo-class">:nth-child</span>(<span class="float">4</span>) { <span class="key">margin-left</span>: <span class="float">6</span>; }
+<span class="tag">th</span><span class="pseudo-class">:nth-child</span>(<span class="float">5</span>),
+<span class="tag">td</span><span class="pseudo-class">:nth-child</span>(<span class="float">5</span>) { <span class="key">margin-left</span>: <span class="float">8</span>; }
+<span class="tag">th</span><span class="pseudo-class">:nth-child</span>(<span class="float">6</span>),
+<span class="tag">td</span><span class="pseudo-class">:nth-child</span>(<span class="float">6</span>) { <span class="key">margin-left</span>: <span class="float">10</span>; }
+
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+<span class="comment">/*                            table of contents                              */</span>
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+
+<span class="tag">toc</span> {
+    <span class="key">display</span>: <span class="value">toc</span>;
+}
+
+<span class="tag">toc</span> &gt; <span class="tag">h</span> {
+    <span class="key">text-align</span>: <span class="value">center</span>;
+    <span class="key">margin-top</span>: <span class="float">1</span>;
+    <span class="key">margin-bottom</span>: <span class="float">1</span>;
+    <span class="key">margin-left</span>: <span class="float">3</span>;
+    <span class="key">margin-right</span>: <span class="float">3</span>;
+}
+
+<span class="tag">toc</span> &gt; <span class="tag">entry</span> &gt; <span class="tag">ref</span> {
+    <span class="key">display</span>: <span class="value">toc-item</span>;
+    <span class="key">margin-left</span>: <span class="float">2</span>;
+    <span class="key">text-indent</span>: <span class="float">-2</span>;
+}
+
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+<span class="comment">/*                               other blocks                                */</span>
+<span class="comment">/* ------------------------------------------------------------------------- */</span>
+
+<span class="tag">block</span>,
+<span class="tag">lngroup</span>,
+<span class="tag">ln</span>,
+<span class="tag">object</span>,
+<span class="tag">verse</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+}
+</pre></div>
+</div>
+</div>
+
+  </body>
+</html>

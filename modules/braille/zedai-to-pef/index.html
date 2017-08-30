@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>ZedAI to PEF</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="ZedAI to PEF">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/wiki/webui/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/Configuration-Files" tabindex="15">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line.html" tabindex="16">
+      
+      Command Line Tool
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts.html" tabindex="17">
+      Scripts
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="18">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="19">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="20">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="21">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="22">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="23">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="24">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="25">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="26">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="27">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="28">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="29">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="30">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="31">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="32">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="33">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="34">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="35">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="36">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="37">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="38">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="39">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/search?utf8=%E2%9C%93&amp;type=Issues&amp;q=+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl" class="external-link" target="_blank" tabindex="40">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide.html" tabindex="41">
+      
+      Developer Guide
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <link rev="dp2:doc" href="resources/xml/zedai-to-pef.xpl">
+
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+
+<meta property="dc:title" content="ZedAI to PEF">
+
+<!--
+summary: A guide on how to use the ZedAI to PEF script.
+labels: [Type-Doc,Compoment-UserGuide,Component-Module,Component-Script]
+sidebar: UserGuideToc
+-->
+
+<h1 id="zedai-to-pef">ZedAI to PEF</h1>
+
+<p>The “ZedAI to PEF” script will convert a ZedAI document (NISO Z39.98-2012 - Authoring and Interchange Framework for Adaptive XML Publishing) into a PEF (Portable Embosser Format) file. PEF is a format for representing paged braille documents in an unambiguous way. It builds on XML, Unicode and Dublin Core. Tools are available for embossing PEF files or converting them into other braille formats. See also <a href="http://pef-format.org/" class="external-link" target="_blank">the PEF Format website</a>.</p>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul id="markdown-toc">
+  <li>
+<a href="#zedai-to-pef" id="markdown-toc-zedai-to-pef">ZedAI to PEF</a>    <ul>
+      <li><a href="#table-of-contents" id="markdown-toc-table-of-contents">Table of contents</a></li>
+      <li>
+<a href="#synopsis" id="markdown-toc-synopsis">Synopsis</a>        <ul>
+          <li><a href="#inputs" id="markdown-toc-inputs">Inputs</a></li>
+          <li><a href="#outputs" id="markdown-toc-outputs">Outputs</a></li>
+          <li><a href="#options" id="markdown-toc-options">Options</a></li>
+        </ul>
+      </li>
+      <li><a href="#example-running-from-command-line" id="markdown-toc-example-running-from-command-line">Example running from command line</a></li>
+      <li><a href="#getting-a-preview" id="markdown-toc-getting-a-preview">Getting a preview</a></li>
+      <li>
+<a href="#advanced-configuration" id="markdown-toc-advanced-configuration">Advanced Configuration</a>        <ul>
+          <li><a href="#translation" id="markdown-toc-translation">Translation</a></li>
+          <li><a href="#hyphenation" id="markdown-toc-hyphenation">Hyphenation</a></li>
+          <li><a href="#text-emphasis" id="markdown-toc-text-emphasis">Text Emphasis</a></li>
+          <li><a href="#math" id="markdown-toc-math">Math</a></li>
+          <li>
+<a href="#styling-with-braille-css" id="markdown-toc-styling-with-braille-css">Styling with Braille CSS</a>            <ul>
+              <li><a href="#example-1-sections-and-headings" id="markdown-toc-example-1-sections-and-headings">Example 1: Sections and headings</a></li>
+              <li><a href="#example-2-ordered-and-unordered-lists" id="markdown-toc-example-2-ordered-and-unordered-lists">Example 2: Ordered and unordered lists</a></li>
+              <li><a href="#example-3-tables-in-linear-versus-stairstep-format" id="markdown-toc-example-3-tables-in-linear-versus-stairstep-format">Example 3: Tables in linear versus stairstep format</a></li>
+              <li><a href="#example-4-print-page-numbers" id="markdown-toc-example-4-print-page-numbers">Example 4: Print page numbers</a></li>
+              <li><a href="#example-5-table-of-contents" id="markdown-toc-example-5-table-of-contents">Example 5: Table of contents</a></li>
+              <li><a href="#example-6-page-layout" id="markdown-toc-example-6-page-layout">Example 6: Page layout</a></li>
+              <li><a href="#example-7-running-headerfooter" id="markdown-toc-example-7-running-headerfooter">Example 7: Running header/footer</a></li>
+              <li><a href="#example-8-braille-page-numbers" id="markdown-toc-example-8-braille-page-numbers">Example 8: Braille page numbers</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="synopsis">Synopsis</h2>
+
+<div class="gui-synopsis">
+
+  <h3 id="inputs">Inputs</h3>
+
+  <ul class="synopsis-inputs">
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">Input ZedAI</div>
+<div class="synopsis-input-desc">
+The ZedAI you want to convert to braille.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://www.daisy.org/z3998/2012/z3998-2012.html" class="media-type external-link" target="_blank">application/z3998-auth+xml</a></li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+</ul>
+
+  <h3 id="outputs">Outputs</h3>
+
+  <ul class="synopsis-outputs">
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">PEF</div>
+<div class="synopsis-output-desc">
+The PEF.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html" class="media-type external-link" target="_blank">application/x-pef+xml</a></li>
+</ul>
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">BRF</div>
+<div class="synopsis-output-desc">
+A plain text ASCII version of the PEF.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">Preview</div>
+<div class="synopsis-output-desc">
+An HTML preview of the PEF.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text/html</li>
+</ul>
+</div>
+</li>
+</ul>
+
+  <h3 id="options">Options</h3>
+
+  <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of CSS/SASS style sheets to apply.
+</div>
+<div class="longdesc">A list of CSS/SASS style sheets to apply.
+
+<p>Must be a space separated list of URIs, absolute or relative to source.</p>
+
+<p>Style sheets can also be associated with the source in other ways: linked (using a
+<a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’ element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
+element</a>) and/or inlined (using
+‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’ attributes</a>).</p>
+
+<p>All style sheets are applied at once, but the order in which they are specified (first the ones
+specified through this option, then the ones associated with the source document) has an influence
+on the cascading order.</p>
+
+<p>CSS/SASS style sheets are interpreted according to <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
+CSS</a> rules.</p>
+
+<p>For info on how to use SASS (Syntactically Awesome StyleSheets) see the <a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" class="external-link" target="_blank">SASS
+manual</a>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Zero or more of the following:<dl class="choice">
+<dt><var>&lt;anyFileURI&gt;</var></dt>
+<dd>File path relative to input ZedAI.</dd>
+<dt><code>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/bana.css</code></dt>
+<dd>A CSS stylesheet for BANA formatting
+
+<p>See <a href="/pipeline/modules/braille/zedai-to-pef/resources/css/bana.css">source</a></p>
+</dd>
+<dt><code>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/ueb.css</code></dt>
+<dd>A CSS stylesheet for UEB formatting
+
+<p>See <a href="/pipeline/modules/braille/zedai-to-pef/resources/css/ueb.css">source</a></p>
+</dd>
+<dt><var>&lt;anyURI&gt;</var></dt>
+<dd>Any other absolute URI</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Transformer query</div>
+<div class="synopsis-option-desc">
+The transformer query.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>(translator:liblouis)(formatter:dotify)</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">ASCII braille table</div>
+<div class="synopsis-option-desc">
+The ASCII braille table, used to render the PEF preview and the plain text version. If left blank, the locale information in the input document will be used to select a suitable table.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include preview</div>
+<div class="synopsis-option-desc">
+Whether or not to include a preview of the PEF in HTML.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include plain text file (BRF)</div>
+<div class="synopsis-option-desc">
+Whether or not to include a plain text ASCII version of the PEF.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+</ul>
+
+  <script type="text/javascript">
+var allElements = [];
+function showDetailsAndHideAllOther() {
+  var windowTopBefore = window.pageYOffset;
+  var topBefore = this.offsetTop;
+  var i;
+  for (i = 0; i < allElements.length; i++) {
+    allElements[i].classList.remove('details-on');
+	allElements[i].classList.add('details-off');
+  }
+  this.classList.remove('details-off');
+  this.classList.add('details-on');
+  window.scrollTo(0, windowTopBefore + this.offsetTop - topBefore);
+}
+var onload = function() {
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-input'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-report'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-output'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-option'), 0));
+  var i;
+  for (i = 0; i < allElements.length; i++) {
+    allElements[i].classList.remove('details-on');
+    allElements[i].classList.add('details-off');
+	allElements[i].addEventListener('click', showDetailsAndHideAllOther);
+  }
+}
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+</div>
+
+<div class="cli-synopsis hidden">
+
+  <pre>Usage: dp2 [GLOBAL_OPTIONS] zedai-to-pef [OPTIONS]
+
+Options:</pre>
+  <table>
+<tr>
+<td>--source <span style="text-transform: uppercase">source</span>
+</td>
+<td>The ZedAI you want to convert to braille.</td>
+</tr>
+<tr>
+<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
+<td>Transformer query (default: <span class="synopsis-option-default"><code>(translator:liblouis)(formatter:dotify)</code></span>)</td>
+</tr>
+<tr>
+<td>--ascii-table [<span style="text-transform: uppercase">ascii-table</span>]</td>
+<td>ASCII braille table (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
+<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--include-brf [<span style="text-transform: uppercase">include-brf</span>]</td>
+<td>Include plain text file (BRF) (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>-o,--output [OUTPUT]</td>
+<td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>
+</tr>
+<tr>
+<td>-z,--zip</td>
+<td>Write the output to a zip file rather than to a folder</td>
+</tr>
+<tr>
+<td>-n,--nicename [NICENAME]</td>
+<td>Set job's nice name</td>
+</tr>
+<tr>
+<td>-r,--priority [PRIORITY]</td>
+<td>Set job's priority (high|medium|low)</td>
+</tr>
+<tr>
+<td>-q,--quiet</td>
+<td>Do not print the job's messages</td>
+</tr>
+<tr>
+<td>-p,--persistent</td>
+<td>Delete the job after it is executed</td>
+</tr>
+<tr>
+<td>-b,--background</td>
+<td>Sends the job and exits</td>
+</tr>
+</table>
+</div>
+
+<script type="text/javascript">
+var guiSynopsis = document.getElementsByClassName('gui-synopsis')[0];
+var cliSynopsis = document.getElementsByClassName('cli-synopsis')[0];
+function switchToCliView() {
+  guiSynopsis.classList.add('hidden');
+  cliSynopsis.classList.remove('hidden');
+}
+function switchToGuiView() {
+  guiSynopsis.classList.remove('hidden');
+  cliSynopsis.classList.add('hidden');
+}
+var loaded = false;
+var onload = function() {
+  if (loaded)
+    return;
+  var button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToCliView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToCliView();
+    }
+  });
+  guiSynopsis.insertBefore(button, guiSynopsis.firstChild);
+  button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToGuiView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToGuiView();
+    }
+  });
+  cliSynopsis.insertBefore(button, cliSynopsis.firstChild);
+  loaded = true;
+}
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+<h2 id="example-running-from-command-line">Example running from command line</h2>
+
+<pre><code>$ ./dp2 zedai-to-pef \
+	--i-source samples/zedai/alice.xml \
+	--x-include-preview true \
+	--x-include-brf true \
+	--x-output ~/Desktop/out
+</code></pre>
+
+<p>output:</p>
+
+<pre><code>$ ls ~/Desktop/out
+alice.pef
+alice.pef.html
+alice.brf
+</code></pre>
+
+<p>More advanded example:</p>
+
+<pre><code>$ ./dp2 zedai-to-pef \
+        --i-source samples/zedai/alice.xml \
+        --x-include-preview true \
+        --x-default-stylesheet bana.css \
+        --x-transform "(formatter:dotify)" \
+        --x-output ~/Desktop/out
+</code></pre>
+
+<h2 id="getting-a-preview">Getting a preview</h2>
+
+<p>To emboss a PEF file or display it on screen you need special software (such as the <a href="http://code.google.com/p/e2u/" class="external-link" target="_blank">Easy Embosser Utility</a> developed at TPB). Opening a PEF with an XML editor is not very useful because you only get to see Unicode braille (dot patterns). If you don’t have access to a special PEF tool, or you just want to quickly review the document first, you should set the <code>include-preview</code> option to <code>true</code>. In addition to the actual PEF file, an HTML page will then be generated that you can open in your browser. You will be able to quickly navigate pages, and switch between a ‘dot patterns’ view and a more readable ASCII view. To properly render this HTML page, you need the <a href="http://sourceforge.net/projects/odt2braille/files/ttf/odt2braille-6dot-v1.1.ttf" class="external-link" target="_blank">odt2braille font</a>.</p>
+
+<h2 id="advanced-configuration">Advanced Configuration</h2>
+
+<h3 id="translation">Translation</h3>
+
+<p>By default, text is translated to braille with a simple generic <a href="http://liblouis.org" class="external-link" target="_blank">liblouis</a> based translator. All the translation tables distributed by liblouis (about 80 languages) are included in the DAISY Pipeline. The translator will automatically look for the table that matches the <code>xml:lang</code> attribute best. The <code>transform</code> option gives you more control over translator selection. For example:</p>
+
+<pre><code>--x-transform "(locale:fr)"
+</code></pre>
+
+<p>will force the document to be translated to French braille. Or, you might want to select a specific liblouis table, for example US English Grade 1:</p>
+
+<pre><code>--x-transform "(liblouis-table:'en-us-g1.ctb')"
+</code></pre>
+
+<p>If you are running DAISY Pipeline 2 in local mode, and you have your own liblouis tables installed somewhere, you can use them by specifying the full path:</p>
+
+<pre><code>--x-transform "(liblouis-table:'file:/home/me/liblouis-tables/my_en-us.ctb')"
+</code></pre>
+
+<p>Liblouis is the main translation engine used in DAISY Pipeline 2, but other libraries are available. The following translator is backed by <a href="https://code.google.com/p/dotify/" class="external-link" target="_blank">Dotify</a>, the braille translation library developed at MTM:</p>
+
+<pre><code>--x-transform "(translator:dotify)"
+</code></pre>
+
+<p>More examples are provided below. If your use case requires non-trivial features and the supplied generic translators won’t do, you can write your own translator, which might be a combination of existing and new components. If you have idea’s about features that should be supported by default, please share them with us.</p>
+
+<h3 id="hyphenation">Hyphenation</h3>
+
+<p>The default transformer automatically hyphenates text with CSS property “hyphens:auto” (see <a href="#styling-with-braille-css">Styling with Braille CSS</a> below). A hyphenator will be selected based on the <code>xml:lang</code> attribute. If liblouis isn’t able to hyphenate the text itself, then <a href="http://hunspell.sourceforge.net/" class="external-link" target="_blank">Hyphen</a>, the hyphenation engine from <a href="http://www.openoffice.org/" class="external-link" target="_blank">OpenOffice</a> and <a href="http://www.libreoffice.org/" class="external-link" target="_blank">LibreOffice</a>, is used. To force the use of Hyphen, specify:</p>
+
+<pre><code>--x-transform "(hyphenator:hyphen)"
+</code></pre>
+
+<p>and to select a specific Hyphen table, specify:</p>
+
+<pre><code>--x-transform "(libhyphen-table:'hyph_en_US.dic')"
+</code></pre>
+
+<h3 id="text-emphasis">Text Emphasis</h3>
+
+<p>In case the input document has styling attached for media ‘print’, the default translator uses this information to mark emphasised text (font-style, font-weight, etc.) with braille indicators.</p>
+
+<h3 id="math">Math</h3>
+
+<p>Translation of <a href="http://www.w3.org/Math/" class="external-link" target="_blank">MathML</a> is supported by default. The supported braille math codes are <em>Nemeth</em> (used in the US), <em>Marburg</em> (Germany), <em>Woluwe</em> (Belgium) and <em>UKMaths</em> (Great Britain). The right translator is selected based on the <code>xml:lang</code> attribute.</p>
+
+<h3 id="styling-with-braille-css">Styling with Braille CSS</h3>
+
+<p>The formatting of documents into a paged braille layout is specified with CSS (Cascading Style Sheets). We use a flavor of CSS specially designed for this use case. For people that already know CSS, it will feel very natural. In fact, it is almost a subset of CSS3, but with certain restrictions and some braille specific features. The most obvious difference is that margins are expressed in units of cell width and line height instead of pixels, ems and percentages. Extensive documentation of braille CSS can be found in the <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">Braille CSS specification draft</a>.</p>
+
+<p>In addition to braille CSS, which is normative, certain parts of ‘print’ CSS can be taken into account as well. An example is text emphasis. (See also <a href="http://braillespecs.github.io/braille-css#media-types" class="external-link" target="_blank">Braille CSS - Media Types</a>.)</p>
+
+<p>The actual rendering of documents based on CSS is done with Dotify. There is a also second implementation based on <a href="http://liblouis.org" class="external-link" target="_blank">liblouisutdml</a>.</p>
+
+<p>Attaching style information to a document can be done either by linking to an external CSS stylesheet, by including an internal stylesheet, by inserting inline styles, or a hibrid of these three.</p>
+
+<ol>
+  <li>
+    <p>External stylesheet:</p>
+
+    <div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;document&gt;</span>
+    <span class="tag">&lt;head&gt;</span>
+        <span class="tag">&lt;link</span> <span class="attribute-name">rel</span>=<span class="string"><span class="delimiter">"</span><span class="content">stylesheet</span><span class="delimiter">"</span></span> <span class="attribute-name">media</span>=<span class="string"><span class="delimiter">"</span><span class="content">embossed</span><span class="delimiter">"</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">"</span><span class="content">text/css</span><span class="delimiter">"</span></span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">external_stylesheet.css</span><span class="delimiter">"</span></span> <span class="tag">/&gt;</span>
+        ...
+</pre></div>
+</div>
+    </div>
+  </li>
+  <li>
+    <p>Internal stylesheet:</p>
+
+    <div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;document&gt;</span>
+    <span class="tag">&lt;head&gt;</span>
+        <span class="tag">&lt;style</span> <span class="attribute-name">media</span>=<span class="string"><span class="delimiter">"</span><span class="content">embossed</span><span class="delimiter">"</span></span> <span class="attribute-name">type</span>=<span class="string"><span class="delimiter">"</span><span class="content">text/css</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+<span class="inline">            <span class="tag">head</span> {
+                <span class="key">display</span>: <span class="value">none</span>;
+            }
+            <span class="tag">h</span> {
+                <span class="key">display</span>: <span class="value">block</span>; <span class="key">text-align</span>: <span class="value">center</span>;
+            }
+            ...</span>
+        <span class="tag">&lt;/style&gt;</span>
+        ...
+</pre></div>
+</div>
+    </div>
+  </li>
+  <li>
+    <p>Inline styles:</p>
+
+    <div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;document&gt;</span>
+    <span class="tag">&lt;head</span> <span class="attribute-name">style</span>=<span class="string"><span class="delimiter">"</span><span class="key">display</span>:<span class="value">none</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+        ...
+    <span class="tag">&lt;/head&gt;</span>
+    <span class="tag">&lt;body&gt;</span>
+        <span class="tag">&lt;frontmatter&gt;</span>
+            <span class="tag">&lt;section&gt;</span>
+                <span class="tag">&lt;h</span> <span class="attribute-name">style</span>=<span class="string"><span class="delimiter">"</span><span class="key">display</span>:<span class="value">block</span>;<span class="key">text-align</span>:<span class="value">center</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>...<span class="tag">&lt;/h&gt;</span>
+                ...
+</pre></div>
+</div>
+    </div>
+  </li>
+</ol>
+
+<p>Keep in mind that a simple default stylesheet (<code>default.css</code>) is always applied first. If you don’t want this default CSS, include <code>reset.css</code> in your stylesheet:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@import</span> <span class="function"><span class="delimiter">url(</span><span class="content">'http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/reset.css'</span><span class="delimiter">)</span></span>;
+</pre></div>
+</div>
+</div>
+
+<p>To change which default CSS is applied, use the <code>default-stylesheet</code> option as in the <a href="#example-running-from-command-line">advanced example</a> above. Valid choices are <a href="../resources/css/bana.css" class="broken-link">bana.css</a> and <a href="../resources/css/ueb.css" class="broken-link">ueb.css</a>. This is not meant to be a complete list, the idea is to eventually have stylesheets for each braille formatting standard. In fact, <code>bana.css</code> and <code>ueb.css</code> are currently only stubs, we are hoping for contributions from people who are more familiar with these standards.</p>
+
+<h4 id="example-1-sections-and-headings">Example 1: Sections and headings</h4>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">section</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">page-break-before</span>: <span class="value">always</span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>By putting this code in your stylesheet, each section will be guaranteed to start on a new braille page.</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">h</span> {
+    <span class="key">display</span>:<span class="value">block</span>;
+    <span class="key">text-align</span>:<span class="value">center</span>;
+    <span class="key">margin-top</span>: <span class="float">1</span>;
+    <span class="key">margin-bottom</span>: <span class="float">1</span>;
+    <span class="key">margin-left</span>: <span class="float">4</span>;
+    <span class="key">margin-right</span>: <span class="float">4</span>;
+    <span class="key">page-break-after</span>: <span class="value">avoid</span>;
+}
+<span class="tag">h</span> + <span class="tag">*</span> {
+    <span class="key">orphans</span>: <span class="float">2</span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>Headings are centered on the page, with at least one line left blank both above and below. The left and right margins are increased enough so that long headings can not be confused with normal paragraphs. To make sure headings are not rendered at the bottom of a page, no page breaks are allowed right after a heading, and any element immediately following a heading must have at least two lines (orphans) on the current page.</p>
+
+<h4 id="example-2-ordered-and-unordered-lists">Example 2: Ordered and unordered lists</h4>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">list</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+}
+<span class="tag">list</span> &gt; <span class="tag">item</span> {
+    <span class="key">display</span>: <span class="value">list-item</span>;
+}
+<span class="tag">list</span>[<span class="attribute-name">type="unordered"</span>] {
+    <span class="key">list-style-type</span>: <span class="error">⠶</span>;
+}
+<span class="tag">list</span>[<span class="attribute-name">type="ordered"</span>]<span class="class">.decimal</span> {
+    <span class="key">list-style-type</span>: <span class="value">decimal</span>;
+}
+<span class="tag">list</span>[<span class="attribute-name">type="ordered"</span>]<span class="class">.alpha</span> {
+    <span class="key">list-style-type</span>: <span class="value">lower-alpha</span>;
+}
+<span class="tag">list</span>[<span class="attribute-name">type="ordered"</span>]<span class="class">.roman</span> {
+    <span class="key">list-style-type</span>: <span class="value">lower-roman</span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>This will format lists of type “unordered” as bulleted lists, with each item preceded by the braille character (bullet) ‘⠶’. Lists of type “ordered” will be numbered: “1. 2. 3. …” for class “decimal”, “a. b. c. …” for class “alpha” and “i. ii. iii. …” for class “roman”.</p>
+
+<h4 id="example-3-tables-in-linear-versus-stairstep-format">Example 3: Tables in linear versus stairstep format</h4>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">table</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">border-top</span>: <span class="error">⠶</span>;
+    <span class="key">border-bottom</span>: <span class="error">⠛</span>;
+}
+<span class="tag">thead</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">border-bottom</span>: <span class="error">⠒</span>;
+}
+<span class="tag">tr</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">page-break-inside</span>: <span class="value">avoid</span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>This code will give tables an upper and lower border (lines of characters ‘⠶’ and ‘⠛’ respectively). If there is a table header, a ‘⠒’ border is printed between the header and the body. Table rows are protected from being split across braille pages.</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="class">.linear</span> <span class="tag">th</span><span class="pseudo-class">::after</span>,
+<span class="class">.linear</span> <span class="tag">td</span><span class="pseudo-class">::after</span> {
+    <span class="key">content</span>: <span class="string"><span class="delimiter">"</span><span class="content">⠰ </span><span class="delimiter">"</span></span>
+}
+</pre></div>
+</div>
+</div>
+
+<p>Tables of class “linear” (<code>&lt;table class="linear"&gt;</code>) will have table cells separated by the character ‘⠰’ and a space.</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">td</span>,
+<span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">th</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+}
+<span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">th</span><span class="pseudo-class">:first-child</span>,
+<span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">td</span><span class="pseudo-class">:first-child</span> {
+    <span class="key">margin-left</span>: <span class="float">0</span>;
+}
+<span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">th</span><span class="pseudo-class">:nth-child</span>(<span class="float">2</span>),
+<span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">td</span><span class="pseudo-class">:nth-child</span>(<span class="float">2</span>) {
+    <span class="key">margin-left</span>: <span class="float">3</span>;
+}
+<span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">th</span><span class="pseudo-class">:nth-child</span>(<span class="float">3</span>),
+<span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">td</span><span class="pseudo-class">:nth-child</span>(<span class="float">3</span>) {
+    <span class="key">margin-left</span>: <span class="float">6</span>;
+}
+...
+</pre></div>
+</div>
+</div>
+
+<p>In tables of class “stairstep” (<code>&lt;table class="stairstep"&gt;</code>), each table cell will start on a new line, with a left margin that is the same for cells in the same column.</p>
+
+<h4 id="example-4-print-page-numbers">Example 4: Print page numbers</h4>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">pagebreak</span> {
+    <span class="key">display</span>: <span class="value">none</span>;
+    <span class="key">string-set</span>: <span class="value">print-page</span> <span class="function"><span class="delimiter">attr(</span><span class="content">value</span><span class="delimiter">)</span></span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>This snippet will update the print page number whenever a <code>&lt;pagebreak value="..."/&gt;</code> is encountered. In order to render print page numbers, the <code>@page</code> rule must be used (see <a href="#example-6-page-layout">example 6</a> below).</p>
+
+<p>When <code>display:none</code> is changed to <code>display:page-break</code>, a <em>page break indicator</em> (a line of braille dots ‘36’) is generated wherever a print page break occurs:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">pagebreak</span> {
+    <span class="key">display</span>: <span class="value">page-break</span>;
+    <span class="key">string-set</span>: <span class="value">print-page</span> <span class="function"><span class="delimiter">attr(</span><span class="content">value</span><span class="delimiter">)</span></span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>Note that in the current implementation, <code>display:page-break</code> only works in combination with <code>string-set:print-page</code>, and won’t have any effect unless it is used for <em>all</em> print pages.</p>
+
+<h4 id="example-5-table-of-contents">Example 5: Table of contents</h4>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;toc&gt;</span>
+    <span class="tag">&lt;h&gt;</span>Contents<span class="tag">&lt;/h&gt;</span>
+    <span class="tag">&lt;entry&gt;</span><span class="tag">&lt;ref</span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">"</span><span class="content">chapter_1</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>I. Down the Rabbit-Hole<span class="tag">&lt;/ref&gt;</span><span class="tag">&lt;/entry&gt;</span>
+    <span class="tag">&lt;entry&gt;</span><span class="tag">&lt;ref</span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">"</span><span class="content">chapter_2</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>II. The Pool of Tears<span class="tag">&lt;/ref&gt;</span><span class="tag">&lt;/entry&gt;</span>
+    <span class="tag">&lt;entry&gt;</span><span class="tag">&lt;ref</span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">"</span><span class="content">chapter_3</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>III. A Caucus-Race and a Long Tale<span class="tag">&lt;/ref&gt;</span><span class="tag">&lt;/entry&gt;</span>
+<span class="tag">&lt;/toc&gt;</span>
+...
+    <span class="tag">&lt;h</span> <span class="attribute-name">xml:id</span>=<span class="string"><span class="delimiter">"</span><span class="content">chapter_1</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>Chapter I. Down the Rabbit-Hole<span class="tag">&lt;/h&gt;</span>
+...
+</pre></div>
+</div>
+</div>
+
+<p>A table of contents can be rendered in a typical layout with page numbers on the right and leaders between entries and page numbers. A precondition is that headings in the text are referenced within the table of contents (e.g. with an attribute). If print page numbers and/or braille page numbers are present in the braille output, they can be included in the table of contents too. The pattern of leaders can be configured. Let’s look at the CSS:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">toc</span> &gt; <span class="tag">h</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">text-align</span>: <span class="value">center</span>;
+    <span class="key">margin-top</span>: <span class="float">1</span>;
+    <span class="key">margin-bottom</span>: <span class="float">1</span>;
+}
+<span class="tag">toc</span> &gt; <span class="tag">entry</span> &gt; <span class="tag">ref</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">margin-left</span>: <span class="float">2</span>;
+    <span class="key">text-indent</span>: <span class="float">-2</span>;
+}
+<span class="tag">toc</span> &gt; <span class="tag">entry</span> &gt; <span class="tag">ref</span><span class="pseudo-class">::after</span> {
+    <span class="key">content</span>: <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> <span class="error">l</span><span class="error">e</span><span class="error">a</span><span class="error">d</span><span class="error">e</span><span class="error">r</span>(<span class="string"><span class="delimiter">'</span><span class="content">⠤</span><span class="delimiter">'</span></span>)
+             <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> <span class="error">t</span><span class="error">a</span><span class="error">r</span><span class="error">g</span><span class="error">e</span><span class="error">t</span><span class="error">-</span><span class="error">s</span><span class="error">t</span><span class="error">r</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>(<span class="function"><span class="delimiter">attr(</span><span class="content">ref</span><span class="delimiter">)</span></span>, <span class="value">print-page</span>)
+             <span class="string"><span class="delimiter">'</span><span class="content"> </span><span class="delimiter">'</span></span> <span class="error">t</span><span class="error">a</span><span class="error">r</span><span class="error">g</span><span class="error">e</span><span class="error">t</span><span class="error">-</span><span class="function"><span class="delimiter">counter(</span><span class="content">attr(ref</span><span class="delimiter">)</span></span>, <span class="value">page</span>);
+}
+</pre></div>
+</div>
+</div>
+
+<p>With the content property we are generating content and appending it to the <code>ref</code> element.</p>
+
+<h4 id="example-6-page-layout">Example 6: Page layout</h4>
+
+<p>The dimensions of the page, the position of page numbers, and the running header and/or footer (see <a href="#example-7-running-headerfooter">example 7</a>), can be configured with the <code>@page</code> rule:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@page</span> {
+    <span class="key">size</span>: <span class="float">40</span> <span class="float">25</span>;
+    <span class="directive">@top-right</span> {
+        <span class="key">content</span>: <span class="error">s</span><span class="error">t</span><span class="error">r</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>(<span class="value">print-page</span>);
+    }
+    <span class="directive">@bottom-right</span> {
+        <span class="key">content</span>: <span class="function"><span class="delimiter">counter(</span><span class="content">page</span><span class="delimiter">)</span></span>;
+    }
+    <span class="directive">@bottom-center</span> {
+        <span class="key">content</span>: <span class="error">s</span><span class="error">t</span><span class="error">r</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>(<span class="value">running-footer</span>);
+    }
+}
+</pre></div>
+</div>
+</div>
+
+<p>The only valid positions for page numbers are currently <code>@top-right</code> and <code>@bottom-right</code>. It is also possible to put both page numbers at the top or at the bottom, like this: <code>@top-right{content:string(print-page) counter(page);}</code></p>
+
+<p>As showed in the next example, pages can be named. This can be useful to switch page layout in the middle of a document. The following example will start a new page with double width for each wide table, so that it can be printed across facing pages.</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@page</span> <span class="tag">double</span> {
+    <span class="key">size</span>: <span class="float">80</span> <span class="float">25</span>;
+}
+
+<span class="tag">table</span><span class="class">.wide</span> {
+    <span class="key">page</span>: <span class="value">double</span>;
+}
+</pre></div>
+</div>
+</div>
+
+<h4 id="example-7-running-headerfooter">Example 7: Running header/footer</h4>
+
+<p>As seen in <a href="#example-6-page-layout">example 6</a> above, pages can have running headers and/or footers. To update the value of the footer whenever a new heading appears, include the following:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">h</span> {
+    <span class="key">string-set</span>: <span class="value">running-footer</span> <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>();
+}
+</pre></div>
+</div>
+</div>
+
+<h4 id="example-8-braille-page-numbers">Example 8: Braille page numbers</h4>
+
+<p>CSS also has some tools to customized the braille page numbering. For example, to distinguished the frontmatter from the bodymatter, they often have different page numbering formats. This snippet gives the frontmatter lowercase Roman page numbers, and restarts the numbering after the frontmatter:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@page</span> <span class="tag">front</span> {
+    <span class="directive">@bottom-right</span> {
+        <span class="key">content</span>: <span class="function"><span class="delimiter">counter(</span><span class="content">page, lower-roman</span><span class="delimiter">)</span></span>;
+    }
+}
+
+<span class="tag">frontmatter</span> {
+    <span class="key">page</span>: <span class="value">front</span>;
+}
+
+<span class="tag">bodymatter</span> {
+    <span class="key">counter-reset</span>: <span class="value">page</span> <span class="float">1</span>;
+}
+</pre></div>
+</div>
+</div>
+
+    </div>
+  </body>
+</html>

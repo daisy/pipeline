@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>accessibility.css</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../accessibility.css">
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="comment">/*
+        This stylesheet is intended to increase readability.
+
+        The font OpenDyslexic by Abelardo Gonzalez is licensed under a Creative Commons Attribution 3.0 Unported License.
+        It is based on a work at dyslexicfonts.com. See http://opendyslexic.org/legal/ for more information.
+
+        This stylesheet is adapted from http://antijingoist.github.io/web-accessibility/stylesheets/accessibility.css.
+*/</span>
+<span class="directive">@font-face</span> {
+    <span class="key">font-family</span>:<span class="string"><span class="delimiter">"</span><span class="content">opendyslexic</span><span class="delimiter">"</span></span>;
+    <span class="key">src</span>: <span class="function"><span class="delimiter">url(</span><span class="content">'fonts/opendyslexic/OpenDyslexic-Regular.otf'</span><span class="delimiter">)</span></span>;
+    <span class="key">font-style</span>: <span class="value">normal</span>;
+    <span class="key">font-weight</span>: <span class="value">normal</span>;
+}
+<span class="directive">@font-face</span> {
+    <span class="key">font-family</span>:<span class="string"><span class="delimiter">"</span><span class="content">opendyslexic</span><span class="delimiter">"</span></span>;
+    <span class="key">src</span>: <span class="function"><span class="delimiter">url(</span><span class="content">'fonts/opendyslexic/OpenDyslexic-Italic.otf'</span><span class="delimiter">)</span></span>;
+    <span class="key">font-style</span>: <span class="value">italic</span>;
+    <span class="key">font-weight</span>: <span class="value">normal</span>;
+}
+<span class="directive">@font-face</span> {
+    <span class="key">font-family</span>:<span class="string"><span class="delimiter">"</span><span class="content">opendyslexic</span><span class="delimiter">"</span></span>;
+    <span class="key">src</span>: <span class="function"><span class="delimiter">url(</span><span class="content">'fonts/opendyslexic/OpenDyslexic-Bold.otf'</span><span class="delimiter">)</span></span>;
+    <span class="key">font-weight</span>: <span class="value">bold</span>;
+    <span class="key">font-style</span>: <span class="value">normal</span>;
+}
+<span class="directive">@font-face</span> {
+    <span class="key">font-family</span>:<span class="string"><span class="delimiter">"</span><span class="content">opendyslexic</span><span class="delimiter">"</span></span>;
+    <span class="key">src</span>: <span class="function"><span class="delimiter">url(</span><span class="content">'fonts/opendyslexic/OpenDyslexic-BoldItalic.otf'</span><span class="delimiter">)</span></span>;
+    <span class="key">font-weight</span>: <span class="value">bold</span>;
+    <span class="key">font-style</span>: <span class="value">italic</span>;
+}
+<span class="directive">@font-face</span> {
+    <span class="key">font-family</span>:<span class="string"><span class="delimiter">"</span><span class="content">opendyslexicMono</span><span class="delimiter">"</span></span>;
+    <span class="key">src</span>: <span class="function"><span class="delimiter">url(</span><span class="content">'fonts/opendyslexic/OpenDyslexicMono-Regular.otf'</span><span class="delimiter">)</span></span>;
+}
+
+<span class="tag">*</span> {
+    <span class="key">font-family</span>:<span class="string"><span class="delimiter">"</span><span class="content">opendyslexic</span><span class="delimiter">"</span></span> <span class="important">!important</span>;
+}
+<span class="tag">code</span>, <span class="tag">kbd</span>, <span class="tag">pre</span>, <span class="tag">samp</span> {
+    <span class="key">font-family</span>:<span class="string"><span class="delimiter">"</span><span class="content">opendyslexicMono</span><span class="delimiter">"</span></span> <span class="important">!important</span>;
+}
+
+<span class="comment">/* Use an off-white background. Some users need high
+   contrast for better reading. Some need low contrast. 
+   A happy medium would be off white to reduce "glare"
+   and black text. Anyone that needs a greater extreme
+   likely overrides stylesheets.                       
+   The text is colored dark blue to assist with "glare"
+   issues, but also to make the black symbols subtly stand
+   out.                                                  */</span>
+ <span class="tag">body</span> {
+    <span class="key">font-size</span>: <span class="float">14px</span>;
+    <span class="key">line-height</span>: <span class="float">200%</span>;
+    <span class="key">background</span>: <span class="value">snow</span>;
+    <span class="key">margin</span>: <span class="value">auto</span> <span class="float">0</span>;
+    <span class="key">padding</span>: <span class="float">0</span> <span class="float">100</span>;
+    <span class="key">color</span>: <span class="color">#1A0033</span>;
+}
+
+<span class="comment">/* alternate paragraph shading helps users stay
+   on track while reading. This shading is very 
+   subtle so it is not annoying, but it still 
+   helps.                                       */</span>
+ <span class="tag">p</span><span class="pseudo-class">:nth-child</span>(<span class="tag">even</span>), <span class="tag">li</span><span class="pseudo-class">:nth-child</span>(<span class="tag">even</span>) {
+    <span class="key">background-color</span>: <span class="color">rgba(0, 0, 0, 0.05)</span>;
+}
+</pre></div>
+</div>
+</div>
+
+  </body>
+</html>

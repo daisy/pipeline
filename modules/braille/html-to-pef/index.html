@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>HTML to PEF</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="HTML to PEF">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/wiki/webui/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/webui/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/wiki/Configuration-Files" tabindex="15">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line.html" tabindex="16">
+      
+      Command Line Tool
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts.html" tabindex="17">
+      Scripts
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="18">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="19">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="20">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="21">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="22">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="23">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="24">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="25">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="26">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="27">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="28">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="29">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="30">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="31">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="32">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="33">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="34">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="35">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="36">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="37">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="38">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="39">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/search?utf8=%E2%9C%93&amp;type=Issues&amp;q=+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl" class="external-link" target="_blank" tabindex="40">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide.html" tabindex="41">
+      
+      Developer Guide
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <link rev="dp2:doc" href="resources/xml/xproc/html-to-pef.xpl">
+
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+
+<meta property="dc:title" content="HTML to PEF">
+
+<h1 id="html-to-pef">HTML to PEF</h1>
+
+<p>Transforms a HTML document into a PEF.</p>
+
+<h2 id="synopsis">Synopsis</h2>
+
+<div class="gui-synopsis">
+
+  <h3 id="inputs">Inputs</h3>
+
+  <ul class="synopsis-inputs">
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">Input HTML</div>
+<div class="synopsis-input-desc">
+The HTML you want to convert to braille.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="https://www.w3.org/TR/html5/" class="media-type external-link" target="_blank">application/xhtml+xml</a></li>
+<li>text/html</li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+</ul>
+
+  <h3 id="outputs">Outputs</h3>
+
+  <ul class="synopsis-outputs">
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">PEF</div>
+<div class="synopsis-output-desc">
+The PEF.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html" class="media-type external-link" target="_blank">application/x-pef+xml</a></li>
+</ul>
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">BRF</div>
+<div class="synopsis-output-desc">
+A plain text ASCII version of the PEF.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">Preview</div>
+<div class="synopsis-output-desc">
+An HTML preview of the PEF.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text/html</li>
+</ul>
+</div>
+</li>
+</ul>
+
+  <h3 id="options">Options</h3>
+
+  <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of XSLT or CSS/SASS style sheets to apply.
+</div>
+<div class="longdesc">A list of XSLT or CSS/SASS style sheets to apply.
+
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+
+<p>Style sheets can also be associated with the source in other ways: linked (using an
+<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
+element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
+element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
+attributes</a>).</p>
+
+<p>Style sheets are applied to the document in the following way: XSLT style sheets are applied before
+CSS/SASS style sheets. XSLT style sheets are applied one by one, first the ones specified through
+this option, then the ones associated with the source document, in the order in which they are
+specified.</p>
+
+<p>All CSS/SASS style sheets are applied at once, but the order in which they are specified (first the
+ones specified through this option, then the ones associated with the source document) has an
+influence on the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading order</a>.</p>
+
+<p>CSS/SASS style sheets are interpreted according to <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
+CSS</a> rules.</p>
+
+<p>For info on how to use SASS (Syntactically Awesome StyleSheets) see the <a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" class="external-link" target="_blank">SASS
+manual</a>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Zero or more of the following:<dl class="choice">
+<dt><var>&lt;anyFileURI&gt;</var></dt>
+<dd>File path relative to input HTML.</dd>
+<dt><var>&lt;anyURI&gt;</var></dt>
+<dd>Any other absolute URI</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Transformer query</div>
+<div class="synopsis-option-desc">
+The transformer query.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>(translator:liblouis)(formatter:dotify)</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include preview</div>
+<div class="synopsis-option-desc">
+Whether or not to include a preview of the PEF in HTML.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include plain text file (BRF)</div>
+<div class="synopsis-option-desc">
+Whether or not to include a plain text ASCII version of the PEF.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include OBFL</div>
+<div class="synopsis-option-desc">
+Keeps the intermediary OBFL-file for debugging.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Plain text (BRF) file format</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The file format to store the plain text version.
+</div>
+<div class="longdesc">The file format to store the plain text version.
+
+<p>If left blank, the locale information in the input document will be used to select a suitable file format.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">ASCII braille table</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
+</div>
+<div class="longdesc">The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
+
+<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Page width</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The number of columns available for printing.
+</div>
+<div class="longdesc">The number of columns available for printing.
+
+<p>Makes the variable <code>$page-width</code> available in style sheets and includes the following rule by default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@page</span> {
+  <span class="key">size</span>: <span class="variable">$page-width</span> <span class="variable">$page-height</span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#the-size-property" class="external-link" target="_blank"><code>size</code></a> property</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>40</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Page height</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The number of rows available for printing.
+</div>
+<div class="longdesc">The number of rows available for printing.
+
+<p>Makes the variable <code>$page-height</code> available in style sheets and includes the following rule by default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@page</span> {
+  <span class="key">size</span>: <span class="variable">$page-width</span> <span class="variable">$page-height</span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#the-size-property" class="external-link" target="_blank"><code>size</code></a> property</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>25</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Left margin</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>0</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Duplex</div>
+<div class="synopsis-option-desc">
+When enabled, will print on both sides of the paper.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Levels in footer</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Specify which headings are rendered in the footer.
+</div>
+<div class="longdesc">Specify which headings are rendered in the footer.
+
+<p>Makes the variable <code>$levels-in-footer</code> available in style sheets and includes the following rule by
+default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@for</span> <span class="variable">$level</span> <span class="value">from</span> <span class="float">1</span> <span class="value">through</span> <span class="float">6</span> {
+  <span class="directive">@if</span> <span class="variable">$levels-in-footer</span> &gt;= <span class="variable">$level</span> {
+    <span class="key">h</span><span class="inline"><span class="inline-delimiter">#{</span><span class="variable">$level</span><span class="inline-delimiter">}</span></span> {
+      <span class="key">string-set</span>: <span class="value">footer</span> <span class="predefined">content</span>();
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+
+<p>In other words, the <code>footer</code> string is updated each time a heading with a level smaller than or
+equal to <code>levels-in-footer</code> is encountered. In order to use the <code>footer</code> string include a rule like
+the following in your custom style sheet:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@page</span> {
+  <span class="directive">@bottom-center</span> {
+    <span class="key">content</span>: <span class="error">s</span><span class="error">t</span><span class="error">r</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>(<span class="value">footer</span>);
+  }
+}
+</pre></div>
+</div>
+</div>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-string-set-property" class="external-link" target="_blank"><code>string-set</code></a> property</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-string-function" class="external-link" target="_blank"><code>string()</code></a> function</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>6</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Main document language</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Hyphenation</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When enabled, will automatically hyphenate text.
+</div>
+<div class="longdesc">When enabled, will automatically hyphenate text.
+
+<p>Makes the variable <code>$hyphenation</code> available in style sheets and includes the following rule by
+default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@if</span> <span class="variable">$hyphenation</span> {
+  :<span class="value">root</span> {
+    <span class="key">hyphens</span>: <span class="value">auto</span>;
+  }
+}
+</pre></div>
+</div>
+</div>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#the-hyphens-property" class="external-link" target="_blank"><code>hyphens</code></a> property</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Line spacing</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Single or double line spacing.
+</div>
+<div class="longdesc">Single or double line spacing.
+
+<p>Makes the variable <code>$line-spacing</code> available in style sheets and includes the following rule by
+default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@if</span> <span class="variable">$line-spacing</span> == <span class="value">double</span> {
+  :<span class="value">root</span> {
+    <span class="key">line-height</span>: <span class="float">2</span>;
+  }
+}
+</pre></div>
+</div>
+</div>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h3_the-line-height-property" class="external-link" target="_blank"><code>line-height</code></a>
+property</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>single</code></dt>
+<dd>Single</dd>
+<dt><code>double</code></dt>
+<dd>Double</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>single</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Tab width</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>4</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Capital letters</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When enabled, will indicate capital letters.
+</div>
+<div class="longdesc">When enabled, will indicate capital letters.
+
+<p>Makes the variable <code>$capital-letters</code> available in style sheets and includes the following rule by
+default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@if</span> <span class="variable">$capital-letters</span> != <span class="value">true</span> {
+  :<span class="value">root</span> {
+    <span class="key">text-transform</span>: <span class="value">lowercase</span>;
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Accented letters</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Polite forms</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Downshift ordinal numbers</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include captions</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When enabled, will include captions for images, tables, and so on.
+</div>
+<div class="longdesc">When enabled, will include captions for images, tables, and so on.
+
+<p>Makes the variable <code>$include-captions</code> available in style sheets and includes the following rule by
+default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">caption</span> {
+  <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-captions</span>, <span class="value">block</span>, <span class="value">none</span>);
+}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include images</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When enabled, will include the alt text of the images. When disabled, the images will be completely removed.
+</div>
+<div class="longdesc">When enabled, will include the alt text of the images. When disabled, the images will be completely removed.
+
+<p>Makes the variable <code>$include-images</code> available in style sheets and includes the following rule by
+default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@if</span> <span class="variable">$include-images</span> {
+  <span class="key">img</span>::<span class="value">after</span> {
+    <span class="key">content</span>: <span class="function"><span class="delimiter">attr(</span><span class="content">alt</span><span class="delimiter">)</span></span>;
+  }
+}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include image groups</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include line groups</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When disabled, lines in a linegroup are joined together to form one block.
+</div>
+<div class="longdesc">When disabled, lines in a linegroup are joined together to form one block.
+
+<p>Makes the variable <code>$include-line-groups</code> available in style sheets and includes the following rule
+by default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">linegroup</span> <span class="tag">line</span> {
+  <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-line-groups</span>, <span class="value">block</span>, <span class="value">inline</span>);
+}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Text-level formatting (emphasis, strong)</div>
+<div class="synopsis-option-desc">
+When enabled, text that is in bold or italics in the print version will be rendered in bold or italics in the braille version as well. **Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include note references</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include production notes</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When enabled, production notes are included in the content.
+</div>
+<div class="longdesc">When enabled, production notes are included in the content.
+
+<p>Makes the variable <code>$include-production-notes</code> available in style sheets and includes the following
+rule by default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">prodnote</span> {
+  <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-production-notes</span>, <span class="value">block</span>, <span class="value">none</span>);
+}
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Show braille page numbers</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When enabled, will number braille pages.
+</div>
+<div class="longdesc">When enabled, will number braille pages.
+
+<p>Makes the variable <code>$show-braille-page-numbers</code> available in style sheets. In order to use the
+variable include a rule like the following in your custom style sheet:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@if</span> <span class="variable">$show-braille-page-numbers</span> {
+  <span class="directive">@page</span> {
+    <span class="directive">@top-right</span> {
+      <span class="key">content</span>: <span class="function"><span class="delimiter">counter(</span><span class="content">page</span><span class="delimiter">)</span></span>;
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+
+<p>This will create a page number in the top right corner of every braille page.</p>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
+  <li>the
+<a href="http://braillespecs.github.io/braille-css/#printing-counters-the-counter-function" class="external-link" target="_blank"><code>counter()</code></a>
+function</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Show print page numbers</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When enabled, will indicate original page numbers.
+</div>
+<div class="longdesc">When enabled, will indicate original page numbers.
+
+<p>Makes the variable <code>$show-print-page-numbers</code> available in style sheets and includes the following
+rule by default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@if</span> <span class="variable">$show-print-page-numbers</span> {
+  <span class="key">pagenum</span> {
+    <span class="key">string-set</span>: <span class="value">print-page</span> <span class="predefined">content</span>();
+  }
+}
+</pre></div>
+</div>
+</div>
+
+<p>In order to use the <code>print-page</code> string include a rule like the following in your custom style
+sheet:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@page</span> {
+  <span class="directive">@bottom-right</span> {
+    <span class="key">content</span>: <span class="error">s</span><span class="error">t</span><span class="error">r</span><span class="error">i</span><span class="error">n</span><span class="error">g</span>(<span class="value">print-page</span>);
+  }
+}
+</pre></div>
+</div>
+</div>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-string-set-property" class="external-link" target="_blank"><code>string-set</code></a> property</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-string-function" class="external-link" target="_blank"><code>string()</code></a> function</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Force braille page break</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Force braille page breaks at print page breaks.
+</div>
+<div class="longdesc">Force braille page breaks at print page breaks.
+
+<p>Makes the variable <code>$force-braille-page-break</code> available in style sheets and includes the following
+rule by default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@if</span> <span class="variable">$force-braille-page-break</span> {
+  <span class="key">pagenum</span> {
+    <span class="key">page-break-before</span>: <span class="value">always</span>;
+  }
+}
+</pre></div>
+</div>
+</div>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_controlling-page-breaks" class="external-link" target="_blank"><code>page-break-before</code></a>
+property</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Table of contents depth</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The depth of the table of contents hierarchy to include. '0' means no table of contents.
+</div>
+<div class="longdesc">The depth of the table of contents hierarchy to include. '0' means no table of contents.
+
+<p>A table of contents will be generated from the heading elements present in the document: from <code>h1</code>
+elements if the specified value for “depth” is 1, from <code>h1</code> and <code>h2</code> elements if the specified value
+is 2, etc. The resulting table of contents has the following nested structure:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;list</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">"</span><span class="content">generated-document-toc</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;li&gt;</span>
+      <span class="tag">&lt;a</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">#ch_1</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>Chapter 1<span class="tag">&lt;/a&gt;</span>
+      <span class="tag">&lt;list&gt;</span>
+          <span class="tag">&lt;li&gt;</span>
+              <span class="tag">&lt;a</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">#ch_1_1</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>1.1<span class="tag">&lt;/a&gt;</span>
+              ...
+          <span class="tag">&lt;/li&gt;</span>
+          <span class="tag">&lt;li&gt;</span>
+              <span class="tag">&lt;a</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">#ch_1_2</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>1.2<span class="tag">&lt;/a&gt;</span>
+              ...
+          <span class="tag">&lt;/li&gt;</span>
+          ...
+      <span class="tag">&lt;/list&gt;</span>
+  <span class="tag">&lt;/li&gt;</span>
+  ...
+<span class="tag">&lt;/list&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<p>Another one of these is generated but with ID <code>generated-volume-toc</code>. <code>ch_1</code>, <code>ch_1_2</code> etc. are the
+IDs of the heading elements from which the list was constructed, and the content of the links are
+exact copies of the content of the heading elements. By default the list is not rendered. The list
+should be styled and positioned with CSS. The following rules are included by default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="id">#generated-document-toc</span> {
+  <span class="key">flow</span>: <span class="value">document-toc</span>;
+  <span class="key">display</span>: <span class="value">-obfl-toc</span>;
+  <span class="key">-obfl-toc-range</span>: <span class="value">document</span>;
+}
+
+<span class="id">#generated-volume-toc</span> {
+  <span class="key">flow</span>: <span class="value">volume-toc</span>;
+  <span class="key">display</span>: <span class="value">-obfl-toc</span>;
+  <span class="key">-obfl-toc-range</span>: <span class="value">volume</span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>This means that a document range table of contents is added to the named flow called “document-toc”,
+and a volume range table of contents is added to the named flow called “volume-toc”. In order to
+consume these named flows use the function <code>flow()</code>. For example, to position the document range
+table of contents at the beginning of the first volume, and to repeat the volume range table of
+content at the beginning of every other volume, include the following additional rules:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@volume</span> {
+  <span class="directive">@begin</span> {
+    <span class="key">content</span>: <span class="error">f</span><span class="error">l</span><span class="error">o</span><span class="error">w</span>(<span class="value">volume-toc</span>);
+  }
+}
+
+<span class="directive">@volume</span><span class="pseudo-class">:first</span> {
+  <span class="directive">@begin</span> {
+    <span class="key">content</span>: <span class="error">f</span><span class="error">l</span><span class="error">o</span><span class="error">w</span>(<span class="value">document-toc</span>);
+  }
+}
+</pre></div>
+</div>
+</div>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-toc" class="external-link" target="_blank"><code>display:
+obfl-toc</code></a>
+value</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#the-flow-property" class="external-link" target="_blank"><code>flow</code></a> property</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-flow-function" class="external-link" target="_blank"><code>flow()</code></a> function</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h3_the-volume-rule" class="external-link" target="_blank"><code>@volume</code></a> rule</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h3_the-begin-and-end-rules" class="external-link" target="_blank"><code>@begin</code></a> rule</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>0</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Footnotes placement</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Colophon/metadata placement</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Rear cover placement</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Number of sheets</div>
+<div class="synopsis-option-desc">
+**Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>50</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Maximum number of sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The maximum number of sheets in a volume.
+</div>
+<div class="longdesc">The maximum number of sheets in a volume.
+
+<p>Makes the variable <code>$maximum-number-of-sheets</code> available in style sheets and includes the following
+rule by default:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@volume</span> {
+  <span class="key">max-length</span>: <span class="variable">$maximum-number-of-sheets</span>;
+}
+</pre></div>
+</div>
+</div>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h3_the-volume-rule" class="external-link" target="_blank"><code>@volume</code></a> rule</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h3_the-length-properties" class="external-link" target="_blank"><code>max-length</code></a> property</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>70</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Minimum number of sheets</div>
+<div class="synopsis-option-desc">
+The minimum number of sheets in a volume. **Not implemented**
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>30</code>
+</div>
+</li>
+</ul>
+
+  <script type="text/javascript">
+var allElements = [];
+function showDetailsAndHideAllOther() {
+  var windowTopBefore = window.pageYOffset;
+  var topBefore = this.offsetTop;
+  var i;
+  for (i = 0; i < allElements.length; i++) {
+    allElements[i].classList.remove('details-on');
+	allElements[i].classList.add('details-off');
+  }
+  this.classList.remove('details-off');
+  this.classList.add('details-on');
+  window.scrollTo(0, windowTopBefore + this.offsetTop - topBefore);
+}
+var onload = function() {
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-input'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-report'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-output'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-option'), 0));
+  var i;
+  for (i = 0; i < allElements.length; i++) {
+    allElements[i].classList.remove('details-on');
+    allElements[i].classList.add('details-off');
+	allElements[i].addEventListener('click', showDetailsAndHideAllOther);
+  }
+}
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+</div>
+
+<div class="cli-synopsis hidden">
+
+  <pre>Usage: dp2 [GLOBAL_OPTIONS] html-to-pef [OPTIONS]
+
+Options:</pre>
+  <table>
+<tr>
+<td>--html <span style="text-transform: uppercase">html</span>
+</td>
+<td>The HTML you want to convert to braille.</td>
+</tr>
+<tr>
+<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
+<td>Transformer query (default: <span class="synopsis-option-default"><code>(translator:liblouis)(formatter:dotify)</code></span>)</td>
+</tr>
+<tr>
+<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
+<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--include-brf [<span style="text-transform: uppercase">include-brf</span>]</td>
+<td>Include plain text file (BRF) (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--include-obfl [<span style="text-transform: uppercase">include-obfl</span>]</td>
+<td>Include OBFL (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--ascii-file-format [<span style="text-transform: uppercase">ascii-file-format</span>]</td>
+<td>Plain text (BRF) file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--ascii-table [<span style="text-transform: uppercase">ascii-table</span>]</td>
+<td>ASCII braille table (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--page-width [<span style="text-transform: uppercase">page-width</span>]</td>
+<td>Page width (default: <span class="synopsis-option-default"><code>40</code></span>)</td>
+</tr>
+<tr>
+<td>--page-height [<span style="text-transform: uppercase">page-height</span>]</td>
+<td>Page height (default: <span class="synopsis-option-default"><code>25</code></span>)</td>
+</tr>
+<tr>
+<td>--left-margin [<span style="text-transform: uppercase">left-margin</span>]</td>
+<td>Left margin (default: <span class="synopsis-option-default"><code>0</code></span>)</td>
+</tr>
+<tr>
+<td>--duplex [<span style="text-transform: uppercase">duplex</span>]</td>
+<td>Duplex (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--levels-in-footer [<span style="text-transform: uppercase">levels-in-footer</span>]</td>
+<td>Levels in footer (default: <span class="synopsis-option-default"><code>6</code></span>)</td>
+</tr>
+<tr>
+<td>--main-document-language [<span style="text-transform: uppercase">main-document-language</span>]</td>
+<td>Main document language (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--hyphenation [<span style="text-transform: uppercase">hyphenation</span>]</td>
+<td>Hyphenation (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--line-spacing [<span style="text-transform: uppercase">line-spacing</span>]</td>
+<td>Line spacing (default: <span class="synopsis-option-default"><code>single</code></span>)</td>
+</tr>
+<tr>
+<td>--tab-width [<span style="text-transform: uppercase">tab-width</span>]</td>
+<td>Tab width (default: <span class="synopsis-option-default"><code>4</code></span>)</td>
+</tr>
+<tr>
+<td>--capital-letters [<span style="text-transform: uppercase">capital-letters</span>]</td>
+<td>Capital letters (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--accented-letters [<span style="text-transform: uppercase">accented-letters</span>]</td>
+<td>Accented letters (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--polite-forms [<span style="text-transform: uppercase">polite-forms</span>]</td>
+<td>Polite forms (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--downshift-ordinal-numbers [<span style="text-transform: uppercase">downshift-ordinal-numbers</span>]</td>
+<td>Downshift ordinal numbers (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--include-captions [<span style="text-transform: uppercase">include-captions</span>]</td>
+<td>Include captions (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--include-images [<span style="text-transform: uppercase">include-images</span>]</td>
+<td>Include images (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--include-image-groups [<span style="text-transform: uppercase">include-image-groups</span>]</td>
+<td>Include image groups (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--include-line-groups [<span style="text-transform: uppercase">include-line-groups</span>]</td>
+<td>Include line groups (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--text-level-formatting [<span style="text-transform: uppercase">text-level-formatting</span>]</td>
+<td>Text-level formatting (emphasis, strong) (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--include-note-references [<span style="text-transform: uppercase">include-note-references</span>]</td>
+<td>Include note references (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--include-production-notes [<span style="text-transform: uppercase">include-production-notes</span>]</td>
+<td>Include production notes (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--show-braille-page-numbers [<span style="text-transform: uppercase">show-braille-page-numbers</span>]</td>
+<td>Show braille page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--show-print-page-numbers [<span style="text-transform: uppercase">show-print-page-numbers</span>]</td>
+<td>Show print page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--force-braille-page-break [<span style="text-transform: uppercase">force-braille-page-break</span>]</td>
+<td>Force braille page break (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--toc-depth [<span style="text-transform: uppercase">toc-depth</span>]</td>
+<td>Table of contents depth (default: <span class="synopsis-option-default"><code>0</code></span>)</td>
+</tr>
+<tr>
+<td>--footnotes-placement [<span style="text-transform: uppercase">footnotes-placement</span>]</td>
+<td>Footnotes placement (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--colophon-metadata-placement [<span style="text-transform: uppercase">colophon-metadata-placement</span>]</td>
+<td>Colophon/metadata placement (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--rear-cover-placement [<span style="text-transform: uppercase">rear-cover-placement</span>]</td>
+<td>Rear cover placement (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--number-of-sheets [<span style="text-transform: uppercase">number-of-sheets</span>]</td>
+<td>Number of sheets (default: <span class="synopsis-option-default"><code>50</code></span>)</td>
+</tr>
+<tr>
+<td>--maximum-number-of-sheets [<span style="text-transform: uppercase">maximum-number-of-sheets</span>]</td>
+<td>Maximum number of sheets (default: <span class="synopsis-option-default"><code>70</code></span>)</td>
+</tr>
+<tr>
+<td>--minimum-number-of-sheets [<span style="text-transform: uppercase">minimum-number-of-sheets</span>]</td>
+<td>Minimum number of sheets (default: <span class="synopsis-option-default"><code>30</code></span>)</td>
+</tr>
+<tr>
+<td>-o,--output [OUTPUT]</td>
+<td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>
+</tr>
+<tr>
+<td>-z,--zip</td>
+<td>Write the output to a zip file rather than to a folder</td>
+</tr>
+<tr>
+<td>-n,--nicename [NICENAME]</td>
+<td>Set job's nice name</td>
+</tr>
+<tr>
+<td>-r,--priority [PRIORITY]</td>
+<td>Set job's priority (high|medium|low)</td>
+</tr>
+<tr>
+<td>-q,--quiet</td>
+<td>Do not print the job's messages</td>
+</tr>
+<tr>
+<td>-p,--persistent</td>
+<td>Delete the job after it is executed</td>
+</tr>
+<tr>
+<td>-b,--background</td>
+<td>Sends the job and exits</td>
+</tr>
+</table>
+</div>
+
+<script type="text/javascript">
+var guiSynopsis = document.getElementsByClassName('gui-synopsis')[0];
+var cliSynopsis = document.getElementsByClassName('cli-synopsis')[0];
+function switchToCliView() {
+  guiSynopsis.classList.add('hidden');
+  cliSynopsis.classList.remove('hidden');
+}
+function switchToGuiView() {
+  guiSynopsis.classList.remove('hidden');
+  cliSynopsis.classList.add('hidden');
+}
+var loaded = false;
+var onload = function() {
+  if (loaded)
+    return;
+  var button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToCliView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToCliView();
+    }
+  });
+  guiSynopsis.insertBefore(button, guiSynopsis.firstChild);
+  button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToGuiView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToGuiView();
+    }
+  });
+  cliSynopsis.insertBefore(button, cliSynopsis.firstChild);
+  loaded = true;
+}
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+    </div>
+  </body>
+</html>
