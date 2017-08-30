@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Example script
+Bundle-SymbolicName: test.example-script
+Bundle-Version: 0.0.0.SNAPSHOT
+Import-Package: org.daisy.pipeline.script,org.daisy.pipeline.datatypes
+Service-Component: OSGI-INF/scripts.xml, OSGI-INF/datatypes.xml

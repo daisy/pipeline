@@ -18,7 +18,7 @@
 
   <modules>
     <module>clientlib-java</module>
-    <!--<module>clientlib-java-httpclient</module>-->
+    <module>clientlib-java-httpclient</module>
   </modules>
 
   <!-- don't publish aggregator -->

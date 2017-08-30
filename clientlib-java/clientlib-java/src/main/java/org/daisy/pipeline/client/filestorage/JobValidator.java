@@ -114,8 +114,13 @@ public class JobValidator {
 		String beginText = "The "+arg.getKind()+" '"+(arg.getNicename() == null || "".equals(arg.getNicename()) ? arg.getName() : arg.getNicename())+"'";
 
 		// is required ?
-		if (!arg.isDefined() && "true".equals(arg.getRequired())) {
+		if (!arg.isDefined() && arg.getRequired()) {
 			return beginText+" is required.";
+		}
+
+		// default value
+		if (!arg.isDefined() && !arg.getRequired()) {
+			return null;
 		}
 
 		// is sequence ?
@@ -310,7 +315,7 @@ public class JobValidator {
 					try {
 						URI uri = new URI(value);
 						
-						if ("".equals(arg.getOutput())) { // input type => validate that it refers to context files
+						if (arg.getOutput() == null) { // input type => validate that it refers to context files
 							if (uri.getScheme() != null || value.startsWith("/")) {
 								return beginText+" must be a relative URI";
 							}
@@ -344,7 +349,7 @@ public class JobValidator {
 					try {
 						URI uri = new URI(value);
 						
-						if ("".equals(arg.getOutput())) { // input type => validate that it refers to context files
+						if (arg.getOutput() == null) { // input type => validate that it refers to context files
 							if (uri.getScheme() != null || value.startsWith("/")) {
 								return beginText+" must be a relative URI";
 							}
@@ -378,7 +383,7 @@ public class JobValidator {
 					try {
 						URI uri = new URI(value);
 						
-						if ("".equals(arg.getOutput())) { // input type => validate that it refers to context files
+						if (arg.getOutput() == null) { // input type => validate that it refers to context files
 							if (uri.getScheme() != null || value.startsWith("/")) {
 								return beginText+" must be a relative URI";
 							}

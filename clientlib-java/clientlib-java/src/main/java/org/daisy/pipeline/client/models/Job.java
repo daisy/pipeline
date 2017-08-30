@@ -824,7 +824,7 @@ public class Job implements Comparable<Job> {
 							value = file.toURI().toString();
 
 						} else {
-							value = file.toURI().relativize(contextDirUri).toString();
+							value = input.get();
 						}
 						item.setAttribute("value", value);
 						arg.appendChild(item);
@@ -858,7 +858,7 @@ public class Job implements Comparable<Job> {
 								value = file.toURI().toString();
 
 							} else {
-								value = file.toURI().relativize(contextDirUri).toString();
+								value = option.get();
 							}
 							item.setAttribute("value", value);
 							arg.appendChild(item);
@@ -884,7 +884,7 @@ public class Job implements Comparable<Job> {
 							value = file.toURI().toString();
 
 						} else {
-							value = file.toURI().relativize(contextDirUri).toString();
+							value = option.get();
 						}
 						
 					} else {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<choice id="foo:choice">
+	<value>one</value>
+	<value>two</value>
+	<value>three</value>
+</choice>

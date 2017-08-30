@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data type="string" id="foo:regex">
+	<param name="pattern">one|two|three</param>
+</data>
