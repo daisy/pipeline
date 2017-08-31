@@ -115,7 +115,7 @@ serve : ws all
 
 .PHONY : ws
 ws :
-	@if ! which $@ 2>/dev/null; then \
+	@if ! which $@ >/dev/null 2>/dev/null; then \
 		echo "ws is not installed, install with 'npm install -g local-web-server'" 2>&1; \
 		exit 1; \
 	fi

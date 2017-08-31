@@ -31,8 +31,8 @@ Dir.glob(base_dir + '/**/*.html').each do |f|
   page_url = RDF::URI(site_base + baseurl + f_path)
   
   ## process links and images
-  doc.css('a, img').each do |a|
-    href_attr = (a.name == 'img') ? 'src' : 'href';
+  doc.css('a, img, iframe').each do |a|
+    href_attr = (a.name == 'img' or a.name == 'iframe') ? 'src' : 'href';
     
     if not a[href_attr]
       next
