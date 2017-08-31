@@ -1,5 +1,12 @@
 ## For file names and sizes, see https://api.github.com/repos/daisy/pipeline-assembly/releases
 
+- group: main
+  version: "1.10.3"
+  sort: "1.10.3"
+  state: update
+  github_tag: "v1.10.3"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.3"
+
 - group: webui
   version: "2.5.1"
   state: stable
