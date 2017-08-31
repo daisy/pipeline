@@ -22,7 +22,7 @@
                 <xsl:when test="$extends-uri-element/@px:extends">
                     <xsl:variable name="doc">
                         <xsl:call-template name="extend-script">
-                            <xsl:with-param name="script-uri" select="$extends-uri"/>
+                            <xsl:with-param name="script-uri" select="$extends-uri-element/resolve-uri(@uri,base-uri(.))"/>
                             <xsl:with-param name="extends-uri" select="$extends-uri-element/resolve-uri(@px:extends,base-uri(.))"/>
                             <xsl:with-param name="catalog-xml" select="$catalog-xml"/>
                         </xsl:call-template>

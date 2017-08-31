@@ -533,15 +533,23 @@ public abstract class Options {
 								if (b.startLevel > 0)
 									startLevel = b.startLevel;
 								break; }
-						if (versionAsInProject
-						    && !a.getBaseVersion().equals(MavenUtils.asInProject().getVersion(groupId, artifactId))) {
-							MavenBundle b = new MavenBundle(a, true);
-							logger.info("Forcing transitive dependency \"" + artifactCoords(b.asArtifact()) + "\" (version as in project) "
-							            + "because it would otherwise resolve to version \"" + a.getBaseVersion() + "\" "
-							            + "(via \"" + artifactCoords(parent) + "\")");
-							b.startLevel(startLevel);
-							fromBundles.add(b);
-							return false; }
+						String versionInProject; {
+							versionInProject = null;
+							try {
+								versionInProject = MavenUtils.asInProject().getVersion(groupId, artifactId); }
+							catch (RuntimeException e) {
+								logger.info("Can not find version of transitive dependency " + groupId + ":" + artifactId
+								            + " in project. Assuming it was explicitly excluded, therefore ignoring it.");
+								return true; }}
+						if (versionAsInProject) {
+							if (!a.getBaseVersion().equals(versionInProject)) {
+								MavenBundle b = new MavenBundle(a, true);
+								logger.info("Forcing transitive dependency \"" + artifactCoords(b.asArtifact()) + "\""
+								            + " (version as in project) because it would otherwise resolve to version \""
+								            + a.getBaseVersion() + "\" (via \"" + artifactCoords(parent) + "\")");
+								b.startLevel(startLevel);
+								fromBundles.add(b);
+								return false; }}
 						MavenBundle b = new MavenBundle(a);
 						if (noStart)
 							b.noStart();
