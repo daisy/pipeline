@@ -4,6 +4,8 @@ For
 {% when 'windows' %} Windows
 {% when 'macosx' %}  Mac OS X
 {% when 'linux' %}   Linux
+{% when 'debian' %}  Debian/Ubuntu
+{% when 'redhat' %}  Red Hat/CentOS
 {% else %}           Other
 {% endcase %}
 users

@@ -1,12 +1,73 @@
 ## For file names and sizes, see https://api.github.com/repos/daisy/pipeline-assembly/releases
 
-- version: "1.10.1"
+- group: webui
+  version: "2.5.1"
+  state: stable
+  github_tag: "v2.5.1"
+  github_url: "https://github.com/daisy/pipeline-webui/releases/tag/v2.5.1"
+  files:
+    - platform: windows
+      package: installer
+      content: webui
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.5.1/webui-2.5.1.msi"
+      size: 53858560
+    - platform: debian
+      package: deb
+      content: webui
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.5.1/webui-2.5.1.deb"
+      size: 51283412
+    - platform: redhat
+      package: rpm
+      content: webui
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.5.1/webui-2.5.1.rpm"
+      size: 53266817
+
+- group: main
+  version: "1.10.2"
+  sort: "1.10.2"
+  state: stable
+  github_tag: "v1.10.2"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.2"
+  description: >
+    Includes the standalone desktop application, the server, and the command line
+    interface. Versions available for Windows (an installer EXE), Mac OS (a DMG
+    disk image containing a standard Mac OS application) and Linux (a ZIP file).
+  files:
+    - platform: windows
+      package: installer
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.2/pipeline2-1.10.2_windows.exe"
+      size: 74819045
+    - platform: macosx
+      package: dmg
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.2/pipeline2-1.10.2_mac.dmg"
+      size: 110699344
+    - platform: linux
+      package: zip
+      content: [gui, server, cli]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.2/pipeline2-1.10.2_linux.zip"
+      size: 49202679
+    - platform: debian
+      package: deb
+      content: [gui, server]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.2/pipeline2-1.10.2_debian.deb"
+      size: 44249076
+    - platform: redhat
+      package: rpm
+      content: [gui, server]
+      url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.2/pipeline2-1.10.2_redhat.rpm"
+      size: 43201924
+
+- group: main
+  version: "1.10.1"
   sort: "1.10.1"
   state: update
   github_tag: "v1.10.1"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.1"
 
-- version: "1.10"
+- group: main
+  version: "1.10"
   sort: "1.10.0"
   state: stable
   github_tag: "v1.10.0"
@@ -32,8 +93,8 @@
       url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10.0/pipeline2-1.10.0_linux.zip"
       size: 48292859
 
-
-- version: "1.10-rc1"
+- group: main
+  version: "1.10-rc1"
   sort: "1.10-rc1"
   state: beta
   github_tag: "v1.10-rc1"
@@ -60,7 +121,8 @@
       size: 51575942
 
 ## Download links disabled
-- version: "1.10-beta1"
+- group: main
+  version: "1.10-beta1"
   sort: "1.10-beta1"
   state: beta
   github_tag: "v1.10-beta1"
@@ -82,7 +144,8 @@
       url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.10-beta1/pipeline2-1.10-beta1_linux.zip"
       size: 49521693
 
-- version: "1.9"
+- group: main
+  version: "1.9"
   sort: "1.09"
   state: stable
   github_tag: "v1.9"

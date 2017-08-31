@@ -44,5 +44,3 @@
   artifact: common-utils
 - group: org.daisy.pipeline.modules
   artifact: tts-common
-  # not in assembly 1.10.0 (or 1.10.1)
-  version: 3.0.1

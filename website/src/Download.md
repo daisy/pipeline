@@ -6,7 +6,7 @@ layout: default
 For installation instructions see
 [Installation]({{site.baseurl}}/Get-Help/User-Guide/Installation/).
 
-{% assign all = site.data.downloads | sort:'sort' %}
+{% assign all = site.data.downloads | where:'group','main' | sort:'sort' %}
 
 {% assign stable = all | where:'state','stable' %}
 
@@ -66,6 +66,18 @@ for more info.
 </ul>
 
 {% endif %}
+
+{% assign webui = site.data.downloads | where:'group','webui' | sort:'sort' %}
+
+## Latest web UI: {{ webui.last.version }}
+
+{{ webui.last.description }}
+
+<ul>
+{% for file in webui.last.files %}
+<li> {% include download-link file=file %} </li>
+{% endfor %}
+</ul>
 
 {% assign previous = stable | reverse | shift %}
 
