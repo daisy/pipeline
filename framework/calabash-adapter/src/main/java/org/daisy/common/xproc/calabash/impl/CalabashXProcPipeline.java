@@ -242,11 +242,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			pipeline.xpipe.run();
                 //propagate possible errors
 		} catch (Exception e) {
-                        pipeline.runtime.close();
                         throw new RuntimeException(e);
 
 		} catch (OutOfMemoryError e) {//this one needs it's own catch!
-                        pipeline.runtime.close();
                         throw new RuntimeException(e);
 		}finally{
                         pipeline.runtime.close();
