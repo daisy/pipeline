@@ -6,8 +6,7 @@ import com.typesafe.sbt.packager.windows.WixHelper
 
 organization := "org.daisy.pipeline"
 name := "webui"
-versionWithGit
-git.useGitDescribe := true
+version := "2.5.2-SNAPSHOT"
 
 organizationName := "The DAISY Consortium"
 organizationHomepage := Some(url("http://daisy.org"))
