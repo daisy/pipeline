@@ -10,14 +10,9 @@ This project provides a Web User Interface for the DAISY Pipeline 2, developed w
 
 ### 1. Prepare the release
 
-The Web UI is versioned based on git tags. If you're on the `v2.0.0` tag,
-then the version used in the build will be `2.0.0`. If you're one commit
-ahead of `v2.0.0`, the version will be a SNAPSHOT version on the format
-`2.0.0-[commits ahead]-[commit hash]SNAPSHOT`.
-
-If you're making a release version (not a snapshot version),
-make sure that your current commit has a git tag and that
-there are no changes in your project directory (staged or unstaged).
+In `build.sbt`, update the `version := "..."`.
+The versioning should follow semantic versioning rules.
+Snapshots should have a `-SNAPSHOT` version suffix.
 
 ### 2. Perform the release
 
@@ -102,3 +97,5 @@ credentials += Credentials("Sonatype Nexus Repository Manager",
 ### 3. Prepare for the next development iteration
 
 Merge with the `master` branch if necessary.
+
+Add a `-SNAPSHOT` suffix to the version in `build.sbt`.
