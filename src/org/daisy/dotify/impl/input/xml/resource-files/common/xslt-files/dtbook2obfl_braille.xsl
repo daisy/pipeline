@@ -235,6 +235,14 @@
 		count(descendant::dtb:note)>0 and
 		count(descendant::*[not(ancestor::dtb:note) and (self::dtb:level2 or self::dtb:level3 or self::dtb:level4 or self::dtb:level5 or self::dtb:level6 or self::dtb:h1 or self::dtb:h2 or self::dtb:h3 or self::dtb:h4 or self::dtb:h5 or self::dtb:h6 or self::dtb:note or self::dtb:pagenum)])
 		=count(descendant::*[not(ancestor::dtb:note)])]" mode="toc"/>
+
+	<!-- Remove title page if set to remove -->
+	<xsl:template match="dtb:level1[tokenize(@class, '\s')=('titlepage', 'halftitlepage')]" priority="1" mode="toc">
+		<!-- The test is negative, because a misspelled value should result in keeping the title page. -->
+		<xsl:if test="$remove-title-page!='true'">
+			<xsl:next-match />
+		</xsl:if>
+	</xsl:template>
 	
 	<xsl:template match="dtb:level2" mode="toc" priority="0.6">
 		<xsl:if test="$toc-depth > 1">

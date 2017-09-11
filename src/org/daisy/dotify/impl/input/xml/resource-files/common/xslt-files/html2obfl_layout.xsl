@@ -15,7 +15,11 @@
 	<xsl:param name="toc-indent-multiplier" select="1" dotify:desc="Indentation for each toc level"  dotify:default="1"/>
 	<!-- TODO: should also support value 'keep' to keep the original toc -->
 	<xsl:param name="toc-policy" select="'replace'" dotify:desc="The toc generation policy" dotify:default="replace" dotify:values="replace/always"/>
-	
+	<xsl:param name="remove-title-page" select="'true'" 
+			dotify:desc="Removes the title page from the text flow (@epub:type=&quot;titlepage&quot; or @epub:type=&quot;halftitlepage&quot;)" 
+			dotify:values="true/false"
+			dotify:default="true"/>
+
 	<xsl:key name="noterefs" match="html:a[epub:noteref(.)]" use="substring-after(@href, '#')"/>
 
 	<xsl:variable name="footnotesInFrontmatter" select="
@@ -391,6 +395,14 @@
 
 	<xsl:template match="html:sub | html:sup" mode="inline-mode">
 		<xsl:call-template name="applyFlatStyle"/>
+	</xsl:template>
+	
+	<!-- Remove title page if set to remove -->
+	<xsl:template match="html:div[epub:types(.)=('titlepage', 'halftitlepage')]" priority="1">
+		<!-- The test is negative, because a misspelled value should result in keeping the title page. -->
+		<xsl:if test="$remove-title-page!='true'">
+			<xsl:next-match />
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="applyStyle">

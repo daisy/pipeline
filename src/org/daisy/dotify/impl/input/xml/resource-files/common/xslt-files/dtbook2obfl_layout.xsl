@@ -45,7 +45,10 @@
 	<xsl:param name="row-spacing" select="1" as="xs:decimal"/>
 	<xsl:param name="duplex" select="true()" as="xs:boolean"/>
 	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string" dotify:desc="Default paragraph separator" dotify:default="indent" dotify:values="empty-line/indent"/> <!-- empty-line or indent -->
-	
+	<xsl:param name="remove-title-page" select="'true'" 
+			dotify:desc="Removes the title page from the text flow (@class=&quot;titlepage&quot; or @class=&quot;halftitlepage&quot;)" 
+			dotify:values="true/false"
+			dotify:default="true"/>
 	
 	<xsl:param name="l10nimagedescription" select="'Image description'"/>
 	<xsl:param name="l10ncaption" select="'Caption'"/>
@@ -492,6 +495,14 @@ or count(descendant::dtb:note)>0 and count(descendant::*[not(ancestor::dtb:note)
 	
 	<xsl:template match="dtb:sup" mode="inline-mode">
 		<xsl:call-template name="applyFlatStyle"/>
+	</xsl:template>
+
+<!-- Remove title page if set to remove -->
+	<xsl:template match="dtb:level1[tokenize(@class, '\s')=('titlepage', 'halftitlepage')]" priority="1">
+		<!-- The test is negative, because a misspelled value should result in keeping the title page. -->
+		<xsl:if test="$remove-title-page!='true'">
+			<xsl:next-match />
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="applyStyle">
