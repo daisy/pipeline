@@ -38,10 +38,10 @@
 	<xsl:import href="dtbook2obfl_base.xsl"/>
 	<xsl:import href="book-formats.xsl"/>
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
-	<xsl:param name="page-width" select="10" as="xs:integer"/>
-	<xsl:param name="page-height" select="10" as="xs:integer"/>
-	<xsl:param name="inner-margin" select="0" as="xs:integer"/>
-	<xsl:param name="outer-margin" select="0" as="xs:integer"/>
+	<xsl:param name="page-width" select="32" as="xs:integer"/>
+	<xsl:param name="page-height" select="29" as="xs:integer"/>
+	<xsl:param name="inner-margin" select="2" as="xs:integer"/>
+	<xsl:param name="outer-margin" select="2" as="xs:integer"/>
 	<xsl:param name="row-spacing" select="1" as="xs:decimal"/>
 	<xsl:param name="duplex" select="true()" as="xs:boolean"/>
 	<xsl:param name="default-paragraph-separator" select="'indent'" as="xs:string" dotify:desc="Default paragraph separator" dotify:default="indent" dotify:values="empty-line/indent"/> <!-- empty-line or indent -->

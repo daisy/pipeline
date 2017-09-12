@@ -7,10 +7,10 @@
 	xmlns="http://www.daisy.org/ns/2011/obfl">
 
 	<xsl:output method="xml" encoding="utf-8" indent="no"/>
-	<xsl:param name="page-width" select="10" as="xs:integer" dotify:desc="The width of the page (a positive integer)"/>
-	<xsl:param name="page-height" select="10" as="xs:integer" dotify:desc="The height of the page (a positive integer)"/>
-	<xsl:param name="inner-margin" select="0" as="xs:integer" dotify:desc="The inner margin (a non-negative integer)"/>
-	<xsl:param name="outer-margin" select="0" as="xs:integer" dotify:desc="The outer margin (a non-negative integer)"/>
+	<xsl:param name="page-width" select="32" as="xs:integer" dotify:desc="The width of the page (a positive integer)" dotify:default="32"/>
+	<xsl:param name="page-height" select="29" as="xs:integer" dotify:desc="The height of the page (a positive integer)" dotify:default="29"/>
+	<xsl:param name="inner-margin" select="2" as="xs:integer" dotify:desc="The inner margin (a non-negative integer)" dotify:default="2"/>
+	<xsl:param name="outer-margin" select="2" as="xs:integer" dotify:desc="The outer margin (a non-negative integer)" dotify:default="2"/>
 	<xsl:param name="row-spacing" select="1" as="xs:decimal" dotify:desc="The row spacing (a number >= 1)" dotify:default="1"/>
 	<xsl:param name="duplex" select="true()" as="xs:boolean" dotify:desc="Layout on both sides of the sheet" dotify:default="true" dotify:values="true/false"/>
 	<xsl:param name="hyphenate" select="true()" as="xs:boolean" dotify:desc="Defines hyphenation policy" dotify:default="true" dotify:values="true/false"/>
