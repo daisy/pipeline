@@ -329,8 +329,14 @@
 		Notifications.listen("job-progress-@uiJob", function(message){
 			var progress = parseFloat(message.estimate);
 			if (!isNaN(progress)) {
-				$("#job-progress").attr("aria-valuetext", "Progress: "+Math.round(progress)+"%");
-				$("#job-progress").attr("aria-valuenow", progress);
+				var valuetext = "Progress: "+Math.round(progress)+"%";
+				var valuenow = (progress+"").replace(/(\..).*/, "$1");
+				if ($("#job-progress").attr("aria-valuetext") != valuetext) {
+					$("#job-progress").attr("aria-valuetext", valuetext);
+				}
+				if ($("#job-progress").attr("aria-valuenow") != valuenow) {
+					$("#job-progress").attr("aria-valuenow", valuenow);
+				}
 				$("#job-progress > div").css("width", progress+"%");
 			}
 		});

@@ -175,8 +175,14 @@
             var loaded = typeof e.loaded === "undefined" ? 0 : e.loaded;
             var total = typeof e.total === "undefined" ? 0 : e.total;
             var progress = Math.abs(total) < 1 ? 0 : loaded/total*100;
-            $(fileWidgetId+" div.progress").attr("aria-valuenow", progress);
-            $(fileWidgetId+" div.progress").attr("aria-valuetext", Math.floor(progress)+"%");
+            var valuenow = (progress+"").replace(/(\..).*/, "$1");
+            var valuetext = Math.floor(progress)+"%";
+            if ($(fileWidgetId+" div.progress").attr("aria-valuenow") != valuenow) {
+                $(fileWidgetId+" div.progress").attr("aria-valuenow", valuenow);
+            }
+            if ($(fileWidgetId+" div.progress").attr("aria-valuetext") != valuetext) {
+                $(fileWidgetId+" div.progress").attr("aria-valuetext", valuetext);
+            }
             $(fileWidgetId+" div.progress div.bar").css("width", progress+"%");
         })
         .bind('fileuploaddone', function (e, data) {

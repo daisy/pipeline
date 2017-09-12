@@ -6,8 +6,7 @@ import com.typesafe.sbt.packager.windows.WixHelper
 
 organization := "org.daisy.pipeline"
 name := "webui"
-versionWithGit
-git.useGitDescribe := true
+version := "2.5.2-SNAPSHOT"
 
 organizationName := "The DAISY Consortium"
 organizationHomepage := Some(url("http://daisy.org"))
@@ -190,7 +189,7 @@ libraryDependencies ++= Seq(
   "org.hibernate" % "hibernate-entitymanager" % "4.3.10.Final",
   "org.avaje.ebeanorm" % "avaje-ebeanorm-api" % "3.1.1",
   "org.apache.derby" % "derby" % "10.11.1.1",
-  "org.daisy.pipeline" % "clientlib-java" % "4.7.0",
+  "org.daisy.pipeline" % "clientlib-java" % "4.8.0",
   "org.daisy.pipeline" % "clientlib-java-httpclient" % "2.0.0",
   "org.apache.commons" % "commons-compress" % "1.9",
   "org.apache.commons" % "commons-email" % "1.4",

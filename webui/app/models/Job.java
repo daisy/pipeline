@@ -197,7 +197,7 @@ public class Job extends Model implements Comparable<Job> {
 								Logger.debug("    status has changed to "+job.getStatus());
 								lastStatus.put(job.getId(), job.getStatus().toString());
 								Logger.debug("    notifying job-status-"+webUiJob.id);
-								NotificationConnection.pushJobNotification(webUiJob.getUser(), new Notification("job-status-"+webUiJob.id, job.getStatus()));
+								NotificationConnection.pushJobNotification(webUiJob.getUser(), new Notification("job-status-"+webUiJob.getId(), job.getStatus()));
 								
 								webUiJob.setStatus(job.getStatus().toString());
 								
@@ -209,7 +209,7 @@ public class Job extends Model implements Comparable<Job> {
 									startedMap.put("text", webUiJob.getStarted().toString());
 									startedMap.put("number", webUiJob.getStarted().getTime()+"");
 									Logger.debug("    notifying job-started-"+webUiJob.id);
-									NotificationConnection.pushJobNotification(webUiJob.getUser(), new Notification("job-started-"+webUiJob.id, startedMap));
+									NotificationConnection.pushJobNotification(webUiJob.getUser(), new Notification("job-started-"+webUiJob.getId(), startedMap));
 								}
 								
 								Logger.debug("    saving");
@@ -221,7 +221,7 @@ public class Job extends Model implements Comparable<Job> {
 							estimateMissingTimestamps(messages, webUiJob);
 							if (messages != null) {
 								for (org.daisy.pipeline.client.models.Message message : messages) {
-									Notification notification = new Notification("job-message-"+webUiJob.id, message);
+									Notification notification = new Notification("job-message-"+webUiJob.getId(), message);
 									NotificationConnection.pushJobNotification(webUiJob.getUser(), notification);
 								}
 								
@@ -249,8 +249,12 @@ public class Job extends Model implements Comparable<Job> {
 								Map<String,String> progressMap = new HashMap<String,String>();
 								progressMap.put("from", job.getProgressFrom()+"");
 								progressMap.put("to", job.getProgressTo()+"");
-								progressMap.put("estimate", job.getProgressEstimate()+"");
-								Notification notification = new Notification("job-progress-"+webUiJob.id, progressMap);
+								double estimate = job.getProgressEstimate();
+								if (estimate < job.getProgressFrom() || estimate >= job.getProgressTo()) {
+									estimate = job.getProgressFrom(); // for some reason there's an error in the calculation (probably due to timestamps or similar); use "from" as estimate instead
+								}
+								progressMap.put("estimate", estimate+"");
+								Notification notification = new Notification("job-progress-"+webUiJob.getId(), progressMap);
 								NotificationConnection.pushJobNotification(webUiJob.getUser(), notification);
 							}
 							
@@ -631,19 +635,29 @@ public class Job extends Model implements Comparable<Job> {
 		save();
 	}
 	
-	/** https://github.com/daisy/pipeline-framework/issues/109 */
+	/** Until the fix for https://github.com/daisy/pipeline-framework/issues/109 is released */
 	public static void estimateMissingTimestamps(List<Message> messages, Job job) {
 		if (messages == null || messages.size() == 0 || job == null || job.started == null) {
 			return;
 		}
 		
 		// we have no idea when the messages arrived so let's just spread them out
-		long start = job.started.getTime();
+		long timeStamp = job.started.getTime();
 		long now = new Date().getTime();
-		long step = (now - start) / messages.size();
+		long remaining = messages.size();
+		long step = (now - timeStamp) / remaining;
 		for (Message m : messages) {
-			m.timeStamp = now;
-			now += step;
+			remaining--;
+			if (m.timeStamp != null) {
+				timeStamp = m.timeStamp;
+				if (now > timeStamp && remaining > 0) {
+					step = (now - timeStamp) / remaining;
+				}
+				
+			} else {
+				m.timeStamp = timeStamp;
+			}
+			timeStamp += step;
 		}
 	}
 	

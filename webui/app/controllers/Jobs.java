@@ -532,6 +532,17 @@ public class Jobs extends Controller {
 								Notification notification = new Notification("job-message-"+webuiJob.getId(), message);
 								NotificationConnection.pushJobNotification(webuiJob.getUser(), notification);
 							}
+							
+							Map<String,String> progressMap = new HashMap<String,String>();
+							progressMap.put("from", job.getProgressFrom()+"");
+							progressMap.put("to", job.getProgressTo()+"");
+							double estimate = job.getProgressEstimate();
+							if (estimate < job.getProgressFrom() || estimate >= job.getProgressTo()) {
+								estimate = job.getProgressFrom(); // for some reason there's an error in the calculation (probably due to timestamps or similar); use "from" as estimate instead
+							}
+							progressMap.put("estimate", estimate+"");
+							Notification notification = new Notification("job-progress-"+webuiJob.getId(), progressMap);
+							NotificationConnection.pushJobNotification(webuiJob.getUser(), notification);
 						}
 					}
 				},
