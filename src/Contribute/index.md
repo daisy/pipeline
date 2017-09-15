@@ -35,20 +35,39 @@ sub-projects for issues that clearly belong to a specific sub-project.
 
 {% capture repos %}
   daisy/pipeline
+  daisy/pipeline-tasks
   daisy/pipeline-assembly
-  daisy/pipeline-framework
-  daisy/pipeline-scripts
   daisy/pipeline-build-utils
+  daisy/pipeline-cli-go
+  daisy/pipeline-clientlib-go
+  daisy/pipeline-clientlib-java
+  daisy/pipeline-framework
+  daisy/pipeline-gui
+  daisy/pipeline-it
+  daisy/pipeline-mod-audio
+  daisy/pipeline-mod-braille
+  daisy/pipeline-mod-nlp
+  daisy/pipeline-mod-tts
+  daisy/pipeline-modules-common
+  daisy/pipeline-samples
+  daisy/pipeline-scripts
+  daisy/pipeline-scripts-utils
+  daisy/pipeline-updater
+  daisy/pipeline-updater-gui
   daisy/pipeline-webui
-  snaekobbi/braille-css
-  snaekobbi/jStyleParser
-  brailleapps/dotify.api
-  brailleapps/dotify.formatter.impl
+  daisy/braille-css
+  daisy/jStyleParser
+  daisy/osgi-libs
+  daisy/xmlcalabash1
+  daisy/xprocspec
+  daisy/xproc-maven-plugin
+  daisy/xspec-maven-plugin
+  snaekobbi/pipeline-mod-braille
 {% endcapture %}
 {% assign repos = repos | normalize_whitespace | split:' ' %}
 
 Before creating a new issue, please first check the
-[existing issues](https://github.com/search?utf8=%E2%9C%93&type=Issues&q={% for r in repos %}+repo%3A{{ r | replace:'/','%2F' }}{% endfor %}) to see if a similar issue was
+[existing issues](https://github.com/search?q=is%3Aopen{% for r in repos %}+repo%3A{{ r | replace:'/','%2F' }}{% endfor %}&type=Issues&s=updated&o=desc) to see if a similar issue was
 already reported.
 
 ## Developer Guide
