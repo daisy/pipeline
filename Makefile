@@ -26,7 +26,7 @@ baseurl := $(call yaml_get,$(CONFIG_FILE),baseurl)
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
-$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(JEKYLL_FILES)
+$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(JEKYLL_FILES)
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)/
 	if ! make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE); then \
@@ -76,6 +76,11 @@ $(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules \
 	find . -type f \
 	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
 	                    cp {} $(CURDIR)/$@/{}" \;
+
+$(JEKYLL_DIR)/api : $(MAVEN_DIR)/javadoc
+	mkdir -p $(dir $@)
+	rm -rf $@
+	cp -r $< $@
 
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
@@ -141,14 +146,17 @@ $(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/doc $(JEKYLL_DIR)/$(meta_file)
 	fi
 
 $(MAVEN_DIR)/doc \
+$(MAVEN_DIR)/javadoc \
 $(MAVEN_DIR)/xprocdoc \
 $(MAVEN_DIR)/sources : $(MAVEN_DIR)/pom.xml
 	rm -rf $(MAVEN_DIR)/doc
+	rm -rf $(MAVEN_DIR)/javadoc
 	rm -rf $(MAVEN_DIR)/xprocdoc
 	rm -rf $(MAVEN_DIR)/sources
 	cd $(MAVEN_DIR) && \
 	if ! mvn --quiet $(MVN_OPTS) "process-sources"; then \
 		rm -rf $(MAVEN_DIR)/doc; \
+		rm -rf $(MAVEN_DIR)/javadoc; \
 		exit 1; \
 	fi
 	cd $(MAVEN_DIR)/doc && \
@@ -160,7 +168,7 @@ $(MAVEN_DIR)/sources : $(MAVEN_DIR)/pom.xml
 	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$(MAVEN_DIR)/xprocdoc/{}) && \
 	                    mv {} $(CURDIR)/$(MAVEN_DIR)/xprocdoc/{}" \;
 
-$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml
+$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml $(JEKYLL_SRC_DIR)/_data/api.yml
 	mkdir -p $(dir $@)
 	make/make_pom.rb $^ > $@
 

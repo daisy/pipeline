@@ -45,6 +45,10 @@ h4 {
 	color: darken($color-complement-0, 35%);
 }
 
+li > p {
+	margin: 7px 0;
+}
+
 b {
 	font-weight: 600;
 }
@@ -64,6 +68,8 @@ a,
 		color: #ff7711; }
 	&:hover {
 		cursor: pointer; }
+	> code {
+		color: inherit; }
 }
 
 code,

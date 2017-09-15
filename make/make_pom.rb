@@ -4,6 +4,7 @@ require 'commaparty'
 
 versions = YAML.load_file(ARGV[0])
 modules = YAML.load_file(ARGV[1])
+api = YAML.load_file(ARGV[2])
 
 $stdout << CommaParty.markup(
   [:project, {xmlns: 'http://maven.apache.org/POM/4.0.0'},
@@ -51,4 +52,27 @@ $stdout << CommaParty.markup(
          else
            []
          end      
+        ]],
+      [:execution,
+        [:id, 'unpack-javadoc'],
+        [:goals,
+         [:goal, 'unpack']],
+        [:configuration,
+         [:excludes, 'index-all.html,allclasses-frame.html,allclasses-noframe.html,overview-frame.html,overview-summary.html,overview-tree.html,deprecated-list.html,constant-values.html,serialized-form.html,package-list,META-INF,META-INF/**/*'],
+         if api
+           [:artifactItems,
+            api.map {|mod|
+              group = mod['group']
+              artifact = mod['artifact']
+              version = mod['version']
+              [:artifactItem,
+               [:groupId, group],
+               [:artifactId, artifact],
+               version && [:version, version],
+               [:type, 'jar'],
+               [:classifier, 'javadoc'],
+               [:outputDirectory, 'javadoc']]}]
+         else
+           []
+         end
         ]]]]]]])
