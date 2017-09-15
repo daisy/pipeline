@@ -34,6 +34,9 @@ h3 {
 h4 {
   color: #7a5300; }
 
+li > p {
+  margin: 7px 0; }
+
 b {
   font-weight: 600; }
 
@@ -56,6 +59,9 @@ a,
   a:hover,
   [role=link]:hover {
     cursor: pointer; }
+  a > code,
+  [role=link] > code {
+    color: inherit; }
 
 code,
 .CodeRay {
@@ -73,7 +79,8 @@ code {
 pre > code {
   display: block;
   border-radius: .3rem;
-  padding: 9px 11px; }
+  padding: 9px 11px;
+  overflow-x: auto; }
 
 pre {
   margin: 0; }
