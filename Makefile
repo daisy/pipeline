@@ -26,7 +26,7 @@ baseurl := $(call yaml_get,$(CONFIG_FILE),baseurl)
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
-$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(JEKYLL_FILES)
+$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(JEKYLL_FILES)
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)/
 	if ! make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE); then \
@@ -59,6 +59,11 @@ $(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules
 	find $@ -name '*.md' -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
 	find $@ -type f -exec sh -c "cat {} | sed '1 s/^---$$/&\\$${newline}layout: doc/' >{}.tmp && mv {}.tmp {}" \;; \
 	find $@ -type f -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;
+
+$(JEKYLL_DIR)/api : $(MAVEN_DIR)/api
+	mkdir -p $(dir $@)
+	rm -rf $@
+	cp -r $< $@
 
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
@@ -103,13 +108,13 @@ $(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/modules $(JEKYLL_DIR)/$(meta_file)
 	cp -r $< $@
 	make/mustache.rb "$@/**/*" $(word 2,$^) $(MUSTACHE_DIR) $(CONFIG_FILE)
 
-$(MAVEN_DIR)/modules : $(MAVEN_DIR)/pom.xml
+$(MAVEN_DIR)/modules $(MAVEN_DIR)/api : $(MAVEN_DIR)/pom.xml
 	rm -rf $@
 	cd $(dir $<) && \
 	mvn --quiet $(MVN_OPTS) "process-sources"
 	test -e $@
 
-$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml
+$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml $(JEKYLL_SRC_DIR)/_data/api.yml
 	mkdir -p $(dir $@)
 	make/make_pom.rb $^ > $@
 
