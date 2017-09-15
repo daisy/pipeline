@@ -555,6 +555,17 @@
 				<xsl:text>&#x09;</xsl:text>
 				<xsl:value-of select="concat('rm -rf $(addprefix ',$dirname,',.project .settings .classpath)')"/>
 				<xsl:text>&#x0A;</xsl:text>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:value-of select="concat('clean : ',$dirname,'.clean')"/>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:text>.PHONY : </xsl:text>
+				<xsl:value-of select="concat($dirname,'.clean')"/>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:value-of select="concat($dirname,'.clean :')"/>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:text>&#x09;</xsl:text>
+				<xsl:value-of select="concat('rm -rf ',$dirname,'target')"/>
+				<xsl:text>&#x0A;</xsl:text>
 			</xsl:if>
 		</xsl:result-document>
 		<xsl:sequence select="$artifacts-and-dependencies"/>
