@@ -119,7 +119,9 @@ assembly/target/dev-launcher/bin/pipeline2 : assembly/.dependencies | .maven-ini
 		rm assembly/target/dev-launcher/etc/*mac*; \
 	fi
 
-ifneq ($(MAKECMDGOALS), clean)
+ifeq ($(MAKECMDGOALS), clean)
+include $(shell find * -name .deps.mk)
+else
 ifneq ($(MAKECMDGOALS), dump-maven-cmd)
 ifneq ($(MAKECMDGOALS), clean-website)
 -include $(addsuffix /.deps.mk,$(MODULES) website/target/maven)
@@ -130,6 +132,7 @@ endif
 SAXON := $(MVN_WORKSPACE)/net/sf/saxon/Saxon-HE/9.4/Saxon-HE-9.4.jar
 export SAXON
 
+ifneq ($(MAKECMDGOALS), clean)
 $(addsuffix /.deps.mk,$(MAVEN_MODULES) website/target/maven) : .maven-deps.mk
 	if ! test -e $@; then \
 		if cat .maven-modules | grep -Fx "$$(dirname $@)" >/dev/null; then \
@@ -137,6 +140,7 @@ $(addsuffix /.deps.mk,$(MAVEN_MODULES) website/target/maven) : .maven-deps.mk
 		fi \
 	fi
 	touch $@
+endif
 
 .SECONDARY : .maven-deps.mk
 .maven-deps.mk : .effective-pom.xml .gradle-pom.xml | $(SAXON)
@@ -207,10 +211,12 @@ $(SAXON) :
 .gradle-pom.xml : $(GRADLE_FILES)
 	bash .make/make-gradle-pom.sh $(GRADLE_MODULES) > $@
 
+ifneq ($(MAKECMDGOALS), clean)
 $(addsuffix /.deps.mk,$(GRADLE_MODULES)) : $(GRADLE_FILES)
 	if ! bash .make/make-gradle-deps.mk.sh $$(dirname $@) >$@; then \
 		echo "\$$(error $@ could not be generated)" >$@; \
 	fi
+endif
 
 .SECONDARY : cli/.install.zip
 cli/.install.zip : cli/.install
@@ -315,7 +321,7 @@ clean : cache
 	find * -name .gradle-dependencies-to-install -exec rm -r "{}" \;
 	find * -name .gradle-dependencies-to-test -exec rm -r "{}" \;
 
-clean : clean-website
+clean : clean-website clean-eclipse
 
 .PHONY : gradle-clean
 gradle-clean :
@@ -398,6 +404,26 @@ help :
 	echo "	Build the website"                                                                                      >&2
 	echo "make dump-maven-cmd:"                                                                                     >&2
 	echo '	Get the Maven command used. To configure your shell: eval $$(make dump-maven-cmd)'                      >&2
+
+PHONY : $(addprefix eclipse-,$(MODULES))
+$(addprefix eclipse-,$(MODULES)) : eclipse-% : %/.project \
+	.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs
+
+.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs : | settings.eclipse.xml
+	if ! test -e $(dir $@); then \
+		echo "No Eclipse workspace in $(CURDIR). Please create one with Eclipse first." >&2; \
+		exit 1; \
+	fi
+	echo "eclipse.m2.userSettingsFile=$(CURDIR)/settings.eclipse.xml" >$@
+	echo "eclipse.preferences.version=1" >>$@
+	echo "Now restart your Eclipse workspace '$(CURDIR)'" >&2
+
+settings.eclipse.xml : settings.xml
+	cat $< | sed -e 's|$${workspace}|$(CURDIR)/$(MVN_WORKSPACE)|g' -e 's|$${cache}|$(CURDIR)/$(MVN_CACHE)|g' >$@
+
+.PHONY : clean-eclipse
+clean-eclipse :
+	rm -rf .metadata settings.eclipse.xml
 
 ifndef VERBOSE
 .SILENT:

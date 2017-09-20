@@ -44,3 +44,18 @@ else
 	# already released, but empty rule is needed because jar might not be in .maven-workspace yet
 	echo "$module/.release :"
 fi
+if [[ $v == *-SNAPSHOT ]]; then
+	echo ""
+	echo "$module/.project : $module/build.gradle $module/gradle.properties $module/.dependencies"
+	echo "	cd \$(dir \$@) && \\"
+	echo "	gradle eclipse"
+	echo ""
+	echo "clean-eclipse : $module/.clean-eclipse"
+	echo ".PHONY : $module/.clean-eclipse"
+	echo "$module/.clean-eclipse :"
+	if ! git ls-files --error-unmatch $module/.project >/dev/null 2>/dev/null; then
+		echo "	rm -rf \$(addprefix $module/,.project .classpath)"
+	else
+		echo "	git checkout HEAD -- \$(addprefix $module/,.project .classpath)"
+	fi
+fi
