@@ -495,6 +495,63 @@
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:if>
+			<xsl:if test="not($is-aggregator)">
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:value-of select="concat($dirname,'.project',' : ',$dirname,'pom.xml')"/>
+				<!--
+				    all dependencies need to be installed in order to be able to run the
+				    eclipse:eclipse goal and all non-Maven and non-snapshot dependencies need to be
+				    installed in order to make the projects build in Eclipse
+				    
+				    FIXME: the correct working of the Makefile relies on Make putting this whole
+				    "install" part before the "eclipse" part in the execution order, if this is not
+				    satisfied the Eclipse projects are not linked up correctly
+				-->
+				<xsl:value-of select="concat(' ',$dirname,'.dependencies')"/>
+				<xsl:text> \&#x0A;&#x09;</xsl:text>
+				<xsl:text>| </xsl:text>
+				<xsl:variable name="dependencies" as="xs:string*">
+					<xsl:for-each select="$artifacts-and-dependencies/self::pom:dependency[not(@fromDependencyManagement)
+					                                                                       or @scope='import']">
+						<!-- if it is a Maven dependency -->
+						<xsl:if test="$effective-pom/pom:project[
+						                string(pom:groupId)=string(current()/pom:groupId) and
+						                string(pom:artifactId)=string(current()/pom:artifactId)]">
+							<xsl:sequence select="concat('.eclipse-projects/',pom:groupId,'.',pom:artifactId)"/>
+						</xsl:if>
+					</xsl:for-each>
+				</xsl:variable>
+				<xsl:variable name="dependencies" as="xs:string*" select="distinct-values($dependencies)"/>
+				<xsl:if test="count($dependencies) &gt; 0">
+					<xsl:sequence select="string-join($dependencies, ' \&#x0A;&#x09;  ')"/>
+					<xsl:text> \&#x0A;&#x09;  </xsl:text>
+				</xsl:if>
+				<xsl:text>.group-eval</xsl:text>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:text>&#x09;</xsl:text>
+				<xsl:text>+$(EVAL) 'bash .make/mvn-eclipse.sh' </xsl:text>
+				<xsl:value-of select="substring($dirname,1,string-length($dirname) - 1)"/>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:text>.SECONDARY :</xsl:text>
+				<xsl:value-of select="concat('.eclipse-projects/',$groupId,'.',$artifactId)"/>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:value-of select="concat('.eclipse-projects/',$groupId,'.',$artifactId)"/>
+				<xsl:text> : </xsl:text>
+				<xsl:value-of select="concat($dirname,'.project')"/>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:value-of select="concat('clean-eclipse : ',$dirname,'.clean-eclipse')"/>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:text>.PHONY : </xsl:text>
+				<xsl:value-of select="concat($dirname,'.clean-eclipse')"/>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:value-of select="concat($dirname,'.clean-eclipse :')"/>
+				<xsl:text>&#x0A;</xsl:text>
+				<xsl:text>&#x09;</xsl:text>
+				<xsl:value-of select="concat('rm -rf $(addprefix ',$dirname,',.project .settings .classpath)')"/>
+				<xsl:text>&#x0A;</xsl:text>
+			</xsl:if>
 		</xsl:result-document>
 		<xsl:sequence select="$artifacts-and-dependencies"/>
 	</xsl:template>
