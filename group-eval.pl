@@ -9,10 +9,11 @@ while (<>) {
  	chomp @a;
 	if ($c =~ /^bash \.make\/mvn-release.sh / and my @release_cmd = grep { @{$_}[0] eq $c } @commands) {
 		push @{$release_cmd[0]}, @a;
-	} elsif ($c =~ /^bash \.make\// and my @prev_cmd = @{$commands[-1]} and $c eq $prev_cmd[0]) {
-		push @prev_cmd, @a;
+	} elsif ($c =~ /^bash \.make\// and @{$commands[-1]} and $c eq @{$commands[-1]}[0]) {
+		push @{$commands[-1]}, @a;
 	} else {
-		push @commands, [$c, @a];
+		my @cmd = ($c, @a);
+		push @commands, \@cmd;
 	}
 }
 print "-------------- ", color("bold yellow"), "Build order", color("reset"), ": -------------\n";
