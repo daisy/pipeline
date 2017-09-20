@@ -964,7 +964,7 @@ public class ProgressTest {
 		addMessage(job, 1000L, "[progress px:dtbook-to-pef.convert 1 p:add-attribute] Adding language attribute to PEF", Message.Level.INFO);
 		addMessage(job, 1000L, "[progress 6 px:dtbook-to-pef.store] Storing PEF", Message.Level.INFO);
 		addMessage(job, 1000L, "[progress px:dtbook-to-pef.store 90 pef:store]", Message.Level.INFO);
-		addMessage(job, 1000L, "[progress pef:store 1 p:store] Storing PEF as 'file:/home/jostein/daisy-pipeline/pipeline-assembly/target/pipeline2-1.9.15-SNAPSHOT_linux/daisy-pipeline/data/jobs/4b613329-3841-401f-8018-d20b5a9a8120/output/pef-output-dir//557889.bok227s.en.pef'", Message.Level.INFO);
+		addMessage(job, 1000L, "[progress pef:store 1 p:store] Storing PEF as 'file:/some/path/data/jobs/4b613329-3841-401f-8018-d20b5a9a8120/output/pef-output-dir/557889.bok227s.en.pef'", Message.Level.INFO);
 		addMessage(job, 1000L, "[progress pef:store 17] Not storing as BRF", Message.Level.INFO);
 		addMessage(job, 1000L, "[progress pef:store 82] Not including HTML preview", Message.Level.INFO);
 		addMessage(job, 1000L, "[progress px:dtbook-to-pef.store 10 p:sink]", Message.Level.INFO);
@@ -1060,7 +1060,7 @@ public class ProgressTest {
 		assertEquals(Message.Level.INFO, job.getMessages().get(88).level); // "[progress px:dtbook-to-pef.convert 1 p:add-attribute] Adding language attribute to PEF"
 		assertEquals(Message.Level.INFO, job.getMessages().get(89).level); // "[progress 6 px:dtbook-to-pef.store] Storing PEF"
 		assertEquals(Message.Level.INFO, job.getMessages().get(90).level); // "[progress px:dtbook-to-pef.store 90 pef:store]"
-		assertEquals(Message.Level.INFO, job.getMessages().get(91).level); // "[progress pef:store 1 p:store] Storing PEF as 'file:/home/jostein/daisy-pipeline/pipeline-assembly/target/pipeline2-1.9.15-SNAPSHOT_linux/daisy-pipeline/data/jobs/4b613329-3841-401f-8018-d20b5a9a8120/output/pef-output-dir//557889.bok227s.en.pef'"
+		assertEquals(Message.Level.INFO, job.getMessages().get(91).level); // "[progress pef:store 1 p:store] Storing PEF as 'file:/some/path/data/jobs/4b613329-3841-401f-8018-d20b5a9a8120/output/pef-output-dir//557889.bok227s.en.pef'"
 		assertEquals(Message.Level.INFO, job.getMessages().get(92).level); // "[progress pef:store 17] Not storing as BRF"
 		assertEquals(Message.Level.INFO, job.getMessages().get(93).level); // "[progress pef:store 82] Not including HTML preview"
 		assertEquals(Message.Level.INFO, job.getMessages().get(94).level); // "[progress px:dtbook-to-pef.store 10 p:sink]"
@@ -1156,7 +1156,7 @@ public class ProgressTest {
 		assertEquals(Message.Level.INFO, job.getMessages().get(88).inferredLevel); // "[progress px:dtbook-to-pef.convert 1 p:add-attribute] Adding language attribute to PEF", Message.Level.INFO);
 		assertEquals(Message.Level.INFO, job.getMessages().get(89).inferredLevel); // "[progress 6 px:dtbook-to-pef.store] Storing PEF", Message.Level.INFO);
 		assertEquals(Message.Level.INFO, job.getMessages().get(90).inferredLevel); // "[progress px:dtbook-to-pef.store 90 pef:store]", Message.Level.INFO);
-		assertEquals(Message.Level.INFO, job.getMessages().get(91).inferredLevel); // "[progress pef:store 1 p:store] Storing PEF as 'file:/home/jostein/daisy-pipeline/pipeline-assembly/target/pipeline2-1.9.15-SNAPSHOT_linux/daisy-pipeline/data/jobs/4b613329-3841-401f-8018-d20b5a9a8120/output/pef-output-dir//557889.bok227s.en.pef'", Message.Level.INFO);
+		assertEquals(Message.Level.INFO, job.getMessages().get(91).inferredLevel); // "[progress pef:store 1 p:store] Storing PEF as 'file:/some/path/data/jobs/4b613329-3841-401f-8018-d20b5a9a8120/output/pef-output-dir//557889.bok227s.en.pef'", Message.Level.INFO);
 		assertEquals(Message.Level.INFO, job.getMessages().get(92).inferredLevel); // "[progress pef:store 17] Not storing as BRF", Message.Level.INFO);
 		assertEquals(Message.Level.INFO, job.getMessages().get(93).inferredLevel); // "[progress pef:store 82] Not including HTML preview", Message.Level.INFO);
 		assertEquals(Message.Level.INFO, job.getMessages().get(94).inferredLevel); // "[progress px:dtbook-to-pef.store 10 p:sink]", Message.Level.INFO);

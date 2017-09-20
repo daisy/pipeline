@@ -55,7 +55,7 @@ public class Pipeline2HttpClient {
 	 * @param secret Robot secret. Can be null.
 	 * @param parameters URL query string parameters
 	 * @return The return body.
-	 * @throws Pipeline2Exception
+	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
 	public static WSResponse get(String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
 		return getDelete("GET", endpoint, path, username, secret, parameters);
@@ -69,7 +69,7 @@ public class Pipeline2HttpClient {
 	 * @param secret Robot secret. Can be null.
 	 * @param parameters URL query string parameters
 	 * @return The return body.
-	 * @throws Pipeline2Exception 
+	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
 	public static WSResponse delete(String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
 		return getDelete("DELETE", endpoint, path, username, secret, parameters);
@@ -127,7 +127,7 @@ public class Pipeline2HttpClient {
 	 * @param secret Robot secret. Can be null.
 	 * @param xml The XML document to post.
 	 * @return The return body.
-	 * @throws Pipeline2Exception 
+	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
 	public static WSResponse postXml(String endpoint, String path, String username, String secret, Document xml) throws Pipeline2Exception {
 		String url = url(endpoint, path, username, secret, null);
@@ -180,7 +180,7 @@ public class Pipeline2HttpClient {
 	 * @param secret Robot secret. Can be null.
 	 * @param parts A map of all the parts.
 	 * @return The return body.
-	 * @throws Pipeline2Exception 
+	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
 	public static WSResponse postMultipart(String endpoint, String path, String username, String secret, Map<String,File> parts) throws Pipeline2Exception {
 		String url = url(endpoint, path, username, secret, null);
@@ -220,13 +220,13 @@ public class Pipeline2HttpClient {
 	/**
 	 * Sign a URL for communication with a Pipeline 2 Web Service running in authenticated mode.
 	 * 
-	 * @param endpoint
-	 * @param path
-	 * @param username
-	 * @param secret
-	 * @param parameters
-	 * @return
-	 * @throws Pipeline2Exception
+	 * @param endpoint the Pipeline 2 endpoint
+	 * @param path the URL path component
+	 * @param username the username
+	 * @param secret the secret
+	 * @param parameters a map of parameters to encode in the URL
+	 * @return the signed URL as a String
+	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
 	public static String url(String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
 		boolean hasAuth = !(username == null || "".equals(username) || secret == null || "".equals(secret));

@@ -46,14 +46,14 @@ public class WSRemoteTest extends PaxExamConfig {
 			Argument href = script.getArgument("href");
 			href.set(new File(BASEDIR, "src/test/resources/input2.html"), context);
 		}
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 		             "<jobRequest xmlns=\"http://www.daisy.org/ns/pipeline/data\">\n" +
-		             "<script href=\"http://localhost:8181/ws/scripts/foo:script\"/>\n" +
-		             "<input name=\"source\">\n" +
-		             "<item value=\"input1.xml\"/>\n" +
-		             "</input>\n" +
-		             "<option name=\"option-1\">three</option>\n" +
-		             "<option name=\"href\">input2.html</option>\n" +
+		             "   <script href=\"http://localhost:8181/ws/scripts/foo:script\"/>\n" +
+		             "   <input name=\"source\">\n" +
+		             "      <item value=\"input1.xml\"/>\n" +
+		             "   </input>\n" +
+		             "   <option name=\"option-1\">three</option>\n" +
+		             "   <option name=\"href\">input2.html</option>\n" +
 		             "</jobRequest>\n",
 		             XML.toString(job.toJobRequestXml(false)));
 		assertNull(job.validate());

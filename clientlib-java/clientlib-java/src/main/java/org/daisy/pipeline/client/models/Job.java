@@ -1048,7 +1048,7 @@ public class Job implements Comparable<Job> {
 	
 	/**
 	 * The progress stack contains information about the progress at each progress "depth".
-	 * @return 
+	 * @return the progress stack
 	 */
 	public Stack<JobMessages.Progress> getProgressStack() {
 		return messages.getProgressStack();

@@ -338,7 +338,7 @@ public class JobMessages extends AbstractList<Message> {
 	
 	/**
 	 * The progress stack contains information about the progress at each progress "depth".
-	 * @return 
+	 * @return the progress stack
 	 */
 	public Stack<Progress> getProgressStack() {
 		return currentProgress;

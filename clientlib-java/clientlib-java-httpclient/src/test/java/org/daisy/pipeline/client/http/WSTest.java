@@ -49,59 +49,58 @@ public class WSTest extends PaxExamConfig {
 		assertEquals(1, scripts.size());
 		assertEquals("foo:script", scripts.get(0).getId());
 		Script script = ws.getScript("foo:script");
-		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-		             "<script xmlns=\"http://www.daisy.org/ns/pipeline/data\" " +
-		                     "href=\"http://localhost:8181/ws/scripts/foo:script\" " +
-		                     "id=\"foo:script\" " +
-		                     "input-filesets=\"daisy202 daisy3\" " +
-		                     "output-filesets=\"epub2 epub3\">\n" +
-		             "<nicename>Example script</nicename>\n" +
-		             "<description>Transforms a Something into a Something.</description>\n" +
-		             "<version>0.0.0-SNAPSHOT</version>\n" +
-		             "<homepage>http://github.com/daisy</homepage>\n" +
-		             "<input desc=\"Input port description.\" " +
-		                    "mediaType=\"application/x-dtbook+xml\" " +
-		                    "name=\"source\" " +
-		                    "nicename=\"Input port\" " +
-		                    "ordered=\"true\" " +
-		                    "required=\"true\" " +
-		                    "sequence=\"false\" " +
-		                    "type=\"anyFileURI\"/>\n" +
-		             "<option data-type=\"foo:choice\" " +
-		                     "desc=\"Enum description.\" " +
-		                     "mediaType=\"\" " +
-		                     "name=\"option-1\" " +
-		                     "nicename=\"Enum\" " +
-		                     "ordered=\"true\" " +
-		                     "required=\"true\" " +
-		                     "sequence=\"false\" " +
-		                     "type=\"string\"/>\n" +
-		             "<option data-type=\"foo:regex\" " +
-		                     "desc=\"Regex description.\" " +
-		                     "mediaType=\"\" " +
-		                     "name=\"option-2\" " +
-		                     "nicename=\"Regex\" " +
-		                     "ordered=\"true\" " +
-		                     "required=\"false\" " +
-		                     "sequence=\"false\" " +
-		                     "type=\"string\"/>\n" +
-		             "<option desc=\"Input HTML.\" " +
-		                     "mediaType=\"application/xhtml+xml " +
-		                     "text/html\" " +
-		                     "name=\"href\" " +
-		                     "nicename=\"HTML\" " +
-		                     "ordered=\"true\" " +
-		                     "required=\"true\" " +
-		                     "sequence=\"false\" " +
-		                     "type=\"anyFileURI\"/>\n" +
-		             "<option desc=\"Whether or not to include or not include something that you may (or may not) want to include.\" " +
-		                     "mediaType=\"\" " +
-		                     "name=\"yes-or-no\" " +
-		                     "nicename=\"Yes? No?\" " +
-		                     "ordered=\"true\" " +
-		                     "required=\"false\" " +
-		                     "sequence=\"false\" " +
-		                     "type=\"boolean\"/>\n" +
+		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+		             "<script xmlns=\"http://www.daisy.org/ns/pipeline/data\"\n" +
+		             "        href=\"http://localhost:8181/ws/scripts/foo:script\"\n" +
+		             "        id=\"foo:script\"\n" +
+		             "        input-filesets=\"daisy202 daisy3\"\n" +
+		             "        output-filesets=\"epub2 epub3\">\n" +
+		             "   <nicename>Example script</nicename>\n" +
+		             "   <description>Transforms a Something into a Something.</description>\n" +
+		             "   <version>0.0.0-SNAPSHOT</version>\n" +
+		             "   <homepage>http://github.com/daisy</homepage>\n" +
+		             "   <input desc=\"Input port description.\"\n" +
+		             "          mediaType=\"application/x-dtbook+xml\"\n" +
+		             "          name=\"source\"\n" +
+		             "          nicename=\"Input port\"\n" +
+		             "          ordered=\"true\"\n" +
+		             "          required=\"true\"\n" +
+		             "          sequence=\"false\"\n" +
+		             "          type=\"anyFileURI\"/>\n" +
+		             "   <option data-type=\"foo:choice\"\n" +
+		             "           desc=\"Enum description.\"\n" +
+		             "           mediaType=\"\"\n" +
+		             "           name=\"option-1\"\n" +
+		             "           nicename=\"Enum\"\n" +
+		             "           ordered=\"true\"\n" +
+		             "           required=\"true\"\n" +
+		             "           sequence=\"false\"\n" +
+		             "           type=\"string\"/>\n" +
+		             "   <option data-type=\"foo:regex\"\n" +
+		             "           desc=\"Regex description.\"\n" +
+		             "           mediaType=\"\"\n" +
+		             "           name=\"option-2\"\n" +
+		             "           nicename=\"Regex\"\n" +
+		             "           ordered=\"true\"\n" +
+		             "           required=\"false\"\n" +
+		             "           sequence=\"false\"\n" +
+		             "           type=\"string\"/>\n" +
+		             "   <option desc=\"Input HTML.\"\n" +
+		             "           mediaType=\"application/xhtml+xml text/html\"\n" +
+		             "           name=\"href\"\n" +
+		             "           nicename=\"HTML\"\n" +
+		             "           ordered=\"true\"\n" +
+		             "           required=\"true\"\n" +
+		             "           sequence=\"false\"\n" +
+		             "           type=\"anyFileURI\"/>\n" +
+		             "   <option desc=\"Whether or not to include or not include something that you may (or may not) want to include.\"\n" +
+		             "           mediaType=\"\"\n" +
+		             "           name=\"yes-or-no\"\n" +
+		             "           nicename=\"Yes? No?\"\n" +
+		             "           ordered=\"true\"\n" +
+		             "           required=\"false\"\n" +
+		             "           sequence=\"false\"\n" +
+		             "           type=\"boolean\"/>\n" +
 		             "</script>\n",
 		             XML.toString(script.toXml()));
 		assertEquals("Example script", script.getNicename());

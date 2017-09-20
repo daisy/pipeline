@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <data type="string" id="test-regex">
     <param name="pattern">\d</param>
+    <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0" xml:lang="en">Documentation in english.</documentation>
+    <documentation xmlns="http://relaxng.org/ns/compatibility/annotations/1.0" xml:lang="no">Dokumentasjon på norsk.
+
+Flere linjer.
+
+Enda flere linjer.</documentation>
 </data>

@@ -410,11 +410,13 @@ public class ParsingTest {
 			assertTrue("test-regex is regex", testRegexDataType instanceof RegexType);
 			RegexType testRegex = (RegexType)testRegexDataType;
 			assertEquals("\\d", testRegex.regex);
+			assertEquals("Documentation in english.", testRegex.getDescription());
+			assertEquals("Documentation in english.", testRegex.descriptions.get("en"));
+			assertEquals("Dokumentasjon på norsk.\n\nFlere linjer.\n\nEnda flere linjer.", testRegex.descriptions.get("no"));
 			assertFalse(testRegex.pattern.matcher("").matches());
 			assertTrue(testRegex.pattern.matcher("1").matches());
 			assertFalse(testRegex.pattern.matcher("a").matches());
 			assertFalse(testRegex.pattern.matcher("123").matches());
-			
 			DataType brailleTranslatorDataType = DataType.getDataType(loadResourceXml("responses/datatypes/braille-translator.xml"));
 			assertEquals("braille-translator", brailleTranslatorDataType.id);
 			assertTrue("braille-translator is enum", brailleTranslatorDataType instanceof EnumType);

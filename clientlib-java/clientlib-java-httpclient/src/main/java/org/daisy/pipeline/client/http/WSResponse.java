@@ -36,10 +36,13 @@ public class WSResponse {
 	/**
 	 * Creates a new Pipeline2WSResponse with the given HTTP status code, status name, status description and content body.
 	 * 
-	 * @param status
-	 * @param statusName
-	 * @param statusDescription
-	 * @param bodyStream
+	 * @param url the URL
+	 * @param status the HTTP status
+	 * @param statusName the HTTP status name
+	 * @param statusDescription the HTTP status description
+	 * @param contentType the content type
+	 * @param size the size of the body
+	 * @param bodyStream the body as a InputStream
 	 */
 	public WSResponse(String url, int status, String statusName, String statusDescription, String contentType, Long size, InputStream bodyStream) {
 		this.status = status;
@@ -52,8 +55,9 @@ public class WSResponse {
 	
 	/**
 	 * Returns the response body as a String.
-	 * @return
-	 * @throws Pipeline2Exception 
+	 * 
+	 * @return the response body as a String.
+	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
 	public String asText() throws Pipeline2Exception {
 		if (bodyText != null)
@@ -105,8 +109,9 @@ public class WSResponse {
 	
 	/**
 	 * Returns the response body as a InputStream.
-	 * @return
-	 * @throws Pipeline2Exception 
+	 * 
+	 * @return the response body as a InputStream.
+	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
 	public InputStream asStream() throws Pipeline2Exception {
 		if (bodyStream != null)
@@ -128,8 +133,9 @@ public class WSResponse {
 	
 	/**
 	 * Returns the response body as an XML Document.
-	 * @return
-	 * @throws Pipeline2Exception 
+	 * 
+	 * @return the response body as an XML Document.
+	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
 	public Document asXml() throws Pipeline2Exception {
 		if (bodyXml != null)

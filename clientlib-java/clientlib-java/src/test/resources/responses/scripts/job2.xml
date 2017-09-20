@@ -6,46 +6,46 @@
     </script>
     <messages>
         <message level="INFO" sequence="0"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/context/dtbook.imgfolder/hauy_valid.xml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/context/dtbook.imgfolder/hauy_valid.xml </message>
         <message level="INFO" sequence="1"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/context/dtbook.imgfolder/hauy_valid.xml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/context/dtbook.imgfolder/hauy_valid.xml </message>
         <message level="INFO" sequence="2"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content.xhtml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content.xhtml </message>
         <message level="INFO" sequence="3"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content.xhtml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content.xhtml </message>
         <message level="INFO" sequence="4"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-1.xhtml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-1.xhtml </message>
         <message level="INFO" sequence="5"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-2.xhtml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-2.xhtml </message>
         <message level="INFO" sequence="6"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-3.xhtml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-3.xhtml </message>
         <message level="INFO" sequence="7"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-4.xhtml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-4.xhtml </message>
         <message level="INFO" sequence="8"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-5.xhtml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-5.xhtml </message>
         <message level="INFO" sequence="9"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-6.xhtml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-6.xhtml </message>
         <message level="INFO" sequence="10"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-7.xhtml </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/content-7.xhtml </message>
         <message level="INFO" sequence="11"> Message:[INFO] ncx base:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/ </message>
-        <message level="INFO" sequence="12"> Message:[INFO] epub-dir: file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/ </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/ </message>
+        <message level="INFO" sequence="12"> Message:[INFO] epub-dir: file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/ </message>
         <message level="INFO" sequence="13"> Message:processing file from memory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/package.opf </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/package.opf </message>
         <message level="INFO" sequence="14"> Message:[INFO] #1 - fileset/@xml:base =
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/ </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/ </message>
         <message level="INFO" sequence="15"> Message:Making directory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/css/ </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/css/ </message>
         <message level="INFO" sequence="16"> Message:Copied accessibility.css to EPUB/Content/css/accessibility.css </message>
         <message level="INFO" sequence="17"> Message:Making directory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/css/fonts/opendyslexic/ </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/css/fonts/opendyslexic/ </message>
         <message level="INFO" sequence="18"> Message:Copied OpenDyslexic-Regular.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-Regular.otf </message>
         <message level="INFO" sequence="19"> Message:Copied OpenDyslexic-Italic.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-Italic.otf </message>
         <message level="INFO" sequence="20"> Message:Copied OpenDyslexic-Bold.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-Bold.otf </message>
         <message level="INFO" sequence="21"> Message:Copied OpenDyslexic-BoldItalic.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexic-BoldItalic.otf </message>
         <message level="INFO" sequence="22"> Message:Copied OpenDyslexicMono-Regular.otf to EPUB/Content/css/fonts/opendyslexic/OpenDyslexicMono-Regular.otf </message>
         <message level="INFO" sequence="23"> Message:Making directory:
-            file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/img/ </message>
+            file:/some/path/data/313ded3e-37b7-4de6-831c-05f8639326f5/output/output-dir/epub/EPUB/Content/img/ </message>
         <message level="INFO" sequence="24">Message:Copy error:</message>
         <message level="INFO" sequence="25">Message:Writing in-memory document to EPUB/ncx.xml</message>
         <message level="INFO" sequence="26"> Message:Writing in-memory document to EPUB/navigation.xhtml </message>

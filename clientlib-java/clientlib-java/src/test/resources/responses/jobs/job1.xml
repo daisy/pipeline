@@ -129,7 +129,7 @@
         <message level="INFO" sequence="57">Message:Validating ZedAI</message>
         <message level="INFO" sequence="58">Message:ZedAI output is valid.</message>
         <message level="INFO" sequence="59">
-            Message:file:/tmp/jobContext293532058981488693/dtbook/valentin.jpg --> file:/home/jostein/pipeline-assembly/target/dev-launcher/data/data/job1/output/output-dir/valentin.jpg
+            Message:file:/tmp/jobContext293532058981488693/dtbook/valentin.jpg --&gt; file:/some/path/data/job1/output/output-dir/valentin.jpg
         </message>
         <message level="INFO" sequence="60">Message:Conversion complete.</message>
         <message level="INFO" sequence="61">Message:Storing ZedAI fileset.</message>

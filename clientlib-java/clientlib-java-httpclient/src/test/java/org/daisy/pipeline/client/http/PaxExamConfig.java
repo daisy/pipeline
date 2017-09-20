@@ -20,8 +20,10 @@ import static org.ops4j.pax.exam.CoreOptions.bundle;
 import static org.ops4j.pax.exam.CoreOptions.junitBundles;
 import static org.ops4j.pax.exam.CoreOptions.options;
 import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
+import static org.ops4j.pax.exam.CoreOptions.systemPackage;
 import static org.ops4j.pax.exam.CoreOptions.systemProperty;
 import org.ops4j.pax.exam.junit.PaxExam;
+import org.ops4j.pax.exam.MavenUtils;
 import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
@@ -56,6 +58,8 @@ public abstract class PaxExamConfig {
 			logbackConfigFile(),
 			felixDeclarativeServices(),
 			junitBundles(),
+			systemPackage("com.sun.org.apache.xml.internal.resolver"),
+			systemPackage("com.sun.org.apache.xml.internal.resolver.tools"),
 			mavenBundlesWithDependencies(
 				logbackClassic(),
 				mavenBundle("commons-io:commons-io:?"),
@@ -75,13 +79,13 @@ public abstract class PaxExamConfig {
 			// is no other way to keep the webservice running while the test
 			// is executed
 			wrappedBundle(
-				bundle(new File(BASEDIR, "target/clientlib-java-httpclient-2.0.1-SNAPSHOT.jar").toURL().toString()))
+				bundle(new File(BASEDIR, "target/clientlib-java-httpclient-"+MavenUtils.asInProject().getVersion("org.daisy.pipeline", "clientlib-java-httpclient")+".jar").toURL().toString()))
 				.bundleSymbolicName("org.daisy.pipeline.clientlib-java-httpclient")
-				.bundleVersion("2.0.1.SNAPSHOT"),
+				.bundleVersion(MavenUtils.asInProject().getVersion("org.daisy.pipeline", "clientlib-java-httpclient").replaceAll("-",".")),
 			wrappedBundle(
 				mavenBundle("org.daisy.pipeline:clientlib-java:?"))
 				.bundleSymbolicName("org.daisy.pipeline.clientlib-java")
-				.bundleVersion("4.7.1.SNAPSHOT"),
+				.bundleVersion(MavenUtils.asInProject().getVersion("org.daisy.pipeline", "clientlib-java")),
 			mavenBundle("org.apache.httpcomponents:httpcore-osgi:?"),
 			mavenBundle("org.apache.httpcomponents:httpclient-osgi:?")
 		);

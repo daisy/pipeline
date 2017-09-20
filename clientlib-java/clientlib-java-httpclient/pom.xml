@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.daisy</groupId>
         <artifactId>daisy</artifactId>
-        <version>3</version>
+        <version>4</version>
         <relativePath />
     </parent>
 
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>clientlib-java-httpclient</artifactId>
-    <version>2.0.1-SNAPSHOT</version>
+    <version>2.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>DAISY Pipeline 2 :: Java Client Library :: HTTP Client Implementation</name>
@@ -63,7 +63,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>jar-before-test</id>
+                        <id>default-jar</id>
                         <phase>generate-test-resources</phase>
                         <goals>
                             <goal>jar</goal>
@@ -118,7 +118,7 @@
             <dependency>
                 <groupId>org.daisy.pipeline</groupId>
                 <artifactId>framework-bom</artifactId>
-                <version>1.10.2</version>
+                <version>1.10.3</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -143,7 +143,7 @@
         <dependency>
             <groupId>org.daisy.pipeline</groupId>
             <artifactId>clientlib-java</artifactId>
-            <version>4.7.1-SNAPSHOT</version>
+            <version>4.8.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -159,7 +159,6 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient-osgi</artifactId>
-            <version>4.2.5</version>
             <scope>test</scope>
         </dependency>
         <!--
@@ -168,22 +167,12 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore-osgi</artifactId>
-            <version>4.2.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline</groupId>
             <artifactId>webservice</artifactId>
             <scope>test</scope>
-            <!--
-                FIXME: remove from framework-core POM
-            -->
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline</groupId>
@@ -205,15 +194,6 @@
             <artifactId>woodstox-osgi-adapter</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--
-            FIXME: belongs in the framework as runtime dependency
-        -->
-        <dependency>
-            <groupId>org.daisy.libs</groupId>
-            <artifactId>jing</artifactId>
-            <version>20120724.0.0</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -222,7 +202,7 @@
         <dependency>
             <groupId>org.daisy.pipeline</groupId>
             <artifactId>pax-exam-helper</artifactId>
-            <version>2.1.0</version>
+            <version>2.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

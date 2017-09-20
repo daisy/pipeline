@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.daisy</groupId>
         <artifactId>daisy</artifactId>
-        <version>3</version>
+        <version>4</version>
         <relativePath />
     </parent>
 
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>clientlib-java</artifactId>
-    <version>4.7.1-SNAPSHOT</version>
+    <version>4.8.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 :: Java Client Library</name>
