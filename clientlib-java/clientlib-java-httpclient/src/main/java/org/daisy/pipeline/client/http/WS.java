@@ -25,6 +25,9 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import org.daisy.pipeline.client.Pipeline2Exception;
 import org.daisy.pipeline.client.Pipeline2Logger;
 import org.daisy.pipeline.client.models.*;
@@ -45,7 +48,16 @@ public class WS implements WSInterface {
 	
 	private boolean isLocal;
 
+	private final Pipeline2HttpClient httpclient;
+
 	public WS() {
+		this(new DefaultHttpClient());
+	}
+
+	/** Use a custom HttpClient (only for testing)  */
+	// FIXME: can not make this package-private because of Pax-Exam
+	protected WS(HttpClient httpclient) {
+		this.httpclient = new Pipeline2HttpClient(httpclient);
 		endpoint = "http://localhost:8181/ws";
 		username = "clientid";
 		secret = "supersecret";
@@ -97,7 +109,7 @@ public class WS implements WSInterface {
 	@Override
 	public Alive alive() {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/alive", null, null, null);
+			WSResponse response = httpclient.get(endpoint, "/alive", null, null, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return new Alive(response.asXml());
@@ -116,7 +128,7 @@ public class WS implements WSInterface {
 	@Override
 	public boolean halt() {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/admin/halt/"+shutDownKey, username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/admin/halt/"+shutDownKey, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return true;
@@ -135,7 +147,7 @@ public class WS implements WSInterface {
 	@Override
 	public List<Property> getProperties() {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/admin/properties", username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/admin/properties", username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return Property.parsePropertiesXml(response.asXml());
@@ -154,7 +166,7 @@ public class WS implements WSInterface {
 	@Override
 	public List<Script> getScripts() {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/scripts", username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/scripts", username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return Script.parseScriptsXml(response.asXml());
@@ -173,7 +185,7 @@ public class WS implements WSInterface {
 	@Override
 	public Script getScript(String scriptId) {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/scripts/"+scriptId, username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/scripts/"+scriptId, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return new Script(response.asXml());
@@ -192,7 +204,7 @@ public class WS implements WSInterface {
 	@Override
 	public Map<String,String> getDataTypes() {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/datatypes", username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/datatypes", username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return DataType.getDataTypes(response.asXml());
@@ -211,7 +223,7 @@ public class WS implements WSInterface {
 	@Override
 	public DataType getDataType(String dataTypeId) {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/datatypes/"+dataTypeId, username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/datatypes/"+dataTypeId, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return DataType.getDataType(response.asXml());
@@ -230,7 +242,7 @@ public class WS implements WSInterface {
 	@Override
 	public List<Job> getJobs() {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/jobs", username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/jobs", username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return Job.parseJobsXml(response.asXml());
@@ -252,12 +264,12 @@ public class WS implements WSInterface {
 			WSResponse response;
 
 			if (msgSeq <= 0) {
-				response = Pipeline2HttpClient.get(endpoint, "/jobs/"+jobId, username, secret, null);
+				response = httpclient.get(endpoint, "/jobs/"+jobId, username, secret, null);
 
 			} else {
 				Map<String,String> parameters = new HashMap<String,String>();
 				parameters.put("msgSeq", msgSeq+"");
-				response = Pipeline2HttpClient.get(endpoint, "/jobs/"+jobId, username, secret, parameters);
+				response = httpclient.get(endpoint, "/jobs/"+jobId, username, secret, parameters);
 			}
 
 			if (response.status >= 200 && response.status < 300) {
@@ -284,7 +296,7 @@ public class WS implements WSInterface {
 			if (isLocal) {
 				jobRequestDocument = job.toJobRequestXml(true);
 				
-				response = Pipeline2HttpClient.postXml(endpoint, "/jobs", username, secret, jobRequestDocument);
+				response = httpclient.postXml(endpoint, "/jobs", username, secret, jobRequestDocument);
 
 			} else {
 				File contextZipFile = job.getJobStorage().makeContextZip();
@@ -305,7 +317,7 @@ public class WS implements WSInterface {
 					parts.put("job-request", jobRequestFile);
 					parts.put("job-data", contextZipFile);
 
-					response = Pipeline2HttpClient.postMultipart(endpoint, "/jobs", username, secret, parts);
+					response = httpclient.postMultipart(endpoint, "/jobs", username, secret, parts);
 
 				} catch (IOException e) {
 					Pipeline2Logger.logger().error("Could not create and/or write to temporary jobRequest file", e);
@@ -338,7 +350,7 @@ public class WS implements WSInterface {
 	@Override
 	public boolean deleteJob(String jobId) {
 		try {
-			WSResponse response = Pipeline2HttpClient.delete(endpoint, "/jobs/"+jobId, username, secret, null);
+			WSResponse response = httpclient.delete(endpoint, "/jobs/"+jobId, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return true;
@@ -357,7 +369,7 @@ public class WS implements WSInterface {
 	@Override
 	public JobSizes getSizes() {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/admin/sizes", username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/admin/sizes", username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return new JobSizes(response.asXml());
@@ -376,7 +388,7 @@ public class WS implements WSInterface {
 	@Override
 	public List<Job> getBatch(String batchId) {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/batch/"+batchId, username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/batch/"+batchId, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return Job.parseJobsXml(response.asXml());
@@ -395,7 +407,7 @@ public class WS implements WSInterface {
 	@Override
 	public boolean deleteBatch(String batchId) {
 		try {
-			WSResponse response = Pipeline2HttpClient.delete(endpoint, "/batch/"+batchId, username, secret, null);
+			WSResponse response = httpclient.delete(endpoint, "/batch/"+batchId, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return true;
@@ -415,7 +427,7 @@ public class WS implements WSInterface {
 	public String getJobLog(String jobId) {
 		try {
 			Pipeline2Logger.logger().debug("getting log...");
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/jobs/"+jobId+"/log", username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/jobs/"+jobId+"/log", username, secret, null);
 			String responseText = response.asText();
 			return responseText;
 
@@ -432,7 +444,7 @@ public class WS implements WSInterface {
 				href = "";
 			else
 				href = "/"+href.replace(" ", "%20");
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/jobs/"+jobId+"/result"+href, username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/jobs/"+jobId+"/result"+href, username, secret, null);
 			return response.asStream();
 
 		} catch (Pipeline2Exception e) {
@@ -518,7 +530,7 @@ public class WS implements WSInterface {
 	@Override
 	public JobQueue getQueue() {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/queue", username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/queue", username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return new JobQueue(response.asXml());
@@ -537,7 +549,7 @@ public class WS implements WSInterface {
 	@Override
 	public JobQueue moveUpQueue(String jobId) {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/queue/up/"+jobId, username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/queue/up/"+jobId, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return new JobQueue(response.asXml());
@@ -556,7 +568,7 @@ public class WS implements WSInterface {
 	@Override
 	public JobQueue moveDownQueue(String jobId) {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/queue/down/"+jobId, username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/queue/down/"+jobId, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return new JobQueue(response.asXml());
@@ -575,7 +587,7 @@ public class WS implements WSInterface {
 	@Override
 	public List<Client> getClients() {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/admin/clients", username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/admin/clients", username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return Client.parseClientsXml(response.asXml());
@@ -594,7 +606,7 @@ public class WS implements WSInterface {
 	@Override
 	public Client getClient(String clientId) {
 		try {
-			WSResponse response = Pipeline2HttpClient.get(endpoint, "/admin/clients/"+clientId, username, secret, null);
+			WSResponse response = httpclient.get(endpoint, "/admin/clients/"+clientId, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return new Client(response.asXml());
@@ -613,7 +625,7 @@ public class WS implements WSInterface {
 	@Override
 	public boolean deleteClient(String clientId) {
 		try {
-			WSResponse response = Pipeline2HttpClient.delete(endpoint, "/admin/clients/"+clientId, username, secret, null);
+			WSResponse response = httpclient.delete(endpoint, "/admin/clients/"+clientId, username, secret, null);
 
 			if (response.status >= 200 && response.status < 300) {
 				return true;

@@ -1,11 +1,18 @@
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.net.URL;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.conn.SchemeRegistryFactory;
+import org.apache.http.impl.conn.SystemDefaultDnsResolver;
 
 import org.daisy.pipeline.client.filestorage.JobStorage;
 import org.daisy.pipeline.client.http.WS;
@@ -13,12 +20,14 @@ import org.daisy.pipeline.client.http.WSInterface;
 import org.daisy.pipeline.client.models.Argument;
 import org.daisy.pipeline.client.models.Job;
 import org.daisy.pipeline.client.models.Script;
+import org.daisy.pipeline.client.Pipeline2Exception;
 import org.daisy.pipeline.client.utils.XML;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 public class WSRemoteTest extends PaxExamConfig {
@@ -30,7 +39,25 @@ public class WSRemoteTest extends PaxExamConfig {
 	
 	@Test
 	public void testJobRemote() throws InterruptedException, ZipException, IOException {
-		WSInterface ws = new WS();
+		
+		// pretend that the server is running on a remote machine with address http://example.org
+		HttpClient httpclient = new DefaultHttpClient(
+			new PoolingClientConnectionManager(
+				SchemeRegistryFactory.createDefault(),
+				-1,
+				java.util.concurrent.TimeUnit.MILLISECONDS,
+				new SystemDefaultDnsResolver() {
+					@Override
+					public InetAddress[] resolve(final String host) throws UnknownHostException {
+						if (host.equalsIgnoreCase("localhost"))
+							throw new UnknownHostException();
+						else if (host.equals(WS_REMOTE_HOST))
+							return super.resolve("localhost");
+						else
+							return super.resolve(host); }}));
+		WSInterface ws = new WS(httpclient){};
+		assertNull(ws.alive());
+		ws.setEndpoint(WS_REMOTE_ENDPOINT);
 		assertFalse(ws.alive().localfs);
 		Job job; {
 			job = new Job();
@@ -48,7 +75,7 @@ public class WSRemoteTest extends PaxExamConfig {
 		}
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 		             "<jobRequest xmlns=\"http://www.daisy.org/ns/pipeline/data\">\n" +
-		             "   <script href=\"http://localhost:8181/ws/scripts/foo:script\"/>\n" +
+		             "   <script href=\"http://" + "0.0.0.0" + ":" + WS_PORT + "/" + WS_PATH + "/scripts/foo:script\"/>\n" +
 		             "   <input name=\"source\">\n" +
 		             "      <item value=\"input1.xml\"/>\n" +
 		             "   </input>\n" +

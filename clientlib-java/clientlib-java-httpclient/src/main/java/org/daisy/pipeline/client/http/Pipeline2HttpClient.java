@@ -35,11 +35,19 @@ import org.daisy.pipeline.client.Pipeline2Logger;
 import org.daisy.pipeline.client.utils.XML;
 
 /** Implementation of DP2HttpClient that uses Apache HTTP Client as the underlying HTTP client. */
-public class Pipeline2HttpClient {
+class Pipeline2HttpClient {
+	
+	public static final Pipeline2HttpClient DEFAULT = new Pipeline2HttpClient(new DefaultHttpClient());
 	
 	// TODO: implement PUT support put(...) ?
 	
 	private static final String HMAC_SHA1_ALGORITHM = "HmacSHA1";
+	
+	private final HttpClient httpclient;
+	
+	Pipeline2HttpClient(HttpClient httpclient) {
+		this.httpclient = httpclient;
+	}
 	
 	public static DateFormat iso8601;
 	static {
@@ -57,8 +65,12 @@ public class Pipeline2HttpClient {
 	 * @return The return body.
 	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
-	public static WSResponse get(String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
-		return getDelete("GET", endpoint, path, username, secret, parameters);
+	public WSResponse get(String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
+		return get(httpclient, endpoint, path, username, secret, parameters);
+	}
+	
+	public static WSResponse get(HttpClient httpclient, String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
+		return getDelete(httpclient, "GET", endpoint, path, username, secret, parameters);
 	}
 	
 	/**
@@ -71,18 +83,21 @@ public class Pipeline2HttpClient {
 	 * @return The return body.
 	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
-	public static WSResponse delete(String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
-		return getDelete("DELETE", endpoint, path, username, secret, parameters);
+	public WSResponse delete(String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
+		return delete(httpclient, endpoint, path, username, secret, parameters);
 	}
 	
-	private static WSResponse getDelete(String method, String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
+	public static WSResponse delete(HttpClient httpclient, String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
+		return getDelete(httpclient, "DELETE", endpoint, path, username, secret, parameters);
+	}
+	
+	private static WSResponse getDelete(HttpClient httpclient, String method, String endpoint, String path, String username, String secret, Map<String,String> parameters) throws Pipeline2Exception {
 		String url = url(endpoint, path, username, secret, parameters);
 		Pipeline2Logger.logger().debug(method.toUpperCase()+": ["+url+"]");
 		if (endpoint == null) {
 			return new WSResponse(url, 503, "Endpoint is not set", "Please provide a Pipeline 2 endpoint.", null, null, null);
 		}
 		
-		HttpClient httpclient = new DefaultHttpClient();
 		HttpRequestBase http;
 		
 		if ("DELETE".equals(method)) {
@@ -129,7 +144,11 @@ public class Pipeline2HttpClient {
 	 * @return The return body.
 	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
-	public static WSResponse postXml(String endpoint, String path, String username, String secret, Document xml) throws Pipeline2Exception {
+	public WSResponse postXml(String endpoint, String path, String username, String secret, Document xml) throws Pipeline2Exception {
+		return postXml(httpclient, endpoint, path, username, secret, xml);
+	}
+	
+	public static WSResponse postXml(HttpClient httpclient, String endpoint, String path, String username, String secret, Document xml) throws Pipeline2Exception {
 		String url = url(endpoint, path, username, secret, null);
 		
 		if (Pipeline2Logger.logger().logsLevel(Pipeline2Logger.LEVEL.DEBUG)) {
@@ -137,7 +156,6 @@ public class Pipeline2HttpClient {
 			Pipeline2Logger.logger().debug(XML.toString(xml));
 		}
 		
-		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(url);
 		
 		StringEntity entity;
@@ -182,10 +200,13 @@ public class Pipeline2HttpClient {
 	 * @return The return body.
 	 * @throws Pipeline2Exception thrown if an error occurs
 	 */
-	public static WSResponse postMultipart(String endpoint, String path, String username, String secret, Map<String,File> parts) throws Pipeline2Exception {
+	public WSResponse postMultipart(String endpoint, String path, String username, String secret, Map<String,File> parts) throws Pipeline2Exception {
+		return postMultipart(httpclient, endpoint, path, username, secret, parts);
+	}
+	
+	public static WSResponse postMultipart(HttpClient httpclient, String endpoint, String path, String username, String secret, Map<String,File> parts) throws Pipeline2Exception {
 		String url = url(endpoint, path, username, secret, null);
 		
-		HttpClient httpclient = new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(url);
 		
 		MultipartEntity reqEntity = new MultipartEntity();

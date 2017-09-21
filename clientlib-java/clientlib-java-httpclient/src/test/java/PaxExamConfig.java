@@ -11,6 +11,8 @@ import static org.daisy.pipeline.pax.exam.Options.logbackConfigFile;
 import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 import static org.daisy.pipeline.pax.exam.Options.mavenBundlesWithDependencies;
 
+import org.daisy.pipeline.webserviceutils.Properties;
+
 import org.junit.runner.RunWith;
 
 import org.ops4j.pax.exam.Configuration;
@@ -34,6 +36,10 @@ public abstract class PaxExamConfig {
 	static final File BASEDIR = new File(PathUtils.getBaseDir());
 	static final File PIPELINE_BASE = new File(BASEDIR, "target/tmp/server");
 	static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
+	static final String WS_REMOTE_HOST = "example.org";
+	static final String WS_PORT = "8181";
+	static final String WS_PATH = "ws";
+	static final String WS_REMOTE_ENDPOINT = "http://" + WS_REMOTE_HOST + ":" + WS_PORT + "/" + WS_PATH;
 	
 	static {
 		try {
@@ -48,8 +54,12 @@ public abstract class PaxExamConfig {
 	@Configuration
 	public Option[] config() throws MalformedURLException {
 		return options(
-			systemProperty("org.daisy.pipeline.ws.localfs").value(String.valueOf(isLocalFs())),
-			systemProperty("org.daisy.pipeline.ws.authentication").value("false"),
+			systemProperty(Properties.HOST).value(isLocalFs() ? "localhost" : "0.0.0.0"), // can not be set to WS_REMOTE_HOST
+			                                                                              // unless you change /etc/hosts
+			systemProperty(Properties.PORT).value(WS_PORT),
+			systemProperty(Properties.PATH).value(WS_PATH),
+			systemProperty(Properties.LOCALFS).value(String.valueOf(isLocalFs())),
+			systemProperty(Properties.AUTHENTICATION).value("false"),
 			systemProperty("org.daisy.pipeline.iobase").value(new File(PIPELINE_DATA, "jobs").getAbsolutePath()),
 			systemProperty("org.daisy.pipeline.version").value("1.10"),
 			domTraversalPackage(),
