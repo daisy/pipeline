@@ -117,8 +117,10 @@ sub common_path_between {
 				chomp(my @side_path = `git rev-list $_ ^$base`);
 				@commits = array_minus(@commits, @side_path);
 			}
-			$commits[0] eq $base or die "coding error";
-			push @path, shift @commits;
+			if (@commits) {
+				$commits[0] eq $base or die "coding error";
+				push @path, shift @commits;
+			}
 		} else {
 			die "coding error";
 		}
@@ -213,10 +215,20 @@ sub rebase_on_subrepo {
 			}
 			my $commits_in_subtree = grep { `git diff-tree -r $_ -- $subdir` } distance(@$base[0], $rev);
 			if ($commits_in_subtree) {
-				print "git checkout $rev\n";
+				my $temp_branch;
+				if (`git rev-parse --abbrev-ref $rev`) {
+					print "git checkout $rev\n";
+				} else {
+					$temp_branch = generate_branch_name("tmp_");
+					print "git checkout -b $temp_branch $rev\n";
+				}
 				print "git subrepo branch $subdir\n";
 				print "git checkout \$(git rev-parse subrepo/$subdir)\n";
-				print "git branch -D subrepo/$subdir\n";
+				print "git branch -D subrepo/$subdir";
+				if ($temp_branch) {
+					print " $temp_branch";
+				}
+				print "\n";
 				if (not @$base[1]) {
 					print "gitk $onto HEAD\n";
 				} elsif (not (@$base[1] eq $onto)) {
@@ -233,10 +245,20 @@ sub rebase_on_subrepo {
 			# not (@$base[1] eq $last_sync[1]) or die "coding error";
 			my $commits_in_subtree = grep { `git diff-tree -r $_ -- $subdir` } distance($last_sync[0], $rev);
 			if ($commits_in_subtree) {
-				print "git checkout $rev\n";
+				my $temp_branch;
+				if (`git rev-parse --abbrev-ref $rev`) {
+					print "git checkout $rev\n";
+				} else {
+					$temp_branch = generate_branch_name("tmp_");
+					print "git checkout -b $temp_branch $rev\n";
+				}
 				print "git subrepo branch $subdir\n";
 				print "git checkout \$(git rev-parse subrepo/$subdir)\n";
-				print "git branch -D subrepo/$subdir\n";
+				print "git branch -D subrepo/$subdir";
+				if ($temp_branch) {
+					print " $temp_branch";
+				}
+				print "\n";
 				print "git rebase --onto $last_sync[1] HEAD~$commits_in_subtree HEAD\n";
 			}
 			if ($onto eq @$base[1]) {
@@ -285,15 +307,14 @@ if ($merge_base) {
 	my @subrepos_b = list_subrepos($merge_revision);
 	my @subrepos_common = intersect(@subrepos_a, @subrepos_b);
 	my @subrepos_only_b = array_minus(@subrepos_b, @subrepos_a);
-	my $current_branch_save = generate_branch_name("$current_branch-");
-	print "git checkout -b $current_branch_save\n";
+	my $current_branch_commit = rev_parse($current_branch);
 	for my $subrepo (@subrepos_common) {
-		my ($base_a, $base_b) = merge_base_sub($current_branch_save, $merge_revision, $subrepo);
+		my ($base_a, $base_b) = merge_base_sub($current_branch_commit, $merge_revision, $subrepo);
 		my $onto =
 			(@$base_a[1] and not @$base_b[1]) ? @$base_a[1] :
 			(@$base_a[1] or @$base_b[1])      ? @$base_b[1] :
 			rebase_on_subrepo($subrepo, @$base_b[0]);
-		my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_save, $base_a, $onto);
+		my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_commit, $base_a, $onto);
 		my $rebased_b = rebase_on_subrepo($subrepo, $merge_revision,        $base_b, $onto);
 		if (not $rebased_a eq $rebased_b) {
 			my $merged;
@@ -362,7 +383,6 @@ if ($merge_base) {
 		print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\"\n";
 	}
 	print "git checkout $current_branch\n";
-	print "git branch -D $current_branch_save\n";
 	if ($rebase) {
 		print "# FIXME: now rebase all changes from $current_branch that are not in any subrepo\n"
 	} else {

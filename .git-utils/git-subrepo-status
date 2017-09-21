@@ -114,7 +114,7 @@ my @subrepos; {
 		push @subrepos, $repo;
 	} else {
 		my $prev;
-		for (`find . -type f -name .gitrepo`) {
+		for (`find . -type f -name .gitrepo | sort`) {
 			chomp;
 			s/\/\.gitrepo$//;
 			s/^\.\///;
@@ -144,8 +144,14 @@ for my $subrepo (@subrepos) {
 	print "$subrepo";
 	my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
 	if ($fetch) {
-		# FIXME: what if $remote does not exist? use get_remote()?
 		`git fetch --prune $remote 2>/dev/null`;
+		if ($? != 0) {
+			$remote = get_remote($subrepo);
+			`git fetch --prune $remote 2>/dev/null`;
+			if ($? != 0) {
+				die;
+			}
+		}
 	}
 	my ($commit, $subrepo_commit) = find_last_git_subrepo_commit($subrepo);
 	
