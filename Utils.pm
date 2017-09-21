@@ -20,7 +20,11 @@ our @EXPORT = qw(
 
 sub revision_exists {
 	my ($rev) = @_;
-	return not $rev =~ /^\$/ and `git rev-parse --verify $rev 2>/dev/null`;
+	if ($rev =~ /^\$/) {
+		return;
+	} else {
+		return `git rev-parse --verify $rev 2>/dev/null`;
+	}
 }
 
 sub is_ancestor {
@@ -88,11 +92,14 @@ sub find_last_git_subrepo_commit {
 		if ($commit_message =~ /^subrepo:\n +subdir: *"([^"]*)"\n  merged: *"([0-9a-f]{7,})"/m) {
 			if ($1 eq $subdir) {
 				if (not revision_exists($2)) {
-					# commit does not exist anymore (got purged)
+					print STDERR "ERROR: corrupt git-subrepo commit: $commit";
+					print STDERR " (commit $2 does not exist: might have been purged, or was never pushed)\n";
+					return;
 				} elsif (cmp_tree_with_subtree($2, $commit, $subdir)) {
 					return ($commit, rev_parse($2));
 				} else {
-					print STDERR "ERROR: corrupt git-subrepo commit: $commit\n";
+					print STDERR "ERROR: corrupt git-subrepo commit: $commit";
+					print STDERR " (is not tree-equal to commit $2)\n";
 					return;
 				}
 			}
