@@ -8,6 +8,7 @@ use lib "$FindBin::Bin";
 use Utils;
 
 my $merge_revision;
+my $repo;
 
 # If --rebase is specified, perform rebases instead of merges. Instead of
 # merging $merge_revision into the current branch, the current branch is rebased
@@ -21,6 +22,9 @@ while (@ARGV) {
 		shift;
 	} elsif (not $merge_revision) {
 		$merge_revision = $arg;
+		shift;
+	} elsif (not $repo) {
+		$repo = $arg;
 		shift;
 	} else {
 		die "Unexpected argument: $arg";
@@ -56,10 +60,12 @@ sub list_subrepos {
 			chomp;
 			s/\/\.gitrepo$//;
 			s/^\.\///;
-			my $repo = $_;
-			if (not defined $prev or not $repo =~ /^\Q$prev\E\//) {
-				push @subrepos, $repo;
-				$prev = $repo;
+			my $subrepo = $_;
+			if (not defined $prev or not $subrepo =~ /^\Q$prev\E\//) {
+				if (not $repo or $repo eq $subrepo) {
+					push @subrepos, $subrepo;
+				}
+				$prev = $subrepo;
 			}
 		}
 	}
