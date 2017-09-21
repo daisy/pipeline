@@ -1,5 +1,3 @@
-package org.daisy.pipeline.client.http;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -10,6 +8,8 @@ import java.util.zip.ZipFile;
 import org.apache.commons.io.IOUtils;
 
 import org.daisy.pipeline.client.filestorage.JobStorage;
+import org.daisy.pipeline.client.http.WS;
+import org.daisy.pipeline.client.http.WSInterface;
 import org.daisy.pipeline.client.models.Argument;
 import org.daisy.pipeline.client.models.Job;
 import org.daisy.pipeline.client.models.Script;

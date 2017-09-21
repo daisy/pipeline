@@ -1,9 +1,9 @@
-package org.daisy.pipeline.client.http;
-
 import java.io.File;
 import java.util.List;
 
 import org.daisy.pipeline.client.filestorage.JobStorage;
+import org.daisy.pipeline.client.http.WS;
+import org.daisy.pipeline.client.http.WSInterface;
 import org.daisy.pipeline.client.models.Alive;
 import org.daisy.pipeline.client.models.Argument;
 import org.daisy.pipeline.client.models.datatypes.EnumType;
