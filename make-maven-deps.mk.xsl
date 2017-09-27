@@ -7,6 +7,7 @@
                 xmlns="http://maven.apache.org/POM/4.0.0">
 	
 	<xsl:param name="CURDIR"/>
+	<xsl:param name="GRADLE_POM"/>
 	<xsl:param name="MODULE"/>
 	<xsl:param name="SRC_DIRS"/>
 	<xsl:param name="MAIN_DIRS"/>
@@ -16,6 +17,7 @@
 	<xsl:output method="xml" indent="yes"/>
 	
 	<xsl:variable name="effective-pom" select="/*"/>
+	<xsl:variable name="gradle-pom" select="document(concat($CURDIR,'/',$GRADLE_POM))/*"/>
 	
 	<xsl:variable name="src-dirs" select="tokenize($SRC_DIRS, '\s+')"/>
 	<xsl:variable name="main-dirs" select="tokenize($MAIN_DIRS, '\s+')"/>
@@ -40,6 +42,8 @@
 						<xsl:for-each select="pom:dependencies/pom:dependency">
 							<xsl:if test="not(pom:scope='test') and not(pom:scope='provided')">
 								<xsl:if test="$effective-pom/pom:project[pom:groupId=current()/pom:groupId and
+								                                         pom:artifactId=current()/pom:artifactId]
+								              or $gradle-pom/pom:project[pom:groupId=current()/pom:groupId and
 								                                         pom:artifactId=current()/pom:artifactId]">
 									<xsl:copy-of select="."/>
 								</xsl:if>
@@ -48,6 +52,7 @@
 					</pom:dependencies>
 				</xsl:copy>
 			</xsl:for-each>
+			<xsl:sequence select="$gradle-pom/pom:project"/>
 		</pom:projects>
 	</xsl:variable>
 	
@@ -598,10 +603,9 @@
 				    version is overwritten by Maven to a snapshot based on the
 				    dependencyManagement of A.
 				    
-				    We try to support this use case here. We are making the assumption that
-				    module B is present in the Maven reactor and that the transitive
-				    dependencies of B as defined in the module (the snapshot) and the transitive
-				    dependencies of the non-snapshot version of B are the same.
+				    We try to support this use case here. We are making the assumption that that the
+				    transitive dependencies of B as defined in the module (the snapshot) and the
+				    transitive dependencies of the non-snapshot version of B are the same.
 				-->
 				<xsl:when test="self::pom:dependency and not(pom:scope='test') and not(pom:scope='provided')">
 					<xsl:apply-templates select="$managed-internal-runtime-dependencies/pom:project[pom:groupId=$groupId and
