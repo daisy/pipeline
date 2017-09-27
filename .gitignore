@@ -8,6 +8,7 @@
 /*.deb
 /*.rpm
 /*.zip
+/.gradle-pom.xml
 /.gradle-settings/
 /.gradle/
 /.maven-cache/

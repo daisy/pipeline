@@ -139,12 +139,13 @@ $(addsuffix /.deps.mk,$(MAVEN_MODULES) website/target/maven) : .maven-deps.mk
 	touch $@
 
 .SECONDARY : .maven-deps.mk
-.maven-deps.mk : .effective-pom.xml | $(SAXON)
+.maven-deps.mk : .effective-pom.xml .gradle-pom.xml | $(SAXON)
 	rm -f $(addsuffix /.deps.mk,$(MAVEN_MODULES) website/target/maven) && \
 	if ! java -cp $(SAXON) net.sf.saxon.Transform \
 	          -s:$< \
 	          -xsl:.make/make-maven-deps.mk.xsl \
 	          CURDIR="$(CURDIR)" \
+	          GRADLE_POM="$(word 2,$^)" \
 	          MODULE="." \
 	          SRC_DIRS="$$(cat .maven-modules | while read -r m; do test -e $$m/src && echo $$m/src; done | paste -sd ' ' -)" \
 	          MAIN_DIRS="$$(cat .maven-modules | while read -r m; do test -e $$m/src/main && echo $$m/src/main; done | paste -sd ' ' -)" \
@@ -202,6 +203,9 @@ $(SAXON) :
 		fi \
 	} && \
 	print_modules_recursively . >$@
+
+.gradle-pom.xml : $(GRADLE_FILES)
+	bash .make/make-gradle-pom.sh $(GRADLE_MODULES) > $@
 
 $(addsuffix /.deps.mk,$(GRADLE_MODULES)) : $(GRADLE_FILES)
 	if ! bash .make/make-gradle-deps.mk.sh $$(dirname $@) >$@; then \
@@ -291,7 +295,8 @@ clean : cache
 	rm -f *.zip *.deb *.rpm
 	rm -rf webui/dp2webui
 	rm -f .maven-modules
-	find . -name .effective-pom.xml -exec rm -r "{}" \;
+	rm -f .effective-pom.xml
+	rm -f .gradle-pom.xml
 	find * -name .last-tested -exec rm -r "{}" \;
 	find * -name .deps.mk -exec rm -r "{}" \;
 	# generated in previous versions:
