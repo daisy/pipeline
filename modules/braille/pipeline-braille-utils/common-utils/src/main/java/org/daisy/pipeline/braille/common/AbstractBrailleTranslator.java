@@ -60,9 +60,9 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 			
 			/**
 			 * This method MUST translate to braille (the result may contain only <a
-			 * href="http://snaekobbi.github.io/braille-css-spec/master/index.html#dfn-braille-character">braille
+			 * href="http://braillespecs.github.io/braille-css/master/index.html#dfn-braille-character">braille
 			 * characters</a> and <a
-			 * href="http://snaekobbi.github.io/braille-css-spec/master/index.html#dfn-white-space-characters">white
+			 * href="http://braillespecs.github.io/braille-css/master/index.html#dfn-white-space-characters">white
 			 * space</a>) and perform line breaking within words (hyphenate). It MAY also collapse
 			 * white space and perform line breaking outside or at the boundaries of words
 			 * (according to the CSS rules), but it doesn't need to because it will be followed by
@@ -180,7 +180,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 				 * - SHY create soft wrap opportunities that insert a hyphen glyph
 				 * - normal soft wrap opportunities override soft wrap opportunities that insert a hyphen glyph
 				 *
-				 * @see <a href="http://snaekobbi.github.io/braille-css-spec/#h3_line-breaking">Braille CSS – § 9.4 Line Breaking</a>
+				 * @see <a href="http://braillespecs.github.io/braille-css/#h3_line-breaking">Braille CSS – § 9.4 Line Breaking</a>
 				 */
 				private ArrayList<Byte> wrapInfo = new ArrayList<Byte>();
 				private final static byte NO_SOFT_WRAP = (byte)0x0;

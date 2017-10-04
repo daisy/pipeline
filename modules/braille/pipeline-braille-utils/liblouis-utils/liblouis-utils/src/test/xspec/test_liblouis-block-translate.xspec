@@ -2,6 +2,9 @@
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
                stylesheet="../../main/resources/xml/transform/liblouis-block-translate.xsl">
   
+  <x:param name="text-transform" select="'(locale:en)'"/>
+  <x:param name="main-locale" select="'en'"/>
+  
   <x:scenario label="test_01">
     <x:context>
       <doc xml:lang="en">
@@ -14,7 +17,7 @@
     </x:context>
     <x:expect label="result">
       <_ style="text-transform: none">
-      <doc xml:lang="en">
+      <doc xml:lang="en-Brai">
         <p style="display: block">
           <span style="white-space: pre-wrap">
             ⠋⠕⠕­<span>⠃⠜</span>
@@ -33,7 +36,7 @@
     </x:context>
     <x:expect label="result">
       <_ style="text-transform: none">
-      <doc xml:lang="en">         ⠋⠕⠕<br style="::before {{ content: &quot;&#xA;&quot;; white-space: pre-line; text-transform: auto }}"/>⠃⠜       </doc>
+      <doc xml:lang="en-Brai">         ⠋⠕⠕<br style="::before {{ content: &quot;&#xA;&quot;; white-space: pre-line; text-transform: auto }}"/>⠃⠜       </doc>
       </_>
     </x:expect>
   </x:scenario>
@@ -50,7 +53,7 @@
     </x:context>
     <x:expect label="result">
       <_ style="text-transform: none">
-      <doc xml:lang="en">
+      <doc xml:lang="en-Brai">
         <p style="display: block">
           <span>
             ⠋⠕⠕ <span>⠃⠜</span>

@@ -6,7 +6,7 @@
         <title>File 2: Test</title>
         <meta content="test" name="dc:identifier" />
         <style>
-            /* when media not specified; should be dropped */
+            /* when media not specified; should be applied when apply-document-specific-stylesheets=true */
             #p1 {
                 padding-left: 1;
             }
@@ -24,13 +24,13 @@
             }
         </style>
         
-        <!-- when media not specified; should be dropped -->
+        <!-- when media not specified; should be applied -->
         <link rel="stylesheet" href="p4-padding.css"/>
         
-        <!-- when media not specified; should be dropped -->
+        <!-- when media is not embossed; should be dropped -->
         <link rel="stylesheet" href="p5-padding.css" media="screen"/>
         
-        <!-- when media not specified; should be dropped -->
+        <!-- when media is embossed; should be applied when apply-document-specific-stylesheets=true -->
         <link rel="stylesheet" href="p6-padding.css" media="embossed"/>
         
     </head>
@@ -42,7 +42,7 @@
         <p id="p5">bar</p>
         <p id="p6">bar</p>
         
-        <!-- style attributes apply by default to all media, but should never be applied when embossing -->
+        <!-- style attributes should be applied when apply-document-specific-stylesheets=true -->
         <p style="padding-left: 7;">bar</p>
     </body>
 </html>

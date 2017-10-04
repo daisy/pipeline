@@ -35,6 +35,7 @@
             <meta>
               <dc:format>application/x-pef+xml</dc:format>
               <dc:title>foobar</dc:title>
+              <dc:language>en</dc:language>
             </meta>
           </head>
           <body>

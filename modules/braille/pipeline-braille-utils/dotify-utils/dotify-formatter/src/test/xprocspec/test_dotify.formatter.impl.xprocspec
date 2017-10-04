@@ -2,7 +2,8 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:dotify="http://code.google.com/p/dotify/"
                xmlns:p="http://www.w3.org/ns/xproc"
-               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               pending="true">
 
   <x:script>
     <p:declare-step type="pxi:test" version="1.0">
@@ -2315,7 +2316,7 @@
   <x:scenario label="white-space-normalization-around-marker" xfail="true">
     <x:documentation>
       Tests white space normalisation near marker elements. Tests that white space at the beginning
-      of a block or following a br element is stripped, also when it is followed directly by a
+      of a block or following a br element is stripped, also when it is preceded directly by a
       marker element.
       
       Broken: see https://github.com/joeha480/dotify/issues/117. An additional normalisation step in
@@ -2382,6 +2383,61 @@
                   <row>⠤⠤⠤</row>
                   <row>⠤⠤⠤⠀⠤⠤⠤</row>
                   <row>⠤⠤⠤</row> <!-- was: ⠀⠤⠤⠤ -->
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="white-space-normalization-in-span">
+    <x:documentation>
+      Tests that white space at the beginning and end of a span is not stripped. Dotify would
+      normally strip it if DP2 wouldn't inhibit it by adding ZWSP characters. This is done because
+      Dotify strips white space too aggressively in some cases. The current solution is not ideal
+      either but it is better to strip too little than too much.
+    </x:documentation>
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="body" page-width="15" page-height="10" duplex="true">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="body">
+              <block>
+                <span> ⠿⠿ </span> ⠤⠤⠤
+              </block>
+              <block>
+                <span> ⠿⠿ </span><evaluate expression="(round 1)"/>
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="15" rows="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠀⠀⠤⠤⠤</row>
+                  <row>⠿⠿⠀⠼⠁</row>
                 </page>
               </section>
             </volume>
@@ -7973,6 +8029,132 @@
       </pef>
     </x:document>
   </x:expect>
+</x:scenario>
+
+<x:scenario label="break-before-volume-first-sequence">
+  <x:documentation>
+    Tests break-before="volume" on the first sequence.
+    
+    If the sequences are of equal size, this (paradoxically) results in the error "Volume sizes too
+    uneven: [1, 1]". This seems like a bug in Dotify. This is not a problem, just something we have
+    to take into account. We can simply work around it by never putting a break-before="volume" on
+    the first sequence.
+  </x:documentation>
+  <x:call step="pxi:test"/>
+  
+  <x:scenario label="uneven sequences">
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="master" duplex="true" page-width="10" page-height="5">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="master" break-before="volume">
+              <block>⠤⠤⠤⠤⠤</block>
+            </sequence>
+            <sequence master="master" break-before="volume">
+              <block>⠤⠤⠤⠤⠤</block>
+              <block break-before="page">⠤⠤⠤⠤⠤</block>
+              <block break-before="page">⠤⠤⠤⠤⠤</block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="even sequences" pending="Volume sizes too uneven: [1, 1]">
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="master" duplex="true" page-width="10" page-height="5">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="master" break-before="volume">
+              <block>⠤⠤⠤⠤⠤</block>
+            </sequence>
+            <sequence master="master" break-before="volume">
+              <block>⠤⠤⠤⠤⠤</block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
 </x:scenario>
 
 <x:scenario label="br">

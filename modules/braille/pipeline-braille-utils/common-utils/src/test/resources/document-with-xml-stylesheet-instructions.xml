@@ -1,0 +1,7 @@
+<?xml-stylesheet href="1.css"?>
+<?xml-stylesheet href="2.css" type="text/css"?>
+<?xml-stylesheet  href='3.css'  ?>
+<?xml-stylesheet href='4.css' foo="bar"?>
+<?xml-stylesheet href=5.css?>
+<?some-other-instruction?>
+<irrelevant/>

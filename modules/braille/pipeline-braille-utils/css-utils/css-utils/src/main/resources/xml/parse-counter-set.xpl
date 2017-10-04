@@ -15,7 +15,7 @@
             The 'counter-set', 'counter-reset' and 'counter-increment' properties of elements in the
             input must be declared in css:counter-set, css:counter-reset and css:counter-increment
             attributes and must conform to
-            http://snaekobbi.github.io/braille-css-spec/#h4_manipulating-counters-the-counter-increment-counter-set-and-counter-reset-properties.
+            http://braillespecs.github.io/braille-css/#h4_manipulating-counters-the-counter-increment-counter-set-and-counter-reset-properties.
         </p:documentation>
     </p:input>
     

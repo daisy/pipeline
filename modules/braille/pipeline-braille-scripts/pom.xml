@@ -23,6 +23,7 @@
     <module>html-to-pef</module>
     <module>dtbook-to-pef</module>
     <module>zedai-to-pef</module>
+    <module>epub3-to-epub3</module>
   </modules>
   
   <build>

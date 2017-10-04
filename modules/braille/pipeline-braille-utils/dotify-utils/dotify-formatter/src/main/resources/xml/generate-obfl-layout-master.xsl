@@ -95,8 +95,8 @@
              <!--
                  default scope within footnotes area is 'page'
              -->
-            <xsl:if test="$footnotes-content[self::css:flow[@from and @scope[not(.='page')]]]">
-                <xsl:message select="concat($footnotes-content/@scope,' argument of flow() function not allowed within footnotes area')"/>
+            <xsl:if test="$footnotes-content[self::css:flow[@from]][1]/@scope[not(.='page')]">
+                <xsl:message select="concat($footnotes-content[self::css:flow[@from]][1]/@scope,' argument of flow() function not allowed within footnotes area')"/>
             </xsl:if>
             <xsl:for-each select="$footnotes-content[self::css:flow[@from]][1]">
                 <xsl:variable name="footnotes-border-top" as="xs:string"

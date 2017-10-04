@@ -13,7 +13,6 @@ import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.common.TransformProvider;
-import org.daisy.pipeline.braille.common.util.Locales;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
 import static org.daisy.pipeline.braille.common.util.Strings.insertHyphens;
@@ -115,7 +114,11 @@ public class LiblouisHyphenatorJnaImplProvider implements LiblouisHyphenator.Pro
 			if (table != null)
 				q.add("table", table);
 			if (locale != null)
-				q.add("locale", Locales.toString(parseLocale(locale), '_'));
+				try {
+					q.add("locale", parseLocale(locale).toLanguageTag().replace('-', '_')); }
+				catch (IllegalArgumentException e) {
+					logger.error("Invalid locale", e);
+					return empty; }
 			Iterable<LiblouisTableJnaImpl> tables = tableProvider.get(q.asImmutable());
 			return transform(
 				tables,

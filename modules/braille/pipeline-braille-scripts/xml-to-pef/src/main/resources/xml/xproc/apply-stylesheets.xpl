@@ -4,6 +4,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 exclude-inline-prefixes="px pxi css"
                 name="main">
 	
@@ -75,18 +76,11 @@
 	</p:declare-step>
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
 	
-	<p:variable name="xslt-stylesheets" select="string-join(tokenize($stylesheets,'\s+')[matches(.,'\.xsl$')],' ')"/>
+	<p:variable name="xslt-stylesheets" select="string-join(tokenize($stylesheets,'\s+')[matches(.,'\.xslt?$')],' ')"/>
 	<p:variable name="css-stylesheets" select="string-join(tokenize($stylesheets,'\s+')[matches(.,'\.s?css$')],' ')"/>
-	
-	<p:variable name="stylesheets-from-document"
-	            select="string-join(/processing-instruction('xml-stylesheet')
-	                                /replace(.,'^\s*([^=]+=(&quot;[^&quot;]+&quot;|''[^'']+'')\s+)*href=(&quot;([^&quot;]+)&quot;|''([^'']+)'')(\s+[^=]+=(&quot;[^&quot;]+&quot;|''[^'']+''))*\s*$','$4$5'),' ')"/>
-	<p:variable name="xslt-stylesheets-from-document" select="string-join(tokenize($stylesheets-from-document,'\s+')[matches(.,'\.xsl$')],' ')"/>
-	<p:variable name="css-stylesheets-from-document" select="string-join(tokenize($stylesheets-from-document,'\s+')[matches(.,'\.s?css$')],' ')"/>
-	
-	<p:delete match="/processing-instruction('xml-stylesheet')"/>
 	
 	<p:choose>
 		<p:when test="not(string-join(($xslt-stylesheets,$css-stylesheets)[not(.='')],' ')=normalize-space($stylesheets))">
@@ -99,18 +93,36 @@
 		</p:otherwise>
 	</p:choose>
 	
-	<pxi:recursive-xslt>
-		<p:with-option name="stylesheets" select="string-join(($xslt-stylesheets,$xslt-stylesheets-from-document),' ')"/>
-		<p:input port="parameters">
-			<p:pipe step="main" port="parameters"/>
-		</p:input>
-	</pxi:recursive-xslt>
+	<px:parse-xml-stylesheet-instructions name="xml-stylesheet-instructions"/>
 	
-	<css:inline>
-		<p:with-option name="default-stylesheet" select="string-join(($css-stylesheets,$css-stylesheets-from-document),' ')"/>
-		<p:input port="sass-variables">
-			<p:pipe step="main" port="parameters"/>
-		</p:input>
-	</css:inline>
+	<p:group>
+		<p:variable name="all-xslt-stylesheets"
+		            select="string-join((
+		                      $xslt-stylesheets,
+		                      /d:xml-stylesheets/d:xml-stylesheet[not(@type) and matches(@href,'\.xslt?$')]
+		                      /@href),' ')"/>
+		<p:variable name="all-css-stylesheets"
+		            select="string-join((
+		                      $css-stylesheets,
+		                      /d:xml-stylesheets/d:xml-stylesheet[@type='text/css' or (not(@type[not(.='text/css')]) and matches(@href,'\.s?css$'))]
+		                      /@href),' ')"/>
+		<p:identity>
+			<p:input port="source">
+				<p:pipe step="main" port="source"/>
+			</p:input>
+		</p:identity>
+		<pxi:recursive-xslt>
+			<p:with-option name="stylesheets" select="$all-xslt-stylesheets"/>
+			<p:input port="parameters">
+				<p:pipe step="main" port="parameters"/>
+			</p:input>
+		</pxi:recursive-xslt>
+		<css:inline>
+			<p:with-option name="default-stylesheet" select="$all-css-stylesheets"/>
+			<p:input port="sass-variables">
+				<p:pipe step="main" port="parameters"/>
+			</p:input>
+		</css:inline>
+	</p:group>
 	
 </p:declare-step>

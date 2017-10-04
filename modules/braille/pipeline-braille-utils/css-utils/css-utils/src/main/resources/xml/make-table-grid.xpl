@@ -14,7 +14,7 @@
             The input document must be valid HTML (namespace "http://www.w3.org/1999/xhtml") or
             DTBook ("http://www.daisy.org/z3986/2005/dtbook/"). The 'display' properties of elements
             in the input must be declared in css:display attributes, and must conform to
-            http://snaekobbi.github.io/braille-css-spec/#the-display-property.
+            http://braillespecs.github.io/braille-css/#the-display-property.
         </p:documentation>
     </p:input>
     

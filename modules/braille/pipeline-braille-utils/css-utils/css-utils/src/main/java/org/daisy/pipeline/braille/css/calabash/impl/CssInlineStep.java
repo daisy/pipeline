@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -21,6 +22,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
@@ -31,9 +33,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.toArray;
+import static com.google.common.collect.Iterators.forArray;
 import com.google.common.io.ByteSource;
 
 import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.io.ReadablePipe;
@@ -41,6 +45,8 @@ import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
+import com.xmlcalabash.util.Base64;
+import com.xmlcalabash.util.S9apiUtils;
 
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
@@ -120,9 +126,11 @@ import org.slf4j.LoggerFactory;
 public class CssInlineStep extends DefaultStep {
 	
 	private ReadablePipe sourcePipe = null;
+	private ReadablePipe contextPipe = null;
 	private WritablePipe resultPipe = null;
 	private Map<String,String> sassVariables = new HashMap<String,String>();
 	private NetworkProcessor network = null;
+	private final InMemoryURIResolver inMemoryResolver;
 	private Importer importer = null;
 	
 	private final String scssNumber = "\\d*\\.\\d+";
@@ -139,11 +147,13 @@ public class CssInlineStep extends DefaultStep {
 	private static final QName _media = new QName("media");
 	private static final QName _attribute_name = new QName("attribute-name");
 	
-	private static final String DEFAULT_MEDIA = "embossed";
+	private static final String DEFAULT_MEDIUM = "embossed";
 	private static final QName DEFAULT_ATTRIBUTE_NAME = new QName("style");
 	
 	private CssInlineStep(XProcRuntime runtime, XAtomicStep step, final URIResolver resolver) {
 		super(runtime, step);
+		inMemoryResolver = new InMemoryURIResolver();
+		final URIResolver _resolver = fallback(inMemoryResolver, resolver);
 		importer = new Importer() {
 			public Collection<Import> apply(String url, Import previous) {
 				try {
@@ -151,17 +161,23 @@ public class CssInlineStep extends DefaultStep {
 					URI base = previous.getAbsoluteUri();
 					logger.debug("Importing SASS style sheet: " + uri + " (base = " + base + ")");
 					URI abs = base.resolve(uri);
-					try {
-						Source resolved = resolver.resolve(abs.toString(), "");
-						if (resolved != null) {
-							abs = asURI(resolved.getSystemId());
-							logger.debug("Resolved to: " + abs); }}
-					catch (TransformerException e) {
-						throw new IOException(e); }
+					InputStream is; {
+						Source resolved; {
+							try {
+								resolved = _resolver.resolve(abs.toString(), ""); }
+							catch (TransformerException e) {
+								throw new IOException(e); }}
+						if (resolved != null && resolved instanceof StreamSource)
+							is = ((StreamSource)resolved).getInputStream();
+						else {
+							if (resolved != null) {
+								abs = asURI(resolved.getSystemId());
+								logger.debug("Resolved to: " + abs); }
+							is = asURL(abs).openStream(); }}
 					try {
 						return ImmutableList.of(
 							new Import(uri, abs,
-							           byteSource(asURL(abs).openStream()).asCharSource(StandardCharsets.UTF_8).read())); }
+							           byteSource(is).asCharSource(StandardCharsets.UTF_8).read())); }
 					catch (RuntimeException e) {
 						throw new IOException(e); }}
 				catch (IOException e) {
@@ -175,14 +191,19 @@ public class CssInlineStep extends DefaultStep {
 			@Override
 			public InputStream fetch(URL url) throws IOException {
 				logger.debug("Fetching CSS style sheet: " + url);
-				try {
-					Source resolved = resolver.resolve(asURI(url).toString(), "");
-					if (resolved != null) {
-						url = new URL(resolved.getSystemId());
-						logger.debug("Resolved to :" + url); }}
-				catch (TransformerException e) {
-					throw new IOException(e); }
-				InputStream is = super.fetch(url);
+				InputStream is; {
+					Source resolved; {
+						try {
+							resolved = _resolver.resolve(asURI(url).toString(), ""); }
+						catch (TransformerException e) {
+							throw new IOException(e); }}
+					if (resolved != null && resolved instanceof StreamSource)
+						is = ((StreamSource)resolved).getInputStream();
+					else {
+						if (resolved != null) {
+							url = new URL(resolved.getSystemId());
+							logger.debug("Resolved to :" + url); }
+						is = super.fetch(url); }}
 				
 				// skip BOM
 				is = new BOMInputStream(is);
@@ -236,7 +257,10 @@ public class CssInlineStep extends DefaultStep {
 	
 	@Override
 	public void setInput(String port, ReadablePipe pipe) {
-		sourcePipe = pipe;
+		if ("source".equals(port))
+			sourcePipe = pipe;
+		else
+			contextPipe = pipe;
 	}
 	
 	@Override
@@ -281,18 +305,98 @@ public class CssInlineStep extends DefaultStep {
 					l.add(asURL(base.resolve(asURI(t.nextToken()))));
 				defaultSheets = toArray(l, URL.class);
 			}
-			Set<String> media = ImmutableSet.copyOf(Splitter.on(' ').omitEmptyStrings().split(getOption(_media, DEFAULT_MEDIA)));
+			String medium = getOption(_media, DEFAULT_MEDIUM);
 			QName attributeName = getOption(_attribute_name, DEFAULT_ATTRIBUTE_NAME);
-			resultPipe.write(new CssInlineTransform(runtime, network, defaultSheets, media, attributeName).transform(source)); }
+			inMemoryResolver.setContext(contextPipe);
+			resultPipe.write(new CssInlineTransform(runtime, network, defaultSheets, medium, attributeName).transform(source)); }
 		catch (Exception e) {
 			logger.error("css:inline failed", e);
 			throw new XProcException(step.getNode(), e); }
 	}
 	
+	private static final QName c_encoding = new QName("c", XProcConstants.NS_XPROC_STEP, "encoding");
+	private static final QName _content_type = new QName("content-type");
+	
+	static class InMemoryURIResolver implements URIResolver {
+		private ReadablePipe documents = null;
+		InMemoryURIResolver() {}
+		void setContext(ReadablePipe documents) {
+			this.documents = documents;
+		}
+		public Source resolve(String href, String base) throws TransformerException {
+			if (documents == null) return null;
+			try {
+				URI uri = (base != null) ?
+					new URI(base).resolve(new URI(href)) :
+					new URI(href);
+				uri = normalizeUri(uri);
+				documents.resetReader();
+				while (documents.moreDocuments()) {
+					XdmNode doc = documents.read();
+					XdmNode root = S9apiUtils.getDocumentElement(doc);
+					URI docUri = normalizeUri(root.getBaseURI()); // can not use doc.getBaseURI() because it is not modified by
+					                                          // px:fileset-load (when @href != @original-href)
+					if (docUri.equals(uri)) {
+						if (XProcConstants.c_result.equals(root.getNodeName())
+						    && root.getAttributeValue(_content_type) != null
+						    && root.getAttributeValue(_content_type).startsWith("text/"))
+							return new StreamSource(new ByteArrayInputStream(doc.getStringValue().getBytes()),
+							                        uri.toASCIIString());
+						else if ("base64".equals(root.getAttributeValue(c_encoding)))
+							return new StreamSource(new ByteArrayInputStream(Base64.decode(doc.getStringValue())),
+							                        uri.toASCIIString());
+						else if (XProcConstants.c_data.equals(root.getNodeName()))
+							return new StreamSource(new ByteArrayInputStream(doc.getStringValue().getBytes()),
+							                        uri.toASCIIString());
+						else
+							return doc.asSource(); }}}
+			catch (URISyntaxException e) {
+				e.printStackTrace();
+				throw new TransformerException(e); }
+			catch (SaxonApiException e) {
+				e.printStackTrace();
+				throw new TransformerException(e); }
+			return null;
+		}
+	}
+	
+	private static URI normalizeUri(URI uri) {
+		String s = uri.toASCIIString();
+		
+		// A URI that starts with "file:///" can be written as "file:/"
+		if (s.startsWith("file:///"))
+			s = "file:" + s.substring(7);
+		
+		// A URI that contains "!/" is a ZIP URI
+		if (s.startsWith("file:") && s.contains("!/"))
+			s = "zip:" + s;
+		
+		// The part of a ZIP URI after the "!" must start with "/"
+		if (s.startsWith("zip:file:") && !s.contains("!/"))
+			s = s.replaceFirst("!", "!/");
+		try {
+			return new URI(s); }
+		catch (URISyntaxException e) {
+			throw new RuntimeException(e); }
+	}
+	
+	private static URIResolver fallback(final URIResolver... resolvers) {
+		return new URIResolver() {
+			public Source resolve(String href, String base) throws TransformerException {
+				Iterator<URIResolver> iterator = forArray(resolvers);
+				while (iterator.hasNext()) {
+					Source source = iterator.next().resolve(href, base);
+					if (source != null)
+						return source; }
+				return null;
+			}
+		};
+	}
+	
 	@Component(
 		name = "css:inline",
 		service = { XProcStepProvider.class },
-		property = { "type:String={http://www.daisy.org/ns/pipeline/braille-css}inline" }
+		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}css-inline" }
 	)
 	public static class Provider implements XProcStepProvider {
 		
@@ -315,7 +419,7 @@ public class CssInlineStep extends DefaultStep {
 		}
 	}
 	
-	// media print
+	// medium print
 	private static final SupportedCSS printCSS = SupportedPrintCSS.getInstance();
 	private static DeclarationTransformer printDeclarationTransformer; static {
 		// SupportedCSS injected via CSSFactory in DeclarationTransformer.<init>
@@ -324,7 +428,7 @@ public class CssInlineStep extends DefaultStep {
 	private static final RuleFactory printRuleFactory = RuleFactoryImpl.getInstance();
 	private static final CSSParserFactory printParserFactory = CSSParserFactory.getInstance();
 	
-	// media embossed
+	// medium embossed
 	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(false, true);
 	private static DeclarationTransformer brailleDeclarationTransformer; static {
 		// SupportedCSS injected via CSSFactory in DeclarationTransformer.<init>
@@ -337,19 +441,19 @@ public class CssInlineStep extends DefaultStep {
 		
 		private final NetworkProcessor network;
 		private final URL[] defaultSheets;
-		private final Set<String> media;
+		private final String medium;
 		private final QName attributeName;
 		private final List<CascadedStyle> styles;
 		
 		public CssInlineTransform(XProcRuntime xproc,
 		                          NetworkProcessor network,
 		                          URL[] defaultSheets,
-		                          Set<String> media,
+		                          String medium,
 		                          QName attributeName) {
 			super(xproc);
 			this.network = network;
 			this.defaultSheets = defaultSheets;
-			this.media = media;
+			this.medium = medium;
 			this.attributeName = attributeName;
 			this.styles = new ArrayList<CascadedStyle>();
 		}
@@ -361,10 +465,12 @@ public class CssInlineStep extends DefaultStep {
 			this.writer = writer;
 			
 			try {
-			
-			URI baseURI = new URI(document.getBaseURI());
-			
-			for (String medium : media) {
+				
+				// get base URI of document element instead of document because
+				// unzipped files have an empty base URI, but an xml:base
+				// attribute may have been added to their document element
+				URI baseURI = new URI(document.getDocumentElement().getBaseURI());
+				
 				CascadedStyle style = new CascadedStyle();
 				styles.add(style);
 				StyleSheet stylesheet;
@@ -432,12 +538,11 @@ public class CssInlineStep extends DefaultStep {
 				} else {
 					throw new RuntimeException("medium " + medium + " not supported");
 				}
-			}
-			
-			writer.startDocument(baseURI);
-			traverse(document.getDocumentElement());
-			writer.endDocument();
-			
+				
+				writer.startDocument(baseURI);
+				traverse(document.getDocumentElement());
+				writer.endDocument();
+				
 			} catch (Exception e) {
 				throw new TransformationException(e);
 			}

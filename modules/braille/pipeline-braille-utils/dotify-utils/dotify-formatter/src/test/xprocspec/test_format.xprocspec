@@ -23,10 +23,21 @@
       </pxi:css-to-obfl>
       <pxi:obfl-normalize-space/>
       <p:for-each><p:identity/></p:for-each>
-      <dotify:obfl-to-pef locale="und">
-        <p:with-option name="mode" select="concat($text-transform,'(input:text-css)(output:braille)')"/>
-        <p:with-param port="parameters" name="allow-text-overflow-trimming" select="$allow-text-overflow-trimming"/>
-      </dotify:obfl-to-pef>
+      <p:try>
+        <p:group>
+          <dotify:obfl-to-pef locale="und">
+            <p:with-option name="mode" select="concat($text-transform,'(input:text-css)(output:braille)')"/>
+            <p:with-param port="parameters" name="allow-text-overflow-trimming" select="$allow-text-overflow-trimming"/>
+          </dotify:obfl-to-pef>
+        </p:group>
+        <p:catch>
+          <p:identity>
+            <p:input port="source">
+              <p:inline><pef xmlns="http://www.daisy.org/ns/2008/pef">obfl-to-pef failed</pef></p:inline>
+            </p:input>
+          </p:identity>
+        </p:catch>
+      </p:try>
     </p:declare-step>
   </x:script>
   
@@ -608,30 +619,33 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_05" pending="xfail doesn't work because of error">
+  <x:scenario label="test_05">
     <x:documentation>
-      Tests counter(page) with different counter styles. Broken: "Invalid input: 'i'" (roman numbers
-      are not translated).
+      Tests counter(page) with different counter styles.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform:none">
             <body style="@page {
-                         size: 15 5;
-                         @bottom-right { content: counter(page) }}">
-              <frontmatter style="@page {
-                                  size: 15 5;
-                                  @bottom-right { content: '⠏' counter(page) }}">
+                           size: 15 5;
+                           margin-bottom: 1;
+                           @bottom-right { content: counter(page) }}">
+              <frontmatter style="{ display: block }
+                                  @page {
+                                    size: 15 5;
+                                    margin-bottom: 1;
+                                    @bottom-right { content: '⠏' counter(page) }}">
                 ⠤⠤⠤
               </frontmatter>
-              <bodymatter>
+              <bodymatter style="display: block">
                 ⠤⠤⠤
               </bodymatter>
-              <rearmatter style="{ counter-set: page 1 }
+              <rearmatter style="{ display: block; counter-set: page 1 }
                                  @page {
-                                 size: 15 5;
-                                 @bottom-right { content: counter(page, lower-roman) }}">
+                                   size: 15 5;
+                                   margin-bottom: 1;
+                                   @bottom-right { content: counter(page, lower-roman) }}">
                 ⠤⠤⠤
               </rearmatter>
             </body>
@@ -715,7 +729,8 @@
     <x:context label="pef">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare"
+              xfail="Invalid input: 'i' (roman numbers are not translated)">
       <x:document type="inline">
         <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
           <head xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -2130,6 +2145,7 @@
                 <toc>
                   <entry ref="chapter_1" style="::after {
                                                   display: block;
+                                                  text-transform: auto;
                                                   content: target-text(attr(ref))
                                                            ' ⠄⠄⠄⠄⠄⠄⠄ '
                                                            target-string(attr(ref), print-page)
@@ -2137,6 +2153,7 @@
                                                            target-counter(attr(ref), page); }"/>
                   <entry ref="chapter_2" style="::after {
                                                   display: block;
+                                                  text-transform: auto;
                                                   content: target-text(attr(ref))
                                                            ' ⠄⠄⠄⠄⠄⠄ '
                                                            target-string(attr(ref), print-page)
@@ -2144,6 +2161,7 @@
                                                            target-counter(attr(ref), page); }"/>
                   <entry ref="chapter_3" style="::after {
                                                   display: block;
+                                                  text-transform: auto;
                                                   content: target-text(attr(ref))
                                                            ' ⠄⠄⠄⠄ '
                                                            target-string(attr(ref), print-page)
@@ -2189,19 +2207,19 @@
             </default-template>
           </layout-master>
           <sequence master="body">
-            <block>
+            <block translate="">
               ⠿
               ⠄⠄⠄⠄⠄⠄⠄
               ⠤
               <page-number ref-id="chapter_1" number-format="default"/>
             </block>
-            <block>
+            <block translate="">
               ⠿⠿
               ⠄⠄⠄⠄⠄⠄
               ⠤
               <page-number ref-id="chapter_2" number-format="default"/>
             </block>
-            <block>
+            <block translate="">
               ⠿⠿⠿
               ⠄⠄⠄⠄
               ⠤⠤
@@ -2312,11 +2330,13 @@
                 <toc>
                   <entry ref="chapter_1" style="::after {
                                                   display: block;
+                                                  text-transform: auto;
                                                   content: target-text(attr(ref))
                                                            ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄ '
                                                            target-counter(attr(ref), page); }"/>
                   <entry ref="chapter_2" style="::after {
                                                   display: block;
+                                                  text-transform: auto;
                                                   content: target-text(attr(ref))
                                                            ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ '
                                                            target-counter(attr(ref), page); }"/>
@@ -2333,16 +2353,19 @@
                 <index>
                   <entry ref="x" style="::after {
                                           display: block;
+                                          text-transform: auto;
                                           content: target-text(attr(ref))
                                                    ' ⠄⠄⠄⠄⠄⠄⠄⠄ '
                                                    target-counter(attr(ref), page); }"/>
                   <entry ref="y" style="::after {
                                           display: block;
+                                          text-transform: auto;
                                           content: target-text(attr(ref))
                                                    ' ⠄⠄⠄⠄⠄⠄⠄⠄ '
                                                    target-counter(attr(ref), page); }"/>
                   <entry ref="z" style="::after {
                                           display: block;
+                                          text-transform: auto;
                                           content: target-text(attr(ref))
                                                    ' ⠄⠄⠄⠄⠄⠄⠄⠄ '
                                                    target-counter(attr(ref), page); }"/>
@@ -2376,12 +2399,12 @@
             </default-template>
           </layout-master>
           <sequence master="body">
-            <block>
+            <block translate="">
               ⠿
               ⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄
               <page-number ref-id="chapter_1" number-format="default"/>
             </block>
-            <block>
+            <block translate="">
               ⠿⠿
               ⠄⠄⠄⠄⠄⠄⠄⠄⠄
               <page-number ref-id="chapter_2" number-format="default"/>
@@ -2404,17 +2427,17 @@
               </block>
             </block>
             <block break-before="page">
-              <block>
+              <block translate="">
                 ⠤⠤⠤
                 ⠄⠄⠄⠄⠄⠄⠄⠄
                 <page-number ref-id="x" number-format="default"/>
               </block>
-              <block>
+              <block translate="">
                 ⠤⠤⠤
                 ⠄⠄⠄⠄⠄⠄⠄⠄
                 <page-number ref-id="y" number-format="default"/>
               </block>
-              <block>
+              <block translate="">
                 ⠤⠤⠤
                 ⠄⠄⠄⠄⠄⠄⠄⠄
                 <page-number ref-id="z" number-format="default"/>
@@ -7074,7 +7097,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_67" pending="not supported yet">
+  <x:scenario label="test_67" xfail="not supported yet">
     <x:documentation>
       Tests nested footnotes (noteref inside note).
     </x:documentation>
@@ -9544,9 +9567,7 @@
           <doc style="text-transform:none; display:block">
             <span style="text-transform:auto">
               1 2 3
-              <span style="text-transform:none">
-                ⠿⠿⠿
-              </span>
+              <span style="text-transform:none">⠿⠿⠿</span>
               4 5 6
             </span>
           </doc>
@@ -9570,9 +9591,7 @@
             <block>
               <span translate="">
                 1 2 3
-              </span>
-              ⠿⠿⠿
-              <span translate="">
+              </span>⠿⠿⠿<span translate="">
                 4 5 6
               </span>
             </block>
@@ -9608,8 +9627,6 @@
   <x:scenario label="test_88">
     <x:documentation>
       Tests text-transform:auto on -obfl-evaluate().
-      
-      Broken: white space is stripped too aggressively (Dotify issue?).
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -9679,7 +9696,7 @@
             <volume cols="40" rows="25" rowgap="0" duplex="true">
               <section>
                 <page>
-                  <row>⠤⠤⠤⠤⠤⠼⠁⠤⠤⠤⠤⠤</row> <!-- white space problem! -->
+                  <row>⠤⠤⠤⠤⠤⠀⠼⠁⠀⠤⠤⠤⠤⠤</row>
                 </page>
               </section>
               <section>
@@ -9706,6 +9723,10 @@
               1<span style="::after {
                               text-transform: downshift;
                               content: -obfl-evaluate('(round $volumes)') }"/>
+              <p style="::after {
+                          display: block;
+                          text-transform: downshift;
+                          content: -obfl-evaluate('(round $volume)') }"/>
             </titlepage>
             <body style="display: block">
               ⠤⠤⠤⠤⠤
@@ -9731,9 +9752,16 @@
             <pre-content>
               <sequence master="main">
                 <block translate="">
-                  1<style name="text-transform: downshift">
-                  <evaluate expression="(round $volumes)"/>
+                  <block>
+                    1<style name="text-transform: downshift">
+                    <evaluate expression="(round $volumes)"/>
                   </style>
+                  </block>
+                  <block>
+                    <style name="text-transform: downshift">
+                      <evaluate expression="(round $volume)"/>
+                    </style>
+                  </block>
                 </block>
               </sequence>
             </pre-content>
@@ -9762,6 +9790,7 @@
               <section>
                 <page>
                   <row>⠼⠁⠂</row>
+                  <row>⠂</row>
                 </page>
               </section>
               <section>
@@ -11540,6 +11569,107 @@
               <section>
                 <page>
                   <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_102">
+    <x:documentation>
+      Tests forced volume break before the first content.
+      
+      The sequences are chosen to be equal size in order to show that we work around a bug in Dotify
+      (see "break-before-volume-first-sequence" in test_dotify.formatter.impl.xprocspec).
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <body style="{ display: block; text-transform: none }
+                       @page { size: 10 5 }">
+            <br style="display: block; volume-break-before: always"/>
+            ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+            <br style="display: block; volume-break-before: always"/>
+            ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <layout-master name="main" duplex="true" page-number-variable="page" page-width="10" page-height="5">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="main">
+            <block>
+              <block/>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+            </block>
+          </sequence>
+          <sequence master="main" break-before="volume">
+            <block>
+              <block/>
+              <block>
+                ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
+              </block>
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠤⠤</row>
                 </page>
               </section>
             </volume>

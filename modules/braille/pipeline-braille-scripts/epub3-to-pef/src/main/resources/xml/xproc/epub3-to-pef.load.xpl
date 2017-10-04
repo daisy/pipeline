@@ -12,6 +12,9 @@
     <p:output port="in-memory.out" sequence="true">
         <p:pipe port="in-memory.out" step="result"/>
     </p:output>
+    <p:output port="opf">
+        <p:pipe step="opf" port="result"/>
+    </p:output>
     
     <p:option name="epub" required="true" px:media-type="application/epub+zip application/oebps-package+xml"/>
     <!-- Empty temporary directory dedicated to this conversion -->
@@ -80,5 +83,14 @@
             <p:identity name="load.in-memory"/>
         </p:otherwise>
     </p:choose>
+    
+    <!-- Get the OPF so that we can use the metadata in options -->
+    <px:message message="Getting the OPF"/>
+    <px:fileset-load media-types="application/oebps-package+xml">
+        <p:input port="in-memory">
+            <p:pipe step="result" port="in-memory.out"/>
+        </p:input>
+    </px:fileset-load>
+    <p:identity name="opf"/>
     
 </p:declare-step>

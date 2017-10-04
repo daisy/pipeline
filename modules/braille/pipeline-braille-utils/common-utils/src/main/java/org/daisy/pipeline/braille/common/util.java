@@ -13,9 +13,13 @@ import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.IllformedLocaleException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -24,6 +28,7 @@ import java.util.regex.Pattern;
 import com.google.common.base.Function;
 import static com.google.common.base.Functions.forPredicate;
 import static com.google.common.base.Functions.toStringFunction;
+import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.Multimap;
@@ -270,6 +275,53 @@ public abstract class util {
 					}
 				};
 			}
+		}
+		
+		public static <K,V> Iterable<Map<K,V>> combinations(final Map<K,? extends Iterable<V>> fromMap) {
+			if (fromMap.isEmpty())
+				return Collections.singleton(Collections.<K,V>emptyMap());
+			return new Iterable<Map<K,V>>() {
+				public Iterator<Map<K,V>> iterator() {
+					return new AbstractIterator<Map<K,V>>() {
+						Map<K,Iterator<V>> iterators; {
+							iterators = new HashMap<K,Iterator<V>>();
+							for (K k : fromMap.keySet()) {
+								Iterator<V> i = fromMap.get(k).iterator();
+								if (!i.hasNext())
+									throw new RuntimeException("Can't compute combinations. No iterables may be empty.");
+								iterators.put(k, i); }
+						}
+						Map<K,V> currentMap = null;
+						protected Map<K,V> computeNext() {
+							Map<K,V> nextMap = new HashMap<K,V>();
+							if (currentMap == null)
+								for (K k : fromMap.keySet())
+									nextMap.put(k, iterators.get(k).next());
+							else {
+								nextMap.putAll(currentMap);
+								Iterator<K> keys = fromMap.keySet().iterator();
+								while (keys.hasNext()) {
+									K k = keys.next();
+									Iterator<V> i = iterators.get(k);
+									if (i.hasNext()) {
+										nextMap.put(k, i.next());
+										break; }
+									else if (!keys.hasNext())
+										return endOfData();
+									else {
+										i = fromMap.get(k).iterator();
+										nextMap.put(k, i.next());
+										iterators.put(k, i); }}}
+							currentMap = nextMap;
+							return nextMap;
+						}
+					};
+				}
+				@Override
+				public String toString() {
+					return "combinations( " + fromMap + " )";
+				}
+			};
 		}
 	}
 	
@@ -610,38 +662,11 @@ public abstract class util {
 	}
 	
 	public static abstract class Locales {
-		
 		public static Locale parseLocale(String locale) {
-			StringTokenizer parser = new StringTokenizer(locale, "-_");
-			if (parser.hasMoreTokens()) {
-				String lang = parser.nextToken();
-				if (parser.hasMoreTokens()) {
-					String country = parser.nextToken();
-					if (parser.hasMoreTokens()) {
-						String variant = parser.nextToken();
-						return new Locale(lang, country, variant); }
-					else
-						return new Locale(lang, country); }
-				else
-					return new Locale(lang); }
-			else
-				throw new IllegalArgumentException("Locale '" + locale + "' could not be parsed");
-		}
-		
-		public static String toString(Locale locale, char separator) {
-			StringBuilder string = new StringBuilder();
-			String language = locale.getLanguage();
-			String country = locale.getCountry();
-			String variant = locale.getVariant();
-			string.append(language);
-			if (country.length() > 0 || variant.length() > 0)
-				string.append(separator);
-			if (country.length() > 0)
-				string.append(country);
-			if (variant.length() > 0) {
-				string.append(separator);
-				string.append(variant); }
-			return string.toString();
+			try {
+				return (new Locale.Builder()).setLanguageTag(locale.replace('_','-')).build(); }
+			catch (IllformedLocaleException e) {
+				throw new IllegalArgumentException("Locale '" + locale + "' could not be parsed", e); }
 		}
 	}
 	

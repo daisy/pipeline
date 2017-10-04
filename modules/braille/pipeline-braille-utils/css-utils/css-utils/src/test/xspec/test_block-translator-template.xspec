@@ -30,7 +30,7 @@
     </x:context>
     <x:expect label="result">
       <_ style="text-transform: none">
-        <doc xml:lang="en">
+        <doc xml:lang="en-Brai">
           <br style="::before {{ content: &quot;&#xA;&quot;; white-space: pre-line; text-transform: auto }}"/>
         </doc>
       </_>

@@ -58,7 +58,13 @@ public interface LiblouisMathMLTransform {
 						if (!supportedOutput.contains(f.getValue().get()))
 							return empty;
 					if (query.containsKey("locale")) {
-						MathCode code = mathCodeFromLocale(parseLocale(query.getOnly("locale").getValue().get()));
+						Locale locale; {
+							try {
+								locale = parseLocale(query.getOnly("locale").getValue().get()); }
+							catch (IllegalArgumentException e) {
+								return empty; }
+						}
+						MathCode code = mathCodeFromLocale(locale);
 						if (code != null)
 							return of(logCreate((Transform)new TransformImpl(code))); }}}
 			catch (IllegalStateException e) {}

@@ -3,5 +3,6 @@
 
     <p:import href="epub3-to-pef.load.xpl"/>
     <p:import href="epub3-to-pef.convert.xpl"/>
+    <p:import href="epub3-to-pef.store.xpl"/>
 
 </p:library>

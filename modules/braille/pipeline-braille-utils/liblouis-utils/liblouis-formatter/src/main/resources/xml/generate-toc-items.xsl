@@ -24,11 +24,13 @@
                                                     self::css:counter[@target][@name='braille-page'] or
                                                     self::css:leader)])]">
         <xsl:variable name="target" as="xs:string*"
-                      select="distinct-values(child::*[not(self::css:leader)]/string(@target))"/>
+                      select="distinct-values(
+                                for $t in child::*[not(self::css:leader)]/string(@target)
+                                return if (contains($t,'#')) then $t else concat('#',$t))"/>
         <xsl:choose>
             <xsl:when test="count($target)=1 and $target[1]!='' and
                             collection()/*[not(self::louis:box)]
-                                        //*[@xml:id=$target[1] or concat('#',@xml:id)=$target[1]]">
+                                        //*[concat('#',@xml:id)=$target[1]]">
                 <xsl:element name="louis:toc-item">
                     <xsl:attribute name="ref" select="replace($target[1],'^#','')"/>
                     <xsl:sequence select="@style|@css:display"/>

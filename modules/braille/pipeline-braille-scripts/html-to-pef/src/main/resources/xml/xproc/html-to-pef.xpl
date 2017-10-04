@@ -164,7 +164,6 @@
         </p:with-option>
         <p:with-option name="include-brf" select="$include-brf"/>
         <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:with-option name="ascii-file-format" select="$ascii-file-format"/>
         <p:with-option name="ascii-table" select="$ascii-table"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>

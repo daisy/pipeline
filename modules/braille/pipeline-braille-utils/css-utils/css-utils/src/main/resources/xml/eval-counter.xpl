@@ -7,8 +7,8 @@
     
     <p:documentation>
         Evaluate counter() and target-counter() values according to
-        http://snaekobbi.github.io/braille-css-spec/#h4_printing-counters-the-counter-function /
-        http://snaekobbi.github.io/braille-css-spec/#h4_the-target-counter-function.
+        http://braillespecs.github.io/braille-css/#h4_printing-counters-the-counter-function /
+        http://braillespecs.github.io/braille-css/#h4_the-target-counter-function.
     </p:documentation>
     
     <p:input port="source" sequence="true">
@@ -17,7 +17,7 @@
             elements. The 'counter-set', 'counter-reset' and 'counter-increment' properties of
             elements must be declared in css:counter-set, css:counter-reset and
             css:counter-increment attributes and must conform to
-            http://snaekobbi.github.io/braille-css-spec/#h4_manipulating-counters-the-counter-increment-counter-set-and-counter-reset-properties.
+            http://braillespecs.github.io/braille-css/#h4_manipulating-counters-the-counter-increment-counter-set-and-counter-reset-properties.
             Elements that are referenced by a target-counter() value must be indicated with a css:id
             attribute that matches the css:counter element's target attribute. If a document in the
             input sequence represents a named flow this must be indicated with a css:flow attribute

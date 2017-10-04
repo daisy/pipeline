@@ -9,6 +9,7 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 		return new String[] {
 			brailleModule("xml-to-pef"),
 			brailleModule("common-utils"),
+			brailleModule("css-utils"),
 			brailleModule("pef-utils"),
 			brailleModule("liblouis-utils"),
 			brailleModule("dotify-utils"),

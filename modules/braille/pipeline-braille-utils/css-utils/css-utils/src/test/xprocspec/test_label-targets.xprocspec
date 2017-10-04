@@ -74,4 +74,40 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_02">
+    <x:call step="css:label-targets">
+      <x:input port="source">
+        <x:document type="inline">
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <body xml:base="file:/EPUB/-1-frontmatter.xhtml">
+              <a class="pageref" href="-2-chapter.xhtml#p-81">
+                <css:counter target="-2-chapter.xhtml#p-81" name="page"/>
+              </a>
+            </body>
+            <body xml:base="file:/EPUB/-2-chapter.xhtml">
+              <a id="p-81" css:id="x"/>
+            </body>
+          </html>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+          <html xmlns="http://www.w3.org/1999/xhtml">
+            <body xml:base="file:/EPUB/-1-frontmatter.xhtml">
+              <a class="pageref" href="-2-chapter.xhtml#p-81">
+                <css:counter target="x" original-target="-2-chapter.xhtml#p-81" name="page"/>
+              </a>
+            </body>
+            <body xml:base="file:/EPUB/-2-chapter.xhtml">
+              <a css:id="x" id="p-81"/>
+            </body>
+          </html>
+        </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

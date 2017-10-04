@@ -20,7 +20,6 @@ import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.varyLocale;
-import org.daisy.pipeline.braille.common.util.Locales;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import org.daisy.pipeline.braille.dotify.DotifyHyphenator;
 
@@ -105,7 +104,13 @@ public class DotifyHyphenatorImpl extends AbstractHyphenator implements DotifyHy
 				public Iterable<DotifyHyphenator> _get(Query query) {
 					MutableQuery q = mutableQuery(query);
 					if (q.containsKey("locale")) {
-						final String locale = Locales.toString(parseLocale(q.removeOnly("locale").getValue().get()), '-');
+						final String locale; {
+							try {
+								locale = parseLocale(q.removeOnly("locale").getValue().get()).toLanguageTag(); }
+							catch (IllegalArgumentException e) {
+								logger.error("Invalid locale", e);
+								return empty; }
+						}
 						if (!q.isEmpty()) {
 							logger.warn("Unsupported feature '"+ q.iterator().next().getKey() + "'");
 							return empty; }

@@ -14,7 +14,7 @@
             Boxes must be represented by css:box elements. All block boxes must have at least one
             descendant inline box and inline boxes must have no descendant block boxes. 'string-set'
             properties must be declared in css:string-set attributes, and must conform to
-            http://snaekobbi.github.io/braille-css-spec/#the-string-set-property.
+            http://braillespecs.github.io/braille-css/#the-string-set-property.
         </p:documentation>
     </p:input>
     

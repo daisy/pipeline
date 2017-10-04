@@ -36,6 +36,17 @@
         </p:documentation>
     </p:input>
     
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Status</h2>
+            <p px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
+
+When `include-obfl` is set to true, the conversion may fail but still output a document on the
+"obfl" port.</p>
+        </p:documentation>
+        <p:pipe step="convert" port="status"/>
+    </p:output>
+    
     <p:option name="stylesheet" px:sequence="true">
         <p:pipeinfo>
             <px:data-type>
@@ -157,21 +168,20 @@
     <!-- ===== -->
     <!-- STORE -->
     <!-- ===== -->
-    <px:xml-to-pef.store>
+    <px:dtbook-to-pef.store>
+        <p:input port="dtbook">
+            <p:pipe step="main" port="source"/>
+        </p:input>
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>
-        <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
-            <p:pipe step="main" port="source"/>
-        </p:with-option>
         <p:with-option name="include-brf" select="$include-brf"/>
         <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:with-option name="ascii-file-format" select="$ascii-file-format"/>
         <p:with-option name="ascii-table" select="$ascii-table"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-    </px:xml-to-pef.store>
+    </px:dtbook-to-pef.store>
     
 </p:declare-step>

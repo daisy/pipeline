@@ -7,7 +7,7 @@
     
     <p:documentation>
         Wrap inline boxes that have sibling block boxes in anonymous block boxes.
-        (http://snaekobbi.github.io/braille-css-spec/#anonymous-boxes).
+        (http://braillespecs.github.io/braille-css/#anonymous-boxes).
     </p:documentation>
     
     <p:input port="source">

@@ -11,4 +11,4 @@ Submodules
 - [`css-calabash`](css-calabash/src/main): XProc bindings.
 
 
-[braillecss]: http://snaekobbi.github.io/braille-css-spec
+[braillecss]: http://braillespecs.github.io/braille-css

@@ -27,4 +27,12 @@
                        select="@style"/>
     </xsl:template>
     
+    <!--
+        Suppress warning messages "The source document is in no namespace, but the template rules
+        all expect elements in a namespace" (see https://github.com/daisy/pipeline-mod-braille/issues/38)
+    -->
+    <xsl:template match="/phony">
+        <xsl:next-match/>
+    </xsl:template>
+    
 </xsl:stylesheet>

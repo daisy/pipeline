@@ -11,6 +11,12 @@
                 <xsl:value-of select="($identifier/@content,replace(replace(string(current-dateTime()),'\+.*',''),'[^\d]',''))[1]"/>
             </dc:identifier>
             
+            <xsl:if test="not(/html:html/html:head/html:meta[lower-case(@name)='dc:language']) and /*/@xml:lang">
+                <dc:language>
+                    <xsl:value-of select="/*/@xml:lang"/>
+                </dc:language>
+            </xsl:if>
+
             <xsl:if test="not(/html:html/html:head/html:meta[lower-case(@name)='dc:title'])">
                 <dc:title>
                     <xsl:value-of select="/html:html/html:head/html:title/text()"/>

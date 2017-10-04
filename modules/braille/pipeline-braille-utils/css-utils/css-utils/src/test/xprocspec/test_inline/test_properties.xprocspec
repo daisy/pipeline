@@ -53,6 +53,8 @@
                 p#2 { border-left: none }
                 p#3 { border-left: ⠸ }
                 p#4 { border-left: solid inner 1 }
+                p#5 { border: ⠒ none; }
+                p#6 { border-style: solid none; }
               </style>
             </head>
             <body>
@@ -60,6 +62,8 @@
               <p id="2"/>
               <p id="3"/>
               <p id="4"/>
+              <p id="5"/>
+              <p id="6"/>
             </body>
           </document>
         </x:document>
@@ -75,6 +79,8 @@
           <p id="2" style="border-left-align: center; border-left-pattern: none; border-left-style: none; border-left-width: 1;"/>
           <p id="3" style="border-left-align: center; border-left-pattern: ⠸; border-left-style: none; border-left-width: 1;"/>
           <p id="4" style="border-left-align: inner; border-left-pattern: none; border-left-style: solid; border-left-width: 1;"/>
+          <p id="5"/>
+          <p id="6" style="border-bottom-style: solid; border-left-style: none; border-right-style: none; border-top-style: solid;"/>
         </body>
       </x:document>
     </x:expect>

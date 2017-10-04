@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -148,6 +149,9 @@ public class BrailleFilterFactoryImpl implements BrailleFilterFactory {
 					SimpleInlineStyle style = t.getStyle();
 					if (style != null && !style.isEmpty())
 						throw new RuntimeException("Translator does not support style '" + style + "'");
+					Map<String,String> attrs = t.getTextAttributes();
+					if (attrs != null && !attrs.isEmpty())
+						throw new RuntimeException("Translator does not support text attributes '" + attrs + "'");
 					braille[i++] = NumberBrailleTranslator.this.transform(t.getText()); }
 				return Arrays.asList(braille);
 			}
@@ -319,9 +323,11 @@ public class BrailleFilterFactoryImpl implements BrailleFilterFactory {
 		Set<String> env = null;
 		String segment = "";
 		SimpleInlineStyle style = null;
+		Map<String,String> attrs = null;
 		for (CSSStyledText st : styledText) {
 			String t = st.getText();
 			SimpleInlineStyle s = st.getStyle();
+			Map<String,String> a = st.getTextAttributes();
 			if (s != null) {
 				Collection<String> properties = s.getPropertyNames();
 				String key = null;
@@ -343,15 +349,17 @@ public class BrailleFilterFactoryImpl implements BrailleFilterFactory {
 						t = "";
 					if (key.equals("-dotify-def") || key.equals("-dotify-defifndef"))
 						env.add(var); }}
-			if (s == null && style == null || s != null && s.equals(style))
+			if ((s == null && style == null || s != null && s.equals(style))
+			    && (a == null && attrs == null || a != null && a.equals(attrs)))
 				segment += t;
 			else {
 				if (!segment.isEmpty())
-					segments.add(new CSSStyledText(segment, style));
+					segments.add(new CSSStyledText(segment, style, attrs));
 				segment = t;
-				style = s; }}
+				style = s;
+				attrs = a; }}
 		if (!segment.isEmpty())
-			segments.add(new CSSStyledText(segment, style));
+			segments.add(new CSSStyledText(segment, style, attrs));
 		return segments;
 	}
 	
@@ -359,9 +367,11 @@ public class BrailleFilterFactoryImpl implements BrailleFilterFactory {
 		List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
 		String segment = "";
 		SimpleInlineStyle style = null;
+		Map<String,String> attrs = null;
 		for (CSSStyledText st : styledText) {
 			String t = st.getText();
 			SimpleInlineStyle s = st.getStyle();
+			Map<String,String> a = st.getTextAttributes();
 			if (s != null) {
 				if (s.getProperty("text-transform") == TextTransform.list_values) {
 					TermList list = s.getValue(TermList.class, "text-transform");
@@ -395,15 +405,17 @@ public class BrailleFilterFactoryImpl implements BrailleFilterFactory {
 							else if (system.equals("symbolic"))
 								t = counterRepresentationSymbolic(counterValue, symbols); }}}
 				s.removeProperty("-dotify-counter-style"); }
-			if (s == null && style == null || s != null && s.equals(style))
+			if ((s == null && style == null || s != null && s.equals(style))
+			    && (a == null && attrs == null || a != null && a.equals(attrs)))
 				segment += t;
 			else {
 				if (!segment.isEmpty())
-					segments.add(new CSSStyledText(segment, style));
+					segments.add(new CSSStyledText(segment, style, attrs));
 				segment = t;
-				style = s; }}
+				style = s;
+				attrs = a; }}
 		if (!segment.isEmpty())
-			segments.add(new CSSStyledText(segment, style));
+			segments.add(new CSSStyledText(segment, style, attrs));
 		return segments;
 	}
 	

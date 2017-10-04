@@ -21,6 +21,9 @@
                     <xsl:for-each select="$root//*[@css:flow=$flow]">
                         <xsl:copy>
                             <xsl:sequence select="@* except (@style|@css:flow|@css:id|@css:counter-increment)"/>
+                            <xsl:if test="not(@xml:base)">
+                                <xsl:attribute name="xml:base" select="base-uri(.)"/>
+                            </xsl:if>
                             <xsl:sequence select="css:style-attribute(css:serialize-declaration-list(
                                                   css:specified-properties(($css:properties,'#all'), true(), false(), false(), .)
                                                   [not(@value='initial')]))"/>
@@ -88,6 +91,14 @@
     
     <xsl:template match="css:duplicate[not(@css:flow[not(.='normal')])]">
         <xsl:message>::duplicate pseudo-elements must participate in a named flow.</xsl:message>
+    </xsl:template>
+    
+    <!--
+        Suppress warning messages "The source document is in no namespace, but the template rules
+        all expect elements in a namespace" (see https://github.com/daisy/pipeline-mod-braille/issues/38)
+    -->
+    <xsl:template match="/phony">
+        <xsl:next-match/>
     </xsl:template>
     
 </xsl:stylesheet>

@@ -3,6 +3,7 @@ package org.daisy.pipeline.braille.dotify.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 
 import com.google.common.collect.ImmutableList;
@@ -137,9 +138,9 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	
 	/**
 	 * BrailleTranslator with <a
-	 * href="http://snaekobbi.github.io/braille-css-spec/#h3_white-space-processing">white
+	 * href="http://braillespecs.github.io/braille-css/#h3_white-space-processing">white
 	 * space processing</a> and <a
-	 * href="http://snaekobbi.github.io/braille-css-spec/#line-breaking">line
+	 * href="http://braillespecs.github.io/braille-css/#line-breaking">line
 	 * breaking</a> according to braille CSS.
 	 *
 	 * White space is normalised. Preserved spaces must have been converted to
@@ -237,6 +238,10 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 					else if (wordSpacing != spacing)
 						throw new RuntimeException("word-spacing must be constant, but both "
 						                           + wordSpacing + " and " + spacing + " specified");
+					Map<String,String> attrs = styledText.getTextAttributes();
+					if (attrs != null)
+						for (String k : attrs.keySet())
+							logger.warn("Text attribute \"{}:{}\" ignored", k, attrs.get(k));
 					braille += styledText.getText(); }
 				if (wordSpacing < 0) wordSpacing = 1; }
 			return new DefaultLineBreaker.LineIterator(braille, '\u2800', '\u2824', wordSpacing);
