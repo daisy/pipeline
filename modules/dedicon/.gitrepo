@@ -7,5 +7,5 @@
 	remote = https://bitbucket.org/dedicon/pip.git
 	branch = develop
 	commit = 77e931ee6dd23f1a39bf2a20ae4a52f73408e5b3
-	parent = f78ae450f7ae745c9a12bf06e6dfbaa9aa0bf281
+	parent = dcd6a3eecc712d4327ed36941d8993505fff2df7
 	cmdver = 0.3.1

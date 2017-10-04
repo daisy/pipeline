@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="nl" version="2005-3">
+<head>
+<meta name="dtb:uid" content="223344"/>
+<meta name="dc:Title" content="Maximum number of sheets 1"/>
+<meta name="dc:Language" content="nl"/>
+<meta name="dc:Identifier" content="222233"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2002"/>
+<meta name="dc:Source" content="1111111111"/>
+<meta name="prod:docType" content="ro"/>
+<meta name="prod:docHyphenate" content="Y"/>
+<meta name="prod:colophon" content="1"/>
+<meta name="prod:producer" content="Paul Rambags"/>
+<meta name="prod:guidelineversion" content="sdf"/>
+</head>
+<book>
+<level1>
+<h1>simple test</h1>
+<p>
+blabla blabla blabla blabla blabla blabla blabla blabla
+blabla blabla blabla blabla blabla blabla blabla blabla
+</p>
+<p>
+blabla blabla blabla blabla blabla blabla blabla blabla
+blabla blabla blabla blabla blabla blabla blabla blabla
+</p>
+</level1>
+</book>
+</dtbook>

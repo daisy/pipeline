@@ -179,6 +179,7 @@
                                     ascii-table
                                     include-brf
                                     include-preview
+                                    include-obfl
                                     pef-output-dir
                                     brf-output-dir
                                     preview-output-dir
@@ -272,11 +273,13 @@
     <!-- DTBOOK TO PEF -->
     <!-- ============= -->
     <px:dtbook-to-pef.convert default-stylesheet="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"
-                              transform="(formatter:dotify)(translator:dedicon)">
+                              transform="(formatter:dotify)(translator:dedicon)"
+                              name="convert">
         <p:with-option name="temp-dir" select="string(/c:result)">
             <p:pipe step="temp-dir" port="result"/>
         </p:with-option>
         <p:with-option name="stylesheet" select="$stylesheet"/>
+        <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
         </p:input>
@@ -313,6 +316,17 @@
             <p:with-option name="brf-name-pattern" select="concat('p',$name,'_{}')"/>
             <p:with-option name="brf-number-width" select="'3'"/>
         </pef:store>
+
+        <!-- Store OBFL -->
+        <p:for-each>
+            <p:iteration-source>
+                <p:pipe step="convert" port="obfl"/>
+            </p:iteration-source>
+            <px:message message="Storing OBFL"/>
+            <p:store>
+                <p:with-option name="href" select="concat($pef-output-dir,'/',$name,'.obfl')"/>
+            </p:store>
+        </p:for-each>
     </p:group>
-    
+
 </p:declare-step>

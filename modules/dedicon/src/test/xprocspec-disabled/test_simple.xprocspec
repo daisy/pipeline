@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:dedicon="http://www.dedicon.nl"
+               script="http://www.dedicon.nl/pipeline/modules/braille/dtbook-to-pef.xpl">
+  
+  <x:scenario label="_">
+    <x:call step="dedicon:dtbook-to-pef">
+      <x:option name="page-width" select="'33'"/>
+      <x:option name="page-height" select="'28'"/>
+      <x:option name="toc-depth" select="'0'"/>
+      <x:option name="include-obfl" select="'true'"/>
+      <x:option name="include-document-toc-in-last-volume" select="false()"/>
+      <x:option name="include-symbols-list" select="false()"/>
+      <x:option name="show-print-page-numbers" select="false()"/>
+      <x:option name="show-braille-page-numbers" select="false()"/>
+      <x:option name="add-boilerplate" select="false()"/>
+      <x:option name="hyphenation" select="false()"/>
+    </x:call>
+    
+  <x:scenario label="maximum-number-of-sheets">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/maximum-number-of-sheets-1.xml"/>
+      </x:input>
+      <x:option name="maximum-number-of-sheets" select="'2'"/>
+      <x:option name="page-width" select="'10'"/>
+      <x:option name="page-height" select="'5'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('maximum-number-of-sheets/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('maximum-number-of-sheets/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="maximum-number-of-sheets/output-dir/222233.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/maximum-number-of-sheets-1.pef"/>
+    </x:expect>
+  </x:scenario>
+    
+  </x:scenario> <!-- label="_" -->
+</x:description>

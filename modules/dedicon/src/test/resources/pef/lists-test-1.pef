@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pef xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="nl" version="2008-1">
+<pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
    <head>
       <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
          <dc:format>application/x-pef+xml</dc:format>

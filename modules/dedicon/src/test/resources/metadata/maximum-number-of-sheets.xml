@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <lois_id>222233</lois_id>
+  <volume>
+    <filename>p222233_001.brl</filename>
+    <vtype>br</vtype>
+    <volumenumber>1</volumenumber>
+    <fromip>2</fromip>
+    <tillip>21</tillip>
+    <ippages/>
+    <fromcp>1</fromcp>
+    <tillcp>61</tillcp>
+    <amount>61</amount>
+    <last>N</last>
+    <vreadydate>10-7-2017</vreadydate>
+  </volume>
+  <volume>
+    <filename>pp222233_002.brl</filename>
+    <vtype>br</vtype>
+    <volumenumber>19</volumenumber>
+    <fromip>299</fromip>
+    <tillip>318</tillip>
+    <ippages/>
+    <fromcp>1119</fromcp>
+    <tillcp>1194</tillcp>
+    <amount>76</amount>
+    <last>Y</last>
+    <vreadydate>10-7-2017</vreadydate>
+  </volume>
+</document>

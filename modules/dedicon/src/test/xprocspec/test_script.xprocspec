@@ -448,10 +448,11 @@
       </x:context>
       <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
         <x:document type="inline">
-          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="nl">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>nl</dc:language>
               </meta>
             </head>
             <body>
@@ -460,6 +461,7 @@
                   <page>
                     <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
                     <row>⠨⠓⠕⠕⠋⠙⠎⠞⠥⠅⠀⠼⠁</row>
+                    <row/>
                   </page>
                 </section>
               </volume>
@@ -479,10 +481,11 @@
       </x:context>
       <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
         <x:document type="inline">
-          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="nl">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
             <head>
               <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
                 <dc:format>application/x-pef+xml</dc:format>
+                <dc:language>nl</dc:language>
               </meta>
             </head>
             <body>
@@ -490,6 +493,7 @@
                 <section>
                   <page>
                     <row>⠨⠓⠕⠕⠋⠙⠎⠞⠥⠅⠀⠼⠁</row>
+                    <row/>
                   </page>
                 </section>
               </volume>
@@ -498,6 +502,25 @@
         </x:document>
       </x:expect>
     </x:scenario>
+  </x:scenario>
+
+  <x:scenario label="maximum-number-of-sheets">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/maximum-number-of-sheets-1.xml"/>
+      </x:input>
+      <x:option name="maximum-number-of-sheets" select="'2'"/>
+      <x:option name="page-width" select="'10'"/>
+      <x:option name="page-height" select="'5'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('maximum-number-of-sheets/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('maximum-number-of-sheets/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="maximum-number-of-sheets/output-dir/222233.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/maximum-number-of-sheets-1.pef"/>
+    </x:expect>
   </x:scenario>
   
   </x:scenario> <!-- label="_" -->

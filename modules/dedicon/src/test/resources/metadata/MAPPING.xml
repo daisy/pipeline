@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <lois_id>dtbook dc:identifier</lois_id>
+  <volume>
+    <filename>$brf-name-pattern, moet ook in de output folder staan</filename>
+    <vtype>br</vtype>
+    <volumenumber>Volume nummer, te beginnen bij 1</volumenumber>
+    <fromip>dtbook start <pagenum>dit nummer</pagenum> - waar haal je dat vandaan?</fromip>
+    <tillip>dtbook einde <pagenum>dit nummer</pagenum> - waar haal je dat vandaan?</tillip>
+    <ippages/>
+    <fromcp>PEF start page number - waar haal je dat vandaan?</fromcp>
+    <tillcp>PEF einde page number - waar haal je dat vandaan?</tillcp>
+    <amount>tillcp - fromcp + 1</amount>
+    <last>Y als er nog een is, anders N</last>
+    <vreadydate>10-7-2017</vreadydate>
+  </volume>
+</document>
