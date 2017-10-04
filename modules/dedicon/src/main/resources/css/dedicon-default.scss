@@ -1,0 +1,738 @@
+/**********************************************************************************
+ * Dedicon Default CSS
+ * http://www.dedicon.nl/
+ *
+ * Author: Davy Kager <davykager@dedicon.nl>
+ * Author: Bert Frees <bertfrees@gmail.com>
+ *
+ * Hexadecimal Unicode values used throughout this stylesheet:
+ * \A - line feed (LF)
+ * \A0 - non-breaking space (NBSP)
+ * \200B - zero-width space (ZWSP)
+ *
+ * See also Braille CSS: http://snaekobbi.github.io/braille-css-spec/master/index.html
+ */
+
+/**********************************************************************************
+ * General rules
+ */
+
+/* --------------------------------------------------------------------------------
+ * Namespaces
+ */
+@namespace xml "http://www.w3.org/XML/1998/namespace";
+
+/* --------------------------------------------------------------------------------
+ * Volume breaking
+ *
+ * Try to prevent breaking top-level sections in a way that would leave
+ * two sheets or less in either volume.
+ * Try to avoid breaking inside block elements that can be assumed
+ * to contain less than one sheet of text.
+ */
+/* level1 {
+	-obfl-keep-with-previous-sheets: 2;
+	-obfl-keep-with-next-sheets: 2;
+}
+p {
+	volume-break-inside: -obfl-keep(1);
+} */
+
+/* --------------------------------------------------------------------------------
+ * Page layout
+ *
+ * A page contains 33 columns by 28 rows of braille (configurable with options, defaults in script).
+ *
+ * The print page number is shown in the top-center.
+ * If a braille page contains content from multiple print pages,
+ * the print page number is a range "from - to".
+ * If no print page number is available, this part of the braille page is left blank.
+ *
+ * The braille page number is shown in the top-right.
+ *
+ * See also the pagenum rule.
+ */
+@if $show-print-page-numbers {
+	@page {
+		@top-center {
+			content: string(print-page-from, page-start-except-last) string(print-page-to, page-last);
+		}
+	}
+}
+@if $show-braille-page-numbers {
+	@page {
+		@top-right {
+			content: counter(page);
+		}
+	}
+}
+
+/* --------------------------------------------------------------------------------
+ * Boilerplate
+ *
+ * Each volume begins with the volume-level TOC.
+ * The last volume optionally ends with a document-level TOC.
+ *
+ * See also the #generated-volume-toc and #generated-document-toc rules.
+ */
+@volume {
+	@begin {
+		/* The volume-toc flow is defined by the system default CSS. */
+		content: flow(title-page) flow(volume-toc);
+	}
+}
+@if $include-document-toc-in-last-volume {
+	@volume:last {
+		@end {
+			/* The document-toc flow is defined by the system default CSS. */
+			content: flow(document-toc);
+		}
+	}
+}
+
+/* --------------------------------------------------------------------------------
+ * Hidden elements
+ *
+ * These are not directly incldued in the output.
+ *
+ * See also the #generated-doctitle and #generated-docauthors rules.
+ */
+head, doctitle, docauthor {
+	display: none;
+}
+
+/**********************************************************************************
+ * Block elements
+ */
+
+/* --------------------------------------------------------------------------------
+ * Print page numbers
+ *
+ * If there is a print page change somewhere on the braille page,
+ * the new print page number is optionally shown on its own line, horizontally centered,
+ * with a blank line before it.
+ *
+ * See also the @page rule.
+ */
+pagenum {
+	display: none;
+	/* The following line sets the values used for the top-center page position and the TOC. */
+	string-set: print-page-from content() ' - ', print-page-to content(), print-page-toc content() '\200B\A0\A0';
+}
+@if $show-inline-print-page-numbers {
+	pagenum {
+		display: block;
+		text-align: center;
+	}
+	/* HACK: don't show pagenums if they are the first thing on the page. */
+	level1 > pagenum:first-child {
+		display: none;
+	}
+} /* $show-inline-print-page-numbers */
+
+/* --------------------------------------------------------------------------------
+ * Front matter, body matter and rear matter
+ *
+ * The print page number is reset on the start of these elements.
+ *
+ * If any of these consist of only content that is not rendered,
+ * then that element as a whole is not rendered.
+ */
+frontmatter, bodymatter, rearmatter {
+	display: block;
+	/* The following line sets the values used for the TOC. */
+	string-set: print-page-toc '';
+}
+frontmatter:not(:has(> *:not(doctitle, docauthor, #generated-title-page))) {
+	display: none;
+}
+
+/* --------------------------------------------------------------------------------
+ * Levels (sections)
+ *
+ * Level 1 always start on a new page.
+ * Level 2 has two blank lines before it.
+ * Other levels have one blank line before them.
+ *
+ * See also the heading rules.
+ */
+level,
+level1, level2, level3,
+level4, level5, level6 {
+	display: block;
+}
+level1 {
+	page-break-before: always;
+}
+level2 {
+	margin-top: 2;
+}
+level, level3,
+level4, level5, level6 {
+	margin-top: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * Headings
+ *
+ * A heading cannot be the last item on a page.
+ * If the heading spans multiple braille lines,
+ * every line except the first one is indented by 2 braille cells.
+ *
+ * Heading level 1 has a blank line after it,
+ * and typically starts on a new page because it is at the start of a level 1.
+ * Other headings have no blank lines after them.
+ *
+ * See also the level rules.
+ */
+hd, h1, h2, h3, h4, h5, h6 {
+	display: block;
+	/* This needs a left margin in order to negatively indent the first line. */
+	margin-left: 2;
+	text-indent: -2;
+	page-break-after: avoid;
+}
+h1 {
+	margin-bottom: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * Bridgeheads
+ *
+ * A bridgehead has a blank line before it.
+ */
+bridgehead {
+	display: block;
+	margin-top: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * Divisions
+ */
+div {
+	display: block;
+}
+
+/* --------------------------------------------------------------------------------
+ * Paragraphs
+ *
+ * A paragraph is a block element with no special features.
+ *
+ * An empty paragraph is rendered as a blank line.
+ *
+ * To precede the paragraph by a blank line, add class precedingemptyline.
+ * To indent the first line of the paragraph, add class indented.
+ * To mark this paragraph as a table title or caption, add class table-title.
+ */
+p {
+	display: block;
+}
+p:empty {
+	margin-bottom: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * Generated title page
+ */
+#generated-title-page {
+	flow: title-page;
+	page-break-inside: avoid;
+}
+
+/* --------------------------------------------------------------------------------
+ * Book title, author and ISBN
+ */
+#generated-doctitle,
+#generated-docauthors,
+#generated-isbn {
+	margin-top: 1;
+	margin-bottom: 2;
+	/* This needs a left margin in order to negatively indent the first line. */
+	margin-left: 2;
+	text-indent: -2;
+}
+
+/* --------------------------------------------------------------------------------
+ * Title page footer
+ */
+#generated-title-page-footer {
+	-obfl-vertical-position: 25;
+}
+
+/* --------------------------------------------------------------------------------
+ * Generated colophon page
+ */
+#generated-colophon-page {
+	page-break-inside: avoid;
+	/* The following line sets the values used for the TOC. */
+	string-set: print-page-toc '';
+}
+
+/* --------------------------------------------------------------------------------
+ * Lists
+ *
+ * Two consecutive lists are separated by a blank line.
+ */
+list {
+	display: block;
+}
+list:has(+ list) {
+	margin-bottom: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * List items
+ *
+ * If the list item spans multiple braille lines,
+ * every line except the first one is indented by 2 braille cells.
+ */
+list > li {
+	display: block;
+	/* This needs a left margin in order to negatively indent the first line. */
+	margin-left: 2;
+	text-indent: -2;
+}
+
+/* --------------------------------------------------------------------------------
+ * Volume-level TOC
+ *
+ * The TOC always starts on a new page.
+ * The start of each TOC is indicated with text.
+ *
+ * See also the @volume rule.
+ */
+#generated-volume-toc::-obfl-on-toc-start {
+	display: block;
+	page-break-before: always;
+	margin-bottom: 1;
+	content: 'Inhoud band ' -obfl-evaluate('(round $volume)');
+}
+
+/* --------------------------------------------------------------------------------
+ * Document-level TOC
+ *
+ * The TOC always starts on a new page.
+ * The start of each TOC is indicated with text.
+ *
+ * See also the @volume rule.
+ */
+#generated-document-toc::-obfl-on-toc-start {
+	display: block;
+	page-break-before: always;
+	margin-bottom: 1;
+	content: 'Inhoud van alle banden';
+}
+#generated-document-toc::-obfl-on-volume-start {
+	display: block;
+	page-break-after: avoid;
+	margin-bottom: 1;
+	content: 'Inhoud band ' -obfl-evaluate('(round $started-volume-number)');
+}
+#generated-document-toc::-obfl-on-volume-end {
+	/* This separates individual volume TOCs by an empty line. */
+	display: block;
+	margin-bottom: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * TOC items
+ *
+ * If the TOC item spans multiple braille lines,
+ * every line except the first one is indented by 2 braille cells.
+ *
+ * See also the pagenum rule.
+ */
+#generated-volume-toc li > a::after,
+#generated-document-toc li > a::after {
+	/* Whitespace after the print page number is added through string-set. */
+	content: '\200B\A0\A0' target-string(attr(href), print-page-toc) target-counter(attr(href), page);
+}
+#generated-volume-toc li > a,
+#generated-document-toc li > a {
+	display: block;
+	/* This needs a left margin in order to negatively indent the first line. */
+	margin-left: 2;
+	text-indent: -2;
+}
+#generated-volume-toc li,
+#generated-document-toc li {
+	/* Override default list item behavior to avoid indenting nested lists. */
+	margin-left: 0;
+	text-indent: 0;
+}
+
+/* --------------------------------------------------------------------------------
+ * Producer notes
+ *
+ * This adds the text "ND:", followed by a space and the element text.
+ */
+prodnote::before {
+	content: 'ND: ';
+}
+prodnote {
+	display: block;
+}
+
+/* --------------------------------------------------------------------------------
+ * Tables
+ *
+ * The start and end of a table are indicated with text.
+ * A table has a blank line before and after it.
+ */
+table::before {
+	display: block;
+	content: 'begin tabel';
+}
+table::after {
+	display: block;
+	content: 'einde tabel';
+}
+table {
+	display: block;
+	margin-top: 1;
+	margin-bottom: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * Table rows
+ *
+ * Each row is shown on a new line.
+ * If the row spans multiple braille lines,
+ * every line except the first one is indented by 2 braille cells.
+ */
+table > tr {
+	display: block;
+	/* This needs a left margin in order to negatively indent the first line. */
+	margin-left: 2;
+	text-indent: -2;
+}
+
+/* --------------------------------------------------------------------------------
+ * Image groups
+ *
+ * The start and end of an image group are indicated with text.
+ * An image group has a blank line before and after it.
+ *
+ * An image groups that does not contain a caption or a prodnote is ignored.
+ */
+imggroup::before {
+	display: block;
+	content: 'begin afbeelding';
+}
+imggroup::after {
+	display: block;
+	content: 'einde afbeelding';
+}
+imggroup {
+	display: block;
+	margin-top: 1;
+	margin-bottom: 1;
+}
+imggroup:not(:has(caption)):not(:has(prodnote)) {
+	display: none;
+}
+
+/* --------------------------------------------------------------------------------
+ * Captions
+ *
+ * This adds the text "Bijschrift:", followed by a space and the element text.
+ * Captions are only used for images.
+ */
+caption::before {
+	content: 'Bijschrift: ';
+}
+caption {
+	display: block;
+}
+
+/* --------------------------------------------------------------------------------
+ * Sidebarss
+ *
+ * The start and end of a sidebar are indicated with text.
+ * A sidebar has a blank line before and after it.
+ *
+ * The value of the render attribute has no effect on the output.
+ */
+sidebar::before {
+	display: block;
+	content: 'begin kader';
+}
+sidebar::after {
+	display: block;
+	content: 'einde kader';
+}
+sidebar {
+	display: block;
+	margin-top: 1;
+	margin-bottom: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * Block quotations
+ *
+ * The start and end of a block quotation is indicated with text.
+ * A block quotation has a blank line before and after it.
+ */
+blockquote::before {
+	display: block;
+	content: 'begin citaat';
+}
+blockquote::after {
+	display: block;
+	content: 'einde citaat';
+}
+blockquote {
+	display: block;
+	margin-top: 1;
+	margin-bottom: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * Poems
+ *
+ * A poem has a blank line before and after it.
+ */
+poem {
+	display: block;
+	margin-top: 1;
+	margin-bottom: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * Linegroups
+ */
+linegroup {
+	display: block;
+}
+
+/* --------------------------------------------------------------------------------
+ * Lines
+ *
+ * If a line spans multiple braille lines,
+ * every line except the first one is indented by 2 braille cells.
+ *
+ * A line should be kept on a single page.
+ */
+line {
+	display: block;
+	page-break-inside: avoid;
+	/* This needs a left margin in order to negatively indent the first line. */
+	margin-left: 2;
+	text-indent: -2;
+}
+
+/* --------------------------------------------------------------------------------
+ * Notes
+ *
+ * A note is indicated with an asterisk (*), but not with its number.
+ *
+ * Every line except the first one is indented by 2 braille cells.
+ * The first line is indented by 1 braille cell,
+ * this extra cell contains the asterisk.
+ *
+ * A note has a blank line before and after it.
+ *
+ * Notes are inserted inside the block element that references it,
+ * after all the block's other content.
+ * Because of this behavior, some styling from these blocks has to be reset.
+ */
+note {
+	display: block;
+	margin-top: 1;
+	margin-bottom: 1;
+	margin-left: 2;
+}
+note > :first-child::before {
+	content: '⠔';
+}
+note > :first-child {
+	text-indent: -1;
+}
+note > :not(:first-child) {
+	text-indent: 0;
+}
+
+/* --------------------------------------------------------------------------------
+ * Definition lists
+ */
+dl {
+	display: block;
+}
+
+/* --------------------------------------------------------------------------------
+ * Definition list terms
+ */
+dt {
+	display: block;
+}
+
+/* --------------------------------------------------------------------------------
+ * Definition list definitions
+ *
+ * Definitions are indented by 2 braille cells.
+ */
+dd {
+	display: block;
+	margin-left: 2;
+}
+
+/* --------------------------------------------------------------------------------
+ * Code
+ *
+ * Code is not hyphenated.
+ * To also preserve whitespace, add attribute xml:space="preserve" to the XML element.
+ */
+code {
+	display: block;
+	hyphens: none;
+}
+
+/**********************************************************************************
+ * Inline elements
+ */
+
+/* --------------------------------------------------------------------------------
+ * Line breaks
+ */
+br::before {
+	white-space: pre-line;
+	content: '\A';
+}
+
+/* --------------------------------------------------------------------------------
+ * Table cells
+ *
+ * Cells are separated by a semicolon and a space.
+ * Empty cells are indicated with text.
+ */
+table > tr > td:has(+ td)::after {
+	/* Use a braille pattern here because a semicolon currently doesn't work. */
+	content: '⠆⠀';
+}
+table > tr > td:empty::before {
+	content: 'gg';
+}
+
+/* --------------------------------------------------------------------------------
+ * List item components
+ *
+ * Components are separated by two spaces.
+ */
+list > li > lic:has(+ lic)::after {
+	content: '\200B\A0\A0';
+}
+
+/* --------------------------------------------------------------------------------
+ * Subscript
+ *
+ * Subscript is indicated with dots 16.
+ */
+sub::before {
+	content: '⠡';
+}
+
+/* --------------------------------------------------------------------------------
+ * Superscript
+ *
+ * Superscript is indicated with dots 34.
+ */
+sup::before {
+	content: '⠌';
+}
+
+/* --------------------------------------------------------------------------------
+ * Note references
+ *
+ * A note reference is indicated with an asterisk (*).
+ */
+noteref::before {
+	content: '⠔';
+}
+ 
+/* --------------------------------------------------------------------------------
+ * Current volume number
+ */
+.placeholder-current-volume::before {
+	/* HACK: the space before the span is dropped. */
+	content: ' ';
+}
+.placeholder-current-volume::after {
+	/* HACK: the space after the span is dropped. */
+	content: -obfl-evaluate('(round $volume)') ' ';
+}
+
+/* --------------------------------------------------------------------------------
+ * Total number of volumes
+ */
+.placeholder-total-volumes::after {
+	/* HACK: the space before the span is dropped. */
+	content: ' ' -obfl-evaluate('(round $volumes)');
+}
+
+/**********************************************************************************
+ * Attributes
+ *
+ * These are attributes that can be specified on XML elements.
+ */
+ 
+/* --------------------------------------------------------------------------------
+ * Strong text
+ *
+ * This is marked up as bold.
+ */
+.emph-bxx-brl {
+	text-transform: louis-bold;
+}
+
+/* --------------------------------------------------------------------------------
+ * Emphasized text
+ *
+ * This is marked up as italic.
+ */
+.emph-xix-brl {
+	text-transform: louis-ital;
+}
+
+/* --------------------------------------------------------------------------------
+ * Preceding empty line
+ *
+ * Adds a blank line before the element.
+ */
+.precedingemptyline {
+	margin-top: 1;
+}
+
+/* --------------------------------------------------------------------------------
+ * Indented elements
+ *
+ * Indents the element by 2 braille cells.
+ */
+.indented {
+	text-indent: 2;
+}
+
+/* --------------------------------------------------------------------------------
+ * Table title or caption
+ *
+ * This adds the text "titel tabel", followed by the element text on a new line.
+ * The element text is indented by 2 braille cells.
+ */
+p.table-title::before {
+	/* The next line prevents newline characters from being converted to spaces. */
+	white-space: pre-line;
+	content: 'tabel titel\A';
+}
+p.table-title {
+	/* This needs a left margin in order to negatively indent the first line. */
+	margin-left: 2;
+	text-indent: -2;
+}
+
+/* --------------------------------------------------------------------------------
+ * xml:space="preserve"
+ *
+ * Elements with this attribute and value are treated as preformatted text.
+ */
+[xml|space=preserve] {
+	white-space: pre-wrap;
+}

@@ -1,0 +1,8 @@
+Package: daisy-pipeline2-mod-dedicon
+Version: [[version]]
+Section: text
+Priority: optional
+Architecture: all
+Depends: daisy-pipeline2 (>= 1.9)
+Maintainer: Bert Frees <bertfrees@gmail.com>
+Description: DAISY Pipeline 2 braille module for Dedicon

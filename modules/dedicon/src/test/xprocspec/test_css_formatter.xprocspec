@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+  
+  <x:script>
+    <p:declare-step type="pxi:transform" version="1.0">
+      <p:input port="source"/>
+      <p:output port="result"/>
+      <p:option name="temp-dir" required="true"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
+      <px:apply-stylesheets>
+        <p:with-param port="parameters" name="show-print-page-numbers" select="true()"/>
+        <p:with-param port="parameters" name="show-braille-page-numbers" select="true()"/>
+        <p:with-param port="parameters" name="include-document-toc-in-last-volume" select="false()"/>
+        <p:with-param port="parameters" name="show-inline-print-page-numbers" select="true()"/>
+      </px:apply-stylesheets>
+      <px:transform query="(input:css)(output:pef)(formatter:dotify)(translator:dedicon)(locale:nl)">
+        <p:with-option name="temp-dir" select="$temp-dir"/>
+      </px:transform>
+    </p:declare-step>
+  </x:script>
+  
+  <x:scenario label="test_pagination_1">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/pagination-test-1.xml"/>
+      </x:input>
+      <x:option name="temp-dir" select="$temp-dir"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/pagination-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_pagination_2">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/pagination-test-2.xml"/>
+      </x:input>
+      <x:option name="temp-dir" select="$temp-dir"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/pagination-test-2.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_pagination_3" pending="print page range on first braille page does not include first print page">
+    <x:call step="pxi:transform">
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/pagination-test-3.xml"/>
+      </x:input>
+      <x:option name="temp-dir" select="$temp-dir"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/pagination-test-3.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

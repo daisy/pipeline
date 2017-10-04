@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook version="2005-3" xml:lang="nl" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<meta name="prod:rawVersion" content="N"/>
+<meta name="dc:Language" content="nl"/>
+<meta name="dc:Creator" content="Hugo"/>
+<meta name="dtb:producedDate" content="2017-01-16"/>
+<meta name="prod:docType" content="ro"/>
+<meta name="prod:docHyphenate" content="Y"/>
+<meta name="dc:Title" content="Test diakrieten in braille"/>
+<meta name="prod:fileReady" content="Y"/>
+<meta name="prod:fileNumber" content="1"/>
+<meta name="dtb:producer" content="Dedicon"/>
+<meta name="dc:Date" content="2017-01-16"/>
+<meta name="dtb:uid" content="311819"/>
+<meta name="dc:Publisher" content="Dedicon"/>
+<meta name="dc:Identifier" content="311819"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2005"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>Test diakrieten in braille</doctitle>
+</frontmatter>
+<bodymatter>
+<level1>
+<h1>Losse letters</h1>
+<level2>
+<h2>a aigu</h2>
+<p>klein: á</p>
+<p>groot: Á</p>
+</level2>
+<level2>
+<h2>a grave</h2>
+<p>klein: à</p>
+<p>groot: À</p>
+</level2>
+<level2>
+<h2>a trema</h2>
+<p>klein: ä</p>
+<p>groot: Ä</p>
+</level2>
+<level2>
+<h2>a circonflexe</h2>
+<p>klein: â</p>
+<p>groot: Â</p>
+</level2>
+<level2>
+<h2>e aigu</h2>
+<p>klein: é</p>
+<p>groot: É</p>
+</level2>
+<level2>
+<h2>e grave</h2>
+<p>klein: è</p>
+<p>groot: È</p>
+</level2>
+<level2>
+<h2>e trema</h2>
+<p>klein: ë</p>
+<p>groot: Ë</p>
+</level2>
+<level2>
+<h2>e circonflexe</h2>
+<p>klein: ê</p>
+<p>groot: Ê</p>
+</level2>
+<level2>
+<h2>i aigu</h2>
+<p>klein: í</p>
+<p>groot: Í</p>
+</level2>
+<level2>
+<h2>i grave</h2>
+<p>klein: ì</p>
+<p>groot: Ì</p>
+</level2>
+<level2>
+<h2>ï trema</h2>
+<p>klein: ï</p>
+<p>groot: Ï</p>
+</level2>
+<level2>
+<h2>i circonflexe</h2>
+<p>klein: î</p>
+<p>groot: Î</p>
+</level2>
+<level2>
+<h2>o aigu</h2>
+<p>klein: ó</p>
+<p>groot: Ó</p>
+</level2>
+<level2>
+<h2>o grave</h2>
+<p>klein: ò</p>
+<p>groot: Ò</p>
+</level2>
+<level2>
+<h2>o umlaut</h2>
+<p>klein: ö</p>
+<p>groot: Ö</p>
+</level2>
+<level2>
+<h2>o circonflexe</h2>
+<p>klein: ô</p>
+<p>groot: Ô</p>
+</level2>
+<level2>
+<h2>u aigu</h2>
+<p>klein: ú</p>
+<p>groot: Ú</p>
+</level2>
+<level2>
+<h2>u grave</h2>
+<p>klein: ù</p>
+<p>groot: Ù</p>
+</level2>
+<level2>
+<h2>u umlaut</h2>
+<p>klein: ü</p>
+<p>groot: Ü</p>
+</level2>
+<level2>
+<h2>u circonflexe</h2>
+<p>klein: û</p>
+<p>groot: Û</p>
+</level2>
+<level2>
+<h2>c cedille</h2>
+<p>klein: ç</p>
+<p>groot: Ç</p>
+</level2>
+<level2>
+<h2>Ringel-s</h2>
+<p>klein: ß</p>
+</level2>
+<level2>
+<h2>n tilde</h2>
+<p>klein: ñ</p>
+<p>groot: Ñ</p>
+</level2>
+</level1>
+<level1>
+<h1>Test umlaut</h1>
+<p class="precedingemptyline">Dabei lässt er keinen Zweifel daran, dass es einen Automatismus weder in die eine Richtung des Ausschlusses noch in die andere Richtung der Zulassung gibt. Sowohl die individuell zu beurteilende Art und Weise, wie jemand in diese Situation gekommen ist als auch das Bemühen, einen Weg mit der Kirche zu finden können aber für eine Zulassung sprechen.</p>
+<p class="precedingemptyline">Test met hoofdletters: Überhaupt, Ähnlich, Öffnen.</p>
+<p class="precedingemptyline">Test met trema's: Tweeëntwintig feeën werden geïnterviewd (door dwaze dwergen).</p>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

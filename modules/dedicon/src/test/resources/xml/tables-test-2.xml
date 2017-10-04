@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<meta name="dtb:uid" content="228286"/>
+<meta name="dc:Title" content="Table test 2"/>
+<meta name="dc:Creator" content="sfkjhdf"/>
+<meta name="dc:Date" content="2014-05-30"/>
+<meta name="dc:Publisher" content="Dedicon"/>
+<meta name="dc:Language" content="nl"/>
+<meta name="dc:Identifier" content="222222"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2002"/>
+<meta name="dc:Source" content="1111111111"/>
+<meta name="dtb:producedDate" content="2014-05-30"/>
+<meta name="prod:docType" content="ro"/>
+<meta name="prod:rawVersion" content="N"/>
+<meta name="prod:docHyphenate" content="Y"/>
+<meta name="prod:MathNotation" content="code2009"/>
+<meta name="prod:colophon" content="1"/>
+<meta name="prod:producer" content="Davy Kager"/>
+<meta name="dtb:sourcePublisher" content="sdf"/>
+<meta name="prod:guidelineversion" content="sdf"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>Table test 2</doctitle>
+<docauthor>Davy Kager</docauthor>
+</frontmatter>
+<bodymatter>
+<level1>
+<h1>Rijtjes woorden in tabel</h1>
+<p class="table-title">Deze tabel bevat een aantal lege cellen</p>
+<table>
+<tr><td/><td>del</td><td>hel</td><td>tel</td></tr>
+<tr><td>bol</td><td/><td>hol</td><td/></tr>
+<tr><td>bal</td><td/><td/><td>tal</td></tr>
+<tr><td/><td>dil</td><td>hil</td><td/></tr>
+</table>
+</level1>
+</bodymatter>
+<rearmatter/>
+</book>
+</dtbook>

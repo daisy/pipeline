@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<meta name="dtb:uid" content="228286"/>
+<meta name="dc:Title" content="Notes test 2"/>
+<meta name="dc:Language" content="nl"/>
+<meta name="dc:Identifier" content="222222"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2002"/>
+<meta name="dc:Source" content="1111111111"/>
+<meta name="prod:docType" content="ro"/>
+<meta name="prod:docHyphenate" content="Y"/>
+<meta name="prod:colophon" content="1"/>
+<meta name="prod:producer" content="Davy Kager"/>
+<meta name="prod:guidelineversion" content="sdf"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>Notes test 2</doctitle>
+<docauthor>Davy Kager</docauthor>
+</frontmatter>
+<bodymatter>
+<level1>
+<h1>Note references 1</h1>
+<p>This text contains a note<noteref idref="#c06001">1</noteref>.</p>
+<p>This is the next paragraph.</p>
+<p>This text contains a <span>note<noteref idref="#c06002">2</noteref></span> in a span.</p>
+<p>This text contains a <span><w>note<noteref idref="#c06003">3</noteref></w></span> in nested inline elements.</p>
+</level1>
+<level1>
+<h1>Note references 2</h1>
+<div>This is a note<noteref idref="#c06004">4</noteref> in a div.</div>
+<div><p>This text contains a note<noteref idref="#c06005">5</noteref> in nested block elements.</p>
+<p>Another paragraph.</p></div>
+<list type="pl">
+<li>- This text wraps and it also contains a note<noteref idref="#c06006">6</noteref>.</li>
+<li>- This is the next list item.</li>
+</list>
+</level1>
+<level1>
+<h1>Note references 3</h1>
+<p>This text references a previously used note<noteref idref="#c06001">7</noteref>.</p>
+<p>This text references the same note<noteref idref="#c06007">8</noteref> multiple times<noteref idref="#c06007">9</noteref>.</p>
+</level1>
+</bodymatter>
+<rearmatter>
+<level1>
+<note id="c06001"><p>This is the first note.</p></note>
+<note id="c06002"><p>This is the second note.</p></note>
+<note id="c06003"><p>This is the third note.</p></note>
+<note id="c06004"><p>This is the fourth note.</p></note>
+<note id="c06005"><p>This is the fifth note.</p></note>
+<note id="c06006"><p>This is the sixth note. It wraps to the next line.</p>
+<p>It also consists of two paragraphs.</p></note>
+<note id="c06007"><p>This is the seventh note.</p></note>
+</level1>
+</rearmatter>
+</book>
+</dtbook>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<meta name="dc:Title" content="TOC test"/>
+<meta name="dc:Language" content="nl"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>TOC test</doctitle>
+<docauthor/>
+</frontmatter>
+<bodymatter>
+<level1>
+<pagenum page="normal" id="p-1">1</pagenum>
+<h1>Hoofdstuk 1</h1>
+<level2>
+<pagenum page="normal" id="p-2">2</pagenum>
+<h2>Paragraaf 1</h2>
+</level2>
+<level2>
+<pagenum page="normal" id="p-3">3</pagenum>
+<h2>Paragraaf 2</h2>
+</level2>
+</level1>
+<level1>
+<pagenum page="normal" id="p-3">3</pagenum>
+<h1>Hoofdstuk 2</h1>
+<level2>
+<pagenum page="normal" id="p-4">4</pagenum>
+<h2>Paragraaf 1</h2>
+<level3>
+<pagenum page="normal" id="p-5">5</pagenum>
+<h3>Subparagraaf 1</h3>
+</level3>
+<level3>
+<pagenum page="normal" id="p-6">6</pagenum>
+<h3>Subparagraaf 2</h3>
+</level3>
+</level2>
+</level1>
+<level1>
+<pagenum page="normal" id="p-7">7</pagenum>
+<h1>Hoofdstuk 3</h1>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

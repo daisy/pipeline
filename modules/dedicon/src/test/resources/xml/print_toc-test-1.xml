@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<meta name="dtb:uid" content="228286"/>
+<meta name="dc:Title" content="Print TOC test 1"/>
+<meta name="dc:Language" content="nl"/>
+<meta name="dc:Identifier" content="222222"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2002"/>
+<meta name="dc:Source" content="1111111111"/>
+<meta name="prod:docType" content="ro"/>
+<meta name="prod:docHyphenate" content="Y"/>
+<meta name="prod:colophon" content="1"/>
+<meta name="prod:producer" content="Davy Kager"/>
+<meta name="prod:guidelineversion" content="sdf"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>Print TOC test 1</doctitle>
+<docauthor>Davy Kager</docauthor>
+<level1 class="print_toc">
+<pagenum id="p-3">3</pagenum>
+<h1>Inhoud</h1>
+<list class="toc" type="pl">
+<li><lic class="toc-line"><strong>1. Nederlandse brailletabel gerangschikt volgens het braillesysteem</strong></lic> <lic class="toc-pg"><a href="#p-4">4</a></lic></li>
+<li><lic class="toc-line">2. Tekengebruik</lic> <lic class="toc-pg"><a href="#p-8">8</a></lic>
+<list class="toc-chapter" type="pl">
+<li><lic class="toc-line">2.1. Aanhalingstekens</lic> <lic class="toc-pg"><a href="#p-8">8</a></lic></li>
+<li><lic class="toc-line">2.2. Alfabetwisselingsteken</lic> <lic class="toc-pg"><a href="#p-9">9</a></lic></li>
+<li><lic class="toc-line">2.3. Ampersandteken (&amp;)</lic> <lic class="toc-pg"><a href="#p-9">9</a></lic></li>
+<li><lic class="toc-line">2.4. Apenstaartje/at-sign (@)</lic> <lic class="toc-pg"><a href="#p-9">9</a></lic></li>
+<li><lic class="toc-line">2.5. Apostrof/weglatingsteken</lic> <lic class="toc-pg"><a href="#p-10">10</a></lic></li>
+<li><lic class="toc-line">2.6. Asterisk/sterretje</lic> <lic class="toc-pg"><a href="#p-10">10</a></lic></li>
+<li><lic class="toc-line">2.7. Beklemtoonde klinkers</lic> <lic class="toc-pg"><a href="#p-10">10</a></lic></li>
+<li><lic class="toc-line">2.8. Drukwijzigingsteken</lic> <lic class="toc-pg"><a href="#p-11">11</a></lic></li>
+<li><lic class="toc-line">2.9. Einderegelteken</lic> <lic class="toc-pg"><a href="#p-12">12</a></lic></li>
+<li><lic class="toc-line">2.10. Haakjes</lic> <lic class="toc-pg"><a href="#p-13">13</a></lic></li>
+<li><lic class="toc-line">2.11. Herstelteken/sleutelteken eerste betekenis</lic> <lic class="toc-pg"><a href="#p-13">13</a></lic></li>
+<li><lic class="toc-line">2.12. Hoofdletters</lic> <lic class="toc-pg"><a href="#p-14">14</a></lic></li>
+<li><lic class="toc-line">2.13. Internettekens</lic> <lic class="toc-pg"><a href="#p-16">16</a></lic></li>
+<li><lic class="toc-line">2.14. Kopiëren van verzen</lic> <lic class="toc-pg"><a href="#p-17">17</a></lic></li>
+<li><lic class="toc-line">2.15. Leestekens (volgorde conform het braillesysteem)</lic> <lic class="toc-pg"><a href="#p-18">18</a></lic></li>
+<li><lic class="toc-line">2.16. Liggend streepje</lic> <lic class="toc-pg"><a href="#p-19">19</a></lic></li>
+<li><lic class="toc-line">2.17. Muntsymbolen/valutatekens</lic> <lic class="toc-pg"><a href="#p-19">19</a></lic></li>
+<li><lic class="toc-line">2.18. Procent- en promilleteken</lic> <lic class="toc-pg"><a href="#p-19">19</a></lic></li>
+<li><lic class="toc-line">2.19. Punt</lic> <lic class="toc-pg"><a href="#p-20">20</a></lic></li>
+<li><lic class="toc-line">2.20. Sleutelteken tweede betekenis</lic> <lic class="toc-pg"><a href="#p-21">21</a></lic></li>
+<li><lic class="toc-line">2.21. Tekens met meervoudige functies</lic> <lic class="toc-pg"><a href="#p-21">21</a></lic></li>
+<li><lic class="toc-line">2.22. Voortekens</lic> <lic class="toc-pg"><a href="#p-22">22</a></lic></li>
+<li><lic class="toc-line">2.23. Zeldzaam voorkomende tekens</lic> <lic class="toc-pg"><a href="#p-23">23</a></lic></li>
+</list></li>
+<li><lic class="toc-line">3. Getallen en aanverwante tekens</lic> <lic class="toc-pg"><a href="#p-24">24</a></lic>
+<list class="toc-chapter" type="pl">
+<li><lic class="toc-line">3.1. Het cijferteken</lic> <lic class="toc-pg"><a href="#p-24">24</a></lic></li>
+<li><lic class="toc-line">3.2. De basisrekentekens</lic> <lic class="toc-pg"><a href="#p-26">25</a></lic></li>
+<li><lic class="toc-line">3.3. Breuken</lic> <lic class="toc-pg"><a href="#p-26">26</a></lic></li>
+<li><lic class="toc-line">3.4. Procent- en promilleteken</lic> <lic class="toc-pg"><a href="#p-27">27</a></lic></li>
+<li><lic class="toc-line">3.5. Oppervlakte- en inhoudsmaten</lic> <lic class="toc-pg"><a href="#p-27">27</a></lic></li>
+<li><lic class="toc-line">3.6. Graad-, minuut- en secondeteken</lic> <lic class="toc-pg"><a href="#p-28">28</a></lic></li>
+<li><lic class="toc-line">3.7. Groter dan en kleiner dan</lic> <lic class="toc-pg"><a href="#p-28">28</a></lic></li>
+</list></li>
+<li><lic class="toc-line">4. Alfabetisch tekenregister</lic> <lic class="toc-pg"><a href="#p-29">29</a></lic></li>
+</list>
+</level1>
+</frontmatter>
+<bodymatter/>
+<rearmatter/>
+</book>
+</dtbook>

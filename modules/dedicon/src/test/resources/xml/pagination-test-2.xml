@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<style type="text/css">
+@page {
+	size: 35 28;
+	@top-center {
+		content: string(print-page-from, page-start-except-last) string(print-page-to, page-last);
+	}
+	@top-right {
+		content: counter(page);
+	}
+}
+pagenum {
+	display: none;
+	string-set: print-page-from content() ' - ', print-page-to content();
+}
+head {
+	display: none;
+}
+book {
+	hyphens: auto;
+}
+p {
+	display: block;
+}
+h1 {
+	display: block;
+	margin-top: 1;
+	margin-bottom: 1;
+}
+</style>
+<meta name="dtb:uid" content="228286"/>
+<meta name="dc:Title" content="page ranges"/>
+<meta name="dc:Creator" content="sfkjhdf"/>
+<meta name="dc:Date" content="2014-05-30"/>
+<meta name="dc:Publisher" content="Dedicon"/>
+<meta name="dc:Language" content="nl"/>
+<meta name="dc:Identifier" content="222222"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2002"/>
+<meta name="dc:Source" content="1111111111"/>
+<meta name="dtb:producedDate" content="2014-05-30"/>
+<meta name="prod:docType" content="ro"/>
+<meta name="prod:rawVersion" content="N"/>
+<meta name="prod:docHyphenate" content="Y"/>
+<meta name="prod:MathNotation" content="code2009"/>
+<meta name="prod:colophon" content="1"/>
+<meta name="prod:producer" content="Davy Kager"/>
+<meta name="dtb:sourcePublisher" content="sdf"/>
+<meta name="prod:guidelineversion" content="sdf"/>
+</head>
+<book>
+<bodymatter>
+<level1>
+<h1>Page ranges</h1>
+<p>Paragraph 1.</p>
+<pagenum page="normal">2</pagenum>
+<p>Paragraph 2.</p>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

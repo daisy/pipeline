@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pef xmlns="http://www.daisy.org/ns/2008/pef" xml:lang="nl" version="2008-1">
+   <head>
+      <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+         <dc:format>application/x-pef+xml</dc:format>
+         <dc:identifier>identifier?</dc:identifier>
+         <dc:date>2016-04-28</dc:date>
+         <dc:title>Boilerplate test 1</dc:title>
+         <dc:creator>sfkjhdf</dc:creator>
+         <dc:language>nl</dc:language>
+         <dc:publisher>Dedicon</dc:publisher>
+      </meta>
+   </head>
+   <body>
+      <volume cols="33" rows="28" rowgap="0" duplex="true">
+         <section>
+            <page>
+               <row>⠨⠓⠕⠕⠋⠙⠎⠞⠥⠅⠀⠼⠁</row>
+               <row/>
+            </page>
+         </section>
+      </volume>
+   </body>
+</pef>

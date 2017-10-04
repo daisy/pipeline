@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <uri name="http://www.dedicon.nl/pipeline/modules/braille/dtbook-to-pef.xpl" uri="../xml/xproc/dtbook-to-pef.xpl"
+       px:extends="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl" px:script="true"/>
+  <uri name="http://www.dedicon.nl/pipeline/modules/braille/library.xpl" uri="../xml/xproc/library.xpl"/>
+  <uri name="http://www.dedicon.nl/pipeline/modules/braille/default.scss" uri="../css/dedicon-default.scss"/>
+  <uri name="http://www.dedicon.nl/pipeline/modules/braille/symbols_code.xml" uri="../xml/symbols_code2009.xml"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:liblouis-tables"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:libhyphen-libreoffice-tables"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:dtbook-to-pef"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+</catalog>

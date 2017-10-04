@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<meta name="dc:Title" content="Negative text-indent test"/>
+<meta name="dc:Language" content="nl"/>
+<style type="text/css">
+@page {
+	size: 20 28;
+	@top-right {
+		content: counter(page);
+	}
+}
+head, pagenum {
+	display: none;
+}
+frontmatter, bodymatter, level1, level2, level3 {
+	display: block;
+	page-break-before: always;
+	page-break-after: always;
+}
+doctitle, docauthor {
+	display: block;
+}
+</style>
+</head>
+<book>
+<frontmatter>
+<doctitle>Negative text-indent test</doctitle>
+<docauthor/>
+</frontmatter>
+<bodymatter>
+<level1>
+<pagenum page="normal" id="p-1">1</pagenum>
+<p style="display: block; margin-left: 2; text-indent: -2;">This text is too long to fit on one line of braille.</p>
+<level2 style="display: block; margin-left: 2;">
+<p style="display: block; text-indent: -2;">This text is too long to fit on one line of braille.</p>
+</level2>
+<level2 style="display: block; margin-left: 2;">
+<span style="display: inline; text-indent: -2;">This text is too long to fit on one line of braille.</span>
+</level2>
+<level2 style="display: block; margin-left: 2; text-indent: -2;">
+<p style="display: block;">This text is too long to fit on one line of braille.</p>
+</level2>
+<level2 style="display: block; margin-left: 2;">
+<level3 style="display: inline;">
+<p style="display: block; text-indent: -2;">This text is too long to fit on one line of braille.</p>
+</level3>
+</level2>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

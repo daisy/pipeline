@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<!--
+	Transform query: (formatter:dotify)(translator:dedicon)
+-->
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<style type="text/css">
+p, table, tr { display: block; }
+table > tr > td:nth-last-child(n+2)::after { content: ';'; }
+</style>
+</head>
+<book>
+<frontmatter>
+<doctitle></doctitle>
+<docauthor></docauthor>
+</frontmatter>
+<bodymatter>
+<level1>
+<p class="table-title">Rijtjes woorden</p>
+<table>
+<tr>
+<td>bel</td>
+<td>del</td>
+<td>hel</td>
+<td>tel</td>
+</tr>
+<tr>
+<td>bol</td>
+<td>dol</td>
+<td>hol</td>
+<td>tol</td>
+</tr>
+<tr>
+<td>bal</td>
+<td>dal</td>
+<td>hal</td>
+<td>tal</td>
+</tr>
+<tr>
+<td>bil</td>
+<td>dil</td>
+<td>hil</td>
+<td>til</td>
+</tr>
+</table>
+</level1>
+</bodymatter>
+<rearmatter>
+</rearmatter>
+</book>
+</dtbook>

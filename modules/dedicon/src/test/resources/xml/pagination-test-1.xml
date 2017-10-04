@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<!--
+	Ref.: https://github.com/snaekobbi/system/releases/tag/v1.2.2
+	Tested using BRF output.
+	Used `(formatter:dotify)`.
+	
+	Issues with dotify:
+	* There are two page breaks between frontmatter and bodymatter.
+	  Expected is that page-break-after and page-break-before collapse into one.
+	* The top-center pagenum with ID pg1 is not rendered when `display` is set to `none`.
+	  The pagenum is rendered correctly when `display` is set to `block`,
+	  but then it also appears in the normal flow.
+-->
+<head>
+<style type="text/css">
+/* @import url("http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css"); */
+@page {
+	size: 35 3;
+	@top-center {
+		content: string(print-page);
+	}
+	@top-right {
+		content: counter(page);
+	}
+}
+pagenum {
+	display: none;
+	string-set: print-page content();
+}
+frontmatter, bodymatter {
+	display: block;
+	page-break-before: always;
+	/* page-break-after: always; */
+}
+level1, h1, p {
+	display: block;
+}
+docauthor {
+	display: none;
+}
+/* from default.css */
+head {
+	display: none;
+}
+doctitle {
+	display: block;
+}
+</style>
+</head>
+<book>
+<frontmatter>
+<doctitle>Pagination test</doctitle>
+<docauthor></docauthor>
+</frontmatter>
+<bodymatter>
+<level1>
+<pagenum page="normal" id="pg1">1</pagenum>
+<h1>First Page</h1>
+<p>This is some text.</p>
+</level1>
+</bodymatter>
+</book>
+</dtbook>

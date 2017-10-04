@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<meta name="dtb:uid" content="228286"/>
+<meta name="dc:Title" content="Lists test 4"/>
+<meta name="dc:Language" content="nl"/>
+<meta name="dc:Identifier" content="222222"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2002"/>
+<meta name="dc:Source" content="1111111111"/>
+<meta name="prod:docType" content="ro"/>
+<meta name="prod:docHyphenate" content="Y"/>
+<meta name="prod:colophon" content="1"/>
+<meta name="prod:producer" content="Davy Kager"/>
+<meta name="prod:guidelineversion" content="sdf"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>Lists test 4</doctitle>
+<docauthor>Davy Kager</docauthor>
+</frontmatter>
+<bodymatter>
+<level1 class="print_toc">
+<h1>Two components</h1>
+<list type="pl">
+<li><lic class="entry">Chapter 1</lic><lic class="pagenum">page 5</lic></li>
+<li><lic class="entry">Chapter 2</lic><lic class="pagenum">page 15</lic></li>
+<li><lic class="entry">Chapter 3</lic><lic class="pagenum">page 25</lic></li>
+</list>
+</level1>
+<level1>
+<h1>Three components</h1>
+<list type="pl">
+<li><lic>Chapter 1</lic><lic>Par. 1</lic><lic>page 5</lic></li>
+<li><lic>Chapter 1</lic><lic>Par. 2</lic><lic>page 8</lic></li>
+<li><lic>Chapter 1</lic><lic>Par. 3</lic><lic>page 10</lic></li>
+</list>
+</level1>
+</bodymatter>
+<rearmatter/>
+</book>
+</dtbook>

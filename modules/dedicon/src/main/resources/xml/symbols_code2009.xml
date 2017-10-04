@@ -1,0 +1,5811 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <!DOCTYPE symbols SYSTEM "symbols_code2009.dtd"> -->
+<!-- 
+       201601122 KH changed:
+       - '~' tranlates into '~' in <text> in context="formula" (incorrectly translated into ')' in previous version)
+       - added symbol '⊻'
+       - added symbol '⋀'
+       - added symbol '⋁'
+       - added symbol '∘'
+       - added symbol '≔'
+       - added symbol '⊢'
+       - added symbol '⊬'
+       - added symbol '⊨'
+       - added symbol '⊭'
+       - added symbol '⎕'
+       - added symbol '↦'
+       - added symbol '↤'
+       - added symbol '◦'
+       - added symbol '∏'
+       - added symbol '∑'
+       - 'π' translates into '~p' in context="formula" (changed from 'pi' in previous version)
+       - 'Π' translates into '~P' in <text> and into '~{P' in <braille> in context="formula" (changed from 'Pi' in previous version) 
+       20150323 KH changed:
+       - '~' tranlates into '~' in <text> in context="code" (incorrectly translated into ')' in previous version)
+       20100715 ES changed:
+			- added removeprecedingspace on symbol ')' (in braille ä closing bracket)
+			- added capital signs to capital Greek characters
+		30 June 2010 EP changed the following in symbols_code2009_TJ.xml:
+		°: in case of code text should be literally copied into braille and text; removed space-attributes
+		÷: cat=6 changed into cat=0; removeleadingspace="1" removetrailingspace="1" added in case of formula/braille
+			and formula/text, follows rule for simple fraction (no spaces around the /);
+			changed code/description from 'deelteken' into 'slash'
+		:  : added <symbol>:</symbol>
+		By mutual agreement TJ and EP changed braille representation of {- from {- to &#- in all contexts.
+		TJ decided: { on itself translates into à in case of default/braille, into &amp;# in other cases. NOTE: one { in context formula
+				turns every { into &amp;#
+		TJ decided: { in combinations such as {→ and {^ and {- translates into &amp;#  in all contexts and all output formats.
+	TJ decided: no 'removetrailingspace' at €.
+		TJ decided: delete 'subscript' from description for / in case of default context
+		28 april 2010 EP added soft hyphen
+		23 december volgens opgave emilia alt 0094 0095 8730 open="("close=")" removetralingspace teruggeplaatst 
+		 ivm noodzaak afbreekregels.
+		16 dec 2009: taco: 0093+0252 default ]ü ivm oudere bestanden. 8745 default 'doorsnede' spatie voor en na. 
+		alle breukcijfertekens toegestaan default ü veranderd in / . alt 0123+8594 alle uitvoer tekstbestand aangepast met 
+		streepje streepje groterdanteken .
+		alt 0094 0095 8730 open="("close=")" removetralingspace weggehaaldwant onduidelijk welke funktie dit zou hebben.
+		alt 0913 0914 0916 0917 0918 0921 0922 0923 0924 0925 0926 0927 0928 0929 0932 7944 7945 7960 
+		 7961 7976 7977 8008 8009 8025 8040 8041 8072 8073 8088 8089 8104 8105 8124 8140 8188 8169 7840
+		 0482 7684 7692 7712 7716 7730 7746 7750 0338 7770 0352 7778 7788 7806 7816 0159 7826; hoofdletter teken 
+		komt niet in braille, is niet op te lossen in symbols.xml
+		24 November 2009 Taco: omschrijving (hoofdl)weg behalve bij grieks.
+		Taal grieks/hebreeuws e.d. volgens oorspronkelijke lijst aangevuld (alle items lang ook taalomschrijving).
+		2 November 2009 EP added meta element to hold lastEdited date (idem to the belonging dtd);
+			EP added <language> element to every <symbol> that contains <char>.
+		21 October 2009 Taco changed the content of some elements
+		18 October 2009 (symbols_code2009_10.xml)
+		14 September 2009 (symbols2009_1.xml)
+		EP: some of <braille> and <text> elements filled with values according to code2009;
+		purpose: provide ES with realistic output when testing with symbols.xml
+		9 September 2009
+		<altcode> and <text> elements added
+	Omschrijving onderdelen:
+	char cat = nummer in tekengroep
+	altcode = code voor bijbehorend caracter
+	language = taalgroep waar caracter onder valt
+	replace context = weergave in uitvoer
+	 default = standaard uitvoer
+	 formula = indien uitvoer afwijkt bij opmaak met formula
+	 code = indien uitvoer afwijkt bij opmaak met code
+	braille = uitvoer caracter in braille
+	tekst = uitvoer indien die afwijkt van de invoer in tekst
+	description = omschrijving caracter in symbolenlijst
+	addleadingspace="1"  = voeg spatie toe, ervoor 1x
+	removeleadingspace="1"   = haal spatie weg, ervoor 1x
+	addtrailingspace="1"  = voeg spatie toe, erna 1x 
+	removetrailingspace="1"  = haal spatie weg, erna 1x
+	open="(" close=")"  = indien nodig worden haakjes gezet om de expressie die volgt op het symbool
+	
+	27 mei 2010 ton Jumelet
+	aanpassing gemaakt in driehoeksymbool wordt nu standaard genoteerd als drieh en in de symbolenlijst als driehoeksymbool
+	aanpassing gemaakt in hoek (teken) wordt nu standaard genoteerd als hoek en in de symbolenlijst als hoeksymbool
+	aanpassing gemaakt bij pi, mits opgemaakt met formula/code dan de toevoeging in de symbolenlijst (Grieks)
+	aanpassing gemaakt bij Pi, mits opgemaakt met formula/code dan de toevoeging in de symbolenlijst (Grieks)
+	aanpassing gemaakt bij _ (underscore) in de symbolenlijst
+	aanpassing gemaakt bij gradenteken, daar komt nu altijd een spatie voor of een spatie na, 
+	  dat zal waarschijnlijk een fout geven als er na het gradenteken een punt staat, dan 
+	  staat daar een spatie voor de punt
+
+
+
+
+-->
+<symbols>
+	<meta name="lastEdited" content="26 december 2010"/>
+	<symbol>
+		<char cat="0">{→</char>
+		<altcode>0123+8594</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;#:,</braille>
+			<text>{--></text>
+			<description>vectorpijl</description>
+		</replace>
+		<replace context="formula">
+			<braille>&amp;#:,</braille>
+			<text>{--></text>
+			<description>vectorpijl</description>
+		</replace>
+		<replace context="code">
+			<braille>&amp;#:,</braille>
+			<text>{--></text>
+			<description>vectorpijl</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ā</char>
+		<altcode>0256</altcode>
+		<language/>
+		<replace context="default">
+			<braille>A</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ā</char>
+		<altcode>0257</altcode>
+		<language/>
+		<replace context="default">
+			<braille>a</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ē</char>
+		<altcode>0274</altcode>
+		<language/>
+		<replace context="default">
+			<braille>E</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ē</char>
+		<altcode>0275</altcode>
+		<language/>
+		<replace context="default">
+			<braille>e</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ū</char>
+		<altcode>0362</altcode>
+		<language/>
+		<replace context="default">
+			<braille>U</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ū</char>
+		<altcode>0363</altcode>
+		<language/>
+		<replace context="default">
+			<braille>u</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ǣ</char>
+		<altcode>0482</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~Ä</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ǣ</char>
+		<altcode>0483</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~ä</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ǭ</char>
+		<altcode>0492</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Q</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ǭ</char>
+		<altcode>0493</altcode>
+		<language/>
+		<replace context="default">
+			<braille>q</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ḡ</char>
+		<altcode>7712</altcode>
+		<language/>
+		<replace context="default">
+			<braille>G</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ḡ</char>
+		<altcode>7713</altcode>
+		<language/>
+		<replace context="default">
+			<braille>g</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ῡ</char>
+		<altcode>8169</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Y</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ŌĒ</char>
+		<altcode>0332+0274</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~Ö</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ōē</char>
+		<altcode>0333+0275</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~ö</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ạ</char>
+		<altcode>7840</altcode>
+		<language/>
+		<replace context="default">
+			<braille>A</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ạ</char>
+		<altcode>7841</altcode>
+		<language/>
+		<replace context="default">
+			<braille>a</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ḅ</char>
+		<altcode>7684</altcode>
+		<language/>
+		<replace context="default">
+			<braille>B</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ḅ</char>
+		<altcode>7685</altcode>
+		<language/>
+		<replace context="default">
+			<braille>b</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ḍ</char>
+		<altcode>7692</altcode>
+		<language/>
+		<replace context="default">
+			<braille>D</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ḍ</char>
+		<altcode>7693</altcode>
+		<language/>
+		<replace context="default">
+			<braille>d</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ḥ</char>
+		<altcode>7716</altcode>
+		<language/>
+		<replace context="default">
+			<braille>H</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ḥ</char>
+		<altcode>7717</altcode>
+		<language/>
+		<replace context="default">
+			<braille>h</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ḳ</char>
+		<altcode>7730</altcode>
+		<language/>
+		<replace context="default">
+			<braille>K</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ḳ</char>
+		<altcode>7731</altcode>
+		<language/>
+		<replace context="default">
+			<braille>k</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ṃ</char>
+		<altcode>7746</altcode>
+		<language/>
+		<replace context="default">
+			<braille>M</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ṃ</char>
+		<altcode>7747</altcode>
+		<language/>
+		<replace context="default">
+			<braille>m</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ṇ</char>
+		<altcode>7750</altcode>
+		<language/>
+		<replace context="default">
+			<braille>N</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ṇ</char>
+		<altcode>7751</altcode>
+		<language/>
+		<replace context="default">
+			<braille>n</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ṛ</char>
+		<altcode>7770</altcode>
+		<language/>
+		<replace context="default">
+			<braille>R</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ṛ</char>
+		<altcode>7771</altcode>
+		<language/>
+		<replace context="default">
+			<braille>r</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ṣ</char>
+		<altcode>7778</altcode>
+		<language/>
+		<replace context="default">
+			<braille>S</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ṣ</char>
+		<altcode>7779</altcode>
+		<language/>
+		<replace context="default">
+			<braille>s</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ṭ</char>
+		<altcode>7788</altcode>
+		<language/>
+		<replace context="default">
+			<braille>T</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ṭ</char>
+		<altcode>7789</altcode>
+		<language/>
+		<replace context="default">
+			<braille>t</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ṿ</char>
+		<altcode>7806</altcode>
+		<language/>
+		<replace context="default">
+			<braille>V</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ṿ</char>
+		<altcode>7807</altcode>
+		<language/>
+		<replace context="default">
+			<braille>v</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ẉ</char>
+		<altcode>7816</altcode>
+		<language/>
+		<replace context="default">
+			<braille>W</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ẉ</char>
+		<altcode>7817</altcode>
+		<language/>
+		<replace context="default">
+			<braille>w</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ẓ</char>
+		<altcode>7826</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Z</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ẓ</char>
+		<altcode>7827</altcode>
+		<language/>
+		<replace context="default">
+			<braille>z</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">`</char>
+		<altcode>0060</altcode>
+		<language/>
+		<replace context="default">
+			<braille>'</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">"</char>
+		<altcode>0022</altcode>
+		<language/>
+		<replace context="default">
+			<braille>=</braille>
+			<text/>
+			<description>aanhalingsteken</description>
+		</replace>
+		<replace context="formula">
+			<braille>"</braille>
+			<text>"</text>
+			<description>aanhalingsteken</description>
+		</replace>
+		<replace context="code">
+			<braille>"</braille>
+			<text>"</text>
+			<description>aanhalingsteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ø</char>
+		<altcode>0216</altcode>
+		<language>Deens/Noors</language>
+		<replace context="default">
+			<braille lang="de,no">~Ö</braille>
+			<text/>
+			<description>o met slash</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ø</char>
+		<altcode>0248</altcode>
+		<language>Deens/Noors</language>
+		<replace context="default">
+			<braille lang="de,no">~ö</braille>
+			<text/>
+			<description>o met slash</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ß</char>
+		<altcode>0223</altcode>
+		<language>Duits</language>
+		<replace context="default">
+			<braille lang="ge">è</braille>
+			<text/>
+			<description>ringel s</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Æ</char>
+		<altcode>0198</altcode>
+		<language>Deens/Latijn/Engels/Italiaans</language>
+		<replace context="default">
+			<braille lang="de,la,en,it">~Ä</braille>
+			<text/>
+			<description>a e ligatuur</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">æ</char>
+		<altcode>0230</altcode>
+		<language>Deens/Latijn/Engels/Italiaans</language>
+		<replace context="default">
+			<braille lang="de,la,en,it">~ä</braille>
+			<text/>
+			<description>a e ligatuur</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Œ</char>
+		<altcode>0338</altcode>
+		<language>Frans/Italiaans</language>
+		<replace context="default">
+			<braille lang="fr,it">~Ö</braille>
+			<text/>
+			<description>o e ligatuur</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">œ</char>
+		<altcode>0339</altcode>
+		<language>Frans/Italiaans</language>
+		<replace context="default">
+			<braille lang="fr,it">~ö</braille>
+			<text/>
+			<description>o e ligatuur</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ý</char>
+		<altcode>0221</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Y</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ý</char>
+		<altcode>0253</altcode>
+		<language/>
+		<replace context="default">
+			<braille>y</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ÿ</char>
+		<altcode>0159</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Y</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ÿ</char>
+		<altcode>0255</altcode>
+		<language/>
+		<replace context="default">
+			<braille>y</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Å</char>
+		<altcode>0197</altcode>
+		<language>Noors</language>
+		<replace context="default">
+			<braille lang="no">~Â</braille>
+			<text/>
+			<description>angstrom (a met rondje erboven)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">å</char>
+		<altcode>0229</altcode>
+		<language>Noors</language>
+		<replace context="default">
+			<braille lang="no">~â</braille>
+			<text/>
+			<description>angstrom (a met rondje erboven)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ñ</char>
+		<altcode>0209</altcode>
+		<language>Spaans</language>
+		<replace context="default">
+			<braille lang="es">~Ï</braille>
+			<text/>
+			<description>n met tilde erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ñ</char>
+		<altcode>0241</altcode>
+		<language>Spaans</language>
+		<replace context="default">
+			<braille lang="es">~ï</braille>
+			<text/>
+			<description>n met tilde erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ç</char>
+		<altcode>0199</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ç</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ç</char>
+		<altcode>0231</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ç</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">¡</char>
+		<altcode>0161</altcode>
+		<language>Spaans</language>
+		<replace context="default">
+			<braille lang="es">!</braille>
+			<text/>
+			<description>omgekeerd uitroepteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">¿</char>
+		<altcode>0191</altcode>
+		<language>Spaans</language>
+		<replace context="default">
+			<braille lang="es">?</braille>
+			<text/>
+			<description>omgekeerd vraagteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ğ</char>
+		<altcode>0286</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">~Ê</braille>
+			<text/>
+			<description>g met vinkje erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ğ</char>
+		<altcode>0287</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">~ê</braille>
+			<text/>
+			<description>g met vinkje erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ĝ</char>
+		<altcode>0284</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">G</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ĝ</char>
+		<altcode>0285</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">g</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ī</char>
+		<altcode>0298</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">~I</braille>
+			<text/>
+			<description>i met streep erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ī</char>
+		<altcode>0299</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">~i</braille>
+			<text/>
+			<description>i met streep erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">§</char>
+		<altcode>0167</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ò</braille>
+			<text/>
+			<description>paragraaf</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">†</char>
+		<altcode>0134</altcode>
+		<language/>
+		<replace context="default">
+			<braille>overleden</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">°</char>
+		<altcode>0176</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;"</braille>
+			<text/>
+			<description>gradenteken; geboorteteken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">gr</braille>
+			<text addleadingspace="1" addtrailingspace="1">gr</text>
+			<description>gradenteken</description>
+		</replace>
+		<replace context="code">
+			<braille>gr</braille>
+			<text>gr</text>
+			<description>gradenteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Á</char>
+		<altcode>0193</altcode>
+		<language/>
+		<replace context="default">
+			<braille>À</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">á</char>
+		<altcode>0255</altcode>
+		<language/>
+		<replace context="default">
+			<braille>à</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">À</char>
+		<altcode>0192</altcode>
+		<language/>
+		<replace context="default">
+			<braille>À</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">à</char>
+		<altcode>0224</altcode>
+		<language/>
+		<replace context="default">
+			<braille>à</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Â</char>
+		<altcode>0194</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Â</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">â</char>
+		<altcode>0226</altcode>
+		<language/>
+		<replace context="default">
+			<braille>â</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ä</char>
+		<altcode>0196</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ä</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ä</char>
+		<altcode>0228</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ä</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ă</char>
+		<altcode>0258</altcode>
+		<language/>
+		<replace context="default">
+			<braille>A</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ă</char>
+		<altcode>0259</altcode>
+		<language/>
+		<replace context="default">
+			<braille>a</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ã</char>
+		<altcode>0195</altcode>
+		<language/>
+		<replace context="default">
+			<braille>À</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ã</char>
+		<altcode>0227</altcode>
+		<language/>
+		<replace context="default">
+			<braille>à</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ú</char>
+		<altcode>0218</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ù</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ú</char>
+		<altcode>0250</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ù</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ù</char>
+		<altcode>0217</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ù</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ù</char>
+		<altcode>0249</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ù</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Û</char>
+		<altcode>0219</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Û</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">û</char>
+		<altcode>0251</altcode>
+		<language/>
+		<replace context="default">
+			<braille>û</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ü</char>
+		<altcode>0220</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ü</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ü</char>
+		<altcode>0252</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ü</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Í</char>
+		<altcode>0205</altcode>
+		<language/>
+		<replace context="default">
+			<braille>I</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">í</char>
+		<altcode>0237</altcode>
+		<language/>
+		<replace context="default">
+			<braille>i</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ì</char>
+		<altcode>0204</altcode>
+		<language/>
+		<replace context="default">
+			<braille>I</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ì</char>
+		<altcode>0236</altcode>
+		<language/>
+		<replace context="default">
+			<braille>i</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Î</char>
+		<altcode>0206</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Î</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">î</char>
+		<altcode>0238</altcode>
+		<language/>
+		<replace context="default">
+			<braille>î</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">Į</char>
+		<altcode>0302</altcode>
+		<language/>
+		<replace context="default">
+			<braille>I</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">į</char>
+		<altcode>0303</altcode>
+		<language/>
+		<replace context="default">
+			<braille>i</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ï</char>
+		<altcode>0207</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ï</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ï</char>
+		<altcode>0239</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ï</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ó</char>
+		<altcode>0211</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ò</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ó</char>
+		<altcode>0243</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ò</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ò</char>
+		<altcode>0210</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ò</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ò</char>
+		<altcode>0242</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ò</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ô</char>
+		<altcode>0212</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ô</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ô</char>
+		<altcode>0244</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ô</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ö</char>
+		<altcode>0214</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ö</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ö</char>
+		<altcode>0246</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ö</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Õ</char>
+		<altcode>0213</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~Ö</braille>
+			<text/>
+			<description>o met een tilde</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">õ</char>
+		<altcode>0245</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~ö</braille>
+			<text/>
+			<description>o met een tilde</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">É</char>
+		<altcode>0201</altcode>
+		<language/>
+		<replace context="default">
+			<braille>É</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">é</char>
+		<altcode>0233</altcode>
+		<language/>
+		<replace context="default">
+			<braille>é</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">È</char>
+		<altcode>0200</altcode>
+		<language/>
+		<replace context="default">
+			<braille>È</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">è</char>
+		<altcode>0232</altcode>
+		<language/>
+		<replace context="default">
+			<braille>è</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ê</char>
+		<altcode>0202</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ê</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ê</char>
+		<altcode>0234</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ê</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ë</char>
+		<altcode>0203</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Ë</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ë</char>
+		<altcode>0235</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ë</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ń</char>
+		<altcode>0323</altcode>
+		<language/>
+		<replace context="default">
+			<braille>N</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ń</char>
+		<altcode>0324</altcode>
+		<language/>
+		<replace context="default">
+			<braille>n</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ō</char>
+		<altcode>0332</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~O</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ō</char>
+		<altcode>0333</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~o</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ŏ</char>
+		<altcode>0334</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~O</braille>
+			<text/>
+			<description>o met een vinkje</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ŏ</char>
+		<altcode>0335</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~o</braille>
+			<text/>
+			<description>o met een vinkje</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ř</char>
+		<altcode>0344</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~R</braille>
+			<text/>
+			<description>r met vinkje erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ř</char>
+		<altcode>0345</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~r</braille>
+			<text/>
+			<description>r met vinkje erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Š</char>
+		<altcode>0352</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~S</braille>
+			<text/>
+			<description>s met vinkje erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">š</char>
+		<altcode>0353</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~s</braille>
+			<text/>
+			<description>s met vinkje erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ś</char>
+		<altcode>0346</altcode>
+		<language/>
+		<replace context="default">
+			<braille>S</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ś</char>
+		<altcode>0347</altcode>
+		<language/>
+		<replace context="default">
+			<braille>s</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ŭ</char>
+		<altcode>0364</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~U</braille>
+			<text/>
+			<description>u met vinkje erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ŭ</char>
+		<altcode>0365</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~u</braille>
+			<text/>
+			<description>u met vinkje erboven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ŷ</char>
+		<altcode>0374</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Y</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ŷ</char>
+		<altcode>0375</altcode>
+		<language/>
+		<replace context="default">
+			<braille>y</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">א</char>
+		<altcode>1488</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~a</braille>
+			<text/>
+			<description>aleph</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ב</char>
+		<altcode>1489</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~b</braille>
+			<text/>
+			<description>bet</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ג</char>
+		<altcode>1490</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~g</braille>
+			<text/>
+			<description>gimel</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ד</char>
+		<altcode>1491</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~d</braille>
+			<text/>
+			<description>dalet</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ה</char>
+		<altcode>1492</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~h</braille>
+			<text/>
+			<description>hé</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ו</char>
+		<altcode>1493</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~w</braille>
+			<text/>
+			<description>wav</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ז</char>
+		<altcode>1494</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~z</braille>
+			<text/>
+			<description>zayin</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ח</char>
+		<altcode>1495</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~x</braille>
+			<text/>
+			<description>hèt</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ט</char>
+		<altcode>1496</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~t</braille>
+			<text/>
+			<description>tèt</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">י</char>
+		<altcode>1497</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~j</braille>
+			<text/>
+			<description>yod</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ך</char>
+		<altcode>1498</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~k</braille>
+			<text/>
+			<description>kaf</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">כ</char>
+		<altcode>1499</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~â</braille>
+			<text/>
+			<description>haf</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ל</char>
+		<altcode>1500</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~l</braille>
+			<text/>
+			<description>lamed</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ם</char>
+		<altcode>1501</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~m</braille>
+			<text/>
+			<description>mem</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">מ</char>
+		<altcode>1502</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~m</braille>
+			<text/>
+			<description>mem</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ן</char>
+		<altcode>1503</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~n</braille>
+			<text/>
+			<description>noun</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">נ</char>
+		<altcode>1504</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~n</braille>
+			<text/>
+			<description>noun</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ס</char>
+		<altcode>1505</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~s</braille>
+			<text/>
+			<description>sameh</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ע</char>
+		<altcode>1506</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~ë</braille>
+			<text/>
+			<description>ayin</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ף</char>
+		<altcode>1507</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~p</braille>
+			<text/>
+			<description>pé</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">פ</char>
+		<altcode>1508</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~f</braille>
+			<text/>
+			<description>fé</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ץ</char>
+		<altcode>1509</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~è</braille>
+			<text/>
+			<description>ts</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">צ</char>
+		<altcode>1510</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~è</braille>
+			<text/>
+			<description>ts</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ק</char>
+		<altcode>1511</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~q</braille>
+			<text/>
+			<description>gof</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ר</char>
+		<altcode>1512</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~r</braille>
+			<text/>
+			<description>rech</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ש</char>
+		<altcode>1513</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~î</braille>
+			<text/>
+			<description>chin</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="3">ת</char>
+		<altcode>1514</altcode>
+		<language>Hebreeuws</language>
+		<replace context="default">
+			<braille lang="he">~t</braille>
+			<text/>
+			<description>tav</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">α</char>
+		<altcode>0945</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~a</braille>
+			<text lang="el"/>
+			<description>alfa</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~a</braille>
+			<text lang="el">~a</text>
+			<description>alfa</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~a</braille>
+			<text lang="el">~a</text>
+			<description>alfa</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">β</char>
+		<altcode>0946</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~b</braille>
+			<text lang="el"/>
+			<description>bèta</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~b</braille>
+			<text lang="el">~b</text>
+			<description>bèta</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~b</braille>
+			<text lang="el">~b</text>
+			<description>bèta</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">γ</char>
+		<altcode>0947</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~g</braille>
+			<text lang="el"/>
+			<description>gamma</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~g</braille>
+			<text lang="el">~g</text>
+			<description>gamma</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~g</braille>
+			<text lang="el">~g</text>
+			<description>gamma</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">δ</char>
+		<altcode>0948</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~d</braille>
+			<text lang="el"/>
+			<description>delta</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~d</braille>
+			<text lang="el">~d</text>
+			<description>delta</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~d</braille>
+			<text lang="el">~d</text>
+			<description>delta</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ε</char>
+		<altcode>0949</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~e</braille>
+			<text lang="el"/>
+			<description>epsilon</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~e</braille>
+			<text lang="el">~e</text>
+			<description>epsilon</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~e</braille>
+			<text lang="el">~e</text>
+			<description>epsilon</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ζ</char>
+		<altcode>0950</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~z</braille>
+			<text lang="el"/>
+			<description>zèta</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~z</braille>
+			<text lang="el">~z</text>
+			<description>zèta</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~z</braille>
+			<text lang="el">~z</text>
+			<description>zèta</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">η</char>
+		<altcode>0951</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~ä</braille>
+			<text lang="el"/>
+			<description>èta</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~ä</braille>
+			<text lang="el">~ä</text>
+			<description>èta</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~ä</braille>
+			<text lang="el">~ä</text>
+			<description>èta</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">θ</char>
+		<altcode>0952</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~ô</braille>
+			<text lang="el"/>
+			<description>thèta</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~ô</braille>
+			<text lang="el">~ô</text>
+			<description>thèta</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~ô</braille>
+			<text lang="el">~ô</text>
+			<description>thèta</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ι</char>
+		<altcode>0953</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~i</braille>
+			<text lang="el"/>
+			<description>iota</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~i</braille>
+			<text lang="el">~i</text>
+			<description>iota</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~i</braille>
+			<text lang="el">~i</text>
+			<description>iota</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">κ</char>
+		<altcode>0954</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~k</braille>
+			<text lang="el"/>
+			<description>kappa</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~k</braille>
+			<text lang="el">~k</text>
+			<description>kappa</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~k</braille>
+			<text lang="el">~k</text>
+			<description>kappa</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">λ</char>
+		<altcode>0955</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~l</braille>
+			<text lang="el"/>
+			<description>labda</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~l</braille>
+			<text lang="el">~l</text>
+			<description>labda</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~l</braille>
+			<text lang="el">~l</text>
+			<description>labda</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">μ</char>
+		<altcode>0956</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~m</braille>
+			<text lang="el"/>
+			<description>mu</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~m</braille>
+			<text lang="el">~m</text>
+			<description>mu</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~m</braille>
+			<text lang="el">~m</text>
+			<description>mu</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ν</char>
+		<altcode>0957</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~n</braille>
+			<text lang="el"/>
+			<description>nu</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~n</braille>
+			<text lang="el">~n</text>
+			<description>nu</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~n</braille>
+			<text lang="el">~n</text>
+			<description>nu</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ξ</char>
+		<altcode>0958</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~x</braille>
+			<text lang="el"/>
+			<description>xi</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~x</braille>
+			<text lang="el">~x</text>
+			<description>xi</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~x</braille>
+			<text lang="el">~x</text>
+			<description>xi</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ο</char>
+		<altcode>0959</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~o</braille>
+			<text lang="el"/>
+			<description>omikron</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~o</braille>
+			<text lang="el">~o</text>
+			<description>omikron</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~o</braille>
+			<text lang="el">~o</text>
+			<description>omikron</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">π</char>
+		<altcode>0960</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~p</braille>
+			<text lang="el"/>
+			<description>pi</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~p</braille>
+			<text lang="el">~p</text>
+			<description>pi</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~p</braille>
+			<text lang="el">~p</text>
+			<description>pi</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ρ</char>
+		<altcode>0961</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~r</braille>
+			<text lang="el"/>
+			<description>rho</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~r</braille>
+			<text lang="el">~r</text>
+			<description>rho</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~r</braille>
+			<text lang="el">~r</text>
+			<description>rho</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ς</char>
+		<altcode>0962</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~s</braille>
+			<text lang="el"/>
+			<description>sigma</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~s</braille>
+			<text lang="el">~s</text>
+			<description>sigma</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~s</braille>
+			<text lang="el">~s</text>
+			<description>sigma</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">σ</char>
+		<altcode>0963</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~s</braille>
+			<text lang="el"/>
+			<description>sigma</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~s</braille>
+			<text lang="el">~s</text>
+			<description>sigma</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~s</braille>
+			<text lang="el">~s</text>
+			<description>sigma</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">τ</char>
+		<altcode>0964</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~t</braille>
+			<text lang="el"/>
+			<description>tau</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~t</braille>
+			<text lang="el">~t</text>
+			<description>tau</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~t</braille>
+			<text lang="el">~t</text>
+			<description>tau</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">υ</char>
+		<altcode>0965</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~y</braille>
+			<text lang="el"/>
+			<description>upsilon</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~y</braille>
+			<text lang="el">~y</text>
+			<description>upsilon</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~y</braille>
+			<text lang="el">~y</text>
+			<description>upsilon</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">φ</char>
+		<altcode>0966</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~f</braille>
+			<text lang="el"/>
+			<description>phi</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~f</braille>
+			<text lang="el">~f</text>
+			<description>phi</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~f</braille>
+			<text lang="el">~f</text>
+			<description>phi</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">χ</char>
+		<altcode>0967</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~h</braille>
+			<text lang="el"/>
+			<description>chi</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~h</braille>
+			<text lang="el">~h</text>
+			<description>chi</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~h</braille>
+			<text lang="el">~h</text>
+			<description>chi</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ψ</char>
+		<altcode>0968</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~#</braille>
+			<text lang="el"/>
+			<description>psi</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~#</braille>
+			<text lang="el">~ç</text>
+			<description>psi</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~#</braille>
+			<text lang="el">~ç</text>
+			<description>psi</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">ω</char>
+		<altcode>0969</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~j</braille>
+			<text lang="el"/>
+			<description>omega</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~j</braille>
+			<text lang="el">~j</text>
+			<description>omega</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~j</braille>
+			<text lang="el">~j</text>
+			<description>omega</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Α</char>
+		<altcode>0913</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{A</braille>
+			<text lang="el"/>
+			<description>alfa (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{A</braille>
+			<text lang="el">~A</text>
+			<description>alfa (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{A</braille>
+			<text lang="el">~A</text>
+			<description>alfa (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Β</char>
+		<altcode>0914</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{B</braille>
+			<text lang="el"/>
+			<description>bèta (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{B</braille>
+			<text lang="el">~B</text>
+			<description>bèta (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{B</braille>
+			<text lang="el">~B</text>
+			<description>bèta (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Γ</char>
+		<altcode>0915</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{G</braille>
+			<text lang="el"/>
+			<description>gamma (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{G</braille>
+			<text lang="el">~G</text>
+			<description>gamma (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{G</braille>
+			<text lang="el">~G</text>
+			<description>gamma (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Δ</char>
+		<altcode>0916</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{D</braille>
+			<text lang="el"/>
+			<description>delta (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{D</braille>
+			<text lang="el">~D</text>
+			<description>delta (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{D</braille>
+			<text lang="el">~D</text>
+			<description>delta (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Ε</char>
+		<altcode>0917</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{E</braille>
+			<text lang="el"/>
+			<description>epsilon (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{E</braille>
+			<text lang="el">~E</text>
+			<description>epsilon (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{E</braille>
+			<text lang="el">~E</text>
+			<description>epsilon (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Ζ</char>
+		<altcode>0918</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{Z</braille>
+			<text lang="el"/>
+			<description>zèta (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{Z</braille>
+			<text lang="el">~Z</text>
+			<description>zèta (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{Z</braille>
+			<text lang="el">~Z</text>
+			<description>zèta (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Η</char>
+		<altcode>0919</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{Ä</braille>
+			<text lang="el"/>
+			<description>èta (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{Ä</braille>
+			<text lang="el">~Ä</text>
+			<description>èta (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{Ä</braille>
+			<text lang="el">~Ä</text>
+			<description>èta (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Θ</char>
+		<altcode>0920</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{Ô</braille>
+			<text lang="el"/>
+			<description>thèta (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{Ô</braille>
+			<text lang="el">~Ô</text>
+			<description>thèta (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{Ô</braille>
+			<text lang="el">~Ô</text>
+			<description>thèta (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Ι</char>
+		<altcode>0921</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{I</braille>
+			<text lang="el"/>
+			<description>iota (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{I</braille>
+			<text lang="el">~I</text>
+			<description>iota (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{I</braille>
+			<text lang="el">~I</text>
+			<description>iota (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Κ</char>
+		<altcode>0922</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{K</braille>
+			<text lang="el"/>
+			<description>kappa (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{K</braille>
+			<text lang="el">~K</text>
+			<description>kappa (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{K</braille>
+			<text lang="el">~K</text>
+			<description>kappa (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Λ</char>
+		<altcode>0923</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{L</braille>
+			<text lang="el"/>
+			<description>labda (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{L</braille>
+			<text lang="el">~L</text>
+			<description>labda (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{L</braille>
+			<text lang="el">~L</text>
+			<description>labda (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Μ</char>
+		<altcode>0924</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{M</braille>
+			<text lang="el"/>
+			<description>mu (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{M</braille>
+			<text lang="el">~M</text>
+			<description>mu (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{M</braille>
+			<text lang="el">~M</text>
+			<description>mu (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Ν</char>
+		<altcode>0925</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{N</braille>
+			<text lang="el"/>
+			<description>nu (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{N</braille>
+			<text lang="el">~N</text>
+			<description>nu (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{N</braille>
+			<text lang="el">~N</text>
+			<description>nu (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Ξ</char>
+		<altcode>0926</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{X</braille>
+			<text lang="el"/>
+			<description>xi (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{X</braille>
+			<text lang="el">~X</text>
+			<description>xi (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{X</braille>
+			<text lang="el">~X</text>
+			<description>xi (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Ο</char>
+		<altcode>0927</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{O</braille>
+			<text lang="el"/>
+			<description>omikron (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{O</braille>
+			<text lang="el">~O</text>
+			<description>omikron (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{O</braille>
+			<text lang="el">~O</text>
+			<description>omikron (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Π</char>
+		<altcode>0928</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{P</braille>
+			<text lang="el"/>
+			<description>pi (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{P</braille>
+			<text lang="el">~P</text>
+			<description>pi (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{P</braille>
+			<text lang="el">~P</text>
+			<description>pi (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Ρ</char>
+		<altcode>0929</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{R</braille>
+			<text lang="el"/>
+			<description>rho (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{R</braille>
+			<text lang="el">~R</text>
+			<description>rho (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{R</braille>
+			<text lang="el">~R</text>
+			<description>rho (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Σ</char>
+		<altcode>0931</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{S</braille>
+			<text lang="el"/>
+			<description>sigma (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{S</braille>
+			<text lang="el">~S</text>
+			<description>sigma (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{S</braille>
+			<text lang="el">~S</text>
+			<description>sigma (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Τ</char>
+		<altcode>0932</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{T</braille>
+			<text lang="el"/>
+			<description>tau (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{T</braille>
+			<text lang="el">~T</text>
+			<description>tau (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{T</braille>
+			<text lang="el">~T</text>
+			<description>tau (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Υ</char>
+		<altcode>0933</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{Y</braille>
+			<text lang="el"/>
+			<description>upsilon (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{Y</braille>
+			<text lang="el">~Y</text>
+			<description>upsilon (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{Y</braille>
+			<text lang="el">~Y</text>
+			<description>upsilon (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Φ</char>
+		<altcode>0934</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{F</braille>
+			<text lang="el"/>
+			<description>phi (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{F</braille>
+			<text lang="el">~F</text>
+			<description>phi (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{F</braille>
+			<text lang="el">~F</text>
+			<description>phi (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Χ</char>
+		<altcode>0935</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{H</braille>
+			<text lang="el"/>
+			<description>chi (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{H</braille>
+			<text lang="el">~H</text>
+			<description>chi (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{H</braille>
+			<text lang="el">~H</text>
+			<description>chi (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Ψ</char>
+		<altcode>0936</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{#</braille>
+			<text lang="el"/>
+			<description>psi (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{#</braille>
+			<text lang="el">~Ç</text>
+			<description>psi (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{#</braille>
+			<text lang="el">~Ç</text>
+			<description>psi (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">Ω</char>
+		<altcode>0937</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~{J</braille>
+			<text lang="el"/>
+			<description>omega (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille lang="el">~{J</braille>
+			<text lang="el">~J</text>
+			<description>omega (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille lang="el">~{J</braille>
+			<text lang="el">~J</text>
+			<description>omega (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="1">·</char>
+		<altcode>0183</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille>!</braille>
+			<text/>
+			<description>Griekse hoge punt</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ἀ</char>
+		<altcode>7936</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~a</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ἁ</char>
+		<altcode>7937</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~ha</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ἀ</char>
+		<altcode>7944</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~A</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ἁ</char>
+		<altcode>7945</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hA</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ἐ</char>
+		<altcode>7952</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~e</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ἑ</char>
+		<altcode>7953</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~he</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ἐ</char>
+		<altcode>7960</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~E</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ἑ</char>
+		<altcode>7961</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hE</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ἠ</char>
+		<altcode>7968</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~û</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ἡ</char>
+		<altcode>7969</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hû</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ἠ</char>
+		<altcode>7976</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~Û</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ἡ</char>
+		<altcode>7977</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hÛ</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ἰ</char>
+		<altcode>7984</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~i</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ἱ</char>
+		<altcode>7985</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ἰ</char>
+		<altcode>7992</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~I</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ἱ</char>
+		<altcode>7993</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hI</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ὀ</char>
+		<altcode>8000</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~o</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ὁ</char>
+		<altcode>8001</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~ho</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ὀ</char>
+		<altcode>8008</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~O</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ὁ</char>
+		<altcode>8009</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hO</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ὐ</char>
+		<altcode>8016</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~u</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ὑ</char>
+		<altcode>8017</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hu</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ὑ</char>
+		<altcode>8025</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hU</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ὠ</char>
+		<altcode>8032</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~w</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ὡ</char>
+		<altcode>8033</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hw</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ὠ</char>
+		<altcode>8040</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~W</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">Ὡ</char>
+		<altcode>8041</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hW</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾀ</char>
+		<altcode>8064</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~ai</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾁ</char>
+		<altcode>8065</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hai</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾈ</char>
+		<altcode>8072</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~Ai</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾉ</char>
+		<altcode>8073</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hAi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾳ</char>
+		<altcode>8115</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~ai</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾼ</char>
+		<altcode>8124</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~Ai</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾐ</char>
+		<altcode>8080</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~ûi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾑ</char>
+		<altcode>8081</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hûi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ῃ</char>
+		<altcode>8131</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~ûi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ῌ</char>
+		<altcode>8140</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~Ûi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾘ</char>
+		<altcode>8088</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~Ûi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾙ</char>
+		<altcode>8089</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hÛi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾠ</char>
+		<altcode>8096</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~wi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾡ</char>
+		<altcode>8097</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hwi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾨ</char>
+		<altcode>8104</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~Wi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ᾩ</char>
+		<altcode>8105</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~hWi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ῼ</char>
+		<altcode>8188</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~Wi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="2">ῳ</char>
+		<altcode>8179</altcode>
+		<language>Grieks</language>
+		<replace context="default">
+			<braille lang="el">~wi</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">€</char>
+		<altcode>0128</altcode>
+		<language/>
+		<replace context="default">
+			<braille>e</braille>
+			<text/>
+			<description>euro</description>
+		</replace>
+		<replace context="formula">
+			<braille>e</braille>
+			<text>€</text>
+			<description>euro</description>
+		</replace>
+		<replace context="code">
+			<braille>e</braille>
+			<text>€</text>
+			<description>euro</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ƒ</char>
+		<altcode>0131</altcode>
+		<language/>
+		<replace context="default">
+			<braille removetrailingspace="1">f</braille>
+			<text/>
+			<description>florijnteken</description>
+		</replace>
+		<replace context="formula">
+			<braille>f</braille>
+			<text>f</text>
+			<description>florijnteken</description>
+		</replace>
+		<replace context="code">
+			<braille>f</braille>
+			<text>f</text>
+			<description>florijnteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">$</char>
+		<altcode>0036</altcode>
+		<language/>
+		<replace context="default">
+			<braille removetrailingspace="1">d</braille>
+			<text/>
+			<description>dollar</description>
+		</replace>
+		<replace context="formula">
+			<braille>û</braille>
+			<text>$</text>
+			<description>dollar</description>
+		</replace>
+		<replace context="code">
+			<braille>û</braille>
+			<text>$</text>
+			<description>dollar</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">£</char>
+		<altcode>0163</altcode>
+		<language/>
+		<replace context="default">
+			<braille removetrailingspace="1">p</braille>
+			<text/>
+			<description>pound</description>
+		</replace>
+		<replace context="formula">
+			<braille>p</braille>
+			<text>£</text>
+			<description>pound</description>
+		</replace>
+		<replace context="code">
+			<braille>p</braille>
+			<text>£</text>
+			<description>pound</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">¥</char>
+		<altcode>0165</altcode>
+		<language/>
+		<replace context="default">
+			<braille removetrailingspace="1">y</braille>
+			<text/>
+			<description>yen</description>
+		</replace>
+		<replace context="formula">
+			<braille>y</braille>
+			<text>yen</text>
+			<description>yen</description>
+		</replace>
+		<replace context="code">
+			<braille>y</braille>
+			<text>yen</text>
+			<description>yen</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">@</char>
+		<altcode>0064</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ä</braille>
+			<text/>
+			<description>at</description>
+		</replace>
+		<replace context="formula">
+			<braille>~a</braille>
+			<text>@</text>
+			<description>at</description>
+		</replace>
+		<replace context="code">
+			<braille>~a</braille>
+			<text>@</text>
+			<description>at</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">_</char>
+		<altcode>0095</altcode>
+		<language/>
+		<replace context="default">
+			<braille>[</braille>
+			<text/>
+			<description>underscore</description>
+		</replace>
+		<replace context="formula">
+			<braille open="(" close=")">@-</braille>
+			<text open="(" close=")" removetrailingspace="1">_</text>
+			<description>subscript</description>
+		</replace>
+		<replace context="code">
+			<braille>@-</braille>
+			<text>_</text>
+			<description>underscore</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">&amp;</char>
+		<altcode>0038</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">#</braille>
+			<text/>
+			<description>ampersand</description>
+		</replace>
+		<replace context="formula">
+			<braille>#</braille>
+			<text>&amp;</text>
+			<description>ampersand</description>
+		</replace>
+		<replace context="code">
+			<braille>#</braille>
+			<text>&amp;</text>
+			<description>ampersand</description>
+		</replace>
+		<replace context="symbol">
+			<braille>&amp;</braille>
+			<text/>
+			<description>onderstreept</description>
+		</replace>
+	</symbol> 
+	<symbol>
+		<char cat="0">~</char>
+		<altcode>0126</altcode>
+		<language/>
+		<replace context="default">
+			<braille>~</braille>
+			<text>~</text>
+			<description>tilde; taalwisselingsteken</description>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1">~</braille>
+			<text>~</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille removeleadingspace="1">~</braille>
+			<text>~</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">;</char>
+		<altcode>0059</altcode>
+		<language/>
+		<replace context="default">
+			<braille>;</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>;</braille>
+			<text>;</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille removetrailingspace="1">;</braille>
+			<text>;</text>
+			<description>puntkomma</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">÷</char>
+		<altcode>0247</altcode>
+		<language/>
+		<replace context="default">
+			<braille>deelteken</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1" removetrailingspace="1">/</braille>
+			<text removeleadingspace="1" removetrailingspace="1">/</text>
+			<description>deelteken</description>
+		</replace>
+		<replace context="code">
+			<braille>/</braille>
+			<text>/</text>
+			<description>deelteken</description>
+		</replace>
+	</symbol>
+		<symbol>
+		<char cat="0">:</char>
+		<altcode>0058</altcode>
+		<language/>
+		<replace context="default">
+			<braille>:</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">:</braille>
+			<text>:</text>
+			<description>deelteken</description>
+		</replace>
+		<replace context="code">
+			<braille>:</braille>
+			<text>:</text>
+			<description>deelteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">+</char>
+		<altcode>0043</altcode>
+		<language/>
+		<replace context="default">
+			<braille>+</braille>
+			<text/>
+			<description>plusteken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">+</braille>
+			<text>+</text>
+			<description>plusteken</description>
+		</replace>
+		<replace context="code">
+			<braille>+</braille>
+			<text>+</text>
+			<description>plusteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">=</char>
+		<altcode>0061</altcode>
+		<language/>
+		<replace context="default">
+			<braille>=</braille>
+			<text>=</text>
+			<description>isgelijkteken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">=</braille>
+			<text>=</text>
+			<description>isgelijkteken</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">=</braille>
+			<text>=</text>
+			<description>isgelijkteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">-</char>
+		<altcode>0045</altcode>
+		<language/>
+		<replace context="default">
+			<braille>-</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">-</braille>
+			<text>-</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">-</braille>
+			<text>-</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+	<!-- soft hyphen -->
+		<char cat="0">­</char>
+		<altcode>0173</altcode>
+		<language/>
+		<replace context="default">
+			<braille>-</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>-</braille>
+			<text>-</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>-</braille>
+			<text>-</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">◦</char>
+		<altcode>25E6</altcode>
+		<language/>
+		<replace context="default">
+			<braille>-</braille>
+			<text>-</text>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>-</braille>
+			<text>-</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>-</braille>
+			<text>-</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<!-- hard space -->
+		<char cat="6"> </char>
+		<altcode>0160</altcode>
+		<language/>
+		<replace context="default">
+			<braille>
+			</braille>
+			<text>
+			</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⊕</char>
+		<altcode>8853</altcode>
+		<language/>
+		<replace context="default">
+			<braille>["+</braille>
+			<text/>
+			<description>plusteken in een cirkel</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">["+</braille>
+			<text addleadingspace="1" addtrailingspace="1">["+</text>
+			<description>plusteken in een cirkel</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">["+</braille>
+			<text addleadingspace="1" addtrailingspace="1">["+</text>
+			<description>plusteken in een cirkel</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">#</char>
+		<altcode>0035</altcode>
+		<language/>
+		<replace context="default">
+			<braille>|%</braille>
+			<text/>
+			<description>hekje</description>
+		</replace>
+		<replace context="formula">
+			<braille>&amp;é=</braille>
+			<text>#</text>
+			<description>hekje</description>
+		</replace>
+		<replace context="code">
+			<braille>&amp;é=</braille>
+			<text>#</text>
+			<description>hekje</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">%</char>
+		<altcode>0037</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1">é</braille>
+			<text/>
+			<description>procent</description>
+		</replace>
+		<replace context="formula">
+			<braille>é</braille>
+			<text>%</text>
+			<description>procent</description>
+		</replace>
+		<replace context="code">
+			<braille>é</braille>
+			<text>%</text>
+			<description>procent</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">‰</char>
+		<altcode>8240</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1">éé</braille>
+			<text/>
+			<description>promille</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1">éé</braille>
+			<text addleadingspace="1" addtrailingspace="1">%%</text>
+			<description>promille</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1">éé</braille>
+			<text addleadingspace="1" addtrailingspace="1">%%</text>
+			<description>promille</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">√</char>
+		<altcode>8730</altcode>
+		<language/>
+		<replace context="default">
+			<braille>sqrt</braille>
+			<text>sqrt</text>
+			<description>wortelteken</description>
+		</replace>
+		<replace context="formula">
+			<braille open="(" close=")" removetrailingspace="1">sqrt</braille>
+			<text open="(" close=")" removetrailingspace="1">sqrt</text>
+			<description>wortelteken</description>
+		</replace>
+		<replace context="code">
+			<braille open="(" close=")" removeleadingspace="1">sqrt</braille>
+			<text open="(" close=")" removeleadingspace="1">sqrt</text>
+			<description>wortelteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">×</char>
+		<altcode>0215</altcode>
+		<language/>
+		<replace context="default">
+			<braille>x</braille>
+			<text>x</text>
+			<description>vermenigvuldigingsteken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">*</braille>
+			<text>*</text>
+			<description>vermenigvuldigingsteken</description>
+		</replace>
+		<replace context="code">
+			<braille>*</braille>
+			<text>*</text>
+			<description>vermenigvuldigingsteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⊗</char>
+		<altcode>8855</altcode>
+		<language/>
+		<replace context="default">
+			<braille>["x</braille>
+			<text/>
+			<description>vermenigvuldigingsteken in een cirkel</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">["*</braille>
+			<text addleadingspace="1" addtrailingspace="1">["*</text>
+			<description>vermenigvuldigingsteken in een cirkel</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">["*</braille>
+			<text addleadingspace="1" addtrailingspace="1">["*</text>
+			<description>vermenigvuldigingsteken in een cirkel</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∞</char>
+		<altcode>8734</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%é</braille>
+			<text/>
+			<description>oneindigteken</description>
+		</replace>
+		<replace context="formula">
+			<braille>inf</braille>
+			<text>inf</text>
+			<description>oneindigteken</description>
+		</replace>
+		<replace context="code">
+			<braille>inf</braille>
+			<text>inf</text>
+			<description>oneindigteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∘</char>
+		<altcode>2218</altcode>
+		<language/>
+		<replace context="default">
+			<braille>o</braille>
+			<text/>
+			<description>ring</description>
+		</replace>
+		<replace context="formula">
+			<braille>o</braille>
+			<text>o</text>
+			<description>ring</description>
+		</replace>
+		<replace context="code">
+			<braille>o</braille>
+			<text>o</text>
+			<description>ring</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≈</char>
+		<altcode>8776</altcode>
+		<language/>
+		<replace context="default">
+			<braille>??</braille>
+			<text/>
+			<description>dubbel slangetje</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">=ong</braille>
+			<text addleadingspace="1" addtrailingspace="1">=ong</text>
+			<description>dubbel slangetje</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">=ong</braille>
+			<text addleadingspace="1" addtrailingspace="1">=ong</text>
+			<description>dubbel slangetje</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≉</char>
+		<altcode>8777</altcode>
+		<language/>
+		<replace context="default">
+			<braille>*??</braille>
+			<text/>
+			<description>doorgestreept slangetje</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">=nietOng</braille>
+			<text addleadingspace="1" addtrailingspace="1">=nietOng</text>
+			<description>doorgestreept dubbel slangetje</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">=nietOng</braille>
+			<text addleadingspace="1" addtrailingspace="1">=nietOng</text>
+			<description>doorgestreept dubbel slangetje</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≠</char>
+		<altcode>8800</altcode>
+		<language/>
+		<replace context="default">
+			<braille>*=</braille>
+			<text/>
+			<description>is niet gelijk aan</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">=niet</braille>
+			<text addleadingspace="1" addtrailingspace="1">=niet</text>
+			<description>is niet gelijk aan</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">=niet</braille>
+			<text addleadingspace="1" addtrailingspace="1">=niet</text>
+			<description>is niet gelijk aan</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≡</char>
+		<altcode>8801</altcode>
+		<language/>
+		<replace context="default">
+			<braille>==</braille>
+			<text/>
+			<description>identiek</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">==</braille>
+			<text>==</text>
+			<description>identiek</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">==</braille>
+			<text>==</text>
+			<description>identiek</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≅</char>
+		<altcode>8773</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">=congr</braille>
+			<text/>
+			<description>is congruent</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">=congr</braille>
+			<text addleadingspace="1" addtrailingspace="1">=congr</text>
+			<description>is congruent</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">=congr</braille>
+			<text addleadingspace="1" addtrailingspace="1">=congr</text>
+			<description>is congruent</description>
+		</replace>
+	</symbol>
+<symbol>
+		<char cat="6">≔</char>
+		<altcode>2254</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">:=</braille>
+			<text/>
+			<description>gedefinieerd als</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">:=</braille>
+			<text addleadingspace="1" addtrailingspace="1">:=</text>
+			<description>gedefinieerd als</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">:=</braille>
+			<text addleadingspace="1" addtrailingspace="1">:=</text>
+			<description>gedefinieerd als</description>
+		</replace>
+	</symbol>
+<symbol>
+		<char cat="6">⊢</char>
+		<altcode>22A2</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">|-</braille>
+			<text/>
+			<description>draaihekje</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">|-</braille>
+			<text addleadingspace="1" addtrailingspace="1">|-</text>
+			<description>draaihekje</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">|-</braille>
+			<text addleadingspace="1" addtrailingspace="1">|-</text>
+			<description>draaihekje</description>
+		</replace>
+	</symbol>
+<symbol>
+		<char cat="6">⊬</char>
+		<altcode>22AC</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">|-/</braille>
+			<text/>
+			<description>draaihekje met schuine streep</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">|-/</braille>
+			<text addleadingspace="1" addtrailingspace="1">|-/</text>
+			<description>draaihekje met schuine streep</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">|-/</braille>
+			<text addleadingspace="1" addtrailingspace="1">|-/</text>
+			<description>draaihekje met schuine streep</description>
+		</replace>
+	</symbol>
+<symbol>
+		<char cat="6">⊨</char>
+		<altcode>22A8</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">|=</braille>
+			<text/>
+			<description>dubbel draaihekje</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">|=</braille>
+			<text addleadingspace="1" addtrailingspace="1">|=</text>
+			<description>dubbel draaihekje</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">|=</braille>
+			<text addleadingspace="1" addtrailingspace="1">|=</text>
+			<description>dubbel draaihekje</description>
+		</replace>
+	</symbol>
+<symbol>
+		<char cat="6">⊭</char>
+		<altcode>22AD</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">|=/</braille>
+			<text/>
+			<description>dubbel draaihekje met schuine streep</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">|=/</braille>
+			<text addleadingspace="1" addtrailingspace="1">|=/</text>
+			<description>dubbel draaihekje met schuine streep</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">|=/</braille>
+			<text addleadingspace="1" addtrailingspace="1">|=/</text>
+			<description>dubbel draaihekje met schuine streep</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∣</char>
+		<altcode>8739</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ô</braille>
+			<text/>
+			<description>verticale streep</description>
+		</replace>
+		<replace context="formula">
+			<braille>ô</braille>
+			<text>|</text>
+			<description>verticale streep</description>
+		</replace>
+		<replace context="code">
+			<braille>ô</braille>
+			<text>|</text>
+			<description>verticale streep</description>
+		</replace>
+		<replace context="symbol">
+			<braille>|</braille>
+			<text/>
+			<description>vetdruk</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">(</char>
+		<altcode>0040</altcode>
+		<language/>
+		<replace context="default">
+			<braille>}</braille>
+			<text/>
+			<description>ronde haak openen</description>
+		</replace>
+		<replace context="formula">
+			<braille>ê</braille>
+			<text>(</text>
+			<description>ronde haak openen</description>
+		</replace>
+		<replace context="code">
+			<braille>ê</braille>
+			<text>(</text>
+			<description>ronde haak openen</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">)</char>
+		<altcode>0041</altcode>
+		<language/>
+		<replace context="default">
+			<braille>"</braille>
+			<text/>
+			<description>ronde haak sluiten</description>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1">ä</braille>
+			<text>)</text>
+			<description>ronde haak sluiten</description>
+		</replace>
+		<replace context="code">
+			<braille>ä</braille>
+			<text>)</text>
+			<description>ronde haak sluiten</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">[</char>
+		<altcode>0091</altcode>
+		<language/>
+		<replace context="default">
+			<braille>à</braille>
+			<text/>
+			<description>blokhaak openen</description>
+		</replace>
+		<replace context="formula">
+			<braille>à</braille>
+			<text>[</text>
+			<description>blokhaak openen</description>
+		</replace>
+		<replace context="code">
+			<braille>à</braille>
+			<text>[</text>
+			<description>blokhaak openen</description>
+		</replace>
+		<replace context="symbol">
+			<braille>[</braille>
+			<text/>
+			<description>cursief</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">]</char>
+		<altcode>0093</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ù</braille>
+			<text/>
+			<description>blokhaak sluiten</description>
+		</replace>
+		<replace context="formula">
+			<braille>ù</braille>
+			<text>]</text>
+			<description>blokhaak sluiten</description>
+		</replace>
+		<replace context="code">
+			<braille>ù</braille>
+			<text>]</text>
+			<description>blokhaak sluiten</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">{</char>
+		<altcode>0123</altcode>
+		<language/>
+		<replace context="default">
+			<braille>à</braille>
+			<text/>
+			<description>accolade openen</description>
+		</replace>
+		<replace context="formula">
+			<braille>&amp;#</braille>
+			<text>{</text>
+			<description>accolade openen</description>
+		</replace>
+		<replace context="code">
+			<braille>&amp;#</braille>
+			<text>{</text>
+			<description>accolade openen</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">}</char>
+		<altcode>0125</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ù</braille>
+			<text/>
+			<description>accolade sluiten</description>
+		</replace>
+		<replace context="formula">
+			<braille>&amp;y</braille>
+			<text>}</text>
+			<description>accolade sluiten</description>
+		</replace>
+		<replace context="code">
+			<braille>&amp;y</braille>
+			<text>}</text>
+			<description>accolade sluiten</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">&lt;</char>
+		<altcode>0060</altcode>
+		<language/>
+		<replace context="default">
+			<braille>|ö</braille>
+			<text/>
+			<description>kleiner dan</description>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1" removetrailingspace="1">&amp;ö</braille>
+			<text>&lt;</text>
+			<!-- no directions about spaces; copy text as it is because this character has several functions  -->
+			<description>kleiner dan</description>
+		</replace>
+		<replace context="code">
+			<braille removeleadingspace="1" removetrailingspace="1">&amp;ö</braille>
+			<text>&lt;</text>
+			<!-- no directions about spaces; copy text as it is because this character has several functions (punthaak openen; kleiner dan) -->
+			<description>kleiner dan</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">&gt;</char>
+		<altcode>0062</altcode>
+		<language/>
+		<replace context="default">
+			<braille>|o</braille>
+			<text/>
+			<description>groter dan</description>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1" removetrailingspace="1">&amp;o</braille>
+			<text>&gt;</text>
+			<!-- no directions about spaces; copy text as it is because this character has several functions (punthaak sluiten; groter dan) -->
+			<description>groter dan</description>
+		</replace>
+		<replace context="code">
+			<braille removeleadingspace="1" removetrailingspace="1">&amp;o</braille>
+			<text>&gt;</text>
+			<!-- no directions about spaces; copy text as it is because this character has several functions (punthaak sluiten; groter dan) -->
+			<description>groter dan</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≤</char>
+		<altcode>8804</altcode>
+		<language/>
+		<replace context="default">
+			<braille>|ö=</braille>
+			<text/>
+			<description>kleiner dan of gelijk</description>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1" removetrailingspace="1">&amp;ö=</braille>
+			<text addleadingspace="1" addtrailingspace="1">&lt;=</text>
+			<description>kleiner dan of gelijk</description>
+		</replace>
+		<replace context="code">
+			<braille removeleadingspace="1" removetrailingspace="1">&amp;ö=</braille>
+			<text addleadingspace="1" addtrailingspace="1">&lt;=</text>
+			<description>kleiner dan of gelijk</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≥</char>
+		<altcode>8805</altcode>
+		<language/>
+		<replace context="default">
+			<braille>|o=</braille>
+			<text/>
+			<description>groter dan of gelijk</description>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1" removetrailingspace="1">&amp;o=</braille>
+			<text addleadingspace="1" addtrailingspace="1">&gt;=</text>
+			<description>groter dan of gelijk</description>
+		</replace>
+		<replace context="code">
+			<braille removeleadingspace="1" removetrailingspace="1">&amp;o=</braille>
+			<text addleadingspace="1" addtrailingspace="1">&gt;=</text>
+			<description>groter dan of gelijk</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≮</char>
+		<altcode>8814</altcode>
+		<language/>
+		<replace context="default">
+			<braille>niet kleiner dan</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1" removetrailingspace="1">*ö</braille>
+			<text addleadingspace="1" addtrailingspace="1">niet&lt;</text>
+			<description>niet kleiner dan</description>
+		</replace>
+		<replace context="code">
+			<braille removeleadingspace="1" removetrailingspace="1">*ö</braille>
+			<text addleadingspace="1" addtrailingspace="1">niet&lt;</text>
+			<description>niet kleiner dan</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≯</char>
+		<altcode>8815</altcode>
+		<language/>
+		<replace context="default">
+			<braille>niet groter dan</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1" removetrailingspace="1">*o</braille>
+			<text addleadingspace="1" addtrailingspace="1">niet&gt;</text>
+			<description>niet groter dan</description>
+		</replace>
+		<replace context="code">
+			<braille removeleadingspace="1" removetrailingspace="1">*o</braille>
+			<text addleadingspace="1" addtrailingspace="1">niet&gt;</text>
+			<description>niet groter dan</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">↑</char>
+		<altcode>8593</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ô,</braille>
+			<text/>
+			<description>pijl naar boven</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">ô,</braille>
+			<text addleadingspace="1" addtrailingspace="1">vanOnder--&gt;</text>
+			<description>pijl naar boven</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">ô,</braille>
+			<text addleadingspace="1" addtrailingspace="1">vanOnder--&gt;</text>
+			<description>pijl naar boven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">↓</char>
+		<altcode>8595</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ô'</braille>
+			<text/>
+			<description>pijl naar beneden</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">ô'</braille>
+			<text addleadingspace="1" addtrailingspace="1">vanBoven--&gt;</text>
+			<description>pijl naar beneden</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">ô'</braille>
+			<text addleadingspace="1" addtrailingspace="1">vanBoven--&gt;</text>
+			<description>pijl naar beneden</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">→</char>
+		<altcode>2192</altcode>
+		<language/>
+		<replace context="default">
+			<braille>:,</braille>
+			<text/>
+			<description>pijl naar rechts</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">:,</braille>
+			<text addleadingspace="1" addtrailingspace="1">--&gt;</text>
+			<description>pijl naar rechts</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">:,</braille>
+			<text addleadingspace="1" addtrailingspace="1">--&gt;</text>
+			<description>pijl naar rechts</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">←</char>
+		<altcode>8592</altcode>
+		<language/>
+		<replace context="default">
+			<braille>,:</braille>
+			<text/>
+			<description>pijl naar links</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">,:</braille>
+			<text addleadingspace="1" addtrailingspace="1">&lt;--</text>
+			<description>pijl naar links</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">,:</braille>
+			<text addleadingspace="1" addtrailingspace="1">&lt;--</text>
+			<description>pijl naar links</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">↕</char>
+		<altcode>8597</altcode>
+		<language/>
+		<replace context="default">
+			<braille>,ô'</braille>
+			<text/>
+			<description>pijl naar boven en beneden</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">,ô'</braille>
+			<text addleadingspace="1" addtrailingspace="1">,ô'</text>
+			<description>pijl naar boven en beneden</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">,ô'</braille>
+			<text addleadingspace="1" addtrailingspace="1">,ô'</text>
+			<description>pijl naar boven en beneden</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">↔</char>
+		<altcode>8596</altcode>
+		<language/>
+		<replace context="default">
+			<braille>,:,</braille>
+			<text/>
+			<description>pijl naar links en naar rechts</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">,:,</braille>
+			<text>,:,</text>
+			<description>pijl naar links en naar rechts</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">,:,</braille>
+			<text>,:,</text>
+			<description>pijl naar links en naar rechts</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">⇄</char>
+		<altcode>8644</altcode>
+		<language/>
+		<replace context="default">
+			<braille>'=,</braille>
+			<text/>
+			<description>pijl naar rechts boven een pijl naar links</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">'=,</braille>
+			<text>'=,</text>
+			<description>pijl naar rechts boven een pijl naar links</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">'=,</braille>
+			<text>'=,</text>
+			<description>pijl naar rechts boven een pijl naar links</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">⇆</char>
+		<altcode>8646</altcode>
+		<language/>
+		<replace context="default">
+			<braille>,='</braille>
+			<text/>
+			<description>pijl naar links boven een pijl naar rechts</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">,='</braille>
+			<text>,='</text>
+			<description>pijl naar links boven een pijl naar rechts</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">,='</braille>
+			<text>,='</text>
+			<description>pijl naar links boven een pijl naar rechts</description>
+		</replace>
+	</symbol>
+<symbol>
+		<char cat="5">↦</char>
+		<altcode>21A6</altcode>
+		<language/>
+		<replace context="default">
+			<braille>|-&gt;</braille>
+			<text/>
+			<description>pijl naar rechts vanuit stok</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">|-&gt;</braille>
+			<text>|-&gt;</text>
+			<description>pijl naar rechts vanuit stok</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">|-&gt;</braille>
+			<text>|-&gt;</text>
+			<description>pijl naar rechts vanuit stok</description>
+		</replace>
+	</symbol>
+<symbol>
+		<char cat="5">↤</char>
+		<altcode>21A4</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&lt;-|</braille>
+			<text/>
+			<description>pijl naar links vanuit stok</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">&lt;-|</braille>
+			<text>&lt;-|</text>
+			<description>pijl naar links vanuit stok</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">&lt;-|</braille>
+			<text>&lt;-|</text>
+			<description>pijl naar links vanuit stok</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">±</char>
+		<altcode>0177</altcode>
+		<language/>
+		<replace context="default">
+			<braille>+-</braille>
+			<text/>
+			<description>plusminus</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">+-</braille>
+			<text>+-</text>
+			<description>plusminus</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">+-</braille>
+			<text>+-</text>
+			<description>plusminus</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∓</char>
+		<altcode>8723</altcode>
+		<language/>
+		<replace context="default">
+			<braille>-+</braille>
+			<text/>
+			<description>minusplus</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">-+</braille>
+			<text>-+</text>
+			<description>minusplus</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">-+</braille>
+			<text>-+</text>
+			<description>minusplus</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">^</char>
+		<altcode>0094</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ò</braille>
+			<text>^</text>
+			<description>dakje; tot de macht; superscript</description>
+		</replace>
+		<replace context="formula">
+			<braille open="(" close=")">ò</braille>
+			<text  open="(" close=")" removetrailingspace="1">^</text>
+			<description>dakje; tot de macht; superscript</description>
+		</replace>
+		<replace context="code">
+			<braille>ò</braille>
+			<text>^</text>
+			<description>dakje; tot de macht; superscript</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∧</char>
+		<altcode>8743</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">en</braille>
+			<text/>
+			<description>"en" -teken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">en</braille>
+			<text addleadingspace="1" addtrailingspace="1">en</text>
+			<description>"en" -teken</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">en</braille>
+			<text addleadingspace="1" addtrailingspace="1">en</text>
+			<description>"en" -teken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∨</char>
+		<altcode>8744</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">of</braille>
+			<text/>
+			<description>"of"- teken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">of</braille>
+			<text addleadingspace="1" addtrailingspace="1">of</text>
+			<description>"of"- teken</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">of</braille>
+			<text addleadingspace="1" addtrailingspace="1">of</text>
+			<description>"of"- teken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⊻</char>
+		<altcode>8891</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">xof</braille>
+			<text/>
+			<description>"exclusieve of"-teken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">xof</braille>
+			<text addleadingspace="1" addtrailingspace="1">xof</text>
+			<description>"exclusieve of"-teken</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">xof</braille>
+			<text addleadingspace="1" addtrailingspace="1">xof</text>
+			<description>"exclusieve of"-teken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⋀</char>
+		<altcode>22C0</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">en</braille>
+			<text/>
+			<description>"en"-teken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">en</braille>
+			<text addleadingspace="1" addtrailingspace="1">en</text>
+			<description>"en"-teken</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">en</braille>
+			<text addleadingspace="1" addtrailingspace="1">en</text>
+			<description>"en"-teken</description>
+		</replace>
+	</symbol>
+<symbol>
+		<char cat="6">⋁</char>
+		<altcode>22C1</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">of</braille>
+			<text/>
+			<description>"of"-teken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">of</braille>
+			<text addleadingspace="1" addtrailingspace="1">of</text>
+			<description>"of"-teken</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">of</braille>
+			<text addleadingspace="1" addtrailingspace="1">of</text>
+			<description>"of"-teken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">©</char>
+		<altcode>0169</altcode>
+		<language/>
+		<replace context="default">
+			<braille>|c</braille>
+			<text/>
+			<description>copyright</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">®</char>
+		<altcode>0174</altcode>
+		<language/>
+		<replace context="default">
+			<braille>|r</braille>
+			<text/>
+			<description>geregistreerd handelsmerk</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">™</char>
+		<altcode>0153</altcode>
+		<language/>
+		<replace context="default">
+			<braille>|tm</braille>
+			<text/>
+			<description>handelsmerk</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">⇔</char>
+		<altcode>8660</altcode>
+		<language/>
+		<replace context="default">
+			<braille>,=,</braille>
+			<text/>
+			<description>pijl naar links en rechts met dubbele stok</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">,=,</braille>
+			<text addleadingspace="1" addtrailingspace="1">&lt;=&gt;</text>
+			<description>pijl naar links en rechts met dubbele stok</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">,=,</braille>
+			<text addleadingspace="1" addtrailingspace="1">&lt;=&gt;</text>
+			<description>pijl naar links en rechts met dubbele stok</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">⇐</char>
+		<altcode>8656</altcode>
+		<language/>
+		<replace context="default">
+			<braille>,=</braille>
+			<text/>
+			<description>pijl naar links met dubbele stok</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">,=</braille>
+			<text addleadingspace="1" addtrailingspace="1">,=</text>
+			<description>pijl naar links met dubbele stok</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">,=</braille>
+			<text addleadingspace="1" addtrailingspace="1">,=</text>
+			<description>pijl naar links met dubbele stok</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="5">⇒</char>
+		<altcode>8658</altcode>
+		<language/>
+		<replace context="default">
+			<braille>=,</braille>
+			<text/>
+			<description>pijl naar rechts met dubbele stok</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">=,</braille>
+			<text addleadingspace="1" addtrailingspace="1">=&gt;</text>
+			<description>pijl naar rechts met dubbele stok</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">=,</braille>
+			<text addleadingspace="1" addtrailingspace="1">=&gt;</text>
+			<description>pijl naar rechts met dubbele stok</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⊃</char>
+		<altcode>8835</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;ä</braille>
+			<text/>
+			<description>bevat als deelverzameling</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">omvat</braille>
+			<text addleadingspace="1" addtrailingspace="1">omvat</text>
+			<description>bevat als deelverzameling</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">omvat</braille>
+			<text addleadingspace="1" addtrailingspace="1">omvat</text>
+			<description>bevat als deelverzameling</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⊇</char>
+		<altcode>8839</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;ä=</braille>
+			<text/>
+			<description>bevat als deelverzameling of is gelijk aan</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">omvat of =</braille>
+			<text addleadingspace="1" addtrailingspace="1">omvatOf=</text>
+			<description>bevat als deelverzameling of is gelijk aan</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">omvat of =</braille>
+			<text addleadingspace="1" addtrailingspace="1">omvatOf=</text>
+			<description>bevat als deelverzameling of is gelijk aan</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⊄</char>
+		<altcode>8836</altcode>
+		<language/>
+		<replace context="default">
+			<braille>*ê</braille>
+			<text/>
+			<description>is geen deelverzameling van</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">geenDeelverz</braille>
+			<text addleadingspace="1" addtrailingspace="1">geenDeelverz</text>
+			<description>is geen deelverzameling van</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">geenDeelverz</braille>
+			<text addleadingspace="1" addtrailingspace="1">geenDeelverz</text>
+			<description>is geen deelverzameling van</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⊂</char>
+		<altcode>8834</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;ê</braille>
+			<text/>
+			<description>is een deelverzameling van</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">deelverz</braille>
+			<text addleadingspace="1" addtrailingspace="1">deelverz</text>
+			<description>is een deelverzameling van</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">deelverz</braille>
+			<text addleadingspace="1" addtrailingspace="1">deelverz</text>
+			<description>is een deelverzameling van</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⊆</char>
+		<altcode>8838</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;ê=</braille>
+			<text/>
+			<description>is een deelverzameling of gelijk aan</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">deelverz of =</braille>
+			<text addleadingspace="1" addtrailingspace="1">deelverzOf=</text>
+			<description>is een deelverzameling of gelijk aan</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">deelverz of =</braille>
+			<text addleadingspace="1" addtrailingspace="1">deelverzOf=</text>
+			<description>is een deelverzameling of gelijk aan</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∅</char>
+		<altcode>8709</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1">diameter</braille>
+			<text>diameter</text>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">&amp;#&amp;y</braille>
+			<text addleadingspace="1" addtrailingspace="1">{}</text>
+			<description>lege verzameling; diameter</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">&amp;#&amp;y</braille>
+			<text addleadingspace="1" addtrailingspace="1">{}</text>
+			<description>lege verzameling; diameter</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∈</char>
+		<altcode>8712</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;e</braille>
+			<text/>
+			<description>is element van</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">element</braille>
+			<text addleadingspace="1" addtrailingspace="1">element</text>
+			<description>is element van</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">element</braille>
+			<text addleadingspace="1" addtrailingspace="1">element</text>
+			<description>is element van</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∉</char>
+		<altcode>8713</altcode>
+		<language/>
+		<replace context="default">
+			<braille>*e</braille>
+			<text/>
+			<description>is geen element van</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">geenElement</braille>
+			<text addleadingspace="1" addtrailingspace="1">geenElement</text>
+			<description>is geen element van</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">geenElement</braille>
+			<text addleadingspace="1" addtrailingspace="1">geenElement</text>
+			<description>is geen element van</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∩</char>
+		<altcode>8745</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">doorsnede</braille>
+			<text addleadingspace="1" addtrailingspace="1">doorsnede</text>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">doorsnede</braille>
+			<text addleadingspace="1" addtrailingspace="1">doorsnede</text>
+			<description>doorsnede</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">doorsnede</braille>
+			<text addleadingspace="1" addtrailingspace="1">doorsnede</text>
+			<description>doorsnede</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⋃</char>
+		<altcode>8899</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;î:</braille>
+			<text/>
+			<description>vereniging</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">verenigd</braille>
+			<text addleadingspace="1" addtrailingspace="1">verenigd</text>
+			<description>vereniging</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">verenigd</braille>
+			<text addleadingspace="1" addtrailingspace="1">verenigd</text>
+			<description>vereniging</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">ℕ</char>
+		<altcode>8469</altcode>
+		<language/>
+		<replace context="default">
+			<braille>N</braille>
+			<text>N</text>
+			<description>verzameling N</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">ℚ</char>
+		<altcode>8474</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Q</braille>
+			<text>Q</text>
+			<description>verzameling Q</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">ℝ</char>
+		<altcode>8477</altcode>
+		<language/>
+		<replace context="default">
+			<braille>R</braille>
+			<text>R</text>
+			<description>verzameling R</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">ℤ</char>
+		<altcode>8484</altcode>
+		<language/>
+		<replace context="default">
+			<braille>Z</braille>
+			<text>Z</text>
+			<description>verzameling Z</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∀</char>
+		<altcode>8704</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">voor alle</braille>
+			<text/>
+			<description>voor alle</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">voor alle</braille>
+			<text addleadingspace="1" addtrailingspace="1">voor alle</text>
+			<description>voor alle</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">voor alle</braille>
+			<text addleadingspace="1" addtrailingspace="1">voor alle</text>
+			<description>voor alle</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∃</char>
+		<altcode>8707</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">er is een</braille>
+			<text/>
+			<description>er bestaat een</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">er is een</braille>
+			<text addleadingspace="1" addtrailingspace="1">er is een</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">er is een</braille>
+			<text addleadingspace="1" addtrailingspace="1">er is een</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∏</char>
+		<altcode>220F</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">~P</braille>
+			<text/>
+			<description>product, pi (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">~P</braille>
+			<text >~P</text>
+			<description>product, pi (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">~P</braille>
+			<text>~P</text>
+			<description>product, pi (hoofdl.)</description>
+		</replace>
+	</symbol>
+<symbol>
+		<char cat="6">∑</char>
+		<altcode>2211</altcode>
+		<language/>
+		<replace context="default">
+			<braille addleadingspace="1" addtrailingspace="1">~S</braille>
+			<text/>
+			<description>som, sigma (hoofdl.)</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">~S</braille>
+			<text>~S</text>
+			<description>som, sigma (hoofdl.)</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">~S</braille>
+			<text>~S</text>
+			<description>som, sigma (hoofdl.)</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∟</char>
+		<altcode>8735</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ï}</braille>
+			<text/>
+			<description>rechte hoek</description>
+		</replace>
+		<replace context="formula">
+			<braille addtrailingspace="1">rHoek</braille>
+			<text addtrailingspace="1">rHoek</text>
+			<description>rechte hoek</description>
+		</replace>
+		<replace context="code">
+			<braille addtrailingspace="1">rHoek</braille>
+			<text addtrailingspace="1">rHoek</text>
+			<description>rechte hoek</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∠</char>
+		<altcode>8736</altcode>
+		<language/>
+		<replace context="default">
+			<braille addtrailingspace="1">hoek</braille>
+			<text addtrailingspace="1">hoek</text>
+			<description>hoeksymbool</description>
+		</replace>
+		<replace context="formula">
+			<braille addtrailingspace="1">hoek</braille>
+			<text addtrailingspace="1">hoek</text>
+			<description>hoeksymbool</description>
+		</replace>
+		<replace context="code">
+			<braille addtrailingspace="1">hoek</braille>
+			<text addtrailingspace="1">hoek</text>
+			<description>hoeksymbool</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∡</char>
+		<altcode>8737</altcode>
+		<language/>
+		<replace context="default">
+			<braille>ïö</braille>
+			<text/>
+			<description>hoeksymbool</description>
+		</replace>
+		<replace context="formula">
+			<braille addtrailingspace="1">hoek</braille>
+			<text addtrailingspace="1">hoek</text>
+			<description>hoeksymbool</description>
+		</replace>
+		<replace context="code">
+			<braille addtrailingspace="1">hoek</braille>
+			<text addtrailingspace="1">hoek</text>
+			<description>hoeksymbool</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∆</char>
+		<altcode>8710</altcode>
+		<language/>
+		<replace context="default">
+			<braille addtrailingspace="1">drieh</braille>
+			<text addtrailingspace="1">drieh</text>
+			<description>driehoeksymbool</description>
+		</replace>
+		<replace context="formula">
+			<braille addtrailingspace="1">drieh</braille>
+			<text addtrailingspace="1">drieh</text>
+			<description>driehoeksymbool</description>
+		</replace>
+		<replace context="code">
+			<braille addtrailingspace="1">drieh</braille>
+			<text addtrailingspace="1">drieh</text>
+			<description>driehoeksymbool</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∥</char>
+		<altcode>8741</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;é</braille>
+			<text>//</text>
+			<description>evenwijdig aan</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">//</braille>
+			<text addleadingspace="1" addtrailingspace="1">//</text>
+			<description>evenwijdig aan</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">&amp;é</braille>
+			<text addleadingspace="1" addtrailingspace="1">//</text>
+			<description>evenwijdig aan</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⊥</char>
+		<altcode>8869</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;%' </braille>
+			<text/>
+			<description>loodrecht</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" addtrailingspace="1">loodr</braille>
+			<text addleadingspace="1" addtrailingspace="1">loodr</text>
+			<description>loodrecht</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" addtrailingspace="1">loodr</braille>
+			<text addleadingspace="1" addtrailingspace="1">loodr</text>
+			<description>loodrecht</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">≙</char>
+		<altcode>8793</altcode>
+		<language/>
+		<replace context="default">
+			<braille>&amp;ò=</braille>
+			<text>~</text>
+			<description>komt overeen met</description>
+		</replace>
+		<replace context="formula">
+			<braille>~</braille>
+			<text>~</text>
+			<description>komt overeen met</description>
+		</replace>
+		<replace context="code">
+			<braille>~</braille>
+			<text>~</text>
+			<description>komt overeen met</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⋅</char>
+		<altcode>8901</altcode>
+		<language/>
+		<replace context="default">
+			<braille>*</braille>
+			<text>*</text>
+			<description>vermenigvuldigingsteken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">*</braille>
+			<text>*</text>
+			<description>vermenigvuldigingsteken</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">*</braille>
+			<text>*</text>
+			<description>vermenigvuldigingsteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∫</char>
+		<altcode>8747</altcode>
+		<language/>
+		<replace context="default">
+			<braille>è</braille>
+			<text/>
+			<description>integraal</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">{Intg</braille>
+			<text addleadingspace="1">Intg</text>
+			<description>integraal</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">è</braille>
+			<text addleadingspace="1">Intg</text>
+			<description>integraal</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∬</char>
+		<altcode>8748</altcode>
+		<language/>
+		<replace context="default">
+			<braille>èè</braille>
+			<text/>
+			<description>dubbele integraal</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">IntgIntg</braille>
+			<text addleadingspace="1">IntgIntg</text>
+			<description>dubbele integraal</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">IntgIntg</braille>
+			<text addleadingspace="1">IntgIntg</text>
+			<description>dubbele integraal</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">∮</char>
+		<altcode>8750</altcode>
+		<language/>
+		<replace context="default">
+			<braille>è"</braille>
+			<text/>
+			<description>kring-integraal</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">kringIntg</braille>
+			<text addleadingspace="1">kringIntg</text>
+			<description>kring-integraal</description>
+		</replace>
+		<replace context="code">
+			<braille addleadingspace="1" removetrailingspace="1">kringIntg</braille>
+			<text addleadingspace="1">kringIntg</text>
+			<description>kring-integraal</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">/</char>
+		<altcode>0047</altcode>
+		<language/>
+		<replace context="default">
+			<braille>/</braille>
+			<text/>
+			<description>slash</description>
+		</replace>
+		<replace context="formula">
+			<braille removeleadingspace="1" removetrailingspace="1">/</braille>
+			<text removeleadingspace="1" removetrailingspace="1">/</text>
+			<description>deelteken; breukstreep</description>
+		</replace>
+		<replace context="code">
+			<braille>/</braille>
+			<text>/</text>
+			<description>slash; breukstreep</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">\</char>
+		<altcode>0092</altcode>
+		<language/>
+		<replace context="default">
+			<braille>\</braille>
+			<text>\</text>
+			<description>backslash</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">*</char>
+		<altcode>0042</altcode>
+		<language/>
+		<replace context="default">
+			<braille>*</braille>
+			<text/>
+			<description>sterretje</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">*</braille>
+			<text>*</text>
+			<description>sterretje; vermenigvuldigingsteken</description>
+		</replace>
+		<replace context="code">
+			<braille>*</braille>
+			<text>*</text>
+			<description>sterretje; vermenigvuldigingsteken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="0">⎕</char>
+		<altcode>2395</altcode>
+		<language/>
+		<replace context="default">
+			<braille>box</braille>
+			<text/>
+			<description>"box"-teken</description>
+		</replace>
+		<replace context="formula">
+			<braille addleadingspace="1" removetrailingspace="1">box</braille>
+			<text>box</text>
+			<description>"box"-teken</description>
+		</replace>
+		<replace context="code">
+			<braille>box</braille>
+			<text>box</text>
+			<description>"box"-teken</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">İ</char>
+		<altcode>0304</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">I</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ı</char>
+		<altcode>0305</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">i</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ş</char>
+		<altcode>0350</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">S</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ş</char>
+		<altcode>0351</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille lang="tr">s</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ę</char>
+		<altcode>0280</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille>E</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ę</char>
+		<altcode>0281</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille>e</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">Ţ</char>
+		<altcode>0354</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille>T</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">ţ</char>
+		<altcode>0355</altcode>
+		<language>Turks</language>
+		<replace context="default">
+			<braille>t</braille>
+			<text/>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">½</char>
+		<altcode>0189</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%1/%2</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%1/%2</braille>
+			<text>1/2</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%1/%2</braille>
+			<text>1/2</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">¾</char>
+		<altcode>0190</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%3/%4</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%3/%4</braille>
+			<text>3/4</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%3/%4</braille>
+			<text>3/4</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">¼</char>
+		<altcode>0188</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%1/%4</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%1/%4</braille>
+			<text>1/4</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%1/%4</braille>
+			<text>1/4</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅓</char>
+		<altcode>8531</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%1/%3</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%1/%3</braille>
+			<text>1/3</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%1/%3</braille>
+			<text>1/3</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅔</char>
+		<altcode>8532</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%2/%3</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%2/%3</braille>
+			<text>2/3</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%2/%3</braille>
+			<text>2/3</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅕</char>
+		<altcode>8533</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%1/%5</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%1/%5</braille>
+			<text>1/5</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%1/%5</braille>
+			<text>1/5</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅖</char>
+		<altcode>8534</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%2/%5</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%2/%5</braille>
+			<text>2/5</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%2/%5</braille>
+			<text>2/5</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅗</char>
+		<altcode>8535</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%3/%5</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%3/%5</braille>
+			<text>3/5</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%3/%5</braille>
+			<text>3/5</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅘</char>
+		<altcode>8536</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%4/%5</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%4/%5</braille>
+			<text>4/5</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%4/%5</braille>
+			<text>4/5</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅙</char>
+		<altcode>8537</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%1/%6</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%1/%6</braille>
+			<text>1/6</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%1/%6</braille>
+			<text>1/6</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅚</char>
+		<altcode>8538</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%5/%6</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%5/%6</braille>
+			<text>5/6</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%5/%6</braille>
+			<text>5/6</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅛</char>
+		<altcode>8539</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%1/%8</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%1/%8</braille>
+			<text>1/8</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%1/%8</braille>
+			<text>1/8</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅜</char>
+		<altcode>8540</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%3/%8</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%3/%8</braille>
+			<text>3/8</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%3/%8</braille>
+			<text>3/8</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅝</char>
+		<altcode>8541</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%5/%8</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%5/%8</braille>
+			<text>5/8</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%5/%8</braille>
+			<text>5/8</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">⅞</char>
+		<altcode>8542</altcode>
+		<language/>
+		<replace context="default">
+			<braille>%7/%8</braille>
+			<text/>
+			<description/>
+		</replace>
+		<replace context="formula">
+			<braille>%7/%8</braille>
+			<text>7/8</text>
+			<description/>
+		</replace>
+		<replace context="code">
+			<braille>%7/%8</braille>
+			<text>7/8</text>
+			<description/>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="4">♥</char>
+		<altcode>9829</altcode>
+		<language/>
+		<replace context="default">
+			<braille>(h)</braille>
+			<text/>
+			<description>hartje</description>
+		</replace>
+	</symbol>
+	<!-- 17 Oct 2009: not in use any more? 
+<symbol>
+		<char cat="6">~ü</char>
+		<altcode>0126+0252</altcode>
+		<replace context="default">
+			<braille>~ü</braille>
+			<text></text>
+			<description>regel verlagingsteken</description>
+		</replace>
+	</symbol>
+-->
+	<symbol>
+		<char cat="6">]ü</char>
+		<altcode>0093+0252</altcode>
+		<replace context="default">
+			<braille>]ü</braille>
+			<text/>
+			<description>regel verhogingsteken</description>
+		</replace>
+	</symbol>
+
+	<symbol>
+		<char cat="6">]:</char>
+		<altcode>0093+0058</altcode>
+		<replace context="default">
+			<braille>]:</braille>
+			<text/>
+			<description>streep midden boven</description>
+		</replace>
+	</symbol>
+
+	<symbol>
+		<char cat="6">{-</char>
+		<altcode>0123+0045</altcode>
+		<replace context="default">
+			<braille>&amp;#-</braille>
+			<text/>
+			<description></description>
+		</replace>
+		<replace context="formula">
+			<braille>&amp;#-</braille>
+			<text/>
+			<description>streep midden boven</description>
+		</replace>
+		<replace context="code">
+			<braille>&amp;#-</braille>
+			<text/>
+			<description>streep midden boven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">{^</char>
+		<altcode>0123+0094</altcode>
+		<replace context="default">
+			<braille>&amp;#ò</braille>
+			<text>{^</text>
+			<description></description>
+		</replace>
+		<replace context="formula">
+			<braille>&amp;#ò</braille>
+			<text>{^</text>
+			<description>dakje midden boven</description>
+		</replace>
+		<replace context="code">
+			<braille>&amp;#ò</braille>
+			<text>{^</text>
+			<description>dakje midden boven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">~:</char>
+		<altcode>0126+0058</altcode>
+		<replace context="default">
+			<braille>~:</braille>
+			<text>~:</text>
+			<description>streep midden onder</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">%/</char>
+		<altcode>0037+0047</altcode>
+		<replace context="default">
+			<braille>%/</braille>
+			<text>%/</text>
+			<description>index links boven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">%\</char>
+		<altcode>0037+0092</altcode>
+		<replace context="default">
+			<braille>%\</braille>
+			<text>%\</text>
+			<description>index links onder</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">[/</char>
+		<altcode>0091+0047</altcode>
+		<replace context="default">
+			<braille>[/</braille>
+			<text>[/</text>
+			<description>index midden boven</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<char cat="6">[\</char>
+		<altcode>0091+0092</altcode>
+		<replace context="default">
+			<braille>[\</braille>
+			<text>[\</text>
+			<description>index midden onder</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<element>frame</element>
+		<replace context="symbol">
+			<braille>bk</braille>
+			<text>bk</text>
+			<description>begin kader</description>
+		</replace>
+		<replace context="symbol">
+			<braille>ek</braille>
+			<text>ek</text>
+			<description>einde kader</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<element>table</element>
+		<replace context="symbol">
+			<braille>bt</braille>
+			<text>bt</text>
+			<description>begin tabel</description>
+		</replace>
+		<replace context="symbol">
+			<braille>et</braille>
+			<text>et</text>
+			<description>einde tabel</description>
+		</replace>
+	</symbol>
+	<symbol>
+		<element>img</element>
+		<replace context="symbol">
+			<braille>ba</braille>
+			<text>ba</text>
+			<description>begin afbeelding</description>
+		</replace>
+		<replace context="symbol">
+			<braille>ea</braille>
+			<text>ea</text>
+			<description>einde afbeelding</description>
+		</replace>
+	</symbol>
+</symbols>

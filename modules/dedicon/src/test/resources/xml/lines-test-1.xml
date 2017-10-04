@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<meta name="dtb:uid" content="228286"/>
+<meta name="dc:Title" content="Line test 1"/>
+<meta name="dc:Language" content="nl"/>
+<meta name="dc:Identifier" content="222222"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2002"/>
+<meta name="dc:Source" content="1111111111"/>
+<meta name="prod:docType" content="ro"/>
+<meta name="prod:docHyphenate" content="Y"/>
+<meta name="prod:colophon" content="1"/>
+<meta name="prod:producer" content="Davy Kager"/>
+<meta name="prod:guidelineversion" content="sdf"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>Line test 1</doctitle>
+<docauthor>Davy Kager</docauthor>
+</frontmatter>
+<bodymatter>
+<level1>
+<h1>All in one linegroup</h1>
+<poem>
+<linegroup>
+<line>1. (1) Sir,</line>
+<line>(2) Of course the best solution to the problem of species conservation is to conserve the</line>
+<line>(3) natural environment. However, the doubt about the future of so much natural</line>
+<line>(4) environment causes a problem. The Kenyans and others may not be able to support the</line>
+<line>(5) black rhinoceros info the far distant future; nor may other African states be able to</line>
+<line>(6) support their gorillas and chimpanzees and so on – and on and on. The gathering clouds of</line>
+<line>(7) human demographic catastrophe in so much of the world warn us that there are stormy</line>
+<line>(8) waters ahead of the ark.</line>
+<line>2. (9) Only a fool would venture info a strong ocean in a ship without a lifeboat.</line>
+<line>(10) Everybody hopes the lifeboat will never be needed – but all should be grateful that the</line>
+<line>(11) lifeboat is there.</line>
+</linegroup>
+</poem>
+</level1>
+<level1>
+<h1>In multiple linegroups</h1>
+<poem>
+<linegroup>
+<line>1. (1) Sir,</line>
+<line>(2) Of course the best solution to the problem of species conservation is to conserve the</line>
+<line>(3) natural environment. However, the doubt about the future of so much natural</line>
+<line>(4) environment causes a problem. The Kenyans and others may not be able to support the</line>
+<line>(5) black rhinoceros info the far distant future; nor may other African states be able to</line>
+<line>(6) support their gorillas and chimpanzees and so on – and on and on. The gathering clouds of</line>
+<line>(7) human demographic catastrophe in so much of the world warn us that there are stormy</line>
+<line>(8) waters ahead of the ark.</line>
+</linegroup>
+<linegroup>
+<line>2. (9) Only a fool would venture info a strong ocean in a ship without a lifeboat.</line>
+<line>(10) Everybody hopes the lifeboat will never be needed – but all should be grateful that the</line>
+<line>(11) lifeboat is there.</line>
+</linegroup>
+</poem>
+</level1>
+</bodymatter>
+<rearmatter/>
+</book>
+</dtbook>

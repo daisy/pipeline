@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:dedicon="http://www.dedicon.nl"
+               script="http://www.dedicon.nl/pipeline/modules/braille/dtbook-to-pef.xpl">
+  
+  <x:scenario label="_">
+    <x:call step="dedicon:dtbook-to-pef">
+      <x:option name="page-width" select="'33'"/>
+      <x:option name="page-height" select="'28'"/>
+      <x:option name="toc-depth" select="'0'"/>
+      <x:option name="include-document-toc-in-last-volume" select="false()"/>
+      <x:option name="include-symbols-list" select="false()"/>
+      <x:option name="show-print-page-numbers" select="false()"/>
+      <x:option name="show-braille-page-numbers" select="false()"/>
+      <x:option name="add-boilerplate" select="false()"/>
+      <x:option name="hyphenation" select="false()"/>
+    </x:call>
+    
+  <x:scenario label="accentletters">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/accentletters-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('accentletters/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('accentletters/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="accentletters/output-dir/311819.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/accentletters-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="accentletters-symbolenlijst">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/accentletters-1.xml"/>
+      </x:input>
+      <x:option name="include-symbols-list" select="true()"/>
+      <x:option name="pef-output-dir" select="resolve-uri('accentletters-symbolenlijst/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('accentletters-symbolenlijst/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="accentletters-symbolenlijst/output-dir/311819.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/accentletters-symbolenlijst-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="toc">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/toc-test-1.xml"/>
+      </x:input>
+      <x:option name="toc-depth" select="'2'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('toc/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('toc/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="toc/output-dir/toc-test-1.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/toc-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="annotations 1">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/annotations-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('annotations/1/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('annotations/1/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="annotations/1/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/annotations-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="definition lists 1">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/def-lists-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('def-lists/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('def-lists/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="def-lists/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/def-lists-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="images">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/images-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('images/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('images/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="images/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/images-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="levels">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/levels-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('levels/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('levels/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="levels/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/levels-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="lists 1">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/lists-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('lists/1/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('lists/1/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="lists/1/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/lists-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="lists 2">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/lists-test-2.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('lists/2/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('lists/2/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="lists/2/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/lists-test-2.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="lists 3">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/lists-test-3.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('lists3/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('lists3/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="lists3/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/lists-test-3.pef"/>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="lists 4">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/lists-test-4.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('lists4/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('lists4/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="lists4/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/lists-test-4.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="line breaks 1">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/line-breaks-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('line-breaks/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('line-breaks/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="line-breaks/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/line-breaks-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="lines 1">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/lines-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('lines/1/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('lines/1/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="lines/1/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/lines-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="lines 2">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/lines-test-2.xml"/>
+      </x:input>
+      <x:option name="page-height" select="'15'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('lines2/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('lines2/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="lines2/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/lines-test-2.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="notes 1">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/notes-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('notes/1/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('notes/1/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="notes/1/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/notes-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="notes 2" pending="depends on css:left">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/notes-test-2.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('notes/2/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('notes/2/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="notes/2/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/notes-test-2.pef"/>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="print_toc 1">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/print_toc-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('print_toc/1/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('print_toc/1/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="print_toc/1/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/print_toc-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="subsup 1">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/subsup-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('subsup/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('subsup/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="subsup/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/subsup-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="tables 1">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/tables-test-1.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('tables/1/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('tables/1/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="tables/1/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/tables-test-1.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="tables 2">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/tables-test-2.xml"/>
+      </x:input>
+      <x:option name="pef-output-dir" select="resolve-uri('tables/2/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('tables/2/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="file" base-uri="temp-dir" href="tables/2/output-dir/222222.pef"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="file" href="../resources/pef/tables-test-2.pef"/>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="add-boilerplate">
+    <x:call>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xml/boilerplate-test-1.xml"/>
+      </x:input>
+    </x:call>
+    <x:scenario label="enabled">
+      <x:call>
+        <x:option name="add-boilerplate" select="true()"/>
+        <x:option name="pef-output-dir" select="resolve-uri('add-boilerplate/enabled/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('add-boilerplate/enabled/temp-dir',$temp-dir)"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="add-boilerplate/enabled/output-dir/222222.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="file" href="../resources/pef/boilerplate-test-1-enabled.pef"/>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="disabled">
+      <x:call>
+        <x:option name="add-boilerplate" select="false()"/>
+        <x:option name="pef-output-dir" select="resolve-uri('add-boilerplate/disabled/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('add-boilerplate/disabled/temp-dir',$temp-dir)"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="add-boilerplate/disabled/output-dir/222222.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="file" href="../resources/pef/boilerplate-test-1-disabled.pef"/>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="with pagenums" pending="fails because of empty page">
+      <x:call>
+        <x:option name="add-boilerplate" select="true()"/>
+        <x:option name="show-print-page-numbers" select="true()"/>
+        <x:option name="show-braille-page-numbers" select="true()"/>
+        <x:option name="pef-output-dir" select="resolve-uri('add-boilerplate/pagenums/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('add-boilerplate/pagenums/temp-dir',$temp-dir)"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="add-boilerplate/pagenums/output-dir/222222.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="file" href="../resources/pef/boilerplate-test-1-pagenums.pef"/>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="with toc without pagenums" pending="fails because of empty page">
+      <x:call>
+        <x:option name="add-boilerplate" select="true()"/>
+        <x:option name="toc-depth" select="'6'"/>
+        <x:option name="pef-output-dir" select="resolve-uri('add-boilerplate/toc-no-pagenums/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('add-boilerplate/toc-no-pagenums/temp-dir',$temp-dir)"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="add-boilerplate/toc-no-pagenums/output-dir/222222.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="file" href="../resources/pef/boilerplate-test-1-toc-no-pagenums.pef"/>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="with toc with pagenums" pending="fails because of empty page">
+      <x:call>
+        <x:option name="add-boilerplate" select="true()"/>
+        <x:option name="toc-depth" select="'6'"/>
+        <x:option name="show-print-page-numbers" select="true()"/>
+        <x:option name="show-braille-page-numbers" select="true()"/>
+        <x:option name="pef-output-dir" select="resolve-uri('add-boilerplate/toc-pagenums/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('add-boilerplate/toc-pagenums/temp-dir',$temp-dir)"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="add-boilerplate/toc-pagenums/output-dir/222222.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="file" href="../resources/pef/boilerplate-test-1-toc-pagenums.pef"/>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  <x:scenario label="show-braille-page-numbers">
+    <x:call>
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <book>
+              <bodymatter>
+                <level1>
+                  <h1>Hoofdstuk 1</h1>
+                </level1>
+              </bodymatter>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="include-brf" select="true()"/>
+    </x:call>
+    <x:scenario label="enabled">
+      <x:call>
+        <x:option name="show-braille-page-numbers" select="true()"/>
+        <x:option name="pef-output-dir" select="resolve-uri('show-braille-page-numbers/enabled/output-dir',$temp-dir)"/>
+        <x:option name="brf-output-dir" select="resolve-uri('show-braille-page-numbers/enabled/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('show-braille-page-numbers/enabled/temp-dir',$temp-dir)"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="show-braille-page-numbers/enabled/output-dir/test_script.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="nl">
+            <head>
+              <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <dc:format>application/x-pef+xml</dc:format>
+              </meta>
+            </head>
+            <body>
+              <volume cols="33" rows="28" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                    <row>⠨⠓⠕⠕⠋⠙⠎⠞⠥⠅⠀⠼⠁</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+    <x:scenario label="disabled">
+      <x:call>
+        <x:option name="show-braille-page-numbers" select="false()"/>
+        <x:option name="pef-output-dir" select="resolve-uri('show-braille-page-numbers/disabled/output-dir',$temp-dir)"/>
+        <x:option name="temp-dir" select="resolve-uri('show-braille-page-numbers/disabled/temp-dir',$temp-dir)"/>
+      </x:call>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="show-braille-page-numbers/disabled/output-dir/test_script.pef"/>
+      </x:context>
+      <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+        <x:document type="inline">
+          <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1" xml:lang="nl">
+            <head>
+              <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+                <dc:format>application/x-pef+xml</dc:format>
+              </meta>
+            </head>
+            <body>
+              <volume cols="33" rows="28" rowgap="0" duplex="true">
+                <section>
+                  <page>
+                    <row>⠨⠓⠕⠕⠋⠙⠎⠞⠥⠅⠀⠼⠁</row>
+                  </page>
+                </section>
+              </volume>
+            </body>
+          </pef>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+  </x:scenario>
+  
+  </x:scenario> <!-- label="_" -->
+</x:description>

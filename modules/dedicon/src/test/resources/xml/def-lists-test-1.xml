@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xml:lang="nl" version="2005-3" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+<head>
+<meta name="dtb:uid" content="228286"/>
+<meta name="dc:Title" content="Definition list test 1"/>
+<meta name="dc:Creator" content="sfkjhdf"/>
+<meta name="dc:Date" content="2014-05-30"/>
+<meta name="dc:Publisher" content="Dedicon"/>
+<meta name="dc:Language" content="nl"/>
+<meta name="dc:Identifier" content="222222"/>
+<meta name="dc:Format" content="ANSI/NISO Z39.86-2002"/>
+<meta name="dc:Source" content="1111111111"/>
+<meta name="dtb:producedDate" content="2014-05-30"/>
+<meta name="prod:docType" content="ro"/>
+<meta name="prod:rawVersion" content="N"/>
+<meta name="prod:docHyphenate" content="Y"/>
+<meta name="prod:MathNotation" content="code2009"/>
+<meta name="prod:colophon" content="1"/>
+<meta name="prod:producer" content="Davy Kager"/>
+<meta name="dtb:sourcePublisher" content="sdf"/>
+<meta name="prod:guidelineversion" content="sdf"/>
+</head>
+<book>
+<frontmatter>
+<doctitle>Definition list test 1</doctitle>
+<docauthor>Davy Kager</docauthor>
+</frontmatter>
+<bodymatter>
+<level2>
+<h2>1.10 Begrippen</h2>
+<dl>
+<dt>Aftrekken:</dt>
+<dd>Het verschil tussen twee of meer getallen berekenen.</dd>
+<dt>Delen:</dt>
+<dd>De omgekeerde bewerking van het vermenigvuldigen.</dd>
+<dt>Machtsverheffen:</dt>
+<dd>Herhaald vermenigvuldigen.</dd>
+<dt>Optellen:</dt>
+<dd>De som van twee of meer getallen berekenen.</dd>
+<dt>Procent:</dt>
+<dd>Eenhonderdste deel.</dd>
+<dt>Promille:</dt>
+<dd>Eenduizendste deel.</dd>
+<dt>Vermenigvuldigen:</dt>
+<dd>Een herhaling van het optellen.</dd>
+</dl>
+</level2>
+</bodymatter>
+<rearmatter/>
+</book>
+</dtbook>
