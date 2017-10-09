@@ -355,23 +355,25 @@ init() {
 
 run() {
     if [ "x$PIPELINE2_AUTH" = "x" ]; then
-            PIPELINE2_AUTH="-Dorg.daisy.pipeline.ws.authentication=false"
-            export PIPELINE2_AUTH 
+        OPTS="$OPTS -Dorg.daisy.pipeline.ws.authentication=false"
     else
-            PIPELINE2_AUTH="-Dorg.daisy.pipeline.ws.authentication=$PIPELINE2_AUTH"
-            export PIPELINE2_AUTH 
-
+        OPTS="$OPTS -Dorg.daisy.pipeline.ws.authentication=$PIPELINE2_AUTH"
     fi
     if [ "x$PIPELINE2_LOCAL" = "x" ]; then
-            PIPELINE2_LOCAL="-Dorg.daisy.pipeline.ws.localfs=true"
-            export PIPELINE2_LOCAL
+        OPTS="$OPTS -Dorg.daisy.pipeline.ws.localfs=true"
     else
-            PIPELINE2_LOCAL="-Dorg.daisy.pipeline.ws.localfs=$PIPELINE2_LOCAL"
-            export PIPELINE2_LOCAL
-
+        OPTS="$OPTS -Dorg.daisy.pipeline.ws.localfs=$PIPELINE2_LOCAL"
+    fi
+    if [ "x$PIPELINE2_AUTH_CLIENTKEY" != "x" ]; then
+        OPTS="$OPTS -Dorg.daisy.pipeline.ws.authentication.key=$PIPELINE2_AUTH_CLIENTKEY"
+    fi
+    if [ "x$PIPELINE2_AUTH_CLIENTSECRET" != "x" ]; then
+        OPTS="$OPTS -Dorg.daisy.pipeline.ws.authentication.secret=$PIPELINE2_AUTH_CLIENTSECRET"
+    fi
+    if [ "x$PIPELINE2_HOST" != "x" ]; then
+        OPTS="$OPTS -Dorg.daisy.pipeline.ws.host=$PIPELINE2_HOST"
     fi
     MAIN=org.apache.felix.main.Main
-    OPTS="$PIPELINE2_LOCAL $PIPELINE2_AUTH"
     MODE=" -Dorg.daisy.pipeline.main.mode=webservice"
 
     case "$1" in
