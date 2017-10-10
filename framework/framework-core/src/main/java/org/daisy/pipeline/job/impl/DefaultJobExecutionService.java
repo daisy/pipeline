@@ -12,6 +12,8 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
+import org.daisy.pipeline.properties.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -39,7 +41,7 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 int procs=2;
 
                 try{
-                        String confProcs=System.getProperty(NUM_PROCS,"2");
+                        String confProcs=Properties.getProperty(NUM_PROCS,"2");
                         procs=Integer.parseInt(confProcs);
                 }catch(NumberFormatException e){
                         logger.info(String.format("Error parsing %s %s",NUM_PROCS,procs));

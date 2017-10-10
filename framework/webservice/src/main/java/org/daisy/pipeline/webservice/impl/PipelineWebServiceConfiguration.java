@@ -34,7 +34,7 @@ public class PipelineWebServiceConfiguration {
 
         private void readOptions() {
                 //Authentication        
-                String authentication = System.getProperty(Properties.AUTHENTICATION);
+                String authentication = Properties.AUTHENTICATION.get();
                 if (authentication != null) {
                         if (authentication.equalsIgnoreCase("true")) {
                                 usesAuthentication = true;
@@ -50,7 +50,7 @@ public class PipelineWebServiceConfiguration {
                         }
                 }
                 //Temporal directory
-                String tmp = System.getProperty(Properties.TMPDIR);
+                String tmp = Properties.TMPDIR.get();
                 if (tmp != null) {
                         File f = new File(tmp);
                         if (f.exists()) {
@@ -66,7 +66,7 @@ public class PipelineWebServiceConfiguration {
                 
 
                 //Max req time
-                String maxrequesttime = System.getProperty(Properties.MAX_REQUEST_TIME);
+                String maxrequesttime = Properties.MAX_REQUEST_TIME.get();
                 if (maxrequesttime != null) {
                         try {
                                 long ms = Long.parseLong(maxrequesttime);
@@ -78,62 +78,71 @@ public class PipelineWebServiceConfiguration {
                         }
                 }
                 //ssl related stuff
-                ssl=System.getProperty(Properties.SSL)!=null&&System.getProperty(Properties.SSL).equalsIgnoreCase("true");
-                sslKeystore=System.getProperty(Properties.SSL_KEYSTORE,"");
-                sslKeystorePassword=System.getProperty(Properties.SSL_KEYSTOREPASSWORD,"");
-                sslKeyPassword=System.getProperty(Properties.SSL_KEYPASSWORD,"");
+                ssl=Properties.SSL.get()!=null&&Properties.SSL.get().equalsIgnoreCase("true");
+                sslKeystore=Properties.SSL_KEYSTORE.get("");
+                sslKeystorePassword=Properties.SSL_KEYSTOREPASSWORD.get("");
+                sslKeyPassword=Properties.SSL_KEYPASSWORD.get("");
 
 
-                clientKey=System.getProperty(Properties.CLIENT_KEY);
-                clientSecret=System.getProperty(Properties.CLIENT_SECRET);
+                clientKey=Properties.CLIENT_KEY.get();
+                clientSecret=Properties.CLIENT_SECRET.get();
 
-                cleanUpOnStartUp = Boolean.valueOf(System.getProperty(Properties. CLEAN_UP_ON_START_UP,"false"));
+                cleanUpOnStartUp = Boolean.valueOf(Properties. CLEAN_UP_ON_START_UP.get("false"));
         }
 
         public void publishConfiguration(PropertyPublisher propPublisher){
                 //mode
-                propPublisher.publish(Properties.LOCALFS,System.getProperty(Properties.LOCALFS,"false"),this.getClass());       
+                publish(propPublisher, Properties.LOCALFS,Properties.LOCALFS.get("false"));
                 //ssl related properties
-                propPublisher.publish(Properties.SSL,System.getProperty(Properties.SSL,"false"),this.getClass());       
-                propPublisher.publish(Properties.SSL_KEYSTORE,!System.getProperty(Properties.SSL_KEYSTORE,"").isEmpty()+"",this.getClass());    
-                propPublisher.publish(Properties.SSL_KEYSTOREPASSWORD,!System.getProperty(Properties.SSL_KEYSTOREPASSWORD,"").isEmpty()+"",this.getClass());    
-                propPublisher.publish(Properties.SSL_KEYPASSWORD,!System.getProperty(Properties.SSL_KEYPASSWORD,"").isEmpty()+"",this.getClass());      
+                publish(propPublisher, Properties.SSL,Properties.SSL.get("false"));
+                publish(propPublisher, Properties.SSL_KEYSTORE,!Properties.SSL_KEYSTORE.get("").isEmpty()+"");
+                publish(propPublisher, Properties.SSL_KEYSTOREPASSWORD,!Properties.SSL_KEYSTOREPASSWORD.get("").isEmpty()+"");
+                publish(propPublisher, Properties.SSL_KEYPASSWORD,!Properties.SSL_KEYPASSWORD.get("").isEmpty()+"");
                 //client keys and secret
-                propPublisher.publish(Properties.CLIENT_KEY,System.getProperty(Properties.CLIENT_KEY,""),this.getClass());      
-                propPublisher.publish(Properties.CLIENT_SECRET,!System.getProperty(Properties.CLIENT_SECRET,"").isEmpty()+"",this.getClass());  
+                publish(propPublisher, Properties.CLIENT_KEY,Properties.CLIENT_KEY.get(""));
+                publish(propPublisher, Properties.CLIENT_SECRET,!Properties.CLIENT_SECRET.get("").isEmpty()+"");
                 //request
-                propPublisher.publish(Properties.MAX_REQUEST_TIME,this.getMaxRequestTime()+"",this.getClass()); 
+                publish(propPublisher, Properties.MAX_REQUEST_TIME,this.getMaxRequestTime()+"");
                 //tmp dir
-                propPublisher.publish(Properties.TMPDIR,this.getTmpDir(),this.getClass());      
-                propPublisher.publish(Properties.AUTHENTICATION,this.isAuthenticationEnabled()+"",this.getClass());     
+                publish(propPublisher, Properties.TMPDIR,this.getTmpDir());
+                publish(propPublisher, Properties.AUTHENTICATION,this.isAuthenticationEnabled()+"");
                 Routes routes=new Routes();
-                propPublisher.publish(Properties.HOST,routes.getHost()+"",this.getClass());     
-                propPublisher.publish(Properties.PATH,routes.getPath()+"",this.getClass());     
-                propPublisher.publish(Properties.PORT,routes.getPort()+"",this.getClass());     
+                publish(propPublisher, Properties.HOST,routes.getHost()+"");
+                publish(propPublisher, Properties.PATH,routes.getPath()+"");
+                publish(propPublisher, Properties.PORT,routes.getPort()+"");
 
-                propPublisher.publish(Properties.CLEAN_UP_ON_START_UP,this.getCleanUpOnStartUp()+"",this.getClass());     
+                publish(propPublisher, Properties.CLEAN_UP_ON_START_UP,this.getCleanUpOnStartUp()+"");
 
         }
 
         public void unpublishConfiguration(PropertyPublisher propPublisher){
                 //mode
-                propPublisher.unpublish(Properties.LOCALFS, this.getClass());
+                unpublish(propPublisher, Properties.LOCALFS);
                 //ssl related properties
-                propPublisher.unpublish(Properties.SSL                  , this.getClass());
-                propPublisher.unpublish(Properties.SSL_KEYSTORE         , this.getClass());
-                propPublisher.unpublish(Properties.SSL_KEYSTOREPASSWORD , this.getClass());
-                propPublisher.unpublish(Properties.SSL_KEYPASSWORD      , this.getClass());
+                unpublish(propPublisher, Properties.SSL);
+                unpublish(propPublisher, Properties.SSL_KEYSTORE);
+                unpublish(propPublisher, Properties.SSL_KEYSTOREPASSWORD);
+                unpublish(propPublisher, Properties.SSL_KEYPASSWORD);
                 //client keys and secret
-                propPublisher.unpublish(Properties.CLIENT_KEY           , this.getClass());
-                propPublisher.unpublish(Properties.CLIENT_SECRET        , this.getClass());
+                unpublish(propPublisher, Properties.CLIENT_KEY);
+                unpublish(propPublisher, Properties.CLIENT_SECRET);
                 //request
-                propPublisher.unpublish(Properties.MAX_REQUEST_TIME     , this.getClass());
+                unpublish(propPublisher, Properties.MAX_REQUEST_TIME);
                 //tmp dir
-                propPublisher.unpublish(Properties.TMPDIR               , this.getClass());
-                propPublisher.unpublish(Properties.AUTHENTICATION       , this.getClass());
-                propPublisher.unpublish(Properties.CLEAN_UP_ON_START_UP , this.getClass());     
+                unpublish(propPublisher, Properties.TMPDIR);
+                unpublish(propPublisher, Properties.AUTHENTICATION);
+                unpublish(propPublisher, Properties.CLEAN_UP_ON_START_UP);
 
         }
+
+        private static void publish(PropertyPublisher publisher, Properties propertyName, String value) {
+                publisher.publish(propertyName.getName(), value, PipelineWebServiceConfiguration.class);
+        }
+
+        private static void unpublish(PropertyPublisher publisher, Properties propertyName) {
+                publisher.unpublish(propertyName.getName(), PipelineWebServiceConfiguration.class);
+        }
+
         public String getTmpDir() {
                 return tmpDir;
         }
@@ -198,7 +207,7 @@ public class PipelineWebServiceConfiguration {
 
         
         public boolean isLocalFS() {
-                return Boolean.valueOf(System.getProperty(Properties.LOCALFS,"false"));
+                return Boolean.valueOf(Properties.LOCALFS.get("false"));
         }
 
         // the length of time in ms that a request is valid for, counting from its timestamp value

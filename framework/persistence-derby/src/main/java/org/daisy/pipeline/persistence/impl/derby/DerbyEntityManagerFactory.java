@@ -6,6 +6,8 @@ import java.util.Map;
 import org.daisy.common.properties.PropertyPublisher;
 import org.daisy.common.properties.PropertyPublisherFactory;
 import org.daisy.pipeline.persistence.ForwardingEntityManagerFactory;
+import org.daisy.pipeline.properties.Properties;
+
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +15,7 @@ import org.slf4j.LoggerFactory;
 public class DerbyEntityManagerFactory extends  ForwardingEntityManagerFactory{
 
 	private static final String DERBY_JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-	private static final String DERBY_DB_URL = "jdbc:derby:"+System.getProperty("org.daisy.pipeline.data")+"/db;create=true";
+	private static final String DERBY_DB_URL = "jdbc:derby:"+Properties.getProperty("org.daisy.pipeline.data")+"/db;create=true";
 	
 	protected static Logger logger = LoggerFactory
 			.getLogger(DerbyEntityManagerFactory.class.getName());

@@ -21,7 +21,9 @@ import com.xmlcalabash.core.XProcRunnable;
  */
 public class EventBusMessageListener implements XProcMessageListener {
 
-        private static boolean LOG_DEBUG = Boolean.parseBoolean(System.getProperty("org.daisy.pipeline.calabash.logDebug","false"));
+	private static boolean LOG_DEBUG = Boolean.parseBoolean(
+		org.daisy.pipeline.properties.Properties.getProperty("org.daisy.pipeline.calabash.logDebug","false"));
+	
 	/** The listener. */
 	EventBusProvider eventBus;
 	MessageBuliderFactory messageBuilderFactory;

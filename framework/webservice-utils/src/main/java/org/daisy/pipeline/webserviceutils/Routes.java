@@ -58,7 +58,7 @@ public class Routes {
 	}
 
 	private void readOptions() {
-		String path = System.getProperty(Properties.PATH);
+		String path = Properties.PATH.get();
 		if (path != null) {
 			if (!path.startsWith("/")) {
 				path = "/" + path;
@@ -66,15 +66,15 @@ public class Routes {
 			this.path = path;
 		}
 
-		String hostname = System.getProperty(Properties.HOST);
+		String hostname = Properties.HOST.get();
 		if (hostname != null) {
 			host = hostname;
 		}
-		if (System.getProperty(Properties.SSL)!=null&&System.getProperty(Properties.SSL).equalsIgnoreCase("true")){
+		if (Properties.SSL.get()!=null&&Properties.SSL.get().equalsIgnoreCase("true")){
 			proto="https://";
 		}
 
-		String port = System.getProperty(Properties.PORT);
+		String port = Properties.PORT.get();
 		if (port != null) {
 			try {
 				int portnum = Integer.parseInt(port);

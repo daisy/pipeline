@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.daisy.pipeline.persistence.ForwardingEntityManagerFactory;
+import org.daisy.pipeline.properties.Properties;
+
 import org.osgi.service.jpa.EntityManagerFactoryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,11 +24,11 @@ public class MySQLEntityManagerFactory extends  ForwardingEntityManagerFactory{
 		props.put(JAVAX_PERSISTENCE_JDBC_DRIVER,
 				COM_MYSQL_JDBC_DRIVER);
 		props.put(JAVAX_PERSISTENCE_JDBC_URL,
-				System.getProperty(ORG_DAISY_PERSISTENCE_URL));
+				Properties.getProperty(ORG_DAISY_PERSISTENCE_URL));
 		props.put(JAVAX_PERSISTENCE_JDBC_USER,
-				System.getProperty(ORG_DAISY_PERSISTENCE_USER));
+				Properties.getProperty(ORG_DAISY_PERSISTENCE_USER));
 		props.put(JAVAX_PERSISTENCE_JDBC_PASSWORD,
-				System.getProperty(ORG_DAISY_PERSISTENCE_PASSWORD));
+				Properties.getProperty(ORG_DAISY_PERSISTENCE_PASSWORD));
 	}
 	
 	public void setBuilder(EntityManagerFactoryBuilder builder){

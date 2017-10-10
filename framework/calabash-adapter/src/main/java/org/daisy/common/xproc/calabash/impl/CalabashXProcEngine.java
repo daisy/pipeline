@@ -13,6 +13,8 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcResult;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.pipeline.event.EventBusProvider;
+import org.daisy.pipeline.properties.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.EntityResolver;
@@ -124,7 +126,7 @@ public final class CalabashXProcEngine implements XProcEngine {
 	public void setPropertyPublisherFactory(PropertyPublisherFactory propertyPublisherFactory){
 		PropertyPublisher propertyPublisher=propertyPublisherFactory.newPropertyPublisher();	
 		//the property publishing step goes here
-		propertyPublisher.publish("org.daisy.pipeline.xproc.configuration" ,System.getProperty("org.daisy.pipeline.xproc.configuration" ),this.getClass());
+		propertyPublisher.publish("org.daisy.pipeline.xproc.configuration" ,Properties.getProperty("org.daisy.pipeline.xproc.configuration" ),this.getClass());
 		propertyPublisher.publish("com.xmlcalabash.config.jar" ,System.getProperty("com.xmlcalabash.config.jar","true" ),this.getClass());
 		propertyPublisher.publish("com.xmlcalabash.config.home" ,System.getProperty("com.xmlcalabash.config.home","true" ),this.getClass());
 		propertyPublisher.publish("com.xmlcalabash.config.cwd" ,System.getProperty("com.xmlcalabash.config.cwd","true" ),this.getClass());

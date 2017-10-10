@@ -1,22 +1,43 @@
 package org.daisy.pipeline.webserviceutils;
 
-public interface Properties {
-	public static final String MAX_REQUEST_TIME = "org.daisy.pipeline.ws.maxrequesttime";
-	public static final String TMPDIR = "org.daisy.pipeline.ws.tmpdir";
-	public static final String AUTHENTICATION = "org.daisy.pipeline.ws.authentication";
-	public static final String LOCALFS= "org.daisy.pipeline.ws.localfs";
-	public static final String FRAMEWORK_VERSION="org.daisy.pipeline.version";
-	public static final String JAVA_IO_TMPDIR = "java.io.tmpdir";
-	public static final String PORT = "org.daisy.pipeline.ws.port";
-	public static final String PATH = "org.daisy.pipeline.ws.path";
-	public static final String HOST = "org.daisy.pipeline.ws.host";
-	public static final String SSL= "org.daisy.pipeline.ws.ssl";
-	public static final String SSL_KEYSTORE= "org.daisy.pipeline.ws.ssl.keystore";
-	public static final String SSL_KEYSTOREPASSWORD= "org.daisy.pipeline.ws.ssl.keystorepassword";
-	public static final String CLEAN_UP_ON_START_UP = "org.daisy.pipeline.ws.cleanuponstartup";
+public enum Properties {
 
-	public static final String SSL_KEYPASSWORD= "org.daisy.pipeline.ws.ssl.keypassword";
-	public static final String CLIENT_KEY= "org.daisy.pipeline.ws.authentication.key";
-	public static final String CLIENT_SECRET= "org.daisy.pipeline.ws.authentication.secret";
+	MAX_REQUEST_TIME("org.daisy.pipeline.ws.maxrequesttime"),
+	TMPDIR("org.daisy.pipeline.ws.tmpdir"),
+	AUTHENTICATION("org.daisy.pipeline.ws.authentication"),
+	LOCALFS("org.daisy.pipeline.ws.localfs"),
+	FRAMEWORK_VERSION("org.daisy.pipeline.version"),
+	PORT("org.daisy.pipeline.ws.port"),
+	PATH("org.daisy.pipeline.ws.path"),
+	HOST("org.daisy.pipeline.ws.host"),
+	SSL("org.daisy.pipeline.ws.ssl"),
+	SSL_KEYSTORE("org.daisy.pipeline.ws.ssl.keystore"),
+	SSL_KEYSTOREPASSWORD("org.daisy.pipeline.ws.ssl.keystorepassword"),
+	CLEAN_UP_ON_START_UP("org.daisy.pipeline.ws.cleanuponstartup"),
+	SSL_KEYPASSWORD("org.daisy.pipeline.ws.ssl.keypassword"),
+	CLIENT_KEY("org.daisy.pipeline.ws.authentication.key"),
+	CLIENT_SECRET("org.daisy.pipeline.ws.authentication.secret");
 
+	private final String key;
+	
+	private Properties(String key) {
+		this.key = key;
+	}
+
+	public String get() {
+		return org.daisy.pipeline.properties.Properties.getProperty(key);
+	}
+
+	public String get(String defaultValue) {
+		return org.daisy.pipeline.properties.Properties.getProperty(key, defaultValue);
+	}
+
+	public String getName() {
+		return key;
+	}
+
+	@Override
+	public String toString() {
+		return key;
+	}
 }

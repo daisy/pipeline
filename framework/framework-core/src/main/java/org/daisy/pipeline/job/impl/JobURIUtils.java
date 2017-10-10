@@ -6,6 +6,7 @@ import java.net.URI;
 
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.properties.Properties;
 
 public class JobURIUtils   {
         /** The Constant ORG_DAISY_PIPELINE_IOBASE. */
@@ -80,9 +81,9 @@ public class JobURIUtils   {
                 }
         }
         private static String frameworkBase(){
-                if (System.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
+                if (Properties.getProperty(ORG_DAISY_PIPELINE_IOBASE) == null) {
                         throw new IllegalStateException(String.format("The property %s is not set",ORG_DAISY_PIPELINE_IOBASE ));
                 }
-                return System.getProperty(ORG_DAISY_PIPELINE_IOBASE);
+                return Properties.getProperty(ORG_DAISY_PIPELINE_IOBASE);
         }
 }

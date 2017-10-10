@@ -224,11 +224,11 @@ public class PipelineWebService extends Application {
 
         private void generateStopKey() throws IOException {
                 shutDownKey = new Random().nextLong();
-                File fout = new File(System.getProperty(Properties.JAVA_IO_TMPDIR)+File.separator+KEY_FILE_NAME);
+                File fout = new File(System.getProperty("java.io.tmpdir")+File.separator+KEY_FILE_NAME);
                 FileOutputStream fos= new FileOutputStream(fout);
                 fos.write((shutDownKey+"").getBytes());
                 fos.close();
-                logger.info("Shutdown key stored to: "+System.getProperty(Properties.JAVA_IO_TMPDIR)+File.separator+KEY_FILE_NAME);
+                logger.info("Shutdown key stored to: "+System.getProperty("java.io.tmpdir")+File.separator+KEY_FILE_NAME);
         }
 
         public boolean shutDown(long key) throws BundleException{
