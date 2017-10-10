@@ -17,10 +17,10 @@ zip $DATA $DOCUMENT
 
 # run the pipeline
 docker run --name pipeline --rm --detach \
-       -e PIPELINE2_HOST=0.0.0.0 \
+       -e PIPELINE2_WS_HOST=0.0.0.0 \
        -e PIPELINE2_AUTH=true \
-       -e PIPELINE2_AUTH_CLIENTKEY=$CLIENTKEY \
-       -e PIPELINE2_AUTH_CLIENTSECRET=$CLIENTSECRET \
+       -e PIPELINE2_WS_AUTHENTICATION_KEY=$CLIENTKEY \
+       -e PIPELINE2_WS_AUTHENTICATION_SECRET=$CLIENTSECRET \
        -p 8181:8181 daisyorg/pipeline2
 
 # wait for the pipeline to start
