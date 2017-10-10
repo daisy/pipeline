@@ -72,6 +72,11 @@ dist-rpm : assembly/.dependencies | .maven-init
 		echo "Skipping RPM because not running RedHat/CentOS"; \
 	fi
 
+.PHONY : dist-docker-image
+dist-docker-image : dist-zip-linux
+	cd assembly && \
+	make docker
+
 .PHONY : dist-webui-deb
 dist-webui-deb : assembly/.dependencies
 	# see webui README for instructions on how to make a signed package for distribution
@@ -99,6 +104,13 @@ run-webui : # webui/.dependencies
 	if [ ! -d webui/dp2webui ]; then cp -r webui/dp2webui-cleandb webui/dp2webui ; fi
 	cd webui && \
 	./activator run
+
+.PHONY : run-docker
+run-docker : dist-docker-image
+	cd assembly && \
+	docker run --name pipeline --detach \
+	       -e PIPELINE2_WS_HOST=0.0.0.0 \
+	       -p 8181:8181 daisyorg/pipeline2
 
 .PHONY : check
 check : $(addprefix check-,$(MODULES))
