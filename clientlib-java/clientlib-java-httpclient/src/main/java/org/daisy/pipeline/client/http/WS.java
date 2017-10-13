@@ -108,6 +108,10 @@ public class WS implements WSInterface {
 
 	@Override
 	public Alive alive() {
+		return alive(true);
+	}
+	
+	private Alive alive(boolean logError) {
 		try {
 			WSResponse response = httpclient.get(endpoint, "/alive", null, null, null);
 
@@ -120,7 +124,9 @@ public class WS implements WSInterface {
 			}
 
 		} catch (Pipeline2Exception e) {
-			Pipeline2Logger.logger().error("failed to parse /alive response", e);
+			if (logError) {
+				Pipeline2Logger.logger().error("failed to parse /alive response", e);
+			}
 			return null;
 		}
 	}
@@ -665,7 +671,7 @@ public class WS implements WSInterface {
 	}
 	
 	public void checkIfLocal() {
-		Alive alive = alive();
+		Alive alive = alive(false);
 		if (alive != null && alive.localfs == false) {
 			isLocal = false;
 		} else {
