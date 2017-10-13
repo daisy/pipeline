@@ -27,14 +27,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
 import org.junit.Test;
 
 public class WSRemoteTest extends PaxExamConfig {
 	
-	@Override
-	boolean isLocalFs() {
-		return false;
+	public WSRemoteTest() {
+		super(false);
 	}
 	
 	@Test
@@ -57,7 +55,7 @@ public class WSRemoteTest extends PaxExamConfig {
 							return super.resolve(host); }}));
 		WSInterface ws = new WS(httpclient){};
 		assertNull(ws.alive());
-		ws.setEndpoint(WS_REMOTE_ENDPOINT);
+		ws.setEndpoint(getEndpoint());
 		assertFalse(ws.alive().localfs);
 		Job job; {
 			job = new Job();
@@ -75,6 +73,8 @@ public class WSRemoteTest extends PaxExamConfig {
 		}
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 		             "<jobRequest xmlns=\"http://www.daisy.org/ns/pipeline/data\">\n" +
+		             
+		             // FIXME: "0.0.0.0"
 		             "   <script href=\"http://" + "0.0.0.0" + ":" + WS_PORT + "/" + WS_PATH + "/scripts/foo:script\"/>\n" +
 		             "   <input name=\"source\">\n" +
 		             "      <item value=\"input1.xml\"/>\n" +
@@ -96,8 +96,10 @@ public class WSRemoteTest extends PaxExamConfig {
 		assertEquals("The job is finished", Job.Status.DONE, job.getStatus());
 		String result; {
 			StringWriter writer = new StringWriter();
-			IOUtils.copy(new URL(job.getResults().get(job.getResult("output-dir")).get(0).href).openStream(),
-			             writer);
+			assertEquals("http://" + "0.0.0.0" + ":" + WS_PORT + "/" + WS_PATH + "/jobs/" + job.getId(), job.getHref());
+			String resultHref = job.getResults().get(job.getResult("output-dir")).get(0).href;
+			assertEquals(job.getHref() + "/result/option/output-dir/idx/output-dir/result.xml", resultHref);
+			IOUtils.copy(new URL(resultHref).openStream(), writer);
 			result = writer.toString();
 		}
 		assertEquals("<result>" +

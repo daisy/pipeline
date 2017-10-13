@@ -31,15 +31,14 @@ import org.ops4j.pax.exam.util.PathUtils;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public abstract class PaxExamConfig {
+public abstract class PaxExamConfig extends AbstractTest {
 	
 	static final File BASEDIR = new File(PathUtils.getBaseDir());
 	static final File PIPELINE_BASE = new File(BASEDIR, "target/tmp/server");
 	static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
 	static final String WS_REMOTE_HOST = "example.org";
-	static final String WS_PORT = "8181";
+	static final String WS_PORT = "8182";
 	static final String WS_PATH = "ws";
-	static final String WS_REMOTE_ENDPOINT = "http://" + WS_REMOTE_HOST + ":" + WS_PORT + "/" + WS_PATH;
 	
 	static {
 		try {
@@ -49,16 +48,24 @@ public abstract class PaxExamConfig {
 		}
 	}
 	
-	abstract boolean isLocalFs();
+	final boolean localfs;
+	
+	public PaxExamConfig(boolean localfs) {
+		this.localfs = localfs;
+	}
+	
+	String getEndpoint() {
+		return "http://" + (localfs ? "localhost" : WS_REMOTE_HOST) + ":" + WS_PORT + "/" + WS_PATH;
+	}
 	
 	@Configuration
 	public Option[] config() throws MalformedURLException {
 		return options(
-			systemProperty(Properties.HOST).value(isLocalFs() ? "localhost" : "0.0.0.0"), // can not be set to WS_REMOTE_HOST
-			                                                                              // unless you change /etc/hosts
+			systemProperty(Properties.HOST).value(localfs ? "localhost" : "0.0.0.0"), // can not be set to WS_REMOTE_HOST
+			                                                                          // unless you change /etc/hosts
 			systemProperty(Properties.PORT).value(WS_PORT),
 			systemProperty(Properties.PATH).value(WS_PATH),
-			systemProperty(Properties.LOCALFS).value(String.valueOf(isLocalFs())),
+			systemProperty(Properties.LOCALFS).value(String.valueOf(localfs)),
 			systemProperty(Properties.AUTHENTICATION).value("false"),
 			systemProperty("org.daisy.pipeline.iobase").value(new File(PIPELINE_DATA, "jobs").getAbsolutePath()),
 			systemProperty("org.daisy.pipeline.version").value("1.10"),

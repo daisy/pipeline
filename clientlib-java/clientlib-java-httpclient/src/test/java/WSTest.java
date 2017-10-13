@@ -21,9 +21,8 @@ import org.junit.Test;
 
 public class WSTest extends PaxExamConfig {
 
-	@Override
-	boolean isLocalFs() {
-		return true;
+	public WSTest() {
+		super(true);
 	}
 	
 	// use this to test the webservice manually in the browser (http://localhost:8181/ws/...)
@@ -35,6 +34,7 @@ public class WSTest extends PaxExamConfig {
 	@Test
 	public void testAlive() {
 		WSInterface ws = new WS();
+		ws.setEndpoint(getEndpoint());
 		Alive alive = ws.alive();
 		assertFalse(alive.error);
 		assertFalse(alive.authentication);
@@ -45,13 +45,14 @@ public class WSTest extends PaxExamConfig {
 	@Test
 	public void testScripts() {
 		WSInterface ws = new WS();
+		ws.setEndpoint(getEndpoint());
 		List<Script> scripts = ws.getScripts();
 		assertEquals(1, scripts.size());
 		assertEquals("foo:script", scripts.get(0).getId());
 		Script script = ws.getScript("foo:script");
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 		             "<script xmlns=\"http://www.daisy.org/ns/pipeline/data\"\n" +
-		             "        href=\"http://localhost:8181/ws/scripts/foo:script\"\n" +
+		             "        href=\"" + getEndpoint() + "/scripts/foo:script\"\n" +
 		             "        id=\"foo:script\"\n" +
 		             "        input-filesets=\"daisy202 daisy3\"\n" +
 		             "        output-filesets=\"epub2 epub3\">\n" +
@@ -122,6 +123,7 @@ public class WSTest extends PaxExamConfig {
 	@Test
 	public void testJobLocal() throws InterruptedException {
 		WSInterface ws = new WS();
+		ws.setEndpoint(getEndpoint());
 		Job job; {
 			job = new Job();
 			job.setId("1");
