@@ -43,17 +43,30 @@ while ! curl localhost:8181/ws/alive >/dev/null 2>/dev/null; do
 done
 
 # run the cli
-docker run --name cli --rm -it --link pipeline \
-       --entrypoint /opt/daisy-pipeline2/cli/dp2 \
-       --volume="$(pwd):$MOUNT_POINT:rw" \
-       daisyorg/pipeline2 \
-       --host http://pipeline \
-       --starting false \
-       --client_key $CLIENTKEY \
-       --client_secret $CLIENTSECRET \
-       dtbook-to-epub3 --source $DTBOOK --output $MOUNT_POINT --data $MOUNT_POINT/$DATA --persistent
-#       help dtbook-to-epub3
-#       dtbook-validator --input-dtbook $DTBOOK --output $MOUNT_POINT --data $MOUNT_POINT/$DATA
+dp2() {
+    docker run --name cli --rm -it --link pipeline \
+               --entrypoint /opt/daisy-pipeline2/cli/dp2 \
+               --volume="$(pwd):$MOUNT_POINT:rw" \
+               daisyorg/pipeline2 \
+               --host http://pipeline \
+               --starting false \
+               --client_key $CLIENTKEY \
+               --client_secret $CLIENTSECRET "$@"
+}
+
+dp2 dtbook-to-epub3 --source $DTBOOK --output $MOUNT_POINT --data $MOUNT_POINT/$DATA
+    # help dtbook-to-epub3
+    # dtbook-validator --input-dtbook $DTBOOK --output $MOUNT_POINT --data $MOUNT_POINT/$DATA
+
+# run the cli again in the background
+dp2 dtbook-to-epub3 --source $DTBOOK --data $MOUNT_POINT/$DATA --background --nicename "myjob"
+sleep 10
+while dp2 jobs | grep "RUNNING" >/dev/null; do
+    echo "Waiting for job to finish..." >&2
+    sleep 10
+done
+dp2 jobs | grep "DONE" >/dev/null
+dp2 results --output $MOUNT_POINT "myjob"
 
 docker stop pipeline
 docker rm pipeline
