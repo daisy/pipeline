@@ -1,0 +1,14 @@
+language: go
+go:
+        - 1.4 
+
+install:
+        - go get github.com/capitancambio/restclient
+        - go get  golang.org/x/tools/cmd/cover
+        - go get github.com/modocache/gover
+        - go get github.com/mattn/goveralls
+        - go build github.com/mattn/goveralls
+script:
+        - go test -covermode=atomic -coverprofile=profile.cov
+        - ls $HOME/gopath
+        - $HOME/gopath/bin/goveralls -coverprofile=profile.cov -service=travis-ci
