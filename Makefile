@@ -118,6 +118,10 @@ check : $(addprefix check-,$(MODULES))
 .PHONY : release
 release : assembly/.release
 
+.PHONY : publish-docker-image
+publish-docker-image : dist-docker-image
+	docker push daisyorg/pipeline2
+
 .PHONY : $(addprefix check-,$(MODULES))
 $(addprefix check-,$(MODULES)) : check-% : %/.last-tested
 
