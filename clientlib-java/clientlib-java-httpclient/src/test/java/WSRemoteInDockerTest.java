@@ -47,26 +47,26 @@ public class WSRemoteInDockerTest extends AbstractTest {
 			File jobStorageDir = new File(TARGET_DIR, "tmp/client/jobs");
 			JobStorage context = new JobStorage(job, jobStorageDir, null);
 			Argument source = script.getArgument("source");
-			source.set(new File(TARGET_DIR, "test-classes/DTB23151.xml"), context);
+			source.set(new File(TARGET_DIR, "test-classes/hauy_valid.xml"), context);
 		}
 		assertEquals("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
 		             "<jobRequest xmlns=\"http://www.daisy.org/ns/pipeline/data\">\n" +
 		             "   <script href=\"" + getEndpoint() + "/scripts/dtbook-to-pef\"/>\n" +
 		             "   <input name=\"source\">\n" +
-		             "      <item value=\"DTB23151.xml\"/>\n" +
+		             "      <item value=\"hauy_valid.xml\"/>\n" +
 		             "   </input>\n" +
 		             "</jobRequest>\n",
 		             XML.toString(job.toJobRequestXml(false)));
 		assertNull(job.validate());
 		job.getJobStorage().save(false);
 		ZipFile contextZip = new ZipFile(job.getJobStorage().makeContextZip());
-		assertNotNull(contextZip.getEntry("DTB23151.xml"));
+		assertNotNull(contextZip.getEntry("hauy_valid.xml"));
 		contextZip.close();
 		job = ws.postJob(job);
 		assertNotNull(job);
 		
 		// FIXME: wait for status DONE
-		Thread.sleep(30000);
+		Thread.sleep(40000);
 		job = ws.getJob(job.getId(), 0);
 		
 		// FIXME: show error messages if status = ERROR?
@@ -74,7 +74,7 @@ public class WSRemoteInDockerTest extends AbstractTest {
 		StringWriter writer = new StringWriter();
 		assertEquals(getEndpoint() + "/jobs/" + job.getId(), job.getHref());
 		String resultHref = job.getResults().get(job.getResult("pef-output-dir")).get(0).href;
-		assertEquals(job.getHref() + "/result/option/pef-output-dir/idx/pef-output-dir/DTB23151.pef", resultHref);
+		assertEquals(job.getHref() + "/result/option/pef-output-dir/idx/pef-output-dir/hauy_valid.pef", resultHref);
 		IOUtils.copy(new URL(resultHref).openStream(), writer);
 	}
 }
