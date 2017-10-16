@@ -111,6 +111,14 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>**/WSRemoteInDockerTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencyManagement>
@@ -206,4 +214,58 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <profiles>
+        <profile>
+            <id>docker-test</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-test-dependencies</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>copy-dependencies</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/test-dependencies</outputDirectory>
+                                    <includeScope>test</includeScope>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>exec-test</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <!--
+                                            FIXME: redirection of output does not work well
+                                            
+                                            to debug use these commands:
+                                            - docker logs clientlibjavahttpclienttest_pipeline2_1
+                                            - docker logs clientlibjavahttpclienttest_test_run_*
+                                        -->
+                                        <exec executable="docker-compose" dir="src/test/docker" failonerror="true">
+                                            <arg value="run"/>
+                                            <arg value="test"/>
+                                            <env key="COMPOSE_FILE" value="test-remote.yml"/>
+                                            <env key="COMPOSE_PROJECT_NAME" value="clientlib-java-httpclient-test"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

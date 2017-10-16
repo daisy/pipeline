@@ -1,0 +1,20 @@
+version: "2.0"
+services:
+  pipeline2:
+    image: daisyorg/pipeline2
+    environment:
+      PIPELINE2_WS_HOST: "pipeline2"
+      PIPELINE2_WS_PORT: "8181"
+      PIPELINE2_AUTH: "false"
+  test:
+    image: openjdk:8-jre
+    environment:
+      PIPELINE2_WS_HOST: "pipeline2"
+      PIPELINE2_WS_PORT: "8181"
+    depends_on:
+      - pipeline2
+    links:
+      - pipeline2
+    volumes:
+      - ../../../target:/target
+    command: java -cp "/target/classes:/target/test-classes:/target/test-dependencies/*" org.junit.runner.JUnitCore WSRemoteInDockerTest
