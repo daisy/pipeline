@@ -37,7 +37,7 @@
     <module>updater/gui</module>
     <module>assembly</module>
     <module>website/target/maven</module>
-    <module>clientlib-java</module>
+    <module>clientlib/java</module>
   </modules>
   
   <build>

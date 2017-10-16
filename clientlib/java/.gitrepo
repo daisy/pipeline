@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-clientlib-java.git
 	branch = master
-	commit = 6c2388a271b5adce5f5aa68e4a2f08cf22ff5d41
-	parent = e0870f1ecd8cfc623158026f39516ef9575a4519
+	commit = 358919a32dd976e8ee9170e7711171b0a5edb5da
+	parent = 7913f03518f852524da512362dc7613c3fa8f0e8
 	cmdver = 0.3.1
