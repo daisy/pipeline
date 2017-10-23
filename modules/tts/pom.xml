@@ -37,6 +37,7 @@
     <module>tts-utils/tts-adapter-acapela</module>
     <module>tts-utils/tts-adapter-osx</module>
     <module>tts-utils/tts-adapter-sapinative</module>
+    <module>tts-utils/tts-adapter-qfrency</module>
     <module>tts-utils/tts-helpers</module>
     <module>zedai-to-ssml</module>
     <module>mathml-to-ssml</module>

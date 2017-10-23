@@ -1,0 +1,9 @@
+This TTS adapter enables the Pipeline to use the Qfrency speech engine developed by the Human Language Technology unit of the CSIR, South Africa. This adapter was specifically developed for the server (Unix) version of the speech engine.
+
+To use this adapter, two properties must be defined in the Pipeline configuration:
+
+qfrency.path: Should point to the client program of the Qfrency speech engine.
+qfrency.address: Should point to the address where the speech server is running (e.g. localhost.)
+
+Voices can be obtained by visiting www.qfrency.com, and using the contact details available on the website.
+
