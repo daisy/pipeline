@@ -1,11 +1,11 @@
 package org.daisy.dotify.tasks.impl.system.common;
 
-import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
-import org.daisy.dotify.api.tasks.TaskGroupInformation;
-import org.daisy.dotify.api.tasks.TaskSystem;
-import org.daisy.dotify.api.tasks.TaskSystemFactory;
-import org.daisy.dotify.api.tasks.TaskSystemFactoryException;
-import org.daisy.dotify.tasks.impl.input.SPIHelper;
+import org.daisy.streamline.api.tasks.TaskGroupFactoryMaker;
+import org.daisy.streamline.api.tasks.TaskGroupFactoryMakerService;
+import org.daisy.streamline.api.tasks.TaskGroupInformation;
+import org.daisy.streamline.api.tasks.TaskSystem;
+import org.daisy.streamline.api.tasks.TaskSystemFactory;
+import org.daisy.streamline.api.tasks.TaskSystemFactoryException;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;
@@ -66,7 +66,7 @@ public class DotifyTaskSystemFactory implements TaskSystemFactory {
 	@Override
 	public void setCreatedWithSPI() {
 		if (imf == null) {
-			imf = SPIHelper.getInputManagerFactoryMakerService();
+			imf = TaskGroupFactoryMaker.newInstance();
 		}
 	}
 

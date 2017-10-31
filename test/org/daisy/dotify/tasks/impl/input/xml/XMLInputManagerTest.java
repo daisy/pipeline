@@ -11,7 +11,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.xpath.XPathExpressionException;
 
-import org.daisy.dotify.api.tasks.TaskSystemException;
+import org.daisy.streamline.api.tasks.TaskSystemException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 

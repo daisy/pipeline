@@ -1,8 +1,8 @@
 package org.daisy.dotify.tasks.impl.identity;
 
-import org.daisy.dotify.api.identity.Identifier;
-import org.daisy.dotify.api.identity.IdentifierFactory;
-import org.daisy.dotify.api.tasks.FileDetails;
+import org.daisy.streamline.api.identity.Identifier;
+import org.daisy.streamline.api.identity.IdentifierFactory;
+import org.daisy.streamline.api.tasks.FileDetails;
 
 import aQute.bnd.annotation.component.Component;
 

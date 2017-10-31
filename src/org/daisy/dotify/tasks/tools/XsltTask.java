@@ -14,14 +14,14 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.tasks.AnnotatedFile;
-import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
-import org.daisy.dotify.api.tasks.InternalTaskException;
-import org.daisy.dotify.api.tasks.ReadWriteTask;
-import org.daisy.dotify.api.tasks.TaskOption;
-import org.daisy.dotify.api.tasks.TaskOptionValue;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
+import org.daisy.streamline.api.tasks.AnnotatedFile;
+import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.tasks.InternalTaskException;
+import org.daisy.streamline.api.tasks.ReadWriteTask;
+import org.daisy.streamline.api.tasks.TaskOption;
+import org.daisy.streamline.api.tasks.TaskOptionValue;
 
 /**
  * <p>Task that runs an XSLT conversion.</p>

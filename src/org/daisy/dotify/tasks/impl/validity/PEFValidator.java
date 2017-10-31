@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.validity.ValidationReport;
-import org.daisy.dotify.api.validity.Validator;
 import org.daisy.dotify.tasks.impl.input.ValidatorException;
 import org.daisy.dotify.tasks.impl.input.ValidatorTask;
+import org.daisy.streamline.api.validity.ValidationReport;
+import org.daisy.streamline.api.validity.Validator;
 
 /**
  * Validates PEF-documents against the official Relax NG schema. Optionally performs additional

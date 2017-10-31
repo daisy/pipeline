@@ -10,12 +10,12 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.tasks.AnnotatedFile;
-import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
-import org.daisy.dotify.api.tasks.InternalTaskException;
-import org.daisy.dotify.api.tasks.ReadWriteTask;
-import org.daisy.dotify.api.tasks.TaskOption;
 import org.daisy.dotify.common.xml.XMLTools;
+import org.daisy.streamline.api.tasks.AnnotatedFile;
+import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.tasks.InternalTaskException;
+import org.daisy.streamline.api.tasks.ReadWriteTask;
+import org.daisy.streamline.api.tasks.TaskOption;
 
 class Text2ObflTask extends ReadWriteTask {
 	private static final String SOURCE_ENCODING = "source-encoding";

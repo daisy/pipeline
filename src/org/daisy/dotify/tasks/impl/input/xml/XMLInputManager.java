@@ -13,15 +13,6 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.identity.IdentificationFailedException;
-import org.daisy.dotify.api.tasks.AnnotatedFile;
-import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
-import org.daisy.dotify.api.tasks.ExpandingTask;
-import org.daisy.dotify.api.tasks.InternalTask;
-import org.daisy.dotify.api.tasks.InternalTaskException;
-import org.daisy.dotify.api.tasks.TaskGroup;
-import org.daisy.dotify.api.tasks.TaskOption;
-import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.common.io.ResourceLocator;
 import org.daisy.dotify.common.io.ResourceLocatorException;
 import org.daisy.dotify.tasks.impl.identity.XmlIdentifier;
@@ -29,6 +20,15 @@ import org.daisy.dotify.tasks.impl.input.DuplicatorTask;
 import org.daisy.dotify.tasks.impl.input.Keys;
 import org.daisy.dotify.tasks.impl.input.ValidatorTask;
 import org.daisy.dotify.tasks.tools.XsltTask;
+import org.daisy.streamline.api.identity.IdentificationFailedException;
+import org.daisy.streamline.api.tasks.AnnotatedFile;
+import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.tasks.ExpandingTask;
+import org.daisy.streamline.api.tasks.InternalTask;
+import org.daisy.streamline.api.tasks.InternalTaskException;
+import org.daisy.streamline.api.tasks.TaskGroup;
+import org.daisy.streamline.api.tasks.TaskOption;
+import org.daisy.streamline.api.tasks.TaskSystemException;
 
 /**
  * <p>Provides a method to determine the input format and load the 

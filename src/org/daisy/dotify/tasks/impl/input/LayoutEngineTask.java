@@ -19,14 +19,6 @@ import org.daisy.dotify.api.engine.FormatterEngine;
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.formatter.FormatterConfiguration;
-import org.daisy.dotify.api.tasks.AnnotatedFile;
-import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
-import org.daisy.dotify.api.tasks.InternalTaskException;
-import org.daisy.dotify.api.tasks.ReadWriteTask;
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
-import org.daisy.dotify.api.tasks.TaskOption;
-import org.daisy.dotify.api.tasks.TaskOptionValue;
-import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.writer.AttributeItem;
 import org.daisy.dotify.api.writer.MediaTypes;
@@ -36,6 +28,14 @@ import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 import org.daisy.dotify.tasks.impl.input.ObflResourceLocator.ObflResourceIdentifier;
+import org.daisy.streamline.api.tasks.AnnotatedFile;
+import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.tasks.InternalTaskException;
+import org.daisy.streamline.api.tasks.ReadWriteTask;
+import org.daisy.streamline.api.tasks.TaskGroupSpecification;
+import org.daisy.streamline.api.tasks.TaskOption;
+import org.daisy.streamline.api.tasks.TaskOptionValue;
+import org.daisy.streamline.api.tasks.TaskSystemException;
 
 /**
  * <p>

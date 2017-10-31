@@ -1,12 +1,12 @@
 package org.daisy.dotify.tasks.impl.identity;
 
-import org.daisy.dotify.api.identity.IdentificationFailedException;
-import org.daisy.dotify.api.identity.Identifier;
-import org.daisy.dotify.api.tasks.AnnotatedFile;
-import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
 import org.daisy.dotify.common.xml.XMLInfo;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
+import org.daisy.streamline.api.identity.IdentificationFailedException;
+import org.daisy.streamline.api.identity.Identifier;
+import org.daisy.streamline.api.tasks.AnnotatedFile;
+import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
 
 /**
  * Provides an identifier for xml files. This identifier will attach some additional

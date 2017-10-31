@@ -4,12 +4,12 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.validity.ValidationReport;
-import org.daisy.dotify.api.validity.Validator;
 import org.daisy.dotify.tasks.impl.input.ObflResourceLocator;
+import org.daisy.dotify.tasks.impl.input.ObflResourceLocator.ObflResourceIdentifier;
 import org.daisy.dotify.tasks.impl.input.ValidatorException;
 import org.daisy.dotify.tasks.impl.input.ValidatorTask;
-import org.daisy.dotify.tasks.impl.input.ObflResourceLocator.ObflResourceIdentifier;
+import org.daisy.streamline.api.validity.ValidationReport;
+import org.daisy.streamline.api.validity.Validator;
 
 class OBFLValidator implements Validator {
 	private static final Logger logger = Logger.getLogger(OBFLValidator.class.getCanonicalName());

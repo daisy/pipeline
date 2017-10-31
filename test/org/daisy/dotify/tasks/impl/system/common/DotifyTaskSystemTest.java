@@ -7,11 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.daisy.dotify.api.tasks.TaskGroup;
-import org.daisy.dotify.api.tasks.TaskGroupActivity;
-import org.daisy.dotify.api.tasks.TaskGroupInformation;
-import org.daisy.dotify.consumer.tasks.TaskGroupFactoryMaker;
-import org.daisy.dotify.tasks.impl.system.common.DotifyTaskSystem;
+import org.daisy.streamline.api.tasks.TaskGroup;
+import org.daisy.streamline.api.tasks.TaskGroupActivity;
+import org.daisy.streamline.api.tasks.TaskGroupFactoryMaker;
+import org.daisy.streamline.api.tasks.TaskGroupInformation;
 import org.junit.Test;
 @SuppressWarnings("javadoc")
 public class DotifyTaskSystemTest {

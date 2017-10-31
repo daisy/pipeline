@@ -3,7 +3,7 @@ package org.daisy.dotify.tasks.impl.system.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.daisy.dotify.api.tasks.TaskGroupInformation;
+import org.daisy.streamline.api.tasks.TaskGroupInformation;
 
 class QueueInfo {
 	private final TaskGroupSpecificationFilter candidates;

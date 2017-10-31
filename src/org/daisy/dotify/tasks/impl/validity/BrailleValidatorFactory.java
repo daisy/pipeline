@@ -4,9 +4,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.dotify.api.validity.Validator;
-import org.daisy.dotify.api.validity.ValidatorFactory;
-import org.daisy.dotify.api.validity.ValidatorFactoryException;
+import org.daisy.streamline.api.validity.Validator;
+import org.daisy.streamline.api.validity.ValidatorFactory;
+import org.daisy.streamline.api.validity.ValidatorFactoryException;
 
 import aQute.bnd.annotation.component.Component;
 

@@ -9,13 +9,13 @@ import java.io.IOException;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
-import org.daisy.dotify.api.tasks.AnnotatedFile;
-import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
-import org.daisy.dotify.api.tasks.InternalTaskException;
-import org.daisy.dotify.api.tasks.ReadWriteTask;
 import org.daisy.dotify.common.text.StringFilter;
 import org.daisy.dotify.common.xml.EntityResolverCache;
 import org.daisy.dotify.common.xml.XMLResolverAdapter;
+import org.daisy.streamline.api.tasks.AnnotatedFile;
+import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.tasks.InternalTaskException;
+import org.daisy.streamline.api.tasks.ReadWriteTask;
 
 /**
  * <p>Task that runs a list of StringFilters on the character data of the input file.</p>

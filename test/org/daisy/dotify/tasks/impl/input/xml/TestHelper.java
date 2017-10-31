@@ -33,13 +33,12 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.daisy.braille.utils.pef.XMLFileCompare;
-import org.daisy.dotify.api.tasks.InternalTaskException;
-import org.daisy.dotify.api.tasks.TaskGroup;
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
-import org.daisy.dotify.api.tasks.TaskSystemException;
-import org.daisy.dotify.tasks.impl.input.xml.XMLInputManagerFactory;
-import org.daisy.dotify.tasks.runner.TaskRunner;
 import org.daisy.dotify.tasks.tools.XsltTask;
+import org.daisy.streamline.api.tasks.InternalTaskException;
+import org.daisy.streamline.api.tasks.TaskGroup;
+import org.daisy.streamline.api.tasks.TaskGroupSpecification;
+import org.daisy.streamline.api.tasks.TaskSystemException;
+import org.daisy.streamline.engine.TaskRunner;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;

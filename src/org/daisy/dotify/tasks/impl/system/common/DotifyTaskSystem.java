@@ -8,15 +8,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.daisy.dotify.api.tasks.CompiledTaskSystem;
-import org.daisy.dotify.api.tasks.DefaultCompiledTaskSystem;
-import org.daisy.dotify.api.tasks.TaskGroup;
-import org.daisy.dotify.api.tasks.TaskGroupActivity;
-import org.daisy.dotify.api.tasks.TaskGroupFactoryMakerService;
-import org.daisy.dotify.api.tasks.TaskGroupInformation;
-import org.daisy.dotify.api.tasks.TaskOption;
-import org.daisy.dotify.api.tasks.TaskSystem;
-import org.daisy.dotify.api.tasks.TaskSystemException;
+import org.daisy.streamline.api.tasks.CompiledTaskSystem;
+import org.daisy.streamline.api.tasks.DefaultCompiledTaskSystem;
+import org.daisy.streamline.api.tasks.TaskGroup;
+import org.daisy.streamline.api.tasks.TaskGroupActivity;
+import org.daisy.streamline.api.tasks.TaskGroupFactoryMakerService;
+import org.daisy.streamline.api.tasks.TaskGroupInformation;
+import org.daisy.streamline.api.tasks.TaskOption;
+import org.daisy.streamline.api.tasks.TaskSystem;
+import org.daisy.streamline.api.tasks.TaskSystemException;
 
 
 /**

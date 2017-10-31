@@ -6,11 +6,11 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
-import org.daisy.dotify.api.tasks.InternalTask;
-import org.daisy.dotify.api.tasks.TaskGroup;
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
-import org.daisy.dotify.api.tasks.TaskSystemException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
+import org.daisy.streamline.api.tasks.InternalTask;
+import org.daisy.streamline.api.tasks.TaskGroup;
+import org.daisy.streamline.api.tasks.TaskGroupSpecification;
+import org.daisy.streamline.api.tasks.TaskSystemException;
 
 /**
  * Provides a task group for running the Dotify formatter.

@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.daisy.dotify.common.io.FileIO;
-import org.daisy.dotify.tasks.impl.input.epub.ContentExtractor;
-import org.daisy.dotify.tasks.impl.input.epub.ContentMerger;
-import org.daisy.dotify.tasks.impl.input.epub.EPUB3ReaderException;
 
 @SuppressWarnings("javadoc")
 public class Main {

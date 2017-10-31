@@ -2,9 +2,8 @@ package org.daisy.dotify.tasks.impl.input.xml;
 
 import static org.junit.Assert.assertTrue;
 
-import org.daisy.dotify.api.tasks.TaskGroupSpecification;
 import org.daisy.dotify.common.text.FilterLocale;
-import org.daisy.dotify.tasks.impl.input.xml.XMLInputManagerFactory;
+import org.daisy.streamline.api.tasks.TaskGroupSpecification;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")

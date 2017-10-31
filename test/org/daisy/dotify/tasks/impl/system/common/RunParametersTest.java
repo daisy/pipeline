@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.dotify.tasks.impl.system.common.RunParameters;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")

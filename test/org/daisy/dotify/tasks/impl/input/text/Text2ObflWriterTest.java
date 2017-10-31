@@ -11,7 +11,6 @@ import java.io.OutputStream;
 
 import javax.xml.transform.TransformerException;
 
-import org.daisy.dotify.tasks.impl.input.text.Text2ObflWriter;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
