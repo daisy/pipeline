@@ -1,5 +1,7 @@
 package org.daisy.dotify.api.formatter;
 
+import java.util.Optional;
+
 /**
  * <p>SequenceProperties stores properties that are specific for a sequence
  * of blocks</p>
@@ -27,6 +29,7 @@ public class SequenceProperties {
 	private final String masterName;
 	private final Integer initialPageNumber;
 	private final SequenceBreakBefore breakBefore;
+	private final Optional<String> pageCounterName;
 	/**
 	 * The Builder is used when creating a SequenceProperites instance 
 	 * @author Joel Håkansson
@@ -38,6 +41,7 @@ public class SequenceProperties {
 		//Optional parameters
 		Integer initialPageNumber = null;
 		SequenceBreakBefore breakBefore = SequenceBreakBefore.AUTO;
+		private String pageCounterName = null;
 		
 		/**
 		 * Create a new Builder
@@ -70,6 +74,20 @@ public class SequenceProperties {
 		}
 		
 		/**
+		 * Sets the page counter name for the sequence. When this value is
+		 * set, pages in the sequence are counted separately (in other words,
+		 * not using the default page counter). Instead, pages are counted
+		 * together with other sequences having the same page counter name.
+		 * 
+		 * @param value the identifier
+		 * @return returns "this" object
+		 */
+		public Builder pageCounterName(String value) {
+			this.pageCounterName = value;
+			return this;
+		}
+		
+		/**
 		 * Build SequenceProperties using the current state of the Builder
 		 * @return returns a new SequenceProperties instance
 		 */
@@ -83,6 +101,7 @@ public class SequenceProperties {
 		this.masterName = builder.masterName;
 		this.initialPageNumber = builder.initialPageNumber;
 		this.breakBefore = builder.breakBefore;
+		this.pageCounterName = Optional.ofNullable(builder.pageCounterName);
 	}
 
 	/**
@@ -109,4 +128,14 @@ public class SequenceProperties {
 		return breakBefore;
 	}
 
+	/**
+	 * Gets the page counter name. If a value is present, page numbers
+	 * within this sequence should be counted separately (in other words, 
+	 * not using the default page counter). Instead, pages are counted
+	 * together with other sequences having the same page counter name.
+	 * @return returns the page counter name
+	 */
+	public Optional<String> getPageCounterName() {
+		return pageCounterName;
+	}
 }
