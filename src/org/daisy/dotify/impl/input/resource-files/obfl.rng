@@ -442,6 +442,11 @@
         </choice>
       </attribute>
     </optional>
+    <optional>
+      <attribute name="page-number-counter">
+        <data type="NMTOKEN"/>
+      </attribute>
+    </optional>
     <ref name="textAtts"/>
   </define>
   <!-- Document root -->
@@ -654,14 +659,14 @@
   <define name="field">
     <element name="field">
       <ref name="attlist-field"/>
-      <oneOrMore>
+      <zeroOrMore>
         <choice>
           <ref name="marker-reference"/>
           <ref name="string"/>
           <ref name="current-page"/>
           <ref name="evaluate"/>
         </choice>
-      </oneOrMore>
+      </zeroOrMore>
     </element>
   </define>
   <define name="attlist-field" combine="interleave">
@@ -670,6 +675,14 @@
         <data type="NMTOKEN"/>
       </attribute>
     </optional>
+     <optional>
+      <attribute name="allow-text-flow">
+        <choice>
+          <value>true</value>
+          <value>false</value>
+        </choice>
+      </attribute>
+     </optional>
   </define>
   <define name="current-page">
     <element name="current-page">
@@ -834,6 +847,7 @@
         <choice>
           <ref name="sequence"/>
           <ref name="dynamic-sequence"/>
+          <ref name="toc-sequence"/>
         </choice>
       </zeroOrMore>
     </element>
