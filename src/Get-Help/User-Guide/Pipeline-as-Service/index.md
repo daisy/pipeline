@@ -63,17 +63,10 @@ the installation.
 If the Pipeline was installed via the Debian package,
 `system.properties` and `config-logback.xml` are located in
 `/etc/opt/daisy-pipeline2`. In addition there is a third configuration
-file available: `/etc/default/daisy-pipeline2`. It supports the
-following settings:
-
-`REMOTE`
-: When "true", run the server in "remote" mode ("true" or
-  "false", default is "false"). Has the same effect as setting
-  environment variables `PIPELINE2_LOCAL=false` and `PIPELINE2_AUTH=true`.
-
-In addition, all available [environment variables](#environment-variables)
-listed below, except for `PIPELINE2_DATA`, can be specified in this file in
-the format `export VAR=value`.
+file available: `/etc/default/daisy-pipeline2`. All available
+[environment variables](#environment-variables) listed below, except
+for `PIPELINE2_DATA`, can be specified in this file in the format
+`export VAR=value`.
 
 ### Other distros
 
@@ -109,20 +102,18 @@ A number of environment variables will influence the program:
 `JAVA_DEBUG_OPTS`
 : Additional Java options to be passed on when `PIPELINE2_DEBUG` is set.
 
-`PIPELINE2_LOCAL`
+`PIPELINE2_WS_LOCALFS`
 : Whether to allow local filesystem interaction when the client is running
   on the same machine as the server ("true" or "false", default is "true").
 
-`PIPELINE2_AUTH`
+`PIPELINE2_WS_AUTHENTICATION`
 : Whether the web service requires authentication ("true" or "false", default is "false").
 
 `PIPELINE2_DEBUG`
 : When "true", passes debug options to Java ("true" or "false", default is "false").
 
-`PIPELINE2_DATA`
-: Directory for storing program data.
-
 <!--
+- `PIPELINE2_DATA`: Directory for storing program data.
 - `PIPELINE2_BASE`: what is this for?
 - `PIPELINE2_HOME`: will be ignored?
 - `PIPELINE2_CONFIG`: will be ignored?
@@ -135,11 +126,11 @@ The following command line arguments are available. Combinations are possible.
 
 `remote`
 : Run Pipeline server in "remote" mode. Has the same effect as
-  setting `PIPELINE2_LOCAL=false` and `PIPELINE2_AUTH=true`.
+  setting `PIPELINE2_WS_LOCALFS=false` and `PIPELINE2_WS_AUTHENTICATION=true`.
 
 `local`
 : Run Pipeline server in "local" mode. Has the same effect as setting
-  `PIPELINE2_LOCAL=true` and `PIPELINE2_AUTH=false`.
+  `PIPELINE2_WS_LOCALFS=true` and `PIPELINE2_WS_AUTHENTICATION=false`.
 
 `clean`
 : Clean the program data.

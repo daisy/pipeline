@@ -145,7 +145,7 @@ The following properties should not be edited! <!-- FIXME: move them to a differ
 `org.daisy.pipeline.ws.localfs`
 : Whether or not to allow local filesystem interaction when the client is running on the same machine as the server
 : Automatically set based on the
-  [`PIPELINE2_LOCAL`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
+  [`PIPELINE2_WS_LOCALFS`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
   environment variable and the
   [`local`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#arguments-for-pipeline2-executable)
   argument
@@ -153,7 +153,7 @@ The following properties should not be edited! <!-- FIXME: move them to a differ
 `org.daisy.pipeline.ws.authentication`
 : Whether or not the web service requires authentication
 : Automatically set based on the
-  [`PIPELINE2_AUTH`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
+  [`PIPELINE2_WS_AUTHENTICATION`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
   environment variable and the
   [`remote`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#arguments-for-pipeline2-executable)
   argument
