@@ -11,7 +11,7 @@ Provides implementations for converting:
 
 ## Using ##
 Download the [latest release](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.daisy.dotify%22%20%20a%3A%22dotify.task.impl%22) from maven central and add it to your runtime environment.
-Access the implementations via the `TaskSystemFactory` and `TaskGroupFactory` API in [dotify.task-api](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.daisy.dotify%22%20%20a%3A%22dotify.task-api%22) _or_ in an OSGi environment use `TaskSystemFactoryMakerService` and `TaskGroupFactoryMakerService`.
+Access the implementations via the `TaskSystemFactory` and `TaskGroupFactory` API in [streamline-api](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.daisy.streamline%22%20AND%20a%3A%22streamline-api%22) _or_ in an OSGi environment use `TaskSystemFactoryMakerService` and `TaskGroupFactoryMakerService`.
 
 ## Building ##
 Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
