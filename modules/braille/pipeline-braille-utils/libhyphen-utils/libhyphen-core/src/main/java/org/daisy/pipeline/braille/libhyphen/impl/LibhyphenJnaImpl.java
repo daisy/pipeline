@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URL;
+import java.util.Locale;
 
 import ch.sbs.jhyphen.CompilationException;
 import ch.sbs.jhyphen.Hyphen;
@@ -158,11 +159,18 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 				return empty; }
 			return of(get(asURI(table))); }
 		if (tableProvider != null) {
-			String locale = "und";
-			if (q.containsKey("locale"))
-				locale = q.removeOnly("locale").getValue().get();
+			Locale locale; {
+				String loc = "und";
+				if (q.containsKey("locale"))
+					loc = q.removeOnly("locale").getValue().get();
+				try {
+					locale = parseLocale(loc); }
+				catch (IllegalArgumentException e) {
+					logger.error("Invalid locale", e);
+					return empty; }
+			}
 			return transform(
-				tableProvider.get(parseLocale(locale)),
+				tableProvider.get(locale),
 				new Function<URI,LibhyphenHyphenator>() {
 					public LibhyphenHyphenator _apply(URI table) {
 						return __apply(get(table)); }}); }

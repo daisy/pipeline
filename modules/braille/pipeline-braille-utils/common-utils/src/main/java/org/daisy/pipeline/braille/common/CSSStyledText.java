@@ -13,25 +13,37 @@ import cz.vutbr.web.css.RuleBlock;
 public class CSSStyledText implements Cloneable {
 		
 	private final String text;
+	private Map<String,String> textAttributes;
 	private Style style;
 	
 	public CSSStyledText(String text, SimpleInlineStyle style) {
+		this(text, style, null);
+	}
+	
+	public CSSStyledText(String text, SimpleInlineStyle style, Map<String,String> textAttributes) {
 		this.text = text;
 		this.style = new Style();
 		this.style.properties = style;
+		this.textAttributes = textAttributes;
 	}
 	
 	public CSSStyledText(String text, String style) {
+		this(text, style, null);
+	}
+	
+	public CSSStyledText(String text, String style, Map<String,String> textAttributes) {
 		this.text = text;
 		if (style == null)
 			this.style = null;
 		else
 			this.style = parseCSS.apply(style);
+		this.textAttributes = textAttributes;
 	}
 	
 	public CSSStyledText(String text) {
 		this.text = text;
 		this.style = null;
+		this.textAttributes = null;
 	}
 	
 	public String getText() {
@@ -52,6 +64,10 @@ public class CSSStyledText implements Cloneable {
 			return style.textTransformDefs.get(name);
 	}
 	
+	public Map<String,String> getTextAttributes() {
+		return textAttributes;
+	}
+	
 	@Override
 	public Object clone() {
 		CSSStyledText clone; {
@@ -63,15 +79,17 @@ public class CSSStyledText implements Cloneable {
 		}
 		if (style != null)
 			clone.style = (Style)style.clone();
+		if (textAttributes != null)
+			clone.textAttributes = new HashMap<String,String>(textAttributes);
 		return clone;
 	}
 	
 	@Override
 	public String toString() {
-		if (style == null || style.properties == null || style.properties.isEmpty())
-			return text;
-		else
-			return text + "{" + style.properties + "}";
+		String s = text;
+		if (style != null && style.properties != null && !style.properties.isEmpty())
+			s += "{" + style.properties + "}";
+		return s;
 	}
 	
 	// TODO: Does this need to be evicted? There is an infinite number of

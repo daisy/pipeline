@@ -7,7 +7,7 @@
     
     <p:documentation>
         Convert padding into non-collapsing margins
-        (http://snaekobbi.github.io/braille-css-spec/#collapsing-margins).
+        (http://braillespecs.github.io/braille-css/#collapsing-margins).
     </p:documentation>
     
     <p:input port="source">

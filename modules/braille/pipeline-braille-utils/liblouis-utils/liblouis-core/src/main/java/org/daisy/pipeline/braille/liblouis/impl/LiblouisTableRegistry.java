@@ -92,7 +92,7 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 
 		private static final URI identifier = asURI("file:/");
 		
-		private static final Predicate<String> isLiblouisTable = matchesGlobPattern("*.{dis,ctb,cti,ctu,dic}");
+		private static final Predicate<String> isLiblouisTable = matchesGlobPattern("*.{dis,ctb,cti,uti,utb,dic}");
 		
 		public URI getIdentifier() {
 			return identifier;

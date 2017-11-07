@@ -13,12 +13,12 @@
     
     <xsl:template match="css:content[@target]">
         <xsl:variable name="target" select="@target"/>
-        <xsl:apply-templates select="//*[@css:id=$target][1]/child::node()" mode="add-anchor">
+        <xsl:apply-templates select="//*[@css:id=$target][1]/child::node()" mode="copy">
             <xsl:with-param name="anchor" select="$target"/>
         </xsl:apply-templates>
     </xsl:template>
     
-    <xsl:template match="*" mode="add-anchor">
+    <xsl:template match="*" mode="copy">
         <xsl:param name="anchor" as="xs:string" required="yes"/>
         <xsl:copy>
             <xsl:sequence select="@*"/>
@@ -29,8 +29,22 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="text()" mode="add-anchor">
+    <xsl:template match="text()" mode="copy">
         <xsl:sequence select="."/>
+    </xsl:template>
+    
+    <xsl:template match="css:after|
+                         css:before|
+                         css:duplicate|
+                         css:alternate|
+                         css:footnote-call" mode="copy"/>
+    
+    <!--
+        Suppress warning messages "The source document is in no namespace, but the template rules
+        all expect elements in a namespace" (see https://github.com/daisy/pipeline-mod-braille/issues/38)
+    -->
+    <xsl:template match="/phony">
+        <xsl:next-match/>
     </xsl:template>
     
 </xsl:stylesheet>

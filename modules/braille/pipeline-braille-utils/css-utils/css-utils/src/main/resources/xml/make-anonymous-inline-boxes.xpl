@@ -7,7 +7,7 @@
     
     <p:documentation>
         Break inline boxes around contained block boxes and create anonymous inline boxes
-        (http://snaekobbi.github.io/braille-css-spec/#anonymous-boxes).
+        (http://braillespecs.github.io/braille-css/#anonymous-boxes).
     </p:documentation>
     
     <p:input port="source">

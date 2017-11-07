@@ -12,7 +12,7 @@
     <p:input port="source">
         <p:documentation>
             Style sheets of elements in the input must be declared in style attributes, which must
-            conform to http://snaekobbi.github.io/braille-css-spec/#style-attribute.
+            conform to http://braillespecs.github.io/braille-css/#style-attribute.
         </p:documentation>
     </p:input>
     

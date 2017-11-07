@@ -8,7 +8,7 @@
 	<p:input port="source"/>
 	<p:output port="result"/>
 	
-	<p:option name="query" select="''"/>
+	<p:option name="block-transform" select="''"/>
 	<p:option name="temp-dir" required="true"/>
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
@@ -24,7 +24,7 @@
 	</p:xslt>
 	
 	<px:transform>
-		<p:with-option name="query" select="$query"/>
+		<p:with-option name="query" select="$block-transform"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 	</px:transform>
 	

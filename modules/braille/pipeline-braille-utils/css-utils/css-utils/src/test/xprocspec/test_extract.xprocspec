@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:c="http://www.w3.org/ns/xproc-step">
+	
+	<x:script>
+		<p:declare-step version="1.0" type="pxi:test">
+			<p:input port="source"/>
+			<p:output port="result" primary="true"/>
+			<p:output port="stylesheet">
+				<p:pipe step="extract" port="stylesheet"/>
+			</p:output>
+			<p:import href="../../main/resources/xml/library.xpl"/>
+			<css:extract name="extract"/>
+			<p:delete match="@style"/>
+		</p:declare-step>
+	</x:script>
+	
+	<x:scenario label="test">
+		<x:call step="pxi:test">
+			<x:input port="source">
+				<x:document type="inline">
+					<html>
+						<body xml:id="a" style="@page {
+						                          @top-left { content: 'foo' }}">
+							<section xml:id="b" style="@page {
+							                             @top-left { content: 'foo' }}
+							                           @page:left {
+							                             @top-left { content: 'foo' }
+							                             @top-right { content: 'bar' }}
+							                           { display: block }">
+								<h1 xml:id="c" style="display: block;
+								                      border-bottom-align: center;
+								                      border-bottom-pattern: ⠒;
+								                      border-bottom-style: none;
+								                      border-bottom-width: 1;"/>
+								<p xml:id="d" style="display: block"/>
+								<p xml:id="e" style="display: block"/>
+								<p xml:id="f" style="{ display: block } ::before { content: 'foo' }"/>
+							</section>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<html>
+					<body id="a">
+						<section id="b">
+							<h1 id="c"/>
+							<p id="d"/>
+							<p id="e"/>
+							<p id="f"/>
+						</section>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="stylesheet">
+			<x:document type="port" port="stylesheet"/>
+		</x:context>
+		<x:expect label="stylesheet" type="compare" normalize-space="false">
+			<x:document type="inline">
+				<c:result content-type="text/plain">@page page-1 {
+	@top-left {
+		content: 'foo'
+	}
+}
+@page page-2 {
+	@top-left {
+		content: 'foo'
+	}
+}
+@page page-2:left {
+	@top-left {
+		content: 'foo'
+	}
+	@top-right {
+		content: 'bar'
+	}
+}
+#a {
+	page: page-1
+}
+#b {
+	page: page-2;
+	display: block
+}
+#c {
+	display: block;
+	border-bottom-align: center;
+	border-bottom-pattern: ⠒;
+	border-bottom-style: none;
+	border-bottom-width: 1
+}
+#d, #e {
+	display: block
+}
+#f {
+	display: block
+}
+#f::before {
+	content: 'foo'
+}
+</c:result>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
+</x:description>

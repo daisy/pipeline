@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,7 +50,6 @@ import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.memoize;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
-import org.daisy.pipeline.braille.common.util.Locales;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
 import static org.daisy.pipeline.braille.common.util.Strings.insertHyphens;
@@ -145,6 +145,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	/**
 	 * Recognized features:
 	 *
+	 * - id: If present it must be the only feature. Will match a transformer with a unique ID.
+	 *
 	 * - translator: Will only match if the value is `liblouis'
 	 *
 	 * - hyphenator: A value `none' will disable hyphenation. `liblouis' will match only liblouis
@@ -220,7 +222,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		if (table != null)
 			q.add("table", table);
 		if (locale != null)
-			q.add("locale", Locales.toString(parseLocale(locale), '_'));
+			try {
+				q.add("locale", parseLocale(locale).toLanguageTag().replace('-', '_')); }
+			catch (IllegalArgumentException e) {
+				logger.error("Invalid locale", e);
+				return empty; }
 		if (!asciiBraille)
 			q.add("unicode");
 		q.add("white-space");
@@ -238,7 +244,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 										translators = Iterables.of(
 											logCreate((LiblouisTranslator)new LiblouisTranslatorHyphenatorImpl(
 													table.getTranslator(),
-													handleNonStandardHyphenation))
+													handleNonStandardHyphenation,
+													locale))
 										);
 										break; }
 							if (!"liblouis".equals("hyphenator")) {
@@ -259,7 +266,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 														(LiblouisTranslator)new LiblouisTranslatorImpl(
 																table.getTranslator(),
 																hyphenator,
-																handleNonStandardHyphenation))); }}));
+																handleNonStandardHyphenation,
+																locale))); }}));
 								}}
 						if ("none".equals(hyphenator) || "auto".equals(hyphenator))
 							translators = concat(
@@ -267,7 +275,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								logCreate((LiblouisTranslator)new LiblouisTranslatorImpl(
 										table.getTranslator(),
 										null,
-										handleNonStandardHyphenation)));
+										handleNonStandardHyphenation,
+										locale)));
 						return translators;
 					}
 				}
@@ -287,6 +296,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		private Hyphenator hyphenator;
 		protected FullHyphenator fullHyphenator;
 		private Hyphenator.LineBreaker lineBreaker;
+		private final String mainLocale;
 		
 		// how to handle non-standard hyphenation in pre-translation mode
 
@@ -302,14 +312,15 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		private final static int NON_STANDARD_HYPH_FAIL = 1;
 		private final static int NON_STANDARD_HYPH_DEFER = 2;
 		
-		private LiblouisTranslatorImpl(Translator translator, int handleNonStandardHyphenation) {
+		private LiblouisTranslatorImpl(Translator translator, int handleNonStandardHyphenation, String mainLocale) {
 			table = new LiblouisTable(translator.getTable());
 			this.translator = translator;
 			this.handleNonStandardHyphenation = handleNonStandardHyphenation;
+			this.mainLocale = mainLocale;
 		}
 		
-		private LiblouisTranslatorImpl(Translator translator, Hyphenator hyphenator, int handleNonStandardHyphenation) {
-			this(translator, handleNonStandardHyphenation);
+		private LiblouisTranslatorImpl(Translator translator, Hyphenator hyphenator, int handleNonStandardHyphenation, String mainLocale) {
+			this(translator, handleNonStandardHyphenation, mainLocale);
 			this.hyphenator = hyphenator;
 			if (hyphenator != null) {
 				try {
@@ -465,6 +476,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					SimpleInlineStyle[] styles = new SimpleInlineStyle[size]; {
 						int i = 0;
 						for (CSSStyledText t : styledText) {
+							Map<String,String> attrs = t.getTextAttributes();
+							if (attrs != null)
+								for (String k : attrs.keySet())
+									logger.warn("Text attribute \"{}:{}\" ignored", k, attrs.get(k));
 							text[i] = t.getText();
 							styles[i] = t.getStyle();
 							i++; }}
@@ -952,6 +967,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			SimpleInlineStyle[] style = new SimpleInlineStyle[size];
 			int i = 0;
 			for (CSSStyledText t : styledText) {
+				Map<String,String> attrs = t.getTextAttributes();
+				if (attrs != null)
+					for (String k : attrs.keySet())
+						logger.warn("Text attribute \"{}:{}\" ignored", k, attrs.get(k));
 				text[i] = t.getText();
 				style[i] = t.getStyle();
 				i++; }
@@ -1258,14 +1277,16 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 										brailleWithWs[k] = textWithWs[k] + m.group(1);
 									else
 										wsLost = true; }
-							if (wsLost)
-								logger.warn("White space was lost in the output.\n"
-								            + "Input: " + Arrays.toString(textWithWs) + "\n"
-								            + "Output: " + Arrays.toString(brailleWithWs)); }
+							if (wsLost) {
+								logger.warn("White space was not preserved: " + joinedText.replaceAll("\\s+"," "));
+								logger.debug("White space was lost in the output.\n"
+								             + "Input: " + Arrays.toString(textWithWs) + "\n"
+								             + "Output: " + Arrays.toString(brailleWithWs)); }}
 						else {
-							logger.warn("Text segmentation was lost in the output. Falling back to fuzzy mode.\n"
-							            + "=> input segments: " + Arrays.toString(textWithWs) + "\n"
-							            + "=> output segments: " + Arrays.toString(Arrays.copyOf(brailleWithWs, l)));
+							logger.warn("Text segmentation was lost: " + joinedText.replaceAll("\\s+"," "));
+							logger.debug("Text segmentation was lost in the output. Falling back to fuzzy mode.\n"
+							             + "=> input segments: " + Arrays.toString(textWithWs) + "\n"
+							             + "=> output segments: " + Arrays.toString(Arrays.copyOf(brailleWithWs, l)));
 							brailleWithWs = null; }
 					}
 					
@@ -1332,10 +1353,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							if (pre[l])
 								wsLost = true;
 							brailleWithWs[l++] = ""; }
-						if (wsLost)
-							logger.warn("White space was lost in the output.\n"
-							            + "Input: " + Arrays.toString(textWithWs) + "\n"
-							            + "Output: " + Arrays.toString(brailleWithWs));
+						if (wsLost) {
+							logger.warn("White space was not preserved: " + joinedText.replaceAll("\\s+"," "));
+							logger.debug("White space was lost in the output.\n"
+							             + "Input: " + Arrays.toString(textWithWs) + "\n"
+							             + "Output: " + Arrays.toString(brailleWithWs)); }
 					}
 				}
 			} catch (TranslationException e) {
@@ -1413,8 +1435,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	
 	private static class LiblouisTranslatorHyphenatorImpl extends LiblouisTranslatorImpl {
 		
-		private LiblouisTranslatorHyphenatorImpl(Translator translator, int handleNonStandardHyphenation) {
-			super(translator, handleNonStandardHyphenation);
+		private LiblouisTranslatorHyphenatorImpl(Translator translator, int handleNonStandardHyphenation, String mainLocale) {
+			super(translator, handleNonStandardHyphenation, mainLocale);
 			fullHyphenator = new LiblouisTranslatorAsFullHyphenator(translator);
 		}
 		

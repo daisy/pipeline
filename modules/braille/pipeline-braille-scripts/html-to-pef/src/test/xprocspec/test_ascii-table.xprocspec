@@ -4,70 +4,42 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/braille/html-to-pef/html-to-pef.xpl">
   
-  <x:scenario label="ascii-table has priority over xml:lang" pending="wait for BRAILLO_6DOT_031_01 support in braille-utils">
+  <x:scenario label="ascii-file-format has priority over dc:language / xml:lang">
     <x:call step="px:html-to-pef">
-      <x:input port="source">
-        <x:document type="inline">
-          <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-            <head>
-            </head>
-            <body>
-              <h1>Foo</h1>
-              <p>bar</p>
-              <p>123</p>
-            </body>
-          </html>
-        </x:document>
-      </x:input>
-      <x:option name="pef-output-dir" select="resolve-uri('1/output-dir',$temp-dir)"/>
-      <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
+      <x:option name="html" select="resolve-uri('../resources/test_ascii-table_1.xhtml')"/>
       <x:option name="include-brf" select="'true'"/>
-      <x:option name="transform" select="'(locale:nl)(formatter:dotify)'"/>
-      <x:option name="ascii-table" select="'(id:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
-                                            (line-breaks:DOS)
-                                            (page-breaks:&quot;---&quot;)'"/>
+      <x:option name="ascii-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
+                                                  (line-breaks:DOS)
+                                                  (page-breaks:&quot;---&quot;)
+                                                  (pad:BOTH)'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('1/output-dir',$temp-dir)"/>
+      <x:option name="brf-output-dir" select="resolve-uri('1/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
     </x:call>
     <x:context label="brf">
-      <x:document type="file" method="text" base-uri="temp-dir" href="1/output-dir/test_ascii-table.brf"/>
+      <x:document type="file" method="text" base-uri="temp-dir" href="1/output-dir/test_ascii-table_1_vol-1.brf"/>
     </x:context>
     <x:expect label="brf" type="compare" normalize-space="false">
       <x:document type="file" method="text" href="../resources/test_ascii-table_1.brf"/>
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="Table can be found by locale" pending="wait for BRAILLO_6DOT_031_01 support in braille-utils">
+  <x:scenario label="Table can be found by locale">
     <x:call step="px:html-to-pef">
-      <x:input port="source">
-        <x:document type="inline">
-          <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="nl">
-            <head>
-            </head>
-            <body>
-              <h1>Foo</h1>
-              <p>bar</p>
-              <p>123</p>
-            </body>
-          </html>
-        </x:document>
-      </x:input>
-      <x:option name="pef-output-dir" select="resolve-uri('2/output-dir',$temp-dir)"/>
-      <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
+      <x:option name="html" select="resolve-uri('../resources/test_ascii-table_2.xhtml')"/>
       <x:option name="include-brf" select="'true'"/>
-      <!--
-        The locale will be extracted from xml:lang.
-        This cannot be tested because ascii-table has to be empty,
-        but then line-breaks is missing and the test fails on some platforms.
-        Instead, just provide locale as a parameter.
-      -->
-      <x:option name="ascii-table" select="'(locale:nl)
-                                            (line-breaks:DOS)
-                                            (page-breaks:&quot;---&quot;)'"/>
+      <x:option name="ascii-file-format" select="'(line-breaks:DOS)
+                                                  (page-breaks:&quot;---&quot;)
+                                                  (pad:BOTH)'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('2/output-dir',$temp-dir)"/>
+      <x:option name="brf-output-dir" select="resolve-uri('2/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
     </x:call>
     <x:context label="brf">
-      <x:document type="file" method="text" base-uri="temp-dir" href="2/output-dir/test_ascii-table.brf"/>
+      <x:document type="file" method="text" base-uri="temp-dir" href="2/output-dir/test_ascii-table_2_vol-1.brf"/>
     </x:context>
     <x:expect label="brf" type="compare" normalize-space="false">
-      <x:document type="file" method="text" href="../resources/test_ascii-table_1.brf"/>
+      <x:document type="file" method="text" href="../resources/test_ascii-table_2.brf"/>
     </x:expect>
   </x:scenario>
   

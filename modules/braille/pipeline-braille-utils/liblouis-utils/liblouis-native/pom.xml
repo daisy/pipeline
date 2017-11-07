@@ -28,6 +28,29 @@
     </dependency>
   </dependencies>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.liblouis</groupId>
+        <artifactId>louis</artifactId>
+        <version>3.0.0-alpha1</version>
+        <type>nar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.liblouis</groupId>
+        <artifactId>louisutdml</artifactId>
+        <version>2.5.0</version>
+        <type>nar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.libs</groupId>
+        <artifactId>xml2</artifactId>
+        <version>2.7.3</version>
+        <type>nar</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <build>
     <plugins>
       <plugin>

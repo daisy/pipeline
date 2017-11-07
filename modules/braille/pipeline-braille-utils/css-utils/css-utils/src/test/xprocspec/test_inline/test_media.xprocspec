@@ -76,23 +76,6 @@
         </x:document>
       </x:expect>
     </x:scenario>
-    <x:scenario label="media-embossed-and-print">
-      <x:call>
-        <x:option name="media" select="'embossed print'"/>
-      </x:call>
-      <x:context label="result">
-        <x:document type="port" port="result" select="//body"/>
-      </x:context>
-      <x:expect label="result" type="compare">
-        <x:document type="inline">
-          <body>
-            <p style="display: block;">
-              foo<em style="font-style: italic; font-weight: bold;">bar</em>
-            </p>
-          </body>
-        </x:document>
-      </x:expect>
-    </x:scenario>
   </x:scenario>
   
   <x:scenario label="test_02">
@@ -124,7 +107,7 @@
           </document>
         </x:document>
       </x:input>
-      <x:option name="media" select="'embossed print'"/>
+      <x:option name="media" select="'embossed'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result" select="//body"/>
@@ -133,7 +116,7 @@
       <x:document type="inline">
         <body>
           <p style="display: block;">
-            foo<em style="font-weight: bold;">bar</em>
+            foo<em>bar</em>
           </p>
         </body>
       </x:document>

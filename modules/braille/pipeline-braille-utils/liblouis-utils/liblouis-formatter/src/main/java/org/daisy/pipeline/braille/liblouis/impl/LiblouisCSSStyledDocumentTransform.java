@@ -85,7 +85,7 @@ public interface LiblouisCSSStyledDocumentTransform {
 						new Function<BrailleTranslator,Transform>() {
 							public Transform _apply(BrailleTranslator blockTransform) {
 								return __apply(
-									logCreate(new TransformImpl(q.toString(), blockTransform))); }}); }}
+									logCreate(new TransformImpl(blockTransform))); }}); }}
 			catch (IllegalStateException e) {}
 			return empty;
 		}
@@ -95,8 +95,9 @@ public interface LiblouisCSSStyledDocumentTransform {
 			private final BrailleTranslator blockTransform;
 			private final XProc xproc;
 			
-			private TransformImpl(String blockTransformQuery, BrailleTranslator blockTransform) {
-				Map<String,String> options = ImmutableMap.of("query", blockTransformQuery);
+			private TransformImpl(BrailleTranslator blockTransform) {
+				Map<String,String> options = ImmutableMap.of("block-transform",
+				                                             mutableQuery().add("id", blockTransform.getIdentifier()).toString());
 				xproc = new XProc(href, null, options);
 				this.blockTransform = blockTransform;
 			}

@@ -13,7 +13,7 @@
         <p:documentation>
             The 'white-space' properties of elements in the input must be declared in
             css:white-space attributes, and must conform to
-            http://snaekobbi.github.io/braille-css-spec/#the-white-space-property. target-text(),
+            http://braillespecs.github.io/braille-css/#the-white-space-property. target-text(),
             target-string(), target-counter() and target-content() values must be represented by
             css:text, css:string, css:counter and css:content elements.
         </p:documentation>

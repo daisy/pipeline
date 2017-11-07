@@ -5,7 +5,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/epub3-to-pef.xpl">
   
-  <x:scenario label="ascii-table has priority over xml:lang">
+  <x:scenario label="ascii-file-format has priority over dc:language">
     <x:call step="px:epub3-to-pef">
       <x:option name="epub" select="resolve-uri('../resources/test_ascii-table_1/package.opf')"/>
       <x:option name="include-brf" select="'true'"/>

@@ -42,6 +42,7 @@ import static org.daisy.pipeline.pax.exam.Options.thisPlatform;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import org.junit.ComparisonFailure;
 import org.junit.Test;
 
 import org.ops4j.pax.exam.ProbeBuilder;
@@ -111,7 +112,7 @@ public class LiblouisCoreTest extends AbstractTest {
 	
 	@Test
 	public void testGetTranslatorFromQuery3() {
-		provider.withContext(messageBus).get(query("(locale:foo_BAR)")).iterator().next();
+		provider.withContext(messageBus).get(query("(locale:foo_BA)")).iterator().next();
 	}
 	
 	@Test(expected=NoSuchElementException.class)
@@ -504,6 +505,18 @@ public class LiblouisCoreTest extends AbstractTest {
 		String id = table.getIdentifier();
 		assertEquals(table, tableProvider.get(query("(id:'" + id + "')")).iterator().next());
 		// assertEquals(table, tableCatalog.newTable(id));
+	}
+	
+	@Test(expected=ComparisonFailure.class)
+	public void testTranslatorStatefulBug() {
+		FromStyledTextToBraille translator = provider.withContext(messageBus)
+		                                             .get(query("(table:'stateful.utb')")).iterator().next()
+		                                             .fromStyledTextToBraille();
+		String p = translator.transform(text("p")).iterator().next();
+		//assertEquals("⠰⠏", p);
+		translator.transform(text("xx"));
+		// this is expected to fail:
+		assertEquals(p, translator.transform(text("p")).iterator().next());
 	}
 	
 	private Iterable<CSSStyledText> styledText(String... textAndStyle) {

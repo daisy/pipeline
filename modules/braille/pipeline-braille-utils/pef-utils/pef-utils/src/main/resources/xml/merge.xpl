@@ -35,25 +35,7 @@
             </p:iteration-source>
             <p:xslt>
                 <p:input port="stylesheet">
-                    <p:inline>
-                        <xsl:stylesheet version="2.0">
-                            <xsl:template match="/*">
-                                <xsl:copy>
-                                    <xsl:sequence select="@*|text()"/>
-                                    <xsl:apply-templates select="*"/>
-                                </xsl:copy>
-                            </xsl:template>
-                            <xsl:template match="*[local-name()='section']">
-                                <xsl:copy>
-                                    <xsl:sequence select="(@cols,parent::*/@cols)[1]"/>
-                                    <xsl:sequence select="(@duplex,parent::*/@duplex)[1]"/>
-                                    <xsl:sequence select="(@rowgap,parent::*/@rowgap)[1]"/>
-                                    <xsl:sequence select="(@rows,parent::*/@rows)[1]"/>
-                                    <xsl:sequence select="node()"/>
-                                </xsl:copy>
-                            </xsl:template>
-                        </xsl:stylesheet>
-                    </p:inline>
+                    <p:document href="merge.extract-sections.xsl"/>
                 </p:input>
                 <p:input port="parameters">
                     <p:empty/>
@@ -71,33 +53,7 @@
         </p:insert>
         <p:xslt>
             <p:input port="stylesheet">
-                <p:inline>
-                    <xsl:stylesheet version="2.0">
-                        <xsl:template match="/*">
-                            <xsl:copy>
-                                <xsl:sequence select="@*|text()"/>
-                                <xsl:apply-templates select="*"/>
-                            </xsl:copy>
-                        </xsl:template>
-                        <xsl:template match="*[local-name()='section']">
-                            <xsl:copy>
-                                <xsl:if test="string(@cols)!=string(parent::*/@cols)">
-                                    <xsl:sequence select="@cols"/>
-                                </xsl:if>
-                                <xsl:if test="string(@duplex)!=string(parent::*/@duplex)">
-                                    <xsl:sequence select="@duplex"/>
-                                </xsl:if>
-                                <xsl:if test="string(@rowgap)!=string(parent::*/@rowgap)">
-                                    <xsl:sequence select="@rowgap"/>
-                                </xsl:if>
-                                <xsl:if test="string(@rows)!=string(parent::*/@rows)">
-                                    <xsl:sequence select="@rows"/>
-                                </xsl:if>
-                                <xsl:sequence select="node()"/>
-                            </xsl:copy>
-                        </xsl:template>
-                    </xsl:stylesheet>
-                </p:inline>
+                <p:document href="merge.remove-duplicate-attributes.xsl"/>
             </p:input>
             <p:input port="parameters">
                 <p:empty/>

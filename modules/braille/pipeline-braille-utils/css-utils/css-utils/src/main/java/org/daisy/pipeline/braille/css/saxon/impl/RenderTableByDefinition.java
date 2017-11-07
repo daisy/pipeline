@@ -199,14 +199,18 @@ public class RenderTableByDefinition extends ExtensionFunctionDefinition {
 								_ = DTB_; }
 						else if (isHTMLorDTBookElement(THEAD, name)) {
 							rowType = TableCell.RowType.THEAD;
+							// TODO: if style != default, warning that style on thead element is ignored
 							break; }
 						else if (isHTMLorDTBookElement(TFOOT, name)) {
 							rowType = TableCell.RowType.TFOOT;
+							// TODO: if style != default, warning that style on tfoot element is ignored
 							break; }
 						else if (isHTMLorDTBookElement(TBODY, name)) {
 							rowType = TableCell.RowType.TBODY;
+							// TODO: if style != default, warning that style on tbody element is ignored
 							break; }
 						else if (isHTMLorDTBookElement(TR, name)) {
+							// TODO: if style != default, warning that style on tr element is ignored
 							break; }
 						else if (isHTMLorDTBookElement(COLGROUP, name) || isHTMLorDTBookElement(COL, name))
 							throw new RuntimeException("Elements colgroup and col not supported yet.");

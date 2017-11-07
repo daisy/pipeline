@@ -13,7 +13,7 @@
         <p:documentation>
             The 'content' properties of elements in the input must be declared in css:content
             attributes, and must conform to
-            http://snaekobbi.github.io/braille-css-spec/#the-content-property. '::before' and
+            http://braillespecs.github.io/braille-css/#the-content-property. '::before' and
             '::after' and '::footnote-call' pseudo-elements must be represented by css:before,
             css:after and css:footnote-call elements. '::alternate' pseudo-elements must be
             reprented by css:alternate elements with a css:anchor attribute that points to the

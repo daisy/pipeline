@@ -12,13 +12,21 @@
     </xsl:template>
     
     <xsl:template match="*[@xml:id or @id]">
-        <xsl:variable name="name" as="xs:string*" select="(@xml:id|@id)"/>
+        <xsl:variable name="uri" as="xs:anyURI*" select="for $i in (@xml:id|@id) return resolve-uri(concat('#',$i),base-uri(.))"/>
+        <xsl:variable name="referenced" as="element()*">
+            <xsl:variable name="id" as="xs:string*" select="(@xml:id|@id)"/>
+            <xsl:for-each select="//*[self::css:text[@target] or
+                                      self::css:string[@name][@target] or
+                                      self::css:counter[@target] or
+                                      self::css:content[@target]]
+                                     [replace(@target,'^.*#','')=$id]">
+                <xsl:if test="resolve-uri(if (contains(@target,'#')) then @target else concat('#',@target),base-uri(.))=$uri">
+                    <xsl:sequence select="."/>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
         <xsl:choose>
-            <xsl:when test="//*[self::css:text[@target] or
-                                self::css:string[@name][@target] or
-                                self::css:counter[@target] or
-                                self::css:content[@target]]
-                               [replace(@target,'^#','')=$name]">
+            <xsl:when test="exists($referenced)">
                 <xsl:copy>
                     <xsl:apply-templates select="@*"/>
                     <xsl:if test="not(@css:id)">
@@ -37,15 +45,48 @@
                          css:string[@name][@target]|
                          css:counter[@target]|
                          css:content[@target]">
-        <xsl:variable name="name" as="xs:string" select="replace(@target,'^#','')"/>
-        <xsl:variable name="target" as="element()?" select="//*[@xml:id=$name or @id=$name][1]"/>
-        <xsl:if test="$target">
-            <xsl:copy>
-                <xsl:sequence select="@* except @target"/>
-                <xsl:attribute name="target" select="($target/@css:id,generate-id($target))[1]"/>
-                <xsl:sequence select="node()"/>
-            </xsl:copy>
-        </xsl:if>
+        <xsl:variable name="uri" as="xs:anyURI"
+                      select="resolve-uri(if (contains(@target,'#')) then @target else concat('#',@target),base-uri(.))"/>
+        <xsl:variable name="target" as="element()*">
+            <xsl:variable name="id" as="xs:string" select="replace(@target,'^.*#','')"/>
+            <xsl:for-each select="//*[@xml:id=$id or @id=$id]">
+                <xsl:if test="resolve-uri(concat('#',$id),base-uri(.))=$uri">
+                    <xsl:sequence select="."/>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="target" as="element()?" select="$target[1]"/>
+        <xsl:choose>
+            <xsl:when test="exists($target)">
+                <xsl:copy>
+                    <xsl:sequence select="@* except @target"/>
+                    <xsl:attribute name="target" select="($target/@css:id,generate-id($target))[1]"/>
+                    <xsl:attribute name="original-target" select="@target"/>
+                    <xsl:sequence select="node()"/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>
+                    <xsl:text>target-</xsl:text>
+                    <xsl:value-of select="local-name(.)"/>
+                    <xsl:text>(</xsl:text>
+                    <xsl:if test="self::css:string">
+                        <xsl:value-of select="@name"/>
+                        <xsl:text>, </xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="@target"/>
+                    <xsl:text>) could not be resolved.</xsl:text>
+                </xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <!--
+        Suppress warning messages "The source document is in no namespace, but the template rules
+        all expect elements in a namespace" (see https://github.com/daisy/pipeline-mod-braille/issues/38)
+    -->
+    <xsl:template match="/phony">
+        <xsl:next-match/>
     </xsl:template>
     
 </xsl:stylesheet>

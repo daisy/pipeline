@@ -43,7 +43,7 @@
           </obfl>
         </x:document>
       </x:input>
-      <x:option name="text-transform" select="concat('(liblouis-table:&quot;', resolve-uri('../resources/write-out-numbers.ctu'), '&quot;)')"/>
+      <x:option name="text-transform" select="concat('(liblouis-table:&quot;', resolve-uri('../resources/write-out-numbers.utb'), '&quot;)')"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>

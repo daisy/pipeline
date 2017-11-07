@@ -13,6 +13,8 @@
   
   <xsl:variable name="_depth" as="xs:integer" select="if ($depth) then xs:integer($depth) else 6"/>
   
+  <xsl:variable name="root-base-uri" as="xs:anyURI" select="base-uri(/*)"/>
+  
   <xsl:template match="/*">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
@@ -25,7 +27,7 @@
               <xsl:if test="current-group()/self::*:h1">
                 <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                   <xsl:call-template name="link-attributes">
-                    <xsl:with-param name="href" select="pxi:get-or-generate-id(current-group()/self::*:h1)"/>
+                    <xsl:with-param name="header-element" select="current-group()/self::*:h1"/>
                   </xsl:call-template>
                   <xsl:apply-templates select="current-group()/self::*:h1/child::node()"/>
                 </xsl:element>
@@ -38,7 +40,7 @@
                       <xsl:if test="current-group()/self::*:h2">
                         <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                           <xsl:call-template name="link-attributes">
-                            <xsl:with-param name="href" select="pxi:get-or-generate-id(current-group()/self::*:h2)"/>
+                            <xsl:with-param name="header-element" select="current-group()/self::*:h2"/>
                           </xsl:call-template>
                           <xsl:apply-templates select="current-group()/self::*:h2/child::node()"/>
                         </xsl:element>
@@ -51,7 +53,7 @@
                               <xsl:if test="current-group()/self::*:h3">
                                 <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                                   <xsl:call-template name="link-attributes">
-                                    <xsl:with-param name="href" select="pxi:get-or-generate-id(current-group()/self::*:h3)"/>
+                                    <xsl:with-param name="header-element" select="current-group()/self::*:h3"/>
                                   </xsl:call-template>
                                   <xsl:apply-templates select="current-group()/self::*:h3/child::node()"/>
                                 </xsl:element>
@@ -64,7 +66,7 @@
                                       <xsl:if test="current-group()/self::*:h4">
                                         <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                                           <xsl:call-template name="link-attributes">
-                                            <xsl:with-param name="href" select="pxi:get-or-generate-id(current-group()/self::*:h4)"/>
+                                            <xsl:with-param name="header-element" select="current-group()/self::*:h4"/>
                                           </xsl:call-template>
                                           <xsl:apply-templates select="current-group()/self::*:h4/child::node()"/>
                                         </xsl:element>
@@ -77,7 +79,7 @@
                                               <xsl:if test="current-group()/self::*:h5">
                                                 <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                                                   <xsl:call-template name="link-attributes">
-                                                    <xsl:with-param name="href" select="pxi:get-or-generate-id(current-group()/self::*:h5)"/>
+                                                    <xsl:with-param name="header-element" select="current-group()/self::*:h5"/>
                                                   </xsl:call-template>
                                                   <xsl:apply-templates select="current-group()/self::*:h5/child::node()"/>
                                                 </xsl:element>
@@ -89,7 +91,7 @@
                                                       <xsl:call-template name="list-item-attributes"/>
                                                       <xsl:element name="{f:link-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
                                                         <xsl:call-template name="link-attributes">
-                                                          <xsl:with-param name="href" select="pxi:get-or-generate-id(.)"/>
+                                                          <xsl:with-param name="header-element" select="."/>
                                                         </xsl:call-template>
                                                         <xsl:apply-templates select="node()"/>
                                                       </xsl:element>
@@ -195,7 +197,7 @@
   </xsl:function>
   
   <xsl:function name="f:list-name">
-    <xsl:param name="namespace-uri" required="yes"/>
+    <xsl:param name="namespace-uri"/>
     <xsl:choose>
       <xsl:when test="$namespace-uri = 'http://www.daisy.org/z3986/2005/dtbook/'">
         <xsl:value-of select="'list'"/>
@@ -222,20 +224,26 @@
   </xsl:template>
   
   <xsl:function name="f:list-item-name">
-    <xsl:param name="namespace-uri" required="yes"/>
+    <xsl:param name="namespace-uri"/>
     <xsl:value-of select="'li'"/>
   </xsl:function>
   
   <xsl:template name="list-item-attributes"/>
   
   <xsl:function name="f:link-name">
-    <xsl:param name="namespace-uri" required="yes"/>
+    <xsl:param name="namespace-uri"/>
     <xsl:value-of select="'a'"/>
   </xsl:function>
   
   <xsl:template name="link-attributes">
-    <xsl:param name="href" required="yes"/>
-    <xsl:attribute name="href" select="$href"/>
+    <xsl:param name="header-element" as="element()" required="yes"/>
+    <xsl:attribute name="href" select="pxi:get-or-generate-id($header-element)"/>
+    <xsl:if test="not(@xml:base)">
+      <xsl:variable name="header-base-uri" as="xs:anyURI" select="base-uri($header-element)"/>
+      <xsl:if test="not($header-base-uri=$root-base-uri)">
+        <xsl:attribute name="xml:base" select="$header-base-uri"/>
+      </xsl:if>
+    </xsl:if>
   </xsl:template>
   
 </xsl:stylesheet>

@@ -77,20 +77,10 @@ public class DotifyFormatterTest extends AbstractXSpecAndXProcSpecTest {
 	@Override @Test
 	public void runXProcSpec() throws Exception {
 		File baseDir = new File(PathUtils.getBaseDir());
-		boolean success = xprocspecRunner.run(ImmutableMap.of(
-			                                      "test_format",
-			                                      new File(baseDir, "src/test/xprocspec/test_format.xprocspec"),
-			                                      "test_obfl-to-pef",
-			                                      new File(baseDir, "src/test/xprocspec/test_obfl-to-pef.xprocspec"),
-			                                      // "test_dotify.formatter.impl",
-			                                      // new File(baseDir, "src/test/xprocspec/test_dotify.formatter.impl.xprocspec"),
-			                                      "test_propagate-page-break.xprocspec",
-			                                      new File(baseDir, "src/test/xprocspec/test_propagate-page-break.xprocspec")
-			                                      ),
+		boolean success = xprocspecRunner.run(new File(baseDir, "src/test/xprocspec"),
 		                                      new File(baseDir, "target/xprocspec-reports"),
 		                                      new File(baseDir, "target/surefire-reports"),
 		                                      new File(baseDir, "target/xprocspec"),
-		                                      null,
 		                                      new XProcSpecRunner.Reporter.DefaultReporter());
 		assertTrue("XProcSpec tests should run with success", success);
 	}

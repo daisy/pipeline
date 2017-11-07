@@ -285,12 +285,13 @@
               <style media="embossed" type="text/css">
                 #foo { display: block }
                 p#bar { margin-left: 1 }
+				#baz { hyphens: auto; }
               </style>
             </head>
             <body>
               <p id="foo"/>
               <p id="bar"/>
-              <p id="baz"/>
+              <p xml:id="baz"/>
             </body>
           </document>
         </x:document>
@@ -304,7 +305,7 @@
         <body>
           <p id="foo" style="display: block;"/>
           <p id="bar" style="margin-left: 1;"/>
-          <p id="baz"/>
+          <p xml:id="baz"/>
         </body>
       </x:document>
     </x:expect>

@@ -13,7 +13,7 @@
         <p:documentation>
             The 'display' properties of elements in the input must be declared in css:display
             attributes, and must conform to
-            http://snaekobbi.github.io/braille-css-spec/#the-display-property. Elements with a
+            http://braillespecs.github.io/braille-css/#the-display-property. Elements with a
             'display' property of 'table' must have been previously marked with a css:table
             attribute. Their table cells must be marked with a css:table-cell attribute and table
             captions with a css:table-caption attribute.

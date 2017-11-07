@@ -4,7 +4,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl">
   
-  <x:scenario label="ascii-table has priority over xml:lang">
+  <x:scenario label="ascii-table has priority over dc:language / xml:lang">
     <x:call step="px:dtbook-to-pef">
       <x:input port="source">
         <x:document type="inline">

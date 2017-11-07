@@ -43,7 +43,7 @@ public class DotifyCoreTest extends AbstractTest {
 	
 	@Test
 	public void testFuzzySelect() {
-		provider.get(query("(locale:sv_SE_blah)")).iterator().next();
+		provider.get(query("(locale:sv_SE_blaah)")).iterator().next();
 	}
 	
 	@Test

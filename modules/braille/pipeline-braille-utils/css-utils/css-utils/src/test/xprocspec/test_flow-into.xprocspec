@@ -1,15 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-               script="../../main/resources/xml/flow-into.xpl">
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
+  
+  <x:script>
+    <p:declare-step type="pxi:test" version="1.0">
+      <p:input port="source"/>
+      <p:output port="result" primary="true">
+        <p:pipe step="flow-into" port="result"/>
+      </p:output>
+      <p:output port="flows" sequence="true">
+        <p:pipe step="delete-xml-base" port="result"/>
+      </p:output>
+      <p:import href="../../main/resources/xml/flow-into.xpl"/>
+      <css:flow-into name="flow-into"/>
+      <p:delete match="@xml:base" name="delete-xml-base">
+        <p:input port="source">
+          <p:pipe step="flow-into" port="flows"/>
+        </p:input>
+      </p:delete>
+    </p:declare-step>
+  </x:script>
   
   <x:scenario label="test_01">
-    <x:call step="css:flow-into">
+    <x:call step="pxi:test">
       <x:input port="source">
         <x:document type="inline">
           <body style="text-align:right">
             <note style="display:list-item"
-				  css:flow="footnote"
+                  css:flow="footnote"
                   css:id="xyz"> foo </note>
           </body>
         </x:document>
@@ -39,7 +59,7 @@
   </x:scenario>
   
   <x:scenario label="test_02">
-    <x:call step="css:flow-into">
+    <x:call step="pxi:test">
       <x:input port="source">
         <x:document type="inline">
           <_>
@@ -72,7 +92,7 @@
   </x:scenario>
   
   <x:scenario label="test_03">
-    <x:call step="css:flow-into">
+    <x:call step="pxi:test">
       <x:input port="source">
         <x:document type="inline">
           <_>
@@ -105,7 +125,7 @@
   </x:scenario>
   
   <x:scenario label="test_04">
-    <x:call step="css:flow-into">
+    <x:call step="pxi:test">
       <x:input port="source">
         <x:document type="inline">
           <_>

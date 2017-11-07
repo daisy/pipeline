@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../../main/resources/xml/inline.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="css:inline">
+      <x:input port="source">
+        <x:document type="inline">
+          <html>
+            <body>
+              <h>foobar</h>
+            </body>
+          </html>
+        </x:document>
+      </x:input>
+      <x:input port="context">
+        <x:document type="inline">
+          <c:result content-type="text/plain" xml:base="http://example.org/default.scss">
+			@import "mod.scss";
+            h {
+              text-align: center
+            }
+          </c:result>
+		</x:document>
+        <x:document type="inline">
+          <c:result content-type="text/plain" xml:base="http://example.org/mod.scss">
+            h {
+              page-break-after: avoid
+            }
+          </c:result>
+        </x:document>
+      </x:input>
+      <x:option name="default-stylesheet" select="'http://example.org/default.scss'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <html>
+          <body>
+            <h style="page-break-after: avoid; text-align: center;">foobar</h>
+          </body>
+        </html>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

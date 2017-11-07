@@ -105,11 +105,18 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 				logger.warn("A query with both 'table' and '" + q.iterator().next().getKey() + "' never matches anything");
 				return empty; }
 			return fromNullable(get(asURI(v))); }
-		Locale locale;
-		if (q.containsKey("locale"))
-			locale = parseLocale(q.removeOnly("locale").getValue().get());
-		else
-			locale = parseLocale("und");
+		Locale locale; {
+			String loc;
+			if (q.containsKey("locale"))
+				loc = q.removeOnly("locale").getValue().get();
+			else
+				loc = "und";
+			try {
+				locale = parseLocale(loc); }
+			catch (IllegalArgumentException e) {
+				logger.error("Invalid locale", e);
+				return empty; }
+		}
 		if (!q.isEmpty()) {
 			logger.warn("A query with '" + q.iterator().next().getKey() + "' never matches anything");
 			return empty; }

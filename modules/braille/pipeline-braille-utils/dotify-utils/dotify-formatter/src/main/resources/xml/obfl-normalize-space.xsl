@@ -4,6 +4,10 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
     
+    <!--
+        Anticipate bugs in Dotify's white space normalization.
+    -->
+    
     <xsl:template match="@*|node()">
        <xsl:copy>
            <xsl:apply-templates select="@*|node()"/>
@@ -11,10 +15,16 @@
     </xsl:template>
     
     <!--
-        Anticipate a bug in Dotify's white space normalization:
+        Strip white space from the beginning of text nodes in a block where none of the preceding
+        nodes in the block is something else than a marker or empty text node.
         
-        Whitespace is stripped from the beginning of text nodes in a block where one of
-        the preceding nodes in the block is not a marker or not an empty text node.
+        Equivalent oneliner:
+        
+        <xsl:template match="*[self::obfl:block or self::obfl:td]
+                             //text()[not((ancestor::obfl:block|ancestor::obfl:td)[last()]//node()
+                                          intersect preceding::node()[not(self::obfl:marker or self::text()[normalize-space(.)=''])])]">
+            <xsl:sequence select="replace(., '^\s+', '')"/>
+        </xsl:template>
     -->
     
     <xsl:template match="obfl:block | obfl:td">
@@ -43,6 +53,20 @@
     
     <xsl:template match="@*" mode="normalize">
        <xsl:sequence select="."/>
+    </xsl:template>
+    
+    <!--
+        Prevent white space at the begin or end of a span from being stripped by Dotify.
+    -->
+    
+    <xsl:template match="obfl:span/text()" mode="#default normalize">
+        <xsl:if test="not(preceding-sibling::node()) and matches(.,'^\s')">
+            <xsl:text>&#x200B;</xsl:text>
+        </xsl:if>
+        <xsl:next-match/>
+        <xsl:if test="not(following-sibling::node()) and matches(.,'\s$')">
+            <xsl:text>&#x200B;</xsl:text>
+        </xsl:if>
     </xsl:template>
     
 </xsl:stylesheet>

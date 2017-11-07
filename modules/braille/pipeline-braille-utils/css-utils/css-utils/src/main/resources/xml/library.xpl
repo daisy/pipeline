@@ -4,6 +4,9 @@
            version="1.0">
     
     <p:import href="adjust-boxes.xpl"/>
+    <p:import href="apply-stylesheets.xpl"/>
+    <p:import href="delete-stylesheets.xpl"/>
+    <p:import href="extract.xpl"/>
     <p:import href="eval-counter.xpl"/>
     <p:import href="eval-string-set.xpl"/>
     <p:import href="eval-target-content.xpl"/>

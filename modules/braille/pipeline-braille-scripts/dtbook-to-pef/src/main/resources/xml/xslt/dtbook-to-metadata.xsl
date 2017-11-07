@@ -4,7 +4,22 @@
     xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" version="2.0" exclude-result-prefixes="#all">
 
     <xsl:output indent="yes" method="xml"/>
-
+    
+    <xsl:template match="/*">
+        <xsl:choose>
+            <xsl:when test="dtb:head">
+                <xsl:apply-templates/>
+            </xsl:when>
+            <xsl:otherwise>
+                <metadata>
+                    <xsl:if test="@xml:lang">
+                        <dc:language id="language-1"><xsl:value-of select="@xml:lang"/></dc:language>
+                    </xsl:if>
+                </metadata>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
     <xsl:template match="//dtb:head">
         <metadata prefix="dc: http://purl.org/dc/elements/1.1/">
             <xsl:namespace name="dc" select="'http://purl.org/dc/elements/1.1/'"/>
@@ -25,9 +40,12 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each>
+            <xsl:if test="/*/@xml:lang and not(dtb:meta[lower-case(@name)='dc:language'])">
+                <dc:language id="language-1"><xsl:value-of select="/*/@xml:lang"/></dc:language>
+            </xsl:if>
         </metadata>
     </xsl:template>
-
+    
     <!-- identity template which discards everything -->
     <xsl:template match="@*|node()">
         <xsl:apply-templates select="@*|node()"/>

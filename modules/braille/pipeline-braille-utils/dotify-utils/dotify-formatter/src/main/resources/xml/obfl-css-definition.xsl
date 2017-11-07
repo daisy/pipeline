@@ -43,9 +43,8 @@
                                 else if ($css:property/@name=('-obfl-keep-with-previous-sheets',
                                                               '-obfl-keep-with-next-sheets'))
                                 then matches($css:property/@value,'^[0-9]$')
-                                else if ($css:property/@name='volume-break-inside'
-                                         and matches($css:property/@value,$css:VENDOR_PRF_FN_RE))
-                                then matches($css:property/@value,re:exact($_OBFL_KEEP_FN_RE))
+                                else if ($css:property/@name='volume-break-inside')
+                                then matches($css:property/@value,re:exact(re:or(('auto',$_OBFL_KEEP_FN_RE))))
                                 else (
                                   css:is-valid($css:property)
                                   and not($css:property/@value=('inherit','initial'))
