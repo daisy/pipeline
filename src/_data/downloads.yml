@@ -8,6 +8,28 @@
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.3"
 
 - group: webui
+  version: "2.6.0"
+  state: stable
+  github_tag: "v2.6.0"
+  github_url: "https://github.com/daisy/pipeline-webui/releases/tag/v2.6.0"
+  files:
+    - platform: windows
+      package: installer
+      content: webui
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.6.0/webui-2.6.0.msi"
+      size: 53870872
+    - platform: debian
+      package: deb
+      content: webui
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.6.0/webui-2.6.0.deb"
+      size: 51083004
+    - platform: redhat
+      package: rpm
+      content: webui
+      url: "http://repo1.maven.org/maven2/org/daisy/pipeline/webui/2.6.0/webui-2.6.0.rpm"
+      size: 53274072
+
+- group: webui
   version: "2.5.1"
   state: stable
   github_tag: "v2.5.1"
