@@ -3,6 +3,7 @@ package org.daisy.dotify.impl.input.text;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.daisy.dotify.api.tasks.DefaultAnnotatedFile;
 import org.daisy.dotify.api.tasks.InternalTaskException;
 import org.daisy.dotify.api.tasks.ReadWriteTask;
 import org.daisy.dotify.api.tasks.TaskOption;
+import org.daisy.dotify.common.xml.XMLTools;
 
 class Text2ObflTask extends ReadWriteTask {
 	private static final String SOURCE_ENCODING = "source-encoding";
@@ -39,7 +41,7 @@ class Text2ObflTask extends ReadWriteTask {
 	
 	private static String getEncoding(Map<String, Object> params) {
 		Object param = params.get(SOURCE_ENCODING);
-		return (param!=null)?""+param:DEFAULT_ENCODING;
+		return (param!=null)?""+param:null;
 	}
 	
 	private String getLanguage() {
@@ -50,7 +52,10 @@ class Text2ObflTask extends ReadWriteTask {
 	@Override
 	public AnnotatedFile execute(AnnotatedFile input, File output) throws InternalTaskException {
 		try {
-			Text2ObflWriter fw = new Text2ObflWriter(input.getFile(), output, encoding);
+			Text2ObflWriter fw = new Text2ObflWriter(input.getFile(), output, encoding!=null?encoding:
+				XMLTools.detectBomEncoding(Files.readAllBytes(input.getFile().toPath()))
+					.map(v->v.name())
+					.orElse(DEFAULT_ENCODING));
 			fw.setRootLang(getLanguage());
 		
 			{
@@ -93,7 +98,7 @@ class Text2ObflTask extends ReadWriteTask {
 			options = new ArrayList<>();
 			options.add(new TaskOption.Builder(PAGE_WIDTH).description("The width of the page").defaultValue("32").build());
 			options.add(new TaskOption.Builder(PAGE_HEIGHT).description("The height of the page").defaultValue("29").build());
-			options.add(new TaskOption.Builder(SOURCE_ENCODING).description("The encoding of the input file").defaultValue(DEFAULT_ENCODING).build());
+			options.add(new TaskOption.Builder(SOURCE_ENCODING).description("The encoding of the input file").defaultValue("[detect]").build());
 			options.add(new TaskOption.Builder(SOURCE_LANGUAGE).description("The language of the input file").defaultValue(rootLang).build());
 		}
 		return options;
