@@ -109,8 +109,13 @@ sub find_last_git_subrepo_commit {
 }
 
 sub distance {
-	my ($from, $to) = @_;
-	my @commits = defined $from ? `git rev-list $to ^$from` : `git rev-list $to`;
+	my ($from, $to, $path) = @_;
+	my @commits;
+	if ($path) {
+		@commits = defined $from ? `git rev-list $to ^$from -- $path` : `git rev-list $to -- $path`;
+	} else {
+		@commits = defined $from ? `git rev-list $to ^$from`          : `git rev-list $to`;
+	}
 	for (@commits) {
 		chomp;
 	}

@@ -16,8 +16,10 @@ GRADLE                  := $(CURDIR)/libs/dotify/dotify.api/gradlew
 
 ifneq ($(MAKECMDGOALS), dump-maven-cmd)
 ifneq ($(MAKECMDGOALS), dump-gradle-cmd)
+ifneq ($(MAKECMDGOALS), check-versions)
 ifneq ($(MAKECMDGOALS), clean-website)
 include .make/main.mk
+endif
 endif
 endif
 endif
@@ -210,6 +212,10 @@ go-offline :
 .PHONY : checked
 checked :
 	touch $(addsuffix /.last-tested,$(MODULES))
+
+.PHONY : check-versions
+check-versions : .maven-modules .effective-pom.xml
+	bash .make/check-versions.sh
 
 website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml api.yml versions.yml)
 	cd website && \

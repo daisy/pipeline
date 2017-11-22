@@ -1,0 +1,84 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+use FindBin;
+use lib "$FindBin::Bin";
+use Utils;
+
+my $subrepo;
+my $filter;
+my $n;
+my $path;
+
+while (@ARGV) {
+	my $arg = $ARGV[0];
+	if ($subrepo and $arg eq "--filter" and not $filter) {
+		shift;
+		if (not @ARGV) {
+			die "Missing value for $arg option";
+		}
+		$filter = $ARGV[0];
+		shift;
+	} elsif ($subrepo and $arg eq "-n" and not $n) {
+		shift;
+		if (not @ARGV) {
+			die "Missing value for $arg option";
+		}
+		$n = $ARGV[0];
+		shift;
+	} elsif ($subrepo and not $path) {
+		$path = $arg;
+		shift;
+	} elsif (not $subrepo) {
+		$subrepo = $arg;
+		shift;
+	} else {
+		die "Unexpected argument: $arg";
+	}
+}
+
+defined $subrepo or die "Missing subrepo argument";
+
+-e "$subrepo/.gitrepo" or die "$subrepo is not a subrepo";
+
+sub maybe_print_commit {
+	my ($commit, $in_subrepo) = @_;
+	if (not $filter) {
+		print $commit;
+		return 1;
+	} else {
+		$ENV{GIT_COMMIT}=$commit;
+		if ($in_subrepo) {
+			$ENV{GIT_SUBTREE}="";
+		} else {
+			$ENV{GIT_SUBTREE}="$subrepo/";
+		}
+		system("bash", "-c", $filter);
+		if ($? == 0) {
+			print $commit;
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+}
+
+my @last_subrepo_commit = find_last_git_subrepo_commit($subrepo, "HEAD");
+my $printed = 0;
+
+for my $c (distance($last_subrepo_commit[0], "HEAD", defined $path ? "$subrepo/$path" : $subrepo)) {
+	if (maybe_print_commit($c, 0)) {
+		$printed++;
+		exit if ($n and --$n == 0);
+	}
+}
+for my $c (distance(undef, $last_subrepo_commit[1], $path)) {
+	if (maybe_print_commit($c, 1)) {
+		$printed++;
+		exit if ($n and --$n == 0);
+	}
+}
+if (not $printed) {
+	exit 1;
+}
