@@ -67,7 +67,7 @@ for more info.
 
 {% endif %}
 
-{% assign webui = site.data.downloads | where:'group','webui' | sort:'sort' %}
+{% assign webui = site.data.downloads | where:'group','webui' | sort:'version' %}
 
 ## Latest web UI: {{ webui.last.version }}
 
