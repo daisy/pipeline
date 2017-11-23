@@ -39,7 +39,7 @@ jQuery is available for use when writing scripts.
 
 The following inserts a link to another website, after the "About" navigation item.
 
-**javascripts/theme.css**
+**javascripts/theme.js**
 ```
 $(document).ready(function() {
     $(".navbar-fixed-top nav ul:first-child").append(

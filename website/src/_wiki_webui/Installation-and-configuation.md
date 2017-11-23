@@ -7,18 +7,14 @@ use the Pipeline 2 Desktop GUI instead.
 
 ## Installation
 
-First, make sure Java 8 (or newer) is installed. Then, download and run the installer for your operating system:
-
-- [webui-2.5.1.deb](http://search.maven.org/remotecontent?filepath=org/daisy/pipeline/webui/2.5.1/webui-2.5.1.deb) (Ubuntu / Debian)
-- [webui-2.5.1.rpm](http://search.maven.org/remotecontent?filepath=org/daisy/pipeline/webui/2.5.1/webui-2.5.1.rpm) (Red Hat)
-- [webui-2.5.1.msi](http://search.maven.org/remotecontent?filepath=org/daisy/pipeline/webui/2.5.1/webui-2.5.1.msi) (Windows)
+First, make sure Java 8 (or newer) is installed. Then, [download and run the installer for your operating system](http://daisy.github.io/pipeline/Download.html).
 
 In Linux, the Web UI will be installed as a service. To check the status of the service in Ubuntu, run the command `sudo service daisy-pipeline2-webui status`.
 
 The Linux installers are command line based, and are installed like any other package for Linux. The following is a walkthrough of the graphical Windows installer, as it appears in Windows 7.
 
 <table role="presentation">
-<tr><td>Run <code>webui-2.5.1.msi</code> to start the installer. Windows will try preventing you from installing the Web UI. Click "More info".</td><td><img src="images/1.png" alt=""/></td></tr>
+<tr><td>Run <code>webui-*.msi</code> to start the installer. Windows will try preventing you from installing the Web UI. Click "More info".</td><td><img src="images/1.png" alt=""/></td></tr>
 <tr><td>A button named "Run anyway" will appear. Click it.</td><td><img src="images/2.png" alt=""/></td></tr>
 <tr><td>The installer will start, and show a welcome message. Click "Next".</td><td><img src="images/3.png" alt=""/></td></tr>
 <tr><td>The licence agreement will show. If you accept it, click "Next".</td><td><img src="images/4.png" alt=""/></td></tr>

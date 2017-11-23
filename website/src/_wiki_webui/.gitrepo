@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-webui.wiki.git
 	branch = master
-	commit = 6ad33d67bd617c94689b83d44dd4ff9ffcd0d9f2
-	parent = 8b9d132163f7fdae7f22258929cb938063020f16
+	commit = 458fd2b72f036e8d0fb667e0832c9e51d0f232ea
+	parent = 9ba524e5396f138290a9d67adfe3d72b4a7ded4d
 	cmdver = 0.3.1
