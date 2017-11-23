@@ -22,7 +22,8 @@ shift
 modules=( "$@" )
 
 select_modules_xsl=$CURDIR/.make/mvn-release-select-modules.xsl
-update_versions_xsl=$CURDIR/.make/mvn-release-update-versions.xsl
+update_external_versions_xsl=$CURDIR/.make/mvn-release-update-external-versions.xsl
+update_internal_versions_xsl=$CURDIR/.make/mvn-release-update-internal-versions.xsl
 workaround_bug_4979_xsl=$CURDIR/.make/mvn-release-workaround-bug-4979.xsl
 
 gitrepo_dir=$release_dir
@@ -84,6 +85,19 @@ if [ $release_dir != $gitrepo_dir ]; then
     echo "cd ${release_dir#${gitrepo_dir}/} && \\"
 fi
 
+# update versions of external dependencies in dependepencyManagement section
+# other external dependencies are handled by maven-release-plugin.
+echo "java -cp $CURDIR/$SAXON \\
+     net.sf.saxon.Transform \\
+     -xsl:$update_external_versions_xsl \\
+     -s:pom.xml \\
+     OUTPUT_FILENAME=pom.xml.new \\
+     >/dev/null && \\"
+echo "find . -name pom.xml.new -execdir bash -c 'diff -Bw {} pom.xml >/dev/null && rm {} || mv {} pom.xml' \; && \\"
+echo "git add -u && \\"
+echo "( git commit -m 'Resolve snapshot dependencies (BOMs)' >/dev/null || true ) && \\"
+
+# disable modules that should not be released
 if [ ${#modules[@]} -gt 0 ]; then
     echo "java -cp $CURDIR/$SAXON \\
      net.sf.saxon.Transform \\
@@ -127,11 +141,11 @@ echo " && \\"
 
 echo "git diff-index --quiet HEAD && \\"
 
-# parents were updated by release-plugin but not the ones of disabled modules and also bom import is not updated
+# parents were updated by release-plugin but not the ones of disabled modules and also internal bom import is not updated
 if [ ${#modules[@]} -gt 0 ]; then
     echo "java -cp $CURDIR/$SAXON \\
      net.sf.saxon.Transform \\
-     -xsl:$update_versions_xsl \\
+     -xsl:$update_internal_versions_xsl \\
      -s:pom.xml \\
      OUTPUT_FILENAME=pom.xml.new \\
      >/dev/null && \\"
