@@ -11,6 +11,9 @@
 	<xsl:param name="MODULE"/>
 	<xsl:param name="SRC_DIRS"/>
 	<xsl:param name="MAIN_DIRS"/>
+	<!--
+	    directories from which multiple modules are released at once
+	-->
 	<xsl:param name="RELEASE_DIRS"/>
 	<xsl:param name="OUTPUT_FILENAME"/>
 	
@@ -118,11 +121,7 @@
 						</artifactItem>
 					</xsl:if>
 					<xsl:for-each select="$module-pom/pom:project/pom:dependencyManagement/pom:dependencies/pom:dependency">
-						<xsl:if test="ends-with(pom:version, '-SNAPSHOT')
-						              or $internal-runtime-dependencies/pom:project[
-						                    string(pom:groupId)=string(current()/pom:groupId) and
-						                    string(pom:artifactId)=string(current()/pom:artifactId) and
-						                    string(pom:version)=concat(current()/pom:version,'-SNAPSHOT')]">
+						<xsl:if test="ends-with(pom:version, '-SNAPSHOT')">
 							<dependency fromDependencyManagement="true">
 								<xsl:if test="pom:scope='import'">
 									<xsl:attribute name="scope" select="'import'"/>
@@ -443,44 +442,49 @@
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat($dirname,'.release :')"/>
 						<xsl:variable name="dependencies" as="xs:string*">
+							<!--
+							    If the release happens from the current directory, include also snapshot dependencies
+							    existing only in a dependencyManagement section (i.e. not true dependencies). If the
+							    release does not happen from the current directory it means that the current module
+							    could have dependencies to other modules in the same multi-module project, and making
+							    all internal dependencies, including those existing only in a dependencyManagement
+							    section, explicit could result in circular dependencies. "import" dependencies
+							    (i.e. BOMs) are always included because they don't result in circular
+							    dependencies.
+							    
+							    Refuse to release if there are snapshot dependencies that do not match a module in the
+							    super project (by appending the string "!!!" to the version). Also refuse to release if
+							    there are snapshot dependencies that match a module in the super project but the
+							    versions don't match (module version does not equal version of dependency and module
+							    version does not equal version of dependency minus -SNAPSHOT).
+							-->
 							<xsl:for-each select="if ($is-release-dir or not($is-aggregator or $release-dir))
 							                      then $artifacts-and-dependencies/self::pom:dependency
 							                      else $artifacts-and-dependencies/self::pom:dependency
 							                        [not(@fromDependencyManagement and not(@scope='import'))]">
-								<xsl:variable name="dependency-version"
-								              select="if (@fromDependencyManagement and not(@scope='import')
-								                          and not($artifacts-and-dependencies
-								                                  /self::pom:dependency[
-								                                    not(@fromDependencyManagement and not(@scope='import')) and
-								                                    string(pom:groupId)=string(current()/pom:groupId) and
-								                                    string(pom:artifactId)=string(current()/pom:artifactId) and
-								                                    string(pom:version)=string(current()/pom:version) and
-								                                    string(pom:type)=string(current()/pom:type) and
-								                                    string(pom:classifier)=string(current()/pom:classifier)
-								                                  ]))
-								                      then replace(pom:version,'-SNAPSHOT$','-SNAPSHOT!!!')
-								                      else replace(pom:version,'-SNAPSHOT$','')"/>
-								<!--
-								    if pom:version=$dependency-version, it was already a non-snapshot so it has already
-								    been checked before whether this matches an internal project, otherwise we have just
-								    made it into a non-snapshot so we need to check
-								-->
-								<xsl:if test="ends-with($dependency-version,'!!!')
-								              or string(pom:version)=$dependency-version
-								              or $internal-runtime-dependencies/pom:project[
-								                    string(pom:groupId)=string(current()/pom:groupId) and
-								                    string(pom:artifactId)=string(current()/pom:artifactId) and
-								                    string(pom:version)=concat($dependency-version,'-SNAPSHOT')]">
-									<xsl:call-template name="location-in-repo">
-										<xsl:with-param name="groupId" select="pom:groupId"/>
-										<xsl:with-param name="artifactId" select="pom:artifactId"/>
-										<!-- make the build fail if SNAPSHOT dependency inside dependencyManagement is an
-										     external one because maven-release-plugin doesn't fix those -->
-										<xsl:with-param name="version" select="$dependency-version"/>
-										<xsl:with-param name="type" select="pom:type"/>
-										<xsl:with-param name="classifier" select="pom:classifier"/>
-									</xsl:call-template>
-								</xsl:if>
+								<xsl:choose>
+									<xsl:when test="$internal-runtime-dependencies/pom:project[
+									                  string(pom:groupId)=string(current()/pom:groupId) and
+									                  string(pom:artifactId)=string(current()/pom:artifactId) and
+									                  replace(pom:version,'-SNAPSHOT$','')=replace(current()/pom:version,'-SNAPSHOT$','')]">
+										<xsl:call-template name="location-in-repo">
+											<xsl:with-param name="groupId" select="pom:groupId"/>
+											<xsl:with-param name="artifactId" select="pom:artifactId"/>
+											<xsl:with-param name="version" select="replace(pom:version,'-SNAPSHOT$','')"/>
+											<xsl:with-param name="type" select="pom:type"/>
+											<xsl:with-param name="classifier" select="pom:classifier"/>
+										</xsl:call-template>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:call-template name="location-in-repo">
+											<xsl:with-param name="groupId" select="pom:groupId"/>
+											<xsl:with-param name="artifactId" select="pom:artifactId"/>
+											<xsl:with-param name="version" select="concat(pom:version,'!!!')"/>
+											<xsl:with-param name="type" select="pom:type"/>
+											<xsl:with-param name="classifier" select="pom:classifier"/>
+										</xsl:call-template>
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:for-each>
 						</xsl:variable>
 						<xsl:variable name="dependencies" as="xs:string*" select="distinct-values($dependencies)"/>
