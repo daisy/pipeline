@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.translator;
+package org.daisy.dotify.api.translator;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -11,13 +11,6 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import org.daisy.dotify.api.translator.BrailleTranslator;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMakerService;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactoryService;
-import org.daisy.dotify.api.translator.TranslatorConfigurationException;
-import org.daisy.dotify.api.translator.TranslatorSpecification;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

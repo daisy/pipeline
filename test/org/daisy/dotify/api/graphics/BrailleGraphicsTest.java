@@ -1,4 +1,4 @@
-package org.daisy.dotify.graphics;
+package org.daisy.dotify.api.graphics;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.daisy.dotify.api.graphics.BrailleGraphics;
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")

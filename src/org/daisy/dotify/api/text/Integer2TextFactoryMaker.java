@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.text;
+package org.daisy.dotify.api.text;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,12 +10,6 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import org.daisy.dotify.api.text.Integer2Text;
-import org.daisy.dotify.api.text.Integer2TextConfigurationException;
-import org.daisy.dotify.api.text.Integer2TextFactory;
-import org.daisy.dotify.api.text.Integer2TextFactoryMakerService;
-import org.daisy.dotify.api.text.Integer2TextFactoryService;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

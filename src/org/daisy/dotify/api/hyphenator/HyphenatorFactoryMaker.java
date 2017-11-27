@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.hyphenator;
+package org.daisy.dotify.api.hyphenator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,12 +10,6 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import org.daisy.dotify.api.hyphenator.HyphenatorConfigurationException;
-import org.daisy.dotify.api.hyphenator.HyphenatorFactory;
-import org.daisy.dotify.api.hyphenator.HyphenatorFactoryMakerService;
-import org.daisy.dotify.api.hyphenator.HyphenatorFactoryService;
-import org.daisy.dotify.api.hyphenator.HyphenatorInterface;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

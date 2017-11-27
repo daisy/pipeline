@@ -1,4 +1,4 @@
-package org.daisy.dotify.graphics;
+package org.daisy.dotify.api.graphics;
 
 import java.awt.image.Raster;
 import java.util.ArrayList;

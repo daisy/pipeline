@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.writer;
+package org.daisy.dotify.api.writer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,12 +10,6 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import org.daisy.dotify.api.writer.PagedMediaWriter;
-import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
-import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
-import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
-import org.daisy.dotify.api.writer.PagedMediaWriterFactoryService;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

@@ -1,9 +1,6 @@
-package org.daisy.dotify.consumer.formatter;
+package org.daisy.dotify.api.formatter;
 
 import java.util.ServiceLoader;
-
-import org.daisy.dotify.api.formatter.Formatter;
-import org.daisy.dotify.api.formatter.FormatterFactory;
 
 /**
  * <p>Provides a factory for formatters. The factory will instantiate 

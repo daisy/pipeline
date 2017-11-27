@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.translator;
+package org.daisy.dotify.api.translator;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -8,12 +8,6 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import org.daisy.dotify.api.translator.MarkerProcessor;
-import org.daisy.dotify.api.translator.MarkerProcessorConfigurationException;
-import org.daisy.dotify.api.translator.MarkerProcessorFactory;
-import org.daisy.dotify.api.translator.MarkerProcessorFactoryMakerService;
-import org.daisy.dotify.api.translator.MarkerProcessorFactoryService;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

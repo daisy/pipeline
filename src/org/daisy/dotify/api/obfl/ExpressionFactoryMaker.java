@@ -1,8 +1,6 @@
-package org.daisy.dotify.consumer.obfl;
+package org.daisy.dotify.api.obfl;
 
 import java.util.ServiceLoader;
-
-import org.daisy.dotify.api.obfl.ExpressionFactory;
 
 /**
  * <p>Like all classes in the org.daisy.dotify.consumer sub packages, this

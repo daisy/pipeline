@@ -1,9 +1,7 @@
-package org.daisy.dotify.consumer.engine;
+package org.daisy.dotify.api.engine;
 
 import java.util.ServiceLoader;
 
-import org.daisy.dotify.api.engine.FormatterEngine;
-import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.writer.PagedMediaWriter;
 
 /**

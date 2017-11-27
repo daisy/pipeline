@@ -1,4 +1,4 @@
-package org.daisy.dotify.consumer.translator;
+package org.daisy.dotify.api.translator;
 
 import java.util.Iterator;
 import java.util.List;
@@ -6,12 +6,6 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import org.daisy.dotify.api.translator.TextBorderConfigurationException;
-import org.daisy.dotify.api.translator.TextBorderFactory;
-import org.daisy.dotify.api.translator.TextBorderFactoryMakerService;
-import org.daisy.dotify.api.translator.TextBorderFactoryService;
-import org.daisy.dotify.api.translator.TextBorderStyle;
 
 import aQute.bnd.annotation.component.Component;
 import aQute.bnd.annotation.component.Reference;

@@ -3,4 +3,4 @@
  * 
  * @author Joel Håkansson
  */
-package org.daisy.dotify.graphics;
+package org.daisy.dotify.api.graphics;
