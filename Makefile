@@ -335,7 +335,7 @@ website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml versio
 	cd website && \
 	make target/maven/pom.xml
 
-export MVN_OPTS = --settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)'
+export MVN_OPTS = --settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)' -Pstaged-releases
 
 website/target/maven/modules : website/target/maven/.deps.mk website/target/maven/.dependencies
 	rm -rf $@
