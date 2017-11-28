@@ -184,6 +184,10 @@ fi
 
 echo "git push -u $remote $release_branch:$release_branch && \\"
 
+if [ $release_dir == "assembly" ]; then
+    echo "./update_rd.sh && \\"
+fi
+
 echo "cd $CURDIR && \\"
 echo "git fetch subrepo/$gitrepo_dir && \\"
 
