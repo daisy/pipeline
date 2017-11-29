@@ -1,18 +1,14 @@
 .DS_Store
 .deps.mk
-.effective-pom.xml
 .last-tested
 /*.deb
 /*.rpm
 /*.zip
-/.gradle-pom.xml
-/.gradle-settings/
 /.gradle/
+/.make-target/
 /.maven-cache/
-/.maven-modules
 /.maven-workspace/
 /maven.log
-/settings.eclipse.xml
 # eclipse
 bin/
 .classpath
