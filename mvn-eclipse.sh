@@ -1,6 +1,30 @@
+#!/usr/bin/env bash
 [[ -n ${VERBOSE+x} ]] && set -x
 set -e
 set -o pipefail
+shopt -s nocasematch
+
+if [ "$1" == "--dry-run" ]; then
+    shift
+    if [[ "${HOST_PLATFORM}" == "batch" ]]; then
+        for module in "$@"; do
+            echo mvn --projects $module \
+                      org.apache.maven.plugins:maven-eclipse-plugin:2.10:eclipse \
+                      -Declipse.useProjectReferences=true \
+                      -Declipse.projectNameTemplate=[groupId].[artifactId]
+        done
+        for module in "$@"; do
+            echo "rem Now import the project at '$module' into your Eclipse workspace"
+        done
+        exit 0
+    else
+        exit 1
+    fi
+else
+    if [[ -n ${HOST_PLATFORM} ]]; then
+        exit 1
+    fi
+fi
 
 # start eclim if available
 if which eclim >/dev/null; then
@@ -8,8 +32,8 @@ if which eclim >/dev/null; then
         echo "Please start Eclim" >&2
         exit 1
     fi
-    if [ "$CURDIR" != "$( eval printf "$(eclim -command workspace_dir)" )" ]; then
-        echo "Please switch to your Eclipse workspace '$CURDIR'" >&2
+    if [ "$ROOT_DIR" != "$( eval printf "$(eclim -command workspace_dir)" )" ]; then
+        echo "Please switch to your Eclipse workspace '$ROOT_DIR'" >&2
         exit 1
     fi
 fi
@@ -40,8 +64,8 @@ done
 # import projects with eclim if available
 if which eclim >/dev/null; then
     for module in "$@"; do
-        if [ -e "$CURDIR/$module/.project" ]; then
-            msg=$( eclim -command project_import -f "$CURDIR/$module" )
+        if [ -e "$ROOT_DIR/$module/.project" ]; then
+            msg=$( eclim -command project_import -f "$ROOT_DIR/$module" )
             msg=$( eval printf "$msg" )
             if project=$( perl -e '$ARGV[0] =~ /^Project with name \x27(.+?)\x27 already exists/ and print "$1" or exit 1' "$msg" ); then
                 msg=$( eclim -command project_update -p $project )

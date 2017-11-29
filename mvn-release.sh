@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 [[ -n ${VERBOSE+x} ]] && set -x
 set -e
 set -o pipefail
@@ -21,10 +22,10 @@ release_dir=$1
 shift
 modules=( "$@" )
 
-select_modules_xsl=$CURDIR/.make/mvn-release-select-modules.xsl
-update_external_versions_xsl=$CURDIR/.make/mvn-release-update-external-versions.xsl
-update_internal_versions_xsl=$CURDIR/.make/mvn-release-update-internal-versions.xsl
-workaround_bug_4979_xsl=$CURDIR/.make/mvn-release-workaround-bug-4979.xsl
+select_modules_xsl=$ROOT_DIR/$MY_DIR/mvn-release-select-modules.xsl
+update_external_versions_xsl=$ROOT_DIR/$MY_DIR/mvn-release-update-external-versions.xsl
+update_internal_versions_xsl=$ROOT_DIR/$MY_DIR/mvn-release-update-internal-versions.xsl
+workaround_bug_4979_xsl=$ROOT_DIR/$MY_DIR/mvn-release-workaround-bug-4979.xsl
 
 gitrepo_dir=$release_dir
 while ! [ -e $gitrepo_dir/.gitrepo ]; do
@@ -49,7 +50,7 @@ fi
 echo ": first cd to the $github_repo repo you want to release from && \\"
 echo "git fetch $remote $on_remote_branch && \\"
 
-pom=$CURDIR/$release_dir/.effective-pom.xml
+pom=$ROOT_DIR/$release_dir/.effective-pom.xml
 eval $MVN --quiet --projects $release_dir help:effective-pom -Doutput=$pom
 artifactId=$(xmllint --xpath "/*/*[local-name()='artifactId']/text()" $pom)
 groupId=$(xmllint --xpath "/*/*[local-name()='groupId']/text()" $pom 2>/dev/null) || \
@@ -87,7 +88,7 @@ fi
 
 # update versions of external dependencies in dependepencyManagement section
 # other external dependencies are handled by maven-release-plugin.
-echo "java -cp $CURDIR/$SAXON \\
+echo "java -cp $SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$update_external_versions_xsl \\
      -s:pom.xml \\
@@ -99,7 +100,7 @@ echo "( git commit -m 'Resolve snapshot dependencies (BOMs)' >/dev/null || true 
 
 # disable modules that should not be released
 if [ ${#modules[@]} -gt 0 ]; then
-    echo "java -cp $CURDIR/$SAXON \\
+    echo "java -cp $SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$select_modules_xsl \\
      -s:pom.xml \\
@@ -120,10 +121,10 @@ if [ ${#modules[@]} -gt 0 ]; then
     # substitutions in settings file need to be made in advance because the release-plugin doesn't pass along
     # system properties to the sub-process (and we can't use the "arguments" property, see below)
     # and also because Pax Exam wouldn't even resolve the system properties
-    cat "$CURDIR/.make/mvn-release-settings.xml" | sed -e "s|\${releaseRepo}|$tmp_dir/repo|g" \
-                                                       -e "s|\${cacheRepo}|$CURDIR/$MVN_CACHE|g" \
-                                                       -e "s|\${user\.home}|$HOME|g" \
-                                                       >$tmp_dir/settings.xml
+    cat "$ROOT_DIR/MY_DIR/mvn-release-settings.xml" | sed -e "s|\${releaseRepo}|$tmp_dir/repo|g" \
+                                                          -e "s|\${cacheRepo}|$ROOT_DIR/$MVN_RELEASE_CACHE_REPO|g" \
+                                                          -e "s|\${user\.home}|$HOME|g" \
+                                                          >$tmp_dir/settings.xml
     echo "env org.ops4j.pax.url.mvn.settings='$tmp_dir/settings.xml' \\"
 fi
 printf "mvn clean release:clean release:prepare \\
@@ -143,7 +144,7 @@ echo "git diff-index --quiet HEAD && \\"
 
 # parents were updated by release-plugin but not the ones of disabled modules and also internal bom import is not updated
 if [ ${#modules[@]} -gt 0 ]; then
-    echo "java -cp $CURDIR/$SAXON \\
+    echo "java -cp $SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$update_internal_versions_xsl \\
      -s:pom.xml \\
@@ -156,7 +157,7 @@ fi
 
 # work around a Maven bug: https://issues.apache.org/jira/browse/MNG-4979
 # note that this workaround can not be applied to the prepare step because the pom would get committed
-echo "java -cp $CURDIR/$SAXON \\
+echo "java -cp $SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$workaround_bug_4979_xsl \\
      -s:pom.xml \\
@@ -188,7 +189,7 @@ if [ $release_dir == "assembly" ]; then
     echo "./update_rd.sh && \\"
 fi
 
-echo "cd $CURDIR && \\"
+echo "cd $ROOT_DIR && \\"
 echo "git fetch subrepo/$gitrepo_dir && \\"
 
 echo "git subrepo commit $gitrepo_dir subrepo/$gitrepo_dir/$release_branch^ && \\"
