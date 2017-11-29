@@ -112,6 +112,10 @@ run-docker : dist-docker-image
 
 .PHONY : check
 
+.PHONY : check-clientlib/go
+check-clientlib/go :
+	$(MAKE) -C clientlib/go check
+
 .PHONY : release
 release : assembly/.release
 
@@ -199,9 +203,11 @@ assembly/.dependencies : \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-linux_386.zip \
 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.1-SNAPSHOT/cli-2.1.1-SNAPSHOT-windows_386.zip
 
+export PIPELINE_CLIENTLIB_PATH = $(CURDIR)/clientlib/go
+
 cli/build/bin/darwin_386/dp2 cli/build/bin/linux_386/dp2 : cli/.install
 
-cli/.install : cli/cli/*.go
+cli/.install : cli/cli/*.go clientlib/go/*.go
 
 .SECONDARY : cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip
 cli/.install-darwin_386.zip cli/.install-linux_386.zip cli/.install-windows_386.zip : cli/.install
