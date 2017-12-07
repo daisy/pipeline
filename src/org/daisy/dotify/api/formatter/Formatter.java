@@ -42,7 +42,14 @@ public interface Formatter {
 	 * @param props properties
 	 * @return returns a new volume template builder
 	 */
-	public VolumeTemplateBuilder newVolumeTemplate(VolumeTemplateProperties props); 
+	public VolumeTemplateBuilder newVolumeTemplate(VolumeTemplateProperties props);
+	
+	/**
+	 * <p>Gets the transition builder.</p>
+	 * 
+	 * @return returns the transition builder
+	 */
+	public TransitionBuilder getTransitionBuilder();
 
 	/**
 	 * Creates a new table of contents with the supplied name
