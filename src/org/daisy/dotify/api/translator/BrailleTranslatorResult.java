@@ -77,5 +77,12 @@ public interface BrailleTranslatorResult {
 	 * @throws UnsupportedMetricException if the metric is not supported
 	 */
 	public double getMetric(String metric);
+	
+	/**
+	 * Returns a copy of this result in the current state.
+	 * @return returns a copy of the result
+	 * @throws UnsupportedOperationException if the operation is not supported
+	 */
+	public BrailleTranslatorResult copy();
 
 }
