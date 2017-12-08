@@ -13,6 +13,7 @@ public class FormatterConfiguration {
 	private final String translationMode;
 	private final String locale;
 	private final boolean allowsTextOverflowTrimming;
+	private final boolean allowsEndingVolumeOnHyphen;
 	private final boolean hyphenating;
 	private final boolean marksCapitalLetters;
 	private final Set<String> ignoredStyles;
@@ -25,6 +26,7 @@ public class FormatterConfiguration {
 		private final String translationMode;
 		private final String locale;
 		private boolean allowsTextOverflowTrimming = false;
+		private boolean allowsEndingVolumeOnHyphen = true;
 		private boolean hyphenating = true;
 		private boolean marksCapitalLetters = true;
 		private Set<String> ignoredStyles = new HashSet<String>();
@@ -50,6 +52,17 @@ public class FormatterConfiguration {
 			this.allowsTextOverflowTrimming = value;
 			return this;
 		}
+
+		/**
+		 * Sets the hyphenation policy for the last line (of the main flow) in each volume. 
+		 * @param value true if the last line may be hyphenated, false otherwise.
+		 * @return returns this builder
+		 */
+		public Builder allowsEndingVolumeOnHyphen(boolean value) {
+			this.allowsEndingVolumeOnHyphen = value;
+			return this;
+		}
+
 		/**
 		 * Sets the global hyphenation policy
 		 * @param value the value of the global hyphenation policy
@@ -104,6 +117,7 @@ public class FormatterConfiguration {
 		locale = builder.locale;
 		translationMode = builder.translationMode;
 		allowsTextOverflowTrimming = builder.allowsTextOverflowTrimming;
+		allowsEndingVolumeOnHyphen = builder.allowsEndingVolumeOnHyphen;
 		hyphenating = builder.hyphenating;
 		marksCapitalLetters = builder.marksCapitalLetters;
 		ignoredStyles = Collections.unmodifiableSet(new HashSet<>(builder.ignoredStyles));
@@ -131,6 +145,15 @@ public class FormatterConfiguration {
 	 */
 	public boolean isAllowingTextOverflowTrimming() {
 		return allowsTextOverflowTrimming;
+	}
+	
+	/**
+	 * Returns true if the last line (of the main flow) in each volume may be
+	 * hyphenated, if necessary.
+	 * @return returns true if the last line may be hyphenated, false otherwise
+	 */
+	public boolean allowsEndingVolumeOnHyphen() {
+		return allowsEndingVolumeOnHyphen;
 	}
 
 	/**

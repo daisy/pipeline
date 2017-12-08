@@ -33,7 +33,32 @@ public interface BrailleTranslatorResult {
 	 * 				 if no natural break point is found 
 	 * @return returns the translated string
 	 */
-	public String nextTranslatedRow(int limit, boolean force);
+	public default String nextTranslatedRow(int limit, boolean force) {
+		return nextTranslatedRow(limit, force, false);
+	}
+
+	/**
+	 * <p>
+	 * Gets the translated string preceding the row break, including a translated 
+	 * hyphen at the end, if needed. The length of the translated text must not exceed the
+	 * specified <tt>limit</tt>. If <tt>force</tt> is not used, the result could be empty and no 
+	 * characters removed from the buffer. A caller would typically set <tt>force</tt> to 
+	 * true when <tt>limit</tt> is equal to the maximum number of available characters 
+	 * on a row.</p>
+	 * 
+	 * <p>
+	 * When <code>wholeWordsOnly</code> is set to true, the row may not end on a break point
+	 * inside a word. However, when combined with <code>force</code>, a row may end on such a break point
+	 * if the distance to the first word boundary is longer than the row <em>and</em>
+	 * there is a suitable break point inside the word.</p>
+	 * 
+	 * @param limit specifies the maximum number of characters allowed in the result
+	 * @param force specifies if the translator should force a break at the limit
+	 * 				 if no natural break point is found
+	 * @param wholeWordsOnly specifies that the row may not end on a break point inside a word.
+	 * @return returns the translated string
+	 */
+	public String nextTranslatedRow(int limit, boolean force, boolean wholeWordsOnly);
 	
 	/**
 	 * Gets the translated remainder, in other words the characters not
