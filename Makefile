@@ -20,6 +20,7 @@ ifneq ($(MAKECMDGOALS), clean-website)
 include .make/main.mk
 assembly/BASEDIR := assembly
 include assembly/deps.mk
+-include webui/.deps.mk
 endif
 endif
 endif
@@ -62,14 +63,14 @@ dist-docker-image : assembly/.dependencies
 dist-webui-deb : assembly/.dependencies
 	# see webui README for instructions on how to make a signed package for distribution
 	cd webui && \
-	./activator clean debian:packageBin | $(MVN_LOG)
+	./activator -Dmvn.settings.localRepository="file:$(CURDIR)/$(MVN_WORKSPACE)" clean debian:packageBin | $(MVN_LOG)
 	mv webui/target/*deb .
 
 .PHONY : dist-webui-rpm
 dist-webui-rpm : assembly/.dependencies
 	# see webui README for instructions on how to make a signed package for distribution
 	cd webui && \
-	./activator clean rpm:packageBin
+	./activator -Dmvn.settings.localRepository="file:$(CURDIR)/$(MVN_WORKSPACE)" clean rpm:packageBin
 	mv webui/target/rpm/RPMS/noarch/*.rpm .
 
 ifeq ($(shell uname), Darwin)
@@ -98,10 +99,10 @@ run-cli :
 	echo '# eval $$(make $@)'
 
 .PHONY : run-webui
-run-webui : # webui/.dependencies
+run-webui : webui/.dependencies
 	if [ ! -d webui/dp2webui ]; then cp -r webui/dp2webui-cleandb webui/dp2webui ; fi
 	cd webui && \
-	./activator run
+	./activator -Dmvn.settings.localRepository="file:$(CURDIR)/$(MVN_WORKSPACE)" run
 
 .PHONY : run-docker
 run-docker : dist-docker-image
@@ -196,6 +197,16 @@ assembly/.install.dmg : assembly/.dependencies | .maven-init .group-eval
 .SECONDARY : assembly/.install.exe
 assembly/.install.exe : assembly/.dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,exe)
+
+webui/.deps.mk : webui/build.sbt
+	if ! bash .make/make-webui-deps.mk.sh >$@; then \
+		echo "\$$(error $@ could not be generated)" >$@; \
+	fi
+
+clean : clean-webui-deps
+.PHONY : clean-webui-deps
+clean-webui-deps :
+	rm -f webui/.deps.mk
 
 # FIXME: hard code dependency because unpack-cli-{mac,win,linux} are inside profiles
 assembly/.dependencies : \
