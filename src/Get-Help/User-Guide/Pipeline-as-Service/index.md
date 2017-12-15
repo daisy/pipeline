@@ -6,7 +6,7 @@ layout: default
 Most people will use DAISY Pipeline 2 as a standalone desktop
 application. It is easy to install and ready to go. But the Pipeline
 can also be used as a service to which client programs can connect,
-through a web API.
+through a [web API]({{site.baseurl}}/wiki/WebServiceAPI).
 
 There are several use cases:
 

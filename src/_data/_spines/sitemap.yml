@@ -40,6 +40,8 @@
   pages:
     - url: https://github.com/daisy/pipeline
       title: "Source Code"
+    - url: {{site.baseurl}}/wiki/WebServiceAPI/
+      title: "Web Service API"
     - url: https://groups.google.com/forum/#!forum/daisy-pipeline-dev
       title: "Developers Mailing List"
       # copied from "existing issues" in http://daisy.github.io/pipeline/Contribute/
