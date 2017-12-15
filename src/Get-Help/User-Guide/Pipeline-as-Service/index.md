@@ -120,6 +120,14 @@ A number of environment variables will influence the program:
 - `MAX_FD`: ?
 -->
 
+In addition to the environment variable listed above, all available
+[system properties]({{site.baseurl}}/wiki/Configuration-Files/#system-properties)
+that start with `org.daisy.pipeline` can be set through environment
+variables as well. For example, the system property
+`org.daisy.pipeline.ws.host` can be set with the environment variable
+`PIPELINE2_WS_HOST`. The environment variable settings will have
+precedence over settings in the `system.properties` file.
+
 #### Arguments for `pipeline2` executable
 
 The following command line arguments are available. Combinations are possible.
