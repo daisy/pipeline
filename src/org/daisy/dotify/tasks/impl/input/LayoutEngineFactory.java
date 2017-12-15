@@ -5,10 +5,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
+import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.tasks.TaskGroup;
 import org.daisy.dotify.api.tasks.TaskGroupFactory;
 import org.daisy.dotify.api.tasks.TaskGroupInformation;
 import org.daisy.dotify.api.tasks.TaskGroupSpecification;
+import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 
 import aQute.bnd.annotation.component.Component;
@@ -63,10 +65,10 @@ public class LayoutEngineFactory implements TaskGroupFactory {
 
 	public void setCreatedWithSPI() {
 		if (pmw == null) {
-			pmw = SPIHelper.getPagedMediaWriterFactoryMakerService();
+			pmw = PagedMediaWriterFactoryMaker.newInstance();
 		}
 		if (fe == null) {
-			fe = SPIHelper.getFormatterEngineFactoryService();
+			fe = FormatterEngineMaker.newInstance().getFactory();
 		}
 	}
 	

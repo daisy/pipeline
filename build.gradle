@@ -46,9 +46,9 @@ sourceSets.main {
 
 dependencies {
 	compileOnly group: "biz.aQute.bnd", name: "annotation", version: "2.3.0"
-	compile 'org.daisy.dotify:dotify.api:3.0.0'
+	compile 'org.daisy.dotify:dotify.api:3.3.0'
 	compile 'org.daisy.streamline:streamline-api:0.2.0'
-	compile 'org.daisy.dotify:dotify.common:3.7.1'
+	compile 'org.daisy.dotify:dotify.common:3.9.0'
 	compile group: 'org.daisy.libs', name: 'jing', version: '20120724.0.0'	
 	compile (group: 'org.daisy.libs', name: 'saxon-he', version: '9.5.1.5') {
 		exclude module: 'Saxon-HE'
