@@ -19,13 +19,9 @@ import org.daisy.pipeline.client.filestorage.JobStorage;
 import org.daisy.pipeline.client.models.Job.Status;
 import org.daisy.pipeline.client.models.Message;
 import org.daisy.pipeline.client.models.Result;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
 import play.Logger;
 import play.libs.Akka;
 import scala.concurrent.duration.Duration;
-import utils.XML;
 import akka.actor.Cancellable;
 
 import com.avaje.ebean.Model;

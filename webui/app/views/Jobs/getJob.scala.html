@@ -217,7 +217,7 @@
 				}
 			}
 			
-			var li = '<li data-depth="'+message.depth+'" data-level="'+message.level+'" data-inferred-level="'+message.inferredLevel+'" id="m'+message.sequence+'" value="'+message.sequence+'" class="'+(message.inferredLevel=="ERROR"?"message-error":"")+(message.inferredLevel=="WARNING"?"message-warn":"")+(emptyNoText ? " message-empty" : "")+'"><span class="message" style="'+(empty ? 'font-style: italic;' : '')+'">'+message.text+'</span></li>';
+			var li = '<li data-depth="'+message.depth+'" data-level="'+message.level+'" data-inferred-level="'+message.inferredLevel+'" id="m'+message.sequence+'" data-sequence="'+message.sequence+'" class="'+(message.inferredLevel=="ERROR"?"message-error":"")+(message.inferredLevel=="WARNING"?"message-warn":"")+(emptyNoText ? " message-empty" : "")+'"><pre class="message" style="'+(empty ? 'font-style: italic;' : '')+'">'+message.text+'</pre></li>';
 			
 			if ($("#m"+message.sequence).size() > 0) {
 				$("#m"+message.sequence).attr("data-depth", message.depth)
@@ -237,7 +237,7 @@
 					// top-level message
 					
 					var putAfter = $("#message-list > li")
-										.filter(function(i){ return $(this).attr("value") < message.sequence; })
+										.filter(function(i){ return $(this).attr("data-sequence") < message.sequence; })
 										.last();
 					
 					if ($(putAfter).size()) {
@@ -251,12 +251,12 @@
 					// nested message
 					
 					var firstPreceding = $("#message-list li")
-							.filter(function(i){ return $(this).attr("value") < message.sequence && $(this).attr("data-depth") <= message.depth; })
+							.filter(function(i){ return $(this).attr("data-sequence") < message.sequence && $(this).attr("data-depth") <= message.depth; })
 							.last();
 					var shouldNest = $(firstPreceding).attr("data-depth") < message.depth; 
 					
 					if (shouldNest && !$(firstPreceding).children("div").size()) {
-						var listId = "message-sublist-"+$(firstPreceding).attr("value");
+						var listId = "message-sublist-"+$(firstPreceding).attr("data-sequence");
 						$(firstPreceding).children(".message").after('<div class="'+($(firstPreceding).attr("data-depth") == 1 ? 'collapse' : '')+'" id="'+listId+'"><ol aria-live="polite" role="log" class="messagelist"></ol></div>');
 						if ($(firstPreceding).attr("data-depth") == 1) {
 							$(firstPreceding).children(".message").after(

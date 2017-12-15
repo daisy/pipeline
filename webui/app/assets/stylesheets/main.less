@@ -37,8 +37,9 @@ ol.messagelist {
 	/*font-family:"Courier New",Courier,mono;*/
 	color: #999999;
 	margin:0;
-  padding:0em 0 0.5em 2.8em;
+	padding:0em 0 0.5em 2.8em;
 	width:96%;
+	list-style-type: none;
 	
 	li {
 		//white-space: nowrap;
@@ -50,18 +51,20 @@ ol.messagelist {
 			background-color: transparent;
 			border: 0px #FFF;
 			font-size: 1.25em;
+			padding: 0px;
+			font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
 		}
 	}
 	
-	.message-empty:not(ul) {
+	li.message-empty:not(ul) {
 		display: none;
 	}
 		
-	.message-error > span {
+	li.message-error > * {
 		background-color: #FAA;
 	}
 	
-	.message-warn > span {
+	li.message-warn > * {
 		background-color: #FFA;
 	}
 	

@@ -135,10 +135,10 @@ wixConfig := {
 }
 
 // Repositories for maven artifacts
-resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases/"
+//resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/repositories/releases/"
 //resolvers += "Sonatype OSS Staging" at "https://oss.sonatype.org/content/repositories/staging/"
-resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-resolvers += "Local Maven Repository" at Path.userHome.asFile.toURI.toURL+".m2/repository/"
+//resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+resolvers += "Local Maven Repository" at System.getProperty("mvn.settings.localRepository", Path.userHome.asFile.toURI.toURL+".m2/repository/")
 resolvers += Resolver.url("Typesafe Ivy releases", url("https://repo.typesafe.com/typesafe/ivy-releases"))(Resolver.ivyStylePatterns)
 
 publishTo := {
