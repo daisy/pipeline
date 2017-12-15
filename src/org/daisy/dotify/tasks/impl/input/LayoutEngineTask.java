@@ -56,6 +56,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	private static final String DATE_FORMAT = "dateFormat";
 	private static final String DATE = "date";
 	private static final String IDENTIFIER = "identifier";
+	private static final String ALLOWS_ENDING_VOLUME_ON_HYPHEN = "allows-ending-volume-on-hyphen";
 	private static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd";
 	private static final QName ENTRY = new QName("http://www.daisy.org/ns/2015/dotify", "entry", "generator");
 	private final FormatterConfiguration config;
@@ -124,10 +125,12 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	private static FormatterConfiguration getFormatterConfig(Properties p2, String translatorMode, String locale) {
 		boolean markCapitals = !p2.getProperty(MARK_CAPITAL_LETTERS, "true").equalsIgnoreCase("false");
 		boolean hyphenate = !p2.getProperty(HYPHENATE, "true").equalsIgnoreCase("false");
+		boolean allowsEndingVolumeOnHyphen = !p2.getProperty(ALLOWS_ENDING_VOLUME_ON_HYPHEN, "true").equalsIgnoreCase("false");
 		
 		FormatterConfiguration.Builder config = FormatterConfiguration.with(locale, translatorMode)
 			.markCapitalLetters(markCapitals)
-			.hyphenate(hyphenate);
+			.hyphenate(hyphenate)
+			.allowsEndingVolumeOnHyphen(allowsEndingVolumeOnHyphen);
 		if (p2.getProperty(REMOVE_STYLES, "false").equalsIgnoreCase("true")) {
 			config.ignoreStyle("em").ignoreStyle("strong");
 		}
