@@ -5,9 +5,8 @@ layout: default
 
 This article covers the most common errors Windows users may
 experience when starting DAISY Pipeline 2. If your issue isn't listed
-here, please visit our
-[issue-tracker](https://daisy.github.io/pipeline/Contribute/#issue-tracker)
-to report it.
+here, please visit our [issue tracker](../../Issue-Tracker.md) to
+report it.
 
 ## ERROR: Unable to retrieve JAVA_HOME or JAVA_HOME is not valid
 
@@ -104,4 +103,4 @@ Confirm that your **JAVA\_HOME** variable is now set correctly.
 Once you have verified that your **JAVA\_HOME** is set correctly,
 DAISY Pipeline 2 should start correctly. If you experience this
 problem again or any others, please visit our
-[issue-tracker](https://daisy.github.io/pipeline/Contribute/#issue-tracker).
+[issue tracker](../../Issue-Tracker.md).
