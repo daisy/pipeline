@@ -79,6 +79,7 @@ bundle {
     instructions << [
 		//must use file() to resolve against the build.gradle in Eclipse
         "-include": file('bnd.bnd'),
+        'Automatic-Module-Name': "$moduleName",
         'Built-By': System.getProperty("user.name"),
         'Built-On': new Date().format('yyyy-MM-dd'),
         'Repository-Revision': "$repoRevision",
