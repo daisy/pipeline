@@ -13,8 +13,6 @@ sub-project. All sub-projects are listed
 [here](https://github.com/daisy) (open the appropriate sub-project and
 open the **Issues** tab).
 
-<!--
-  This doesn't seem to work?
 {% capture repos %}
   daisy/pipeline
   daisy/pipeline-assembly
@@ -28,7 +26,6 @@ open the **Issues** tab).
   brailleapps/dotify.formatter.impl
 {% endcapture %}
 {% assign repos = repos | normalize_whitespace | split:' ' %}
--->
 
 Before creating a new issue, please first check the
 [existing issues](https://github.com/search?utf8=%E2%9C%93&type=Issues&q={% for r in repos %}+repo%3A{{ r | replace:'/','%2F' }}{% endfor %}) to
