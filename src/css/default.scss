@@ -425,3 +425,20 @@ body {
 		dd {
 			margin-bottom: .5rem; }}
 }
+
+table#scripts-matrix {
+	border-collapse: collapse;
+	width: 100%;
+	th {
+		border: 1px solid #ddd;
+	}
+	td {
+		border: 1px solid #eee;
+		text-align: center;
+		width: 12%;
+		background-color: lighten($color-primary-4, 5%);
+	}
+	td:empty {
+		background-color: initial;
+	}
+}
