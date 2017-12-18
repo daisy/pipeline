@@ -34,6 +34,10 @@
             - {{href}}
             {{/sparql}}
 
+    - {{site.baseurl}}/Get-Help/Issue-Tracker.html
+    - group: {{site.baseurl}}/Get-Help/Troubleshooting/
+      pages:
+        - {{site.baseurl}}/Get-Help/Troubleshooting/Common-Errors_win/
     - url: http://www.daisy.org/forums/pipeline-2
       title: "Forums"
 - group: {{site.baseurl}}/Contribute/
