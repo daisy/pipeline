@@ -1,11 +1,11 @@
 version: "2.0"
 services:
   pipeline2:
-    image: daisyorg/pipeline2
+    image: daisyorg/pipeline-assembly
     environment:
       PIPELINE2_WS_HOST: "pipeline2"
       PIPELINE2_WS_PORT: "8181"
-      PIPELINE2_AUTH: "false"
+      PIPELINE2_WS_AUTHENTICATION: "false"
   test:
     image: openjdk:8-jre
     environment:
