@@ -12,8 +12,8 @@ import javax.xml.stream.XMLStreamException;
 import org.daisy.dotify.common.text.StringFilter;
 import org.daisy.dotify.common.xml.EntityResolverCache;
 import org.daisy.dotify.common.xml.XMLResolverAdapter;
-import org.daisy.streamline.api.tasks.AnnotatedFile;
-import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.media.AnnotatedFile;
+import org.daisy.streamline.api.media.DefaultAnnotatedFile;
 import org.daisy.streamline.api.tasks.InternalTaskException;
 import org.daisy.streamline.api.tasks.ReadWriteTask;
 

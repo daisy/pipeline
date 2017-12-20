@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-import org.daisy.streamline.api.tasks.AnnotatedFile;
+import org.daisy.streamline.api.media.AnnotatedFile;
 import org.daisy.streamline.api.tasks.InternalTaskException;
 import org.daisy.streamline.api.tasks.ReadOnlyTask;
 

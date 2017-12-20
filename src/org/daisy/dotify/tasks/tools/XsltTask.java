@@ -16,12 +16,12 @@ import java.util.logging.Logger;
 
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
-import org.daisy.streamline.api.tasks.AnnotatedFile;
-import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.media.AnnotatedFile;
+import org.daisy.streamline.api.media.DefaultAnnotatedFile;
 import org.daisy.streamline.api.tasks.InternalTaskException;
 import org.daisy.streamline.api.tasks.ReadWriteTask;
-import org.daisy.streamline.api.tasks.TaskOption;
-import org.daisy.streamline.api.tasks.TaskOptionValue;
+import org.daisy.streamline.api.option.UserOption;
+import org.daisy.streamline.api.option.UserOptionValue;
 
 /**
  * <p>Task that runs an XSLT conversion.</p>
@@ -35,7 +35,7 @@ public class XsltTask extends ReadWriteTask {
 	private static final Logger logger = Logger.getLogger(XsltTask.class.getCanonicalName());
 	final URL url;
 	final Map<String, Object> options;
-	List<TaskOption> uiOptions;
+	List<UserOption> uiOptions;
 	
 	/**
 	 * <p>Create a new XSLT task. Use system property javax.xml.transform.TransformerFactory
@@ -77,15 +77,15 @@ public class XsltTask extends ReadWriteTask {
 	 * @param options the xslt parameters
 	 * @param uiOptions the options presented to a user
 	 */
-	public XsltTask(String name, URL url, Map<String, Object> options, List<TaskOption> uiOptions) {
+	public XsltTask(String name, URL url, Map<String, Object> options, List<UserOption> uiOptions) {
 		super(name);
 		this.url = url;
 		this.options = options;
 		this.uiOptions = uiOptions;
 	}
 	
-	private List<TaskOption> buildOptions() {
-		List<TaskOption> ret = new ArrayList<>();
+	private List<UserOption> buildOptions() {
+		List<UserOption> ret = new ArrayList<>();
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			XMLTools.transform(url, os, this.getClass().getResource("resource-files/list-params.xsl"), new HashMap<String, Object>(),  new net.sf.saxon.TransformerFactoryImpl());
@@ -93,14 +93,14 @@ public class XsltTask extends ReadWriteTask {
 			px.loadFromXML(new ByteArrayInputStream(os.toByteArray()));
 			for (Entry<Object, Object> entry : px.entrySet()) {
 				List<String> fields = splitFields(entry.getValue().toString());
-				TaskOption.Builder builder = new TaskOption.Builder(entry.getKey().toString());
+				UserOption.Builder builder = new UserOption.Builder(entry.getKey().toString());
 				if (fields.size()>0) {
 					builder.defaultValue(fields.get(0));
 					if (fields.size()>1) {
 						if (!"".equals(fields.get(1))) {
 							String[] values = fields.get(1).split("/");
 							for (String value : values) {
-								builder.addValue(new TaskOptionValue.Builder(value).build());
+								builder.addValue(new UserOptionValue.Builder(value).build());
 							}
 						}
 						if (fields.size()>2) {
@@ -146,7 +146,7 @@ public class XsltTask extends ReadWriteTask {
 	}
 
 	@Override
-	public List<TaskOption> getOptions() {
+	public List<UserOption> getOptions() {
 		if (uiOptions==null) {
 			this.uiOptions = buildOptions();
 		}

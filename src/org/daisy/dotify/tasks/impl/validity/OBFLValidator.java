@@ -1,6 +1,7 @@
 package org.daisy.dotify.tasks.impl.validity;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,7 +16,7 @@ class OBFLValidator implements Validator {
 	private static final Logger logger = Logger.getLogger(OBFLValidator.class.getCanonicalName());
 
 	@Override
-	public ValidationReport validate(URL input) {
+	public ValidationReport validate(URL input, Map<String, Object> params) {
 		try {
 			return ValidatorTask.validate(input,
 					false,

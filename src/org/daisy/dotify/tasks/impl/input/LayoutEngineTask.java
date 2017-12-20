@@ -28,13 +28,13 @@ import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactory;
 import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMakerService;
 import org.daisy.dotify.tasks.impl.input.ObflResourceLocator.ObflResourceIdentifier;
-import org.daisy.streamline.api.tasks.AnnotatedFile;
-import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.media.AnnotatedFile;
+import org.daisy.streamline.api.media.DefaultAnnotatedFile;
 import org.daisy.streamline.api.tasks.InternalTaskException;
 import org.daisy.streamline.api.tasks.ReadWriteTask;
 import org.daisy.streamline.api.tasks.TaskGroupSpecification;
-import org.daisy.streamline.api.tasks.TaskOption;
-import org.daisy.streamline.api.tasks.TaskOptionValue;
+import org.daisy.streamline.api.option.UserOption;
+import org.daisy.streamline.api.option.UserOptionValue;
 import org.daisy.streamline.api.tasks.TaskSystemException;
 
 /**
@@ -64,7 +64,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	private final FormatterEngineFactoryService fe;
 	private final TaskGroupSpecification spec;
 	private static final Logger logger = Logger.getLogger(LayoutEngineTask.class.getCanonicalName());
-	private List<TaskOption> options;
+	private List<UserOption> options;
 	
 	/**
 	 * Creates a new instance.
@@ -175,32 +175,32 @@ public class LayoutEngineTask extends ReadWriteTask  {
 		return new MetaDataItem.Builder(new QName("http://purl.org/dc/elements/1.1/", name, "dc"), value).build();
 	}
 
-	private static List<TaskOption> buildOptions(TaskGroupSpecification spec) {
-		List<TaskOption> ret = new ArrayList<>();
+	private static List<UserOption> buildOptions(TaskGroupSpecification spec) {
+		List<UserOption> ret = new ArrayList<>();
 		ret.add(withBooleanValues(
-				new TaskOption.Builder(MARK_CAPITAL_LETTERS)
+				new UserOption.Builder(MARK_CAPITAL_LETTERS)
 				.description("Specifies if capital letters should be marked in braille."))
 				.defaultValue("true")
 				.build());
 		ret.add(withBooleanValues(
-				new TaskOption.Builder(REMOVE_STYLES)
+				new UserOption.Builder(REMOVE_STYLES)
 				.description("Specifies if em/strong styles should be removed."))
 				.defaultValue("false")
 			.build());
 		ret.add(withBooleanValues(
-				new TaskOption.Builder(HYPHENATE)
+				new UserOption.Builder(HYPHENATE)
 				.description("Specifies if hyphenation should be used."))
 				.defaultValue("true")
 			.build());
-		ret.add(new TaskOption.Builder(TRANSLATE)
+		ret.add(new UserOption.Builder(TRANSLATE)
 			.description("Specifies a translation mode.")
 			.build());
 		//PEF supports additional options
 		if (Keys.PEF_FORMAT.equals(spec.getOutputFormat())) {
-			ret.add(new TaskOption.Builder(IDENTIFIER)
+			ret.add(new UserOption.Builder(IDENTIFIER)
 				.description("Sets identifier in meta data.")
 				.build());
-			ret.add(new TaskOption.Builder(DATE)
+			ret.add(new UserOption.Builder(DATE)
 				.description("Sets date in meta data.")
 				.defaultValue(getDefaultDate(DEFAULT_DATE_FORMAT))
 				.build());
@@ -208,9 +208,9 @@ public class LayoutEngineTask extends ReadWriteTask  {
 		return ret;
 	}
 	
-	private static TaskOption.Builder withBooleanValues(TaskOption.Builder builder) {
-		return builder.addValue(new TaskOptionValue.Builder("true").build())
-		.addValue(new TaskOptionValue.Builder("false").build());
+	private static UserOption.Builder withBooleanValues(UserOption.Builder builder) {
+		return builder.addValue(new UserOptionValue.Builder("true").build())
+		.addValue(new UserOptionValue.Builder("false").build());
 	}
 	
 	private static String getDefaultDate(String dateFormat) {
@@ -249,7 +249,7 @@ public class LayoutEngineTask extends ReadWriteTask  {
 	}
 
 	@Override
-	public List<TaskOption> getOptions() {
+	public List<UserOption> getOptions() {
 		if (options==null) {
 			options = Collections.unmodifiableList(buildOptions(spec));
 		}

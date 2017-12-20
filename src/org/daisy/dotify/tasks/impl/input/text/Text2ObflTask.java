@@ -11,11 +11,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.daisy.dotify.common.xml.XMLTools;
-import org.daisy.streamline.api.tasks.AnnotatedFile;
-import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.media.AnnotatedFile;
+import org.daisy.streamline.api.media.DefaultAnnotatedFile;
 import org.daisy.streamline.api.tasks.InternalTaskException;
 import org.daisy.streamline.api.tasks.ReadWriteTask;
-import org.daisy.streamline.api.tasks.TaskOption;
+import org.daisy.streamline.api.option.UserOption;
 
 class Text2ObflTask extends ReadWriteTask {
 	private static final String SOURCE_ENCODING = "source-encoding";
@@ -26,7 +26,7 @@ class Text2ObflTask extends ReadWriteTask {
 	private final String encoding;
 	private final String rootLang;
 	private final Map<String, Object> params;
-	private static List<TaskOption> options = null;
+	private static List<UserOption> options = null;
 	
 	Text2ObflTask(String name, String rootLang, Map<String, Object> params) {
 		this(name, rootLang, getEncoding(params), params);
@@ -93,13 +93,13 @@ class Text2ObflTask extends ReadWriteTask {
 	}
 
 	@Override
-	public List<TaskOption> getOptions() {
+	public List<UserOption> getOptions() {
 		if (options==null) {
 			options = new ArrayList<>();
-			options.add(new TaskOption.Builder(PAGE_WIDTH).description("The width of the page").defaultValue("32").build());
-			options.add(new TaskOption.Builder(PAGE_HEIGHT).description("The height of the page").defaultValue("29").build());
-			options.add(new TaskOption.Builder(SOURCE_ENCODING).description("The encoding of the input file").defaultValue("[detect]").build());
-			options.add(new TaskOption.Builder(SOURCE_LANGUAGE).description("The language of the input file").defaultValue(rootLang).build());
+			options.add(new UserOption.Builder(PAGE_WIDTH).description("The width of the page").defaultValue("32").build());
+			options.add(new UserOption.Builder(PAGE_HEIGHT).description("The height of the page").defaultValue("29").build());
+			options.add(new UserOption.Builder(SOURCE_ENCODING).description("The encoding of the input file").defaultValue("[detect]").build());
+			options.add(new UserOption.Builder(SOURCE_LANGUAGE).description("The language of the input file").defaultValue(rootLang).build());
 		}
 		return options;
 	}

@@ -21,13 +21,13 @@ import org.daisy.dotify.tasks.impl.input.Keys;
 import org.daisy.dotify.tasks.impl.input.ValidatorTask;
 import org.daisy.dotify.tasks.tools.XsltTask;
 import org.daisy.streamline.api.identity.IdentificationFailedException;
-import org.daisy.streamline.api.tasks.AnnotatedFile;
-import org.daisy.streamline.api.tasks.DefaultAnnotatedFile;
+import org.daisy.streamline.api.media.AnnotatedFile;
+import org.daisy.streamline.api.media.DefaultAnnotatedFile;
 import org.daisy.streamline.api.tasks.ExpandingTask;
 import org.daisy.streamline.api.tasks.InternalTask;
 import org.daisy.streamline.api.tasks.InternalTaskException;
 import org.daisy.streamline.api.tasks.TaskGroup;
-import org.daisy.streamline.api.tasks.TaskOption;
+import org.daisy.streamline.api.option.UserOption;
 import org.daisy.streamline.api.tasks.TaskSystemException;
 
 /**
@@ -264,9 +264,9 @@ public class XMLInputManager implements TaskGroup {
 	}
 
 	@Override
-	public List<TaskOption> getOptions() {
-		List<TaskOption> ret = new ArrayList<>();
-		ret.add(new TaskOption.Builder(OBFL_OUTPUT_LOCATION).description("Path to store intermediary OBFL-file.").build());
+	public List<UserOption> getOptions() {
+		List<UserOption> ret = new ArrayList<>();
+		ret.add(new UserOption.Builder(OBFL_OUTPUT_LOCATION).description("Path to store intermediary OBFL-file.").build());
 		return ret;
 	}
 

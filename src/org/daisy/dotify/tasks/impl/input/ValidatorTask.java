@@ -16,7 +16,7 @@ import org.daisy.dotify.common.xml.EntityResolverCache;
 import org.daisy.dotify.common.xml.XMLInfo;
 import org.daisy.dotify.common.xml.XMLTools;
 import org.daisy.dotify.common.xml.XMLToolsException;
-import org.daisy.streamline.api.tasks.AnnotatedFile;
+import org.daisy.streamline.api.media.AnnotatedFile;
 import org.daisy.streamline.api.tasks.InternalTaskException;
 import org.daisy.streamline.api.tasks.ReadOnlyTask;
 import org.daisy.streamline.api.validity.ValidationReport;

@@ -2,12 +2,17 @@ package org.daisy.dotify.tasks.impl.validity;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.daisy.dotify.tasks.impl.input.ValidatorException;
 import org.daisy.dotify.tasks.impl.input.ValidatorTask;
+import org.daisy.streamline.api.option.UserOption;
+import org.daisy.streamline.api.option.UserOptionValue;
 import org.daisy.streamline.api.validity.ValidationReport;
 import org.daisy.streamline.api.validity.Validator;
 
@@ -22,7 +27,7 @@ class PEFValidator implements Validator {
 	 * Key for getFeature/setFeature,
 	 * corresponding value should be a {@link Mode} value
 	 */
-	public static final String FEATURE_MODE = "validator mode";
+	private static final String FEATURE_MODE = "validator-mode";
 	/**
 	 * Defines the modes available to the validator.
 	 */
@@ -30,11 +35,11 @@ class PEFValidator implements Validator {
 		/**
 		 * Light mode validation only validates the document against the Relax NG schema
 		 */
-		LIGHT_MODE("resource-files/pef-2008-1.rng"), 
+		LIGHT("resource-files/pef-2008-1.rng"), 
 		/**
 		 * In addition to schema validation, performs other tests required by the PEF-specification.
 		 */
-		FULL_MODE("resource-files/pef-2008-1.rng", "resource-files/pef-schematron.sch");
+		FULL("resource-files/pef-2008-1.rng", "resource-files/pef-schematron.sch");
 		private final URL[] schemas;
 		Mode(String ... schemaPaths) {
 			List<URL> schemas = new ArrayList<>();
@@ -45,21 +50,25 @@ class PEFValidator implements Validator {
 		}
 	}
 	private static final Logger logger = Logger.getLogger(PEFValidator.class.getCanonicalName());
-	private Mode mode;
+	private List<UserOption> options;
 	
 	/**
 	 * Creates a new PEFValidator
 	 */
 	PEFValidator() {
-		this(PEFValidator.class.getCanonicalName());
-	}
-
-	PEFValidator(String id) {
-		this.mode = Mode.FULL_MODE;
 	}
 
 	@Override
-	public ValidationReport validate(URL input) {
+	public ValidationReport validate(URL input, Map<String, Object> params) {
+		Mode mode = Optional.ofNullable(params.get(FEATURE_MODE))
+				.map(v-> {
+					try {
+						return Mode.valueOf(v.toString().toUpperCase());
+					} catch (IllegalArgumentException e) {
+						logger.warning(String.format("'%s' is not a recognized value for key %s", v.toString(), FEATURE_MODE));
+						return null;
+					}})
+				.orElse(Mode.FULL);
 		return validate(input, mode);
 	}
 	
@@ -72,26 +81,23 @@ class PEFValidator implements Validator {
 		}
 		return null;
 	}
-	
-	Object getFeature(String key) {
-		if (FEATURE_MODE.equals(key)) {
-			return mode;
-		} else {
-			throw new IllegalArgumentException("Unknown feature: '" + key +"'");
-		}
+
+	private List<UserOption> buildOptions() {
+		List<UserOption> ret = new ArrayList<>();
+		ret.add(new UserOption.Builder(FEATURE_MODE)
+				.defaultValue(Mode.FULL.name())
+				.addValue(new UserOptionValue.Builder(Mode.FULL.name().toLowerCase()).description("Runs all tests").build())
+				.addValue(new UserOptionValue.Builder(Mode.LIGHT.name().toLowerCase()).description("Runs basic tests").build())
+				.build());
+		return ret;
 	}
 
-	void setFeature(String key, Object value) {
-		if (FEATURE_MODE.equals(key)) {
-			try {
-				mode = (Mode)value;
-			} catch (ClassCastException e) {
-				throw new IllegalArgumentException("Unsupported value for " + FEATURE_MODE + " '" + value + "'", e);
-			}
-		} else {
-			throw new IllegalArgumentException("Unknown feature: '" + key +"'");
+	@Override
+	public List<UserOption> listOptions() {
+		if (options==null) {
+			options = Collections.unmodifiableList(buildOptions());
 		}
-		
+		return options;
 	}
 
 }

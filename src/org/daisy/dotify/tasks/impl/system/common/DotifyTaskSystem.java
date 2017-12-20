@@ -14,7 +14,7 @@ import org.daisy.streamline.api.tasks.TaskGroup;
 import org.daisy.streamline.api.tasks.TaskGroupActivity;
 import org.daisy.streamline.api.tasks.TaskGroupFactoryMakerService;
 import org.daisy.streamline.api.tasks.TaskGroupInformation;
-import org.daisy.streamline.api.tasks.TaskOption;
+import org.daisy.streamline.api.option.UserOption;
 import org.daisy.streamline.api.tasks.TaskSystem;
 import org.daisy.streamline.api.tasks.TaskSystemException;
 
@@ -72,16 +72,16 @@ public class DotifyTaskSystem implements TaskSystem {
 			if (spec.getActivity()==TaskGroupActivity.ENHANCE) {
 				// For enhance, only include the options required to enable the task group. Once enabled,
 				// additional options may be presented
-				for (TaskOption o : spec.getRequiredOptions()) {
+				for (UserOption o : spec.getRequiredOptions()) {
 					setup.addOption(o);
 				}
 			}
 			if (spec.getActivity()==TaskGroupActivity.CONVERT || matchesRequiredOptions(spec, pa, false)) {
 				TaskGroup g = imf.newTaskGroup(spec, context);
 				//TODO: these options should be on the group level instead of on the system level
-				List<TaskOption> opts = g.getOptions();
+				List<UserOption> opts = g.getOptions();
 				if (opts!=null) {
-					for (TaskOption o : opts) {
+					for (UserOption o : opts) {
 						setup.addOption(o);
 					}
 				}
@@ -146,7 +146,7 @@ public class DotifyTaskSystem implements TaskSystem {
 		if (candidate.getRequiredOptions().isEmpty()) {
 			return emptyReturn;
 		}
-		for (TaskOption option : candidate.getRequiredOptions()) {
+		for (UserOption option : candidate.getRequiredOptions()) {
 			String key = option.getKey();
 			if (!parameters.containsKey(key)) {
 				return false;
