@@ -888,7 +888,7 @@ value
 
 <p>Makes the variable <code>$page-width</code> available in style sheets and includes the following rule by default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@page</span> {
   <span class="key">size</span>: <span class="variable">$page-width</span> <span class="variable">$page-height</span>;
@@ -922,7 +922,7 @@ value
 
 <p>Makes the variable <code>$page-height</code> available in style sheets and includes the following rule by default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@page</span> {
   <span class="key">size</span>: <span class="variable">$page-width</span> <span class="variable">$page-height</span>;
@@ -983,7 +983,7 @@ When enabled, will print on both sides of the paper.
 <p>Makes the variable <code>$levels-in-footer</code> available in style sheets and includes the following rule by
 default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@for</span> <span class="variable">$level</span> <span class="value">from</span> <span class="float">1</span> <span class="value">through</span> <span class="float">6</span> {
   <span class="directive">@if</span> <span class="variable">$levels-in-footer</span> &gt;= <span class="variable">$level</span> {
@@ -1000,7 +1000,7 @@ default:</p>
 equal to <code>levels-in-footer</code> is encountered. In order to use the <code>footer</code> string include a rule like
 the following in your custom style sheet:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@page</span> {
   <span class="directive">@bottom-center</span> {
@@ -1051,7 +1051,7 @@ the following in your custom style sheet:</p>
 <p>Makes the variable <code>$hyphenation</code> available in style sheets and includes the following rule by
 default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@if</span> <span class="variable">$hyphenation</span> {
   :<span class="value">root</span> {
@@ -1087,7 +1087,7 @@ default:</p>
 <p>Makes the variable <code>$line-spacing</code> available in style sheets and includes the following rule by
 default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@if</span> <span class="variable">$line-spacing</span> == <span class="value">double</span> {
   :<span class="value">root</span> {
@@ -1142,7 +1142,7 @@ property</li>
 <p>Makes the variable <code>$capital-letters</code> available in style sheets and includes the following rule by
 default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@if</span> <span class="variable">$capital-letters</span> != <span class="value">true</span> {
   :<span class="value">root</span> {
@@ -1211,7 +1211,7 @@ default:</p>
 <p>Makes the variable <code>$include-captions</code> available in style sheets and includes the following rule by
 default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">caption</span> {
   <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-captions</span>, <span class="value">block</span>, <span class="value">none</span>);
@@ -1239,7 +1239,7 @@ default:</p>
 <p>Makes the variable <code>$include-images</code> available in style sheets and includes the following rule by
 default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@if</span> <span class="variable">$include-images</span> {
   <span class="key">img</span>::<span class="value">after</span> {
@@ -1282,7 +1282,7 @@ default:</p>
 <p>Makes the variable <code>$include-line-groups</code> available in style sheets and includes the following rule
 by default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">linegroup</span> <span class="tag">line</span> {
   <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-line-groups</span>, <span class="value">block</span>, <span class="value">inline</span>);
@@ -1336,7 +1336,7 @@ When enabled, text that is in bold or italics in the print version will be rende
 <p>Makes the variable <code>$include-production-notes</code> available in style sheets and includes the following
 rule by default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">prodnote</span> {
   <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-production-notes</span>, <span class="value">block</span>, <span class="value">none</span>);
@@ -1364,7 +1364,7 @@ rule by default:</p>
 <p>Makes the variable <code>$show-braille-page-numbers</code> available in style sheets. In order to use the
 variable include a rule like the following in your custom style sheet:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@if</span> <span class="variable">$show-braille-page-numbers</span> {
   <span class="directive">@page</span> {
@@ -1407,7 +1407,7 @@ function</li>
 <p>Makes the variable <code>$show-print-page-numbers</code> available in style sheets and includes the following
 rule by default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@if</span> <span class="variable">$show-print-page-numbers</span> {
   <span class="key">pagenum</span> {
@@ -1421,7 +1421,7 @@ rule by default:</p>
 <p>In order to use the <code>print-page</code> string include a rule like the following in your custom style
 sheet:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@page</span> {
   <span class="directive">@bottom-right</span> {
@@ -1459,7 +1459,7 @@ sheet:</p>
 <p>Makes the variable <code>$force-braille-page-break</code> available in style sheets and includes the following
 rule by default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@if</span> <span class="variable">$force-braille-page-break</span> {
   <span class="key">pagenum</span> {
@@ -1497,7 +1497,7 @@ property</li>
 elements if the specified value for “depth” is 1, from <code>h1</code> and <code>h2</code> elements if the specified value
 is 2, etc. The resulting table of contents has the following nested structure:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;list</span> <span class="attribute-name">id</span>=<span class="string"><span class="delimiter">"</span><span class="content">generated-document-toc</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
   <span class="tag">&lt;li&gt;</span>
@@ -1525,7 +1525,7 @@ IDs of the heading elements from which the list was constructed, and the content
 exact copies of the content of the heading elements. By default the list is not rendered. The list
 should be styled and positioned with CSS. The following rules are included by default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="id">#generated-document-toc</span> {
   <span class="key">flow</span>: <span class="value">document-toc</span>;
@@ -1548,7 +1548,7 @@ consume these named flows use the function <code>flow()</code>. For example, to 
 table of contents at the beginning of the first volume, and to repeat the volume range table of
 content at the beginning of every other volume, include the following additional rules:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@volume</span> {
   <span class="directive">@begin</span> {
@@ -1648,7 +1648,7 @@ value</li>
 <p>Makes the variable <code>$maximum-number-of-sheets</code> available in style sheets and includes the following
 rule by default:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@volume</span> {
   <span class="key">max-length</span>: <span class="variable">$maximum-number-of-sheets</span>;

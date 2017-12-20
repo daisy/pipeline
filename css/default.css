@@ -514,3 +514,16 @@ body {
     .synopsis-report dl.choice dd,
     .synopsis-option dl.choice dd {
       margin-bottom: .5rem; }
+
+table#scripts-matrix {
+  border-collapse: collapse;
+  width: 100%; }
+  table#scripts-matrix th {
+    border: 1px solid #ddd; }
+  table#scripts-matrix td {
+    border: 1px solid #eee;
+    text-align: center;
+    width: 12%;
+    background-color: #d6e0ff; }
+  table#scripts-matrix td:empty {
+    background-color: initial; }

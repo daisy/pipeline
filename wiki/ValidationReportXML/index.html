@@ -695,7 +695,7 @@ summary Pipeline-specific XML formats used by validation tools
 
 <p>There is a Relax NG schema for it <a href="https://github.com/daisy/pipeline-modules-common/blob/master/validation-utils/src/main/resources/xml/schema/document-validation-report.rng" class="external-link" target="_blank">here</a>.</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;d:document-validation-report</span> <span class="attribute-name">xmlns:d</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
   <span class="tag">&lt;d:document-info&gt;</span>
@@ -739,7 +739,7 @@ summary Pipeline-specific XML formats used by validation tools
 
 <p>The resulting report from the <code>check-files-exist</code> step is formatted as a <code>&lt;d:errors&gt;</code> element, described above.</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;d:files</span> <span class="attribute-name">xmlns:d</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
   <span class="tag">&lt;d:file</span> <span class="attribute-name">path</span>=<span class="string"><span class="delimiter">"</span><span class="content">file:/full/path/to/image1.jpg</span><span class="delimiter">"</span></span> <span class="attribute-name">ref</span>=<span class="string"><span class="delimiter">"</span><span class="content">file:/full/path/to/dtbook.xml#ID</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>

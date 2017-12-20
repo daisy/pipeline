@@ -623,7 +623,7 @@ and PLS lexicons.</p>
 style sheets, and (links to) PLS lexicons. The file format is as
 follows:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;config&gt;</span>
   <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">acapela.samplerate</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">44100</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
@@ -835,7 +835,7 @@ CSS. To do so, add one or more “css” elements to the configuration
 file. If the “href” attribute is missing, the CSS stylesheets will be
 interpreted as inlined in the configuration file:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;config&gt;</span>
   <span class="tag">&lt;css&gt;</span>
@@ -959,7 +959,7 @@ voice with the highest priority. Each voice has a default priority,
 though they can be overridden via the “voice” entries of the
 configuration file, as follows:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;config&gt;</span>
   <span class="tag">&lt;voice</span> <span class="attribute-name">engine</span>=<span class="string"><span class="delimiter">"</span><span class="content">sapi</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">Microsoft Todd</span><span class="delimiter">"</span></span> <span class="attribute-name">gender</span>=<span class="string"><span class="delimiter">"</span><span class="content">male-adult</span><span class="delimiter">"</span></span> <span class="attribute-name">priority</span>=<span class="string"><span class="delimiter">"</span><span class="content">100</span><span class="delimiter">"</span></span> <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
@@ -1016,7 +1016,7 @@ rendering.</p>
 configuration file. If the “href” attribute is missing, the pipeline
 will read the lexicons inside the config nodes, as in this example:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;config&gt;</span>
   <span class="tag">&lt;lexicon</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/2005/01/pronunciation-lexicon</span><span class="delimiter">"</span></span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">1.0</span><span class="delimiter">"</span></span>
@@ -1035,7 +1035,7 @@ will read the lexicons inside the config nodes, as in this example:</p>
 extended with regular expression matching. To enable regular
 expression matching, add the “regex” attribute, as follows:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;lexicon</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/2005/01/pronunciation-lexicon</span><span class="delimiter">"</span></span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">1.0</span><span class="delimiter">"</span></span>
          <span class="attribute-name">alphabet</span>=<span class="string"><span class="delimiter">"</span><span class="content">ipa</span><span class="delimiter">"</span></span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
@@ -1056,7 +1056,7 @@ syntax used is that from
 matching can be made more accurate by specifying the
 “positive-lookahead” and “negative-lookahead” attributes:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;lexicon</span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">1.0</span><span class="delimiter">"</span></span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/2005/01/pronunciation-lexicon</span><span class="delimiter">"</span></span>
          <span class="attribute-name">alphabet</span>=<span class="string"><span class="delimiter">"</span><span class="content">ipa</span><span class="delimiter">"</span></span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>

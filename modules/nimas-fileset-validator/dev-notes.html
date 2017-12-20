@@ -603,7 +603,7 @@ if (window.addEventListener) {
 <!-- 
 summary: NIMAS fileset validator development notes
 -->
-<p># NIMAS Fileset Validator Development Notes</p>
+<h1 id="nimas-fileset-validator-development-notes">NIMAS Fileset Validator Development Notes</h1>
 
 <h2 id="this-script-can">This script can</h2>
 
@@ -623,13 +623,14 @@ summary: NIMAS fileset validator development notes
   <li>Validate the Package file against its schema</li>
   <li>Enforce metadata rules in the package file:
     <ul>
-      <li>“Metadata must be added to indicate the presence of MathML in a source file.” 
-   ~~~xml
-        <meta name="z39-86-extension-version" scheme="http://www.w3.org/1998/Math/MathML" content="1.0">
-
-        <meta name="DTBook-XSLTFallback" scheme="http://www.w3.org/1998/Math/MathML" content="xslt-file-name">
-
-        <p>~~~</p>
+      <li>“Metadata must be added to indicate the presence of MathML in a source file.”
+        <div class="language-xml highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>   <span class="tag">&lt;meta</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">z39-86-extension-version</span><span class="delimiter">"</span></span> <span class="attribute-name">scheme</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/1998/Math/MathML</span><span class="delimiter">"</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">1.0</span><span class="delimiter">"</span></span> <span class="tag">/&gt;</span> 
+   <span class="tag">&lt;meta</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">DTBook-XSLTFallback</span><span class="delimiter">"</span></span> <span class="attribute-name">scheme</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/1998/Math/MathML</span><span class="delimiter">"</span></span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">xslt-file-name</span><span class="delimiter">"</span></span> <span class="tag">/&gt;</span>
+</pre></div>
+</div>
+        </div>
         <ul>
           <li>“If MathML is not present, then metadata must not be present that indicates that it is (for example, automated processes must not add MathML metadata by default).”</li>
           <li>NIMAS-specific metadata (from http://aim.cast.org/experience/technologies/spec-v1_1):

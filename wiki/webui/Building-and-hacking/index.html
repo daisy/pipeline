@@ -615,9 +615,11 @@ if (window.addEventListener) {
 
 <p>The <code>pipeline-clientlib-java</code> Java library is used for parsing and serializing the XML that is received from and sent to the engine. If you want to change the way the Web UI communicates with the engine, you may want to make the changes in that library instead of the Web UI.</p>
 
-<p>There are two repositories you can use:
-- <a href="https://github.com/daisy/pipeline-webui" class="external-link" target="_blank">The Web UI repository</a>
-- <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank">The Pipeline 2 super project</a></p>
+<p>There are two repositories you can use:</p>
+<ul>
+  <li><a href="https://github.com/daisy/pipeline-webui" class="external-link" target="_blank">The Web UI repository</a></li>
+  <li><a href="https://github.com/daisy/pipeline" class="external-link" target="_blank">The Pipeline 2 super project</a></li>
+</ul>
 
 <p>The Pipeline 2 super project is easier to use if you want to start a development version of the engine for testing the Web UI, and/or change <code>pipeline-clientlib-java</code> or other relevant libraries at the same time as you make changes to the Web UI.</p>
 
@@ -635,7 +637,7 @@ if (window.addEventListener) {
   <li>
     <p>For some reason the application is unable to initialize the database itself, therefore upon the first run copy a clean pre-initialized version of the database:</p>
 
-    <div class="highlighter-coderay">
+    <div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>rm -r dp2webui &amp;&amp; cp -r dp2webui-cleandb dp2webui
 </pre></div>

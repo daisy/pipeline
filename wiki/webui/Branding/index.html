@@ -635,13 +635,12 @@ if (window.addEventListener) {
 
 <p>Store the logo (about 20px in height) as <code>themes/My Theme/images/logo.png</code>.</p>
 
-<p><strong>stylesheets/main.css</strong>
-<code>
-a.brand::before {
+<p><strong>stylesheets/main.css</strong></p>
+<pre><code>a.brand::before {
     content: url('../images/logo.png');
     padding-right: 1em;
 }
-</code></p>
+</code></pre>
 
 <h4 id="example-use-javascript-to-add-a-navigation-item">Example: use JavaScript to add a navigation item</h4>
 
@@ -649,16 +648,15 @@ a.brand::before {
 
 <p>The following inserts a link to another website, after the “About” navigation item.</p>
 
-<p><strong>javascripts/theme.js</strong>
-<code>
-$(document).ready(function() {
+<p><strong>javascripts/theme.js</strong></p>
+<pre><code>$(document).ready(function() {
     $(".navbar-fixed-top nav ul:first-child").append(
         '&lt;li class="active"&gt;&lt;a href="https://example.org" target="_blank"&gt;'+
         '&lt;i class="icon-share icon-white"&gt;&lt;/i&gt; '+
         'My Organization'+
         '&lt;/a&gt;&lt;/li&gt;');
 });
-</code></p>
+</code></pre>
 
     </div>
   </body>
