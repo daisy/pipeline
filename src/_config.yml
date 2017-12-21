@@ -2,19 +2,18 @@ name: DAISY Pipeline 2
 collections:
   wiki:
     output: true
-    permalink: /wiki/:path/
+    permalink: /:path/
   wiki_gui:
     output: true
-    permalink: /wiki/gui/:path/
+    permalink: /Get-Help/User-Guide/Desktop-Application/:path/
   wiki_webui:
     output: true
-    permalink: /wiki/webui/:path/
+    permalink: /Get-Help/User-Guide/Web-Application/:path/
 defaults:
   - scope: {path: "", type: wiki}
     values:
       layout: wiki
       spine: sitemap
-      spine2: wiki
       edit_button: wiki
   - scope: {path: "", type: wiki_gui}
     values:

@@ -6,19 +6,19 @@
       pages:
         - group: {{site.baseurl}}/Get-Help/User-Guide/Installation/
           pages:
-            - url: {{site.baseurl}}/wiki/webui/Installation-and-configuation/
+            - url: {{site.baseurl}}/Get-Help/User-Guide/Web-Application/Installation-and-configuation/
               title: Web Application
-        - url: {{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/
+        - url: {{site.baseurl}}/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide/
           title: "Desktop Application"
-        - group: {{site.baseurl}}/wiki/webui/User-Guide/
+        - group: {{site.baseurl}}/Get-Help/User-Guide/Web-Application/User-Guide/
           title: "Web Application"
           pages:
-            - {{site.baseurl}}/wiki/webui/Templating/
-            - {{site.baseurl}}/wiki/webui/Administrator-settings/
-            - {{site.baseurl}}/wiki/webui/Branding/
+            - {{site.baseurl}}/Get-Help/User-Guide/Web-Application/Templating/
+            - {{site.baseurl}}/Get-Help/User-Guide/Web-Application/Administrator-settings/
+            - {{site.baseurl}}/Get-Help/User-Guide/Web-Application/Branding/
         - group: {{site.baseurl}}/Get-Help/User-Guide/Pipeline-as-Service/
           pages:
-            - url: {{site.baseurl}}/wiki/Configuration-Files/
+            - url: {{site.baseurl}}/Configuration-Files/
               title: "Configuration Files"
         - {{site.baseurl}}/Get-Help/User-Guide/Command-Line.html
         - group: {{site.baseurl}}/Get-Help/User-Guide/Scripts.html
@@ -40,7 +40,7 @@
   pages:
     - url: https://github.com/daisy/pipeline
       title: "Source Code"
-    - url: {{site.baseurl}}/wiki/WebServiceAPI/
+    - url: {{site.baseurl}}/WebServiceAPI/
       title: "Web Service API"
     - url: https://groups.google.com/forum/#!forum/daisy-pipeline-dev
       title: "Developers Mailing List"

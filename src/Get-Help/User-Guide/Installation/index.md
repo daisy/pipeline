@@ -121,7 +121,7 @@ however are on their own. The minimum required version of Java is 8.
 <!-- (linked to from pipeline2 start script if no JavaFX is detected) -->
 
 The
-[desktop application]({{site.baseurl}}/wiki/gui/DAISY-Pipeline-2-User-Guide/)
+[desktop application]({{site.baseurl}}/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide/)
 requires [JavaFX][]. If you are on Windows or Mac, a version of Java
 that includes JavaFX, namely Oracle's Java SE implementation, is
 automatically installed for you. If you are on another platform and

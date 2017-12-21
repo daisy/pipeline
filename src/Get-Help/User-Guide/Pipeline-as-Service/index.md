@@ -6,14 +6,14 @@ layout: default
 Most people will use DAISY Pipeline 2 as a standalone desktop
 application. It is easy to install and ready to go. But the Pipeline
 can also be used as a service to which client programs can connect,
-through a [web API]({{site.baseurl}}/wiki/WebServiceAPI).
+through a [web API]({{site.baseurl}}/WebServiceAPI).
 
 There are several use cases:
 
 - You want to run batch jobs through the
   [command line interface](../Command-Line).
 - You want to use our
-  [web application]({{site.baseurl}}/wiki/webui/User-Guide/).
+  [web application]({{site.baseurl}}/Get-Help/User-Guide/Web-Application/User-Guide/).
 - You want to include the Pipeline in a larger setup where it needs to
   talk to other components.
 
@@ -50,7 +50,7 @@ When using DAISY Pipeline 2 as a service, especially when integrating
 it in a custom setup, you probably want to configure a thing or
 two. Two files are intended to be edited by you for this purpose:
 `system.properties` and `config-logback.xml`. See
-[Configuration files]({{site.baseurl}}/wiki/Configuration-Files) for
+[Configuration files]({{site.baseurl}}/Configuration-Files) for
 details. Where on the file system these files are located depends on
 the installation.
 
