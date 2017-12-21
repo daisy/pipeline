@@ -3,12 +3,15 @@ collections:
   wiki:
     output: true
     permalink: /:path/
+    alternative_base: "https://github.com/daisy/pipeline/wiki"
   wiki_gui:
     output: true
     permalink: /Get-Help/User-Guide/Desktop-Application/:path/
+    alternative_base: "https://github.com/daisy/pipeline-gui/wiki"
   wiki_webui:
     output: true
     permalink: /Get-Help/User-Guide/Web-Application/:path/
+    alternative_base: "https://github.com/daisy/pipeline-webui/wiki"
 defaults:
   - scope: {path: "", type: wiki}
     values:
