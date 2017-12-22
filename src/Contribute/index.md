@@ -54,7 +54,7 @@ already reported.
 ## Developer Guide
 
 Guidance on how to get started can be found in the
-[developer guide](Developer-Guide).
+[developer guide]({{site.baseurl}}/Contribute/Developer-Guide).
 
 ## Easy Hacks
 

@@ -1,7 +1,7 @@
 JEKYLL_SRC_DIR := src
 SHELL := bash
-JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/{_wiki,_wiki_gui,_wiki_webui} -type f -not -name '_Sidebar.md' -not -name '*.png' )
-JEKYLL_SRC_FILES_MUSTACHE := $(shell find $(JEKYLL_SRC_DIR)/_data/_spines/ -type f -name '*.yml')
+JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/{_wiki,_wiki_gui,_wiki_webui} -type f -not -name '_*' -not -name '*.png' )
+JEKYLL_SRC_FILES_MUSTACHE := $(shell find $(JEKYLL_SRC_DIR)/ -type f -name '_Sidebar.md')
 JEKYLL_SRC_FILES_OTHER := $(filter-out $(JEKYLL_SRC_FILES_CONTENT) $(JEKYLL_SRC_FILES_MUSTACHE),\
                                        $(shell find $(JEKYLL_SRC_DIR) -type f))
 JEKYLL_DIR := target/jekyll
@@ -29,7 +29,7 @@ all : $(JEKYLL_DIR)/_site
 $(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(JEKYLL_FILES)
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)/
-	make/post_process.rb $< $@$(baseurl) $(CONFIG_FILE)
+	make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE)
 	touch $@
 
 $(JEKYLL_FILES_CONTENT) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%

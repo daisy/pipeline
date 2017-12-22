@@ -1,7 +1,3 @@
----
-layout: default
-title: Help
----
 # Getting Help
 
 The [user guide](User-Guide) should get you up and running quickly and
@@ -12,7 +8,7 @@ If you can't find what you are looking for, please contact us via the
 
 If you are a developer and you are looking for more technical
 documentation, check out the
-[developer guide](../Contribute/Developer-Guide).
+[developer guide](http://daisy.github.io/pipeline/Contribute/Developer-Guide).
 
 
 <!--
