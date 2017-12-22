@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
-              dp2: http://www.daisy.org/ns/pipeline/">
+<html lang="en">
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta charset="utf-8">
-    <meta http-equiv="content-language" content="en">
-    <title>DTBook to DAISY 3</title>
-    
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DTBook to DAISY 3">
+	<meta charset="utf-8">
+	<meta http-equiv="content-language" content="en">
+	<title>DAISY Pipeline 2 | Easy Hacks</title>
+	
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Easy Hacks">
 
 
-    <link rel="stylesheet" href="/pipeline/css/default.css">
-    <link rel="stylesheet" href="/pipeline/css/coderay.css">
-    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+	<link rel="stylesheet" href="/pipeline/css/default.css">
+	<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 
   </head>
   <body>
@@ -47,23 +45,23 @@
   
     
       
-        <li class="spine-item spine-item-has-current">
+        <li class="spine-item">
       
       <a href="/pipeline/Get-Help" tabindex="3">
       Help
       </a>
       
-      <ul class="spine spine-has-current" id="nav-sitemap-left">
+      <ul class="spine">
   
     
       
-        <li class="spine-item spine-item-has-current">
+        <li class="spine-item">
       
       <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
       User Guide
       </a>
       
-      <ul class="spine spine-has-current">
+      <ul class="spine">
   
     
       
@@ -196,13 +194,13 @@
   
     
       
-        <li class="spine-item spine-item-has-current">
+        <li class="spine-item">
       
       <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="17">
       Scripts
       </a>
       
-      <ul class="spine spine-has-current">
+      <ul class="spine">
   
     
       
@@ -266,7 +264,7 @@
   
     
       
-        <li class="spine-item spine-item-current">
+        <li class="spine-item">
       
       
         <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="23">
@@ -500,13 +498,13 @@
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-has-current">
       
       <a href="/pipeline/Contribute" tabindex="4">
       Contribute
       </a>
       
-      <ul class="spine">
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
   
     
       
@@ -546,7 +544,7 @@
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-current">
       
       
         <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="44">
@@ -623,253 +621,11 @@ if (window.addEventListener) {
 </script>
 
 
-      <link rev="dp2:doc" href="resources/xml/dtbook-to-daisy3.xpl">
+      <h1 id="easy-hacks">Easy Hacks</h1>
 
-<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
-
-<meta property="dc:title" content="DTBook to DAISY 3">
-
-<h1 id="dtbook-to-daisy-3">DTBook to DAISY 3</h1>
-
-<p>Converts multiple DTBooks to DAISY 3 format.</p>
-
-<h2 id="synopsis">Synopsis</h2>
-
-<div class="gui-synopsis">
-
-  <h3 id="inputs">Inputs</h3>
-
-  <ul class="synopsis-inputs">
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-input-name">DTBook file(s)</div>
-<div class="synopsis-input-desc">
-One or more 2005-3 DTBook files to be transformed. In the case of multiple files, the first one will be taken.
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: yes</div>
-</li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-input-name">Text-To-Speech configuration file</div>
-<div class="synopsis-input-desc">
-<div class="shortdesc">Configuration file for the Text-To-Speech.
-</div>
-<div class="longdesc">Configuration file for the Text-To-Speech.
-
-<p><a href="/pipeline/modules/tts-common/tts-config.html">More details on the configuration file format</a>.</p>
-</div>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: no</div>
-</li>
-</ul>
-
-  <h3 id="outputs">Outputs</h3>
-
-  <ul class="synopsis-outputs">
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-output-name">DAISY 3</div>
-<div class="synopsis-output-desc">
-The resulting DAISY 3 publication.
-</div>
-</li>
-</ul>
-
-  <h3 id="options">Options</h3>
-
-  <ul class="synopsis-options">
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Publisher</div>
-<div class="synopsis-option-desc">
-The agency responsible for making the Digital Talking Book available. If left blank, it will be retrieved from the DTBook meta-data.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable Text-To-Speech</div>
-<div class="synopsis-option-desc">
-Whether to use a speech synthesizer to produce audio files.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">With text</div>
-<div class="synopsis-option-desc">
-Includes DTBook in output, as opposed to audio only.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-</ul>
-
-  <script type="text/javascript">
-var allElements = [];
-function showDetailsAndHideAllOther() {
-  var windowTopBefore = window.pageYOffset;
-  var topBefore = this.offsetTop;
-  var i;
-  for (i = 0; i < allElements.length; i++) {
-    allElements[i].classList.remove('details-on');
-	allElements[i].classList.add('details-off');
-  }
-  this.classList.remove('details-off');
-  this.classList.add('details-on');
-  window.scrollTo(0, windowTopBefore + this.offsetTop - topBefore);
-}
-var onload = function() {
-  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-input'), 0));
-  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-report'), 0));
-  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-output'), 0));
-  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-option'), 0));
-  var i;
-  for (i = 0; i < allElements.length; i++) {
-    allElements[i].classList.remove('details-on');
-    allElements[i].classList.add('details-off');
-	allElements[i].addEventListener('click', showDetailsAndHideAllOther);
-  }
-}
-if (window.addEventListener) {
-  window.addEventListener('load', onload);
-} else {
-  window.attachEvent('onload', onload);
-}
-</script>
-
-</div>
-
-<div class="cli-synopsis hidden">
-
-  <pre>Usage: dp2 [GLOBAL_OPTIONS] dtbook-to-daisy3 [OPTIONS]
-
-Options:</pre>
-  <table>
-<tr>
-<td>--source <span style="text-transform: uppercase">source</span>
-</td>
-<td>One or more 2005-3 DTBook files to be transformed. In the case of multiple files, the first one will be taken.</td>
-</tr>
-<tr>
-<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
-</td>
-<td>Configuration file for the Text-To-Speech.
-</td>
-</tr>
-<tr>
-<td>--publisher [<span style="text-transform: uppercase">publisher</span>]</td>
-<td>Publisher (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
-<td>Enable Text-To-Speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--with-text [<span style="text-transform: uppercase">with-text</span>]</td>
-<td>With text (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>-o,--output [OUTPUT]</td>
-<td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>
-</tr>
-<tr>
-<td>-z,--zip</td>
-<td>Write the output to a zip file rather than to a folder</td>
-</tr>
-<tr>
-<td>-n,--nicename [NICENAME]</td>
-<td>Set job's nice name</td>
-</tr>
-<tr>
-<td>-r,--priority [PRIORITY]</td>
-<td>Set job's priority (high|medium|low)</td>
-</tr>
-<tr>
-<td>-q,--quiet</td>
-<td>Do not print the job's messages</td>
-</tr>
-<tr>
-<td>-p,--persistent</td>
-<td>Delete the job after it is executed</td>
-</tr>
-<tr>
-<td>-b,--background</td>
-<td>Sends the job and exits</td>
-</tr>
-</table>
-</div>
-
-<script type="text/javascript">
-var guiSynopsis = document.getElementsByClassName('gui-synopsis')[0];
-var cliSynopsis = document.getElementsByClassName('cli-synopsis')[0];
-function switchToCliView() {
-  guiSynopsis.classList.add('hidden');
-  cliSynopsis.classList.remove('hidden');
-}
-function switchToGuiView() {
-  guiSynopsis.classList.remove('hidden');
-  cliSynopsis.classList.add('hidden');
-}
-var loaded = false;
-var onload = function() {
-  if (loaded)
-    return;
-  var button = document.createElement('span');
-  button.setAttribute('role', 'link');
-  button.setAttribute('tabindex', '0');
-  button.className = 'toggle-synopsis-button';
-  button.addEventListener('click', switchToCliView);
-  button.addEventListener('keyup', function(event) {
-    if (event.keyCode == 13) {
-      event.preventDefault();
-      switchToCliView();
-    }
-  });
-  guiSynopsis.insertBefore(button, guiSynopsis.firstChild);
-  button = document.createElement('span');
-  button.setAttribute('role', 'link');
-  button.setAttribute('tabindex', '0');
-  button.className = 'toggle-synopsis-button';
-  button.addEventListener('click', switchToGuiView);
-  button.addEventListener('keyup', function(event) {
-    if (event.keyCode == 13) {
-      event.preventDefault();
-      switchToGuiView();
-    }
-  });
-  cliSynopsis.insertBefore(button, cliSynopsis.firstChild);
-  loaded = true;
-}
-if (window.addEventListener) {
-  window.addEventListener('load', onload);
-} else {
-  window.attachEvent('onload', onload);
-}
-</script>
-
+<p><a href="https://github.com/search?utf8=%E2%9C%93&amp;type=Issues&amp;q=label%3Aeasyhack+state%3Aopen" class="external-link" target="_blank">These issues</a>
+have been tagged as relatively easy to fix, so should be good starting
+points for new developers.</p>
 
     </div>
   </body>
