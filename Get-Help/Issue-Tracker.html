@@ -1,25 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
-              dp2: http://www.daisy.org/ns/pipeline/">
+<html lang="en">
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta charset="utf-8">
-    <meta http-equiv="content-language" content="en">
-    <title>DTBook to ZedAI Development Notes</title>
-    
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DTBook to ZedAI Development Notes">
+	<meta charset="utf-8">
+	<meta http-equiv="content-language" content="en">
+	<title>DAISY Pipeline 2 | Issue Tracker</title>
+	
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Issue Tracker">
 
 
-    <link rel="stylesheet" href="/pipeline/css/default.css">
-    <link rel="stylesheet" href="/pipeline/css/coderay.css">
-    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+	<link rel="stylesheet" href="/pipeline/css/default.css">
+	<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 
   </head>
   <body>
     <div id="body">
       <nav id="nav-sitemap">
   
-  <ul class="spine">
+  <ul class="spine spine-has-current">
   
     
       
@@ -47,13 +45,13 @@
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-has-current">
       
       <a href="/pipeline/Get-Help" tabindex="3">
       Help
       </a>
       
-      <ul class="spine">
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
   
     
       
@@ -471,7 +469,7 @@
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-current">
       
       
         <a href="/pipeline/Get-Help/Issue-Tracker.html" tabindex="39">
@@ -623,29 +621,21 @@ if (window.addEventListener) {
 </script>
 
 
-      <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+      <h1 id="issue-tracker">Issue Tracker</h1>
 
-<meta property="dc:title" content="DTBook to ZedAI Development Notes">
+<p><a href="https://github.com/daisy/pipeline/issues" class="external-link" target="_blank">This Github project</a> is the
+main issue tracker for DAISY Pipeline 2. However, it is not the only
+place where you can find issues because the Pipeline source code is
+distributed over several smaller sub-projects that each have their own
+issue tracker. If possible, use the individual trackers of the
+sub-projects for issues that clearly belong to a specific
+sub-project. All sub-projects are listed
+<a href="https://github.com/daisy/pipeline#code" class="external-link" target="_blank">here</a>. Follow the link to the
+appropriate sub-project and open the <strong>Issues</strong> tab.</p>
 
-<!-- 
-summary: DTBook to ZedAI development notes
--->
-<h1 id="dtbook-to-zedai-development-notes">DTBook to ZedAI Development Notes</h1>
-
-<p>The DTBook2ZedAI module will convert one or more DTBook XML files to a single ZedAI file.</p>
-
-<p>This module is written in XProc and XSLT. It relies on the DTBookUtils and MetadataUtils modules within the Pipeline 2.</p>
-
-<h2 id="steps">Steps</h2>
-
-<ul>
-  <li>Upgrade. Migrate a single DTBook file from version 1.1.0, 2005-1, or 2005-2 to 2005-3, using the upgrade-dtbook utility.</li>
-  <li>If there are multiple input files, merge them into one DTBook document, using the merge-dtbook utility.</li>
-  <li>Create external metadata records, using the metadata utilities.</li>
-  <li>Transform DTBook 2005-3 to ZedAI. DTBook2ZedAI_TransformationRules lists each DTBook element and gives its ZedAI translation. The sub-steps are documented in the source code and include content model normalization as well as direct translation of elements and attributes.</li>
-  <li>In ZedAI, visual attributes are expressed in a separate CSS file. The following DTBook attributes are extracted into a separate CSS file: height, width, align, valign, abbr, axis, headers, scope, rowspan, colspan, border, frame, cellspacing, cellpadding</li>
-  <li>Copy all referenced material (e.g. images) to the output directory.</li>
-</ul>
+<p>Before creating a new issue, please first check the
+<a href="https://github.com/search?q=is%3Aopen+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-tasks+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-cli-go+repo%3Adaisy%2Fpipeline-clientlib-go+repo%3Adaisy%2Fpipeline-clientlib-java+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-gui+repo%3Adaisy%2Fpipeline-it+repo%3Adaisy%2Fpipeline-mod-audio+repo%3Adaisy%2Fpipeline-mod-braille+repo%3Adaisy%2Fpipeline-mod-nlp+repo%3Adaisy%2Fpipeline-mod-tts+repo%3Adaisy%2Fpipeline-modules-common+repo%3Adaisy%2Fpipeline-samples+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-scripts-utils+repo%3Adaisy%2Fpipeline-updater+repo%3Adaisy%2Fpipeline-updater-gui+repo%3Adaisy%2Fpipeline-webui+repo%3Adaisy%2Fbraille-css+repo%3Adaisy%2FjStyleParser+repo%3Adaisy%2Fosgi-libs+repo%3Adaisy%2Fxmlcalabash1+repo%3Adaisy%2Fxprocspec+repo%3Adaisy%2Fxproc-maven-plugin+repo%3Adaisy%2Fxspec-maven-plugin+repo%3Asnaekobbi%2Fpipeline-mod-braille&amp;type=Issues&amp;s=updated&amp;o=desc" class="external-link" target="_blank">existing issues</a> to see if a similar issue was
+already reported.</p>
 
     </div>
   </body>

@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
-              dp2: http://www.daisy.org/ns/pipeline/">
+<html lang="en">
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta charset="utf-8">
     <meta http-equiv="content-language" content="en">
-    <title>DTBook to ZedAI Development Notes</title>
+    <title>API Documentation</title>
     
-  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DTBook to ZedAI Development Notes">
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="API Documentation">
 
 
     <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/wiki.css">
     <link rel="stylesheet" href="/pipeline/css/coderay.css">
     <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 
@@ -19,7 +19,7 @@
     <div id="body">
       <nav id="nav-sitemap">
   
-  <ul class="spine">
+  <ul class="spine spine-has-current">
   
     
       
@@ -47,13 +47,13 @@
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-has-current">
       
       <a href="/pipeline/Get-Help" tabindex="3">
       Help
       </a>
       
-      <ul class="spine">
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
   
     
       
@@ -444,7 +444,7 @@
   
     
       
-        <li class="spine-item">
+        <li class="spine-item spine-item-current">
       
       <a href="/pipeline/Get-Help/API-Documentation" tabindex="37">
       API Documentation
@@ -623,29 +623,18 @@ if (window.addEventListener) {
 </script>
 
 
-      <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+      <div class="edit-button">
+  <a href="https://github.com/daisy/pipeline/wiki/Get-Help/API-Documentation/_edit" class="external-link" target="_blank">
+    Edit this page on Github
+  </a>
+</div>
 
-<meta property="dc:title" content="DTBook to ZedAI Development Notes">
+      <h1 id="api-documentation">API Documentation</h1>
 
-<!-- 
-summary: DTBook to ZedAI development notes
--->
-<h1 id="dtbook-to-zedai-development-notes">DTBook to ZedAI Development Notes</h1>
+<h2 id="web-service-api">Web Service API</h2>
 
-<p>The DTBook2ZedAI module will convert one or more DTBook XML files to a single ZedAI file.</p>
-
-<p>This module is written in XProc and XSLT. It relies on the DTBookUtils and MetadataUtils modules within the Pipeline 2.</p>
-
-<h2 id="steps">Steps</h2>
-
-<ul>
-  <li>Upgrade. Migrate a single DTBook file from version 1.1.0, 2005-1, or 2005-2 to 2005-3, using the upgrade-dtbook utility.</li>
-  <li>If there are multiple input files, merge them into one DTBook document, using the merge-dtbook utility.</li>
-  <li>Create external metadata records, using the metadata utilities.</li>
-  <li>Transform DTBook 2005-3 to ZedAI. DTBook2ZedAI_TransformationRules lists each DTBook element and gives its ZedAI translation. The sub-steps are documented in the source code and include content model normalization as well as direct translation of elements and attributes.</li>
-  <li>In ZedAI, visual attributes are expressed in a separate CSS file. The following DTBook attributes are extracted into a separate CSS file: height, width, align, valign, abbr, axis, headers, scope, rowspan, colspan, border, frame, cellspacing, cellpadding</li>
-  <li>Copy all referenced material (e.g. images) to the output directory.</li>
-</ul>
+<p>If you want to use DAISY Pipeline 2 as a web server and implement your
+own client, you need to know about the <a href="/pipeline/WebServiceAPI">web service API</a>.</p>
 
     </div>
   </body>
