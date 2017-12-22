@@ -1,15 +1,11 @@
----
-layout: default
----
 # Installation
 
 Start by downloading DAISY Pipeline from the
-[downloads]({{site.baseurl}}/Download.html) page. You can choose from
-different packages. DAISY Pipeline consists of several components
-(explained [here]({{site.baseurl}}/Get-Help/User-Guide/)). Check
-whether the package you are downloading includes the component you
-wish to install. Also, there are different downloads for different
-platforms.
+[downloads](http://daisy.github.io/pipeline/Download.html) page. You
+can choose from different packages. DAISY Pipeline consists of several
+components (explained [here](User-Guide)). Check whether the package
+you are downloading includes the component you wish to install. Also,
+there are different downloads for different platforms.
 
 ## Packages
 
@@ -30,7 +26,7 @@ For Mac OS users there is the disk image. It contains the desktop
 application. To install, open the image and drag the application file
 to the "Applications" folder, or any other destination you want.
 
-<img src="/pipeline/Get-Help/User-Guide/Installation/disk-image.png" alt="Contents of the disc image" width="600px"/>
+<img src="Get-Help/User-Guide/Installation/disk-image.png" alt="Contents of the disc image" width="600px"/>
 
 ### Debian
 
@@ -121,7 +117,7 @@ however are on their own. The minimum required version of Java is 8.
 <!-- (linked to from pipeline2 start script if no JavaFX is detected) -->
 
 The
-[desktop application]({{site.baseurl}}/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide/)
+[desktop application](https://github.com/daisy/pipeline-gui/wiki/DAISY-Pipeline-2-User-Guide/)
 requires [JavaFX][]. If you are on Windows or Mac, a version of Java
 that includes JavaFX, namely Oracle's Java SE implementation, is
 automatically installed for you. If you are on another platform and

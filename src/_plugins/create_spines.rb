@@ -104,7 +104,21 @@ module Jekyll
                 }
               else
                 base_path = File.expand_path("..", sidebar) + '/'
-                path = base_path + href + '.md'
+                site.collections.values.each do |c|
+                  if base_path == "#{site.source}/_#{c.label}/"
+                    Dir.glob("#{base_path}**/*").each do |f|
+                      if f.end_with?('.md')
+                        if href == File.basename(f).sub(/\.md$/, '')
+                          path = f
+                          break
+                        end
+                      end
+                    end
+                  end
+                end
+                if not path
+                  path = base_path + href + '.md'
+                end
                 page = pages.detect { |page| page.path == path }
               end
               if not page

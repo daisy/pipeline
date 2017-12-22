@@ -15,8 +15,26 @@ baseurl = config['baseurl'] || ''
 graph = RDF::Graph.load(meta_file)
 
 $src_mapping = Hash[
-  config['collections'].map { |name, options|
-    ["/_#{name}/", options['permalink'].sub(/\/:path\/$/, '/')]
+  config['collections'].map { |name, metadata|
+    ["/_#{name}/", metadata['permalink'].sub(/\/:path\/$/, '/')]
+  }
+]
+
+# assume all collections are github wikis
+# github wiki flattens directory structure
+collection_files = Hash[
+  config['collections'].map { |name, _|
+    [
+      "/_#{name}/",
+      Hash[
+        Dir.glob("#{$src_base_dir}/_#{name}/**/*").map { |f|
+          [
+            f.end_with?('.md') ? File.basename(f).sub(/\.md$/, '') : f[$src_base_dir.length+name.length+3..-1],
+            f[$src_base_dir.length..-1]
+          ]
+        }
+      ]  
+    ]
   }
 ]
 
@@ -142,22 +160,47 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         if rel_path =~ /^(.+)\.md$/o
           rel_path = $1 + '.html'
         end
-        if src_path.start_with?('/_wiki/') or src_path.start_with?('/_wiki_gui/') or src_path.start_with?('/_wiki_webui/')
-          rel_path = '../' + rel_path
+        collection_files.each do |name, files|
+          if src_path.start_with?(name)
+            if files.key?(rel_path)
+              abs_path = baseurl + to_destination(files[rel_path])
+            else
+              link_error(a, href_attr, f)
+            end
+            break
+          end
         end
         # FIXME: support relative paths from a regular page to a wiki page (relative between source files)?
-        abs_url = page_url.join(rel_path)
-      end
-
-      # external link
-      if not abs_url.to_s.start_with?("#{site_base}#{baseurl}")
-        if a.name == 'a'
-          a['class'] = ((a['class']||'').split(' ') << 'external-link').join(' ')
-          a['target'] = '_blank'
+        if not abs_path
+          abs_url = page_url.join(rel_path)
         end
-        next
       end
-      abs_path = abs_url.to_s[site_base.length..-1]
+      if not abs_path
+        if not abs_url.to_s.start_with?("#{site_base}#{baseurl}")
+          config['collections'].each do |_, metadata|
+            if metadata['alternative_base']
+              if abs_url.to_s.start_with?(metadata['alternative_base'])
+                if a.xpath("ancestor::*[@class='edit-button']").empty?
+                  abs_path = baseurl + metadata['permalink'].sub(/\/:path\/$/, abs_url.to_s[metadata['alternative_base'].length..-1])
+                end
+                break
+              end
+            end
+          end
+        end
+      end
+      if not abs_path
+        
+        # external link
+        if not abs_url.to_s.start_with?("#{site_base}#{baseurl}")
+          if a.name == 'a'
+            a['class'] = ((a['class']||'').split(' ') << 'external-link').join(' ')
+            a['target'] = '_blank'
+          end
+          next
+        end
+        abs_path = abs_url.to_s[site_base.length..-1]
+      end
     end
     if not baseurl.empty?
       if not abs_path.start_with?(baseurl)

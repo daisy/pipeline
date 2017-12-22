@@ -1,6 +1,3 @@
----
-layout: default
----
 # Developer Guide
 
 ## Getting started
