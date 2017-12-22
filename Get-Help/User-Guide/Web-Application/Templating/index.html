@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>Templating</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Templating">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/wiki.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Configuration-Files" tabindex="15">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="16">
+      
+      Command Line
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="17">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="18">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="19">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="20">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="21">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="22">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="23">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="24">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="25">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="26">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="27">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="28">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="29">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="30">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="31">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="32">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="33">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="34">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="35">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="36">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="37">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="38">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/WebServiceAPI" tabindex="39">
+      
+      Web Service API
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="40">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/search?utf8=%E2%9C%93&amp;type=Issues&amp;q=+repo%3Adaisy%2Fpipeline+repo%3Adaisy%2Fpipeline-assembly+repo%3Adaisy%2Fpipeline-framework+repo%3Adaisy%2Fpipeline-scripts+repo%3Adaisy%2Fpipeline-build-utils+repo%3Adaisy%2Fpipeline-webui+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Abrailleapps%2Fdotify.api+repo%3Abrailleapps%2Fdotify.formatter.impl" class="external-link" target="_blank" tabindex="41">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide" tabindex="42">
+      
+      Developer Guide
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <div class="edit-button">
+  <a href="https://github.com/daisy/pipeline-webui/wiki/Templating/_edit" class="external-link" target="_blank">
+    Edit this page on Github
+  </a>
+</div>
+
+      <h1 id="templating">Templating</h1>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul>
+  <li><a href="#listing-templates">Listing templates</a></li>
+  <li><a href="#create-a-new-job-based-on-a-template">Create a new job based on a template</a></li>
+  <li><a href="#the-job-view">The job view</a></li>
+  <li><a href="#creating-a-template-from-scratch">Creating a template from scratch</a></li>
+  <li><a href="#sharing-a-template-with-other-users">Sharing a template with other users</a></li>
+</ul>
+
+<h2 id="listing-templates">Listing templates</h2>
+
+<p>To list templates, click the “Templates” tab in the navigation bar at the top of the page.</p>
+
+<p>By default, all templates available to you will be displayed.</p>
+
+<h2><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/1_-_listing_all_templates.png" alt="screenshot of listing all templates"></h2>
+<p><br><br><br><br></p>
+
+<p>If you only want to display the templates that you have created yourself, click “Your templates”.</p>
+
+<h2 id="-1"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/2_-_listing_your_templates.png" alt="screenshot of listing your templates"></h2>
+<p><br><br><br><br></p>
+
+<h2 id="create-a-new-job-based-on-a-template">Create a new job based on a template</h2>
+
+<p>Clicking “New job” on a template in the list of templates will create a new job.</p>
+
+<p>The job will be given a name to reflect what template it is based on.</p>
+
+<p>First, you will be asked if you want to upload any additional files.
+Some files may already be present here if the template contains files.</p>
+
+<p>The script to use is already defined by the template.</p>
+
+<h2 id="-2"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/3_-_new_job_from_template_-_files.png" alt="screenshot of file upload button"></h2>
+<p><br><br><br><br></p>
+
+<p>Since the script to use is already defined by the template, the next thing you need
+to do is to complete the mandatory options.</p>
+
+<h2 id="-3"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/4_-_new_job_from_template_-_options.png" alt="screenshot of mandatory jobs form for the DTBook to PEF (MTM) script"></h2>
+<p><br><br><br><br></p>
+
+<p>In this example, some of the optional parameters has been pre-filled by the template.
+Different templates can have different values.</p>
+
+<p>When you’re done; click “Start job”. You will be redirected to the job view.</p>
+
+<h2 id="-4"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/5_-_new_job_from_template_-_optional_parameters.png" alt="screenshot of optional parameters form for the DTBook to PEF (MTM) script"></h2>
+<p><br><br><br><br></p>
+
+<h2 id="the-job-view">The job view</h2>
+
+<p>The job view contains some details about the job such as its status, when it was started,
+which script was used, what the inputs and option values were, an execution log,
+and some scripts also contain a report.</p>
+
+<p>When the job has finished running, you can download the results, and also the input files if needed.</p>
+
+<p>At the bottom of the page you have three buttons, letting you either:</p>
+<ul>
+  <li>restart the job</li>
+  <li>create a similar job with slightly different option values</li>
+  <li>save the job inputs and option values as a template for use later</li>
+</ul>
+
+<h2 id="-5"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/6_-_job_view.png" alt="screenshot of job view"></h2>
+<p><br><br><br><br></p>
+
+<h2 id="creating-a-template-from-scratch">Creating a template from scratch</h2>
+
+<p>To create a new template from scratch, click “New job”.
+Upload the files you want to include in the template, if any.</p>
+
+<h2 id="-6"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/9_-_creating_a_template_-_new_job.png" alt="screenshot of the view after clicking new job"></h2>
+<p><br><br><br><br></p>
+
+<p>In this example, a CSS-file has been added. All jobs that are created based on this template later
+will include this CSS-file, so that the CSS-file doesn’t have to be re-uploaded for every future job.</p>
+
+<h2 id="-7"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/10_-_creating_a_template_-_adding_a_css_file.png" alt="screenshot of file upload widget after having uploaded a css file"></h2>
+<p><br><br><br><br></p>
+
+<p>Next, choose a script. You cannot create a template without choosing a script.</p>
+
+<h2 id="-8"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/11_-_creating_a_template_-_choosing_a_script.png" alt="screenshot of the script listing when creating a job"></h2>
+<p><br><br><br><br></p>
+
+<p>Finally, you can fill out the options as you want them to be stored in the template, and instead of clicking
+“Start job”, click instead “Save as template”.</p>
+
+<h2 id="-9"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/12_-_creating_a_template_-_saving_new_job_as_a_template.png" alt="screenshot of the script options form with both a button for creating a job as well as a button for saving as a template"></h2>
+<p><br><br><br><br></p>
+
+<p>You will be redirected to the template listing, and the new template will be highlighted.</p>
+
+<h2 id="-10"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/13_-_creating_a_template_-_saved_new_job_as_a_template.png" alt="screenshot of template listing after having created a job as a template, where the new template is highlighted"></h2>
+<p><br><br><br><br></p>
+
+<p>You will probably want to rename your template to something more descriptive. Click “Rename” next to the template, fill out a new name, and click “Save”.</p>
+
+<h2 id="-11"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/14_-_creating_a_template_-_renaming_a_template.png" alt="screenshot showing how to rename a template"></h2>
+<p><br><br><br><br></p>
+
+<h2 id="sharing-a-template-with-other-users">Sharing a template with other users</h2>
+
+<p>When you create templates, they are by default only visible to yourself (and administrators). Other users cannot use your private templates.</p>
+
+<p>In this screenshot, we see the template listing for another user, who cannot see the template we just created.</p>
+
+<h2 id="-12"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/16_-_sharing_a_template_-_not_visible_to_other_users.png" alt="screenshot showing the template listing for the other user that cannot see the first users private template"></h2>
+<p><br><br><br><br></p>
+
+<p>Back in the template listing for the first user, click “Share with others” to share the template.</p>
+
+<h2 id="-13"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/15_-_sharing_a_template_-_not_shared.png" alt="screenshot showing the template listing for the first user with a button that toggles the template between being shared and being private"></h2>
+<p><br><br><br><br></p>
+
+<p>The template will now be listed as “shared” in the template list. You can change it back to private at a later point if you want to.</p>
+
+<h2 id="-14"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/17_-_sharing_a_template_-_shared.png" alt="screenshot showing the first users template listing after having toggled the template from private to shared"></h2>
+<p><br><br><br><br></p>
+
+<p>In this screenshot we see the template listing for the other user who could not see the template earlier. The template is now available for them to use.</p>
+
+<h2 id="-15"><img src="/pipeline/Get-Help/User-Guide/Web-Application/images-templating/18_-_sharing_a_template_-_visible_to_other_users.png" alt="screenshot showing the template listing for the other user that can now see the first users shared template"></h2>
+<p><br><br><br><br></p>
+
+    </div>
+  </body>
+</html>

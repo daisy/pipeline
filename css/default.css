@@ -224,25 +224,6 @@ body {
     left: 0.7rem; }
 
 /* #nav-sitemap */
-#nav-wiki {
-  float: right;
-  margin: 8rem 0 1rem 1rem;
-  border: 1px solid silver;
-  background-color: #f9fbff; }
-  #nav-wiki ul {
-    padding: 0;
-    margin: 1rem 1.5rem 1rem 2.5rem; }
-    #nav-wiki ul a {
-      color: #7596FB; }
-    #nav-wiki ul li.spine-item-current > a {
-      font-weight: 600;
-      color: #416DF2; }
-  #nav-wiki::before {
-    display: block;
-    content: 'Wiki';
-    font-weight: 600;
-    margin: 1rem 1.5rem; }
-
 .edit-button {
   position: absolute;
   right: 10px;

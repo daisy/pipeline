@@ -2,15 +2,17 @@
 <html lang="en">
   <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta charset="utf-8">
-	<meta http-equiv="content-language" content="en">
-	<title>DAISY Pipeline 2 | Pipeline as a Service</title>
-	
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>Pipeline as a Service</title>
+    
   <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Pipeline as a Service">
 
 
-	<link rel="stylesheet" href="/pipeline/css/default.css">
-	<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/wiki.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 
   </head>
   <body>
@@ -78,7 +80,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/wiki/webui/Installation-and-configuation" tabindex="8">
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
       
       Web Application
       </a>
@@ -95,7 +97,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/wiki/gui/DAISY-Pipeline-2-User-Guide" tabindex="9">
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
       
       Desktop Application
       </a>
@@ -106,7 +108,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/wiki/webui/User-Guide" tabindex="10">
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
       Web Application
       </a>
       
@@ -117,7 +119,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/wiki/webui/Templating" tabindex="11">
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
       
       Templating
       </a>
@@ -129,7 +131,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/wiki/webui/Administrator-settings" tabindex="12">
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
       
       Administrator Settings
       </a>
@@ -141,7 +143,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/wiki/webui/Branding" tabindex="13">
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
       
       Branding
       </a>
@@ -168,7 +170,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/wiki/Configuration-Files" tabindex="15">
+        <a href="/pipeline/Configuration-Files" tabindex="15">
       
       Configuration Files
       </a>
@@ -185,9 +187,9 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Get-Help/User-Guide/Command-Line.html" tabindex="16">
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="16">
       
-      Command Line Tool
+      Command Line
       </a>
     
     </li>
@@ -196,7 +198,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Get-Help/User-Guide/Scripts.html" tabindex="17">
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="17">
       Scripts
       </a>
       
@@ -484,7 +486,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/wiki/WebServiceAPI" tabindex="39">
+        <a href="/pipeline/WebServiceAPI" tabindex="39">
       
       Web Service API
       </a>
@@ -520,7 +522,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide.html" tabindex="42">
+        <a href="/pipeline/Contribute/Developer-Guide" tabindex="42">
       
       Developer Guide
       </a>
@@ -594,20 +596,26 @@ if (window.addEventListener) {
 </script>
 
 
+      <div class="edit-button">
+  <a href="https://github.com/daisy/pipeline/wiki/Get-Help/User-Guide/Pipeline-as-Service/_edit" class="external-link" target="_blank">
+    Edit this page on Github
+  </a>
+</div>
+
       <h1 id="pipeline-as-a-service">Pipeline as a Service</h1>
 
 <p>Most people will use DAISY Pipeline 2 as a standalone desktop
 application. It is easy to install and ready to go. But the Pipeline
 can also be used as a service to which client programs can connect,
-through a <a href="/pipeline/wiki/WebServiceAPI">web API</a>.</p>
+through a <a href="/pipeline/WebServiceAPI">web API</a>.</p>
 
 <p>There are several use cases:</p>
 
 <ul>
   <li>You want to run batch jobs through the
-<a href="/pipeline/Get-Help/User-Guide/Command-Line.html">command line interface</a>.</li>
+<a href="/pipeline/Get-Help/User-Guide/Command-Line">command line interface</a>.</li>
   <li>You want to use our
-<a href="/pipeline/wiki/webui/User-Guide">web application</a>.</li>
+<a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide">web application</a>.</li>
   <li>You want to include the Pipeline in a larger setup where it needs to
 talk to other components.</li>
 </ul>
@@ -615,9 +623,9 @@ talk to other components.</li>
 <h2 id="installation">Installation</h2>
 
 <p>Choose a package from the
-<a href="/pipeline/Download.html">downloads page</a> that includes the
-server, then follow the installation instructions for that
-package.</p>
+<a href="/pipeline/Download.html">downloads page</a> that
+includes the server, then follow the installation instructions for
+that package.</p>
 
 <h2 id="starting-and-stopping-the-service">Starting and stopping the service</h2>
 
@@ -645,9 +653,8 @@ installation. To shut down the service press <code>Ctrl-C</code>.</p>
 it in a custom setup, you probably want to configure a thing or
 two. Two files are intended to be edited by you for this purpose:
 <code>system.properties</code> and <code>config-logback.xml</code>. See
-<a href="/pipeline/wiki/Configuration-Files">Configuration files</a> for
-details. Where on the file system these files are located depends on
-the installation.</p>
+<a href="/pipeline/Configuration-Files">Configuration files</a> for details. Where on the
+file system these files are located depends on the installation.</p>
 
 <h3 id="windows-1">Windows</h3>
 
