@@ -68,7 +68,7 @@
               <xsl:sequence select="."/>
             </xsl:template>
             <!-- if xml:base attribute is defined on document element, also adapt it -->
-            <xsl:template match="/*[@xml:base]">
+            <xsl:template match="/*[@xml:base]" priority="1">
               <xsl:copy>
                 <xsl:sequence select="@* except @xml:base"/>
                 <xsl:attribute name="xml:base" select="$output-base-uri"/>
