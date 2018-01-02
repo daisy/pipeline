@@ -13,6 +13,10 @@
   <name>DAISY Pipeline 2 :: Updater</name>
   <dependencies>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>

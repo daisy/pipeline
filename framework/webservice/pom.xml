@@ -122,6 +122,17 @@
       <artifactId>logging-activator</artifactId>
       <scope>test</scope>
     </dependency>
+    <!--
+        FIXME: This dependency is included in order to prevent the error
+        "Could not resolve version. Do you have a dependency for org.apache.logging.log4j/log4j-slf4j-impl in your maven project?"
+        Remove when updated to the latest pax-exam-helper
+    -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>2.1</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>

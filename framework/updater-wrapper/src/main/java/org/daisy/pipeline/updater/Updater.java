@@ -3,6 +3,8 @@ package org.daisy.pipeline.updater;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.daisy.pipeline.properties.Properties;
+
 public class Updater {
 
         private static String UPDATER_BIN="org.pipeline.updater.bin";
@@ -14,10 +16,10 @@ public class Updater {
 
         //launches the pipeline and waits it to be up
         public void update(UpdaterObserver obs) throws IOException {
-                String bin=System.getProperty(UPDATER_BIN,"");
-                String deployPath=System.getProperty(DEPLOY_PATH,"");
-                String updateSite=System.getProperty(UPDATE_SITE,"");
-                String releaseDescriptor=System.getProperty(RELEASE_DESCRIPTOR,"");
+                String bin=Properties.getProperty(UPDATER_BIN,"");
+                String deployPath=Properties.getProperty(DEPLOY_PATH,"");
+                String updateSite=Properties.getProperty(UPDATE_SITE,"");
+                String releaseDescriptor=Properties.getProperty(RELEASE_DESCRIPTOR,"");
                 if (bin.isEmpty()){
                         throw new IllegalArgumentException(String.format(ERROR,UPDATER_BIN));
                 }

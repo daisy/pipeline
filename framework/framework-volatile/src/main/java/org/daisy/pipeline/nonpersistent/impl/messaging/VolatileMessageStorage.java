@@ -7,6 +7,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
+import org.daisy.pipeline.properties.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +31,7 @@ public final class VolatileMessageStorage {
 	 *
 	 */
 	private VolatileMessageStorage() {
-		int timeout = Integer.valueOf(System.getProperty(
+		int timeout = Integer.valueOf(Properties.getProperty(
 				CACHE_TIMEOUT_PROPERTY, "60"));
 		cache = CacheBuilder.newBuilder()
 				.expireAfterAccess(timeout, TimeUnit.SECONDS)

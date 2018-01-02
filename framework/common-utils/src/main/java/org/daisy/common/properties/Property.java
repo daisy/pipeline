@@ -16,7 +16,7 @@ public class Property {
 		eq&=this.bundleId==other.bundleId;
 		eq&=this.bundleName.equals(other.bundleName);
 		eq&=this.propertyName.equals(other.propertyName);
-		eq&=this.value.equals(other.value);
+		eq&=(this.value==null && other.value==null || this.value != null && this.value.equals(other.value));
 		return eq;
 
 	}
