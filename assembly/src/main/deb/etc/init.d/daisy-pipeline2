@@ -27,11 +27,6 @@ SCRIPTNAME=/etc/init.d/$NAME
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
 
-# Set daemon argument list
-if [ "$REMOTE" = "true" ]; then
-	DAEMON_ARGS="remote"
-fi
-
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
 

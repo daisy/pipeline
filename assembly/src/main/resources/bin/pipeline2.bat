@@ -209,18 +209,18 @@ if "%PIPELINE2_PROFILER%" == "" goto :RUN
     call %PIPELINE2_PROFILER_SCRIPT%
 
 :RUN
-    if "%PIPELINE2_AUTH%" == "" (
-        SET PIPELINE2_AUTH=-Dorg.daisy.pipeline.ws.authentication=false
+    if "%PIPELINE2_WS_AUTHENTICATION%" == "" (
+	SET AUTH=-Dorg.daisy.pipeline.ws.authentication=false
     ) else (
-	SET PIPELINE2_AUTH=-Dorg.daisy.pipeline.ws.authentication=%PIPELINE2_AUTH%
+	SET AUTH=-Dorg.daisy.pipeline.ws.authentication=%PIPELINE2_WS_AUTHENTICATION%
     )
-    if "%PIPELINE2_LOCAL%" == "" (
-        SET PIPELINE2_LOCAL=-Dorg.daisy.pipeline.ws.localfs=true
+    if "%PIPELINE2_WS_LOCALFS%" == "" (
+	SET LOCAL=-Dorg.daisy.pipeline.ws.localfs=true
     ) else (
-	SET PIPELINE2_LOCAL=-Dorg.daisy.pipeline.ws.localfs=%PIPELINE2_LOCAL%
+	SET LOCAL=-Dorg.daisy.pipeline.ws.localfs=%PIPELINE2_WS_LOCALFS%
     )
     
-    SET OPTS=%PIPELINE2_LOCAL% %PIPELINE2_AUTH%
+    SET OPTS=%LOCAL% %AUTH%
     SET MAIN=org.apache.felix.main.Main
     SET SHIFT=false
     SET MODE=-Dorg.daisy.pipeline.main.mode=webservice

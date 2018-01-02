@@ -1,7 +1,8 @@
 # Configuration file for /etc/init.d/daisy-pipeline2
 
-# Execute pipeline in remote mode
-#REMOTE=true
+# Execute pipeline in remote mode and with authentication
+#export PIPELINE2_WS_LOCALFS=true
+#export PIPELINE2_WS_AUTHENTICATION=false
 
 # Java heap size
 #export JAVA_MIN_MEM=256M

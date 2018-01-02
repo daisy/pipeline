@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.10.4-SNAPSHOT</version>
+  <version>1.10.5-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -52,28 +52,28 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.4</version>
+        <version>1.10.5-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-bom</artifactId>
-        <version>1.10.2-SNAPSHOT</version>
+        <version>1.10.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.10.3</version>
+        <version>1.10.4</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.10.2</version>
+        <version>1.10.3</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -2816,102 +2816,6 @@ rm -rf /opt/daisy-pipeline2/cli
                 </script>
               </postremoveScriptlet>
             </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>webui</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>webui-desktop</artifactId>
-                      <version>1.8.1</version>
-                      <type>zip</type>
-                      <overWrite>true</overWrite>
-                      <outputDirectory>target/webui</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                  <overWriteReleases>false</overWriteReleases>
-                  <overWriteSnapshots>true</overWriteSnapshots>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>dist-webui-mac</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach>
-                  <descriptors>
-                    <descriptor>src/main/assembly/webui-mac.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
-                  </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>pipeline2-${project.version}-webui_mac</finalName>
-                </configuration>
-              </execution>
-              <execution>
-                <id>dist-webui-linux</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach>
-                  <descriptors>
-                    <descriptor>src/main/assembly/webui-linux.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-nix.properties</filter>
-                  </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>pipeline2-${project.version}-webui_linux</finalName>
-                </configuration>
-              </execution>
-              <execution>
-                <id>dist-webui-win</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach>
-                  <descriptors>
-                    <descriptor>src/main/assembly/webui-win.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-win.properties</filter>
-                  </filters>
-                  <appendAssemblyId>false</appendAssemblyId>
-                  <finalName>pipeline2-${project.version}-webui_windows</finalName>
-                </configuration>
-              </execution>
-            </executions>
           </plugin>
         </plugins>
       </build>

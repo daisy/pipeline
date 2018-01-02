@@ -354,24 +354,14 @@ init() {
 }
 
 run() {
-    if [ "x$PIPELINE2_AUTH" = "x" ]; then
-            PIPELINE2_AUTH="-Dorg.daisy.pipeline.ws.authentication=false"
-            export PIPELINE2_AUTH 
-    else
-            PIPELINE2_AUTH="-Dorg.daisy.pipeline.ws.authentication=$PIPELINE2_AUTH"
-            export PIPELINE2_AUTH 
-
+    # set defaults
+    if [ "x$PIPELINE2_WS_AUTHENTICATION" = "x" ]; then
+        PIPELINE2_WS_AUTHENTICATION=false
     fi
-    if [ "x$PIPELINE2_LOCAL" = "x" ]; then
-            PIPELINE2_LOCAL="-Dorg.daisy.pipeline.ws.localfs=true"
-            export PIPELINE2_LOCAL
-    else
-            PIPELINE2_LOCAL="-Dorg.daisy.pipeline.ws.localfs=$PIPELINE2_LOCAL"
-            export PIPELINE2_LOCAL
-
+    if [ "x$PIPELINE2_WS_LOCALFS" = "x" ]; then
+        PIPELINE2_WS_LOCALFS=true
     fi
     MAIN=org.apache.felix.main.Main
-    OPTS="$PIPELINE2_LOCAL $PIPELINE2_AUTH"
     MODE=" -Dorg.daisy.pipeline.main.mode=webservice"
 
     case "$1" in
@@ -383,11 +373,13 @@ run() {
         #     shift
         #     ;;
         'remote')
-            OPTS="-Dorg.daisy.pipeline.ws.localfs=false -Dorg.daisy.pipeline.ws.authentication=true"
+            PIPELINE2_WS_LOCALFS=false
+            PIPELINE2_WS_AUTHENTICATION=true
             shift
             ;;
         'local')
-            OPTS="-Dorg.daisy.pipeline.ws.localfs=true -Dorg.daisy.pipeline.ws.authentication=false"
+            PIPELINE2_WS_LOCALFS=true
+            PIPELINE2_WS_AUTHENTICATION=false
             shift
             ;;
         'clean')
@@ -437,7 +429,13 @@ run() {
     fi
     cd "$PIPELINE2_BASE"
 
-    eval exec "\"$JAVA"\" "$JAVA_OPTS" -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\"  -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" -Dorg.daisy.pipeline.base="\"$PIPELINE2_BASE"\" -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" $FELIX_OPTS $PIPELINE2_OPTS $OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@"\"
+    export PIPELINE2_HOME # also available as org.daisy.pipeline.home in system.properties
+    export PIPELINE2_BASE # also available as org.daisy.pipeline.data in system.properties
+    export PIPELINE2_DATA
+    export PIPELINE2_WS_LOCALFS
+    export PIPELINE2_WS_AUTHENTICATION
+    
+    eval exec "\"$JAVA"\" "$JAVA_OPTS" -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\" -Dorg.daisy.pipeline.home="\"$PIPELINE2_HOME"\" -Dorg.daisy.pipeline.data="\"$PIPELINE2_DATA"\" -Dfelix.config.properties="\"file:$PIPELINE2_HOME/etc/config.properties"\" -Dfelix.system.properties="\"file:$PIPELINE2_CONFIG/system.properties"\" $FELIX_OPTS $MODE -classpath "\"$CLASSPATH"\" $MAIN "\"$@"\"
 }
 
 main() {
