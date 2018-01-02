@@ -29,7 +29,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.10.3-SNAPSHOT</version>
+        <version>1.10.4-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

@@ -4,6 +4,7 @@
 	xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 	xmlns:d="http://www.daisy.org/ns/pipeline/data"
 	xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+	xmlns:c="http://www.w3.org/ns/xproc-step"
 	exclude-inline-prefixes="#all"
 	type="odt:update-files"
 	name="update-files">
@@ -38,14 +39,13 @@
 				<p:identity/>
 			</p:when>
 			<p:otherwise>
-				<px:message severity="WARN">
-					<p:with-option name="message" select="concat('[odt-utils] unknown file: ', $base, ', will not be updated')"/>
-				</px:message>
-				<p:identity>
+				<p:error code="runtime">
 					<p:input port="source">
-						<p:empty/>
+						<p:inline>
+							<c:message>Asked to update file that is not in file set.</c:message>
+						</p:inline>
 					</p:input>
-				</p:identity>
+				</p:error>
 			</p:otherwise>
 		</p:choose>
 	</p:for-each>
