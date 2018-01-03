@@ -14,6 +14,5 @@ Private-Package: \
 	org.daisy.dotify.tasks.impl.input.xml,\
 	org.daisy.dotify.tasks.impl.system.common,\
 	org.daisy.dotify.tasks.impl.validity
-Include-Resource: / = src/
--sources: false
+-sources: true
 Service-Component: *
