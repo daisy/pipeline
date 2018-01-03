@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns="http://www.daisy.org/ns/2011/obfl"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 xmlns:re="regex-utils"
@@ -9,6 +10,71 @@
                 version="2.0">
     
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
+    
+    <xsl:param name="duplex" as="xs:string" required="yes"/>
+    
+    <xsl:variable name="page-stylesheets" as="element()*" select="/*/css:rule[@selector='@page']"/>
+    
+    <xsl:function name="pxi:layout-master-name" as="xs:string">
+        <xsl:param name="page-stylesheet" as="xs:string"/>
+        <xsl:sequence select="concat('master_',
+                                     index-of($page-stylesheets/@style, $page-stylesheet)[1])"/>
+    </xsl:function>
+    
+    <xsl:template match="/*">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:variable name="sequences" as="element()*" select="//obfl:sequence|//obfl:toc-sequence|//obfl:dynamic-sequence"/>
+            <xsl:for-each select="distinct-values($sequences/@css:page)">
+                <xsl:variable name="layout-master-name" select="pxi:layout-master-name(.)"/>
+                <xsl:variable name="page-stylesheet" as="element()" select="$page-stylesheets[@style=current()][1]"/>
+                <xsl:variable name="default-page-counter-names"
+                              select="distinct-values(
+                                        for $s in $sequences[@css:page=current()] return
+                                          if ($s/parent::obfl:pre-content) then 'pre-page'
+                                          else if ($s/parent::obfl:post-content) then 'post-page'
+                                          else 'page')"/>
+                <xsl:sequence select="obfl:generate-layout-master(
+                                        $page-stylesheet/*,
+                                        $layout-master-name,
+                                        $default-page-counter-names[1])"/>
+                <!--
+                    The result of calling obfl:generate-layout-master is the same regardless of the
+                    default-page-counter-name passed. Therefore only the first result is
+                    relevant. However, all calls need to be made anyway because the function checks
+                    that there are no mismatches between the active page counter and counter() calls
+                    in page margins.
+                -->
+                <xsl:for-each select="$default-page-counter-names[position()&gt;1]">
+                    <xsl:variable name="_">
+                        <xsl:sequence select="obfl:generate-layout-master(
+                                                $page-stylesheet/*,
+                                                $layout-master-name,
+                                                .)"/>
+                    </xsl:variable>
+                </xsl:for-each>
+            </xsl:for-each>
+            <xsl:apply-templates/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="obfl:sequence/@css:page|
+                         obfl:toc-sequence/@css:page|
+                         obfl:dynamic-sequence/@css:page">
+        <xsl:attribute name="master" select="pxi:layout-master-name(.)"/>
+    </xsl:template>
+    
+    <xsl:template match="/*/css:rule[@selector='@page']"/>
+    
+    <xsl:template match="@*|node()">
+        <xsl:copy>
+            <xsl:apply-templates select="@*|node()"/>
+        </xsl:copy>
+    </xsl:template>
+    
+    <!-- ==================================== -->
+    <!-- CSS page style to OBFL layout-master -->
+    <!-- ==================================== -->
     
     <xsl:variable name="empty-string" as="element()">
         <string value=""/>
@@ -21,69 +87,77 @@
     </xsl:variable>
     
     <xsl:function name="obfl:generate-layout-master">
-        <xsl:param name="page-stylesheet" as="xs:string"/>
+        <xsl:param name="page-stylesheet" as="element()*"/> <!-- css:rule* -->
         <xsl:param name="name" as="xs:string"/>
-        <xsl:variable name="duplex" as="xs:boolean" select="true()"/>
-        <xsl:sequence select="obfl:generate-layout-master($page-stylesheet, $name, $duplex)"/>
-    </xsl:function>
-    
-    <xsl:function name="obfl:generate-layout-master">
-        <xsl:param name="page-stylesheet" as="xs:string"/>
-        <xsl:param name="name" as="xs:string"/>
-        <xsl:param name="duplex" as="xs:boolean"/>
-        <xsl:variable name="right-page-odd" as="xs:boolean" select="true()"/>
-        <xsl:sequence select="obfl:generate-layout-master($page-stylesheet, $name, $duplex, $right-page-odd)"/>
-    </xsl:function>
-    
-    <xsl:function name="obfl:generate-layout-master">
-        <xsl:param name="page-stylesheet" as="xs:string"/>
-        <xsl:param name="name" as="xs:string"/>
-        <xsl:param name="duplex" as="xs:boolean"/>
-        <xsl:param name="right-page-odd" as="xs:boolean"/>
-        <xsl:variable name="page-stylesheet" as="element()*" select="css:parse-stylesheet($page-stylesheet)"/>
-        <xsl:variable name="right-page-stylesheet" as="element()*" select="css:parse-stylesheet($page-stylesheet[@selector=':right']/@style)"/>
-        <xsl:variable name="left-page-stylesheet" as="element()*" select="css:parse-stylesheet($page-stylesheet[@selector=':left']/@style)"/>
-        <xsl:variable name="default-page-stylesheet" as="element()*">
-            <xsl:choose>
-                <xsl:when test="$right-page-stylesheet or $left-page-stylesheet">
-                    <xsl:sequence select="css:parse-stylesheet($page-stylesheet[not(@selector)]/@style)"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="$page-stylesheet"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
+        <xsl:param name="default-page-counter-name" as="xs:string"/> <!-- "page"|"pre-page"|"post-page" -->
+        <xsl:variable name="duplex" as="xs:boolean" select="$duplex='true'"/>
+        <xsl:variable name="right-page-stylesheet" as="element()*" select="$page-stylesheet[@selector=':right']/*"/>
+        <xsl:variable name="left-page-stylesheet" as="element()*" select="$page-stylesheet[@selector=':left']/*"/>
+        <xsl:variable name="default-page-stylesheet" as="element()*"
+                      select="if ($right-page-stylesheet or $left-page-stylesheet)
+                              then $page-stylesheet[not(@selector)]/*
+                              else $page-stylesheet"/>
         <xsl:variable name="default-page-properties" as="element()*"
-                      select="css:parse-declaration-list($default-page-stylesheet[not(@selector)]/@style)"/>
+                      select="if ($default-page-stylesheet/self::css:property)
+                              then $default-page-stylesheet/self::css:property
+                              else $default-page-stylesheet[not(@selector)]/css:property"/>
         <xsl:variable name="size" as="xs:string"
                       select="($default-page-properties[@name='size'][css:is-valid(.)]/@value, css:initial-value('size'))[1]"/>
         <xsl:variable name="page-width" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[1]))"/>
         <xsl:variable name="page-height" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[2]))"/>
+        <xsl:if test="$default-page-properties[@name='counter-set']">
+            <xsl:message>
+                <xsl:apply-templates mode="css:serialize" select="$default-page-properties[@name='counter-set'][1]"/>
+                <xsl:text> not supported inside @page</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        <xsl:variable name="counter-increment" as="element()*"
+                      select="css:parse-counter-set(
+                                ($default-page-properties[@name='counter-increment']/@value,$default-page-counter-name)[1],
+                                1)"/>
+        <xsl:if test="count($counter-increment)&gt;1">
+            <xsl:message terminate="yes">
+                <xsl:value-of select="$default-page-properties[@name='counter-increment'][1]"/>
+                <xsl:text>: a page can only have one page counter</xsl:text>
+            </xsl:message>
+        </xsl:if>
+        <xsl:variable name="counter-increment" as="element()" select="$counter-increment[last()]"/>
+        <xsl:if test="not($counter-increment/@value='1')">
+            <xsl:message terminate="yes">
+                <xsl:value-of select="$default-page-properties[@name='counter-increment'][1]"/>
+                <xsl:text>: a page counter can not be incremented by </xsl:text>
+                <xsl:value-of select="$counter-increment/@value"/>
+            </xsl:message>
+        </xsl:if>
+        <xsl:variable name="page-counter-name" as="xs:string" select="$counter-increment/@name"/>
         <xsl:variable name="footnotes-properties" as="element()*"
-                      select="css:parse-declaration-list($default-page-stylesheet[@selector='@footnotes'][1]/@style)"/>
+                      select="$default-page-stylesheet[@selector='@footnotes'][1]/css:property"/>
         <xsl:variable name="footnotes-content" as="element()*"
                       select="css:parse-content-list($footnotes-properties[@name='content'][1]/@value,())"/>
         <layout-master name="{$name}" duplex="{$duplex}" page-number-variable="page"
                        page-width="{$page-width}" page-height="{$page-height}">
             <xsl:if test="$right-page-stylesheet">
-                <template use-when="(= (% $page 2) {if ($right-page-odd) then 1 else 0})">
+                <template use-when="(= (% $page 2) 1)">
                     <xsl:call-template name="template">
                         <xsl:with-param name="stylesheet" select="$right-page-stylesheet"/>
                         <xsl:with-param name="page-side" tunnel="yes" select="'right'"/>
+                        <xsl:with-param name="page-counter-name" tunnel="yes" select="$page-counter-name"/>
                     </xsl:call-template>
                 </template>
             </xsl:if>
             <xsl:if test="$left-page-stylesheet">
-                <template use-when="(= (% $page 2) {if ($right-page-odd) then 0 else 1})">
+                <template use-when="(= (% $page 2) 0)">
                     <xsl:call-template name="template">
                         <xsl:with-param name="stylesheet" select="$left-page-stylesheet"/>
                         <xsl:with-param name="page-side" tunnel="yes" select="'left'"/>
+                        <xsl:with-param name="page-counter-name" tunnel="yes" select="$page-counter-name"/>
                     </xsl:call-template>
                 </template>
             </xsl:if>
             <default-template>
                 <xsl:call-template name="template">
                     <xsl:with-param name="stylesheet" select="$default-page-stylesheet"/>
+                    <xsl:with-param name="page-counter-name" tunnel="yes" select="$page-counter-name"/>
                 </xsl:call-template>
             </default-template>
             <xsl:if test="$footnotes-content[not(self::css:flow[@from])]">
@@ -137,39 +211,41 @@
     </xsl:function>
     
     <xsl:template name="template">
-        <xsl:param name="stylesheet" as="element()*" required="yes"/>
+        <xsl:param name="stylesheet" as="element()*" required="yes"/> <!-- css:rule*|css:property* -->
         <xsl:variable name="top-left" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="margin-stylesheet" select="$stylesheet[@selector='@top-left'][1]/@style"/>
+                <xsl:with-param name="properties" select="$stylesheet[@selector='@top-left'][1]/css:property"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="top-center" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="margin-stylesheet" select="$stylesheet[@selector='@top-center'][1]/@style"/>
+                <xsl:with-param name="properties" select="$stylesheet[@selector='@top-center'][1]/css:property"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="top-right" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="margin-stylesheet" select="$stylesheet[@selector='@top-right'][1]/@style"/>
+                <xsl:with-param name="properties" select="$stylesheet[@selector='@top-right'][1]/css:property"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bottom-left" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="margin-stylesheet" select="$stylesheet[@selector='@bottom-left'][1]/@style"/>
+                <xsl:with-param name="properties" select="$stylesheet[@selector='@bottom-left'][1]/css:property"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bottom-center" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="margin-stylesheet" select="$stylesheet[@selector='@bottom-center'][1]/@style"/>
+                <xsl:with-param name="properties" select="$stylesheet[@selector='@bottom-center'][1]/css:property"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bottom-right" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="margin-stylesheet" select="$stylesheet[@selector='@bottom-right'][1]/@style"/>
+                <xsl:with-param name="properties" select="$stylesheet[@selector='@bottom-right'][1]/css:property"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="properties" as="element()*"
-                      select="css:parse-declaration-list($stylesheet[not(@selector)]/@style)"/>
+                      select="if ($stylesheet/self::css:property)
+                              then $stylesheet/self::css:property
+                              else $stylesheet[not(@selector)]/css:property"/>
         <xsl:variable name="margin-top" as="xs:integer"
                       select="max(($properties[@name='margin-top'][css:is-valid(.)]/xs:integer(@value),0))"/>
         <xsl:variable name="margin-bottom" as="xs:integer"
@@ -205,12 +281,12 @@
             </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="margin-region">
-            <xsl:with-param name="margin-stylesheet" select="$stylesheet[@selector='@left'][1]/@style"/>
+            <xsl:with-param name="properties" select="$stylesheet[@selector='@left'][1]/css:property"/>
             <xsl:with-param name="side" select="'left'"/>
             <xsl:with-param name="min-width" select="$margin-left"/>
         </xsl:call-template>
         <xsl:call-template name="margin-region">
-            <xsl:with-param name="margin-stylesheet" select="$stylesheet[@selector='@right'][1]/@style"/>
+            <xsl:with-param name="properties" select="$stylesheet[@selector='@right'][1]/css:property"/>
             <xsl:with-param name="side" select="'right'"/>
             <xsl:with-param name="min-width" select="$margin-right"/>
         </xsl:call-template>
@@ -257,8 +333,7 @@
     </xsl:template>
     
     <xsl:template name="fields" as="element()*"> <!-- obfl:field* -->
-        <xsl:param name="margin-stylesheet" as="xs:string?"/>
-        <xsl:variable name="properties" as="element()*" select="css:parse-declaration-list($margin-stylesheet)"/>
+        <xsl:param name="properties" as="element()*"/> <!-- css:property* -->
         <xsl:variable name="white-space" as="xs:string" select="($properties[@name='white-space']/@value,'normal')[1]"/>
         <xsl:variable name="text-transform" as="xs:string" select="($properties[@name='text-transform']/@value,'auto')[1]"/>
         <xsl:variable name="content" as="element()*">
@@ -277,10 +352,9 @@
     </xsl:template>
     
     <xsl:template name="margin-region" as="element()?"> <!-- obfl:margin-region? -->
-        <xsl:param name="margin-stylesheet" as="xs:string?"/>
+        <xsl:param name="properties" as="element()*"/> <!-- css:property* -->
         <xsl:param name="side" as="xs:string" required="yes"/>
         <xsl:param name="min-width" as="xs:integer" required="yes"/>
-        <xsl:variable name="properties" as="element()*" select="css:parse-declaration-list($margin-stylesheet)"/>
         <xsl:variable name="indicators" as="element()*">
             <xsl:apply-templates select="css:parse-content-list($properties[@name='content'][1]/@value,())" mode="eval-content-list-left-right"/>
         </xsl:variable>
@@ -335,9 +409,32 @@
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template match="css:counter[not(@target)][@name='page']" mode="eval-content-list-top-bottom">
+    <xsl:template match="css:counter[not(@target)]" priority="1" mode="eval-content-list-top-bottom">
         <xsl:param name="white-space" as="xs:string" select="'normal'"/>
         <xsl:param name="text-transform" as="xs:string" select="'auto'"/>
+        <xsl:param name="page-counter-name" as="xs:string" tunnel="yes"/>
+        <xsl:if test="not(@name=$page-counter-name)">
+            <xsl:choose>
+                <xsl:when test="@name='page'">
+                    <xsl:message>
+                        <xsl:text>Should not use counter(page) in a page margin when the active page counter is </xsl:text>
+                        <xsl:value-of select="$page-counter-name"/>
+                        <xsl:text>. Assuming counter(</xsl:text>
+                        <xsl:value-of select="$page-counter-name"/>
+                        <xsl:text>) was meant.</xsl:text>
+                    </xsl:message>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message terminate="yes">
+                        <xsl:text>Can not use counter(</xsl:text>
+                        <xsl:value-of select="@name"/>
+                        <xsl:text>) in a page margin when the active page counter is </xsl:text>
+                        <xsl:value-of select="$page-counter-name"/>
+                        <xsl:text>.</xsl:text>
+                    </xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
         <xsl:if test="$white-space!='normal'">
             <xsl:message select="concat('white-space:',$white-space,' could not be applied to target-counter(',@name,')')"/>
         </xsl:if>
@@ -563,10 +660,6 @@
     
     <xsl:template match="css:counter[not(@target)]" mode="eval-content-list-left-right">
         <xsl:message>counter() function not supported in left and right page margin</xsl:message>
-    </xsl:template>
-    
-    <xsl:template match="css:counter[not(@target)][not(@name='page')]" mode="eval-content-list-top-bottom">
-        <xsl:message>counter() function not supported in page margin for other counters than 'page'</xsl:message>
     </xsl:template>
     
     <xsl:template match="css:leader" mode="eval-content-list-top-bottom eval-content-list-left-right">

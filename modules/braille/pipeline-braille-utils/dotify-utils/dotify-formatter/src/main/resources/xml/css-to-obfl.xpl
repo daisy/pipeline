@@ -26,6 +26,7 @@
     <p:import href="shift-obfl-marker.xpl"/>
     <p:import href="make-obfl-pseudo-elements.xpl"/>
     <p:import href="extract-obfl-pseudo-elements.xpl"/>
+    <p:import href="deep-parse-page-and-volume-stylesheets.xpl"/>
     
     <p:declare-step type="pxi:recursive-parse-stylesheet-and-make-pseudo-elements">
         <p:input port="source"/>
@@ -110,13 +111,21 @@
         </p:documentation>
     </css:render-table-by>
     
-    <pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+    <pxi:recursive-parse-stylesheet-and-make-pseudo-elements name="parse-stylesheet">
         <p:documentation>
             Make css:page and css:volume attributes, css:after, css:before, css:duplicate,
             css:alternate, css:footnote-call, css:_obfl-on-toc-start, css:_obfl-on-volume-start,
             css:_obfl-on-volume-end and css:_obfl-on-toc-end pseudo-elements.
         </p:documentation>
     </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
+    
+    <pxi:deep-parse-page-and-volume-stylesheets name="page-and-volume-styles"/>
+    <p:sink/>
+    <p:identity>
+        <p:input port="source">
+            <p:pipe step="parse-stylesheet" port="result"/>
+        </p:input>
+    </p:identity>
     
     <p:for-each>
         <pxi:extract-obfl-pseudo-elements>
@@ -257,11 +266,51 @@
         </p:group>
     </p:for-each>
     
-    <css:eval-counter exclude-counters="page">
+    <p:group>
+    <p:variable name="page-counters"
+                select="string-join(distinct-values((
+                          if (not(/*/*[@selector='@page']))
+                          then 'page'
+                          else for $r in /*/*[@selector='@page'] return
+                               for $rr in (if ($r/*[matches(@selector,'^:')])
+                                           then $r/*[not(@selector)]
+                                           else $r) return
+                                 ((if ($rr/css:property) then $rr/css:property
+                                   else $rr/*[not(@selector)]/css:property)
+                                  [@name='counter-increment']/@value,'page')[1]
+                          ,
+                          if (not(//*[@selector='@begin']/*[@selector='@page']))
+                          then 'pre-page'
+                          else for $r in //*[@selector='@begin']/*[@selector='@page'] return
+                               for $rr in (if ($r/*[matches(@selector,'^:')])
+                                           then $r/*[not(@selector)]
+                                           else $r) return
+                                 ((if ($rr/css:property) then $rr/css:property
+                                   else $rr/*[not(@selector)]/css:property)
+                                  [@name='counter-increment']/@value,'pre-page')[1]
+                          ,
+                          if (not(//*[@selector='@end']/*[@selector='@page']))
+                          then 'pre-page'
+                          else for $r in //*[@selector='@end']/*[@selector='@page'] return
+                               for $rr in (if ($r/*[matches(@selector,'^:')])
+                                           then $r/*[not(@selector)]
+                                           else $r) return
+                                 ((if ($rr/css:property) then $rr/css:property
+                                   else $rr/*[not(@selector)]/css:property)
+                                  [@name='counter-increment']/@value,'post-page')[1]
+                          )),' ')">
+        <p:pipe step="page-and-volume-styles" port="result"/>
+    </p:variable>
+    
+    <css:eval-counter>
         <p:documentation>
-            Evaluate css:counter elements. <!-- depends on label-targets, parse-content and
-            make-boxes -->
+            Evaluate css:counter elements. All css:counter-set, css:counter-increment and
+            css:counter-reset attributes in the output will be manipulating page counters. <!--
+            depends on label-targets, parse-content and make-boxes -->
         </p:documentation>
+        <p:with-option name="exclude-counters" select="$page-counters">
+            <p:empty/>
+        </p:with-option>
     </css:eval-counter>
     
     <css:flow-from>
@@ -282,33 +331,28 @@
                 Wrap/unwrap with inline css:box elements.
             </p:documentation>
         </css:make-anonymous-inline-boxes>
-        <css:parse-counter-set counters="page">
-            <p:documentation>
-                Make css:counter-set-page attributes.
-            </p:documentation>
-        </css:parse-counter-set>
         <p:delete match="/*[@css:flow]//*/@css:volume|
                          //css:box[@type='table']//*/@css:page|
                          //css:box[@type='table']//*/@css:volume|
-                         //css:box[@type='table']//*/@css:counter-set-page">
+                         //css:box[@type='table']//*/@css:counter-set">
             <p:documentation>
                 Don't support 'volume' within named flows. Don't support 'volume', 'page' and
-                'counter-set: page' within tables.
+                'counter-set' within tables.
             </p:documentation>
         </p:delete>
         <p:group>
             <p:documentation>
-                Move css:counter-set-page attribute to css:box elements.
+                Move css:counter-set attribute to css:box elements.
             </p:documentation>
-            <p:insert match="css:_[@css:counter-set-page]" position="first-child">
+            <p:insert match="css:_[@css:counter-set]" position="first-child">
                 <p:input port="insertion">
                     <p:inline><css:box type="inline"/></p:inline>
                 </p:input>
             </p:insert>
-            <p:label-elements match="css:_[@css:counter-set-page]/css:box[1]"
-                              attribute="css:counter-set-page"
-                              label="parent::css:_/@css:counter-set-page"/>
-            <p:delete match="css:_/@css:counter-set-page"/>
+            <p:label-elements match="css:_[@css:counter-set]/css:box[1]"
+                              attribute="css:counter-set"
+                              label="parent::css:_/@css:counter-set"/>
+            <p:delete match="css:_/@css:counter-set"/>
         </p:group>
         <p:group>
             <p:documentation>
@@ -439,14 +483,14 @@
                 <p:delete match="css:box[@type='block'][following-sibling::*]/@css:volume-break-after[.='always']"/>
             </p:group>
             <css:split split-before="css:box[preceding::css:box]
-                                            [@css:counter-set-page or
+                                            [@css:counter-set or
                                              @css:page-break-before='right' or
                                              @css:volume-break-before='always' or
                                              @type='table']"
                        split-after="css:box[following::css:box]
                                            [@type='table']">
                 <p:documentation>
-                    Split before and after tables, before css:counter-set-page attributes, before
+                    Split before and after tables, before css:counter-set attributes, before
                     css:page-break-before attributes with value 'right', and before
                     css:volume-break-before attributes with value 'always'. <!-- depends on
                     make-boxes and propagate-page-break -->
@@ -456,18 +500,17 @@
         <p:for-each>
             <p:group>
                 <p:documentation>
-                    Move css:page, css:counter-set-page and css:volume attributes to css:_ root
-                    element.
+                    Move css:page, css:counter-set and css:volume attributes to css:_ root element.
                 </p:documentation>
                 <p:wrap wrapper="css:_" match="/*[not(self::css:_)]"/>
                 <p:label-elements match="/*[descendant::*/@css:page]" attribute="css:page"
                                   label="(descendant::*/@css:page)[last()]"/>
-                <p:label-elements match="/*[descendant::*/@css:counter-set-page]" attribute="css:counter-set-page"
-                                  label="(descendant::*/@css:counter-set-page)[last()]"/>
+                <p:label-elements match="/*[descendant::*/@css:counter-set]" attribute="css:counter-set"
+                                  label="(descendant::*/@css:counter-set)[last()]"/>
                 <p:label-elements match="/*[descendant::*/@css:volume]" attribute="css:volume"
                                   label="(descendant::*/@css:volume)[last()]"/>
                 <p:delete match="/*//*/@css:page"/>
-                <p:delete match="/*//*/@css:counter-set-page"/>
+                <p:delete match="/*//*/@css:counter-set"/>
                 <p:delete match="/*//*/@css:volume"/>
             </p:group>
             <p:delete match="css:box[@part[not(.='first')]]/@css:page-break-before"/>
@@ -571,17 +614,40 @@
     <!-- for debug info -->
     <p:for-each><p:identity/></p:for-each>
     
+    <p:identity name="sections"/>
+    
     <p:xslt template-name="start">
+        <p:input port="source">
+            <p:pipe step="sections" port="result"/>
+            <p:pipe step="page-and-volume-styles" port="result"/>
+        </p:input>
         <p:input port="stylesheet">
             <p:document href="css-to-obfl.xsl"/>
         </p:input>
         <p:with-param name="braille-translator-query" select="if ($text-transform='auto') then '' else $text-transform">
             <p:empty/>
         </p:with-param>
+        <p:with-param name="page-counters" select="$page-counters">
+            <p:empty/>
+        </p:with-param>
+    </p:xslt>
+    
+    <!-- for debug info -->
+    <p:for-each><p:identity/></p:for-each>
+    
+    <!--
+        generate layout-masters
+    -->
+    <p:xslt>
+        <p:input port="stylesheet">
+            <p:document href="generate-obfl-layout-master.xsl"/>
+        </p:input>
         <p:with-param name="duplex" select="$duplex">
             <p:empty/>
         </p:with-param>
     </p:xslt>
+    
+    </p:group>
     
     <!--
         fill in <marker class="foo/prev"/> values

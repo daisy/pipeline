@@ -5,7 +5,7 @@
                stylesheet="../../main/resources/xml/css-to-obfl.xsl">
   
   <x:param name="braille-translator-query"></x:param>
-  <x:param name="duplex">true</x:param>
+  <x:param name="page-counters">page</x:param>
   
   <x:scenario label="test_01">
     <x:call function="obfl:volume-stylesheets-use-when">

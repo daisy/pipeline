@@ -4,11 +4,13 @@
                xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                stylesheet="../../main/resources/xml/generate-obfl-layout-master.xsl">
   
+  <x:param name="duplex" select="'true'"/>
+  
   <x:scenario label="test_01">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="''"/>
+      <x:param/>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="40" page-height="25" duplex="true" page-number-variable="page">
@@ -22,11 +24,19 @@
   
   <x:scenario label="test_02">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'size: 15 15;
-                        @top-right { content: counter(page, lower-roman) }
-                        @bottom-center { content: &quot;footer&quot; }'"/>
+      <x:param>
+        <css:rule>
+          <css:property name="size" value="15 15"/>
+        </css:rule>
+        <css:rule selector="@top-right">
+          <css:property name="content" value="counter(page, lower-roman)"/>
+        </css:rule>
+        <css:rule selector="@bottom-center">
+          <css:property name="content" value="&quot;footer&quot;"/>
+        </css:rule>
+      </x:param>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="15" duplex="true" page-number-variable="page">
@@ -60,11 +70,29 @@
   
   <x:scenario label="test_03">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'{ size: 15 15 }
-                        :right { margin-top: 1; @top-right { content: counter(page) }}
-                        :left { margin-top: 2; @top-left { content: counter(page) }}'"/>
+      <x:param>
+        <css:rule>
+          <css:property name="size" value="15 15"/>
+        </css:rule>
+        <css:rule selector=":right">
+          <css:rule>
+            <css:property name="margin-top" value="1"/>
+          </css:rule>
+          <css:rule selector="@top-right">
+            <css:property name="content" value="counter(page)"/>
+          </css:rule>
+        </css:rule>
+        <css:rule selector=":left">
+          <css:rule>
+            <css:property name="margin-top" value="2"/>
+          </css:rule>
+          <css:rule selector="@top-left">
+            <css:property name="content" value="counter(page)"/>
+          </css:rule>
+        </css:rule>
+      </x:param>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="15" duplex="true" page-number-variable="page">
@@ -117,9 +145,14 @@
   
   <x:scenario label="test_04">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'size: 15 5; margin-bottom: 1;'"/>
+      <x:param>
+        <css:rule>
+          <css:property name="size" value="15 5"/>
+          <css:property name="margin-bottom" value="1"/>
+        </css:rule>
+      </x:param>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="5" duplex="true" page-number-variable="page">
@@ -143,9 +176,14 @@
   
   <x:scenario label="test_05">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'size: 15 5; margin-bottom: 2;'"/>
+      <x:param>
+        <css:rule>
+          <css:property name="size" value="15 5"/>
+          <css:property name="margin-bottom" value="2"/>
+        </css:rule>
+      </x:param>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="5" duplex="true" page-number-variable="page">
@@ -180,9 +218,17 @@
   
   <x:scenario label="test_06">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'@bottom-left { content: &quot;⠆&quot; } size: 15 5; margin-bottom: 1;'"/>
-      <x:param select="'x'"/> 
-      <x:param select="true()"/>
+      <x:param>
+        <css:rule selector="@bottom-left">
+          <css:property name="content" value="&quot;⠆&quot;"/>
+        </css:rule>
+        <css:rule>
+          <css:property name="size" value="15 5"/>
+          <css:property name="margin-bottom" value="1"/>
+        </css:rule>
+      </x:param>
+      <x:param select="'x'"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="5" duplex="true" page-number-variable="page">
@@ -206,9 +252,17 @@
   
   <x:scenario label="test_07">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'@bottom-left { content: &quot;⠆&quot; } size: 15 5; margin-bottom: 2;'"/>
+      <x:param>
+        <css:rule selector="@bottom-left">
+          <css:property name="content" value="&quot;⠆&quot;"/>
+        </css:rule>
+        <css:rule>
+          <css:property name="size" value="15 5"/>
+          <css:property name="margin-bottom" value="2"/>
+        </css:rule>
+      </x:param>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="5" duplex="true" page-number-variable="page">
@@ -243,9 +297,18 @@
   
   <x:scenario label="test_08">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'@bottom-left { content: &quot;⠆&#x0a;⠆⠆&quot;; white-space: pre-wrap; } size: 15 5; margin-bottom: 2;'"/>
+      <x:param>
+        <css:rule selector="@bottom-left">
+          <css:property name="content" value="&quot;⠆&#x0a;⠆⠆&quot;"/>
+          <css:property name="white-space" value="pre-wrap"/>
+        </css:rule>
+        <css:rule>
+          <css:property name="size" value="15 5"/>
+          <css:property name="margin-bottom" value="2"/>
+        </css:rule>
+      </x:param>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="5" duplex="true" page-number-variable="page">
@@ -280,9 +343,18 @@
   
   <x:scenario label="test_09">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'@bottom-left { content: &quot;⠆&#x0a;⠆⠆&quot;; white-space: pre-wrap; } size: 15 5; margin-bottom: 1;'"/>
+      <x:param>
+        <css:rule selector="@bottom-left">
+          <css:property name="content" value="&quot;⠆&#x0a;⠆⠆&quot;"/>
+          <css:property name="white-space" value="pre-wrap"/>
+        </css:rule>
+        <css:rule>
+          <css:property name="size" value="15 5"/>
+          <css:property name="margin-bottom" value="1"/>
+        </css:rule>
+      </x:param>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="5" duplex="true" page-number-variable="page">
@@ -317,16 +389,28 @@
   
   <x:scenario label="test_10" pending="generated variable name in marker-references makes test very brittle">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'{ size: 28 28 }
-                        :right {
-                          margin-bottom: 1;
-                          @bottom-left {
-                            content: string(print-page, spread-start)  string(slash-print-page, spread-last-except-start);
-                            text-transform: print-page; }
-                          @bottom-center { content: string(running-footer, spread-start); }
-                          @bottom-right { content: counter(page); }}'"/>
+      <x:param>
+        <css:rule>
+          <css:property name="size" value="28 28"/>
+        </css:rule>
+        <css:rule selector=":right">
+          <css:rule>
+            <css:property name="margin-bottom" value="1"/>
+          </css:rule>
+          <css:rule selector="@bottom-left">
+            <css:property name="content" value="string(print-page, spread-start) string(slash-print-page, spread-last-except-start)"/>
+            <css:property name="text-transform" value="print-page"/>
+          </css:rule>
+          <css:rule selector="@bottom-center">
+            <css:property name="content" value="string(running-footer, spread-start)"/>
+          </css:rule>
+          <css:rule selector="@bottom-right">
+            <css:property name="content" value="counter(page)"/>
+          </css:rule>
+        </css:rule>
+      </x:param>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="28" page-height="28" duplex="true" page-number-variable="page">
@@ -357,9 +441,18 @@
   
   <x:scenario label="test_11">
     <x:call function="obfl:generate-layout-master">
-      <x:param select="'size: 15 15; @footnotes { border-top-pattern:⠒; max-height:10; content:flow(footnote) }'"/>
+      <x:param>
+        <css:rule>
+          <css:property name="size" value="15 15"/>
+        </css:rule>
+        <css:rule selector="@footnotes">
+          <css:property name="border-top-pattern" value="⠒"/>
+          <css:property name="max-height" value="10"/>
+          <css:property name="content" value="flow(footnote)"/>
+        </css:rule>
+      </x:param>
       <x:param select="'x'"/>
-      <x:param select="true()"/>
+      <x:param select="'page'"/>
     </x:call>
     <x:expect label="layout-master">
       <layout-master xmlns="http://www.daisy.org/ns/2011/obfl" name="x" page-width="15" page-height="15" duplex="true" page-number-variable="page">

@@ -157,6 +157,11 @@
             <p:pipe port="result" step="spine-bodies"/>
         </p:input>
     </p:wrap-sequence>
+    <p:add-attribute match="/*" attribute-name="xml:lang">
+        <p:with-option name="attribute-value" select="(/*/opf:metadata/dc:language[not(@refines)])[1]/text()">
+            <p:pipe port="result" step="opf"/>
+        </p:with-option>
+    </p:add-attribute>
     
     <px:message message="Generating table of contents"/>
     <p:xslt>

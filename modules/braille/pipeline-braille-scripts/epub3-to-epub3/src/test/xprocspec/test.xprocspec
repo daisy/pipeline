@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:c="http://www.w3.org/ns/xproc-step"
@@ -8,6 +9,7 @@
 	<x:scenario label="valentin">
 		<x:call step="px:epub3-to-epub3">
 			<x:option name="source" select="resolve-uri('../resources/valentin.epub',base-uri(.))"/>
+			<x:option name="braille-translator" select="'(translator:liblouis)'"/>
 			<x:option name="output-dir" select="concat($temp-dir,'valentin/')"/>
 		</x:call>
 		<x:context label="The output directory">
@@ -74,6 +76,7 @@
 				</c:zipfile>
 			</x:document>
 		</x:expect>
+		
 		<x:context label="The container document">
 			<x:document type="file" base-uri="temp-dir" href="valentin/valentin.epub!/META-INF/container.xml"/>
 		</x:context>
@@ -90,6 +93,12 @@
 				</container>
 			</x:document>
 		</x:expect>
+		
+		<x:context label="The braille version of the XHTML cover document">
+			<x:document type="file" base-uri="temp-dir" href="valentin/valentin.epub!/EPUB/C00000-1-cover_braille.xhtml"/>
+		</x:context>
+		<x:expect label="The name of the root element should be html" type="xpath" test="/*/local-name()" equals="'html'"/>
+		<x:expect label="The namespace of the root element should be http://www.w3.org/1999/xhtml" type="xpath" test="/*/namespace-uri()" equals="'http://www.w3.org/1999/xhtml'"/>
 	</x:scenario>
 	
 </x:description>

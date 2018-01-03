@@ -575,32 +575,23 @@ public class CssInlineStep extends DefaultStep {
 					for (PseudoElement pseudo : sort(cs.styleMap.pseudoSet(elem), pseudoElementComparator)) {
 						NodeData pseudoData = cs.styleMap.get(elem, pseudo);
 						if (pseudoData != null)
-							insertPseudoStyle(style, pseudoData, pseudo); }
+							insertPseudoStyle(style, pseudoData, pseudo, cs.pageRules); }
 					if (cs.pageRules != null) {
-						BrailleCSSProperty.Page pageProperty = null;
-						if (nodeData != null)
-							pageProperty = nodeData.<BrailleCSSProperty.Page>getProperty("page", false);
-						if (pageProperty != null) {
-							String name;
-							if (pageProperty == BrailleCSSProperty.Page.identifier)
-								name = nodeData.<TermIdent>getValue(TermIdent.class, "page", false).getValue();
-							else
-								name = pageProperty.toString();
-							Map<String,RulePage> pageRule = getPageRule(name, cs.pageRules);
-							if (pageRule != null)
-								insertPageStyle(style, pageRule, true); }
+						Map<String,RulePage> pageRule = getPageRule(nodeData, cs.pageRules);
+						if (pageRule != null) {
+							insertPageStyle(style, pageRule, true); }
 						else if (isRoot) {
-							Map<String,RulePage> pageRule = getPageRule("auto", cs.pageRules);
+							pageRule = getPageRule("auto", cs.pageRules);
 							if (pageRule != null)
-								insertPageStyle(style, pageRule, true); }
-						if (isRoot) {
-							if (cs.volumeRules != null) {
-								Map<String,RuleVolume> volumeRule = getVolumeRule("auto", cs.volumeRules);
-								if (volumeRule != null)
-									insertVolumeStyle(style, volumeRule, cs.pageRules); }
-							if (cs.textTransformRules != null)
-								for (RuleTextTransform r : cs.textTransformRules)
-									insertTextTransformDefinition(style, r); }}}
+								insertPageStyle(style, pageRule, true); }}
+					if (isRoot) {
+						if (cs.volumeRules != null) {
+							Map<String,RuleVolume> volumeRule = getVolumeRule("auto", cs.volumeRules);
+							if (volumeRule != null)
+								insertVolumeStyle(style, volumeRule, cs.pageRules); }
+						if (cs.textTransformRules != null)
+							for (RuleTextTransform r : cs.textTransformRules)
+								insertTextTransformDefinition(style, r); }}
 				if (normalizeSpace(style).length() > 0) {
 					writer.addAttribute(attributeName, style.toString().trim()); }
 				isRoot = false;
@@ -696,13 +687,17 @@ public class CssInlineStep extends DefaultStep {
 				builder.append("(").append(join(args, ", ")).append(")"); }
 	}
 	
-	private static void insertPseudoStyle(StringBuilder builder, NodeData nodeData, PseudoElement elem) {
+	private static void insertPseudoStyle(StringBuilder builder, NodeData nodeData, PseudoElement elem,
+	                                      Map<String,Map<String,RulePage>> pageRules) {
 		if (builder.length() > 0 && !builder.toString().endsWith("} ")) {
 			builder.insert(0, "{ ");
 			builder.append("} "); }
 		pseudoElementToString(builder, elem);
 		builder.append(" { ");
 		insertStyle(builder, nodeData);
+		Map<String,RulePage> pageRule = getPageRule(nodeData, pageRules);
+		if (pageRule != null)
+			insertPageStyle(builder, pageRule, false);
 		builder.append("} ");
 	}
 	
@@ -737,8 +732,31 @@ public class CssInlineStep extends DefaultStep {
 		builder.append(decl.getProperty()).append(": ").append(join(decl, " ", termToString)).append("; ");
 	}
 	
+	private static Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {
+		BrailleCSSProperty.Page pageProperty; {
+			if (nodeData != null)
+				pageProperty = nodeData.<BrailleCSSProperty.Page>getProperty("page", false);
+			else
+				pageProperty = null;
+		}
+		String name; {
+			if (pageProperty != null) {
+				if (pageProperty == BrailleCSSProperty.Page.identifier)
+					name = nodeData.<TermIdent>getValue(TermIdent.class, "page", false).getValue();
+				else
+					name = pageProperty.toString(); }
+			else
+				name = null;
+		}
+		if (name != null)
+			return getPageRule(name, pageRules);
+		else
+			return null;
+	}
+	
+	
 	private static Map<String,RulePage> getPageRule(String name, Map<String,Map<String,RulePage>> pageRules) {
-		Map<String,RulePage> auto = pageRules.get("auto");
+		Map<String,RulePage> auto = pageRules == null ? null : pageRules.get("auto");
 		Map<String,RulePage> named = null;
 		if (!name.equals("auto"))
 			named = pageRules.get(name);
