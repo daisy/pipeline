@@ -3,12 +3,13 @@ language: java
 # configure the Maven environment
 before_install:
   - source <(curl -fsSL https://raw.github.com/daisy/maven-parents/travis/before_install)
-
+  # see https://github.com/travis-ci/travis-cookbooks/issues/964
+  - rm -f /opt/jdk_switcher/jdk_switcher.sh
+  
 install: mvn install -DskipTests=true -Dinvoker.skip=true -Dmaven.javadoc.skip=true -B -V
 
 # main task, run the verify goal
-# FIXME: disable tests on Travis for now because of error
-script: true #mvn verify
+script: mvn verify
 
 # if the build succeeds, deploy the artifact (tests are skipped)
 after_success: 

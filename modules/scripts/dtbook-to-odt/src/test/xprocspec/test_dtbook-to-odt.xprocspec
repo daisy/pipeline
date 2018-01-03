@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+               xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+               xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+               xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+               xmlns:xlink="http://www.w3.org/1999/xlink"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               script="http://www.daisy.org/pipeline/modules/dtbook-to-odt/dtbook-to-odt.xpl">
+  
+  <x:scenario label="minimal">
+    <x:call step="px:dtbook-to-odt">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <book>
+              <bodymatter>
+                <level1>
+                  <p>Bla bla bla bla</p>
+                </level1>
+              </bodymatter>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="output-dir" select="concat($temp-dir,'minimal/')"/>
+    </x:call>
+    <x:context label="the output directory">
+      <x:document type="directory" base-uri="temp-dir" href="minimal/" recursive="true"/>
+    </x:context>
+    <x:expect label="the output directory should contain the ODT file" type="xpath"
+              test="/c:directory/c:file[@name='test_dtbook-to-odt.odt']"/>
+    <x:context label="the content file">
+      <x:document type="file" base-uri="temp-dir" href="minimal/test_dtbook-to-odt.odt!/content.xml"
+                  select="/office:document-content/office:body/office:text"/>
+    </x:context>
+    <x:expect label="the content file" type="compare">
+      <x:document type="inline">
+        <office:text>
+          <text:sequence-decls>
+            <text:sequence-decl text:display-outline-level="0" text:name="Illustration"/>
+            <text:sequence-decl text:display-outline-level="0" text:name="Table"/>
+            <text:sequence-decl text:display-outline-level="0" text:name="Text"/>
+            <text:sequence-decl text:display-outline-level="0" text:name="Drawing"/>
+          </text:sequence-decls>
+          <text:p text:style-name="dtb_3a_p">Bla bla bla bla</text:p>
+        </office:text>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

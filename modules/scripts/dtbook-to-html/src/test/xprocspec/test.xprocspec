@@ -26,13 +26,13 @@
 					</head>
 					<body>
 						<section xmlns:epub="http://www.idpf.org/2007/ops" epub:type="frontmatter">
-							<section id="d3338e7">
+							<section id="d3539e7">
 								<h1 epub:type="title">Minimal DTBook</h1>
 								<p>Bert</p>
 							</section>
 						</section>
 						<section xmlns:epub="http://www.idpf.org/2007/ops" epub:type="bodymatter">
-							<section id="d3338e13">
+							<section id="d3539e13">
 								<span epub:type="pagebreak" title="1" id="page_1"/>
 								<h1>Chapter</h1>
 								<p>Paragraph</p>
