@@ -9,8 +9,7 @@ Export-Package:  \
 	org.daisy.dotify.api.text,\
 	org.daisy.dotify.api.translator,\
 	org.daisy.dotify.api.writer
-Include-Resource: / = src/
--sources: false
+-sources: true
 Service-Component: *
 Import-Package: org.junit*;resolution:=optional,\
 	*
