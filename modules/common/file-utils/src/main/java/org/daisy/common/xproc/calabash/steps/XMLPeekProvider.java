@@ -142,7 +142,7 @@ public class XMLPeekProvider implements XProcStepProvider {
 				while ((r = reader.read()) != -1) {
 					// warn after 100K chars, break after 1M chars, we can possibly reduce these if this becomes a bottleneck
 					characterCount++;
-					if (characterCount > 100000) {
+					if (characterCount == 100000) {
 						logger.warn("More than 100 000 characters in prolog; this is probably not a XML file but will keep looking for root element a little while longer: "+file);
 					}
 					if (characterCount > 1000000) {

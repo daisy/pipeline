@@ -3,7 +3,6 @@
     xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
     xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
     xmlns:cx="http://xmlcalabash.com/ns/extensions"
     exclude-inline-prefixes="#all">
     
@@ -20,17 +19,20 @@
     <p:import href="normalize-uri.xpl"/>
     <p:import href="java-library.xpl"/>
     
-    <pxi:normalize-uri name="parent-dir">
-        <p:with-option name="href" select="$href"/>
-    </pxi:normalize-uri>
+    <px:normalize-uri name="parent-dir">
+        <p:with-option name="href" select="if (not(ends-with($href,'/'))) then concat($href,'/') else $href"/>
+    </px:normalize-uri>
+    <p:sink/>
     
     <px:mkdir>
-        <p:with-option name="href" select="string(/c:result)"/>
+        <p:with-option name="href" select="string(/c:result)">
+            <p:pipe step="parent-dir" port="normalized"/>
+        </p:with-option>
     </px:mkdir>
     
     <px:tempfile name="temp-file" suffix="">
         <p:with-option name="href" select="string(/c:result)">
-            <p:pipe step="parent-dir" port="result"/>
+            <p:pipe step="parent-dir" port="normalized"/>
         </p:with-option>
     </px:tempfile>
     

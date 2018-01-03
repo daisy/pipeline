@@ -14,7 +14,13 @@
         -->
         <xsl:analyze-string select="concat('X',$uri)" regex="^X(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?">
             <xsl:matching-substring>
-                <xsl:sequence select="(regex-group(2),regex-group(4),regex-group(5),regex-group(7),regex-group(9))"/>
+                <xsl:sequence select="(
+                    if (regex-group(1)) then regex-group(2) else '',
+                    if (regex-group(3)) then regex-group(4) else '',
+                    regex-group(5),
+                    if (regex-group(6)) then regex-group(7) else '',
+                    if (regex-group(8)) then regex-group(9) else ''
+                )"/>
             </xsl:matching-substring>
         </xsl:analyze-string>
     </xsl:function>

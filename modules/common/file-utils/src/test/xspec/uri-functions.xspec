@@ -2,11 +2,20 @@
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
     stylesheet="../../main/resources/xml/xslt/uri-functions.xsl">
 
-    <x:scenario pending="Not yet implemented" label="function tokenize-uri">
-        <x:call function="pf:tokenize-uri">
-            <x:param name="uri" select="''"/>
-        </x:call>
-        <x:expect label="Not yet implemented" select="'Not yet implemented'"/>
+    <x:scenario label="function tokenize-uri">
+        <x:call function="pf:tokenize-uri"/>
+        <x:scenario label="example from the RFC">
+            <x:call>
+                <x:param name="uri" select="'foo://example.com:8042/over/there?name=ferret#nose'"/>
+            </x:call>
+            <x:expect label="result" select="('foo','example.com:8042','/over/there','name=ferret','nose')"/>
+        </x:scenario>
+        <x:scenario label="relative path uri">
+            <x:call>
+                <x:param name="uri" select="'a/path'"/>
+            </x:call>
+            <x:expect label="result" select="('','','a/path','','')"/>
+        </x:scenario>
     </x:scenario>
 
     <x:scenario pending="Not yet implemented" label="function recompose-uri">
@@ -379,6 +388,16 @@
             <x:call><x:param name="uri" select="'file:/home3/user/a/b/c/d/e/f/.tmp/../../sub/././../.././../.././.folder/file.xml'"/></x:call>
             <x:expect label="'.' should be removed, '..' should be resolved" select="'file:/home3/user/a/b/.folder/file.xml'"/>
         </x:scenario>
+        
+        <!-- preserve trailing slash in file uris -->
+        <x:scenario label="uri with trailing slash">
+            <x:call><x:param name="uri" select="'file:/tmp//dir/file.xml/'"/></x:call>
+            <x:expect label="slash should be preserved" select="'file:/tmp/dir/file.xml/'"/>
+        </x:scenario>
+        <x:scenario label="uri without trailing slash">
+            <x:call><x:param name="uri" select="'file:/tmp//dir/file.xml'"/></x:call>
+            <x:expect label="slash should not be added" select="'file:/tmp/dir/file.xml'"/>
+        </x:scenario>
     </x:scenario>
     
     
@@ -569,6 +588,16 @@
                 <x:param name="path" select="'/../a/b/../c/./d.html'"/>
             </x:call>
             <x:expect label="Removing dot-segments" select="'/a/c/d.html'"/>
+        </x:scenario>
+        
+        <!-- preserve trailing slash -->
+        <x:scenario label="path with trailing slash">
+            <x:call><x:param name="path" select="'/tmp//dir/file.xml/'"/></x:call>
+            <x:expect label="slash should be preserved" select="'/tmp/dir/file.xml/'"/>
+        </x:scenario>
+        <x:scenario label="path without trailing slash">
+            <x:call><x:param name="path" select="'/tmp//dir/file.xml'"/></x:call>
+            <x:expect label="slash should not be added" select="'/tmp/dir/file.xml'"/>
         </x:scenario>
     </x:scenario>
 
