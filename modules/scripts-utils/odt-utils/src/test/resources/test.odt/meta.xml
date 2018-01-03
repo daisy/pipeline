@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><office:document-meta xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:grddl="http://www.w3.org/2003/g/data-view#" office:version="1.2">
+	<office:meta>
+                    <meta:generator>org.daisy.pipeline.modules/dtbook-to-odt/1.1.2-SNAPSHOT</meta:generator>
+                
+                    <meta:user-defined meta:name="dtbook-to-odt.version">1.1.2-SNAPSHOT</meta:user-defined>
+                
+		<dc:description>Als E-Book strukturiert von der Schweiz, Bibliothek für Blinde und Sehbehinderete, Grubenstrasse 12, 8045 Zürich. Bitte das Copyright beachten!</dc:description>
+	<dc:creator/><meta:initial-creator/><dc:date/><meta:creation-date/><dc:title/></office:meta>
+</office:document-meta>

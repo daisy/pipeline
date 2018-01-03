@@ -2,7 +2,6 @@
 <p:declare-step
     xmlns:p="http://www.w3.org/ns/xproc"
     xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
     xmlns:c="http://www.w3.org/ns/xproc-step"
     xmlns:d="http://www.daisy.org/ns/pipeline/data"
     xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
@@ -19,26 +18,22 @@
         <p:pipe step="result" port="result"/>
     </p:output>
     
-    <p:import href="utils/normalize-uri.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl"/>
     
     <p:variable name="base" select="//d:file[starts-with(@media-type, 'application/vnd.oasis.opendocument')]
                                     /resolve-uri(@href, base-uri(.))"/>
     
-    <pxi:normalize-uri name="href">
+    <px:normalize-uri name="href">
         <p:with-option name="href" select="$href"/>
-    </pxi:normalize-uri>
-    <p:sink/>
+    </px:normalize-uri>
     
     <!-- ================= -->
     <!-- Generate manifest -->
     <!-- ================= -->
     
     <p:xslt name="manifest">
-        <p:input port="source">
-            <p:pipe step="store" port="fileset.in"/>
-        </p:input>
         <p:input port="stylesheet">
             <p:document href="manifest-from-fileset.xsl"/>
         </p:input>
@@ -120,7 +115,7 @@
             <p:pipe port="result" step="zip-manifest"/>
         </p:input>
         <p:with-option name="href" select="/c:result/string()">
-            <p:pipe step="href" port="result"/>
+            <p:pipe step="href" port="normalized"/>
         </p:with-option>
     </px:zip>
     

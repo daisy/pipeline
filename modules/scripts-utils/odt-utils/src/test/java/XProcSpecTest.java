@@ -5,10 +5,11 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	@Override
 	protected String[] testDependencies() {
 		return new String[] {
-			"org.daisy.libs:jing:?",
+			"org.daisy.pipeline:calabash-adapter:?",
 			pipelineModule("common-utils"),
-			pipelineModule("validation-utils"),
-			pipelineModule("dtbook-utils"),
+			pipelineModule("fileset-utils"),
+			pipelineModule("file-utils"),
+			pipelineModule("zip-utils")
 		};
 	}
 }
