@@ -100,6 +100,28 @@ sub generate_variable {
 	}
 }
 
+my %variable_evaluations = ();
+
+sub evaluate_variable {
+	my ($name) = @_;
+	if (exists $variable_evaluations{$name}) {
+		$variable_evaluations{$name}->();
+		delete($variable_evaluations{$name});
+	}
+	return "$name";
+}
+
+sub add_lambdas {
+	my @lambdas = @_;
+    return sub {
+		for (@lambdas) {
+			if ($_) {
+				$_->();
+			}
+		}
+	};
+}
+
 # find all commits between $from and $to that either can reach, or are reachable from, any other commit
 sub common_path_between {
 	my ($from, $to) = @_;
@@ -204,6 +226,8 @@ sub merge_base_sub {
 	return ($base_a, $base_b);
 }
 
+# may return unevaluated variable
+# argument $onto may be unevaluated variable
 sub rebase_on_subrepo {
 	my ($subdir, $rev, $base, $onto) = @_;
 	my @last_sync = find_last_git_subrepo_commit($subdir, $rev);
@@ -221,28 +245,34 @@ sub rebase_on_subrepo {
 			}
 			my $commits_in_subtree = grep { `git diff-tree -r $_ -- $subdir` } distance(@$base[0], $rev);
 			if ($commits_in_subtree) {
-				my $temp_branch;
-				if (`git rev-parse --abbrev-ref $rev`) {
-					print "git checkout $rev\n";
-				} else {
-					$temp_branch = generate_branch_name("tmp_");
-					print "git checkout -b $temp_branch $rev\n";
-				}
-				print "git subrepo branch $subdir\n";
-				print "git checkout \$(git rev-parse subrepo/$subdir)\n";
-				print "git branch -D subrepo/$subdir";
-				if ($temp_branch) {
-					print " $temp_branch";
-				}
-				print "\n";
-				if (not @$base[1]) {
-					print "gitk $onto HEAD\n";
-				} elsif (not (@$base[1] eq $onto)) {
-					print "gitk $onto @$base[1] HEAD\n";
-				}
-				print "git rebase --onto $onto HEAD~$commits_in_subtree HEAD\n";
 				my $var = generate_variable("tmp_");
-				print "$var=\$(git rev-parse HEAD)\n";
+				my $evaluation = sub {
+					my $temp_branch;
+					if (`git rev-parse --abbrev-ref $rev`) {
+						print "git checkout $rev\n";
+					} else {
+						$temp_branch = generate_branch_name("tmp_");
+						print "git checkout -b $temp_branch $rev\n";
+					}
+					print "git subrepo branch $subdir\n";
+					print "git checkout \$(git rev-parse subrepo/$subdir)\n";
+					print "git branch -D subrepo/$subdir";
+					if ($temp_branch) {
+						print " $temp_branch";
+					}
+					print "\n";
+					if ($onto =~ /^\$/) {
+						evaluate_variable($onto);
+					}
+					if (not @$base[1]) {
+						print "gitk $onto HEAD\n";
+					} elsif (not (@$base[1] eq $onto)) {
+						print "gitk $onto @$base[1] HEAD\n";
+					}
+					print "git rebase --onto $onto HEAD~$commits_in_subtree HEAD\n";
+					print "$var=\$(git rev-parse HEAD)\n";
+				};
+				$variable_evaluations{"\$$var"} = $evaluation;
 				return "\$$var";
 			} else {
 				return $onto;
@@ -250,40 +280,65 @@ sub rebase_on_subrepo {
 		} elsif (@$base[1]) {
 			# not (@$base[1] eq $last_sync[1]) or die "coding error";
 			my $commits_in_subtree = grep { `git diff-tree -r $_ -- $subdir` } distance($last_sync[0], $rev);
+			my $evaluation;
 			if ($commits_in_subtree) {
-				my $temp_branch;
-				if (`git rev-parse --abbrev-ref $rev`) {
-					print "git checkout $rev\n";
-				} else {
-					$temp_branch = generate_branch_name("tmp_");
-					print "git checkout -b $temp_branch $rev\n";
-				}
-				print "git subrepo branch $subdir\n";
-				print "git checkout \$(git rev-parse subrepo/$subdir)\n";
-				print "git branch -D subrepo/$subdir";
-				if ($temp_branch) {
-					print " $temp_branch";
-				}
-				print "\n";
-				print "git rebase --onto $last_sync[1] HEAD~$commits_in_subtree HEAD\n";
+				$evaluation = sub {
+					my $temp_branch;
+					if (`git rev-parse --abbrev-ref $rev`) {
+						print "git checkout $rev\n";
+					} else {
+						$temp_branch = generate_branch_name("tmp_");
+						print "git checkout -b $temp_branch $rev\n";
+					}
+					print "git subrepo branch $subdir\n";
+					print "git checkout \$(git rev-parse subrepo/$subdir)\n";
+					print "git branch -D subrepo/$subdir";
+					if ($temp_branch) {
+						print " $temp_branch";
+					}
+					print "\n";
+					print "git rebase --onto $last_sync[1] HEAD~$commits_in_subtree HEAD\n";
+				};
 			}
 			if ($onto eq @$base[1]) {
 				if (not $commits_in_subtree) {
+					if ($evaluation) {
+						$evaluation->();
+					}
 					return $last_sync[1];
 				}
 			} else {
 				if ($commits_in_subtree) {
-					print "gitk $onto HEAD\n";
-					print "git rebase --onto $onto @$base[1] HEAD\n";
+					$evaluation = add_lambdas(
+						$evaluation,
+						sub {
+							if ($onto =~ /^\$/) {
+								evaluate_variable($onto);
+							}
+							print "gitk $onto HEAD\n";
+							print "git rebase --onto $onto @$base[1] HEAD\n"; });
 				} elsif (@$base[1] eq $last_sync[1]) {
+					if ($evaluation) {
+						$evaluation->();
+					}
 					return $onto;
 				} else {
-					print "gitk $onto $last_sync[1]\n";
-					print "git rebase --onto $onto @$base[1] $last_sync[1]\n";
+					$evaluation = add_lambdas(
+						$evaluation,
+						sub {
+							if ($onto =~ /^\$/) {
+								evaluate_variable($onto);
+							}
+							print "gitk $onto $last_sync[1]\n";
+							print "git rebase --onto $onto @$base[1] $last_sync[1]\n"; });
 				}
 			}
 			my $var = generate_variable("tmp_");
-			print "$var=\$(git rev-parse HEAD)\n";
+			$evaluation = add_lambdas(
+				$evaluation,
+				sub {
+					print "$var=\$(git rev-parse HEAD)\n"; });
+			$variable_evaluations{"\$$var"} = $evaluation;
 			return "\$$var";
 		} else {
 			die "coding error";
@@ -323,6 +378,12 @@ if ($merge_base) {
 		my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_commit, $base_a, $onto);
 		my $rebased_b = rebase_on_subrepo($subrepo, $merge_revision,        $base_b, $onto);
 		if (not $rebased_a eq $rebased_b) {
+			if ($rebased_a =~ /^\$/) {
+				evaluate_variable($rebased_a);
+			}
+			if ($rebased_b =~ /^\$/) {
+				evaluate_variable($rebased_b);
+			}
 			my $merged;
 			if (revision_exists($rebased_a)
 				and revision_exists($rebased_b)
