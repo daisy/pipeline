@@ -154,6 +154,12 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         else
           fragment = ''
         end
+        if rel_path =~ /^([^\?]*)(\?.+)$/o
+          rel_path = $1
+          query = $2
+        else
+          query = ''
+        end
         if rel_path.empty?
           next
         end
@@ -214,6 +220,14 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         fragment = $2
       else
         fragment = ''
+      end
+    end
+    if not query
+      if abs_path =~ /^([^\?]*)(\?.+)$/o
+        abs_path = $1
+        query = $2
+      else
+        query = ''
       end
     end
     if abs_path =~ /^(.*\/)index\.html$/o
