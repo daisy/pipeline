@@ -4,3 +4,13 @@
 - group: org.daisy.pipeline
   artifact: clientlib-java-httpclient
   version: 2.0.2-SNAPSHOT
+- group: org.daisy.pipeline
+  artifact: common-utils
+- group: org.daisy.pipeline
+  artifact: xproc-api
+- group: org.daisy.pipeline
+  artifact: framework-core
+- group: org.daisy.pipeline
+  artifact: modules-registry
+- group: org.daisy.pipeline
+  artifact: xmlcatalog
