@@ -85,9 +85,10 @@ class PEFValidator implements Validator {
 	private List<UserOption> buildOptions() {
 		List<UserOption> ret = new ArrayList<>();
 		ret.add(new UserOption.Builder(FEATURE_MODE)
-				.defaultValue(Mode.FULL.name())
-				.addValue(new UserOptionValue.Builder(Mode.FULL.name().toLowerCase()).description("Runs all tests").build())
-				.addValue(new UserOptionValue.Builder(Mode.LIGHT.name().toLowerCase()).description("Runs basic tests").build())
+				.description("Sets the accuracy/speed of the validator")
+				.defaultValue(Mode.FULL.name().toLowerCase())
+				.addValue(new UserOptionValue.Builder(Mode.FULL.name().toLowerCase()).description("Runs all tests (more accurate)").build())
+				.addValue(new UserOptionValue.Builder(Mode.LIGHT.name().toLowerCase()).description("Runs basic tests (faster)").build())
 				.build());
 		return ret;
 	}
