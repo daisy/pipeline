@@ -170,16 +170,16 @@
 													                                      string(pom:artifactId)=string(current()/pom:artifactId) and
 													                                      string(pom:type)=string(current()/pom:type)]
 													                      /pom:version"/>
-													<xsl:choose>
-														<xsl:when test="$managed-version">
-															<pom:version>
+													<pom:version>
+														<xsl:choose>
+															<xsl:when test="$managed-version">
 																<xsl:value-of select="$managed-version"/>
-															</pom:version>
-														</xsl:when>
-														<xsl:otherwise>
-															<xsl:copy-of select="pom:version"/>
-														</xsl:otherwise>
-													</xsl:choose>
+															</xsl:when>
+															<xsl:otherwise>
+																<xsl:text>DUMMY</xsl:text>
+															</xsl:otherwise>
+														</xsl:choose>
+													</pom:version>
 												</xsl:copy>
 											</xsl:for-each>
 										</pom:dependencies>
