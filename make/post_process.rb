@@ -128,7 +128,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       result = query.execute(graph)
       if not result.empty?
         abs_url = result[0]['href']
-      elsif a['href'] =~ /http.*/o
+      elsif a['href'] =~ /^http.*/o
         link_warning(a, href_attr, f)
         next
       end
@@ -139,7 +139,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         abs_path = a[href_attr]
         
       # absolute url
-      elsif a[href_attr] =~ /http.*/o
+      elsif a[href_attr] =~ /^http.*/o
         abs_url = a[href_attr]
       end
     end
@@ -153,6 +153,12 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
           fragment = $2
         else
           fragment = ''
+        end
+        if rel_path =~ /^([^\?]*)(\?.+)$/o
+          rel_path = $1
+          query = $2
+        else
+          query = ''
         end
         if rel_path.empty?
           next
@@ -216,6 +222,14 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         fragment = ''
       end
     end
+    if not query
+      if abs_path =~ /^([^\?]*)(\?.+)$/o
+        abs_path = $1
+        query = $2
+      else
+        query = ''
+      end
+    end
     if abs_path =~ /^(.*\/)index\.html$/o
       abs_path = $1
     elsif abs_path =~ /^(.+)\.html$/o
@@ -234,6 +248,16 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
     else
       if f_path.start_with?('/modules/')
         # FIXME: include sources
+        link_warning(a, href_attr, f)
+      elsif ['/api/overview-summary',
+             '/api/overview-tree',
+             '/api/index',
+             '/api/index-all',
+             '/api/allclasses-noframe',
+             '/api/serialized-form',
+             '/api/deprecated-list',
+             '/api/constant-values'].include?(abs_path)
+        # FIXME
         link_warning(a, href_attr, f)
       else
         link_error(a, href_attr, f)
