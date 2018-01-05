@@ -27,6 +27,15 @@ dependencies:
 The entry point of the library is the class
 [`org.daisy.pipeline.client.http.WS`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/client/http/WS.html).
 
+## Go Client Library
+
+We also provide a HTTP client library for the Go language. Run the
+following command to download and install the "pipeline" package:
+
+~~~sh
+go get github.com/daisy/pipeline-clientlib-go
+~~~
+
 ## Java API
 
 DAISY Pipeline 2 may also be used directly as a Java library instead
