@@ -29,7 +29,10 @@ all : $(JEKYLL_DIR)/_site
 $(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(JEKYLL_FILES)
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)/
-	make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE)
+	if ! make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE); then \
+		rm -rf $@; \
+		exit 1; \
+	fi
 	touch $@
 
 $(JEKYLL_FILES_CONTENT) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
