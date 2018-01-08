@@ -187,6 +187,23 @@ for my $subrepo (@subrepos) {
 		$subrepo_commit = rev_parse($subrepo_commit);
 		@subrepo_branches = grep { $remote_branches{$_} eq $subrepo_commit } keys %remote_branches;
 		if (not @subrepo_branches) {
+			for (`git remote`) {
+				chomp;
+				my $r = $_;
+				for (`git ls-remote . "refs/remotes/$r/*"`) {
+					$_ =~ /^([0-9a-f]+)\trefs\/remotes\/\Q$r\E\/(.+)$/ or die;
+					if ($1 eq $subrepo_commit) {
+						$remote = $r;
+						@subrepo_branches = $2;
+						last;
+					}
+				}
+				if (@subrepo_branches) {
+					last;
+				}
+			}
+		}
+		if (not @subrepo_branches) {
 			my @behind_branches = in_remote_branches($subrepo_commit, $remote);
 			if (@behind_branches) {
 				for (@behind_branches) {
@@ -232,6 +249,9 @@ for my $subrepo (@subrepos) {
 			}
 			print_color("bold yellow");
 			print "$branch";
+			if (not $remote eq "subrepo/$subrepo" =~ s/\/\./\/%2e/r) {
+				print " @ $remote";
+			}
 			print_color_reset;
 			my @pr_number;
 			if ($show_pr_numbers) {
@@ -252,7 +272,7 @@ for my $subrepo (@subrepos) {
 				print ")";
 			}
 		} else {
-			print_color("bold yellow");
+			print_color("bold red");
 			print substr("$subrepo_commit", 0, 7 + 1);
 			print_color_reset;
 		}
@@ -262,16 +282,16 @@ for my $subrepo (@subrepos) {
 			print_color_reset;
 		} else {
 			if ($behind) {
-				print_color("bold red");
-				# TODO: use format with tilde ~ and/or caret ^ (e.g. "master~209^2~15")
-				print " -$behind";
+				print_color("bold yellow");
+				# TODO: this is not always accurate; express $subrepo_commit in terms of $subrepo_branches[0], ~N, and ^N
+				print "~$behind";
 				print_color_reset;
 			} elsif ($ahead) {
 				print_color("bold red");
 				print " +$ahead";
 				print_color_reset;
 			}
-			if ($behind or $ahead) {
+			if ($behind or $ahead or not @subrepo_branches) {
 				print " (";
 				my $local_branch; {
 					for (`git branch --contains $subrepo_commit`) {
@@ -285,7 +305,7 @@ for my $subrepo (@subrepos) {
 				}
 				if (defined $local_branch) {
 					print "$local_branch";
-				} else {
+				} elsif ($behind or $ahead) {
 					print substr("$subrepo_commit", 0, 7 + 1);
 				}
 				print ")";
