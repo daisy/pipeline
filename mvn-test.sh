@@ -3,6 +3,6 @@
 set -e
 set -o pipefail
 for arg in "$@"; do
-    cd $arg
+    cd "$ROOT_DIR/$arg"
     eval $MVN clean verify | eval $MVN_LOG
 done
