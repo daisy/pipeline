@@ -466,7 +466,8 @@
 									<xsl:when test="$internal-runtime-dependencies/pom:project[
 									                  string(pom:groupId)=string(current()/pom:groupId) and
 									                  string(pom:artifactId)=string(current()/pom:artifactId) and
-									                  replace(pom:version,'-SNAPSHOT$','')=replace(current()/pom:version,'-SNAPSHOT$','')]">
+									                  string(pom:version)=(string(current()/pom:version),
+									                                       replace(current()/pom:version,'-SNAPSHOT$',''))]">
 										<xsl:call-template name="location-in-repo">
 											<xsl:with-param name="groupId" select="pom:groupId"/>
 											<xsl:with-param name="artifactId" select="pom:artifactId"/>
@@ -475,7 +476,7 @@
 											<xsl:with-param name="classifier" select="pom:classifier"/>
 										</xsl:call-template>
 									</xsl:when>
-									<xsl:otherwise>
+									<xsl:when test="ends-with(pom:version, '-SNAPSHOT')">
 										<xsl:call-template name="location-in-repo">
 											<xsl:with-param name="groupId" select="pom:groupId"/>
 											<xsl:with-param name="artifactId" select="pom:artifactId"/>
@@ -483,7 +484,7 @@
 											<xsl:with-param name="type" select="pom:type"/>
 											<xsl:with-param name="classifier" select="pom:classifier"/>
 										</xsl:call-template>
-									</xsl:otherwise>
+									</xsl:when>
 								</xsl:choose>
 							</xsl:for-each>
 						</xsl:variable>
@@ -632,11 +633,7 @@
 				</xsl:choose>
 			</xsl:variable>
 			<xsl:choose>
-				<xsl:when test="ends-with($version, '-SNAPSHOT')
-				                or $internal-runtime-dependencies/pom:project[
-				                       string(pom:groupId)=$groupId and
-				                       string(pom:artifactId)=$artifactId and
-				                       string(pom:version)=concat($version,'-SNAPSHOT')]">
+				<xsl:when test="ends-with($version, '-SNAPSHOT')">
 					<xsl:variable name="type">
 						<xsl:choose>
 							<xsl:when test="self::pom:parent">
