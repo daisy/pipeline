@@ -18,7 +18,7 @@ if [ "$1" == "--dry-run" ]; then
 else
     if [[ -z ${HOST_PLATFORM} ]]; then
         for arg in "$@"; do
-            cd $arg
+            cd "$ROOT_DIR/$arg"
             eval $MVN clean install -DskipTests -Dinvoker.skip=true | eval $MVN_LOG
         done
     else

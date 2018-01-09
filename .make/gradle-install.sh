@@ -2,6 +2,6 @@
 [[ -n ${VERBOSE+x} ]] && set -x
 set -e
 for arg in "$@"; do
-    cd $arg
+    cd "$ROOT_DIR/$arg"
     eval $GRADLE install
 done
