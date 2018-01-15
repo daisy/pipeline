@@ -47,7 +47,7 @@ $stdout << CommaParty.markup(
                version && [:version, version],
                [:type, 'jar'],
                [:classifier, 'doc'],
-               [:outputDirectory, (group.gsub('.', '/') + '/' + artifact).sub(/^org\/daisy\/pipeline\//, '')]]}]
+               [:outputDirectory, 'doc/' + (group.gsub('.', '/') + '/' + artifact)]]}]
          else
            []
          end      
