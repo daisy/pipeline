@@ -14,3 +14,17 @@
   artifact: modules-registry
 - group: org.daisy.pipeline
   artifact: xmlcatalog
+- group: org.daisy.pipeline.modules.braille
+  artifact: common-utils
+- group: org.daisy.pipeline.modules.braille
+  artifact: css-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: dotify-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: libhyphen-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: liblouis-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: pef-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: texhyph-core
