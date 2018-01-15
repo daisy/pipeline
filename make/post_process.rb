@@ -128,8 +128,8 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       result = query.execute(graph)
       if not result.empty?
         abs_url = result[0]['href']
-      elsif a['href'] =~ /^http.*/o
-        link_warning(a, href_attr, f)
+      elsif a['href'] =~ /^https?:\/\//o
+        link_error(a, href_attr, f)
         next
       end
     else
@@ -139,7 +139,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         abs_path = a[href_attr]
         
       # absolute url
-      elsif a[href_attr] =~ /^http.*/o
+      elsif a[href_attr] =~ /^https?:\/\//o
         abs_url = a[href_attr]
       end
     end
@@ -245,9 +245,23 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       abs_path = target_path
     elsif File.exist?($base_dir + abs_path + '/index.html')
       target_path = abs_path + '/index.html'
-    else
+    elsif a['class'] == 'apidoc' and abs_path =~ /^\/modules\/.+\/java\/(.+)$/o
+      abs_path = '/api/' + $1
+      if File.exist?($base_dir + abs_path) and not File.directory?($base_dir + abs_path)
+        target_path = abs_path
+      elsif File.exist?($base_dir + abs_path + '.html')
+        target_path = abs_path + '.html'
+        abs_path = target_path
+      elsif File.exist?($base_dir + abs_path + '/index.html')
+        target_path = abs_path + '/index.html'
+      elsif File.exist?($base_dir + abs_path + '/package-summary.html')
+        target_path = abs_path + '/package-summary.html'
+        abs_path = target_path
+      end
+    end
+    if not target_path
       if f_path.start_with?('/modules/')
-        # FIXME: include sources
+        # FIXME
         link_warning(a, href_attr, f)
       elsif ['/api/overview-summary',
              '/api/overview-tree',
@@ -258,14 +272,14 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
              '/api/deprecated-list',
              '/api/constant-values'].include?(abs_path)
         # FIXME
-        link_warning(a, href_attr, f)
+        #link_warning(a, href_attr, f)
       else
         link_error(a, href_attr, f)
       end
     end
     
     # check that links between collections are absolute
-    if not a[href_attr] =~ /http.*/o
+    if not a[href_attr] =~ /^https?:\/\//o
       ['/_wiki/', '/_wiki_gui/', '/_wiki_webui/'].each do |src_dir|
         if src_path.start_with?(src_dir)
           if a.xpath("ancestor::ul[@class='spine']").empty?
