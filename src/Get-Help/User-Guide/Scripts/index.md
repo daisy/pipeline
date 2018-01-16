@@ -15,7 +15,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
 <table id="scripts-matrix">
   <tr>
     <th colspan="1" rowspan="2">Inputs</th>
-    <th colspan="7">Outputs</th>
+    <th colspan="8">Outputs</th>
   </tr>
   <tr>
     <th>DAISY 2.02</th>
@@ -25,12 +25,14 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <th>ZedAI</th>
     <th>PEF</th>
     <th>RTF</th>
+    <th>ODT</th>
   </tr>
   <tr>
     <th>DAISY 2.02</th>
     <td></td>
     <td></td>
     <td><a href="{{site.baseurl}}/modules/daisy202-to-epub3">x</a></td>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>
@@ -45,6 +47,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td></td>
     <td></td>
     <td></td>
+    <td></td>
   </tr>
   <tr>
     <th>DTBook</th>
@@ -55,6 +58,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td><a href="{{site.baseurl}}/modules/dtbook-to-zedai">x</a></td>
     <td><a href="{{site.baseurl}}/modules/braille/dtbook-to-pef">x</a></td>
     <td><a href="{{site.baseurl}}/modules/dtbook-to-rtf">x</a></td>
+    <td><a href="{{site.baseurl}}/modules/dtbook-to-odt">x</a></td>
   </tr>
   <tr>
     <th>EPUB 3</th>
@@ -64,6 +68,8 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td></td>
     <td></td>
     <td><a href="{{site.baseurl}}/modules/braille/epub3-to-pef">x</a></td>
+    <td></td>
+    <td></td>
   </tr>
   <tr>
     <th>HTML</th>
@@ -74,6 +80,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td></td>
     <td><a href="{{site.baseurl}}/modules/braille/html-to-pef">x</a></td>
     <td></td>
+    <td></td>
   </tr>
   <tr>
     <th>ZedAI</th>
@@ -83,6 +90,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td><a href="{{site.baseurl}}/modules/zedai-to-html">x</a></td>
     <td></td>
     <td><a href="{{site.baseurl}}/modules/braille/zedai-to-pef">x</a></td>
+    <td></td>
     <td></td>
   </tr>
 </table>

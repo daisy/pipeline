@@ -14,8 +14,8 @@
   artifact: dtbook-to-epub3
 - group: org.daisy.pipeline.modules
   artifact: dtbook-to-html
-# - group: org.daisy.pipeline.modules
-#   artifact: dtbook-to-odt
+- group: org.daisy.pipeline.modules
+  artifact: dtbook-to-odt
 - group: org.daisy.pipeline.modules
   artifact: dtbook-to-rtf
 - group: org.daisy.pipeline.modules
