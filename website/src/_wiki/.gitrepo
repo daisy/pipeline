@@ -4,8 +4,8 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = git@github.com:daisy/pipeline.git
+	remote = git@github.com:daisy/pipeline.wiki.git
 	branch = wiki
 	commit = 62c679fcc53b3639d40bf05fc1204244a3fa6e78
-	parent = e71dc655820d979005e616f18709fc07910318e0
-	cmdver = 0.3.0
+	parent = e65c8d842609705318a7f9682b5a6a5eb555b5b3
+	cmdver = 0.3.1

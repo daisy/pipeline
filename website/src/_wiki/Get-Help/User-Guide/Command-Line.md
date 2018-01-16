@@ -1,6 +1,3 @@
----
-layout: default
----
 # Command Line Tool
 
 The command line is not a standalone tool. It only works in
@@ -12,9 +9,9 @@ server.
 ## Installation
 
 Choose a package from the
-[downloads page]({{site.baseurl}}/Download.html) that includes the
-command line tool, then follow the installation instructions for that
-package.
+[downloads page](http://daisy.github.io/pipeline//Download.html) that
+includes the command line tool, then follow the installation
+instructions for that package.
 
 ## Usage
 

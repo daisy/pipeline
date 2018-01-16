@@ -139,23 +139,23 @@ The following properties should not be edited! <!-- FIXME: move them to a differ
 `org.daisy.pipeline.data`
 : Path to a writeable directory for storing program data
 : Automatically set based on the platform and the
-  [`PIPELINE2_DATA`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
+  [`PIPELINE2_DATA`](Pipeline-as-Service#environment-variables)
   environment variable
 
 `org.daisy.pipeline.ws.localfs`
 : Whether or not to allow local filesystem interaction when the client is running on the same machine as the server
 : Automatically set based on the
-  [`PIPELINE2_LOCAL`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
+  [`PIPELINE2_LOCAL`](Pipeline-as-Service#environment-variables)
   environment variable and the
-  [`local`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#arguments-for-pipeline2-executable)
+  [`local`](Pipeline-as-Service#arguments-for-pipeline2-executable)
   argument
 
 `org.daisy.pipeline.ws.authentication`
 : Whether or not the web service requires authentication
 : Automatically set based on the
-  [`PIPELINE2_AUTH`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#environment-variables)
+  [`PIPELINE2_AUTH`](Pipeline-as-Service#environment-variables)
   environment variable and the
-  [`remote`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service#arguments-for-pipeline2-executable)
+  [`remote`](Pipeline-as-Service#arguments-for-pipeline2-executable)
   argument
 
 `org.daisy.pipeline.iobase`

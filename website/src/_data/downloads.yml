@@ -1,6 +1,11 @@
 ## For file names and sizes, see https://api.github.com/repos/daisy/pipeline-assembly/releases
 
 - group: main
+  version: "1.10.4"
+  sort: "1.10.4"
+  state: update
+
+- group: main
   version: "1.10.3"
   sort: "1.10.3"
   state: update

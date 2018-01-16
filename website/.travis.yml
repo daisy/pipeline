@@ -1,0 +1,18 @@
+before_install:
+  - gem install jekyll:3.3.0
+                rdf:1.1.15
+                rdf-xsd:1.1.4
+                rdf-aggregate-repo:1.1.0
+                sparql-client:1.1.6
+                sparql:1.1.8
+                rdf-turtle:1.1.7
+                rdf-rdfa:1.1.6
+                commaparty:0.0.2
+                nokogiri:1.5.6
+                mustache:1.0.2
+                github-markup:1.4.0
+                coderay:1.1.0
+script:
+  - make
+after_success:
+  - source .travis/publish.sh
