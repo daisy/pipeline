@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.daisy.dotify.tasks.impl.input.text.TextInputManager.Type;
 import org.daisy.streamline.api.tasks.TaskGroup;
 import org.daisy.streamline.api.tasks.TaskGroupFactory;
 import org.daisy.streamline.api.tasks.TaskGroupInformation;
@@ -17,26 +18,22 @@ import aQute.bnd.annotation.component.Component;
  */
 @Component
 public class TextInputManagerFactory implements TaskGroupFactory {
-	private final Set<TaskGroupSpecification> specs;
 	private final Set<TaskGroupInformation> information;
+	private static final String HTML = "html";
 
 	/**
 	 * Creates a new text input manager factory.
 	 */
 	public TextInputManagerFactory() {
-		this.specs = new HashSet<>();
 		String text = "text";
 		String txt = "txt";
 		String obfl = "obfl";
-		String sv = "sv-SE";
-		String en = "en-US";
-		this.specs.add(new TaskGroupSpecification(text, obfl, sv));
-		this.specs.add(new TaskGroupSpecification(text, obfl, en));
-		this.specs.add(new TaskGroupSpecification(txt, obfl, sv));
-		this.specs.add(new TaskGroupSpecification(txt, obfl, en));
+		
 		Set<TaskGroupInformation> tmp = new HashSet<>();
 		tmp.add(TaskGroupInformation.newConvertBuilder(text, obfl).build());
 		tmp.add(TaskGroupInformation.newConvertBuilder(txt, obfl).build());
+		tmp.add(TaskGroupInformation.newConvertBuilder(text, HTML).build());
+		tmp.add(TaskGroupInformation.newConvertBuilder(txt, HTML).build());
 		information = Collections.unmodifiableSet(tmp);
 	}
 	
@@ -47,7 +44,11 @@ public class TextInputManagerFactory implements TaskGroupFactory {
 
 	@Override
 	public TaskGroup newTaskGroup(TaskGroupSpecification spec) {
-		return new TextInputManager(spec.getLocale());
+		if (HTML.equalsIgnoreCase(spec.getOutputFormat())) {
+			return new TextInputManager(spec.getLocale(), Type.HTML);
+		} else {
+			return new TextInputManager(spec.getLocale(), Type.OBFL);
+		}
 	}
 
 	@Override
