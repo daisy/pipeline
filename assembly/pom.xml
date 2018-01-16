@@ -763,6 +763,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>dtbook-to-odt</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>dtbook-to-rtf</artifactId>
                 </artifactItem>
                 <artifactItem>
