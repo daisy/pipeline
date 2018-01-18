@@ -106,7 +106,7 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
   page_url = RDF::URI(site_base + baseurl + f_path)
   
   ## process links and images
-  doc.css('a, img, iframe').each do |a|
+  doc.css('a, img, iframe, link').each do |a|
     href_attr = (a.name == 'img' or a.name == 'iframe') ? 'src' : 'href';
     
     if not a[href_attr]
@@ -245,6 +245,9 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       ['/_wiki/', '/_wiki_gui/', '/_wiki_webui/'].each do |src_dir|
         if src_path.start_with?(src_dir)
           if a.xpath("ancestor::ul[@class='spine']").empty?
+            if target_path.start_with?('/css/')
+              break
+            end
             target_src_path = to_source(target_path)
             if not target_src_path.start_with?(src_dir)
               link_error(a, href_attr, f)
