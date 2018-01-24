@@ -12,27 +12,57 @@ for help on the format. The location of this file is specified in
 
 ## System properties
 
+All of the properties below (including the TTS properties) can also be
+set through environment variables. For example, the system property
+`org.daisy.pipeline.ws.host` can be set with the environment variable
+`PIPELINE2_WS_HOST`. The environment variable settings will have
+precedence over settings in the `system.properties` file.
+
+
 `org.daisy.pipeline.procs`
 : Maximum allowed number of jobs running simultaneously
 : **Allowed values**: A positive number
-: **Initial setting**: "2"
-: **Required**: No, defaults to "2"
+: **Required**: No
+: **Default**: "2"
 
 `org.daisy.pipeline.ws.host`
 : Host address for the web service
 : **Allowed values**: A host address
-: **Initial setting**: "localhost"
-: **Required**: No, defaults to "localhost"
+: **Required**: No
+: **Default**: "localhost"
 
 `org.daisy.pipeline.ws.port`
 : Port number for the web service
 : **Allowed values**: Any available port, from 0 to 65535
-: **Required**: No, defaults to "8181"
+: **Required**: No
+: **Default**: "8181"
 
 `org.daisy.pipeline.ws.path`
 : Path for the web service
 : **Allowed values**: Any URI path fragment
-: **Required**: No, defaults to "/ws"
+: **Required**: No
+: **Default**: "/ws"
+
+`org.daisy.pipeline.ws.localfs`
+: Whether to allow local filesystem interaction when the client is
+  running on the same machine as the server
+: **Allowed values**: "true" or "false"
+: **Required**: No
+: **Default**: "true"
+: May be overwritten by the
+  [`local`](Pipeline-as-Service#arguments-for-pipeline2-executable) ("true")
+  and [`remote`](Pipeline-as-Service#arguments-for-pipeline2-executable) ("false")
+  arguments
+
+`org.daisy.pipeline.ws.authentication`
+: Whether the web service requires authentication
+: **Allowed values**: "true" or "false"
+: **Required**: No
+: **Default**: "false"
+: May be overwritten by the
+  [`local`](Pipeline-as-Service#arguments-for-pipeline2-executable) ("false")
+  and [`remote`](Pipeline-as-Service#arguments-for-pipeline2-executable) ("true")
+  arguments
 
 `org.daisy.pipeline.ws.authentication.key`
 : Initial admin's authentication ID
@@ -47,7 +77,8 @@ for help on the format. The location of this file is specified in
 `org.daisy.pipeline.ws.ssl`
 : Makes the web service use the secure socket layer
 : **Allowed values**: "true" or "false"
-: **Required**: No, defaults to "false"
+: **Required**: No
+: **Default**: "false"
 
 `org.daisy.pipeline.ws.ssl.keystore`
 : Path to the SSL keystore file
@@ -67,53 +98,41 @@ for help on the format. The location of this file is specified in
 `org.daisy.pipeline.ws.maxrequesttime`
 : Maximum amount of time (in ms) that a web service request is considered valid
 : **Allowed values**: A positive long number
-: **Required**: No, defaults to "600000" (10 minutes)
+: **Required**: No
+: **Default**: "600000" (10 minutes)
 
 `org.daisy.pipeline.ws.tmpdir`
 : Path to a writable temporary directory
 : **Allowed values**: Local directory path
-: **Required**: No, defaults to "${java.io.tmpdir}" or "/tmp"
+: **Required**: No
+: **Default**: "${java.io.tmpdir}" or "/tmp"
 
-`org.daisy.pipeline.liblouis.external`
+`org.daisy.pipeline.updater.updateSite`
+: URL of the update service
+: **Required**: No
+: **Default**: "http://daisy.github.io/pipeline-assembly/releases/"
+
+`org.daisy.pipeline.braille.liblouis.external`
 : Whether to use the Liblouis library present on the system instead of the embedded version
 : **Allowed values**: "true" or "false"
-: **Required**: No, defaults to "false"
-
-`tts.config`
-: File to load TTS configuration properties from at start-up
-: **Allowed values**: Local file path
 : **Required**: No
+: **Default**: "false"
 
-`espeak.path`
-: Path to eSpeak executable
-: **Allowed values**: Local file path
-: **Required**: Yes, if you wish to use the eSpeak TTS engine and the
-  executable can not be found in one of the directories specified by
-  the environment variable "PATH"
+### TTS configuration
 
-`osxspeech.path`
-: Alternative path to OSX's command line program "say"
-: **Allowed values**: Local file path
-: **Required**: No, defaults to "/usr/bin/say"
+A number of system properties are specific to text-to-speech. These
+properties are documented
+[here](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).
 
 <!--
-`att.bin.priority`
-`att.servers`
-`att.client.path`
--->
 
-<!--
-`host.protection`
--->
+The following are used in persistence-mysql but persistence-mysql is not included
 
-<!-- The following are used in persistence-mysql but persistence-mysql is not included -->
-
-<!--
 `org.daisy.pipeline.persistence.url`
 : Database connection URL
 : **Allowed values**: A JDBC url
-: **Initial setting**: "jdbc:mysql://localhost:3306/daisy_pipeline"
-: **Required**: Yes
+: **Required**: No
+: **Default**: "jdbc:mysql://localhost:3306/daisy_pipeline"
 
 `org.daisy.pipeline.persistence.user`
 : Database user
@@ -124,17 +143,9 @@ for help on the format. The location of this file is specified in
 : Database password
 : **Allowed values**: A non-empty string
 : **Required**: Yes
--->
 
----
 
-The following properties should not be edited! <!-- FIXME: move them to a different file -->
-
-`org.daisy.pipeline.home`
-: Automatically set to the program's root directory
-
-`org.daisy.pipeline.version`
-: The program's version number
+The following should not be edited
 
 `org.daisy.pipeline.data`
 : Path to a writeable directory for storing program data
@@ -142,73 +153,45 @@ The following properties should not be edited! <!-- FIXME: move them to a differ
   [`PIPELINE2_DATA`](Pipeline-as-Service#environment-variables)
   environment variable
 
-`org.daisy.pipeline.ws.localfs`
-: Whether or not to allow local filesystem interaction when the client is running on the same machine as the server
-: Automatically set based on the
-  [`PIPELINE2_WS_LOCALFS`](Pipeline-as-Service#environment-variables)
-  environment variable and the
-  [`local`](Pipeline-as-Service#arguments-for-pipeline2-executable)
-  argument
-
-`org.daisy.pipeline.ws.authentication`
-: Whether or not the web service requires authentication
-: Automatically set based on the
-  [`PIPELINE2_WS_AUTHENTICATION`](Pipeline-as-Service#environment-variables)
-  environment variable and the
-  [`remote`](Pipeline-as-Service#arguments-for-pipeline2-executable)
-  argument
-
 `org.daisy.pipeline.iobase`
 : Path to a writable directory for storing job data
-: **Set to**: "${org.daisy.pipeline.data}/jobs"
+: **Default**: "${org.daisy.pipeline.data}/jobs"
 
 `org.daisy.pipeline.logdir`
 : Path to a writeable directory for storing global logging info
 : Property is used in [`config-logback.xml`](#logback)
-: **Set to**: "/var/log/daisy-pipeline2" (on Debian/Ubuntu) or
+: **Default**: "/var/log/daisy-pipeline2" (on Debian/Ubuntu) or
   "${org.daisy.pipeline.home}/log/" (on other platforms)
 
 `derby.stream.error.file`
 : Path to a writeable file for storing Derby specific logging info
-: **Set to**: "/var/log/daisy-pipeline2/derby.log" (on Debian/Ubuntu)
+: **Default**: "/var/log/daisy-pipeline2/derby.log" (on Debian/Ubuntu)
   or "${org.daisy.pipeline.home}/log/derby.log" (on other platforms)
 
 `logback.configurationFile`
 : Path (file URI) to Logback configuration file (see [`config-logback.xml`](#logback))
-: **Set to**: "file:/etc/opt/daisy-pipeline2/config-logback.xml" (on Debian/Ubuntu) or
+: **Default**: "file:/etc/opt/daisy-pipeline2/config-logback.xml" (on Debian/Ubuntu) or
   "file:${org.daisy.pipeline.home}/etc/config-logback.xml" (on other platforms)
 
-`org.pipeline.updater.bin`
-: **Set to**: "${org.daisy.pipeline.home}/updater/${pipeline.updater}"
+`org.daisy.pipeline.updater.bin`
+: **Default**: "${org.daisy.pipeline.home}/updater/${pipeline.updater}"
 
-`org.pipeline.updater.deployPath`
-: **Set to**: "${org.daisy.pipeline.home}/"
+`org.daisy.pipeline.updater.deployPath`
+: **Default**: "${org.daisy.pipeline.home}/"
 
-`org.pipeline.updater.releaseDescriptor`
-: **Set to**: "${org.daisy.pipeline.home}/etc/releaseDescriptor.xml"
-
-`org.pipeline.updater.updateSite`
-: **Set to**: "http://daisy.github.io/pipeline-assembly/releases/"
+`org.daisy.pipeline.updater.releaseDescriptor`
+: **Default**: "${org.daisy.pipeline.home}/etc/releaseDescriptor.xml"
 
 `org.daisy.pipeline.xproc.configuration`
 : Path to Calabash configuration file
-: **Set to**: "${org.daisy.pipeline.home}/etc/config-calabash.xml"
+: **Default**: "${org.daisy.pipeline.home}/etc/config-calabash.xml"
 
-`java.awt.headless`
-: **Set to**: "true"
+`org.daisy.pipeline.messaging.cache`
+: Time in seconds that messages are kept in the volatile memory
+: **Default**: "60"
 
-`com.xmlcalabash.config.user`
-: **Set to**: ""
+`org.daisy.pipeline.calabash.logDebug`
+: Enable job message of level DEBUG and below
+: **Default**: "false"
 
-`file.encoding`
-: **Set to**: "UTF8"
-
-`org.ops4j.pax.logging.DefaultServiceLog.level` <!-- what is this for? -->
-: **Set to**: "WARN"
-
-`org.ops4j.pax.logging.service.frameworkEventsLogLevel` <!-- what is this for? -->
-: **Set to**: "TRACE"
-
-<!--
-`org.daisy.pipeline.base`
 -->

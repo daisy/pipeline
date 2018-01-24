@@ -98,13 +98,6 @@ A number of environment variables will influence the program:
 `JAVA_DEBUG_OPTS`
 : Additional Java options to be passed on when `PIPELINE2_DEBUG` is set.
 
-`PIPELINE2_WS_LOCALFS`
-: Whether to allow local filesystem interaction when the client is running
-  on the same machine as the server ("true" or "false", default is "true").
-
-`PIPELINE2_WS_AUTHENTICATION`
-: Whether the web service requires authentication ("true" or "false", default is "false").
-
 `PIPELINE2_DEBUG`
 : When "true", passes debug options to Java ("true" or "false", default is "false").
 
