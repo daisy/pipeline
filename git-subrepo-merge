@@ -406,7 +406,7 @@ if ($merge_base) {
 			}
 			if ($merged) {
 				print "git checkout $current_branch\n";
-				print "git subrepo commit $subrepo $merged\n";
+				print "git subrepo commit --force $subrepo $merged\n";
 				my $pulled_branch; {
 					if (revision_exists($rebased_b)) {
 						my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
@@ -433,7 +433,7 @@ if ($merge_base) {
 		chomp(my $remote = `git show $merge_revision:$subrepo/.gitrepo | git config --file - --get subrepo.remote`);
 		print "git checkout $current_branch\n";
 		print "git subrepo clone $remote $subrepo\n";
-		print "git subrepo commit $subrepo $rebased_b\n";
+		print "git subrepo commit --force $subrepo $rebased_b\n";
 		my $pulled_branch; {
 			if (revision_exists($rebased_b)) {
 				my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
