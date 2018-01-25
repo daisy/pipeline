@@ -64,7 +64,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <th>EPUB 3</th>
     <td><a href="{{site.baseurl}}/modules/epub3-to-daisy202">x</a></td>
     <td></td>
-    <td></td>
+    <td><a href="{{site.baseurl}}/modules/epub3-to-epub3">x</a></td>
     <td></td>
     <td></td>
     <td><a href="{{site.baseurl}}/modules/braille/epub3-to-pef">x</a></td>
