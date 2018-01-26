@@ -27,5 +27,7 @@
 	<entry key="l10nEndnotesHeading">Fotnoter til dette heftet</entry>
 	<entry key="l10nEndnotesPageStart">Side {0}</entry>
 	<entry key="l10nEndnotesPageHeader">Noter</entry>
+	
+	<entry key="l10nSequenceInterruptedMsg">Continues in the next volume.</entry>
 
 </properties>

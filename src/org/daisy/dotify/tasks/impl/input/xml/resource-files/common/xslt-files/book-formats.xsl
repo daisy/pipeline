@@ -40,6 +40,7 @@
 	<xsl:param name="l10ntablepart" select="'Table part'"/>
 	<xsl:param name="l10nrearjacketcopy" select="'Rear jacket copy'"/>
 	<xsl:param name="l10ncolophon" select="'Colophon'"/>
+	<xsl:param name="l10nSequenceInterruptedMsg" select="'Continues in the next volume'"/>
 
 	<xsl:function name="obfl:insertLayoutMaster">
 		<xsl:param name="footnotesInFrontMatter" as="xs:integer"/> 
@@ -326,6 +327,16 @@
 				</volume-template>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:function>
+	
+	<xsl:function name="obfl:insertVolumeTransition">
+		<xsl:param name="range"/>
+		<volume-transition range="{(('page', 'sheet')[.=$range], 'page')[1]}">
+			<sequence-interrupted>
+				<block>&#x2013; &#x2013; &#x2013;</block>
+				<block><xsl:value-of select="$l10nSequenceInterruptedMsg"/></block>
+			</sequence-interrupted>
+		</volume-transition>
 	</xsl:function>
 	
 	<xsl:function name="obfl:insertPostContentNotes">

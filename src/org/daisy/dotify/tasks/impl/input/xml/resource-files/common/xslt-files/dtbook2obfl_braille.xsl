@@ -25,6 +25,7 @@
 	<xsl:param name="show-print-page-numbers" as="xs:boolean" select="true()"/>
 	<xsl:param name="matrix-table-columns-max" select="5"/>
 	<xsl:param name="staircase-table-columns-max" select="8"/>
+	<xsl:param name="volume-break-transition" select="'none'" dotify:desc="Volume break transition range. Within the range, text may be moved to the following volume." dotify:default="none" dotify:values="none/page/sheet"/>
 
 	<xsl:param name="l10nLang" select="'en'"/>
 	<xsl:param name="l10nTocHeadline" select="'Table Of Contents'"/>
@@ -108,6 +109,9 @@
 			$insertToc,
 			$additionalPreContent,
 			$firstInFirstVolumeContent)"/>
+		<xsl:if test="$volume-break-transition!='none'">
+			<xsl:copy-of select="obfl:insertVolumeTransition($volume-break-transition)"/>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="insertNoteCollection">

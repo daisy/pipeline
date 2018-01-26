@@ -19,6 +19,7 @@
 			dotify:desc="Removes the title page from the text flow (@epub:type=&quot;titlepage&quot; or @epub:type=&quot;halftitlepage&quot;)" 
 			dotify:values="true/false"
 			dotify:default="true"/>
+	<xsl:param name="volume-break-transition" select="'none'" dotify:desc="Volume break transition range. Within the range, text may be moved to the following volume." dotify:default="none" dotify:values="none/page/sheet"/>
 
 	<xsl:key name="noterefs" match="html:a[epub:noteref(.)]" use="substring-after(@href, '#')"/>
 
@@ -78,6 +79,9 @@
 			$insertToc,
 			$additionalPreContent,
 			$firstInFirstVolumeContent)"/>
+		<xsl:if test="$volume-break-transition!='none'">
+			<xsl:copy-of select="obfl:insertVolumeTransition($volume-break-transition)"/>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="insertNoteCollection">

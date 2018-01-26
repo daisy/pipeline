@@ -474,6 +474,9 @@
       <zeroOrMore>
         <ref name="volume-template"/>
       </zeroOrMore>
+      <optional>
+        <ref name="volume-transition"/>
+      </optional>
       <zeroOrMore>
         <ref name="collection"/>
       </zeroOrMore>
@@ -855,6 +858,61 @@
   <define name="attlist-post-content" combine="interleave">
     <empty/>
   </define>
+  <define name="volume-transition">
+    <element name="volume-transition">
+      <ref name="attlist-volume-transition"/>
+      <optional>
+        <ref name="block-interrupted"/>
+      </optional>
+      <optional>
+        <ref name="block-resumed"/>
+      </optional>
+      <optional>
+        <ref name="sequence-interrupted"/>
+      </optional>
+      <optional>
+        <ref name="sequence-resumed"/>
+      </optional>
+    </element>
+  </define>
+  <define name="attlist-volume-transition" combine="interleave">
+    <optional>
+      <attribute name="range">
+        <choice>
+          <value>page</value>
+          <value>sheet</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+  <define name="sequence-interrupted">
+    <element name="sequence-interrupted">
+      <zeroOrMore>
+        <ref name="block"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="sequence-resumed">
+    <element name="sequence-resumed">
+      <zeroOrMore>
+        <ref name="block"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="block-interrupted">
+    <element name="block-interrupted">
+      <zeroOrMore>
+        <ref name="blockContents"/>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="block-resumed">
+    <element name="block-resumed">
+      <zeroOrMore>
+        <ref name="blockContents"/>
+      </zeroOrMore>
+    </element>
+  </define>
   <define name="toc-sequence">
     <element name="toc-sequence">
       <ref name="attlist-toc-sequence"/>
@@ -871,7 +929,7 @@
         <ref name="on-toc-end"/>
       </zeroOrMore>
     </element>
-  </define>
+  </define>  
   <define name="attlist-toc-sequence" combine="interleave">
     <attribute name="toc">
       <data type="IDREF"/>

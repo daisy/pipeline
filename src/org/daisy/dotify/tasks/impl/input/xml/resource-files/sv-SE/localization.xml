@@ -27,6 +27,8 @@
 	<entry key="l10nEndnotesHeading">Fotnoter till denna volym</entry>
 	<entry key="l10nEndnotesPageStart">Sida {0}</entry>
 	<entry key="l10nEndnotesPageHeader">Noter</entry>
+	
+	<entry key="l10nSequenceInterruptedMsg">Fortsättning i nästa volym.</entry>
 
 	<!--  (concat &quot;Volym &quot; (round $started-volume-number)) -->
 	<!--  (concat &quot;Innehåll volym &quot; (round $volume)) -->
