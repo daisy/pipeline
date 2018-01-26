@@ -16,6 +16,8 @@
   * [[API Documentation|API-Documentation]]
     * [[Web Service API|WebServiceAPI]]
   * [[Issue Tracker|http://daisy.github.io/pipeline/Get-Help/Issue-Tracker.html]]
+  * [[Troubleshooting|Troubleshooting]]
+    * [[Troubleshooting on Windows|Common-Errors-Windows]]
   * [[Forums|http://www.daisy.org/forums/pipeline-2]]
 * [[Contribute|Contribute]]
   * [[Source Code|https://github.com/daisy/pipeline]]

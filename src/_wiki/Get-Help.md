@@ -3,6 +3,8 @@
 The [user guide](User-Guide) should get you up and running quickly and
 should answer your most common questions.
 
+Visit [troubleshooting](Troubleshooting) for fixing common errors.
+
 If you can't find what you are looking for, please contact us via the
 [forums](http://www.daisy.org/forums/pipeline-2).
 
