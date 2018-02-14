@@ -74,6 +74,7 @@ End Sub
 Sub visitTroubleshooting()
     Dim path
     path = "https://daisy.github.io/pipeline/Get-Help/Troubleshooting/"
+    oShell.Run Path
 End Sub
 
 Sub viewLogs()

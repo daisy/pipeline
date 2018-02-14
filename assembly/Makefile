@@ -113,8 +113,8 @@ endif
 
 .PHONY : docker
 docker : target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
-	cp Dockerfile.without_builder $(dir $<)/Dockerfile
-	cd $(dir $<) && \
+	cp Dockerfile.without_builder target/assembly-$(assembly/VERSION)-linux/Dockerfile
+	cd target/assembly-$(assembly/VERSION)-linux && \
 	$(DOCKER) build -t daisyorg/pipeline-assembly .
 
 .PHONY : dev-launcher

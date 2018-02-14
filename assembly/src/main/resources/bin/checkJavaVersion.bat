@@ -225,3 +225,4 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 :END
     endlocal & set JAVA=%JAVA%
+    exit /b %ERRORLEVEL%

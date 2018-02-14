@@ -1,3 +1,11 @@
+Changes in release ???
+======================
+
+### Distribution/Installation
+
+- **FIX** Installation issues on Windows
+
+
 Changes in release v1.11.1
 ==========================
 
