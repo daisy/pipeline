@@ -236,7 +236,7 @@ public class XMLInputManager implements TaskGroup {
 		private void addValidationTask(String type, String[] schemas, List<InternalTask> setup, ResourceLocator locator) throws ResourceLocatorException {
 			if (schemas!=null) {
 				for (String s : schemas) {
-					if (s!=null && s!="") {
+					if (s!=null && !s.equals("")) {
 						setup.add(new ValidatorTask(type + " conformance checker: " + s, locator.getResource(s)));
 					}
 				}
