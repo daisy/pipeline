@@ -103,10 +103,19 @@ sub generate_variable {
 my %variable_evaluations = ();
 
 sub evaluate_variable {
-	my ($name) = @_;
+	my ($name, $save_and_restore_state) = @_;
 	if (exists $variable_evaluations{$name}) {
+		my $commit_before; {
+			if ($save_and_restore_state) {
+				$commit_before = generate_variable("tmp_");
+				print "$commit_before=\$(git rev-parse HEAD)\n";
+			}
+		}
 		$variable_evaluations{$name}->();
 		delete($variable_evaluations{$name});
+		if ($save_and_restore_state) {
+			print "git checkout \$$commit_before\n";
+		}
 	}
 	return "$name";
 }
@@ -262,7 +271,7 @@ sub rebase_on_subrepo {
 					}
 					print "\n";
 					if ($onto =~ /^\$/) {
-						evaluate_variable($onto);
+						evaluate_variable($onto, 1);
 					}
 					if (not @$base[1]) {
 						print "gitk $onto HEAD\n";
