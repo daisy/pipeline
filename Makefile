@@ -52,9 +52,7 @@ $(JEKYLL_FILES_OTHER) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
 	cp $< $@
 
-$(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules \
-                        $(MAVEN_DIR)/sources \
-                        $(MAVEN_DIR)/xprocdoc
+$(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules $(MAVEN_DIR)/sources
 	mkdir -p $(dir $@)
 	rm -rf $@
 	eval "$$(echo 'newline="'; echo '"')"; \
@@ -71,22 +69,19 @@ $(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules \
 	                    cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: source\\$${newline}---\\$${newline}&/' >$(CURDIR)/$@/{}" \;; \
 	find . -type f ! -name '*.md' \
 	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
-	                    cp {} $(CURDIR)/$@/{}" \;; \
-	cd $(CURDIR)/$(word 3,$^)/org/daisy/pipeline/modules; \
-	find . -type f \
-	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
 	                    cp {} $(CURDIR)/$@/{}" \;
 
-$(JEKYLL_DIR)/api : $(MAVEN_DIR)/javadoc
-	mkdir -p $(dir $@)
+$(JEKYLL_DIR)/api : $(MAVEN_DIR)/javadoc $(MAVEN_DIR)/xprocdoc
 	rm -rf $@
-	cp -r $< $@
+	mkdir -p $@
+	cp -r $</* $@/
+	cp -r $(word 2,$^)/* $@/
 
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
 	make/make_meta.rb "$<$(baseurl)/**/*.html" $<$(baseurl) $(CONFIG_FILE) >$@
 
-$(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(META_JEKYLL_FILES)
+$(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(META_JEKYLL_FILES)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)
 	touch $@
 
@@ -107,9 +102,12 @@ $(META_JEKYLL_FILES_OTHER) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
 	cp $< $@
 
-$(META_JEKYLL_DIR)/modules : $(MAVEN_DIR)/doc \
-                             $(MAVEN_DIR)/sources \
-                             $(MAVEN_DIR)/xprocdoc
+$(META_JEKYLL_DIR)/api : $(MAVEN_DIR)/xprocdoc
+	rm -rf $@
+	mkdir -p $(dir $@)
+	cp -r $< $@
+
+$(META_JEKYLL_DIR)/modules : $(MAVEN_DIR)/doc $(MAVEN_DIR)/sources
 	mkdir -p $(dir $@)
 	rm -rf $@
 	eval "$$(echo 'newline="'; echo '"')"; \
@@ -125,10 +123,6 @@ $(META_JEKYLL_DIR)/modules : $(MAVEN_DIR)/doc \
 	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
 	                    cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: source\\$${newline}---\\$${newline}&/' >$(CURDIR)/$@/{}" \;; \
 	find . -type f ! -name '*.md' \
-	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
-	                    cp {} $(CURDIR)/$@/{}" \;; \
-	cd $(CURDIR)/$(word 3,$^)/org/daisy/pipeline/modules; \
-	find . -type f \
 	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
 	                    cp {} $(CURDIR)/$@/{}" \;
 
@@ -163,10 +157,6 @@ $(MAVEN_DIR)/sources : $(MAVEN_DIR)/pom.xml
 	find . -type f \( -path '**/src/main/**' -o -path '**/src/test/**' \) \
 	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$(MAVEN_DIR)/sources/{}) && \
 	                    mv {} $(CURDIR)/$(MAVEN_DIR)/sources/{}" \;
-	cd $(MAVEN_DIR)/doc && \
-	find . -type f -path '**/xprocdoc/**' \
-	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$(MAVEN_DIR)/xprocdoc/{}) && \
-	                    mv {} $(CURDIR)/$(MAVEN_DIR)/xprocdoc/{}" \;
 
 $(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml $(JEKYLL_SRC_DIR)/_data/api.yml
 	mkdir -p $(dir $@)

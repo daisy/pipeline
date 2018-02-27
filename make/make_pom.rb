@@ -53,7 +53,7 @@ $stdout << CommaParty.markup(
            []
          end      
         ]],
-      [:execution,
+       [:execution,
         [:id, 'unpack-javadoc'],
         [:goals,
          [:goal, 'unpack']],
@@ -61,7 +61,7 @@ $stdout << CommaParty.markup(
          [:excludes, 'index-all.html,allclasses-frame.html,allclasses-noframe.html,overview-frame.html,overview-summary.html,overview-tree.html,deprecated-list.html,constant-values.html,serialized-form.html,package-list,META-INF,META-INF/**/*'],
          if api
            [:artifactItems,
-            api.map {|mod|
+            api['javadoc'].map {|mod|
               group = mod['group']
               artifact = mod['artifact']
               version = mod['version']
@@ -72,6 +72,29 @@ $stdout << CommaParty.markup(
                [:type, 'jar'],
                [:classifier, 'javadoc'],
                [:outputDirectory, 'javadoc']]}]
+         else
+           []
+         end
+        ]],
+       [:execution,
+        [:id, 'unpack-xprocdoc'],
+        [:goals,
+         [:goal, 'unpack']],
+        [:configuration,
+         [:excludes, 'index.html,libraries.html,overview.html,steps.html,META-INF,META-INF/**/*'],
+         if api
+           [:artifactItems,
+            api['xprocdoc'].map {|mod|
+              group = mod['group']
+              artifact = mod['artifact']
+              version = mod['version']
+              [:artifactItem,
+               [:groupId, group],
+               [:artifactId, artifact],
+               version && [:version, version],
+               [:type, 'jar'],
+               [:classifier, 'xprocdoc'],
+               [:outputDirectory, 'xprocdoc']]}]
          else
            []
          end
