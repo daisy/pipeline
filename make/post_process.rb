@@ -123,7 +123,9 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
         SELECT ?href WHERE {
           { <#{a['href']}> dp2:doc ?href }
           UNION
-          { [] dp2:doc ?href ; dp2:alias '#{a['href']}' } .
+          { [] dp2:doc ?href ; dp2:alias <#{a['href']}> }
+          UNION
+          { <#{a['href']}> dp2:alias [ dp2:doc ?href ] } .
           ?href a dp2:#{a['class']} .
         }
       })
