@@ -107,8 +107,10 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
   
   ## process links and images
   doc.css('a, img, iframe, link').each do |a|
+    if a.name == 'link' and not a['type'] == 'text/css'
+      next
+    end
     href_attr = (a.name == 'img' or a.name == 'iframe') ? 'src' : 'href';
-    
     if not a[href_attr]
       next
     end
