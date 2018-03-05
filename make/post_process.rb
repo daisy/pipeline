@@ -277,17 +277,14 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       end
     end
     if not target_path
-      if f_path.start_with?('/modules/')
-        # FIXME
-        link_warning(a, href_attr, f)
-      elsif ['/api/overview-summary',
-             '/api/overview-tree',
-             '/api/index',
-             '/api/index-all',
-             '/api/allclasses-noframe',
-             '/api/serialized-form',
-             '/api/deprecated-list',
-             '/api/constant-values'].include?(abs_path)
+      if ['/api/overview-summary',
+          '/api/overview-tree',
+          '/api/index',
+          '/api/index-all',
+          '/api/allclasses-noframe',
+          '/api/serialized-form',
+          '/api/deprecated-list',
+          '/api/constant-values'].include?(abs_path)
         # FIXME
         #link_warning(a, href_attr, f)
       else
