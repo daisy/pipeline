@@ -249,18 +249,31 @@ Dir.glob($base_dir + '/**/*.html').each do |f|
       abs_path = target_path
     elsif File.exist?($base_dir + abs_path + '/index.html')
       target_path = abs_path + '/index.html'
-    elsif a['class'] == 'apidoc' and abs_path =~ /^\/modules\/.+\/java\/(.+)$/o
-      abs_path = '/api/' + $1
-      if File.exist?($base_dir + abs_path) and not File.directory?($base_dir + abs_path)
-        target_path = abs_path
-      elsif File.exist?($base_dir + abs_path + '.html')
-        target_path = abs_path + '.html'
-        abs_path = target_path
-      elsif File.exist?($base_dir + abs_path + '/index.html')
-        target_path = abs_path + '/index.html'
-      elsif File.exist?($base_dir + abs_path + '/package-summary.html')
-        target_path = abs_path + '/package-summary.html'
-        abs_path = target_path
+    elsif abs_path =~ /^\/modules\/.+\/java\/(.+)$/o
+      if a['class'] == 'apidoc'
+        abs_path = '/api/' + $1
+        if File.exist?($base_dir + abs_path) and not File.directory?($base_dir + abs_path)
+          target_path = abs_path
+        elsif File.exist?($base_dir + abs_path + '.html')
+          target_path = abs_path + '.html'
+          abs_path = target_path
+        elsif File.exist?($base_dir + abs_path + '/index.html')
+          target_path = abs_path + '/index.html'
+        elsif File.exist?($base_dir + abs_path + '/package-summary.html')
+          target_path = abs_path + '/package-summary.html'
+          abs_path = target_path
+        elsif File.exist?($base_dir + abs_path.gsub(/\.java$/, '.html'))
+          target_path = abs_path.gsub(/\.java$/, '.html')
+          abs_path = target_path
+        end
+      else
+        if File.exist?($base_dir + abs_path + '/package-summary.html')
+          target_path = abs_path + '/package-summary.html'
+          abs_path = target_path
+        elsif File.exist?($base_dir + abs_path.gsub(/\.java$/, '.html'))
+          target_path = abs_path.gsub(/\.java$/, '.html')
+          abs_path = target_path
+        end
       end
     end
     if not target_path
