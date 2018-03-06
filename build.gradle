@@ -41,13 +41,6 @@ dependencies {
     testCompile group: "junit", name: "junit", version: "4.7"
 }
 
-task updateBndVersion() {
-	doLast() {
-		String contents = file('bnd.bnd').getText('UTF-8')
-		file('bnd.bnd').write(contents.replaceAll('Bundle-Version: [\\d\\.A-Za-z\\-]+', "Bundle-Version: $version"), 'UTF-8')
-	}
-}
-
 def matchesPackageInfo() {
 	def v = (version =~ /([\d]+\.[\d]+)/)[0][1]
 	//println v
@@ -73,8 +66,10 @@ task verifyPackageInfo() {
 
 bundle {
     instructions << [
-		//must use file() to resolve against the build.gradle in Eclipse
-        "-include": file('bnd.bnd'),
+        '-sources': 'true',
+        //The split-package instruction is because the packageinfo files are included separately on the classpath
+        'Export-Package': 'org.daisy.dotify.api.*;-split-package:=merge-first',
+        'Service-Component': '*',
         'Automatic-Module-Name': "$moduleName",
         'Built-By': System.getProperty("user.name"),
         'Built-On': new Date().format('yyyy-MM-dd'),
