@@ -10,10 +10,13 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * Provides a braille translator factory maker. This class will look for 
@@ -75,9 +78,11 @@ public class BrailleTranslatorFactoryMaker implements
 	 * Adds a factory (intended for use by the OSGi framework)
 	 * @param factory the factory to add
 	 */
-	@Reference(type = '*')
+	@Reference(cardinality=ReferenceCardinality.MULTIPLE, policy=ReferencePolicy.DYNAMIC)
 	public void addFactory(BrailleTranslatorFactoryService factory) {
-		logger.finer("Adding factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Adding factory: " + factory);
+		}
 		factories.add(factory);
 	}
 
@@ -87,7 +92,9 @@ public class BrailleTranslatorFactoryMaker implements
 	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(BrailleTranslatorFactoryService factory) {
-		logger.finer("Removing factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Removing factory: " + factory);
+		}
 		// this is to avoid adding items to the cache that were removed while
 		// iterating
 		synchronized (map) {
@@ -122,7 +129,9 @@ public class BrailleTranslatorFactoryMaker implements
 			synchronized (map) {
 				for (BrailleTranslatorFactoryService h : factories) {
 					if (h.supportsSpecification(locale, grade)) {
-						logger.fine("Found a factory for " + locale + " (" + h.getClass() + ")");
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Found a factory for " + locale + " (" + h.getClass() + ")");
+						}
 						map.put(toKey(locale, grade), h);
 						template = h;
 						break;

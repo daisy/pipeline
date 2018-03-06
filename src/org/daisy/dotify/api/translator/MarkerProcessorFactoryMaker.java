@@ -7,10 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * Provides a marker processor factory maker. This class will look for
@@ -74,9 +77,11 @@ public class MarkerProcessorFactoryMaker implements
 	 * Adds a factory (intended for use by the OSGi framework)
 	 * @param factory the factory to add
 	 */
-	@Reference(type = '*')
+	@Reference(cardinality=ReferenceCardinality.MULTIPLE, policy=ReferencePolicy.DYNAMIC)
 	public void addFactory(MarkerProcessorFactoryService factory) {
-		logger.finer("Adding factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Adding factory: " + factory);
+		}
 		factories.add(factory);
 	}
 
@@ -86,7 +91,9 @@ public class MarkerProcessorFactoryMaker implements
 	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(MarkerProcessorFactoryService factory) {
-		logger.finer("Removing factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Removing factory: " + factory);
+		}
 		// this is to avoid adding items to the cache that were removed while
 		// iterating
 		synchronized (map) {
@@ -113,7 +120,9 @@ public class MarkerProcessorFactoryMaker implements
 			synchronized (map) {
 				for (MarkerProcessorFactoryService h : factories) {
 					if (h.supportsSpecification(locale.toString(), grade)) {
-						logger.fine("Found a factory for " + locale + " (" + h.getClass() + ")");
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Found a factory for " + locale + " (" + h.getClass() + ")");
+						}
 						map.put(toKey(locale, grade), h);
 						template = h;
 						break;

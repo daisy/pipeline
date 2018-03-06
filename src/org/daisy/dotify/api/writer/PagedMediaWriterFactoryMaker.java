@@ -9,10 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import aQute.bnd.annotation.component.Component;
-import aQute.bnd.annotation.component.Reference;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * Provides a PagedMediaWriter factory maker. This is the entry point for
@@ -67,9 +70,11 @@ public class PagedMediaWriterFactoryMaker implements
 	 * Adds a factory (intended for use by the OSGi framework)
 	 * @param factory the factory to add
 	 */
-	@Reference(type = '*')
+	@Reference(cardinality=ReferenceCardinality.MULTIPLE, policy=ReferencePolicy.DYNAMIC)
 	public void addFactory(PagedMediaWriterFactoryService factory) {
-		logger.finer("Adding factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Adding factory: " + factory);
+		}
 		filters.add(factory);
 	}
 
@@ -79,7 +84,9 @@ public class PagedMediaWriterFactoryMaker implements
 	 */
 	// Unbind reference added automatically from addFactory annotation
 	public void removeFactory(PagedMediaWriterFactoryService factory) {
-		logger.finer("Removing factory: " + factory);
+		if (logger.isLoggable(Level.FINER)) {
+			logger.finer("Removing factory: " + factory);
+		}
 		// this is to avoid adding items to the cache that were removed while
 		// iterating
 		synchronized (map) {
@@ -97,7 +104,9 @@ public class PagedMediaWriterFactoryMaker implements
 			synchronized (map) {
 				for (PagedMediaWriterFactoryService h : filters) {
 					if (h.supportsMediaType(target)) {
-						logger.fine("Found a PagedMediaWriter factory for " + target + " (" + h.getClass() + ")");
+						if (logger.isLoggable(Level.FINE)) {
+							logger.fine("Found a PagedMediaWriter factory for " + target + " (" + h.getClass() + ")");
+						}
 						map.put(target.toLowerCase(), h);
 						template = h;
 						break;
