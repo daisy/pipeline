@@ -1,10 +1,7 @@
 .DS_Store
-.classpath
 .deps.mk
 .effective-pom.xml
-.project
 .last-tested
-.settings
 /*.deb
 /*.rpm
 /*.zip
@@ -15,3 +12,16 @@
 /.maven-modules
 /.maven-workspace/
 /maven.log
+/settings.eclipse.xml
+# eclipse
+bin/
+.classpath
+.project
+.settings/
+/eclimd.log
+/.metadata/
+/.recommenders/
+# for build remainders on subrepo branches
+target/
+/build/
+/node-modules/
