@@ -17,6 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -90,26 +91,6 @@ public class AppMenu extends MenuBar {
                         }
                 });
 
-                if (PlatformUtils.isMac()) {
-                    this.setUseSystemMenuBar(true);
-                    MenuToolkit toolkit = MenuToolkit.toolkit();
-                    Menu toolkitMenu = toolkit.createDefaultApplicationMenu("DAISY Pipeline 2");
-                    toolkit.setApplicationMenu(toolkitMenu);
-                    // the application menu title still reads "java" on OSX; this
-                    // has to be changed in Info.plist when the application is bundled
-                    
-                	
-                }  else {
-                        MenuItem exit = new MenuItem("Exit");
-                        exit.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN));
-                        exit.setOnAction(new EventHandler<ActionEvent>() {
-                                public void handle(ActionEvent t) {
-                                        System.exit(0);
-                                }
-                        });
-                        menuFile.getItems().add(exit);
-                }
-
                 runJob = new MenuItem("Run job");
                 runJob.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN));
                 runJob.setOnAction(new EventHandler<ActionEvent>() {
@@ -139,6 +120,8 @@ public class AppMenu extends MenuBar {
                 });
                 menuFile.getItems().add(runJobAgain);
                 runJobAgain.setDisable(true);
+                
+                menuFile.getItems().add(new SeparatorMenuItem());
 
                 MenuItem copyMessages = new MenuItem("Copy messages to clipboard");
                 copyMessages.setOnAction(new EventHandler<ActionEvent>() {
@@ -147,6 +130,27 @@ public class AppMenu extends MenuBar {
                         }
                 });
                 menuFile.getItems().add(copyMessages);
+                
+                menuFile.getItems().add(new SeparatorMenuItem());
+                
+                if (PlatformUtils.isMac()) {
+                        this.setUseSystemMenuBar(true);
+                        MenuToolkit toolkit = MenuToolkit.toolkit();
+                        Menu toolkitMenu = toolkit.createDefaultApplicationMenu("DAISY Pipeline 2");
+                        toolkit.setApplicationMenu(toolkitMenu);
+                        // the application menu title still reads "java" on OSX; this
+                        // has to be changed in Info.plist when the application is bundled
+        
+                } else {
+                        MenuItem exit = new MenuItem("Exit");
+                        exit.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN));
+                        exit.setOnAction(new EventHandler<ActionEvent>() {
+                            public void handle(ActionEvent t) {
+                                System.exit(0);
+                            }
+                        });
+                        menuFile.getItems().add(exit);
+                }
 
                 initHelp();
         }
