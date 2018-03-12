@@ -2,6 +2,8 @@
 package org.daisy.pipeline.gui;
 
 import java.text.Collator;
+import java.util.prefs.Preferences;
+import java.io.File;
 import java.net.MalformedURLException;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.transformation.SortedList;
@@ -13,12 +15,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import javafx.collections.FXCollections;
+import javafx.beans.property.SimpleStringProperty;
+
 
 import org.daisy.pipeline.gui.databridge.Script;
 import org.daisy.pipeline.job.Job;
@@ -67,7 +74,7 @@ public class NewJobPane extends VBox {
 		scriptsCombo.getSelectionModel().clearSelection();
 		scriptInfoBox.clearControls();
 		scriptFormControlsGrid.clearControls();
-		main.clearValidationMessages();
+		main.getMessagesPane().clearMessages();
 	}
 	public void newFromBoundScript(BoundScript boundScript) {
 		scriptsCombo.getSelectionModel().select(boundScript.getScript());
@@ -149,7 +156,7 @@ public class NewJobPane extends VBox {
                 if (script == null) {
                         return;
                 }
-                main.clearValidationMessages();
+                main.getMessagesPane().clearMessages();
                 main.enableRunJobMenuItem();
                 scriptInfoBox.clearControls();
                 scriptFormControlsGrid.clearControls();
@@ -164,16 +171,27 @@ public class NewJobPane extends VBox {
                 for (ScriptFieldAnswer input : boundScript.getInputFields()) {
                         addInputField(input);
                 }
-                for (ScriptFieldAnswer option : boundScript.getRequiredOptionFields()) {
-                        addOptionField(option);
+                
+                // if this script produces results, add an output directory field. that directory will contain subdirs for each specific output option.
+                if (boundScript.getScript().hasResultOptions()) {
+                	Preferences prefs = Preferences.userRoot().node("com/org/daisy/pipeline/gui");
+                    String lastUsedOutputDir = prefs.get("LastUsedOutputDir", "");
+                    boundScript.getOutputDir().set(lastUsedOutputDir);
+                    // pass it the property in boundScript to bind the text field widget to
+                	scriptFormControlsGrid.addOutputField(boundScript.getOutputDir());
                 }
                 
-                if (Iterators.size(boundScript.getOptionalOptionFields().iterator()) > 0) {
+                // add the required non-result options
+                for (ScriptFieldAnswer option : boundScript.getOptionFields(true)) {
+                        addOptionField(option);
+                }
+                // add the optional non-result options
+                if (Iterators.size(boundScript.getOptionFields(false).iterator()) > 0) {
                         Text options = new Text("Options:");
                         options.getStyleClass().add("subtitle");
                         scriptFormControlsGrid.addRow(options);
                 }
-                for (ScriptFieldAnswer option : boundScript.getOptionalOptionFields()) {
+                for (ScriptFieldAnswer option : boundScript.getOptionFields(false)) {
                         addOptionField(option);
                 }
                 
@@ -215,6 +233,7 @@ public class NewJobPane extends VBox {
                 }
         }
         
+        
         private void addStandardButtons() {
                 Button run = new Button("Run");
                 run.getStyleClass().add("run-button");
@@ -229,29 +248,34 @@ public class NewJobPane extends VBox {
         }
         
         public void runJob() {
-                ScriptValidator validator = new ScriptValidator(boundScript);
-                if (!validator.validate()) {
-                        logger.debug("Script is not valid");
-                        ObservableList<String> messages = validator.getMessages();
-                        main.addValidationMessages(messages);
-                }
-                else {
-                        Job newJob;
-                        try {
-                                newJob = JobExecutor.runJob(main, boundScript);
-                                if (newJob != null) {
-                                        ObservableJob objob = main.getDataManager().addJob(newJob);
-                                        objob.setBoundScript(boundScript);
-                                        main.getCurrentJobProperty().set(objob);
-                                } else {
-                                        logger.error("Couldn't create the job");
-                                }
-                        } catch (MalformedURLException e) {
-                                ObservableList<String> error= FXCollections.observableArrayList();
-                                error.add("Error while trasfroming path: "+e.getMessage());
-                                main.addValidationMessages(error);
-                                logger.error("Couldn't create the job",e);
+            main.getMessagesPane().clearMessages();
+
+            ScriptValidator validator = new ScriptValidator(boundScript);
+            if (!validator.validate()) {
+                    logger.debug("Script is not valid");
+                    ObservableList<String> messages = validator.getMessages();
+                    main.getMessagesPane().addMessages(messages);
+            }
+            else {
+            		// store the output dir preference, because by this point, we're sure it's valid
+            		if (boundScript.getScript().hasResultOptions()) {
+            			Preferences prefs = Preferences.userRoot().node("com/org/daisy/pipeline/gui");
+            			prefs.put("LastUsedOutputDir", boundScript.getOutputDir().get());
+            		}
+                    Job newJob;
+                    try {
+                        newJob = JobExecutor.runJob(main, boundScript);
+                        if (newJob != null) {
+                                ObservableJob objob = main.getDataManager().addJob(newJob);
+                                objob.setBoundScript(boundScript);
+                                main.getCurrentJobProperty().set(objob);
+                        } else {
+                                logger.error("Couldn't create the job");
                         }
-                }
+                    } catch (MalformedURLException e) {
+                        main.getMessagesPane().addMessage("ERROR while transforming path: " + e.getMessage());
+                        logger.error("Couldn't create the job",e);
+                    }
+            }
         }
 }

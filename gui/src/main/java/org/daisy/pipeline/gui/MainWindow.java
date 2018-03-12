@@ -174,12 +174,8 @@ public class MainWindow extends BorderPane {
     	currentJobProperty.addListener(currentJobChangeListener);
     }
 
-    // convenience functions to add/clear validation messages
-    public void addValidationMessages(ObservableList<String> messages) {
-    	messagesPane.addMessages(messages);
-    }
-    public void clearValidationMessages() {
-    	messagesPane.clearMessages();
+    public MessagesPane getMessagesPane() {
+    	return this.messagesPane;
     }
     
     private void showNewJobPane() {

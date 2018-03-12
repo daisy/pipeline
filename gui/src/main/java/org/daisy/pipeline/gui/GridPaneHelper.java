@@ -13,6 +13,7 @@ import org.pegdown.ast.RootNode;
 
 import javafx.scene.text.TextFlow;
 import javafx.application.HostServices;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -263,7 +264,12 @@ public class GridPaneHelper extends GridPane {
                 Text label = new Text();
                 String labelText = answer.getField().getNiceName() + ":";
                 if (answer.getField().isResult()) {
-                    labelText = "Output directory for: " + labelText;
+                	if (answer.getField().getDataType() == DataType.FILE) {
+                		labelText = "File for: " + labelText;
+                	}
+                	else {
+                		labelText = "Directory for: " + labelText;
+                	}
                 }
                 label.setText(labelText);
                 final TextField inputFileText = new TextField();
@@ -279,24 +285,47 @@ public class GridPaneHelper extends GridPane {
                 
                 final ScriptFieldAnswer.ScriptFieldAnswerString answer_ = answer;
                 inputFileButton.setOnAction(new EventHandler<ActionEvent>() {
-                        public void handle(ActionEvent event) {
-                                File file;
-                                if (answer_.getField().getDataType() == DataType.FILE) {
-                        FileChooser fileChooser = new FileChooser();
-                        fileChooser.setTitle("Select File");
-                        file = fileChooser.showOpenDialog(null);
-                                }
-                                // assume directory
-                                else {
-                                        DirectoryChooser dirChooser = new DirectoryChooser();
-                        dirChooser.setTitle("Select Directory");
-                        file = dirChooser.showDialog(null);
-                                }
-                                if(file != null) {
-                        inputFileText.setText(file.getPath());
-                }
+                    public void handle(ActionEvent event) {
+                        File file;
+                        if (answer_.getField().getDataType() == DataType.FILE) {
+	                        FileChooser fileChooser = new FileChooser();
+	                        fileChooser.setTitle("Select File");
+	                        file = fileChooser.showOpenDialog(null);
                         }
+                        // assume directory
+                        else {
+                            DirectoryChooser dirChooser = new DirectoryChooser();
+	                        dirChooser.setTitle("Select Directory");
+	                        file = dirChooser.showDialog(null);
+                        }
+                        if (file != null) {
+                        	inputFileText.setText(file.getPath());
+                        }
+                    }
                 });
+        }
+        
+        // a very simple version of the above addFileDirPicker function
+        public void addOutputField(SimpleStringProperty outputDir) {
+        	Text label = new Text("Output directory:");
+            final TextField inputFileText = new TextField();
+            inputFileText.textProperty().bindBidirectional(outputDir);
+            Button inputFileButton = new Button("Browse");
+            VBox vbox = new VBox();
+            vbox.getChildren().addAll(label);
+            addRow(vbox, inputFileText, inputFileButton);
+            vbox.getStyleClass().add("label-helper-vbox");
+            
+            inputFileButton.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    DirectoryChooser dirChooser = new DirectoryChooser();
+                    dirChooser.setTitle("Select Directory");
+                    File file = dirChooser.showDialog(null);
+                    if (file != null) {
+                    	inputFileText.setText(file.getPath());
+                    }
+                }
+            });
         }
         
         // add the descriptive text to its own row (sometimes it's added in other ways, which is why

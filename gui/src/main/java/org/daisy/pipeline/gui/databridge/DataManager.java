@@ -88,14 +88,11 @@ public class DataManager {
 			ScriptFieldAnswer newAnswer = newBoundScript.getInputByName(answer.getField().getName());
 			copyAnswer(newAnswer, answer);
 		}
-		for (ScriptFieldAnswer answer : boundScript.getRequiredOptionFields()) {
+		for (ScriptFieldAnswer answer : boundScript.getOptionFields()) {
 			ScriptFieldAnswer newAnswer = newBoundScript.getOptionByName(answer.getField().getName());
 			copyAnswer(newAnswer, answer);
 		}
-		for (ScriptFieldAnswer answer : boundScript.getOptionalOptionFields()) {
-			ScriptFieldAnswer newAnswer = newBoundScript.getOptionByName(answer.getField().getName());
-			copyAnswer(newAnswer, answer);
-		}
+		// TODO copy output dir property
 		
 		return newBoundScript;
 	}
