@@ -108,13 +108,13 @@ sub evaluate_variable {
 		my $commit_before; {
 			if ($save_and_restore_state) {
 				$commit_before = generate_variable("tmp_");
-				print "$commit_before=\$(git rev-parse HEAD)\n";
+				print "$commit_before=\$(git rev-parse HEAD) &&\\\n";
 			}
 		}
 		$variable_evaluations{$name}->();
 		delete($variable_evaluations{$name});
 		if ($save_and_restore_state) {
-			print "git checkout \$$commit_before\n";
+			print "git checkout \$$commit_before &&\\\n";
 		}
 	}
 	return "$name";
@@ -258,28 +258,28 @@ sub rebase_on_subrepo {
 				my $evaluation = sub {
 					my $temp_branch;
 					if (`git rev-parse --abbrev-ref $rev`) {
-						print "git checkout $rev\n";
+						print "git checkout $rev &&\\\n";
 					} else {
 						$temp_branch = generate_branch_name("tmp_");
-						print "git checkout -b $temp_branch $rev\n";
+						print "git checkout -b $temp_branch $rev &&\\\n";
 					}
-					print "git subrepo branch $subdir\n";
-					print "git checkout \$(git rev-parse subrepo/$subdir)\n";
+					print "git subrepo branch $subdir &&\\\n";
+					print "git checkout \$(git rev-parse subrepo/$subdir) &&\\\n";
 					print "git branch -D subrepo/$subdir";
 					if ($temp_branch) {
 						print " $temp_branch";
 					}
-					print "\n";
+					print " &&\\\n";
 					if ($onto =~ /^\$/) {
 						evaluate_variable($onto, 1);
 					}
 					if (not @$base[1]) {
-						print "gitk $onto HEAD\n";
+						print "gitk $onto HEAD &&\\\n";
 					} elsif (not (@$base[1] eq $onto)) {
-						print "gitk $onto @$base[1] HEAD\n";
+						print "gitk $onto @$base[1] HEAD &&\\\n";
 					}
-					print "git rebase --onto $onto HEAD~$commits_in_subtree HEAD\n";
-					print "$var=\$(git rev-parse HEAD)\n";
+					print "git rebase --onto $onto HEAD~$commits_in_subtree HEAD &&\\\n";
+					print "$var=\$(git rev-parse HEAD) &&\\\n";
 				};
 				$variable_evaluations{"\$$var"} = $evaluation;
 				return "\$$var";
@@ -294,19 +294,19 @@ sub rebase_on_subrepo {
 				$evaluation = sub {
 					my $temp_branch;
 					if (`git rev-parse --abbrev-ref $rev`) {
-						print "git checkout $rev\n";
+						print "git checkout $rev &&\\\n";
 					} else {
 						$temp_branch = generate_branch_name("tmp_");
-						print "git checkout -b $temp_branch $rev\n";
+						print "git checkout -b $temp_branch $rev &&\\\n";
 					}
-					print "git subrepo branch $subdir\n";
-					print "git checkout \$(git rev-parse subrepo/$subdir)\n";
+					print "git subrepo branch $subdir &&\\\n";
+					print "git checkout \$(git rev-parse subrepo/$subdir) &&\\\n";
 					print "git branch -D subrepo/$subdir";
 					if ($temp_branch) {
 						print " $temp_branch";
 					}
-					print "\n";
-					print "git rebase --onto $last_sync[1] HEAD~$commits_in_subtree HEAD\n";
+					print " &&\\\n";
+					print "git rebase --onto $last_sync[1] HEAD~$commits_in_subtree HEAD &&\\\n";
 				};
 			}
 			if ($onto eq @$base[1]) {
@@ -324,8 +324,8 @@ sub rebase_on_subrepo {
 							if ($onto =~ /^\$/) {
 								evaluate_variable($onto);
 							}
-							print "gitk $onto HEAD\n";
-							print "git rebase --onto $onto @$base[1] HEAD\n"; });
+							print "gitk $onto HEAD &&\\\n";
+							print "git rebase --onto $onto @$base[1] HEAD &&\\\n"; });
 				} elsif (@$base[1] eq $last_sync[1]) {
 					if ($evaluation) {
 						$evaluation->();
@@ -338,15 +338,15 @@ sub rebase_on_subrepo {
 							if ($onto =~ /^\$/) {
 								evaluate_variable($onto);
 							}
-							print "gitk $onto $last_sync[1]\n";
-							print "git rebase --onto $onto @$base[1] $last_sync[1]\n"; });
+							print "gitk $onto $last_sync[1] &&\\\n";
+							print "git rebase --onto $onto @$base[1] $last_sync[1] &&\\\n"; });
 				}
 			}
 			my $var = generate_variable("tmp_");
 			$evaluation = add_lambdas(
 				$evaluation,
 				sub {
-					print "$var=\$(git rev-parse HEAD)\n"; });
+					print "$var=\$(git rev-parse HEAD) &&\\\n"; });
 			$variable_evaluations{"\$$var"} = $evaluation;
 			return "\$$var";
 		} else {
@@ -402,20 +402,20 @@ if ($merge_base) {
 					$merged = undef;
 				}
 			} else {
-				print "git checkout $rebased_a\n";
-				print "gitk HEAD $rebased_b\n";
+				print "git checkout $rebased_a &&\\\n";
+				print "gitk HEAD $rebased_b &&\\\n";
 				if ($rebase) {
-					print "git rebase $rebased_b\n";
+					print "git rebase $rebased_b &&\\\n";
 				} else {
-					print "git merge $rebased_b\n";
+					print "git merge $rebased_b &&\\\n";
 				}
 				my $var = generate_variable("tmp_");
-				print "$var=\$(git rev-parse HEAD)\n";
+				print "$var=\$(git rev-parse HEAD) &&\\\n";
 				$merged = "\$$var";
 			}
 			if ($merged) {
-				print "git checkout $current_branch\n";
-				print "git subrepo commit --force $subrepo $merged\n";
+				print "git checkout $current_branch &&\\\n";
+				print "git subrepo commit --force $subrepo $merged &&\\\n";
 				my $pulled_branch; {
 					if (revision_exists($rebased_b)) {
 						my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
@@ -429,20 +429,20 @@ if ($merge_base) {
 					$pulled_branch = $pulled_branch || "?";
 				}
 				print "git commit --amend -m \"git subrepo pull $subrepo ($pulled_branch)\" \\\n";
-				print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\"\n";
+				print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" &&\\\n";
 			} else {
-				print "# $subrepo is up to date\n";
+				print ": $subrepo is up to date\n";
 			}
 		} else {
-			print "# $subrepo is up to date\n";
+			print ": $subrepo is up to date\n";
 		}
 	}
 	for my $subrepo (@subrepos_only_b) {
 		my $rebased_b  = rebase_on_subrepo($subrepo, $merge_revision);
 		chomp(my $remote = `git show $merge_revision:$subrepo/.gitrepo | git config --file - --get subrepo.remote`);
-		print "git checkout $current_branch\n";
-		print "git subrepo clone $remote $subrepo\n";
-		print "git subrepo commit --force $subrepo $rebased_b\n";
+		print "git checkout $current_branch &&\\\n";
+		print "git subrepo clone $remote $subrepo &&\\\n";
+		print "git subrepo commit --force $subrepo $rebased_b &&\\\n";
 		my $pulled_branch; {
 			if (revision_exists($rebased_b)) {
 				my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
@@ -456,13 +456,13 @@ if ($merge_base) {
 			$pulled_branch = $pulled_branch || "?";
 		}
 		print "git commit --amend -m \"git subrepo pull $subrepo ($pulled_branch)\" \\\n";
-		print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\"\n";
+		print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" &&\\\n";
 	}
 	print "git checkout $current_branch\n";
 	if ($rebase) {
-		print "# FIXME: now rebase all changes from $current_branch that are not in any subrepo\n"
+		print ": FIXME: now rebase all changes from $current_branch that are not in any subrepo\n"
 	} else {
-		print "# FIXME: now merge all changes from $merge_revision that are not in any subrepo\n"
+		print ": FIXME: now merge all changes from $merge_revision that are not in any subrepo\n"
 	}
 } else {
 	die "FIXME";
