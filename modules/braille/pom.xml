@@ -27,15 +27,15 @@
   <modules>
     <module>maven/bom</module>
     <module>maven/parent</module>
-    <module>pipeline-braille-utils/common-utils</module>
-    <module>pipeline-braille-utils/css-utils</module>
-    <module>pipeline-braille-utils/pef-utils</module>
-    <module>pipeline-braille-utils/obfl-utils</module>
-    <module>pipeline-braille-utils/liblouis-utils</module>
-    <module>pipeline-braille-utils/dotify-utils</module>
-    <module>pipeline-braille-utils/libhyphen-utils</module>
-    <module>pipeline-braille-utils/texhyph-utils</module>
-    <module>pipeline-braille-scripts</module>
+    <module>common-utils</module>
+    <module>css-utils</module>
+    <module>pef-utils</module>
+    <module>obfl-utils</module>
+    <module>liblouis-utils</module>
+    <module>dotify-utils</module>
+    <module>libhyphen-utils</module>
+    <module>texhyph-utils</module>
+    <module>xml-to-pef</module>
   </modules>
   
   <build>
@@ -57,7 +57,6 @@
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>
-          <arguments>-DskipTests -Psonatype-oss-release</arguments>
         </configuration>
       </plugin>
     </plugins>

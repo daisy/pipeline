@@ -3,7 +3,11 @@
 
 [![Build Status](https://travis-ci.org/daisy/pipeline-mod-braille.png?branch=master)](https://travis-ci.org/daisy/pipeline-mod-braille)
 
-Braille Production Modules for the [DAISY Pipeline 2][pipeline].
+This repository contains a library of utility modules for braille
+production for the [DAISY Pipeline 2][pipeline]. The top-level
+"*-to-pef" scripts that are build on these braille modules live in the
+[pipeline-scripts][] repository.
+
 
 Project layout
 --------------
@@ -12,14 +16,35 @@ code is not always easy. In order to make it more obvious where to
 find a particular piece of code, I've tried to organize the modules
 into subdirectories in a logical and consistent way.
 
-- [`pipeline-braille-scripts`](pipeline-braille-scripts) contains the
-  two top-level *scripts* that are presented to the end-user, notably
-  `zedai-to-pef` and `dtbook-to-pef`.
+The braille modules are divided into logical *groups*:
 
-- [`pipeline-braille-utils`](pipeline-braille-utils) contains everything
-  else: all the low-level building blocks that the scripts are made up
-  from. The building blocks are divided into logical *groups* such as
-  `css-utils`, `pef-utils`, `liblouis-utils`, etc.
+- [`common-utils`](common-utils/src/main)
+- [`css-utils`](css-utils)
+- [`dotify-utils`](dotify-utils)
+- [`libhyphen-utils`](libhyphen-utils)
+- [`liblouis-utils`](liblouis-utils)
+- [`pef-utils`](pef-utils)
+- [`texhyph-utils`](texhyph-utils)
+- [`obfl-utils`](obfl-utils)
+
+Each of these utility modules collect all the XSLT/XPath functions and
+XProc steps of that group into one `library.xsl` and one
+`library.xpl`, so that they can be made available with a single
+import. These library files make up the interface between the scripts
+and the utils, scripts should not have to use any lower-level parts
+directly.
+
+The implementation of the functions and steps can either be found in
+the utils module itself (which is mostly the case when they are
+written in XSLT/XProc), or otherwise in a submodule. Submodules are
+grouped in a directory with the same name as the utils module minus
+the `-utils`.  They typically contain Java code. Some recurring types
+of modules are modules for Saxon XPath extension functions (ending in
+`-saxon`) and modules for custom Calabash steps (`-calabash`).
+Generally, the XPath and XProc bindings are separated from the core
+functionality (`-core` modules). Precompiled native binaries are
+bundled in `-native` modules.
+
 
 Building
 --------
@@ -104,9 +129,6 @@ Release procedure
 
 - Add a link to the release notes to http://github.com/daisy/pipeline-mod-braille/releases/v${VERSION}.
 
-See also
---------
- - [ZedAI to PEF script user guide](http://code.google.com/p/daisy-pipeline/wiki/ZedAIToPEFDoc)
 
 Authors
 -------
@@ -128,7 +150,8 @@ GNU Lesser General Public License for more details.
 
 
 [pipeline-mod-braille]: https://github.com/daisy/pipeline-mod-braille
-[pipeline]: http://code.google.com/p/daisy-pipeline
+[pipeline-scripts]: https://github.com/daisy/pipeline-scripts
+[pipeline]: http://daisy.github.io/pipeline
 [bert]: http://github.com/bertfrees
 [daisy]: http://www.daisy.org
 [lgpl]: http://www.gnu.org/licenses/lgpl.html
