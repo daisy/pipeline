@@ -1,0 +1,175 @@
+/* ------------------------------------------------------------------------- */
+/*  http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/bana.css  */
+/* ------------------------------------------------------------------------- */
+
+/* ------------------------------------------------------------------------- */
+/*                                  general                                  */
+/* ------------------------------------------------------------------------- */
+
+@page {
+    size: 40 25;
+    @top-right {
+        content: string(print-page);
+    }
+    @bottom-right {
+        content: counter(braille-page);
+    }
+}
+
+pagebreak {
+    display: page-break;
+    string-set: print-page attr(value);
+}
+
+head {
+    display: none;
+}
+
+annotation[role="production"] {
+    display: none;
+}
+
+section,
+frontmatter {
+    display: block;
+    page-break-before: always;
+    page-break-after: always;
+}
+
+/* ------------------------------------------------------------------------- */
+/*                                paragraphs                                 */
+/* ------------------------------------------------------------------------- */
+
+p {
+    display: block;
+    text-indent: 2;
+}
+
+/* ------------------------------------------------------------------------- */
+/*                                 headings                                  */
+/* ------------------------------------------------------------------------- */
+
+h {
+    display: block;
+    page-break-after: avoid;
+}
+
+bodymatter > section > h {
+    page-break-before: always;
+    text-align: center;
+    margin-top: 1;
+    margin-bottom: 1;
+    margin-left: 3;
+    margin-right: 3;
+}
+
+bodymatter > section > section > h {
+    margin-bottom: 1;
+    margin-left: 3;
+    margin-right: 3;
+}
+
+bodymatter > section > section > section > h {
+    text-align: left;
+    margin-left: 4;
+    margin-top: 1;
+}
+
+bodymatter > section > section > section > section > h {
+    text-align: left;
+    margin-top: 1;
+}
+
+/* ------------------------------------------------------------------------- */
+/*                                  lists                                    */
+/* ------------------------------------------------------------------------- */
+
+list {
+    display: block;
+}
+
+list[type="unordered"] {
+    list-style-type: ⠶;
+}
+
+list[prefix="decimal"] {
+    list-style-type: decimal;
+}
+
+list[prefix="lower-alpha"] {
+    list-style-type: lower-alpha;
+}
+
+list[prefix="lower-roman"] {
+    list-style-type: lower-roman;
+}
+
+item {
+    display: list-item;
+}
+
+/* ------------------------------------------------------------------------- */
+/*                                  tables                                   */
+/* ------------------------------------------------------------------------- */
+
+table {
+    display: block;
+    border-top: ⠶;
+    border-bottom: ⠛;
+}
+
+thead {
+    display: block;
+    border-bottom: ⠒;
+}
+
+tr, td, th {
+    display: block;
+}
+
+th:first-child,
+td:first-child { margin-left: 0; }
+th:nth-child(2),
+td:nth-child(2) { margin-left: 2; }
+th:nth-child(3),
+td:nth-child(3) { margin-left: 4; }
+th:nth-child(4),
+td:nth-child(4) { margin-left: 6; }
+th:nth-child(5),
+td:nth-child(5) { margin-left: 8; }
+th:nth-child(6),
+td:nth-child(6) { margin-left: 10; }
+
+/* ------------------------------------------------------------------------- */
+/*                            table of contents                              */
+/* ------------------------------------------------------------------------- */
+
+toc {
+    display: toc;
+}
+
+toc > h {
+    text-align: center;
+    margin-top: 1;
+    margin-bottom: 1;
+    margin-left: 3;
+    margin-right: 3;
+}
+
+toc > entry > ref {
+    display: toc-item;
+    margin-left: 2;
+    text-indent: -2;
+}
+
+/* ------------------------------------------------------------------------- */
+/*                               other blocks                                */
+/* ------------------------------------------------------------------------- */
+
+block,
+lngroup,
+ln,
+object,
+verse {
+    display: block;
+}

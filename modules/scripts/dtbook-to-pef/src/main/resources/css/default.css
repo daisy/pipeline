@@ -1,0 +1,70 @@
+/* ----------------------------------------------------------------------------- */
+/*  http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/css/default.css  */
+/* ----------------------------------------------------------------------------- */
+
+/*
+ * See also
+ * - http://www.cucat.org/projects/dtbook2005-3/dtbook-2005-3.dtd.html
+ * - http://www.daisy.org/z3986/2005/dtbook.2005.basic.css
+ */
+
+@namespace xml "http://www.w3.org/XML/1998/namespace";
+
+address,
+annotation,
+author,
+blockquote,
+bodymatter,
+book,
+bridgehead,
+byline,
+covertitle,
+dateline,
+div,
+dl,
+docauthor,
+doctitle,
+epigraph,
+frontmatter,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hd,
+img,
+imggroup,
+level,
+level1,
+level2,
+level3,
+level4,
+level5,
+level6,
+line,
+linegroup,
+list,
+note,
+p,
+poem,
+prodnote,
+rearmatter,
+sidebar,
+table {
+  display: block;
+}
+
+head {
+  display: none;
+}
+
+br::before {
+  content: "\A";
+  white-space: pre-line;
+}
+
+/* xml:space */
+[xml|space=preserve] {
+  white-space: pre-wrap;
+}

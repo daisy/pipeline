@@ -61,6 +61,11 @@
         <version>1.1.1</version>
       </dependency>
       <dependency>
+        <groupId>org.daisy.pipeline.modules.braille</groupId>
+        <artifactId>dtbook-to-pef</artifactId>
+        <version>5.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-rtf</artifactId>
         <version>1.0.0-SNAPSHOT</version>
@@ -82,6 +87,16 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
+        <artifactId>epub3-to-epub3</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules.braille</groupId>
+        <artifactId>epub3-to-pef</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-validator</artifactId>
         <version>1.1.1</version>
       </dependency>
@@ -94,6 +109,11 @@
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>html-to-epub3</artifactId>
         <version>1.2.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules.braille</groupId>
+        <artifactId>html-to-pef</artifactId>
+        <version>2.6.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -109,6 +129,11 @@
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>zedai-to-html</artifactId>
         <version>1.1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline.modules.braille</groupId>
+        <artifactId>zedai-to-pef</artifactId>
+        <version>3.3.3</version>
       </dependency>
       <!--
           Third-Party Libraries

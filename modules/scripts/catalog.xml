@@ -15,4 +15,9 @@
   <nextCatalog catalog="./nimas-fileset-validator/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./zedai-to-epub3/src/main/resources/META-INF/catalog.xml"/>
   <nextCatalog catalog="./zedai-to-html/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./epub3-to-pef/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./html-to-pef/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./dtbook-to-pef/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./zedai-to-pef/src/main/resources/META-INF/catalog.xml"/>
+  <nextCatalog catalog="./epub3-to-epub3/src/main/resources/META-INF/catalog.xml"/>
 </catalog>

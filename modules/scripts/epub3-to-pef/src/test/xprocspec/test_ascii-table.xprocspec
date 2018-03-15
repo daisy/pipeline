@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/epub3-to-pef.xpl">
+  
+  <x:scenario label="ascii-file-format has priority over dc:language">
+    <x:call step="px:epub3-to-pef">
+      <x:option name="epub" select="resolve-uri('../resources/test_ascii-table_1/package.opf')"/>
+      <x:option name="include-brf" select="'true'"/>
+      <x:option name="ascii-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
+                                                  (line-breaks:DOS)
+                                                  (page-breaks:&quot;---&quot;)
+                                                  (pad:BOTH)'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('1/output-dir',$temp-dir)"/>
+      <x:option name="brf-output-dir" select="resolve-uri('1/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('1/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="brf">
+      <x:document type="file" method="text" base-uri="temp-dir" href="1/output-dir/test_vol-1.brf"/>
+    </x:context>
+    <x:expect label="brf" type="compare" normalize-space="false">
+      <x:document type="file" method="text" href="../resources/test_ascii-table_1.brf"/>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Table can be found by locale">
+    <x:call step="px:epub3-to-pef">
+      <x:option name="epub" select="resolve-uri('../resources/test_ascii-table_2/package.opf')"/>
+      <x:option name="include-brf" select="'true'"/>
+      <x:option name="ascii-file-format" select="'(line-breaks:DOS)
+                                                  (page-breaks:&quot;---&quot;)
+                                                  (pad:BOTH)'"/>
+      <x:option name="pef-output-dir" select="resolve-uri('2/output-dir',$temp-dir)"/>
+      <x:option name="brf-output-dir" select="resolve-uri('2/output-dir',$temp-dir)"/>
+      <x:option name="temp-dir" select="resolve-uri('2/temp-dir',$temp-dir)"/>
+    </x:call>
+    <x:context label="brf">
+      <x:document type="file" method="text" base-uri="temp-dir" href="2/output-dir/test_vol-1.brf"/>
+    </x:context>
+    <x:expect label="brf" type="compare" normalize-space="false">
+      <x:document type="file" method="text" href="../resources/test_ascii-table_2.brf"/>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

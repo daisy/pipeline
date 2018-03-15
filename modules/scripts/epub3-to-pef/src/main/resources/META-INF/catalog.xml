@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  
+  <!-- scripts -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/epub3-to-pef.xpl" uri="../xml/xproc/epub3-to-pef.xpl" px:script="true" px:extends="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl"/>
+  
+  <!-- other -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/reset.css" uri="../css/reset.css"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/css/default.css" uri="../css/default.css"/>
+  
+  <!-- dependencies -->
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:xml-to-pef"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
+  
+</catalog>
