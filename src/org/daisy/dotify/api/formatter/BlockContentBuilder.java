@@ -45,6 +45,18 @@ public interface BlockContentBuilder {
 	public void endStyle();
 	
 	/**
+	 * Starts a span section
+	 * @param props the span properties
+	 */
+	public void startSpan(SpanProperties props);
+	
+	/**
+	 * Ends a previously opened span section
+	 * @throws IllegalStateException if the current state does not allow this call to be made
+	 */
+	public void endSpan();
+	
+	/**
 	 * Explicitly break the current line, even if the line has space 
 	 * left for more characters. The current block remains open.
 	 * @throws IllegalStateException if the current state does not allow this call to be made
