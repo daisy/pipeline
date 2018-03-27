@@ -32,13 +32,13 @@ while ! [ -e $gitrepo_dir/.gitrepo ]; do
     gitrepo_dir=$(dirname $gitrepo_dir)
 done
 remote=$(git config --file $gitrepo_dir/.gitrepo --get subrepo.remote)
-github_user_repo=$(
+github_owner_repo=$(
     echo "$remote" | perl -e 'while (<>) {
                                 $_ =~ /^(?:https?:\/\/github\.com\/|git\@github\.com:)([^\.\/]+)\/([^\.\/]+)(\.git)?$/
                                   or die "not a github remote: $_";
                                 print "$1/$2\n"; }')
-github_user=$(echo $github_user_repo | cut -d/ -f1)
-github_repo=$(echo $github_user_repo | cut -d/ -f2)
+github_owner=$(echo $github_owner_repo | cut -d/ -f1)
+github_repo=$(echo $github_owner_repo | cut -d/ -f2)
 
 base_commit=$(.git-utils/git-subrepo-status --fetch --sha-only $gitrepo_dir | sed "s|^$gitrepo_dir @ ||")
 on_remote_branch=$(git branch -r --contains $base_commit | sed -n "s|^  subrepo/$gitrepo_dir/\(.*\)\$|\1|p" | head -n1)
@@ -121,10 +121,10 @@ if [ ${#modules[@]} -gt 0 ]; then
     # substitutions in settings file need to be made in advance because the release-plugin doesn't pass along
     # system properties to the sub-process (and we can't use the "arguments" property, see below)
     # and also because Pax Exam wouldn't even resolve the system properties
-    cat "$ROOT_DIR/MY_DIR/mvn-release-settings.xml" | sed -e "s|\${releaseRepo}|$tmp_dir/repo|g" \
-                                                          -e "s|\${cacheRepo}|$ROOT_DIR/$MVN_RELEASE_CACHE_REPO|g" \
-                                                          -e "s|\${user\.home}|$HOME|g" \
-                                                          >$tmp_dir/settings.xml
+    cat "$ROOT_DIR/$MY_DIR/mvn-release-settings.xml" | sed -e "s|\${releaseRepo}|$tmp_dir/repo|g" \
+                                                           -e "s|\${cacheRepo}|$ROOT_DIR/$MVN_RELEASE_CACHE_REPO|g" \
+                                                           -e "s|\${user\.home}|$HOME|g" \
+                                                           >$tmp_dir/settings.xml
     echo "env org.ops4j.pax.url.mvn.settings='$tmp_dir/settings.xml' \\"
 fi
 printf "mvn clean release:clean release:prepare \\
@@ -185,14 +185,70 @@ fi
 
 echo "git push -u $remote $release_branch:$release_branch && \\"
 
+# create PR
+if [ $github_owner == "daisy" ]; then
+    if [ $release_dir != $gitrepo_dir ]; then
+        title="Release ${release_dir#${gitrepo_dir}/} v$version"
+    else
+        title="Release v$version"
+    fi
+    if [ $release_dir != $gitrepo_dir ]; then
+        nexus_staging_props_file="target/checkout/${release_dir#${gitrepo_dir}/}/target/nexus-staging/staging/*.properties"
+    else
+        nexus_staging_props_file="target/checkout/target/nexus-staging/staging/*.properties"
+    fi
+    echo "staging_repo_id=\$(cat $nexus_staging_props_file \\"
+    echo "                  | grep 'stagingRepository.id' | sed 's/^stagingRepository\.id=//g') && \\"
+    echo "credentials=\$( echo -n \"Enter user name: \" >&2 && read user && \\"
+    echo "               echo -n \"Enter password: \" >&2 && read -s pass && echo \"***\" >&2 && \\"
+    echo "               echo \"\$user:\$pass\" ) && \\"
+    echo "pr_number=\$("
+    echo "    echo \"{\\\"title\\\": \\\"$title\\\", \\"
+    echo "           \\\"body\\\":  \\\"staged: https://oss.sonatype.org/content/repositories/\$staging_repo_id\\\", \\"
+    echo "           \\\"head\\\":  \\\"$release_branch\\\", \\"
+    echo "           \\\"base\\\":  \\\"master\\\"}\" \\"
+    echo "    | curl -u \"\$credentials\" -X POST --data @- \\"
+    echo "           https://api.github.com/repos/$github_owner/$github_repo/pulls \\"
+    echo "    | jq -r '.number' ) && \\"
+    milestone=$(xmllint --xpath "/*/*[local-name()='version']/text()" assembly/pom.xml)
+    milestone=${milestone%-SNAPSHOT}
+    milestone_json=$(
+        curl https://api.github.com/repos/$github_owner/$github_repo/milestones 2>/dev/null \
+        | jq --arg title "v${milestone}" '.[] | select(.title == $title)' )
+    if [ -z "$milestone_json" ]; then
+        echo ": Milestone 'v${milestone}' does not exist" >&2
+    else
+        milestone_nr=$( echo "$milestone_json" | jq -r '.number' )
+        echo "echo \"{\\\"milestone\\\": \\\"${milestone_nr}\\\"}\" \\"
+        echo "| curl -u \"\$credentials\" -X PATCH --data @- \\"
+        echo "       https://api.github.com/repos/$github_owner/$github_repo/issues/\$pr_number"
+    fi
+    echo ": open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
+fi
+
 if [ $release_dir == "assembly" ]; then
     echo "./update_rd.sh && \\"
+    if [ $github_owner == "daisy" ]; then
+        echo "pr_number=\$("
+        echo "    echo \"{\\\"title\\\": \\\"Release descriptor $version\\\", \\"
+        echo "           \\\"head\\\":  \\\"rd-$version\\\", \\"
+        echo "           \\\"base\\\":  \\\"gh-pages\\\"}\" \\"
+        echo "    | curl -u \"\$credentials\" -X POST --data @- \\"
+        echo "           https://api.github.com/repos/$github_owner/$github_repo/pulls \\"
+        echo "    | jq -r '.number' ) && \\"
+        if [[ -n ${milestone_nr+x} ]]; then
+            echo "echo \"{\\\"milestone\\\": \\\"${milestone_nr}\\\"}\" \\"
+            echo "| curl -u \"\$credentials\" -X PATCH --data @- \\"
+            echo "       https://api.github.com/repos/$github_owner/$github_repo/issues/\$pr_number"
+        fi
+        echo ": open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
+    fi
 fi
 
 echo "cd $ROOT_DIR && \\"
 echo "git fetch subrepo/$gitrepo_dir && \\"
 
-echo "git subrepo commit $gitrepo_dir subrepo/$gitrepo_dir/$release_branch^ && \\"
+echo "git subrepo commit -f $gitrepo_dir subrepo/$gitrepo_dir/$release_branch^ && \\"
 echo "git commit --amend -m \"git subrepo pull $gitrepo_dir ($tag)\" -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" && \\"
 
 if [ -e "$tmp_dir" ]; then
