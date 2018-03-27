@@ -10,6 +10,8 @@
 	<xsl:param name="GRADLE_POM"/>
 	<xsl:param name="MODULE"/>
 	<xsl:param name="SRC_DIRS"/>
+	<xsl:param name="DOC_DIRS"/>
+	<xsl:param name="INDEX_FILES"/>
 	<xsl:param name="MAIN_DIRS"/>
 	<!--
 	    directories from which multiple modules are released at once
@@ -24,6 +26,8 @@
 	
 	<xsl:variable name="src-dirs" select="tokenize($SRC_DIRS, '\s+')"/>
 	<xsl:variable name="main-dirs" select="tokenize($MAIN_DIRS, '\s+')"/>
+	<xsl:variable name="doc-dirs" select="tokenize($DOC_DIRS, '\s+')"/>
+	<xsl:variable name="index-files" select="tokenize($INDEX_FILES, '\s+')"/>
 	<xsl:variable name="release-dirs" select="tokenize($RELEASE_DIRS, '\s+')"/>
 	
 	<xsl:template match="/">
@@ -234,6 +238,8 @@
 					</xsl:for-each>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
+					<xsl:value-of select="concat('check : ',$dirname,'.last-tested')"/>
+					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>.PHONY : </xsl:text>
 					<xsl:value-of select="concat($dirname,'.last-tested')"/>
 					<xsl:text>&#x0A;</xsl:text>
@@ -295,7 +301,7 @@
 							<xsl:with-param name="type" select="'pom'"/>
 						</xsl:call-template>
 						<xsl:text> : </xsl:text>
-						<xsl:value-of select="concat($dirname,'.install | .group-eval')"/>
+						<xsl:value-of select="concat($dirname,'.install.pom | .group-eval')"/>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(EVAL) touch $@</xsl:text>
@@ -312,6 +318,16 @@
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(EVAL) 'test -e' $@</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>.SECONDARY : </xsl:text>
+						<xsl:value-of select="concat($dirname,'.install.pom')"/>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:value-of select="concat($dirname,'.install.pom')"/>
+						<xsl:text> : %/.install.pom : %/pom.xml %/.dependencies | .maven-init .group-eval</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>&#x09;</xsl:text>
+						<xsl:text>+$(EVAL) 'bash .make/mvn-install-pom.sh' $$(dirname $@)</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:if test="$type='jar'">
 							<xsl:text>&#x0A;</xsl:text>
@@ -334,7 +350,52 @@
 								<xsl:value-of select="concat($dirname,'.install-doc.jar')"/>
 								<xsl:text>&#x0A;</xsl:text>
 								<xsl:value-of select="concat($dirname,'.install-doc.jar')"/>
-								<xsl:text> : %/.install-doc.jar : %/.install </xsl:text>
+								<xsl:text> : %/.install-doc.jar : %/.install</xsl:text>
+								<xsl:text>&#x0A;</xsl:text>
+								<xsl:for-each select="$doc-dirs">
+									<xsl:if test="starts-with(.,$dirname)">
+										<xsl:text>&#x0A;</xsl:text>
+										<xsl:value-of select="concat($dirname,'.install-doc.jar :  $(call rwildcard,',.,'/,*)')"/>
+										<xsl:text>&#x0A;</xsl:text>
+									</xsl:if>
+								</xsl:for-each>
+								<xsl:for-each select="$index-files">
+									<xsl:if test="starts-with(.,$dirname)">
+										<xsl:text>&#x0A;</xsl:text>
+										<xsl:value-of select="concat($dirname,'.install-doc.jar : ',.)"/>
+										<xsl:text>&#x0A;</xsl:text>
+									</xsl:if>
+								</xsl:for-each>
+							</xsl:if>
+							<xsl:if test="$effective-pom
+							              /pom:project[pom:groupId=$groupId and
+							                           pom:artifactId=$artifactId and
+							                           pom:version=$version]
+							              //pom:build/pom:plugins/pom:plugin[(not(pom:groupId) or pom:groupId='org.apache.maven.plugins')
+							                                                 and pom:artifactId='maven-jar-plugin']
+							              /pom:executions/pom:execution[pom:goals[pom:goal='jar']]
+							              /pom:configuration/pom:classifier[string(.)='xprocdoc']">
+								<xsl:text>&#x0A;</xsl:text>
+								<xsl:text>.SECONDARY : </xsl:text>
+								<xsl:value-of select="concat($dirname,'.install-xprocdoc.jar')"/>
+								<xsl:text>&#x0A;</xsl:text>
+								<xsl:value-of select="concat($dirname,'.install-xprocdoc.jar')"/>
+								<xsl:text> : %/.install-xprocdoc.jar : %/.install</xsl:text>
+								<xsl:text>&#x0A;</xsl:text>
+							</xsl:if>
+							<xsl:if test="$effective-pom
+							              /pom:project[pom:groupId=$groupId and
+							                           pom:artifactId=$artifactId and
+							                           pom:version=$version]
+							              /pom:build/pom:plugins/pom:plugin[(not(pom:groupId) or pom:groupId='org.apache.maven.plugins')
+							                                                and pom:artifactId='maven-javadoc-plugin']
+							              /pom:executions/pom:execution[pom:goals[pom:goal='jar']]">
+								<xsl:text>&#x0A;</xsl:text>
+								<xsl:text>.SECONDARY : </xsl:text>
+								<xsl:value-of select="concat($dirname,'.install-javadoc.jar')"/>
+								<xsl:text>&#x0A;</xsl:text>
+								<xsl:value-of select="concat($dirname,'.install-javadoc.jar')"/>
+								<xsl:text> : %/.install-javadoc.jar : %/.install </xsl:text>
 								<xsl:text>&#x0A;</xsl:text>
 							</xsl:if>
 						</xsl:if>
@@ -359,10 +420,12 @@
 							</xsl:if>
 						</xsl:for-each>
 						<xsl:text>&#x0A;</xsl:text>
-						<xsl:text>&#x0A;</xsl:text>
-						<xsl:value-of select="concat('.SECONDARY : ',$dirname,'.dependencies')"/>
-						<xsl:text>&#x0A;</xsl:text>
-						<xsl:value-of select="concat($dirname,'.dependencies :')"/>
+					</xsl:if>
+					<xsl:text>&#x0A;</xsl:text>
+					<xsl:value-of select="concat('.SECONDARY : ',$dirname,'.dependencies')"/>
+					<xsl:text>&#x0A;</xsl:text>
+					<xsl:value-of select="concat($dirname,'.dependencies :')"/>
+					<xsl:if test="ends-with($version,'-SNAPSHOT')">
 						<xsl:variable name="dependencies" as="xs:string*">
 							<xsl:for-each select="$artifacts-and-dependencies/self::pom:dependency[not(@fromDependencyManagement)
 							                                                                       or @scope='import']">
@@ -383,9 +446,9 @@
 							</xsl:if>
 							<xsl:sequence select="string-join($dependencies, ' \&#x0A;&#x09;')"/>
 						</xsl:if>
-						<xsl:text>&#x0A;</xsl:text>
-						<xsl:text>&#x0A;</xsl:text>
 					</xsl:if>
+					<xsl:text>&#x0A;</xsl:text>
+					<xsl:text>&#x0A;</xsl:text>
 					<xsl:variable name="version-without-snapshot" select="replace($version,'-SNAPSHOT$','')"/>
 					<xsl:value-of select="concat('$(MVN_WORKSPACE)/',
 					                             translate($groupId,'.','/'),
@@ -620,7 +683,9 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<!-- might be transitive dependency, but not supported here -->
-								<xsl:message terminate="yes">error</xsl:message>
+								<xsl:message terminate="yes"
+								             select="concat('error: artifact not found: ',
+								                            string(pom:groupId),':',string(pom:artifactId))"/>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:when>
