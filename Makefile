@@ -113,7 +113,6 @@ run-docker : dist-docker-image
 	       -p 8181:8181 daisyorg/pipeline2
 
 .PHONY : check
-check : $(addprefix check-,$(MODULES))
 
 .PHONY : release
 release : assembly/.release
@@ -121,7 +120,7 @@ release : assembly/.release
 .PHONY : $(addprefix check-,$(MODULES))
 $(addprefix check-,$(MODULES)) : check-% : %/.last-tested
 
-assembly/target/dev-launcher/bin/pipeline2 : assembly/.dependencies | .maven-init
+assembly/target/dev-launcher/bin/pipeline2 : assembly/pom.xml assembly/.dependencies $(call rwildcard,assembly/src/main/,*) | .maven-init
 	cd assembly && \
 	$(MVN) clean package -Pdev-launcher | $(MVN_LOG)
 	rm assembly/target/dev-launcher/etc/*windows*
@@ -165,6 +164,8 @@ endif
 	          MODULE="." \
 	          SRC_DIRS="$$(cat .maven-modules | while read -r m; do test -e $$m/src && echo $$m/src; done | paste -sd ' ' -)" \
 	          MAIN_DIRS="$$(cat .maven-modules | while read -r m; do test -e $$m/src/main && echo $$m/src/main; done | paste -sd ' ' -)" \
+	          DOC_DIRS="$$(cat .maven-modules | while read -r m; do test -e $$m/doc && echo $$m/doc; done | paste -sd ' ' -)" \
+	          INDEX_FILES="$$(cat .maven-modules | while read -r m; do test -e $$m/index.md && echo $$m/index.md; done | paste -sd ' ' -)" \
 	          RELEASE_DIRS="$$(for x in $(GITREPOS); do [ -e $$x/bom/pom.xml ] || [ -e $$x/maven/bom/pom.xml ] && echo $$x; done )" \
 	          OUTPUT_FILENAME=".deps.mk" \
 	          >/dev/null \
@@ -239,6 +240,8 @@ updater/cli/.install : updater/cli/*.go
 
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
+
+modules/scripts/dtbook-to-odt/.install-doc.jar : $(call rwildcard,modules/scripts/dtbook-to-odt/src/test/,*)
 
 .SECONDARY : .group-eval
 .group-eval :
@@ -343,29 +346,30 @@ gradle-clean :
 checked :
 	touch $(addsuffix /.last-tested,$(MODULES))
 
-website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml versions.yml)
+website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml api.yml versions.yml)
 	cd website && \
 	make target/maven/pom.xml
 
 export MVN_OPTS = --settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)' -Pstaged-releases
 
-website/target/maven/modules : website/target/maven/.deps.mk website/target/maven/.dependencies
+$(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target/maven/.deps.mk website/target/maven/.dependencies
 	rm -rf $@
 	cd website && \
-	make target/maven/modules
+	target=$@ && \
+	make $${target#website/}
 
 .PHONY : website
-website : | website/target/maven/modules
+website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 	cd website && \
 	make
 
 .PHONY : serve-website
-serve-website : | website/target/maven/modules
+serve-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 	cd website && \
 	make serve
 
 .PHONY : publish-website
-publish-website : | website/target/maven/modules
+publish-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 	cd website && \
 	make publish
 
