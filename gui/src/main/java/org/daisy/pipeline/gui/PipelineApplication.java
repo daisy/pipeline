@@ -56,6 +56,6 @@ public class PipelineApplication extends Application {
                 ServiceRegistry.getInstance().getGUIService().stopGUI();
         }
         
-        public static String USERGUIDE_URL = "https://github.com/daisy/pipeline-gui/wiki";
+        public static String USERGUIDE_URL = "https://daisy.github.io/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide/";
 
 }
