@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../ssml-phoneme-attrib.rng">
+</head>
+<body><div class="code" about="../ssml-phoneme-attrib.rng">&lt;<span class="code-xml-element-local-name">grammar</span>&gt;
+    &lt;<span class="code-xml-element-local-name">info</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">title</span>&gt;The SSML phoneme attribute module &lt;/<span class="code-xml-element-local-name">title</span>&gt;
+        &lt;<span class="code-xml-element-local-name">annotation</span> <span class="code-xml-attribute-local-name">annotates</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;Defines an adaption of the SSML phoneme element as an attribute, enabling the provision of pronounciation information on elements that are not in the SSML namespace. &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">annotation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">author</span>&gt;
+            &lt;<span class="code-xml-element-local-name">personname</span>&gt;Markus Gylling&lt;/<span class="code-xml-element-local-name">personname</span>&gt;
+            &lt;<span class="code-xml-element-local-name">email</span>&gt;mgylling@daisy.org&lt;/<span class="code-xml-element-local-name">email</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">author</span>&gt;
+        &lt;<span class="code-xml-element-local-name">copyright</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2009&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2010&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2011&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2012&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">holder</span>&gt;DAISY Consortium&lt;/<span class="code-xml-element-local-name">holder</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">copyright</span>&gt;
+        &lt;<span class="code-xml-element-local-name">legalnotice</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                &lt;<span class="code-xml-element-local-name">link</span> <span class="code-xml-attribute-prefix">xlink:</span><span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://creativecommons.org/licenses/by/3.0/"</span>&gt;http://creativecommons.org/licenses/by/3.0/&lt;/<span class="code-xml-element-local-name">link</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                &lt;<span class="code-xml-element-local-name">link</span> <span class="code-xml-attribute-prefix">xlink:</span><span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.daisy.org"</span>&gt;www.daisy.org&lt;/<span class="code-xml-element-local-name">link</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">legalnotice</span>&gt;
+        &lt;<span class="code-xml-element-local-name">revhistory</span>&gt;
+            &lt;<span class="code-xml-element-local-name">revision</span>&gt;
+                &lt;<span class="code-xml-element-local-name">date</span>&gt;2012-12-19&lt;/<span class="code-xml-element-local-name">date</span>&gt;
+                &lt;<span class="code-xml-element-local-name">authorinitials</span>&gt;MGy&lt;/<span class="code-xml-element-local-name">authorinitials</span>&gt;
+                &lt;<span class="code-xml-element-local-name">revdescription</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">para</span>&gt;Initial version&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">revdescription</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">revision</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">revhistory</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">info</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ssml.ph.ns.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ph"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/10/synthesis"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Specifies a phonemic/phonetic pronunciation for the text contained in the current element. This attribute inherits the semantics of the ssml.ph attribute on the SSML ssml.phoneme element. Note that this attribute is namespace qualified and intended for use on non-SSML namespace elements, as opposed to the default (non-qualified) ssml.ph attribute, which is only allowed on the ssml.phoneme element. Consult Speech Synthesis Markup Language (SSML) Version 1.1 for further information. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ssml.ph.ns.attrib.content"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"*[@ssml:ph]"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(descendant::ssml:phoneme) and not(descendant::*[@ssml:ph])"</span>&gt;Elements with the ssml:ph attribute element must not have ssml:phoneme descendants, nor descendants with the ssml:ph attribute. &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"string-length(normalize-space(@ssml:ph)) &gt; 0"</span>&gt;The ssml:ph attribute element must neither be empty nor contain only whitespace. &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ssml.ph.ns.attrib.content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"SSML.PhoneticExpression.datatype"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ssml.alphabet.ns.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"alphabet"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/10/synthesis"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Specifies which phonemic/phonetic pronunciation alphabet is used in the value of the ssml.ph.ns attribute. Note that this attribute is namespace qualified and intended for use on non-SSML namespace elements in conjunction with the ssml.ph.ns attribute. If omitted, the implicit value x-SAMPA is assumed. Consult Speech Synthesis Markup Language (SSML) Version 1.1 for further information. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ssml.alphabet.ns.attrib.content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ssml.alphabet.ns.attrib.content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"SSML.alphabet.datatype"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The phoneme attributes - initial class declaration &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ssml.Phoneme.attrib"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ssml.ph.ns.attrib"</span>/&gt;
+                &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ssml.alphabet.ns.attrib"</span>/&gt;
+                &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

@@ -1,0 +1,678 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="/pipeline/modules/dtbook-to-odt/src/test/xprocspec/test_content.xprocspec.css">
+</head>
+<body>
+<h2>headings</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">h1</span>&gt;foo&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">h1</span>&gt;
+&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">h2</span>&gt;bar&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">h2</span>&gt;
+</div></div>
+<div class="odt-document">
+        
+          <div class="text-h text-outline-level-1 text-style-name-dtb_3a_h1">foo</div>
+          <div class="text-h text-outline-level-2 text-style-name-dtb_3a_h2">bar</div>
+        
+      </div>
+<h2>paragraph</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;foo&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-p text-style-name-dtb_3a_p">foo</div>
+      </div>
+<h2>unordered list</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span> <span xmlns="" class="code-xml-attribute-local-name">type</span>=<span xmlns="" class="code-xml-attribute-value">"ul"</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;mango&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;lychee&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;carambola&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;rambutan&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;sugar&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;lime juice&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-list text-style-name-dtb_3a_list_5f_ul">
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">mango</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">lychee</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">carambola</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">rambutan</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">sugar</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">lime juice</div>
+          </div>
+        </div>
+      </div>
+<h2>ordered list</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span> <span xmlns="" class="code-xml-attribute-local-name">type</span>=<span xmlns="" class="code-xml-attribute-value">"ol"</span> <span xmlns="" class="code-xml-attribute-local-name">enum</span>=<span xmlns="" class="code-xml-attribute-value">"1"</span> <span xmlns="" class="code-xml-attribute-local-name">class</span>=<span xmlns="" class="code-xml-attribute-value">"steps"</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;peel fruit.&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;cut fruit in bite sized pieces.&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;sprinkle fruit with sugar and lime juice to taste.&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;stir salad.&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;chill for one hour.&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-list text-style-name-dtb_3a_list_5f_ol">
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">peel fruit.</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">cut fruit in bite sized pieces.</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">sprinkle fruit with sugar and lime juice to taste.</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">stir salad.</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">chill for one hour.</div>
+          </div>
+        </div>
+      </div>
+<h2>nested preformatted list</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span> <span xmlns="" class="code-xml-attribute-local-name">type</span>=<span xmlns="" class="code-xml-attribute-value">"pl"</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+    well-known tropical fruit
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span> <span xmlns="" class="code-xml-attribute-local-name">type</span>=<span xmlns="" class="code-xml-attribute-value">"pl"</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;* pineapple&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;* papaya&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+    exotic tropical fruit
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span> <span xmlns="" class="code-xml-attribute-local-name">type</span>=<span xmlns="" class="code-xml-attribute-value">"pl"</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;* rambutan&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;* mangosteen&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-list text-style-name-dtb_3a_list_5f_pl">
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">well-known tropical fruit</div>
+            <div class="text-list text-style-name-dtb_3a_list_5f_pl">
+              <div class="text-list-item">
+                <div class="text-p text-style-name-dtb_3a_li">* pineapple</div>
+              </div>
+              <div class="text-list-item">
+                <div class="text-p text-style-name-dtb_3a_li">* papaya</div>
+              </div>
+            </div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">exotic tropical fruit</div>
+            <div class="text-list text-style-name-dtb_3a_list_5f_pl">
+              <div class="text-list-item">
+                <div class="text-p text-style-name-dtb_3a_li">* rambutan</div>
+              </div>
+              <div class="text-list-item">
+                <div class="text-p text-style-name-dtb_3a_li">* mangosteen</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<h2>list items with or without paragraph</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;foo&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;bar&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+    baz
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">li</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">list</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-list text-style-name-dtb_3a_list_5f_ul">
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">foo</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_li">bar</div>
+            <div class="text-p text-style-name-dtb_3a_li">baz</div>
+          </div>
+        </div>
+      </div>
+<h2>definition list</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dl</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;mango&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;tropical fruit with sweet golden flesh&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;lychee&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;tropical fruit with deep red leathery skin and clear white flesh&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;carambola&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;star shaped tropical fruit with tart lemon-pineapple flavour&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;rambutan&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;egg-shaped tropical fruit similar to lychees with leathery skin covered in soft red hairs&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dl</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-list text-style-name-dtb_3a_dl">
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_dd">
+<span class="text-span text-style-name-dtb_3a_dt">mango</span>: tropical fruit with sweet golden flesh</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_dd">
+<span class="text-span text-style-name-dtb_3a_dt">lychee</span>: tropical fruit with deep red leathery skin and clear white flesh</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_dd">
+<span class="text-span text-style-name-dtb_3a_dt">carambola</span>: star shaped tropical fruit with tart lemon-pineapple flavour</div>
+          </div>
+          <div class="text-list-item">
+            <div class="text-p text-style-name-dtb_3a_dd">
+<span class="text-span text-style-name-dtb_3a_dt">rambutan</span>: egg-shaped tropical fruit similar to lychees with leathery skin covered in soft red hairs</div>
+          </div>
+        </div>
+      </div>
+<h2>definition list with multiples of dt and dd</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dl</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;Punt&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;Kick a ball&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;Take a bet&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dl</span>&gt;
+&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dl</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;Color&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;Colour&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dt</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;Any hue except white or black&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dd</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">dl</span>&gt;
+</div></div>
+<div class="odt-document">
+        
+          <div class="text-list text-style-name-dtb_3a_dl">
+            <div class="text-list-item">
+              <div class="text-p text-style-name-dtb_3a_dd">
+<span class="text-span text-style-name-dtb_3a_dt">Punt</span>: Kick a ball</div>
+            </div>
+            <div class="text-list-item">
+              <div class="text-p text-style-name-dtb_3a_dd">Take a bet</div>
+            </div>
+          </div>
+          <div class="text-list text-style-name-dtb_3a_dl">
+            <div class="text-list-item">
+              <div class="text-p text-style-name-Standard"><span class="text-span text-style-name-dtb_3a_dt">Color</span></div>
+            </div>
+            <div class="text-list-item">
+              <div class="text-p text-style-name-dtb_3a_dd">
+<span class="text-span text-style-name-dtb_3a_dt">Colour</span>: Any hue except white or black</div>
+            </div>
+          </div>
+        
+      </div>
+<h2>table with header</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">table</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">thead</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span>&gt;Parent Company&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span>&gt;Divested Business&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">thead</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;U.S. Sprint&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;Cellular phone&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;Union Pacific&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;Oil, gas&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;Viacom&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;Cable TV&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">table</span>&gt;
+</div></div>
+<div class="odt-document">
+        <table class="table-table table-name-dtb:table#1">
+          <div class="table-table-column table-number-columns-repeated-2"></div>
+          <thead class="table-table-header-rows">
+            <tr class="table-table-row">
+              <td class="table-table-cell office-value-type-string">
+                <div class="text-p text-style-name-dtb_3a_th">Parent Company</div>
+              </td>
+              <td class="table-table-cell office-value-type-string">
+                <div class="text-p text-style-name-dtb_3a_th">Divested Business</div>
+              </td>
+            </tr>
+          </thead>
+          <tr class="table-table-row">
+            <td class="table-table-cell office-value-type-string">
+              <div class="text-p text-style-name-dtb_3a_td">U.S. Sprint</div>
+            </td>
+            <td class="table-table-cell office-value-type-string">
+              <div class="text-p text-style-name-dtb_3a_td">Cellular phone</div>
+            </td>
+          </tr>
+          <tr class="table-table-row">
+            <td class="table-table-cell office-value-type-string">
+              <div class="text-p text-style-name-dtb_3a_td">Union Pacific</div>
+            </td>
+            <td class="table-table-cell office-value-type-string">
+              <div class="text-p text-style-name-dtb_3a_td">Oil, gas</div>
+            </td>
+          </tr>
+          <tr class="table-table-row">
+            <td class="table-table-cell office-value-type-string">
+              <div class="text-p text-style-name-dtb_3a_td">Viacom</div>
+            </td>
+            <td class="table-table-cell office-value-type-string">
+              <div class="text-p text-style-name-dtb_3a_td">Cable TV</div>
+            </td>
+          </tr>
+        </table>
+      </div>
+<h2>table with caption, header, footer and body</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">table</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">caption</span>&gt;caption&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">caption</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">thead</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span>&gt;header&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">thead</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tfoot</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span>&gt;footer&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tfoot</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tbody</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;body&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tbody</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">table</span>&gt;
+</div></div>
+<div class="odt-document">
+        
+          <div class="text-p text-style-name-dtb_3a_caption">caption</div>
+          <table class="table-table table-name-dtb:table#1">
+            <div class="table-table-column table-number-columns-repeated-1"></div>
+            <thead class="table-table-header-rows">
+              <tr class="table-table-row">
+                <td class="table-table-cell office-value-type-string">
+                  <div class="text-p text-style-name-dtb_3a_th">header</div>
+                </td>
+              </tr>
+            </thead>
+            <tr class="table-table-row">
+              <td class="table-table-cell office-value-type-string">
+                <div class="text-p text-style-name-dtb_3a_td">body</div>
+              </td>
+            </tr>
+            <tr class="table-table-row">
+              <td class="table-table-cell office-value-type-string">
+                <div class="text-p text-style-name-dtb_3a_th">footer</div>
+              </td>
+            </tr>
+          </table>
+        
+      </div>
+<h2>table with colspan and rowspan</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">table</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">thead</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span> <span xmlns="" class="code-xml-attribute-local-name">colspan</span>=<span xmlns="" class="code-xml-attribute-value">"4"</span>&gt;A1&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">th</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">thead</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tbody</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span> <span xmlns="" class="code-xml-attribute-local-name">colspan</span>=<span xmlns="" class="code-xml-attribute-value">"2"</span>&gt;B1&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span> <span xmlns="" class="code-xml-attribute-local-name">colspan</span>=<span xmlns="" class="code-xml-attribute-value">"2"</span> <span xmlns="" class="code-xml-attribute-local-name">rowspan</span>=<span xmlns="" class="code-xml-attribute-value">"2"</span>&gt;B2&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span> <span xmlns="" class="code-xml-attribute-local-name">rowspan</span>=<span xmlns="" class="code-xml-attribute-value">"2"</span>&gt;C1&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;C2&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span> <span xmlns="" class="code-xml-attribute-local-name">colspan</span>=<span xmlns="" class="code-xml-attribute-value">"3"</span>&gt;D2&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tbody</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">table</span>&gt;
+</div></div>
+<div class="odt-document">
+        <table class="table-table table-name-dtb:table#1">
+          <div class="table-table-column table-number-columns-repeated-4"></div>
+          <thead class="table-table-header-rows">
+            <tr class="table-table-row">
+              <td class="table-table-cell office-value-type-string table-number-columns-spanned-4" colspan="4">
+                <div class="text-p text-style-name-dtb_3a_th">A1</div>
+              </td>
+              <div class="table-covered-table-cell"></div>
+              <div class="table-covered-table-cell"></div>
+              <div class="table-covered-table-cell"></div>
+            </tr>
+          </thead>
+          <tr class="table-table-row">
+            <td class="table-table-cell office-value-type-string table-number-columns-spanned-2" colspan="2">
+              <div class="text-p text-style-name-dtb_3a_td">B1</div>
+            </td>
+            <div class="table-covered-table-cell"></div>
+            <td class="table-table-cell office-value-type-string table-number-columns-spanned-2 table-number-rows-spanned-2" colspan="2" rowspan="2">
+              <div class="text-p text-style-name-dtb_3a_td">B2</div>
+            </td>
+            <div class="table-covered-table-cell"></div>
+          </tr>
+          <tr class="table-table-row">
+            <td class="table-table-cell office-value-type-string table-number-rows-spanned-2" rowspan="2">
+              <div class="text-p text-style-name-dtb_3a_td">C1</div>
+            </td>
+            <td class="table-table-cell office-value-type-string">
+              <div class="text-p text-style-name-dtb_3a_td">C2</div>
+            </td>
+            <div class="table-covered-table-cell"></div>
+            <div class="table-covered-table-cell"></div>
+          </tr>
+          <tr class="table-table-row">
+            <div class="table-covered-table-cell"></div>
+            <td class="table-table-cell office-value-type-string table-number-columns-spanned-3" colspan="3">
+              <div class="text-p text-style-name-dtb_3a_td">D2</div>
+            </td>
+            <div class="table-covered-table-cell"></div>
+            <div class="table-covered-table-cell"></div>
+          </tr>
+        </table>
+      </div>
+<h2>footnote</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+  Morley's favorite vacation spot was the Bay of Islands&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">noteref</span> <span xmlns="" class="code-xml-attribute-local-name">idref</span>=<span xmlns="" class="code-xml-attribute-value">"#fn12"</span> <span xmlns="" class="code-xml-attribute-local-name">class</span>=<span xmlns="" class="code-xml-attribute-value">"footnote"</span>&gt;12&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">noteref</span>&gt; on New Zealand's North Island.
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">note</span> <span xmlns="" class="code-xml-attribute-local-name">id</span>=<span xmlns="" class="code-xml-attribute-value">"fn12"</span> <span xmlns="" class="code-xml-attribute-local-name">class</span>=<span xmlns="" class="code-xml-attribute-value">"footnote"</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+    12. Morley once described the area as "paradise in twenty shades of blue".
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">note</span>&gt;
+</div></div>
+<div class="odt-document">
+        
+          <div class="text-p text-style-name-dtb_3a_p">
+            Morley's favorite vacation spot was the Bay of Islands<span class="footnote-ref"></span> on New Zealand's North Island.
+          </div>
+        
+      <div class="footnotes"><div class="text-note text-note-class-footnote text-id-fn12">
+            <div class="text-note-citation"></div>
+            <div class="text-note-body">
+              <div class="text-p text-style-name-dtb_3a_note_5f_footnote">
+                12. Morley once described the area as "paradise in twenty shades of blue".
+              </div>
+            </div>
+            </div></div>
+</div>
+<h2>annotation</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+  The speed of a sailing vessel was measured in &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">annoref</span> <span xmlns="" class="code-xml-attribute-local-name">idref</span>=<span xmlns="" class="code-xml-attribute-value">"#anno_4"</span>&gt;knots&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">annoref</span>&gt;.
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">annotation</span> <span xmlns="" class="code-xml-attribute-local-name">id</span>=<span xmlns="" class="code-xml-attribute-value">"anno_4"</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+    The term "knot" is derived from the practice of counting the number of knots
+    on a line unreeled in a set period of time from a device known as a chip log.
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">annotation</span>&gt;
+</div></div>
+<div class="odt-document">
+        
+          <div class="text-p text-style-name-dtb_3a_p">
+            The speed of a sailing vessel was measured in knots<span class="footnote-ref"></span>.
+          </div>
+        
+      <div class="footnotes"><div class="text-note text-note-class-footnote text-id-anno_4">
+            <div class="text-note-citation"></div>
+            <div class="text-note-body">
+              <div class="text-p text-style-name-dtb_3a_annotation">
+                The term "knot" is derived from the practice of counting the number of knots
+                on a line unreeled in a set period of time from a device known as a chip log.
+              </div>
+            </div>
+            </div></div>
+</div>
+<h2>sidebar with paragraph</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">sidebar</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;foo&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">sidebar</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-section text-name-dtb:sidebar#1 text-style-name-dtb_3a_sidebar">
+          <div class="text-p text-style-name-dtb_3a_p">foo</div>
+        </div>
+      </div>
+<h2>sidebar without paragraph</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">sidebar</span>&gt;
+  foo
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">sidebar</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-section text-name-dtb:sidebar#1 text-style-name-dtb_3a_sidebar">
+          <div class="text-p text-style-name-dtb_3a_p">foo</div>
+        </div>
+      </div>
+<h2>two images that share a caption</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">imggroup</span> <span xmlns="" class="code-xml-attribute-local-name">id</span>=<span xmlns="" class="code-xml-attribute-value">"imggrp_43"</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">img</span> <span xmlns="" class="code-xml-attribute-local-name">id</span>=<span xmlns="" class="code-xml-attribute-value">"img_12"</span> <span xmlns="" class="code-xml-attribute-local-name">src</span>=<span xmlns="" class="code-xml-attribute-value">"orion62.jpg"</span> <span xmlns="" class="code-xml-attribute-local-name">alt</span>=<span xmlns="" class="code-xml-attribute-value">"Orion Nebula by visible and ultraviolet light"</span>/&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">img</span> <span xmlns="" class="code-xml-attribute-local-name">id</span>=<span xmlns="" class="code-xml-attribute-value">"img_13"</span> <span xmlns="" class="code-xml-attribute-local-name">src</span>=<span xmlns="" class="code-xml-attribute-value">"orion3.jpg"</span> <span xmlns="" class="code-xml-attribute-local-name">alt</span>=<span xmlns="" class="code-xml-attribute-value">"Young stars in Orion Nebula"</span>/&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">caption</span> <span xmlns="" class="code-xml-attribute-local-name">imgref</span>=<span xmlns="" class="code-xml-attribute-value">"img_12 img_13"</span>&gt;
+    Many young stars lie inside the mass of gas and dust that forms the Orion Nebula.
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">caption</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">imggroup</span>&gt;
+</div></div>
+<div class="odt-document">
+        
+          <div class="text-p text-style-name-dtb_3a_caption">
+            Many young stars lie inside the mass of gas and dust that forms the Orion Nebula.
+          </div>
+          <div class="text-p text-style-name-dtb_3a_img">
+            <img src="/pipeline/modules/dtbook-to-odt/src/test/xprocspec/orion62.jpg" title="Orion Nebula by visible and ultraviolet light" style="width: 1.6667in">
+          </div>
+          <div class="text-p text-style-name-dtb_3a_img">
+            <img src="/pipeline/modules/dtbook-to-odt/src/test/xprocspec/orion3.jpg" title="Young stars in Orion Nebula" style="width: 2.1333in">
+          </div>
+        
+      </div>
+<h2>mathml with asciimath encoding</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-local-name">math</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-local-name">semantics</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-local-name">mrow</span>&gt;
+        &lt;<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;x&lt;/<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;
+        &lt;<span xmlns="" class="code-xml-element-local-name">mo</span>&gt;=&lt;/<span xmlns="" class="code-xml-element-local-name">mo</span>&gt;
+        &lt;<span xmlns="" class="code-xml-element-local-name">mfrac</span>&gt;
+          &lt;<span xmlns="" class="code-xml-element-local-name">mrow</span>&gt;
+            &lt;<span xmlns="" class="code-xml-element-local-name">mo</span>&gt;-&lt;/<span xmlns="" class="code-xml-element-local-name">mo</span>&gt;
+            &lt;<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;b&lt;/<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;
+            &lt;<span xmlns="" class="code-xml-element-local-name">mo</span>&gt;±&lt;/<span xmlns="" class="code-xml-element-local-name">mo</span>&gt;
+            &lt;<span xmlns="" class="code-xml-element-local-name">msqrt</span>&gt;
+              &lt;<span xmlns="" class="code-xml-element-local-name">mrow</span>&gt;
+                &lt;<span xmlns="" class="code-xml-element-local-name">msup</span>&gt;
+                  &lt;<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;b&lt;/<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;
+                  &lt;<span xmlns="" class="code-xml-element-local-name">mn</span>&gt;2&lt;/<span xmlns="" class="code-xml-element-local-name">mn</span>&gt;
+                &lt;/<span xmlns="" class="code-xml-element-local-name">msup</span>&gt;
+                &lt;<span xmlns="" class="code-xml-element-local-name">mo</span>&gt;-&lt;/<span xmlns="" class="code-xml-element-local-name">mo</span>&gt;
+                &lt;<span xmlns="" class="code-xml-element-local-name">mn</span>&gt;4&lt;/<span xmlns="" class="code-xml-element-local-name">mn</span>&gt;
+                &lt;<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;a&lt;/<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;
+                &lt;<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;c&lt;/<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;
+              &lt;/<span xmlns="" class="code-xml-element-local-name">mrow</span>&gt;
+            &lt;/<span xmlns="" class="code-xml-element-local-name">msqrt</span>&gt;
+          &lt;/<span xmlns="" class="code-xml-element-local-name">mrow</span>&gt;
+          &lt;<span xmlns="" class="code-xml-element-local-name">mrow</span>&gt;
+            &lt;<span xmlns="" class="code-xml-element-local-name">mn</span>&gt;2&lt;/<span xmlns="" class="code-xml-element-local-name">mn</span>&gt;
+            &lt;<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;a&lt;/<span xmlns="" class="code-xml-element-local-name">mi</span>&gt;
+          &lt;/<span xmlns="" class="code-xml-element-local-name">mrow</span>&gt;
+        &lt;/<span xmlns="" class="code-xml-element-local-name">mfrac</span>&gt;
+      &lt;/<span xmlns="" class="code-xml-element-local-name">mrow</span>&gt;
+      &lt;<span xmlns="" class="code-xml-element-local-name">annotation</span> <span xmlns="" class="code-xml-attribute-local-name">encoding</span>=<span xmlns="" class="code-xml-attribute-value">"ASCIIMath"</span>&gt;x = (-b +- sqrt(b^2-4ac))/(2a)&lt;/<span xmlns="" class="code-xml-element-local-name">annotation</span>&gt;
+    &lt;/<span xmlns="" class="code-xml-element-local-name">semantics</span>&gt;
+  &lt;/<span xmlns="" class="code-xml-element-local-name">math</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-p text-style-name-dtb_3a_p">
+          <div class="draw-frame draw-name-math:math#1 draw-style-name-dtb_3a_math text-anchor-type-as-char draw-z-index-0">
+            <div class="draw-object">
+              <math xmlns="http://www.w3.org/1998/Math/MathML" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <semantics>
+                  <mrow>
+                    <mi>x</mi>
+                    <mo>=</mo>
+                    <mfrac>
+                      <mrow>
+                        <mo>-</mo>
+                        <mi>b</mi>
+                        <mo>±</mo>
+                        <msqrt>
+                          <mrow>
+                            <msup>
+                              <mi>b</mi>
+                              <mn>2</mn>
+                            </msup>
+                            <mo>-</mo>
+                            <mn>4</mn>
+                            <mi>a</mi>
+                            <mi>c</mi>
+                          </mrow>
+                        </msqrt>
+                      </mrow>
+                      <mrow>
+                        <mn>2</mn>
+                        <mi>a</mi>
+                      </mrow>
+                    </mfrac>
+                  </mrow>
+                  <annotation encoding="ASCIIMath">x = (-b +- sqrt(b^2-4ac))/(2a)</annotation>
+                </semantics>
+              </math>
+            </div>
+            <div class="svg-title">x = (-b +- sqrt(b^2-4ac))/(2a)</div>
+          </div>
+        </div>
+      </div>
+<h2>page number inside a paragraph</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+  foo
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">pagenum</span>&gt;1&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">pagenum</span>&gt;
+  bar
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+</div></div>
+<h3>with floating page numbers</h3>
+<div class="odt-document">
+          
+            <div class="text-p text-style-name-dtb_3a_p"> foo bar </div>
+            <div class="text-p text-style-name-dtb_3a_pagenum">1</div>
+          
+        </div>
+<h3>without floating page numbers</h3>
+<div class="odt-document">
+          
+            <div class="text-p text-style-name-dtb_3a_p"> foo </div>
+            <div class="text-p text-style-name-dtb_3a_pagenum">1</div>
+            <div class="text-p text-style-name-dtb_3a_p"> bar </div>
+          
+        </div>
+<h3>with page numbers disabled</h3>
+<div class="odt-document">
+          
+            <div class="text-p text-style-name-dtb_3a_p"> foo bar </div>
+          
+        </div>
+<h2>table that spans multiple pages</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">table</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>/&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>/&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">pagenum</span>&gt;256&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">pagenum</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>/&gt;
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">td</span>/&gt;
+  &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">tr</span>&gt;
+&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">table</span>&gt;
+</div></div>
+<h3>with floating page numbers</h3>
+<div class="odt-document">
+          
+            <table class="table-table table-name-dtb:table#1">
+              <div class="table-table-column table-number-columns-repeated-2"></div>
+              <tr class="table-table-row">
+                <td class="table-table-cell office-value-type-string"></td>
+                <td class="table-table-cell office-value-type-string"></td>
+              </tr>
+              <tr class="table-table-row">
+                <td class="table-table-cell office-value-type-string"></td>
+                <td class="table-table-cell office-value-type-string"></td>
+              </tr>
+            </table>
+            <div class="text-p text-style-name-dtb_3a_pagenum">256</div>
+          
+        </div>
+<h3>without floating page numbers</h3>
+<div class="odt-document">
+          
+            <table class="table-table table-name-dtb:table#1">
+              <div class="table-table-column table-number-columns-repeated-2"></div>
+              <tr class="table-table-row">
+                <td class="table-table-cell office-value-type-string"></td>
+                <td class="table-table-cell office-value-type-string"></td>
+              </tr>
+              <tr class="table-table-row">
+                <td class="table-table-cell office-value-type-string">
+                  <div class="text-p text-style-name-dtb_3a_pagenum">256</div>
+                </td>
+              </tr>
+              <tr class="table-table-row">
+                <td class="table-table-cell office-value-type-string"></td>
+                <td class="table-table-cell office-value-type-string"></td>
+              </tr>
+            </table>
+          
+        </div>
+<h3>with page numbers disabled</h3>
+<div class="odt-document">
+          
+            <table class="table-table table-name-dtb:table#1">
+              <div class="table-table-column table-number-columns-repeated-2"></div>
+              <tr class="table-table-row">
+                <td class="table-table-cell office-value-type-string"></td>
+                <td class="table-table-cell office-value-type-string"></td>
+              </tr>
+              <tr class="table-table-row">
+                <td class="table-table-cell office-value-type-string"></td>
+                <td class="table-table-cell office-value-type-string"></td>
+              </tr>
+            </table>
+          
+        </div>
+<h2>preserve whitespace</h2>
+<div class="xml-document"><div class="code">&lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+  &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">code</span> <span xmlns="" class="code-xml-attribute-prefix">xml:</span><span xmlns="" class="code-xml-attribute-local-name">space</span>=<span xmlns="" class="code-xml-attribute-value">"preserve"</span>&gt;    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">strong</span>&gt;case&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">strong</span>&gt; "o":
+    glBegin(GL_QUAD_STRIP)
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">strong</span>&gt;for&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">strong</span>&gt;(i=0;i&lt;=12; i++) {
+        angle = 3.14159 / 6.0 * i;
+        glVertex2f(0.4 * cos(angle), 0.4 * sin(angle));
+        glVertex2f(0.5 * cos(angle), 0.5 * sin(angle));
+    }
+    glEnd();
+    &lt;<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">strong</span>&gt;break&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">strong</span>&gt;;&lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">code</span>&gt;
+      &lt;/<span xmlns="" class="code-xml-element-prefix">dtb:</span><span xmlns="" class="code-xml-element-local-name">p</span>&gt;
+</div></div>
+<div class="odt-document">
+        <div class="text-p text-style-name-dtb_3a_p">
+            <span class="text-span text-style-name-dtb_3a_code"><span class="text-s text-c-4">    </span><span class="text-span text-style-name-dtb_3a_strong">case</span><span class="text-s text-c-1"> </span>"o":<div class="text-line-break"></div>
+<span class="text-s text-c-4">    </span>glBegin(GL_QUAD_STRIP)<div class="text-line-break"></div>
+<span class="text-s text-c-4">    </span><span class="text-span text-style-name-dtb_3a_strong">for</span>(i=0;i&lt;=12;<span class="text-s text-c-1"> </span>i++)<span class="text-s text-c-1"> </span>{<div class="text-line-break"></div>
+<span class="text-s text-c-8">        </span>angle<span class="text-s text-c-1"> </span>=<span class="text-s text-c-1"> </span>3.14159<span class="text-s text-c-1"> </span>/<span class="text-s text-c-1"> </span>6.0<span class="text-s text-c-1"> </span>*<span class="text-s text-c-1"> </span>i;<div class="text-line-break"></div>
+<span class="text-s text-c-8">        </span>glVertex2f(0.4<span class="text-s text-c-1"> </span>*<span class="text-s text-c-1"> </span>cos(angle),<span class="text-s text-c-1"> </span>0.4<span class="text-s text-c-1"> </span>*<span class="text-s text-c-1"> </span>sin(angle));<div class="text-line-break"></div>
+<span class="text-s text-c-8">        </span>glVertex2f(0.5<span class="text-s text-c-1"> </span>*<span class="text-s text-c-1"> </span>cos(angle),<span class="text-s text-c-1"> </span>0.5<span class="text-s text-c-1"> </span>*<span class="text-s text-c-1"> </span>sin(angle));<div class="text-line-break"></div>
+<span class="text-s text-c-4">    </span>}<div class="text-line-break"></div>
+<span class="text-s text-c-4">    </span>glEnd();<div class="text-line-break"></div>
+<span class="text-s text-c-4">    </span><span class="text-span text-style-name-dtb_3a_strong">break</span>;</span>
+                </div>
+      </div>
+</body>
+</html>

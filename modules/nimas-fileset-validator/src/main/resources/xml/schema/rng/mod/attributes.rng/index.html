@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../attributes.rng">
+</head>
+<body><div class="code" about="../attributes.rng">&lt;<span class="code-xml-element-local-name">grammar</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema-datatypes"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        attributes.rng
+        Original version: mgylling 2005-06-01    
+        Version/change history:
+        
+    &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"datatypes.rng"</span>/&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.id"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.href.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.href.required.z3986-2005.subset"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri.z3986-2005.subset"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;	
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.href.optional.z3986-2005.subset"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.href.required.z3986-2005.subset"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;	
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;	
+    
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.href.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.href.required.relative.smilwithfragment"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri.relative.smilwithfragment"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.class.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"class"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.class.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.class.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.urivalue.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyURI"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.urivalue.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.urivalue.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.urivalue.z3986-subset.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri.z3986-2005.subset"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.urivalue.z3986-subset.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.urivalue.z3986-subset.required"</span>/&gt;		
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.title.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"title"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt; 
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.title.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.title.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.xml.lang.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:lang"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.rfc1766"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.xml.lang.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.xml.lang.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.lang.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.rfc1766"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.lang.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.lang.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.dir.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dir"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;ltr&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;rtl&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.dir.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.dir.required"</span>/&gt;    
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.dur.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dur"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.dur.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.dur.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.src.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"src"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.src.required.z3986-2005.subset"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"src"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri.z3986-2005.subset"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.src.required.uri.z3986-2005.subset.relative.smilwithfragment"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"src"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri.z3986-2005.subset.relative.smilwithfragment"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;		
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.src.optional.uri.z3986-2005.subset.relative.smilwithfragment"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.src.required.uri.z3986-2005.subset.relative.smilwithfragment"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.src.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.src.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.src.optional.z3986-2005.subset"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.src.required.z3986-2005.subset"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.clipBegin.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"clipBegin"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.clipBegin.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.clipBegin.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.clipEnd.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"clipEnd"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.clipEnd.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.clipEnd.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.customTest.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"customTest"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.idref"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.customTest.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.customTest.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.region.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"region"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt; 
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.region.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.region.required"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"scheme"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.required"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

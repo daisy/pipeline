@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>cs translation.cti</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../cs-translation.cti">
+
+<pre><code>#
+#  Copyright (C) 2011 by Bert Frees &lt;bertfrees@gmail.com&gt;
+#  Copyright (C) 2011 by Jan Halousek &lt;merit@login.cz&gt;
+#
+#  This file is part of liblouis.
+#
+#  liblouis is free software: you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as
+#  published by the Free Software Foundation, either version 3 of the
+#  License, or (at your option) any later version.
+#
+#  liblouis is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#  Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with liblouis. If not, see
+#  &lt;http://www.gnu.org/licenses/&gt;.
+#
+# ----------------------------------------------------------------------------------------------
+#
+#  Czech Braille
+#
+#     Created and maintained by Bert Frees &lt;bertfrees@gmail.com&gt;
+#                               Jan Halousek &lt;merit@login.cz&gt;
+#
+#     Based on the official Czech Braille Standard
+# ----------------------------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------------------------
+# Braille indicator opcodes
+# ----------------------------------------------------------------------------------------------
+
+numsign  3456
+capsign  6
+begcaps  56
+endcaps  5
+
+# ----------------------------------------------------------------------------------------------
+# Literary digits
+# ----------------------------------------------------------------------------------------------
+
+include litdigits6Dots.uti
+
+# ----------------------------------------------------------------------------------------------
+# Decimal points, hyphens
+# ----------------------------------------------------------------------------------------------
+
+decpoint  \x002C  2
+decpoint  \x002E  3
+hyphen    \x002D  36
+
+# ----------------------------------------------------------------------------------------------
+# Letter prefix in numbers
+# ----------------------------------------------------------------------------------------------
+
+class    digitletter                 abcdefghij
+context  $d[]%digitletter            @5
+context  $d"."[]%digitletter         @5
+context  $d","[]%digitletter         @5
+
+# ----------------------------------------------------------------------------------------------
+</code></pre>
+
+  </body>
+</html>

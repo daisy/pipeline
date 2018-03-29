@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../pres-mathml-to-ssml.xsl">
+</head>
+<body><div class="code" about="../pres-mathml-to-ssml.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/mathml-to-ssml/src/main/resources/xml/pres-to-ssml/mathml-serialization.xsl" class="source">mathml-serialization.xsl</a>"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/mathml-to-ssml/src/main/resources/xml/pres-to-ssml/mathml-normalization.xsl" class="source">mathml-normalization.xsl</a>"</span>/&gt;
+
+  
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"simple-rules"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:rule[@constant]"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"@constant"</span>/&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"rules"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"document('mathml-rules.xml')"</span>/&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">speak</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.1"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//m:math[@id and @xml:lang]"</span> <span class="code-xml-attribute-local-name">group-by</span>=<span class="code-xml-attribute-value">"substring-before(concat(@xml:lang, '-'), '-')"</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-grouping-key()"</span>/&gt;
+
+	
+	
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">rules</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$rules//d:rule[d:trans[not(@xml:lang) or @xml:lang = $lang][1]]"</span>&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sort</span> <span class="code-xml-attribute-local-name">data-type</span>=<span class="code-xml-attribute-value">"number"</span> <span class="code-xml-attribute-local-name">order</span>=<span class="code-xml-attribute-value">"descending"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"if (current()/@priority) then current()/@priority else 0"</span>/&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"node() except d:trans"</span>/&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@* except regex except constant"</span>/&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+		  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count($pattern//d:group) + count($pattern//d:text) + count($pattern//d:optional-group) = 0"</span>&gt;
+		    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"constant"</span>&gt;
+		      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(d:serialize($pattern, 'false'), '')"</span>/&gt;
+		    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+		  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+		  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+		    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"regex"</span>&gt;
+		      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(d:serialize($pattern, 'true'), '')"</span>/&gt;
+		    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+		  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:trans[@xml:lang = $lang][1]"</span>/&gt;
+	      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+	  &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">rules</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+
+	
+	
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group()"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"normalized"</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current()"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"normalize"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+	  &lt;<span class="code-xml-element-local-name">s</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*"</span>/&gt; 
+
+	    
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"m:*[local-name()!='text'][1]/preceding-sibling::m:text"</span>&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current()/text()"</span>/&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+
+	    
+	    
+
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"iterate-over-rules"</span>&gt;
+	      
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"serialized"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(d:serialize($normalized/node(), 'false'), '')"</span>/&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$compiled-rules"</span>/&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+
+	    
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"m:*[local-name()!='text'][1]/following-sibling::m:text"</span>&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current()/text()"</span>/&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+	  &lt;/<span class="code-xml-element-local-name">s</span>&gt;
+
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">speak</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"iterate-over-rules"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"serialized"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"true()"</span>/&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"decrement"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$serialized"</span> <span class="code-xml-attribute-local-name">regex</span>=<span class="code-xml-attribute-value">"^:([0-9]+):"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">matching-substring</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"regex-group(1)"</span>/&gt; 
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">matching-substring</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">non-matching-substring</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"shifted"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$serialized"</span> <span class="code-xml-attribute-local-name">regex</span>=<span class="code-xml-attribute-value">"([:@])([0-9]+)"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">matching-substring</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat(regex-group(1), 1 + number(regex-group(2)) - number($decrement))"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">matching-substring</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">non-matching-substring</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>/&gt; 
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">non-matching-substring</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"simple-rule"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"key('simple-rules', $shifted, $compiled-rules)"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$simple-rule"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$simple-rule/d:trans/node()"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(contains($serialized, ':') and contains($serialized, '@'))"</span>&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat(' ', $serialized, ' ')"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"first-rule"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$compiled-rules//d:rule[@regex][1]"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$first-rule"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"one-iteration"</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"serialized"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$shifted"</span>/&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"rule"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$first-rule"</span>/&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$compiled-rules"</span>/&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$emphasize"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"one-iteration"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"serialized"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"rule"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"next"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$rule/following-sibling::d:rule[@regex][1]"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$serialized"</span> <span class="code-xml-attribute-local-name">regex</span>=<span class="code-xml-attribute-value">"{concat('^', $rule/@regex, '$')}"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">matching-substring</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"regex-groups"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-groups</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span> <span class="code-xml-attribute-local-name">n</span>=<span class="code-xml-attribute-value">"1"</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"regex-group(1)"</span>/&gt;&lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span> <span class="code-xml-attribute-local-name">n</span>=<span class="code-xml-attribute-value">"2"</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"regex-group(2)"</span>/&gt;&lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span> <span class="code-xml-attribute-local-name">n</span>=<span class="code-xml-attribute-value">"3"</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"regex-group(3)"</span>/&gt;&lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span> <span class="code-xml-attribute-local-name">n</span>=<span class="code-xml-attribute-value">"4"</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"regex-group(4)"</span>/&gt;&lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span> <span class="code-xml-attribute-local-name">n</span>=<span class="code-xml-attribute-value">"5"</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"regex-group(5)"</span>/&gt;&lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-group</span>&gt;
+	    
+	    
+	  &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">regex-groups</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$rule/d:trans/node()"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"regex-groups"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$regex-groups"</span>/&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$compiled-rules"</span>/&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$emphasize"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">matching-substring</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">non-matching-substring</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"expected-ending"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'@1@[^ ]+ $'"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"without-ending"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"replace($serialized, $expected-ending, '')"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$next"</span>&gt;
+	    
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"one-iteration"</span>&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"serialized"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$serialized"</span>/&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"rule"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$next"</span>/&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$compiled-rules"</span>/&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$emphasize"</span>/&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+	  
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(contains($without-ending, '@1@'))"</span>&gt;
+	    
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"iterate-over-rules"</span>&gt;
+	      
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"serialized"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"replace($without-ending, '^:1:[^ ]+ ', '')"</span>/&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$compiled-rules"</span>/&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$emphasize"</span>/&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(matches($serialized, $expected-ending))"</span>&gt;
+	    
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"' ERROR '"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	    
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$serialized"</span> <span class="code-xml-attribute-local-name">regex</span>=<span class="code-xml-attribute-value">":1:"</span>&gt; 
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">matching-substring</span>/&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">non-matching-substring</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"iterate-over-rules"</span>&gt;
+		  
+		  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"serialized"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat(':1:', .)"</span>/&gt;
+		  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$compiled-rules"</span>/&gt;
+		  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$emphasize"</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+	      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">non-matching-substring</span>&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span>&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">non-matching-substring</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:group"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"2"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"regex-groups"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"n"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@n"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"play-emphasis"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$emphasize and @emph='true'"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$play-emphasis"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">break</span> <span class="code-xml-attribute-local-name">time</span>=<span class="code-xml-attribute-value">"300ms"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"iterate-over-rules"</span>&gt;
+      
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"serialized"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$regex-groups//d:regex-group[@n=$n]"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$compiled-rules"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@emph-children='true'"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$play-emphasis"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">break</span> <span class="code-xml-attribute-local-name">time</span>=<span class="code-xml-attribute-value">"300ms"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"node()"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"1"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"regex-groups"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"emphasize"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"node()"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"replace"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"regex-groups"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$regex-groups"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"compiled-rules"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$compiled-rules"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"depth"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$emphasize"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

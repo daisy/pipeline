@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../create-opf.xsl">
+</head>
+<body><div class="code" about="../create-opf.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"xsl d pf xs"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xslt/uri-functions.xsl" class="source">http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl</a>"</span>/&gt;
+
+
+  
+  
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-dir"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"title"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"uid"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"total-time"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"publisher"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"audio-only"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"mathml-xslt-fallback"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span>/&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"has-audio"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"boolean(//d:file[contains(@media-type, 'audio')][1])"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"has-image"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"boolean(//d:file[contains(@media-type, 'image')][1])"</span>/&gt;
+
+    &lt;<span class="code-xml-element-local-name">package</span> <span class="code-xml-attribute-local-name">unique-identifier</span>=<span class="code-xml-attribute-value">"uid"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">metadata</span>&gt;
+	&lt;<span class="code-xml-element-local-name">dc-metadata</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Format</span>&gt;ANSI/NISO Z39.86-2005&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Format</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Language</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$lang"</span>/&gt;&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Language</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Date</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"format-date(current-date(), '[Y0001]-[M01]-[D01]')"</span>/&gt;&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Date</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Publisher</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$publisher"</span>/&gt;&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Publisher</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Title</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$title"</span>/&gt;&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Title</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Identifier</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"uid"</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$uid"</span>/&gt;&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">Identifier</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">dc-metadata</span>&gt;
+	&lt;<span class="code-xml-element-local-name">x-metadata</span>&gt;
+	  &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dtb:multimediaType"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{if ($audio-only='true') then 'audioOnly' else     (if ($has-audio) then 'audioFullText' else 'textNCX')}"</span>/&gt;
+	  &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dtb:totalTime"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{$total-time}"</span>/&gt;
+	  &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dtb:multimediaContent"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{concat(     if ($audio-only='true') then 'audio' else (if ($has-audio) then 'audio,text' else 'text'),     if ($has-image) then ',image' else '')}"</span>/&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$mathml-xslt-fallback != ''"</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z39-86-extension-version"</span> <span class="code-xml-attribute-local-name">scheme</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1998/Math/MathML"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"1.0"</span>/&gt;
+	    &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"DTBook-XSLTFallback"</span> <span class="code-xml-attribute-local-name">scheme</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1998/Math/MathML"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{pf:relativize-uri($mathml-xslt-fallback, $output-dir)}"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">x-metadata</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">metadata</span>&gt;
+      &lt;<span class="code-xml-element-local-name">manifest</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"manifest"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">manifest</span>&gt;
+      &lt;<span class="code-xml-element-local-name">spine</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"spine"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">spine</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">package</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"d:getIdRef"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"s"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"substring-before(tokenize($s, '[/\\]')[last()], '.')"</span>/&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"manifest"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//d:file"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"contains(@media-type, 'smil')"</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:getIdRef(@href)"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"contains(@media-type, 'ncx')"</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'ncx'"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"contains(@media-type, 'res')"</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'resource'"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('opf-', position())"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+      &lt;<span class="code-xml-element-local-name">item</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{pf:relativize-uri(resolve-uri(@href, base-uri(.)), $output-dir)}"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"{$id}"</span> <span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"{@media-type}"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"spine"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//d:file[contains(@media-type, 'smil')]"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">itemref</span> <span class="code-xml-attribute-local-name">idref</span>=<span class="code-xml-attribute-value">"{d:getIdRef(@href)}"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

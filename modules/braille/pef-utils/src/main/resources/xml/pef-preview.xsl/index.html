@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../pef-preview.xsl">
+</head>
+<body><div class="code" about="../pef-preview.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"table"</span>/&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">html</span>&gt;
+            &lt;<span class="code-xml-element-local-name">head</span>&gt;
+                &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">http-equiv</span>=<span class="code-xml-attribute-value">"Content-Type"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"text/html; charset=UTF-8"</span>/&gt;
+                &lt;<span class="code-xml-element-local-name">link</span> <span class="code-xml-attribute-local-name">rel</span>=<span class="code-xml-attribute-value">"stylesheet"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"text/css"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"pef-preview.css"</span>/&gt;
+                &lt;<span class="code-xml-element-local-name">script</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"text/javascript"</span> <span class="code-xml-attribute-local-name">src</span>=<span class="code-xml-attribute-value">"pef-preview.js"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">head</span>&gt;
+            &lt;<span class="code-xml-element-local-name">body</span>&gt;
+                &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"header"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">h1</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">span</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"label"</span>&gt;title&lt;/<span class="code-xml-element-local-name">span</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string(/pef:pef/pef:head/pef:meta/dc:title)"</span>/&gt;
+                    &lt;/<span class="code-xml-element-local-name">h1</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">h2</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">span</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"label"</span>&gt;creator&lt;/<span class="code-xml-element-local-name">span</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string(/pef:pef/pef:head/pef:meta/dc:creator)"</span>/&gt;
+                    &lt;/<span class="code-xml-element-local-name">h2</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"view-buttons"</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">button</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"view-braille"</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"active"</span> <span class="code-xml-attribute-local-name">onclick</span>=<span class="code-xml-attribute-value">"toggleView()"</span>&gt;Braille&lt;/<span class="code-xml-element-local-name">button</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">button</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"view-text"</span> <span class="code-xml-attribute-local-name">onclick</span>=<span class="code-xml-attribute-value">"toggleView()"</span>&gt;Text&lt;/<span class="code-xml-element-local-name">button</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">button</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"view-metadata"</span> <span class="code-xml-attribute-local-name">onclick</span>=<span class="code-xml-attribute-value">"toggleMetadata()"</span>&gt;Metadata&lt;/<span class="code-xml-element-local-name">button</span>&gt;
+                    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">ul</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"metadata"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/pef:pef/pef:head/pef:meta/dc:*[not(local-name()=('title','creator'))]"</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">li</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">span</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"label"</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"local-name(.)"</span>/&gt;&lt;/<span class="code-xml-element-local-name">span</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string(.)"</span>/&gt;
+                            &lt;/<span class="code-xml-element-local-name">li</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                    &lt;/<span class="code-xml-element-local-name">ul</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ul</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"nav"</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"nav-volumes"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"volumes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"count(//pef:volume)"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//pef:volume"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"volume"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"position()"</span>/&gt;
+                        &lt;<span class="code-xml-element-local-name">li</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"nav-volume"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"volume{$volume}"</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"volume-label"</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$volume &gt; 1"</span>&gt;
+                                    &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"volume-previous"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"#volume{$volume - 1}"</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$volume - 1"</span>/&gt;
+                                    &lt;/<span class="code-xml-element-local-name">a</span>&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"volume-current"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"#volume{$volume}"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$volume"</span>/&gt;
+                                &lt;/<span class="code-xml-element-local-name">a</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$volume &lt; $volumes"</span>&gt;
+                                    &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"volume-next"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"#volume{$volume + 1}"</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$volume + 1"</span>/&gt;
+                                    &lt;/<span class="code-xml-element-local-name">a</span>&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                            &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">ul</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"nav-pages"</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">".//pef:page"</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"format-number(position(), '0')"</span>/&gt;
+                                    &lt;<span class="code-xml-element-local-name">li</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"nav-page"</span>&gt;
+                                        &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"#page{$volume}.{$page}"</span>&gt;
+                                            &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"page-number"</span>&gt;
+                                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$page"</span>/&gt;
+                                            &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                                            &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"page"</span>&gt;
+                                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pef:row"</span>&gt;
+                                                    &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"row"</span>&gt;
+                                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@rowgap"</span>/&gt;
+                                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string(.)"</span>/&gt;
+                                                    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                                            &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                                        &lt;/<span class="code-xml-element-local-name">a</span>&gt;
+                                    &lt;/<span class="code-xml-element-local-name">li</span>&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                            &lt;/<span class="code-xml-element-local-name">ul</span>&gt;
+                        &lt;/<span class="code-xml-element-local-name">li</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">ul</span>&gt;
+                &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"main"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//pef:volume"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"volume"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"position()"</span>/&gt;
+                        &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"volume"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">".//pef:page"</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"position()"</span>/&gt;
+                                &lt;<span class="code-xml-element-local-name">span</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"bookmark"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"page{$volume}.{$page}"</span>&gt; &lt;/<span class="code-xml-element-local-name">span</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"page"</span>&gt;
+                                    &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"braille-page"</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pef:row"</span>&gt;
+                                            &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"row"</span>&gt;
+                                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@rowgap"</span>/&gt;
+                                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string(.)"</span>/&gt;
+                                            &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                                    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                                    &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"text-page"</span>&gt;
+                                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pef:row"</span>&gt;
+                                            &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"row"</span>&gt;
+                                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@rowgap"</span>/&gt;
+                                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pef:encode($table, string(.))"</span>/&gt;
+                                            &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                                    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                                &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                        &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">body</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">html</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

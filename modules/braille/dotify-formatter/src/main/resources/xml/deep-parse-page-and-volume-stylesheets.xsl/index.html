@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../deep-parse-page-and-volume-stylesheets.xsl">
+</head>
+<body><div class="code" about="../deep-parse-page-and-volume-stylesheets.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/css-utils/src/main/resources/xml/library.xsl" class="source">http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl</a>"</span>/&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">_</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"distinct-values(collection()//@css:volume)"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">selector</span>=<span class="code-xml-attribute-value">"@volume"</span> <span class="code-xml-attribute-local-name">style</span>=<span class="code-xml-attribute-value">"{.}"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"css:deep-parse-stylesheet(.)"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"distinct-values(collection()//@css:page)"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">selector</span>=<span class="code-xml-attribute-value">"@page"</span> <span class="code-xml-attribute-local-name">style</span>=<span class="code-xml-attribute-value">"{.}"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"css:deep-parse-stylesheet(.)"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">_</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>Troubleshooting on Windows</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Troubleshooting on Windows">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/wiki.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Configuration-Files" tabindex="15">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="16">
+      
+      Command Line
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="17">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="18">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="19">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="20">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="21">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="22">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="23">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="24">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="25">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-odt" tabindex="26">
+      
+      DTBook to ODT
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="27">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-rtf" tabindex="28">
+      
+      DTBook to RTF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="29">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-epub3" tabindex="30">
+      
+      EPUB 3 Enhancer
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="31">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="32">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="33">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="34">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="35">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="36">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="37">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="38">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="39">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/API-Documentation" tabindex="40">
+      API Documentation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/WebServiceAPI" tabindex="41">
+      
+      Web Service API
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Issue-Tracker.html" tabindex="42">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="43">
+      Troubleshooting
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      
+        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="44">
+      
+      Troubleshooting on Windows
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="45">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute​
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="46">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="47">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="48">
+      Developer Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="49">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="50">
+      
+      Build System
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="51">
+      
+      Testing
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="52">
+      
+      Debugging
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="53">
+      
+      Release Management
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="54">
+      
+      Easy Hacks
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <div class="edit-button">
+  <a href="https://github.com/daisy/pipeline/wiki/Get-Help/Troubleshooting/Common-Errors-Windows/_edit" class="external-link" target="_blank">
+    Edit this page on Github
+  </a>
+</div>
+
+      <h1 id="troubleshooting-on-windows">Troubleshooting on Windows</h1>
+
+<p>This article covers the most common errors Windows users may
+experience when starting DAISY Pipeline 2. If your issue isn’t listed
+here, please visit our
+<a href="/pipeline/Get-Help/Issue-Tracker.html">issue tracker</a>
+to report it.</p>
+
+<h2 id="error-unable-to-retrieve-javahome-or-javahome-is-not-valid">ERROR: Unable to retrieve JAVA_HOME or JAVA_HOME is not valid</h2>
+
+<p>DAISY Pipeline 2 uses the Windows environment variable <strong>JAVA_HOME</strong>
+to find your Java installation folder. This error can occur if the
+variable is not set or pointing to an incorrect path. Please follow
+the steps below to set or correct your <strong>JAVA_HOME</strong> variable.</p>
+
+<h3 id="verify-java">Verify Java</h3>
+
+<p>Before following the solution steps, first verify that you have Java
+installed correctly.</p>
+
+<p>Windows 10: Open the search box (press <strong>Win⊞ + S</strong>, type
+<strong>About Java</strong>, and hit <strong>Enter</strong>. If nothing comes up, please
+<a href="https://java.com/en/" class="external-link" target="_blank">install the latest Java version</a>.</p>
+
+<p>Alternatively, open a command prompt window (press <strong>Win⊞ + R</strong>,
+type <strong>cmd</strong>, and hit <strong>Enter</strong>) and enter the command: <code>java -version</code>.
+This will output the version of Java installed on your
+computer. If the command is not recognized, please
+<a href="https://java.com/en/" class="external-link" target="_blank">install the latest Java version</a>.</p>
+
+<h3 id="java-installation-path">Java Installation Path</h3>
+
+<p>You will need the path to your Java installation folder for the next
+steps, which can be found through File Explorer or Command Prompt.</p>
+
+<p>Your Java installation path will likely resemble: <strong>C:\Program Files\Java\jre1.8.X_XXX</strong>.</p>
+
+<ul>
+  <li>If you have a Java Development Kit installed, replace
+<strong>jre1.8.X_XXX</strong> with <strong>jdk1.8.X_XXX</strong>.</li>
+</ul>
+
+<p>You can find your Java installation path via one of these two methods:</p>
+
+<h4 id="command-prompt-windows-2003">Command Prompt (Windows 2003+)</h4>
+
+<ol>
+  <li>
+    <p>Open a command prompt window and enter the command <code>where java</code> (Windows 2003+).</p>
+  </li>
+  <li>
+    <p>Press <strong>Ctrl + M</strong> to enter “mark” mode, highlight the path to your
+installation directory (e.g. <strong>jre1.8.X_XXX</strong>), and copy it.</p>
+  </li>
+</ol>
+
+<h4 id="file-explorer">File Explorer</h4>
+
+<p>Open File Explorer (<strong>Win⊞ + R</strong>, type <strong>explorer</strong>, hit
+<strong>Enter</strong>), and browse for your Java installation folder. It will
+likely be installed in either <strong>Program Files\Java</strong> or <strong>Program
+Files (x86)\Java</strong> on your OS drive.</p>
+
+<p>Once you find your Java folder,</p>
+
+<ol>
+  <li>Open to it.</li>
+  <li>If there is a <strong>JRE</strong> installation folder (e.g. <strong>jre1.8.X_XXX</strong>), open it.</li>
+  <li>Otherwise, open the <strong>JDK</strong> installation folder (e.g. <strong>jdk1.8.X_XXX</strong>).</li>
+  <li>Copy the full path in the navigation bar at the top.</li>
+</ol>
+
+<h3 id="setting-javahome">Setting JAVA_HOME</h3>
+
+<p>You can now set or correct your <strong>JAVA_HOME</strong> variable via one of two methods:</p>
+
+<h4 id="command-prompt">Command Prompt</h4>
+
+<ol>
+  <li>Open a Command Prompt window as administrator.
+    <ul>
+      <li>Windows 10: press <strong>Win⊞ + S</strong>, type <strong>cmd</strong>, then press
+<strong>Ctrl + Shift + Enter</strong>.</li>
+      <li>Or click <strong>Start</strong>, and click <strong>All Programs</strong>. Right-click
+<strong>Command Prompt</strong>, and then click <strong>Run as administrator</strong>.</li>
+    </ul>
+  </li>
+  <li>Enter the command <code>setx JAVA_HOME -m "Path"</code>. For <strong>“Path”</strong>, paste
+in your <a href="#java-installation-path">Java installation path</a> .</li>
+</ol>
+
+<h4 id="control-panel">Control Panel</h4>
+
+<ol>
+  <li>Open the Control Panel (<strong>Win⊞ + R</strong>, type <strong>Control Panel</strong>,
+press <strong>Enter</strong>), and navigate to <strong>System and Security &gt; System</strong>.</li>
+  <li>Click on <strong>Advanced system settings</strong> link in the top left.</li>
+  <li>Click on the <strong>Environment Variables</strong> button. A new window will pop up.</li>
+  <li>In the bottom pane labeled <strong>System variables</strong>, click the <strong>New…</strong> button.</li>
+  <li>For the variable name, enter <strong>JAVA_HOME</strong>.</li>
+  <li>For the variable value, paste the path to your <a href="#java-installation-path">Java installation path</a>.</li>
+</ol>
+
+<h3 id="verify-javahome">Verify JAVA_HOME</h3>
+
+<p>Confirm that your <strong>JAVA_HOME</strong> variable is now set correctly.</p>
+
+<ol>
+  <li>Open a Command Prompt window (<strong>Win⊞ + R</strong>, type <strong>cmd</strong>, hit
+<strong>Enter</strong>).</li>
+  <li>Enter the command <code>echo %JAVA_HOME%</code>. This should output the path
+to your <a href="#java-installation-path">Java installation folder</a>.
+    <ul>
+      <li>If it doesn’t, your <strong>JAVA_HOME</strong> variable was not set
+correctly. Please make sure you’re using the correct
+<a href="#java-installation-path">Java installation folder</a>, or repeat
+the steps <a href="#verify-java">above</a>.</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Once you have verified that your <strong>JAVA_HOME</strong> is set correctly,
+DAISY Pipeline 2 should start correctly. If you experience this
+problem again or any others, please visit our
+<a href="/pipeline/Get-Help/Issue-Tracker.html">issue tracker</a>.</p>
+
+    </div>
+  </body>
+</html>

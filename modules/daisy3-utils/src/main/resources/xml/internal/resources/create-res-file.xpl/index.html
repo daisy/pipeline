@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../create-res-file.xpl">
+</head>
+<body><div class="code" about="../create-res-file.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:create-res-file"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+      &lt;<span class="code-xml-element-local-name">p</span>&gt;DAISY 3 resource file.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-dir"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+      &lt;<span class="code-xml-element-local-name">p</span>&gt;Output directory URI if the resource file were to be stored or refered by a fileset.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+      &lt;<span class="code-xml-element-local-name">p</span>&gt;Main language of the DTBook document which the resource file refers to.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"xml:base"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+      
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+	&lt;<span class="code-xml-element-local-name">resources</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2005-1"</span>&gt;
+	  &lt;<span class="code-xml-element-local-name">scope</span> <span class="code-xml-attribute-local-name">nsuri</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/z3986/2005/ncx/"</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">nodeSet</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"page-set"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//smilCustomTest[@bookStruct='PAGE_NUMBER']"</span>&gt;
+	      &lt;<span class="code-xml-element-local-name">resource</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">text</span>&gt;page&lt;/<span class="code-xml-element-local-name">text</span>&gt;
+	      &lt;/<span class="code-xml-element-local-name">resource</span>&gt;
+	    &lt;/<span class="code-xml-element-local-name">nodeSet</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">nodeSet</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"note-set"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//smilCustomTest[@bookStruct='NOTE']"</span>&gt;
+	      &lt;<span class="code-xml-element-local-name">resource</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">text</span>&gt;note&lt;/<span class="code-xml-element-local-name">text</span>&gt;
+	      &lt;/<span class="code-xml-element-local-name">resource</span>&gt;
+	    &lt;/<span class="code-xml-element-local-name">nodeSet</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">nodeSet</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"notref-set"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//smilCustomTest[@bookStruct='NOTE_REFERENCE']"</span>&gt;
+	      &lt;<span class="code-xml-element-local-name">resource</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">text</span>&gt;note&lt;/<span class="code-xml-element-local-name">text</span>&gt;
+	      &lt;/<span class="code-xml-element-local-name">resource</span>&gt;
+	    &lt;/<span class="code-xml-element-local-name">nodeSet</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">nodeSet</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"annot-set"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//smilCustomTest[@bookStruct='ANNOTATION']"</span>&gt;
+	      &lt;<span class="code-xml-element-local-name">resource</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">text</span>&gt;annotation&lt;/<span class="code-xml-element-local-name">text</span>&gt;
+	      &lt;/<span class="code-xml-element-local-name">resource</span>&gt;
+	    &lt;/<span class="code-xml-element-local-name">nodeSet</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">nodeSet</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"line-set"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//smilCustomTest[@bookStruct='LINE_NUMBER']"</span>&gt;
+	      &lt;<span class="code-xml-element-local-name">resource</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">text</span>&gt;line&lt;/<span class="code-xml-element-local-name">text</span>&gt;
+	      &lt;/<span class="code-xml-element-local-name">resource</span>&gt;
+	    &lt;/<span class="code-xml-element-local-name">nodeSet</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">nodeSet</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"sidebar-set"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//smilCustomTest[@bookStruct='OPTIONAL_SIDEBAR']"</span>&gt;
+	      &lt;<span class="code-xml-element-local-name">resource</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">text</span>&gt;sidebar&lt;/<span class="code-xml-element-local-name">text</span>&gt;
+	      &lt;/<span class="code-xml-element-local-name">resource</span>&gt;
+	    &lt;/<span class="code-xml-element-local-name">nodeSet</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">nodeSet</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"prodnote-set"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//smilCustomTest[@bookStruct='OPTIONAL_PRODUCER_NOTE']"</span>&gt;
+	      &lt;<span class="code-xml-element-local-name">resource</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">text</span>&gt;note&lt;/<span class="code-xml-element-local-name">text</span>&gt;
+	      &lt;/<span class="code-xml-element-local-name">resource</span>&gt;
+	    &lt;/<span class="code-xml-element-local-name">nodeSet</span>&gt;
+	  &lt;/<span class="code-xml-element-local-name">scope</span>&gt;
+	  &lt;<span class="code-xml-element-local-name">scope</span> <span class="code-xml-attribute-local-name">nsuri</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/SMIL20/"</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">nodeSet</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"math-seq-set"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//seq[@class='math']"</span>&gt;
+	      &lt;<span class="code-xml-element-local-name">resource</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">text</span>&gt;mathematical formula&lt;/<span class="code-xml-element-local-name">text</span>&gt;
+	      &lt;/<span class="code-xml-element-local-name">resource</span>&gt;
+	    &lt;/<span class="code-xml-element-local-name">nodeSet</span>&gt;
+	    &lt;<span class="code-xml-element-local-name">nodeSet</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"math-par-set"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//par[@class='math']"</span>&gt;
+	      &lt;<span class="code-xml-element-local-name">resource</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">text</span>&gt;mathematical formula&lt;/<span class="code-xml-element-local-name">text</span>&gt;
+	      &lt;/<span class="code-xml-element-local-name">resource</span>&gt;
+	    &lt;/<span class="code-xml-element-local-name">nodeSet</span>&gt;
+	  &lt;/<span class="code-xml-element-local-name">scope</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">resources</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute-value"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($output-dir, 'resources.res')"</span>/&gt;
+  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

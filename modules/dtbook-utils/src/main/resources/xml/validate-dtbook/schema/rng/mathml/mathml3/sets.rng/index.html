@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../sets.rng">
+</head>
+<body><div class="code" about="../sets.rng">&lt;<span class="code-xml-element-local-name">grammar</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cd.token.unary.class"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"card.token"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cd.token.binary.class"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in.token"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notin.token"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notsubset.token"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notprsubset.token"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"setdiff.token"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cd.token.nary.class"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"set.token"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"list.token"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"intersect.token"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"subset.token"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prsubset.token"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cartesianproduct.token"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"set.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+    &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"order"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"MathMLtype"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ContExp"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"set.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"set"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"set.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"list.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+    &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"order"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"MathMLtype"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ContExp"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"list.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"list"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"list.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"union.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"union.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"union"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"union.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"intersect.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"intersect.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"intersect"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"intersect.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notin.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notin.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notin"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notin.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"subset.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"subset.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"subset"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"subset.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prsubset.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prsubset.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prsubset"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prsubset.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notsubset.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notsubset.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notsubset"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notsubset.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notprsubset.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notprsubset.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notprsubset"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notprsubset.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"setdiff.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"setdiff.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"setdiff"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"setdiff.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"card.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"card.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"card"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"card.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cartesianproduct.content"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Token.type"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cartesianproduct.token"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cartesianproduct"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cartesianproduct.content"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

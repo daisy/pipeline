@@ -1,0 +1,799 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">xml-to-pef {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">xml-to-pef</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<div>Defined in:
+          <span class="uri">http://www.daisy.org/pipeline/modules/braille/xml-to-pef/xml-to-pef.xpl</span>
+</div>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">stylesheet</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Style sheets</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">A list of XSLT or CSS/SASS style sheets to apply.
+
+Must be a space separated list of URIs, absolute or relative to the input.
+
+Style sheets can also be associated with the source in other ways: linked (using an
+['xml-stylesheet' processing instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+element](https://www.w3.org/Style/styling-XML#External)), embedded (using a ['style'
+element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using '[style'
+attributes](https://www.w3.org/TR/css-style-attr/)).
+
+Style sheets are applied to the document in the following way: XSLT style sheets are applied before
+CSS/SASS style sheets. XSLT style sheets are applied one by one, first the ones specified through
+this option, then the ones associated with the source document, in the order in which they are
+specified.
+
+All CSS/SASS style sheets are applied at once, but the order in which they are specified (first the
+ones specified through this option, then the ones associated with the source document) has an
+influence on the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order).
+
+CSS/SASS style sheets are interpreted according to [braille
+CSS](http://braillespecs.github.io/braille-css) rules.
+
+For info on how to use SASS (Syntactically Awesome StyleSheets) see the [SASS
+manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">transform</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'(translator:liblouis)(formatter:dotify)'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Transformer query</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The transformer query.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-preview</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Include preview</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">Whether or not to include a preview of the PEF in HTML.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-brf</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Include plain text file (BRF)</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">Whether or not to include a plain text ASCII version of the PEF.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-obfl</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Include OBFL</h2>
+<p xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">Keeps the intermediary OBFL-file for debugging.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">ascii-file-format</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Plain text (BRF) file format</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">The file format to store the plain text version.
+
+If left blank, the locale information in the input document will be used to select a suitable file format.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">ascii-table</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">ASCII braille table</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
+
+If left blank, the locale information in the input document will be used to select a suitable table.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">page-width</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'40'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Page layout: Page width</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">The number of columns available for printing.
+
+Makes the variable `$page-width` available in style sheets and includes the following rule by default:
+
+~~~sass
+@page {
+  size: $page-width $page-height;
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">page-height</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'25'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Page layout: Page height</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">The number of rows available for printing.
+
+Makes the variable `$page-height` available in style sheets and includes the following rule by default:
+
+~~~sass
+@page {
+  size: $page-width $page-height;
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">left-margin</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'0'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Page layout: Left margin</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">duplex</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Page layout: Duplex</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When enabled, will print on both sides of the paper.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">levels-in-footer</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'6'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Headers/footers: Levels in footer</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">Specify which headings are rendered in the footer.
+              
+Makes the variable `$levels-in-footer` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+@for $level from 1 through 6 {
+  @if $levels-in-footer &gt;= $level {
+    h#{$level} {
+      string-set: footer content();
+    }
+  }
+}
+~~~
+
+In other words, the `footer` string is updated each time a heading with a level smaller than or
+equal to `levels-in-footer` is encountered. In order to use the `footer` string include a rule like
+the following in your custom style sheet:
+
+~~~css
+@page {
+  @bottom-center {
+    content: string(footer);
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`string-set`](http://braillespecs.github.io/braille-css/#h4_the-string-set-property) property
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`string()`](http://braillespecs.github.io/braille-css/#h4_the-string-function) function
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">main-document-language</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Translation/formatting of text: Main document language</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">hyphenation</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Translation/formatting of text: Hyphenation</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When enabled, will automatically hyphenate text.
+
+Makes the variable `$hyphenation` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+@if $hyphenation {
+  :root {
+    hyphens: auto;
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`hyphens`](http://braillespecs.github.io/braille-css/#the-hyphens-property) property
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">line-spacing</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'single'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">tab-width</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'4'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Translation/formatting of text: Tab width</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">capital-letters</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Translation/formatting of text: Capital letters</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When enabled, will indicate capital letters.
+
+Makes the variable `$capital-letters` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+@if $capital-letters != true {
+  :root {
+    text-transform: lowercase;
+  }
+}
+~~~</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">accented-letters</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Translation/formatting of text: Accented letters</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">polite-forms</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Translation/formatting of text: Polite forms</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">downshift-ordinal-numbers</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Translation/formatting of text: Downshift ordinal numbers</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-captions</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Block elements: Include captions</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When enabled, will include captions for images, tables, and so on.
+
+Makes the variable `$include-captions` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+caption {
+  display: if($include-captions, block, none);
+}
+~~~</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-images</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Block elements: Include images</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When enabled, will include the alt text of the images. When disabled, the images will be completely removed.
+
+Makes the variable `$include-images` available in style sheets and includes the following rule by
+default:
+
+~~~sass
+@if $include-images {
+  img::after {
+    content: attr(alt);
+  }
+}
+~~~</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-image-groups</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Block elements: Include image groups</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-line-groups</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Block elements: Include line groups</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When disabled, lines in a linegroup are joined together to form one block.
+
+Makes the variable `$include-line-groups` available in style sheets and includes the following rule
+by default:
+
+~~~sass
+linegroup line {
+  display: if($include-line-groups, block, inline);
+}
+~~~</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">text-level-formatting</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Inline elements: Text-level formatting (emphasis, strong)</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When enabled, text that is in bold or italics in the print version will be rendered in bold or italics in the braille version as well. **Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-note-references</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Inline elements: Include note references</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-production-notes</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Inline elements: Include production notes</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When enabled, production notes are included in the content.
+
+Makes the variable `$include-production-notes` available in style sheets and includes the following
+rule by default:
+
+~~~sass
+prodnote {
+  display: if($include-production-notes, block, none);
+}
+~~~</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">show-braille-page-numbers</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Page numbers: Show braille page numbers</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When enabled, will number braille pages.
+
+Makes the variable `$show-braille-page-numbers` available in style sheets. In order to use the
+variable include a rule like the following in your custom style sheet:
+
+~~~sass
+@if $show-braille-page-numbers {
+  @page {
+    @top-right {
+      content: counter(page);
+    }
+  }
+}
+~~~
+
+This will create a page number in the top right corner of every braille page.
+
+See the CSS specification for more info:
+
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the
+  [`counter()`](http://braillespecs.github.io/braille-css/#printing-counters-the-counter-function)
+  function
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">show-print-page-numbers</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Page numbers: Show print page numbers</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">When enabled, will indicate original page numbers.
+
+Makes the variable `$show-print-page-numbers` available in style sheets and includes the following
+rule by default:
+
+~~~sass
+@if $show-print-page-numbers {
+  pagenum {
+    string-set: print-page content();
+  }
+}
+~~~
+
+In order to use the `print-page` string include a rule like the following in your custom style
+sheet:
+
+~~~css
+@page {
+  @bottom-right {
+    content: string(print-page);
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`string-set`](http://braillespecs.github.io/braille-css/#h4_the-string-set-property) property
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`string()`](http://braillespecs.github.io/braille-css/#h4_the-string-function) function
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">force-braille-page-break</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Page numbers: Force braille page break</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">Force braille page breaks at print page breaks.
+
+Makes the variable `$force-braille-page-break` available in style sheets and includes the following
+rule by default:
+
+~~~sass
+@if $force-braille-page-break {
+  pagenum {
+    page-break-before: always;
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`page-break-before`](http://braillespecs.github.io/braille-css/#h4_controlling-page-breaks)
+  property
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">toc-depth</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'0'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Table of contents: Table of contents depth</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">The depth of the table of contents hierarchy to include. '0' means no table of contents.
+
+A table of contents will be generated from the heading elements present in the document: from `h1`
+elements if the specified value for "depth" is 1, from `h1` and `h2` elements if the specified value
+is 2, etc. The resulting table of contents has the following nested structure:
+
+~~~xml
+&lt;list id="generated-document-toc"&gt;
+  &lt;li&gt;
+      &lt;a href="#ch_1"&gt;Chapter 1&lt;/a&gt;
+      &lt;list&gt;
+          &lt;li&gt;
+              &lt;a href="#ch_1_1"&gt;1.1&lt;/a&gt;
+              ...
+          &lt;/li&gt;
+          &lt;li&gt;
+              &lt;a href="#ch_1_2"&gt;1.2&lt;/a&gt;
+              ...
+          &lt;/li&gt;
+          ...
+      &lt;/list&gt;
+  &lt;/li&gt;
+  ...
+&lt;/list&gt;
+~~~
+
+Another one of these is generated but with ID `generated-volume-toc`. `ch_1`, `ch_1_2` etc. are the
+IDs of the heading elements from which the list was constructed, and the content of the links are
+exact copies of the content of the heading elements. By default the list is not rendered. The list
+should be styled and positioned with CSS. The following rules are included by default:
+
+~~~css
+#generated-document-toc {
+  flow: document-toc;
+  display: -obfl-toc;
+  -obfl-toc-range: document;
+}
+
+#generated-volume-toc {
+  flow: volume-toc;
+  display: -obfl-toc;
+  -obfl-toc-range: volume;
+}
+~~~
+
+This means that a document range table of contents is added to the named flow called "document-toc",
+and a volume range table of contents is added to the named flow called "volume-toc". In order to
+consume these named flows use the function `flow()`. For example, to position the document range
+table of contents at the beginning of the first volume, and to repeat the volume range table of
+content at the beginning of every other volume, include the following additional rules:
+
+~~~css
+@volume {
+  @begin {
+    content: flow(volume-toc);
+  }
+}
+
+@volume:first {
+  @begin {
+    content: flow(document-toc);
+  }
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`display:
+  obfl-toc`](http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-toc)
+  value
+- the [`flow`](http://braillespecs.github.io/braille-css/#the-flow-property) property
+- the [`flow()`](http://braillespecs.github.io/braille-css/#h4_the-flow-function) function
+- the [`@volume`](http://braillespecs.github.io/braille-css/#h3_the-volume-rule) rule
+- the [`@begin`](http://braillespecs.github.io/braille-css/#h3_the-begin-and-end-rules) rule
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">footnotes-placement</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Placement of content: Footnotes placement</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">colophon-metadata-placement</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Placement of content: Colophon/metadata placement</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">rear-cover-placement</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Placement of content: Rear cover placement</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">number-of-sheets</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'50'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Volumes: Number of sheets</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">**Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">maximum-number-of-sheets</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'70'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Volumes: Maximum number of sheets</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">The maximum number of sheets in a volume.
+
+Makes the variable `$maximum-number-of-sheets` available in style sheets and includes the following
+rule by default:
+
+~~~sass
+@volume {
+  max-length: $maximum-number-of-sheets;
+}
+~~~
+
+See the CSS specification for more info:
+
+- the [`@volume`](http://braillespecs.github.io/braille-css/#h3_the-volume-rule) rule
+- the [`max-length`](http://braillespecs.github.io/braille-css/#h3_the-length-properties) property
+</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">minimum-number-of-sheets</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'30'</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Volumes: Minimum number of sheets</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">The minimum number of sheets in a volume. **Not implemented**</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">pef-output-dir</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">PEF</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The PEF.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">brf-output-dir</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">BRF</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">A plain text ASCII version of the PEF.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">preview-output-dir</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Preview</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">An HTML preview of the PEF.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">temp-dir</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Temporary directory</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Directory for storing temporary files during conversion.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

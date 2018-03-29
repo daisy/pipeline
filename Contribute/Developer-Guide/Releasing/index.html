@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>Release Management</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="Release Management">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/wiki.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Configuration-Files" tabindex="15">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="16">
+      
+      Command Line
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="17">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="18">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="19">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="20">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="21">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="22">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="23">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="24">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="25">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-odt" tabindex="26">
+      
+      DTBook to ODT
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="27">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-rtf" tabindex="28">
+      
+      DTBook to RTF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="29">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-epub3" tabindex="30">
+      
+      EPUB 3 Enhancer
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="31">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="32">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="33">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="34">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="35">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="36">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="37">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="38">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="39">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/API-Documentation" tabindex="40">
+      API Documentation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/WebServiceAPI" tabindex="41">
+      
+      Web Service API
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Issue-Tracker.html" tabindex="42">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="43">
+      Troubleshooting
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="44">
+      
+      Troubleshooting on Windows
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="45">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute​
+      </a>
+      
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="46">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="47">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="48">
+      Developer Guide
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="49">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="50">
+      
+      Build System
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="51">
+      
+      Testing
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="52">
+      
+      Debugging
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="53">
+      
+      Release Management
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="54">
+      
+      Easy Hacks
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <div class="edit-button">
+  <a href="https://github.com/daisy/pipeline/wiki/Contribute/Developer-Guide/Releasing/_edit" class="external-link" target="_blank">
+    Edit this page on Github
+  </a>
+</div>
+
+      <h1 id="release-management">Release Management</h1>
+
+<h2 id="release-schedule">Release schedule</h2>
+
+<p>There is currently no fixed release schedule. A release is made when
+there are (important) enough new improvements or bug fixes to justify
+one, or when we get special requests from users.</p>
+
+<p>There are three kinds of releases:</p>
+
+<ul>
+  <li>available as full download or update</li>
+  <li>available as full download only</li>
+  <li>available as update only</li>
+</ul>
+
+<p>In general, smaller releases like bugfix releases can only be
+installed with the updater tool. Upon special request they can also be
+made available via download. Major releases with significant changes
+to the runtime can not be installed with the updater, for technical
+reasons.</p>
+
+<h2 id="versioning-rules">Versioning rules</h2>
+
+<p>Different versioning rules apply for different parts of the
+Pipeline. (For an overview of the various components see the page
+about <a href="/pipeline/Contribute/Developer-Guide/Sources">source code</a>.)</p>
+
+<ul>
+  <li>
+    <p>The version number of pipeline-assembly determines the main version
+of the Pipeline. Smaller changes are marked by updates of the patch
+segment, bigger changes are marker by updates of the minor segment.</p>
+  </li>
+  <li>
+    <p>The version numbers of “bom”, “parent” and “aggregator” POMs are
+aligned with the version of pipeline-assembly. Their major and minor
+segments should always match the latest version of
+pipeline-assembly, their patch segments may vary. The “bom” (bill of
+material) POMs are the places where the “current” versions of all
+bundles are listed. The boms are imported by the assembly, and every
+POM that has a dependency that is declared in a bom should import
+that bom. This way the version declarations are nicely centralized
+and reduced to a minimum.</p>
+  </li>
+  <li>
+    <p>Version numbering of bundles should be done according to the
+versioning rules of OSGi a.k.a. <a href="http://semver.org" class="external-link" target="_blank">semantic versioning</a>. Note
+that the “API” of a bundle is not always strictly defined (e.g. in
+case of public XSLT, XProc or CSS code) so there is a bit of room
+for interpretation. As an exception to this rule, the version
+numbers of forks of third-party libraries should match those of the
+corresponding original versions, possibly with some segments added
+to the number to distinguish versions.</p>
+  </li>
+  <li>
+    <p>For pipeline-clientlib-java, pipeline-webui, pipeline-cli-go and
+pipeline-updater, semantic versioning applies as well.</p>
+  </li>
+  <li>
+    <p>pipeline-clientlib-go is not versioned.</p>
+  </li>
+</ul>
+
+<p>When updating version numbers, care must be taken to keep versions
+numbers in project declarations and dependency declaractions
+aligned. If both are snapshots, they must match. The super-build will
+error if this is not the case. In addition, if a release has been made
+of a certain component, or if significant changes have been made to it
+since the last release, all dependent components should ideally be
+updated as soon as possible to compile and test against the latest
+version. This allows you to see the consequences of a change
+immediately so that bugs are spotted sooner, and by running the test
+suite you can ensure that all the latest components are compatible. It
+can be enforced with the command <code>make check-versions</code> in the
+super-project.</p>
+
+<h2 id="release-procedure">Release procedure</h2>
+
+<p>The assumption is made that at the time a release is made, a number of
+things have already been done beforehand, during development:</p>
+
+<ul>
+  <li>Versions numbers have been updated according to the versioning rules
+described above.</li>
+  <li>NEWS files (in
+<a href="https://github.com/daisy/pipeline-assembly/blob/develop/NEWS.md" class="external-link" target="_blank">pipeline-assembly</a>
+and
+<a href="https://github.com/daisy/pipeline-mod-braille/blob/develop/NEWS.md" class="external-link" target="_blank">pipeline-mod-braille</a>)
+have been updated with changes since the last release.</li>
+  <li>Milestones have been added to Github issues.</li>
+</ul>
+
+<p>To initiate a release, run the following command in the super-project:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>make release
+</pre></div>
+</div>
+</div>
+
+<p>This will generate instructions for releasing the assembly and all its
+components. The instructions are mostly just shell commands that can
+be executed without much thinking.</p>
+
+<p>The release script covers the following:</p>
+
+<ul>
+  <li>creating release branches</li>
+  <li>building, uploading and staging Maven artifacts</li>
+  <li>manual releasing of non-Maven components</li>
+  <li>publishing the release descriptor to a branch</li>
+</ul>
+
+<p>Things the script does not cover include:</p>
+
+<ul>
+  <li>closing the milestones</li>
+  <li>finalizing the release notes (NEWS files) of pipeline-mod-braille
+and pipeline-assembly</li>
+  <li>editing the
+<a href="https://github.com/daisy/pipeline-assembly/blob/master/src/main/resources/README.txt" class="external-link" target="_blank">distribution README file</a>
+in pipeline-assembly</li>
+  <li>creating pull requests</li>
+  <li>releasing staged artifacts</li>
+  <li>merging release branches</li>
+  <li>pushing git tags</li>
+  <li>editing the Github releases of pipeline-mod-braille and pipeline-assembly</li>
+  <li>building and uploading the distribution packages to the release page
+of pipeline-assembly (if not a updater-only release)</li>
+  <li>updating the website</li>
+  <li>sending the release announcement</li>
+</ul>
+
+<p>Ideally the release notes should already be made prior to making the
+release, and milestones should have been set, however because life is
+not perfect, it is best to search the Github issues (use the link at
+<a href="https://github.com/daisy/pipeline#issues" class="external-link" target="_blank">https://github.com/daisy/pipeline#issues</a>)
+for mistakes or things that were forgotten:</p>
+
+<ul>
+  <li>Sort the issues by “Recently updated”</li>
+  <li>Search for issues closed after a certain date with <code>closed:&gt;yyyy-mm-dd</code>.</li>
+  <li>Search for issues in the current milestone with <code>milestone:v0.0.0</code>
+</li>
+</ul>
+
+<p>Finalize the release notes by adding a link to the
+pipeline-mod-braille release notes as well as a list of links to
+closed issues:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>### Details
+- [Closed issues in pipeline-tasks](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-tasks+milestone%3Av1.10.0)
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.10.0)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.10.0)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.10.0)
+- [Closed issues in pipeline-gui](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-gui+milestone%3Av1.10.0)
+- [Closed issues in pipeline-mod-audio](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-audio+milestone%3Av1.10.0)
+- [Closed issues in pipeline-mod-braille](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-braille+milestone%3Av1.10.0)
+- ...
+</pre></div>
+</div>
+</div>
+
+<p>The “Release notes” section of the distribution README file in
+pipeline-assembly can be taken from the NEWS file. The details should
+be replaced with a link to the Github release page which has a full
+copy of the release notes.</p>
+
+<p>An email announcement should be sent to the following lists:</p>
+
+<ul>
+  <li>daisy-pipeline-dev@googlegroups.com</li>
+  <li>technical-developments@mail.daisy.org</li>
+  <li>support@mail.daisy.org</li>
+  <li>daisy-members@daisy.org</li>
+</ul>
+
+<p>The announcement can be based on the following template:</p>
+
+<blockquote>
+  <p>Subject: Pipeline 2 vXYZ released</p>
+
+  <p>Dear all,</p>
+
+  <p>Version XYZ of the DAISY Pipeline 2 project is now available for download. The following alternative packages are proposed:</p>
+
+  <ul>
+    <li>for Windows users (exe file, XX MB):
+https://github.com/daisy-consortium/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_windows.exe</li>
+    <li>for Mac OS X users (dmg file, XX MB):
+https://github.com/daisy-consortium/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_mac.dmg</li>
+    <li>for Linux users  (zip file, XX MB):
+https://github.com/daisy-consortium/pipeline-assembly/releases/download/vXYZ/pipeline2-XYZ_linux.zip</li>
+  </ul>
+
+  <p>All distributions include the new graphical user interface (GUI), all the conversion scripts, and a native command line tool (CLI).</p>
+
+  <p>This release features notably:
+- <strong>XXX</strong> <em>insert highlights of the release</em></p>
+
+  <p>If you have any problems or identify some bugs, please report them to the Pipeline team using our issue tracker on GitHub:
+https://github.com/daisy/pipeline/issues</p>
+
+  <p>For details, please refer to the full release notes:
+https://github.com/daisy/pipeline-assembly/releases/tag/vXYZ</p>
+
+  <p>User documentation is available on the project’s web site:
+http://daisy.github.io/pipeline/</p>
+
+  <p>As usual, feedback is warmly welcome!</p>
+</blockquote>
+
+<p>pipeline-webui and other components that are not included in
+pipeline-assembly are released separately.</p>
+
+
+    </div>
+  </body>
+</html>

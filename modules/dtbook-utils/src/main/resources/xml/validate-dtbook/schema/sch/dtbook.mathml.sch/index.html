@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../dtbook.mathml.sch">
+</head>
+<body><div class="code" about="../dtbook.mathml.sch">&lt;<span class="code-xml-element-local-name">schema</span> <span class="code-xml-attribute-local-name">queryBinding</span>=<span class="code-xml-attribute-value">"xslt2"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ns</span> <span class="code-xml-attribute-local-name">uri</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/z3986/2005/dtbook/"</span> <span class="code-xml-attribute-local-name">prefix</span>=<span class="code-xml-attribute-value">"dtb"</span>/&gt;
+    &lt;<span class="code-xml-element-local-name">ns</span> <span class="code-xml-attribute-local-name">uri</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1998/Math/MathML"</span> <span class="code-xml-attribute-local-name">prefix</span>=<span class="code-xml-attribute-value">"m"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"notes"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:note[@id]"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"annotations"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:annotation[@id]"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"id-unique"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">let</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id-set"</span> <span class="code-xml-attribute-local-name">value</span>=<span class="code-xml-attribute-value">"//*[@id]"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"*[@id]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count($id-set[@id = current()/@id]) = 1"</span>&gt;Duplicate ID '&lt;<span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current()/@id"</span>/&gt;'&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_MetaUid"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:head"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(dtb:meta[@name='dtb:uid'])=1"</span>&gt; There must be exactly one
+                dtb:uid metadata item. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:meta[@name='dtb:uid']"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"string-length(normalize-space(@content))!=0"</span>&gt; Content of dtb:uid metadata
+                may not be empty. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_MetaTitle"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:head"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(dtb:meta[@name='dc:Title'])&gt;0"</span>&gt; There must be at least one dc:Title
+                metadata item. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:meta[@name='dc:Title']"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"string-length(normalize-space(@content))!=0"</span>&gt; Content of dc:Title metadata
+                may not be empty. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_idrefNote"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:noteref"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"contains(@idref, '#')"</span>&gt; noteref URI value does not contain a fragment
+                identifier. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"contains(@idref, '#') and string-length(substring-before(@idref, '#'))=0 and count(key('notes',substring(current()/@idref,2)))!=1"</span>&gt; noteref URI value does not resolve to a note element. &lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_idrefAnnotation"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:annoref"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"contains(@idref, '#')"</span>&gt; annoref URI value does not contain a fragment
+                identifier. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"contains(@idref, '#') and string-length(substring-before(@idref, '#'))=0 and count(key('annotations',substring(current()/@idref,2)))!=1"</span>&gt; annoref URI value does not resolve to a annotation element. &lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_internalLinks"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:a[starts-with(@href, '#')]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(//dtb:*[@id=substring(current()/@href, 2)])=1"</span>&gt; Internal link does
+                not resolve. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_enumAttrInList"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:list"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@enum and @type!='ol'"</span>&gt; The enum attribute is only allowed in numbered
+                lists. &lt;/<span class="code-xml-element-local-name">report</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_depthList"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:list"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@depth and @depth!=count(ancestor-or-self::dtb:list)"</span>&gt; The depth attribute
+                on list element does not contain the list wrapping level. &lt;/<span class="code-xml-element-local-name">report</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_headersThTd"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:*[@headers and (self::dtb:th or self::dtb:td)]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"                 count(                 ancestor::dtb:table//dtb:th/@id[contains( concat(' ',current()/@headers,' '), concat(' ',normalize-space(),' ') )]                 ) =                  string-length(normalize-space(@headers)) - string-length(translate(normalize-space(@headers), ' ','')) + 1                 "</span>&gt; Not all the tokens in the headers attribute match the id attributes of 'th'
+                elements in this or a parent table. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_imgrefProdnote"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:prodnote[@imgref]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"                 count(                 //dtb:img/@id[contains( concat(' ',current()/@imgref,' '), concat(' ',normalize-space(),' ') )]                 ) =                  string-length(normalize-space(@imgref)) - string-length(translate(normalize-space(@imgref), ' ','')) + 1                 "</span>&gt; Not all the tokens in the imgref attribute match the id attributes of 'img'
+                elements. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_imgrefCaption"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:caption[@imgref]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"                 count(                 //dtb:img/@id[contains( concat(' ',current()/@imgref,' '), concat(' ',normalize-space(),' ') )]                 ) =                  string-length(normalize-space(@imgref)) - string-length(translate(normalize-space(@imgref), ' ','')) + 1                 "</span>&gt; Not all the tokens in the imgref attribute match the id attributes of 'img'
+                elements. &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_accesskeyTabindex"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:a"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@accesskey and string-length(@accesskey)!=1"</span>&gt;The accesskey attribute value
+                is not 1 character long.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@tabindex and string-length(translate(@width,'0123456789',''))!=0"</span>&gt;The
+                tabindex attribute value is not expressed in numbers.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@accesskey and count(//dtb:a/@accesskey=@accesskey)!=1"</span>&gt;The accesskey
+                attribute value is not unique within the document.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@tabindex and count(//dtb:a/@tabindex=@tabindex)!=1"</span>&gt;The tabindex
+                attribute value is not unique within the document.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_charAttribute"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:*[self::dtb:col   or self::dtb:colgroup or self::dtb:tbody or self::dtb:td or              self::dtb:tfoot or self::dtb:th       or self::dtb:thead or self::dtb:tr]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@char and string-length(@char)!=1"</span>&gt;The char attribute value is not 1
+                character long.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@char and @align!='char'"</span>&gt;char attribute may only occur when align
+                attribute value is 'char'.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_imgWidthHeight"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:img"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@width) or                  string-length(translate(@width,'0123456789',''))=0 or                 (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)&gt;=2)"</span>&gt;The image width is not expressed in pixels or percentage.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@height) or                  string-length(translate(@height,'0123456789',''))=0 or                 (contains(@height,'%') and substring-after(@height,'%')='' and translate(@height,'%0123456789','')='' and string-length(@height)&gt;=2)"</span>&gt;The image height is not expressed in pixels or percentage.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_tableAttributes"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:table"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@width) or                  string-length(translate(@width,'0123456789',''))=0 or                 (contains(@width,'%') and substring-after(@width,'%')='' and translate(@width,'%0123456789','')='' and string-length(@width)&gt;=2)"</span>&gt;Table width is not expressed in pixels or percentage.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@cellspacing) or                  string-length(translate(@cellspacing,'0123456789',''))=0 or                 (contains(@cellspacing,'%') and substring-after(@cellspacing,'%')='' and translate(@cellspacing,'%0123456789','')='' and string-length(@cellspacing)&gt;=2)"</span>&gt;Table cellspacing is not expressed in pixels or percentage.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@cellpadding) or                  string-length(translate(@cellpadding,'0123456789',''))=0 or                 (contains(@cellpadding,'%') and substring-after(@cellpadding,'%')='' and translate(@cellpadding,'%0123456789','')='' and string-length(@cellpadding)&gt;=2)"</span>&gt;Table cellpadding is not expressed in pixels or percentage.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_startAttrInList"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:list"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@start and @type!='ol'"</span>&gt;The start attribute occurs in a non-numbered
+                list.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@start='' or string-length(translate(@start,'0123456789',''))!=0"</span>&gt;The
+                start attribute is not a non negative number.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_dcMetadata"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:meta"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"starts-with(@name, 'dc:') and not(@name='dc:Title' or @name='dc:Subject' or @name='dc:Description' or                 @name='dc:Type' or @name='dc:Source' or @name='dc:Relation' or                  @name='dc:Coverage' or @name='dc:Creator' or @name='dc:Publisher' or                  @name='dc:Contributor' or @name='dc:Rights' or @name='dc:Date' or                  @name='dc:Format' or @name='dc:Identifier' or @name='dc:Language')"</span>&gt;Unrecognized Dublin Core metadata name.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"starts-with(@name, 'DC:') or starts-with(@name, 'Dc:') or starts-with(@name, 'dC:')"</span>&gt;Unrecognized Dublin Core metadata prefix.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_spanColColgroup"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:*[self::dtb:col or self::dtb:colgroup]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@span and (translate(@span,'0123456789','')!='' or starts-with(@span,'0'))"</span>&gt;span attribute is not a positive integer.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:*[self::dtb:td or self::dtb:th]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@rowspan and (translate(@rowspan,'0123456789','')!='' or starts-with(@rowspan,'0'))"</span>&gt; The rowspan attribute value is not a positive integer.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@colspan and (translate(@colspan,'0123456789','')!='' or starts-with(@colspan,'0'))"</span>&gt; The colspan attribute value is not a positive integer.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+            &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@rowspan and number(@rowspan) &gt; count(parent::dtb:tr/following-sibling::dtb:tr)+1"</span>&gt; The rowspan attribute value is larger than the number of rows left in the
+                table.&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dtbook_levelDepth"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"dtb:level[@depth]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@depth=count(ancestor-or-self::dtb:level)"</span>&gt;The value of the depth
+                attribute on the level element does not correspond to actual nesting level.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    
+    
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//m:math"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//node()[@alttext]"</span>&gt;alttext attribute must be present&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(empty(//node()[@alttext]))"</span>&gt;alttext attribute must be
+                non-empty&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//node()[@altimg]"</span>&gt;altimg attribute must be present&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(empty(//node()[@altimg]))"</span>&gt;altimg attribute must be non-empty&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+
+            
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"xref"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"m:*[@xref]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"some $elem in //* satisfies ($elem/@id eq @xref)"</span>&gt; xref attribute does not
+                resolve.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"annotation"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"m:annotation-xml"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"node()/ancestor::m:semantics"</span>&gt; &lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">pattern</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"mod/mathml-content-elements.sch"</span>/&gt;
+&lt;/<span class="code-xml-element-local-name">schema</span>&gt;</div></body>
+</html>

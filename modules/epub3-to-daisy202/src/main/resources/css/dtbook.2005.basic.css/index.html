@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>dtbook.2005.basic.css</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../dtbook.2005.basic.css">
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="comment">/* ------------------------------------------------------------ */</span>
+<span class="comment">/* dtbook.2005.basic.css 
+
+   Created  10-13-1999 by M. Moodie from M. Hakkinen's template
+   Modified 03-16-2000 and 09/06-2000 by M. Brown
+   Modified 12-12-2002 by Guillaume du Bourguet (BrailleNet)
+   M Gylling 2003-11-04: additions, merging and fixing of
+                         Dtbvisv3.css,
+                         dtbook-std.css,
+                         dtbbase.css, into
+                         dtbook.basic.css 
+   version (2004-08-28, m gylling):                         
+                     --&gt; dtbook.2004.basic.css &lt;--                      
+   Changelist:
+   Added support for:         bridgehead 
+                             hd
+                          poem 
+                          linegroup
+                        dateline 
+                        byline
+                        epigraph
+                        covertitle
+
+   version (2005-01-18, m gylling and brandon nelson)
+                   --&gt; dtbook.2005.basic.css &lt;-- 
+                Changelist latest version:
+                        Misc updates for Z39.86.2005 version of dtbook                  
+
+   version (2006-08-18, b nelson)
+                   Changelist:
+                           Fixed inline pagenums
+
+   version (2006-09-28, m gylling)
+                   Changelist:
+                           Fixed new http reference in this comment
+
+   This CSS is supported and maintained by the Z39.86 committee.
+   You may modify and redistribute it, but please consider
+   donating enhancements back to the source.
+
+   Contact:
+       markus.gylling@tpb.se
+       z3986@mail.daisy.org   
+   WWW: http://www.daisy.org/z3986/2005/
+
+   Note: if you want to apply local/specific rules,
+   the best way to do that is to associate another
+   stylesheet with the dtbook document via an
+   additional xml-stylesheet link.
+
+   In that additional stylesheet you can override
+   rules in or add rules to this stylesheet.
+
+   If the proximity rule works to your disadvantage,
+   use the !important syntax to force things to order.          */</span>
+<span class="comment">/* ------------------------------------------------------------ */</span>
+
+<span class="comment">/* The following strings are searchable
+   to go directly to subsection:
+
+  elements without display properties
+  base properties of whole doc
+  frontmatter
+  bodymatter
+  rearmatter
+  headings
+  pagenum, linenum
+  general block
+  general inlines
+  list.ul,list.ol
+  tables
+  images
+
+*/</span>
+
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*             elements without display properties               */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">dtbook</span> {
+  <span class="key">display</span>:<span class="value">block</span>;
+  <span class="key">width</span>: <span class="float">100%</span>;
+}
+
+<span class="tag">head</span>, <span class="tag">head</span> <span class="tag">*</span> {
+  <span class="key">display</span>: <span class="value">none</span>
+}
+
+
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                  base properties of whole doc                 */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">book</span> {
+ <span class="key">display</span>: <span class="value">block</span>;
+ <span class="key">background-color</span>: <span class="color">rgb(255,255,255)</span>;
+ <span class="key">color</span>: <span class="color">rgb(0,0,0)</span>;
+ <span class="key">font-family</span>: <span class="value">arial</span>, <span class="value">verdana</span>, <span class="value">sans-serif</span>;
+ <span class="key">line-height</span>: <span class="float">1.5em</span>;
+ <span class="key">margin-top</span>: <span class="float">4em</span>;
+ <span class="key">margin-bottom</span>: <span class="float">2em</span>;
+ <span class="key">margin-left</span>: <span class="float">6em</span>;
+ <span class="key">margin-right</span>: <span class="float">6em</span>;
+}
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                          frontmatter                          */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">frontmatter</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">margin-top</span>: <span class="float">1em</span>;
+  <span class="key">margin-bottom</span>: <span class="float">1em</span>;
+}
+
+<span class="tag">doctitle</span>, <span class="tag">docauthor</span>, <span class="tag">covertitle</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">font-weight</span>: <span class="value">bold</span>;
+  <span class="key">text-align</span>: <span class="value">center</span>;
+}
+
+<span class="tag">doctitle</span> {
+  <span class="key">font-size</span>: <span class="float">2.0em</span>;
+}
+
+<span class="tag">covertitle</span> {
+  <span class="key">font-size</span>: <span class="float">1.5em</span>;
+}
+<span class="tag">docauthor</span> {
+  <span class="key">font-style</span>: <span class="value">italic</span>;
+  <span class="key">font-size</span>: <span class="float">1.5em</span>;
+}
+
+
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                          bodymatter                           */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">bodymatter</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">margin-top</span>: <span class="float">1em</span>;
+  <span class="key">margin-bottom</span>: <span class="float">1em</span>;
+}
+
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                          rearmatter                           */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">rearmatter</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">margin-top</span>: <span class="float">1em</span>;
+  <span class="key">margin-bottom</span>: <span class="float">1em</span>;
+}
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                          headings                             */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">h1</span>, <span class="tag">h2</span>, <span class="tag">h3</span>, <span class="tag">h4</span>, <span class="tag">h5</span>, <span class="tag">h6</span>, <span class="tag">levelhd</span>, <span class="tag">bridgehead</span>, <span class="tag">hd</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">font-weight</span>: <span class="value">bold</span>;
+  <span class="key">margin-bottom</span>: <span class="float">0.5em</span>;
+}
+
+<span class="tag">h1</span>, <span class="tag">level</span> <span class="tag">levelhd</span> {
+  <span class="key">font-size</span>: <span class="float">1.7em</span>;
+  <span class="key">margin-top</span>: <span class="float">1.5em</span>
+}
+<span class="tag">h2</span>, <span class="tag">level</span> <span class="tag">level</span> <span class="tag">levelhd</span> {
+  <span class="key">font-size</span>: <span class="float">1.5em</span>;
+  <span class="key">margin-top</span>: <span class="float">1.2em</span>
+}
+<span class="tag">h3</span>, <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">levelhd</span> {
+  <span class="key">font-size</span>: <span class="float">1.4em</span>;
+  <span class="key">margin-top</span>: <span class="float">1.0em</span>
+}
+<span class="tag">h4</span>, <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">levelhd</span> {
+  <span class="key">font-size</span>: <span class="float">1.3em</span>;
+  <span class="key">margin-top</span>: <span class="float">1.0em</span>
+}
+<span class="tag">h5</span>, <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">levelhd</span> {
+  <span class="key">font-size</span>: <span class="float">1.2em</span>;
+  <span class="key">margin-top</span>: <span class="float">1.0em</span>
+}
+<span class="tag">h6</span>, <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">level</span> <span class="tag">levelhd</span> {
+  <span class="key">font-size</span>: <span class="float">1.0em</span>;
+  <span class="key">margin-top</span>: <span class="float">1.0em</span>
+}
+<span class="tag">bridgehead</span>, <span class="tag">hd</span> {
+  <span class="key">font-size</span>: <span class="float">1.0em</span>;
+  <span class="key">margin-top</span>: <span class="float">0.8em</span>        
+}
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                       pagenum, linenum                        */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">pagenum</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">color</span>: <span class="color">rgb(30,30,30)</span>;
+  <span class="key">padding</span>: <span class="float">0.2em</span> <span class="float">0.2em</span> <span class="float">0.2em</span> <span class="float">1em</span>;
+  <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="color">rgb(200,200,250)</span>;
+  <span class="key">margin-top</span>: <span class="float">0.8em</span>;
+  <span class="key">margin-bottom</span>: <span class="float">0.8em</span>;
+}
+
+<span class="tag">level</span> &gt; <span class="tag">pagenum</span>, <span class="tag">level1</span> &gt; <span class="tag">pagenum</span>, <span class="tag">level2</span> &gt; <span class="tag">pagenum</span>, <span class="tag">level3</span> &gt; <span class="tag">pagenum</span>, <span class="tag">level4</span> &gt; <span class="tag">pagenum</span>, <span class="tag">level5</span> &gt; <span class="tag">pagenum</span>, <span class="tag">level6</span> &gt; <span class="tag">pagenum</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+}
+
+<span class="tag">linenum</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+}
+
+<span class="tag">linenum</span><span class="pseudo-class">:after</span> {
+  <span class="key">content</span>: <span class="string"><span class="delimiter">"</span><span class="content"> </span><span class="delimiter">"</span></span>
+}
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                       general block                           */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">div</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+}
+
+<span class="tag">p</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">margin-top</span>: <span class="float">0.7em</span>;
+}
+
+<span class="tag">prodnote</span>, <span class="tag">notice</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">padding</span>: <span class="float">0.2em</span>;
+  <span class="key">margin</span>: <span class="float">0.3em</span>;
+  <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
+}
+
+<span class="comment">/* sidebar content model block:
+frontmatter bodymatter rearmatter level level1 level2 level3 level4 level5 level6
+   sidebar content model inline:
+div prodnote sidebar note annotation blockquote dd li th td
+*/</span>
+
+<span class="tag">sidebar</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">padding</span>: <span class="float">0.5em</span>;
+  <span class="key">margin-top</span>: <span class="float">1.5em</span>;
+  <span class="key">margin-bottom</span>: <span class="float">1.5em</span>;
+  <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="color">rgb(0,0,0)</span>;
+  <span class="key">background-color</span>: <span class="color">rgb(250,250,250)</span>;
+}
+
+<span class="tag">div</span> <span class="tag">sidebar</span>, <span class="tag">prodnote</span> <span class="tag">sidebar</span>, <span class="tag">sidebar</span> <span class="tag">sidebar</span>, <span class="tag">note</span> <span class="tag">sidebar</span>, <span class="tag">annotation</span> <span class="tag">sidebar</span>, <span class="tag">blockquote</span> <span class="tag">sidebar</span>, <span class="tag">dd</span> <span class="tag">sidebar</span>, <span class="tag">li</span> <span class="tag">sidebar</span>, <span class="tag">th</span> <span class="tag">sidebar</span>, <span class="tag">td</span> <span class="tag">sidebar</span> {
+  <span class="key">float</span>: <span class="value">right</span>;
+  <span class="key">width</span>: <span class="value">inherit</span>;
+  <span class="key">clear</span>: <span class="value">both</span>;
+  <span class="key">margin-left</span>: <span class="float">1em</span>;
+  <span class="key">margin-right</span>: <span class="float">1em</span>;
+}
+
+<span class="tag">frontmatter</span> <span class="tag">sidebar</span>, <span class="tag">bodymatter</span> <span class="tag">sidebar</span>, <span class="tag">rearmatter</span> <span class="tag">sidebar</span>, <span class="tag">level</span> <span class="tag">sidebar</span>, <span class="tag">level1</span> <span class="tag">sidebar</span>, <span class="tag">level2</span> <span class="tag">sidebar</span>, <span class="tag">level3</span> <span class="tag">sidebar</span>, <span class="tag">level4</span> <span class="tag">sidebar</span>, <span class="tag">level5</span> <span class="tag">sidebar</span>, <span class="tag">level6</span> <span class="tag">sidebar</span> {
+  <span class="comment">/*inline formatting, all inherited from generic sidebar selector*/</span>
+}
+
+
+<span class="tag">address</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">margin-top</span>:<span class="float">1em</span>;
+  <span class="key">margin-bottom</span>:<span class="float">1em</span>;
+}
+
+<span class="tag">note</span> {
+  <span class="key">display</span>:<span class="value">block</span>;
+  <span class="key">margin</span>:  <span class="float">1.2em</span> <span class="float">1em</span> <span class="float">1.2em</span> <span class="float">1em</span>;
+  <span class="key">padding</span>: <span class="float">0.5em</span> <span class="float">1em</span> <span class="float">0.5em</span> <span class="float">1em</span>;
+  <span class="key">border-top</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
+  <span class="key">border-bottom</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
+}
+
+<span class="tag">blockquote</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">margin-left</span>: <span class="float">2em</span>;
+  <span class="key">margin-top</span>: <span class="float">0.6em</span>;
+  <span class="key">margin-bottom</span>: <span class="float">0.6em</span>;
+}
+
+<span class="tag">line</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+        <span class="key">margin</span>: <span class="float">0em</span>;
+}
+
+<span class="tag">poem</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">margin-left</span>: <span class="float">3em</span>;
+  <span class="key">margin-top</span>: <span class="float">1em</span>;
+  <span class="key">margin-bottom</span>: <span class="float">1em</span>;
+}
+
+<span class="tag">linegroup</span> {
+  <span class="key">display</span>: <span class="value">block</span>;  
+  <span class="key">margin-top</span>: <span class="float">0.6em</span>;
+}
+
+<span class="tag">dateline</span>, <span class="tag">byline</span> {
+  <span class="key">display</span>: <span class="value">block</span>;  
+}
+
+<span class="tag">epigraph</span> {
+ <span class="key">display</span>: <span class="value">block</span>;  
+ <span class="key">margin-top</span>: <span class="float">2em</span>;
+ <span class="key">margin-bottom</span>: <span class="float">2em</span>;
+ <span class="key">margin-left</span>: <span class="float">3em</span>;
+ <span class="key">font-style</span>: <span class="value">italic</span>; 
+}
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                      general inlines                          */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+
+<span class="tag">a</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+        <span class="key">text-decoration</span>: <span class="value">underline</span>;
+        <span class="key">color</span>: <span class="color">rgb(0,0,255)</span>;
+}
+
+<span class="tag">bdo</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+}
+
+<span class="tag">em</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">font-style</span>: <span class="value">italic</span>;
+}
+
+<span class="tag">strong</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">font-weight</span>: <span class="value">bold</span>;
+}
+
+<span class="tag">kbd</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">font-variant</span>: <span class="value">small-caps</span>;
+  <span class="key">font-size</span>: <span class="float">90%</span>;
+  <span class="key">background</span>: <span class="color">rgb(0,0,0)</span>;
+  <span class="key">color</span>: <span class="color">rgb(255,255,255)</span>;
+  <span class="key">padding</span>: <span class="float">0.2em</span>;
+}
+
+<span class="tag">span</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+}
+
+<span class="tag">sub</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">vertical-align</span> : <span class="value">sub</span>;
+  <span class="key">font-size</span> : <span class="float">90%</span>;
+  <span class="key">padding-left</span>: <span class="float">0.3em</span>;
+  <span class="key">padding-right</span>: <span class="float">0.3em</span>;
+}
+
+<span class="tag">sup</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">vertical-align</span> : <span class="value">super</span>;
+  <span class="key">font-size</span> : <span class="float">90%</span>;
+  <span class="key">padding-left</span>: <span class="float">0.3em</span>;
+  <span class="key">padding-right</span>: <span class="float">0.3em</span>;
+}
+
+<span class="tag">abbr</span>, <span class="tag">acronym</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">border-bottom</span>: <span class="float">1px</span> <span class="value">dotted</span> <span class="value">gray</span>;
+}
+
+<span class="tag">dfn</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">border-bottom</span>: <span class="float">1px</span> <span class="value">dashed</span> <span class="value">black</span>;
+}
+
+<span class="tag">code</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">font-family</span>: <span class="value">courier</span>, <span class="value">verdana</span>, <span class="value">arial</span>, <span class="value">sans-serif</span>;
+}
+
+<span class="tag">samp</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+}
+
+<span class="tag">cite</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+}
+
+<span class="tag">cite</span> <span class="tag">title</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">border-bottom</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">grey</span>
+}
+
+<span class="tag">cite</span> <span class="tag">author</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;        
+}
+
+<span class="tag">br</span> {
+ <span class="key">display</span>:<span class="value">block</span>;
+}
+
+<span class="tag">q</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">font-style</span>: <span class="value">italic</span>;
+}
+
+<span class="tag">noteref</span>, <span class="tag">annoref</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+  <span class="key">font-size</span>: <span class="float">0.7em</span>;
+  <span class="key">vertical-align</span>: <span class="value">super</span>;
+  <span class="key">padding-left</span>: <span class="float">0.3em</span>;
+  <span class="key">padding-right</span>: <span class="float">0.3em</span>;
+  <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="color">rgb(210,210,210)</span>;
+}
+
+<span class="tag">sent</span> {
+  <span class="key">display</span>:<span class="value">inline</span>;
+  <span class="key">margin</span>:<span class="float">0em</span>;
+}
+
+<span class="tag">w</span> {
+  <span class="key">display</span>:<span class="value">inline</span>;
+  <span class="key">margin</span>:<span class="float">0em</span>;
+}
+
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                      list.ul,list.ol                          */</span>
+<span class="comment">/*                                                               */</span>
+<span class="comment">/* &lt;!ELEMENT list                                                */</span>
+<span class="comment">/* Contains:                                                     */</span>
+<span class="comment">/* (hd | prodnote | li | pagenum)+                               */</span>
+<span class="comment">/*                                                               */</span>
+<span class="comment">/* type (ol | ul) #IMPLIED                                       */</span>
+<span class="comment">/* enum (1 | a | U | i | X) #IMPLIED                             */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">list</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+  <span class="key">margin-top</span>: <span class="float">1em</span>;
+  <span class="key">margin-bottom</span>: <span class="float">1em</span>;
+  <span class="key">margin-left</span>: <span class="float">1em</span>;
+}
+
+<span class="tag">li</span> {
+ <span class="key">display</span>: <span class="value">list-item</span>;
+ <span class="key">list-style-position</span>: <span class="value">outside</span>;
+}
+
+<span class="tag">lic</span> {
+  <span class="key">display</span>: <span class="value">inline</span>;
+}
+
+<span class="tag">lic</span> + <span class="tag">lic</span> {
+        <span class="key">margin-left</span>: <span class="float">1em</span>;        
+}
+
+<span class="tag">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="1"</span>] {
+  <span class="key">list-style-type</span>: <span class="value">decimal</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="a"</span>] {
+  <span class="key">list-style-type</span>: <span class="value">lower-alpha</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="U"</span>] {
+  <span class="key">list-style-type</span>: <span class="value">upper-alpha</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="i"</span>] {
+  <span class="key">list-style-type</span>: <span class="value">lower-roman</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="X"</span>] {
+  <span class="key">list-style-type</span>: <span class="value">upper-roman</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">type="ul"</span>] {
+  <span class="key">list-style-type</span>: <span class="value">disc</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">type="pl"</span>] {
+        <span class="key">list-style-type</span>: <span class="value">none</span>;        
+}
+
+<span class="tag">list</span> &gt; <span class="tag">li</span> &gt; <span class="tag">list</span>[<span class="attribute-name">type=ul</span>] {
+  <span class="key">list-style-type</span>: <span class="value">circle</span>;
+}
+
+<span class="tag">list</span> &gt; <span class="tag">li</span> &gt; <span class="tag">list</span> &gt; <span class="tag">li</span> &gt; <span class="tag">list</span>[<span class="attribute-name">type=ul</span>] {
+  <span class="key">list-style-type</span>: <span class="value">square</span>;
+}
+
+<span class="tag">list</span> &gt; <span class="tag">li</span> &gt; <span class="tag">list</span>, <span class="tag">list</span> <span class="tag">li</span> <span class="tag">list</span> {
+  <span class="key">margin-top</span>: <span class="float">0em</span>;
+  <span class="key">margin-bottom</span>: <span class="float">0em</span>;
+}
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                      definition list                          */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">dl</span>, <span class="tag">dt</span>, <span class="tag">dd</span> {
+  <span class="key">display</span>: <span class="value">block</span>;
+}
+
+<span class="tag">dt</span> {
+  <span class="key">font-weight</span>: <span class="value">bold</span>;
+  <span class="key">margin-top</span>: <span class="float">0.4em</span>;
+}
+
+<span class="tag">dd</span> {
+  <span class="key">margin-left</span>: <span class="float">2em</span>;
+}
+
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                          tables                               */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+
+<span class="tag">table</span> {
+  <span class="key">display</span>: <span class="value">table</span>;
+  <span class="key">border-spacing</span>: <span class="float">0px</span>;
+  <span class="key">border-collapse</span>: <span class="value">collapse</span>;
+  <span class="key">margin-top</span>: <span class="float">0</span>;
+  <span class="key">margin-bottom</span>: <span class="float">0</span>;
+  <span class="comment">/* -moz-box-sizing: border-box; */</span>
+  <span class="key">text-indent</span>: <span class="float">0</span>;
+  <span class="key">empty-cells</span>: <span class="value">show</span>;
+}
+
+<span class="tag">table</span> &gt; <span class="tag">caption</span> {
+  <span class="key">display</span>: <span class="value">table-caption</span>;
+  <span class="key">text-align</span>: <span class="value">center</span>;
+  <span class="comment">/* -moz-box-sizing: border-box; */</span>
+}
+
+<span class="tag">tr</span> {
+  <span class="key">display</span>: <span class="value">table-row</span>;
+  <span class="key">vertical-align</span>: <span class="value">inherit</span>;
+}
+
+<span class="tag">col</span> {
+  <span class="key">display</span>: <span class="value">table-column</span>;
+}
+
+<span class="tag">colgroup</span> {
+  <span class="key">display</span>: <span class="value">table-column-group</span>;
+}
+
+<span class="tag">tbody</span> {
+  <span class="key">display</span>: <span class="value">table-row-group</span>;
+  <span class="key">vertical-align</span>: <span class="value">middle</span>;
+}
+
+<span class="tag">thead</span> {
+  <span class="key">display</span>: <span class="value">table-header-group</span>;
+  <span class="key">vertical-align</span>: <span class="value">middle</span>;
+}
+
+<span class="tag">tfoot</span> {
+  <span class="key">display</span>: <span class="value">table-footer-group</span>;
+  <span class="key">vertical-align</span>: <span class="value">middle</span>;
+}
+
+<span class="tag">td</span> {
+  <span class="key">display</span>: <span class="value">table-cell</span>;
+        <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">gray</span>;
+        <span class="key">vertical-align</span>: <span class="value">inherit</span>;
+  <span class="key">text-align</span>: <span class="value">inherit</span>;
+  <span class="key">padding</span>: <span class="float">0.5em</span>;
+}
+
+<span class="tag">th</span> {
+  <span class="key">display</span>: <span class="value">table-cell</span>;
+        <span class="comment">/*border: 1px solid gray;*/</span>
+        <span class="key">vertical-align</span>: <span class="value">inherit</span>;
+  <span class="key">font-weight</span>: <span class="value">bold</span>;
+  <span class="key">padding</span>: <span class="float">2px</span>;
+}
+
+
+<span class="comment">/* ------------------------------------------------------------- */</span>
+<span class="comment">/*                          images                               */</span>
+<span class="comment">/* ------------------------------------------------------------- */</span>
+
+<span class="tag">imggroup</span> {
+ <span class="key">display</span>: <span class="value">inline</span>;
+}
+
+<span class="comment">/*
+img:before {
+  content: url(attr(src));
+}
+*/</span>
+
+<span class="tag">imggroup</span> &gt; <span class="tag">caption</span> {
+  <span class="key">font-size</span>: <span class="float">80%</span>;
+}
+
+ 
+</pre></div>
+</div>
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../pef-2008-1.rng">
+</head>
+<body><div class="code" about="../pef-2008-1.rng">&lt;<span class="code-xml-element-local-name">grammar</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/2008/pef"</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema-datatypes"</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		RELAX NG schema for PEF 1.0 - Portable Embosser Format
+		Public Draft 12 February 2009
+		Authors: Joel Håkansson, Piotr Kiernicki, Linus Ericson
+	&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">start</span>&gt;
+		&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.pef"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">start</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.pef"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pef"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/2008/pef"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.pef.attList"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.head"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.body"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.pef.attList"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"version"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+				&lt;<span class="code-xml-element-local-name">value</span>&gt;2008-1&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+		&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.head"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+			&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+				&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.meta"</span>/&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.meta"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"meta"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+			&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+				&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:identifier"</span>&gt;
+					&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:format"</span>&gt;
+					&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.mime.pef"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;<span class="code-xml-element-local-name">optional</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:title"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:creator"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:subject"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">optional</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:description"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:publisher"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:contributor"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">optional</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:date"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601.yyyyMmDd"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:type"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:source"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:language"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.rfc1766"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:relation"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:coverage"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:rights"</span>&gt;
+						&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+							&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+						&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+						&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any.meta"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;	  	
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.body"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"body"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+			&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+				&lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.volume"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.volume"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"volume"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Defines a volume of embossed braille.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.cols"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rows"</span>/&gt;	
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rowgap"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.duplex"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+			&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+				&lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.section"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.section"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"section"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Defines a section of embossed braille.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.cols.optional"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rows.optional"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rowgap.optional"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.duplex.optional"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+			&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+				&lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.page"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.page"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Defines a page of embossed braille.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rowgap.optional"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+			&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.row"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.row"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"row"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Defines a row of embossed braille.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rowgap.optional"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>/&gt;
+			&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.unicode.braille"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span>&gt;
+			&lt;<span class="code-xml-element-local-name">anyName</span>&gt;
+				&lt;<span class="code-xml-element-local-name">except</span>&gt;
+					&lt;<span class="code-xml-element-local-name">nsName</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/2008/pef"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">except</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">anyName</span>&gt;
+			&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.any"</span>/&gt;
+					&lt;<span class="code-xml-element-local-name">text</span>/&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any.meta"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">element</span>&gt;
+			&lt;<span class="code-xml-element-local-name">anyName</span>&gt;
+				&lt;<span class="code-xml-element-local-name">except</span>&gt;
+					&lt;<span class="code-xml-element-local-name">nsName</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/2008/pef"</span>/&gt;
+					&lt;<span class="code-xml-element-local-name">nsName</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://purl.org/dc/elements/1.1/"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">except</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">anyName</span>&gt;
+			&lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+				&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.any"</span>/&gt;
+					&lt;<span class="code-xml-element-local-name">text</span>/&gt;
+					&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element.any.meta"</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">element</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.any"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">attribute</span>&gt;
+			&lt;<span class="code-xml-element-local-name">anyName</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.anyExceptDefault"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">attribute</span>&gt;
+			&lt;<span class="code-xml-element-local-name">anyName</span>&gt;
+				&lt;<span class="code-xml-element-local-name">except</span>&gt;
+					&lt;<span class="code-xml-element-local-name">nsName</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">""</span>/&gt;
+				&lt;/<span class="code-xml-element-local-name">except</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">anyName</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.cols"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Defines the width (measured in characters) of page descendants.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cols"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.positiveInteger"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.cols.optional"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Overrides any value defined by ancestors.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">optional</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.cols"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rows"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Defines the height (measured in characters) of page descendants.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"rows"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.positiveInteger"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rows.optional"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Overrides any value defined by ancestors.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">optional</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rows"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rowgap"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Defines the size of a gap between rows (expressed as a multiple of the dot-to-dot height). In practice, this value should be 0 or more for six dot braille and 1 or more for eight dot braille&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"rowgap"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.nonNegativeInteger"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rowgap.optional"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Overrides any value defined by ancestors.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">optional</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.rowgap"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">optional</span>&gt;	
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.duplex"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Defines whether page descendants are intended for duplex printing or not.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"duplex"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.boolean"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.duplex.optional"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Overrides any value defined by ancestors.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">optional</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.duplex"</span>/&gt;
+		&lt;/<span class="code-xml-element-local-name">optional</span>&gt;	
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.mime.pef"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;application/x-pef+xml&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.unicode.braille"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;([⠀-⣿])*&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.rfc1766"</span>&gt;		
+		
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"language"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.boolean"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"boolean"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;	
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"integer"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+		
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601.yyyyMmDd"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;[ISO8601] subset: requires yyyy-mm-dd
+			format&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[0-9]{4}-[0-9]{2}-[0-9]{2}&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.nonNegativeInteger"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"nonNegativeInteger"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.positiveInteger"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"positiveInteger"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

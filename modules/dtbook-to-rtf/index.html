@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>DTBook to RTF</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DTBook to RTF">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine spine-has-current" id="nav-sitemap-left">
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Configuration-Files" tabindex="15">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="16">
+      
+      Command Line
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-has-current">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="17">
+      Scripts
+      </a>
+      
+      <ul class="spine spine-has-current">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="18">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="19">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="20">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="21">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="22">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="23">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="24">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="25">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-odt" tabindex="26">
+      
+      DTBook to ODT
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="27">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item spine-item-current">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-rtf" tabindex="28">
+      
+      DTBook to RTF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="29">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-epub3" tabindex="30">
+      
+      EPUB 3 Enhancer
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="31">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="32">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="33">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="34">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="35">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="36">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="37">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="38">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="39">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/API-Documentation" tabindex="40">
+      API Documentation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/WebServiceAPI" tabindex="41">
+      
+      Web Service API
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Issue-Tracker.html" tabindex="42">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="43">
+      Troubleshooting
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="44">
+      
+      Troubleshooting on Windows
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="45">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute​
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="46">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="47">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="48">
+      Developer Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="49">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="50">
+      
+      Build System
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="51">
+      
+      Testing
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="52">
+      
+      Debugging
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="53">
+      
+      Release Management
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="54">
+      
+      Easy Hacks
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <link rev="dp2:doc" href="src/main/resources/xml/dtbook-to-rtf.xpl">
+
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+
+<meta property="dc:title" content="DTBook to RTF">
+
+<!--
+labels: [Type-Doc,Compoment-UserGuide,Component-Module,Component-Script]
+sidebar: UserGuideToc
+-->
+
+<h1 id="dtbook-to-rtf">DTBook To RTF</h1>
+
+<p>The “DTBook to RTF” script will convert a single DTBook XML document to an RTF document.</p>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul id="markdown-toc">
+  <li>
+<a href="#dtbook-to-rtf" id="markdown-toc-dtbook-to-rtf">DTBook To RTF</a>    <ul>
+      <li><a href="#table-of-contents" id="markdown-toc-table-of-contents">Table of contents</a></li>
+      <li>
+<a href="#synopsis" id="markdown-toc-synopsis">Synopsis</a>        <ul>
+          <li><a href="#inputs" id="markdown-toc-inputs">Inputs</a></li>
+          <li><a href="#outputs" id="markdown-toc-outputs">Outputs</a></li>
+          <li><a href="#options" id="markdown-toc-options">Options</a></li>
+        </ul>
+      </li>
+      <li><a href="#example-running-from-command-line" id="markdown-toc-example-running-from-command-line">Example running from command line</a></li>
+      <li><a href="#see-also" id="markdown-toc-see-also">See also</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="synopsis">Synopsis</h2>
+
+<div class="gui-synopsis">
+
+  <h3 id="inputs">Inputs</h3>
+
+  <ul class="synopsis-inputs">
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">DTBook file</div>
+<div class="synopsis-input-desc">
+One 2005-3 DTBook files to be transformed.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: yes</div>
+</li>
+</ul>
+
+  <h3 id="outputs">Outputs</h3>
+
+  <ul class="synopsis-outputs">
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">RTF file</div>
+<div class="synopsis-output-desc">
+The resulting rtf file.
+</div>
+</li>
+</ul>
+
+  <h3 id="options">Options</h3>
+
+  <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include table of content</div>
+<div class="synopsis-option-desc">
+A boolean indicating if a TOC should be generated.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include page number</div>
+<div class="synopsis-option-desc">
+A boolean indicating if a TOC should be generated.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+</ul>
+
+  <script type="text/javascript">
+var allElements = [];
+function showDetailsAndHideAllOther() {
+  var windowTopBefore = window.pageYOffset;
+  var topBefore = this.offsetTop;
+  var i;
+  for (i = 0; i < allElements.length; i++) {
+    allElements[i].classList.remove('details-on');
+	allElements[i].classList.add('details-off');
+  }
+  this.classList.remove('details-off');
+  this.classList.add('details-on');
+  window.scrollTo(0, windowTopBefore + this.offsetTop - topBefore);
+}
+var onload = function() {
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-input'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-report'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-output'), 0));
+  allElements = allElements.concat(Array.prototype.slice.call(document.getElementsByClassName('synopsis-option'), 0));
+  var i;
+  for (i = 0; i < allElements.length; i++) {
+    allElements[i].classList.remove('details-on');
+    allElements[i].classList.add('details-off');
+	allElements[i].addEventListener('click', showDetailsAndHideAllOther);
+  }
+}
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+</div>
+
+<div class="cli-synopsis hidden">
+
+  <pre>Usage: dp2 [GLOBAL_OPTIONS] dtbook-to-rtf [OPTIONS]
+
+Options:</pre>
+  <table>
+<tr>
+<td>--source <span style="text-transform: uppercase">source</span>
+</td>
+<td>One 2005-3 DTBook files to be transformed.</td>
+</tr>
+<tr>
+<td>--include-table-of-content [<span style="text-transform: uppercase">include-table-of-content</span>]</td>
+<td>Include table of content (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--include-page-number [<span style="text-transform: uppercase">include-page-number</span>]</td>
+<td>Include page number (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>-o,--output [OUTPUT]</td>
+<td>Path where to store the results. This option is mandatory when the job is not executed in the background</td>
+</tr>
+<tr>
+<td>-z,--zip</td>
+<td>Write the output to a zip file rather than to a folder</td>
+</tr>
+<tr>
+<td>-n,--nicename [NICENAME]</td>
+<td>Set job's nice name</td>
+</tr>
+<tr>
+<td>-r,--priority [PRIORITY]</td>
+<td>Set job's priority (high|medium|low)</td>
+</tr>
+<tr>
+<td>-q,--quiet</td>
+<td>Do not print the job's messages</td>
+</tr>
+<tr>
+<td>-p,--persistent</td>
+<td>Delete the job after it is executed</td>
+</tr>
+<tr>
+<td>-b,--background</td>
+<td>Sends the job and exits</td>
+</tr>
+</table>
+</div>
+
+<script type="text/javascript">
+var guiSynopsis = document.getElementsByClassName('gui-synopsis')[0];
+var cliSynopsis = document.getElementsByClassName('cli-synopsis')[0];
+function switchToCliView() {
+  guiSynopsis.classList.add('hidden');
+  cliSynopsis.classList.remove('hidden');
+}
+function switchToGuiView() {
+  guiSynopsis.classList.remove('hidden');
+  cliSynopsis.classList.add('hidden');
+}
+var loaded = false;
+var onload = function() {
+  if (loaded)
+    return;
+  var button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToCliView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToCliView();
+    }
+  });
+  guiSynopsis.insertBefore(button, guiSynopsis.firstChild);
+  button = document.createElement('span');
+  button.setAttribute('role', 'link');
+  button.setAttribute('tabindex', '0');
+  button.className = 'toggle-synopsis-button';
+  button.addEventListener('click', switchToGuiView);
+  button.addEventListener('keyup', function(event) {
+    if (event.keyCode == 13) {
+      event.preventDefault();
+      switchToGuiView();
+    }
+  });
+  cliSynopsis.insertBefore(button, cliSynopsis.firstChild);
+  loaded = true;
+}
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+<h2 id="example-running-from-command-line">Example running from command line</h2>
+
+<p>On Linux and Mac OS X:</p>
+
+<pre><code>$ cli/dp2 dtbook-to-rtf
+          --source ~/Documents/tests_dtbook/Sample1.xml
+          --output-dir ~/tmp/testdtbooktortf
+</code></pre>
+
+<p>On Windows:</p>
+
+<pre><code>$ cli\dp2.exe dtbook-to-rtf
+              --source samples\dtbook\Sample1.xml
+              --output-dir C:\Pipeline2-Output
+</code></pre>
+
+<p>Input DTBook:</p>
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="preprocessor">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="doctype">&lt;!DOCTYPE dtbook
+  PUBLIC '-//NISO//DTD dtbook 2005-3//EN'
+  'http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd'&gt;</span>
+<span class="tag">&lt;dtbook</span> <span class="attribute-name">version</span>=<span class="string"><span class="delimiter">"</span><span class="content">2005-3</span><span class="delimiter">"</span></span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">fr</span><span class="delimiter">"</span></span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">"</span><span class="content">http://www.daisy.org/z3986/2005/dtbook/</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
+  <span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">AUTO-UID-5373731396833</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dtb:uid</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">fr-00000-packaged</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Identifier</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">Test Dtbook To RTF</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Title</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">Book Creator</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Creator</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">Book Producer</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dtb:producer</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">Source Publisher</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dtb:sourcePublisher</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">Source Rights</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dtb:sourceRights</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">0-00000-000-0</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Identifier</span><span class="delimiter">"</span></span> <span class="attribute-name">scheme</span>=<span class="string"><span class="delimiter">"</span><span class="content">ISBN</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">1111111111</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Identifier</span><span class="delimiter">"</span></span> <span class="attribute-name">scheme</span>=<span class="string"><span class="delimiter">"</span><span class="content">EAN</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">2016-10-26</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Date</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">Publisher</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Publisher</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">fr-FR</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Language</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">Text</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Type</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attribute-name">content</span>=<span class="string"><span class="delimiter">"</span><span class="content">ANSI/NISO Z39.86-2005</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">dc:Format</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+  <span class="tag">&lt;/head&gt;</span>
+  <span class="tag">&lt;book&gt;</span>
+    <span class="tag">&lt;frontmatter&gt;</span>
+      <span class="tag">&lt;doctitle&gt;</span>Test Dtbook To RTF<span class="tag">&lt;/doctitle&gt;</span>
+      <span class="tag">&lt;docauthor&gt;</span>Book Author<span class="tag">&lt;/docauthor&gt;</span>
+    <span class="tag">&lt;/frontmatter&gt;</span>
+    <span class="tag">&lt;bodymatter&gt;</span>
+      <span class="tag">&lt;level1&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Content 1<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Content 2<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Content 3<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;p</span> <span class="attribute-name">xml:lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">en-GB</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>Titre original : <span class="entity">&amp;quot;</span>Test Dtbook To RTF<span class="entity">&amp;quot;</span><span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Copyright : Source Rights, 1998<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;p&gt;</span>ISBN 0-00000-000-0<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;p&gt;</span>Transcription en braille intégral : Bibliothèque Braille Intégral<span class="tag">&lt;/p&gt;</span>
+        <span class="tag">&lt;p&gt;</span>juin 2004<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;/level1&gt;</span>
+      <span class="tag">&lt;level1&gt;</span>
+        <span class="tag">&lt;h1&gt;</span>Content Before
+          <span class="tag">&lt;sup&gt;</span>Sup<span class="tag">&lt;/sup&gt;</span>
+          Content After<span class="tag">&lt;/h1&gt;</span>
+          <span class="tag">&lt;p&gt;</span>Content<span class="tag">&lt;/p&gt;</span>
+      <span class="tag">&lt;/level1&gt;</span>
+    <span class="tag">&lt;/bodymatter&gt;</span>
+  <span class="tag">&lt;/book&gt;</span>
+<span class="tag">&lt;/dtbook&gt;</span>
+</pre></div>
+</div>
+</div>
+
+<p>Output RTF:</p>
+
+<pre><code>{\rtf1\ansi\ansicpg1252\deff0 {\fonttbl{\f0\fswiss Arial;}{\f1\fmodern Courier New;}}{\colortbl;\red0\green0\blue0;\red255\green255\blue255;\red0\green0\blue255;}{\stylesheet{\s0\plain\fs20 \sb100\sa100\li0\ri0 \sbasedon222\snext0 Normal;}{\s1\sb200\sa100\li0\ri0\plain\fs32\b \sbasedon0\snext0 heading 1;}{\s2\sb200\sa100\li0\ri0\plain\fs28\b\i \sbasedon0\snext0 heading 2;}{\s3\sb200\sa100\li0\ri0\plain\fs24\b \sbasedon0\snext0 heading 3;}{\s4\sb200\sa100\li0\ri0\plain\fs22\b \sbasedon0\snext0 heading 4;}{\s5\sb200\sa100\li0\ri0\plain\fs22\i \sbasedon0\snext0 heading 5;}{\s6\sb200\sa100\li0\ri0\plain\fs20\i \sbasedon0\snext0 heading 6;}{\s7\plain\fs20\b \sbasedon0 strong;}{\s8\plain\fs20\b \sbasedon0 Emphazised;}{\s9\sb200\sa200\qc\plain\fs32\b \sbasedon0 title;}{\s10\sb100\sa100\li0\ri0\qc\plain\fs28\b \sbasedon0 subtitle;}{\s11\sb200\sa200\li0\ri0\plain\fs20\i \sbasedon0\snext0 citation;}{\s12\sb200\sa200\li750\ri750\box\brdrs\brdrw1\brsp250\plain\fs20 \sbasedon0\snext0 boxed;}}{\info{\title }
+{\subject }
+{\author }
+{\company }
+{\doccomm }
+{\*\userprops {{\propname Identifier}\proptype30\staticval }
+{{\propname Copyright}\proptype30\staticval }
+}}
+\deflang1024\paperw11905\paperh16838\psz9\margl1134\margr1134\margt1134\margb1134\deftab283\notabind\fet2\ftnnar\aftnnar
+\sectd\sbkodd\pgnstarts1\pgnlcrm{\footer\qc\plain\chpgn\par}
+\s9\sb200\sa200\qc\plain\fs32\b Test Dtbook To RTF\par
+\pard \s10\sb100\sa100\li0\ri0\qc\plain\fs28\b Book Author\par
+\pard \sect\sectd\sbkodd\pgnstarts1\pgnrestart\pgndec{\footer\qc\plain\chpgn\par}
+\s0\plain\fs20 \sb100\sa100\li0\ri0 Content 1\par
+\pard \s0\plain\fs20 \sb100\sa100\li0\ri0 Content 2\par
+\pard \s0\plain\fs20 \sb100\sa100\li0\ri0 Content 3\par
+\pard \s0\plain\fs20 \sb100\sa100\li0\ri0 Titre original : "Test Dtbook To RTF"\par
+\pard \s0\plain\fs20 \sb100\sa100\li0\ri0 Copyright : Source Rights, 1998\par
+\pard \s0\plain\fs20 \sb100\sa100\li0\ri0 ISBN 0-00000-000-0\par
+\pard \s0\plain\fs20 \sb100\sa100\li0\ri0 Transcription en braille int\u233?gral : Biblioth\u232?que Braille Int\u233?gral\par
+\pard \s0\plain\fs20 \sb100\sa100\li0\ri0 juin 2004\par
+\pard {\*\bkmkstart d426e79}\s1\sb200\sa100\li0\ri0\plain\fs32\b \keep\keepn Content Before
+          {\super Sup}
+          Content After\plain\par
+\pard {\*\bkmkend d426e79}\s0\plain\fs20 \sb100\sa100\li0\ri0 Content\par
+\pard }
+</code></pre>
+
+<p>This is what the RTF will look like in a word processor:</p>
+
+<iframe src="/pipeline/modules/dtbook-to-rtf/doc/example-rtf.html" id="frame" style="width:90%" frameborder="0" onload="setIframeHeight(this.id)"></iframe>
+<script type="application/javascript">
+function getDocHeight(doc) {
+    doc = doc || document;
+    var body = doc.body, html = doc.documentElement;
+    var height = Math.max( body.scrollHeight, body.offsetHeight, 
+        html.clientHeight, html.scrollHeight, html.offsetHeight );
+    return height;
+}
+function setIframeHeight(id) {
+    var ifrm = document.getElementById(id);
+    var doc = ifrm.contentDocument? ifrm.contentDocument: 
+        ifrm.contentWindow.document;
+    ifrm.style.visibility = 'hidden';
+    ifrm.style.height = "10px";
+    ifrm.style.height = getDocHeight( doc ) + 4 + "px";
+    ifrm.style.visibility = 'visible';
+}
+</script>
+
+<h2 id="see-also">See also</h2>
+
+<ul>
+  <li><a href="https://www.microsoft.com/en-us/download/details.aspx?id=10725" class="external-link" target="_blank">RTF specification</a></li>
+</ul>
+
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../z3998-core-attrib.rng">
+</head>
+<body><div class="code" about="../z3998-core-attrib.rng">&lt;<span class="code-xml-element-local-name">grammar</span>&gt;
+    &lt;<span class="code-xml-element-local-name">info</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">title</span>&gt;The core attributes module &lt;/<span class="code-xml-element-local-name">title</span>&gt;
+        &lt;<span class="code-xml-element-local-name">annotation</span> <span class="code-xml-attribute-local-name">annotates</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;This module defines the xml.id , xml.space , xml.base and class attributes that constitute the core attributes collection that is available for all elements in a profile's core markup model. &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;The core attributes are all optional, but the module activation process provides a mechanism to require some or all of the attributes. &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">annotation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">author</span>&gt;
+            &lt;<span class="code-xml-element-local-name">personname</span>&gt;Markus Gylling&lt;/<span class="code-xml-element-local-name">personname</span>&gt;
+            &lt;<span class="code-xml-element-local-name">email</span>&gt;mgylling@daisy.org&lt;/<span class="code-xml-element-local-name">email</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">author</span>&gt;
+        &lt;<span class="code-xml-element-local-name">copyright</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2009&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2010&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2011&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2012&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">holder</span>&gt;DAISY Consortium&lt;/<span class="code-xml-element-local-name">holder</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">copyright</span>&gt;
+        &lt;<span class="code-xml-element-local-name">legalnotice</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                &lt;<span class="code-xml-element-local-name">link</span> <span class="code-xml-attribute-prefix">xlink:</span><span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://creativecommons.org/licenses/by/3.0/"</span>&gt;http://creativecommons.org/licenses/by/3.0/&lt;/<span class="code-xml-element-local-name">link</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                &lt;<span class="code-xml-element-local-name">link</span> <span class="code-xml-attribute-prefix">xlink:</span><span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.daisy.org"</span>&gt;www.daisy.org&lt;/<span class="code-xml-element-local-name">link</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">legalnotice</span>&gt;
+        &lt;<span class="code-xml-element-local-name">revhistory</span>&gt;
+            &lt;<span class="code-xml-element-local-name">revision</span>&gt;
+                &lt;<span class="code-xml-element-local-name">date</span>&gt;2012-12-19&lt;/<span class="code-xml-element-local-name">date</span>&gt;
+                &lt;<span class="code-xml-element-local-name">authorinitials</span>&gt;MGy&lt;/<span class="code-xml-element-local-name">authorinitials</span>&gt;
+                &lt;<span class="code-xml-element-local-name">revdescription</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">para</span>&gt;Initial version&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">revdescription</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">revision</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">revhistory</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">info</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.id.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:id"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The xml:id attribute specifies a unique identifier for the element. No two elements in an xml document can have the same xml:id, including inside components that are appended to the primary document by xinclude statements or other means. The semantics of this attribute are defined by refXMLID . &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ID.datatype"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.space.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:space"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The xml:space attribute indicates whether the whitespace within an element is significant. The semantics of this attribute are defined by refXML . Refer to White Space Handling for more information. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.space.attrib.content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.space.attrib.content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;default&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Signals that applications' default white-space processing modes are acceptable for this element. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;preserve&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Signals the intent that applications preserve white space for this element. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.base.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:base"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The xml:base attribute specifies a base URI to use for resolving relative URI references, for instances where the base URI of the document or external entity is not appropriate. The semantics and behaviors of this attribute are defined by refXMLBase . &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.base.attrib.content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.base.attrib.content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"URI.datatype"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.class.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"class"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The class attribute provides the ability to express general classifying or commonality between elements. This attribute inherits all the fundamental properties of the (X)HTML class attribute and is usable in the context of CSS styling . The class attribute is not used to inflect semantics or structure on elements or their contents. Refer to the role attribute for more information on how to layer semantic meaning on elements. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"NMTOKENS.datatype"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Core.attrib"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;A set of attributes, initially consisting of the xml.id , xml.space , xml.base and class attributes. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.id.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.space.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.base.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.class.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Core.extern.attrib"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Core.extern.attrib"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;A pattern for external (to this module) contributions to the z3998.Core.attrib pattern. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Core.attrib.xml.id.required"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;A convenience pattern. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.id.attrib"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.space.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.base.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.class.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Core.extern.attrib"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

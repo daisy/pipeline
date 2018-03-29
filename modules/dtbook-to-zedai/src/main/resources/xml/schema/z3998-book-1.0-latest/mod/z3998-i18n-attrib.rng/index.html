@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../z3998-i18n-attrib.rng">
+</head>
+<body><div class="code" about="../z3998-i18n-attrib.rng">&lt;<span class="code-xml-element-local-name">grammar</span>&gt;
+    &lt;<span class="code-xml-element-local-name">info</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">title</span>&gt;The I18n module &lt;/<span class="code-xml-element-local-name">title</span>&gt;
+        &lt;<span class="code-xml-element-local-name">annotation</span> <span class="code-xml-attribute-local-name">annotates</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;This module defines the xml.lang , its.dir and its.translate attributes that constitute the I18n (Internationalization) attributes collection that is available for all elements in a profile's core markup model. &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;The I18n attributes are all optional, but the module activation process provides a mechanism to require some or all of the attributes locally or globally. &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">annotation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">author</span>&gt;
+            &lt;<span class="code-xml-element-local-name">personname</span>&gt;Markus Gylling&lt;/<span class="code-xml-element-local-name">personname</span>&gt;
+            &lt;<span class="code-xml-element-local-name">email</span>&gt;mgylling@daisy.org&lt;/<span class="code-xml-element-local-name">email</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">author</span>&gt;
+        &lt;<span class="code-xml-element-local-name">legalnotice</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;Copyright 1998-2008 W3C (MIT, ERCIM, Keio), All Rights Reserved. Permission to use, copy, modify and distribute the ITS schema and its accompanying documentation for any purpose and without fee is hereby granted in perpetuity, provided that the above copyright notice and this paragraph appear in all copies.&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">legalnotice</span>&gt;
+        &lt;<span class="code-xml-element-local-name">revhistory</span>&gt;
+            &lt;<span class="code-xml-element-local-name">revision</span>&gt;
+                &lt;<span class="code-xml-element-local-name">date</span>&gt;2012-12-19&lt;/<span class="code-xml-element-local-name">date</span>&gt;
+                &lt;<span class="code-xml-element-local-name">authorinitials</span>&gt;MGy&lt;/<span class="code-xml-element-local-name">authorinitials</span>&gt;
+                &lt;<span class="code-xml-element-local-name">revdescription</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">para</span>&gt;Initial version&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">revdescription</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">revision</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">revhistory</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">info</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.lang.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:lang"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The xml:lang attribute identifies the natural or formal language in which the content is written. The semantics of this attribute are defined by refXML . Refer to Language Identification for more information. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.lang.attrib.content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.lang.attrib.content"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"LanguageIdentifier.datatype"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.dir.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dir"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2005/11/its"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The its:dir attribute specifies the base writing direction of the content. If omitted, the implicit value ltr (left-to-right) is assumed. The semantics of this attribute are defined by refITS . Refer to Directionality for more information. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.dir.attrib.content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.dir.attrib.content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;ltr&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The writing direction is left-to-right. This is the implicit value of this attribute. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;rtl&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The writing direction is right-to-left. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;lro&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The writing direction is left-to-right override. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;rlo&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The writing direction is right-to-left override. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.translate.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"translate"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2005/11/its"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The its:translate attribute indicates whether the content of an element is translatable or not. If omitted, the implicit value yes is assumed. The semantics of this attribute are defined by refITS . Refer to Translate for more information. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.translate.attrib.content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.translate.attrib.content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;yes&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The content is translatable. This is the default value of this attribute. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">value</span>&gt;no&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The content is not translatable. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.I18n.attrib"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;A set of attributes, initially consisting of the xml.lang , its.dir and its.translate attributes. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.lang.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.dir.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.translate.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.I18n.extern.attrib"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.I18n.extern.attrib"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;A pattern for external (to this module) contributions to the z3998.I18n.attrib pattern. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.I18n.attrib.xml.lang.required"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;A convenience pattern. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml.lang.attrib"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.dir.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"its.translate.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.I18n.extern.attrib"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

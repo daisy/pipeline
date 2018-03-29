@@ -1,0 +1,630 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../package-doc-1.2.rng">
+</head>
+<body><div class="code" about="../package-doc-1.2.rng">&lt;<span class="code-xml-element-local-name">grammar</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema-datatypes"</span>&gt;
+ 
+  &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+      RelaxNg schema for oeb package 1.2 DTD
+      Last edit by: mdemeglio 2013-03-08
+	  Original version: mgylling 2005-07-01
+  &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"mod/attributes.rng"</span>/&gt;
+  
+  &lt;<span class="code-xml-element-local-name">start</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"package"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">start</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"package"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"package"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.package"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"metadata"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"manifest"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"spine"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"tours"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"guide"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.package"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"unique-identifier"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.idref"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"metadata"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"metadata"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc-metadata"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc-metadata"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+      &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"x-metadata"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"x-metadata"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"manifest"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"manifest"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.manifest"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"item"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.manifest"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"item"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"item"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.item"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.item"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"InternationalAttributes"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.required"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.href.required.z3986-2005.subset"</span>&gt;
+        
+      &lt;/<span class="code-xml-element-local-name">ref</span>&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"media-type"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.mime.z2005list"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fallback"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.idref"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+
+          &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"spine"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"spine"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.spine"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"itemref"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.spine"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"itemref"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"itemref"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.itemref"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.itemref"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"idref"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.idref"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"tours"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"tours"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.tours"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"tour"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.tours"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"tour"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"tour"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.tour"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"site"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.tour"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"title"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"site"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"site"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.site"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.site"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"title"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.href.required"</span>/&gt;
+      
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"guide"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"guide"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.guide"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reference"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.guide"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reference"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reference"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.reference"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.reference"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"type"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.pkg.guide.reference.type.values"</span>/&gt;
+        
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"title"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.href.required"</span>/&gt;
+      
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc-metadata"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.dc-metadata"</span>/&gt;
+      
+      &lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Title"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;          
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.non-null"</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Creator"</span>&gt;
+           &lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+             &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.role.optional"</span>/&gt;
+             &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.file-as.optional"</span>/&gt;
+             &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+           &lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+           &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Subject"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+           &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Description"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+           &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Publisher"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.non-null"</span>/&gt;  
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Contributor"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+           &lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+             &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.role.optional"</span>/&gt;
+             &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.file-as.optional"</span>/&gt;
+           &lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+           &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Date"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"event"</span>&gt;
+              &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+           &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601"</span>&gt;           
+             
+           &lt;/<span class="code-xml-element-local-name">ref</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Type"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+
+        
+        &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Format"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+            
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;NIMAS 1.1&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;One instance of this element, that which is referenced from the package unique-identifier attribute, must include an id.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Identifier"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+              &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+              &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+              &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.non-null"</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+
+        
+        
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Source"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Language"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.rfc1766"</span>&gt;
+              
+            &lt;/<span class="code-xml-element-local-name">ref</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Relation"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Coverage"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+
+        
+        
+        &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:Rights"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+
+      &lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.dc-metadata"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+  &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"x-metadata"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.x-metadata"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+        &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"meta"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://openebook.org/namespaces/oeb-package/1.0/"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"x-meta.attlist"</span>/&gt;
+       &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.x-metadata"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"x-meta.attlist"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Optional - recommended. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:sourceDate&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601"</span>/&gt;
+            
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Optional - recommended. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:sourceEdition&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Optional - recommended. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:sourcePublisher&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Optional - recommended. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:sourceRights&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Optional. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:sourceTitle&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Required. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:multimediaType&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;audioOnly&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;audioNCX&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;audioPartText&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;audioFullText&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;textPartAudio&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;textNCX&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Required. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:multimediaContent&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+              
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;audio&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;text&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;image&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;audio,text&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;audio,image&lt;/<span class="code-xml-element-local-name">value</span>&gt;              
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;audio,text,image&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;audio,image,text&lt;/<span class="code-xml-element-local-name">value</span>&gt;              
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;text,audio&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;text,image&lt;/<span class="code-xml-element-local-name">value</span>&gt;              
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;text,audio,image&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;text,image,audio&lt;/<span class="code-xml-element-local-name">value</span>&gt;                            
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;image,text&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;image,audio&lt;/<span class="code-xml-element-local-name">value</span>&gt;              
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;image,text,audio&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+              &lt;<span class="code-xml-element-local-name">value</span>&gt;image,audio,text&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">choice</span>&gt;           
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Optional. Repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:narrator&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Optional. Repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:producer&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Optional. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:producedDate&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601"</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Optional. Repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:producer&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Optional. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:revision&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.nonNegativeInteger"</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Optional. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:revisionDate&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601"</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Optional. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:revisionDescription&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Required. Not repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                    
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:totalTime&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Occurrence: Optional, recommended for audio DTBs. Repeatable.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span>&gt;dtb:audioFormat&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Values are not case-sensitive.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+              &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+                &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[M|m][P|p]3&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+              &lt;/<span class="code-xml-element-local-name">data</span>&gt;
+              &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+                &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[W|w][A|a][V|v]&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+              &lt;/<span class="code-xml-element-local-name">data</span>&gt;
+              &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+                &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[M|m][P|p]4-[A|a][A|a][C|c]&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+              &lt;/<span class="code-xml-element-local-name">data</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+         &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+           &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.nondtbns"</span>/&gt;
+         &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+         &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.content.stringvalue.required"</span>/&gt;
+         &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.scheme.optional"</span>/&gt;
+         &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>/&gt;
+       &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.role.optional"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"role"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.file-as.optional"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"file-as"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">text</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"CommonAttributes"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.optional"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"InternationalAttributes"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+    &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"InternationalAttributes"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.xml.lang.optional"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

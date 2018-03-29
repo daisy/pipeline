@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../dtbook-to-mods-meta.xsl">
+</head>
+<body><div class="code" about="../dtbook-to-mods-meta.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"dtb"</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">indent</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">method</span>=<span class="code-xml-attribute-value">"xml"</span>/&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">mods</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"3.3"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">mods</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:head"</span>&gt;
+
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>/&gt;
+
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[contains(@name, 'dtb:source')]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">relatedItem</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"original"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourceRights']"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">accessCondition</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourceRights']/@content"</span>/&gt;
+                    &lt;/<span class="code-xml-element-local-name">accessCondition</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourceTitle']"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">titleInfo</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">title</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourceTitle']/@content"</span>/&gt;
+                        &lt;/<span class="code-xml-element-local-name">title</span>&gt;
+                    &lt;/<span class="code-xml-element-local-name">titleInfo</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourceDate'] or ./dtb:meta[@name = 'dtb:sourceEdition'] or                             ./dtb:meta[@name = 'dtb:sourcePublisher']"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">originInfo</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourceDate']"</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">dateIssued</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourceDate']/@content"</span>/&gt;
+                            &lt;/<span class="code-xml-element-local-name">dateIssued</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourceEdition']"</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">edition</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourceEdition']/@content"</span>/&gt;
+                            &lt;/<span class="code-xml-element-local-name">edition</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourcePublisher']"</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">publisher</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:sourcePublisher']/@content"</span>/&gt;
+                            &lt;/<span class="code-xml-element-local-name">publisher</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                    &lt;/<span class="code-xml-element-local-name">originInfo</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">relatedItem</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[contains(@name, 'dtb:producer')] or ./dtb:meta[contains(@name, 'dtb:producedDate')]"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">originInfo</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:producer']"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">publisher</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:producer']/@content"</span>/&gt;
+                    &lt;/<span class="code-xml-element-local-name">publisher</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:producedDate']"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">dateCreated</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"./dtb:meta[@name = 'dtb:producedDate']/@content"</span>/&gt;
+                    &lt;/<span class="code-xml-element-local-name">dateCreated</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">originInfo</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name = 'dc:Title']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">titleInfo</span>&gt;
+            &lt;<span class="code-xml-element-local-name">title</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">title</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">titleInfo</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name= 'dc:Creator']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">name</span>&gt;
+            &lt;<span class="code-xml-element-local-name">namePart</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">namePart</span>&gt;
+            &lt;<span class="code-xml-element-local-name">role</span>&gt;
+                &lt;<span class="code-xml-element-local-name">roleTerm</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"text"</span>&gt;author&lt;/<span class="code-xml-element-local-name">roleTerm</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">role</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">name</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name= 'dc:Identifier']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">identifier</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"uid"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">identifier</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name = 'dc:Language']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">language</span>&gt;
+            &lt;<span class="code-xml-element-local-name">languageTerm</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"code"</span> <span class="code-xml-attribute-local-name">authority</span>=<span class="code-xml-attribute-value">"rfc3066"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">languageTerm</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">language</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name = 'dc:Subject']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">subject</span>&gt;
+            &lt;<span class="code-xml-element-local-name">topic</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">topic</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">subject</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name = 'dc:Description']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">note</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">note</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name = 'dc:Type']"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"lower-case(@content) = 'text'"</span>&gt;
+                &lt;<span class="code-xml-element-local-name">typeOfResource</span>&gt;text&lt;/<span class="code-xml-element-local-name">typeOfResource</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"lower-case(@content) = 'sound'"</span>&gt;
+                &lt;<span class="code-xml-element-local-name">typeOfResource</span>&gt;sound recording&lt;/<span class="code-xml-element-local-name">typeOfResource</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"lower-case(@content) = 'image' or lower-case(@content) = 'stillimage'"</span>&gt;
+                &lt;<span class="code-xml-element-local-name">typeOfResource</span>&gt;still image&lt;/<span class="code-xml-element-local-name">typeOfResource</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"lower-case(@content) = 'movingimage'"</span>&gt;
+                &lt;<span class="code-xml-element-local-name">typeOfResource</span>&gt;moving image&lt;/<span class="code-xml-element-local-name">typeOfResource</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"lower-case(@content) = 'software'"</span>&gt;
+                &lt;<span class="code-xml-element-local-name">typeOfResource</span>&gt;software, multimedia&lt;/<span class="code-xml-element-local-name">typeOfResource</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"empty(@content)"</span>&gt;
+                
+                &lt;<span class="code-xml-element-local-name">typeOfResource</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"extension"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcterms:Type"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name = 'dc:Source' and @scheme = 'isbn']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">identifier</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"isbn"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">identifier</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name= 'dc:Contributor']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">name</span>&gt;
+            &lt;<span class="code-xml-element-local-name">namePart</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">namePart</span>&gt;
+            &lt;<span class="code-xml-element-local-name">role</span>&gt;
+                &lt;<span class="code-xml-element-local-name">roleTerm</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"text"</span>&gt;contributor&lt;/<span class="code-xml-element-local-name">roleTerm</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">role</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">name</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dtb:meta[@name= 'dc:Rights']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">accessCondition</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@content"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">accessCondition</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@*|node()"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

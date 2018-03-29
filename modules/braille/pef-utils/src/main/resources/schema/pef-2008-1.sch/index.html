@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../pef-2008-1.sch">
+</head>
+<body><div class="code" about="../pef-2008-1.sch">&lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">schema</span>&gt;
+	&lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">ns</span> <span class="code-xml-attribute-local-name">prefix</span>=<span class="code-xml-attribute-value">"pef"</span> <span class="code-xml-attribute-local-name">uri</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/2008/pef"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;
+		&lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"pef:page"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"(ceiling(sum(pef:row/sum(ancestor-or-self::pef:*[@rowgap][1]/@rowgap)) div 4) + count(pef:row))&lt;=(ancestor::pef:*[@rows][1])/@rows"</span>&gt;[Rule 1] Rows do not fit within the defined page height&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;
+	&lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;
+		&lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"pef:row"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"string-length(text())&lt;=(ancestor::pef:*[@cols][1])/@cols"</span>&gt;[Rule 2] Too many characters on row&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;
+	&lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">diagnostics</span>/&gt;
+&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">schema</span>&gt;</div></body>
+</html>

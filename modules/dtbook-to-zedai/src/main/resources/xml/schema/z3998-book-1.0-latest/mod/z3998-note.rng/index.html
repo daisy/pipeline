@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../z3998-note.rng">
+</head>
+<body><div class="code" about="../z3998-note.rng">&lt;<span class="code-xml-element-local-name">grammar</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/z3998/authoring/"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">info</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">title</span>&gt;The note module &lt;/<span class="code-xml-element-local-name">title</span>&gt;
+        &lt;<span class="code-xml-element-local-name">annotation</span> <span class="code-xml-attribute-local-name">annotates</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;This module defines the note and noteref elements for the referencing and inclusion of footnotes and endnotes. &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;More information about this module is available at http://www.daisy.org/z3998/2012/auth/cm/#z3998.note.module&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">annotation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">author</span>&gt;
+            &lt;<span class="code-xml-element-local-name">personname</span>&gt;Markus Gylling&lt;/<span class="code-xml-element-local-name">personname</span>&gt;
+            &lt;<span class="code-xml-element-local-name">email</span>&gt;mgylling@daisy.org&lt;/<span class="code-xml-element-local-name">email</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">author</span>&gt;
+        &lt;<span class="code-xml-element-local-name">copyright</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2009&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2010&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2011&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">year</span>&gt;2012&lt;/<span class="code-xml-element-local-name">year</span>&gt;
+            &lt;<span class="code-xml-element-local-name">holder</span>&gt;DAISY Consortium&lt;/<span class="code-xml-element-local-name">holder</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">copyright</span>&gt;
+        &lt;<span class="code-xml-element-local-name">legalnotice</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;This module is licensed under a Creative Commons Attribution 3.0 license, a copy of which is available at 
+                &lt;<span class="code-xml-element-local-name">link</span> <span class="code-xml-attribute-prefix">xlink:</span><span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://creativecommons.org/licenses/by/3.0/"</span>&gt;http://creativecommons.org/licenses/by/3.0/&lt;/<span class="code-xml-element-local-name">link</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+            &lt;<span class="code-xml-element-local-name">para</span>&gt;For complete licensing information, please refer to the LICENSE file that came with this distribution, a copy of which is also available from the DAISY web site at 
+                &lt;<span class="code-xml-element-local-name">link</span> <span class="code-xml-attribute-prefix">xlink:</span><span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.daisy.org"</span>&gt;www.daisy.org&lt;/<span class="code-xml-element-local-name">link</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">para</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">legalnotice</span>&gt;
+        &lt;<span class="code-xml-element-local-name">revhistory</span>&gt;
+            &lt;<span class="code-xml-element-local-name">revision</span>&gt;
+                &lt;<span class="code-xml-element-local-name">date</span>&gt;2012-12-19&lt;/<span class="code-xml-element-local-name">date</span>&gt;
+                &lt;<span class="code-xml-element-local-name">authorinitials</span>&gt;MGy&lt;/<span class="code-xml-element-local-name">authorinitials</span>&gt;
+                &lt;<span class="code-xml-element-local-name">revdescription</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">para</span>&gt;Initial version&lt;/<span class="code-xml-element-local-name">para</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">revdescription</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">revision</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">revhistory</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">info</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"note"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The note element represents a single footnote or endnote. The Block variant is an adaptation for use including notes between block elements. Notes provide or reference sources of additional information, or acknowledge the source of a quotation or idea. In printed matter, they are usually distinguishable from annotations by their location either at the bottom of print pages, at the end of sections or in the back matter of a document. Each note is typically referenced by a noteref or prefixed by a page location (when explicit references have been omitted from the text). If the note does not have a referent in a Z39.98-AI document, it must include a ref attribute that references back to the nearest element in the document to the content to which it applies. The role attribute optionally expresses the semantic nature of the note. The value can be either footnote or endnote. If omitted, the implicit value footnote is assumed. When a note is prefixed by a number or symbol, that identifier should be included using the Content Rendition feature's prefix attribute. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.attlist"</span>/&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.content"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"default:note"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"key('noterefs', @xml:id) or id(current()/@ref)"</span>&gt;The note element must either be referenced by a noteref or reference another element in the document. &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"normalize-space(.) or *"</span>&gt;The note element must neither be empty nor contain only whitespace. &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Flow.choice.model"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.attlist"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Block.attrib"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.ref.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.phrase"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"note"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The note element represents a single footnote or endnote. The Phrase variant is an adaptation for use including notes inline in phrase contexts. Notes provide or reference sources of additional information, or acknowledge the source of a quotation or idea. In printed matter, they are usually distinguishable from annotations by their location either at the bottom of print pages, at the end of sections or in the back matter of a document. Each note is typically referenced by a noteref or prefixed by a page location (when explicit references have been omitted from the text). If the note does not have a referent in a Z39.98-AI document, it must include a ref attribute that references back to the nearest element in the document to the content to which it applies. The role attribute optionally expresses the semantic nature of the note. The value can be either footnote or endnote. If omitted, the implicit value footnote is assumed. When a note is prefixed by a number or symbol, that identifier should be included using the Content Rendition feature's prefix attribute. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.phrase.attlist"</span>/&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.phrase.content"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.phrase.content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Flow.choice.model"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.phrase.attlist"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Phrase.attrib"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.ref.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.noteref"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"noteref"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The noteref element represents a textual reference to a note . Note references typically appear as superscripted numbers or symbols within the narrative flow but may also appear as linked words, especially in electronic formats. The ref attribute is used to establish the link between the note reference and its associated note. By default, the text content of the noteref represents the link reference and is treated as document content. When superscripted numbers or symbols are used to identify the corresponding note, the noteref.value attribute should be used. The noteref must be an empty element when attaching a value attribute; it it not permitted to include text content and a value attribute. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.noteref.attlist"</span>/&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.noteref.content"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"default:noteref"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@value and (count(*|text()[normalize-space()]) &gt; 0)"</span>&gt;The {value} attribute can only be used on empty {noteref} elements.&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">report</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@value) and (count(*|text()[normalize-space()]) = 0)"</span>&gt;A {noteref} element cannot be empty and not include a {value} attribute.&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">report</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"every $ref in tokenize(current()/@ref, ' +') satisfies key('notes', $ref)"</span>&gt;The IDREF(s) in the ref attribute must resolve to note elements. &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"default:noteref"</span> <span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"warning"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"warning"</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"(count(node()[normalize-space()]) = 1) and child::default:sup"</span>&gt;Superscripted referents should be included in a {value} attribute, not as text content.&lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">report</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.noteref.value.attrib"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"value"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;The noteref value attribute provides the number or symbol that represents the current note reference. The value attribute allows any text string as an identifier. &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"NonEmptyString.datatype"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.noteref.attlist"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Phrase.attrib"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.ref.attrib"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.noteref.value.attrib"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.noteref.content"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+                &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Phrase.core.Text.mix.model"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+    &lt;<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;note, noteref - default content model contribution &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Phrase.core.class"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.noteref"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Block.core.class"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.Phrase.core.class"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.phrase"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.verse.content.class"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.phrase"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.lngroup.content"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"interleave"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+                &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"z3998.note.phrase"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

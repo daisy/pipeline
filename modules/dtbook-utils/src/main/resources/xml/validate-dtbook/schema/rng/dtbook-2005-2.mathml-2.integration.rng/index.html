@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../dtbook-2005-2.mathml-2.integration.rng">
+</head>
+<body><div class="code" about="../dtbook-2005-2.mathml-2.integration.rng">&lt;<span class="code-xml-element-local-name">grammar</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema-datatypes"</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"mod/smilref-attr.rng"</span>/&gt;
+    
+    &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"mathml/mathml2/mathml2.rng"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1998/Math/MathML"</span>&gt;
+        
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"math.id.type"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"NCName"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"math.idref.type"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"NCName"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        
+    &lt;/<span class="code-xml-element-local-name">include</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"dtbook/dtbook-2005-2.rng"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/z3986/2005/dtbook/"</span>&gt;
+        
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dtb.id.type"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"NCName"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dtb.idrefs.type"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">list</span>&gt;
+                &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"NCName"</span>/&gt;
+                &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">list</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        
+         
+        &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dtb.externalFlow"</span> <span class="code-xml-attribute-local-name">combine</span>=<span class="code-xml-attribute-value">"choice"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/z3986/2005/dtbook/"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"math"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1998/Math/MathML"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+        
+    &lt;/<span class="code-xml-element-local-name">include</span>&gt;
+    
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../validation-report-to-html.xpl">
+</head>
+<body><div class="code" about="../validation-report-to-html.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"validation-report-to-html"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:validation-report-to-html"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">h1</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Validation Report to HTML&lt;/<span class="code-xml-element-local-name">h1</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Combines a series of validation reports into one single HTML report.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"application/vnd.pipeline.report+xml"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"toc"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'false'"</span>/&gt;
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" class="external-link" target="_blank">http://xmlcalabash.com/extension/steps/library-1.0.xpl</a>"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"convert-to-html"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"validation-report-to-html"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">viewport</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:expected | d:was"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">escape-markup</span> <span class="code-xml-attribute-local-name">method</span>=<span class="code-xml-attribute-value">"xml"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*/text()"</span> <span class="code-xml-attribute-local-name">replace</span>=<span class="code-xml-attribute-value">"replace(/*,'(\n)[\s\n]+\n','$1')"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">viewport</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"htmlify-validation-report"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/validation-utils/src/main/resources/xml/xslt/validation-report-to-html.xsl" class="source">../xslt/validation-report-to-html.xsl</a>"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
+        
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span> <span class="code-xml-attribute-local-name">position</span>=<span class="code-xml-attribute-value">"last-child"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"//xhtml:body"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"assemble-html-report"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+                &lt;<span class="code-xml-element-local-name">html</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">head</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">title</span>&gt;Validation Results&lt;/<span class="code-xml-element-local-name">title</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">style</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"text/css"</span>&gt; 
+                            body { 
+                            font-family: helvetica; 
+                            } 
+                            pre.box { 
+                            white-space: pre-wrap; /* css-3 */ 
+                            white-space: -moz-pre-wrap; /*Mozilla, since 1999 */ 
+                            white-space: -pre-wrap; /* Opera 4-6 */
+                            white-space: -o-pre-wrap; /* Opera 7 */ 
+                            word-wrap: break-word; /*Internet Explorer 5.5+ */ 
+                            } 
+                            li.error div { 
+                            display: table; 
+                            border: gray thin solid; 
+                            padding: 5px; 
+                            } 
+                            li.error div h3 { 
+                            display: table-cell; 
+                            padding-right: 10px; 
+                            font-size: smaller; 
+                            } 
+                            li.error div pre.box { 
+                            display: table-cell; 
+                            } 
+                            li { 
+                            padding-bottom: 15px; 
+                            } 
+                            #toc {
+                            border-spacing: 0px;
+                            }
+                            #toc th, #toc td {
+                            padding: 5px 30px 5px 10px;
+                            border-spacing: 0px;
+                            font-size: 90%;
+                            margin: 0px;
+                            }
+                            #toc th, #toc td {
+                            text-align: left;
+                            border-top: 1px solid #f1f8fe;
+                            border-bottom: 1px solid #cbd2d8;
+                            border-right: 1px solid #cbd2d8;
+                            }
+                            
+                            #toc tr:nth-child(odd) {
+                            background-color: #e0e9f0;
+                            }
+                            #toc tr:nth-child(even), #toc thead th {
+                            background-color: #e8eff5; !important;
+                            }
+                            
+                        &lt;/<span class="code-xml-element-local-name">style</span>&gt;
+                    &lt;/<span class="code-xml-element-local-name">head</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">body</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"header"</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">h1</span>&gt;Validation Results&lt;/<span class="code-xml-element-local-name">h1</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"datetime"</span>&gt;@@&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">table</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"toc"</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">thead</span>&gt;
+                                    &lt;<span class="code-xml-element-local-name">tr</span>&gt;
+                                        &lt;<span class="code-xml-element-local-name">th</span>&gt;File name&lt;/<span class="code-xml-element-local-name">th</span>&gt;
+                                        &lt;<span class="code-xml-element-local-name">th</span>&gt;Validation results&lt;/<span class="code-xml-element-local-name">th</span>&gt;
+                                        &lt;<span class="code-xml-element-local-name">th</span>&gt;Type&lt;/<span class="code-xml-element-local-name">th</span>&gt;
+                                        &lt;<span class="code-xml-element-local-name">th</span>&gt;Link to XML report&lt;/<span class="code-xml-element-local-name">th</span>&gt;
+                                        &lt;<span class="code-xml-element-local-name">th</span>&gt;Link to Document&lt;/<span class="code-xml-element-local-name">th</span>&gt;
+                                    &lt;/<span class="code-xml-element-local-name">tr</span>&gt;
+                                &lt;/<span class="code-xml-element-local-name">thead</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">tbody</span>/&gt;
+                            &lt;/<span class="code-xml-element-local-name">table</span>&gt;
+                        &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+                    &lt;/<span class="code-xml-element-local-name">body</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">html</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"insertion"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert-to-html"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+                &lt;<span class="code-xml-element-local-name">script</span> <span class="code-xml-attribute-local-name">src</span>=<span class="code-xml-attribute-value">"https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"</span>&gt; &lt;/<span class="code-xml-element-local-name">script</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$toc eq 'true'"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"generate-document-index"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+                
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">iteration-source</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//xhtml:div[@class='document-validation-report']"</span>/&gt;
+                
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"section-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*/@id"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"document-name"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*/d:data/d:document-info/d:document-name/text()"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"document-type"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*/d:data/d:document-info/d:document-type/text()"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"document-path"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*/d:data/d:document-info/d:document-path/text()"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"report-path"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*/d:data/d:document-info/d:report-path/text()"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"error-count"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*/d:data/d:document-info/d:error-count/text()"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">tr</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">td</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"filename"</span>&gt;@@&lt;/<span class="code-xml-element-local-name">td</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">td</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"issues"</span>&gt;&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"@@"</span>&gt;&lt;<span class="code-xml-element-local-name">span</span>&gt;@@&lt;/<span class="code-xml-element-local-name">span</span>&gt; found&lt;/<span class="code-xml-element-local-name">a</span>&gt;&lt;/<span class="code-xml-element-local-name">td</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">td</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"filetype"</span>&gt;@@&lt;/<span class="code-xml-element-local-name">td</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">td</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"reportpath"</span>&gt;&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"@@"</span>&gt;XML report&lt;/<span class="code-xml-element-local-name">a</span>&gt;&lt;/<span class="code-xml-element-local-name">td</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">td</span> <span class="code-xml-attribute-local-name">class</span>=<span class="code-xml-attribute-value">"filepath"</span>&gt;&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"@@"</span>&gt;Document&lt;/<span class="code-xml-element-local-name">a</span>&gt;&lt;/<span class="code-xml-element-local-name">td</span>&gt;
+                            &lt;/<span class="code-xml-element-local-name">tr</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"xhtml:td[@class='filename']/text()"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('"', $document-name, '"')"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"xhtml:td[@class='issues']/xhtml:a/@href"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('"', '#', $section-id, '"')"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$error-count = 1"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"xhtml:td[@class='issues']/xhtml:a/xhtml:span/text()"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'"1 issue"'"</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span>&gt;        
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"xhtml:td[@class='issues']/xhtml:a/xhtml:span/text()"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('"', $error-count, ' issues "')"</span>/&gt;
+                        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                
+                
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"xhtml:td[@class='filetype']/text()"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('"', $document-type, '"')"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"xhtml:td[@class='reportpath']/xhtml:a/@href"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('"', $report-path, '"')"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"xhtml:td[@class='filepath']/xhtml:a/@href"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('"', $document-path, '"')"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span>&gt;
+                
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;   
+            
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"xhtml:table[@id='toc']/xhtml:tbody"</span> <span class="code-xml-attribute-local-name">position</span>=<span class="code-xml-attribute-value">"last-child"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assemble-html-report"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"insertion"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"generate-document-index"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span>&gt;
+            
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"xhtml:table[@id='toc']"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+    
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"//xhtml:div[@class='document-validation-report']/d:data"</span>/&gt;
+        
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"//*[@id='datetime']/text()"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"replace"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat('"Generated on ', current-date(), ' at ', current-time(), '"')"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">string-replace</span>&gt;
+    
+    
+        
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

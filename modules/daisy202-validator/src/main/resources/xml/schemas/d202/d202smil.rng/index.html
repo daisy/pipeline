@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../d202smil.rng">
+</head>
+<body><div class="code" about="../d202smil.rng">&lt;<span class="code-xml-element-local-name">grammar</span>&gt;
+  &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    d202smil.rng
+    This file is part of the RelaxNG/Schematron validation
+    suite for Daisy 2.02. All Schematron assertion strings
+    can be identified by the intitial part of the string 
+    being: '[sch][dtb::d202][type::warning|error][msg::'.
+    Last edit by: linuse 2006-08-07
+    catalog-mapped by the PID '-//DAISY//RNG smil v2.02//EN'
+
+  &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"../relaxngcommon/attributes.rng"</span>/&gt;
+  &lt;<span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"d202meta.rng"</span>/&gt;
+
+  &lt;<span class="code-xml-element-local-name">start</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil"</span>/&gt;
+  &lt;/<span class="code-xml-element-local-name">start</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.optional"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"head"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"body"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+    
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.optional"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">group</span>&gt;
+        &lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+          &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil.meta"</span>/&gt;
+          &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt; 
+          &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"layout"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.optional"</span>/&gt;
+			
+            &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"region"</span>&gt;
+              &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+              &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.required"</span>/&gt;
+			  
+            &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+
+          &lt;/<span class="code-xml-element-local-name">element</span>&gt;  
+        &lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"body"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"body"</span>&gt;  
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.optional"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"motherseq"</span>/&gt; 
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"motherseq"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"seq"</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.seq"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+            &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+              &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"par"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+            &lt;<span class="code-xml-element-local-name">zeroOrMore</span>&gt;
+              &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"noterefseq"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">zeroOrMore</span>&gt;    
+          &lt;/<span class="code-xml-element-local-name">interleave</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"audio"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"noterefseq"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"seq"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.seq"</span>/&gt;    
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"par"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"par"</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"par"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"par"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.optional"</span>/&gt;            
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"endsync"</span>&gt;
+         &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;last&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"system-required"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;sidebar-on&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;prodnote-on&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;footnote-on&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;pagenumber-on&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+      &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+      &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"text"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"parchildseq"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+              &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"img"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;  
+          &lt;/<span class="code-xml-element-local-name">interleave</span>&gt;  
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;
+          &lt;<span class="code-xml-element-local-name">interleave</span>&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"text"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"audio"</span>/&gt;
+            &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+              &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"img"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">optional</span>&gt;  
+          &lt;/<span class="code-xml-element-local-name">interleave</span>&gt;  
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;
+        &lt;<span class="code-xml-element-local-name">group</span>&gt;          
+            &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"text"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">group</span>&gt;   
+      &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"parchildseq"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"seq"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.seq"</span>/&gt;      
+      &lt;<span class="code-xml-element-local-name">oneOrMore</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"audio"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">oneOrMore</span>&gt;  
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"text"</span>&gt;    
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"text"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.mo"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"src"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"audio"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"audio"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.mo"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"src"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"clip-begin"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"clip-end"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"img"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"img"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.mo"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"src"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri"</span>/&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;      
+      &lt;<span class="code-xml-element-local-name">empty</span>/&gt;
+    &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.repeat.optional"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"repeat"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;1&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">optional</span>&gt; 
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.fill.optional"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+      &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fill"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;remove&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">optional</span>&gt;
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.seq"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.optional"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.dur.optional"</span>/&gt;
+      &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.repeat.optional"</span>/&gt; 
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+  
+  &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attlist.mo"</span>&gt;
+    &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"attribute.id.required"</span>/&gt;
+    
+  &lt;/<span class="code-xml-element-local-name">define</span>&gt;  
+  
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smil.meta"</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"meta"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">optional</span>&gt;
+          &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"skip-content"</span> <span class="code-xml-attribute-prefix">a:</span><span class="code-xml-attribute-local-name">defaultValue</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">optional</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+          
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcFormat"</span>&gt; 
+            &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcFormatSmil"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dcFormatSmil"</span>&gt;
+              &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(meta[@name='dc:format'])=1"</span>&gt;                
+                  [sch][dtb::d202][type::warning][msg::meta dc:format seems not to be present exactly once]
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;
+              &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;                    
+          &lt;/<span class="code-xml-element-local-name">ref</span>&gt;                    
+          
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccGenerator"</span>&gt; 
+            &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccGeneratorSmil"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"nccGeneratorSmil"</span>&gt;                      
+              &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(meta[@name='ncc:generator'])&lt;2"</span>&gt;
+                  [sch][dtb::d202][type::warning][msg::meta ncc:generator seems to occur more than once]
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;                                   
+              &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;          
+          &lt;/<span class="code-xml-element-local-name">ref</span>&gt;     
+               
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcIdentifier"</span>&gt; 
+            &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcIdentifierSmil"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dcIdentifierSmil"</span>&gt;                      
+              &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(meta[@name='dc:identifier'])&lt;2"</span>&gt;
+                  [sch][dtb::d202][type::warning][msg::meta dc:identifier seems to occur more than once]
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;                                   
+              &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;          
+          &lt;/<span class="code-xml-element-local-name">ref</span>&gt;          
+          
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcTitle"</span>&gt; 
+            &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcTitleSmil"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"dcTitleSmil"</span>&gt;                      
+              &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(meta[@name='dc:title'])&lt;2"</span>&gt;
+                  [sch][dtb::d202][type::warning][msg::meta dc:title seems to occur more than once]
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;                                   
+              &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;                    
+          &lt;/<span class="code-xml-element-local-name">ref</span>&gt;
+          
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccTimeInThisSmil"</span>&gt; 
+            &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccTimeInThisSmil"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"nccTimeInThisSmil"</span>&gt;                      
+              &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(meta[@name='ncc:timeInThisSmil'])&lt;2"</span>&gt;
+                  [sch][dtb::d202][type::warning][msg::meta ncc:timeInThisSmil seems to occur more than once]
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;                                   
+              &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;                              
+          &lt;/<span class="code-xml-element-local-name">ref</span>&gt;
+          
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccTotalElapsedTime"</span>&gt; 
+            &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccTotalElapsedTimeSmil"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"nccTotalElapsedTimeSmil"</span>&gt;                      
+              &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(meta[@name='ncc:totalElapsedTime'])&lt;2"</span>&gt;
+                  [sch][dtb::d202][type::warning][msg::meta ncc:totalElapsedTime seems to occur more than once]
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;                                   
+              &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;                    
+          &lt;/<span class="code-xml-element-local-name">ref</span>&gt;
+
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"title"</span>&gt; 
+            &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"titleSmil"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"titleSmil"</span>&gt;                      
+              &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"head"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(meta[@name='title'])&lt;2"</span>&gt;
+                  [sch][dtb::d202][type::warning][msg::meta title seems to occur more than once]
+                &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">assert</span>&gt;                                   
+              &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">rule</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">sch:</span><span class="code-xml-element-local-name">pattern</span>&gt;                    
+          &lt;/<span class="code-xml-element-local-name">ref</span>&gt;          
+        &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">element</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

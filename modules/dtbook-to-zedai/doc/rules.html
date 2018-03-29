@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>DTBook to ZedAI Conversion Rules</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DTBook to ZedAI Conversion Rules">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Configuration-Files" tabindex="15">
+      
+      Configuration Files
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="16">
+      
+      Command Line
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="17">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator" tabindex="18">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3" tabindex="19">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202" tabindex="20">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3" tabindex="21">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator" tabindex="22">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3" tabindex="23">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3" tabindex="24">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html" tabindex="25">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-odt" tabindex="26">
+      
+      DTBook to ODT
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef" tabindex="27">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-rtf" tabindex="28">
+      
+      DTBook to RTF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai" tabindex="29">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-epub3" tabindex="30">
+      
+      EPUB 3 Enhancer
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator" tabindex="31">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202" tabindex="32">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef" tabindex="33">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3" tabindex="34">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef" tabindex="35">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator" tabindex="36">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3" tabindex="37">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html" tabindex="38">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef" tabindex="39">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/API-Documentation" tabindex="40">
+      API Documentation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/WebServiceAPI" tabindex="41">
+      
+      Web Service API
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Issue-Tracker.html" tabindex="42">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="43">
+      Troubleshooting
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="44">
+      
+      Troubleshooting on Windows
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org/forums/pipeline-2" class="external-link" target="_blank" tabindex="45">
+      
+      Forums
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute​
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="46">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="47">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="48">
+      Developer Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="49">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="50">
+      
+      Build System
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="51">
+      
+      Testing
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="52">
+      
+      Debugging
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="53">
+      
+      Release Management
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="54">
+      
+      Easy Hacks
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+
+<meta property="dc:title" content="DTBook to ZedAI Conversion Rules">
+
+<!--
+labels: [Type-Doc,Compoment-UserGuide,Component-Module,Component-Script]
+sidebar: UserGuideToc
+-->
+
+<h1 id="dtbook-to-zedai-conversion-rules">DTBook To ZedAI Conversion Rules</h1>
+
+<p>This page gives the conversion mappings used in the DTBook-To-ZedAI module.</p>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul id="markdown-toc">
+  <li>
+<a href="#dtbook-to-zedai-conversion-rules" id="markdown-toc-dtbook-to-zedai-conversion-rules">DTBook To ZedAI Conversion Rules</a>    <ul>
+      <li><a href="#table-of-contents" id="markdown-toc-table-of-contents">Table of contents</a></li>
+      <li><a href="#dtbook-element-a" id="markdown-toc-dtbook-element-a">DTBook element: <code>a</code></a></li>
+      <li><a href="#dtbook-element-abbr" id="markdown-toc-dtbook-element-abbr">DTBook element: <code>abbr</code></a></li>
+      <li><a href="#dtbook-element-acronym" id="markdown-toc-dtbook-element-acronym">DTBook element: <code>acronym</code></a></li>
+      <li><a href="#dtbook-element-address" id="markdown-toc-dtbook-element-address">DTBook element: <code>address</code></a></li>
+      <li><a href="#dtbook-element-annoref" id="markdown-toc-dtbook-element-annoref">DTBook element: <code>annoref</code></a></li>
+      <li><a href="#dtbook-element-annotation" id="markdown-toc-dtbook-element-annotation">DTBook element: <code>annotation</code></a></li>
+      <li><a href="#dtbook-element-author" id="markdown-toc-dtbook-element-author">DTBook element: <code>author</code></a></li>
+      <li><a href="#dtbook-element-bdo" id="markdown-toc-dtbook-element-bdo">DTBook element: <code>bdo</code></a></li>
+      <li><a href="#dtbook-element-blockquote" id="markdown-toc-dtbook-element-blockquote">DTBook element: <code>blockquote</code></a></li>
+      <li><a href="#dtbook-element-bodymatter" id="markdown-toc-dtbook-element-bodymatter">DTBook element: <code>bodymatter</code></a></li>
+      <li><a href="#dtbook-element-book" id="markdown-toc-dtbook-element-book">DTBook element: <code>book</code></a></li>
+      <li><a href="#dtbook-element-br" id="markdown-toc-dtbook-element-br">DTBook element: <code>br</code></a></li>
+      <li><a href="#dtbook-element-bridgehead" id="markdown-toc-dtbook-element-bridgehead">DTBook element: <code>bridgehead</code></a></li>
+      <li><a href="#dtbook-element-byline" id="markdown-toc-dtbook-element-byline">DTBook element: <code>byline</code></a></li>
+      <li><a href="#dtbook-element-caption" id="markdown-toc-dtbook-element-caption">DTBook element: <code>caption</code></a></li>
+      <li><a href="#dtbook-element-cite" id="markdown-toc-dtbook-element-cite">DTBook element: <code>cite</code></a></li>
+      <li><a href="#dtbook-element-code" id="markdown-toc-dtbook-element-code">DTBook element: <code>code</code></a></li>
+      <li><a href="#dtbook-element-col" id="markdown-toc-dtbook-element-col">DTBook element: <code>col</code></a></li>
+      <li><a href="#dtbook-element-colgroup" id="markdown-toc-dtbook-element-colgroup">DTBook element: <code>colgroup</code></a></li>
+      <li><a href="#dtbook-element-covertitle" id="markdown-toc-dtbook-element-covertitle">DTBook element: <code>covertitle</code></a></li>
+      <li><a href="#dtbook-element-dateline" id="markdown-toc-dtbook-element-dateline">DTBook element: <code>dateline</code></a></li>
+      <li><a href="#dtbook-element-dd" id="markdown-toc-dtbook-element-dd">DTBook element: <code>dd</code></a></li>
+      <li><a href="#dtbook-element-dfn" id="markdown-toc-dtbook-element-dfn">DTBook element: <code>dfn</code></a></li>
+      <li><a href="#dtbook-element-div" id="markdown-toc-dtbook-element-div">DTBook element: <code>div</code></a></li>
+      <li><a href="#dtbook-element-dl" id="markdown-toc-dtbook-element-dl">DTBook element: <code>dl</code></a></li>
+      <li><a href="#dtbook-element-docauthor" id="markdown-toc-dtbook-element-docauthor">DTBook element: <code>docauthor</code></a></li>
+      <li><a href="#dtbook-element-doctitle" id="markdown-toc-dtbook-element-doctitle">DTBook element: <code>doctitle</code></a></li>
+      <li><a href="#dtbook-element-dt" id="markdown-toc-dtbook-element-dt">DTBook element: <code>dt</code></a></li>
+      <li><a href="#dtbook-element-dtbook" id="markdown-toc-dtbook-element-dtbook">DTBook element: <code>dtbook</code></a></li>
+      <li><a href="#dtbook-element-epigraph" id="markdown-toc-dtbook-element-epigraph">DTBook element: <code>epigraph</code></a></li>
+      <li><a href="#dtbook-element-em" id="markdown-toc-dtbook-element-em">DTBook element: <code>em</code></a></li>
+      <li><a href="#dtbook-element-frontmatter" id="markdown-toc-dtbook-element-frontmatter">DTBook element: <code>frontmatter</code></a></li>
+      <li><a href="#dtbook-element-h1" id="markdown-toc-dtbook-element-h1">DTBook element: <code>h1</code></a></li>
+      <li><a href="#dtbook-element-h2" id="markdown-toc-dtbook-element-h2">DTBook element: <code>h2</code></a></li>
+      <li><a href="#dtbook-element-h3" id="markdown-toc-dtbook-element-h3">DTBook element: <code>h3</code></a></li>
+      <li><a href="#dtbook-element-h4" id="markdown-toc-dtbook-element-h4">DTBook element: <code>h4</code></a></li>
+      <li><a href="#dtbook-element-h5" id="markdown-toc-dtbook-element-h5">DTBook element: <code>h5</code></a></li>
+      <li><a href="#dtbook-element-h6" id="markdown-toc-dtbook-element-h6">DTBook element: <code>h6</code></a></li>
+      <li><a href="#dtbook-element-hd" id="markdown-toc-dtbook-element-hd">DTBook element: <code>hd</code></a></li>
+      <li><a href="#dtbook-element-head" id="markdown-toc-dtbook-element-head">DTBook element: <code>head</code></a></li>
+      <li><a href="#dtbook-element-img" id="markdown-toc-dtbook-element-img">DTBook element: <code>img</code></a></li>
+      <li><a href="#dtbook-element-imggroup" id="markdown-toc-dtbook-element-imggroup">DTBook element: <code>imggroup</code></a></li>
+      <li><a href="#dtbook-element-kbd" id="markdown-toc-dtbook-element-kbd">DTBook element: <code>kbd</code></a></li>
+      <li><a href="#dtbook-element-level" id="markdown-toc-dtbook-element-level">DTBook element: <code>level</code></a></li>
+      <li><a href="#dtbook-element-level1" id="markdown-toc-dtbook-element-level1">DTBook element: <code>level1</code></a></li>
+      <li><a href="#dtbook-element-level2" id="markdown-toc-dtbook-element-level2">DTBook element: <code>level2</code></a></li>
+      <li><a href="#dtbook-element-level3" id="markdown-toc-dtbook-element-level3">DTBook element: <code>level3</code></a></li>
+      <li><a href="#dtbook-element-level4" id="markdown-toc-dtbook-element-level4">DTBook element: <code>level4</code></a></li>
+      <li><a href="#dtbook-element-level5" id="markdown-toc-dtbook-element-level5">DTBook element: <code>level5</code></a></li>
+      <li><a href="#dtbook-element-level6" id="markdown-toc-dtbook-element-level6">DTBook element: <code>level6</code></a></li>
+      <li><a href="#dtbook-element-lic" id="markdown-toc-dtbook-element-lic">DTBook element: <code>lic</code></a></li>
+      <li><a href="#dtbook-element-line" id="markdown-toc-dtbook-element-line">DTBook element: <code>line</code></a></li>
+      <li><a href="#dtbook-element-linegroup" id="markdown-toc-dtbook-element-linegroup">DTBook element: <code>linegroup</code></a></li>
+      <li><a href="#dtbook-element-linenum" id="markdown-toc-dtbook-element-linenum">DTBook element: <code>linenum</code></a></li>
+      <li><a href="#dtbook-element-link" id="markdown-toc-dtbook-element-link">DTBook element: <code>link</code></a></li>
+      <li><a href="#dtbook-element-li" id="markdown-toc-dtbook-element-li">DTBook element: <code>li</code></a></li>
+      <li><a href="#dtbook-element-list" id="markdown-toc-dtbook-element-list">DTBook element: <code>list</code></a></li>
+      <li><a href="#dtbook-element-meta" id="markdown-toc-dtbook-element-meta">DTBook element: <code>meta</code></a></li>
+      <li><a href="#dtbook-element-note" id="markdown-toc-dtbook-element-note">DTBook element: <code>note</code></a></li>
+      <li><a href="#dtbook-element-noteref" id="markdown-toc-dtbook-element-noteref">DTBook element: <code>noteref</code></a></li>
+      <li><a href="#dtbook-element-p" id="markdown-toc-dtbook-element-p">DTBook element: <code>p</code></a></li>
+      <li><a href="#dtbook-element-pagenum" id="markdown-toc-dtbook-element-pagenum">DTBook element: <code>pagenum</code></a></li>
+      <li><a href="#dtbook-element-poem" id="markdown-toc-dtbook-element-poem">DTBook element: <code>poem</code></a></li>
+      <li><a href="#dtbook-element-prodnote" id="markdown-toc-dtbook-element-prodnote">DTBook element: <code>prodnote</code></a></li>
+      <li><a href="#dtbook-element-q" id="markdown-toc-dtbook-element-q">DTBook element: <code>q</code></a></li>
+      <li><a href="#dtbook-element-rearmatter" id="markdown-toc-dtbook-element-rearmatter">DTBook element: <code>rearmatter</code></a></li>
+      <li><a href="#dtbook-element-samp" id="markdown-toc-dtbook-element-samp">DTBook element: <code>samp</code></a></li>
+      <li><a href="#dtbook-element-sent" id="markdown-toc-dtbook-element-sent">DTBook element: <code>sent</code></a></li>
+      <li><a href="#dtbook-element-sidebar" id="markdown-toc-dtbook-element-sidebar">DTBook element: <code>sidebar</code></a></li>
+      <li><a href="#dtbook-element-span" id="markdown-toc-dtbook-element-span">DTBook element: <code>span</code></a></li>
+      <li><a href="#dtbook-element-strong" id="markdown-toc-dtbook-element-strong">DTBook element: <code>strong</code></a></li>
+      <li><a href="#dtbook-element-sub" id="markdown-toc-dtbook-element-sub">DTBook element: <code>sub</code></a></li>
+      <li><a href="#dtbook-element-sup" id="markdown-toc-dtbook-element-sup">DTBook element: <code>sup</code></a></li>
+      <li><a href="#dtbook-element-table" id="markdown-toc-dtbook-element-table">DTBook element: <code>table</code></a></li>
+      <li><a href="#dtbook-element-tbody" id="markdown-toc-dtbook-element-tbody">DTBook element: <code>tbody</code></a></li>
+      <li><a href="#dtbook-element-td" id="markdown-toc-dtbook-element-td">DTBook element: <code>td</code></a></li>
+      <li><a href="#dtbook-element-tfoot" id="markdown-toc-dtbook-element-tfoot">DTBook element: <code>tfoot</code></a></li>
+      <li><a href="#dtbook-element-th" id="markdown-toc-dtbook-element-th">DTBook element: <code>th</code></a></li>
+      <li><a href="#dtbook-element-thead" id="markdown-toc-dtbook-element-thead">DTBook element: <code>thead</code></a></li>
+      <li><a href="#dtbook-element-title" id="markdown-toc-dtbook-element-title">DTBook element: <code>title</code></a></li>
+      <li><a href="#dtbook-element-tr" id="markdown-toc-dtbook-element-tr">DTBook element: <code>tr</code></a></li>
+      <li><a href="#dtbook-element-w" id="markdown-toc-dtbook-element-w">DTBook element: <code>w</code></a></li>
+      <li><a href="#common-attributes" id="markdown-toc-common-attributes">Common Attributes</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-a">DTBook element: <code>a</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>ref</code></p>
+
+<p><strong>Dropped attributes</strong>: <code>@type</code>, <code>@hreflang</code>, <code>@accesskey</code>, <code>@tabindex</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<p><strong>Notes</strong>:</p>
+
+<p>If <code>dtbook:a@external = true</code>, then we use <code>@xlink:href</code> instead of <code>@ref</code>.</p>
+
+<hr>
+
+<h2 id="dtbook-element-abbr">DTBook element: <code>abbr</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>abbr @type='truncation'</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span</code> role=’<code>cite</code>’`, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span</code> role=”<code>sent</code>ence”`</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>annoref</code>, <code>noteref</code> become <code>span</code></p>
+  </li>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-acronym">DTBook element: <code>acronym</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>abbr</code></p>
+
+<p><strong>Notes</strong>:</p>
+
+<ul>
+  <li>
+<code>@pronounce="no"</code> becomes <code>@type="initialism"</code>
+</li>
+  <li>if missing <code>@pronounce</code>, becomes <code>@type="initialism"</code>
+</li>
+  <li>
+<code>@pronounce="yes"</code> becomes <code>@type="acronym"</code>
+</li>
+</ul>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span</code> role=’<code>cite</code>’, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span</code>
+</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+<code>annoref</code>, <code>noteref</code> become <code>span</code>
+</li>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-address">DTBook element: <code>address</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>address</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-annoref">DTBook element: <code>annoref</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>annoref</code></p>
+
+<p><strong>Dropped attributes</strong>:</p>
+
+<ul>
+  <li>
+<code>@type</code> (“Type provides advisory content MIME type of the targeted id, see RFC1556.” –structguide)</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-annotation">DTBook element: <code>annotation</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>annotation</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-author">DTBook element: <code>author</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>citation</code> or <code>p @property='author' @about='IDREF'</code></p>
+
+<p>author element should be made into citation except when found inside <code>poem</code>/<code>blockquote</code>/<code>cite</code>, then use <code>p @property/@about</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-bdo">DTBook element: <code>bdo</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>span @its:dir="rtl|ltr"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-blockquote">DTBook element: <code>blockquote</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>quote</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-bodymatter">DTBook element: <code>bodymatter</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>bodymatter</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-book">DTBook element: <code>book</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>body</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-br">DTBook element: <code>br</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: use <code>ln</code> to wrap lines</p>
+
+<hr>
+
+<h2 id="dtbook-element-bridgehead">DTBook element: <code>bridgehead</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>hd</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-byline">DTBook element: <code>byline</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>citation</code> or <code>p @role="periodicals:byline"</code></p>
+
+<p>Notes: for most book (non-article) use cases, <code>byline</code> can be <code>citation</code>. The exception would be anthologies, for which we can call upon the periodicals vocab and actually use <code>"role = byline"</code>. For now, we will use just 1 vocabulary in this converter.</p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-caption">DTBook element: <code>caption</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>caption</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-cite">DTBook element: <code>cite</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>citation</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>
+<code>title</code> and <code>author</code>, are <code>span</code> instead of <code>p</code>
+</li>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-code">DTBook element: <code>code</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>code</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Inline content model if only children are: <code>em</code>, <code>strong</code>, <code>abbr</code>, <code>acronym</code>, <code>ln</code>, <code>sub</code>, <code>sup</code>, <code>span</code>, <code>bdo</code>, <code>pagenum</code>, <code>text</code>
+</li>
+  <li>If any of the following occur, make all children block-level: <code>dfn</code>, <code>code</code>, <code>samp</code>, <code>kbd</code>, <code>cite</code>, <code>a</code>, <code>img</code>, <code>imggroup</code>, <code>q</code>, <code>sent</code>, <code>w</code>, <code>prodnote</code>, <code>annoref</code>, <code>noteref</code>
+</li>
+  <li>deal with <code>br</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-col">DTBook element: <code>col</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>col</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code>, <code>@width</code> (all to go in CSS)</p>
+
+<hr>
+
+<h2 id="dtbook-element-colgroup">DTBook element: <code>colgroup</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>colgroup</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code>, <code>@width</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-covertitle">DTBook element: <code>covertitle</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>block @role='covertitle'</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-dateline">DTBook element: <code>dateline</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>p @role="time"</code></p>
+
+<p>Notes: Used <code>p</code> since <code>ln</code> is not suitable for all content models (e.g. <code>level</code>&gt;<code>dateline</code> cannot be translated as <code>section</code>&gt;<code>ln</code>)</p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-dd">DTBook element: <code>dd</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>definition</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code> * <code>br</code> to <code>ln</code> * Re-parent list, dl, div, poem, linegroup, table, sidebar * Re-parent or re-name p, dateline, epigraph, address, author, note</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-dfn">DTBook element: <code>dfn</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>term</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-div">DTBook element: <code>div</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>block</code></p>
+
+<p><strong>Adjustments</strong>: Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</p>
+
+<hr>
+
+<h2 id="dtbook-element-dl">DTBook element: <code>dl</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>list</code></p>
+
+<p><strong>Adjustments</strong>: either wrap each term, definition in its own <code>item</code> element, or combine them into one <code>item</code> element</p>
+
+<hr>
+
+<h2 id="dtbook-element-docauthor">DTBook element: <code>docauthor</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>p @property="author"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-doctitle">DTBook element: <code>doctitle</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>p @property="title"</code> or <code>h @property="title"</code> when child of the frontmatter</p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-dt">DTBook element: <code>dt</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>term</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span @role='cite'</code>, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span</code>
+</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>annoref</code>, <code>noteref</code> become <code>span</code></p>
+  </li>
+  <li>inline <code>samp</code>
+</li>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-dtbook">DTBook element: <code>dtbook</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>document</code></p>
+
+<p><strong>Notes</strong>: Reference default ZedAI book profile and default vocabulary.</p>
+
+<hr>
+
+<h2 id="dtbook-element-epigraph">DTBook element: <code>epigraph</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>block @role="epigraph"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-em">DTBook element: <code>em</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>emph</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-frontmatter">DTBook element: <code>frontmatter</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>frontmatter</code></p>
+
+<p>Notes: A <code>section</code> is created automatically containing <code>doctitle</code>, <code>docauthor</code>, <code>covertitle</code>. The reason is that DTBook can have that info free-floating, whereas ZedAI must have only toc/section/biblio/glossary children and so we have to contain that info in a <code>section</code> element.</p>
+
+<hr>
+
+<h2 id="dtbook-element-h1">DTBook element: <code>h1</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-h2">DTBook element: <code>h2</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-h3">DTBook element: <code>h3</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-h4">DTBook element: <code>h4</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-h5">DTBook element: <code>h5</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-h6">DTBook element: <code>h6</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>h</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-hd">DTBook element: <code>hd</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>hd</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-head">DTBook element: <code>head</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>head</code></p>
+
+<p><strong>Notes</strong>:</p>
+
+<ul>
+  <li>ZedAI book profile is hardcoded</li>
+  <li>DTBook <code>@profile</code> is not preserved.</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-img">DTBook element: <code>img</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>object</code></p>
+
+<p><strong>Notes</strong>:</p>
+
+<ul>
+  <li>
+<code>dtbook:@longdesc</code> is a URI which resolves to a <code>prodnote</code> elsewhere the book</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-imggroup">DTBook element: <code>imggroup</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>block</code> (with <code>@role='figure'</code> if a caption is present)</p>
+
+<p><strong>Notes</strong>:</p>
+
+<ul>
+  <li>Look at DTBook multiple <code>prodnote</code> descriptions</li>
+  <li>There can also be multiple captions, each targeting multiple images</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-kbd">DTBook element: <code>kbd</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>code</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Same as <code>dtb:code</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-level">DTBook element: <code>level</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<hr>
+
+<h2 id="dtbook-element-level1">DTBook element: <code>level1</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<hr>
+
+<h2 id="dtbook-element-level2">DTBook element: <code>level2</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<hr>
+
+<h2 id="dtbook-element-level3">DTBook element: <code>level3</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<hr>
+
+<h2 id="dtbook-element-level4">DTBook element: <code>level4</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<hr>
+
+<h2 id="dtbook-element-level5">DTBook element: <code>level5</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<hr>
+
+<h2 id="dtbook-element-level6">DTBook element: <code>level6</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>section</code></p>
+
+<p><strong>Adjustments</strong>: Mixed section/block content model</p>
+
+<hr>
+
+<h2 id="dtbook-element-lic">DTBook element: <code>lic</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>span</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-line">DTBook element: <code>line</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>ln</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>deal with <code>br</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-linegroup">DTBook element: <code>linegroup</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>block</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-linenum">DTBook element: <code>linenum</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>lnum</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-link">DTBook element: <code>link</code>
+</h2>
+
+<p>Discarded</p>
+
+<hr>
+
+<h2 id="dtbook-element-li">DTBook element: <code>li</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>item</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-list">DTBook element: <code>list</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>list</code></p>
+
+<p><strong>Adjustments</strong>: wrap <code>dtbook:prodnote</code> and <code>dtbook:hd</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-meta">DTBook element: <code>meta</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>meta</code></p>
+
+<p><strong>Notes</strong>: See https://github.com/daisy/pipeline/issues/56</p>
+
+<hr>
+
+<h2 id="dtbook-element-note">DTBook element: <code>note</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>note</code></p>
+
+<p><strong>Adjustments</strong>: Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</p>
+
+<hr>
+
+<h2 id="dtbook-element-noteref">DTBook element: <code>noteref</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>noteref</code></p>
+
+<p>Dropped: <code>@type</code> (“Type provides advisory content MIME type of the targeted id, see RFC1556.”)</p>
+
+<hr>
+
+<h2 id="dtbook-element-p">DTBook element: <code>p</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>p</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>re-parent <code>list</code>, <code>dl</code> children</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-pagenum">DTBook element: <code>pagenum</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>pagebreak</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-poem">DTBook element: <code>poem</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>block @role="poem"</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-prodnote">DTBook element: <code>prodnote</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>annotation @by="republisher"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-q">DTBook element: <code>q</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>quote</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-rearmatter">DTBook element: <code>rearmatter</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>backmatter</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-samp">DTBook element: <code>samp</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>block @role="example"</code></p>
+
+<p><strong>Notes</strong>: in DTBook, it seems like <code>samp</code> can be both block and inline. There are cases when it is be best translated as a <code>zedai:span</code> instead. In this case, the content model needs to be adjusted for inline-only.</p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-sent">DTBook element: <code>sent</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>s</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-sidebar">DTBook element: <code>sidebar</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>aside @role="sidebar"</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-span">DTBook element: <code>span</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>span</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-strong">DTBook element: <code>strong</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>emph</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>Re-parent or rename <code>cite</code>, <code>q</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-sub">DTBook element: <code>sub</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>sub</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span @role='cite'</code>, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span @role='sentence'</code>
+</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+  <li>
+<code>abbr</code> becomes <code>span @role='truncation'</code>
+</li>
+  <li>
+<code>acronym</code> becomes <code>span @role='acronym' | 'initialism'</code>
+</li>
+  <li>
+<code>w</code> becomes <code>span @role='word'</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>annoref</code>, <code>noteref</code> become <code>span</code></p>
+  </li>
+  <li>Re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-sup">DTBook element: <code>sup</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>sup</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span</code> role=’<code>cite</code>’, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>sent</code> becomes <code>span</code>
+</li>
+  <li>
+<code>prodnote</code> becomes <code>extract</code>
+</li>
+  <li>
+<code>abbr</code> becomes <code>span @role='truncation'</code>
+</li>
+  <li>
+<code>acronym</code> becomes <code>span @role='acronym' | 'initialism'</code>
+</li>
+  <li>
+<code>w</code> becomes <code>span @role='word'</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+<code>a</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>annoref</code>, <code>noteref</code> become <code>span</code></p>
+  </li>
+  <li>Re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-table">DTBook element: <code>table</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>table</code></p>
+
+<p><strong>CSS</strong>: <code>@width</code>, <code>@border</code> (border width), <code>@cellspacing</code>, <code>@cellpadding</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>Re-parent <code>caption</code> children</li>
+  <li>Move <code>col</code>s into a <code>colgroup</code>; zedai does not allow free-floating <code>col</code>s.</li>
+  <li>Move <code>tr</code> or <code>pagenum</code> into a <code>tbody</code> if <code>thead</code> or <code>tfoot</code> is present</li>
+  <li>Re-order <code>thead</code>, <code>tfoot</code>, <code>tbody</code> into <code>thead</code>, <code>tbody</code>, <code>tfoot</code>
+</li>
+</ul>
+
+<p><strong>Notes</strong>: See https://github.com/daisy/pipeline/issues/58</p>
+
+<hr>
+
+<h2 id="dtbook-element-tbody">DTBook element: <code>tbody</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>tbody</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-td">DTBook element: <code>td</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>td</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-tfoot">DTBook element: <code>tfoot</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>tfoot</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-th">DTBook element: <code>th</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>th</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+  <li>Normalize block/inline content model: if mixed, wrap inlines in <code>p</code> element.</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-thead">DTBook element: <code>thead</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>thead</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-title">DTBook element: <code>title</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>p @property='title' @about='IDREF'</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<ul>
+  <li>re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>
+<code>br</code> to <code>ln</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="dtbook-element-tr">DTBook element: <code>tr</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>tr</code></p>
+
+<p><strong>CSS</strong>: <code>@align</code>, <code>@valign</code></p>
+
+<hr>
+
+<h2 id="dtbook-element-w">DTBook element: <code>w</code>
+</h2>
+
+<p><strong>ZedAI element</strong>: <code>w</code></p>
+
+<p><strong>Adjustments</strong>:</p>
+
+<p>The following are rather meaningless in this context, so translate them as <code>span</code>. Would be nice to carry the original intent along, such as <code>span @role='cite'</code>, but there aren’t roles for them all.</p>
+
+<ul>
+  <li>
+<code>dfn</code> becomes <code>span</code>
+</li>
+  <li>
+<code>code</code> becomes <code>span</code>
+</li>
+  <li>
+<code>kbd</code> becomes <code>span</code>
+</li>
+  <li>
+<code>cite</code> becomes <code>span</code>
+</li>
+  <li>
+<code>abbr</code> becomes <code>span @role='truncation'</code>
+</li>
+  <li>acronym becomes <code>span @role='acronym' | 'initialism'</code>
+</li>
+</ul>
+
+<p>These are a little trickier as they (may) reference something else, but as there is no allowed child element in ZedAI which may contain a link or reference, that information is not carried along. This is an unlikely scenario.</p>
+
+<ul>
+  <li>
+<code>q</code> becomes <code>span</code>
+</li>
+  <li>
+    <p><code>a</code> becomes <code>span</code></p>
+  </li>
+  <li>Re-parent <code>imggroup</code> children</li>
+  <li>use inline <code>samp</code>
+</li>
+  <li>remove <code>br</code>
+</li>
+</ul>
+
+<hr>
+
+<h2 id="common-attributes">Common Attributes</h2>
+
+<ul>
+  <li>
+<code>id</code> becomes <code>xml:id</code>
+</li>
+  <li>
+<code>xml:space</code> is copied</li>
+  <li>
+<code>class</code> is copied</li>
+  <li>
+<code>xml:lang</code> is copied</li>
+  <li>
+<code>dir</code> becomes <code>its:dir</code>
+</li>
+  <li>
+<code>showin</code> is discarded</li>
+  <li>
+<code>title</code> and <code>name</code> are discarded</li>
+</ul>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../smil-to-smil.xsl">
+</head>
+<body><div class="code" about="../smil-to-smil.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">xpath-default-namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/SMIL20/"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span>&gt;
+
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">indent</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncc-uri"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'ncc.html'"</span>/&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncx-idrefs"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"document-node()"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">document</span>&gt;
+            &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">doc</span>&gt;
+                &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">idref</span> <span class="code-xml-attribute-local-name">idref</span>=<span class="code-xml-attribute-value">"bagw_0015"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"bagw_0015"</span> <span class="code-xml-attribute-local-name">navmap</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">idref</span> <span class="code-xml-attribute-local-name">idref</span>=<span class="code-xml-attribute-value">"bagw_0017"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"bagw_0017"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">idref</span> <span class="code-xml-attribute-local-name">idref</span>=<span class="code-xml-attribute-value">"bagw_0016"</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"noteref-1"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">doc</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">document</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test-note-ids"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"('note','footnote')"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string*"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test-noteref-ids"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'noteref'"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string*"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test-page-ids"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'pagenumber'"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string*"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test-prodnote-ids"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'prodnote'"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string*"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test-sidebar-ids"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'sidebar'"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string*"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncx-idrefs"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:idref"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"@idref"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ids"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"text()"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">smil</span>&gt;
+            &lt;<span class="code-xml-element-local-name">head</span>&gt;
+                &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:format"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"Daisy 2.02"</span>/&gt;
+                &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncc:generator"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"DAISY Pipeline 2"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/smil/head/meta"</span>/&gt;
+                
+                &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncc:timeInThisSmil"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{//body[1]/seq[1]/@dur}"</span>/&gt;
+                &lt;<span class="code-xml-element-local-name">layout</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">region</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"txtView"</span>/&gt;
+                &lt;/<span class="code-xml-element-local-name">layout</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">head</span>&gt;
+            &lt;<span class="code-xml-element-local-name">body</span>&gt;
+                
+                
+                &lt;<span class="code-xml-element-local-name">seq</span> <span class="code-xml-attribute-local-name">dur</span>=<span class="code-xml-attribute-value">"{//body[1]/seq[1]/@dur}"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//body"</span>/&gt;
+                &lt;/<span class="code-xml-element-local-name">seq</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">body</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">smil</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"meta[@name='dtb:totalElapsedTime']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncc:totalElapsedTime"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{@content}"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"meta[@name='dtb:uid']"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dc:identifier"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{@content}"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"add-text-ref"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">text</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"{generate-id()}"</span> <span class="code-xml-attribute-local-name">src</span>=<span class="code-xml-attribute-value">"{concat($ncc-uri,'#',f:get-ncc-ref(.))}"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"par[empty(text)]"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"media"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"add-text-ref"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"par"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"media"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"audio"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"media"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">audio</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"{if(@id) then @id else generate-id()}"</span> <span class="code-xml-attribute-local-name">src</span>=<span class="code-xml-attribute-value">"{@src}"</span> <span class="code-xml-attribute-local-name">clip-begin</span>=<span class="code-xml-attribute-value">"{@clipBegin}"</span> <span class="code-xml-attribute-local-name">clip-end</span>=<span class="code-xml-attribute-value">"{@clipEnd}"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"seq[count(audio)&gt;1]"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"media"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">seq</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@dur|@id"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">seq</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"seq[par]"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"media"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"add-text-ref"</span>/&gt;
+        &lt;<span class="code-xml-element-local-name">seq</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@dur|@id"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">".//audio"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"#current"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">seq</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    
+
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"par[f:system-required(.)]"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">par</span> <span class="code-xml-attribute-local-name">endsync</span>=<span class="code-xml-attribute-value">"last"</span> <span class="code-xml-attribute-local-name">system-required</span>=<span class="code-xml-attribute-value">"{f:system-required(.)}"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"media"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">par</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"par[f:is-noteref(.) and f:is-note(following::*[1])]"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">seq</span>&gt;
+            
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@customTest)"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"ancestor::seq[1][@customTest]/@id"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">comment</span>&gt;Note reference&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">comment</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">comment</span>&gt;Note body&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">comment</span>&gt;
+            &lt;<span class="code-xml-element-local-name">par</span> <span class="code-xml-attribute-local-name">endsync</span>=<span class="code-xml-attribute-value">"last"</span> <span class="code-xml-attribute-local-name">system-required</span>=<span class="code-xml-attribute-value">"footnote-on"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"following::par[1]/@id"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"following::*[1]"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"media"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">par</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">seq</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"par"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">par</span> <span class="code-xml-attribute-local-name">endsync</span>=<span class="code-xml-attribute-value">"last"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"media"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">par</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"seq[f:is-note(.) and f:is-noteref(preceding::par[not(f:is-note(.))][1])]               |par[f:is-note(.) and f:is-noteref(preceding::par[not(f:is-note(.))][1])]"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"seq[not(parent::body)][count(*)=2 and not(f:is-note(*[1])) and f:is-note(*[2])]"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">seq</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@id|@dur"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*[1]"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*[2]"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">seq</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:get-customtest"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"attribute()?"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"elem"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"             $elem/(@customTest,             self::seq[count(*)=1]/par/@customTest,             self::par/ancestor::seq[1]/@customTest)[1]"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:is-note"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:boolean"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"elem"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"node()?"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"f:get-customtest($elem) = $test-note-ids"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:is-noteref"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:boolean"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"elem"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"f:get-customtest($elem) = $test-noteref-ids"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:system-required"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string?"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"elem"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"customTest"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"f:get-customtest($elem)"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"             if ($test-page-ids=$customTest) then 'pagenumber-on'             else if ($test-note-ids=$customTest) then 'footnote-on'             else if ($test-prodnote-ids=$customTest) then 'prodnote-on'             else if ($test-sidebar-ids=$customTest) then 'sidebar-on'             else ()             "</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:get-ncc-ref"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string?"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"par"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"node()?"</span>/&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"this-or-parent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"             $par/ancestor-or-self::*[@id and exists(key('ncx-idrefs',@id,$ncx-idrefs))][1]/@id"</span>/&gt;
+
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"             if ($this-or-parent-id) then key('ncx-idrefs',$this-or-parent-id,$ncx-idrefs)/@id             else $ncx-idrefs//d:idref[@navmap][for $idref in @idref return $par/(.&gt;&gt;./key('ids',$idref))]/@id             "</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>pef preview.css</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <link rev="doc" href="../pef-preview.css">
+
+<div class="highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="directive">@font-face</span> {
+    <span class="key">font-family</span>: <span class="value">odt2braille</span>;
+    <span class="key">src</span>: <span class="function"><span class="delimiter">url(</span><span class="content">odt2braille8.ttf</span><span class="delimiter">)</span></span>;
+}
+
+<span class="tag">body</span> {
+    <span class="key">font-family</span>: <span class="string"><span class="delimiter">'</span><span class="content">Helvetica Neue</span><span class="delimiter">'</span></span>, <span class="value">Helvetica</span>, <span class="value">Arial</span>, <span class="value">sans-serif</span>;
+}
+<span class="tag">div</span><span class="id">#header</span> {
+    <span class="key">position</span>: <span class="value">fixed</span>;
+    <span class="key">top</span>: <span class="float">0</span>;
+    <span class="key">left</span>: <span class="float">220px</span>;
+    <span class="key">width</span>: <span class="float">100%</span>;
+    <span class="key">color</span>: <span class="color">#333</span>;
+    <span class="key">margin</span>: <span class="float">0px</span> <span class="float">20px</span>;
+    <span class="key">border-bottom</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="color">#CCC</span>;
+    <span class="key">background-image</span>: <span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">rgba(255, 255, 255, 1)</span>, <span class="color">rgba(255, 255, 255, 0.94)</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">m</span><span class="error">o</span><span class="error">z</span><span class="error">-</span><span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">rgba(255, 255, 255, 1)</span>, <span class="color">rgba(255, 255, 255, 0.94)</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">w</span><span class="error">e</span><span class="error">b</span><span class="error">k</span><span class="error">i</span><span class="error">t</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">linear</span>, <span class="value">left</span> <span class="value">top</span>, <span class="value">left</span> <span class="value">bottom</span>, <span class="error">f</span><span class="error">r</span><span class="error">o</span><span class="error">m</span>(<span class="color">rgba(255, 255, 255, 1)</span>), <span class="error">t</span><span class="error">o</span>(<span class="color">rgba(255, 255, 255, 0.94)</span>));
+}
+<span class="tag">div</span><span class="id">#main</span> {
+    <span class="key">min-height</span>: <span class="float">100%</span>;
+    <span class="key">margin-left</span>: <span class="float">250px</span>;
+    <span class="key">margin-top</span>: <span class="float">130px</span>;
+    <span class="key">font-size</span>: <span class="float">25px</span>;
+}
+<span class="tag">ul</span><span class="id">#nav</span> {
+    <span class="key">position</span>: <span class="value">fixed</span>;
+    <span class="key">top</span>: <span class="float">0</span>;
+    <span class="key">left</span>: <span class="float">0</span>;
+    <span class="key">background-color</span>: <span class="color">#444</span>;
+    <span class="key">overflow-x</span>: <span class="value">hidden</span>;
+    <span class="key">overflow-y</span>: <span class="value">scroll</span>;
+    <span class="key">height</span>: <span class="float">100%</span>;
+    <span class="key">width</span>: <span class="float">220px</span>;
+    <span class="key">margin</span>: <span class="float">0</span>;
+    <span class="key">padding</span>: <span class="float">0</span>;
+    <span class="key">-webkit-touch-callout</span>: <span class="value">none</span>;
+    <span class="key">-webkit-user-select</span>: <span class="value">none</span>;
+    <span class="key">-khtml-user-select</span>: <span class="value">none</span>;
+    <span class="key">-moz-user-select</span>: <span class="value">none</span>;
+    <span class="key">-ms-user-select</span>: <span class="value">none</span>;
+    <span class="key">user-select</span>: <span class="value">none</span>;
+}
+<span class="tag">ul</span><span class="id">#nav</span> <span class="tag">ul</span> {
+    <span class="key">margin</span>: <span class="float">0</span>;
+    <span class="key">padding</span>: <span class="float">0</span>
+}
+<span class="class">.nav-volume</span> {
+    <span class="key">position</span>: <span class="value">relative</span>;
+}
+<span class="class">.volume-label</span> {
+    <span class="key">font-weight</span>: <span class="value">bold</span>;
+    <span class="key">text-align</span>: <span class="value">center</span>;
+    <span class="key">padding</span>: <span class="float">10px</span>;
+    <span class="key">color</span>: <span class="color">#CCC</span>;
+    <span class="key">background-color</span>: <span class="color">#222</span>;
+    <span class="key">width</span>: <span class="float">200px</span>;
+}
+<span class="class">.volume-label</span><span class="class">.top</span> {
+    <span class="key">position</span>: <span class="value">absolute</span>;
+    <span class="key">top</span>: <span class="float">0</span>;
+    <span class="key">left</span>: <span class="float">0</span>;
+}
+<span class="class">.volume-label</span><span class="class">.bottom</span> {
+    <span class="key">position</span>: <span class="value">absolute</span>;
+    <span class="key">bottom</span>: <span class="float">0</span>;
+    <span class="key">left</span>: <span class="float">0</span>;
+}
+<span class="class">.volume-label</span><span class="class">.fixed</span> {
+    <span class="key">position</span>: <span class="value">fixed</span>;
+    <span class="key">top</span>: <span class="float">0</span>;
+    <span class="key">left</span>: <span class="float">0</span>;
+}
+<span class="tag">a</span><span class="class">.volume-current</span> {
+    <span class="key">color</span>: <span class="value">inherit</span>;
+    <span class="key">text-decoration</span>: <span class="value">none</span>;
+}
+<span class="tag">a</span><span class="class">.volume-current</span><span class="pseudo-class">::before</span> {
+    <span class="key">content</span>: <span class="string"><span class="delimiter">'</span><span class="content">Volume </span><span class="delimiter">'</span></span>;
+}
+<span class="tag">a</span><span class="class">.volume-current</span><span class="pseudo-class">:hover</span> {
+    <span class="key">text-decoration</span>: <span class="value">underline</span>;
+}
+<span class="tag">a</span><span class="class">.volume-next</span>,
+<span class="tag">a</span><span class="class">.volume-previous</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">padding</span>: <span class="float">10px</span>;
+    <span class="key">top</span>: <span class="float">0</span>;
+    <span class="key">position</span>: <span class="value">absolute</span>;
+    <span class="key">color</span>: <span class="value">inherit</span>;
+    <span class="key">text-decoration</span>: <span class="value">none</span>;
+}
+<span class="tag">a</span><span class="class">.volume-next</span> {
+    <span class="key">right</span>: <span class="float">0</span>;
+}
+<span class="tag">a</span><span class="class">.volume-previous</span> {
+    <span class="key">left</span>: <span class="float">0</span>;
+}
+<span class="tag">a</span><span class="class">.volume-next</span><span class="pseudo-class">::after</span>,
+<span class="tag">a</span><span class="class">.volume-previous</span><span class="pseudo-class">::before</span> {
+    <span class="key">font-weight</span>: <span class="value">initial</span>;
+    <span class="key">font-size</span>: <span class="float">90%</span>;
+}
+<span class="tag">a</span><span class="class">.volume-next</span><span class="pseudo-class">::after</span> {
+    <span class="key">content</span>: <span class="string"><span class="delimiter">'</span><span class="content"> &gt;</span><span class="delimiter">'</span></span> ;
+}
+<span class="tag">a</span><span class="class">.volume-previous</span><span class="pseudo-class">::before</span> {
+    <span class="key">content</span>: <span class="string"><span class="delimiter">'</span><span class="content">&lt; </span><span class="delimiter">'</span></span>;
+}
+<span class="tag">a</span><span class="class">.volume-next</span><span class="pseudo-class">:hover</span>,
+<span class="tag">a</span><span class="class">.volume-previous</span><span class="pseudo-class">:hover</span> {
+    <span class="key">text-decoration</span>:<span class="value">underline</span>;
+}
+<span class="tag">li</span><span class="class">.nav-page</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">position</span>: <span class="value">relative</span>;
+}
+<span class="tag">li</span><span class="class">.nav-page</span> <span class="tag">a</span> {
+    <span class="key">text-decoration</span>: <span class="value">none</span>;
+    <span class="key">color</span>: <span class="value">black</span>;
+}
+<span class="tag">li</span><span class="class">.nav-page</span><span class="pseudo-class">:hover</span> {
+    <span class="key">background-color</span>: <span class="color">#222</span>;
+    <span class="key">background-image</span>: <span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#444</span>, <span class="color">#222</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">o</span><span class="error">-</span><span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#444</span>, <span class="color">#222</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">m</span><span class="error">s</span><span class="error">-</span><span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#444</span>, <span class="color">#222</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">m</span><span class="error">o</span><span class="error">z</span><span class="error">-</span><span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#444</span>, <span class="color">#222</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">w</span><span class="error">e</span><span class="error">b</span><span class="error">k</span><span class="error">i</span><span class="error">t</span><span class="error">-</span><span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#444</span>, <span class="color">#222</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">w</span><span class="error">e</span><span class="error">b</span><span class="error">k</span><span class="error">i</span><span class="error">t</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">linear</span>, <span class="float">0%</span> <span class="float">0%</span>, <span class="float">0%</span> <span class="float">100%</span>, <span class="error">f</span><span class="error">r</span><span class="error">o</span><span class="error">m</span>(<span class="color">#444</span>), <span class="error">t</span><span class="error">o</span>(<span class="color">#222</span>));
+}
+<span class="tag">li</span><span class="class">.nav-page</span> <span class="tag">div</span><span class="class">.page-number</span> {
+    <span class="key">float</span>: <span class="value">left</span>;
+    <span class="key">padding</span>: <span class="float">20px</span> <span class="float">10px</span>;
+    <span class="key">color</span>: <span class="color">#BBB</span>;
+    <span class="key">font-size</span>: <span class="float">12px</span>;
+    <span class="key">vertical-align</span>: <span class="value">center</span>;
+}
+<span class="tag">li</span><span class="class">.nav-page</span><span class="pseudo-class">:hover</span> <span class="tag">div</span><span class="class">.page-number</span>  {
+    <span class="key">color</span>: <span class="value">white</span>;
+}
+<span class="tag">li</span><span class="class">.nav-page</span> <span class="tag">div</span><span class="class">.page</span> {
+    <span class="key">display</span>: <span class="value">inline-block</span>;
+    <span class="key">font-size</span>: <span class="float">5px</span>;
+    <span class="key">margin</span>: <span class="float">10px</span>;
+}
+<span class="tag">span</span><span class="class">.bookmark</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">width</span>: <span class="float">0</span>;
+    <span class="key">height</span>: <span class="float">0</span>;
+    <span class="key">position</span>: <span class="value">relative</span>;
+    <span class="key">top</span>: <span class="float">-130px</span>;
+}
+<span class="tag">div</span><span class="class">.page</span> {
+    <span class="key">display</span>: <span class="value">inline-block</span>;
+    <span class="key">padding</span>: <span class="float">0.5em</span>;
+    <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="value">black</span>;
+    <span class="key">margin</span>: <span class="float">0.5em</span>;
+    <span class="key">background-color</span>: <span class="value">white</span>;
+    <span class="key">box-shadow</span>: <span class="float">0.2em</span> <span class="float">0.2em</span> <span class="float">10px</span> <span class="color">#444</span>;
+    <span class="key">-moz-box-shadow</span>: <span class="float">0.2em</span> <span class="float">0.2em</span> <span class="float">10px</span> <span class="color">#444</span>;
+    <span class="key">-webkit-box-shadow</span>: <span class="float">0.2em</span> <span class="float">0.2em</span> <span class="float">10px</span> <span class="color">#444</span>;
+}
+<span class="tag">div</span><span class="class">.braille-page</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+}
+<span class="tag">div</span><span class="class">.text-page</span> {
+    <span class="key">display</span>: <span class="value">none</span>;
+}
+<span class="tag">div</span><span class="class">.row</span> {
+    <span class="key">font-family</span>: <span class="string"><span class="delimiter">"</span><span class="content">odt2braille 8 dot</span><span class="delimiter">"</span></span>, <span class="value">odt2braille</span>;;
+    <span class="key">letter-spacing</span>: <span class="float">0px</span>;
+    <span class="key">white-space</span>: <span class="value">pre</span>;
+    <span class="key">letter-spacing</span>: <span class="float">0px</span>;
+    <span class="key">font-size</span>: <span class="float">125%</span>;
+    <span class="key">height</span>: <span class="float">1em</span>;
+}
+<span class="tag">div</span><span class="class">.row</span>[<span class="attribute-name">rowgap="1"</span>] {
+    <span class="key">height</span>: <span class="float">1.25em</span>;
+}
+<span class="tag">div</span><span class="class">.row</span>[<span class="attribute-name">rowgap="2"</span>] {
+    <span class="key">height</span>: <span class="float">1.5em</span>;
+}
+<span class="tag">div</span><span class="class">.row</span>[<span class="attribute-name">rowgap="3"</span>] {
+    <span class="key">height</span>: <span class="float">1.75em</span>;
+}
+<span class="tag">div</span><span class="class">.row</span>[<span class="attribute-name">rowgap="4"</span>] {
+    <span class="key">height</span>: <span class="float">2em</span>;
+}
+<span class="tag">span</span><span class="class">.label</span> {
+    <span class="key">background-color</span>: <span class="color">#999</span>;
+    <span class="key">border</span>: <span class="value">none</span>;
+    <span class="key">border-radius</span>: <span class="float">3px</span>;
+    <span class="key">color</span>: <span class="value">white</span>;
+    <span class="key">font-size</span>: <span class="float">11px</span>;
+    <span class="key">font-weight</span>: <span class="value">bold</span>;
+    <span class="key">padding</span>: <span class="float">1px</span> <span class="float">4px</span> <span class="float">2px</span>;
+    <span class="key">margin</span>: <span class="float">2px</span>;
+    <span class="key">margin-right</span>: <span class="float">5px</span>;
+    <span class="key">text-shadow</span>: <span class="color">rgba(0, 0, 0, 0.246094)</span> <span class="float">0px</span> <span class="float">-1px</span> <span class="float">0px</span>;
+}
+<span class="tag">ul</span><span class="id">#metadata</span> {
+    <span class="key">display</span>: <span class="value">none</span>;
+    <span class="key">width</span>: <span class="float">100%</span>;
+    <span class="key">margin</span>: <span class="float">0px</span>;
+    <span class="key">padding</span>: <span class="float">0px</span> <span class="float">0px</span> <span class="float">15px</span> <span class="float">0px</span>;
+    <span class="key">list-style-type</span>: <span class="value">none</span>;
+}
+<span class="tag">ul</span><span class="id">#metadata</span> <span class="tag">li</span> {
+    <span class="key">padding</span>: <span class="float">1px</span> <span class="float">0px</span>;
+}
+<span class="tag">div</span><span class="id">#view-buttons</span> {
+    <span class="key">position</span>: <span class="value">fixed</span>;
+    <span class="key">top</span>: <span class="float">0</span>;
+    <span class="key">right</span>: <span class="float">0</span>;
+    <span class="key">margin</span>: <span class="float">30px</span>;
+}
+<span class="tag">button</span><span class="id">#view-braille</span>,
+<span class="tag">button</span><span class="id">#view-text</span>,
+<span class="tag">button</span><span class="id">#view-metadata</span> {
+    <span class="key">display</span>: <span class="value">block</span>;
+    <span class="key">float</span>: <span class="value">left</span>;
+    <span class="key">box-shadow</span>: <span class="color">rgba(255, 255, 255, 0.199219)</span> <span class="float">0px</span> <span class="float">1px</span> <span class="float">0px</span> <span class="float">0px</span> <span class="value">inset</span>, <span class="color">rgba(0, 0, 0, 0.046875)</span> <span class="float">0px</span> <span class="float">1px</span> <span class="float">2px</span> <span class="float">0px</span>;
+    <span class="key">-moz-box-shadow</span>: <span class="color">rgba(255, 255, 255, 0.199219)</span> <span class="float">0px</span> <span class="float">1px</span> <span class="float">0px</span> <span class="float">0px</span> <span class="value">inset</span>, <span class="color">rgba(0, 0, 0, 0.046875)</span> <span class="float">0px</span> <span class="float">1px</span> <span class="float">2px</span> <span class="float">0px</span>;
+    <span class="key">-webkit-box-shadow</span>: <span class="color">rgba(255, 255, 255, 0.199219)</span> <span class="float">0px</span> <span class="float">1px</span> <span class="float">0px</span> <span class="float">0px</span> <span class="value">inset</span>, <span class="color">rgba(0, 0, 0, 0.046875)</span> <span class="float">0px</span> <span class="float">1px</span> <span class="float">2px</span> <span class="float">0px</span>;
+    <span class="key">background-color</span>: <span class="color">#e6e6e6</span>;
+    <span class="key">background-image</span>: <span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#ffffff</span>, <span class="color">#e6e6e6</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">o</span><span class="error">-</span><span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#ffffff</span>, <span class="color">#e6e6e6</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">m</span><span class="error">s</span><span class="error">-</span><span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#ffffff</span>, <span class="color">#e6e6e6</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">m</span><span class="error">o</span><span class="error">z</span><span class="error">-</span><span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#ffffff</span>, <span class="color">#e6e6e6</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">w</span><span class="error">e</span><span class="error">b</span><span class="error">k</span><span class="error">i</span><span class="error">t</span><span class="error">-</span><span class="error">l</span><span class="error">i</span><span class="error">n</span><span class="error">e</span><span class="error">a</span><span class="error">r</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">top</span>, <span class="color">#ffffff</span>, <span class="color">#e6e6e6</span>);
+    <span class="key">background-image</span>: <span class="error">-</span><span class="error">w</span><span class="error">e</span><span class="error">b</span><span class="error">k</span><span class="error">i</span><span class="error">t</span><span class="error">-</span><span class="error">g</span><span class="error">r</span><span class="error">a</span><span class="error">d</span><span class="error">i</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>(<span class="value">linear</span>, <span class="float">0</span> <span class="float">0</span>, <span class="float">0</span> <span class="float">100%</span>, <span class="error">f</span><span class="error">r</span><span class="error">o</span><span class="error">m</span>(<span class="color">#ffffff</span>), <span class="error">t</span><span class="error">o</span>(<span class="color">#e6e6e6</span>));
+    <span class="key">border</span>: <span class="float">1px</span> <span class="value">solid</span> <span class="color">rgba(0, 0, 0, 0.0976562)</span>;
+    <span class="key">color</span>: <span class="color">#333</span>;
+    <span class="key">cursor</span>: <span class="value">pointer</span>;
+    <span class="key">font-size</span>: <span class="float">13px</span>;
+    <span class="key">height</span>: <span class="float">28px</span>;
+    <span class="key">padding</span>: <span class="float">4px</span> <span class="float">10px</span>;
+    <span class="key">margin</span>: <span class="float">0px</span>;
+}
+<span class="tag">button</span><span class="id">#view-braille</span> {
+    <span class="key">border-bottom-left-radius</span>: <span class="float">4px</span>;
+    <span class="key">-webkit-border-top-left-radius</span>: <span class="float">4px</span>;
+    <span class="key">-webkit-border-bottom-left-radius</span>: <span class="float">4px</span>;
+    <span class="key">border-top-left-radius</span>: <span class="float">4px</span>;
+    <span class="key">border-right</span>: <span class="value">none</span>;
+}
+<span class="tag">button</span><span class="id">#view-text</span> {
+    <span class="key">border-bottom-right-radius</span>: <span class="float">4px</span>;
+    <span class="key">-webkit-border-top-right-radius</span>: <span class="float">4px</span>;
+    <span class="key">-webkit-border-bottom-right-radius</span>: <span class="float">4px</span>;
+    <span class="key">border-top-right-radius</span>: <span class="float">4px</span>;
+}
+<span class="tag">button</span><span class="id">#view-metadata</span> {
+    <span class="key">border-bottom-left-radius</span>: <span class="float">4px</span>;
+    <span class="key">-webkit-border-top-left-radius</span>: <span class="float">4px</span>;
+    <span class="key">-webkit-border-bottom-left-radius</span>: <span class="float">4px</span>;
+    <span class="key">border-top-left-radius</span>: <span class="float">4px</span>;
+    <span class="key">border-bottom-right-radius</span>: <span class="float">4px</span>;
+    <span class="key">-webkit-border-top-right-radius</span>: <span class="float">4px</span>;
+    <span class="key">-webkit-border-bottom-right-radius</span>: <span class="float">4px</span>;
+    <span class="key">border-top-right-radius</span>: <span class="float">4px</span>;
+    <span class="key">clear</span>: <span class="value">both</span>;
+    <span class="key">float</span>: <span class="value">right</span>;
+    <span class="key">margin-top</span>: <span class="float">20px</span>;
+}
+<span class="tag">button</span><span class="id">#view-braille</span><span class="pseudo-class">:hover</span>,
+<span class="tag">button</span><span class="id">#view-text</span><span class="pseudo-class">:hover</span>,
+<span class="tag">button</span><span class="id">#view-metadata</span><span class="pseudo-class">:hover</span>{
+    <span class="key">background-image</span>: <span class="value">none</span>;
+    <span class="key">background-color</span>: <span class="color">#e6e6e6</span>;
+}
+<span class="tag">button</span><span class="id">#view-braille</span><span class="pseudo-class">:active</span>,
+<span class="tag">button</span><span class="id">#view-braille</span><span class="class">.active</span>,
+<span class="tag">button</span><span class="id">#view-text</span><span class="pseudo-class">:active</span>,
+<span class="tag">button</span><span class="id">#view-text</span><span class="class">.active</span>,
+<span class="tag">button</span><span class="id">#view-metadata</span><span class="pseudo-class">:active</span>,
+<span class="tag">button</span><span class="id">#view-metadata</span><span class="class">.active</span> {
+    <span class="key">background-image</span>: <span class="value">none</span>;
+    <span class="key">box-shadow</span>: <span class="value">inset</span> <span class="float">0</span> <span class="float">2px</span> <span class="float">4px</span> <span class="color">rgba(0, 0, 0, 0.15)</span>, <span class="float">0</span> <span class="float">1px</span> <span class="float">2px</span> <span class="color">rgba(0, 0, 0, 0.05)</span>;
+    <span class="key">-moz-box-shadow</span>: <span class="value">inset</span> <span class="float">0</span> <span class="float">2px</span> <span class="float">4px</span> <span class="color">rgba(0, 0, 0, 0.15)</span>, <span class="float">0</span> <span class="float">1px</span> <span class="float">2px</span> <span class="color">rgba(0, 0, 0, 0.05)</span>;
+    <span class="key">-webkit-box-shadow</span>: <span class="value">inset</span> <span class="float">0</span> <span class="float">2px</span> <span class="float">4px</span> <span class="color">rgba(0, 0, 0, 0.15)</span>, <span class="float">0</span> <span class="float">1px</span> <span class="float">2px</span> <span class="color">rgba(0, 0, 0, 0.05)</span>;
+}
+</pre></div>
+</div>
+</div>
+
+  </body>
+</html>

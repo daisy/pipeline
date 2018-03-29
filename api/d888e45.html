@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">daisy3-load {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="../../src/main/resources/xml/internal/load/load.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">daisy3-load</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<p xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">Creates a fileset document based on a DAISY 3 package file.</p>
+<p xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The fileset entries are ordered as the appear in the <code>manifest</code> element of the
+            input OPF document, except for SMIL documents which are listed in the <code>spine</code>
+            order. If more than one DTBook document is found in the fileset, SMIL documents are
+            loaded in memory to sort the DTBook documents in the spine order in the resulting
+            fileset. Otherwise, only the OPF itself is loaded in memory.</p>
+<p xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Note: In the resulting fileset, the media type of SMIL documents will be
+                <code>application/smil+xml</code> (as opposed to <code>application/smil</code> in
+            DAISY 3) and the media type of the OPF document will be
+                <code>application/oebps-package+xml</code> (as opposed to <code>text/xml</code> in
+            DAISY 3).</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/daisy3-utils/library.xpl.html" target="detail">http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary</span>
+</td>
+<td>
+<h2 xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Input OPF</h2>
+<p xmlns="" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc">The package file of the input DTB.</p>
+</td>
+</tr></tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">fileset.out</span><span class="details"> primary</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">in-memory.out</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

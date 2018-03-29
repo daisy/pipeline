@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../java-library.xpl">
+</head>
+<body><div class="code" about="../java-library.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of the target. The step
+            fails if the file represented by &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt; does not exist or if it cannot be
+            copied to the specified target.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:copy"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"target"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fail-on-error"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'true'"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of the deleted file. The
+            step fails if the file does not exist or if it cannot be deleted.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:delete"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+
+    
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:directory&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:file&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt;, or
+                &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:other&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; (implementations may also return more specific types,
+            e.g., &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:fifo&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; or &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:dev&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt;). If the document doesn't
+            exist, an empty sequence is returned. The document element of the result, if there is
+            one, will have &lt;<span class="code-xml-element-local-name">code</span>&gt;readable&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;writable&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;hidden&lt;/<span class="code-xml-element-local-name">code</span>&gt;,
+                &lt;<span class="code-xml-element-local-name">code</span>&gt;last-modified&lt;/<span class="code-xml-element-local-name">code</span>&gt;, and &lt;<span class="code-xml-element-local-name">code</span>&gt;size&lt;/<span class="code-xml-element-local-name">code</span>&gt; attributes. The
+                &lt;<span class="code-xml-element-local-name">code</span>&gt;readable&lt;/<span class="code-xml-element-local-name">code</span>&gt;, &lt;<span class="code-xml-element-local-name">code</span>&gt;writable&lt;/<span class="code-xml-element-local-name">code</span>&gt; and &lt;<span class="code-xml-element-local-name">code</span>&gt;hidden&lt;/<span class="code-xml-element-local-name">code</span>&gt; attributes are
+            boolean and are only present if they are true. The &lt;<span class="code-xml-element-local-name">code</span>&gt;last-modified&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute
+            returns the last-modified time in UTC. The &lt;<span class="code-xml-element-local-name">code</span>&gt;size&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute returns the size
+            of the file; it is absent for directories and other types that have no meaningful
+            size.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:info"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns the first count lines of the file named in &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt;. If
+                &lt;<span class="code-xml-element-local-name">code</span>&gt;count&lt;/<span class="code-xml-element-local-name">code</span>&gt; is negative, the step returns all except those first lines. The
+            step returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;c:result&lt;/<span class="code-xml-element-local-name">code</span>&gt; element containing one &lt;<span class="code-xml-element-local-name">code</span>&gt;c:line&lt;/<span class="code-xml-element-local-name">code</span>&gt; for each
+            line. Lines are identified as described in &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.w3.org/TR/xml/#sec-line-ends"</span>&gt;XML 1.0, 2.11 End-of-Line
+                Handling&lt;/<span class="code-xml-element-local-name">a</span>&gt;. If an error occurs, the step fails if &lt;<span class="code-xml-element-local-name">code</span>&gt;fail-on-error&lt;/<span class="code-xml-element-local-name">code</span>&gt; is
+            true; otherwise, the step returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;c:error&lt;/<span class="code-xml-element-local-name">code</span>&gt; element which may contain
+            additional, implementation-defined information about the nature of the error.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:head"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"count"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fail-on-error"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'true'"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Creates a directory with the name spacified in the "href" option. If the name includes
+            more than one directory component, all of the intermediate components are created. The
+            path separator is implementation-defined. Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt;
+            containing the absolute filename of the directory created. The step fails if the
+            directory cannot be created.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:mkdir"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of the target. The step
+            fails if the file represented by the &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt; does not exist or if it cannot be
+            copied to the specified target; the source file is deleted if the copy succeeds.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:move"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"target"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns the last &lt;<span class="code-xml-element-local-name">code</span>&gt;count&lt;/<span class="code-xml-element-local-name">code</span>&gt; lines of the file named in &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt;. If
+                &lt;<span class="code-xml-element-local-name">code</span>&gt;count&lt;/<span class="code-xml-element-local-name">code</span>&gt; is negative, the step returns all except those last lines. The
+            step returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;c:result&lt;/<span class="code-xml-element-local-name">code</span>&gt; element containing one &lt;<span class="code-xml-element-local-name">code</span>&gt;c:line&lt;/<span class="code-xml-element-local-name">code</span>&gt; for each
+            line. Lines are identified as described in &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.w3.org/TR/xml/#sec-line-ends"</span>&gt;XML 1.0, 2.11 End-of-Line
+                Handling&lt;/<span class="code-xml-element-local-name">a</span>&gt;. If an error occurs, the step fails if &lt;<span class="code-xml-element-local-name">code</span>&gt;fail-on-error&lt;/<span class="code-xml-element-local-name">code</span>&gt; is
+            true; otherwise, the step returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;c:error&lt;/<span class="code-xml-element-local-name">code</span>&gt; element which may contain
+            additional, implementation-defined information about the nature of the error.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:tail"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"count"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fail-on-error"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'true'"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of a temporary file. The
+            temporary file is guaranteed not to already exist when &lt;<span class="code-xml-element-local-name">code</span>&gt;pxf:tempfile&lt;/<span class="code-xml-element-local-name">code</span>&gt; is
+            called. The file is created in the directory specified by the &lt;<span class="code-xml-element-local-name">code</span>&gt;href&lt;/<span class="code-xml-element-local-name">code</span>&gt;. The
+            step fails if the directory does not exist.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;If the &lt;<span class="code-xml-element-local-name">code</span>&gt;delete-on-exit&lt;/<span class="code-xml-element-local-name">code</span>&gt; option (a boolean) is true, then the temporary file
+            will automatically be deleted when the processor terminates.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:tempfile"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"delete-on-exit"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"suffix"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Returns a &lt;<span class="code-xml-element-local-name">code</span>&gt;&lt;c:result&gt;&lt;/<span class="code-xml-element-local-name">code</span>&gt; containing the absolute URI of the touched file. The
+            step fails if the file does not exist and cannot be created.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:touch"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+    
+
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;TODO&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:cwd"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span>&gt;</div></body>
+</html>

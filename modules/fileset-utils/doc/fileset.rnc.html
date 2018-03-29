@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!-- Created by htmlize-1.43 in css mode. --><html prefix="dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+    <!--
+        This file was created by opening fileset.rnc in Emacs with rnc-mode (https://github.com/TreeRex/rnc-mode),
+        then exporting it to HTML with htmlize-buffer and adding the metadata below.
+    -->
+    <link rev="dp2:doc" href="../src/main/resources/xml/schemas/fileset.rnc">
+    <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/source">
+    <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+    <title>fileset.rnc</title>
+    <style type="text/css">
+    <!--
+      body {
+        color: #151515;
+        background-color: #ffffff;
+      }
+      .comment {
+        /* font-lock-comment-face */
+        color: #8e908c;
+        font-style: italic;
+      }
+      .function-name {
+        /* font-lock-function-name-face */
+        color: #1d58d0;
+      }
+      .italic {
+        /* italic */
+        font-style: italic;
+      }
+      .keyword {
+        /* font-lock-keyword-face */
+        color: #568c00;
+      }
+      .preprocessor {
+        /* font-lock-preprocessor-face */
+        color: #9030b0;
+      }
+      .string {
+        /* font-lock-string-face */
+        color: #2994a1;
+      }
+      .variable-name {
+        /* font-lock-variable-name-face */
+        color: #dca000;
+      }
+
+      a {
+        color: inherit;
+        background-color: inherit;
+        font: inherit;
+        text-decoration: inherit;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    -->
+    </style>
+  </head>
+  <body>
+    <pre>
+<span class="preprocessor">namespace</span> <span class="function-name">d</span> = <span class="string">"http://www.daisy.org/ns/pipeline/data"</span>
+<span class="preprocessor">namespace</span> <span class="function-name">local</span> = <span class="string">""</span>
+
+<span class="function-name">xmlid.attr</span> = <span class="keyword">attribute</span><span class="variable-name"> xml:id </span>{ <span class="italic">xsd:ID</span> }
+<span class="function-name">xmlbase.attr</span> = <span class="keyword">attribute</span><span class="variable-name"> xml:base </span>{ <span class="italic">xsd:anyURI</span> }
+<span class="function-name">common.attributes</span> = xmlid.attr?, xmlbase.attr?, extension.attr*
+
+<span class="comment"># ============================================================
+</span>
+<span class="function-name">start</span> = FileSet
+
+<span class="function-name">FileSet</span> = 
+    <span class="keyword">element</span><span class="variable-name"> d:fileset </span>{
+        common.attributes,
+        File*
+    }
+
+<span class="function-name">File</span> =
+    <span class="keyword">element</span><span class="variable-name"> d:file </span>{
+        common.attributes,
+        <span class="keyword">attribute</span><span class="variable-name"> href </span>{ <span class="italic">xsd:anyURI</span> },
+        <span class="keyword">attribute</span><span class="variable-name"> original-href </span>{ <span class="italic">xsd:anyURI</span> }?,
+        <span class="keyword">attribute</span><span class="variable-name"> media-type </span>{ <span class="italic">text</span> }?,
+        FileRef*
+    }
+
+<span class="function-name">FileRef</span> =
+    <span class="keyword">element</span><span class="variable-name"> d:ref </span>{
+        common.attributes,
+        <span class="keyword">attribute</span><span class="variable-name"> href </span>{ <span class="italic">xsd:anyURI</span> }
+    }
+
+<span class="comment"># ============================================================
+</span>
+_<span class="function-name">any.attr</span> = <span class="keyword">attribute</span><span class="variable-name"> * </span>{ <span class="italic">text</span> }
+<span class="function-name">extension.attr</span> = <span class="keyword">attribute</span><span class="variable-name"> * - (local:* | xml:*) </span>{ <span class="italic">text</span> }
+<span class="function-name">Any</span> = <span class="keyword">element</span><span class="variable-name"> * </span>{ (_any.attr | <span class="italic">text</span> | Any)* }</pre>
+  </body>
+</html>

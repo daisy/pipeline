@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../package-doc-common.sch">
+</head>
+<body><div class="code" about="../package-doc-common.sch">&lt;<span class="code-xml-element-local-name">pattern</span> <span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"package-doc-common"</span>&gt;
+	&lt;<span class="code-xml-element-local-name">let</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"uniqueid"</span> <span class="code-xml-attribute-local-name">value</span>=<span class="code-xml-attribute-value">"//pkg:package/@unique-identifier"</span>/&gt; 
+	
+    &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:metadata/pkg:dc-metadata"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"dc:Identifier[@id=$uniqueid]"</span>&gt;Value of unique-identifier attribute on package element does not match id value of any dc:Identifier.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	
+    	
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(dc:Format) &gt;= 1"</span>&gt;dc:Format metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(dc:Rights) &gt;= 1"</span>&gt;dc:Rights metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(dc:Source) &gt;= 1"</span>&gt;dc:Source metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	
+    	
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"dc:Format[text() = 'NIMAS 1.1']"</span>&gt;dc:Format metadata must equal NIMAS 1.1&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(dc:Subject) &gt;=1"</span>&gt;dc:Subject is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;	
+    &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:metadata/pkg:x-metadata"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='dtb:sourcePublisher'])&lt;2"</span>&gt;x-metadata element dtb:sourcePublisher occured more than one time.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        
+        &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='dtb:sourceRights'])&lt;2"</span>&gt;x-metadata element dtb:sourceRights occured more than one time.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        
+        &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='dtb:sourceTitle'])&lt;2"</span>&gt;x-metadata element dtb:sourceTitle occured more than one time.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        
+    	
+        
+        
+        
+        
+        &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='dtb:producedDate'])&lt;2"</span>&gt;x-metadata element dtb:producedDate occured more than one time.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        
+        &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='dtb:revision'])&lt;2"</span>&gt;x-metadata element dtb:revision occured more than one time.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        
+        &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='dtb:revisionDate'])&lt;2"</span>&gt;x-metadata element dtb:revisionDate occured more than one time.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+        
+        &lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='dtb:revisionDescription'])&lt;2"</span>&gt;x-metadata element dtb:revisionDescription occured more than one time.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	
+        
+
+
+		
+    	
+    	
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name = 'nimas-SourceDate']) &gt;= 1"</span>&gt;nimas-SourceDate metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	
+    	
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.description.note']) &gt;= 1"</span>&gt;DCTERMS.description.note metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.date.dateCopyrighted']) &gt;= 1"</span>&gt;DCTERMS.date.dateCopyrighted metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.description.version']) &gt;= 1"</span>&gt;DCTERMS.description.version metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.audience.educationLevel']) &gt;= 1"</span>&gt;DCTERMS.audience.educationLevel metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.created']) &gt;= 1"</span>&gt;DCTERMS.created metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.publisher.place']) &gt;= 1"</span>&gt;DCTERMS.publisher.place metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.date.issued']) &gt;= 1"</span>&gt;DCTERMS.date.issued metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
+    	
+    	
+    &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    
+    &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:manifest"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:item[@media-type = 'application/x-dtbook+xml']) = 0"</span>&gt; 
+            At least one document with media-type equal to 'application/x-dtbook+xml' is required in the manifest.
+        &lt;/<span class="code-xml-element-local-name">report</span>&gt;
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	 
+    	
+    	
+    	 
+    	
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:item[@media-type='application/x-dtbresource+xml'])&lt;2"</span>&gt; 
+    		Several resource files are listed in manifest.
+    	&lt;/<span class="code-xml-element-local-name">assert</span>&gt;  
+    	&lt;<span class="code-xml-element-local-name">report</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:item[@media-type = 'application/pdf']) = 0"</span>&gt; 
+    		NIMAS requires at least one document with media-type equal to 'application/pdf' in the manifest.
+    	&lt;/<span class="code-xml-element-local-name">report</span>&gt;
+    &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+    
+	&lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:manifest/pkg:item[@media-type='application/x-dtbresource+xml']"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@id='resource'"</span>&gt; 
+			Resource manifest item in opf must have id="resource".
+		&lt;/<span class="code-xml-element-local-name">assert</span>&gt;   					
+	&lt;/<span class="code-xml-element-local-name">rule</span>&gt;	
+	
+	&lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:manifest/pkg:item[@media-type='application/smil']"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:spine/pkg:itemref[@idref=current()/@id]"</span>&gt; 
+			SMIL file in manifest not referenced in spine.
+		&lt;/<span class="code-xml-element-local-name">assert</span>&gt;   					
+	&lt;/<span class="code-xml-element-local-name">rule</span>&gt;	
+	
+	
+	
+	&lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:metadata/pkg:x-metadata/pkg:meta[@name='dtb:multimediaContent' and contains(@content,'audio')]"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(//pkg:package/pkg:manifest/pkg:item[@media-type='audio/mpeg4-generic' or @media-type='audio/mpeg' or @media-type='audio/x-wav' ])&gt;0"</span>&gt; 
+			dtb:multimediaContent value 'audio' does not correspond to manifest.
+		&lt;/<span class="code-xml-element-local-name">assert</span>&gt;   					
+	&lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:metadata/pkg:x-metadata/pkg:meta[@name='dtb:multimediaContent' and contains(@content,'image')]"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(//pkg:package/pkg:manifest/pkg:item[@media-type='image/jpeg' or @media-type='image/png' or @media-type='image/svg+xml' ])&gt;0"</span>&gt; 
+			dtb:multimediaContent value 'image' does not correspond to manifest.
+		&lt;/<span class="code-xml-element-local-name">assert</span>&gt;   					
+	&lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:metadata/pkg:x-metadata/pkg:meta[@name='dtb:multimediaContent' and contains(@content,'text')]"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(//pkg:package/pkg:manifest/pkg:item[@media-type='application/x-dtbook+xml'])&gt;0"</span>&gt; 
+			dtb:multimediaContent value 'text' does not correspond to manifest.
+		&lt;/<span class="code-xml-element-local-name">assert</span>&gt;   					
+	&lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+	
+	
+	
+	&lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:spine/pkg:itemref"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//pkg:item[@id=current()/@idref and @media-type='application/x-dtbook+xml']"</span>&gt; 
+			Manifest item referenced by itemref in spine is not a DTBook file.
+		&lt;/<span class="code-xml-element-local-name">assert</span>&gt;   					
+	&lt;/<span class="code-xml-element-local-name">rule</span>&gt;
+	
+&lt;/<span class="code-xml-element-local-name">pattern</span>&gt;</div></body>
+</html>

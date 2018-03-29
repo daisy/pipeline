@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../resource-map.xsl">
+</head>
+<body><div class="code" about="../resource-map.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span>&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/file-utils/src/main/resources/xml/xslt/uri-functions.xsl" class="source">http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl</a>"</span>/&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"default-rendition.html.base"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille-rendition.html.base"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"rendition-mapping.base"</span>/&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"default-rendition.package-document"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"collection()[1]"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille-rendition.package-document"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"collection()[2]"</span>/&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"default-rendition.manifest-item"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$default-rendition.package-document//opf:manifest/opf:item[resolve-uri(@href,base-uri(.))=$default-rendition.html.base]"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"default-rendition.spine-itemref"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$default-rendition.package-document//opf:spine/opf:itemref[@idref=$default-rendition.manifest-item/@id]"</span>/&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille-rendition.manifest-item"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$braille-rendition.package-document//opf:manifest/opf:item[resolve-uri(@href,base-uri(.))=$braille-rendition.html.base]"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille-rendition.spine-itemref"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$braille-rendition.package-document//opf:spine/opf:itemref[@idref=$braille-rendition.manifest-item/@id]"</span>/&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span>&gt;
+		
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$default-rendition.spine-itemref and $braille-rendition.spine-itemref"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">nav</span> <span class="code-xml-attribute-prefix">epub:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"resource-map"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$rendition-mapping.base"</span>/&gt;
+				&lt;<span class="code-xml-element-local-name">ul</span>&gt;
+					&lt;<span class="code-xml-element-local-name">li</span>&gt;
+						&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{string-join((                   pf:relativize-uri(base-uri($default-rendition.package-document/*),$rendition-mapping.base),                   '#epubcfi(',                   epub:cfipath($default-rendition.spine-itemref),                   for $id in $default-rendition.spine-itemref/@id return ('[',$id,']'),                   ')'),'')}"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">li</span>&gt;
+					&lt;<span class="code-xml-element-local-name">li</span>&gt;
+						&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{string-join((                   pf:relativize-uri(base-uri($braille-rendition.package-document/*),$rendition-mapping.base),                   '#epubcfi(',                   epub:cfipath($braille-rendition.spine-itemref),                   for $id in $braille-rendition.spine-itemref/@id return ('[',$id,']'),                   ')'),'')}"</span>/&gt;
+					&lt;/<span class="code-xml-element-local-name">li</span>&gt;
+				&lt;/<span class="code-xml-element-local-name">ul</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">nav</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"epub:cfipath"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"node"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"node()"</span>/&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(('',                           (for $n in $node/(ancestor::*|self::node()) return                              string(2*count($n/(preceding-sibling::*|self::*))+count($n/self::text())))                            [position()&gt;1]),                           '/')"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+	
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

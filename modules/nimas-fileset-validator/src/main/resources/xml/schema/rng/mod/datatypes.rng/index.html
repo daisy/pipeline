@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../datatypes.rng">
+</head>
+<body><div class="code" about="../datatypes.rng">&lt;<span class="code-xml-element-local-name">grammar</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema-datatypes"</span>&gt;
+	
+	&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt; datatatypes.rng Last edit by: jpritchett@rfbd.org, 25 October 2007
+		&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.idrefs"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"IDREFS"</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/datatypes/1.0"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.idref"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"IDREF"</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/datatypes/1.0"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.id"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"ID"</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/datatypes/1.0"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.rfc1766"</span>&gt;		
+		
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"language"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.non-null"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;.*\S.*&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.romannumeral"</span>&gt;
+		
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;\s*[Mm]*([Dd]?[Cc]{0,3}|[Cc][DdMm])([Ll]?[Xx]{0,3}|[Xx][LlCc])([Vv]?[Ii]{0,3}|[Ii][VvXx])\s*&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+		
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"integer"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyURI"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri.z3986-2005.subset"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[A-Za-z0-9/\.\-_#]+&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri.relative.smilwithfragment"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;.+\.[Ss][Mm][Ii][Ll]#.+&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.uri.z3986-2005.subset.relative.smilwithfragment"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[A-Za-z0-9/\.\-_]+\.[Ss][Mm][Ii][Ll]#.+&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.nondtbns"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;when other meta elems in group must have other ns than
+				dtb&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;(([^d].{3})|(.[^t].{2})|(.{2}[^b].)|(.{3}[^:])).*|(.{1,3})&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.prodPrefix"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;prod:.*&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.mime"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.mime.z2005list"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;audio/mpeg4-generic&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;audio/mpeg&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;audio/x-wav&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;image/jpeg&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;image/png&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;image/svg+xml&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;text/css&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;application/smil&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;text/xml&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;application/xml-dtd&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;application/x-dtbncx+xml&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;application/x-dtbook+xml&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;application/x-dtbresource+xml&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			
+			
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;application/xml&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;application/xslt+xml&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;application/pdf&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;[ISO8601] the syntax is YYYY[-MM[-DD]] with a mandatory 4-digit
+			year, an optional 2-digit month, and, if the month is present, an optional
+			2-digit day of month.&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601.yyyy"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601.yyyyMm"</span>/&gt;
+			&lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601.yyyyMmDd"</span>/&gt;						
+		&lt;/<span class="code-xml-element-local-name">choice</span>&gt;		
+		
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601.yyyy"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;[ISO8601] subset: requires yyyy format&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[0-9]{4}&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601.yyyyMm"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;[ISO8601] subset: requires yyyy-mm format&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[0-9]{4}-[0-9]{2}&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+		
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601.yyyyMmDd"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;[ISO8601] subset: requires yyyy-mm-dd
+			format&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[0-9]{4}-[0-9]{2}-[0-9]{2}&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.nonNegativeInteger"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"nonNegativeInteger"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.positiveInteger"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"positiveInteger"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.charset"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.identifier"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>/&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>&gt;
+			
+		&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt; Below defined as a datatype as per
+				http://www.w3.org/TR/smil20/smil-timing.html#Timing-ClockValueSyntax
+				with additional restrictions as per Z39-86-2002.html#Clock
+				&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+			&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Full-clock-val&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+				&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;(\s*)(npt=)?[0-9]+:[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(\s*)&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+			&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Partial-clock-val&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+				&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;(\s*)(npt=)?[0-5][0-9]:[0-5][0-9](\.[0-9]+)?(\s*)&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+			&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+				&lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;Timecount-val&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+				&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;(\s*)(npt=)?[0-9]+(\.[0-9]+)?(h|min|s|ms)?(\s*)&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+			&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">choice</span>&gt;		
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.resxpathsubset"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+			
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;//(\*|(\p{L}|_)(\p{L}|[0-9]|[\.\-_])+)(\[@(\p{L}|_)(\p{L}|[0-9]|[\.\-_])+=("[^"]*"|'[^']*')\])*&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.pkg.guide.reference.type.values"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;cover&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;title-page&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;toc&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;index&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;glossary&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;acknowledgements&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;bibliography&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;colophon&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;copyright-page&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;dedication&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;epigraph&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;foreword&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;loi&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;lot&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;notes&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;preface&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;[other.].*&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.dtbook.element.names"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">choice</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;dtbook&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;head&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;title&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;link&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;meta&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;style&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;book&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;frontmatter&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;bodymatter&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;rearmatter&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;level&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;level1&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;level2&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;level3&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;level4&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;level5&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;level6&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;br&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;linenum&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;address&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;div&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;author&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;notice&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;prodnote&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;sidebar&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;note&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;annotation&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;line&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;a&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;em&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;strong&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;dfn&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;kbd&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;code&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;samp&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;cite&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;abbr&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;acronym&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;sub&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;sup&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;span&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;bdo&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;sent&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;w&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;pagenum&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;noteref&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;annoref&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;q&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;img&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;imggroup&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;hr&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;p&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;doctitle&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;docauthor&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;levelhd&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;h1&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;h2&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;h3&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;h4&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;h5&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;h6&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;hd&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;blockquote&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;dl&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;dt&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;dd&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;list&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;li&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;lic&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;table&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;caption&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;thead&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;tfoot&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;tbody&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;colgroup&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;col&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;tr&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;th&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+			&lt;<span class="code-xml-element-local-name">value</span>&gt;td&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+	&lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.id.and.dtbook.element.names"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"ID"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;dtbook|head|title|link|meta|style|book|frontmatter|bodymatter|rearmatter|level|level1|level2|level3|level4|level5|level6|br|linenum|address|div|author|notice|prodnote|sidebar|note|annotation|line|a|em|strong|dfn|kbd|code|samp|cite|abbr|acronym|sub|sup|span|bdo|sent|w|pagenum|noteref|annoref|q|img|imggroup|hr|p|doctitle|docauthor|levelhd|h1|h2|h3|h4|h5|h6|hd|blockquote|dl|dt|dd|list|li|lic|table|caption|thead|tfoot|tbody|colgroup|col|tr|th|td&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+		&lt;/<span class="code-xml-element-local-name">data</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">define</span>&gt;
+	
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

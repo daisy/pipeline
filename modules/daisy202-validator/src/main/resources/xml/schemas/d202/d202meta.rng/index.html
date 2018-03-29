@@ -1,0 +1,448 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="file:/Users/bert/src/pipeline/src/pipeline/website/src/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../d202meta.rng">
+</head>
+<body><div class="code" about="../d202meta.rng">&lt;<span class="code-xml-element-local-name">grammar</span> <span class="code-xml-attribute-local-name">datatypeLibrary</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema-datatypes"</span> <span class="code-xml-attribute-local-name">ns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+  &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    d202meta.rng
+    This file is part of the RelaxNG/Schematron validation
+    suite for Daisy 2.02. All Schematron assertion strings
+    can be identifier by the intitial part of the string 
+    being: '[sch][dtb::d202][type::warning|error][msg::'.
+    Last edit by: linuse 2006-03-02
+  &lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    
+  
+  
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccCharset"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:charset&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.charset"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcDate"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:date&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcFormat"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:format&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;      
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;Daisy 2.02&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;  
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcIdentifier"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:identifier&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;      
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.identifier"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccPageFront"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;          
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:pageFront&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccPageNormal"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:pageNormal&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccPageSpecial"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:pageSpecial&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcTitle"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:title&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccTocItems"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:tocItems&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccTotalTime"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:totalTime&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;       
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcPublisher"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:publisher&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt; 
+            
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcLanguage"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:language&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.rfc1766"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;        
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcCreator"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:creator&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccSetInfo"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:setInfo&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccSidebars"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+           &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:sidebars&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccFootnotes"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:footnotes&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccProdNotes"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:prodNotes&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+            
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccDepth"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:depth&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt; 
+            
+          &lt;/<span class="code-xml-element-local-name">data</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccFiles"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:files&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccMaxPageNormal"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:maxPageNormal&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccMultimediaType"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:multimediaType&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;audioOnly&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;audioNcc&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;audioPartText&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;audioFullText&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;textPartAudio&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+            &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;textNcc&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcSource"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:source&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccSourceDate"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:sourceDate&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccSourceEdition"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:sourceEdition&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccSourcePublisher"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;          
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:sourcePublisher&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                          
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccGenerator"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:generator&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                                  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"httpEquiv"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"http-equiv"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">data</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pattern"</span>&gt;[C|c][o|O][n|N][t|T][e|E][n|N][t|T]-[t|T][y|Y][p|P][e|E]&lt;/<span class="code-xml-element-local-name">param</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">data</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ncckByteSize"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:kByteSize&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                   
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccProducedDate"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:producedDate&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;           
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccProducer"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;        
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:producer&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;           
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccRevision"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;        
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:revision&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;           
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.integer"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccRevisionDate"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;                
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:revisionDate&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;           
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.iso8601"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccSourceRights"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;                        
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:sourceRights&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;           
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccSourceTitle"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:sourceTitle&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                   
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcSubject"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;        
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:subject&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;           
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccNarrator"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:narrator&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                   
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcContributor"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:contributor&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                           
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcCoverage"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:coverage&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                                   
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcDescription"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:description&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                                   
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcRelation"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:relation&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                                   
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcRights"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;        
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:rights&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;              
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dcType"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;                
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;dc:type&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                      
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;    
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prodmeta"</span>&gt;  
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string.prodPrefix"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccTimeInThisSmil"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;                
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:timeInThisSmil&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                      
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nccTotalElapsedTime"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;                
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;ncc:totalElapsedTime&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                      
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.smilclock"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;
+      
+      &lt;<span class="code-xml-element-local-name">define</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"title"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"name"</span>&gt;                
+          &lt;<span class="code-xml-element-local-name">value</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"string"</span>&gt;title&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;                      
+        &lt;<span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">ref</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"datatype.string"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">attribute</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">define</span>&gt;       
+&lt;/<span class="code-xml-element-local-name">grammar</span>&gt;</div></body>
+</html>

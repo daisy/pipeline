@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">http://www.daisy.org/pipeline/modules/common-utils/library.xpl</title>
+<link rev="dp2:doc" href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>Library <span class="name">http://www.daisy.org/pipeline/modules/common-utils/library.xpl</span>
+</h2>
+<h3>Steps</h3>
+<table border="1">
+<thead><tr>
+<td>Local Name</td>
+<td>Namespace URI</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d828e103.html" target="detail">assert</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Example usage:
+        
+            &lt;px:assert message="All d:file elements must have a media-type attribute. $1 and $2 more d:file elements is missing their media-type attribute." severity="ERROR" error-code="pxe:PEOU0002"&gt;
+               &lt;p:with-param name="param1" select="(/d:fileset/d:file[n [...]</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d828e60.html" target="detail">error</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Example usage:
+        
+            &lt;px:error code="pxe:PEOU0001"&gt;
+                &lt;p:with-param name="param1" select="$href"/&gt;
+                &lt;p:input port="error-definitions"&gt;
+                    &lt;p:inline&gt;
+                        &lt;d:errors xmlns:pxe="..."&gt;
+                            &lt;d:erro [...]</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d828e211.html" target="detail">i18n-translate</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>This step invokes the pf:i18n-translate function (implemented in i18n-translate.xsl) with its options as arguments and returns the result as a c:result
+            document.</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d828e19.html" target="detail">message</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Example usage:
+        
+            &lt;px:message message="The value '$1' is an invalid font color. Will use black instead." severity="WARN"&gt;
+                &lt;p:with-param name="param1" select="$color"/&gt;
+            &lt;/px:message&gt;</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d828e155.html" target="detail">tokenize</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>This step invokes the XPath fn:tokenize function with its options as
+            arguments and returns the result as a sequence of c:result documents.</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

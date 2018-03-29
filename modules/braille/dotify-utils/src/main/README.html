@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>dotify-utils API</title>
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <h1 id="dotify-utils-api">dotify-utils API</h1>
+
+<h2 id="a-hrefresourcesmeta-infcatalogxml-classsourcecatalogxmla"><a href="/pipeline/modules/braille/dotify-utils/src/main/resources/META-INF/catalog.xml" class="source">catalog.xml</a></h2>
+
+<ul>
+  <li><a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/library.xsl" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xsl</code></a></li>
+  <li><a href="/pipeline/api/d293e21.html" class="apidoc"><code>http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl</code></a></li>
+</ul>
+
+<h2 id="osgi-services">OSGi services</h2>
+
+<h3 id="transformers-orgdaisypipelinebraillecommontransformproviderhttpdaisygithubiopipelineapiorgdaisypipelinebraillecommontransformproviderhtml">Transformers (<a href="/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html"><code>org.daisy.pipeline.braille.common.TransformProvider</code></a>)</h3>
+
+<ul>
+  <li>
+    <p><a href="/pipeline/modules/braille/dotify-utils/src/main/java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSBlockTransform.html"><code>(input:css)(output:css)(translator:dotify)</code></a></p>
+
+    <p>Recognized features:</p>
+
+    <ul>
+      <li>
+<code>translator</code>: Will only match if the value is <code>dotify</code>.</li>
+      <li>
+<code>locale</code>: If present the value will be used instead of any xml:lang attributes.</li>
+    </ul>
+
+    <p>Other features are used for finding sub-transformers of type DotifyTranslator.</p>
+  </li>
+</ul>
+
+<link rev="dp2:doc" href="./">
+
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+
+
+  </body>
+</html>
