@@ -23,7 +23,7 @@ reasons.
 
 Different versioning rules apply for different parts of the
 Pipeline. (For an overview of the various components see the page
-about [source code](Source).)
+about [source code](Sources).)
 
 * The version number of pipeline-assembly determines the main version
   of the Pipeline. Smaller changes are marked by updates of the patch
@@ -40,7 +40,7 @@ about [source code](Source).)
   and reduced to a minimum.
 
 * Version numbering of bundles should be done according to the
-  versioning rules of OSGi a.k.a. [semantic versioning](semver). Note
+  versioning rules of OSGi a.k.a. [semantic versioning][semver]. Note
   that the "API" of a bundle is not always strictly defined (e.g. in
   case of public XSLT, XProc or CSS code) so there is a bit of room
   for interpretation. As an exception to this rule, the version

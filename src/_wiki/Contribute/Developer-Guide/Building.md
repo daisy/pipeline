@@ -1,7 +1,7 @@
 # Building
 
 DAISY Pipeline's build system makes use of a variety of build tools:
-[Maven][], [Gradle][], [Makefiles](Make), [Autotools][], etc. This is
+[Maven][], [Gradle][], [Makefiles][Make], [Autotools][], etc. This is
 a concequence of using different programming languages and third-party
 software. The build system tries to hide as much as possible the
 complexity this brings.
@@ -18,7 +18,7 @@ Gradle is Maven compatible. Some components such as
 Autotools which is not inherently Maven compatible, but the binary
 artifacts are made part of the Maven system by packaging them into a
 special kind of JAR file (see
-[liblouis-nar]https://github.com/liblouis/liblouis-nar).
+[liblouis-nar](https://github.com/liblouis/liblouis-nar).
 
 [The "super-build" project](#super-build) attempts to further simplify
 things by wrapping the entire code base in a single Make based build
