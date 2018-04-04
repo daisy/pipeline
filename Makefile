@@ -70,7 +70,7 @@ dist-rpm : assembly/.dependencies | .maven-init
 .PHONY : dist-docker-image
 dist-docker-image : dist-zip-linux
 	cd assembly && \
-	make docker
+	$(MAKE) docker
 
 .PHONY : dist-webui-deb
 dist-webui-deb : assembly/.dependencies
@@ -218,7 +218,7 @@ checked :
 
 website/target/maven/pom.xml : $(addprefix website/src/_data/,modules.yml api.yml versions.yml)
 	cd website && \
-	make target/maven/pom.xml
+	$(MAKE) target/maven/pom.xml
 
 export MVN_OPTS = --settings '$(CURDIR)/settings.xml' -Dworkspace='$(CURDIR)/$(MVN_WORKSPACE)' -Dcache='$(CURDIR)/$(MVN_CACHE)' -Pstaged-releases
 
@@ -226,7 +226,7 @@ $(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target
 	rm -rf $@
 	cd website && \
 	target=$@ && \
-	make $${target#website/}
+	$(MAKE) $${target#website/}
 
 .PHONY : website
 website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
@@ -236,17 +236,17 @@ website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 .PHONY : serve-website
 serve-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 	cd website && \
-	make serve
+	$(MAKE) serve
 
 .PHONY : publish-website
 publish-website : | $(addprefix website/target/maven/,javadoc doc sources xprocdoc)
 	cd website && \
-	make publish
+	$(MAKE) publish
 
 .PHONY : clean-website
 clean-website :
 	cd website && \
-	make clean
+	$(MAKE) clean
 
 .PHONY : dump-maven-cmd
 dump-maven-cmd :
