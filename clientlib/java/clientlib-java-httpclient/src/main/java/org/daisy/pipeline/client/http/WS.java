@@ -457,57 +457,70 @@ public class WS implements WSInterface {
 		}
 
 		File resultFile;
-
-		if (result.file != null && result.file.length() > 0) {
-			// single file download
-			try {
-				Pipeline2Logger.logger().debug("Reading file from disk: \""+result.file+"\" (href: \""+href+"\")");
-				resultFile = new File(new URI(result.file));
-
-			} catch (URISyntaxException e) {
-				Pipeline2Logger.logger().error("Unable to parse result file path; please make sure that the Pipeline 2 engine is running on the same system as the the client (i.e. the Web UI).", e);
-				return null;
-
-			} catch (IllegalArgumentException e) {
-				Pipeline2Logger.logger().error("Could not read file from disk: "+result.file, e);
-				return null;
+		
+		if (isLocal) {
+			if (result.file != null && result.file.length() > 0) {
+				// single file download
+				try {
+					Pipeline2Logger.logger().debug("Reading file from disk: \""+result.file+"\" (href: \""+href+"\")");
+					resultFile = new File(new URI(result.file));
+	
+				} catch (URISyntaxException e) {
+					Pipeline2Logger.logger().error("Unable to parse result file path; please make sure that the Pipeline 2 engine is running on the same system as the the client (i.e. the Web UI).", e);
+					return null;
+	
+				} catch (IllegalArgumentException e) {
+					Pipeline2Logger.logger().error("Could not read file from disk: "+result.file, e);
+					return null;
+				}
 			}
-		}
-
-		else {
-			// ZIP the results
-			try {
-				File tempDirForZip = File.createTempFile("webui-result-zip", null);
-				Pipeline2Logger.logger().debug("creating temp dir for zip: "+tempDirForZip.getAbsolutePath());
-				tempDirForZip.delete();
-				tempDirForZip.mkdir();
-
-				resultFile = new File(new URI(tempDirForZip.toURI().toString()+"/"+jobId+(result.name == null ? "" : "-"+result.name)+".zip"));
-				Pipeline2Logger.logger().debug("touching zip: "+resultFile.getAbsolutePath());
-				resultFile.createNewFile();
-
-				for (Result optionOrPort : job.getResults().keySet()) {
-					if (result.from != null && result.from.length() > 0 && result.name != null && !result.name.equals(optionOrPort.name)) {
-						continue;
-					}
-					for (Result optionOrPortFile : job.getResults().get(optionOrPort)) {
-						String contextPath = optionOrPortFile.file.substring(0, optionOrPortFile.file.indexOf(jobId) + jobId.length() + "/output/".length());
-						String optionOrPortPath = contextPath + optionOrPort.name + "/";
-						File optionOrPortDir = new File(new URI(optionOrPortPath));
-						for (File file : optionOrPortDir.listFiles()) {
-							// NOTE: When downloading multiple output directories, all output directories will be merged into one.
-							//       If there are file naming collisions, only the last one will appear in the resulting ZIP.
-							org.daisy.pipeline.client.utils.Files.addDirectoryToZip(resultFile, file);
+	
+			else {
+				// ZIP the results
+				try {
+					File tempDirForZip = File.createTempFile("webui-result-zip", null);
+					Pipeline2Logger.logger().debug("creating temp dir for zip: "+tempDirForZip.getAbsolutePath());
+					tempDirForZip.delete();
+					tempDirForZip.mkdir();
+	
+					resultFile = new File(new URI(tempDirForZip.toURI().toString()+"/"+(result.name == null ? jobId : result.name)+".zip"));
+					Pipeline2Logger.logger().debug("touching zip: "+resultFile.getAbsolutePath());
+					resultFile.createNewFile();
+	
+					for (Result optionOrPort : job.getResults().keySet()) {
+						if (result.from != null && result.from.length() > 0 && result.name != null && !result.name.equals(optionOrPort.name)) {
+							continue;
+						}
+						for (Result optionOrPortFile : job.getResults().get(optionOrPort)) {
+							String contextPath = optionOrPortFile.file.substring(0, optionOrPortFile.file.indexOf(jobId) + jobId.length() + "/output/".length());
+							String optionOrPortPath = contextPath + optionOrPort.name + "/";
+							File optionOrPortDir = new File(new URI(optionOrPortPath));
+							for (File file : optionOrPortDir.listFiles()) {
+								// NOTE: When downloading multiple output directories, all output directories will be merged into one.
+								//       If there are file naming collisions, only the last one will appear in the resulting ZIP.
+								org.daisy.pipeline.client.utils.Files.addDirectoryToZip(resultFile, file);
+							}
 						}
 					}
+	
+				} catch (IOException e) {
+					Pipeline2Logger.logger().error("Unable to create result ZIP archive for "+result.from+" "+result.name, e);
+					return null;
+	
+				} catch (URISyntaxException e) {
+					Pipeline2Logger.logger().error("Unable to create result ZIP archive for "+result.from+" "+result.name, e);
+					return null;
 				}
-
-			} catch (IOException e) {
-				Pipeline2Logger.logger().error("Unable to create result ZIP archive for "+result.from+" "+result.name, e);
-				return null;
-
-			} catch (URISyntaxException e) {
-				Pipeline2Logger.logger().error("Unable to create result ZIP archive for "+result.from+" "+result.name, e);
+			}
+			
+		} else {
+			// download the file through the Web API
+			try {
+				WSResponse response = Pipeline2HttpClient.get(endpoint, "/jobs/"+jobId+"/result"+("".equals(result.relativeHref) ? "" : "/"+result.relativeHref), username, secret, null);
+				return response.asFile();
+				
+			} catch (Pipeline2Exception e) {
+				Pipeline2Logger.logger().error("Unable to retrieve file from pipeline engine: '"+result.relativeHref+"'", e);
 				return null;
 			}
 		}

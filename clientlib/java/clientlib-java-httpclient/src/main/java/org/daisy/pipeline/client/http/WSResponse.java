@@ -2,8 +2,11 @@ package org.daisy.pipeline.client.http;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringWriter;
@@ -18,6 +21,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.daisy.pipeline.client.Pipeline2Exception;
+import org.daisy.pipeline.client.Pipeline2Logger;
 import org.daisy.pipeline.client.utils.XML;
 import org.w3c.dom.Document;
 
@@ -144,9 +148,55 @@ public class WSResponse {
 		if (bodyText == null)
 			asText();
 		
-		bodyXml = XML.getXml(bodyText);
+		if (bodyText != null)
+			bodyXml = XML.getXml(bodyText);
 		
 		return bodyXml;
 	}
 	
+
+	/**
+	 * Returns the response body as a File.
+	 * 
+	 * NOTE: if asText(), asStream() or asXml() has been called already, this will return null
+	 *       if asFile() has been called already, this will also return null
+	 *       if asFile() has been called already, then asText(), asStream() and asXml() will return null
+	 * 
+	 * @return the response body as a String.
+	 * @throws Pipeline2Exception thrown if an error occurs
+	 */
+	public File asFile() throws Pipeline2Exception {
+		if (bodyStream != null) {
+			try {
+				File tempFile = File.createTempFile("webui", null);
+				Pipeline2Logger.logger().debug("storing response as: "+tempFile.getAbsolutePath());
+				System.out.println("storing response as: "+tempFile.getAbsolutePath());
+				tempFile.delete();
+				
+			    OutputStream outStream = new FileOutputStream(tempFile);
+			 
+			    byte[] buffer = new byte[8 * 1024];
+			    int bytesRead;
+			    while ((bytesRead = bodyStream.read(buffer)) != -1) {
+			        outStream.write(buffer, 0, bytesRead);
+			    }
+			    
+			    try { bodyStream.close(); } catch (IOException e) {}
+			    try { outStream.close(); } catch (IOException e) {}
+				
+                return tempFile;
+                
+            } catch (UnsupportedEncodingException e) {
+				// unable to open stream
+				e.printStackTrace();
+				
+			} catch (IOException e) {
+				// unable to read buffer
+				e.printStackTrace();
+				
+			}
+		}
+		
+		return null;
+	}
 }

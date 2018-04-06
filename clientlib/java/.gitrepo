@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/pipeline-clientlib-java.git
 	branch = master
 	commit = 358919a32dd976e8ee9170e7711171b0a5edb5da
-	parent = 7913f03518f852524da512362dc7613c3fa8f0e8
+	parent = b18fd9a3ce34b6dcfbe8f7f7fa31056707a6ab9b
 	cmdver = 0.3.1
