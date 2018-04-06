@@ -48,7 +48,7 @@ public class LameTest {
 
 	@Before
 	public void cleanProperties() {
-		System.setProperty("host.protection", "true");
+		System.setProperty("org.daisy.pipeline.tts.host.protection", "true");
 	}
 
 	private static byte[] mp3ToPCM(AudioFormat originalFormat, String mp3File)
@@ -185,7 +185,7 @@ public class LameTest {
 
 	@Test
 	public void noHostProtection() throws Throwable {
-		System.setProperty("host.protection", "false");
+		System.setProperty("org.daisy.pipeline.tts.host.protection", "false");
 		boolean valid = isValid(new AudioFormat(8000, 8, 1, true, true));
 		Assert.assertTrue(valid);
 	}

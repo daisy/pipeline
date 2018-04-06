@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-mod-audio.git
 	branch = master
-	commit = 1c4d3eee6299864158e89a05409f0c834f5504e7
-	parent = f894037de6b9220a8b5afef1d124f72caf3ea71e
-	cmdver = 0.3.0
+	commit = d5b5631aa5a4ef8a19ebafbfb22676c30ebf1981
+	parent = cfb9b577cdc697656a27b45974f6502c35bc281c
+	cmdver = 0.3.1

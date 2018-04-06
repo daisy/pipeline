@@ -127,12 +127,12 @@ public class LameEncoder implements AudioEncoder {
 		LameEncodingOptions opts = new LameEncodingOptions();
 
 		opts.cliOptions = new String[0];
-		String cliextra = params.get("lame.cli.options");
+		String cliextra = params.get("org.daisy.pipeline.tts.lame.cli.options");
 		if (cliextra != null) {
 			opts.cliOptions = cliextra.split(" ");
 		}
 
-		String lamePathProp = "lame.path";
+		String lamePathProp = "org.daisy.pipeline.tts.lame.path";
 		opts.binpath = params.get(lamePathProp);
 		if (opts.binpath == null) {
 			Optional<String> lpath = BinaryFinder.find("lame");

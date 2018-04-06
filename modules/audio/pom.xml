@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>audio-modules-aggregator</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.11.0</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Audio Modules Aggregator</name>
@@ -20,7 +20,11 @@
   <modules>
     <module>parent</module>
     <module>bom</module>
-    <module>audio-utils/audio-common</module>
+    <!--<module>audio-utils/audio-common</module>-->
     <module>audio-utils/audio-encoder-lame</module>
   </modules>
+
+  <scm>
+    <tag>v1.11.0</tag>
+  </scm>
 </project>
