@@ -1,4 +1,4 @@
-<link rev="dp2:doc" href="resources/xml/xproc/zedai-to-html.xpl"/>
+<link rev="dp2:doc" href="src/main/resources/xml/xproc/zedai-to-html.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 <meta property="dc:title" content="ZedAI to HTML"/>
 

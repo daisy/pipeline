@@ -61,7 +61,7 @@
             <h1 px:role="name">Validation Status</h1>
             <p px:role="desc" xml:space="preserve">The validation status
 
-[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
+[More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe step="if-package-wellformed" port="validation-status"/>
     </p:output>

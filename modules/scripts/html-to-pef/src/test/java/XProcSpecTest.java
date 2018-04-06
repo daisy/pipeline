@@ -19,7 +19,9 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("file-utils"),
 			pipelineModule("html-utils"),
 			pipelineModule("common-utils"),
-			"org.daisy.pipeline:logging-activator:?"
+			"org.daisy.pipeline:logging-activator:?",
+			// FIXME: Dotify needs older version of jing
+			"org.daisy.libs:jing:20120724.0.0",
 		};
 	}
 }

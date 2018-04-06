@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-parent</artifactId>
-    <version>1.10.3-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../parent/</relativePath>
   </parent>
   
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>dtbook-to-odt</artifactId>
-  <version>1.1.2-SNAPSHOT</version>
+  <version>1.1.2</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 module :: DTBook to ODT</name>
@@ -107,6 +107,68 @@
                   (zip_odt src/main/resources/templates/${template} $(pwd)/target/generated-resources/templates/${template})
                 done
               </script>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-sources</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>src</directory>
+                  <includes>
+                    <include>test/xprocspec/test_content.xprocspec.css</include>
+                    <include>test/xprocspec/orion3.jpg</include>
+                    <include>test/xprocspec/orion62.jpg</include>
+                  </includes>
+                </resource>
+              </resources>
+              <outputDirectory>${project.build.directory}/doc/src/</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>htmlize-sources</id>
+            <configuration>
+              <sourceDirectory>${project.basedir}</sourceDirectory>
+              <includes>
+                src/main/resources/META-INF/catalog.xml,
+                src/main/resources/**/*.xpl,
+                src/main/resources/**/*.xsl,
+                src/main/resources/templates/,
+                src/test/xprocspec/test_content.xprocspec
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>package-doc-jar</id>
+            <configuration>
+              <includes>
+                <include>**/*.md</include>
+                <include>**/*.html</include>
+                <include>src/test/xprocspec/test_content.xprocspec.css</include>
+                <include>src/test/xprocspec/orion3.jpg</include>
+                <include>src/test/xprocspec/orion62.jpg</include>
+              </includes>
             </configuration>
           </execution>
         </executions>

@@ -1,4 +1,4 @@
-<link rev="dp2:doc" href="resources/xml/dtbook-to-zedai.xpl"/>
+<link rev="dp2:doc" href="src/main/resources/xml/dtbook-to-zedai.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 <meta property="dc:title" content="DTBook to ZedAI"/>
 
@@ -177,7 +177,7 @@ Output:
 
 # See also
 
-* [Developer documentation](dev-notes.md)
-* [Element conversion rules](rules.md)
+* [Developer documentation](doc/dev-notes.md)
+* [Element conversion rules](doc/rules.md)
 * [ZedAI specifications](http://www.daisy.org/z3998/2012/)
 

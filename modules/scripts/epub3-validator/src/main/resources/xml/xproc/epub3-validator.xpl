@@ -34,7 +34,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
 
-[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
+[More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe port="result" step="status"/>
     </p:output>

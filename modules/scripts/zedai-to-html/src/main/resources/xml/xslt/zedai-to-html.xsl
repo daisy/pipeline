@@ -10,7 +10,6 @@
   <xsl:import href="zedai-vocab-utils.xsl"/>
 
   <xsl:output method="xhtml" doctype-system="about:legacy-compat" encoding="UTF-8" indent="yes"/>
-  <xsl:strip-space elements="*"/>
 
   <xsl:param name="base" select="base-uri(/)"/>
 

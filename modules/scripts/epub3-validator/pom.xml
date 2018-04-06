@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-parent</artifactId>
-    <version>1.10.3-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>epub3-validator</artifactId>
-  <version>1.1.2-SNAPSHOT</version>
+  <version>1.1.2</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EPUB 3 Validator</name>

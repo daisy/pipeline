@@ -1,4 +1,4 @@
-<link rev="dp2:doc" href="resources/xml/dtbook-validator.xpl"/>
+<link rev="dp2:doc" href="src/main/resources/xml/dtbook-validator.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 <meta property="dc:title" content="DTBook Validator"/>
 
@@ -52,7 +52,7 @@ They are as follows:
 
 ### `dtbook-validation-report.xml`
 
-Raw validation output from DTBook validation. See [ValidationReportXML](http://daisy.github.io/pipeline/wiki/ValidationReportXML) for details on the file format.
+Raw validation output from DTBook validation. See [ValidationReportXML](http://daisy.github.io/pipeline/ValidationReportXML) for details on the file format.
 
 ### `dtbook-validation-report.xhtml`
 

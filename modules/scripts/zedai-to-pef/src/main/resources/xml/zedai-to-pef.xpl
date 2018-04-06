@@ -38,14 +38,6 @@
                     <data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc">
                         <documentation xml:lang="en">File path relative to input ZedAI.</documentation>
                     </data>
-                    <value>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/bana.css</value>
-                    <documentation xml:lang="en">A CSS stylesheet for BANA formatting
-
-See [source](http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/bana.css)</documentation>
-                    <value>http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/ueb.css</value>
-                    <documentation xml:lang="en">A CSS stylesheet for UEB formatting
-
-See [source](http://daisy.github.io/pipeline/modules/braille/zedai-to-pef/resources/css/ueb.css)</documentation>
                     <data type="anyURI">
                         <documentation xml:lang="en">Any other absolute URI</documentation>
                     </data>

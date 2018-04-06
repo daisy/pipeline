@@ -3,6 +3,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 			   xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:html="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
                script="../../main/resources/xml/dtbook-to-epub3.xpl">
 
     <x:scenario label="minimal">
@@ -128,12 +129,46 @@
             <x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
         </x:call>
-        <x:context label="the output directory">
+        <x:context label="the content file">
             <x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test.epub!/EPUB/test-2.xhtml" select="//html:h1[1]"/>
         </x:context>
-        <x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false" xfail="true">
+        <x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
             <x:document type="inline">
-                <h1 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1"><em>CHAPTER 1</em> <em>THE LAST JUDGEMENT (MICHAEL ANGELO)</em></h1>
+                <h1 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
+                                        <em>CHAPTER 1</em> <em>THE LAST JUDGEMENT (MICHAEL ANGELO)</em>
+                                    </h1>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <!--
+        FIXME: generated id attributes make test brittle
+    -->
+    <x:scenario label="dtbook 1.1.0">
+        <x:call step="px:dtbook-to-epub3">
+            <x:input port="source">
+                <x:document type="file" href="../resources/dtbook110.xml"/>
+            </x:input>
+            <x:option name="assert-valid" select="'true'"/>
+            <x:option name="output-dir" select="resolve-uri('dtbook110/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('dtbook110/temp-dir/',$temp-dir)"/>
+        </x:call>
+        <x:context label="the result HTML file">
+            <x:document type="file" base-uri="temp-dir" href="dtbook110/output-dir/dtbook110.epub!/EPUB/dtbook110-1.xhtml"/>
+        </x:context>
+        <x:expect label="the result HTML file" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+                    <head>
+                        <meta charset="UTF-8"/>
+                        <title>Title</title>
+                    </head>
+                    <body id="d34112e7-0" epub:type="frontmatter">
+                        <section id="d34112e8-0">
+                            <h1 id="d34112e9-0" epub:type="title">Title</h1>
+                        </section>
+                    </body>
+                </html>
             </x:document>
         </x:expect>
     </x:scenario>

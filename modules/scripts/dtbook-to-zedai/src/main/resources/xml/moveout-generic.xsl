@@ -14,11 +14,10 @@
         <xsl:variable name="this" select="."/>
         <!-- depth first processing -->
         <xsl:variable name="children" as="node()*">
-            <xsl:apply-templates select="node()[not(self::text()) or normalize-space()]"
-                mode="moveout"/>
+            <xsl:apply-templates select="node()" mode="moveout"/>
         </xsl:variable>
         <xsl:choose>
-            <xsl:when test="empty($children)">
+            <xsl:when test="empty($children[not(self::text()) or normalize-space()])">
                 <xsl:copy-of select="."/>
             </xsl:when>
             <xsl:otherwise>
@@ -30,6 +29,9 @@
                                     select="current-group()/concat(local-name(.),if (@id) then concat('#',@id) else '')"
                                 /></xsl:message>
                             <xsl:apply-templates select="current-group()" mode="moveout"/>
+                        </xsl:when>
+                        <xsl:when test="every $n in current-group() satisfies $n/self::text()[normalize-space()='']">
+                            <xsl:value-of select="current-group()"/>
                         </xsl:when>
                         <xsl:when
                             test="not(. is $first) and $this/(self::dtb:h1|self::dtb:h2|self::dtb:h3|self::dtb:h4|self::dtb:h5|self::dtb:h5|self::dtb:h6|self::dtb:h)">

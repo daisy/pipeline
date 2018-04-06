@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="test_content.xprocspec.xsl"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
@@ -11,8 +13,18 @@
                xmlns:xlink="http://www.w3.org/1999/xlink">
   
   <x:script>
-    <p:pipeline type="pxi:test-content" name="main" version="1.0">
-      <p:xslt>
+    <p:declare-step type="pxi:test-content" name="main" version="1.0">
+      <p:input port="source"/>
+      <p:output port="result">
+        <p:pipe step="odt-content" port="result"/>
+      </p:output>
+      <p:option name="page-numbers" select="'true'"/>
+      <p:option name="page-numbers-float" select="'true'"/>
+      <p:option name="temp-dir"/>
+      <p:option name="odt-name"/>
+      <p:option name="store-odt" select="'false'"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/dtbook-to-odt/dtbook-to-odt.xpl"/>
+      <p:xslt name="odt-content">
         <p:input port="source">
           <p:inline>
             <template/>
@@ -28,44 +40,30 @@
                             xmlns:xlink="http://www.w3.org/1999/xlink"
                             xmlns:xs="http://www.w3.org/2001/XMLSchema"
                             xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
-              
               <xsl:import href="../../main/resources/xml/content.xsl"/>
               <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
-              
               <xsl:template match="/">
                 <xsl:variable name="result" as="element()*">
                   <xsl:apply-templates select="collection()[2]/*" mode="office:text"/>
                 </xsl:variable>
                 <xsl:apply-templates select="$result" mode="post"/>
               </xsl:template>
-              
               <xsl:template match="/wrapper" mode="office:text">
                 <xsl:copy>
                   <xsl:apply-templates select="*" mode="#current"/>
                 </xsl:copy>
               </xsl:template>
-              
               <xsl:template match="@*|node()" mode="post">
                 <xsl:copy>
                   <xsl:apply-templates select="@*|node()" mode="#current"/>
                 </xsl:copy>
               </xsl:template>
-              
               <!--
                   Relativize image hrefs
               -->
               <xsl:template match="@xlink:href" mode="post">
                 <xsl:attribute name="xlink:href" select="pf:relativize-uri(string(.), base-uri(collection()[2]/*))"/>
               </xsl:template>
-              
-              <!--
-                  Make it possible to reference non-existing images in tests
-              -->
-              <xsl:function name="pf:image-dimensions" as="xs:integer*">
-                <xsl:param name="src" as="xs:anyURI"/>
-                <xsl:sequence select="(1000,1000)"/>
-              </xsl:function>
-              
               <!--
                   Suppress warnings about nested styles
               -->
@@ -74,20 +72,75 @@
                 <xsl:param name="family" as="xs:string"/>
                 <xsl:sequence select="true()"/>
               </xsl:function>
-              
             </xsl:stylesheet>
           </p:inline>
         </p:input>
+        <p:with-param port="parameters" name="page_numbers" select="$page-numbers"/>
+        <p:with-param port="parameters" name="page_numbers_float" select="$page-numbers-float"/>
       </p:xslt>
-    </p:pipeline>
+      <p:sink/>
+      <p:choose>
+        <p:when test="$store-odt='true' and p:value-available('odt-name') and p:value-available('temp-dir')">
+          <p:insert position="first-child" match="dtb:level1">
+            <p:input port="source">
+              <p:inline>
+                <dtbook xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+                  <book>
+                    <bodymatter>
+                      <level1/>
+                    </bodymatter>
+                  </book>
+                </dtbook>
+              </p:inline>
+            </p:input>
+            <p:input port="insertion" select="/*[not(self::wrapper)]|/wrapper/*">
+              <p:pipe step="main" port="source"/>
+            </p:input>
+          </p:insert>
+          <p:xslt>
+            <p:with-option name="output-base-uri" select="resolve-uri(concat($odt-name,'.xml'))"/>
+            <p:input port="stylesheet">
+              <p:inline>
+                <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+                  <xsl:template match="/*">
+                    <xsl:sequence select="."/>
+                  </xsl:template>
+                </xsl:stylesheet>
+              </p:inline>
+            </p:input>
+            <p:input port="parameters">
+              <p:empty/>
+            </p:input>
+          </p:xslt>
+          <px:dtbook-to-odt>
+            <p:with-option name="page-numbers" select="$page-numbers"/>
+            <p:with-option name="page-numbers-float" select="$page-numbers-float"/>
+            <p:with-option name="output-dir" select="$temp-dir"/>
+          </px:dtbook-to-odt>
+        </p:when>
+        <p:otherwise>
+          <p:identity>
+            <p:input port="source">
+              <p:empty/>
+            </p:input>
+          </p:identity>
+          <p:sink/>
+        </p:otherwise>
+      </p:choose>
+    </p:declare-step>
   </x:script>
+  <x:scenario label="_">
+    <x:call step="pxi:test-content">
+      <x:option name="temp-dir" select="$temp-dir"/>
+      <x:option name="store-odt" select="'false'"/>
+    </x:call>
   
   <!-- ======== -->
   <!-- HEADINGS -->
   <!-- ======== -->
   
   <x:scenario label="headings">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <wrapper>
@@ -96,6 +149,7 @@
           </wrapper>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'headings'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -115,12 +169,13 @@
   <!-- ========== -->
   
   <x:scenario label="paragraph">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:p>foo</dtb:p>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'paragraph'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -137,7 +192,7 @@
   <!-- ===== -->
   
   <x:scenario label="unordered list">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:list type="ul">
@@ -150,6 +205,7 @@
           </dtb:list>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'unordered list'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -181,7 +237,7 @@
   </x:scenario>
   
   <x:scenario label="ordered list">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:list type="ol" enum="1" class="steps">
@@ -193,6 +249,7 @@
           </dtb:list>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'ordered list'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -221,7 +278,7 @@
   </x:scenario>
   
   <x:scenario label="nested preformatted list">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:list type="pl">
@@ -242,6 +299,7 @@
           </dtb:list>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'nested preformatted list'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -277,7 +335,7 @@
   </x:scenario>
   
   <x:scenario label="list items with or without paragraph">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:list>
@@ -289,6 +347,7 @@
           </dtb:list>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'list items with or without paragraph'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -309,7 +368,7 @@
   </x:scenario>
   
   <x:scenario label="definition list">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:dl>
@@ -324,6 +383,7 @@
           </dtb:dl>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'definition list'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -349,7 +409,7 @@
   </x:scenario>
   
   <x:scenario label="definition list with multiples of dt and dd">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <wrapper>
@@ -366,6 +426,7 @@
           </wrapper>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'definition list with multiples of dt and dd'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -399,7 +460,7 @@
   <!-- ====== -->
   
   <x:scenario label="table with header">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:table>
@@ -424,6 +485,7 @@
           </dtb:table>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'table with header'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -472,7 +534,7 @@
   </x:scenario>
   
   <x:scenario label="table with caption, header, footer and body">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <wrapper>
@@ -497,6 +559,7 @@
           </wrapper>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'table with caption, header, footer and body'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -531,7 +594,7 @@
   </x:scenario>
   
   <x:scenario label="table with colspan and rowspan">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:table>
@@ -556,6 +619,7 @@
           </dtb:table>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'table with colspan and rowspan'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -612,7 +676,7 @@
   <!-- ===== -->
   
   <x:scenario label="footnote">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <wrapper>
@@ -628,6 +692,7 @@
           </wrapper>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'footnote'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -652,7 +717,7 @@
   </x:scenario>
   
   <x:scenario label="annotation">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <wrapper>
@@ -668,6 +733,7 @@
           </wrapper>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'annotation'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -697,7 +763,7 @@
   <!-- ==================== -->
   
   <x:scenario label="sidebar with paragraph">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:sidebar>
@@ -705,6 +771,7 @@
           </dtb:sidebar>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'sidebar with paragraph'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -719,7 +786,7 @@
   </x:scenario>
   
   <x:scenario label="sidebar without paragraph" pending="true">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:sidebar>
@@ -727,6 +794,7 @@
           </dtb:sidebar>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'sidebar without paragraph'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -745,7 +813,7 @@
   <!-- ====== -->
   
   <x:scenario label="two images that share a caption">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <wrapper>
@@ -759,6 +827,7 @@
           </wrapper>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'two images that share a caption'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -771,14 +840,14 @@
           </text:p>
           <text:p text:style-name="dtb_3a_img">
             <draw:frame draw:name="dtb:img#1" draw:style-name="dtb_3a_img" text:anchor-type="as-char"
-                        draw:z-index="0" svg:width="1.6667in" svg:height="1.6667in">
+                        draw:z-index="0" svg:width="1.6667in" svg:height="0.8933in">
               <draw:image xlink:href="orion62.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
               <svg:title>Orion Nebula by visible and ultraviolet light</svg:title>
             </draw:frame>
           </text:p>
           <text:p text:style-name="dtb_3a_img">
             <draw:frame draw:name="dtb:img#2" draw:style-name="dtb_3a_img" text:anchor-type="as-char"
-                        draw:z-index="0" svg:width="1.6667in" svg:height="1.6667in">
+                        draw:z-index="0" svg:width="2.1333in" svg:height="1.2433in">
               <draw:image xlink:href="orion3.jpg" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
               <svg:title>Young stars in Orion Nebula</svg:title>
             </draw:frame>
@@ -793,7 +862,7 @@
   <!-- ==== -->
   
   <x:scenario label="mathml with asciimath encoding">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:p>
@@ -832,6 +901,7 @@
           </dtb:p>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'mathml with asciimath encoding'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -886,7 +956,7 @@
   <!-- ============ -->
   
   <x:scenario label="page number inside a paragraph">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <wrapper>
@@ -901,8 +971,9 @@
     </x:call>
     <x:scenario label="with floating page numbers">
       <x:call>
-        <x:param name="page_numbers" select="'true'"/>
-        <x:param name="page_numbers_float" select="'true'"/>
+        <x:option name="page-numbers" select="'true'"/>
+        <x:option name="page-numbers-float" select="'true'"/>
+        <x:option name="odt-name" select="'page number inside a paragraph with floating page numbers'"/>
       </x:call>
       <x:context label="result">
         <x:document type="port" port="result"/>
@@ -918,8 +989,9 @@
     </x:scenario>
     <x:scenario label="without floating page numbers">
       <x:call>
-        <x:param name="page_numbers" select="'true'"/>
-        <x:param name="page_numbers_float" select="'false'"/>
+        <x:option name="page-numbers" select="'true'"/>
+        <x:option name="page-numbers-float" select="'false'"/>
+        <x:option name="odt-name" select="'page number inside a paragraph without floating page numbers'"/>
       </x:call>
       <x:context label="result">
         <x:document type="port" port="result"/>
@@ -936,8 +1008,9 @@
     </x:scenario>
     <x:scenario label="with page numbers disabled">
       <x:call>
-        <x:param name="page_numbers" select="'false'"/>
-        <x:param name="page_numbers_float" select="'false'"/>
+        <x:option name="page-numbers" select="'false'"/>
+        <x:option name="page-numbers-float" select="'false'"/>
+        <x:option name="odt-name" select="'page number inside a paragraph with page numbers disabled'"/>
       </x:call>
       <x:context label="result">
         <x:document type="port" port="result"/>
@@ -953,7 +1026,7 @@
   </x:scenario>
   
   <x:scenario label="table that spans multiple pages">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <wrapper>
@@ -974,8 +1047,9 @@
     </x:call>
     <x:scenario label="with floating page numbers">
       <x:call>
-        <x:param name="page_numbers" select="'true'"/>
-        <x:param name="page_numbers_float" select="'true'"/>
+        <x:option name="page-numbers" select="'true'"/>
+        <x:option name="page-numbers-float" select="'true'"/>
+        <x:option name="odt-name" select="'table that spans multiple pages with floating page numbers'"/>
       </x:call>
       <x:context label="result">
         <x:document type="port" port="result"/>
@@ -1001,8 +1075,9 @@
     </x:scenario>
     <x:scenario label="without floating page numbers">
       <x:call>
-        <x:param name="page_numbers" select="'true'"/>
-        <x:param name="page_numbers_float" select="'false'"/>
+        <x:option name="page-numbers" select="'true'"/>
+        <x:option name="page-numbers-float" select="'false'"/>
+        <x:option name="odt-name" select="'table that spans multiple pages without floating page numbers'"/>
       </x:call>
       <x:context label="result">
         <x:document type="port" port="result"/>
@@ -1032,8 +1107,9 @@
     </x:scenario>
     <x:scenario label="with page numbers disabled">
       <x:call>
-        <x:param name="page_numbers" select="'false'"/>
-        <x:param name="page_numbers_float" select="'false'"/>
+        <x:option name="page-numbers" select="'false'"/>
+        <x:option name="page-numbers-float" select="'false'"/>
+        <x:option name="odt-name" select="'table that spans multiple pages with page numbers disabled'"/>
       </x:call>
       <x:context label="result">
         <x:document type="port" port="result"/>
@@ -1063,7 +1139,7 @@
   <!-- ====================== -->
   
   <x:scenario label="preserve whitespace">
-    <x:call step="pxi:test-content">
+    <x:call>
       <x:input port="source">
         <x:document type="inline">
           <dtb:p>
@@ -1079,81 +1155,19 @@
                 </dtb:p>
         </x:document>
       </x:input>
+      <x:option name="odt-name" select="'preserve whitespace'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="result" type="compare">
+    <x:expect label="result" type="compare" normalize-space="false">
       <x:document type="inline">
         <text:p text:style-name="dtb_3a_p">
-          <text:span text:style-name="dtb_3a_code">
-            <text:s text:c="4"/>
-            <text:span text:style-name="dtb_3a_strong">case</text:span>
-            <text:s text:c="1"/>
-            "o":
-            <text:line-break/>
-            <text:s text:c="4"/>
-            glBegin(GL_QUAD_STRIP)
-            <text:line-break/>
-            <text:s text:c="4"/>
-            <text:span text:style-name="dtb_3a_strong">for</text:span>
-            (i=0;i&lt;=12;<text:s text:c="1"/>i++)
-            <text:s text:c="1"/>
-            {<text:line-break/>
-            <text:s text:c="8"/>
-            angle
-            <text:s text:c="1"/>
-            =
-            <text:s text:c="1"/>
-            3.14159
-            <text:s text:c="1"/>
-            /
-            <text:s text:c="1"/>
-            6.0
-            <text:s text:c="1"/>
-            *
-            <text:s text:c="1"/>
-            i;
-            <text:line-break/>
-            <text:s text:c="8"/>
-            glVertex2f(0.4
-            <text:s text:c="1"/>
-            *
-            <text:s text:c="1"/>
-            cos(angle),
-            <text:s text:c="1"/>
-            0.4
-            <text:s text:c="1"/>
-            *
-            <text:s text:c="1"/>
-            sin(angle));
-            <text:line-break/>
-            <text:s text:c="8"/>
-            glVertex2f(0.5
-            <text:s text:c="1"/>
-            *
-            <text:s text:c="1"/>
-            cos(angle),
-            <text:s text:c="1"/>
-            0.5
-            <text:s text:c="1"/>
-            *
-            <text:s text:c="1"/>
-            sin(angle));
-            <text:line-break/>
-            <text:s text:c="4"/>
-            }
-            <text:line-break/>
-            <text:s text:c="4"/>
-            glEnd();
-            <text:line-break/>
-            <text:s text:c="4"/>
-            <text:span text:style-name="dtb_3a_strong">break</text:span>
-            ;
-          </text:span>
-        </text:p>
+            <text:span text:style-name="dtb_3a_code"><text:s text:c="4"/><text:span text:style-name="dtb_3a_strong">case</text:span><text:s text:c="1"/>"o":<text:line-break/><text:s text:c="4"/>glBegin(GL_QUAD_STRIP)<text:line-break/><text:s text:c="4"/><text:span text:style-name="dtb_3a_strong">for</text:span>(i=0;i&lt;=12;<text:s text:c="1"/>i++)<text:s text:c="1"/>{<text:line-break/><text:s text:c="8"/>angle<text:s text:c="1"/>=<text:s text:c="1"/>3.14159<text:s text:c="1"/>/<text:s text:c="1"/>6.0<text:s text:c="1"/>*<text:s text:c="1"/>i;<text:line-break/><text:s text:c="8"/>glVertex2f(0.4<text:s text:c="1"/>*<text:s text:c="1"/>cos(angle),<text:s text:c="1"/>0.4<text:s text:c="1"/>*<text:s text:c="1"/>sin(angle));<text:line-break/><text:s text:c="8"/>glVertex2f(0.5<text:s text:c="1"/>*<text:s text:c="1"/>cos(angle),<text:s text:c="1"/>0.5<text:s text:c="1"/>*<text:s text:c="1"/>sin(angle));<text:line-break/><text:s text:c="4"/>}<text:line-break/><text:s text:c="4"/>glEnd();<text:line-break/><text:s text:c="4"/><text:span text:style-name="dtb_3a_strong">break</text:span>;</text:span>
+                </text:p>
       </x:document>
     </x:expect>
   </x:scenario>
   
+  </x:scenario>
 </x:description>

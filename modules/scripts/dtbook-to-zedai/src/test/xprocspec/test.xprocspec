@@ -22,13 +22,13 @@
             <x:document type="inline">
 				<body xmlns="http://www.daisy.org/ns/z3998/authoring/">
 					<frontmatter>
-						<section xml:id="d2650e7">
+						<section xml:id="d2843e14">
 							<h role="title">Minimal DTBook</h>
 							<p role="author">Bert</p>
 						</section>
 					</frontmatter>
 					<bodymatter>
-						<section xml:id="d2650e13">
+						<section xml:id="d2843e25">
 							<pagebreak value="1" xml:id="page_1"/>
 							<h>Chapter</h>
 							<p>Paragraph</p>
@@ -40,5 +40,43 @@
 			</x:document>
         </x:expect>
     </x:scenario>
-    
+	
+	<x:scenario label="preserve significant white space (issue #94)">
+		<x:call step="px:dtbook-to-zedai">
+			<x:input port="source">
+				<x:document type="inline">
+					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+						<head>
+							<meta name="dc:Title" content="Selections from &quot;Great Pictures, As Seen and Described by Famous Writers&quot;"/>
+							<meta name="dc:Creator" content="Esther Singleton"/>
+							<meta name="dc:Language" content="en-US"/>
+						</head>
+						<book>
+							<bodymatter>
+								<level1>
+									<h1 id="chapter_1">
+										<em>CHAPTER 1</em> <strong>THE LAST JUDGEMENT (MICHAEL ANGELO)</strong>
+									</h1>
+								</level1>
+							</bodymatter>
+						</book>
+					</dtbook>
+				</x:document>
+			</x:input>
+			<x:option name="zedai-filename" select="'result.xml'"/>
+			<x:option name="assert-valid" select="'false'"/>
+			<x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the output ZedAI">
+			<x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/result.xml" select="//z:h[@xml:id='chapter_1']"/>
+		</x:context>
+		<x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
+			<x:document type="inline">
+				<h xmlns="http://www.daisy.org/ns/z3998/authoring/" xml:id="chapter_1">
+										<emph>CHAPTER 1</emph> <emph>THE LAST JUDGEMENT (MICHAEL ANGELO)</emph>
+									</h>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+	
 </x:description>

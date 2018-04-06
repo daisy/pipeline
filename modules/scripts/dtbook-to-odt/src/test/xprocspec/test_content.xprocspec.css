@@ -1,0 +1,222 @@
+@namespace math "http://www.w3.org/1998/Math/MathML";
+
+.xml-document,
+.odt-document {
+	display: block;
+	border: 1px solid #ccc;
+	box-shadow: 3px 3px 3px #eee;
+	margin: 1em;
+	overflow-x: auto;
+	position: relative;
+}
+
+.xml-document {
+	padding: .5em;
+}
+
+/* xml syntax highlighting */
+/* (http://daisy.github.io/pipeline/css/nxml-mode.css) */
+
+.code {
+	white-space: pre;
+	font-family: monospace;
+	font-size: .9rem;
+}
+
+.code-xml-element-local-name {
+	color: #1d58d0;
+}
+.code-xml-attribute-local-name {
+	color: #dca000;
+}
+.code-xml-attribute-value {
+	color: #2994a1;
+}
+.code-xml-element-prefix,
+.code-xml-attribute-prefix {
+	color: #9030b0;
+}
+
+/* odt */
+
+.text-h,
+.text-p,
+.text-list,
+.text-note,
+.text-section {
+	display: block;
+}
+
+.text-span {
+	display: inline;
+	font-size: inherit;
+}
+
+.text-s {
+	display: inline;
+	white-space: pre;
+}
+
+.text-line-break {
+	display: inline;
+}
+
+.text-line-break::before {
+	content: "↵";
+	font-size: 80%;
+	color: #49d;
+}
+
+.text-line-break::after {
+	white-space: pre;
+	content: "\A";
+}
+
+.text-list-item {
+	display: list-item;
+}
+
+/* .table-table */
+table {
+	display: table;
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+/* .table-table-header-rows */
+thead {
+	display: table-header-group;
+}
+
+/* .table-table-row */
+tr {
+	display: table-row;
+}
+
+/* .table-table-cell */
+td {
+	display: table-cell;
+	border: 1px solid #ddd;
+	vertical-align: top;
+}
+
+/* .table-table-cell.table-number-columns-spanned-4 {
+	table-column-span: 4;
+} */
+
+.table-table-column {
+	display: none;
+}
+
+.table-covered-table-cell {
+	display: none;
+}
+
+.draw-frame {
+	display: inline-block;
+	border: 1px solid #ddd;
+	padding : 2px;
+}
+
+/* .draw-image */
+img {
+	display: inline;
+	vertical-align: text-top;
+	margin-bottom: 1px;
+}
+
+math|math {
+	display: inline;
+	vertical-align: text-top;
+}
+
+.svg-title {
+	display: none;
+}
+
+.footnote-ref {
+	counter-increment: noteref;
+}
+
+.footnote-ref::after {
+	vertical-align: text-top;
+	font-size: 50%;
+	content: counter(noteref);
+}
+
+.footnotes {
+	margin-top: 1in;
+}
+
+.footnotes::before {
+	display: block;
+	content: " ";
+	width: 2.1in;
+	border-top: 2px solid black;
+}
+
+.text-note.text-note-class-footnote {
+	counter-increment: note;
+}
+
+.text-note-citation {
+	display: none;
+}
+
+.text-note-body::before {
+	float: left;
+	content: counter(note);
+}
+
+.text-p::after,
+.text-h::after,
+td:empty::after {
+	content: "¶";
+	color: #49d;
+}
+
+/* default.ott */
+/* (CSS in theory could be computed automatically) */
+
+.text-p.text-style-name-Standard,
+.text-p.text-style-name-dtb_3a_p,
+.text-p.text-style-name-dtb_3a_li,
+.text-p.text-style-name-dtb_3a_dd,
+.text-p.text-style-name-dtb_3a_th,
+.text-p.text-style-name-dtb_3a_td,
+.text-p.text-style-name-dtb_3a_caption,
+.text-p.text-style-name-dtb_3a_note_5f_footnote,
+.text-p.text-style-name-dtb_3a_annotation,
+.text-p.text-style-name-dtb_3a_img,
+.text-p.text-style-name-dtb_3a_pagenum,
+.text-h.text-style-name-dtb_3a_h1,
+.text-h.text-style-name-dtb_3a_h2,
+.text-note-body,
+td:empty
+{
+	font-family: "Times New Roman", Georgia, Serif;
+	font-size: 1.2rem; /* 12pt x .1em/pt */
+}
+
+.text-span.text-style-name-dtb_3a_dt,
+.text-span.text-style-name-dtb_3a_code,
+.text-span.text-style-name-dtb_3a_strong {
+}
+
+.text-list.text-style-name-dtb_3a_list_5f_ul,
+.text-list.text-style-name-dtb_3a_list_5f_ol,
+.text-list.text-style-name-dtb_3a_list_5f_pl,
+.text-list.text-style-name-dtb_3a_dl
+{
+	list-style-type: disc;
+	margin-left: 0.14in;
+}
+
+.text-list.text-style-name-dtb_3a_list_5f_ol > .text-list-item,
+.text-list.text-style-name-dtb_3a_list_5f_ul > .text-list-item,
+.text-list.text-style-name-dtb_3a_list_5f_pl > .text-list-item,
+.text-list.text-style-name-dtb_3a_dl > .text-list-item
+{
+	padding-left: 0.02in; /* 0.02 + 0.14 = 0.16 */
+}

@@ -16,7 +16,7 @@
                 name="main">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Braille in EPUB 3</h1>
+        <h1 px:role="name">EPUB 3 Enhancer</h1>
         <p px:role="desc">Transforms an EPUB 3 publication into an EPUB 3 publication with a braille rendition.</p>
         <dl px:role="author">
             <dt>Name:</dt>

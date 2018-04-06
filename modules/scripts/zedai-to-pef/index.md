@@ -1,4 +1,4 @@
-<link rev="dp2:doc" href="resources/xml/zedai-to-pef.xpl"/>
+<link rev="dp2:doc" href="src/main/resources/xml/zedai-to-pef.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 <meta property="dc:title" content="ZedAI to PEF"/>
 
@@ -144,7 +144,7 @@ Keep in mind that a simple default stylesheet (`default.css`) is always applied 
 @import url('http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/reset.css');
 ~~~
 
-To change which default CSS is applied, use the `default-stylesheet` option as in the [advanced example](#example-running-from-command-line) above. Valid choices are [bana.css](../resources/css/bana.css) and [ueb.css](../resources/css/ueb.css). This is not meant to be a complete list, the idea is to eventually have stylesheets for each braille formatting standard. In fact, `bana.css` and `ueb.css` are currently only stubs, we are hoping for contributions from people who are more familiar with these standards.
+To change which default CSS is applied, use the `default-stylesheet` option as in the [advanced example](#example-running-from-command-line) above. The idea is to eventually have stylesheets for every braille formatting standard. We are hoping for contributions from people who are more familiar with the standards.
 
 #### Example 1: Sections and headings
 

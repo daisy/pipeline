@@ -42,7 +42,7 @@
             <h1 px:role="name">Raw validation report</h1>
             <p px:role="desc" xml:space="preserve">Raw XML-formatted report which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom).
 
-[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationReportXML).</p>
+[More details on the file format](http://daisy.github.io/pipeline/ValidationReportXML).</p>
         </p:documentation>
         <p:pipe port="xml-report" step="if-dtbook-wellformed"/>
     </p:output>
@@ -59,7 +59,7 @@
             <h1 px:role="name">Validation status</h1>
             <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
 
-[More details on the file format](http://daisy.github.io/pipeline/wiki/ValidationStatusXML).</p>
+[More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
         </p:documentation>
         <p:pipe port="validation-status" step="if-dtbook-wellformed"/>
     </p:output>
@@ -78,7 +78,7 @@
             <h2 px:role="name">Validation report in XML and HTML</h2>
             <p px:role="desc" xml:space="preserve">Validation report in two formats: the raw XML-formatted report, which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom), and the HTML-formatted version.
 
-[More details on the XML format](http://daisy.github.io/pipeline/wiki/ValidationReportXML).</p>
+[More details on the XML format](http://daisy.github.io/pipeline/ValidationReportXML).</p>
         </p:documentation>
     </p:option>
 

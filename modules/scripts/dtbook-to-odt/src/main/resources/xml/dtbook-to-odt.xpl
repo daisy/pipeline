@@ -44,7 +44,11 @@
     <p:option name="template" required="false" px:type="anyFileURI" select="''" px:media-type="application/vnd.oasis.opendocument.text-template">
         <p:documentation>
             <h2 px:role="name">Template</h2>
-            <p px:role="desc">OpenOffice template file (.ott) that contains the style definitions.</p>
+            <p px:role="desc" xml:space="preserve">OpenOffice template file (.ott) that contains the style definitions.
+
+Defaults to [default.ott](http://daisy.github.io/pipeline/modules/dtbook-to-odt/doc/templates/default.ott.html).
+
+See [Templating](http://daisy.github.io/pipeline/modules/dtbook-to-odt#templating) for more details.</p>
         </p:documentation>
     </p:option>
     

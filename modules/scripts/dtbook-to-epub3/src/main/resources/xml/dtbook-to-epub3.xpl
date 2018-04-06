@@ -54,7 +54,7 @@
 	<h2 px:role="name">Text-To-Speech configuration file</h2>
 	<p px:role="desc" xml:space="preserve">Configuration file for the Text-To-Speech.
 
-[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/tts-config.html).</p>
+[More details on the configuration file format](http://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html).</p>
       </p:documentation>
     </p:option>
 

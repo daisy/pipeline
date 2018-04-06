@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="http://www.daisy.org/pipeline/modules/dtbook-to-odt/dtbook-to-odt.xpl"
+               pending="not a real test">
+  
+  <x:scenario label="generate-template">
+    <x:documentation>
+      This is not a real test. This is a utility to generate a template for creating .ott
+      templates. The procuded .odt file will contain generated styles for all elements that are
+      present in the input DTBook. You can than edit this .odt file and save it as a .ott.
+    </x:documentation>
+    <x:call step="px:dtbook-to-odt">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook xml:lang="en" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+            <book>
+              <bodymatter>
+                <level1>
+                  <h1>This is a paragraph with style `dtb:h1'</h1>
+                  <level2>
+                    <h2>This is a paragraph with style `dtb:h2'</h2>
+                    <level3>
+                      <h3>This is a paragraph with style `dtb:h3'</h3>
+                      <level4>
+                        <h4>This is a paragraph with style `dtb:h4'</h4>
+                        <level5>
+                          <h5>This is a paragraph with style `dtb:h5'</h5>
+                          <level6>
+                            <h6>This is a paragraph with style `dtb:h6'</h6>
+                            <p>This is a paragraph with style `dtb:p'</p>
+                            <p>Below is a list with style `dtb:list_ol'</p>
+                            <list type="ol">
+                              <li>This is a list item with style `dtb:li'</li>
+                              <li>another item</li>
+                            </list>
+                            <p>Below is a list with style `dtb:list_ul'</p>
+                            <list type="ul">
+                              <li>item</li>
+                              <li>item</li>
+                            </list>
+                            <p>Below is a list with style `dtb:list_pl'</p>
+                            <list type="pl">
+                              <li>item</li>
+                              <li>item</li>
+                            </list>
+                          </level6>
+                        </level5>
+                      </level4>
+                    </level3>
+                  </level2>
+                </level1>
+              </bodymatter>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="output-dir" select="$temp-dir"/>
+    </x:call>
+    <x:context label="the output directory">
+      <x:document type="directory" base-uri="temp-dir" href="./" recursive="true"/>
+    </x:context>
+    <x:expect label="the output directory should contain the ODT file" type="xpath"
+              test="/c:directory/c:file[@name='generate_template.odt']"/>
+  </x:scenario>
+  
+</x:description>

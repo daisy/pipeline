@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook v1.1.0//EN"
+"http://www.loc.gov/nls/z3986/v100/dtbook110.dtd" [
+  <!ATTLIST w
+      gh:voiceR   CDATA        #IMPLIED
+  >
+  <!ATTLIST w
+      gh:pronR   CDATA        #IMPLIED
+  >
+  <!ATTLIST w
+      gh:voiceS   CDATA        #IMPLIED
+  >
+  <!ATTLIST w
+      gh:pronS   CDATA        #IMPLIED
+  >
+  <!ATTLIST dtbook
+      xmlns:gh   CDATA        #IMPLIED
+  >
+  <!ATTLIST list
+      style   CDATA        #IMPLIED
+  >
+]>
+<dtbook version="1.1.0">
+    <head>
+        <title>Title</title>
+        <meta name="dc:Title" content="Title"/>
+    </head>
+    <book>
+        <bodymatter>
+            <level1>
+                <p>Blah</p>
+            </level1>
+        </bodymatter>
+    </book>
+</dtbook>

@@ -97,12 +97,6 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 			// for dtbook-tss mock
 			pipelineModule("dtbook-break-detection"),
 			pipelineModule("nlp-omnilang-lexer"),
-			// override version of saxon: transitive dependency of common-utils but also
-			// of zedval (see below) and zedval needs newer version
-			"org.daisy.libs:saxon-he:?",
-			// override version of jing: transitive dependency of dtbook-utils but also
-			// of zedval (see below) and zedval needs newer version
-			"org.daisy.libs:jing:?",
 		};
 	}
 	
@@ -161,7 +155,6 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 					                           "javax.xml.transform.TransformerFactory%23newInstance"),
 				wrappedBundle(mavenBundle("xerces:xercesImpl:?"))
 					.instructions("SPI-Provider=*"),
-				// see above:
 				// mavenBundle("org.daisy.libs:saxon-he:?"),
 				// mavenBundle("org.daisy.libs:jing:?"),
 				mavenBundle("commons-cli:commons-cli:?"),

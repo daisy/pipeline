@@ -1,4 +1,4 @@
-<link rev="dp2:doc" href="resources/xml/dtbook-to-rtf.xpl"/>
+<link rev="dp2:doc" href="src/main/resources/xml/dtbook-to-rtf.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 <meta property="dc:title" content="DTBook to RTF"/>
 
@@ -117,7 +117,7 @@ Output RTF:
 
 This is what the RTF will look like in a word processor:
 
-<iframe src="example-rtf.html" id="frame" style="width:90%" frameborder="0" onload="setIframeHeight(this.id)"></iframe>
+<iframe src="doc/example-rtf.html" id="frame" style="width:90%" frameborder="0" onload="setIframeHeight(this.id)"></iframe>
 <script type="application/javascript">
 function getDocHeight(doc) {
     doc = doc || document;
