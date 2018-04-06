@@ -6,6 +6,10 @@
                 exclude-inline-prefixes="#all"
                 version="1.0">
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Translate a MathML document to Braille using liblouisutdml.</p>
+    </p:documentation>
+    
     <p:input port="source" px:media-type="application/mathml+xml"/>
     <p:output port="result"/>
     

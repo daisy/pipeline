@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.10.2-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
 
   <artifactId>texhyph-utils</artifactId>
-  <version>1.1.2-SNAPSHOT</version>
+  <version>1.1.2</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: texhyph-utils :: texhyph-utils</name>

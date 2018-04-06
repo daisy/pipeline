@@ -2,7 +2,7 @@
 
 ## OSGi services
 
-### Liblouis table paths (`org.daisy.pipeline.braille.liblouis.LiblouisTablePath`)
+### Liblouis table paths ([`org.daisy.pipeline.braille.liblouis.LiblouisTablePath`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/liblouis/LiblouisTablePath.html))
 
 - <a href="resources/tables/" class="apidoc">`http://www.liblouis.org/tables/`</a>
 

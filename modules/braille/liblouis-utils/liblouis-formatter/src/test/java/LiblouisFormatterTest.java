@@ -16,7 +16,9 @@ public class LiblouisFormatterTest extends AbstractXSpecAndXProcSpecTest {
 			"org.daisy.pipeline.modules.braille:liblouis-native:jar:" + thisPlatform() + ":?",
 			pipelineModule("file-utils"),
 			pipelineModule("fileset-utils"),
-			brailleModule("liblouis-tables")
+			brailleModule("liblouis-tables"),
+			// FIXME: BrailleUtils needs older version of jing
+			"org.daisy.libs:jing:20120724.0.0",
 		};
 	}
 }

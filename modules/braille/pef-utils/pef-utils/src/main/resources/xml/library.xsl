@@ -6,4 +6,13 @@
         * pef:encode
     -->
     
+    <!--
+        pef:encode is implemented in Java (org.daisy.pipeline.braille.pef.saxon.impl.EncodeDefinition)
+    -->
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Re-encode a Braille string (Unicode Braille) using a specified character set.</p>
+        </desc>
+    </doc>
+    
 </xsl:stylesheet>

@@ -5,6 +5,10 @@
                 xmlns:x="http://www.daisy.org/ns/xprocspec"
                 version="1.0">
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Compare two PEF documents as a custom <a href="http://josteinaj.github.io/xprocspec">XProcSpec</a> assertion.</p>
+    </p:documentation>
+    
     <p:input port="context" primary="false"/>
     <p:input port="expect" primary="false"/>
     <p:input port="parameters" kind="parameter" primary="true"/>

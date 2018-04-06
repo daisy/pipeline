@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.10.2-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
 
   <artifactId>liblouis-calabash</artifactId>
-  <version>2.0.5-SNAPSHOT</version>
+  <version>2.0.5</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: liblouis-utils :: liblouis-calabash</name>

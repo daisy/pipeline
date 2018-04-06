@@ -10,7 +10,9 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			brailleModule("pef-utils"),
 			pipelineModule("common-utils"),
 			pipelineModule("file-utils"),
-			pipelineModule("fileset-utils")
+			pipelineModule("fileset-utils"),
+			// FIXME: pef-utils needs older version of jing
+			"org.daisy.libs:jing:20120724.0.0",
 		};
 	}
 }

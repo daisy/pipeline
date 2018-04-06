@@ -9,6 +9,10 @@
                 exclude-inline-prefixes="#all"
                 type="pef:store" name="store" version="1.0">
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Store a PEF document to disk, possibly in an ASCII-based format or with an HTML preview.</p>
+    </p:documentation>
+    
     <p:input port="source" primary="true" px:media-type="application/x-pef+xml"/>
     
     <p:option name="href" required="true"/>

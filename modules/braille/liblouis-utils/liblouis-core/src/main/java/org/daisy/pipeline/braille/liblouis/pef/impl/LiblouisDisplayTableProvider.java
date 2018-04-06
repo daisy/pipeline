@@ -59,20 +59,6 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 	
 	private static Set<String> supportedFeatures = ImmutableSet.of("liblouis-table", "locale", "id");
 	
-	/**
-	 * Recognized features:
-	 *
-	 * - id: Matches liblouis display tables by their fully qualified table identifier. Not
-	 *     compatible with other features.
-	 *
-	 * - liblouis-table: A liblouis table is a URI that can be either a file name, a file path
-	 *     relative to a registered tablepath, an absolute file URI, or a fully qualified table
-	 *     identifier.
-	 *
-	 * - locale: Matches only liblouis display tables with that locale.
-	 *
-	 * All matched tables must be of type "display table".
-	 */
 	protected Iterable<Table> _get(Query query) {
 		for (Feature feature : query)
 			if (!supportedFeatures.contains(feature.getKey())) {

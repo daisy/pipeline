@@ -7,10 +7,13 @@
                 exclude-inline-prefixes="#all"
                 name="main">
 	
-	<p:documentation>
-		CSS cascading and inlining according to
-		http://braillespecs.github.io/braille-css/#h2_cascade and
-		http://braillespecs.github.io/braille-css/#h2_style-attribute.
+	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+		<p>Inline a CSS stylesheet in XML.</p>
+		<p>CSS cascading and inlining happens according to <a
+		href="http://braillespecs.github.io/braille-css/#h2_cascade">http://braillespecs.github.io/braille-css/#h2_cascade</a>
+		and <a
+		href="http://braillespecs.github.io/braille-css/#h2_style-attribute">http://braillespecs.github.io/braille-css/#h2_style-attribute</a>.
+		</p>
 	</p:documentation>
 	
 	<p:input port="source" sequence="false" primary="true">

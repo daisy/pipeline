@@ -1,3 +1,61 @@
+v1.11.0
+=======
+
+Changes
+-------
+- New script for adding a braille rendition to an EPUB
+  (https://github.com/snaekobbi/pipeline-mod-braille/pull/6,
+  https://github.com/daisy/pipeline-mod-braille/issues/164,
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/58)
+- More usable message log (https://github.com/daisy/pipeline-mod-braille/issues/38)
+- `include-obfl` option now outputs OBFL even when conversion to PEF fails
+  (https://github.com/daisy/pipeline-mod-braille/issues/124)
+- Support for custom page counters (https://github.com/brailleapps/dotify/issues/165,
+  https://github.com/brailleapps/dotify/issues/180,
+  https://github.com/braillespecs/braille-css/issues/47)
+- Fixes to volume breaking (https://github.com/brailleapps/dotify.formatter.impl/pull/28,
+  https://github.com/nlbdev/pipeline/issues/80, https://github.com/nlbdev/pipeline/issues/118,
+  https://github.com/nlbdev/pipeline/issues/121,
+  https://github.com/sbsdev/pipeline-mod-sbs/issues/33,
+  https://github.com/daisy/pipeline-mod-braille/issues/136)
+- Fixed handling of cross-references in EPUB 3
+  (https://github.com/daisy/pipeline-mod-braille/issues/126)
+- Improved language detection in EPUB 3
+- Addition of `dc:language` in PEF metadata
+- Improved white space handling
+- Fixed behavior of `target-content()` w.r.t. pseudo-elements
+- Fixed border alignment (https://github.com/nlbdev/pipeline/issues/128)
+- Support for `page` property inside `::before` and `::after` pseudo-elements
+- Fixed support for `line-height` in combination with page footer
+  (https://github.com/brailleapps/dotify/issues/196,
+  https://github.com/brailleapps/dotify.formatter.impl/pull/29)
+- Limited support of `target-counter()` to elements in normal flow
+- Various other bugfixes (`text-transform`, `-obfl-fallback-collection`, ...)
+
+Components
+----------
+- liblouis ([**3.0.0.alpha1**](https://github.com/liblouis/liblouis/releases/tag/v3.0.0.alpha1)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([3.1.0](https://github.com/liblouis/liblouis-java/releases/tag/3.1.0))
+- **dotify** (**api** [**4.1.0**](https://github.com/brailleapps/dotify.api/releases/tag/releases%2Fv4.1.0), **common**
+  [**4.1.0**](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv4.1.0), **hyphenator.impl**
+  [**4.0.0**](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv4.0.0), **translator.impl**
+  [**4.0.0**](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv4.0.0), **formatter.impl**
+  [**4.1.0**](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv4.1.0), **text.impl**
+  [**4.0.0**](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv4.0.0), **streamline-api**
+  [**1.0.0**](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv1.0.0), **streamline-engine**
+  [**1.1.0**](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv1.1.0), **task.impl**
+  [**4.1.0**](https://github.com/brailleapps/dotify.task.impl/releases/tag/releases%2Fv4.1.0))
+- **brailleutils** (**api**
+  [**3.0.1**](https://github.com/brailleapps/braille-utils.api/releases/tag/releases%2Fv3.0.1), **impl**
+  [**3.0.0**](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), **pef-tools**
+  [**2.2.0**](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
+- braille-css ([1.13.0](https://github.com/daisy/braille-css/releases/tag/1.13.0))
+- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
 v1.10.1
 =======
 

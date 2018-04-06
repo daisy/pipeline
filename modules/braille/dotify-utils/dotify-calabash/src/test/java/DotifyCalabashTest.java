@@ -40,7 +40,9 @@ public class DotifyCalabashTest extends AbstractXSpecAndXProcSpecTest {
 			brailleModule("pef-utils"),
 			// logging
 			"org.slf4j:jul-to-slf4j:?",
-			"org.daisy.pipeline:logging-activator:?"
+			"org.daisy.pipeline:logging-activator:?",
+			// FIXME: Dotify needs older version of jing
+			"org.daisy.libs:jing:20120724.0.0",
 		};
 	}
 }

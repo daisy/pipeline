@@ -3,16 +3,21 @@
 ## <a href="resources/META-INF/catalog.xml" class="source">catalog.xml</a>
 
 - <a href="resources/xml/library.xsl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xsl`</a>
-  - `dotify:translate`: Translate a text string to Braille with Dotify.
-
 - <a href="resources/xml/library.xpl" class="apidoc">`http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl`</a>
-  - `dotify:format`
 
 ## OSGi services
 
-### Transformers (`org.daisy.pipeline.braille.common.TransformProvider`)
+### Transformers ([`org.daisy.pipeline.braille.common.TransformProvider`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html))
 
-- [`org.daisy.pipeline.braille.dotify.impl.DotifyCSSBlockTransform.Provider`](java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSBlockTransform.java): `(input:css)(output:css)(translator:dotify)`
+- [`(input:css)(output:css)(translator:dotify)`](java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSBlockTransform.java)
+  
+  Recognized features:
+  
+  - `translator`: Will only match if the value is `dotify`.
+  - `locale`: If present the value will be used instead of any xml:lang attributes.
+  
+  Other features are used for finding sub-transformers of type DotifyTranslator.
+  
 
 
 <link rev="dp2:doc" href="./"/>

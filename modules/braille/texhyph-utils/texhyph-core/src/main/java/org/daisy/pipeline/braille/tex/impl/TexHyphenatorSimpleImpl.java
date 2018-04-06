@@ -72,20 +72,6 @@ public class TexHyphenatorSimpleImpl extends AbstractTransformProvider<TexHyphen
 	
 	private final static Iterable<TexHyphenator> empty = Iterables.<TexHyphenator>empty();
 	
-	/**
-	 * Recognized features:
-	 *
-	 * - hyphenator: Will only match if the value is `tex' or `texhyph'.
-	 *
-	 * - table: A tex table is a URI that is either a file name, a file path relative to a
-	 *     registered tablepath, an absolute file URI, or a fully qualified table identifier. Only
-	 *     URIs that point to LaTeX pattern files (ending with ".tex") are matched. The `table'
-	 *     feature is not compatible with `locale'.
-	 *
-	 * - locale: Matches only hyphenators with that locale.
-	 *
-	 * No other features are allowed.
-	 */
 	public Iterable<TexHyphenator> _get(Query query) {
 		MutableQuery q = mutableQuery(query);
 		if (q.containsKey("hyphenator")) {

@@ -5,6 +5,10 @@
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 version="1.0">
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Convert a PEF document into a textual (ASCII-based) format.</p>
+    </p:documentation>
+    
     <p:input port="source" sequence="false" primary="true"/>
     <p:option name="dir-href" required="true"/>
     <p:option name="file-format" required="false"/> <!-- query format -->
@@ -25,5 +29,9 @@
         if 0, then the volume number is not padded with zeroes
     -->
     <p:option name="number-width" required="false"/>
+    
+    <!--
+        implemented in Java (org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep)
+    -->
     
 </p:declare-step>

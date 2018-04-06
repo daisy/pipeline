@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.10.2-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
   
   <artifactId>libhyphen-libreoffice-tables</artifactId>
-  <version>4.0.0-2-SNAPSHOT</version>
+  <version>4.0.0-2</version>
   <packaging>bundle</packaging>
   
   <name>DP2 Braille Modules :: libhyphen-utils :: libhyphen-libreoffice-tables</name>
@@ -60,13 +60,13 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <mkdir dir="target/checkout"/>
-                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true"/>
+                    <mkdir dir="target/checkout" />
+                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true" />
                     <unzip dest="target/generated-resources/hyphen" src="target/checkout/dictionaries.zip">
                       <patternset>
-                        <include name="**/hyph_*.dic"/>
+                        <include name="**/hyph_*.dic" />
                       </patternset>
-                      <mapper type="flatten"/>
+                      <mapper type="flatten" />
                     </unzip>
                   </tasks>
                 </configuration>

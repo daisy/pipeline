@@ -11,6 +11,10 @@
                 exclude-inline-prefixes="px pxi c pef xsl"
                 version="1.0">
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Convert an XML document with inline Braille CSS to PEF using liblouisutdml.</p>
+    </p:documentation>
+
     <p:input port="source" sequence="true" primary="true"/>
     <p:output port="result" sequence="false" primary="true"/>
     

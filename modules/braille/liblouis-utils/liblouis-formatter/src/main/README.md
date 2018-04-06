@@ -2,9 +2,18 @@
 
 ## OSGi services
 
-### Transformers (`org.daisy.pipeline.braille.common.TransformProvider`)
+### Transformers ([`org.daisy.pipeline.braille.common.TransformProvider`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html))
 
-- [`org.daisy.pipeline.braille.liblouis.impl.LiblouisCSSStyledDocumentTransform.Provider`](java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSStyledDocumentTransform.java): `(input:css)(output:pef)(formatter:liblouis)`
+- [`(input:css)(output:pef)(formatter:liblouis)`](java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSStyledDocumentTransform.java):
+  Converts an XML document with inline Braille CSS to PEF using liblouisutdml.
+  
+  Recognized features:
+
+  - `formatter`: Will only match if the value is `liblouis`.
+
+  Other features are used for finding sub-transformers of type
+  [BrailleTranslator](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/BrailleTranslator.html).
+
 
 
 <link rev="dp2:doc" href="./"/>

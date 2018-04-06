@@ -9,6 +9,10 @@
                 exclude-inline-prefixes="px pxi xsl"
                 version="1.0">
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Compare two <a href="http://code.google.com/p/obfl">OBFL</a> documents.</p>
+    </p:documentation>
+    
     <p:input port="source" primary="true" px:media-type="application/x-obfl+xml"/>
     <p:input port="alternate" px:media-type="application/x-obfl+xml"/>
     <p:output port="result" primary="false" sequence="false">

@@ -7,4 +7,22 @@
         * louis:hyphenate
     -->
     
+    <!--
+        louis:translate is implemented in Java (org.daisy.pipeline.braille.liblouis.saxon.impl.TranslateDefinition)
+    -->
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Translate a text string to Braille using liblouis.</p>
+        </desc>
+    </doc>
+    
+    <!--
+        louis:hyphenate is implemented in Java (org.daisy.pipeline.braille.liblouis.saxon.impl.HyphenateDefinition)
+    -->
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Hyphenate a text string using liblouis.</p>
+        </desc>
+    </doc>
+    
 </xsl:stylesheet>

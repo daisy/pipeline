@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.5</version>
-    <relativePath/>
+    <version>1.6</version>
+    <relativePath />
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>braille-modules-parent</artifactId>
-  <version>1.10.2-SNAPSHOT</version>
+  <version>1.11.0</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Braille Modules Parent POM</name>
@@ -21,7 +21,7 @@
     <connection>scm:git:git@github.com:daisy/pipeline-mod-braille.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-mod-braille.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-mod-braille.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.11.0</tag>
   </scm>
 
 
@@ -33,7 +33,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.10.2-SNAPSHOT</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -43,7 +43,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.3</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -53,21 +53,14 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.10.3</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.10.2</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline.modules</groupId>
-        <artifactId>scripts-bom</artifactId>
-        <version>1.10.1</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -82,7 +75,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -168,7 +161,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -185,7 +178,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -198,7 +191,7 @@
                         </goals>
                     </pluginExecutionFilter>
                     <action>
-                        <ignore/>
+                        <ignore />
                     </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -211,7 +204,7 @@
                         </goals>
                     </pluginExecutionFilter>
                     <action>
-                        <ignore/>
+                        <ignore />
                     </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -224,7 +217,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
               </pluginExecutions>

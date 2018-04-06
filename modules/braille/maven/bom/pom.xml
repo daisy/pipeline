@@ -12,7 +12,7 @@
 
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-bom</artifactId>
-    <version>1.10.2-SNAPSHOT</version>
+    <version>1.11.0</version>
     <packaging>pom</packaging>
 
     <name>DAISY Pipeline 2 :: Braille Modules Bill Of Materials</name>
@@ -21,7 +21,7 @@
         <connection>scm:git:git@github.com:daisy/pipeline-mod-braille.git</connection>
         <url>scm:git:git@github.com:daisy/pipeline-mod-braille.git</url>
         <developerConnection>scm:git:git@github.com:daisy/pipeline-mod-braille.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>v1.11.0</tag>
     </scm>
 
     <dependencyManagement>
@@ -32,52 +32,52 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>common-utils</artifactId>
-                <version>5.3.0-SNAPSHOT</version>
+                <version>5.3.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>css-core</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>css-utils</artifactId>
-                <version>3.4.0-SNAPSHOT</version>
+                <version>3.4.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-calabash</artifactId>
-                <version>2.1.1-SNAPSHOT</version>
+                <version>2.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-core</artifactId>
-                <version>2.1.1-SNAPSHOT</version>
+                <version>2.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-formatter</artifactId>
-                <version>1.12.1-SNAPSHOT</version>
+                <version>1.12.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-saxon</artifactId>
-                <version>2.2.1-SNAPSHOT</version>
+                <version>2.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>dotify-utils</artifactId>
-                <version>2.1.1-SNAPSHOT</version>
+                <version>2.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>libhyphen-core</artifactId>
-                <version>4.1.1</version>
+                <version>4.1.2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>libhyphen-libreoffice-tables</artifactId>
-                <version>4.0.0-1</version>
+                <version>4.0.0-2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -100,32 +100,32 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>libhyphen-saxon</artifactId>
-                <version>2.1.0</version>
+                <version>2.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>libhyphen-utils</artifactId>
-                <version>1.1.1</version>
+                <version>1.1.2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-calabash</artifactId>
-                <version>2.0.4</version>
+                <version>2.0.5</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-core</artifactId>
-                <version>4.1.4-SNAPSHOT</version>
+                <version>4.1.4</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-formatter</artifactId>
-                <version>2.1.4-SNAPSHOT</version>
+                <version>2.1.4</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-mathml</artifactId>
-                <version>2.1.1</version>
+                <version>2.1.2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -148,57 +148,57 @@
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-saxon</artifactId>
-                <version>2.0.3</version>
+                <version>2.0.4</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-tables</artifactId>
-                <version>2.6.3-2</version>
+                <version>2.6.3-3</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>liblouis-utils</artifactId>
-                <version>1.5.0-SNAPSHOT</version>
+                <version>1.5.0</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>pef-calabash</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>pef-core</artifactId>
-                <version>2.1.1</version>
+                <version>2.1.2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>pef-saxon</artifactId>
-                <version>2.1.0</version>
+                <version>2.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>pef-utils</artifactId>
-                <version>2.2.1-SNAPSHOT</version>
+                <version>2.2.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>texhyph-core</artifactId>
-                <version>4.1.0</version>
+                <version>4.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>texhyph-saxon</artifactId>
-                <version>2.0.1</version>
+                <version>2.0.2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>texhyph-utils</artifactId>
-                <version>1.1.1</version>
+                <version>1.1.2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline.modules.braille</groupId>
                 <artifactId>xml-to-pef</artifactId>
-                <version>3.0.0-SNAPSHOT</version>
+                <version>3.0.0</version>
             </dependency>
             <!--
                 Third-Party Libraries

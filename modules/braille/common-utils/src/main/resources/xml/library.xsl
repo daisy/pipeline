@@ -11,4 +11,13 @@
     
     <xsl:import href="encoding-functions.xsl"/>
     
+    <!--
+        pf:transform is implemented in Java (org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition)
+    -->
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Query a text transformer and apply it to a string.</p>
+        </desc>
+    </doc>
+    
 </xsl:stylesheet>

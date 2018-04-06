@@ -6,4 +6,13 @@
         * hyphen:hyphenate
     -->
     
+    <!--
+        hyphen:hyphenate is implemented in Java (org.daisy.pipeline.braille.libhyphen.saxon.impl.HyphenateDefinition)
+    -->
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Hyphenate a text string using Hyphen.</p>
+        </desc>
+    </doc>
+    
 </xsl:stylesheet>

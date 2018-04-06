@@ -59,14 +59,6 @@ public interface DotifyCSSBlockTransform {
 		private final static List<String> supportedInput = ImmutableList.of("css");
 		private final static List<String> supportedOutput = ImmutableList.of("css");
 		
-		/**
-		 * Recognized features:
-		 *
-		 * - translator: Will only match if the value is `dotify'.
-		 * - locale: If present the value will be used instead of any xml:lang attributes.
-		 *
-		 * Other features are used for finding sub-transformers of type DotifyTranslator.
-		 */
 		protected Iterable<BrailleTranslator> _get(Query query) {
 			final MutableQuery q = mutableQuery(query);
 			for (Feature f : q.removeAll("input"))

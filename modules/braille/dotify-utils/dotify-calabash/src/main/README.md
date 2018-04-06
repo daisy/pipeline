@@ -5,7 +5,7 @@
 ### Calabash steps (`org.daisy.common.xproc.calabash.XProcStepProvider`)
 
 - [`{http://code.google.com/p/dotify/}obfl-to-pef`](java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLToPEFStep.java)
-- [`{http://code.google.com/p/dotify/}xml-to-obfl`](java/org/daisy/pipeline/braille/dotify/calabash/impl/XMLToOBFL.java)
+- [`{http://code.google.com/p/dotify/}file-to-obfl`](java/org/daisy/pipeline/braille/dotify/calabash/impl/FileToOBFLStep.java)
 
 
 <link rev="dp2:doc" href="./"/>

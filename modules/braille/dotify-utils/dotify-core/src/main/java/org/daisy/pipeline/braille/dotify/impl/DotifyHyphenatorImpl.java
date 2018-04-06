@@ -78,16 +78,6 @@ public class DotifyHyphenatorImpl extends AbstractHyphenator implements DotifyHy
 	public static class Provider extends AbstractTransformProvider<DotifyHyphenator>
 	                             implements DotifyHyphenator.Provider {
 		
-		/**
-		 * Recognized features:
-		 *
-		 * - hyphenator: Will only match if the value is `dotify'.
-		 * - locale: Required. Matches only Dotify translators for that locale. An
-		 *     automatic fallback mechanism is used: if nothing is found for
-		 *     language-COUNTRY-variant, then language-COUNTRY is searched, then language.
-		 *
-		 * No other features are allowed.
-		 */
 		public Iterable<DotifyHyphenator> _get(Query query) {
 			MutableQuery q = mutableQuery(query);
 			if (q.containsKey("hyphenator"))

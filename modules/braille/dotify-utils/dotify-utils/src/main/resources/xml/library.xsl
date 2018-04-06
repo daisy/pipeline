@@ -6,4 +6,13 @@
         * dotify:translate
     -->
     
+    <!--
+        dotify:translate is implemented in Java (org.daisy.pipeline.braille.dotify.saxon.impl.TranslateDefinition)
+    -->
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Translate a text string to Braille with Dotify.</p>
+        </desc>
+    </doc>
+    
 </xsl:stylesheet>

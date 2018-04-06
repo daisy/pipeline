@@ -14,11 +14,17 @@
     <p:import href="delete-parameters.xpl"/>
     
     <p:declare-step type="px:transform">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Query an XML transformer of a certain type and apply it to a node.</p>
+        </p:documentation>
         <p:input port="source"/>
         <p:input port="parameters" kind="parameter" primary="false"/>
         <p:output port="result"/>
         <p:option name="query" required="true"/>
         <p:option name="temp-dir" required="false"/>
+        <!--
+            implemented in Java (org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep)
+        -->
     </p:declare-step>
     
 </p:library>

@@ -140,21 +140,6 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 	public static class Provider extends AbstractTransformProvider<DotifyTranslator>
 	                             implements DotifyTranslator.Provider {
 		
-		/**
-		 * Recognized features:
-		 *
-		 * - translator: Will only match if the value is `dotify'.
-		 * - locale: Required. Matches only Dotify translators for that locale. An automatic
-		 *     fallback mechanism is used: if nothing is found for language-COUNTRY-variant, then
-		 *     language-COUNTRY is searched, then language.
-		 * - hyphenator: A value `none' will disable hyphenation. `auto' is the default and will
-		 *     match any Dotify translator, whether it supports hyphenation out-of-the-box, with the
-		 *     help of an external hyphenator, or not at all. A value not equal to `none' or `auto'
-		 *     will match every Dotify translator that uses an external hyphenator that matches this
-		 *     feature.
-		 *
-		 * No other features are allowed.
-		 */
 		public Iterable<DotifyTranslator> _get(Query query) {
 			MutableQuery q = mutableQuery(query);
 			for (Feature f : q.removeAll("input"))

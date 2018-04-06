@@ -8,7 +8,11 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 exclude-inline-prefixes="px pxi dc xsl"
                 version="1.0">
-
+    
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Compare two PEF documents.</p>
+    </p:documentation>
+    
     <p:input port="source" primary="true" px:media-type="application/x-pef+xml"/>
     <p:input port="alternate" px:media-type="application/x-pef+xml"/>
     <p:output port="result" primary="false" sequence="false">

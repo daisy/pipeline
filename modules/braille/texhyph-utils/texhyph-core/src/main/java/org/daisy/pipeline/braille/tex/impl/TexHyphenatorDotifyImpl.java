@@ -78,21 +78,6 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 	
 	private final static Iterable<TexHyphenator> empty = Iterables.<TexHyphenator>empty();
 	
-	/**
-	 * Recognized features:
-	 *
-	 * - hyphenator: Will only match if the value is `tex' or `texhyph'.
-	 *
-	 * - table: A tex table is a URI that is be either a file name, a file path relative to a
-	 *     registered tablepath, an absolute file URI, or a fully qualified table identifier. A URI
-	 *     can either point to a LaTeX pattern file (".tex") or a Java properties file (".xml" or
-	 *     ".properties") that Dotify uses as the format for storing hyphenator configurations. The
-	 *     `table' feature is not compatible with `locale'.
-	 *
-	 * - locale: Matches only hyphenators with that locale.
-	 *
-	 * No other features are allowed.
-	 */
 	public Iterable<TexHyphenator> _get(Query query) {
 		MutableQuery q = mutableQuery(query);
 		if (q.containsKey("hyphenator")) {

@@ -65,21 +65,6 @@ public class LiblouisHyphenatorJnaImplProvider implements LiblouisHyphenator.Pro
 		return this;
 	}
 	
-	/**
-	 * Recognized features:
-	 *
-	 * - hyphenator: Will only match if the value is `liblouis'
-	 *
-	 * - table or liblouis-table: A liblouis table is a list of URIs that can be either a file name,
-	 *     a file path relative to a registered tablepath, an absolute file URI, or a fully
-	 *     qualified table identifier. The tablepath that contains the first `sub-table' in the list
-	 *     will be used as the base for resolving the subsequent sub-tables. This feature is not
-	 *     compatible with other features except `hyphenator' and `locale'.
-	 *
-	 * - locale: Matches only hyphenators with that locale.
-	 *
-	 * Other features are passed on to lou_findTable.
-	 */
 	public Iterable<LiblouisHyphenator> get(Query query) {
 		return provider.get(query);
 	}

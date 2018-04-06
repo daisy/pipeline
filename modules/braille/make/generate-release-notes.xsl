@@ -7,6 +7,9 @@
 	
 	<xsl:template match="/">
 		<xsl:variable name="version" select="/pom:project/pom:version"/>
+		<!--
+		    FIXME: moved to liblouis-native
+		-->
 		<xsl:variable name="liblouis-version" select="/pom:project/pom:dependencyManagement
 		                                              /pom:dependencies/pom:dependency[pom:artifactId='louis']
 		                                              /pom:version"/>
@@ -34,15 +37,15 @@
 		<xsl:variable name="dotify.text.impl-version" select="/pom:project/pom:dependencyManagement
 		                                                      /pom:dependencies/pom:dependency[pom:artifactId='dotify.text.impl']
 		                                                      /pom:version"/>
-		<xsl:variable name="dotify.task-api-version" select="/pom:project/pom:dependencyManagement
-		                                                     /pom:dependencies/pom:dependency[pom:artifactId='dotify.task-api']
-		                                                     /pom:version"/>
-		<xsl:variable name="dotify.task-runner-version" select="/pom:project/pom:dependencyManagement
-		                                                        /pom:dependencies/pom:dependency[pom:artifactId='dotify.task-runner']
-		                                                        /pom:version"/>
 		<xsl:variable name="dotify.task.impl-version" select="/pom:project/pom:dependencyManagement
 		                                                      /pom:dependencies/pom:dependency[pom:artifactId='dotify.task.impl']
 		                                                      /pom:version"/>
+		<xsl:variable name="streamline-api-version" select="/pom:project/pom:dependencyManagement
+		                                                    /pom:dependencies/pom:dependency[pom:artifactId='streamline-api']
+		                                                    /pom:version"/>
+		<xsl:variable name="streamline-engine-version" select="/pom:project/pom:dependencyManagement
+		                                                       /pom:dependencies/pom:dependency[pom:artifactId='streamline-engine']
+		                                                       /pom:version"/>
 		<xsl:variable name="braille-utils.api-version" select="/pom:project/pom:dependencyManagement
 		                                                      /pom:dependencies/pom:dependency[pom:artifactId='braille-utils.api']
 		                                                      /pom:version"/>
@@ -58,6 +61,9 @@
 		<xsl:variable name="jsass-version" select="/pom:project/pom:dependencyManagement
 		                                           /pom:dependencies/pom:dependency[pom:artifactId='io.bit3.jsass']
 		                                           /pom:version"/>
+		<!--
+		    FIXME: moved to libhyphen-native
+		-->
 		<xsl:variable name="libhyphen-version" select="/pom:project/pom:dependencyManagement
 		                                               /pom:dependencies/pom:dependency[pom:artifactId='hyphen']
 		                                               /pom:version"/>
@@ -98,42 +104,42 @@
 		<xsl:text>), common&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
 		<xsl:value-of select="$dotify.common-version"/>
-		<xsl:text>](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.common%2Fv</xsl:text>
+		<xsl:text>](https://github.com/brailleapps/dotify.common/releases/tag/releases%2Fv</xsl:text>
 		<xsl:value-of select="$dotify.common-version"/>
 		<xsl:text>), hyphenator.impl&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
 		<xsl:value-of select="$dotify.hyphenator.impl-version"/>
-		<xsl:text>](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.hyphenator.impl%2Fv</xsl:text>
+		<xsl:text>](https://github.com/brailleapps/dotify.hyphenator.impl/releases/tag/releases%2Fv</xsl:text>
 		<xsl:value-of select="$dotify.hyphenator.impl-version"/>
 		<xsl:text>), translator.impl&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
 		<xsl:value-of select="$dotify.translator.impl-version"/>
-		<xsl:text>](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.translator.impl%2Fv</xsl:text>
+		<xsl:text>](https://github.com/brailleapps/dotify.translator.impl/releases/tag/releases%2Fv</xsl:text>
 		<xsl:value-of select="$dotify.translator.impl-version"/>
 		<xsl:text>), formatter.impl&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
 		<xsl:value-of select="$dotify.formatter.impl-version"/>
-		<xsl:text>](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.formatter.impl%2Fv</xsl:text>
+		<xsl:text>](https://github.com/brailleapps/dotify.formatter.impl/releases/tag/releases%2Fv</xsl:text>
 		<xsl:value-of select="$dotify.formatter.impl-version"/>
 		<xsl:text>), text.impl&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
 		<xsl:value-of select="$dotify.text.impl-version"/>
-		<xsl:text>](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.text.impl%2Fv</xsl:text>
+		<xsl:text>](https://github.com/brailleapps/dotify.text.impl/releases/tag/releases%2Fv</xsl:text>
 		<xsl:value-of select="$dotify.text.impl-version"/>
-		<xsl:text>), task-api&#10;</xsl:text>
+		<xsl:text>), streamline-api&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
-		<xsl:value-of select="$dotify.task-api-version"/>
-		<xsl:text>](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task-api%2Fv</xsl:text>
-		<xsl:value-of select="$dotify.task-api-version"/>
-		<xsl:text>), task-runner&#10;</xsl:text>
+		<xsl:value-of select="$streamline-api-version"/>
+		<xsl:text>](https://github.com/brailleapps/streamline-api/releases/tag/releases%2Fv</xsl:text>
+		<xsl:value-of select="$streamline-api-version"/>
+		<xsl:text>), streamline-engine&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
-		<xsl:value-of select="$dotify.task-runner-version"/>
-		<xsl:text>](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task-runner%2Fv</xsl:text>
-		<xsl:value-of select="$dotify.task-runner-version"/>
+		<xsl:value-of select="$streamline-engine-version"/>
+		<xsl:text>](https://github.com/brailleapps/streamline-engine/releases/tag/releases%2Fv</xsl:text>
+		<xsl:value-of select="$streamline-engine-version"/>
 		<xsl:text>), task.impl&#10;</xsl:text>
 		<xsl:text>  [</xsl:text>
 		<xsl:value-of select="$dotify.task.impl-version"/>
-		<xsl:text>](https://github.com/joeha480/dotify/releases/tag/releases%2Fdotify.task.impl%2Fv</xsl:text>
+		<xsl:text>](https://github.com/brailleapps/dotify.task.impl/releases/tag/releases%2Fv</xsl:text>
 		<xsl:value-of select="$dotify.task.impl-version"/>
 		<xsl:text>))&#10;</xsl:text>
 		<xsl:text>- brailleutils (api&#10;</xsl:text>

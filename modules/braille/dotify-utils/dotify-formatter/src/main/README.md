@@ -2,9 +2,16 @@
 
 ## OSGi services
 
-### Transformers (`org.daisy.pipeline.braille.common.TransformProvider`)
+### Transformers ([`org.daisy.pipeline.braille.common.TransformProvider`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html))
 
-- [`org.daisy.pipeline.braille.dotify.impl.DotifyCSSStyledDocumentTransform.Provider`](java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSStyledDocumentTransform.java): `(input:css)(output:pef)(formatter:dotify)`
+- [`(input:css)(output:pef)(formatter:dotify)`](java/org/daisy/pipeline/braille/dotify/impl/DotifyCSSStyledDocumentTransform.java)
+  
+  Recognized features:
+  
+  - `formatter`: Will only match if the value is `dotify`.
+  
+  Other features are used for finding sub-transformers of type BrailleTranslator.
+  
 
 
 <link rev="dp2:doc" href="./"/>

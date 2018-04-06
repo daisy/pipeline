@@ -54,13 +54,6 @@ public interface DotifyCSSStyledDocumentTransform {
 		
 		private final static Iterable<Transform> empty = Iterables.<Transform>empty();
 		
-		/**
-		 * Recognized features:
-		 *
-		 * - formatter: Will only match if the value is `dotify'.
-		 *
-		 * Other features are used for finding sub-transformers of type BrailleTranslator.
-		 */
 		protected Iterable<Transform> _get(Query query) {
 			final MutableQuery q = mutableQuery(query);
 			try {

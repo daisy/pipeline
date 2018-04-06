@@ -59,15 +59,6 @@ public interface LiblouisCSSBlockTransform {
 		
 		private final static Iterable<BrailleTranslator> empty = Iterables.<BrailleTranslator>empty();
 		
-		/**
-		 * Recognized features:
-		 *
-		 * - id: If present it must be the only feature. Will match a transformer with a unique ID.
-		 * - translator: Will only match if the value is `liblouis'.
-		 * - locale: If present the value will be used instead of any xml:lang attributes.
-		 *
-		 * Other features are used for finding sub-transformers of type LiblouisTranslator.
-		 */
 		protected Iterable<BrailleTranslator> _get(Query query) {
 			final MutableQuery q = mutableQuery(query);
 			for (Feature f : q.removeAll("input"))

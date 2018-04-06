@@ -8,9 +8,8 @@
 
 ### PEF tables (`org.daisy.pipeline.braille.pef.TableProvider`)
 
-- [`org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog`](java/org/daisy/pipeline/braille/pef/impl/BrailleUtilsTableCatalog.java): `(id:...)`
-- [`org.daisy.pipeline.braille.pef.impl.LocaleTableProvider`](java/org/daisy/pipeline/braille/pef/impl/LocaleTableProvider.java): `(locale:...)`
-
+- [`(id:...)`](java/org/daisy/pipeline/braille/pef/impl/BrailleUtilsTableCatalog.java)
+- [`(locale:...)`](java/org/daisy/pipeline/braille/pef/impl/LocaleBasedTableProvider.java)
 
 
 <link rev="dp2:doc" href="./"/>

@@ -60,13 +60,6 @@ public interface LiblouisCSSStyledDocumentTransform {
 		
 		private final static List<String> supportedOutput = ImmutableList.of("braille","pef");
 		
-		/**
-		 * Recognized features:
-		 *
-		 * - formatter: Will only match if the value is `liblouis'.
-		 *
-		 * Other features are used for finding sub-transformers of type BrailleTranslator.
-		 */
 		protected Iterable<Transform> _get(final Query query) {
 			final MutableQuery q = mutableQuery(query);
 			try {

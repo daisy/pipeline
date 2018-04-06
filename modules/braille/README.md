@@ -77,7 +77,7 @@ Release procedure
   ```
   
 - Resolve snapshot dependencies and commit.
-- Generate release notes template, edit and commit. (View changes since previous release with `git diff v1.9.3...HEAD`, and look for relevant Github issues on [https://github.com/search](https://github.com/search?o=desc&q=involves%3Abertfrees+repo%3Adaisy%2Fpipeline-mod-braille+repo%3Asnaekobbi%2Fpipeline-mod-braille+repo%3Asnaekobbi%2Fissues+repo%3Asnaekobbi%2Fliblouis+repo%3Aliblouis%2Fliblouis+repo%3Asnaekobbi%2Fbraille-css+repo%3Asnaekobbi%2FjStyleParser+repo%3Ajoeha480%2Fdotify&s=updated&type=Issues))
+- Generate release notes template, edit and commit. (View changes since previous release with `git log v1.9.3...HEAD` and `git diff v1.9.3...HEAD`, and look for relevant Github issues on [https://github.com/search](https://github.com/search?o=desc&q=involves%3Abertfrees+repo%3Adaisy%2Fpipeline-mod-braille+repo%3Asnaekobbi%2Fpipeline-mod-braille+repo%3Asnaekobbi%2Fissues+repo%3Asnaekobbi%2Fliblouis+repo%3Aliblouis%2Fliblouis+repo%3Adaisy%2Fbraille-css+repo%3Adaisy%2FjStyleParser+repo%3Abrailleapps%2Fdotify.formatter.impl+repo%3Asbsdev%2Fpipeline-mod-sbs+repo%3Anlbdev%2Fpipeline&s=updated&type=Issues))
 
   ```sh
   make release-notes

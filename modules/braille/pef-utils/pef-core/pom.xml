@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-parent</artifactId>
-    <version>1.10.2-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../../maven/parent/</relativePath>
   </parent>
 
   <artifactId>pef-core</artifactId>
-  <version>2.1.2-SNAPSHOT</version>
+  <version>2.1.2</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: pef-utils :: pef-core</name>
@@ -86,6 +86,53 @@
             <goals>
               <goal>bundle</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>modules-build-helper</artifactId>
+        <executions>
+          <execution>
+            <id>package-list</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>dependencies-package-list</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/dependencies-package-list/</outputDirectory>
+              <includes>
+                org.daisy.pipeline.*,
+                org.daisy.common.*
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <source>1.8</source>
+              <target>1.8</target>
+              <offlineLinks>
+                <offlineLink>
+                  <url>http://daisy.github.io/pipeline/api/</url>
+                  <location>${project.build.directory}/dependencies-package-list/</location>
+                </offlineLink>
+              </offlineLinks>
+              <links>
+                <link>https://google.github.io/guava/releases/15.0/api/docs</link>
+                <link>http://brailleapps.github.io/braille-utils.api/3.0.1/javadoc</link>
+              </links>
+              <excludePackageNames>*.impl:*.impl.*</excludePackageNames>
+            </configuration>
           </execution>
         </executions>
       </plugin>

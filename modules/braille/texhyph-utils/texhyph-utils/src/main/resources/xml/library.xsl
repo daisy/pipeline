@@ -8,4 +8,13 @@
         * tex:resolve-table
     -->
     
+    <!--
+        tex:hyphenate is implemented in Java: org.daisy.pipeline.braille.tex.saxon.impl.HyphenateDefinition
+    -->
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Hyphenate a text string using texhyphj.</p>
+        </desc>
+    </doc>
+    
 </xsl:stylesheet>

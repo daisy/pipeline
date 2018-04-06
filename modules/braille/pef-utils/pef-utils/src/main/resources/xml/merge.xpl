@@ -9,6 +9,10 @@
     exclude-inline-prefixes="px p pxi xsl"
     version="1.0">
     
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Merge PEF documents on volume- or section-level.</p>
+    </p:documentation>
+    
     <!--
         Merge all PEFs on the source port into a single PEF.
         * If level='volume', the volumes of all PEFs are concatenated.
