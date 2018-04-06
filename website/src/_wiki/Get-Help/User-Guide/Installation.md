@@ -63,6 +63,105 @@ The ZIP can be installed on all Linux distros. It includes the desktop
 application, the server and the command line tool. To install, simply
 extract the contents to any destination you want.
 
+### Docker
+
+The Docker distribution is not available as a download on the
+website. It comes in the form of a Docker image that you can obtain
+via the Docker command line interface:
+
+~~~sh
+docker pull daisyorg/pipeline-assembly
+~~~
+
+It is also possible to get a specific version:
+
+~~~sh
+docker pull daisyorg/pipeline-assembly:<version>
+~~~
+
+You can find the available versions at
+[https://hub.docker.com/r/daisyorg/pipeline-assembly/tags](https://hub.docker.com/r/daisyorg/pipeline-assembly/tags). After
+having pulled the image you're ready to run the Pipeline web server:
+
+~~~sh
+docker run --detach \
+           -p 8181:8181 \
+           daisyorg/pipeline-assembly
+~~~
+
+This will make the web service available on the address
+http://localhost:8181/ws. By default, authentication is enabled. The
+key and secret are "clientid" and
+"sekret". [Environment variables]({{site.baseurl}}/Get-Help/User-Guide/Pipeline-as-Service/#environment-variables)
+can be provided with one or more `-e` arguments.
+
+The Pipeline web application is available as a Docker image too. You
+can find the available versions at
+[https://hub.docker.com/r/daisyorg/pipeline-webui/tags](https://hub.docker.com/r/daisyorg/pipeline-webui/tags).
+
+~~~sh
+docker pull daisyorg/pipeline-webui
+~~~
+
+The application is launched as follows. This assumes the web server is
+already started and accessible on port 8181.
+
+~~~sh
+docker run --detach \
+           -p 9000:9000 \
+           daisyorg/pipeline-webui
+~~~
+
+It is also possible to link the two containers without exposing the
+web service to the host:
+
+~~~sh
+docker run --detach \
+           --name pipeline \
+           -e PIPELINE2_WS_HOST=pipeline \
+           -e PIPELINE2_WS_AUTHENTICATION=false \
+           daisyorg/pipeline-assembly
+docker run --detach \
+           --link pipeline \
+           -p 9000:9000 \
+           -e DAISY_PIPELINE2_URL: http://pipeline:8181/ws \
+           daisyorg/pipeline-webui
+~~~
+
+For running more complex configurations like these,
+[Docker compose](https://docs.docker.com/compose/) is recommended. A
+complete example, that also persists the application data, is given
+below. Simply create a file called "docker-compose.yml" with the
+following content and run `docker-compose up`.
+
+~~~yaml
+version: "2.1"
+services:
+  pipeline:
+    image: daisyorg/pipeline-assembly
+    environment:
+      PIPELINE2_WS_HOST: "pipeline"
+      PIPELINE2_WS_AUTHENTICATION: "false"
+    volumes:
+      - "pipeline-data:/opt/daisy-pipeline2/data"
+  webui:
+    image: daisyorg/pipeline-webui
+    environment:
+      DAISY_PIPELINE2_URL: http://pipeline:8181/ws
+    ports:
+      - "9000:9000"
+    volumes:
+      - "webui-data:/opt/daisy-pipeline2-webui/data"
+    depends_on:
+      pipeline:
+        condition: service_healthy
+volumes:
+  pipeline-data:
+  webui-data:
+~~~
+
+To learn more about Docker see [https://docs.docker.com](https://docs.docker.com).
+
 
 ## Updater
 

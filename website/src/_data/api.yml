@@ -1,3 +1,38 @@
+javadoc:
+
+- group: org.daisy.pipeline
+  artifact: clientlib-java
+  version: 4.8.2-SNAPSHOT
+- group: org.daisy.pipeline
+  artifact: clientlib-java-httpclient
+  version: 2.0.3-SNAPSHOT
+- group: org.daisy.pipeline
+  artifact: common-utils
+- group: org.daisy.pipeline
+  artifact: xproc-api
+- group: org.daisy.pipeline
+  artifact: framework-core
+- group: org.daisy.pipeline
+  artifact: modules-registry
+- group: org.daisy.pipeline
+  artifact: xmlcatalog
+- group: org.daisy.pipeline.modules.braille
+  artifact: common-utils
+- group: org.daisy.pipeline.modules.braille
+  artifact: css-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: dotify-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: libhyphen-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: liblouis-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: pef-core
+- group: org.daisy.pipeline.modules.braille
+  artifact: texhyph-core
+    
+xprocdoc:
+
 - group: org.daisy.pipeline.modules
   artifact: dtbook-to-zedai
 - group: org.daisy.pipeline.modules
@@ -61,44 +96,6 @@
 - group: org.daisy.pipeline.modules.braille
   artifact: obfl-utils
   version: 1.1.4-SNAPSHOT
-- group: org.daisy.pipeline.modules.braille
-  artifact: css-core
-- group: org.daisy.pipeline.modules.braille
-  artifact: dotify-calabash
-- group: org.daisy.pipeline.modules.braille
-  artifact: dotify-core
-- group: org.daisy.pipeline.modules.braille
-  artifact: dotify-formatter
-- group: org.daisy.pipeline.modules.braille
-  artifact: dotify-saxon
-- group: org.daisy.pipeline.modules.braille
-  artifact: libhyphen-core
-- group: org.daisy.pipeline.modules.braille
-  artifact: libhyphen-libreoffice-tables
-- group: org.daisy.pipeline.modules.braille
-  artifact: libhyphen-saxon
-- group: org.daisy.pipeline.modules.braille
-  artifact: liblouis-calabash
-- group: org.daisy.pipeline.modules.braille
-  artifact: liblouis-core
-- group: org.daisy.pipeline.modules.braille
-  artifact: liblouis-formatter
-- group: org.daisy.pipeline.modules.braille
-  artifact: liblouis-mathml
-- group: org.daisy.pipeline.modules.braille
-  artifact: liblouis-saxon
-- group: org.daisy.pipeline.modules.braille
-  artifact: liblouis-tables
-- group: org.daisy.pipeline.modules.braille
-  artifact: pef-calabash
-- group: org.daisy.pipeline.modules.braille
-  artifact: pef-core
-- group: org.daisy.pipeline.modules.braille
-  artifact: pef-saxon
-- group: org.daisy.pipeline.modules.braille
-  artifact: texhyph-core
-- group: org.daisy.pipeline.modules.braille
-  artifact: texhyph-saxon
 - group: org.daisy.pipeline.modules
   artifact: common-utils
 - group: org.daisy.pipeline.modules
@@ -143,8 +140,6 @@
   artifact: odt-utils
 - group: org.daisy.pipeline.modules
   artifact: zedai-utils
-- group: org.daisy.pipeline.modules
-  artifact: tts-common
 - group: org.daisy.pipeline.modules
   artifact: css-speech
 - group: org.daisy.pipeline.modules

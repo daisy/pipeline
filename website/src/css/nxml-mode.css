@@ -1,0 +1,17 @@
+.code {
+  white-space: pre;
+  font-family: monospace;
+}
+.code-xml-element-local-name {
+  color: #1d58d0;
+}
+.code-xml-attribute-local-name {
+  color: #dca000;
+}
+.code-xml-attribute-value {
+  color: #2994a1;
+}
+.code-xml-element-prefix,
+.code-xml-attribute-prefix {
+  color: #9030b0;
+}

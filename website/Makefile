@@ -1,5 +1,6 @@
 JEKYLL_SRC_DIR := src
 SHELL := bash
+RUBY := ruby
 JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/{_wiki,_wiki_gui,_wiki_webui} -type f -not -name '_*' -not -name '*.png' )
 JEKYLL_SRC_FILES_MUSTACHE := $(shell find $(JEKYLL_SRC_DIR)/ -type f -name '_Sidebar.md')
 JEKYLL_SRC_FILES_OTHER := $(filter-out $(JEKYLL_SRC_FILES_CONTENT) $(JEKYLL_SRC_FILES_MUSTACHE),\
@@ -26,7 +27,7 @@ baseurl := $(call yaml_get,$(CONFIG_FILE),baseurl)
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
-$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(JEKYLL_FILES)
+$(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(JEKYLL_FILES)
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)/
 	if ! make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE); then \
@@ -43,28 +44,48 @@ $(JEKYLL_FILES_CONTENT) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 $(JEKYLL_FILES_MUSTACHE) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(JEKYLL_DIR)/$(meta_file)
 	mkdir -p $(dir $@)
 	cp $< $@
-	make/mustache.rb $@ $(word 2,$^) $(JEKYLL_DIR) $(CONFIG_FILE)
+	if ! make/mustache.rb $@ $(word 2,$^) $(JEKYLL_DIR) $(CONFIG_FILE); then \
+		rm -f $@; \
+		exit 1; \
+	fi
 
 $(JEKYLL_FILES_OTHER) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
 	cp $< $@
 
-$(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules
+$(JEKYLL_DIR)/modules : $(MUSTACHE_DIR)/modules $(MAVEN_DIR)/sources
 	mkdir -p $(dir $@)
 	rm -rf $@
-	cp -r $< $@
 	eval "$$(echo 'newline="'; echo '"')"; \
-	find $@ -name '*.md' -path '**/resources/**' \
-	        -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: source\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
-	find $@ -name '*.md' -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
-	find $@ -type f -exec sh -c "cat {} | sed '1 s/^---$$/&\\$${newline}layout: doc/' >{}.tmp && mv {}.tmp {}" \;; \
-	find $@ -type f -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;
+	cd $(CURDIR)/$<; \
+	find . -type f -name '*.md' \
+	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
+	                    cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: doc\\$${newline}---\\$${newline}&/' >$(CURDIR)/$@/{}" \;; \
+	find . -type f ! -name '*.md' \
+	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
+	                    cp {} $(CURDIR)/$@/{}" \;; \
+	cd $(CURDIR)/$(word 2,$^)/org/daisy/pipeline/modules; \
+	find . -type f -name '*.md' \
+	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
+	                    cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: source\\$${newline}---\\$${newline}&/' >$(CURDIR)/$@/{}" \;; \
+	find . -type f ! -name '*.md' \
+	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
+	                    cp {} $(CURDIR)/$@/{}" \;
+
+$(JEKYLL_DIR)/api : $(MAVEN_DIR)/javadoc $(MAVEN_DIR)/xprocdoc
+	rm -rf $@
+	mkdir -p $@
+	cp -r $</* $@/
+	cp -r $(word 2,$^)/* $@/
 
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
-	make/make_meta.rb "$<$(baseurl)/**/*.html" $<$(baseurl) $(CONFIG_FILE) >$@
+	if ! $(RUBY) make/make_meta.rb "$<$(baseurl)/**/*.html" $<$(baseurl) $(CONFIG_FILE) >$@; then
+		rm -f $@; \
+		exit 1; \
+	fi
 
-$(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules $(META_JEKYLL_FILES)
+$(META_JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(META_JEKYLL_FILES)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)
 	touch $@
 
@@ -76,42 +97,77 @@ $(META_JEKYLL_FILES_CONTENT) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 $(META_JEKYLL_FILES_MUSTACHE) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(META_JEKYLL_DIR)/$(meta_file)
 	mkdir -p $(dir $@)
 	cp $< $@
-	make/mustache.rb $@ $(word 2,$^) $(META_JEKYLL_DIR) $(CONFIG_FILE)
+	if ! make/mustache.rb $@ $(word 2,$^) $(META_JEKYLL_DIR) $(CONFIG_FILE); then \
+		rm -f $@; \
+		exit 1; \
+	fi
 
 $(META_JEKYLL_FILES_OTHER) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 	mkdir -p $(dir $@)
 	cp $< $@
 
-$(META_JEKYLL_DIR)/modules : $(MAVEN_DIR)/modules
+$(META_JEKYLL_DIR)/api : $(MAVEN_DIR)/xprocdoc
+	rm -rf $@
+	mkdir -p $(dir $@)
+	cp -r $< $@
+
+$(META_JEKYLL_DIR)/modules : $(MAVEN_DIR)/doc $(MAVEN_DIR)/sources
 	mkdir -p $(dir $@)
 	rm -rf $@
-	cp -r $< $@
 	eval "$$(echo 'newline="'; echo '"')"; \
-	find $@ -name '*.md' -path '**/resources/**' \
-	        -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: source\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
-	find $@ -name '*.md' -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;; \
-	find $@ -type f -exec sh -c "cat {} | sed '1 s/^---$$/&\\$${newline}layout: doc/' >{}.tmp && mv {}.tmp {}" \;; \
-	find $@ -type f -exec sh -c "cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}---\\$${newline}&/' >{}.tmp && mv {}.tmp {}" \;
+	cd $(CURDIR)/$</org/daisy/pipeline/modules; \
+	find . -type f -name '*.md' \
+	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
+	                    cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: doc\\$${newline}---\\$${newline}&/' >$(CURDIR)/$@/{}" \;; \
+	find . -type f ! -name '*.md' \
+	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
+	                    cp {} $(CURDIR)/$@/{}" \;; \
+	cd $(CURDIR)/$(word 2,$^)/org/daisy/pipeline/modules; \
+	find . -type f -name '*.md' \
+	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
+	                    cat {} | sed -E '1 s/^([^-].*)?$$/---\\$${newline}layout: source\\$${newline}---\\$${newline}&/' >$(CURDIR)/$@/{}" \;; \
+	find . -type f ! -name '*.md' \
+	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$@/{}) && \
+	                    cp {} $(CURDIR)/$@/{}" \;
 
 $(META_JEKYLL_DIR)/$(meta_file) :
 	mkdir -p $(dir $@)
 	touch $@
 
-$(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/modules $(JEKYLL_DIR)/$(meta_file)
+$(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/doc $(JEKYLL_DIR)/$(meta_file)
 	mkdir -p $(dir $@)
 	rm -rf $@
-	cp -r $< $@
-	make/mustache.rb "$@/**/*" $(word 2,$^) $(MUSTACHE_DIR) $(CONFIG_FILE)
+	cp -r $</org/daisy/pipeline/modules $@
+	if ! $(RUBY) make/mustache.rb "$@/**/*" $(word 2,$^) $(MUSTACHE_DIR) $(CONFIG_FILE); then \
+		rm -rf $@; \
+		exit 1; \
+	fi
 
-$(MAVEN_DIR)/modules : $(MAVEN_DIR)/pom.xml
-	rm -rf $@
-	cd $(dir $<) && \
-	mvn --quiet $(MVN_OPTS) "process-sources"
-	test -e $@
+$(MAVEN_DIR)/doc \
+$(MAVEN_DIR)/javadoc \
+$(MAVEN_DIR)/xprocdoc \
+$(MAVEN_DIR)/sources : $(MAVEN_DIR)/pom.xml
+	rm -rf $(MAVEN_DIR)/doc
+	rm -rf $(MAVEN_DIR)/javadoc
+	rm -rf $(MAVEN_DIR)/xprocdoc
+	rm -rf $(MAVEN_DIR)/sources
+	cd $(MAVEN_DIR) && \
+	if ! mvn --quiet $(MVN_OPTS) "process-sources"; then \
+		rm -rf $(MAVEN_DIR)/doc; \
+		rm -rf $(MAVEN_DIR)/javadoc; \
+		exit 1; \
+	fi
+	cd $(MAVEN_DIR)/doc && \
+	find . -type f \( -path '**/src/main/**' -o -path '**/src/test/**' \) \
+	       -exec sh -c "mkdir -p \$$(dirname $(CURDIR)/$(MAVEN_DIR)/sources/{}) && \
+	                    mv {} $(CURDIR)/$(MAVEN_DIR)/sources/{}" \;
 
-$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml
+$(MAVEN_DIR)/pom.xml : $(JEKYLL_SRC_DIR)/_data/versions.yml $(JEKYLL_SRC_DIR)/_data/modules.yml $(JEKYLL_SRC_DIR)/_data/api.yml
 	mkdir -p $(dir $@)
-	make/make_pom.rb $^ > $@
+	if ! $(RUBY) make/make_pom.rb $^ > $@; then \
+		rm -f $@ && \
+		exit 1; \
+	fi
 
 .PHONY : serve
 serve : ws all

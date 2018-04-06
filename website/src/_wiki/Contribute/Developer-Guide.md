@@ -2,8 +2,16 @@
 
 ## Getting started
 
-### Checking out the sources
+- [Checking out the sources](Sources)
+- [Build system](Building)
+- [Setting up Eclipse](Eclipse)
 
-### Building
+## Advanced
 
-### Setting up Eclipse
+- [Writing tests](Testing)
+- [Debugging your code](Debugging)
+- [Contributing back](Sources#contributing)
+
+## For maintainers
+
+- [Version management and making releases](Releasing)
