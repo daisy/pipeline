@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>3</version>
+    <version>4</version>
     <relativePath />
   </parent>
 
   <groupId>org.daisy.libs</groupId>
   <artifactId>saxon-he</artifactId>
-  <version>9.5.1.5-1-SNAPSHOT</version>
+  <version>9.5.1.5-1</version>
   <packaging>bundle</packaging>
 
   <name>Saxon HE (OSGi Bundle)</name>
@@ -177,4 +177,8 @@
       </build>
     </profile>
   </profiles>
+
+  <scm>
+    <tag>v9.5.1.5-1</tag>
+  </scm>
 </project>
