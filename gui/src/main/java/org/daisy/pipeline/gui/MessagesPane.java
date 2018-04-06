@@ -4,9 +4,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.application.Platform;
 
 import org.daisy.pipeline.gui.databridge.ObservableJob;
@@ -44,14 +44,21 @@ public class MessagesPane extends VBox {
         public Iterable<String> getMessages() {
                 return messages.getItems();
         }
+        
+        @Override
+        public void requestFocus() {
+                messages.requestFocus();
+        }
+        
         private void initControls() {
                 this.getStyleClass().add("messages");
                 
-                Text title = new Text("Messages");
+                Label title = new Label("Messages");
             title.getStyleClass().add("subtitle");
             
             messages = new ListView<String>();
             
+                title.setLabelFor(messages);
                 this.getChildren().add(title);
                 this.getChildren().add(messages);
         

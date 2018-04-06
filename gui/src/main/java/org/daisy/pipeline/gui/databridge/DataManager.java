@@ -1,14 +1,17 @@
 package org.daisy.pipeline.gui.databridge;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.daisy.common.messaging.Message.Level;
-import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.gui.MainWindow;
+import org.daisy.pipeline.gui.ServiceRegistry;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.ObservableList;
 
 // communicate with the gui-friendly list of ObservableJob objects
@@ -16,12 +19,15 @@ import javafx.collections.ObservableList;
 public class DataManager {
 	
 	MainWindow main;
-	DatatypeRegistry datatypeRegistry;
+	ServiceRegistry pipelineServices;
+	ObservableList<Script> scriptData;
+	private int jobCount = 0;
 	
-	public DataManager(MainWindow main, DatatypeRegistry datatypeRegistry) {
+	public DataManager(MainWindow main, ObservableList<Script> scriptData, ServiceRegistry pipelineServices) {
 		this.main = main;
-		this.datatypeRegistry = datatypeRegistry;
-		initData();
+		this.scriptData = scriptData;
+		this.pipelineServices = pipelineServices;
+		readScripts();
 	}
 	
 	
@@ -41,8 +47,8 @@ public class DataManager {
 		main.getJobData().get(i).addMessage(message, level);
 	}
 	
-	public ObservableJob addJob(Job job) {
-		ObservableJob objob = new ObservableJob(job);
+	public ObservableJob addJob(Job job, BoundScript boundScript) {
+		ObservableJob objob = new ObservableJob(job, boundScript, ++jobCount);
 		main.getJobData().add(objob);
 		return objob;
 	}
@@ -66,17 +72,18 @@ public class DataManager {
 		return -1;
 	}
 	
-	private void addScript(XProcScript xprocScript) {
-		Script script = new Script(xprocScript, datatypeRegistry);
-		main.getScriptData().add(script);
-	}
-	
-	// called once at startup
 	// read the list of scripts
-	private void initData() {
-		for (XProcScriptService scriptService : main.getScriptRegistry().getScripts()) {
-			XProcScript xprocScript = scriptService.load();
-			addScript(xprocScript);
+	// called every time a new scripts combo box is created
+	public void readScripts() {
+		Set<String> ids = scriptData.stream().map(s -> s.getId()).collect(Collectors.toCollection(() -> new HashSet<String>()));
+		for (XProcScriptService scriptService : pipelineServices.getScriptRegistry().getScripts()) {
+			String id = scriptService.getId();
+			if (!ids.contains(id)) {
+				XProcScript xprocScript = scriptService.load();
+				Script script = new Script(id, xprocScript, pipelineServices.getDatatypeRegistry());
+				ids.add(id);
+				scriptData.add(script);
+			}
 		}
 		
 	}

@@ -9,8 +9,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Labeled;
 import javafx.scene.layout.VBox;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.text.Text;
 
 import org.daisy.pipeline.gui.databridge.BoundScript;
@@ -27,6 +29,9 @@ public class DetailsPane extends VBox {
 	private GridPaneHelper resultsGrid; 
 	ChangeListener<String> jobStatusListener;
 	private ChangeListener<ObservableJob> currentJobChangeListener;
+	private final static String paneTitle = "Job details";
+	private Labeled firstLabeled;
+	private String firstLabeledText;
 	
 	public DetailsPane(MainWindow main) {
 		//super(main);
@@ -39,12 +44,43 @@ public class DetailsPane extends VBox {
 		addCurrentJobChangeListener();
 	}
 	
+	@Override
+	public void requestFocus() {
+		Node n = findFirstFocusTraversable(this);
+		if (n != null)
+			n.requestFocus();
+	}
+	
+	private static Node findFirstFocusTraversable(Parent parent) {
+		for (Node n : parent.getChildrenUnmodifiable()) {
+			if (n.isFocusTraversable()) {
+				return n;
+			} else if (n instanceof Parent && (n = findFirstFocusTraversable((Parent)n)) != null) {
+				return n;
+			}
+		}
+		return null;
+	}
+	
+	private static Labeled findFirstLabeled(Parent parent) {
+		for (Node n : parent.getChildrenUnmodifiable()) {
+			if (n instanceof Labeled) {
+				return (Labeled)n;
+			} else if (n instanceof Parent) {
+				Labeled l = findFirstLabeled((Parent)n);
+				if (l != null)
+					return l;
+			}
+		}
+		return null;
+	}
+	
 	private void displayJobInfo() {
 		
 		ObservableJob job = this.main.getCurrentJobProperty().get();
 		this.getStyleClass().add("details");
 		
-		Text title = new Text("Job details");
+		Text title = new Text(paneTitle);
 		title.getStyleClass().add("title");
 		this.getChildren().add(title);
 		
@@ -82,8 +118,14 @@ public class DetailsPane extends VBox {
 		}
 		
 		this.getChildren().add(resultsGrid);
-		refreshLinks();
 		
+		firstLabeled = findFirstLabeled(this);
+		if (firstLabeled != null) {
+			firstLabeledText = firstLabeled.getAccessibleText();
+			if (firstLabeledText == null) firstLabeledText = firstLabeled.getText();
+		}
+		
+		refreshLinks();
 	}
 	
 	private void refreshLinks() {
@@ -105,6 +147,11 @@ public class DetailsPane extends VBox {
 	    	}   	
 	    }
 		
+		// Hack: Prepend the pane title and the job description to the accessible text of the first
+		// focusable node so that it is spoken when switching between panes with F6. This node
+		// should normally be the "read online documentation" link.
+		if (firstLabeled != null)
+			firstLabeled.setAccessibleText(paneTitle + " - Job " + job.toString() + " - " + firstLabeledText);
 	}
 	
 	// listen for when the currently selected job changes

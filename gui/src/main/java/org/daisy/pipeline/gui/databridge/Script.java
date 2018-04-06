@@ -14,6 +14,7 @@ import org.daisy.pipeline.script.XProcScript;
 
 // representation of a pipeline script in a GUI-friendly way
 public class Script {
+        private String id;
         private String name;
         private String description;
         private ArrayList<ScriptField> inputFields;
@@ -21,12 +22,13 @@ public class Script {
         private ArrayList<ScriptField> optionalOptionFields;
         private XProcScript xprocScript;
         
-        public Script(XProcScript script, DatatypeRegistry datatypeRegistry) {
+        public Script(String id, XProcScript script, DatatypeRegistry datatypeRegistry) {
                 inputFields = new ArrayList<ScriptField>();
                 requiredOptionFields = new ArrayList<ScriptField>();
                 optionalOptionFields = new ArrayList<ScriptField>();
                 xprocScript = script;
                 
+                this.id = id;
                 name = script.getName();
                 description = script.getDescription();
                 
@@ -50,6 +52,9 @@ public class Script {
                 }
         }
         
+        public String getId() {
+                return id;
+        }
         public String getName() {
                 return name;
         }

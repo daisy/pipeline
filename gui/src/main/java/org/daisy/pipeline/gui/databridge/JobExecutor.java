@@ -7,7 +7,6 @@ import java.util.Iterator;
 
 import javax.xml.namespace.QName;
 
-import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
@@ -17,6 +16,7 @@ import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcInput.Builder;
 import org.daisy.pipeline.gui.MainWindow;
 import org.daisy.pipeline.gui.NewJobPane;
+import org.daisy.pipeline.gui.ServiceRegistry;
 import org.daisy.pipeline.gui.databridge.ScriptField.DataType;
 import org.daisy.pipeline.gui.databridge.ScriptField.FieldType;
 import org.daisy.pipeline.job.Job;
@@ -31,7 +31,7 @@ public class JobExecutor {
 
         private static final Logger logger = LoggerFactory.getLogger(JobExecutor.class);
         
-        public static Job runJob(MainWindow main, BoundScript boundScript)
+        public static Job runJob(MainWindow main, ServiceRegistry pipelineServices, BoundScript boundScript)
                         throws MalformedURLException {
                
                 NewJobPane newJobPane = main.getNewJobPane();
@@ -67,7 +67,7 @@ public class JobExecutor {
         
         BoundXProcScript bound = BoundXProcScript.from(script, inBuilder.build(), outBuilder.build());
 
-        Optional<Job> newJob = main.getJobManager().newJob(bound).isMapping(true).withNiceName("TODO").build();
+        Optional<Job> newJob = pipelineServices.getJobManager().newJob(bound).isMapping(true).withNiceName("TODO").build();
         
         // TODO what does isPresent() do?
 //        if(!newJob.isPresent()){

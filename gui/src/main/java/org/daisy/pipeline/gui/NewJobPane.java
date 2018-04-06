@@ -4,6 +4,7 @@ package org.daisy.pipeline.gui;
 import java.text.Collator;
 import java.net.MalformedURLException;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.transformation.SortedList;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -11,8 +12,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -41,15 +44,17 @@ public class NewJobPane extends VBox {
 	private ScriptInfoHeaderVBox scriptInfoBox;
 	private GridPaneHelper scriptFormControlsGrid;
 	private MainWindow main;
+	private ServiceRegistry pipelineServices;
 	private ObservableList<Script> scripts;
 	private BoundScript boundScript;
 	
 	
 	private final ComboBox<Script> scriptsCombo = new ComboBox<Script>();
 	
-	public NewJobPane(MainWindow main) {
+	public NewJobPane(MainWindow main, ServiceRegistry pipelineServices) {
 		super();
 		this.main = main;
+		this.pipelineServices = pipelineServices;
                 scripts = main.getScriptData();
                 String css = getClass().getResource("/org/daisy/pipeline/gui/resources/application.css").toExternalForm();
                 this.getStylesheets().add(css);
@@ -74,6 +79,11 @@ public class NewJobPane extends VBox {
 		
 	}
 	
+	@Override
+	public void requestFocus() {
+		scriptsCombo.requestFocus();
+	}
+	
 	private void initControls() {
 		this.getStyleClass().add("new-job");
 	    HBox topGrid = new HBox();
@@ -81,7 +91,15 @@ public class NewJobPane extends VBox {
 	    
 	    topGrid.setSpacing(20.0);
 	    
-		Text title = new Text("Choose a script:");
+		String paneTitle = "New job";
+		Label title = new Label("Script:");
+		
+		// prepend the pane title to the accessible text of the first node
+		// so that it is spoken when switching between panes with F6
+		title.setAccessibleText(paneTitle + " - Choose a script");
+		title.setLabelFor(scriptsCombo);
+    //scriptsCombo.accessibleTextProperty().bind( new SimpleStringProperty( ((Script)scriptsCombo.getSelectionModel().selectedItemProperty().getValue()).getName()) );
+    //scriptsCombo.accessibleHelpProperty().bind( new SimpleStringProperty( ((Script)scriptsCombo.getSelectionModel().selectedItemProperty().getValue()).getDescription()) );
 		topGrid.getChildren().add(title);
 		
 		
@@ -134,6 +152,8 @@ public class NewJobPane extends VBox {
                                         Script oldValue, Script newValue) {
                                 
                                 newScriptSelected(newValue);
+                                // skip "Choose a script" when a script has been selected
+                                title.setAccessibleText(paneTitle);
                         }
                 });
                 
@@ -238,10 +258,9 @@ public class NewJobPane extends VBox {
                 else {
                         Job newJob;
                         try {
-                                newJob = JobExecutor.runJob(main, boundScript);
+                                newJob = JobExecutor.runJob(main, pipelineServices, boundScript);
                                 if (newJob != null) {
-                                        ObservableJob objob = main.getDataManager().addJob(newJob);
-                                        objob.setBoundScript(boundScript);
+                                        ObservableJob objob = main.getDataManager().addJob(newJob, boundScript);
                                         main.getCurrentJobProperty().set(objob);
                                 } else {
                                         logger.error("Couldn't create the job");

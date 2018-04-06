@@ -1,5 +1,6 @@
 package org.daisy.pipeline.gui.databridge;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -11,17 +12,22 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.Job.Status;
 
 // translate the Pipeline2 Job object into GUI-friendly Strings and StringProperty objects
-public class ObservableJob { //extends SimpleObjectProperty {
+public class ObservableJob implements Comparable<ObservableJob> { //extends SimpleObjectProperty {
 
-	private StringProperty status;
-	private ObservableList<String> messages;
-	private Job job;
-	BoundScript boundScript; // store the job parameters here for display later
+	private final int sequenceNumber;
+	private final StringProperty status;
+	private final ObservableList<String> messages;
+	private final Job job;
+	private final BoundScript boundScript; // store the job parameters here for display later
+	private final StringProperty toString;
 	
-	public ObservableJob(Job job) {
-		status = new SimpleStringProperty();
+	public ObservableJob(Job job, BoundScript boundScript, int sequenceNumber) {
 		this.job = job;
-		this.setStatus(job.getStatus());
+		this.boundScript = boundScript;
+		this.sequenceNumber = sequenceNumber;
+		status = new SimpleStringProperty();
+		toString = new SimpleStringProperty();
+		setStatus(job.getStatus());
 		messages = FXCollections.observableArrayList();
 		addInitialMessages();
 	}
@@ -30,7 +36,11 @@ public class ObservableJob { //extends SimpleObjectProperty {
 		return status.get();
 	}
 	public void setStatus(Status status) {
-		this.status.set(statusToString(status));
+		Platform.runLater(() -> {
+				this.status.set(statusToString(status));
+				updateToString();
+			}
+		);
 	}
 	public StringProperty statusProperty() {
 		return this.status;
@@ -39,13 +49,12 @@ public class ObservableJob { //extends SimpleObjectProperty {
 		return this.messages;
 	}
 	public void addMessage(String message, Level level) {
-		this.messages.add(formatMessage(message, level));
+		Platform.runLater(() -> {
+				this.messages.add(formatMessage(message, level));
+			});
 	}
 	public Job getJob() {
 		return job;
-	}
-	public void setBoundScript(BoundScript boundScript) {
-		this.boundScript = boundScript;
 	}
 	public BoundScript getBoundScript() {
 		return boundScript;
@@ -78,4 +87,26 @@ public class ObservableJob { //extends SimpleObjectProperty {
 		return level.toString() + ": " + message;
 	}
 	
+	@Override
+	public String toString() {
+		return "#" + sequenceNumber + " - " + boundScript.getScript().getName() + " - " + status.get();
+	}
+	
+	public StringProperty toStringProperty() {
+		return toString;
+	}
+	
+	private void updateToString() {
+		toString.set(toString());
+	}
+	
+	@Override
+	public int compareTo(ObservableJob o) {
+		if (o.sequenceNumber == sequenceNumber)
+			return 0;
+		else if (o.sequenceNumber < sequenceNumber)
+			return 1;
+		else
+			return -1;
+	}
 }

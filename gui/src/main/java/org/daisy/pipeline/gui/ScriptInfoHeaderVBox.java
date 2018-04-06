@@ -54,6 +54,7 @@ public class ScriptInfoHeaderVBox extends VBox implements MarkdownToJavafx.JavaF
                 if (documentationPage != null && documentationPage.isEmpty() == false) { 
                         Hyperlink link = new Hyperlink();
                         link.setText("Read online documentation");
+                        link.setAccessibleText("Read online documentation of " + script.getName() + " script");
 
                         link.setOnAction(Links.getEventHander(main.getHostServices(),documentationPage));
                         this.getChildren().add(link);

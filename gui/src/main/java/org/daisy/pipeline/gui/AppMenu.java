@@ -77,7 +77,7 @@ public class AppMenu extends MenuBar {
         }
 
         private void initControls() {
-                Menu menuFile = new Menu("File");
+                Menu menuFile = new Menu("_File");
 
                 this.getMenus().addAll(menuFile);
 

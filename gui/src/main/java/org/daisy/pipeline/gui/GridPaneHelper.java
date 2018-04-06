@@ -21,6 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
@@ -144,11 +145,13 @@ public class GridPaneHelper extends GridPane {
         }
         
         public void addFileDirPickerSequence(ScriptFieldAnswer.ScriptFieldAnswerList answer) {
+                Label label = new Label();
+                label.setText(answer.getField().getNiceName());
                 final ListView<String> listbox = new ListView<String>();
                 listbox.setItems(answer.answerProperty());
                 listbox.getStyleClass().add("input-list");
-                Text label = new Text();
-                label.setText(answer.getField().getNiceName());
+                label.setLabelFor(listbox);
+                listbox.setTooltip(new Tooltip(answer.getField().getDescription().split("\\r?\\n")[0]));
                 VBox vbox = new VBox();
                 vbox.getChildren().addAll(label);
                 addRow(vbox, listbox);
@@ -209,9 +212,11 @@ public class GridPaneHelper extends GridPane {
                 
         }
         public void addTextFieldSequence(ScriptFieldAnswer.ScriptFieldAnswerList answer) {
-                Text label = new Text();
+                Label label = new Label();
                 label.setText(answer.getField().getNiceName() + ":");
                 final TextField inputText = new TextField();
+                inputText.setTooltip(new Tooltip(answer.getField().getDescription().split("\\r?\\n")[0]));
+                label.setLabelFor(inputText);
                 Button addTextButton = new Button("Add");
                 VBox vbox = new VBox();
                 vbox.getChildren().addAll(label);
@@ -224,6 +229,7 @@ public class GridPaneHelper extends GridPane {
                 final ListView<String> listbox = new ListView<String>();
                 listbox.setItems(answer.answerProperty());
                 listbox.getStyleClass().add("input-list");
+                listbox.setTooltip(new Tooltip(answer.getField().getDescription().split("\\r?\\n")[0]));
                 addRow(null, listbox);
                 
                 final Button removeTextButton = new Button("Remove");
@@ -260,7 +266,7 @@ public class GridPaneHelper extends GridPane {
         
         // add a text field with a button for file browsing
         public void addFileDirPicker(ScriptFieldAnswer.ScriptFieldAnswerString answer) {
-                Text label = new Text();
+                Label label = new Label();
                 String labelText = answer.getField().getNiceName() + ":";
                 if (answer.getField().isResult()) {
                     labelText = "Output directory for: " + labelText;
@@ -268,6 +274,10 @@ public class GridPaneHelper extends GridPane {
                 label.setText(labelText);
                 final TextField inputFileText = new TextField();
                 inputFileText.textProperty().bindBidirectional(answer.answerProperty());
+                label.setLabelFor(inputFileText);
+                String desc = answer.getField().getDescription();
+                if (desc != null)
+                    inputFileText.setTooltip(new Tooltip(desc.split("\\r?\\n")[0]));
                 Button inputFileButton = new Button("Browse");
                 VBox vbox = new VBox();
                 vbox.getChildren().addAll(label);
@@ -334,9 +344,9 @@ public class GridPaneHelper extends GridPane {
                 if (answer.getField().getDescription() != null) {
                 	RootNode node = mdProcessor.parseMarkdown(answer.getField().getDescription().toCharArray());
                 	node.accept(mdToFx);
+                  parent.getChildren().add(flow);
+                  flow.setMaxWidth(350);
                 }
-                parent.getChildren().add(flow);
-                flow.setMaxWidth(350);
                 //helpText = helpText.trim();
                 //helpText.replace('\n', ' ');
                 //helpText.replace('\t', ' ');
@@ -388,7 +398,7 @@ public class GridPaneHelper extends GridPane {
         }
         // add a checkbox control
         public void addCheckbox(ScriptFieldAnswer.ScriptFieldAnswerBoolean answer) {
-                Text label = new Text();
+                Label label = new Label();
                 VBox vbox = new VBox();
                 label.setText(answer.getField().getNiceName() + ":");
                 vbox.getChildren().add(label);
@@ -397,6 +407,8 @@ public class GridPaneHelper extends GridPane {
                         cb.selectedProperty().set(true);
                 }
                 cb.selectedProperty().bindBidirectional(answer.answerProperty());
+                cb.setTooltip(new Tooltip(answer.getField().getDescription().split("\\r?\\n")[0]));
+                label.setLabelFor(cb);
                 //vbox.getChildren().add(cb);
                 addRow(vbox,cb);
                 makeHelpText(answer,vbox);
@@ -405,12 +417,14 @@ public class GridPaneHelper extends GridPane {
         
         // add a label and a text field
         public void addTextField(ScriptFieldAnswer.ScriptFieldAnswerString answer) {
-                Text label = new Text();
+                Label label = new Label();
                 VBox vbox = new VBox();
                 label.setText(answer.getField().getNiceName() + ":");
                 vbox.getChildren().add(label);
                 final TextField textField = new TextField();
                 textField.textProperty().bindBidirectional(answer.answerProperty());
+                label.setLabelFor(textField);
+                textField.setTooltip(new Tooltip(answer.getField().getDescription().split("\\r?\\n")[0]));
                 addRow(vbox, textField);
                 makeHelpText(answer,vbox);
                 
