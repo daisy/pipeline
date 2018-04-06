@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.daisy.maven</groupId>
     <artifactId>xproc-maven-plugin-parent</artifactId>
-    <version>1.1</version>
+    <version>1.2-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
   
