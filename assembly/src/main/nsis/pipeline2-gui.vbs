@@ -1,4 +1,10 @@
-Set oShell = CreateObject ("Wscript.Shell") 
+' OBJECTS
+Set oShell = CreateObject("Wscript.Shell")
+' VARIANTS
 Dim strArgs
-strArgs = "cmd /c pipeline2.bat gui"
-oShell.Run strArgs, 0, false
+Dim exitCode
+
+' START
+strArgs = "cmd.exe /c daisy-pipeline\bin\pipeline2.bat gui"
+exitCode = oShell.Run(strArgs, 0, true)
+If exitCode<>0 Then oShell.Run "errorPrompt.vbs " & exitCode

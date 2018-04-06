@@ -7,3 +7,6 @@ script:
   - mvn clean package -Plinux &&
     make GTAR=/bin/tar docker &&
     make check-docker
+branches:
+  except:
+    - /^rd-/

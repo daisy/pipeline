@@ -1,4 +1,4 @@
-              DAISY Pipeline 2 - 1.10.2 - August 21, 2017
+              DAISY Pipeline 2 - 1.11.0 - March 30, 2018
 ==============================================================================
 
 
@@ -44,14 +44,18 @@ The package includes:
    * daisy3-to-epub3         Transforms a DAISY 3 publication into an EPUB 3
                              publication.
    * dtbook-to-daisy3        Converts multiple dtbooks to daisy 3 format
-   * dtbook-to-epub3         Converts multiple dtbooks to epub3 format
+   * dtbook-to-epub3         Converts multiple dtbooks to EPUB 3 format
    * dtbook-to-html          Transforms DTBook XML into HTML.
+   * dtbook-to-odt           Transforms DTBook XML into ODT (OpenDocument Text).
    * dtbook-to-pef           Transforms a DTBook (DAISY 3 XML) document into
                              a PEF.
+   * dtbook-to-rtf           Transforms DTBook XML into RTF (Rich Text Format).
    * dtbook-to-zedai         Transforms DTBook XML into ZedAI XML.
    * dtbook-validator        Validates DTBook documents. Supports inclusion of
                              MathML.
-   * epub3-to-daisy202       Transforms an EPUB3 publication into DAISY 2.02.
+   * epub3-to-daisy202       Transforms an EPUB 3 publication into DAISY 2.02.
+   * epub3-to-epub3          Transforms an EPUB 3 publication into an EPUB 3
+                             publication with a braille rendition.
    * epub3-to-pef            Transforms a EPUB 3 publication into a PEF.
    * html-to-epub3           Transforms (X)HTML documents into an EPUB 3
                              publication.
@@ -68,61 +72,35 @@ The package includes:
 3. Release Notes
 ------------------------------------------------------------------------------
 
-The package includes the 1.10.2 version of the project.
-This is a release candidate.
+The package includes the 1.11.0 version of the project.
 
-### Installer/Updater
+### Distribution/Installation
 
-- [FIX] Updater couldn't find the Pipeline installation from the registry on
-  64bit Windows
-- [FIX] Updater couldn't find releases info ("404 not found")
+- [NEW] The application is now available as a set of Docker images
 
-### Framework and API
+### Graphical User Interface
 
-- Improve launch-time stability
-- Support file names with spaces inside zipped job context
-- Improve search algorithm for binaries
-- [FIX] Spaces in paths of book files cause job failure
+- Improved accessibility
+- Improved troubleshooting for application launch issues on Windows
+
+### Framework
+
+- Simplified configuration
 
 ### Modules
 
-- Add basic tests for all scripts
-- daisy202-to-epub3
-  - [FIX] smil references inside links should also be removed
-  - [FIX] Whenever a `epub:textref` attribute is added to a SMIL, an
-    `attribute-value` attribute with the same value is added
-  - [FIX] `epub:textref` in SMIL refers to `.html` files instead of `.xhtml`
-    files
-  - [FIX] Remove superfluous xmlns:d from package document metadata
-- dtbook-to-epub3
-  - [FIX] Issue with whitespace being removed
-  - [FIX] The "assert validity" option on dtbook-to-epub3 does not seem to work
-- daisy202-validator
-  - [FIX] Attribute "shape" not allowed here
-- Braille modules
-  - See details at:
-    https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1101
-- TTS modules
-  - [FIX] problem finding lame
-- Utility modules
-  - [fileset-utils] change the actual base URI of documents in `px:fileset-load`
-
-### Build maintenance
-
-- Cleanup dependencies in Maven POMs
-- Update Calabash to v1.1.9
-- Reorganize the build of some modified/OSGified 3rd party libraries
-- Move web API tests to the `pipeline-framework` project
-- Add a `modules-test-helper` project for reducing boiloplate in Pipeline
-  modules tests
-- Various enhancements to the `pax-exam-helper` test helper
-- Various improvements to the `xproc-maven-plugin`
-- Re-enable all XSpec and and XProcSpec tests in the modules
-
-
+- [NEW] DTBook to ODT (OpenDocument Text) script
+- [NEW] DTBook to RTF (Rich Text Format) script
+- [NEW] Adapter for Qfrency speech engine
+- [NEW] EPUB 3 enhancer script for adding a braille rendition to an EPUB
+- various changes to braille scripts, see the release notes of the Braille modules
+  v1.11.0: https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1110
+- [FIX] Issues with lost significant spaces in dtbook-to-zedai and zedai-to-html
+- [FIX] Improve support for DTBook 1.1.0
+- Simplified configuration of text-to-speech
 
 See also the full release notes on the release page:
-  https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.2
+  https://github.com/daisy/pipeline-assembly/releases/tag/v1.11.0
 
 4. Prerequisites
 ------------------------------------------------------------------------------
@@ -227,7 +205,7 @@ A complete user guide is in the works and will be available soon.
 ------------------------------------------------------------------------------
 
 Please refer to the issue tracker:
- https://github.com/daisy/pipeline-issues/issues
+ https://github.com/daisy/pipeline
 
 
 8. Contact

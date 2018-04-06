@@ -267,6 +267,7 @@ section -Main SEC01
 	file /r "${PROJECT_BUILD_DIR}\pipeline2-${VERSION}_win\daisy-pipeline"
 	file .\pipeline2-gui.vbs
 	file .\pipeline2-webservice.vbs
+	file .\errorPrompt.vbs
 
 	###############
 	# Registry information for add/remove programs
@@ -323,11 +324,12 @@ section "uninstall"
 	# Remove Start Menu launcher
 	delete "$SMPROGRAMS\${APPNAME}\${APPNAME}.lnk"
 	delete "$SMPROGRAMS\${APPNAME}\Pipeline Updater.lnk"
-	# Try to remove the Start Menu folder - this will only happen if it is empty
-	rmDir "$SMPROGRAMS\${APPNAME}\uninstall.lnk"
 
 	# Remove files
 	rmDir /r "$INSTDIR\daisy-pipeline"
+	delete "$INSTDIR\pipeline2-gui.vbs"
+	delete "$INSTDIR\pipeline2-webservice.vbs"
+	delete "$INSTDIR\errorPrompt.vbs"
 	#Remove data dir
 	ReadEnvStr $0 APPDATA
 	rmDir /r "$0\DAISY Pipeline 2"
@@ -338,6 +340,8 @@ section "uninstall"
 	delete $INSTDIR\logo.ico
 
 	# Always delete uninstaller as the last action
+	delete "$SMPROGRAMS\${APPNAME}\uninstall.lnk"
+	rmDir "$SMPROGRAMS\${APPNAME}"
 	delete $INSTDIR\uninstall.exe
 
 	# Try to remove the install directory - this will only happen if it is empty

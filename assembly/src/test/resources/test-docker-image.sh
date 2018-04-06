@@ -37,7 +37,7 @@ docker run --name pipeline --detach \
 
 # wait for the pipeline to start
 sleep 5
-tries=5
+tries=10
 while ! curl localhost:8181/ws/alive >/dev/null 2>/dev/null; do
     if [[ $tries > 0 ]]; then
         echo "Waiting for web service to be up..." >&2

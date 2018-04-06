@@ -2,15 +2,6 @@
 <component>
   <fileSets>
     <fileSet>
-      <directory>src/main/resources</directory>
-      <includes>
-        <include>bin/**</include>
-      </includes>
-      <outputDirectory>/</outputDirectory>
-      <fileMode>0755</fileMode>
-      <filtered>true</filtered>
-    </fileSet>
-    <fileSet>
       <directory>target/bundles/bootstrap</directory>
       <outputDirectory>/system/bootstrap</outputDirectory>
     </fileSet>

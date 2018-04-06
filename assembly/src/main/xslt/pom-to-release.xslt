@@ -26,25 +26,31 @@
                                                 <xsl:when test="pom:id = 'copy-felix-bundles'">
                                                         <xsl:value-of select="'system/felix'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-libs-bundles'">
+                                                <xsl:when test="pom:id = 'copy-logging-bundles'">
+                                                        <xsl:value-of select="'system/felix'"/>
+                                                </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-framework-libs-bundles'">
                                                         <xsl:value-of select="'system/framework'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-pipeline-bundles'">
+                                                <xsl:when test="pom:id = 'copy-framework-pipeline-bundles'">
                                                         <xsl:value-of select="'system/framework'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-frontend'">
+                                                <xsl:when test="pom:id = 'copy-webservice-bundles'">
                                                         <xsl:value-of select="'system/frontend'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-pipeline-modules'">
+                                                <xsl:when test="pom:id = 'copy-modules-libs-bundles'">
+                                                        <xsl:value-of select="'system/framework'"/>
+                                                </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-modules-pipeline-bundles'">
                                                         <xsl:value-of select="'modules'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-pipeline-modules-linux'">
+                                                <xsl:when test="pom:id = 'copy-modules-linux-bundles'">
                                                         <xsl:value-of select="'modules'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-pipeline-modules-mac'">
+                                                <xsl:when test="pom:id = 'copy-modules-mac-bundles'">
                                                         <xsl:value-of select="'modules'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-pipeline-modules-win'">
+                                                <xsl:when test="pom:id = 'copy-modules-win-bundles'">
                                                         <xsl:value-of select="'modules'"/>
                                                 </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-persistence-libs-bundles'">
@@ -53,10 +59,10 @@
                                                 <xsl:when test="pom:id = 'copy-persistence-pipeline-bundles'">
                                                         <xsl:value-of select="'system/framework/persistence'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-volatile-pipeline-bundles'">
+                                                <xsl:when test="pom:id = 'copy-volatile-bundles'">
                                                         <xsl:value-of select="'system/framework/volatile'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-gui'">
+                                                <xsl:when test="pom:id = 'copy-gui-bundles'">
                                                         <xsl:value-of select="'system/gui'"/>
                                                 </xsl:when>
                                                 <xsl:otherwise>

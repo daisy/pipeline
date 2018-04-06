@@ -8,6 +8,7 @@
   <baseDirectory>daisy-pipeline</baseDirectory>
   <componentDescriptors>
       <componentDescriptor>src/main/assembly/components/base.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/bin-nix.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/framework.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/cli-mac.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/modules-mac.xml</componentDescriptor>

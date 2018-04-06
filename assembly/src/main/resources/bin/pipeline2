@@ -354,13 +354,6 @@ init() {
 }
 
 run() {
-    # set defaults
-    if [ "x$PIPELINE2_WS_AUTHENTICATION" = "x" ]; then
-        PIPELINE2_WS_AUTHENTICATION=false
-    fi
-    if [ "x$PIPELINE2_WS_LOCALFS" = "x" ]; then
-        PIPELINE2_WS_LOCALFS=true
-    fi
     MAIN=org.apache.felix.main.Main
     MODE=" -Dorg.daisy.pipeline.main.mode=webservice"
 

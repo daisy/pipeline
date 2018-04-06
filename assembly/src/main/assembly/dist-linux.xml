@@ -8,6 +8,7 @@
   <baseDirectory>daisy-pipeline</baseDirectory>
   <componentDescriptors>
       <componentDescriptor>src/main/assembly/components/base.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/bin-nix.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/framework.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/cli-linux.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/modules-linux.xml</componentDescriptor>

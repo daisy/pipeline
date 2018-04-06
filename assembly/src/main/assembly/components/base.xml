@@ -13,7 +13,6 @@
         <exclude>etc/config.properties</exclude>
         <exclude>etc/config-logback.xml</exclude>
         <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
-        <exclude>etc/org.apache.felix.fileinstall-libs.cfg</exclude>
       </excludes>
       <outputDirectory>/</outputDirectory>
     </fileSet>
@@ -27,15 +26,6 @@
       </includes>
       <filtered>true</filtered>
       <outputDirectory>/</outputDirectory>
-    </fileSet>
-    <fileSet>
-      <directory>src/main/resources</directory>
-      <includes>
-        <include>bin/**</include>
-      </includes>
-      <outputDirectory>/</outputDirectory>
-      <fileMode>0755</fileMode>
-      <filtered>true</filtered>
     </fileSet>
   </fileSets>
 </component>

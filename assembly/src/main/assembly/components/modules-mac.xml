@@ -3,7 +3,7 @@
   <fileSets>
     <fileSet>
       <directory>target/bundles/modules/mac</directory>
-      <outputDirectory>/modules</outputDirectory>
+      <outputDirectory>/system/felix</outputDirectory>
     </fileSet>
   </fileSets>
 </component>

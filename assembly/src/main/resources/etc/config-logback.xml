@@ -2,7 +2,8 @@
 
   <!-- see http://logback.qos.ch/manual/configuration.html#LevelChangePropagator -->
   <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
-    <appender name="JOB" class="${pipeline.log.jobappender}">
+
+  <appender name="JOB" class="org.daisy.pipeline.logging.IgnoreSiftAppender">
     <!-- in the absence of the class attribute, it is assumed that the
          desired discriminator type is
          ch.qos.logback.classic.sift.MDCBasedDiscriminator -->

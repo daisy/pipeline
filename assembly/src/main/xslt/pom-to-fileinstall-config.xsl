@@ -29,7 +29,7 @@
 				<xsl:text>felix.fileinstall.filter=</xsl:text>
 				<xsl:value-of select="replace(concat($artifactId, '-', $version,  $classifierSuffix, '.jar'), '\.', '\\\\.')"/>
 				<xsl:text>&#xA;</xsl:text>
-				<xsl:text>felix.fileinstall.noInitialDelay=true&#xA;</xsl:text>
+				<xsl:text>felix.fileinstall.noInitialDelay=false&#xA;</xsl:text>
 			</xsl:result-document>
 		</xsl:for-each>
 	</xsl:template>

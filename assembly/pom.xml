@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.10.5-SNAPSHOT</version>
+  <version>1.11.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -32,7 +32,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>gui</artifactId>
-        <version>1.1.1-SNAPSHOT</version>
+        <version>1.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -52,56 +52,56 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.5-SNAPSHOT</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-bom</artifactId>
-        <version>1.10.3-SNAPSHOT</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.10.4</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>scripts-utils-bom</artifactId>
-        <version>1.10.3</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-modules-bom</artifactId>
-        <version>1.10.1</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-modules-bom</artifactId>
-        <version>1.10.0</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.10.2</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-modules-bom</artifactId>
-        <version>1.10.0</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -296,12 +296,12 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-libs-bundles</id>
+            <id>copy-framework-libs-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/libs</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>javax.xml.crypto</groupId>
@@ -421,6 +421,17 @@
                   <groupId>com.mysql.jdbc</groupId>
                   <artifactId>com.springsource.com.mysql.jdbc</artifactId>
                 </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-modules-libs-bundles</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
+              <artifactItems>
                 <artifactItem>
                   <groupId>net.java.dev.jna</groupId>
                   <artifactId>jna</artifactId>
@@ -488,15 +499,7 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.task-api</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
                   <artifactId>dotify.task.impl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.dotify</groupId>
-                  <artifactId>dotify.task-runner</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.dotify</groupId>
@@ -505,6 +508,14 @@
                 <artifactItem>
                   <groupId>org.daisy.dotify</groupId>
                   <artifactId>dotify.translator.impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.streamline</groupId>
+                  <artifactId>streamline-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.streamline</groupId>
+                  <artifactId>streamline-engine</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
@@ -517,6 +528,14 @@
                 <artifactItem>
                   <groupId>org.unbescape</groupId>
                   <artifactId>unbescape</artifactId>
+                </artifactItem>
+                <!--
+                    Dotify and epubcheck require older version of Jing
+                -->
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>jing</artifactId>
+                  <version>20120724.0.0</version>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -541,7 +560,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-volatile-pipeline-bundles</id>
+            <id>copy-volatile-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -556,17 +575,19 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-pipeline-bundles</id>
+            <id>copy-logging-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/pipeline</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
+              <!--
+                  logging-appender and dependencies. These are framework bundles that can not be
+                  reloaded dynamically without breaking things. These bundles also have dependencies
+                  in copy-framework-libs-bundles which therefore need to be installed in
+                  bundles/felix as well.
+              -->
               <artifactItems>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>calabash-adapter</artifactId>
-                </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>common-utils</artifactId>
@@ -577,11 +598,26 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>logging-activator</artifactId>
+                  <artifactId>logging-appender</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>logging-appender</artifactId>
+                  <artifactId>xproc-api</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-framework-pipeline-bundles</id>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>calabash-adapter</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
@@ -590,14 +626,6 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>push-notifier</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>updater-wrapper</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>webservice-utils</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
@@ -611,15 +639,11 @@
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>xpath-registry</artifactId>
                 </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>xproc-api</artifactId>
-                </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
           <execution>
-            <id>copy-frontend</id>
+            <id>copy-webservice-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -634,20 +658,38 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-gui</id>
+            <id>copy-gui-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/gui</outputDirectory>
+              <!--
+                  gui needs to be installed and started as early on as possible
+                  so that we can display a splash screen
+              -->
+              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
               <artifactItems>
-                <artifactItem>
-                  <groupId>de.codecentric.centerdevice</groupId>
-                  <artifactId>centerdevice-nsmenufx</artifactId>
-                </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>gui</artifactId>
+                </artifactItem>
+                <!--
+                    framework dependencies
+                -->
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>updater-wrapper</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>webservice-utils</artifactId>
+                </artifactItem>
+                <!--
+                    3rd-party dependencies
+                -->
+                <artifactItem>
+                  <groupId>de.codecentric.centerdevice</groupId>
+                  <artifactId>centerdevice-nsmenufx</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
@@ -657,11 +699,6 @@
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>parboiled</artifactId>
                 </artifactItem>
-                <!--<artifactItem>-->
-                <!--<groupId>org.daisy.libs</groupId>-->
-                <!--<artifactId>parboiled-core</artifactId>-->
-                <!--<version>1.0.0-SNAPSHOT</version>-->
-                <!--</artifactItem>-->
                 <artifactItem>
                   <groupId>org.ow2.asm</groupId>
                   <artifactId>asm</artifactId>
@@ -686,12 +723,12 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-pipeline-modules</id>
+            <id>copy-modules-pipeline-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.directory}/bundles/modules</outputDirectory>
+              <outputDirectory>${project.build.directory}/bundles/felix</outputDirectory>
               <artifactItems>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -807,6 +844,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>epub3-to-epub3</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>epub3-to-ssml</artifactId>
                 </artifactItem>
                 
@@ -911,6 +952,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>odt-utils</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>ssml-to-audio</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -921,10 +966,12 @@
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-acapela</artifactId>
                 </artifactItem>
+                <!--
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-attbin</artifactId>
                 </artifactItem>
+                -->
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-espeak</artifactId>
@@ -936,6 +983,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-sapinative</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>tts-adapter-qfrency</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -1097,7 +1148,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-pipeline-modules-linux</id>
+            <id>copy-modules-linux-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -1118,7 +1169,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-pipeline-modules-mac</id>
+            <id>copy-modules-mac-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -1139,7 +1190,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-pipeline-modules-win</id>
+            <id>copy-modules-win-bundles</id>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -1204,11 +1255,11 @@
                 </goals>
                 <configuration>
                   <target>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-release.xslt" />
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-release.xslt" />
                       <arg value="time=${maven.build.timestamp}" />
-                      <arg line="-o:./target/release-descriptor/releaseDescriptor.xml" />
+                      <arg line="-o:${project.basedir}/target/release-descriptor/releaseDescriptor.xml" />
                     </java>
                   </target>
                 </configuration>
@@ -1894,81 +1945,54 @@
                 </goals>
                 <configuration>
                   <target>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-bundles" />
-                      <arg value="startLevel=30" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=pipeline" />
-                      <arg value="localRepository=${settings.localRepository}" />
-                    </java>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-modules" />
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-modules-linux-bundles" />
                       <arg value="startLevel=50" />
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
                       <arg value="prefix=modules" />
                       <arg value="localRepository=${settings.localRepository}" />
                     </java>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-modules-linux" />
-                      <arg value="startLevel=50" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
-                      <arg value="prefix=modules" />
-                      <arg value="localRepository=${settings.localRepository}" />
-                    </java>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-frontend" />
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-webservice-bundles" />
                       <arg value="startLevel=100" />
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice" />
                       <arg value="prefix=frontend" />
                       <arg value="localRepository=${settings.localRepository}" />
                     </java>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-modules-mac" />
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-modules-mac-bundles" />
                       <arg value="startLevel=50" />
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
                       <arg value="prefix=modules" />
                       <arg value="localRepository=${settings.localRepository}" />
                     </java>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-pipeline-modules-win" />
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-modules-win-bundles" />
                       <arg value="startLevel=50" />
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc" />
                       <arg value="prefix=modules" />
                       <arg value="localRepository=${settings.localRepository}" />
                     </java>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-gui" />
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
+                      <arg value="id=copy-volatile-bundles" />
                       <arg value="startLevel=100" />
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui" />
                       <arg value="prefix=frontend" />
                       <arg value="localRepository=${settings.localRepository}" />
                     </java>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
-                      <arg value="id=copy-volatile-pipeline-bundles" />
-                      <arg value="startLevel=100" />
-                      <arg value="dest=${project.baseUri}/target/generated-resources/etc/gui" />
-                      <arg value="prefix=frontend" />
-                      <arg value="localRepository=${settings.localRepository}" />
-                    </java>
-                    <java classname="net.sf.saxon.Transform">
-                      <arg value="target/tmp/effective-pom.xml" />
-                      <arg value="src/main/xslt/pom-to-fileinstall-config.xsl" />
+                    <java classname="net.sf.saxon.Transform" failonerror="true">
+                      <arg value="${project.basedir}/target/tmp/effective-pom.xml" />
+                      <arg value="${project.basedir}/src/main/xslt/pom-to-fileinstall-config.xsl" />
                       <arg value="id=copy-persistence-pipeline-bundles" />
                       <arg value="startLevel=100" />
                       <arg value="dest=${project.baseUri}/target/generated-resources/etc/webservice" />
@@ -2014,7 +2038,7 @@
                     <descriptor>src/main/assembly/dev.xml</descriptor>
                   </descriptors>
                   <filters>
-                    <filter>src/main/assembly/dev.properties</filter>
+                    <filter>${project.basedir}/src/main/assembly/dev.properties</filter>
                   </filters>
                   <appendAssemblyId>false</appendAssemblyId>
                   <finalName>dev-launcher</finalName>
@@ -2245,7 +2269,6 @@
                       <excludes>
                         config.properties,
                         config-logback.xml,
-                        org.apache.felix.fileinstall-libs.cfg,
                         org.apache.felix.fileinstall-modules.cfg,
                         system.properties
                       </excludes>
@@ -2352,7 +2375,7 @@
                         mac,   mac/*
                       </excludes>
                       <mapper>
-                        <prefix>${pipeline.home}/${bundles.modules}</prefix>
+                        <prefix>${pipeline.home}/${bundles.auto.deploy}</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
@@ -2360,18 +2383,7 @@
                       <type>directory</type>
                       <src>target/bundles/modules/linux</src>
                       <mapper>
-                        <prefix>${pipeline.home}/${bundles.modules}</prefix>
-                        <type>perm</type>
-                      </mapper>
-                    </data>
-                    <!-- ========= -->
-                    <!-- log files -->
-                    <!-- ========= -->
-                    <data>
-                      <type>directory</type>
-                      <src>target/bundles/gui</src>
-                      <mapper>
-                        <prefix>${pipeline.home}/system/gui</prefix>
+                        <prefix>${pipeline.home}/${bundles.auto.deploy}</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
@@ -2571,7 +2583,6 @@
                         <exclude>etc/system.properties</exclude>
                         <exclude>etc/config.properties</exclude>
                         <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
-                        <exclude>etc/org.apache.felix.fileinstall-libs.cfg</exclude>
                       </excludes>
                     </source>
                   </sources>
