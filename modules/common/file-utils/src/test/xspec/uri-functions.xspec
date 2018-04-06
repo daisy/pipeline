@@ -576,6 +576,20 @@
             </x:call>
             <x:expect label="test #20" select="''"/>
         </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml'"/>
+                <x:param name="base" select="'file:/dir/file.xml/index.html'"/>
+            </x:call>
+            <x:expect label="test #21" select="'../file.xml'"/>
+        </x:scenario>
+        <x:scenario label="relativize uri">
+            <x:call>
+                <x:param name="uri" select="'file:/dir/file.xml/'"/>
+                <x:param name="base" select="'file:/dir/file.xml/index.html'"/>
+            </x:call>
+            <x:expect label="test #22" select="''"/>
+        </x:scenario>
     </x:scenario>
 
     <x:scenario label="function normalize-path">

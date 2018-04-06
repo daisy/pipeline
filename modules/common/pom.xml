@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>common-utils-aggregator</artifactId>
-  <version>1.10.5-SNAPSHOT</version>
+  <version>1.11.0</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for the Common Utility Modules</name>
@@ -51,4 +51,8 @@
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <tag>v1.11.0</tag>
+  </scm>
 </project>

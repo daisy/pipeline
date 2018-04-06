@@ -205,9 +205,9 @@
                 <xsl:variable name="base-segments" select="tokenize($base, '/')[position()!=last()]"/>
                 <xsl:variable name="common-prefix-length"
                     select="
-                    (for $i in 1 to count($base-segments) return
+                    (for $i in 1 to min((count($base-segments),count($path-segments) -1)) return
                          if($base-segments[$i] eq $path-segments[$i]) then () else $i -1
-                    ,count($base-segments))[1]"/>
+                    ,min((count($base-segments),count($path-segments) -1)))[1]"/>
                 <xsl:variable name="upSteps" select="count($base-segments) -$common-prefix-length"/>
                 <xsl:sequence
                     select="string-join((

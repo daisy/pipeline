@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>common-utils-parent</artifactId>
-    <version>1.10.5-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>mediatype-utils</artifactId>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>1.0.4</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: mediatype-utils</name>

@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>common-utils-parent</artifactId>
-    <version>1.10.5-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>html-utils</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.1</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: HTML Utilities</name>

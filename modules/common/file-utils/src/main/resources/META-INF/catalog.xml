@@ -2,6 +2,7 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
      
      <uri name="http://www.daisy.org/pipeline/modules/file-utils/library.xpl" uri="../xml/xproc/library.xpl"/>
+     <uri name="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" uri="../xml/xslt/library.xsl"/>
      <uri name="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl" uri="../xml/xslt/uri-functions.xsl"/>
 
      <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
