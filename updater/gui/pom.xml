@@ -23,7 +23,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.3</version>
+        <version>1.11.0-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -33,19 +33,7 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>gui</artifactId>
-      <version>1.1.0</version>
-      <!--
-          Prevent shade plugin from including an old version of updater-wrapper. Because it used to
-          have a different name it won't be automatically overwritten by the version defined in this
-          POM.
-          FIXME: delete when gui is updated to > 1.1.0
-      -->
-      <exclusions>
-        <exclusion>
-          <groupId>org.daisy.pipeline</groupId>
-          <artifactId>updater</artifactId>
-        </exclusion>
-      </exclusions>
+      <version>1.1.1-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>net.java.dev.jna</groupId>
