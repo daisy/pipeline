@@ -284,7 +284,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum LineHeight implements BrailleCSSProperty {
-		integer(""), INHERIT("inherit"), INITIAL("initial");
+		number(""), percentage(""), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 

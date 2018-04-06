@@ -176,7 +176,7 @@ public class SupportedBrailleCSS implements SupportedCSS {
 		// text spacing
 		setProperty("text-align", DEFAULT_UA_TEXT_ALIGN);
 		setProperty("text-indent", TextIndent.integer, DEFAULT_UA_TEXT_IDENT);
-		setProperty("line-height", LineHeight.integer, DEFAULT_UA_LINE_HEIGHT);
+		setProperty("line-height", LineHeight.number, DEFAULT_UA_LINE_HEIGHT);
 		
 		// layout box
 		setProperty("left", AbsoluteMargin.integer, DEFAULT_UA_MARGIN);

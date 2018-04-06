@@ -107,6 +107,15 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		}
 		
 		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append(":not(");
+			OutputUtil.appendList(sb, negatedSelector, ", ");
+			sb.append(")");
+			return sb.toString();
+		}
+		
+		@Override
 		public int hashCode() {
 			final int prime = 31;
 			return prime + negatedSelector.hashCode();
@@ -199,6 +208,15 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 					highestSpecificity = spec; }}
 			for (Selector s : mostSpecificSelector)
 				s.computeSpecificity(specificity);
+		}
+		
+		@Override
+		public String toString() {
+			StringBuilder sb = new StringBuilder();
+			sb.append(":has(");
+			OutputUtil.appendList(sb, relativeSelector, ", ");
+			sb.append(")");
+			return sb.toString();
 		}
 		
 		@Override

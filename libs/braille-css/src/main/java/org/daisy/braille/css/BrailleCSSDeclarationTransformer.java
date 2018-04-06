@@ -46,7 +46,9 @@ import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
+import cz.vutbr.web.css.TermNumber;
 import cz.vutbr.web.css.TermPair;
+import cz.vutbr.web.css.TermPercent;
 import cz.vutbr.web.css.TermString;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.Repeater;
@@ -395,8 +397,17 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	@SuppressWarnings("unused")
 	private boolean processLineHeight(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(LineHeight.class, LineHeight.integer, true,
-				d, properties, values);
+		if (d.size() != 1)
+			return false;
+		Term<?> term = d.get(0);
+		return genericTermIdent(LineHeight.class, term, ALLOW_INH, d.getProperty(),
+				properties)
+			|| genericTerm(TermInteger.class, term, d.getProperty(), LineHeight.number,
+				true, properties, values)
+			|| genericTerm(TermNumber.class, term, d.getProperty(), LineHeight.number,
+				true, properties, values)
+			|| genericTerm(TermPercent.class, term, d.getProperty(), LineHeight.percentage,
+				true, properties, values);
 	}
 	
 	@SuppressWarnings("unused")
