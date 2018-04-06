@@ -41,6 +41,7 @@ public class XProcSpecTest {
 				logbackClassic(),
 				// xprocspec
 				xprocspec(),
+				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?")),
 			junitBundles()
 		);

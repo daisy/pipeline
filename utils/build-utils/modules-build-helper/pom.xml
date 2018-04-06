@@ -12,11 +12,15 @@
 
   <groupId>org.daisy.pipeline.build</groupId>
   <artifactId>modules-build-helper</artifactId>
-  <version>2.0.1-SNAPSHOT</version>
+  <version>2.1.0</version>
   <packaging>maven-plugin</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Build Helper</name>
   <description>Resources for the Pipeline 2 modules build system.</description>
+
+  <properties>
+    <xprocspec.version>1.2.0</xprocspec.version>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -27,13 +31,17 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-calabash</artifactId>
-      <version>1.0.0</version>
+      <version>1.1.0</version>
     </dependency>
+    <!-- avoid circular dependency on framework -->
+    <?fixed-dependency?>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xmlcatalog</artifactId>
       <version>2.0.1</version>
     </dependency>
+    <!-- avoid circular dependency on framework -->
+    <?fixed-dependency?>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>modules-registry</artifactId>
@@ -57,14 +65,20 @@
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
-      <version>3.0-alpha-2</version>
+      <artifactId>maven-core</artifactId>
+      <version>3.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.maven.plugin-tools</groupId>
       <artifactId>maven-plugin-annotations</artifactId>
       <version>3.0</version>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.xprocspec</groupId>
+      <artifactId>xprocspec</artifactId>
+      <version>${xprocspec.version}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -97,6 +111,7 @@
           <postBuildHookScript>verify</postBuildHookScript>
           <properties>
             <modules-build-helper.version>${project.version}</modules-build-helper.version>
+            <xprocspec.version>${xprocspec.version}</xprocspec.version>
           </properties>
           <goals>
             <goal>install</goal>
@@ -114,4 +129,8 @@
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <tag>modules-build-helper-2.1.0</tag>
+  </scm>
 </project>

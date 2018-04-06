@@ -17,6 +17,19 @@
             <enabled>true</enabled>
           </snapshots>
         </repository>
+        <!--
+            disable downloading snapshots from public repositories
+        -->
+        <repository>
+          <id>sonatype-nexus-snapshots</id> <!-- defined in org.daisy:daisy -->
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
       </repositories>
       <pluginRepositories>
         <pluginRepository>
@@ -27,6 +40,19 @@
           </releases>
           <snapshots>
             <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+       <!--
+            disable downloading snapshots from public repositories
+        -->
+        <pluginRepository>
+          <id>sonatype-nexus-snapshots</id> <!-- defined in org.daisy:daisy -->
+          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+          <releases>
+            <enabled>false</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
           </snapshots>
         </pluginRepository>
       </pluginRepositories>

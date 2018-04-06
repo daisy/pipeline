@@ -4,8 +4,8 @@
 ; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
 ;
 [subrepo]
-	remote = git@github.com:daisy/pipeline-build-utils.git
+	remote = https://github.com/vojtechtoman/xprocdoc.git
 	branch = master
-	commit = 0368c99294124cebfd9bbb434c56d78ca1a18b6b
-	parent = 8d0b89e914164867522f157210a8060f2ca80fb8
+	commit = 597e2d63df80f42aaf6ef73d2884e93aa13cd3eb
+	parent = d2f3e04c59f91b02b766dab29fcd27d4bd830675
 	cmdver = 0.3.1

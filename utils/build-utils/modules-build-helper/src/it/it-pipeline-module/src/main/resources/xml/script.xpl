@@ -31,13 +31,8 @@ For more info see [link](http://example.org/more-info).</p>
     
     <p:output port="result"/>
     
-    <p:xslt>
-        <p:input port="stylesheet">
-            <p:document href="foo.xsl"/>
-        </p:input>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
-    </p:xslt>
+    <p:import href="foo.xpl"/>
+    
+    <px:foo/>
     
 </p:declare-step>

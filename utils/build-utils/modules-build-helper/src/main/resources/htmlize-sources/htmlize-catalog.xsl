@@ -21,6 +21,11 @@
 		<xsl:result-document format="html" href="{$output-uri}">
 			<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
 				<head>
+					<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+					<meta charset="utf-8"/>
+					<meta http-equiv="content-language" content="en"/>
+					<link rel="stylesheet" type="text/css" href="http://daisy.github.io/pipeline/css/nxml-mode.css"/>
+					<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico"/>
 					<link rev="doc" href="../{replace(base-uri(/*),'.*/([^/]+)$','$1')}"/>
 				</head>
 				<body>
@@ -56,13 +61,15 @@
 	</xsl:template>
 	
 	<xsl:template mode="attribute-value" match="cat:uri/@name">
-		<span property="alias">
-			<xsl:value-of select="."/>
-		</span>
+		<a href="../{parent::*/@uri}" class="apidoc">
+			<span rel="alias" resource="{.}">
+				<xsl:value-of select="."/>
+			</span>
+		</a>
 	</xsl:template>
 
 	<xsl:template mode="attribute-value" match="cat:uri/@uri">
-		<a href="../{.}" class="apidoc">
+		<a href="../{.}" class="source">
 			<xsl:value-of select="."/>
 		</a>
 	</xsl:template>

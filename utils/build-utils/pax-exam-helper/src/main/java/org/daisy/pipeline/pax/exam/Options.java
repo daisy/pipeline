@@ -527,21 +527,21 @@ public abstract class Options {
 							    && b.artifactId.equals(artifactId)
 							    && b.type.equals(type)
 							    && b.classifier.equals(classifier)) {
-								if (b.versionAsInProject && !a.getVersion().equals(b.version))
+								if (b.versionAsInProject && !a.getBaseVersion().equals(b.version))
 									throw new RuntimeException("Coding error");
 								versionAsInProject = b.versionAsInProject;
 								if (b.startLevel > 0)
 									startLevel = b.startLevel;
 								break; }
-						String versionInProject; {
-							versionInProject = null;
-							try {
-								versionInProject = MavenUtils.asInProject().getVersion(groupId, artifactId); }
-							catch (RuntimeException e) {
-								logger.info("Can not find version of transitive dependency " + groupId + ":" + artifactId
-								            + " in project. Assuming it was explicitly excluded, therefore ignoring it.");
-								return true; }}
 						if (versionAsInProject) {
+							String versionInProject; {
+								versionInProject = null;
+								try {
+									versionInProject = MavenUtils.asInProject().getVersion(groupId, artifactId); }
+								catch (RuntimeException e) {
+									logger.info("Can not find version of transitive dependency " + groupId + ":" + artifactId
+									            + " in project. Assuming it was explicitly excluded, therefore ignoring it.");
+									return true; }}
 							if (!a.getBaseVersion().equals(versionInProject)) {
 								MavenBundle b = new MavenBundle(a, true);
 								logger.info("Forcing transitive dependency \"" + artifactCoords(b.asArtifact()) + "\""

@@ -1,0 +1,4 @@
+<?xml-stylesheet href="a.xml.xsl"?>
+<hello>
+	<world/>
+</hello>

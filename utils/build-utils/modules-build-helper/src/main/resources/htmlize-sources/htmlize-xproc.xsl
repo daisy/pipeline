@@ -21,6 +21,7 @@
 	
 	<xsl:variable name="input-uri" select="base-uri(/*)"/>
 	<xsl:variable name="output-uri" select="concat(resolve-uri(pf:relativize-uri($input-uri,$input-base-uri),$output-base-uri), '/index.html')"/>
+	<xsl:variable name="source-uri" select="resolve-uri(pf:relativize-uri($input-uri,$input-base-uri),$output-base-uri)"/>
 	
 	<xsl:variable name="catalog-xml" select="doc($catalog-xml-uri)"/>
 	<xsl:variable name="entry-in-catalog" select="$catalog-xml//cat:uri[resolve-uri(@uri,base-uri(.))=$input-uri]"/>
@@ -28,12 +29,16 @@
 	<xsl:template match="/">
 		<xsl:result-document format="html" href="{$output-uri}">
 			<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
-				<xsl:variable name="source" select="concat('../',replace($input-uri,'.*/([^/]+)$','$1'))"/>
 				<head>
-					<link rev="doc" href="{$source}"/>
+					<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+					<meta charset="utf-8"/>
+					<meta http-equiv="content-language" content="en"/>
+					<link rel="stylesheet" type="text/css" href="http://daisy.github.io/pipeline/css/nxml-mode.css"/>
+					<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico"/>
+					<link rev="doc" href="{pf:relativize-uri($source-uri,$output-uri)}"/>
 				</head>
 				<body>
-					<div class="code" about="{$source}">
+					<div class="code" about="{pf:relativize-uri($source-uri,$output-uri)}">
 						<xsl:apply-templates mode="serialize" select="/*"/>
 					</div>
 				</body>
@@ -44,7 +49,10 @@
 	<xsl:template mode="attribute-value"
 	              match="p:import/@href|
 	                     p:xslt/p:input[@port='stylesheet']/p:document/@href">
-		<a href="../{.}" class="source">
+		<a href="{pf:relativize-uri(resolve-uri(.,$source-uri),$output-uri)}">
+			<xsl:if test="not(.='http://xmlcalabash.com/extension/steps/library-1.0.xpl')">
+				<xsl:attribute name="class" select="'source'"/>
+			</xsl:if>
 			<xsl:value-of select="."/>
 		</a>
 	</xsl:template>

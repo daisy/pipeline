@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-parent</artifactId>
-  <version>1.6-SNAPSHOT</version>
+  <version>1.6</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Parent POM</name>
@@ -138,7 +138,12 @@
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>modules-build-helper</artifactId>
-          <version>2.0.1-SNAPSHOT</version>
+          <version>2.1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jxr-plugin</artifactId>
+          <version>2.5</version>
         </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
@@ -197,7 +202,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -210,7 +215,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -223,7 +228,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -251,7 +256,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -264,7 +269,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -279,7 +284,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -292,7 +297,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -393,14 +398,35 @@
                 <configuration>
                   <resources>
                     <resource>
-                      <directory>src/main</directory>
+                      <directory>${project.basedir}</directory>
                       <includes>
-                        <include>**/*.md</include>
-                        <include>**/*.html</include>
+                        <include>index.md</include>
+                        <include>src/main/README.md</include>
+                        <include>doc/**/*.md</include>
+                        <include>doc/**/*.html</include>
                       </includes>
+                      <excludes>
+                        <exclude>src/main/resources/**/*</exclude>
+                      </excludes>
                     </resource>
                   </resources>
                   <outputDirectory>${project.build.directory}/doc/</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-jxr-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>htmlize-java</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>jxr</goal>
+                </goals>
+                <configuration>
+                  <destDir>${project.build.directory}/doc/src/main/java/</destDir>
+                  <linkJavadoc>false</linkJavadoc>
                 </configuration>
               </execution>
             </executions>
@@ -410,19 +436,36 @@
             <artifactId>modules-build-helper</artifactId>
             <executions>
               <execution>
+                <id>xprocdoc</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>xprocdoc</goal>
+                </goals>
+                <configuration>
+                  <sourceDirectory>src/main/resources</sourceDirectory>
+                  <outputDirectory>${project.build.directory}/xprocdoc</outputDirectory>
+                  <catalogXmlFile>src/main/resources/META-INF/catalog.xml</catalogXmlFile>
+                  <includes>xml/**/*.xpl</includes>
+                </configuration>
+              </execution>
+              <execution>
                 <id>htmlize-sources</id>
                 <phase>prepare-package</phase>
                 <goals>
                   <goal>htmlize-sources</goal>
                 </goals>
                 <configuration>
-                  <sourceDirectory>${project.basedir}/src/main</sourceDirectory>
+                  <sourceDirectory>${project.basedir}</sourceDirectory>
                   <outputDirectory>${project.build.directory}/doc</outputDirectory>
                   <catalogXmlFile>${project.basedir}/src/main/resources/META-INF/catalog.xml</catalogXmlFile>
                   <includes>
-                    resources/META-INF/catalog.xml,
-                    resources/**/*.xpl,
-                    resources/**/*.css
+                    src/main/resources/META-INF/catalog.xml,
+                    src/main/resources/**/*.xpl,
+                    src/main/resources/**/*.xsl,
+                    src/main/resources/**/*.xml,
+                    src/main/resources/**/*.rng,
+                    src/main/resources/**/*.sch,
+                    src/main/resources/**/*.css
                   </includes>
                 </configuration>
               </execution>
@@ -432,6 +475,7 @@
             <artifactId>maven-jar-plugin</artifactId>
             <executions>
               <execution>
+                <id>package-doc-jar</id>
                 <phase>package</phase>
                 <goals>
                   <goal>jar</goal>
@@ -442,7 +486,26 @@
                   <includes>
                     <include>**/*.md</include>
                     <include>**/*.html</include>
+                    <include>src/main/java/stylesheet.css</include>
                   </includes>
+                  <archive>
+                    <addMavenDescriptor>false</addMavenDescriptor>
+                  </archive>
+                </configuration>
+              </execution>
+              <execution>
+                <id>package-xprocdoc-jar</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+                <configuration>
+                  <classifier>xprocdoc</classifier>
+                  <classesDirectory>${project.build.directory}/xprocdoc</classesDirectory>
+                  <skipIfEmpty>true</skipIfEmpty>
+                  <archive>
+                    <addMavenDescriptor>false</addMavenDescriptor>
+                  </archive>
                 </configuration>
               </execution>
             </executions>
@@ -451,4 +514,8 @@
       </build>
     </profile>
   </profiles>
+
+  <scm>
+    <tag>modules-parent-1.6</tag>
+  </scm>
 </project>
