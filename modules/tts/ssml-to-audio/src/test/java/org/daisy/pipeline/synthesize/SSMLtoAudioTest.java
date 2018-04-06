@@ -95,7 +95,7 @@ public class SSMLtoAudioTest implements IPipelineLogger, URIResolver {
 		@Override
 		public Map<String, String> getAllProperties() {
 			Map<String, String> props = new HashMap<String, String>();
-			props.put("threads.number", "1");
+			props.put("org.daisy.pipeline.tts.threads.number", "1");
 			return props;
 		}
 	}

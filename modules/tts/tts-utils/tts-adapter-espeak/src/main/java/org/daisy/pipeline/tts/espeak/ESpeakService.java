@@ -14,8 +14,8 @@ public class ESpeakService extends AbstractTTSService {
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
 		// settings
 		String eSpeakPath = null;
-		String prop = "espeak.path";
-		eSpeakPath = System.getProperty(prop);
+		String prop = "org.daisy.pipeline.tts.espeak.path";
+		eSpeakPath = params.get(prop);
 		if (eSpeakPath == null) {
 			Optional<String> epath = BinaryFinder.find("espeak");
 			if (!epath.isPresent()) {
@@ -25,7 +25,7 @@ public class ESpeakService extends AbstractTTSService {
 			eSpeakPath = epath.get();
 		}
 
-		String priority = params.get("espeak.priority");
+		String priority = params.get("org.daisy.pipeline.tts.espeak.priority");
 		int intPriority = 2;
 		if (priority != null) {
 			try {

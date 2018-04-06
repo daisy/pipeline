@@ -12,19 +12,38 @@ combination of a text layer and an audio layer synchronized with each
 other.
 
 The way text-to-speech is configured is common to all scripts. Speech
-engines are configured with special properties, and the exact aural
-rendering of the document (TTS voices, pronunciations, speech pitch,
-speech rates, speech levels, etc.) is controlled with CSS style sheets
-and PLS lexicons.
+engines are configured with properties, and the exact aural rendering
+of the document (TTS voices, pronunciations, speech pitch, speech
+rates, speech levels, etc.) is controlled with CSS style sheets and
+PLS lexicons.
 
-TTS configuration files may contain properties, (links to) aural CSS
-style sheets, and (links to) PLS lexicons. The file format is as
-follows:
+The following two properties must be set through
+[system properties](http://daisy.github.io/pipeline/Configuration-Files#system-properties).
+
+`org.daisy.pipeline.tts.config`
+: File to load TTS configuration properties from at start-up
+
+`org.daisy.pipeline.tts.host.protection`
+: Allow dynamic setting of properties
+: Defaults to "true"
+
+All other TTS properties may be specified through either
+[system properties](http://daisy.github.io/pipeline/Configuration-Files#system-properties)
+or special TTS configuration files. Aural CSS style sheets and PLS
+lexicons must be specified in TTS configuration files.
+
+
+Configuration files may either be specified "statically", through the
+system property `org.daisy.pipeline.tts.config` or "dynamically"
+through the optional script input. If
+`org.daisy.pipeline.tts.host.protection` is true, properties in
+dynamic configuration files are ignored. The configuration file format
+is as follows:
 
 ~~~xml
 <config>
-  <property key="acapela.samplerate" value="44100"/>
-  <property key="log" value="true"/>
+  <property key="org.daisy.pipeline.tts.acapela.samplerate" value="44100"/>
+  <property key="org.daisy.pipeline.tts.log" value="true"/>
   <voice engine="acapela" name="claire" lang="fr" gender="female-adult" priority="12"/>
   <css href="css/aural.css"/>
   <lexicon href="lexicons/fr.pls"/>
@@ -36,11 +55,6 @@ TODO: what about <annotations type="" href="">
                     ...
                  </annotations>
 -->
-
-Configuration files may either be specified "statically", through the
-system property
-[`tts.config`](http://daisy.github.io/pipeline/wiki/Configuration-Files#system-properties),
-or "dynamically" through the optional script input.
 
 Both relative and absolute paths are accepted as a value of the "href"
 attributes. Relative paths are relative to the configuration file's
@@ -94,31 +108,37 @@ properties. The following properties are available:
 
 ### Common settings
 
-`audio.tmpdir`
+`org.daisy.pipeline.tts.audio.tmpdir`
 : Temporary directory used during audio synthesis
 : Defaults to "${java.io.tmpdir}"
 
-`threads.number`
+`org.daisy.pipeline.tts.maxmem`
+: Maximum amount of memory in Mb to be used by TTS and audio encoding
+: Defaults to 50% of the total amount of memory that the JVM will
+  attempt to use, or 500 Mb if there is no such limit
+: FIXME
+
+`org.daisy.pipeline.tts.threads.number`
 : Number of threads for audio encoding and regular text-to-speech
 : Defaults to the number of processors available to the JVM
 
-`threads.encoding.number`
+`org.daisy.pipeline.tts.threads.encoding.number`
 : Number of audio encoding threads
-: Defaults to `threads.number` if not specified
+: Defaults to "${org.daisy.pipeline.tts.threads.number}"
 
-`threads.speaking.number`
+`org.daisy.pipeline.tts.threads.speaking.number`
 : Number of regular text-to-speech threads
-: Defaults to `threads.number` if not specified
+: Defaults to "${org.daisy.pipeline.tts.threads.number}"
 
-`threads.each.memlimit`
+`org.daisy.pipeline.tts.threads.each.memlimit`
 : Maximum amount of memory consumed by each text-to-speech thread (in Mb)
 : Defaults to "20"
 
-`encoding.speed`
+`org.daisy.pipeline.tts.encoding.speed`
 : Maximum number of seconds of encoded audio per seconds of encoding
 : Defaults to "2.0"
 
-`log`
+`org.daisy.pipeline.tts.log`
 : If set to "true", will result in the Pipeline logging stuff in the
   output directory in a file named 'tts-log.xml'. The Pipeline will
   log a great deal of information to this file, which can be quite
@@ -130,86 +150,109 @@ properties. The following properties are available:
 
 ### Acapela
 
-`acapela.samplerate`
+`org.daisy.pipeline.tts.acapela.samplerate`
 : Sample rate (in Hz)
 : Defaults to "22050"
 
-`acapela.threads.reserved`
+`org.daisy.pipeline.tts.acapela.threads.reserved`
 : Number of reserved text-to-speech threads
 : Defaults to "3"
 
-`acapela.speed`
+`org.daisy.pipeline.tts.acapela.speed`
 : Defaults to "300"
 
-`acapela.servers`
+`org.daisy.pipeline.tts.acapela.servers`
 : Defaults to "localhost:0"
 
-`acapela.priority`
+`org.daisy.pipeline.tts.acapela.priority`
 : This engine is chosen over another engine that serves the same voice
   if this one has a higher priority.
 : Defaults to "15"
 
+<!--
 ### AT&T
 
-`att.servers`
+tts-adapter-attnative:
+
+`org.daisy.pipeline.tts.att.servers`
+: Address of the AT&T server
 : Defaults to "localhost:8888"
 
-`att.priority`
-: This engine is chosen over another engine that serves the same voice
-  if this one has a higher priority.
+`org.daisy.pipeline.tts.att.priority`
+: Priority with which the AT&T engine is chosen over other TTS engines
+  that serve the same voice.
 : Defaults to "10"
+
+
+tts-adapter-attbin:
+
+`org.daisy.pipeline.tts.att.servers`
+: Address of the AT&T server
+: Defaults to "localhost:8888"
+
+`org.daisy.pipeline.tts.att.client.path`
+: Path to the "TTSClientFile" executable
+: If not specified, Pipeline will automatically look for
+  "TTSClientFile" in the directories specified by the "PATH"
+  environment variable.
+
+`org.daisy.pipeline.tts.att.bin.priority`
+: Priority with which the AT&T engine is chosen over other TTS engines
+  that serve the same voice.
+: Defaults to "5"
+
+-->
 
 ### eSpeak
 
-`espeak.priority`
+`org.daisy.pipeline.tts.espeak.path`
+: Path to eSpeak executable
+: If not specified, Pipeline will automatically look for "espeak" in
+  the directories specified by the "PATH" environment variable.
+
+`org.daisy.pipeline.tts.espeak.priority`
 : This engine is chosen over another engine that serves the same voice
   if this one has a higher priority.
 : Defaults to "2"
 
-In addition there is the
-[`espeak.path`](http://daisy.github.io/pipeline/wiki/Configuration-Files#system-properties)
-system property for setting the path to the eSpeak executable. If not
-specified, Pipeline will automatically look for "espeak" in the
-directories specified by the "PATH" environment variable.
 
 ### Mac OS
 
-`osxspeech.priority`
+`org.daisy.pipeline.tts.osxspeech.path`
+: Alternative path to OSX's command line program "say"
+: Defaults to "/usr/bin/say"
+
+`org.daisy.pipeline.tts.osxspeech.priority`
 : This engine is chosen over another engine that serves the same voice
   if this one has a higher priority.
 : Defaults to "2"
 
-In addition there is the
-[`osxspeech.path`](http://daisy.github.io/pipeline/wiki/Configuration-Files#system-properties)
-system property for setting an alternative path to OSX's command line
-program "say" (default is "/usr/bin/say").
-
 ### SAPI
 
-`sapi.samplerate`
+`org.daisy.pipeline.tts.sapi.samplerate`
 : Sample rate (in Hz)
 : Defaults to "22050"
 : Can not be overridden at runtime. The server must be restarted to
   change this property.
 
-`sapi.bytespersample`
+`org.daisy.pipeline.tts.sapi.bytespersample`
 : Defaults to "2"
 : Can not be overridden at runtime. The server must be restarted to
   change this property.
 
-`sapi.priority`
+`org.daisy.pipeline.tts.sapi.priority`
 : This engine is chosen over another engine that serves the same voice
   if this one has a higher priority.
 : Defaults to "7"
 
 ### LAME encoder
 
-`lame.path`
+`org.daisy.pipeline.tts.lame.path`
 : Path to LAME executable
 : If not specified, will automatically look for "lame" in the
   directories specified by the environment variable "PATH".
 
-`lame.cli.options`
+`org.daisy.pipeline.tts.lame.cli.options`
 : Additional command line options passed to lame
 
 

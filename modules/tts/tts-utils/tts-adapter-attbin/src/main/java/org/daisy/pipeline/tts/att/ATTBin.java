@@ -70,14 +70,14 @@ public class ATTBin extends AbstractTTSService {
 			}
 		};
 
-		mLoadBalancer = new RoundRobinLoadBalancer(System.getProperty("att.servers",
+		mLoadBalancer = new RoundRobinLoadBalancer(System.getProperty("org.daisy.pipeline.tts.att.servers",
 		        "localhost:8888"), null);
 		mMarkPattern = Pattern
 		        .compile("([0-9]+)\\s+BOOKMARK:\\s+([^\\s]+)", Pattern.MULTILINE);
 		mSampleRate = 16000;
 		mAudioFormat = new AudioFormat(mSampleRate, 16, 1, true, false);
 
-		final String property = "att.client.path";
+		final String property = "org.daisy.pipeline.tts.att.client.path";
 		mATTPath = System.getProperty(property);
 		if (mATTPath == null) {
 			Optional<String> apath = BinaryFinder.find("TTSClientFile");
@@ -198,7 +198,7 @@ public class ATTBin extends AbstractTTSService {
 
 	@Override
 	public int getOverallPriority() {
-		return Integer.valueOf(System.getProperty("att.bin.priority", "5"));
+		return Integer.valueOf(System.getProperty("org.daisy.pipeline.tts.att.bin.priority", "5"));
 	}
 
 	@Override

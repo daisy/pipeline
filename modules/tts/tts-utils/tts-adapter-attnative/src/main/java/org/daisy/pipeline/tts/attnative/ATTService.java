@@ -17,10 +17,10 @@ public class ATTService extends AbstractTTSService {
 		System.loadLibrary("att");
 		
 		// settings
-		int priority = convertToInt(params, "att.priority", 10);
+		int priority = convertToInt(params, "org.daisy.pipeline.tts.att.priority", 10);
 
 		// load balancer
-		String serversProperty = "att.servers";
+		String serversProperty = "org.daisy.pipeline.tts.att.servers";
 		String serverVal = params.get(serversProperty);
 		if (serverVal == null) {
 			serverVal = "localhost:8888";

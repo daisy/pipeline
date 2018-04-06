@@ -19,7 +19,7 @@ public class AudioBufferTracker implements AudioBufferAllocator {
 	private Logger ServerLogger = LoggerFactory.getLogger(AudioBufferTracker.class);
 
 	public AudioBufferTracker() {
-		String maxMemProp = System.getProperty("tts.maxmem");
+		String maxMemProp = System.getProperty("org.daisy.pipeline.tts.maxmem");
 		long maxMem;
 		if (maxMemProp != null) {
 			maxMem = Long.valueOf(maxMemProp) * 1048576;

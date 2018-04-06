@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>tts-modules-parent</artifactId>
-		<version>1.10.3-SNAPSHOT</version>
+		<version>1.11.0</version>
 		<relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.1</version>
   <artifactId>tts-adapter-sapinative</artifactId>
   <packaging>bundle</packaging>
 
@@ -21,6 +21,11 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -104,7 +109,7 @@
               <tasks>
                 <copy todir="target/generated-resources/">
                   <fileset dir="target/dependency">
-                    <include name="**/*.dll"/>
+                    <include name="**/*.dll" />
                   </fileset>
                 </copy>
               </tasks>
@@ -120,7 +125,7 @@
         <configuration>
           <instructions>
 	    <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package/>
+	    <Export-Package />
           </instructions>
         </configuration>
         <executions>

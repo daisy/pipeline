@@ -145,9 +145,9 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		VoiceConfigExtension configExt = new VoiceConfigExtension();
 		ConfigReader cr = new ConfigReader(mRuntime.getProcessor(), config.read(), configExt);
 
-		String logEnabledProp = cr.getDynamicProperties().get("log");
+		String logEnabledProp = cr.getDynamicProperties().get("org.daisy.pipeline.tts.log");
 		if (logEnabledProp == null)
-			logEnabledProp = cr.getStaticProperties().get("log");
+			logEnabledProp = cr.getStaticProperties().get("org.daisy.pipeline.tts.log");
 		boolean logEnabled = "true".equalsIgnoreCase(logEnabledProp) && mOutputDirOpt != null
 		        && !mOutputDirOpt.isEmpty();
 		TTSLog log;
@@ -156,7 +156,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		} else
 			log = new TTSLogEmpty();
 
-		String tmpDir = cr.getAllProperties().get("audio.tmpdir");
+		String tmpDir = cr.getAllProperties().get("org.daisy.pipeline.tts.audio.tmpdir");
 		if (tmpDir == null)
 			tmpDir = System.getProperty("java.io.tmpdir");
 		File audioOutputDir = null;

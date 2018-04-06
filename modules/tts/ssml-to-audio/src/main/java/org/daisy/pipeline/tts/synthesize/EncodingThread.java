@@ -29,7 +29,7 @@ public class EncodingThread {
 		//max seconds of encoded audio per seconds of encoding
 		//it would be more accurate with a byte rate instead, but less intuitive
 		float encodingSpeed = 2.0f;
-		String speedProp = "encoding.speed";
+		String speedProp = "org.daisy.pipeline.tts.encoding.speed";
 		String speedParam = TTSproperties.get(speedProp);
 		if (speedParam != null) {
 			try {

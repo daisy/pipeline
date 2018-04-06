@@ -37,9 +37,9 @@ public class ConfigReaderTest {
 	@Test
 	public void withoutProtection() throws SaxonApiException {
 		System.setProperty(ConfigReader.HostProtectionProperty, "false");
-		ConfigReader cr = initConfigReader("<property key=\"key1\" value=\"val1\"/><property key=\"key2\" value=\"val2\"/>");
-		Assert.assertEquals("val1", cr.getAllProperties().get("key1"));
-		Assert.assertEquals("val2", cr.getDynamicProperties().get("key2"));
+		ConfigReader cr = initConfigReader("<property key=\"org.daisy.pipeline.tts.key1\" value=\"val1\"/><property key=\"key2\" value=\"val2\"/>");
+		Assert.assertEquals("val1", cr.getAllProperties().get("org.daisy.pipeline.tts.key1"));
+		Assert.assertEquals("val2", cr.getDynamicProperties().get("org.daisy.pipeline.tts.key2"));
 		Assert.assertEquals(2, cr.getAllProperties().size());
 		Assert.assertEquals(2, cr.getDynamicProperties().size());
 	}

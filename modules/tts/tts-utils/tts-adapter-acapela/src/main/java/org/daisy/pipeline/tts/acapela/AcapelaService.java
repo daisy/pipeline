@@ -21,15 +21,15 @@ public class AcapelaService extends AbstractTTSService {
 		}
 
 		// settings
-		int sampleRate = convertToInt(params, "acapela.samplerate", 22050);
-		int reserved = convertToInt(params, "acapela.threads.reserved", 3);
-		int speed = convertToInt(params, "acapela.speed", 300);
-		int priority = convertToInt(params, "acapela.priority", 15);
+		int sampleRate = convertToInt(params, "org.daisy.pipeline.tts.acapela.samplerate", 22050);
+		int reserved = convertToInt(params, "org.daisy.pipeline.tts.acapela.threads.reserved", 3);
+		int speed = convertToInt(params, "org.daisy.pipeline.tts.acapela.speed", 300);
+		int priority = convertToInt(params, "org.daisy.pipeline.tts.acapela.priority", 15);
 
 		AudioFormat format = new AudioFormat((float) sampleRate, 16, 1, true, false);
 
 		// load balancer
-		String serversProperty = "acapela.servers";
+		String serversProperty = "org.daisy.pipeline.tts.acapela.servers";
 		String serverVal = params.get(serversProperty);
 		if (serverVal == null) {
 			serverVal = "localhost:0";

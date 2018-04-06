@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>tts-modules-parent</artifactId>
-    <version>1.10.3-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.0.1</version>
   <artifactId>tts-adapter-osx</artifactId>
   <packaging>bundle</packaging>
 
@@ -38,7 +38,7 @@
         <configuration>
           <instructions>
             <Service-Component>OSGI-INF/tts-service.xml</Service-Component>
-	    <Export-Package/>
+	    <Export-Package />
           </instructions>
         </configuration>
       </plugin>

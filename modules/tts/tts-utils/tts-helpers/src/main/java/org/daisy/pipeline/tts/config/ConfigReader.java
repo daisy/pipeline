@@ -16,6 +16,8 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
+import org.daisy.pipeline.properties.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
@@ -24,7 +26,8 @@ public class ConfigReader implements ConfigProperties {
 
 	private static Logger Logger = LoggerFactory.getLogger(ConfigReader.class);
 
-	public static String HostProtectionProperty = "host.protection";
+	public static String HostProtectionProperty = "org.daisy.pipeline.tts.host.protection";
+	private static final String ttsConfigProperty = "org.daisy.pipeline.tts.config";
 
 	public interface Extension {
 		/**
@@ -42,7 +45,7 @@ public class ConfigReader implements ConfigProperties {
 	}
 
 	public ConfigReader(Processor saxonproc, XdmNode doc, Extension... extensions) {
-		String staticConfigPath = System.getProperty("tts.config");
+		String staticConfigPath = System.getProperty(ttsConfigProperty);
 		if (staticConfigPath != null) {
 			XdmNode content = readFromURIinsideConfig(staticConfigPath, saxonproc, null);
 			if (content != null)
@@ -50,6 +53,14 @@ public class ConfigReader implements ConfigProperties {
 		}
 		if (doc != null) {
 			readConfig(mDynamicProps, doc, extensions);
+		}
+		for (String key : Properties.propertyNames()) {
+			if (key.startsWith("org.daisy.pipeline.tts.")
+			    && !key.equals(HostProtectionProperty)
+			    && !key.equals(ttsConfigProperty)) {
+				String value = Properties.getProperty(key);
+				mStaticProps.put(key, value);
+			}
 		}
 		mAllProps = new HashMap<String, String>();
 		mAllProps.putAll(mStaticProps);
@@ -125,6 +136,9 @@ public class ConfigReader implements ConfigProperties {
 						Logger.warn("Missing key or value for config's property "
 						        + node.toString());
 					} else {
+						if (!key.startsWith("org.daisy.pipeline.tts."))
+							// for backwards compatibility
+							key = "org.daisy.pipeline.tts." + key;
 						props.put(key, value);
 					}
 				} else {

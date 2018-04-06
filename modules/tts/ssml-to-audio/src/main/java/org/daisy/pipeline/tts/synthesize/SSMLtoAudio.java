@@ -460,13 +460,13 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				reservedThreadNum += tts.reservedThreadNum();
 		}
 		int cores = Runtime.getRuntime().availableProcessors();
-		int ttsThreadNum = convertToInt(mProperties, "threads.number", cores);
-		int encodingThreadNum = convertToInt(mProperties, "threads.encoding.number",
+		int ttsThreadNum = convertToInt(mProperties, "org.daisy.pipeline.tts.threads.number", cores);
+		int encodingThreadNum = convertToInt(mProperties, "org.daisy.pipeline.tts.threads.encoding.number",
 		        ttsThreadNum);
-		int regularTTSthreadNum = convertToInt(mProperties, "threads.speaking.number",
+		int regularTTSthreadNum = convertToInt(mProperties, "org.daisy.pipeline.tts.threads.speaking.number",
 		        ttsThreadNum);
 		int totalTTSThreads = regularTTSthreadNum + reservedThreadNum;
-		int maxMemPerTTSThread = convertToInt(mProperties, "threads.each.memlimit", 20)*1048576; //20MB
+		int maxMemPerTTSThread = convertToInt(mProperties, "org.daisy.pipeline.tts.threads.each.memlimit", 20)*1048576; //20MB
 		mLogger.printInfo("Number of encoding threads: " + encodingThreadNum);
 		mLogger.printInfo("Number of regular text-to-speech threads: " + regularTTSthreadNum);
 		mLogger.printInfo("Number of reserved text-to-speech threads: " + reservedThreadNum);

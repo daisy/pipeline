@@ -16,9 +16,9 @@ public class SAPIservice extends AbstractTTSService {
 
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
-		int sampleRate = convertToInt(params, "sapi.samplerate", 22050);
-		int bytesPerSample = convertToInt(params, "sapi.bytespersample", 2);
-		int priority = convertToInt(params, "sapi.priority", 7);
+		int sampleRate = convertToInt(params, "org.daisy.pipeline.tts.sapi.samplerate", 22050);
+		int bytesPerSample = convertToInt(params, "org.daisy.pipeline.tts.sapi.bytespersample", 2);
+		int priority = convertToInt(params, "org.daisy.pipeline.tts.sapi.priority", 7);
 
 		AudioFormat audioFormat = new AudioFormat(sampleRate, 8 * bytesPerSample, 1, true,
 		        false);

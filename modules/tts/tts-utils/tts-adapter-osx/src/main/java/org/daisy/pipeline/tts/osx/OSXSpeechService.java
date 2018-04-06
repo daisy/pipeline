@@ -10,12 +10,12 @@ public class OSXSpeechService extends AbstractTTSService {
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
 		// settings
-		String prop = "osxspeech.path";
-		String sayPath = System.getProperty(prop);
+		String prop = "org.daisy.pipeline.tts.osxspeech.path";
+		String sayPath = params.get(prop);
 		if (sayPath == null) {
 			sayPath = "/usr/bin/say";
 		}
-		String priority = params.get("osxspeech.priority");
+		String priority = params.get("org.daisy.pipeline.tts.osxspeech.priority");
 		int intPriority = 2;
 		if (priority != null) {
 			try {
