@@ -15,18 +15,6 @@
         </div>
     </p:documentation>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
-        <p:documentation>
-            Collection of utilities for validation and reporting.
-        </p:documentation>
-    </p:import>
-    
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
-        <p:documentation>
-            Schema selector used for DTBook validation.
-        </p:documentation>
-    </p:import>
-    
     <p:documentation>Generate a MODS metadata record from a DTBook 2005-3 document.</p:documentation>
     <p:declare-step name="dtbook-to-mods-meta" type="px:dtbook-to-mods-meta">
         <p:input port="source"/>
@@ -37,6 +25,16 @@
                 Whether to stop processing and raise an error on validation issues.
             </p:documentation>
         </p:option>
+        <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
+            <p:documentation>
+                Collection of utilities for validation and reporting.
+            </p:documentation>
+        </p:import>
+        <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+            <p:documentation>
+                Schema selector used for DTBook validation.
+            </p:documentation>
+        </p:import>
         <px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
         <px:validate-with-relax-ng-and-report name="validate-dtbook-input">
             <p:input port="source">
@@ -69,6 +67,16 @@
                 Whether to stop processing and raise an error on validation issues.
             </p:documentation>
         </p:option>
+        <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
+            <p:documentation>
+                Collection of utilities for validation and reporting.
+            </p:documentation>
+        </p:import>
+        <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+            <p:documentation>
+                Schema selector used for DTBook validation.
+            </p:documentation>
+        </p:import>
         <px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
         <px:validate-with-relax-ng-and-report name="validate-dtbook-input">
             <p:input port="source">

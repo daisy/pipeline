@@ -6,18 +6,20 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-utils-parent</artifactId>
-    <version>1.10.4-SNAPSHOT</version>
+    <version>1.11.0</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>dtbook-utils</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.3</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook Utils</name>
   
   <dependencies>
-    <!-- runtime dependencies -->
+    <!--
+        runtime dependencies
+    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
@@ -42,6 +44,19 @@
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>validation-utils</artifactId>
       <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-entities</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.build</groupId>
+      <artifactId>modules-test-helper</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   

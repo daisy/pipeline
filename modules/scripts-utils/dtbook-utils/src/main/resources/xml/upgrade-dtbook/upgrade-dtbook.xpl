@@ -44,7 +44,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
     
-    <p:variable name="version" select="dtb:dtbook/@version"/>
+    <p:variable name="version" select="(/dtb:dtbook|/dtbook)/@version"/>
     
     <px:message severity="DEBUG">
         <p:with-option name="message" select="concat('Input document version: ', $version)"/>    

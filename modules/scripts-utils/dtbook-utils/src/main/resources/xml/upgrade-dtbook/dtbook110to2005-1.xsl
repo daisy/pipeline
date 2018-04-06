@@ -49,18 +49,18 @@
 </xsl:template>
 
 <xsl:template match="*">
-	<xsl:copy>
-		<xsl:if test="name()!='head' and name()!='meta'">
+	<xsl:element name="{local-name()}" namespace="http://www.daisy.org/z3986/2005/dtbook/">
+		<xsl:if test="local-name()!='head' and local-name()!='meta'">
 			<xsl:attribute name="id"><xsl:value-of select="generate-id()" /></xsl:attribute>
 		</xsl:if>
 		<xsl:call-template name="copyAtts"/>
 		<xsl:apply-templates />
-	</xsl:copy>
+	</xsl:element>
 </xsl:template>
 
 <!-- Root element name is changed, plus add version & namespace -->
-<xsl:template match="dtbook">
-	<dtbook version="2005-1">
+<xsl:template match="/dtbook">
+	<dtbook version="2005-1" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
 		<xsl:for-each select="@*" >
 			<xsl:choose>
 				<xsl:when test="name()='version'"/>
@@ -82,7 +82,7 @@
 
 <!-- wrap non-level block items in fromtmatter in a level -->
 <xsl:template match="frontmatter|bodymatter|rearmatter">
-	<xsl:copy>
+	<xsl:element name="{local-name()}" namespace="http://www.daisy.org/z3986/2005/dtbook/">
 		<xsl:call-template name="copyAtts"/>
 		<xsl:for-each-group select="*" group-adjacent="local-name()='level' or local-name()='level1' or local-name()='doctitle' or local-name()='docauthor'">
 			<xsl:choose>
@@ -100,18 +100,18 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:for-each-group>
-	</xsl:copy>
+	</xsl:element>
 </xsl:template>
 
 <!-- levels containing only a heading is appended an empty paragraph -->
 <xsl:template match="level|level1|level2|level3|level4|level5|level6">
-	<xsl:copy>
+	<xsl:element name="{local-name()}" namespace="http://www.daisy.org/z3986/2005/dtbook/">
 		<xsl:call-template name="copyAtts"/>
 		<xsl:apply-templates/>
 		<xsl:if test="count(*[name()!='hd' and name()!='h1' and name()!='h2' and name()!='h3' and name()!='h4' and name()!='h5' and name()!='h6'])=0">
 			<p/>
 		</xsl:if>
-	</xsl:copy>
+	</xsl:element>
 </xsl:template>
  
 <!-- levelhd is transformed to hd, including all attributes excluding the depth attribute -->
@@ -190,12 +190,12 @@
 
 <!-- sidebars and prodnotes need @render (default = optional) -->
 <xsl:template match="sidebar | prodnote">
-	<xsl:copy>
+	<xsl:element name="{local-name()}" namespace="http://www.daisy.org/z3986/2005/dtbook/">
 		<xsl:attribute name="id"><xsl:value-of select="generate-id()" /></xsl:attribute>
 		<xsl:attribute name="render">optional</xsl:attribute>
 		<xsl:call-template name="copyAtts"/>
 		<xsl:apply-templates />
-	</xsl:copy>
+	</xsl:element>
 </xsl:template>
 
 <!-- Convert the various specialized lists to the generic list element -->

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+    
+    <x:scenario label="dtbook 1.1.0 to dtbook 2005-3">
+        <x:call step="px:upgrade-dtbook">
+            <x:input port="source">
+                <x:document type="inline">
+                    <dtbook version="1.1.0">
+                        <head>
+                            <title>Title</title>
+                            <meta name="dc:Title" content="Title"/>
+                        </head>
+                        <book>
+                            <bodymatter>
+                                <level1>
+                                    <p>Blah</p>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="assert-valid" select="'true'"/>
+        </x:call>
+        <x:context label="the dtbook 2005-3">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the dtbook 2005-3 should be as expected" type="compare">
+            <x:document type="inline">
+                <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3">
+                    <head>
+                        <meta name="dc:Title" content="Title"/>
+                    </head>
+                    <book id="d2114e11">
+                        <bodymatter>
+                            <level1>
+                                <p id="d2114e17">Blah</p>
+                            </level1>
+                        </bodymatter>
+                    </book>
+                </dtbook>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>
