@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -49,6 +50,7 @@ import net.sf.saxon.s9api.XdmValue;
 import net.sf.saxon.s9api.XsltCompiler;
 import net.sf.saxon.s9api.XsltExecutable;
 import net.sf.saxon.s9api.XsltTransformer;
+import net.sf.saxon.trans.XPathException;
 
 import org.apache.xml.resolver.CatalogManager;
 import org.apache.xml.resolver.tools.CatalogResolver;
@@ -57,7 +59,7 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Function;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Files;
 import com.google.common.io.InputSupplier;
 import com.google.common.io.Resources;
@@ -87,13 +89,56 @@ public class XSpecRunner {
 		this.processor = processor;
 	}
 
+	public boolean hasFocus(File testDir) {
+		return hasFocus(listXSpecFilesRecursively(testDir));
+	}
+
+	public boolean hasFocus(Collection<File> tests) {
+		for (File test : tests) {
+			if (test.exists()) {
+				try {
+					XdmNode node = new XdmNode(
+						processor.getUnderlyingConfiguration().buildDocument(new StreamSource(test)));
+					if (((XdmAtomicValue)xpathCompiler.evaluateSingle("exists(//scenario[@focus])", node)).getBooleanValue())
+						return true;
+				} catch (SaxonApiException e) {
+				} catch (XPathException e) {
+				}
+			}
+		}
+		return false;
+	}
+	
 	public TestResults run(Map<String, File> tests, File reportDir) {
+		Set<String> focusTests = new HashSet<String>(); {
+			for (String testName : tests.keySet()) {
+				File test = tests.get(testName);
+				if (test.exists()) {
+					try {
+						XdmNode node = new XdmNode(
+							processor.getUnderlyingConfiguration().buildDocument(new StreamSource(test)));
+						if (((XdmAtomicValue)xpathCompiler.evaluateSingle("exists(//scenario[@focus])", node)).getBooleanValue())
+							focusTests.add(testName);
+					} catch (SaxonApiException e) {
+					} catch (XPathException e) {
+					}
+				}
+			}
+		}
+		Set<String> skipTests = new HashSet<String>(); {
+			if (!focusTests.isEmpty())
+				for (String testName : tests.keySet())
+					if (!focusTests.contains(testName))
+						skipTests.add(testName);
+		}
 		TestResults.Builder builder = new TestResults.Builder("");
 		for (Map.Entry<String, File> test : tests.entrySet()) {
+			if (skipTests.contains(test.getKey()))
+				continue;
 			builder.addSubResults(runSingle(test.getKey(), test.getValue(),
 					reportDir));
 		}
-		writeSummaryReport(tests.keySet(), reportDir);
+		writeSummaryReport(focusTests.isEmpty() ? tests.keySet() : focusTests, reportDir);
 		return builder.build();
 	}
 	
@@ -313,8 +358,8 @@ public class XSpecRunner {
 	 * FileUtils.listFiles from Apache Commons IO could be used here as well,
 	 * but would introduce another dependency.
 	 */
-	private static Collection<File> listXSpecFilesRecursively(File directory) {
-		ImmutableList.Builder<File> builder = new ImmutableList.Builder<File>();
+	public static Set<File> listXSpecFilesRecursively(File directory) {
+		ImmutableSet.Builder<File> builder = new ImmutableSet.Builder<File>();
 		if (directory.isDirectory())
 			for (File file : directory.listFiles()) {
 				if (file.isDirectory())
