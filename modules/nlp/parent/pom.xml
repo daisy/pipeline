@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.5</version>
+    <version>1.6</version>
     <relativePath />
   </parent>
 
   <artifactId>nlp-modules-parent</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.11.0</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: NLP Modules Parent POM</name>
@@ -24,7 +24,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-modules-bom</artifactId>
-        <version>1.10.1-SNAPSHOT</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -34,7 +34,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.10.2</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -44,10 +44,14 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils-bom</artifactId>
-        <version>1.10.1</version>
+        <version>1.11.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <scm>
+    <tag>v1.11.0</tag>
+  </scm>
 </project>

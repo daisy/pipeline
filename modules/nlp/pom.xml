@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>nlp-modules-aggregator</artifactId>
-  <version>1.10.1-SNAPSHOT</version>
+  <version>1.11.0</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: NLP Modules Aggregator POM</name>
@@ -21,14 +21,18 @@
   <modules>
     <module>bom</module>
     <module>parent</module>
-    <module>nlp-utils/nlp-common</module>
-    <module>nlp-utils/lexing</module>
+    <!--<module>nlp-utils/nlp-common</module>-->
+    <!--<module>nlp-utils/lexing</module>-->
     <module>nlp-utils/break-detection</module>
-    <module>ruled-lexer</module>
-    <module>light-lexer</module>
-    <module>omnilang-lexer</module>
+    <!--<module>ruled-lexer</module>-->
+    <!--<module>light-lexer</module>-->
+    <!--<module>omnilang-lexer</module>-->
     <module>zedai-break-detection</module>
     <module>html-break-detection</module>
     <module>dtbook-break-detection</module>
   </modules>
+
+  <scm>
+    <tag>v1.11.0</tag>
+  </scm>
 </project>

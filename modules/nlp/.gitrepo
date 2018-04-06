@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-mod-nlp.git
 	branch = master
-	commit = 46e7fd81c13532d18b2620700db5b0abcaed3705
-	parent = 53e7707663f1b5620c63e01706cbe6f8baf1301a
-	cmdver = 0.3.0
+	commit = 9054848e187e36800bd4062a0f5a4a618f83236e
+	parent = cb3d4eaa054460e11b49653f6f26ebdf9b7d530e
+	cmdver = 0.3.1
