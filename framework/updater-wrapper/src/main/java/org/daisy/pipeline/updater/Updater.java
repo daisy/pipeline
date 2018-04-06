@@ -7,10 +7,10 @@ import org.daisy.pipeline.properties.Properties;
 
 public class Updater {
 
-        private static String UPDATER_BIN="org.pipeline.updater.bin";
-        private static String DEPLOY_PATH="org.pipeline.updater.deployPath";
-        private static String UPDATE_SITE="org.pipeline.updater.updateSite";
-        private static String RELEASE_DESCRIPTOR="org.pipeline.updater.releaseDescriptor";
+        private static String UPDATER_BIN="org.daisy.pipeline.updater.bin";
+        private static String DEPLOY_PATH="org.daisy.pipeline.updater.deployPath";
+        private static String UPDATE_SITE="org.daisy.pipeline.updater.updateSite";
+        private static String RELEASE_DESCRIPTOR="org.daisy.pipeline.updater.releaseDescriptor";
         private static String ERROR="Property %s not set";
 
 

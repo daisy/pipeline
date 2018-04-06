@@ -47,7 +47,7 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	 * @param script the script
 	 */
 	public void register(final XProcScriptService script) {
-		logger.trace("registering script {}",script.getURI());
+		logger.debug("Registering script {}", script.getId());
 		if (!script.hasParser()){
 			script.setParser(parser);
 		}
@@ -62,8 +62,9 @@ public class DefaultScriptRegistry implements ScriptRegistry {
 	 * @param script the script
 	 */
 	public void unregister(XProcScriptService script) {
+		logger.debug("Unregistering script {}", script.getId());
 		// TODO check
-		descriptors.remove(script);
+		descriptors.remove(script.getURI());
 	}
 
 	/* (non-Javadoc)

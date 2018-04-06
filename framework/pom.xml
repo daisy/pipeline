@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-aggregator</artifactId>
-  <version>1.10.5-SNAPSHOT</version>
+  <version>1.11.0</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Aggregator</name>
@@ -21,7 +21,7 @@
     <connection>scm:git:git@github.com:daisy/pipeline-framework.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-framework.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-framework.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.11.0</tag>
   </scm>
 
   <modules>
@@ -33,7 +33,7 @@
     <module>framework-core</module>
     <module>framework-persistence</module>
     <module>framework-volatile</module>
-    <module>logging-activator</module>
+    <!--<module>logging-activator</module>-->
     <module>logging-appender</module>
     <module>modules-registry</module>
     <module>persistence-derby</module>
@@ -42,10 +42,10 @@
     <module>updater-wrapper</module>
     <module>webservice</module>
     <module>webservice-utils</module>
-    <module>woodstox-osgi-adapter</module>
-    <module>xpath-registry</module>
+    <!--<module>woodstox-osgi-adapter</module>-->
+    <!--<module>xpath-registry</module>-->
     <module>xproc-api</module>
-    <module>launcher</module>
+    <!--<module>launcher</module>-->
   </modules>
   
   <build>

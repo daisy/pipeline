@@ -1,6 +1,8 @@
 package org.daisy.pipeline.properties;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public final class Properties {
 
@@ -10,6 +12,18 @@ public final class Properties {
 	// System.getProperties() returns an object that is always up to date
 	private final static java.util.Properties systemProperties = System.getProperties();
 	private final static Map<String,String> systemEnv = System.getenv();
+
+	/**
+	 * Returns a set of all the keys in this property list.
+	 */
+	public static Set<String> propertyNames() {
+		Set<String> keys = new HashSet<String>();
+		keys.addAll(systemProperties.stringPropertyNames());
+		for (String envKey : systemEnv.keySet())
+			if (envKey.startsWith("PIPELINE2_"))
+				keys.add("org.daisy.pipeline." + envKey.substring(10).replace('_','.').toLowerCase());
+		return keys;
+	}
 
 	/**
 	 * Gets the system property or environment variable indicated by the specified key.
