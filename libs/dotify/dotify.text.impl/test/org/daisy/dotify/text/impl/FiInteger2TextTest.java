@@ -1,10 +1,13 @@
-package org.daisy.dotify.impl.text;
+package org.daisy.dotify.text.impl;
 
 import static org.junit.Assert.assertEquals;
 
 import org.daisy.dotify.api.text.IntegerOutOfRange;
+import org.daisy.dotify.text.impl.BasicInteger2Text;
+import org.daisy.dotify.text.impl.FiInt2TextLocalization;
 import org.junit.Test;
 
+@SuppressWarnings("javadoc")
 public class FiInteger2TextTest {
 	private BasicInteger2Text int2text = new FiInt2TextLocalization();
 

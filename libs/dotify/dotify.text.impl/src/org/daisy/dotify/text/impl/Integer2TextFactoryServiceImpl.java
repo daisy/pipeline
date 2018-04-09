@@ -1,13 +1,16 @@
-package org.daisy.dotify.impl.text;
+package org.daisy.dotify.text.impl;
 
 import java.util.Collection;
 import java.util.Locale;
 
 import org.daisy.dotify.api.text.Integer2TextFactory;
 import org.daisy.dotify.api.text.Integer2TextFactoryService;
+import org.osgi.service.component.annotations.Component;
 
-import aQute.bnd.annotation.component.Component;
-
+/**
+ * Provides an integer to text factory service.
+ * @author Joel Håkansson
+ */
 @Component
 public class Integer2TextFactoryServiceImpl implements Integer2TextFactoryService {
 	

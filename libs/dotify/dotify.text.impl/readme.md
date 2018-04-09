@@ -2,7 +2,7 @@
 [![Type](https://img.shields.io/badge/type-provider_bundle-blue.svg)](https://github.com/brailleapps/wiki/wiki/Types)
 
 # Introduction #
-dotify.text.impl contains an implementation of the text interfaces of [dotify.api](https://github.com/joeha480/dotify/tree/master/dotify.api).
+dotify.text.impl contains an implementation of the text interfaces of [dotify.api](https://github.com/brailleapps/dotify.api/tree/master).
 
 ## Using ##
 Download the [latest release](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.daisy.dotify%22%20%20a%3A%22dotify.text.impl%22) from maven central and add it to your runtime environment.
@@ -20,7 +20,7 @@ Build with `gradlew build` (Windows) or `./gradlew build` (Mac/Linux)
 Tests are run with `gradlew test` (Windows) or `./gradlew test` (Mac/Linux)
 
 ## Requirements & Compatibility ##
-- Requires JDK 7
+- Requires Java 8
 - Compatible with SPI and OSGi
 
 ## More information ##

@@ -1,4 +1,4 @@
-package org.daisy.dotify.impl.text;
+package org.daisy.dotify.text.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,18 +6,23 @@ import java.util.List;
 
 import org.daisy.dotify.api.text.Integer2TextFactory;
 import org.daisy.dotify.api.text.Integer2TextFactoryService;
+import org.osgi.service.component.annotations.Component;
 
-import aQute.bnd.annotation.component.Component;
-
+/**
+ * Provides a Swedish integer to text implementation.
+ * @author Joel Håkansson
+ */
 @Component
-public class EnglishInteger2TextFactoryService implements
+public class SwedishInteger2TextFactoryService implements
 		Integer2TextFactoryService {
 	
-	private final static List<String> locales;
+	private static final List<String> locales;
 	static {
 		locales = new ArrayList<>();
-		locales.add("en");
+		locales.add("sv-SE");
+		locales.add("sv");
 	}
+	
 
 	@Override
 	public boolean supportsLocale(String locale) {
@@ -31,7 +36,7 @@ public class EnglishInteger2TextFactoryService implements
 
 	@Override
 	public Integer2TextFactory newFactory() {
-		return new EnglishInteger2TextFactory();
+		return new SwedishInteger2TextFactory();
 	}
 
 	@Override

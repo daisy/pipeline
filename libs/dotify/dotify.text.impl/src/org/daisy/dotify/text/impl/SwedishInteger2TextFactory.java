@@ -1,4 +1,4 @@
-package org.daisy.dotify.impl.text;
+package org.daisy.dotify.text.impl;
 
 import org.daisy.dotify.api.text.Integer2Text;
 import org.daisy.dotify.api.text.Integer2TextConfigurationException;

@@ -1,4 +1,4 @@
-package org.daisy.dotify.impl.text;
+package org.daisy.dotify.text.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,8 +34,8 @@ class Integer2TextFactoryImpl implements Integer2TextFactory {
 			this.clazz = clazz;
 		}
 	}
-	final static Map<String, Class<? extends Integer2Text>> locales;
-	final static List<String> displayNames;
+	static final Map<String, Class<? extends Integer2Text>> locales;
+	static final List<String> displayNames;
 	static {
 		List<String> _localeNames = new ArrayList<>();
 		Map<String, Class<? extends Integer2Text>> _locales = new HashMap<>();

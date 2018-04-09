@@ -1,4 +1,4 @@
-package org.daisy.dotify.impl.text;
+package org.daisy.dotify.text.impl;
 
 import org.daisy.dotify.api.text.Integer2Text;
 import org.daisy.dotify.api.text.IntegerOutOfRange;
@@ -81,7 +81,7 @@ abstract class BasicInteger2Text implements Integer2Text {
 
 	private String intToTextInner(int value) throws IntegerOutOfRange {
 		if (value >= 10000) {
-			throw new IntegerOutOfRange();
+			throw new IntegerOutOfRange("Value out of range: " + value);
 		} else if (value < 0) {
 			return formatNegative(intToTextInner(-value));
 		} else {
