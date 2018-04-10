@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>common-utils-bom</artifactId>
-  <version>1.11.0</version>
+  <version>1.11.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Common Utility Modules BoM</name>
@@ -62,8 +62,4 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <scm>
-    <tag>v1.11.0</tag>
-  </scm>
 </project>
