@@ -122,7 +122,7 @@
 		<x:context label="The 'xprocdoc' JAR content">
 			<x:document type="zip" href="../../../target/it-pipeline-module-0-SNAPSHOT-xprocdoc.jar"/>
 		</x:context>
-		<x:expect label="The 'xprocdoc' JAR content" type="compare">
+		<x:expect label="The 'xprocdoc' JAR content" type="compare" pending="order of zip entries is undeterministic">
 			<x:document type="inline">
 				<c:zipfile name="it-pipeline-module-0-SNAPSHOT-xprocdoc.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>

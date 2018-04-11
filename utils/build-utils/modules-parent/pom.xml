@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-parent</artifactId>
-  <version>1.6</version>
+  <version>1.7-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Parent POM</name>
@@ -514,8 +514,4 @@
       </build>
     </profile>
   </profiles>
-
-  <scm>
-    <tag>modules-parent-1.6</tag>
-  </scm>
 </project>
