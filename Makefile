@@ -137,6 +137,15 @@ libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
 
 modules/scripts/dtbook-to-odt/.install-doc.jar : $(call rwildcard,modules/scripts/dtbook-to-odt/src/test/,*)
 
+.SECONDARY : \
+	modules/braille/liblouis-utils/liblouis-native/.install-mac.jar \
+	modules/braille/liblouis-utils/liblouis-native/.install-linux.jar \
+	modules/braille/liblouis-utils/liblouis-native/.install-windows.jar
+modules/braille/liblouis-utils/liblouis-native/.install-mac.jar \
+modules/braille/liblouis-utils/liblouis-native/.install-linux.jar \
+modules/braille/liblouis-utils/liblouis-native/.install-windows.jar: \
+	modules/braille/liblouis-utils/liblouis-native/.install
+
 .SECONDARY : .dependencies-init
 .dependencies-init :
 	echo "Recomputing dependencies between modules..." >&2
