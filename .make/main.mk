@@ -13,7 +13,7 @@ MVN_LOG           := tee -a $(ROOT_DIR)/maven.log \
 override GRADLE   := M2_HOME=$(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings $(GRADLE) $(MVN_PROPERTIES)
 EVAL              := :
 
-export ROOT_DIR MY_DIR MVN MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE HOST_PLATFORM MAKE MAKEFLAGS MAKECMDGOALS
+export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE HOST_PLATFORM MAKE MAKEFLAGS MAKECMDGOALS
 
 rwildcard = $(shell [ -d $1 ] && find $1 -type f | sed 's/ /\\ /g')
 # alternative, but does not support spaces in file names:
@@ -208,17 +208,12 @@ endif
 $(addsuffix /.project,$(MODULES)) : parents
 
 ifneq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
-$(addsuffix /.project,$(MODULES)) : .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs
-endif
 
-.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs : | $(TARGET_DIR)/effective-settings.xml
-	if ! test -e $(dir $@); then \
-		echo "No Eclipse workspace in $(ROOT_DIR). Please create one with Eclipse first." >&2; \
-		exit 1; \
-	fi
-	echo "eclipse.m2.userSettingsFile=$(ROOT_DIR)/$(TARGET)/effective-settings.xml" >$@
-	echo "eclipse.preferences.version=1" >>$@
-	echo "Now restart your Eclipse workspace '$(ROOT_DIR)'" >&2
+$(addsuffix /.project,$(MODULES)) : .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs
+.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs : | $(TARGET_DIR)/effective-settings.xml .group-eval
+	$(EVAL) $(MY_DIR)/eclipse-init.sh
+
+endif
 
 .SECONDARY : .group-eval
 .group-eval :
