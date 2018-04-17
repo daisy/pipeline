@@ -173,7 +173,8 @@
 													                      /pom:dependencies
 													                      /pom:dependency[string(pom:groupId)=string(current()/pom:groupId) and
 													                                      string(pom:artifactId)=string(current()/pom:artifactId) and
-													                                      string(pom:type)=string(current()/pom:type)]
+													                                      string(pom:type)=string(current()/pom:type) and
+													                                      string(pom:classifier)=string(current()/pom:classifier)]
 													                      /pom:version"/>
 													<pom:version>
 														<xsl:choose>
@@ -666,7 +667,7 @@
 							<xsl:when test="$project/pom:dependencies/pom:dependency
 							                [string(pom:groupId)=string(current()/pom:groupId) and
 							                 string(pom:artifactId)=string(current()/pom:artifactId) and
-							                 string(pom:type)=string(current()/pom:type) and
+							                 (pom:type/string(),'jar')[1]=(current()/pom:type/string(),'jar')[1] and
 							                 string(pom:classifier)=string(current()/pom:classifier)]">
 								<!-- already handled -->
 							</xsl:when>
@@ -681,10 +682,11 @@
 							<xsl:when test="$project/pom:dependencyManagement/pom:dependencies/pom:dependency
 							                [string(pom:groupId)=string(current()/pom:groupId) and
 							                 string(pom:artifactId)=string(current()/pom:artifactId)]">
-								<xsl:value-of select="$project/pom:dependencyManagement/pom:dependencies/pom:dependency
-								                      [string(pom:groupId)=string(current()/pom:groupId) and
-								                       string(pom:artifactId)=string(current()/pom:artifactId)]
-								                      /pom:version"/>
+								<xsl:value-of select="($project/pom:dependencyManagement/pom:dependencies/pom:dependency
+								                       [string(pom:groupId)=string(current()/pom:groupId) and
+								                        string(pom:artifactId)=string(current()/pom:artifactId)]
+								                       /(.[string(pom:classifier)=string(current()/pom:classifier)],.)
+								                       /pom:version)[1]"/>
 							</xsl:when>
 							<xsl:otherwise>
 								<!-- might be transitive dependency, but not supported here -->
