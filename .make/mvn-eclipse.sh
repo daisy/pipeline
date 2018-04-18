@@ -54,18 +54,19 @@ done
 
 # generate projects one by one, otherwise projectNameTemplate is not used for inter-module links (Maven bug)
 for module in "$@"; do
+    if ! [ -e $module/src/main/java ] && ! [ -e $module/src/test/java ]; then
+        continue
+    fi
     eval $MVN --projects $module \
               org.apache.maven.plugins:maven-eclipse-plugin:2.10:eclipse \
               -Declipse.useProjectReferences=true \
               -Declipse.projectNameTemplate=[groupId].[artifactId] \
     | eval $MVN_LOG
-done
-
-# import projects with eclim if available
-if which eclim >/dev/null; then
-    for module in "$@"; do
+    # import project with eclim if available
+    if which eclim >/dev/null; then
         if [ -e "$ROOT_DIR/$module/.project" ]; then
             msg=$( eclim -command project_import -f "$ROOT_DIR/$module" )
+            # FIXME: printf '\u0027' does not work with older versions of bash
             msg=$( eval printf "$msg" )
             if project=$( perl -e '$ARGV[0] =~ /^Project with name \x27(.+?)\x27 already exists/ and print "$1" or exit 1' "$msg" ); then
                 msg=$( eclim -command project_update -p $project )
@@ -75,11 +76,9 @@ if which eclim >/dev/null; then
                 echo "$msg"
             fi
         fi
-    done
-else
-    # print instructions if eclim not available
-    for module in "$@"; do
+    else
+        # print instructions if eclim not available
         echo "Now import the project at '$module' into your Eclipse workspace" >&2
-    done
-fi
+    fi
+done
 

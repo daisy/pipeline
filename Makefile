@@ -195,11 +195,6 @@ gradle-clean :
 PHONY : $(addprefix eclipse-,$(MODULES))
 $(addprefix eclipse-,$(MODULES)) : eclipse-% : %/.project
 
-# override
-# FIXME:how to suppress warnings?
-libs/osgi-libs/jing/.project libs/osgi-libs/saxon/.project :
-	+:
-
 TEMP_REPOS := modules/scripts/dtbook-to-daisy3/target/test/local-repo
 
 .PHONY : go-offline
