@@ -3,6 +3,10 @@
 set -e
 set -o pipefail
 
+if [ "$SKIP_RELEASE" = "true" ]; then
+    exit 0
+fi
+
 make_cmd="make"
 if [[ -n $MAKEFLAGS ]]; then
     make_cmd+=" "
