@@ -85,22 +85,16 @@
     <px:assert message="More than one XHTML documents found." test-count-max="1" error-code="PEZE00"/>
     <p:identity name="html"/>
     
-    <p:xslt px:message="Generating table of contents" px:progress=".01">
-        <p:input port="stylesheet">
-            <p:document href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl"/>
-        </p:input>
-        <p:with-param name="depth" select="/*/*[@name='toc-depth']/@value">
-            <p:pipe step="parameters" port="result"/>
-        </p:with-param>
-    </p:xslt>
-    
-    <p:group px:message="Inlining CSS" px:progress=".10">
+    <p:group px:message="Inlining CSS" px:progress=".11">
         <p:variable name="first-css-stylesheet"
                     select="tokenize($stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
         <p:variable name="first-css-stylesheet-index"
                     select="(index-of(tokenize($stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
         <p:variable name="stylesheets-to-be-inlined"
                     select="string-join((
+                              if (tokenize($stylesheet,'\s+') = 'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl')
+                                then ()
+                                else 'http://www.daisy.org/pipeline/modules/braille/xml-to-pef/generate-toc.xsl',
                               (tokenize($stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
                               $default-stylesheet,
                               resolve-uri('../../css/default.scss'),

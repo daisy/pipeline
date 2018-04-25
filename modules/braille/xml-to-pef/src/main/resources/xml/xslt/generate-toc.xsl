@@ -8,10 +8,10 @@
   
   <!-- stylesheet defaults to names used in HTML if no other grammar is detected -->
   
-  <xsl:param name="depth" as="xs:string"/>
+  <xsl:param name="toc-depth" as="xs:string"/>
   <xsl:param name="heading-names" select="''"/>
   
-  <xsl:variable name="_depth" as="xs:integer" select="if ($depth) then xs:integer($depth) else 6"/>
+  <xsl:variable name="_depth" as="xs:integer" select="if ($toc-depth) then xs:integer($toc-depth) else 6"/>
   
   <xsl:variable name="root-base-uri" as="xs:anyURI" select="base-uri(/*)"/>
   
