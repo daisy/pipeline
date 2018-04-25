@@ -95,10 +95,16 @@
     </p:xslt>
     
     <p:group px:message="Inlining CSS" px:progress=".10">
-        <p:variable name="stylesheets-to-be-inlined" select="string-join((
-                                                               $default-stylesheet,
-                                                               resolve-uri('../../css/default.scss'),
-                                                               $stylesheet),' ')">
+        <p:variable name="first-css-stylesheet"
+                    select="tokenize($stylesheet,'\s+')[matches(.,'\.s?css$')][1]"/>
+        <p:variable name="first-css-stylesheet-index"
+                    select="(index-of(tokenize($stylesheet,'\s+')[not(.='')], $first-css-stylesheet),10000)[1]"/>
+        <p:variable name="stylesheets-to-be-inlined"
+                    select="string-join((
+                              (tokenize($stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
+                              $default-stylesheet,
+                              resolve-uri('../../css/default.scss'),
+                              (tokenize($stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
         </p:variable>
         <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}"/>
