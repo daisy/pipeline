@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-utils-parent</artifactId>
-    <version>1.11.0</version>
+    <version>1.11.1-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>common-entities</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Common Entities</name>

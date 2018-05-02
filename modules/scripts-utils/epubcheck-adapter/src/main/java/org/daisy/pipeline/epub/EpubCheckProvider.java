@@ -21,6 +21,7 @@ import com.adobe.epubcheck.api.EpubCheck;
 import com.adobe.epubcheck.api.EpubCheckFactory;
 import com.adobe.epubcheck.api.Report;
 import com.adobe.epubcheck.api.EPUBLocation;
+import com.adobe.epubcheck.api.EPUBProfile;
 import com.adobe.epubcheck.messages.Message;
 import com.adobe.epubcheck.messages.Severity;
 import com.adobe.epubcheck.nav.NavCheckerFactory;
@@ -130,7 +131,7 @@ public class EpubCheckProvider implements XProcStepProvider {
 					xmlReport.info(null, FeatureEnum.TOOL_DATE, toolDate);
 
 				if (mode != null) {
-					xmlReport.info(null, FeatureEnum.EXEC_MODE, String.format(Messages.get("single_file"), mode, epubVersion.toString()));
+					xmlReport.info(null, FeatureEnum.EXEC_MODE, String.format(Messages.get("single_file"), mode, epubVersion.toString(), EPUBProfile.DEFAULT));
 
 					if ("expanded".equals(mode) || "exp".equals(mode)) {
 						epub = new Archive(path, false);

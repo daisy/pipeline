@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>scripts-utils-parent</artifactId>
-    <version>1.11.0</version>
+    <version>1.11.1-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <artifactId>metadata-utils</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: metadata-utils</name>
