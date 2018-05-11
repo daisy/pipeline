@@ -47,7 +47,6 @@
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/xml-to-pef/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     
     <!-- Ensure that there's exactly one c:param-set -->
@@ -107,6 +106,9 @@
                         <p:pipe step="dtbook" port="result"/>
                     </p:with-option>
                     <p:with-option name="temp-dir" select="$temp-dir"/>
+                    <p:input port="parameters">
+                        <p:pipe port="result" step="parameters"/>
+                    </p:input>
                 </px:transform>
             </p:viewport>
         </p:when>
