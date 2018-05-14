@@ -642,6 +642,7 @@
 		<xsl:for-each select="pom:parent|
 		                      pom:dependencies/pom:dependency|
 		                      pom:build/pom:plugins/pom:plugin|
+		                      pom:build/pom:plugins/pom:plugin/pom:dependencies/pom:dependency|
 		                      pom:build/pom:plugins/pom:plugin[(not(pom:groupId) or pom:groupId='org.apache.maven.plugins')
 		                                                       and pom:artifactId='maven-dependency-plugin']
 		                                                      /pom:executions/pom:execution[pom:goals[pom:goal='copy' or
