@@ -24,6 +24,8 @@
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
     <module>libs/osgi-libs</module>
+    <module>libs/xsweet/htmlevator</module>
+    <module>libs/xsweet/xsweet</module>
     <module>framework</module>
     <module>modules</module>
     <module>cli</module>
