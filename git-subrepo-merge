@@ -386,7 +386,7 @@ if ($merge_base) {
 			rebase_on_subrepo($subrepo, @$base_b[0]);
 		my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_commit, $base_a, $onto);
 		my $rebased_b = rebase_on_subrepo($subrepo, $merge_revision,        $base_b, $onto);
-		if (not $rebased_a eq $rebased_b) {
+		if (not $rebased_a eq $rebased_b and not $rebased_b eq $onto) {
 			if ($rebased_a =~ /^\$/) {
 				evaluate_variable($rebased_a);
 			}
