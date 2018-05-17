@@ -8,21 +8,38 @@ use lib "$FindBin::Bin";
 use Utils;
 use Try::Tiny;
 
-my $merge_revision;
+my $merge_revision; # or "rebase_upstream"
 my $repo;
 
 # If --rebase is specified, perform rebases instead of merges. Instead of
 # merging $merge_revision into the current branch, the current branch is rebased
 # onto $merge_revision.
 my $rebase = 0;
+my $rebase_onto;
+my $rebase_branch;
+
+my $rest = 0;
 
 while (@ARGV) {
 	my $arg = $ARGV[0];
-	if ($arg eq "--rebase" and not $rebase) {
+	if ($arg eq "--rebase" and not $rebase and not $merge_revision) {
 		$rebase = 1;
 		shift;
+	} elsif ($arg eq "--onto" and $rebase and not $rebase_onto and not $merge_revision) {
+		shift;
+		$arg = $ARGV[0];
+		$rebase_onto = $arg;
+		shift;
+	} elsif ($arg eq "--" and not $rest and $merge_revision) {
+		$rest = 1;
+		shift;
+	} elsif ($arg =~ /^-/) {
+		die "Unexpected argument: $arg";
 	} elsif (not $merge_revision) {
 		$merge_revision = $arg;
+		shift;
+	} elsif ($rebase and not $rebase_branch and not $rest) {
+		$rebase_branch = $arg;
 		shift;
 	} elsif (not $repo) {
 		$repo = $arg;
@@ -36,9 +53,11 @@ if (not $merge_revision) {
 	die "$0 requires a revision arguments";
 }
 
-for ($merge_revision) {
-	if (not revision_exists($_)) {
-		die "Unknown revision: $_";
+for ($merge_revision, $rebase_onto, $rebase_branch) {
+	if (defined $_) {
+		if (not revision_exists($_)) {
+			die "Unknown revision: $_";
+		}
 	}
 }
 
@@ -48,10 +67,14 @@ try {
 	die "You have uncommitted changes";
 };
 
-chomp(my $current_branch = git "rev-parse --abbrev-ref HEAD");
+chomp(my $current_branch = git "rev-parse --abbrev-ref ".($rebase_branch || "HEAD"));
 
 if ($current_branch eq "HEAD") {
-	die "You are not on a branch";
+	if ($rebase_branch) {
+		die "$rebase_branch is not a branch.";
+	} else {
+		die "You are not on a branch.";
+	}
 }
 
 sub list_subrepos {
@@ -399,13 +422,45 @@ my $merge_base = merge_base($current_branch, $merge_revision);
 
 if ($merge_base) {
 	my @subrepos_a = list_subrepos($current_branch);
-	my @subrepos_b = list_subrepos($merge_revision);
+	my @subrepos_b = list_subrepos($rebase_onto || $merge_revision);
 	my @subrepos_common = intersect(@subrepos_a, @subrepos_b);
 	my @subrepos_only_b = array_minus(@subrepos_b, @subrepos_a);
 	my $current_branch_commit = rev_parse($current_branch);
 	for my $subrepo (@subrepos_common) {
-		if (not grep { git "diff-tree -r $_ -- $subrepo" } distance($merge_base, $merge_revision)) {
+		if (not grep { git "diff-tree -r $_ -- $subrepo" } distance($merge_base, $rebase_onto || $merge_revision)) {
 			print ": $subrepo is up to date\n";
+			next;
+		}
+		if (defined $rebase_onto) {
+			my $merged;
+			my $rebased_b = rebase_on_subrepo($subrepo, $rebase_onto);
+			try {
+				my $base_a = rebase_on_subrepo($subrepo, $merge_base);
+				if ($base_a =~ /^\$/) {
+					evaluate_variable($base_a, 1);
+				}
+				my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_commit, [undef, $base_a]);
+				if ($rebased_a =~ /^\$/) {
+					evaluate_variable($rebased_a, 1);
+				}
+				print "gitk $rebased_b $base_a $rebased_a &&\\\n";
+				print "git rebase --onto $rebased_b $base_a $rebased_a &&\\\n";
+				my $var = generate_variable("tmp_");
+				print "$var=\$(git rev-parse HEAD) &&\\\n";
+				$merged = "\$$var";
+			} catch {
+				if ($_ =~ /^corrupt git-subrepo commit/) {
+					# do rebase in one go
+					$merged = rebase_on_subrepo($subrepo, $current_branch_commit, [$merge_base, undef], $rebased_b);
+					evaluate_variable($merged, 1);
+				} else {
+					die_with_stack_trace "$_";
+				}
+			};
+			print "git checkout $current_branch &&\\\n";
+			print "git subrepo commit --force $subrepo $merged &&\\\n";
+			print "git commit --amend -m \"git subrepo pull $subrepo\" \\\n";
+			print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" &&\\\n";
 			next;
 		}
 		my ($base_a, $base_b);
@@ -495,8 +550,8 @@ if ($merge_base) {
 		}
 	}
 	for my $subrepo (@subrepos_only_b) {
-		my $rebased_b  = rebase_on_subrepo($subrepo, $merge_revision);
-		chomp(my $remote = git "show $merge_revision:$subrepo/.gitrepo | git config --file - --get subrepo.remote");
+		my $rebased_b  = rebase_on_subrepo($subrepo, $rebase_onto || $merge_revision);
+		chomp(my $remote = git "show ".($rebase_onto || $merge_revision).":$subrepo/.gitrepo | git config --file - --get subrepo.remote");
 		print "git checkout $current_branch &&\\\n";
 		print "git subrepo clone $remote $subrepo &&\\\n";
 		print "git subrepo commit --force $subrepo $rebased_b &&\\\n";
