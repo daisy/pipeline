@@ -147,7 +147,7 @@ sub evaluate_variable {
 
 sub add_lambdas {
 	my @lambdas = @_;
-    return sub {
+	return sub {
 		for (@lambdas) {
 			if ($_) {
 				$_->();
@@ -212,8 +212,8 @@ sub merge_base_sub {
 	my $base_b = [undef, undef];
 	my $merge_base = merge_base($rev_a, $rev_b);
 	if ($merge_base) {
-	    my @last_a = find_last_git_subrepo_commit($subdir, $rev_a);
-	    my @last_b = find_last_git_subrepo_commit($subdir, $rev_b);
+		my @last_a = find_last_git_subrepo_commit($subdir, $rev_a);
+		my @last_b = find_last_git_subrepo_commit($subdir, $rev_b);
 		if (@last_a and @last_b) {
 			my $base_sub = merge_base($last_a[1], $last_b[1]);
 			if ($base_sub) {
@@ -423,133 +423,132 @@ my $merge_base = merge_base($current_branch, $merge_revision);
 if ($merge_base) {
 	my @subrepos_a = list_subrepos($current_branch);
 	my @subrepos_b = list_subrepos($rebase_onto || $merge_revision);
-	my @subrepos_common = intersect(@subrepos_a, @subrepos_b);
-	my @subrepos_only_b = array_minus(@subrepos_b, @subrepos_a);
 	my $current_branch_commit = rev_parse($current_branch);
-	for my $subrepo (@subrepos_common) {
+	for my $subrepo (intersect(@subrepos_a, @subrepos_b)) {
 		if (not grep { git "diff-tree -r $_ -- $subrepo" } distance($merge_base, $rebase_onto || $merge_revision)) {
 			print ": $subrepo is up to date\n";
 			next;
 		}
-		if (defined $rebase_onto) {
-			my $merged;
-			my $rebased_b = rebase_on_subrepo($subrepo, $rebase_onto);
-			try {
-				my $base_a = rebase_on_subrepo($subrepo, $merge_base);
-				if ($base_a =~ /^\$/) {
-					evaluate_variable($base_a, 1);
-				}
-				my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_commit, [undef, $base_a]);
-				if ($rebased_a =~ /^\$/) {
-					evaluate_variable($rebased_a, 1);
-				}
-				print "gitk $rebased_b $base_a $rebased_a &&\\\n";
-				print "git rebase --onto $rebased_b $base_a $rebased_a &&\\\n";
-				my $var = generate_variable("tmp_");
-				print "$var=\$(git rev-parse HEAD) &&\\\n";
-				$merged = "\$$var";
-			} catch {
-				if ($_ =~ /^corrupt git-subrepo commit/) {
-					# do rebase in one go
-					$merged = rebase_on_subrepo($subrepo, $current_branch_commit, [$merge_base, undef], $rebased_b);
-					evaluate_variable($merged, 1);
-				} else {
-					die_with_stack_trace "$_";
-				}
-			};
-			print "git checkout $current_branch &&\\\n";
-			print "git subrepo commit --force $subrepo $merged &&\\\n";
-			print "git commit --amend -m \"git subrepo pull $subrepo\" \\\n";
-			print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" &&\\\n";
-			next;
-		}
-		my ($base_a, $base_b);
 		try {
-			($base_a, $base_b) = merge_base_sub($current_branch_commit, $merge_revision, $subrepo);
-			0;
-		} catch {
-			if ($_ =~ /^corrupt git-subrepo commit/) {
-				# merge_base_sub failed because of a corrupt git-subrepo commit
-				if ($rebase) {
-					# try alternative approach: do the rebase in a single go
-					my $rebased_b = rebase_on_subrepo($subrepo, $merge_revision);
-					if ($rebased_b =~ /^\$/) {
-						evaluate_variable($rebased_b);
+			if (defined $rebase_onto) {
+				my $merged;
+				my $rebased_b = rebase_on_subrepo($subrepo, $rebase_onto);
+				try {
+					my $base_a = rebase_on_subrepo($subrepo, $merge_base);
+					if ($base_a =~ /^\$/) {
+						evaluate_variable($base_a, 1);
 					}
-					my $merged = rebase_on_subrepo($subrepo, $current_branch_commit, [$merge_base, undef], $rebased_b);
-					evaluate_variable($merged, 1);
-					print "git checkout $current_branch &&\\\n";
-					print "git subrepo commit --force $subrepo $merged &&\\\n";
-					print "git commit --amend -m \"git subrepo pull $subrepo\" \\\n";
-					print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" &&\\\n";
-					return 1;
-				}
-			}
-			die_with_stack_trace "$_";
-		} and next;
-		if (not ((@$base_a[0] or @$base_a[1]) and (@$base_b[0] or @$base_b[1]))) {
-			print ": ERROR: no merge-base between $current_branch and $merge_revision ($subrepo)\n";
-			print ": skipping...\n";
-			next;
-		}
-		my $onto =
-			(@$base_a[1] and not @$base_b[1]) ? @$base_a[1] :
-			(@$base_a[1] or @$base_b[1])      ? @$base_b[1] :
-			rebase_on_subrepo($subrepo, @$base_b[0]);
-		my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_commit, $base_a, $onto);
-		my $rebased_b = rebase_on_subrepo($subrepo, $merge_revision,        $base_b, $onto);
-		if (not $rebased_a eq $rebased_b and not $rebased_b eq $onto) {
-			if ($rebased_a =~ /^\$/) {
-				evaluate_variable($rebased_a);
-			}
-			if ($rebased_b =~ /^\$/) {
-				evaluate_variable($rebased_b);
-			}
-			my $merged;
-			if (revision_exists($rebased_a)
-				and revision_exists($rebased_b)
-				and (is_ancestor($rebased_b, $rebased_a) or is_ancestor($rebased_a, $rebased_b))) {
-				$merged = is_ancestor($rebased_b, $rebased_a) ? $rebased_a : $rebased_b;
-				if (cmp_tree_with_subtree($merged, $current_branch, $subrepo)) {
-					$merged = undef;
-				}
-			} else {
-				print "git checkout $rebased_a &&\\\n";
-				print "gitk HEAD $rebased_b &&\\\n";
-				if ($rebase) {
-					print "git rebase $rebased_b &&\\\n";
-				} else {
-					print "git merge $rebased_b &&\\\n";
-				}
-				my $var = generate_variable("tmp_");
-				print "$var=\$(git rev-parse HEAD) &&\\\n";
-				$merged = "\$$var";
-			}
-			if ($merged) {
+					my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_commit, [undef, $base_a]);
+					if ($rebased_a =~ /^\$/) {
+						evaluate_variable($rebased_a, 1);
+					}
+					print "gitk $rebased_b $base_a $rebased_a &&\\\n";
+					print "git rebase --onto $rebased_b $base_a $rebased_a &&\\\n";
+					my $var = generate_variable("tmp_");
+					print "$var=\$(git rev-parse HEAD) &&\\\n";
+					$merged = "\$$var";
+				} catch {
+					if ($_ =~ /^corrupt git-subrepo commit/) {
+						# do rebase in one go
+						$merged = rebase_on_subrepo($subrepo, $current_branch_commit, [$merge_base, undef], $rebased_b);
+						evaluate_variable($merged, 1);
+					} else {
+						die_with_stack_trace "$_";
+					}
+				};
 				print "git checkout $current_branch &&\\\n";
 				print "git subrepo commit --force $subrepo $merged &&\\\n";
-				my $pulled_branch; {
-					if (revision_exists($rebased_b)) {
-						my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
-						my @in_branches = in_remote_branches($rebased_b, $remote);
-						$pulled_branch =
-							"master"  ~~ @in_branches ? "master" :
-							"develop" ~~ @in_branches ? "develop" :
-							min_key { distance($rebased_b, "$remote/$_") } @in_branches;
-						$pulled_branch = $pulled_branch || "super/$merge_revision";
-					}
-					$pulled_branch = $pulled_branch || "?";
-				}
-				print "git commit --amend -m \"git subrepo pull $subrepo ($pulled_branch)\" \\\n";
+				print "git commit --amend -m \"git subrepo pull $subrepo\" \\\n";
 				print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" &&\\\n";
 			} else {
-				print ": $subrepo is up to date\n";
+				try {
+					my ($base_a, $base_b) = merge_base_sub($current_branch_commit, $merge_revision, $subrepo);
+					if (not ((@$base_a[0] or @$base_a[1]) and (@$base_b[0] or @$base_b[1]))) {
+						die_with_stack_trace "no merge-base between $current_branch and $merge_revision ($subrepo)";
+					}
+					my $onto =
+						(@$base_a[1] and not @$base_b[1]) ? @$base_a[1] :
+						(@$base_a[1] or @$base_b[1])      ? @$base_b[1] :
+						rebase_on_subrepo($subrepo, @$base_b[0]);
+					my $rebased_a = rebase_on_subrepo($subrepo, $current_branch_commit, $base_a, $onto);
+					my $rebased_b = rebase_on_subrepo($subrepo, $merge_revision,        $base_b, $onto);
+					if (not $rebased_a eq $rebased_b and not $rebased_b eq $onto) {
+						if ($rebased_a =~ /^\$/) {
+							evaluate_variable($rebased_a);
+						}
+						if ($rebased_b =~ /^\$/) {
+							evaluate_variable($rebased_b);
+						}
+						my $merged;
+						if (revision_exists($rebased_a)
+							and revision_exists($rebased_b)
+							and (is_ancestor($rebased_b, $rebased_a) or is_ancestor($rebased_a, $rebased_b))) {
+							$merged = is_ancestor($rebased_b, $rebased_a) ? $rebased_a : $rebased_b;
+							if (cmp_tree_with_subtree($merged, $current_branch, $subrepo)) {
+								$merged = undef;
+							}
+						} else {
+							print "git checkout $rebased_a &&\\\n";
+							print "gitk HEAD $rebased_b &&\\\n";
+							if ($rebase) {
+								print "git rebase $rebased_b &&\\\n";
+							} else {
+								print "git merge $rebased_b &&\\\n";
+							}
+							my $var = generate_variable("tmp_");
+							print "$var=\$(git rev-parse HEAD) &&\\\n";
+							$merged = "\$$var";
+						}
+						if ($merged) {
+							print "git checkout $current_branch &&\\\n";
+							print "git subrepo commit --force $subrepo $merged &&\\\n";
+							my $pulled_branch; {
+								if (revision_exists($rebased_b)) {
+									my $remote = "subrepo/$subrepo" =~ s/\/\./\/%2e/r;
+									my @in_branches = in_remote_branches($rebased_b, $remote);
+									$pulled_branch =
+										"master"  ~~ @in_branches ? "master" :
+										"develop" ~~ @in_branches ? "develop" :
+										min_key { distance($rebased_b, "$remote/$_") } @in_branches;
+									$pulled_branch = $pulled_branch || "super/$merge_revision";
+								}
+								$pulled_branch = $pulled_branch || "?";
+							}
+							print "git commit --amend -m \"git subrepo pull $subrepo ($pulled_branch)\" \\\n";
+							print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" &&\\\n";
+						} else {
+							print ": $subrepo is up to date\n";
+						}
+					} else {
+						print ": $subrepo is up to date\n";
+					}
+				} catch {
+					if ($_ =~ /^corrupt git-subrepo commit/) {
+						# merge_base_sub failed because of a corrupt git-subrepo commit
+						if ($rebase) {
+							# try alternative approach: do the rebase in a single go
+							my $rebased_b = rebase_on_subrepo($subrepo, $merge_revision);
+							if ($rebased_b =~ /^\$/) {
+								evaluate_variable($rebased_b);
+							}
+							my $merged = rebase_on_subrepo($subrepo, $current_branch_commit, [$merge_base, undef], $rebased_b);
+							evaluate_variable($merged, 1);
+							print "git checkout $current_branch &&\\\n";
+							print "git subrepo commit --force $subrepo $merged &&\\\n";
+							print "git commit --amend -m \"git subrepo pull $subrepo\" \\\n";
+							print "                   -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\" &&\\\n";
+							return 1;
+						}
+					}
+					die_with_stack_trace "$_";
+				}
 			}
-		} else {
-			print ": $subrepo is up to date\n";
+		} catch {
+			print ": ERROR: ".(split(/\n/, $_))[0]."\n";
+			print ": skipping...\n";
 		}
 	}
-	for my $subrepo (@subrepos_only_b) {
+	for my $subrepo (array_minus(@subrepos_b, @subrepos_a)) {
 		my $rebased_b  = rebase_on_subrepo($subrepo, $rebase_onto || $merge_revision);
 		chomp(my $remote = git "show ".($rebase_onto || $merge_revision).":$subrepo/.gitrepo | git config --file - --get subrepo.remote");
 		print "git checkout $current_branch &&\\\n";
