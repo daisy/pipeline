@@ -548,6 +548,9 @@ if ($merge_base) {
 	}
 	for my $subrepo (array_minus(@subrepos_b, @subrepos_a)) {
 		my $rebased_b  = rebase_on_subrepo($subrepo, $rebase_onto || $merge_revision);
+		if ($rebased_b =~ /^\$/) {
+			evaluate_variable($rebased_b);
+		}
 		chomp(my $remote = git "show ".($rebase_onto || $merge_revision).":$subrepo/.gitrepo | git config --file - --get subrepo.remote");
 		print "git checkout $current_branch &&\\\n";
 		print "git subrepo clone $remote $subrepo &&\\\n";
