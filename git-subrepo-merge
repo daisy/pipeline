@@ -9,7 +9,7 @@ use Utils;
 use Try::Tiny;
 
 my $merge_revision; # or "rebase_upstream"
-my $repo;
+my @repos;
 
 # If --rebase is specified, perform rebases instead of merges. Instead of
 # merging $merge_revision into the current branch, the current branch is rebased
@@ -41,11 +41,9 @@ while (@ARGV) {
 	} elsif ($rebase and not $rebase_branch and not $rest) {
 		$rebase_branch = $arg;
 		shift;
-	} elsif (not $repo) {
-		$repo = $arg;
-		shift;
 	} else {
-		die "Unexpected argument: $arg";
+		push @repos, $arg;
+		shift;
 	}
 }
 
@@ -87,7 +85,7 @@ sub list_subrepos {
 			s/^\.\///;
 			my $subrepo = $_;
 			if (not defined $prev or not $subrepo =~ /^\Q$prev\E\//) {
-				if (not $repo or $repo eq $subrepo) {
+				if (not @repos or $subrepo ~~ @repos) {
 					push @subrepos, $subrepo;
 				}
 				$prev = $subrepo;
