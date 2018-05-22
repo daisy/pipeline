@@ -110,10 +110,10 @@ public class DetailsPane extends VBox {
 			addScriptFieldAnswer(answer);
 		}
 		
-		for (ScriptFieldAnswer answer : boundScript.getRequiredOptionFields()) {
+		for (ScriptFieldAnswer answer : boundScript.getOptionFields(true)) {
 			addScriptFieldAnswer(answer);
 		}
-		for (ScriptFieldAnswer answer : boundScript.getOptionalOptionFields()) {
+		for (ScriptFieldAnswer answer : boundScript.getOptionFields(false)) {
 			addScriptFieldAnswer(answer);
 		}
 		

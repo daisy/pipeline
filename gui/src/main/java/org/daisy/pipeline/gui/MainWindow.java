@@ -26,6 +26,7 @@ import org.daisy.pipeline.gui.databridge.EventBusListener;
 import org.daisy.pipeline.gui.databridge.ObservableJob;
 import org.daisy.pipeline.gui.databridge.Script;
 import org.daisy.pipeline.gui.utils.PlatformUtils;
+import org.daisy.pipeline.gui.utils.Settings;
 
 public class MainWindow extends BorderPane {
 
@@ -52,6 +53,9 @@ public class MainWindow extends BorderPane {
 	
 	public MainWindow(ServiceRegistry pipelineServices, HostServices hostServices) {
 		super();
+		
+		Settings.init();
+		
 		this.pipelineServices = pipelineServices;
 		this.hostServices = hostServices;
 		
@@ -184,12 +188,8 @@ public class MainWindow extends BorderPane {
     	currentJobProperty.addListener(currentJobChangeListener);
     }
 
-    // convenience functions to add/clear validation messages
-    public void addValidationMessages(ObservableList<String> messages) {
-    	messagesPane.addMessages(messages);
-    }
-    public void clearValidationMessages() {
-    	messagesPane.clearMessages();
+    public MessagesPane getMessagesPane() {
+    	return this.messagesPane;
     }
     
     private void showNewJobPane() {

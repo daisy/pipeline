@@ -38,6 +38,11 @@ public class MessagesPane extends VBox {
                         }
                 });
         }
+        
+        // add a single message
+        public void addMessage(String message) {
+        	messages.getItems().add(message);
+        }
         public void clearMessages() {
                 messages.setItems(null);
         }

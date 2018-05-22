@@ -71,6 +71,19 @@
 .center-scroll {
 	-fx-background-color:transparent;
 }
+
+/* SettingsPane */
+.fieldset {
+	-fx-padding: 10;
+	-fx-border-insets: 10;
+    -fx-background-insets: 10;
+	-fx-border-color: lightGray;
+	-fx-border-width: 2;
+	-fx-border-style: solid;
+	-fx-hgap: 5;
+	-fx-vgap: 5;
+}
+
 /*
  * classes below are built-in javafx style classes
  */

@@ -80,6 +80,28 @@ public class AppMenu extends MenuBar {
                 Menu menuFile = new Menu("_File");
 
                 this.getMenus().addAll(menuFile);
+                
+                MenuItem settings = new MenuItem("Settings");
+                settings.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
+                settings.setOnAction(new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent e) {
+                        Stage otherStage = new Stage();
+                        SettingsPane settingsPane = new SettingsPane(otherStage);
+                        Scene secondScene = new Scene(settingsPane, 450, 475);
+                        String css = getClass().getResource("/org/daisy/pipeline/gui/resources/application.css").toExternalForm();
+
+                        secondScene.getStylesheets().add(css);
+                        settingsPane.build();
+                        otherStage.setScene(secondScene);
+                        otherStage.setTitle("Settings");
+                        // TODO would be nice to bind these somehow
+                        otherStage.setMinWidth(380);
+                        otherStage.setMinHeight(285);
+                        
+                        otherStage.show();
+                    }
+                });
+                menuFile.getItems().add(settings);
 
                 MenuItem newjob = new MenuItem("New job");
                 newjob.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN));
