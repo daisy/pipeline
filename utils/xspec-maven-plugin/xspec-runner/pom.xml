@@ -26,7 +26,7 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-      <version>9.5.1.5-1-SNAPSHOT</version>
+      <version>9.5.1.5-1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
