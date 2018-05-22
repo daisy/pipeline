@@ -15,6 +15,22 @@
   <packaging>bundle</packaging>
   <name>xprocspec-runner</name>
   
+  <dependencyManagement>
+    <dependencies>
+      <!--
+          fixed framework dependency to avoid circular dependency
+      -->
+      <?fixed-dependency?>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>framework-bom</artifactId>
+        <version>1.11.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  
   <dependencies>
     <dependency>
       <groupId>org.daisy.maven</groupId>
@@ -48,16 +64,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>org.daisy.maven</groupId>
-      <artifactId>xproc-engine-daisy-pipeline</artifactId>
-      <version>1.10.2</version>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
       <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-jdk14</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
