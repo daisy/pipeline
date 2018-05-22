@@ -10,8 +10,9 @@ script:
   # skip webservice test for now because it uses pax-exam-container-forked which sometimes causes problems
   - make framework/webservice/.dependencies
   - touch framework/webservice/.last-tested
-  - make check
-  # - make GTAR=/bin/tar dist-docker-image
-  # - cd assembly && make check-docker
+  # skip because it takes too much time to run all tests
+  # - make check
+  - make GTAR=/bin/tar dist-docker-image
+  - cd assembly && make check-docker
 after_failure:
  - cat maven.log
