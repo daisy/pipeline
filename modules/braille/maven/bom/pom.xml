@@ -12,7 +12,7 @@
 
     <groupId>org.daisy.pipeline.modules.braille</groupId>
     <artifactId>braille-modules-bom</artifactId>
-    <version>1.11.0</version>
+    <version>1.11.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>DAISY Pipeline 2 :: Braille Modules Bill Of Materials</name>
@@ -21,7 +21,7 @@
         <connection>scm:git:git@github.com:daisy/pipeline-mod-braille.git</connection>
         <url>scm:git:git@github.com:daisy/pipeline-mod-braille.git</url>
         <developerConnection>scm:git:git@github.com:daisy/pipeline-mod-braille.git</developerConnection>
-        <tag>v1.11.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <dependencyManagement>

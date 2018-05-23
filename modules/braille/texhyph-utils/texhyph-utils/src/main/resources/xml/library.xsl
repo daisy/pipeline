@@ -4,8 +4,6 @@
     <!--
         Import this (dummy) library whenever one of the following functions is used:
         * tex:hyphenate
-        * tex:lookup-table
-        * tex:resolve-table
     -->
     
     <!--
