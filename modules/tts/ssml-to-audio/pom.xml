@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>tts-modules-parent</artifactId>
-    <version>1.11.0</version>
+    <version>1.11.1-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
-  <version>3.0.1</version>
+  <version>3.0.2-SNAPSHOT</version>
   <artifactId>ssml-to-audio</artifactId>
   <packaging>bundle</packaging>
 

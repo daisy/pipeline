@@ -5,11 +5,11 @@
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
     <version>1.6</version>
-    <relativePath />
+    <relativePath/>
   </parent>
 
   <artifactId>tts-modules-parent</artifactId>
-  <version>1.11.0</version>
+  <version>1.11.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: TTS Modules Parent POM</name>
@@ -23,7 +23,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-modules-bom</artifactId>
-        <version>1.11.0</version>
+        <version>1.11.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -78,8 +78,4 @@
       <url>http://maven.restlet.org</url>
     </repository>
   </repositories>
-
-  <scm>
-    <tag>v1.11.0</tag>
-  </scm>
 </project>
