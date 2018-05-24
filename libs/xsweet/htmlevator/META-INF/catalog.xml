@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   <uri name="http://coko.foundation/htmlevator/header-promote/digest-paragraphs.xsl"
+        uri="../applications/header-promote/digest-paragraphs.xsl"/>
+   <uri name="http://coko.foundation/htmlevator/header-promote/make-header-escalator-xslt.xsl"
+        uri="../applications/header-promote/make-header-escalator-xslt.xsl"/>
+</catalog>
