@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://gitlab.coko.foundation/XSweet/XSweet.git
+	branch = master
+	commit = 6d3f878c054bc9aff65076c28b4adec08372e8f7
+	parent = 0f9cd01a70359a6801214c62bedf835f1ee2d521
+	cmdver = 0.3.1

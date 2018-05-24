@@ -1,0 +1,10 @@
+diff a/applications/docx-escalate.xpl b/applications/docx-escalate.xpl	(rejected hunks)
+@@ -50,7 +50,7 @@
+   
+   <p:identity name="ready">
+     <p:input port="source">
+-      <p:pipe port="_D_mapped" step="document-production"/>
++      <p:pipe port="_E_folded" step="document-production"/>
+     </p:input>
+   </p:identity>
+   
