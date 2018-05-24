@@ -96,6 +96,7 @@
   </xsl:template>
   
   <xsl:template mode="build-properties" as="element()+" match="w:tblPr | w:tcPr">
+    <xsl:param name="styles" tunnel="yes" required="yes"/>
     
     <xsl:apply-templates mode="#current" select="w:tblStyle/key('styles-by-id',@w:val, $styles)"/>
     

@@ -91,14 +91,14 @@
        first we build an analysis table -->
   <p:xslt name="digest-paragraphs">
     <p:input port="stylesheet">
-      <p:document href="header-promote/digest-paragraphs.xsl"/>
+      <p:document href="http://coko.foundation/htmlevator/header-promote/digest-paragraphs.xsl"/>
     </p:input>
   </p:xslt>
   
   <!-- Then we generate an XSLT stylesheet from it -->
   <p:xslt name="escalator-xslt">
     <p:input port="stylesheet">
-      <p:document href="header-promote/make-header-escalator-xslt.xsl"/>
+      <p:document href="http://coko.foundation/htmlevator/header-promote/make-header-escalator-xslt.xsl"/>
     </p:input>
   </p:xslt>
 

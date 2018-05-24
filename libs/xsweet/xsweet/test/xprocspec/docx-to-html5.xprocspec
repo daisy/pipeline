@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:xsw="http://coko.foundation/xsweet"
+               script="../../docx-to-html5.xpl">
+    
+    <x:scenario label="basic">
+        <x:call step="xsw:docx-to-html5">
+            <x:option name="docx-file-uri" select="resolve-uri('../resources/basic.docx')"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the HTML should be as expected" type="compare">
+            <x:document type="inline">
+                <html xmlns="http://www.w3.org/1999/xhtml">
+                    <head>
+                        <title>Test</title>
+                        <meta charset="UTF-8"/>
+                        <style type="text/css">
+.Normal { ; /* Normal*/ font-family: Liberation Serif; color: auto; font-size: 12pt }
+.Heading1 { ; /* Normal*/ font-family: Liberation Serif; color: auto; font-size: 12pt; /* Heading*/ margin-top: 12pt; margin-bottom: 6pt; font-family: Liberation Sans; font-size: 14pt; /* Heading1*/ -xsweet-list-level: 0; margin-top: 12pt; margin-bottom: 6pt; -xsweet-outline-level: 0; font-weight: bold; font-size: 18pt }</style>
+                        <style type="text/css">
+.xsw_marginbottom6ptmargintop12ptfontLiberationSans18ptlistlevel0outlinelevel0boldauto { color: auto; font-family: Liberation Sans; font-size: 18pt; font-weight: bold; margin-bottom: 6pt; margin-top: 12pt; -xsweet-list-level: 0; -xsweet-outline-level: 0 }
+.xsw_fontLiberationSerif12ptauto { color: auto; font-family: Liberation Serif; font-size: 12pt }</style>
+                    </head>
+                    <body>
+                        <div class="docx-body">
+                            <ul>
+                                <li>
+                                    <p class="Heading1 xsw_marginbottom6ptmargintop12ptfontLiberationSans18ptlistlevel0outlinelevel0boldauto">Test document</p>
+                                </li>
+                            </ul>
+                            <h1 class="Normal xsw_fontLiberationSerif12ptauto">Test</h1>
+                        </div>
+                        <div class="docx-endnotes"><!-- empty --></div>
+                        <div class="docx-footnotes"><!-- empty --></div>
+                    </body>
+                </html>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>

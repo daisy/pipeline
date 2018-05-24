@@ -8,12 +8,14 @@ Typically you will be constructing a chain of these transformations calling XSLT
 
 * docx-extract/EXTRACT-docx.xsl
 * list-promote/PROMOTE-lists.xsl
+* local-fixup/hyperlink-inferencer.xsl
 * html-polish/final-rinse.xsl
-* html-polish/xhtml-serialize.xsl
+* XSweet/XSweet/applications/html-polish/xhtml-serialize.xsl
+* XSweet/HTMLevator/applications/header-promote/header-promotion-CHOOSE.xsl
 
 Every step but the first, consumes (reads) an HTML-tagged document (albeit in XML syntax for convenience) and produces an (xml-well-formed) HTML document. (A tag-abbreviated HTML5 output may be produced as a terminal step, if wanted.)
 
-Note: it's a convention in this project to name stylesheets with components of their filenames in ALL CAPS when these stylesheets use the XPath 3.0 function transform(), thus achieving "meta-stylesheet" status (inasmuch as they do not merely transform, they also orchestrate and execute transformations). For example, the
+Note: it's a convention in this project to name stylesheets with components of their filenames in ALL CAPS when these stylesheets use the XPath 3.0 function transform(), thus achieving "meta-stylesheet" status (inasmuch as they do not merely transform, they also orchestrate and execute transformations). For example, the 
 
 ## `css-abstract`
 
@@ -32,6 +34,8 @@ Steps expected to be final or near-final.
 ## `list-promote`
 
 Make HTML `ol` and `ul` from WordML inputs (marked as lists items).
+
+## `local-fixup`
 
 ## `produce-analysis`
 

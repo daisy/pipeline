@@ -24,40 +24,58 @@
   <!-- Indent should really be no, but for testing. -->
   <xsl:output method="xml" indent="no" omit-xml-declaration="yes"/>
 
-  <xsl:variable name="endnotes-file"  select="resolve-uri('endnotes.xml',  document-uri(/))"/>
-  <xsl:variable name="footnotes-file" select="resolve-uri('footnotes.xml', document-uri(/))"/>
-  <xsl:variable name="styles-file"    select="resolve-uri('styles.xml',    document-uri(/))"/>
-  <xsl:variable name="rels-file"      select="resolve-uri('_rels/document.xml.rels',    document-uri(/))"/>
-  <!-- We have no interest in stylesWithEffects.xml. -->
+  <xsl:template match="/w:document" priority="1">
+    <xsl:variable name="endnotes-file"  select="resolve-uri('endnotes.xml',  document-uri(/))"/>
+    <xsl:variable name="footnotes-file" select="resolve-uri('footnotes.xml', document-uri(/))"/>
+    <xsl:variable name="styles-file"    select="resolve-uri('styles.xml',    document-uri(/))"/>
+    <xsl:variable name="rels-file"      select="resolve-uri('_rels/document.xml.rels',    document-uri(/))"/>
+    <!-- We have no interest in stylesWithEffects.xml. -->
 
-  <!--<xsl:variable name="endnotes-file" select="'x'"/>
-  <xsl:variable name="styles-file"   select="'x'"/>-->
+    <!--<xsl:variable name="endnotes-file" select="'x'"/>
+        <xsl:variable name="styles-file"   select="'x'"/>-->
 
-  <xsl:variable name="endnotes-doc">
-    <xsl:if test="doc-available($endnotes-file)">
-      <xsl:sequence select="doc($endnotes-file)"/>
-    </xsl:if>
-  </xsl:variable>
+    <xsl:variable name="endnotes-doc" as="document-node()?">
+      <xsl:if test="doc-available($endnotes-file)">
+        <xsl:sequence select="doc($endnotes-file)"/>
+      </xsl:if>
+    </xsl:variable>
 
-  <xsl:variable name="footnotes-doc">
-    <xsl:if test="doc-available($footnotes-file)">
-      <xsl:sequence select="doc($footnotes-file)"/>
-    </xsl:if>
-  </xsl:variable>
+    <xsl:variable name="footnotes-doc" as="document-node()?">
+      <xsl:if test="doc-available($footnotes-file)">
+        <xsl:sequence select="doc($footnotes-file)"/>
+      </xsl:if>
+    </xsl:variable>
 
-  <!-- If no styles are found we get a root (temporary tree) w/ no branches. -->
-  <xsl:variable name="styles">
-    <xsl:if test="doc-available($styles-file)">
-      <xsl:sequence select="doc($styles-file)"/>
-    </xsl:if>
-  </xsl:variable>
+    <!-- If no styles are found we get a root (temporary tree) w/ no branches. -->
+    <xsl:variable name="styles" as="document-node()">
+      <xsl:choose>
+        <xsl:when test="doc-available($styles-file)">
+          <xsl:sequence select="doc($styles-file)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:document/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
-  <xsl:variable name="relations-doc">
-    <xsl:if test="doc-available($rels-file)">
-      <xsl:sequence select="doc($rels-file)"/>
-    </xsl:if>
-  </xsl:variable>
-
+    <xsl:variable name="relations-doc" as="document-node()">
+      <xsl:choose>
+        <xsl:when test="doc-available($rels-file)">
+          <xsl:sequence select="doc($rels-file)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:document/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    
+    <xsl:next-match>
+      <xsl:with-param name="endnotes-doc" tunnel="yes" select="$endnotes-doc"/>
+      <xsl:with-param name="footnotes-doc" tunnel="yes" select="$footnotes-doc"/>
+      <xsl:with-param name="styles" tunnel="yes" select="$styles"/>
+      <xsl:with-param name="relations-doc" tunnel="yes" select="$relations-doc"/>
+    </xsl:next-match>
+  </xsl:template>
 
   <xsl:key name="styles-by-id" match="w:style" use="@w:styleId"/>
 
@@ -73,6 +91,7 @@
 
   <!-- Note that unprefixed elements are in namespace http://www.w3.org/1999/xhtml -->
   <xsl:template match="/w:document">
+    <xsl:param name="styles" tunnel="yes" required="yes"/>
     <html>
       <head>
         <meta charset="UTF-8"/>
@@ -93,6 +112,8 @@
   </xsl:template>
 
   <xsl:template match="w:body">
+    <xsl:param name="endnotes-doc" tunnel="yes" required="yes"/>
+    <xsl:param name="footnotes-doc" tunnel="yes" required="yes"/>
     <body>
       <div class="docx-body">
         <xsl:apply-templates select="w:p | w:tbl"/>
@@ -245,6 +266,7 @@
       </w:hyperlink> -->
 
   <xsl:template match="w:hyperlink">
+    <xsl:param name="relations-doc" tunnel="yes" required="yes"/>
     <a>
       <!-- If we can, we will grab the target of an external link -->
       <xsl:for-each select="key('rels-by-id',@r:id,$relations-doc)">
@@ -483,6 +505,7 @@
   <xsl:template match="*" mode="build-properties"/>
 
   <xsl:template mode="build-properties" as="element()+" match="w:pPr">
+    <xsl:param name="styles" tunnel="yes" required="yes"/>
 
     <xsl:apply-templates mode="#current" select="w:pStyle/key('styles-by-id',@w:val, $styles)"/>
 
@@ -504,6 +527,7 @@
   <!-- match w:style[@w:type='paragraph']/w:rPr to suppress style settings -->
 
   <xsl:template mode="build-properties" as="element()+" match="w:rPr">
+    <xsl:param name="styles" tunnel="yes" required="yes"/>
 
     <xsl:apply-templates mode="#current" select="w:rStyle/key('styles-by-id',@w:val, $styles)"/>
 
@@ -519,6 +543,7 @@
   </xsl:template>
 
   <xsl:template mode="build-properties" as="element()*" match="w:style">
+    <xsl:param name="styles" tunnel="yes" required="yes"/>
     <!--w:link pulls in character level styles - and gets us infinite loops ... -->
     <xsl:apply-templates mode="#current" select="w:basedOn/key('styles-by-id',@w:val, $styles)"/>
     <xsw:style name="{@w:styleId}">
@@ -527,6 +552,7 @@
   </xsl:template>
   
   <xsl:template mode="build-properties" as="element()*" match="w:tblSstyle">
+    <xsl:param name="styles" tunnel="yes" required="yes"/>
     <!--w:link pulls in character level styles - and gets us infinite loops ... -->
     <xsl:apply-templates mode="#current" select="key('styles-by-id',@w:val, $styles)"/>
     <xsw:style name="{@w:styleId}">

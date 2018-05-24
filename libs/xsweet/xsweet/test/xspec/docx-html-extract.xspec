@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:xsw="http://coko.foundation/xsweet"
+               stylesheet="../../applications/docx-extract/docx-html-extract.xsl">
+    
+    <x:param name="show-css" select="'yes'"/>
+    
+    <x:scenario label="basic">
+        <x:context href="../resources/basic.docx!/word/document.xml"/>
+        <x:expect label="the HTML'">
+            <html xmlns="http://www.w3.org/1999/xhtml">
+                <head>
+                    <meta charset="UTF-8"/>
+                    <style type="text/css">
+.Normal { ; /* Normal*/ font-family: Liberation Serif; color: auto; font-size: 12pt }
+.Heading1 { ; /* Normal*/ font-family: Liberation Serif; color: auto; font-size: 12pt; /* Heading*/ margin-top: 12pt; margin-bottom: 6pt; font-family: Liberation Sans; font-size: 14pt; /* Heading1*/ xsweet-list-level: 0; margin-top: 12pt; margin-bottom: 6pt; xsweet-outline-level: 0; font-weight: bold; font-size: 18pt }</style>
+                </head>
+                <body>
+                    <div class="docx-body">
+                        <p class="Heading1"
+                           style="font-family: Liberation Sans; color: auto; font-size: 18pt; margin-top: 12pt; margin-bottom: 6pt; xsweet-list-level: 0; xsweet-outline-level: 0; font-weight: bold">
+                            <xsw:style name="Normal">
+                                <xsw:paraStyles/>
+                                <xsw:runStyles>
+                                    <xsw:prop name="font-family">Liberation Serif</xsw:prop>
+                                    <xsw:prop name="color">auto</xsw:prop>
+                                    <xsw:prop name="font-size">12pt</xsw:prop>
+                                </xsw:runStyles>
+                            </xsw:style>
+                            <xsw:style name="Heading">
+                                <xsw:paraStyles based-on="Normal">
+                                    <xsw:prop name="margin-top">12pt</xsw:prop>
+                                    <xsw:prop name="margin-bottom">6pt</xsw:prop>
+                                </xsw:paraStyles>
+                                <xsw:runStyles based-on="Normal">
+                                    <xsw:prop name="font-family">Liberation Sans</xsw:prop>
+                                    <xsw:prop name="font-size">14pt</xsw:prop>
+                                </xsw:runStyles>
+                            </xsw:style>
+                            <xsw:style name="Heading1">
+                                <xsw:paraStyles based-on="Heading">
+                                    <xsw:prop name="xsweet-list-level">0</xsw:prop>
+                                    <xsw:prop name="margin-top">12pt</xsw:prop>
+                                    <xsw:prop name="margin-bottom">6pt</xsw:prop>
+                                    <xsw:prop name="xsweet-outline-level">0</xsw:prop>
+                                    <xsw:prop name="xsweet-outline-level">0</xsw:prop>
+                                </xsw:paraStyles>
+                                <xsw:runStyles based-on="Heading">
+                                    <xsw:prop name="font-weight">bold</xsw:prop>
+                                    <xsw:prop name="font-size">18pt</xsw:prop>
+                                </xsw:runStyles>
+                            </xsw:style>
+                            <xsw:paraStyles calls="Heading1">
+                                <xsw:prop name="xsweet-list-level">0</xsw:prop>
+                                <xsw:prop name="margin-top">12pt</xsw:prop>
+                                <xsw:prop name="margin-bottom">6pt</xsw:prop>
+                        </xsw:paraStyles>Test document</p>
+                        <p class="Normal"
+                           style="font-family: Liberation Serif; color: auto; font-size: 12pt">
+                            <xsw:style name="Normal">
+                                <xsw:paraStyles/>
+                                <xsw:runStyles>
+                                    <xsw:prop name="font-family">Liberation Serif</xsw:prop>
+                                    <xsw:prop name="color">auto</xsw:prop>
+                                    <xsw:prop name="font-size">12pt</xsw:prop>
+                                </xsw:runStyles>
+                            </xsw:style>
+                        <xsw:paraStyles calls="Normal"/>Test</p>
+                    </div>
+                    <div class="docx-endnotes"/>
+                    <div class="docx-footnotes"/>
+                </body>
+            </html>
+        </x:expect>
+    </x:scenario>
+    
+</x:description>
