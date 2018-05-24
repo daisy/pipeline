@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://gitlab.coko.foundation/XSweet/HTMLevator.git
+	branch = master
+	commit = f1682f9f104df1a09c42bea5eb8ca44a167b9293
+	parent = 29aa1f116193c5aabf1894ca7d51319d64757dec
+	cmdver = 0.3.1

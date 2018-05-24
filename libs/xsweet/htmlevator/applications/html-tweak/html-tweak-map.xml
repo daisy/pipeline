@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<htmlTweak>
+  <where>
+    <match><class>Default</class></match>
+    <remove><class>Default</class></remove>
+  </where>
+  <where>
+    <match><class>Heading2</class></match>
+    <remove><class>Heading2</class></remove>
+    <add><class>HeadingZwo</class></add>
+    
+  </where>
+  <where>
+    <match><style>margin-bottom</style></match>
+    <remove><style>margin-bottom</style></remove>
+  </where>
+  <where>
+    <match><style>font-family: Helvetica</style></match>
+    <remove><style>font-family</style></remove>
+  </where>
+  <where>
+    <match>
+      <style>font-size: 18pt</style>
+      <class>FreeForm</class>
+    </match>
+    <remove>
+      <style>font-size</style>
+      <class>FreeForm</class>
+    </remove>
+    <add>
+      <class>FreeFormNew</class>
+      <style>color: red</style>
+    </add>
+  </where>
+  <where>
+  <match>
+    <style>text-indent: 36pt</style>
+  </match>
+  <add>
+    <class>Indented</class>
+  </add>
+</where>
+  
+</htmlTweak>

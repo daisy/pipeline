@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<div xml:id="header-map">
+  <!-- @class values and contents are read as regular expressions.
+       A given class must match (as a regex) a class 'token' in the input, case-sensitive
+       i.e. 'head1?' matches 'head1' and 'head' and 'HEAD' and also 'bighead'
+       whereas '^head1?' does not match 'bighead' (given the ^ anchoring the match).
+       
+       XPath regular expression syntax is used.
+       \S matches any string with non-whitespace (i.e. just about anything) -->
+  
+  <!-- Mapping the common "Header 1" and its kin -->
+  <h1 class="(H|h)ead(er|ing)?\s*1">\S</h1>
+  <h2 class="(H|h)ead(er|ing)?\s*2">\S</h2>
+  <h3 class="(H|h)ead(er|ing)?\s*3">\S</h3>
+  <h4 class="(H|h)ead(er|ing)?\s*4">\S</h4>
+  <h5 class="(H|h)ead(er|ing)?\s*5">\S</h5>
+  <h6 class="(H|h)ead(er|ing)?\s*6">\S</h6>
+  
+  <!-- Mapping Subtitle -->
+  <h2 class="[Ss]ubtitle">\S</h2>
+  
+  <!-- Mapping any paragraph whose content is 'Introduction' -->
+  <h2>^Introduction\s*$</h2>
+
+  <h2>^Conclusions?\s*$</h2>
+</div>
+
