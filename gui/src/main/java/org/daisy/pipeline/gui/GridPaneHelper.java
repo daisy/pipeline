@@ -2,6 +2,8 @@ package org.daisy.pipeline.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.daisy.pipeline.gui.databridge.ScriptField.DataType;
 import org.daisy.pipeline.gui.databridge.ScriptField.FieldType;
@@ -169,13 +171,13 @@ public class GridPaneHelper extends GridPane {
         final ScriptFieldAnswer.ScriptFieldAnswerList answer_ = answer;
         addFileButton.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    File file;
+                    List<File> files = new ArrayList<File>();
                     if (answer_.getField().getDataType() == DataType.FILE) {
                         FileChooser fileChooser = new FileChooser();
                         fileChooser.setTitle("Select File");
                         setInitialDirPickerDirectory(fileChooser, answer.getField().isResult(),
                                                      answer.getField().isTemp(), answer.getField().getDataType());
-                        file = fileChooser.showOpenDialog(null);
+                        files.addAll(fileChooser.showOpenMultipleDialog(null));
                     }
                     // assume directory
                     else {
@@ -183,13 +185,14 @@ public class GridPaneHelper extends GridPane {
                         dirChooser.setTitle("Select Directory");
                         setInitialDirPickerDirectory(dirChooser, answer.getField().isResult(),
                                                      answer.getField().isTemp(), answer.getField().getDataType());
-                        file = dirChooser.showDialog(null);
+                        files.add(dirChooser.showDialog(null));
                     }
-                    if (file != null) {
-                        answer_.answerProperty().add(file.getPath());
-                        setLastDirectory(file, answer.getField().isResult(),
-                                         answer.getField().isTemp(), answer.getField().getDataType());
-                    }
+                    for (File file: files)
+                        if (file != null) {
+                            answer_.answerProperty().add(file.getPath());
+                            setLastDirectory(file, answer.getField().isResult(),
+                                             answer.getField().isTemp(), answer.getField().getDataType());
+                        }
                 }
             }
         );
