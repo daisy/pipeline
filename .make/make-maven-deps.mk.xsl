@@ -291,6 +291,9 @@
 						<xsl:value-of select="concat($dirname,'.install.pom | .group-eval')"/>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
+						<xsl:text>+$(call eval-if-unix,'test -e' $@)</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(call eval-if-unix,touch $@)</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
@@ -305,6 +308,9 @@
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
 						<xsl:text>+$(call eval-if-unix,'test -e' $@)</xsl:text>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>&#x09;</xsl:text>
+						<xsl:text>+$(call eval-if-unix,'touch' $@)</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>.SECONDARY : </xsl:text>
