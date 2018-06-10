@@ -235,6 +235,10 @@ updater/cli/.install : $(call rwildcard,updater/cli/,*)
 .SECONDARY : updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip
 updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip : updater/cli/.install
 
+libs/xsweet/htmlevator/.install : %/.install : %/META-INF/catalog.xml $(call rwildcard,libs/xsweet/htmlevator/applications/,*)
+libs/xsweet/xsweet/.install : %/.install : \
+	%/META-INF/catalog.xml %/docx-to-html5.xpl %/library.xpl $(call rwildcard,libs/xsweet/xsweet/applications/,*)
+
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
 
