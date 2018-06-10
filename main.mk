@@ -42,7 +42,7 @@ $(TARGET_DIR)/effective-settings.xml : $(MVN_SETTINGS) $(TARGET_DIR)/properties
 	fi
 
 .SECONDARY : poms parents aggregators
-poms :
+poms : pom.xml
 parents :
 aggregators :
 include $(TARGET_DIR)/maven.mk
@@ -125,7 +125,7 @@ $(SAXON) : | .maven-init
 $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON)
 	MAVEN_MODULES=$$(cat $< 2>/dev/null) && \
 	poms=($$(for m in $$MAVEN_MODULES; do echo "$$m/pom.xml"; done)) && \
-	if ! [ -e $@ ] || [[ -n $$(find $${poms[*]} -newer $@ 2>/dev/null) ]]; then \
+	if ! [ -e $@ ] || [[ -n $$(find pom.xml $${poms[*]} -newer $@ 2>/dev/null) ]]; then \
 		rm -rf $(TARGET_DIR)/poms && \
 		for pom in $${poms[*]}; do \
 			v=$$(xmllint --xpath "/*/*[local-name()='version']/text()" $$pom) && \
