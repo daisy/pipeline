@@ -38,9 +38,12 @@ public interface FormattingTypes {
 		/**
 		 * Start block on a new page
 		 */
-		PAGE}
-		// Note:	ODD_PAGE is supported via new sequence
-		// 			EVEN_PAGE is not explicitly supported 
+		PAGE,
+		/**
+		 * Start block on a new sheet
+		 */
+		SHEET
+		}
 	/**
 	 * Defines rows in block keep types.
 	 */
