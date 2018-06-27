@@ -130,7 +130,13 @@ cli/.install.zip : cli/.install
 
 cli/.install : cli/cli/*.go
 
+.SECONDARY : cli/.install-darwin_386.zip cli/.install-linux_386.zip
+cli/.install-darwin_386.zip cli/.install-linux_386.zip : cli/.install
+
 updater/cli/.install : updater/cli/*.go
+
+.SECONDARY : updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip
+updater/cli/.install-darwin_386.zip updater/cli/.install-linux_386.zip : updater/cli/.install
 
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
