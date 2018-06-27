@@ -71,7 +71,7 @@ End Sub
 
 Sub visitTroubleshooting()
     Dim path
-    path = "https://daisy.github.io/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows.html"
+    path = "https://daisy.github.io/pipeline/Get-Help/Troubleshooting/"
 End Sub
 
 Sub viewLogs()

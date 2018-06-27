@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec" stylesheet="../../main/xslt/pom-to-release.xslt">
+    
+    <x:param name="time" select="'2018-01-01T00:00:00Z'"/>
+    
+    <x:scenario label="Scenario for testing a function">
+        <x:context href="../resources/effective-pom.xml"/>
+        <x:expect label="result" href="../resources/descriptor.xml" select="/*" test="/*"/>
+    </x:scenario>
+
+</x:description>
