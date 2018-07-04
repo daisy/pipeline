@@ -1,0 +1,53 @@
+/*
+ * #%L
+ * Native ARchive plugin for Maven
+ * %%
+ * Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package com.github.maven_nar;
+
+/**
+ * Stream to write to a string.
+ *
+ * @author Mark Donszelmann (Mark.Donszelmann@gmail.com)
+ * @version $Id$
+ */
+public class StringTextStream implements TextStream {
+  private final StringBuffer sb;
+
+  private final String lineSeparator;
+
+  public StringTextStream() {
+    this.sb = new StringBuffer();
+    this.lineSeparator = System.getProperty("line.separator", "\n");
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see com.github.maven_nar.TextStream#println(java.lang.String)
+   */
+  @Override
+  public final void println(final String text) {
+    this.sb.append(text);
+    this.sb.append(this.lineSeparator);
+  }
+
+  @Override
+  public final String toString() {
+    return this.sb.toString();
+  }
+}

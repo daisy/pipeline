@@ -1,0 +1,73 @@
+~~~
+~~ #%L
+~~ Native ARchive plugin for Maven
+~~ %%
+~~ Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+~~ %%
+~~ Licensed under the Apache License, Version 2.0 (the "License");
+~~ you may not use this file except in compliance with the License.
+~~ You may obtain a copy of the License at
+~~ 
+~~      http://www.apache.org/licenses/LICENSE-2.0
+~~ 
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+~~ #L%
+~~~
+	---
+NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+NAR Dependencies
+
+	Dependencies on other NARs are handled by the standard maven dependency mechanism.
+The type for NAR files is <<<nar>>>.
+The main nar file is equivalent to a jar file, but with some nar specific information in it. 
+The other nar files are always published as attached artifacts
+to the main nar artifact. A nar dependency is declared in the following way:
+
++--
+<project>
+  ...
+  <dependencies>
+    <dependency>
+      <groupId>dependent-group</groupId>
+      <artifactId>dependent-artifact</artifactId>
+      <version>dependent-version</version>
+      <type>nar</type>
+    </dependency>
+  </dependencies>
+</project>
++--
+        
+	As of version 2.1.x the type needs to be declared as "nar". 
+Maven will automatically download this nar file for any goal that requires it.
+
+	The NAR plugin knows this is a true nar dependency
+by looking inside the nar file for a properties file with the following name:
+
++--
+META-INF/nar/groupId/artifactId/nar.properties
++--
+
+	This file is normally generated in the nar-package goal.
+<<TBD there is no way to include a hand-written file>>.
+
+	The file may contain the following properties:
+	
+*---------------------------+--------------------+---------------------------------------+
+| <<Property>>              | <<Default-Value>>  | <<Description>>                       |
+*---------------------------+--------------------+---------------------------------------+
+| nar.noarch                |                    | Comma separated list of architecture independent nars to download. Each entry consists of groupId:artifactId:type:classifier, for example: ch.cern:cernlib:nar:noarch |
+*---------------------------+--------------------+---------------------------------------+
+| nar.static                |                    | Comma separated list of static nar files to download. Each entry consists of groupId:artifactId:type:classifier. $\{aol\} can be used to be replaced by the current aol value, for example: ch.cern:cernlib:nar:$\{aol\}-static |
+*---------------------------+--------------------+---------------------------------------+
+
+
+	<<TBD more values are possible >>

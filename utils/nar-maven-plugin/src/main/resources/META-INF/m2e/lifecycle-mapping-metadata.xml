@@ -1,0 +1,74 @@
+<!--
+  #%L
+  Native ARchive plugin for Maven
+  %%
+  Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+  %%
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  #L%
+  -->
+<lifecycleMappingMetadata>
+	<pluginExecutions>
+		<pluginExecution>
+			<pluginExecutionFilter>
+				<goals>
+					<goal>nar-testCompile</goal>
+					<goal>nar-test</goal>
+					<goal>nar-integration-test</goal>
+				</goals>
+			</pluginExecutionFilter>
+			<action>
+				<ignore />
+			</action>
+		</pluginExecution>
+		<pluginExecution>
+			<pluginExecutionFilter>
+				<goals>
+					<goal>nar-resources</goal>
+					<goal>nar-gnu-resources</goal>
+					<goal>nar-javah</goal>
+					<goal>nar-gnu-make</goal>
+					<goal>nar-compile</goal>
+					<goal>nar-gnu-process</goal>
+					<goal>nar-process-libraries</goal>
+					<goal>nar-prepare-package</goal>
+					<goal>nar-package</goal>
+				</goals>
+			</pluginExecutionFilter>
+			<action>
+				<execute >
+					<runOnIncremental>false</runOnIncremental>
+				</execute>
+			</action>
+		</pluginExecution>
+		<pluginExecution>
+			<pluginExecutionFilter>
+				<goals>
+					<goal>nar-validate</goal>
+					<goal>nar-download</goal>
+					<goal>nar-unpack</goal>
+					<goal>nar-test-unpack</goal>
+					<goal>nar-gnu-configure</goal>
+					<goal>nar-system-generate</goal>
+					<goal>nar-vcproj</goal>
+				</goals>
+			</pluginExecutionFilter>
+			<action>
+				<execute >
+					<runOnConfiguration>true</runOnConfiguration>
+					<runOnIncremental>false</runOnIncremental>
+				</execute>
+			</action>
+		</pluginExecution>
+	</pluginExecutions>
+</lifecycleMappingMetadata>

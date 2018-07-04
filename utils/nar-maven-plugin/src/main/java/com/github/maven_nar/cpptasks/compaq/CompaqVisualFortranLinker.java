@@ -1,0 +1,89 @@
+/*
+ * #%L
+ * Native ARchive plugin for Maven
+ * %%
+ * Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package com.github.maven_nar.cpptasks.compaq;
+
+import java.util.Vector;
+
+import com.github.maven_nar.cpptasks.compiler.LinkType;
+import com.github.maven_nar.cpptasks.compiler.Linker;
+import com.github.maven_nar.cpptasks.msvc.MsvcCompatibleLinker;
+
+/**
+ * Adapter for the Compaq(r) Visual Fortran linker.
+ *
+ * @author Curt Arnold
+ */
+public final class CompaqVisualFortranLinker extends MsvcCompatibleLinker {
+  private static final CompaqVisualFortranLinker dllLinker = new CompaqVisualFortranLinker(".dll");
+  private static final CompaqVisualFortranLinker instance = new CompaqVisualFortranLinker(".exe");
+
+  public static CompaqVisualFortranLinker getInstance() {
+    return instance;
+  }
+
+  private CompaqVisualFortranLinker(final String outputSuffix) {
+    super("DF", "__bogus__.xxx", outputSuffix);
+  }
+
+  protected void addImpliedArgs(final boolean debug, final LinkType linkType, final Vector<String> args) {
+    args.addElement("/NOLOGO");
+    final boolean staticRuntime = linkType.isStaticRuntime();
+    if (staticRuntime) {
+      args.addElement("/libs:static");
+    } else {
+      args.addElement("/libs:dll");
+    }
+    if (debug) {
+      args.addElement("/debug");
+    } else {
+    }
+    if (linkType.isSharedLibrary()) {
+      args.addElement("/dll");
+    } else {
+      args.addElement("/exe");
+    }
+  }
+
+  @Override
+  public Linker getLinker(final LinkType type) {
+    if (type.isStaticLibrary()) {
+      return CompaqVisualFortranLibrarian.getInstance();
+    }
+    if (type.isSharedLibrary()) {
+      return dllLinker;
+    }
+    return instance;
+  }
+
+  @Override
+  public String[] getOutputFileSwitch(final String outputFile) {
+    final StringBuffer buf = new StringBuffer("/OUT:");
+    if (outputFile.indexOf(' ') >= 0) {
+      buf.append('"');
+      buf.append(outputFile);
+      buf.append('"');
+    } else {
+      buf.append(outputFile);
+    }
+    return new String[] {
+      buf.toString()
+    };
+  }
+}

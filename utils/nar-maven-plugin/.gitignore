@@ -1,0 +1,20 @@
+# Maven
+/target/
+
+# Eclipse
+/.classpath
+/.project
+/.settings
+
+# joe & vi
+*.bak
+.*.swp
+
+# IntelliJ
+/.idea/
+*.iml
+
+# MacOSX
+.DS_Store
+
+*.log

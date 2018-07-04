@@ -1,0 +1,36 @@
+~~~
+~~ #%L
+~~ Native ARchive plugin for Maven
+~~ %%
+~~ Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+~~ %%
+~~ Licensed under the Apache License, Version 2.0 (the "License");
+~~ you may not use this file except in compliance with the License.
+~~ You may obtain a copy of the License at
+~~ 
+~~      http://www.apache.org/licenses/LICENSE-2.0
+~~ 
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+~~ #L%
+~~~
+	---
+NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+CppTasks
+
+	To handle the variety of architectures, compilers and linkers, the NAR Plugin uses
+a derivative of the {{{http://ant-contrib.sourceforge.net/cc.html}cpptasks}} library
+available from {{{http://ant-contrib.sourceforge.net/}ant-contrib}}.  This library
+allows to specify compilers and linkers from ant (and thus from maven) and unifies
+most common options for those compilers and linkers.
+
+	As of revision 3c3807743 the {{{./source-repository.html}source code repository}}
+of the NAR Plugin includes the complete history of <<<cpptasks-parallel>>>.

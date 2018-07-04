@@ -1,0 +1,89 @@
+~~~
+~~ #%L
+~~ Native ARchive plugin for Maven
+~~ %%
+~~ Copyright (C) 2002 - 2014 NAR Maven Plugin developers.
+~~ %%
+~~ Licensed under the Apache License, Version 2.0 (the "License");
+~~ you may not use this file except in compliance with the License.
+~~ You may obtain a copy of the License at
+~~ 
+~~      http://www.apache.org/licenses/LICENSE-2.0
+~~ 
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+~~ #L%
+~~~
+	---
+NAR Plugin
+	---
+	---
+Mark Donszelmann
+	---
+	
+NAR Lifecycle
+
+	The NAR lifecycle copies the default Maven lifecycle and adds native goals to its phases.
+The table below shows the different phases of the NAR Lifecycle and the goals (including
+standard maven goals) attached to them. The order is left to right, top to bottom.
+
+*------------------------+---------------------------------------------------------------------+
+| <Phase>                | <Goals (NAR Goals in bold)>                                         |
+*------------------------+---------------------------------------------------------------------+ 
+| validate               | <<nar-validate>>                                                    |
+*------------------------+---------------------------------------------------------------------+ 
+| initialize             | <<nar-download>>                                                    |
+*------------------------+---------------------------------------------------------------------+ 
+| generate-sources       | <<nar-unpack>>                                                      |
+*------------------------+---------------------------------------------------------------------+ 
+| process-sources        | <<nar-gnu-configure>>                                               |
+*------------------------+---------------------------------------------------------------------+ 
+| generate-resources     | <<nar-system-generate>>, <<nar-vcproj>>                             |
+*------------------------+---------------------------------------------------------------------+ 
+| process-resources      | resources, <<nar-resources>>, <<nar-gnu-resources>>                 |
+*------------------------+---------------------------------------------------------------------+ 
+| compile                | compile, <<nar-javah>>, <<nar-gnu-make>>, <<nar-compile>>           |
+*------------------------+---------------------------------------------------------------------+ 
+| process-classes        | <<nar-gnu-process>>, <<nar-process-libraries>>                      |
+*------------------------+---------------------------------------------------------------------+ 
+| generate-test-sources  | <<nar-test-unpack>>                                                 |
+*------------------------+---------------------------------------------------------------------+ 
+| process-test-sources   |                                                                     |
+*------------------------+---------------------------------------------------------------------+ 
+| generate-test-resources|                                                                     |
+*------------------------+---------------------------------------------------------------------+ 
+| process-test-resources | testResources                                                       |
+*------------------------+---------------------------------------------------------------------+ 
+| test-compile           | testCompile, <<nar-testCompile>>                                    |
+*------------------------+---------------------------------------------------------------------+ 
+| process-test-classes   |                                                                     |
+*------------------------+---------------------------------------------------------------------+ 
+| test                   | test, <<nar-test>>                                                  |
+*------------------------+---------------------------------------------------------------------+ 
+| prepare-package        | <<nar-prepare-package>>                                             |
+*------------------------+---------------------------------------------------------------------+ 
+| package                | <<nar-package>>, jar                                                |
+*------------------------+---------------------------------------------------------------------+ 
+| pre-integration-test   |                                                                     |
+*------------------------+---------------------------------------------------------------------+ 
+| integration-test       | <<nar-integration-test>>                                            |
+*------------------------+---------------------------------------------------------------------+ 
+| post-integration-test  |                                                                     |
+*------------------------+---------------------------------------------------------------------+ 
+| verify                 |                                                                     |
+*------------------------+---------------------------------------------------------------------+ 
+| install                | install                                                             |
+*------------------------+---------------------------------------------------------------------+ 
+| deploy                 | deploy                                                              |
+*------------------------+---------------------------------------------------------------------+ 
+
+
+	The NAR plugin attaches the nar files it produces to the main artifact (jar) so the standard
+install and deploy plugins of maven do their job.
+
+	The nar-assembly goal is not part of the lifestyle and should be called independently.
+	
+	
