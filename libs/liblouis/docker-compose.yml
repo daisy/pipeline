@@ -1,0 +1,6 @@
+debian:
+  build: Dockerfile
+  volumes:
+    - .:/root/src
+    - .m2/repository:/root/.m2/repository
+  working_dir: /root/src

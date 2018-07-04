@@ -1,0 +1,347 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.liblouis</groupId>
+	<artifactId>louis</artifactId>
+	<version>3.6.0</version>
+	<packaging>nar</packaging>
+	<name>liblouis-nar</name>
+	<description>liblouis packaged in a NAR (Native ARchive).</description>
+	<url>https://github.com/bertfrees/liblouis-nar</url>
+	<scm>
+		<connection>scm:git:git@github.com:bertfrees/liblouis-nar.git</connection>
+		<developerConnection>scm:git:git@github.com:bertfrees/liblouis-nar.git</developerConnection>
+		<url>git@github.com:bertfrees/liblouis-nar.git</url>
+	</scm>
+	<licenses>
+		<license>
+			<name>GNU Lesser General Public License 3</name>
+			<url>http://www.gnu.org/licenses/lgpl.html</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<name>Bert Frees</name>
+			<email>bertfrees@gmail.com</email>
+			<url>http://github.com/bertfrees</url>
+			<organization>SBS - Schweizerische Bibliothek f&#xFC;r Blinde, Seh- und Lesebehinderte</organization>
+			<organizationUrl>http://www.sbs.ch</organizationUrl>
+		</developer>
+	</developers>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<nar.arch.option/>
+		<nar.install_name.option/>
+		<nar.rpath.option/>
+		<nar.host.option/>
+	</properties>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.github.maven-nar</groupId>
+					<artifactId>nar-maven-plugin</artifactId>
+					<version>3.5.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>shell-maven-plugin</artifactId>
+					<version>1.0-beta-1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.5.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.19.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>com.github.maven-nar</groupId>
+				<artifactId>nar-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<gnuSourceDirectory>target/generated-sources/liblouis</gnuSourceDirectory>
+					<gnuConfigureArgs>${nar.host.option}</gnuConfigureArgs>
+					<libraries>
+						<library>
+							<type>shared</type>
+						</library>
+					</libraries>
+				</configuration>
+				<executions>
+					<!--
+					    validate: nar-validate
+					    initialize: nar-download
+					    generate-sources: nar-unpack
+					    process-sources: nar-gnu-configure
+					    generate-resources: nar-system-generate, nar-vcproj
+					    process-resources: nar-resources, nar-gnu-resources
+					    compile: nar-javah, nar-gnu-make, nar-compile
+						process-classes: nar-gnu-process, nar-process-libraries
+					    generate-test-sources: nar-test-unpack
+						test-compile: nar-testCompile
+						test: nar-test
+						prepare-package: nar-prepare-package
+						package: nar-package,
+						integration-test: nar-integration-test
+					-->
+					<execution>
+						<id>default-nar-gnu-resources</id>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>default-nar-javah</id>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>default-nar-gnu-make</id>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>default-nar-compile</id>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>default-nar-gnu-configure</id>
+						<phase>compile</phase>
+					</execution>
+					<execution>
+						<id>nar-gnu-make</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>nar-gnu-make</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>nar-compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>nar-compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-sources</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources/liblouis</outputDirectory>
+							<overwrite>true</overwrite>
+							<resources>
+								<resource>
+									<directory>src/liblouis</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-results-1</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/nar/louis-${project.version}-${nar.aol}-shared/lib/${nar.aol}/shared</outputDirectory>
+							<resources>
+								<resource>
+									<directory>target/nar/gnu/${nar.aol}/target/lib</directory>
+									<includes>
+										<include>*.dll.a</include>
+										<include>pkgconfig/*</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-results-2</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/nar/louis-${project.version}-noarch/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>target/nar/gnu/x86_64-MacOSX-gpp/target/</directory>
+									<includes>
+										<include>share/**/*</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>shell-maven-plugin</artifactId>
+				<configuration>
+					<chmod>true</chmod>
+				</configuration>
+				<executions>
+					<execution>
+						<id>process-sources</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>shell</goal>
+						</goals>
+						<configuration>
+							<workDir>target/generated-sources/liblouis</workDir>
+							<script>
+								#!/bin/sh
+								sed \
+								-e 's|^\(liblouis_la_LDFLAGS =\)\(.*\)$|\1 ${nar.install_name.option} ${nar.rpath.option} -avoid-version \2|' \
+								../../../src/liblouis/liblouis/Makefile.am > liblouis/Makefile.am
+								sed \
+								-e 's|^\(AC_INIT(\[Liblouis\],\)[^,]*\(,.*\)$|\1 [${project.version}]\2|' \
+								-e '/^AC_INIT.*$/a\
+								CFLAGS="$CFLAGS ${nar.arch.option}"\
+								' \
+								../../../src/liblouis/configure.ac > configure.ac
+								sed \
+								-e '/^prefix=/d' \
+								-e '/^exec_prefix=/d' \
+								-e '/^tablesdir=/d' \
+								-e 's|@libdir@|@NAR@/lib/${nar.aol}/shared|' \
+								-e 's|@includedir@|@NAR@/include|' \
+								../../../src/liblouis/liblouis.pc.in > liblouis.pc.in
+								mkdir m4
+								touch m4/.keep
+							</script>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>i386</id>
+			<activation>
+				<property>
+					<name>os.arch</name>
+					<value>i386</value>
+				</property>
+			</activation>
+			<properties>
+				<nar.arch.option>-m32</nar.arch.option>
+			</properties>
+		</profile>
+		<profile>
+			<id>linux</id>
+			<activation>
+				<property>
+					<name>os.name</name>
+					<value>Linux</value>
+				</property>
+			</activation>
+			<properties>
+				<nar.rpath.option>-Wl,-rpath,".:\\\$\$ORIGIN",--enable-new-dtags</nar.rpath.option>
+			</properties>
+		</profile>
+		<profile>
+			<id>mac</id>
+			<activation>
+				<property>
+					<name>os.name</name>
+					<value>Mac OS X</value>
+				</property>
+			</activation>
+			<properties>
+				<nar.install_name.option>-Wl,-install_name,@loader_path/liblouis.dylib</nar.install_name.option>
+			</properties>
+		</profile>
+		<profile>
+			<id>cross-compile</id>
+			<properties>
+				<nar.arch.option></nar.arch.option>
+				<nar.rpath.option></nar.rpath.option>
+				<nar.install_name.option></nar.install_name.option>
+				<nar.host.option>--host ${os.arch}-${host.os}</nar.host.option>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.maven-nar</groupId>
+						<artifactId>nar-maven-plugin</artifactId>
+						<configuration>
+							<os>${host.os}</os>
+							<linker>
+								<name>gpp</name>
+							</linker>
+						</configuration>
+						<executions>
+							<execution>
+								<id>default-nar-validate</id>
+								<phase>none</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>sonatype-deploy</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.4</version>
+						<configuration>
+							<useAgent>true</useAgent>
+						</configuration>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+	<distributionManagement>
+		<repository>
+			<id>sonatype-nexus-staging</id>
+			<name>oss.sonatype.org Staging Repository</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+		<snapshotRepository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>oss.sonatype.org github Release Repository Snapshot Repository</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+</project>

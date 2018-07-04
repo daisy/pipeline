@@ -1,0 +1,147 @@
+liblouis 3.6.0 has been released
+
+The liblouis developer team is proud to announce the liblouis release
+3.6.0. The release is available for download at:
+
+    https://github.com/liblouis/liblouis/releases
+
+Introduction
+============
+
+Liblouis is an open-source braille translator and back-translator. It
+features support for computer, literary and math braille, supports
+contracted and uncontracted translation for many, many languages[1].
+It plays an important role in an open source accessibility stack and
+is used by screenreaders such as NVDA, Orca and JAWS. A companion
+project liblouisutdml[2][2] deals with formatting of braille.
+
+Changes in this release
+=======================
+
+This release contains the usual assortment of braille table
+improvements, cleanups and bug fixes. The most prominent change is the
+refactoring of the call APIs by Bert Frees that makes the code much
+more manageable and solid and will help us in the future to evolve the
+library.
+
+For a detailed list of all the changes refer to the list of closed
+issues[3].
+
+New features
+~~~~~~~~~~~~
+
+- Add metadata fields `name' and `display-name' to tables thanks to
+  Bert Frees. The `name' contains a description of the table in the
+  native language. `display-name' contains an English description.
+- YAML test enhancements
+  - You can now test both forward and backwards translation with in
+    the same YAML file and for the same set of tables tests thanks to
+    Bue Vester-Andersen. See the documentation for the
+    `bothDirections' testmode.
+  - Add `maxOutputLength' option in YAML tests.
+
+Bug fixes
+~~~~~~~~~
+
+- Fix a bunch of buffer overflow errors in table parsing thanks to
+  Samuel Thibault and Christian Egli (CVE-2018-11410 and
+  CVE-2018-11440).
+- Fix input-output mapping of context rules thanks to Bert Frees.
+- Fix back tracking with all caps words thanks to Bert Frees.
+- Fix context rules with lookback thanks to Bert Frees.
+- Fix a memory leak in default table resolver thanks to Timothy Lee.
+- Fix an array out of bounds error which caused a crash on i386 thanks
+  to Samuel Thibault.
+- Fix numerous stack-based buffer overflow in table parsing thanks
+  that were reported by Henri Salo thanks to Christian Egli
+  (CVE-2018-11683, CVE-2018-11684 and CVE-2018-11685).
+
+Braille table improvements
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Fix some forward- and back-translation errors in Unified French
+  Grade 2 thanks to André-Abush Clause.
+- Updates to the Simplified-Chinese Braille Translation Table thanks
+  to Roshanson
+  - Added many polygraphs to distinguish different meanings of a word
+  - Letter identifiers have been modified. In China's school for the
+    blind, when many visually impaired students learn, the lowercase
+    letters often do not have to mark the identifiers deliberately. So
+    in this version, we this item has been deleted.
+  - Fixed a bug in the braille code that revises the space and 0
+- Updates to Bopomofo-based Chinese Braille Table thanks to Bo-Cheng
+  Jhan
+  - Redefine some Chinese words and phrases
+  - Add various Nemeth symbols such as arrows and parenthesis
+  - Complete the support of CJK Compatibility block
+  - Fix the support of various parentheses, brackets, and braces
+  - Minor fixes (kana rules, punctuation marks, Greek alphabets)
+- New 8 dot computer braille table for Czech thanks to Jan Hegr.
+- Fixes to Czech 6 dot table thanks to Jan Hegr
+  - Fixed curly brackets representation
+  - Fixed number sign representation
+  - Added copyright sign
+- Minor fixes to Hebrew thanks to Erez Kugler.
+
+Other changes
+~~~~~~~~~~~~~
+
+- Refactoring thanks to Bert Frees
+  - Simplify the emphasis class handling by combining all related vars
+    in a struct `EmphasisClass'
+  - Simplify input/output buffer handling
+  - Combine `emphasisBuffer' and `transnoteBuffer'
+  - Group match related vars in a struct `PassRuleMatch'
+  - Remove dead code
+- Fixed many warnings thanks to Christian Egli
+
+Deprecation notice
+~~~~~~~~~~~~~~~~~~
+
+- The `mode' parameter in `lou_dotsToChar' never had any effect and is
+  now deprecated.
+- In 2012 a new way to specify the test and action part in context and
+  multipass opcodes was introduced. It was never documented and has no
+  known usage in the wild. However it opens up the attack surface to
+  the table parsing code. Therefore it is deprecated and will be
+  removed in the next release.
+
+Backwards incompatible changes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- None
+
+New, renamed or removed tables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+New
+---
+
+  - cs-comp8.utb
+
+Renamed
+-------
+
+  - None
+
+Removed
+-------
+
+  - Cz-Cz-g1.utb
+
+Next release
+============
+
+The next release will be published on June 4 2018 so please keep up
+the excellent work and keep those improvements coming.
+
+Share and Enjoy!
+
+-- Christian Egli, on behalf of the liblouis developers
+
+Footnotes
+=========
+
+[1]  https://github.com/liblouis/liblouis/tree/master/tables
+[2]  https://github.com/liblouis/liblouisutdml
+[3]  https://github.com/liblouis/liblouis/milestone/16?closed=1
