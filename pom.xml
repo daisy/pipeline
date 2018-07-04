@@ -21,6 +21,7 @@
     <module>utils/xspec-maven-plugin</module>
     <module>utils/xprocspec</module>
     <module>utils/xproc-maven-plugin</module>
+    <module>utils/nar-maven-plugin</module>
     <module>libs/jstyleparser</module>
     <module>libs/braille-css</module>
     <module>libs/jhyphen</module>
