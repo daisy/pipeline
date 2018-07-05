@@ -269,8 +269,6 @@ endif
 clean : clean-eclipse
 	rm -rf $(TARGET_DIR)
 	rm -f maven.log
-	rm -f *.zip *.deb *.rpm
-	rm -rf webui/dp2webui
 	find * -name .last-tested -exec rm -r "{}" \;
 	find * -name .deps.mk -exec rm -r "{}" \;
 
