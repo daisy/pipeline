@@ -5,7 +5,7 @@ GRADLE_FILES      := $(shell find * -name build.gradle -o -name settings.gradle 
 GRADLE_MODULES    := $(patsubst %/build.gradle,%,$(filter %/build.gradle,$(GRADLE_FILES)))
 MODULES            = $(MAVEN_MODULES) $(GRADLE_MODULES)
 GITREPOS          := $(shell find * -name .gitrepo -exec dirname {} \;)
-MVN               := mvn --settings "$(ROOT_DIR)/$(MVN_SETTINGS)" $(MVN_PROPERTIES)
+MVN               := mvn --batch-mode --settings "$(ROOT_DIR)/$(MVN_SETTINGS)" $(MVN_PROPERTIES)
 MVN_LOG           := tee -a $(ROOT_DIR)/maven.log \
                      | cut -c1-1000 \
                      | pcregrep -M "^\[INFO\] -+\n\[INFO\] Building .*\n\[INFO\] -+$$|^\[(ERROR|WARNING)\]"; \
