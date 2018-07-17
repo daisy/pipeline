@@ -83,6 +83,7 @@ xprocdoc:
   artifact: common-utils
 - group: org.daisy.pipeline.modules.braille
   artifact: css-utils
+  version: 3.4.1-SNAPSHOT
 - group: org.daisy.pipeline.modules.braille
   artifact: dotify-utils
 - group: org.daisy.pipeline.modules.braille

@@ -30,7 +30,7 @@ all : $(JEKYLL_DIR)/_site
 $(JEKYLL_DIR)/_site : %/_site : %/$(meta_file) %/modules %/api $(JEKYLL_FILES)
 	mkdir -p $(dir $@)
 	cd $(dir $@) && jekyll build --destination $(CURDIR)/$@$(baseurl)/
-	if ! make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE); then \
+	if ! $(RUBY) make/post_process.rb $< $@$(baseurl) $(JEKYLL_DIR) $(CONFIG_FILE); then \
 		rm -rf $@; \
 		exit 1; \
 	fi
@@ -44,7 +44,7 @@ $(JEKYLL_FILES_CONTENT) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 $(JEKYLL_FILES_MUSTACHE) : $(JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(JEKYLL_DIR)/$(meta_file)
 	mkdir -p $(dir $@)
 	cp $< $@
-	if ! make/mustache.rb $@ $(word 2,$^) $(JEKYLL_DIR) $(CONFIG_FILE); then \
+	if ! $(RUBY) make/mustache.rb $@ $(word 2,$^) $(JEKYLL_DIR) $(CONFIG_FILE); then \
 		rm -f $@; \
 		exit 1; \
 	fi
@@ -80,7 +80,7 @@ $(JEKYLL_DIR)/api : $(MAVEN_DIR)/javadoc $(MAVEN_DIR)/xprocdoc
 
 $(JEKYLL_DIR)/$(meta_file) : $(META_JEKYLL_DIR)/_site
 	mkdir -p $(dir $@)
-	if ! $(RUBY) make/make_meta.rb "$<$(baseurl)/**/*.html" $<$(baseurl) $(CONFIG_FILE) >$@; then
+	if ! $(RUBY) make/make_meta.rb "$<$(baseurl)/**/*.html" $<$(baseurl) $(CONFIG_FILE) >$@; then \
 		rm -f $@; \
 		exit 1; \
 	fi
@@ -97,7 +97,7 @@ $(META_JEKYLL_FILES_CONTENT) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/%
 $(META_JEKYLL_FILES_MUSTACHE) : $(META_JEKYLL_DIR)/% : $(JEKYLL_SRC_DIR)/% $(META_JEKYLL_DIR)/$(meta_file)
 	mkdir -p $(dir $@)
 	cp $< $@
-	if ! make/mustache.rb $@ $(word 2,$^) $(META_JEKYLL_DIR) $(CONFIG_FILE); then \
+	if ! $(RUBY) make/mustache.rb $@ $(word 2,$^) $(META_JEKYLL_DIR) $(CONFIG_FILE); then \
 		rm -f $@; \
 		exit 1; \
 	fi
