@@ -150,7 +150,7 @@ $(MUSTACHE_DIR)/modules : $(MAVEN_DIR)/doc $(JEKYLL_DIR)/$(meta_file) | gems
 	mkdir -p $(dir $@)
 	rm -rf $@
 	cp -r $</org/daisy/pipeline/modules $@
-	if ! $(RUBY) make/mustache.rb "$@/**/*" $(word 2,$^) $(MUSTACHE_DIR) $(CONFIG_FILE); then \
+	if ! $(RUBY) make/mustache.rb "$@/**/*.{md,html,xhtml}" $(word 2,$^) $(MUSTACHE_DIR) $(CONFIG_FILE); then \
 		rm -rf $@; \
 		exit 1; \
 	fi
