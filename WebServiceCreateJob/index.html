@@ -760,7 +760,7 @@ if (window.addEventListener) {
 <p>There are two ways of creating jobs. Both involve first creating an
 XML document to represent the job request:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;jobRequest</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>
     <span class="tag">&lt;script</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://example.org/ws/scripts/dtbook-to-zedai</span><span class="delimiter">'</span></span><span class="tag">/&gt;</span>
@@ -795,13 +795,13 @@ building the job request.</p>
 
 <p>A job can be created using inline XML or a multi-part upload.</p>
 
-<h2 id="inline-xml">1. Inline XML</h2>
+<h2 id="1-inline-xml">1. Inline XML</h2>
 
 <p>This method is appropriate if the only files involved are XML, and no
 external files (e.g. JPEGs) are required. The input XML document(s),
 in this case DTBook documents, are nested in the job request itself:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;jobRequest</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>
     <span class="tag">&lt;script</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://example.org/ws/scripts/dtbook-to-zedai</span><span class="delimiter">'</span></span><span class="tag">/&gt;</span>
@@ -825,7 +825,7 @@ in this case DTBook documents, are nested in the job request itself:</p>
 <p>If a sequence of documents is being passed to a port, then a series of
 <code>&lt;docwrapper&gt;</code> elements should be used:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;input</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">source</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
         <span class="tag">&lt;docwrapper&gt;</span>
@@ -842,7 +842,7 @@ in this case DTBook documents, are nested in the job request itself:</p>
 </div>
 </div>
 
-<h2 id="multipart-zip-upload">2. Multipart zip upload</h2>
+<h2 id="2-multipart-zip-upload">2. Multipart zip upload</h2>
 
 <p>Sometimes the input file’s context is required in order to perform the
 operation. An example is when the input file references images, and
@@ -856,7 +856,7 @@ a zip file containing input data.</p>
 <p>The other part of the multi-part upload, identified as <code>job-request</code>,
 is an XML file describing the job request:</p>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;jobRequest</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>
     <span class="tag">&lt;script</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://example.org/ws/scripts/dtbook-to-zedai</span><span class="delimiter">'</span></span><span class="tag">/&gt;</span>

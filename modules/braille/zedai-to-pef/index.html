@@ -1229,7 +1229,7 @@ alice.brf
   <li>
     <p>External stylesheet:</p>
 
-    <div class="highlighter-coderay">
+    <div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;document&gt;</span>
     <span class="tag">&lt;head&gt;</span>
@@ -1242,7 +1242,7 @@ alice.brf
   <li>
     <p>Internal stylesheet:</p>
 
-    <div class="highlighter-coderay">
+    <div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;document&gt;</span>
     <span class="tag">&lt;head&gt;</span>
@@ -1263,7 +1263,7 @@ alice.brf
   <li>
     <p>Inline styles:</p>
 
-    <div class="highlighter-coderay">
+    <div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;document&gt;</span>
     <span class="tag">&lt;head</span> <span class="attribute-name">style</span>=<span class="string"><span class="delimiter">"</span><span class="key">display</span>:<span class="value">none</span><span class="delimiter">"</span></span><span class="tag">&gt;</span>
@@ -1282,7 +1282,7 @@ alice.brf
 
 <p>Keep in mind that a simple default stylesheet (<code>default.css</code>) is always applied first. If you don’t want this default CSS, include <code>reset.css</code> in your stylesheet:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@import</span> <span class="function"><span class="delimiter">url(</span><span class="content">'http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/css/reset.css'</span><span class="delimiter">)</span></span>;
 </pre></div>
@@ -1293,7 +1293,7 @@ alice.brf
 
 <h4 id="example-1-sections-and-headings">Example 1: Sections and headings</h4>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">section</span> {
     <span class="key">display</span>: <span class="value">block</span>;
@@ -1305,7 +1305,7 @@ alice.brf
 
 <p>By putting this code in your stylesheet, each section will be guaranteed to start on a new braille page.</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">h</span> {
     <span class="key">display</span>:<span class="value">block</span>;
@@ -1327,7 +1327,7 @@ alice.brf
 
 <h4 id="example-2-ordered-and-unordered-lists">Example 2: Ordered and unordered lists</h4>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">list</span> {
     <span class="key">display</span>: <span class="value">block</span>;
@@ -1355,7 +1355,7 @@ alice.brf
 
 <h4 id="example-3-tables-in-linear-versus-stairstep-format">Example 3: Tables in linear versus stairstep format</h4>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">table</span> {
     <span class="key">display</span>: <span class="value">block</span>;
@@ -1376,7 +1376,7 @@ alice.brf
 
 <p>This code will give tables an upper and lower border (lines of characters ‘⠶’ and ‘⠛’ respectively). If there is a table header, a ‘⠒’ border is printed between the header and the body. Table rows are protected from being split across braille pages.</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="class">.linear</span> <span class="tag">th</span><span class="pseudo-class">::after</span>,
 <span class="class">.linear</span> <span class="tag">td</span><span class="pseudo-class">::after</span> {
@@ -1388,7 +1388,7 @@ alice.brf
 
 <p>Tables of class “linear” (<code>&lt;table class="linear"&gt;</code>) will have table cells separated by the character ‘⠰’ and a space.</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">td</span>,
 <span class="tag">table</span><span class="class">.stairstep</span> <span class="tag">th</span> {
@@ -1415,7 +1415,7 @@ alice.brf
 
 <h4 id="example-4-print-page-numbers">Example 4: Print page numbers</h4>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">pagebreak</span> {
     <span class="key">display</span>: <span class="value">none</span>;
@@ -1429,7 +1429,7 @@ alice.brf
 
 <p>When <code>display:none</code> is changed to <code>display:page-break</code>, a <em>page break indicator</em> (a line of braille dots ‘36’) is generated wherever a print page break occurs:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">pagebreak</span> {
     <span class="key">display</span>: <span class="value">page-break</span>;
@@ -1443,7 +1443,7 @@ alice.brf
 
 <h4 id="example-5-table-of-contents">Example 5: Table of contents</h4>
 
-<div class="highlighter-coderay">
+<div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;toc&gt;</span>
     <span class="tag">&lt;h&gt;</span>Contents<span class="tag">&lt;/h&gt;</span>
@@ -1460,7 +1460,7 @@ alice.brf
 
 <p>A table of contents can be rendered in a typical layout with page numbers on the right and leaders between entries and page numbers. A precondition is that headings in the text are referenced within the table of contents (e.g. with an attribute). If print page numbers and/or braille page numbers are present in the braille output, they can be included in the table of contents too. The pattern of leaders can be configured. Let’s look at the CSS:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">toc</span> &gt; <span class="tag">h</span> {
     <span class="key">display</span>: <span class="value">block</span>;
@@ -1488,7 +1488,7 @@ alice.brf
 
 <p>The dimensions of the page, the position of page numbers, and the running header and/or footer (see <a href="#example-7-running-headerfooter">example 7</a>), can be configured with the <code>@page</code> rule:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@page</span> {
     <span class="key">size</span>: <span class="float">40</span> <span class="float">25</span>;
@@ -1510,7 +1510,7 @@ alice.brf
 
 <p>As showed in the next example, pages can be named. This can be useful to switch page layout in the middle of a document. The following example will start a new page with double width for each wide table, so that it can be printed across facing pages.</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@page</span> <span class="tag">double</span> {
     <span class="key">size</span>: <span class="float">80</span> <span class="float">25</span>;
@@ -1527,7 +1527,7 @@ alice.brf
 
 <p>As seen in <a href="#example-6-page-layout">example 6</a> above, pages can have running headers and/or footers. To update the value of the footer whenever a new heading appears, include the following:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">h</span> {
     <span class="key">string-set</span>: <span class="value">running-footer</span> <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">t</span><span class="error">e</span><span class="error">n</span><span class="error">t</span>();
@@ -1540,7 +1540,7 @@ alice.brf
 
 <p>CSS also has some tools to customized the braille page numbering. For example, to distinguished the frontmatter from the bodymatter, they often have different page numbering formats. This snippet gives the frontmatter lowercase Roman page numbers, and restarts the numbering after the frontmatter:</p>
 
-<div class="highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="directive">@page</span> <span class="tag">front</span> {
     <span class="directive">@bottom-right</span> {

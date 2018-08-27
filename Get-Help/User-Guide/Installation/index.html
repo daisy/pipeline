@@ -793,7 +793,7 @@ to use the Debian package manager. Open a shell window, change to the
 directory where you have downloaded the DEB file, then execute the
 following command:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>dpkg -i daisy-pipeline2_x.y.z.deb
 </pre></div>
@@ -810,7 +810,7 @@ Pipeline via the <a href="#linux-zip">ZIP file</a>, but easier is to use the “
 package manager. Open a shell window, change to the directory where
 you have downloaded the RPM file, then execute the following command:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>yum install daisy-pipeline2_x.y.z.rpm
 </pre></div>
@@ -832,7 +832,7 @@ extract the contents to any destination you want.</p>
 website. It comes in the form of a Docker image that you can obtain
 via the Docker command line interface:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>docker pull daisyorg/pipeline-assembly
 </pre></div>
@@ -841,7 +841,7 @@ via the Docker command line interface:</p>
 
 <p>It is also possible to get a specific version:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>docker pull daisyorg/pipeline-assembly:&lt;version&gt;
 </pre></div>
@@ -852,7 +852,7 @@ via the Docker command line interface:</p>
 <a href="https://hub.docker.com/r/daisyorg/pipeline-assembly/tags" class="external-link" target="_blank">https://hub.docker.com/r/daisyorg/pipeline-assembly/tags</a>. After
 having pulled the image you’re ready to run the Pipeline web server:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>docker run --detach \
            -p 8181:8181 \
@@ -871,7 +871,7 @@ can be provided with one or more <code>-e</code> arguments.</p>
 can find the available versions at
 <a href="https://hub.docker.com/r/daisyorg/pipeline-webui/tags" class="external-link" target="_blank">https://hub.docker.com/r/daisyorg/pipeline-webui/tags</a>.</p>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>docker pull daisyorg/pipeline-webui
 </pre></div>
@@ -881,7 +881,7 @@ can find the available versions at
 <p>The application is launched as follows. This assumes the web server is
 already started and accessible on port 8181.</p>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>docker run --detach \
            -p 9000:9000 \
@@ -893,7 +893,7 @@ already started and accessible on port 8181.</p>
 <p>It is also possible to link the two containers without exposing the
 web service to the host:</p>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>docker run --detach \
            --name pipeline \
@@ -915,7 +915,7 @@ complete example, that also persists the application data, is given
 below. Simply create a file called “docker-compose.yml” with the
 following content and run <code>docker-compose up</code>.</p>
 
-<div class="highlighter-coderay">
+<div class="language-yaml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="key">version</span>: <span class="string"><span class="delimiter">"</span><span class="content">2.1</span><span class="delimiter">"</span></span>
 <span class="key">services</span>:
@@ -958,7 +958,7 @@ line. The desktop application has a menu item “Check updates” under
 
 <h3 id="mac-os-1">Mac OS</h3>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>/Applications/DAISY\ Pipeline\ 2.app/Contents/Java/updater/pipeline-updater \
     -service="http://daisy.github.io/pipeline-assembly/releases/" \
@@ -976,7 +976,7 @@ you have installed the application file in.</p>
 
 <h3 id="linux-zip-1">Linux (ZIP)</h3>
 
-<div class="highlighter-coderay">
+<div class="language-sh highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>/home/bert/pipeline2/updater/pipeline-updater \
     -service="http://daisy.github.io/pipeline-assembly/releases/" \
