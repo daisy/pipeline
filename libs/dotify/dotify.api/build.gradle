@@ -3,6 +3,7 @@ apply plugin: "maven"
 //custom plugins
 apply plugin: "org.dm.bundle"
 apply plugin: "signing"
+apply plugin: "eclipse"
 
 group = 'org.daisy.dotify'
 

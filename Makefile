@@ -152,6 +152,48 @@ modules/braille/liblouis-utils/liblouis-native/.install-linux.jar \
 modules/braille/liblouis-utils/liblouis-native/.install-windows.jar: \
 	modules/braille/liblouis-utils/liblouis-native/.install
 
+# dotify dependencies
+
+gradle-get-dependency-version = $(shell cat $(1)/build.gradle | perl -ne 'print "$$1\n" if /["'"'"']$(subst .,\.,$(2)):(.+)["'"'"']/')
+
+ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.api), $(libs/dotify/dotify.api/VERSION))
+libs/dotify/dotify.formatter.impl/.dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/dotify/dotify.api/$(libs/dotify/dotify.api/VERSION)/dotify.api-$(libs/dotify/dotify.api/VERSION).jar
+endif
+ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.common), $(libs/dotify/dotify.common/VERSION))
+libs/dotify/dotify.formatter.impl/.dependencies : \
+	$(MVN_LOCAL_REPOSITORY)/org/daisy/dotify/dotify.common/$(libs/dotify/dotify.common/VERSION)/dotify.common-$(libs/dotify/dotify.common/VERSION).jar
+endif
+
+DOTIFY_MODULES := $(addprefix libs/dotify/dotify.,api common formatter.impl)
+
+eclipse-libs/dotify : $(addsuffix /.project,$(DOTIFY_MODULES)) \
+	.metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs
+
+# FIXME: every below is needed because `gradle eclipse` does not take into account localRepository from .gradle-settings/conf/settings.xml
+
+$(addsuffix /.project,$(DOTIFY_MODULES)) : %/.project : %/.eclipse-dependencies
+
+.PHONY : $(addsuffix /.eclipse-dependencies,$(DOTIFY_MODULES))
+$(addsuffix /.eclipse-dependencies,$(DOTIFY_MODULES)) :
+
+USER_HOME := $(shell echo ~)
+
+ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.api), $(libs/dotify/dotify.api/VERSION))
+$(USER_HOME)/.m2/repository/org/daisy/dotify/dotify.api/$(libs/dotify/dotify.api/VERSION)/dotify.api-$(libs/dotify/dotify.api/VERSION).jar : \
+	libs/dotify/dotify.api/build.gradle libs/dotify/dotify.api/gradle.properties $(call rwildcard,libs/dotify/dotify.api/src/,*)
+	+$(EVAL) 'bash -c "cd $(dir $<) && ./gradlew install"'
+libs/dotify/dotify.formatter.impl/.eclipse-dependencies : \
+	$(USER_HOME)/.m2/repository/org/daisy/dotify/dotify.api/$(libs/dotify/dotify.api/VERSION)/dotify.api-$(libs/dotify/dotify.api/VERSION).jar
+endif
+ifeq ($(call gradle-get-dependency-version,libs/dotify/dotify.formatter.impl,org.daisy.dotify:dotify.common), $(libs/dotify/dotify.common/VERSION))
+$(USER_HOME)/.m2/repository/org/daisy/dotify/dotify.common/$(libs/dotify/dotify.common/VERSION)/dotify.common-$(libs/dotify/dotify.common/VERSION).jar : \
+	libs/dotify/dotify.common/build.gradle libs/dotify/dotify.common/gradle.properties $(call rwildcard,libs/dotify/dotify.common/src/,*)
+	+$(EVAL) 'bash -c "cd $(dir $<) && ./gradlew install"'
+libs/dotify/dotify.formatter.impl/.eclipse-dependencies : \
+	$(USER_HOME)/.m2/repository/org/daisy/dotify/dotify.common/$(libs/dotify/dotify.common/VERSION)/dotify.common-$(libs/dotify/dotify.common/VERSION).jar
+endif
+
 .SECONDARY : .dependencies-init
 .dependencies-init :
 	echo "Recomputing dependencies between modules..." >&2
