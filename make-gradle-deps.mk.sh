@@ -7,6 +7,8 @@ v=$((cat $module/gradle.properties | grep '^distVersion' ||
      cat $module/gradle.properties | grep '^version' ) | sed 's/.*=//')
 a=$(basename $module)
 g=$(cat $module/build.gradle | grep '^group' | sed "s/^group *= *['\"]\(.*\)['\"]/\1/")
+echo "$module/VERSION := $v"
+echo ""
 echo "$module/.last-tested : %/.last-tested : %/.test | .group-eval"
 echo "	+\$(EVAL) touch \$@"
 echo ""
@@ -49,10 +51,11 @@ else
 fi
 if [[ $v == *-SNAPSHOT ]]; then
 	echo ""
+	# FIXME: gradle eclipse does not link up projects
+	# FIXME: gradle eclipse does not take into account localRepository from .gradle-settings/conf/settings.xml
+	# when creating .classpath (but it does need the dependencies to be installed in .maven-workspace)
 	echo "$module/.project : $module/build.gradle $module/gradle.properties $module/.dependencies"
-	echo "	cd \$(dir \$@) && \\"
-	# FIXME: generates project name with "/" in it which Eclipse won't import
-	echo "	gradle eclipse"
+	echo "	+\$(EVAL) '.make/gradle-eclipse.sh' \$\$(dirname \$@)"
 	echo ""
 	echo "clean-eclipse : $module/.clean-eclipse"
 	echo ".PHONY : $module/.clean-eclipse"
