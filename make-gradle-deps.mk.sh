@@ -21,6 +21,8 @@ fi
 if [[ $v == *-SNAPSHOT ]]; then
 	echo ""
 	echo "\$(MVN_LOCAL_REPOSITORY)/$(echo $g |tr . /)/$a/$v/$a-$v.jar : $module/.install-jar"
+	echo "	+\$(EVAL) 'test -e' \$@"
+	echo "	+\$(EVAL) touch \$@"
 	echo ""
 	echo ".SECONDARY : $module/.install-jar"
 	echo "$module/.install-jar : %/.install-jar : %/.install"
