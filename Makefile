@@ -28,22 +28,19 @@ endif
 dist: dist-dmg dist-exe dist-zip-linux dist-zip-minimal dist-deb dist-rpm dist-webui-deb dist-webui-rpm
 
 .PHONY : dist-dmg
-dist-dmg : assembly/.dependencies | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Pmac | $(MVN_LOG)
-	mv assembly/target/*.dmg .
+dist-dmg : assembly/.install-mac.dmg | .maven-init
+	cp $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-mac.dmg \
+	   pipeline2-$(assembly/VERSION)_mac.dmg
 
 .PHONY : dist-exe
-dist-exe : assembly/.dependencies | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Pwin | $(MVN_LOG)
-	mv assembly/target/*.exe .
+dist-exe : assembly/.install.exe | .maven-init
+	cp $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe \
+	   pipeline2-$(assembly/VERSION)_windows.exe
 
 .PHONY : dist-zip-linux
-dist-zip-linux : assembly/.dependencies | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Plinux | $(MVN_LOG)
-	mv assembly/target/*.zip .
+dist-zip-linux : assembly/.install-linux.zip | .maven-init
+	cp $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip \
+	   pipeline2-$(assembly/VERSION)_linux.zip
 
 .PHONY : dist-zip-minimal
 dist-zip-minimal : assembly/.dependencies | .maven-init
@@ -52,20 +49,14 @@ dist-zip-minimal : assembly/.dependencies | .maven-init
 	mv assembly/target/*.zip .
 
 .PHONY : dist-deb
-dist-deb : assembly/.dependencies | .maven-init
-	cd assembly && \
-	$(MVN) clean package -Pdeb | $(MVN_LOG)
-	mv assembly/target/*.deb .
+dist-deb : assembly/.install-all.deb | .maven-init
+	cp $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-all.deb \
+	   pipeline2-$(assembly/VERSION)_debian.deb
 
 .PHONY : dist-rpm
-dist-rpm : assembly/.dependencies | .maven-init
-	if [ -f /etc/redhat-release ]; then \
-		cd assembly && \
-		$(MVN) clean package -Prpm | $(MVN_LOG) && \
-		mv assembly/target/rpm/pipeline2/RPMS/*/*.rpm .; \
-	else \
-		echo "Skipping RPM because not running RedHat/CentOS"; \
-	fi
+dist-rpm : assembly/.install-rpm.rpm | .maven-init
+	cp $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-rpm.rpm \
+	   pipeline2-$(assembly/VERSION)_redhat.rpm
 
 .PHONY : dist-docker-image
 dist-docker-image : dist-zip-linux
@@ -124,6 +115,30 @@ assembly/target/dev-launcher/bin/pipeline2 : assembly/pom.xml assembly/.dependen
 	else \
 		rm assembly/target/dev-launcher/etc/*mac*; \
 	fi
+
+.SECONDARY : assembly/.install-all.deb
+assembly/.install-all.deb : %/.install-all.deb : %/pom.xml %/.dependencies $(call rwildcard,assembly/src/main/,*) | .maven-init .group-eval
+	+$(call eval-if-unix,bash -c $(call quote,$(call quote,cd assembly && $(MVN) clean install -Pdeb | $(MVN_LOG))))
+
+.SECONDARY : assembly/.install-rpm.rpm
+assembly/.install-rpm.rpm : %/.install-rpm.rpm : %/pom.xml %/.dependencies $(call rwildcard,assembly/src/main/,*) | .maven-init .group-eval
+	+$(call eval-if-unix,bash -c $(call quote,$(call quote,if [ -f /etc/redhat-release ]; then cd assembly && $(MVN) clean install -Prpm | $(MVN_LOG); else echo "Skipping RPM because not running Red Hat/CentOS"; fi)))
+
+.SECONDARY : assembly/.install-linux.zip
+assembly/.install-linux.zip : %/.install-linux.zip : %/pom.xml %/.dependencies $(call rwildcard,assembly/src/main/,*) | .maven-init .group-eval
+	+$(call eval-if-unix,bash -c $(call quote,$(call quote,cd assembly && $(MVN) clean install -Plinux | $(MVN_LOG))))
+
+.SECONDARY : assembly/.install-mac.zip
+assembly/.install-mac.zip : %/.install-mac.zip : %/pom.xml %/.dependencies $(call rwildcard,assembly/src/main/,*) | .maven-init .group-eval
+	+$(call eval-if-unix,bash -c $(call quote,$(call quote,cd assembly && $(MVN) clean install -Pzip-mac | $(MVN_LOG))))
+
+.SECONDARY : assembly/.install-mac.dmg
+assembly/.install-mac.dmg : %/.install-mac.dmg : %/pom.xml %/.dependencies $(call rwildcard,assembly/src/main/,*) | .maven-init .group-eval
+	+$(call eval-if-unix,bash -c $(call quote,$(call quote,cd assembly && $(MVN) clean install -Pmac | $(MVN_LOG))))
+
+.SECONDARY : assembly/.install.exe
+assembly/.install.exe : %/.install.exe : %/pom.xml %/.dependencies $(call rwildcard,assembly/src/main/,*) | .maven-init .group-eval
+	+$(call eval-if-unix,bash -c $(call quote,$(call quote,cd assembly && $(MVN) clean install -Pwin | $(MVN_LOG))))
 
 .SECONDARY : cli/.install.zip
 cli/.install.zip : cli/.install
