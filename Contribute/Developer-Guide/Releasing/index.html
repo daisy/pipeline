@@ -790,15 +790,15 @@ of the Pipeline. Smaller changes are marked by updates of the patch
 segment, bigger changes are marker by updates of the minor segment.</p>
   </li>
   <li>
-    <p>The version numbers of “bom”, “parent” and “aggregator” POMs are
-aligned with the version of pipeline-assembly. Their major and minor
-segments should always match the latest version of
-pipeline-assembly, their patch segments may vary. The “bom” (bill of
-material) POMs are the places where the “current” versions of all
-bundles are listed. The boms are imported by the assembly, and every
-POM that has a dependency that is declared in a bom should import
-that bom. This way the version declarations are nicely centralized
-and reduced to a minimum.</p>
+    <p>The version numbers of “bom”, “parent” and “aggregator” POMs of
+framework and modules are aligned with the version of
+pipeline-assembly. Their major and minor segments should always
+match the latest version of pipeline-assembly, their patch segments
+may vary. The “bom” (bill of material) POMs are the places where the
+“current” versions of all bundles are listed. The boms are imported
+by the assembly, and every POM that has a dependency that is
+declared in a bom should import that bom. This way the version
+declarations are nicely centralized and reduced to a minimum.</p>
   </li>
   <li>
     <p>Version numbering of bundles should be done according to the
@@ -870,24 +870,60 @@ be executed without much thinking.</p>
   <li>publishing the release descriptor to a branch</li>
 </ul>
 
-<p>Things the script does not cover include:</p>
+<p>The things the script does not cover are listed in the following checklist:</p>
 
 <ul>
-  <li>closing the milestones</li>
-  <li>finalizing the release notes (NEWS files) of pipeline-mod-braille
-and pipeline-assembly</li>
-  <li>editing the
-<a href="https://github.com/daisy/pipeline-assembly/blob/master/src/main/resources/README.txt" class="external-link" target="_blank">distribution README file</a>
-in pipeline-assembly</li>
-  <li>creating pull requests</li>
-  <li>releasing staged artifacts</li>
-  <li>merging release branches</li>
-  <li>pushing git tags</li>
-  <li>editing the Github releases of pipeline-mod-braille and pipeline-assembly</li>
-  <li>building and uploading the distribution packages to the release page
-of pipeline-assembly (if not a updater-only release)</li>
-  <li>updating the website</li>
-  <li>sending the release announcement</li>
+  <li>Fill the “v1.10.0” milestones with issues and resolve the open
+issues (see below).</li>
+  <li>Finalize the release notes (NEWS files) of pipeline-mod-braille and
+pipeline-assembly (see below).</li>
+  <li>Make sure the super repo is in sync with the master branches of all
+the sub repos. This can be verified with <code>git subrepo-status --fetch</code>.</li>
+  <li>Create a release branch “release/v1.10.0” in the super project.</li>
+  <li>Do the release with <code>make release</code> (see above).</li>
+  <li>Edit the <a href="https://github.com/daisy/pipeline-assembly/blob/master/src/main/resources/README.txt" class="external-link" target="_blank">distribution README file</a>
+in pipeline-assembly.</li>
+  <li>Create pull requests from the release branches in the sub repos. Add
+them to the “v1.10.0” milestone.</li>
+  <li>Merge the branches after having verified that the Travis checks
+pass.</li>
+  <li>Close the milestones (should be 100% complete).</li>
+  <li>Release the staged artifacts on the oss.sonatype.org website.</li>
+  <li>Push the generated git tags (<code>git push --tags</code>).</li>
+  <li>
+    <p>Edit the Github releases of
+<a href="https://github.com/daisy/pipeline-mod-braille/releases/tag/v1.10.0" class="external-link" target="_blank">pipeline-mod-braille</a>
+and
+<a href="https://github.com/daisy/pipeline-assembly/releases/tag/v1.10.0" class="external-link" target="_blank">pipeline-assembly</a>. The
+pipeline-mod-braille release contains only a link to the NEWS file:</p>
+
+    <blockquote>
+      <p><a href="https://github.com/daisy/pipeline-mod-braille/blob/master/NEWS.md#v1100" class="external-link" target="_blank">Release notes</a></p>
+    </blockquote>
+
+    <p>The pipeline-assembly release contains the full release notes from
+the NEWS file (see below).</p>
+  </li>
+  <li>Build and upload the distribution packages to the release page of
+pipeline-assembly (if not a updater-only release).
+    <ul>
+      <li>To build the EXE: <code>make dist-exe</code>
+</li>
+      <li>To build the DMG: <code>make dist-dmg</code>
+</li>
+      <li>To build the ZIP: <code>make dist-zip-linux</code>
+</li>
+      <li>To build the DEB: <code>make dist-deb</code>
+</li>
+      <li>To build the RPM: <code>make dist-rpm</code> (must be built on a Red Hat machine)</li>
+    </ul>
+  </li>
+  <li>Publish the Github release.</li>
+  <li>Publish a new version of the website after having updated
+<code>src/_data/versions.yml</code> and <code>src/_data/downloads.yml</code>.</li>
+  <li>Send the email announcements (see below).</li>
+  <li>Update the super repo with <code>git subrepo-rebase release/v1.10.0 master</code>.</li>
+  <li>Delete the “release/v1.10.0” branch.</li>
 </ul>
 
 <p>Ideally the release notes should already be made prior to making the
@@ -898,14 +934,18 @@ for mistakes or things that were forgotten:</p>
 
 <ul>
   <li>Sort the issues by “Recently updated”</li>
-  <li>Search for issues closed after a certain date with <code>closed:&gt;yyyy-mm-dd</code>.</li>
-  <li>Search for issues in the current milestone with <code>milestone:v0.0.0</code>
+  <li>Search for issues closed after a certain date (e.g. the date of the previous release) with <code>closed:&gt;yyyy-mm-dd</code>.</li>
+  <li>Search for issues without milestone with <code>no:milestone</code>
 </li>
+  <li>Search for issues in the current milestone with <code>milestone:v1.10.0</code>
+(only works for the “pipeline”, “pipeline-tasks”,
+“pipeline-assembly”, “pipeline-framework” and the various module
+repositories)</li>
 </ul>
 
 <p>Finalize the release notes by adding a link to the
 pipeline-mod-braille release notes as well as a list of links to
-closed issues:</p>
+closed issues (skip the empty ones):</p>
 
 <div class="language-md highlighter-coderay">
 <div class="CodeRay">
@@ -913,11 +953,18 @@ closed issues:</p>
 - [Closed issues in pipeline-tasks](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-tasks+milestone%3Av1.10.0)
 - [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.10.0)
 - [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.10.0)
+- [Closed issues in pipeline-cli-go](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-cli-go+milestone%3Av1.10.0)
 - [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.10.0)
 - [Closed issues in pipeline-gui](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-gui+milestone%3Av1.10.0)
 - [Closed issues in pipeline-mod-audio](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-audio+milestone%3Av1.10.0)
 - [Closed issues in pipeline-mod-braille](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-braille+milestone%3Av1.10.0)
-- ...
+- [Closed issues in pipeline-mod-nlp](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-nlp+milestone%3Av1.10.0)
+- [Closed issues in pipeline-mod-tts](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-tts+milestone%3Av1.10.0)
+- [Closed issues in pipeline-modules-common](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules-common+milestone%3Av1.10.0)
+- [Closed issues in pipeline-scripts](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-scripts+milestone%3Av1.10.0)
+- [Closed issues in pipeline-scripts-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-scripts-utils+milestone%3Av1.10.0)
+- [Closed issues in pipeline-updater](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-updater+milestone%3Av1.10.0)
+- [Closed issues in pipeline-updater-gui](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-updater-gui+milestone%3Av1.10.0)
 </pre></div>
 </div>
 </div>
