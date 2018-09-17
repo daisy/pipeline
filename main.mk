@@ -148,7 +148,7 @@ $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON)
 		done && \
 		$(MVN) -Dworkspace="$(TARGET_DIR)/poms" \
 		       --projects $$(printf "%s\n" $$MAVEN_MODULES |paste -sd , -) \
-		       help:effective-pom -Doutput=$(ROOT_DIR)/$@ >$(ROOT_DIR)/maven.log; \
+		       org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom -Doutput=$(ROOT_DIR)/$@ >$(ROOT_DIR)/maven.log; \
 	else \
 		touch $@; \
 	fi
