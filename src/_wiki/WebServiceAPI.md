@@ -12,8 +12,8 @@ RESTful web services describe a system in terms of its resources.
 Generally speaking, resources can be created, retrieved, modified, and
 deleted.
 
-The main resources in this web service are *scripts*, *jobs*, and
-*clients*.
+The main resources in this web service are *scripts*, *jobs*,
+*clients* and *data-types*.
 
 A *script* is a Pipeline XProc script. The script is identified with a
 unique URI. It is described in terms of its functionality and all of
@@ -26,6 +26,9 @@ results.
 A *client* is an application using the Pipeline via its API. Examples
 of clients are web applications and command line utilities. A client
 is not a human user.
+
+A *data type* determines the possible values a script option can
+take. It is defined in an XML syntax (a subset of RelaxNG).
 
 ## Accessing Resources
 
@@ -171,6 +174,33 @@ respond with HTTP 405 "Method Not Allowed".
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
    * `HTTP 404 Not Found`: Resource not found
 
+### Data types
+
+#### Get all data types
+
+ * HTTP Method: `GET`
+ * URI: `/datatypes`
+ * Query parameters:
+   * See [Authentication](#authentication)
+ * Response(s):
+   * `HTTP 200 OK`: Response body contains XML data. The `datatypes`
+    root element has a `href` attribute, and a `datatype` child for
+    every existing data type. Each `datatype` element has a `href`
+    atrtibute and an `id` attribute containing the data type's unique
+    ID.
+   * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
+
+#### Get a single data type
+
+ * HTTP Method: `GET`
+ * URI: `/datatypes/$ID`
+   * Where $ID is the data type's unique ID
+ * Query parameters:
+   * See [Authentication](#authentication)
+ * Response(s):
+   * `HTTP 200 OK`: Response body contains the definition of the data type in XML.
+   * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
+   * `HTTP 404 Not Found`: Resource not found
 
 ## Admin
 
