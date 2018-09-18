@@ -204,6 +204,9 @@ $(addsuffix /.deps.mk,$(GRADLE_MODULES)) : $(GRADLE_FILES)
 	fi
 endif
 
+PHONY : $(addprefix eclipse-,$(MODULES))
+$(addprefix eclipse-,$(MODULES)) : eclipse-% : %/.project
+
 # mvn-eclipse.sh requires parent poms to be installed because it uses `mvn --projects ...`
 $(addsuffix /.project,$(MODULES)) : parents
 

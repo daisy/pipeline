@@ -252,6 +252,19 @@
 						<xsl:value-of select="concat($dirname,.,'/.last-tested')"/>
 					</xsl:for-each>
 					<xsl:text>&#x0A;</xsl:text>
+					<xsl:if test="not($module='.')">
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:text>.PHONY : </xsl:text>
+						<xsl:value-of select="concat('eclipse-',$module)"/>
+						<xsl:text>&#x0A;</xsl:text>
+						<xsl:value-of select="concat('eclipse-',$module)"/>
+						<xsl:text> :</xsl:text>
+						<xsl:for-each select="$module-pom/pom:project/pom:modules/pom:module">
+							<xsl:text> \&#x0A;&#x09;</xsl:text>
+							<xsl:value-of select="concat('eclipse-',$dirname,.)"/>
+						</xsl:for-each>
+						<xsl:text>&#x0A;</xsl:text>
+					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="concat($dirname,'.last-tested : %/.last-tested : %/.test | .group-eval')"/>
