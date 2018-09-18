@@ -259,9 +259,6 @@ clean-old :
 gradle-clean :
 	$(GRADLE) clean
 
-PHONY : $(addprefix eclipse-,$(MODULES))
-$(addprefix eclipse-,$(MODULES)) : eclipse-% : %/.project
-
 TEMP_REPOS := modules/scripts/dtbook-to-daisy3/target/test/local-repo
 
 .PHONY : go-offline
