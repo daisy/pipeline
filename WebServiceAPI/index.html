@@ -769,8 +769,8 @@ summary Web Service API documentation
 Generally speaking, resources can be created, retrieved, modified, and
 deleted.</p>
 
-<p>The main resources in this web service are <em>scripts</em>, <em>jobs</em>, and
-<em>clients</em>.</p>
+<p>The main resources in this web service are <em>scripts</em>, <em>jobs</em>,
+<em>clients</em> and <em>data-types</em>.</p>
 
 <p>A <em>script</em> is a Pipeline XProc script. The script is identified with a
 unique URI. It is described in terms of its functionality and all of
@@ -783,6 +783,9 @@ results.</p>
 <p>A <em>client</em> is an application using the Pipeline via its API. Examples
 of clients are web applications and command line utilities. A client
 is not a human user.</p>
+
+<p>A <em>data type</em> determines the possible values a script option can
+take. It is defined in an XML syntax (a subset of RelaxNG).</p>
 
 <h2 id="accessing-resources">Accessing Resources</h2>
 
@@ -1054,6 +1057,63 @@ newer than X”.</li>
     <ul>
       <li>
 <code>HTTP 200 OK</code>: Response body contains a plain text representation of the log file</li>
+      <li>
+<code>HTTP 401 Unauthorized</code>: Client was not authorized to perform request.</li>
+      <li>
+<code>HTTP 404 Not Found</code>: Resource not found</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="data-types">Data types</h3>
+
+<h4 id="get-all-data-types">Get all data types</h4>
+
+<ul>
+  <li>HTTP Method: <code>GET</code>
+</li>
+  <li>URI: <code>/datatypes</code>
+</li>
+  <li>Query parameters:
+    <ul>
+      <li>See <a href="#authentication">Authentication</a>
+</li>
+    </ul>
+  </li>
+  <li>Response(s):
+    <ul>
+      <li>
+<code>HTTP 200 OK</code>: Response body contains XML data. The <code>datatypes</code>
+ root element has a <code>href</code> attribute, and a <code>datatype</code> child for
+ every existing data type. Each <code>datatype</code> element has a <code>href</code>
+ atrtibute and an <code>id</code> attribute containing the data type’s unique
+ ID.</li>
+      <li>
+<code>HTTP 401 Unauthorized</code>: Client was not authorized to perform request.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="get-a-single-data-type">Get a single data type</h4>
+
+<ul>
+  <li>HTTP Method: <code>GET</code>
+</li>
+  <li>URI: <code>/datatypes/$ID</code>
+    <ul>
+      <li>Where $ID is the data type’s unique ID</li>
+    </ul>
+  </li>
+  <li>Query parameters:
+    <ul>
+      <li>See <a href="#authentication">Authentication</a>
+</li>
+    </ul>
+  </li>
+  <li>Response(s):
+    <ul>
+      <li>
+<code>HTTP 200 OK</code>: Response body contains the definition of the data type in XML.</li>
       <li>
 <code>HTTP 401 Unauthorized</code>: Client was not authorized to perform request.</li>
       <li>
