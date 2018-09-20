@@ -209,7 +209,7 @@ you have unpacked the ZIP file to.
 The server and the desktop application require a Java runtime
 environment. Windows and Mac users do not have to worry about Java
 because it is included in the DAISY Pipeline installation. Linux users
-however are on their own. The minimum required version of Java is 8.
+however are on their own. The minimum required version of Java is 9.
 
 ### JavaFX
 
