@@ -142,7 +142,13 @@
 			<goals>${goals}</goals>
 			<xsl:text>&#x0A;</xsl:text>
 			<xsl:value-of select="fn:indent(count(ancestor::*) + 1)"/>
-			<arguments>${arguments}</arguments>
+			<arguments>
+				<xsl:text>${arguments}</xsl:text>
+				<xsl:if test="arguments">
+					<xsl:text> </xsl:text>
+					<xsl:value-of select="arguments"/>
+				</xsl:if>
+			</arguments>
 			<xsl:text>&#x0A;</xsl:text>
 			<xsl:value-of select="fn:indent(count(ancestor::*))"/>
 		</xsl:copy>
