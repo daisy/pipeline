@@ -118,13 +118,13 @@ web service to the host:
 ~~~sh
 docker run --detach \
            --name pipeline \
-           -e PIPELINE2_WS_HOST=pipeline \
+           -e PIPELINE2_WS_HOST=0.0.0.0 \
            -e PIPELINE2_WS_AUTHENTICATION=false \
            daisyorg/pipeline-assembly
 docker run --detach \
            --link pipeline \
            -p 9000:9000 \
-           -e DAISY_PIPELINE2_URL: http://pipeline:8181/ws \
+           -e DAISY_PIPELINE2_URL=http://pipeline:8181/ws \
            daisyorg/pipeline-webui
 ~~~
 
