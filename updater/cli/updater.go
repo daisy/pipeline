@@ -60,22 +60,24 @@ func main() {
 		log.Println(err)
 		os.Exit(-1)
 	}
-	err = remote.UpdateFrom(local, *installDir)
+	updated, err := remote.UpdateFrom(local, *installDir)
 	if err != nil {
 		Error(err.Error())
 		log.Println(err)
 		os.Exit(-1)
 	}
-	if err := Backup(*localDescriptor); err != nil {
-		Error(err.Error())
-		log.Println(err)
-		os.Exit(-1)
-	}
-
-	if err := remote.Save(*localDescriptor); err != nil {
-		Error(err.Error())
-		log.Println(err)
-		os.Exit(-1)
+	if updated || *force {
+		if err := Backup(*localDescriptor); err != nil {
+			Error(err.Error())
+			log.Println(err)
+			os.Exit(-1)
+		}
+		if err := remote.Save(*localDescriptor); err != nil {
+			Error(err.Error())
+			log.Println(err)
+			os.Exit(-1)
+		}
+		Info("Updated to version %s", remote.Version)
 	}
 }
 func LoadRemote(service, version string) (rd ReleaseDescriptor, err error) {

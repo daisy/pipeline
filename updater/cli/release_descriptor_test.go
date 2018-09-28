@@ -236,7 +236,7 @@ func TestIntegrationUpdate(t *testing.T) {
 				So(info.Size(), ShouldNotEqual, 0)
 				Convey("Call update", func() {
 
-					err := remote.UpdateFrom(local, installDir)
+					_, err := remote.UpdateFrom(local, installDir)
 					So(err, ShouldBeNil)
 					Convey("Check the installation structure", func() {
 						Convey("New intalled artifacts", func() {

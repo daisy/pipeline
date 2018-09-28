@@ -94,7 +94,7 @@ func NewEmptyReleaseDescriptor() ReleaseDescriptor {
 //Compares two indeces Returning a list of differences
 func (i ReleaseDescriptor) IsDiff(old ReleaseDescriptor) (is bool, diffs DiffSet) {
 	//no changes
-	if i.Version.Equals(old.Version.Version) {
+	if i.Version.Compare(old.Version.Version) <= 0 {
 
 		return
 	}
@@ -124,21 +124,22 @@ func (i ReleaseDescriptor) IsDiff(old ReleaseDescriptor) (is bool, diffs DiffSet
 	return true, diffs
 }
 
-func (r ReleaseDescriptor) UpdateFrom(local ReleaseDescriptor, installationPath string) error {
+func (r ReleaseDescriptor) UpdateFrom(local ReleaseDescriptor, installationPath string) (success bool, err error) {
 	changes, diffSet := r.IsDiff(local)
 	if !changes {
 		Info("There are no new versions")
 		//nothing to do!
-		return nil
+		return false, nil
 	}
+	Info("Updating to version %s", r.Version)
 	tempDir, err := ioutil.TempDir("", "pipeline-updater")
 	if err != nil {
-		return err
+		return false, err
 	}
 	toDeploy, err := Download(tempDir, diffSet.ToDownload()...)
 	if err != nil {
 		os.RemoveAll(tempDir)
-		return err
+		return false, err
 	}
 	ok, errs := Remove(diffSet.ToRemove(installationPath))
 	if !ok {
@@ -155,7 +156,7 @@ func (r ReleaseDescriptor) UpdateFrom(local ReleaseDescriptor, installationPath 
 		//warn
 		log.Printf("err %+v\n", err)
 	}
-	return nil
+	return true, nil
 }
 
 //String for logging
