@@ -109,7 +109,7 @@
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 				q.add(<span class="jxr_string">"table"</span>, table);
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 			<strong class="jxr_keyword">if</strong> (locale != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 					q.add(<span class="jxr_string">"locale"</span>, parseLocale(locale).toLanguageTag().replace('-', '_')); }
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 					q.add(<span class="jxr_string">"locale"</span>, parseLocale(locale).toLanguageTag()); }
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 				<strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 					logger.error(<span class="jxr_string">"Invalid locale"</span>, e);
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 					<strong class="jxr_keyword">return</strong> empty; }

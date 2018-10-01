@@ -226,9 +226,9 @@
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 						<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/liblouis-core/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTableJnaImplProvider.html">LiblouisTableJnaImpl</a> _apply() {
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 							MutableQuery q = mutableQuery(query);
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 							String table = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 							String type = <span class="jxr_string">"translation"</span>;
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 							<strong class="jxr_keyword">boolean</strong> unicode = false;
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 							<strong class="jxr_keyword">boolean</strong> whiteSpace = false;
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 							<strong class="jxr_keyword">boolean</strong> unicode = false;
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 							<strong class="jxr_keyword">boolean</strong> whiteSpace = false;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 							<strong class="jxr_keyword">boolean</strong> display = false;
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 							<strong class="jxr_keyword">if</strong> (q.containsKey(<span class="jxr_string">"unicode"</span>)) {
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 								q.removeOnly(<span class="jxr_string">"unicode"</span>);
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 								unicode = <strong class="jxr_keyword">true</strong>; }
@@ -240,57 +240,65 @@
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 								<strong class="jxr_keyword">if</strong> (unicode) {
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 									logger.warn(<span class="jxr_string">"A query with '(unicode)(display)' never matches anything"</span>);
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 									<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException(); }
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 								type = <span class="jxr_string">"display"</span>; }
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 								display = <strong class="jxr_keyword">true</strong>; }
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 							<strong class="jxr_keyword">if</strong> (q.containsKey(<span class="jxr_string">"table"</span>))
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 								<em class="jxr_comment">// FIXME: type and remaining features in query are ignored</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 								<em class="jxr_comment">// FIXME: display and remaining features in query are ignored</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 								table = q.removeOnly(<span class="jxr_string">"table"</span>).getValue().get();
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 							<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (q.containsKey(<span class="jxr_string">"liblouis-table"</span>))
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 								<em class="jxr_comment">// FIXME: type and remaining features in query are ignored</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 								<em class="jxr_comment">// FIXME: display and remaining features in query are ignored</em>
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 								table = q.removeOnly(<span class="jxr_string">"liblouis-table"</span>).getValue().get();
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 							<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!q.isEmpty()) {
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 								StringBuilder b = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 								b.append(<span class="jxr_string">"type:"</span>);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 								b.append(type);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 								b.append(<span class="jxr_string">" "</span>);
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 								<strong class="jxr_keyword">for</strong> (Feature f : q) {
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 									String k = f.getKey();
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 									<strong class="jxr_keyword">if</strong> (!k.matches(<span class="jxr_string">"[a-zA-Z0-9_-]+"</span>)) {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 										__apply(
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 											warn(<span class="jxr_string">"Invalid syntax for feature key: "</span> + k));
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 										<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException(); }
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 									b.append(k);
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 									<strong class="jxr_keyword">if</strong> (f.hasValue()) {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 										String v = f.getValue().get();
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 										<strong class="jxr_keyword">if</strong> (!v.matches(<span class="jxr_string">"[a-zA-Z0-9_-]+"</span>)) {
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 											__apply(
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 												warn(<span class="jxr_string">"Invalid syntax for feature value: "</span> + v));
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 											<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException(); }
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 										b.append(<span class="jxr_string">":"</span> + v); }
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 									b.append(<span class="jxr_string">" "</span>); }
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 								lazyIndex();
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 								table = Louis.getLibrary().lou_findTable(b.toString()); }
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 							<strong class="jxr_keyword">if</strong> (table != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 								<strong class="jxr_keyword">if</strong> (whiteSpace)
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 									table = asURI(spacesFile) + <span class="jxr_string">","</span> + table;
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 								<strong class="jxr_keyword">if</strong> (unicode)
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 									table = asURI(unicodeDisFile) + <span class="jxr_string">","</span> + table;
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 								<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 									<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/liblouis-core/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTableJnaImplProvider.html">LiblouisTableJnaImpl</a>(table); }
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 								<strong class="jxr_keyword">catch</strong> (CompilationException e) {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 									__apply(
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 										warn(<span class="jxr_string">"Could not compile table "</span> + table));
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 									logger.warn(<span class="jxr_string">"Could not compile table"</span>, e); }}
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException();
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 						}
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 					}
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			}
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		}
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	);
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(LiblouisTableJnaImplProvider.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> }
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 								<strong class="jxr_keyword">if</strong> (display)
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 									b.append(<span class="jxr_string">"type:display "</span>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 								
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 								<em class="jxr_comment">// FIXME: if !display, need to match for absence of "type:display"</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 								<em class="jxr_comment">// -&gt; i.e. Liblouis query syntax must support negation!</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 								<em class="jxr_comment">// -&gt; this used to be solved by matching "type:translation" but the downside of this</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 								<em class="jxr_comment">//    is that this feature had to be added to every table which is not desired</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 								<em class="jxr_comment">// -&gt; another solution would be to let Liblouis return a list of possible matches and</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 								<em class="jxr_comment">//    select the first match that does not end with ".dis" (or that does not have the</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 								<em class="jxr_comment">//    feature "type:display")</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 								
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 								<strong class="jxr_keyword">for</strong> (Feature f : q) {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 									String k = f.getKey();
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 									<strong class="jxr_keyword">if</strong> (!k.matches(<span class="jxr_string">"[a-zA-Z0-9_-]+"</span>)) {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 										__apply(
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 											warn(<span class="jxr_string">"Invalid syntax for feature key: "</span> + k));
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 										<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException(); }
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 									b.append(k);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 									<strong class="jxr_keyword">if</strong> (f.hasValue()) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 										String v = f.getValue().get();
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 										<strong class="jxr_keyword">if</strong> (!v.matches(<span class="jxr_string">"[a-zA-Z0-9_-]+"</span>)) {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 											__apply(
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 												warn(<span class="jxr_string">"Invalid syntax for feature value: "</span> + v));
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 											<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException(); }
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 										b.append(<span class="jxr_string">":"</span> + v); }
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 									b.append(<span class="jxr_string">" "</span>); }
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 								lazyIndex();
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 								table = Louis.getLibrary().lou_findTable(b.toString()); }
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 							<strong class="jxr_keyword">if</strong> (table != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 								<strong class="jxr_keyword">if</strong> (whiteSpace)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 									table = asURI(spacesFile) + <span class="jxr_string">","</span> + table;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 								<strong class="jxr_keyword">if</strong> (unicode)
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 									table = asURI(unicodeDisFile) + <span class="jxr_string">","</span> + table;
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 								<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 									<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/liblouis-core/src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTableJnaImplProvider.html">LiblouisTableJnaImpl</a>(table); }
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 								<strong class="jxr_keyword">catch</strong> (CompilationException e) {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 									__apply(
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 										warn(<span class="jxr_string">"Could not compile table "</span> + table));
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 									logger.warn(<span class="jxr_string">"Could not compile table"</span>, e); }}
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchElementException();
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 						}
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 					}
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(LiblouisTableJnaImplProvider.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

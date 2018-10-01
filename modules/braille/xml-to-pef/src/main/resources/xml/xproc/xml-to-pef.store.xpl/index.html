@@ -68,7 +68,7 @@
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">count</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"number(string(/*)) &gt; 0"</span>&gt; 
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">store</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">store</span> <span class="code-xml-attribute-local-name">encoding</span>=<span class="code-xml-attribute-value">"utf-8"</span> <span class="code-xml-attribute-local-name">omit-xml-declaration</span>=<span class="code-xml-attribute-value">"false"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
                     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"obfl"</span>/&gt;
                 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;

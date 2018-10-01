@@ -30,6 +30,7 @@
     
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$nodes/ancestor::*/@xml:lang[1]"</span>/&gt;
     &lt;<span class="code-xml-element-local-name">html</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"{if ($lang) then $lang else 'en'}"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$nodes/ancestor::*/@its:dir[1]"</span>/&gt;
       &lt;<span class="code-xml-element-local-name">head</span>&gt;
         &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">charset</span>=<span class="code-xml-attribute-value">"UTF-8"</span>/&gt;
         &lt;<span class="code-xml-element-local-name">title</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$nodes[1]/ancestor::document/head/meta[@property='dcterms:title']/@content"</span>/&gt;&lt;/<span class="code-xml-element-local-name">title</span>&gt;
@@ -1032,6 +1033,9 @@
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@base|@class|@xml:space|@xml:base|@xml:lang|@its:dir"</span>&gt;
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>/&gt;
     
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@its:dir"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dir"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string(.)"</span>/&gt;
     
   &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@role"</span>&gt;

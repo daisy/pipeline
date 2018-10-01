@@ -30,6 +30,32 @@
         </a><div>Defined in:
           <span class="uri">http://www.daisy.org/pipeline/modules/epub3-to-daisy202/xproc/epub3-to-daisy202.xpl</span>
 </div>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">validation-report</span><span class="details"> sequence</span>
+</td>
+<td><h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Input validation report</h1></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">validation-status</span><span class="details"></span>
+</td>
+<td>
+<h1 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">Input validation status</h1>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the input validation was successful.
+
+[More details on the file format](http://daisy.github.io/pipeline/ValidationStatusXML).</p>
+</td>
+</tr>
+</tbody>
+</table>
 <h3>Options</h3>
 <table border="1">
 <thead><tr>
@@ -45,7 +71,20 @@
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
-<td><h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">EPUB 3 Publication</h2></td>
+<td>
+<h2 xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="name">EPUB 3 Publication</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="desc" xml:space="preserve">The EPUB 3 you want to convert to DAISY 2.02.
+
+You may alternatively use the EPUB package document (the OPF-file) if your input is a unzipped/"exploded" version of an EPUB.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">validation</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'off'</td>
+<td></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">

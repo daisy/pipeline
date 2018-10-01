@@ -203,7 +203,7 @@
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 			q.add(<span class="jxr_string">"table"</span>, table);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (locale != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 				q.add(<span class="jxr_string">"locale"</span>, parseLocale(locale).toLanguageTag().replace('-', '_')); }
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 				q.add(<span class="jxr_string">"locale"</span>, parseLocale(locale).toLanguageTag()); }
 <a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 				logger.error(<span class="jxr_string">"Invalid locale"</span>, e);
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 				<strong class="jxr_keyword">return</strong> empty; }
@@ -321,7 +321,7 @@
 <a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/liblouis-core/src/main/java/org/daisy/pipeline/braille/liblouis/LiblouisTranslator.html">FromTypeformedTextToBraille</a> fromTypeformedTextToBraille() {
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<strong class="jxr_keyword">if</strong> (fromTypeformedTextToBraille == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 				fromTypeformedTextToBraille = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/liblouis-core/src/main/java/org/daisy/pipeline/braille/liblouis/LiblouisTranslator.html">FromTypeformedTextToBraille</a>() {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 					<strong class="jxr_keyword">public</strong> String[] transform(String[] text, byte[] typeform) {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 					<strong class="jxr_keyword">public</strong> String[] transform(String[] text, <strong class="jxr_keyword">short</strong>[] typeform) {
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 						<strong class="jxr_keyword">return</strong> LiblouisTranslatorImpl.<strong class="jxr_keyword">this</strong>.transform(text, typeform);
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 					}
 <a class="jxr_linenumber" name="L318" href="#L318">318</a> 				};
@@ -398,7 +398,7 @@
 <a class="jxr_linenumber" name="L389" href="#L389">389</a> 				<em class="jxr_comment">// FIXME: remove duplication!!</em>
 <a class="jxr_linenumber" name="L390" href="#L390">390</a> 				
 <a class="jxr_linenumber" name="L391" href="#L391">391</a> 				<em class="jxr_comment">// convert style into typeform, hyphenate, preserveLines, preserveSpace and letterSpacing arrays</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 				<strong class="jxr_keyword">final</strong> byte[] typeform;
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 				<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">short</strong>[] typeform;
 <a class="jxr_linenumber" name="L393" href="#L393">393</a> 				<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong>[] hyphenate;
 <a class="jxr_linenumber" name="L394" href="#L394">394</a> 				<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong>[] preserveLines;
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 				<strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">boolean</strong>[] preserveSpace;
@@ -468,7 +468,7 @@
 <a class="jxr_linenumber" name="L459" href="#L459">459</a> 					<strong class="jxr_keyword">boolean</strong> someNotTransform = false;
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 					
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 					{ <em class="jxr_comment">// compute typeform, hyphenate, preserveLines, preserveSpace and letterSpacing</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 						typeform = <strong class="jxr_keyword">new</strong> byte[size];
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 						typeform = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">short</strong>[size];
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 						hyphenate = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[size];
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 						preserveLines = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[size];
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 						preserveSpace = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[size];
@@ -895,13 +895,13 @@
 <a class="jxr_linenumber" name="L886" href="#L886">886</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; joinedText.length() - 1; i++)
 <a class="jxr_linenumber" name="L887" href="#L887">887</a> 							interCharacterIndices[i] = i; }
 <a class="jxr_linenumber" name="L888" href="#L888">888</a> 					
-<a class="jxr_linenumber" name="L889" href="#L889">889</a> 					<em class="jxr_comment">// typeform var with the same length as joinedText and short[] instead of byte[]</em>
+<a class="jxr_linenumber" name="L889" href="#L889">889</a> 					<em class="jxr_comment">// typeform var with the same length as joinedText</em>
 <a class="jxr_linenumber" name="L890" href="#L890">890</a> 					<strong class="jxr_keyword">short</strong>[] _typeform = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L891" href="#L891">891</a> 					<strong class="jxr_keyword">for</strong> (byte b : typeform)
-<a class="jxr_linenumber" name="L892" href="#L892">892</a> 						<strong class="jxr_keyword">if</strong> (b != Typeform.PLAIN) {
+<a class="jxr_linenumber" name="L891" href="#L891">891</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">short</strong> t : typeform)
+<a class="jxr_linenumber" name="L892" href="#L892">892</a> 						<strong class="jxr_keyword">if</strong> (t != Typeform.PLAIN) {
 <a class="jxr_linenumber" name="L893" href="#L893">893</a> 							_typeform = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">short</strong>[joinedText.length()];
 <a class="jxr_linenumber" name="L894" href="#L894">894</a> 							<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; _typeform.length; i++)
-<a class="jxr_linenumber" name="L895" href="#L895">895</a> 								_typeform[i] = (<strong class="jxr_keyword">short</strong>)typeform[textWithWsMapping[joinedTextMapping[i]]];
+<a class="jxr_linenumber" name="L895" href="#L895">895</a> 								_typeform[i] = typeform[textWithWsMapping[joinedTextMapping[i]]];
 <a class="jxr_linenumber" name="L896" href="#L896">896</a> 							<strong class="jxr_keyword">break</strong>; }
 <a class="jxr_linenumber" name="L897" href="#L897">897</a> 					<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L898" href="#L898">898</a> 						TranslationResult r = liblouisTranslator.translate(joinedText, _typeform, characterIndices, interCharacterIndices);
@@ -938,7 +938,7 @@
 <a class="jxr_linenumber" name="L929" href="#L929">929</a> 		
 <a class="jxr_linenumber" name="L930" href="#L930">930</a> 		<strong class="jxr_keyword">private</strong> String[] transform(String[] text, SimpleInlineStyle[] styles, <strong class="jxr_keyword">boolean</strong> forceBraille, <strong class="jxr_keyword">boolean</strong> failWhenNonStandardHyphenation) {
 <a class="jxr_linenumber" name="L931" href="#L931">931</a> 			<strong class="jxr_keyword">int</strong> size = text.length;
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			byte[] typeform = <strong class="jxr_keyword">new</strong> byte[size];
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			<strong class="jxr_keyword">short</strong>[] typeform = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">short</strong>[size];
 <a class="jxr_linenumber" name="L933" href="#L933">933</a> 			<strong class="jxr_keyword">boolean</strong>[] hyphenate = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[size];
 <a class="jxr_linenumber" name="L934" href="#L934">934</a> 			<strong class="jxr_keyword">boolean</strong>[] preserveLines = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[size];
 <a class="jxr_linenumber" name="L935" href="#L935">935</a> 			<strong class="jxr_keyword">boolean</strong>[] preserveSpace = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[size];
@@ -1005,7 +1005,7 @@
 <a class="jxr_linenumber" name="L996" href="#L996">996</a> 			                 forceBraille, failWhenNonStandardHyphenation);
 <a class="jxr_linenumber" name="L997" href="#L997">997</a> 		}
 <a class="jxr_linenumber" name="L998" href="#L998">998</a> 		
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		<strong class="jxr_keyword">private</strong> String[] transform(String[] text, byte[] typeform) {
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		<strong class="jxr_keyword">private</strong> String[] transform(String[] text, <strong class="jxr_keyword">short</strong>[] typeform) {
 <a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 			<strong class="jxr_keyword">int</strong> size = text.length;
 <a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 			<strong class="jxr_keyword">boolean</strong>[] hyphenate = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[size];
 <a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 			<strong class="jxr_keyword">boolean</strong>[] preserveLines = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[size];
@@ -1035,7 +1035,7 @@
 <a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		}
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 		
 <a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 		<strong class="jxr_keyword">private</strong> String[] transform(String[] text,
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 		                           byte[] typeform,
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 		                           <strong class="jxr_keyword">short</strong>[] typeform,
 <a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		                           <strong class="jxr_keyword">boolean</strong>[] hyphenate,
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		                           <strong class="jxr_keyword">boolean</strong>[] preserveLines,
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 		                           <strong class="jxr_keyword">boolean</strong>[] preserveSpace,
@@ -1174,13 +1174,13 @@
 <a class="jxr_linenumber" name="L1165" href="#L1165">1165</a> 			<strong class="jxr_keyword">if</strong> (someLetterSpacing)
 <a class="jxr_linenumber" name="L1166" href="#L1166">1166</a> 				inputAttrs = detectLetterBoundaries(inputAttrs, joinedText, (byte)4);
 <a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 			
-<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 			<em class="jxr_comment">// typeform var with the same length as joinedText and short[] instead of byte[]</em>
+<a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 			<em class="jxr_comment">// typeform var with the same length as joinedText</em>
 <a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 			<strong class="jxr_keyword">short</strong>[] _typeform = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 			<strong class="jxr_keyword">for</strong> (byte b : typeform)
-<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 				<strong class="jxr_keyword">if</strong> (b != Typeform.PLAIN) {
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">short</strong> t : typeform)
+<a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 				<strong class="jxr_keyword">if</strong> (t != Typeform.PLAIN) {
 <a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 					_typeform = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">short</strong>[joinedText.length()];
 <a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; _typeform.length; i++)
-<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 						_typeform[i] = (<strong class="jxr_keyword">short</strong>)typeform[textWithWsMapping[joinedTextMapping[i]]];
+<a class="jxr_linenumber" name="L1174" href="#L1174">1174</a> 						_typeform[i] = typeform[textWithWsMapping[joinedTextMapping[i]]];
 <a class="jxr_linenumber" name="L1175" href="#L1175">1175</a> 					<strong class="jxr_keyword">break</strong>; }
 <a class="jxr_linenumber" name="L1176" href="#L1176">1176</a> 			
 <a class="jxr_linenumber" name="L1177" href="#L1177">1177</a> 			<em class="jxr_comment">// translate to braille with hyphens and restored white space</em>
@@ -1444,13 +1444,13 @@
 <a class="jxr_linenumber" name="L1435" href="#L1435">1435</a> <em class="jxr_javadoccomment">	 * @return the corresponding typeform. Possible values are:</em>
 <a class="jxr_linenumber" name="L1436" href="#L1436">1436</a> <em class="jxr_javadoccomment">	 * - 0 = PLAIN</em>
 <a class="jxr_linenumber" name="L1437" href="#L1437">1437</a> <em class="jxr_javadoccomment">	 * - 1 = ITALIC (font-style: italic|oblique)</em>
-<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> <em class="jxr_javadoccomment">	 * - 2 = BOLD (font-weight: bold)</em>
-<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> <em class="jxr_javadoccomment">	 * - 4 = UNDERLINE (text-decoration: underline)</em>
+<a class="jxr_linenumber" name="L1438" href="#L1438">1438</a> <em class="jxr_javadoccomment">	 * - 2 = UNDERLINE (text-decoration: underline)</em>
+<a class="jxr_linenumber" name="L1439" href="#L1439">1439</a> <em class="jxr_javadoccomment">	 * - 4 = BOLD (font-weight: bold)</em>
 <a class="jxr_linenumber" name="L1440" href="#L1440">1440</a> <em class="jxr_javadoccomment">	 * These values can be added for multiple emphasis.</em>
 <a class="jxr_linenumber" name="L1441" href="#L1441">1441</a> <em class="jxr_javadoccomment">	 * @see &lt;a href="<a href="http://liblouis.googlecode.com/svn/documentation/liblouis.html" target="_blank" class="external-link">http://liblouis.googlecode.com/svn/documentation/liblouis.html</a>#lou_translateString"&gt;lou_translateString&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L1442" href="#L1442">1442</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> byte typeformFromInlineCSS(SimpleInlineStyle style) {
-<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 		byte typeform = Typeform.PLAIN;
+<a class="jxr_linenumber" name="L1443" href="#L1443">1443</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">short</strong> typeformFromInlineCSS(SimpleInlineStyle style) {
+<a class="jxr_linenumber" name="L1444" href="#L1444">1444</a> 		<strong class="jxr_keyword">short</strong> typeform = Typeform.PLAIN;
 <a class="jxr_linenumber" name="L1445" href="#L1445">1445</a> 		<strong class="jxr_keyword">for</strong> (String prop : style.getPropertyNames()) {
 <a class="jxr_linenumber" name="L1446" href="#L1446">1446</a> 			<strong class="jxr_keyword">if</strong> (prop.equals(<span class="jxr_string">"font-style"</span>)) {
 <a class="jxr_linenumber" name="L1447" href="#L1447">1447</a> 				CSSProperty value = style.getProperty(prop);
@@ -1483,7 +1483,7 @@
 <a class="jxr_linenumber" name="L1474" href="#L1474">1474</a> 				text = text.toUpperCase();
 <a class="jxr_linenumber" name="L1475" href="#L1475">1475</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (tt.equals(<span class="jxr_string">"lowercase"</span>))
 <a class="jxr_linenumber" name="L1476" href="#L1476">1476</a> 				text = text.toLowerCase();
-<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L1477" href="#L1477">1477</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!LOUIS_TEXT_TRANSFORM.matcher(tt).matches())
 <a class="jxr_linenumber" name="L1478" href="#L1478">1478</a> 				logger.warn(<span class="jxr_string">"text-transform: {} not supported"</span>, tt);
 <a class="jxr_linenumber" name="L1479" href="#L1479">1479</a> 		}
 <a class="jxr_linenumber" name="L1480" href="#L1480">1480</a> 		<strong class="jxr_keyword">return</strong> text;
@@ -1493,41 +1493,64 @@
 <a class="jxr_linenumber" name="L1484" href="#L1484">1484</a> <em class="jxr_javadoccomment">	 * @param textTransform A text-transform value as a space separated list of keywords.</em>
 <a class="jxr_linenumber" name="L1485" href="#L1485">1485</a> <em class="jxr_javadoccomment">	 * @return the corresponding typeform. Possible values are:</em>
 <a class="jxr_linenumber" name="L1486" href="#L1486">1486</a> <em class="jxr_javadoccomment">	 * - 0 = PLAIN</em>
-<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> <em class="jxr_javadoccomment">	 * - 1 = ITALIC (louis-ital)</em>
-<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> <em class="jxr_javadoccomment">	 * - 2 = BOLD (louis-bold)</em>
-<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> <em class="jxr_javadoccomment">	 * - 4 = UNDERLINE (louis-under)</em>
-<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> <em class="jxr_javadoccomment">	 * - 8 = COMPUTER (louis-comp)</em>
+<a class="jxr_linenumber" name="L1487" href="#L1487">1487</a> <em class="jxr_javadoccomment">	 * - 1 = ITALIC (-louis-italic)</em>
+<a class="jxr_linenumber" name="L1488" href="#L1488">1488</a> <em class="jxr_javadoccomment">	 * - 2 = UNDERLINE (-louis-underline)</em>
+<a class="jxr_linenumber" name="L1489" href="#L1489">1489</a> <em class="jxr_javadoccomment">	 * - 4 = BOLD (-louis-bold)</em>
+<a class="jxr_linenumber" name="L1490" href="#L1490">1490</a> <em class="jxr_javadoccomment">	 * - 1024 = COMPUTER (-louis-computer)</em>
 <a class="jxr_linenumber" name="L1491" href="#L1491">1491</a> <em class="jxr_javadoccomment">	 * These values can be added for multiple emphasis.</em>
 <a class="jxr_linenumber" name="L1492" href="#L1492">1492</a> <em class="jxr_javadoccomment">	 * @see &lt;a href="<a href="http://liblouis.googlecode.com/svn/documentation/liblouis.html" target="_blank" class="external-link">http://liblouis.googlecode.com/svn/documentation/liblouis.html</a>#lou_translateString"&gt;lou_translateString&lt;/a&gt;</em>
 <a class="jxr_linenumber" name="L1493" href="#L1493">1493</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> byte typeformFromTextTransform(TermList textTransform) {
-<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 		byte typeform = Typeform.PLAIN;
+<a class="jxr_linenumber" name="L1494" href="#L1494">1494</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">short</strong> typeformFromTextTransform(TermList textTransform) {
+<a class="jxr_linenumber" name="L1495" href="#L1495">1495</a> 		<strong class="jxr_keyword">short</strong> typeform = Typeform.PLAIN;
 <a class="jxr_linenumber" name="L1496" href="#L1496">1496</a> 		<strong class="jxr_keyword">for</strong> (Term&lt;?&gt; t : textTransform) {
 <a class="jxr_linenumber" name="L1497" href="#L1497">1497</a> 			String tt = ((TermIdent)t).getValue();
-<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 			<strong class="jxr_keyword">if</strong> (tt.equals(<span class="jxr_string">"louis-ital"</span>))
-<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 				typeform |= Typeform.ITALIC;
-<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (tt.equals(<span class="jxr_string">"louis-bold"</span>))
-<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 				typeform |= Typeform.BOLD;
-<a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (tt.equals(<span class="jxr_string">"louis-under"</span>))
-<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 				typeform |= Typeform.UNDERLINE;
-<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 			<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (tt.equals(<span class="jxr_string">"louis-comp"</span>))
-<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 				typeform |= Typeform.COMPUTER;
-<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 				logger.warn(<span class="jxr_string">"text-transform: {} not supported"</span>, tt); }
-<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 		<strong class="jxr_keyword">return</strong> typeform;
-<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> 	}
-<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> 	
-<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> 	@SuppressWarnings(<span class="jxr_string">"unused"</span>)
-<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> mod(<strong class="jxr_keyword">int</strong> a, <strong class="jxr_keyword">int</strong> n) {
-<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> 		<strong class="jxr_keyword">int</strong> result = a % n;
-<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> 		<strong class="jxr_keyword">if</strong> (result &lt; 0)
-<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 			result += n;
-<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> 		<strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> 	}
-<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> 	
-<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(LiblouisTranslatorJnaImplProvider.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> 	
-<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> }
+<a class="jxr_linenumber" name="L1498" href="#L1498">1498</a> 			Matcher m = LOUIS_TEXT_TRANSFORM.matcher(tt);
+<a class="jxr_linenumber" name="L1499" href="#L1499">1499</a> 			<strong class="jxr_keyword">if</strong> (m.matches()) {
+<a class="jxr_linenumber" name="L1500" href="#L1500">1500</a> 				String emphClass = m.group(<span class="jxr_string">"class"</span>);
+<a class="jxr_linenumber" name="L1501" href="#L1501">1501</a> 				<strong class="jxr_keyword">if</strong> (emphClass.equals(<span class="jxr_string">"italic"</span>) || emphClass.equals(<span class="jxr_string">"ital"</span>)) {
+<a class="jxr_linenumber" name="L1502" href="#L1502">1502</a> 					typeform |= Typeform.ITALIC;
+<a class="jxr_linenumber" name="L1503" href="#L1503">1503</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L1504" href="#L1504">1504</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (emphClass.equals(<span class="jxr_string">"underline"</span>) || emphClass.equals(<span class="jxr_string">"under"</span>)) {
+<a class="jxr_linenumber" name="L1505" href="#L1505">1505</a> 					typeform |= Typeform.UNDERLINE;
+<a class="jxr_linenumber" name="L1506" href="#L1506">1506</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L1507" href="#L1507">1507</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (emphClass.equals(<span class="jxr_string">"bold"</span>)) {
+<a class="jxr_linenumber" name="L1508" href="#L1508">1508</a> 					typeform |= Typeform.BOLD;
+<a class="jxr_linenumber" name="L1509" href="#L1509">1509</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L1510" href="#L1510">1510</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (emphClass.equals(<span class="jxr_string">"computer"</span>) || emphClass.equals(<span class="jxr_string">"comp"</span>)) {
+<a class="jxr_linenumber" name="L1511" href="#L1511">1511</a> 					typeform |= Typeform.COMPUTER;
+<a class="jxr_linenumber" name="L1512" href="#L1512">1512</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L1513" href="#L1513">1513</a> 				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1514" href="#L1514">1514</a> 					m = LOUIS_NUMBERED_EMPH_CLASS.matcher(emphClass);
+<a class="jxr_linenumber" name="L1515" href="#L1515">1515</a> 					<strong class="jxr_keyword">if</strong> (m.matches()) {
+<a class="jxr_linenumber" name="L1516" href="#L1516">1516</a> 						<strong class="jxr_keyword">int</strong> num = Integer.parseInt(m.group(<span class="jxr_string">"num"</span>));
+<a class="jxr_linenumber" name="L1517" href="#L1517">1517</a> 						typeform |= (((<strong class="jxr_keyword">short</strong>)0x1) &lt;&lt;(num - 1));
+<a class="jxr_linenumber" name="L1518" href="#L1518">1518</a> 						<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L1519" href="#L1519">1519</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L1520" href="#L1520">1520</a> 						<em class="jxr_comment">// FIXME: use lou_getTypeformForEmphClass function</em>
+<a class="jxr_linenumber" name="L1521" href="#L1521">1521</a> 					}
+<a class="jxr_linenumber" name="L1522" href="#L1522">1522</a> 				}
+<a class="jxr_linenumber" name="L1523" href="#L1523">1523</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (tt.equals(<span class="jxr_string">"uppercase"</span>) || tt.equals(<span class="jxr_string">"lowercase"</span>)) {
+<a class="jxr_linenumber" name="L1524" href="#L1524">1524</a> 				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L1525" href="#L1525">1525</a> 			}
+<a class="jxr_linenumber" name="L1526" href="#L1526">1526</a> 			logger.warn(<span class="jxr_string">"text-transform: {} not supported"</span>, tt);
+<a class="jxr_linenumber" name="L1527" href="#L1527">1527</a> 		}
+<a class="jxr_linenumber" name="L1528" href="#L1528">1528</a> 		<strong class="jxr_keyword">return</strong> typeform;
+<a class="jxr_linenumber" name="L1529" href="#L1529">1529</a> 	}
+<a class="jxr_linenumber" name="L1530" href="#L1530">1530</a> 	
+<a class="jxr_linenumber" name="L1531" href="#L1531">1531</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> Pattern LOUIS_TEXT_TRANSFORM = Pattern.compile(<span class="jxr_string">"^-?(lib)?louis-(?&lt;class&gt;.+)$"</span>);
+<a class="jxr_linenumber" name="L1532" href="#L1532">1532</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> Pattern LOUIS_NUMBERED_EMPH_CLASS = Pattern.compile(<span class="jxr_string">"^emph-(?&lt;num&gt;[1-9]|10)$"</span>);
+<a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> 	
+<a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> 	@SuppressWarnings(<span class="jxr_string">"unused"</span>)
+<a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">int</strong> mod(<strong class="jxr_keyword">int</strong> a, <strong class="jxr_keyword">int</strong> n) {
+<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> 		<strong class="jxr_keyword">int</strong> result = a % n;
+<a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> 		<strong class="jxr_keyword">if</strong> (result &lt; 0)
+<a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> 			result += n;
+<a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> 		<strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L1540" href="#L1540">1540</a> 	}
+<a class="jxr_linenumber" name="L1541" href="#L1541">1541</a> 	
+<a class="jxr_linenumber" name="L1542" href="#L1542">1542</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(LiblouisTranslatorJnaImplProvider.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1543" href="#L1543">1543</a> 	
+<a class="jxr_linenumber" name="L1544" href="#L1544">1544</a> }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2018 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
